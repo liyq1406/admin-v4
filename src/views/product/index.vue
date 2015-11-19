@@ -1,0 +1,79 @@
+<template lang="jade">
+.main-content
+  .panel
+    .panel-hd
+      h2(v-text="product.name")
+    .panel-bd
+      tab(:nav="secondaryNav")
+  router-view(class="view", transition="view", transition-mode="out-in", :product="product")
+</template>
+
+<script>
+var Tab = require('../../components/tab.vue');
+
+module.exports = {
+  components: {
+    'tab': Tab
+  },
+
+  data: function () {
+    return {
+      product: {},
+      secondaryNav: []
+    };
+  },
+
+  ready: function () {
+
+  },
+
+  route: {
+    data: function (transition) {
+      return {
+        product: this.fetchProductById(this.$route.params.id),
+        secondaryNav: [{
+          label: '概览',
+          link: { path: '/products/' + this.$route.params.id + '/overview' }
+        }, {
+          label: '设备管理',
+          link: { path: '/products/' + this.$route.params.id + '/devices' }
+        }, {
+          label: '数据端点',
+          link: { path: '/products/' + this.$route.params.id + '/data-node' }
+        }, {
+          label: '通知与告警',
+          link: { path: '/products/' + this.$route.params.id + '/notice' }
+        }, {
+          label: '设备互联',
+          link: { path: '/products/' + this.$route.params.id + '/interconnection' }
+        }, {
+          label: '固件升级',
+          link: { path: '/products/' + this.$route.params.id + '/upgrade' }
+        }, {
+          label: '虚拟设备',
+          link: { path: '/products/' + this.$route.params.id + '/virtual-device' }
+        }]
+      };
+    }
+  },
+
+  methods: {
+    fetchProductById: function (id) {
+      var resource = this.$resource(apiRoot + 'products/:id');
+      var self = this;
+      var params = {
+        id: id
+      };
+
+      return new Promise(function (resolve, reject) {
+        return resource.get(params, function (data, status, request) {
+          resolve(data);
+        }).error(function (data, status, request) {
+          reject(data);
+        });
+      });
+    }
+  }
+
+};
+</script>

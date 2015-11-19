@@ -1,0 +1,19 @@
+{
+  "env": {
+    "browser": true,
+    "node": true,
+    "mocha": true
+  },
+  "ecmaFeatures": {
+  },
+  "globals": {
+    "__DEBUG__": true,
+    "__DEV__": true
+  },
+  "rules": {
+    "strict": [2, "never"],
+    "indent": [2, 2],
+    "semi": 2,
+    "quotes": [2, "single"]
+  }
+}

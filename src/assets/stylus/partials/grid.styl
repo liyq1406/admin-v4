@@ -1,0 +1,11 @@
+// 栅格
+$col
+  float left
+
+.row
+  clearfix()
+
+  for i in 1..20
+    .col-{i}
+      @extend $col
+      width (i * 5) %

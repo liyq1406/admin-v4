@@ -1,0 +1,7 @@
+# Node
+node_modules/
+
+# Generated files
+public/
+dist/
+dist

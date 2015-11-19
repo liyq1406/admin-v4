@@ -1,0 +1,47 @@
+// 基础样式
+.btn
+  display inline-block
+  color #FFF
+  transition background .3s
+  height 30px
+  line-height 30px
+  padding 0 15px
+  font-size 12px
+
+  .fa
+    margin-right 5px
+
+button.btn
+  border none
+  outline none
+  appearance none
+
+// 默认按钮样式
+.btn-default
+  background #C8C8C8
+
+  &:hover
+    background darken(@background, 10%)
+
+  &.active
+    background red
+
+// 主操作按钮样式
+.btn-primary
+  background red
+
+  &:hover
+    color #FFF
+    background darken(red, 10%)
+
+// 链接按钮
+.btn-link
+  color red
+
+button.btn-link
+  background transparent
+  border none
+  appearance none
+
+  &:hover
+    color darken(red, 10%)

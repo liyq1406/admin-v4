@@ -1,0 +1,19 @@
+// 视图淡入淡出
+.view
+  transition all .5s ease
+
+.view-enter
+.view-leave
+  opacity 0
+  transform translate3d(10px, 0, 0)
+
+// 渐近过渡
+.staggered-transition
+  transition all .2s ease
+  margin 0
+
+.staggered-enter
+.staggered-leave
+  opacity 0
+  height 0
+  transform translate3d(10px, 0, 0)
