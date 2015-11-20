@@ -155,6 +155,7 @@ module.exports = {
 
     &:hover
       background #2D2D2D
+      text-decoration none
 
   .v-link-active
     background #2D2D2D
@@ -193,6 +194,7 @@ module.exports = {
     &:hover
       color #FFF
       border-color #FFF
+      text-decoration none
 
 // 主内容区
 .main-wrap

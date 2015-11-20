@@ -1,56 +1,60 @@
 <template lang="jade">
-  .btn-group.v-select(:class="{'open':active}")
-    button.btn.btn-default(:class="{'active': active || !showPlaceholder}", type="button", @click="toggleDropdown", @blur="deactivate")
-      span.placeholder(v-show="showPlaceholder") {{placeholder}}
-      span.content {{value}}
-    .dropdown-menu(:style="dropdownMenuStyle")
-      ul
-        li(v-for="option in options", @mousedown="handleClick(option)")
-          | {{option}}
-          .fa.fa-check(v-show="option === value")
+  .v-select
+    slot
+    .btn-group(:class="{'open':active}")
+      button.btn.btn-default(:class="{'active': active || !showPlaceholder}", type="button", @click="toggleDropdown", @blur="deactivate")
+        span.placeholder(v-show="showPlaceholder") {{placeholder}}
+        span.content {{value}}
+      .dropdown-menu(:style="dropdownMenuStyle")
+        ul
+          li(v-for="option in options", @mousedown="handleClick(option)")
+            | {{option}}
+            .fa.fa-check(v-show="option === value")
 </template>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
 
   .v-select
-    position relative
+    .btn-group
+      display inline-block
+      position relative
 
-    &:after
-      absolute right 10px top 10px
-      content ""
-      triangle #FFF 10px down
+      &:after
+        absolute right 10px top 10px
+        content ""
+        triangle #FFF 10px down
 
-    .btn
-      padding 0 30px 0 20px
+      .btn
+        padding 0 30px 0 20px
 
-    .dropdown-menu
-      absolute right top 26px
-      display none
-      width 100px
-      height 0
-      border 1px solid red
-      background #FFF
-      overflow auto
+      .dropdown-menu
+        absolute right top 26px
+        display none
+        width 100px
+        height 0
+        border 1px solid red
+        background #FFF
+        overflow auto
 
-      li
-        position relative
-        font-size 12px
-        line-height 24px
-        height 24px
-        color red
-        cursor pointer
-        padding 0 10px
+        li
+          position relative
+          font-size 12px
+          line-height 24px
+          height 24px
+          color red
+          cursor pointer
+          padding 0 10px
 
-        &:hover
-          background red
-          color #FFF
+          &:hover
+            background red
+            color #FFF
 
-        .fa
-          absolute right 10px top 5px
+          .fa
+            absolute right 10px top 5px
 
-  .open > .dropdown-menu
-    display block
+    .open > .dropdown-menu
+      display block
 </style>
 
 <script>

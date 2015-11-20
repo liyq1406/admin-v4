@@ -29,7 +29,6 @@ module.exports = {
     width 80%
     absolute left 50% top 50%
     margin-left -40%
-    border-radius 1rem
     text-align center
 
   .modal-header
@@ -57,7 +56,6 @@ module.exports = {
       padding 1rem
       width 100%
       box-sizing border-box
-      border-radius 1rem
       color gray-dark
 
     .radio
@@ -65,7 +63,6 @@ module.exports = {
       display block
       color gray-dark
       background #FFF
-      border-radius 1rem
       font-size 1.6rem
       padding 0.5rem 1rem
       margin-bottom 0.8rem

@@ -26,6 +26,9 @@ nav.tab
       padding 2px 10px
       line-height 42px
 
+      &:hover
+        text-decoration none
+
       &.v-link-active
         padding-bottom 0
         border-bottom 2px solid red
