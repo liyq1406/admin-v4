@@ -1,11 +1,11 @@
 <template lang="jade">
-  .btn-group.v-select
-    button.btn.btn-default(:class="{'active': active}", @click="active=!active")
-      span.placeholder(v-show="!value") {{placeholder}}
+  .btn-group.v-select(:class="{'open':active}")
+    button.btn.btn-default(:class="{'active': active || !showPlaceholder}", type="button", @click="toggleDropdown", @blur="deactivate")
+      span.placeholder(v-show="showPlaceholder") {{placeholder}}
       span.content {{value}}
-    .dropdown-menu(:style="dropdownMenuStyle", v-show="active")
+    .dropdown-menu(:style="dropdownMenuStyle")
       ul
-        li(v-for="option in options", @click="handleClick(option)")
+        li(v-for="option in options", @mousedown="handleClick(option)")
           | {{option}}
           .fa.fa-check(v-show="option === value")
 </template>
@@ -26,15 +26,31 @@
 
     .dropdown-menu
       absolute right top 26px
+      display none
       width 100px
       height 0
-      background red
+      border 1px solid red
+      background #FFF
+      overflow auto
 
       li
+        position relative
         font-size 12px
         line-height 24px
         height 24px
-        color #FFF
+        color red
+        cursor pointer
+        padding 0 10px
+
+        &:hover
+          background red
+          color #FFF
+
+        .fa
+          absolute right 10px top 5px
+
+  .open > .dropdown-menu
+    display block
 </style>
 
 <script>
@@ -67,6 +83,12 @@
       }
     },
 
+    computed: {
+      showPlaceholder: function () {
+        return this.value.length <= 0;
+      }
+    },
+
     methods: {
       handleClick: function (data) {
         if (this.value === data) {
@@ -74,6 +96,15 @@
         } else {
           this.$dispatch('select', data);
         }
+        this.deactivate();
+      },
+
+      toggleDropdown: function () {
+        this.active = !this.active;
+      },
+
+      deactivate: function () {
+        this.active = false;
       }
     }
   };

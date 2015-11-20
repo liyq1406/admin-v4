@@ -49,7 +49,7 @@
         // Start: 设备分布
         .panel
           .panel-hd
-            v-select(:options="cities", :value="city", @select="setCity")
+            v-select(:options="regions", :value="region", @select="setRegion")
             h2 设备分布
           .panel-bd
         // End: 设备分布
@@ -78,8 +78,8 @@
       return {
         period: '周',
         periods: ['周', '月', '年'],
-        city: '',
-        cities: ['广州', '深圳', '上海']
+        region: '',
+        regions: ['广州', '深圳', '上海']
       }
     },
 
@@ -89,9 +89,9 @@
         console.log("period: " + this.period);
       },
 
-      setCity: function (value) {
-        this.city = value;
-        console.log("city: " + this.city);
+      setRegion: function (value) {
+        this.region = value;
+        console.log("region: " + this.region);
       }
     }
   };
