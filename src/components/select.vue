@@ -4,12 +4,12 @@
     .btn-group(:class="{'open':active}")
       button.btn.btn-default(:class="{'active': active || !showPlaceholder}", type="button", @click="toggleDropdown", @blur="deactivate")
         span.placeholder(v-show="showPlaceholder") {{placeholder}}
-        span.content {{value}}
+        span.content {{label}}
       .dropdown-menu(:style="dropdownMenuStyle")
         ul
           li(v-for="option in options", @mousedown="handleClick(option)")
-            | {{option}}
-            .fa.fa-check(v-show="option === value")
+            | {{option.label}}
+            .fa.fa-check(v-show="option.value === value")
 </template>
 
 <style lang="stylus">
@@ -90,15 +90,22 @@
     computed: {
       showPlaceholder: function () {
         return this.value.length <= 0;
+      },
+
+      label: function () {
+        var self = this;
+        return this.options.filter(function (option) {
+          return option.value === self.value;
+        })[0].label;
       }
     },
 
     methods: {
-      handleClick: function (data) {
-        if (this.value === data) {
+      handleClick: function (option) {
+        if (this.value === option.value) {
           this.$dispatch('select', '');
         } else {
-          this.$dispatch('select', data);
+          this.$dispatch('select', option.value);
         }
         this.deactivate();
       },

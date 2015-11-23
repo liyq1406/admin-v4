@@ -1,5 +1,5 @@
 <template lang="jade">
   .panel
     .panel-bd
-      p API
+      p 用户统计
 </template>

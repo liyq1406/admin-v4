@@ -1,13 +1,12 @@
 <template lang="jade">
 .page-container
-  p(v-show="authenticating") Authenticating...
-  header.the-header
+  header.the-header(v-if="controlling")
     nav.nav-header
       ul
         li: a(href="#", target="#") 首页
         li: a(href="#", target="#") 开发文档
         li: a(href="#", target="#") 在线支持
-  section.sidebar
+  section.sidebar(v-if="controlling")
     a.logo(v-link="{ path: '/' }")
     .nav-aside
       .nav-aside-item
@@ -40,9 +39,7 @@
         a(v-link="{ path: '/settings' }")
           i.fa.fa-cog
           | 系统设置
-  section.main-wrap
-    .main
-      router-view(class="view", transition="view", transition-mode="out-in")
+  router-view(class="view", transition="view", transition-mode="out-in")
 </template>
 
 <script>
@@ -50,11 +47,12 @@
 // require('font-awesome/css/font-awesome.css');
 
 var productStore = require('./stores/products');
+var adminStore = require('./stores/admin');
 
 module.exports = {
   data: function () {
     return {
-      authenticating: false,
+      controlling: true,
       productsState: productStore.state
     }
   },

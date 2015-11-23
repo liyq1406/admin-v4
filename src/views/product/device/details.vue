@@ -1,3 +1,3 @@
 <template lang="jade">
-p 设备详情
+  p 设备详情
 </template>

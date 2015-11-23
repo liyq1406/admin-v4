@@ -79,7 +79,11 @@
         period: '周',
         periods: ['周', '月', '年'],
         region: '',
-        regions: ['广州', '深圳', '上海']
+        regions: [
+          { label: '广州', value: 'guangzhou' },
+          { label: '深圳', value: 'shenzhen' },
+          { label: '上海', value: 'shanghai' }
+        ]
       }
     },
 

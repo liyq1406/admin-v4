@@ -9,6 +9,26 @@ var configRouter = function (router) {
       component: require('./views/forbidden.vue')
     },
 
+    // 注册
+    '/register': {
+      component: require('./views/register.vue')
+    },
+
+    // 登录
+    '/login': {
+      component: require('./views/login.vue')
+    },
+
+    // 找回密码
+    '/fetch-password': {
+      component: require('./views/fetch-password.vue')
+    },
+
+    // 重设密码
+    '/reset-password': {
+      component: require('./views/reset-password.vue')
+    },
+
     // 概览
     '/dashboard': {
       component: require('./views/dashboard.vue')
@@ -75,7 +95,15 @@ var configRouter = function (router) {
 
     // 统计分析
     '/statistic': {
-      component: require('./views/statistic/index.vue')
+      component: require('./views/statistic/index.vue'),
+      subRoutes: {
+        'products': {
+          component: require('./views/statistic/products.vue')
+        },
+        'users': {
+          component: require('./views/statistic/users.vue')
+        }
+      }
     },
 
     // 系统设置
@@ -97,20 +125,18 @@ var configRouter = function (router) {
 
   // 重定向
   router.redirect({
-    '/': '/dashboard',
+    // '/': '/dashboard',
     '/products/:id': '/products/:id/overview',
     '/data': '/data/list',
+    '/statistic': '/statistic/products',
     '/settings': '/settings/auth'
   });
 
   router.beforeEach(function (transition) {
-    if (transition.to.path === '/forbidden') {
-      router.app.authenticating = true;
-      window.setTimeout(function () {
-        router.app.authenticating = false;
-        alert('this route is forbidden by a global before hook');
-        transition.abort();
-      }, 3000);
+    //if (transition.to.path === '/login' || transition.to.path === '/register') {
+    if (['/login', '/register', '/fetch-password'].indexOf(transition.to.path) >= 0) {
+      router.app.controlling = false;
+      transition.next();
     } else {
       transition.next();
     }

@@ -1,3 +1,5 @@
 <template lang="jade">
-p 账户信息
+  .panel
+    .panel-bd
+      p 账户信息
 </template>

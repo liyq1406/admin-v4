@@ -1,3 +1,5 @@
 <template lang="jade">
-p 数据表
+  .panel
+    .panel-bd
+      p 数据表
 </template>

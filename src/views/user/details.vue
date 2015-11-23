@@ -1,3 +1,5 @@
 <template lang="jade">
-p 用户详情
+  section.main-wrap
+    .main
+      p 用户详情
 </template>

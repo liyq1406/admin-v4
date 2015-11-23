@@ -1,3 +1,5 @@
 <template lang="jade">
-p 授权管理
+  .panel
+    .panel-bd
+      p 授权管理
 </template>

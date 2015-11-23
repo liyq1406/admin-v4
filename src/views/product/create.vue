@@ -1,3 +1,5 @@
 <template lang="jade">
-p 添加产品
+  section.main-wrap
+    .main
+      p 添加产品
 </template>
