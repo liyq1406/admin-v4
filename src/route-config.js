@@ -125,7 +125,7 @@ var configRouter = function (router) {
 
   // 重定向
   router.redirect({
-    // '/': '/dashboard',
+    '/': '/dashboard',
     '/products/:id': '/products/:id/overview',
     '/data': '/data/list',
     '/statistic': '/statistic/products',
@@ -134,7 +134,7 @@ var configRouter = function (router) {
 
   router.beforeEach(function (transition) {
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
-    if (['/login', '/register', '/fetch-password'].indexOf(transition.to.path) >= 0) {
+    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0) {
       router.app.controlling = false;
       transition.next();
     } else {

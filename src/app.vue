@@ -1,5 +1,5 @@
 <template lang="jade">
-.page-container
+.page-container(:class="{'auth-page':!controlling}")
   header.the-header(v-if="controlling")
     nav.nav-header
       ul
@@ -83,122 +83,244 @@ module.exports = {
 </script>
 
 <style lang="stylus">
-// 配置
-@import 'assets/stylus/base'
+  // 配置
+  @import 'assets/stylus/base'
 
-// 加载 Font-awesome 图标字体包
-@import '../node_modules/font-awesome/css/font-awesome.css'
+  // 加载 Font-awesome 图标字体包
+  @import '../node_modules/font-awesome/css/font-awesome.css'
 
-.page-container
-  size 100%
+  .page-container
+    size 100%
 
-// 头部
-.the-header
-  absolute left top
-  size 100% 61px
-  background #F7F7F7
-  border-bottom 1px solid #E0E0E0
+  .auth-page
+    background #383838
 
-// Logo
-.logo
-  display block
-  size 100% 62px
-  background url("assets/images/logo.png") no-repeat
+  .form
+    .input-text
+      border 1px solid #D9D9D9
+      display block
+      width 100%
+      box-sizing border-box
+      font-size 14px
+      padding 6px 20px
 
-// 头部导航
-.nav-header
-  margin-left 193px
+    .form-row
+      margin-bottom 12px
 
-  ul
-    reset-list()
-    font-size 0
+    .form-hints
+      margin-top 20px
+      margin-bottom 10px
 
-  li
-    display inline-block
-    line-height 61px
-    margin-right 34px
-    font-size 14px
+    .form-tips
+      font-size 12px
+      height 30px
+      line-height 30px
 
-  a
-    color gray-dark
+      span
+      i
+        display inline-block
 
-    &:hover
+      i
+        font-size 20px
+        margin-right 5px
+        vertical-align -2px
+
+    .form-tips-success
+      color green
+
+      i
+        color #92C39E
+
+    .form-tips-error
       color red
 
-// 侧栏
-.sidebar
-  absolute left top
-  size 170px 100%
-  background #202020
+      i
+        color #B76166
 
-// 侧栏导航
-.nav-aside
-  margin-top 5px
+    .form-row-group
+      margin-bottom 20px
 
-.nav-aside-item
-  a
+      & + .form-hints
+        margin-top 40px
+
+  .form-auth
+    absolute left 50% top 50%
+    width 550px
+    margin-left -275px
+    background #FFF
+
+    .form-logo
+      background #383838 url('assets/images/form_logo.png') no-repeat center top
+      height 53px
+      padding-bottom 30px
+
+    .form-cont
+      padding 40px 85px 0
+      box-shadow 0 5px 15px rgba(0, 0, 0, .3)
+
+    .form-header
+      border-bottom 1px solid #E0E0E0
+      font-size 0
+      padding 0 30px
+      margin-bottom 25px
+
+      span
+      a
+        display inline-block
+        font-size 16px
+        padding 10px 30px
+
+      a
+        & + span
+          margin-left 70px
+
+      span
+        border-bottom 3px solid red
+        padding-bottom 7px
+        color red
+
+        & + a
+          margin-left 70px
+
+      a:hover
+        text-decoration none
+
+      h2
+        font-size 24px
+        margin 0
+        font-weight normal
+
+      p
+        font-size 12px
+        color gray
+        margin 0 0 10px
+
+    .form-body
+      padding 0 30px
+
+    .form-actions
+      text-align center
+
+      .btn
+        text-align center
+        color #FFF
+        height 46px
+        line-height 46px
+        font-size 14px
+        margin 0 auto
+
+    .form-footer
+      font-size 12px
+      text-align center
+      padding 20px 0
+
+  // 头部
+  .the-header
+    absolute left top
+    size 100% 61px
+    background #F7F7F7
+    border-bottom 1px solid #E0E0E0
+
+  // Logo
+  .logo
     display block
-    color #999
-    height 40px
-    line-height 40px
-    padding-right 4px
-    padding-left 20px
+    size 100% 62px
+    background url("assets/images/logo.png") no-repeat
+
+  // 头部导航
+  .nav-header
+    margin-left 193px
+
+    ul
+      reset-list()
+      font-size 0
+
+    li
+      display inline-block
+      line-height 61px
+      margin-right 34px
+      font-size 14px
+
+    a
+      color gray-dark
+
+      &:hover
+        color red
+
+  // 侧栏
+  .sidebar
+    absolute left top
+    size 170px 100%
     background #202020
-    transition background .3s
 
-    .fa
-      font-size 16px
-      width 20px
-      margin-right 12px
+  // 侧栏导航
+  .nav-aside
+    margin-top 5px
 
-    &:hover
+  .nav-aside-item
+    a
+      display block
+      color #999
+      height 40px
+      line-height 40px
+      padding-right 4px
+      padding-left 20px
+      background #202020
+      transition background .3s
+
+      .fa
+        font-size 16px
+        width 20px
+        margin-right 12px
+
+      &:hover
+        background #2D2D2D
+        text-decoration none
+
+    .v-link-active
       background #2D2D2D
-      text-decoration none
-
-  .v-link-active
-    background #2D2D2D
-    padding-right 0
-    border-right 4px solid red
-    color #FFF
-
-    &:hover
+      padding-right 0
+      border-right 4px solid red
       color #FFF
 
-.nav-aside-group
-  margin-top 25px
+      &:hover
+        color #FFF
 
-  h3
-    margin 0
-    padding-left 20px
-    font-size 14px
-    line-height 32px
-    color #525252
+  .nav-aside-group
+    margin-top 25px
 
-.nav-aside-actions
-  margin 5px 20px 45px
+    h3
+      margin 0
+      padding-left 20px
+      font-size 14px
+      line-height 32px
+      color #525252
 
-  a
-    display block
-    height 34px
-    line-height 34px
-    border 1px dashed #525252
-    border-radius 2px
-    text-align center
-    color #525252
+  .nav-aside-actions
+    margin 5px 20px 45px
 
-    .fa
-      margin-right 10px
+    a
+      display block
+      height 34px
+      line-height 34px
+      border 1px dashed #525252
+      border-radius 2px
+      text-align center
+      color #525252
 
-    &:hover
-      color #FFF
-      border-color #FFF
-      text-decoration none
+      .fa
+        margin-right 10px
 
-// 主内容区
-.main-wrap
-  absolute top 62px right bottom left 170px
-  overflow auto
+      &:hover
+        color #FFF
+        border-color #FFF
+        text-decoration none
 
-  .main
-    padding 20px 10px 0
+  // 主内容区
+  .main-wrap
+    absolute top 62px right bottom left 170px
+    overflow auto
+
+    .main
+      padding 20px 10px 0
 </style>

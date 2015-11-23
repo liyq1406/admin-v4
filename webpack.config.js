@@ -139,7 +139,7 @@ var webpackConfig = {
   module: {
     loaders: [{
       test: /\.vue$/,
-      exclude: /node_modules/,
+      // exclude: /node_modules/,
       loader: 'vue'
     }, {
       test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,

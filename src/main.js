@@ -2,6 +2,7 @@ var Vue = require('vue');
 
 var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
+var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
 
 // 多语言配置文件
@@ -15,6 +16,9 @@ var App = Vue.extend(require('./app.vue'));
 
 // 使用资源插件
 Vue.use(VueResource);
+
+// 使用表单验证插件
+Vue.use(VueForm);
 
 // 加载路由插件
 Vue.use(VueRouter);

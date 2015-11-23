@@ -1,29 +1,73 @@
 <template lang="jade">
   .form.form-auth.form-reset-password
-    .form-header
-      span 重设密码
-    .form-body
-      .form-hints xxx，您申请了重置密码，请在下方的输入框中输入您的新密码完成修改密码操作。
-      .form-row
-        .form-control 登录账号：
-        .controls
-          span xiaolu@xlink.cn
-      .form-row
-        label.form-control 输入新密码：
-        .controls
-          input(type="password")
-      .form-row
-        label.form-control 确认密码：
-        .controls
-          input(type="password")
+    .form-logo
+    form.form-cont(v-form, name="registerForm", @submit.prevent="onSubmit")
+      .form-header
+        h2 重设密码
+        p 请在下方的输入框中输入您zza的新密码完成修改密码操作。
+      .form-body
+        .form-row
+          | 登录账号：xiaolu@xlink.cn
+        .form-row
+          input.input-text(type="password", placeholder="请输入新密码")
+        .form-row
+          input.input-text(type="password", placeholder="确认密码")
+        .form-actions
+          button.btn.btn-primary.btn-block 确定
+      .form-footer
+        | 2015 &copy; 广州云湾信息技术有限公司.
+
+    .form-cont.reset-password-success
+      .alert.alert-success
+        .icon.icon-success
+        h2 修改成功
+        p 您的密码已重置成功，请重新登录。
       .form-actions
-        button 确定
-    .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+        a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") 确定
 </template>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
+
+  .form-reset-password
+    margin-top -235px
+
+    .form-cont
+      padding-left 100px
+      padding-right 100px
+
+    .form-header
+      padding 0
+      margin-bottom 30px
+
+    .form-body
+      padding 0
+
+    .form-actions
+      margin-top 30px
+
+    .alert
+      padding-left 60px
+
+      h2
+        margin 0
+        font-size 20px
+        font-weight normal
+
+      p
+        margin 0
+        font-size 12px
+
+    .alert-success
+      background url('../assets/images/icon_check_circle_o.png') no-repeat 0 5px
+      margin-bottom 50px
+
+    .reset-password-success
+      padding 80px 140px
+
+      .form-actions
+        button
+          width 90%
 </style>
 
 <script>
