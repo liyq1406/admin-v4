@@ -25,8 +25,6 @@
   @import '../assets/stylus/common'
 
   .form-login
-    margin-top -225px
-
     .operations
       clearfix()
       margin 25px 0

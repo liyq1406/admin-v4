@@ -31,7 +31,7 @@ module.exports = {
   route: {
     data: function (transition) {
       return {
-        product: this.fetchProductById(this.$route.params.id),
+        product: {},
         secondaryNav: [{
           label: '概览',
           link: { path: '/products/' + this.$route.params.id + '/overview' }
@@ -59,21 +59,7 @@ module.exports = {
   },
 
   methods: {
-    fetchProductById: function (id) {
-      var resource = this.$resource(apiRoot + 'products/:id');
-      var self = this;
-      var params = {
-        id: id
-      };
 
-      return new Promise(function (resolve, reject) {
-        return resource.get(params, function (data, status, request) {
-          resolve(data);
-        }).error(function (data, status, request) {
-          reject(data);
-        });
-      });
-    }
   }
 
 };

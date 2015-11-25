@@ -9,10 +9,10 @@
         .form-row
           input.input-text(type="text", placeholder="请输入邮箱")
         .form-tips.form-tips-success
-          i.fa.fa-check-circle-o
+          i.fa.fa-check-circle
           span 一封找回密码的邮件已发送到您的邮箱，请查收
         .form-tips.form-tips-error
-          i.fa.fa-times-circle-o
+          i.fa.fa-times-circle
           span 该邮箱地址不存在，请重试
         .form-actions
           button.btn.btn-primary.btn-block 确定
@@ -24,8 +24,6 @@
   @import '../assets/stylus/common'
 
   .form-fetch-password
-    margin-top -230px
-
     .form-cont
       padding-left 100px
       padding-right 100px

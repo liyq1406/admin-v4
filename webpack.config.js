@@ -179,9 +179,9 @@ var webpackConfig = {
   // },
 
   // 如果是调试模式，则不打包库文件以加速编译速度
-  externals: DEV ? [{
-    'vue': 'Vue'
-  }] : [],
+  // externals: DEV ? [{
+    // 'vue': 'Vue'
+  // }] : [],
 
   plugins:[
     // 优化模块加载顺序

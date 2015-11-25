@@ -2,6 +2,7 @@ var Vue = require('vue');
 
 var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
+// var VueValidator = require('vue-validator');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
 
@@ -14,14 +15,19 @@ var router;
 
 var App = Vue.extend(require('./app.vue'));
 
+Vue.config.debug = true;
+
 // 使用资源插件
 Vue.use(VueResource);
-
-// 使用表单验证插件
-Vue.use(VueForm);
+Vue.http.options.root = 'http://42.121.122.228:8887/v2';
 
 // 加载路由插件
 Vue.use(VueRouter);
+
+// 使用表单验证插件
+Vue.use(VueForm);
+// Vue.use(VueValidator);
+// Vue.use(window['vue-validator']);
 
 // 使用多语言插件
 // 切换语言设置 `Vue.config.lang = 'en'`

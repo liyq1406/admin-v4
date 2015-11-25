@@ -30,8 +30,6 @@
   @import '../assets/stylus/common'
 
   .form-reset-password
-    margin-top -235px
-
     .form-cont
       padding-left 100px
       padding-right 100px

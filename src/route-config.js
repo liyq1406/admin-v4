@@ -138,6 +138,7 @@ var configRouter = function (router) {
       router.app.controlling = false;
       transition.next();
     } else {
+      router.app.controlling = true;
       transition.next();
     }
   });

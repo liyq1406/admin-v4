@@ -15,7 +15,7 @@
           | 概览
       .nav-aside-group
         h3 产品管理
-        .nav-aside-item(v-for="product in productsState.products")
+        .nav-aside-item(v-for="product in products")
           a(v-link="{ name: 'products', params: { id: product.id} }")
             i.fa.fa-link
             | {{ product.name }}
@@ -43,41 +43,26 @@
 </template>
 
 <script>
-// 加载 Font-awesome 图标字体包
-// require('font-awesome/css/font-awesome.css');
-
-var productStore = require('./stores/products');
-var adminStore = require('./stores/admin');
-
 module.exports = {
   data: function () {
     return {
       controlling: true,
-      productsState: productStore.state
+      products: []
     }
   },
 
-  ready: function () {
-    var self = this;
-    this.fetchProducts()
-      .then(function (data) {
-        productStore.addProducts(data);
-      });
+  route: {
+    data: function () {
+      if (controlling) {
+        return {
+          products: []
+        }
+      }
+    }
   },
 
   methods: {
-    fetchProducts: function () {
-      var apiUrl = apiRoot + 'products';
-      var self = this;
 
-      return new Promise(function (resolve, reject) {
-        return self.$http.get(apiUrl, function (data, status, request) {
-          resolve(data);
-        }).error(function (data, status, request) {
-          reject(data);
-        });
-      });
-    }
   }
 };
 </script>
@@ -94,6 +79,7 @@ module.exports = {
 
   .auth-page
     background #383838
+    overflow-y auto
 
   .form
     .input-text
@@ -105,6 +91,7 @@ module.exports = {
       padding 6px 20px
 
     .form-row
+      position relative
       margin-bottom 12px
 
     .form-hints
@@ -113,17 +100,10 @@ module.exports = {
 
     .form-tips
       font-size 12px
-      height 30px
-      line-height 30px
-
-      span
-      i
-        display inline-block
 
       i
-        font-size 20px
         margin-right 5px
-        vertical-align -2px
+        font-size 16px
 
     .form-tips-success
       color green
@@ -144,10 +124,9 @@ module.exports = {
         margin-top 40px
 
   .form-auth
-    absolute left 50% top 50%
     width 550px
-    margin-left -275px
-    background #FFF
+    margin 0 auto
+    padding 100px 0
 
     .form-logo
       background #383838 url('assets/images/form_logo.png') no-repeat center top
@@ -157,6 +136,7 @@ module.exports = {
     .form-cont
       padding 40px 85px 0
       box-shadow 0 5px 15px rgba(0, 0, 0, .3)
+      background #FFF
 
     .form-header
       border-bottom 1px solid #E0E0E0
