@@ -2,7 +2,6 @@ var Vue = require('vue');
 
 var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
-// var VueValidator = require('vue-validator');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
 
@@ -25,9 +24,8 @@ Vue.http.options.root = 'http://42.121.122.228:8887/v2';
 Vue.use(VueRouter);
 
 // 使用表单验证插件
+// 详见：https://github.com/fergaldoyle/vue-form
 Vue.use(VueForm);
-// Vue.use(VueValidator);
-// Vue.use(window['vue-validator']);
 
 // 使用多语言插件
 // 切换语言设置 `Vue.config.lang = 'en'`
@@ -45,4 +43,4 @@ router = new VueRouter({
 
 configRouter(router);
 
-router.start(App, '#app');;
+router.start(App, '#app');

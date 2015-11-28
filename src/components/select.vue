@@ -94,9 +94,10 @@
 
       label: function () {
         var self = this;
-        return this.options.filter(function (option) {
+        var option = this.options.filter(function (option) {
           return option.value === self.value;
-        })[0].label;
+        })[0];
+        return option ? option.label : '';
       }
     },
 

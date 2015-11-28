@@ -1,7 +1,7 @@
 <template lang="jade">
   .form.form-auth.form-reset-password
     .form-logo
-    form.form-cont(v-form, name="registerForm", @submit.prevent="onSubmit")
+    form.form-cont(v-form, name="resetForm", @submit.prevent="onSubmit")
       .form-header
         h2 重设密码
         p 请在下方的输入框中输入您zza的新密码完成修改密码操作。
@@ -70,6 +70,17 @@
 
 <script>
   module.exports = {
+    data: function () {
+      return {
+        resetForm: {},
+        model: {}
+      }
+    },
 
+    methods: {
+      onSubmit: function () {
+
+      }
+    }
   };
 </script>

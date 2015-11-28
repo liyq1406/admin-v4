@@ -197,6 +197,7 @@
 var Promise = require('promise');
 var PostList = require('../components/post-list.vue');
 var pageStore = require('../stores/page');
+var api = require('../api');
 
 module.exports = {
   components: {
@@ -212,6 +213,9 @@ module.exports = {
 
   ready: function () {
     pageStore.setTitle('概览');
+    api.corp.getMembers({limit: 1}).then(function (data) {
+      console.log(data);
+    });
   },
 
   filters: {
@@ -224,50 +228,14 @@ module.exports = {
   route: {
     data: function (transition) {
       return {
-        guides: this.fetchGuides(),
-        notifications: this.fetchNotifications()
+        guides: [],
+        notifications: []
       };
     }
   },
 
   methods: {
-    fetchGuides: function () {
-      var apiUrl = apiRoot + 'guides';
-      var self = this;
-
-      return new Promise(function (resolve, reject) {
-        return self.$http.get(apiUrl, function (data, status, request) {
-          resolve(data);
-        }).error(function (data, status, request) {
-          reject(data);
-        });
-      });
-    },
-
-    fetchNotifications: function () {
-      var apiUrl = apiRoot + 'notifications';
-      var self = this;
-
-      return new Promise(function (resolve, reject) {
-        return self.$http.get(apiUrl, function (data, status, request) {
-          resolve(data);
-        }).error(function (data, status, request) {
-          reject(data);
-        });
-      });
-
-      /*
-      return Promise.resolve(
-        $.ajax({type: "POST",
-          crossDomain : true,
-          url: apiUrl,
-          dataType: "jsonp",
-          jsonp: "jsonp",
-          jsonpCallback: "myJsonMethod"
-        });
-      );
-      */
-    }
+    
   }
 }
 </script>

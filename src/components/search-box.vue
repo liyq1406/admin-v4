@@ -1,8 +1,9 @@
 <template lang="jade">
   .search-box(:class="{'active': active}")
     slot
-    input.search-box-input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
-    .fa.fa-times-circle(@mousedown="handleCancelClick")
+    .search-box-input
+      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
+      .fa.fa-times-circle(@mousedown="handleCancelClick")
 </template>
 
 <style lang="stylus">
@@ -11,12 +12,15 @@
   // 搜索框
   .search-box
     display inline-block
+    
+  .search-box-input
+    display inline-block
     position relative
     background #F1F3F7
     size 100px 30px
     padding 0 36px 0 10px
 
-    .search-box-input
+    input
       background transparent
       border none
       appearance none

@@ -133,13 +133,18 @@ var configRouter = function (router) {
   });
 
   router.beforeEach(function (transition) {
+    var today = new Date();
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
     if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0) {
-      router.app.controlling = false;
+      router.app.access = false;
       transition.next();
     } else {
-      router.app.controlling = true;
-      transition.next();
+      if (localStorage.getItem('accessToken') !== null && localStorage.getItem('expireAt') > today.getTime()) {
+        router.app.access = true;
+        transition.next();
+      } else {
+        router.go({path: '/login'});
+      }
     }
   });
 

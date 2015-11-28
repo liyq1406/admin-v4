@@ -1,12 +1,12 @@
 <template lang="jade">
-.page-container(:class="{'auth-page':!controlling}")
-  header.the-header(v-if="controlling")
+.page-container(:class="{'auth-page':!access}")
+  header.the-header(v-if="access")
     nav.nav-header
       ul
         li: a(href="#", target="#") 首页
         li: a(href="#", target="#") 开发文档
         li: a(href="#", target="#") 在线支持
-  section.sidebar(v-if="controlling")
+  section.sidebar(v-if="access")
     a.logo(v-link="{ path: '/' }")
     .nav-aside
       .nav-aside-item
@@ -46,14 +46,14 @@
 module.exports = {
   data: function () {
     return {
-      controlling: true,
+      access: false,
       products: []
     }
   },
 
   route: {
     data: function () {
-      if (controlling) {
+      if (access) {
         return {
           products: []
         }
