@@ -9,11 +9,24 @@
         .form-row
           | 登录账号：xiaolu@xlink.cn
         .form-row
-          input.input-text(type="password", placeholder="请输入新密码")
+          .input-text-wrap(v-placeholder="'请输入新密码'")
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password")
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
+            span(v-if="validation.password.$error.required") 请输入新密码
+          .form-tips.form-tips-error(v-if="validation.password.$dirty")
+            span(v-if="validation.password.$error.required") 请输入新密码
+            span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
+            span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
         .form-row
-          input.input-text(type="password", placeholder="确认密码")
+          .input-text-wrap(v-placeholder="'再次输入密码'")
+            input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword")
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
+            span(v-if="validation.confirmPassword.$error.required") 请再一次输入密码
+          .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
+            span(v-if="model.password && validation.confirmPassword.$error.required") 请再一次输入密码
+            span(v-if="validation.confirmPassword.$error.customValidator") 两次密码输入不一致
         .form-actions
-          button.btn.btn-primary.btn-block 确定
+          button.btn.btn-primary.btn-block(type="submit") 确定
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 
@@ -73,11 +86,16 @@
     data: function () {
       return {
         validation: {},
-        model: {}
+        model: {},
+        confirmPassword: ''
       }
     },
 
     methods: {
+      checkEqualToPassword: function (value) {
+        return value === this.model.password;
+      },
+
       onSubmit: function () {
 
       }

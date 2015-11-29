@@ -7,7 +7,13 @@
         p 请输入您的注册邮箱，我们会将重设密码的链接发到您的邮箱中。
       .form-body
         .form-row
-          input.input-text(type="text", placeholder="请输入邮箱")
+          .input-text-wrap(v-placeholder="'请输入邮箱'")
+            input.input-text(type="email", v-model="model.email", v-form-ctrl, name="email", required)
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
+            span(v-if="validation.email.$error.required") 请输入您的电子邮件地址
+          .form-tips.form-tips-error(v-if="validation.email.$dirty")
+            span(v-if="validation.email.$error.required") 请输入您的电子邮件地址
+            span(v-if="validation.email.$error.email") 电子邮件地址格式不正确
         .form-tips.form-tips-success
           i.fa.fa-check-circle
           span 一封找回密码的邮件已发送到您的邮箱，请查收
@@ -15,7 +21,7 @@
           i.fa.fa-times-circle
           span 该邮箱地址不存在，请重试
         .form-actions
-          button.btn.btn-primary.btn-block 确定
+          button.btn.btn-primary.btn-block(type="submit") 确定
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 </template>

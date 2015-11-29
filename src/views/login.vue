@@ -7,15 +7,15 @@
         a(v-link="{ path: '/register' }") 注册账号
       .form-body
         .form-row
-          .input-text(v-placeholder="'手机号'")
-            input(type="text", v-model="model.account", v-form-ctrl, name="account", required)
+          .input-text-wrap(v-placeholder="'手机号'")
+            input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required)
           .form-tips.form-tips-error(v-if="validation.$submitted && validation.account.$pristine")
             span(v-if="validation.account.$error.required") 请输入您的注册手机号
           .form-tips.form-tips-error(v-if="validation.account.$dirty")
             span(v-if="validation.account.$error.required") 请输入您的注册手机号
         .form-row
-          .input-text(v-placeholder="'密码'")
-            input(type="password", v-model="model.password", v-form-ctrl, name="password", required)
+          .input-text-wrap(v-placeholder="'密码'")
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required)
           .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
             span(v-if="validation.password.$error.required") 请输入密码
           .form-tips.form-tips-error(v-if="validation.password.$dirty")
@@ -50,13 +50,8 @@
 
 <script>
   var api = require('../api');
-  var Input = require('../components/input.vue');
 
   module.exports = {
-    components: {
-      'v-input': Input
-    },
-
     data: function () {
       return {
         validation: {},

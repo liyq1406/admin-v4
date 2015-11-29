@@ -1,5 +1,5 @@
 <template lang="jade">
-  .search-box(:class="{'active': active}")
+  .search-box(:class="{'active': active && key.length}")
     slot
     .search-box-input
       input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
@@ -12,13 +12,15 @@
   // 搜索框
   .search-box
     display inline-block
-    
+
+  label
+    margin-right 10px
+
   .search-box-input
     display inline-block
     position relative
     background #F1F3F7
-    size 100px 30px
-    padding 0 36px 0 10px
+    size 180px 30px
 
     input
       background transparent
@@ -26,8 +28,9 @@
       appearance none
       size 100% 30px
       line-height 30px
-      padding 0
+      padding 0 36px 0 10px
       font-size 12px
+      box-sizing border-box
 
     .fa
       absolute right 5px top 6px
@@ -43,7 +46,8 @@
       &:hover
         color red
 
-    &.active
+  &.active
+    .search-box-input
       .fa
         display inline
 

@@ -38,8 +38,17 @@ button.btn
     color #FFF
     background darken(red, 10%)
 
+// 成功按钮样式
+.btn-success
+  background green
+
+  &:hover
+    color #FFF
+    background darken(green, 10%)
+
 .btn-default
 .btn-primary
+.btn-success
   &.disabled
     background #CCC
     cursor not-allowed
@@ -62,6 +71,11 @@ button.btn-link
   line-height 36px
   min-width 120px
   font-size 14px
+
+.btn-sm
+  height 20px
+  line-height 20px
+  padding 0 8px
 
 // 块状按钮
 .btn-block

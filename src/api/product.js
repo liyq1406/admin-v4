@@ -3,12 +3,13 @@ var Promise = require('promise');
 
 module.exports = {
   /**
-   * 获取产品摘要信息
-   * @return {Object} 返回产品摘要
+   * 添加产品
+   * @param  {Object} params 产品信息
+   * @return {Promise}
    */
-  getProductSummary: function () {
+  create: function (params) {
     return new Promise(function (resolve, reject) {
-      Vue.http.get(config.apiRoot + '/statistics/product/summary', function (data, status, request) {
+      Vue.http.post(config.apiRoot + '/product', JSON.stringify(params), function (data, status, request) {
         resolve(data);
       }, {
         headers: {

@@ -1,28 +1,28 @@
 <template lang="jade">
-.panel
-  .panel-bd
-    //- 操作栏
-    .action-bar
-      search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
-      .action-group
-        button.btn.btn-default
-          i.fa.fa-plus
-          | 添加设备
-        button.btn.btn-default
-          i.fa.fa-reply-all
-          | 导入设备
+  .panel
+    .panel-bd
+      //- 操作栏
+      .action-bar
+        search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+        .action-group
+          button.btn.btn-default
+            i.fa.fa-plus
+            | 添加设备
+          button.btn.btn-default
+            i.fa.fa-reply-all
+            | 导入设备
 
-    //- 状态栏
-    .status-bar
-      .status
-        | 共有
-        span {{filteredDevices.length}}
-        | 条结果
-      v-select(:options="visibilityOptions", :value="visibility", @select="setVisibility")
-        span 显示：
+      //- 状态栏
+      .status-bar
+        .status
+          | 共有
+          span {{filteredDevices.length}}
+          | 条结果
+        v-select(:options="visibilityOptions", :value="visibility", @select="setVisibility")
+          span 显示：
 
-    //- 设备列表
-    grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
+      //- 设备列表
+      grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
 </template>
 
 <style lang="stylus">

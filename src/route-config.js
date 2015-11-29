@@ -89,7 +89,7 @@ var configRouter = function (router) {
     '/users': {
       component: require('./views/user/list.vue')
     },
-    '/user/:id': {
+    '/users/:id': {
       component: require('./views/user/details.vue')
     },
 

@@ -59,12 +59,13 @@ Vue.directive('placeholder', {
       } else {
         this.placeholder.style.display = 'none';
       }
-    }
+    };
+
     this.placeholder = document.createElement('span');
     this.placeholder.className = 'placeholder';
     this.el.appendChild(this.placeholder);
 
-    this.input = this.el.getElementsByTagName('input')[0];
+    this.input = this.el.getElementsByClassName('input-text')[0];
     this.input.addEventListener('input', function () {
       handlePlaceholder.apply(self);
     });
@@ -75,7 +76,7 @@ Vue.directive('placeholder', {
 
     this.input.addEventListener('blur', function () {
       handlePlaceholder.apply(self);
-    })
+    });
   },
 
   update: function (value) {
