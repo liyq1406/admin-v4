@@ -64,7 +64,7 @@ gulp.task('json-server', function() {
 gulp.task('serve', function () {
   browserSync({
     server: {
-      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules'] : ['./' + config.dirs.dist]
+      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules', './' + config.dirs.src + '/vendors'] : ['./' + config.dirs.dist]
     }
   });
 });
@@ -118,9 +118,9 @@ gulp.task('clean', function(cb) {
 });
 
 // 资源
-gulp.task('assets', function() {
-  gulp.src('./' + config.dirs.src + '/assets/**/*.[css|js|jpg|png|gif]')
-    .pipe(gulp.dest('./' + config.dirs.dist));
+gulp.task('vendors', function() {
+  gulp.src('./' + config.dirs.src + '/vendors/**/*.[css|js|jpg|png|gif]')
+    .pipe(gulp.dest('./' + config.dirs.dist + '/vendors'));
 });
 
 // 监听
@@ -135,6 +135,6 @@ gulp.task('default', function(cb) {
   if (DEV) {
     sequence('webpack-server', 'markup', 'serve', 'watch', cb);
   } else {
-    sequence('markup', 'bundle', 'assets', cb);
+    sequence('markup', 'bundle', 'vendors', cb);
   }
 });

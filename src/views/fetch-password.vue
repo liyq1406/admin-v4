@@ -1,7 +1,7 @@
 <template lang="jade">
   .form.form-auth.form-fetch-password
     .form-logo
-    form.form-cont(v-form, name="fetchForm", @submit.prevent="onSubmit")
+    form.form-cont(v-form, name="validation", @submit.prevent="onSubmit")
       .form-header
         h2 找回密码
         p 请输入您的注册邮箱，我们会将重设密码的链接发到您的邮箱中。
@@ -43,7 +43,7 @@
   module.exports = {
     data: function () {
       return {
-        fetchForm: {},
+        validation: {},
         model: {}
       }
     },

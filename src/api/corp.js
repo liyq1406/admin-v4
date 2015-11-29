@@ -1,4 +1,3 @@
-var request = require('superagent');
 var config = require('../consts/config');
 var Promise = require('promise');
 
@@ -10,16 +9,14 @@ module.exports = {
    */
   register: function (params) {
     return new Promise(function (resolve, reject) {
-      request
-      .post(config.apiRoot + '/corp_register')
-      .send(JSON.stringify(params))
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .end(function (err, res) {
-        if (res.status === 200) {
-          resolve(res);
-        } else {
-          reject(err);
+      Vue.http.post(config.apiRoot + '/corp_register', JSON.stringify(params), function (data, status, request) {
+        resolve(status);
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      }).error(function (data, status, request) {
+        reject(JSON.parse(data).error);
       });
     });
   },
@@ -31,16 +28,14 @@ module.exports = {
    */
   auth: function (params) {
     return new Promise(function (resolve, reject) {
-      request
-      .post(config.apiRoot + '/corp_auth')
-      .send(JSON.stringify(params))
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .end(function (err, res) {
-        if (res.status === 200) {
-          resolve(res);
-        } else {
-          reject(err);
+      Vue.http.post(config.apiRoot + '/corp_auth', JSON.stringify(params), function (data, status, request) {
+        resolve(data);
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      }).error(function (data, status, request) {
+        reject(JSON.parse(data).error);
       });
     });
   },
@@ -56,22 +51,20 @@ module.exports = {
     return new Promise(function (resolve, reject) {
       // if (localStorage.getItem('expireAt') < today.getTime() + 10000) {
       if (localStorage.getItem('expireAt') < today.getTime() + localStorage.getItem('expireIn') / 2) {
-        request
-        .post(config.apiRoot + '/corp/token/refresh')
-        .send(JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}))
-        .set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Access-Token', localStorage.getItem('accessToken'))
-        .end(function (err, res) {
-          if (res.status === 200) {
-            localStorage.setItem('accessToken', res.body.access_token);
-            localStorage.setItem('refreshToken', res.body.refresh_token);
-            localStorage.setItem('expireIn', res.body.expire_in);
-            localStorage.setItem('expireAt', today.getTime() + res.body.expire_in * 1000);
-            // localStorage.setItem('expireAt', today.getTime() + 20000);
-            resolve(res);
-          } else {
-            reject(err);
+        Vue.http.post(config.apiRoot + '/corp/token/refresh', JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}), function (data, status, request) {
+          localStorage.setItem('accessToken', data.access_token);
+          localStorage.setItem('refreshToken', data.refresh_token);
+          localStorage.setItem('expireIn', data.expire_in);
+          localStorage.setItem('expireAt', today.getTime() + data.expire_in * 1000);
+          // localStorage.setItem('expireAt', today.getTime() + 20000);
+          resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
           }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
         });
       } else if (localStorage.getItem('expireAt') < today.getTime()) {
         vm.$route.router.go({path: '/login'});
@@ -87,16 +80,14 @@ module.exports = {
    */
   resetPassword: function (params) {
     return new Promise(function (resolve, reject) {
-      request
-      .put(config.apiRoot + '/corp/password/forgot')
-      .send(JSON.stringify(params))
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .end(function (err, res) {
-        if (res.status === 200) {
-          resolve(res);
-        } else {
-          reject(err);
+      Vue.http.post(config.apiRoot + '/corp/password/forgot', JSON.stringify(params), function (data, status, request) {
+        resolve(data);
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
+      }).error(function (data, status, request) {
+        reject(JSON.parse(data).error);
       });
     });
   },
@@ -110,17 +101,15 @@ module.exports = {
     var today = new Date();
 
     return new Promise(function (resolve, reject) {
-      request
-      .get(config.apiRoot + '/corp/members')
-      .query(params)
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set('Access-Token', localStorage.getItem('accessToken'))
-      .end(function (err, res) {
-        if (res.status === 200) {
-          resolve(res.body.list);
-        } else {
-          reject(err);
+      Vue.http.get(config.apiRoot + '/corp/members', params, function (data, status, request) {
+        resolve(data.list);
+      }, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': localStorage.getItem('accessToken')
         }
+      }).error(function (data, status, request) {
+        reject(JSON.parse(data).error);
       });
     });
   }

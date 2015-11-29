@@ -47,19 +47,22 @@
               .doc-list
                 .doc-list-item
                   a.fa.fa-apple(href="#", target="_blank")
-                  h3
-                    a(href="#", target="_blank") iOS SDK
-                  p 提供iOS开发文档说明
+                  .info
+                    h3
+                      a(href="#", target="_blank") iOS SDK
+                    p 提供iOS开发文档说明
                 .doc-list-item(href="#", target="_blank")
                   a.fa.fa-android(href="#", target="_blank")
-                  h3
-                    a(href="#", target="_blank") Android SDK
-                  p 提供Android开发文档说明
+                  .info
+                    h3
+                      a(href="#", target="_blank") Android SDK
+                    p 提供Android开发文档说明
                 .doc-list-item(href="#", target="_blank")
                   a.fa.fa-th-large(href="#", target="_blank")
-                  h3
-                    a(href="#", target="_blank") APP 开发示例
-                  p 云智易平台提供了丰富的接口
+                  .info
+                    h3
+                      a(href="#", target="_blank") APP 开发示例
+                    p 云智易平台提供了丰富的接口
           // End: 文档
 
         .col-6
@@ -155,7 +158,6 @@
         text-align center
         line-height 36px
         font-size 24px
-        margin-right 15px
         transition color .3s
 
         &:hover
@@ -179,6 +181,9 @@
         &:hover
           color darken(@color, 20%)
 
+      .info
+        margin-left 56px
+
       h3
         margin 0
         font-size 14px
@@ -196,10 +201,11 @@
 <script>
 var Promise = require('promise');
 var PostList = require('../components/post-list.vue');
-var pageStore = require('../stores/page');
 var api = require('../api');
 
 module.exports = {
+  documentTitle: '概览',
+
   components: {
     'post-list': PostList
   },
@@ -212,16 +218,15 @@ module.exports = {
   },
 
   ready: function () {
-    pageStore.setTitle('概览');
-    api.corp.getMembers({limit: 1}).then(function (data) {
-      console.log(data);
-    });
   },
 
   filters: {
     formatDate: function (date) {
-      var d = date.toLocaleDateString().split('/');
-      return d[2] + '年' + d[0] + '月' + d[1] + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+      var d = date.toLocaleDateString('en-US').split('/');
+      var year = date.getFullYear();
+      var month = date.getMonth();
+      var day = date.getDate();
+      return year + '年' + month + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
     }
   },
 
@@ -235,7 +240,7 @@ module.exports = {
   },
 
   methods: {
-    
+
   }
 }
 </script>

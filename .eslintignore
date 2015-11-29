@@ -1,5 +1,6 @@
 # Node
 node_modules/
+src/vendors/
 
 # Generated files
 dist
