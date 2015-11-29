@@ -22,7 +22,6 @@
   "dependencies": {
     "date-format": "0.0.2",
     "font-awesome": "^4.4.0",
-    "input-placeholder-polyfill": "^1.0.0",
     "promise": "^7.0.4",
     "vue": "^1.0.8",
     "vue-form": "^0.2.2",
