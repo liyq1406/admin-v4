@@ -59,9 +59,14 @@
 
     methods: {
       onSubmit: function () {
+        var self = this;
         if (this.validation.$valid) {
           api.product.create(this.model).then(function (data) {
-            console.log(data);
+            if (__DEBUG__) {
+              console.log(data);
+            }
+            self.$route.router.go({path: '/products/' + data.id});
+
           }).catch(function (error) {
             console.log(error);
           });

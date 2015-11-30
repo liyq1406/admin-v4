@@ -1,6 +1,6 @@
 // var Vue = require('vue');
 
-require('input-placeholder-polyfill');
+// require('input-placeholder-polyfill');
 var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
 var VueForm = require('vue-form');
