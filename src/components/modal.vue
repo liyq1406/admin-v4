@@ -1,14 +1,39 @@
 <template lang="jade">
-.modal.modal-tips.hidden
-  .modal-dialog
-    .modal-header
-      h3 提示
-    .modal-body
-  span.close
+.modal(v-show="show", transition="modal")
+  .modal-wrapper
+    .modal-dialog(:style="dialogStyle")
+      .modal-header
+        slot(name="header")
+          h3 提示
+      .modal-body
+        slot(name="body")
+      span.fa.fa-times-circle(@click="show = false")
 </template>
 
 <script>
 module.exports = {
+  props: {
+    width: {
+      type: Number
+    },
+    show: {
+      type: Boolean,
+      required: true,
+      twoway: true
+    }
+  },
+
+  data: function () {
+    return {
+      dialogStyle: {
+        width: this.width + 'px',
+        height: this.height + 'px',
+        marginLeft: -this.width / 2 + 'px',
+        marginTop: -this.height / 2 + 'px'
+      }
+    };
+  },
+
   ready: function () {
 
   }
@@ -19,118 +44,59 @@ module.exports = {
 @import '../assets/stylus/common'
 
 .modal
-  absolute left top
+  fixed left top
   size 100%
   background rgba(0, 0, 0, .6)
   z-index 1000
+  display table
+  transition opacity .3s ease
+
+  .modal-wrapper
+    display table-cell
+    vertical-align middle
 
   .modal-dialog
-    background rgba(255, 255, 255, .9)
-    width 80%
-    absolute left 50% top 50%
-    margin-left -40%
-    text-align center
+    position relative
+    background rgba(255, 255, 255, .95)
+    margin 0 auto
+    width 500px
+    box-shadow 0 2px 8px rgba(0, 0, 0, .3)
+    transition all .3s ease
+
+    .fa-times-circle
+      absolute right top 3px
+      size 40px
+      line-height 40px
+      text-align center
+      cursor pointer
+      font-size 16px
+      color #666
+      transition color .3s
+
+      &:hover
+        color red
 
   .modal-header
-    padding 2.5rem 1rem 1rem
+    padding 10px 20px
+    border-bottom 1px solid #DDD
 
-    h2
+    h3
       font-weight normal
       color gray-darker
-      font-size 1.8rem
       margin 0
 
   .modal-body
-    padding 0 1rem 2.5rem
+    padding 30px
 
-    p
-      margin 0
-      color gray-dark
-      font-size 1.4rem
+  .form
+    .form-row
+      .controls
+        width 330px
 
-    input[type="text"]
-      text-align center
-      border 1px solid #A0A0A0
-      display block
-      font-size 1.4rem
-      padding 1rem
-      width 100%
-      box-sizing border-box
-      color gray-dark
+    .form-actions
+      padding-left 0
+      text-align right
 
-    .radio
-      position relative
-      display block
-      color gray-dark
-      background #FFF
-      font-size 1.6rem
-      padding 0.5rem 1rem
-      margin-bottom 0.8rem
-      text-align left
-
-      input[type="radio"]
-        absolute right 1rem top .6rem
-        appearance none
-        border none
-        background transparent
-        size 2.2rem
-
-        &:checked
-          background-size 2.2rem
-
-  .modal-footer
-    border-top 1px solid #DCDCDC
-    text-align center
-    clearfix()
-
-    .btn-link
-      float left
-      width 50%
-      background transparent
-      border none
-      color #00AEFF
-      font-size 1.4rem
-      padding 1rem 0
-      text-align center
-
-      & + .btn-link
-        border-left 1px solid #DCDCDC
-        box-sizing border-box
-
-    .btn-block
-      width 100%
-
-.modal-tips
-  .modal-dialog
-    margin-top -10rem
-
-.modal-change-name
-  .modal-dialog
-    margin-top -10rem
-
-.modal-select-device
-  .modal-dialog
-    position relative
-    margin-top -20rem
-
-    &:after
-      absolute left 50% bottom -3.1rem
-      content ""
-      size 10rem 3.1rem
-      margin-left -5rem
-      background-size 10rem 3.1rem
-
-  .radio-group
-    height 21rem
-    overflow auto
-
-  .modal-footer
-    border none
-
-  .btn-submit
-    position relative
-    z-index 10
-    margin-bottom -2rem
-    size 8.15rem
-    background-size 8.15rem
+      .btn
+        margin-left 10px
 </style>

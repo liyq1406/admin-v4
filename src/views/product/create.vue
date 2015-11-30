@@ -46,6 +46,7 @@
 
 <script>
   var api = require('../../api');
+  var productsStore = require('../../stores/products');
 
   module.exports = {
     documentTitle: "添加产品",
@@ -53,7 +54,8 @@
     data: function () {
       return {
         model: {},
-        validation: {}
+        validation: {},
+        state: productsStore.state
       }
     },
 
@@ -65,8 +67,8 @@
             if (__DEBUG__) {
               console.log(data);
             }
+            productsStore.addProduct(data);
             self.$route.router.go({path: '/products/' + data.id});
-
           }).catch(function (error) {
             console.log(error);
           });

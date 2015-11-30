@@ -13,8 +13,8 @@
   .search-box
     display inline-block
 
-  label
-    margin-right 10px
+    label
+      margin-right 10px
 
   .search-box-input
     display inline-block

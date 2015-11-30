@@ -15,7 +15,7 @@
           | 概览
       .nav-aside-group
         h3 产品管理
-        .nav-aside-item(v-for="product in products")
+        .nav-aside-item(v-for="product in productsState.products")
           a(v-link="{ name: 'products', params: { id: product.id} }")
             i.fa.fa-link
             | {{ product.name }}
@@ -43,28 +43,40 @@
 </template>
 
 <script>
-module.exports = {
-  data: function () {
-    return {
-      access: false,
-      products: []
-    }
-  },
+  var api = require('./api');
+  var productsStore = require('./stores/products');
 
-  route: {
+  module.exports = {
     data: function () {
-      if (access) {
+      return {
+        access: false,
+        productsState: productsStore.state
+      }
+    },
+
+    ready: function () {
+      var self = this;
+      api.corp.refreshToken(this).then(function () {
+        api.product.list().then(function (data) {
+          productsStore.addProducts(data);
+        })
+      });
+    },
+
+    /*
+    route: {
+      data: function () {
         return {
-          products: []
+          products: api.product.list()
         }
       }
+    },
+    */
+
+    methods: {
+
     }
-  },
-
-  methods: {
-
-  }
-};
+  };
 </script>
 
 <style lang="stylus">

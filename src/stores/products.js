@@ -8,7 +8,7 @@ module.exports = {
   },
 
   addProduct: function (product) {
-    this.state.products.unshift(product);
+    this.state.products.push(product);
   },
 
   deleteProduct: function (product) {

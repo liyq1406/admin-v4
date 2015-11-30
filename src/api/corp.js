@@ -67,6 +67,8 @@ module.exports = function (Vue, Promise, config) {
         } else if (localStorage.getItem('expireAt') < today.getTime()) {
           vm.$route.router.go({path: '/login'});
           //reject('Token expired.');
+        } else {
+          resolve(true);
         }
       });
     },

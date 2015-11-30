@@ -77,6 +77,8 @@ Vue.directive('placeholder', {
     this.input.addEventListener('blur', function () {
       handlePlaceholder.apply(self);
     });
+
+    handlePlaceholder.apply(this);
   },
 
   update: function (value) {
