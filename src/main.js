@@ -1,7 +1,7 @@
-// var Vue = require('vue');
+var Vue = require('vue');
 
 // require('input-placeholder-polyfill');
-var VueResource = require('vue-resource');
+// var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
@@ -18,7 +18,7 @@ var App = Vue.extend(require('./app.vue'));
 Vue.config.debug = true;
 
 // 使用资源插件
-Vue.use(VueResource);
+// Vue.use(VueResource);
 // Vue.http.options.root = 'http://42.121.122.228:8887/v2';
 
 // 加载路由插件

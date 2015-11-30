@@ -121,6 +121,13 @@ var webpackConfig = {
     ].concat(DEV ? [
       'webpack/hot/dev-server',
       'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
+    ] : []),
+
+    test: [
+      'mocha!./' + dirs.test + '/apiTest'
+    ].concat(DEV ? [
+      'webpack/hot/dev-server',
+      'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
     ] : [])
   },
 
@@ -188,11 +195,8 @@ var webpackConfig = {
     new webpack.optimize.OccurenceOrderPlugin(true),
 
     // 变量定义，以便在开发阶段使用
-    new DefinePlugin(GLOBALS),
+    new DefinePlugin(GLOBALS)
 
-    new webpack.ProvidePlugin({
-      Vue: 'vue'
-    })
   ].concat(DEV ? [
     // 代码热替换
     new webpack.HotModuleReplacementPlugin(),

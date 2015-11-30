@@ -11,6 +11,7 @@ var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config').webpackConfig;
 var config = require('./webpack.config').config;
 var fakeData = require('./data');
+var mocha = require('gulp-mocha');
 
 var DEV = webpackConfig.debug;
 
@@ -128,6 +129,7 @@ gulp.task('watch', function () {
   watch(config.markup.src, function () {
     gulp.start('markup');
   });
+
 });
 
 // 默认任务
