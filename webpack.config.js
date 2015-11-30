@@ -6,6 +6,7 @@ var autoprefixer = require('autoprefixer');
 var webpack = require('webpack');
 var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var merge = require('lodash/object/merge');
 
 // 获取命令行参数
 // --debug 输出日志
@@ -82,8 +83,11 @@ var config = {
 
   // 标记语言
   markup: {
-    src: [
+    src: DEV ? [
       './' + dirs.src + '/**/*.jade'
+    ] : [
+      './' + dirs.src + '/**/*.jade',
+      '!./' + dirs.src + '/test.jade'
     ],
     dest: DEV ? './' + dirs.pub : './' + dirs.dist,
     locals: MARKUP_LOCALS
@@ -115,7 +119,7 @@ var webpackConfig = {
   },
 
   // 入口文件
-  entry : {
+  entry : merge({
     app: [
       './' + dirs.src + '/main'
     ].concat(DEV ? [
@@ -123,13 +127,14 @@ var webpackConfig = {
       'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
     ] : []),
 
+  }, DEV ? {
     test: [
       'mocha!./' + dirs.test + '/apiTest'
     ].concat(DEV ? [
       'webpack/hot/dev-server',
       'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
     ] : [])
-  },
+  } : {}),
 
   output: {
     filename: 'scripts/[name].js',
