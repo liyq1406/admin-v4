@@ -123,9 +123,8 @@
 
     route: {
       data: function () {
-        return {
-          devices: this.fetchDevices(this.$route.params['id'])
-        }
+        // devices: this.fetchDevices(this.$route.params['id'])
+        
       }
     },
 
@@ -144,19 +143,6 @@
 
       cancelSearching: function () {
         this.setQuery('');
-      },
-
-      fetchDevices: function (productId) {
-        var apiUrl = apiRoot + 'product/' + productId + '/devices';
-        var self = this;
-
-        return new Promise(function (resolve, reject) {
-          return self.$http.get(apiUrl, function (data, status, request) {
-            resolve(data);
-          }).error(function (data, status, request) {
-            reject(data);
-          });
-        });
       }
     }
   };

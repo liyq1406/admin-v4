@@ -46,7 +46,7 @@
             link: { path: '/products/' + this.$route.params.id + '/devices' }
           }, {
             label: '数据端点',
-            link: { path: '/products/' + this.$route.params.id + '/data-node' }
+            link: { path: '/products/' + this.$route.params.id + '/data-point' }
           }, {
             label: '通知与告警',
             link: { path: '/products/' + this.$route.params.id + '/notice' }

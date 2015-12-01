@@ -49,29 +49,24 @@
   module.exports = {
     data: function () {
       return {
-        access: false,
+        access: true,
         productsState: productsStore.state
       }
     },
 
-    ready: function () {
+    ready: function function_name() {
       var self = this;
-      api.corp.refreshToken(this).then(function () {
-        api.product.list().then(function (data) {
-          productsStore.addProducts(data);
-        })
-      });
-    },
-
-    /*
-    route: {
-      data: function () {
-        return {
-          products: api.product.list()
-        }
+      if (this.access) {
+        api.corp.refreshToken(this).then(function () {
+          api.product.list().then(function (data) {
+            if (__DEBUG__) {
+              // console.log(data);
+            }
+            productsStore.addProducts(data);
+          })
+        });
       }
     },
-    */
 
     methods: {
 

@@ -48,8 +48,8 @@ var configRouter = function (router) {
         'devices': {
           component: require('./views/product/device/list.vue')
         },
-        'data-node': {
-          component: require('./views/product/data-node.vue')
+        'data-point': {
+          component: require('./views/product/data-point.vue')
         },
         'notice': {
           component: require('./views/product/notice.vue')
