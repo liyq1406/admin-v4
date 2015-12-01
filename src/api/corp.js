@@ -161,7 +161,7 @@ module.exports = function (Vue, Promise, config) {
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-             'Access-Token': localStorage.getItem('accessToken')
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
@@ -171,7 +171,7 @@ module.exports = function (Vue, Promise, config) {
     /** 8.删除单个成员信息
      * 删除一个成员的基本信息
      * @param  {Object} params  {member_id}
-     * @return  stauts 
+     * @return  stauts
      */
     delMember: function (member_id) {
       return new Promise(function (resolve, reject) {
@@ -180,7 +180,7 @@ module.exports = function (Vue, Promise, config) {
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-             'Access-Token': localStorage.getItem('accessToken')
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
@@ -190,8 +190,8 @@ module.exports = function (Vue, Promise, config) {
     /**9编辑成员基本信息
      * 成员编辑本成员的基本信息。
      * @param  {Object} params  {"name":"成员姓名"}
-     * @param  {member_id}  
-     * @return  stauts 
+     * @param  {member_id}
+     * @return  stauts
      */
     putMember: function (member_id,params) {
       return new Promise(function (resolve, reject) {
@@ -200,7 +200,7 @@ module.exports = function (Vue, Promise, config) {
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-             'Access-Token': localStorage.getItem('accessToken')
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
@@ -210,7 +210,7 @@ module.exports = function (Vue, Promise, config) {
    /**10 成员重置密码
      * 成员重置自己的密码，成员只能重置自己的密码，管理员不能修改其他任何成员的密码。
      * @param  {Object} params  { "oldpassword":"旧密码",  "newpassword":"新密码"}
-     * @return  stauts 
+     * @return  stauts
      */
     memberResetPwd: function (params) {
       return new Promise(function (resolve, reject) {
@@ -219,7 +219,7 @@ module.exports = function (Vue, Promise, config) {
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-             'Access-Token': localStorage.getItem('accessToken')
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
@@ -229,7 +229,7 @@ module.exports = function (Vue, Promise, config) {
       /**11 成员角色设置
      * 管理员可以设置普通成员的角色。
      * @param   member_id,role_type
-     * @return  stauts 
+     * @return  stauts
      */
     memberResetPwd: function (member_id,role_type) {
       return new Promise(function (resolve, reject) {
@@ -238,7 +238,7 @@ module.exports = function (Vue, Promise, config) {
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
-             'Access-Token': localStorage.getItem('accessToken')
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
@@ -248,7 +248,7 @@ module.exports = function (Vue, Promise, config) {
     /**12 停用成员
      * 将成员设置为停用，使成员不可用。
      * @param  {Object} member_id  member_id
-     * @return  stauts 
+     * @return  stauts
      */
     memberResetPwd: function (member_id) {
       return new Promise(function (resolve, reject) {

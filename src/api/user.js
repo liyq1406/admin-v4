@@ -1,34 +1,42 @@
 module.exports = function(Vue, Promise, config) {
   return {
     /**
-     * 1.添加产品
-     * @param  {Object} params 产品信息
+     * 9.用户列表查询
+     * @param  {Object} params
+      {
+        "offset":"请求列表的偏移量",
+        "limit":"请求数量",
+        "filter":["字段A","字段B"],
+        "query":
+        {
+          "filed1":{"$in":["字段值","字段值"]},
+          "filed3":{"$lt":"字段值"}
+        },
+        "order":
+        {
+          "filed1":"desc",
+          "filed2":"asc"
+        }
+      }
      * @return {Promise}
-     */
-    createProduct: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product', JSON.stringify(
-          params), function(data, status, request) {
-          resolve(data);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+      {
+        "count" : "实际返回数量",
+        "list" :
+        [
+          {
+            "id" : "用户ID",
+            "phone/email" : "手机号/邮箱",
+            "nickname" : "用户昵称",
+            "authorize_code":"认证码",
+            "create_date" : "创建时间",
+            "source" : "用户来源"
           }
-        }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
-        });
-      });
-    },
-
-    /**
-     * 2.删除产品
-     * @param  {Object} product_id 产品Id
-     * @return {Promise}
+        ]
+      }
      */
-    deleteProduct: function(product_id) {
+    list: function(params) {
       return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/product/' + product_id,
+        Vue.http.post(config.apiRoot + '/users', JSON.stringify(params),
           function(data, status, request) {
             resolve(data);
           }, {
@@ -43,38 +51,23 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 3.更新产品信息
-     * @param  {Object} product 产品
+     * 10.获取用户详细信息
+     * @param  user_id
      * @return {Promise}
+      {
+        "id" : "用户ID",
+        "corp_id":"企业ID",
+        "phone/email" : "手机号/邮箱",
+        "nickname" : "用户昵称",
+        "authorize_code":"认证码",
+        "create_date" : "创建时间",
+        "source" : "用户来源",
+        "region_id":"所在区域ID"
+      }
      */
-    updateProduct: function(product) {
+    profile: function(user_id) {
       return new Promise(function(resolve, reject) {
-        var params = {};
-        params.name = product.name;
-        params.description = product.description;
-        params.link_type = product.link_type;
-        params.is_release = product.is_release;
-        Vue.http.put(config.apiRoot + '/product/' + product.id, JSON.stringify(
-          params), function(data, status, request) {
-          resolve(data);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
-          }
-        }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
-        });
-      });
-    },
-
-    /**
-     * 4.获取产品列表
-     * @return {Promise}
-     */
-    getProducts: function() {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/products', function(data,
+        Vue.http.get(config.apiRoot + '/user/' + user_id, function(data,
           status, request) {
           resolve(data);
         }, {
@@ -89,13 +82,31 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 5.获取产品详细信息
-     * @param  {String} product_id 产品Id
+     *11..获取用户订阅的设备列表
+     * @param  {Object} params 重置密码参数信息
      * @return {Promise}
+        [
+          {
+            "id" : "设备ID",
+            "mac" : "设备MAC地址",
+            "is_active" : "是否激活",
+            "active_date" : "激活时间",
+            "is_online" : "是否在线",
+            "last_login" : "最近登录时间",
+            "active_code" : "激活码",
+            "authorize_code" : "认证码",
+            "mcu_mod" : "MCU型号",
+            "mcu_version" : "MCU版本号",
+            "firmware_mod" : "固件型号",
+            "firmware_version" : "固件版本号",
+            "product_id" : "所属的产品ID"
+          }
+        ]
      */
-    getProduct: function(product_id) {
+    subDevliceList: function(user_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id,
+        Vue.http.get(config.apiRoot + '/user/' + user_id +
+          '/subscribe/devices', JSON.stringify(params),
           function(data, status, request) {
             resolve(data);
           }, {
@@ -110,14 +121,45 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 6.添加固件版本
-     * @param  {Object} params 产品信息
+     * 12.设置用户扩展属性
+       用户可以设置自定义扩展属性，扩展属性为Key-Value结构，用户扩展属性限制最多为10个。
+     * @param  {Object} user_id
+     * @param  {Object} params query参数
+        {
+          "{key}":"{value}",
+          "{key}":"{value}"
+        }
      * @return {Promise}
      */
-    addFirmware: function(product_id, params) {
+    setPorperty: function(params, user_id) {
+
       return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/firmware', JSON.stringify(params),
+        Vue.http.post(config.apiRoot + '/user/' + user_id + '/property',
+          params,
+          function(data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /**13.获取用户扩展属性
+     * @param  {Object} user_id
+     * @return {Promise}
+        {
+          "{key}":"{value}",
+          "{key}":"{value}"
+        }
+     */
+    getPropertyList: function(user_id) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/user/' + user_id + '/property',
+          JSON.stringify(params),
           function(data, status, request) {
             resolve(data);
           }, {
@@ -130,23 +172,41 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 7.编辑固件版本
-     * @param  {Object} params 产品信息
-     * @return {Promise}
-     */
-    updateFirmware: function(product_id, firmware) {
+    /**14.修改用户扩展属性
+      * @param  {Object} params
+        {
+          "{key}":"{value}",
+          "{key}":"{value}"
+        }
+      * @return {Promise}
+      */
+    alertProperty: function(params, user_id) {
       return new Promise(function(resolve, reject) {
-        var params = {};
-        params.mod = firmware.mod;
-        params.version = firmware.version;
-        params.file_url = firmware.file_url;
-        params.description = firmware.description;
-        params.release_date = firmware.release_date;
-        params.is_release = firmware.is_release;
-        Vue.http.put(config.apiRoot + '/product/' + product_id +
-          '/firmware/' + firmware.id, JSON.stringify(params),
+        Vue.http.put(config.apiRoot + '/user/' + user_id + '/property',
+          JSON.stringify(params),
+          function(data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /** 15.获取用户单个扩展属性
+     * @param
+     * @return {Promise}
+        {
+          "{key}":"{value}"
+        }
+     */
+    getProperty: function(user_id, key) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/user/' + user_id + '/property/' +
+          key,
           function(data, status, request) {
             resolve(data);
           }, {
@@ -159,19 +219,17 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 8.删除固件版本
-     * @param  {Object} product_id 产品Id
-     * @param  {Object} firmware_id 固件Id
-     * @return {Promise}
+    /** 16.删除用户扩展属性
+     * 删除一个成员的基本信息
+     * @param  {Object} params  {member_id}
+     * @return  stauts
      */
-    deleteFirmware: function(product_id, firmware_id) {
+    delAllProperty: function(member_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/product/' + product_id +
-          '/firmware/' + firmware_id,
+        Vue.http.delete(config.apiRoot + '/user/' + user_id +
+          '/property/' + key,
           function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -182,16 +240,18 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 9.获取固件版本列表
-     * @return {Promise}
+    /**17.停用用户
+     * 成员编辑本成员的基本信息。
+     * @param  {Object} params  {"name":"成员姓名"}
+     * @param  {member_id}
+     * @return  stauts
      */
-    getFirmwares: function() {
+    putMember: function(user_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/products/' + firmwares,
+        Vue.http.put(config.apiRoot + '/user/' + user_id + '/status',
+          JSON.stringify(params),
           function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -202,19 +262,19 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 10.添加数据端点
-     * @param  {String} product_id 产品Id
-     * @param  {Object} params 参数
-     * @return {Promise}
+    /**17.更新用户所在区域
+     * @param  {Object} params
+     * {
+        "region_id":"区域ID"
+       }
+     * @return  stauts
      */
-    addDataPoint: function(product_id, params) {
+    memberResetPwd: function(params, user_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/datapoint', JSON.stringify(params),
+        Vue.http.put(config.apiRoot + '/user/' + user_id + '/region',
+          JSON.stringify(params),
           function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -225,25 +285,17 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 11.更新数据端点
-     * @param  {String} product_id 产品Id
-     * @param  {Object} datapoint 数据端点
-     * @return {Promise}
+    /**11 成员角色设置
+     * 管理员可以设置普通成员的角色。
+     * @param   member_id,role_type
+     * @return  stauts
      */
-    updateDataPoint: function(product_id, datapoint) {
+    memberResetPwd: function(member_id, role_type) {
       return new Promise(function(resolve, reject) {
-        var params = {};
-        params.name = datapoint.name;
-        params.type = datapoint.type;
-        params.index = datapoint.index;
-        params.description = datapoint.description;
-        params.symbol = datapoint.symbol;
-        Vue.http.put(config.apiRoot + '/product/' + product_id +
-          '/datapoint/' + datapoint.id, JSON.stringify(params),
+        Vue.http.put(config.apiRoot + '/corp/member/' + member_id +
+          '/role/' + role_type,
           function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -254,64 +306,17 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-
-    /**
-     * 12.删除数据端点
-     * @param  {String} product_id 产品Id
-     * @param  {Object} datapoint 数据端点
-     * @return {Promise}
+    /**12 停用成员
+     * 将成员设置为停用，使成员不可用。
+     * @param  {Object} member_id  member_id
+     * @return  stauts
      */
-    deleteDataPoint: function(product_id, datapoint_id) {
+    memberResetPwd: function(member_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/product/' + product_id +
-          '/datapoint/' + datapoint_id,
+        Vue.http.put(config.apiRoot + '/corp/member/' + member_id +
+          '/disable',
           function(data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Access-Token': localStorage.getItem('accessToken')
-            }
-          }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
-        });
-      });
-    },
-
-    /**
-     * 13.获取数据端点
-     * @param  {String} product_id 产品Id
-     * @param  {Object} datapoint 数据端点
-     * @return {Promise}
-     */
-    getDataPoint: function(product_id, datapoint_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id +
-          '/datapoint/' + datapoint_id,
-          function(data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Access-Token': localStorage.getItem('accessToken')
-            }
-          }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
-        });
-      });
-    },
-
-    /**
-     * 14.获取数据端点列表
-     * @param  {String} product_id 产品Id
-     * @return {Promise}
-     */
-    getDatapoints: function(product_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id +
-          '/datapoints',
-          function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
