@@ -5,7 +5,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 产品信息
      * @return {Promise}
      */
-    create: function (params) {
+    createProduct: function (params) {
       return new Promise(function (resolve, reject) {
         Vue.http.post(config.apiRoot + '/product', JSON.stringify(params), function (data, status, request) {
           resolve(data);
@@ -25,7 +25,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} product_id 产品Id
      * @return {Promise}
      */
-    create: function (product_id) {
+    deleteProduct: function (product_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.delete(config.apiRoot + '/product/' + product_id, function (data, status, request) {
           resolve(data);
@@ -45,14 +45,14 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} product 产品
      * @return {Promise}
      */
-    update: function (product) {
+    updateProduct: function (product) {
       return new Promise(function (resolve, reject) {
         var params = {};
         params.name = product.name;
         params.description = product.description;
         params.link_type = product.link_type;
         params.is_release = product.is_release;
-        Vue.http.put(config.apiRoot + '/product/' + product_id, JSON.stringify(params), function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/product/' + product.id, JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
           headers: {
@@ -69,7 +69,7 @@ module.exports = function (Vue, Promise, config) {
      * 4.获取产品列表
      * @return {Promise}
      */
-    list: function () {
+    getProducts: function () {
       return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/products', function (data, status, request) {
           resolve(data);
@@ -89,7 +89,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {String} product_id 产品Id
      * @return {Promise}
      */
-    get: function (product_id) {
+    getProduct: function (product_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/product/' + product_id, function (data, status, request) {
           resolve(data);
@@ -286,7 +286,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {String} product_id 产品Id
      * @return {Promise}
      */
-    datapoints: function (product_id) {
+    getDatapoints: function (product_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/product/' + product_id + '/datapoints', function (data, status, request) {
           resolve(data);

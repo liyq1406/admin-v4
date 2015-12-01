@@ -1,4 +1,5 @@
 <template lang="jade">
+  div
     .row
       .col-12
         // Start: 个人信息
@@ -156,15 +157,16 @@
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
-    ul.user-details
-      li
-        list-style none
-        .label
-          display inline-block
-          width 103px
-          line-height 43px
-        .info
-          display inline-block
+
+  ul.user-details
+    li
+      list-style none
+      .label
+        display inline-block
+        width 103px
+        line-height 43px
+      .info
+        display inline-block
 </style>
 <script>
   var Modal = require('../../components/modal.vue');

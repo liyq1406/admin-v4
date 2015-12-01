@@ -193,7 +193,7 @@
     route: {
       data: function (transition) {
         return {
-          datapoints: api.product.datapoints(this.$route.params.id)
+          datapoints: api.product.getDatapoints(this.$route.params.id)
         }
       }
     },
@@ -208,6 +208,7 @@
                 console.log(data);
               }
               self.datapoints.push(data);
+              self.model = {};
               self.showAddModal = false;
             });
           });
@@ -241,7 +242,7 @@
             });
           });
         }
-      },
+      }
     }
   };
 </script>

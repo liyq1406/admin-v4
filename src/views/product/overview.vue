@@ -11,7 +11,7 @@
               .col-9.summary
                 h3
                   | {{ product.name }}
-                  a.fa.fa-edit(href="#", @click.prevent="showModal = true")
+                  a.fa.fa-edit(href="#", @click.prevent="editProduct")
                 p
                   em 产品描述：
                   span {{ product.description }}
@@ -60,15 +60,15 @@
           .panel-bd
         // End: 设备分布
 
-    modal(:show.sync="showModal")
+    modal(:show.sync="showEditModal")
       h3(slot="header") 编辑产品
       .form(slot="body")
-        form(v-form, name="validation", @submit.prevent="onSubmit")
+        form(v-form, name="validation", @submit.prevent="onEditSubmit")
           .form-row
             label.form-control 产品名称：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品名称'")
-                input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入产品名称
               .form-tips.form-tips-error(v-if="validation.name.$dirty")
@@ -78,7 +78,7 @@
             label.form-control 产品描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品描述'")
-                textarea.input-text(v-model="model.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.description.$pristine")
                 span(v-if="validation.description.$error.required") 请输入产品描述
               .form-tips.form-tips-error(v-if="validation.description.$dirty")
@@ -88,19 +88,24 @@
             label.form-control 设备类型：
             .controls
               .select
-                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
                   option(value="1", selected) wifi设备
                   option(value="2") Zigbee网关
                   option(value="3") 蓝牙设备
           .form-actions
-            button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit") 添加
+            label.del-check
+              input(type="checkbox", name="del", v-model="delChecked")
+              | 删除产品
+            button.btn.btn-default(@click.prevent.stop="onCancelEdit") 取消
+            button.btn.btn-primary(type="submit") 确定
 </template>
 
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
   var Select = require('../../components/select.vue');
   var Modal = require('../../components/modal.vue');
+  var productsStore = require('../../stores/products');
+  var api = require('../../api');
 
   module.exports = {
     components: {
@@ -128,9 +133,10 @@
           { label: '深圳', value: 'shenzhen' },
           { label: '上海', value: 'shanghai' }
         ],
-        showModal: false,
-        model: {},
-        validation: {}
+        showEditModal: false,
+        editModel: {},
+        validation: {},
+        delChecked: false
       }
     },
 
@@ -149,19 +155,40 @@
         console.log("region: " + this.region);
       },
 
-      onSubmit: function () {
-        /*var self = this;
-        if (this.validation.$valid) {
-          api.product.create(this.model).then(function (data) {
-            if (__DEBUG__) {
-              console.log(data);
-            }
-            productsStore.addProduct(data);
-            self.$route.router.go({path: '/products/' + data.id});
-          }).catch(function (error) {
-            console.log(error);
+      editProduct: function () {
+        this.showEditModal = true;
+        this.editModel = this.product;
+      },
+
+      onCancelEdit: function () {
+        this.showEditModal = false;
+        this.editModel = this.product;
+      },
+
+      onEditSubmit: function () {
+        var self = this;
+
+        if (this.delChecked) {
+          api.corp.refreshToken().then(function () {
+            api.product.deleteProduct(self.$route.params.id).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.showEditModal = false;
+              productsStore.deleteProduct(self.product);
+              self.$route.router.go('/');
+            });
           });
-        }*/
+        } else if (this.editValidation.$valid) {
+          api.corp.refreshToken().then(function () {
+            api.product.updateProduct(self.$route.params.id, self.editModel).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.showEditModal = false;
+            });
+          });
+        }
       }
     }
   };

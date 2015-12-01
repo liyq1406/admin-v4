@@ -58,7 +58,7 @@
       var self = this;
       if (this.access) {
         api.corp.refreshToken(this).then(function () {
-          api.product.list().then(function (data) {
+          api.product.getProducts().then(function (data) {
             if (__DEBUG__) {
               // console.log(data);
             }

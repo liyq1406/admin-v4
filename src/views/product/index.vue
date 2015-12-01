@@ -29,7 +29,7 @@
       data: function (transition) {
         var self = this;
         api.corp.refreshToken(this).then(function () {
-          api.product.get(self.$route.params.id).then(function (data) {
+          api.product.getProduct(self.$route.params.id).then(function (data) {
             if (__DEBUG__) {
               console.log(data);
             }

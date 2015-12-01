@@ -40,10 +40,6 @@
 
 </template>
 
-<style lang="stylus">
-
-</style>
-
 <script>
   var api = require('../../api');
   var productsStore = require('../../stores/products');
@@ -63,14 +59,16 @@
       onSubmit: function () {
         var self = this;
         if (this.validation.$valid) {
-          api.product.create(this.model).then(function (data) {
-            if (__DEBUG__) {
-              console.log(data);
-            }
-            productsStore.addProduct(data);
-            self.$route.router.go({path: '/products/' + data.id});
-          }).catch(function (error) {
-            console.log(error);
+          api.corp.refreshToken().then(function () {
+            api.product.createProduct(self.model).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              productsStore.addProduct(data);
+              self.$route.router.go({path: '/products/' + data.id});
+            }).catch(function (error) {
+              console.log(error);
+            });
           });
         }
       }

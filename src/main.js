@@ -68,7 +68,6 @@ Vue.directive('placeholder', {
 
     this.input = this.el.getElementsByClassName('input-text')[0];
     vModel = this.input.getAttribute('v-model');
-    console.log(vModel);
 
     if (vModel) {
       this.vm.$watch(vModel, function (value, oldValue) {
