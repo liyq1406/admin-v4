@@ -45,11 +45,11 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="name", maxlength="32", required)
-              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
+                input.input-text(v-model="model.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
+                span(v-if="validation.email.$error.required") 请输入成员邮箱
+              .form-tips.form-tips-error(v-if="validation.email.$dirty")
+                span(v-if="validation.email.$error.required") 请输入成员邮箱
           .form-row
             label.form-control 角色：
             .controls
@@ -59,7 +59,7 @@
                   option(value="2", selected) 普通用户
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit") 添加
+            button.btn.btn-primary(type="submit",@click.prevent.stop="adduser") 添加
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
@@ -120,6 +120,10 @@
 
       cancelSearching: function () {
         this.setQuery('');
+      },
+      adduser:function(){
+        console.log(this.model.email)
+        console.log(this.model.link_type)
       }
     }
   };
