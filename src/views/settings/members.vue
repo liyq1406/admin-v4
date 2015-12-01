@@ -4,7 +4,7 @@
           search-box(:key="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
             label 查找成员
           h2.title 成员列表
-          button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModal = true") +添加成员
+          button.btn.btn-success.btn-lg.mt10.mb10.bottom_add(@click.prevent="showModal = true") +添加成员
     .panel-bd
           //- 用户列表
           table.table.table-stripe.table-bordered
@@ -48,7 +48,7 @@
     .panel-hd
     	.title
     		display inline
-    	.btn
+    	.bottom_add
     		margin-left 50px
 
 </style>
