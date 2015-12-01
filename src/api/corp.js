@@ -1,7 +1,7 @@
 module.exports = function (Vue, Promise, config) {
   return {
     /**
-     * 企业账户注册
+     * 1.企业账户注册
      * @param  {Object} params 注册信息
      * @return {Promise}
      */
@@ -20,7 +20,7 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
-     * 企业认证
+     * 2.企业认证
      * @param  {Object} params 账号与密码信息
      * @return {Promise}
      */
@@ -74,13 +74,13 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
-     * 重置密码
+     * 3.重置密码
      * @param  {Object} params 重置密码参数信息
      * @return {Promise}
      */
     resetPassword: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.post(config.apiRoot + '/corp/password/forgot', JSON.stringify(params), function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/password/forgot', JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
           headers: {
@@ -93,16 +93,167 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
-     * 获取账户下所有成员列表
+     * 7.获取账户下所有成员列表
      * @param  {Object} params query参数
      * @return {Promise}
      */
-    getMembers: function (params) {
+    getMembers: function (params,offset,limit) {
       var today = new Date();
 
       return new Promise(function (resolve, reject) {
-        Vue.http.get(config.apiRoot + '/corp/members', params, function (data, status, request) {
+        Vue.http.get(config.apiRoot + '/corp/members?offset='+offset+'&limit='+limit, params, function (data, status, request) {
           resolve(data.list);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /**4.发起成员邀请邮件
+     * 管理员可发起成员邀请，发起后向成员邮箱发送邮件并提供链接，成员通过该链接完善登陆信息。
+     * @param  {Object} params  { "email":"成员邮箱地址", "content":"邮件内容","role":"角色类型"}
+     * @return {Promise}
+     */
+    memberInvite: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + 'corp/member_invite', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+   /** 5.成员激活邀请
+     * 通过本接口完善成员登陆信息后完成激活，这时成员的邮箱是已认证。
+     * @param  {Object} params  {"phone":"手机号码", "verifycode":"手机验证码","name":"您的姓名","email":"邮箱地址","password":"登陆密码"}
+     * @return {Promise}
+     */
+    memberActivate: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(config.apiRoot + 'corp/member_activate', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+   /** 6. 获取单个成员信息
+     * 获取一个成员的基本信息。。
+     * @param  {Object} params  {member_id}
+     * @return {Promise}   {  "id":"成员ID", "name":"姓名", "role":"角色类型", "status":"成员状态" }
+     */
+    getMember: function (member_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(config.apiRoot + 'corp/member/'+member_id, "", function (data, status, request) {
+          resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+             'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /** 8.删除单个成员信息
+     * 删除一个成员的基本信息
+     * @param  {Object} params  {member_id}
+     * @return  stauts 
+     */
+     delMember: function (member_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(config.apiRoot + 'corp/member/'+ member_id, "", function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+             'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /**9编辑成员基本信息
+     * 成员编辑本成员的基本信息。
+     * @param  {Object} params  {"name":"成员姓名"}
+     * @param  {member_id}  
+     * @return  stauts 
+     */
+     putMember: function (member_id,params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(config.apiRoot + 'corp/member/'+member_id, JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+             'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+   /**10 成员重置密码
+     * 成员重置自己的密码，成员只能重置自己的密码，管理员不能修改其他任何成员的密码。
+     * @param  {Object} params  { "oldpassword":"旧密码",  "newpassword":"新密码"}
+     * @return  stauts 
+     */
+     memberResetPwd: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(config.apiRoot + ' corp/member/password/reset', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+             'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+      /**11 成员角色设置
+     * 管理员可以设置普通成员的角色。
+     * @param   member_id,role_type
+     * @return  stauts 
+     */
+     memberResetPwd: function (member_id,role_type) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/role/'+role_type,'', function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+             'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+    /**12 停用成员
+     * 将成员设置为停用，使成员不可用。
+     * @param  {Object} member_id  member_id
+     * @return  stauts 
+     */
+     memberResetPwd: function (member_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/disable', '', function (data, status, request) {
+          resolve(status);
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
