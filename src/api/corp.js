@@ -97,11 +97,11 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params query参数
      * @return {Promise}
      */
-    getMembers: function (params,offset,limit) {
+    getMembers: function (params) {
       var today = new Date();
 
       return new Promise(function (resolve, reject) {
-        Vue.http.get(config.apiRoot + '/corp/members?offset='+offset+'&limit='+limit, params, function (data, status, request) {
+        Vue.http.get(config.apiRoot + '/corp/members', params, function (data, status, request) {
           resolve(data.list);
         }, {
           headers: {
@@ -156,7 +156,7 @@ module.exports = function (Vue, Promise, config) {
      */
     getMember: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.get(config.apiRoot + 'corp/member/'+member_id, "", function (data, status, request) {
+        Vue.http.get(config.apiRoot + 'corp/member/'+member_id,  function (data, status, request) {
           resolve(data);
         }, {
           headers: {
@@ -173,9 +173,9 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params  {member_id}
      * @return  stauts 
      */
-     delMember: function (member_id) {
+    delMember: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.delete(config.apiRoot + 'corp/member/'+ member_id, "", function (data, status, request) {
+        Vue.http.delete(config.apiRoot + 'corp/member/'+ member_id, function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -193,7 +193,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {member_id}  
      * @return  stauts 
      */
-     putMember: function (member_id,params) {
+    putMember: function (member_id,params) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(config.apiRoot + 'corp/member/'+member_id, JSON.stringify(params), function (data, status, request) {
           resolve(status);
@@ -233,7 +233,7 @@ module.exports = function (Vue, Promise, config) {
      */
      memberResetPwd: function (member_id,role_type) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/role/'+role_type,'', function (data, status, request) {
+        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/role/'+role_type, function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -252,7 +252,7 @@ module.exports = function (Vue, Promise, config) {
      */
      memberResetPwd: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/disable', '', function (data, status, request) {
+        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/disable', function (data, status, request) {
           resolve(status);
         }, {
           headers: {
