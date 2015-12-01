@@ -65,18 +65,61 @@
               button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModa2 = true")编辑
         // End: 企业信息
     modal(:show.sync="showModal")
-      h3(slot="header") 111111111
+      h3(slot="header") 编辑用户信息
       .form(slot="body")
         form(v-form, name="validation")
           .form-row
+            label.form-control 姓名：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入姓名'")
+                input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+                span(v-if="validation.name.$error.required") 请输入姓名
+              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+                span(v-if="validation.name.$error.required") 请输入姓名
+          .form-row
             label.form-control 邮箱：
             .controls
-              .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="name", maxlength="32", required)
+              .input-text-wrap(v-placeholder="'请输入邮箱'")
+                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="email", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
+                span(v-if="validation.name.$error.required") 请输入邮箱
               .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
+                span(v-if="validation.name.$error.required") 请输入邮箱
+          .form-row
+            label.form-control 手机：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入手机'")
+                input.input-text(v-model="model.name", type="number", v-form-ctrl, name="phone", maxlength="11", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+                span(v-if="validation.name.$error.required") 请输入手机
+              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+                span(v-if="validation.name.$error.required") 请输入手机
+          .form-row
+            label.form-control 重复密码：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入登录密码'")
+                input.input-text(v-model="model.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+                span(v-if="validation.name.$error.required") 请输入重复密码
+              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+                span(v-if="validation.name.$error.required") 请输入重复密码
+          .form-row
+            label.form-control 登录密码：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入登录密码'")
+                input.input-text(v-model="model.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+                span(v-if="validation.name.$error.required") 请输入登录密码
+              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+                span(v-if="validation.name.$error.required") 请输入登录密码
+          .form-row
+            label.form-control 状态：
+            .controls
+              .select
+                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                  option(value="1", selected) 启用
+                  option(value="2") 停用
           .form-row
             label.form-control 角色：
             .controls

@@ -11,24 +11,25 @@
             thead
               tr
                 th 姓名
-                th 手机
-                th 邮箱
+                //th 手机
+                //th 邮箱
                 th 角色
-                th 最后一次登录
+                //th 最后一次登录
                 th.tac 状态
             tbody
-              - for(var i=1; i<=10; i++)
-                tr
-                  td 路路
-                  td 13800138000
-                  td 8009995558@citicib.com.cn
-                  td 普通成员
-                  td 2015-6-3 15:38:53
-                  td.tac
-                    if i % 2 === 0
-                      span.hl-gray 正常
-                    else
-                      span.hl-red 已停用
+              tr(v-for="member in members")
+                td {{member.name}}
+                //td 13800138000
+                //td 8009995558@citicib.com.cn
+                td(v-if="member.role==1") 管理员
+                td(v-else) 普通会员
+                //td 2015-6-3 15:38:53
+                td.tac(v-if="member.status==0")
+                    span.hl-red 待激活
+                td.tac(v-if="member.status==1")
+                    span.hl-gray 正常
+                td.tac(v-if="member.status==2")
+                    span.hl-red 已停用
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left
@@ -75,6 +76,7 @@
 <script>
   var SearchBox = require('../../components/search-box.vue');
   var Modal = require('../../components/modal.vue');
+  var api = require('../../api');
 
   module.exports = {
     components: {
@@ -89,10 +91,24 @@
         users: [],
         showModal: false,
         model: {},
-        validation: {}
+        validation: {},
+        members:[]
       }
     },
 
+    route: {
+      data: function () {
+        var self = this;
+        api.corp.getMembers().then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.members = data
+        });
+
+        return {};
+      }
+    },
     methods: {
       setQuery: function (query) {
         this.query = query;
