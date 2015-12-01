@@ -68,7 +68,7 @@
       },
 
       toggleSearching: function () {
-        this.searching = !this.searching;
+        this.searching = !this.searching;   
       },
 
       cancelSearching: function () {
@@ -76,4 +76,5 @@
       }
     }
   };
+
 </script>

@@ -58,3 +58,16 @@
         .panel-bd
           button.btn.btn-primary.btn-lg.mt10.mb10 删除该用户
 </template>
+<style lang="stylus">
+  @import '../../assets/stylus/common'
+
+    .user-details
+      .label
+          display inline-block
+          width 103px
+          line-height 43px
+      .info
+          display inline-block
+
+
+</style>
