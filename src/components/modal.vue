@@ -97,6 +97,13 @@ module.exports = {
       padding-left 0
       text-align right
 
+      .del-check
+        float left
+        margin-top 10px
+
+        input
+          margin-right 5px
+
       .btn
         margin-left 10px
 </style>

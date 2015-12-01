@@ -53,6 +53,7 @@ Vue.mixin({
 Vue.directive('placeholder', {
   bind: function () {
     var self = this;
+    var vModel;
     var handlePlaceholder = function () {
       if (this.input.value.length === 0) {
         this.placeholder.style.display = 'inline';
@@ -66,6 +67,19 @@ Vue.directive('placeholder', {
     this.el.appendChild(this.placeholder);
 
     this.input = this.el.getElementsByClassName('input-text')[0];
+    vModel = this.input.getAttribute('v-model');
+    console.log(vModel);
+
+    if (vModel) {
+      this.vm.$watch(vModel, function (value, oldValue) {
+        if (value === 0) {
+          self.placeholder.style.display = 'inline';
+        } else {
+          self.placeholder.style.display = 'none';
+        }
+      }, { immediate: true });
+    }
+
     this.input.addEventListener('input', function () {
       handlePlaceholder.apply(self);
     });
