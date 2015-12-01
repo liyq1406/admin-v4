@@ -120,7 +120,7 @@ module.exports = function (Vue, Promise, config) {
      */
     memberInvite: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.post(config.apiRoot + 'corp/member_invite', JSON.stringify(params), function (data, status, request) {
+        Vue.http.post(config.apiRoot + '/corp/member_invite', JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -138,7 +138,7 @@ module.exports = function (Vue, Promise, config) {
      */
     memberActivate: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member_activate', JSON.stringify(params), function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/member_activate', JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -156,7 +156,7 @@ module.exports = function (Vue, Promise, config) {
      */
     getMember: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.get(config.apiRoot + 'corp/member/'+member_id,  function (data, status, request) {
+        Vue.http.get(config.apiRoot + '/corp/member/'+member_id,  function (data, status, request) {
           resolve(data);
         }, {
           headers: {
@@ -175,7 +175,7 @@ module.exports = function (Vue, Promise, config) {
      */
     delMember: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.delete(config.apiRoot + 'corp/member/'+ member_id, function (data, status, request) {
+        Vue.http.delete(config.apiRoot + '/corp/member/'+ member_id, function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -195,7 +195,7 @@ module.exports = function (Vue, Promise, config) {
      */
     putMember: function (member_id,params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member/'+member_id, JSON.stringify(params), function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/member/'+member_id, JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -212,9 +212,9 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params  { "oldpassword":"旧密码",  "newpassword":"新密码"}
      * @return  stauts 
      */
-     memberResetPwd: function (params) {
+    memberResetPwd: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + ' corp/member/password/reset', JSON.stringify(params), function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/member/password/reset', JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -231,9 +231,9 @@ module.exports = function (Vue, Promise, config) {
      * @param   member_id,role_type
      * @return  stauts 
      */
-     memberResetPwd: function (member_id,role_type) {
+    memberResetPwd: function (member_id,role_type) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/role/'+role_type, function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/member/'+member_id+'/role/'+role_type, function (data, status, request) {
           resolve(status);
         }, {
           headers: {
@@ -250,9 +250,9 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} member_id  member_id
      * @return  stauts 
      */
-     memberResetPwd: function (member_id) {
+    memberResetPwd: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + 'corp/member/'+member_id+'/disable', function (data, status, request) {
+        Vue.http.put(config.apiRoot + '/corp/member/'+member_id+'/disable', function (data, status, request) {
           resolve(status);
         }, {
           headers: {
