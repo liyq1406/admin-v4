@@ -37,19 +37,38 @@
               i.fa.fa-chevron-right
 
     modal(:show.sync="showModal")
-      h3(slot="header") 编辑产品
+      h3(slot="header") 添加成员
       .form(slot="body")
-        
+        form(v-form, name="validation")
+          .form-row
+            label.form-control 邮箱：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入成员邮箱'")
+                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="name", maxlength="32", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+                span(v-if="validation.name.$error.required") 请输入成员邮箱
+              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+                span(v-if="validation.name.$error.required") 请输入成员邮箱
+          .form-row
+            label.form-control 角色：
+            .controls
+              .select
+                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                  option(value="1") 管理员
+                  option(value="2", selected) 普通用户
+          .form-actions
+            button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
+            button.btn.btn-primary(type="submit") 添加
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
 
   .panel
     .panel-hd
-    	.title
-    		display inline
-    	.bottom_add
-    		margin-left 50px
+      .title
+        display inline
+      .bottom_add
+        margin-left 50px
 
 </style>
 
@@ -68,7 +87,9 @@
         query: '',
         searching: false,
         users: [],
-        showModal: false
+        showModal: false,
+        model: {},
+        validation: {}
       }
     },
 
@@ -78,7 +99,7 @@
       },
 
       toggleSearching: function () {
-        this.searching = !this.searching;   
+        this.searching = !this.searching;
       },
 
       cancelSearching: function () {
