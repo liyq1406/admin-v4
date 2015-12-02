@@ -45,7 +45,7 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="model.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
+                input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
                 span(v-if="validation.email.$error.required") 请输入成员邮箱
               .form-tips.form-tips-error(v-if="validation.email.$dirty")
@@ -54,7 +54,7 @@
             label.form-control 角色：
             .controls
               .select
-                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                select(v-model="newuseremail.role", v-form-ctrl, name="role")
                   option(value="1") 管理员
                   option(value="2", selected) 普通用户
           .form-actions
@@ -92,7 +92,8 @@
         showModal: false,
         model: {},
         validation: {},
-        members:[]
+        members:[],
+        newuseremail:{}
       }
     },
 
@@ -121,9 +122,17 @@
       cancelSearching: function () {
         this.setQuery('');
       },
-      adduser:function(){
-        console.log(this.model.email)
-        console.log(this.model.link_type)
+      adduser:function(){//添加成员
+        var self = this;
+        this.newuseremail.content = "测试邮箱内容" //待改地方
+        console.log(self.newuseremail);
+
+        api.corp.memberInvite(self.newuseremail).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            console.log(data);
+        });
       }
     }
   };

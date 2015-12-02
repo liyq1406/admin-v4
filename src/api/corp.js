@@ -124,7 +124,8 @@ module.exports = function (Vue, Promise, config) {
           resolve(status);
         }, {
           headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
           reject(JSON.parse(data).error);
