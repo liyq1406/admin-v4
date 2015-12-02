@@ -48,7 +48,7 @@ module.exports = function (Vue, Promise, config) {
 
       return new Promise(function (resolve, reject) {
         // if (localStorage.getItem('expireAt') < today.getTime() + 10000) {
-        if (localStorage.getItem('expireAt') < today.getTime() + localStorage.getItem('expireIn') / 2) {
+        if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime() + localStorage.getItem('expireIn') / 2) {
           Vue.http.post(config.apiRoot + '/corp/token/refresh', JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}), function (data, status, request) {
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
@@ -64,7 +64,7 @@ module.exports = function (Vue, Promise, config) {
           }).error(function (data, status, request) {
             reject(JSON.parse(data).error);
           });
-        } else if (localStorage.getItem('expireAt') < today.getTime()) {
+        } else if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime()) {
           vm.$route.router.go({path: '/login'});
           //reject('Token expired.');
         } else {

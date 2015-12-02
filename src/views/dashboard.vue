@@ -199,48 +199,59 @@
 </style>
 
 <script>
-var Promise = require('promise');
-var PostList = require('../components/post-list.vue');
-var api = require('../api');
+  var Promise = require('promise');
+  var PostList = require('../components/post-list.vue');
+  var api = require('../api');
+  var productsStore = require('../stores/products');
 
-module.exports = {
-  documentTitle: '概览',
+  module.exports = {
+    documentTitle: '概览',
 
-  components: {
-    'post-list': PostList
-  },
+    components: {
+      'post-list': PostList
+    },
 
-  data: function () {
-    return {
-      notifications: [],
-      guides: []
-    };
-  },
-
-  ready: function () {
-  },
-
-  filters: {
-    formatDate: function (date) {
-      var d = date.toLocaleDateString('en-US').split('/');
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      return year + '年' + month + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
-    }
-  },
-
-  route: {
-    data: function (transition) {
+    data: function () {
       return {
+        notifications: [],
         guides: [],
-        notifications: []
+        productsState: productsStore.state
       };
+    },
+
+    ready: function () {
+      var self = this;
+      api.corp.refreshToken(this).then(function () {
+        api.product.getProducts().then(function (data) {
+          if (__DEBUG__) {
+            // console.log(data);
+          }
+          productsStore.addProducts(data);
+        })
+      });
+    },
+
+    filters: {
+      formatDate: function (date) {
+        var d = date.toLocaleDateString('en-US').split('/');
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        return year + '年' + month + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+      }
+    },
+
+    route: {
+      data: function (transition) {
+        return {
+          guides: [],
+          notifications: []
+        };
+      }
+    },
+
+    methods: {
+
     }
-  },
-
-  methods: {
-
-  }
-}
+  };
 </script>

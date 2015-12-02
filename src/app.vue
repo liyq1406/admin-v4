@@ -1,45 +1,45 @@
 <template lang="jade">
-.page-container(:class="{'auth-page':!access}")
-  header.the-header(v-if="access")
-    nav.nav-header
-      ul
-        li: a(href="#", target="#") 首页
-        li: a(href="#", target="#") 开发文档
-        li: a(href="#", target="#") 在线支持
-  section.sidebar(v-if="access")
-    a.logo(v-link="{ path: '/' }")
-    .nav-aside
-      .nav-aside-item
-        a(v-link="{ path: '/dashboard' }")
-          i.fa.fa-home
-          | 概览
-      .nav-aside-group
-        h3 产品管理
-        .nav-aside-item(v-for="product in productsState.products")
-          a(v-link="{ name: 'products', params: { id: product.id} }")
-            i.fa.fa-link
-            | {{ product.name }}
-        .nav-aside-actions
-          a(v-link="{ path: '/product/create' }")
-            i.fa.fa-plus
-            | 添加产品
-      .nav-aside-item
-        a(v-link="{ path: '/data' }")
-          i.fa.fa-database
-          | 数据管理
-      .nav-aside-item
-        a(v-link="{ path: '/users' }")
-          i.fa.fa-user
-          | 用户管理
-      .nav-aside-item
-        a(v-link="{ path: '/statistic' }")
-          i.fa.fa-bar-chart
-          | 统计分析
-      .nav-aside-item
-        a(v-link="{ path: '/settings' }")
-          i.fa.fa-cog
-          | 系统设置
-  router-view(class="view", transition="view", transition-mode="out-in")
+  .page-container(:class="{'auth-page':!access}")
+    header.the-header(v-if="access")
+      nav.nav-header
+        ul
+          li: a(href="#", target="#") 首页
+          li: a(href="#", target="#") 开发文档
+          li: a(href="#", target="#") 在线支持
+    section.sidebar(v-if="access")
+      a.logo(v-link="{ path: '/' }")
+      .nav-aside
+        .nav-aside-item
+          a(v-link="{ path: '/dashboard' }")
+            i.fa.fa-home
+            | 概览
+        .nav-aside-group
+          h3 产品管理
+          .nav-aside-item(v-for="product in productsState.products")
+            a(v-link="{ name: 'products', params: { id: product.id} }")
+              i.fa.fa-link
+              | {{ product.name }}
+          .nav-aside-actions
+            a(v-link="{ path: '/product/create' }")
+              i.fa.fa-plus
+              | 添加产品
+        .nav-aside-item
+          a(v-link="{ path: '/data' }")
+            i.fa.fa-database
+            | 数据管理
+        .nav-aside-item
+          a(v-link="{ path: '/users' }")
+            i.fa.fa-user
+            | 用户管理
+        .nav-aside-item
+          a(v-link="{ path: '/statistic' }")
+            i.fa.fa-bar-chart
+            | 统计分析
+        .nav-aside-item
+          a(v-link="{ path: '/settings' }")
+            i.fa.fa-cog
+            | 系统设置
+    router-view(class="view", transition="view", transition-mode="out-in")
 </template>
 
 <script>
@@ -49,22 +49,8 @@
   module.exports = {
     data: function () {
       return {
-        access: true,
+        access: false,
         productsState: productsStore.state
-      }
-    },
-
-    ready: function function_name() {
-      var self = this;
-      if (this.access) {
-        api.corp.refreshToken(this).then(function () {
-          api.product.getProducts().then(function (data) {
-            if (__DEBUG__) {
-              // console.log(data);
-            }
-            productsStore.addProducts(data);
-          })
-        });
       }
     },
 
