@@ -16,13 +16,34 @@
       .status-bar
         .status
           | 共有
-          span {{filteredDevices.length}}
+          span 10
           | 条结果
         v-select(:options="visibilityOptions", :value="visibility", @select="setVisibility")
           span 显示：
 
       //- 设备列表
-      grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
+      //- grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
+      table.table.table-stripe.table-bordered
+        thead
+          tr
+            th MAC
+            th 是否激活
+            th 激活时间
+            th 激活码
+            //- th 在线状态
+        tbody
+          tr(v-for="device in devices")
+            td {{device.mac}}
+            td {{device.is_active}}
+            td {{device.active_date}}
+            td {{device.active_code}}
+            //- td {{device.is_online}}
+      .pager.tar
+        button.pager-btn.pager-prev
+          i.fa.fa-chevron-left
+        input.pager-input(type="text")
+        button.pager-btn.pager-next
+          i.fa.fa-chevron-right
 </template>
 
 <style lang="stylus">
@@ -46,6 +67,7 @@
 </style>
 
 <script>
+  var api = require('../../../api');
   var Select = require('../../../components/select.vue');
   var Grid = require('../../../components/grid.vue');
   var SearchBox = require('../../../components/search-box.vue');
@@ -121,14 +143,32 @@
       }
     },
 
+    ready: function () {
+      var self = this;
+      api.corp.refreshToken().then(function () {
+        api.device.getList(self.$route.params.id, {filter:['mac', 'is_active', 'active_date', 'active_code']}).then(function (data) {
+          self.devices = data;
+        });
+      });
+    },
+
+    /*
     route: {
       data: function () {
         // devices: this.fetchDevices(this.$route.params['id'])
-        
+        devices: this.getDevices()
+
       }
-    },
+    },*/
 
     methods: {
+      getDevices: function () {
+        var self = this;
+        return api.corp.refreshToken().then(function () {
+          return api.device.getList(self.$route.params.id);
+        });
+      },
+
       setVisibility: function (value) {
         this.visibility = value;
       },

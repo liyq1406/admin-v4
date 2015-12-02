@@ -20,7 +20,7 @@
               th 描述
               th.tac 操作
           tbody
-            tr(v-for="datapoint in datapoints")
+            tr(v-for="datapoint in datapoints", track-by="$index")
               td {{datapoint.index}}
               td {{datapoint.name}}
               td {{datapoint.type}}
@@ -155,13 +155,14 @@
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除数据端点
-            button.btn.btn-default(@click.prevent.stop="showEditModal = false") 取消
+            button.btn.btn-default(@click.prevent.stop="onCancelEdit") 取消
             button.btn.btn-primary(type="submit") 确定
 </template>
 
 <script>
   var api = require('../../api');
   var Modal = require('../../components/modal.vue');
+  var _ = require('lodash');
 
   module.exports = {
     components: {
@@ -184,6 +185,8 @@
         showEditModal: false,
         model: {},
         editModel: {},
+        editingDatapoint: {},
+        originModel: {},
         addValidation: {},
         editValidation: {},
         delChecked: false
@@ -193,12 +196,19 @@
     route: {
       data: function (transition) {
         return {
-          datapoints: api.product.getDatapoints(this.$route.params.id)
+          datapoints: this.getDatapoints()
         }
       }
     },
 
     methods: {
+      getDatapoints: function () {
+        var self = this;
+        return api.corp.refreshToken(this).then(function () {
+          return api.product.getDatapoints(self.$route.params.id)
+        });
+      },
+
       onAddSubmit: function () {
         var self = this;
         if (this.addValidation.$valid) {
@@ -218,6 +228,12 @@
       editDataPoint: function (datapoint) {
         this.showEditModal = true;
         this.editModel = datapoint;
+        this.originModel = _.clone(datapoint);
+      },
+
+      onCancelEdit: function () {
+        this.showEditModal = false;
+        this.editModel = this.originModel;
       },
 
       onEditSubmit: function () {

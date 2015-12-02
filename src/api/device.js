@@ -131,11 +131,12 @@ module.exports = function(Vue, Promise, config) {
           ]
         }
      */
-    getList: function(params, product_id) {
+    getList: function(product_id, params) {
       return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + ' /product/' + product_id +
+        Vue.http.post(config.apiRoot + '/product/' + product_id +
           '/devices', JSON.stringify(params),
           function(data, status, request) {
+            console.log(data);
             resolve(data.list);
           }, {
             headers: {

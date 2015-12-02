@@ -23,7 +23,7 @@
                   span
                     a.hl-red(href="#") 查看密钥
                 .actions
-                  a.btn.btn-primary(href="#")
+                  button.btn.btn-primary(@click="showAddModal = true")
                     i.fa.fa-plus
                     | 添加设备
                   a.btn.btn-primary(href="#")
@@ -63,27 +63,27 @@
     modal(:show.sync="showEditModal")
       h3(slot="header") 编辑产品
       .form(slot="body")
-        form(v-form, name="validation", @submit.prevent="onEditSubmit")
+        form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
           .form-row
             label.form-control 产品名称：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品名称'")
                 input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
-              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                span(v-if="validation.name.$error.required") 请输入产品名称
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                span(v-if="validation.name.$error.required") 请输入产品名称
-                span(v-if="validation.name.$error.maxlength") 产品名称最大不能超过32位
+              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
+                span(v-if="editValidation.name.$error.required") 请输入产品名称
+              .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
+                span(v-if="editValidation.name.$error.required") 请输入产品名称
+                span(v-if="editValidation.name.$error.maxlength") 产品名称最大不能超过32位
           .form-row
             label.form-control 产品描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品描述'")
                 textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
-              .form-tips.form-tips-error(v-if="validation.$submitted && validation.description.$pristine")
-                span(v-if="validation.description.$error.required") 请输入产品描述
-              .form-tips.form-tips-error(v-if="validation.description.$dirty")
-                span(v-if="validation.description.$error.required") 请输入产品描述
-                span(v-if="validation.description.$error.maxlength") 产品描述最大不能超过250字
+              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
+                span(v-if="editValidation.description.$error.required") 请输入产品描述
+              .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
+                span(v-if="editValidation.description.$error.required") 请输入产品描述
+                span(v-if="editValidation.description.$error.maxlength") 产品描述最大不能超过250字
           .form-row
             label.form-control 设备类型：
             .controls
@@ -96,7 +96,24 @@
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除产品
-            button.btn.btn-default(@click.prevent.stop="onCancelEdit") 取消
+            button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
+            button.btn.btn-primary(type="submit") 确定
+
+    modal(:show.sync="showAddModal")
+      h3(slot="header") 添加设备
+      .form(slot="body")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+          .form-row
+            label.form-control MAC地址：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入MAC地址'")
+                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required)
+              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
+                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
+                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+          .form-actions
+            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 </template>
 
@@ -135,9 +152,12 @@
           { label: '上海', value: 'shanghai' }
         ],
         showEditModal: false,
+        showAddModal: false,
         editModel: {},
+        addModel: {},
         originModel: {},
-        validation: {},
+        editValidation: {},
+        addValidation: {},
         delChecked: false
       }
     },
@@ -160,10 +180,9 @@
         this.showEditModal = true;
         this.editModel = this.product;
         this.originModel = _.clone(this.product);
-        console.log(this.originModel);
       },
 
-      onCancelEdit: function () {
+      onEditCancel: function () {
         this.showEditModal = false;
         this.editModel = {};
         this.product = this.originModel;
@@ -190,6 +209,27 @@
                 console.log(data);
               }
               self.showEditModal = false;
+            });
+          });
+        }
+      },
+
+      onAddCancel: function () {
+        // body...
+      },
+
+      onAddSubmit: function () {
+        var self = this;
+        if (this.addValidation.$valid) {
+          api.corp.refreshToken().then(function () {
+            api.device.add(self.$route.params.id, self.addModel).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.addModel = {};
+              self.showAddModal = false;
+            }).catch(function (error) {
+              console.log(error);
             });
           });
         }

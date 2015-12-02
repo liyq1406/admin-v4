@@ -27,17 +27,18 @@
 
     route: {
       data: function (transition) {
-        var self = this;
-        api.corp.refreshToken(this).then(function () {
-          api.product.getProduct(self.$route.params.id).then(function (data) {
-            if (__DEBUG__) {
-              console.log(data);
-            }
-            self.product = data;
-          })
-        });
+        // var self = this;
+        // api.corp.refreshToken(this).then(function () {
+        //   api.product.getProduct(self.$route.params.id).then(function (data) {
+        //     if (__DEBUG__) {
+        //       console.log(data);
+        //     }
+        //     self.product = data;
+        //   })
+        // });
 
         return {
+          product: this.getProduct(),
           secondaryNav: [{
             label: '概览',
             link: { path: '/products/' + this.$route.params.id + '/overview' }
@@ -65,7 +66,12 @@
     },
 
     methods: {
-
+      getProduct: function () {
+        var self = this;
+        return api.corp.refreshToken(this).then(function () {
+          return api.product.getProduct(self.$route.params.id);
+        });
+      }
     }
 
   };
