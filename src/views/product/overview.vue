@@ -106,6 +106,7 @@
   var Modal = require('../../components/modal.vue');
   var productsStore = require('../../stores/products');
   var api = require('../../api');
+  var _ = require('lodash');
 
   module.exports = {
     components: {
@@ -135,13 +136,13 @@
         ],
         showEditModal: false,
         editModel: {},
+        originModel: {},
         validation: {},
         delChecked: false
       }
     },
 
     ready: function () {
-
     },
 
     methods: {
@@ -158,11 +159,14 @@
       editProduct: function () {
         this.showEditModal = true;
         this.editModel = this.product;
+        this.originModel = _.clone(this.product);
+        console.log(this.originModel);
       },
 
       onCancelEdit: function () {
         this.showEditModal = false;
-        this.editModel = this.product;
+        this.editModel = {};
+        this.product = this.originModel;
       },
 
       onEditSubmit: function () {

@@ -1,3 +1,6 @@
+var api = require('./api');
+// var productsStore = require('./stores/products');
+
 var configRouter = function (router) {
   router.map({
     // 404
@@ -141,6 +144,14 @@ var configRouter = function (router) {
     } else {
       if (localStorage.getItem('accessToken') !== null && localStorage.getItem('expireAt') > today.getTime()) {
         router.app.access = true;
+        api.corp.refreshToken(this).then(function () {
+          api.product.getProducts().then(function (data) {
+            if (__DEBUG__) {
+              // console.log(data);
+            }
+            router.app.products = data;
+          });
+        });
         transition.next();
       } else {
         router.go({path: '/login'});
