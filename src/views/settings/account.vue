@@ -164,7 +164,7 @@
       .label
         display inline-block
         width 103px
-        line-height 43px
+        line-height 35px
       .info
         display inline-block
 </style>

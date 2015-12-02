@@ -249,7 +249,6 @@ module.exports = function(Vue, Promise, config) {
     putMember: function(user_id) {
       return new Promise(function(resolve, reject) {
         Vue.http.put(config.apiRoot + '/user/' + user_id + '/status',
-          JSON.stringify(params),
           function(data, status, request) {
             resolve(status);
           }, {

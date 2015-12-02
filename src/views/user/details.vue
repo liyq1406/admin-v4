@@ -40,33 +40,22 @@
                 th 产品名称
                 th 设备mac
                 th 设备状态
-                th 身份
-            tbody
-              - for(var i=1; i<=10; i++)
+                th 认证码
+            tbody(v-for="subDevlice in subDevlices")
                 tr
-                  td 德尔玛加湿器
-                  td 00113322aabb
-                  td
-                    if i % 2 === 0
-                      span.hl-gray 离线
-                    else
-                      span.hl-green 在线
-                  td admin
-
+                  td {{subDevlice.product_id}}
+                  //这里使用产品id 不是产品名称 debug
+                  td {{subDevlice.mac}}
+                  td(v-if="subDevlice.is_online==true") 在线
+                  td(v-if="subDevlice.is_online==false") 离线
+                  td {{subDevlice.authorize_code}}
       .panel
         .panel-bd
-          button.btn.btn-primary.btn-lg.mt10.mb10 删除该用户
+          button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") 删除该用户
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
 
-    .user-details
-      .label
-          display inline-block
-          width 103px
-          line-height 43px
-      .info
-          display inline-block
 </style>
 <script>
   var api = require('../../api');
@@ -80,7 +69,7 @@
       return {
 
         user: {},//用户信息
-        subDevlice:[]//用户绑定设备列表
+        subDevlices:[]//用户绑定设备列表
       }
     },
     route: {
@@ -91,7 +80,7 @@
         api.corp.refreshToken().then(function () {
           api.user.profile(user_id).then(function (data) {
             if(__DEBUG__) {
-              //console.log(data);
+              console.log(data);
             }
             self.user=data;
           });
@@ -100,8 +89,7 @@
             if(__DEBUG__) {
               console.log(data);
             }
-            self.subDevlice=data;
-            console.log(self.subDevlice);
+            self.subDevlices=data;
           });
 
 
@@ -113,16 +101,20 @@
     },
 
     methods: {
-      setQuery: function (query) {
-        this.query = query;
-      },
+      deleteUser: function () {
+        if(confirm("确定要删除当前用户吗？")){
+          var user_id = this.user.id;
+          api.corp.refreshToken().then(function () {
+            api.user.putMember(user_id).then(function (data){
+              if(__DEBUG__) {
+                console.log(data);
+              }
+              console.log(data);
+            });
+          });
 
-      toggleSearching: function () {
-        this.searching = !this.searching;
-      },
+        }
 
-      cancelSearching: function () {
-        this.setQuery('');
       }
     }
   };
