@@ -11,7 +11,7 @@ module.exports = {
   device: require('./api/device')(Vue, Promise, config),
   email: require('./api/email')(Vue, Promise, config),
   firmware: require('./api/firmware')(Vue, Promise, config),
-  user: require('./api/statistics')(Vue, Promise, config),
+  user: require('./api/user')(Vue, Promise, config),
   statistics: require('./api/statistics')(Vue, Promise, config),
   product: require('./api/product')(Vue, Promise, config)
 };

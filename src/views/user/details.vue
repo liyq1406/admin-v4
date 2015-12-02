@@ -68,6 +68,4 @@
           line-height 43px
       .info
           display inline-block
-
-
 </style>

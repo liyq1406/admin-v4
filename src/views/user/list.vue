@@ -12,27 +12,20 @@
             thead
               tr
                 th 序号
-                th 用户名
+                th id
                 th 昵称
-                th Email
+                th 手机号/邮箱
                 th 创建时间
-                th 最后一次登录
-                th.tac 在线状态
-            tbody
-              - for(var i=1; i<=10; i++)
+                th 用户来源
+
+            tbody(v-for="user in users.list")
                 tr
-                  td= i
                   td
-                    a.hl-red(v-link="{path: '/users/1'}") samxlu
-                  td 路路
-                  td 8009995558@citicib.com.cn
-                  td 2015-6-3 15:38:53
-                  td 2015-6-3 15:38:53
-                  td.tac
-                    if i % 2 === 0
-                      span.hl-gray 离线
-                    else
-                      span.hl-green 在线
+                    a.hl-red(v-link="{path: '/users/1'}") {{user.id}}
+                  td {{user.nickname}}
+                  td {{user.phone/email}}
+                  td {{user.create_date}}
+                  td {{user.source}}
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left
@@ -48,17 +41,37 @@
 
 <script>
   var SearchBox = require('../../components/search-box.vue');
+  var Modal = require('../../components/modal.vue');
+  var api = require('../../api');
 
   module.exports = {
     components: {
-      'search-box': SearchBox
+      'search-box': SearchBox,
+      'modal': Modal,
+      'api': api
     },
 
     data: function () {
       return {
         query: '',
         searching: false,
-        users: []
+        users: {}
+      }
+    },
+
+    route: {
+      data: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.user.list().then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.users=data;
+            console.log(self.users.list)
+          });
+        })
+        return {};
       }
     },
 
@@ -68,7 +81,7 @@
       },
 
       toggleSearching: function () {
-        this.searching = !this.searching;   
+        this.searching = !this.searching;
       },
 
       cancelSearching: function () {
