@@ -73,59 +73,59 @@
             label.form-control 姓名：
             .controls
               .input-text-wrap(v-placeholder="'请输入姓名'")
-                input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="user.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入姓名
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+              .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入姓名
           .form-row
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入邮箱'")
-                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="email", maxlength="32", required)
+                input.input-text(v-model="user.name", type="email", v-form-ctrl, name="email", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入邮箱
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+              .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入邮箱
           .form-row
             label.form-control 手机：
             .controls
               .input-text-wrap(v-placeholder="'请输入手机'")
-                input.input-text(v-model="model.name", type="number", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="user.name", type="number", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入手机
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+              .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入手机
           .form-row
             label.form-control 重复密码：
             .controls
               .input-text-wrap(v-placeholder="'请输入登录密码'")
-                input.input-text(v-model="model.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="user.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入重复密码
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+              .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入重复密码
           .form-row
             label.form-control 登录密码：
             .controls
               .input-text-wrap(v-placeholder="'请输入登录密码'")
-                input.input-text(v-model="model.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="user.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入登录密码
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
+              .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入登录密码
           .form-row
             label.form-control 状态：
             .controls
               .select
-                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                select(v-model="user.link_type", v-form-ctrl, name="link_type")
                   option(value="1", selected) 启用
                   option(value="2") 停用
           .form-row
             label.form-control 角色：
             .controls
               .select
-                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                select(v-model="user.link_type", v-form-ctrl, name="link_type")
                   option(value="1") 管理员
                   option(value="2", selected) 普通用户
           .form-actions
@@ -139,16 +139,16 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="model.name", type="email", v-form-ctrl, name="name", maxlength="32", required)
-              .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
-              .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                span(v-if="validation.name.$error.required") 请输入成员邮箱
+                input.input-text(v-model="corp.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
+              .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
+                span(v-if="validation.email.$error.required") 请输入成员邮箱
+              .form-tips.form-tips-error(v-if="validation.email.$dirty")
+                span(v-if="validation.email.$error.required") 请输入成员邮箱
           .form-row
             label.form-control 角色：
             .controls
               .select
-                select(v-model="model.link_type", v-form-ctrl, name="link_type")
+                select(v-model="corp.link_type", v-form-ctrl, name="link_type")
                   option(value="1") 管理员
                   option(value="2", selected) 普通用户
           .form-actions
@@ -170,22 +170,40 @@
 </style>
 <script>
   var Modal = require('../../components/modal.vue');
+  var api = require('../../api');
 
   module.exports = {
     components: {
 
-      'modal': Modal
+      'modal': Modal,
+      'api': api
     },
 
     data: function () {
       return {
         query: '',
         searching: false,
-        users: [],
+        user: {},
+        corp:{},
         showModal: false,
         showModa2: false,
-        model: {},
         validation: {}
+      }
+    },
+
+    route: {
+      data: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.user.profile('1207d2acbacdc801').then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+
+            console.log(self.users.list)
+          });
+        })
+        return {};
       }
     },
 

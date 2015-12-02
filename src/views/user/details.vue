@@ -9,27 +9,26 @@
         .panel-bd
           ul.user-details
             li
-              .label 用户名：
-              .info samxlu
+              .label 用户id：
+              .info {{user.id}}
+            li
+              .label 企业id：
+              .info {{user.corp_id}}
             li
               .label 昵称：
-              .info 路路
+              .info {{user.nickname}}
             li
-              .label 邮箱：
-              .info samxlu@xlink.cn
+              .label 用户认证码：
+              .info {{user.authorize_code}}
+            li
+              .label 手机号码：
+              .info {{user.phone}}
             li
               .label 创建时间：
-              .info 2015-11-12 19:33:22
+              .info {{user.create_date}}
             li
-              .label 最后登录：
-              .info 2015-11-12 19:33:22
-            li
-              .label 在线状态：
-              .info
-                span.hl-green 在线
-            li
-              .label 帐号状态：
-              .info 等待验证
+              .label 所在区域ID
+              .info {{user.region_id}}
       .panel
         .panel-hd
           h2 绑定设备列表
@@ -69,3 +68,62 @@
       .info
           display inline-block
 </style>
+<script>
+  var api = require('../../api');
+
+  module.exports = {
+    components: {
+      'api': api
+    },
+
+    data: function () {
+      return {
+
+        user: {},//用户信息
+        subDevlice:[]//用户绑定设备列表
+      }
+    },
+    route: {
+      data: function () {
+        var self = this;
+        var user_id = window.location.hash.split("/");
+        user_id = user_id[user_id.length-1];//获取当前用户id
+        api.corp.refreshToken().then(function () {
+          api.user.profile(user_id).then(function (data) {
+            if(__DEBUG__) {
+              //console.log(data);
+            }
+            self.user=data;
+          });
+
+          api.user.subDevliceList(user_id).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.subDevlice=data;
+            console.log(self.subDevlice);
+          });
+
+
+        });
+        return {};
+      },
+
+
+    },
+
+    methods: {
+      setQuery: function (query) {
+        this.query = query;
+      },
+
+      toggleSearching: function () {
+        this.searching = !this.searching;
+      },
+
+      cancelSearching: function () {
+        this.setQuery('');
+      }
+    }
+  };
+</script>

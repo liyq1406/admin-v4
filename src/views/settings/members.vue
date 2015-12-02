@@ -124,7 +124,7 @@
       },
       adduser:function(){//添加成员
         var self = this;
-        this.newuseremail.content = "测试邮箱内容" //待改地方
+        this.newuseremail.content = "测试邮箱内容" //待改地方debug
         console.log(self.newuseremail);
 
         api.corp.memberInvite(self.newuseremail).then(function (data) {
@@ -133,6 +133,7 @@
             }
             console.log(data);
         });
+        self.showModal = false;
       }
     }
   };

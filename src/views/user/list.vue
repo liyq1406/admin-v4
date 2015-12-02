@@ -11,21 +11,24 @@
           table.table.table-stripe.table-bordered
             thead
               tr
-                th 序号
                 th id
                 th 昵称
-                th 手机号/邮箱
+                th 手机号或邮箱
                 th 创建时间
                 th 用户来源
-
             tbody(v-for="user in users.list")
                 tr
                   td
-                    a.hl-red(v-link="{path: '/users/1'}") {{user.id}}
+                    a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
                   td {{user.nickname}}
-                  td {{user.phone/email}}
+                  td(v-if="user.phone&&user.email") {{user.phone}}/{{user.email}}
+                  td(v-if="user.phone") {{user.phone}}
+                  td(v-if="user.email") {{user.email}}
                   td {{user.create_date}}
-                  td {{user.source}}
+                  td(v-if="user.source==1") Web
+                  td(v-if="user.source==2") Android
+                  td(v-if="user.source==3") IOS
+                  td(v-if="user.source==4") 微信
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left
@@ -63,7 +66,7 @@
       data: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
-          api.user.list().then(function (data) {
+          api.user.list({ "filter":["id","phone","email","nickname","create_date","source"]}).then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }

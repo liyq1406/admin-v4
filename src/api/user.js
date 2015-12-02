@@ -106,7 +106,7 @@ module.exports = function(Vue, Promise, config) {
     subDevliceList: function(user_id) {
       return new Promise(function(resolve, reject) {
         Vue.http.get(config.apiRoot + '/user/' + user_id +
-          '/subscribe/devices', JSON.stringify(params),
+          '/subscribe/devices',
           function(data, status, request) {
             resolve(data);
           }, {
