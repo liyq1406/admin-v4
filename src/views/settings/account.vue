@@ -31,7 +31,7 @@
                 .label 状态：
                 .info
                   span.hl-green 正常
-              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModal = true")编辑
+              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModal = true") 编辑
         // End: 个人信息
 
       .col-8
@@ -63,7 +63,7 @@
               li
                 .label 创建时间:
                 .info 2015-11-1  15:33:21
-              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModa2 = true")编辑
+              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModa2 = true") 编辑
         // End: 企业信息
     modal(:show.sync="showModal")
       h3(slot="header") 编辑用户信息

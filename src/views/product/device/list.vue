@@ -5,7 +5,7 @@
       .action-bar
         search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
         .action-group
-          button.btn.btn-default
+          button.btn.btn-default(@click="showAddModal = true")
             i.fa.fa-plus
             | 添加设备
           button.btn.btn-default
@@ -33,17 +33,31 @@
             //- th 在线状态
         tbody
           tr(v-for="device in devices")
-            td {{device.mac}}
+            td
+              a.hl-red(v-link="{path: device.id, append: true}") {{device.mac}}
             td {{device.is_active}}
             td {{device.active_date}}
             td {{device.active_code}}
             //- td {{device.is_online}}
-      .pager.tar
-        button.pager-btn.pager-prev
-          i.fa.fa-chevron-left
-        input.pager-input(type="text")
-        button.pager-btn.pager-next
-          i.fa.fa-chevron-right
+      pager(:total="129", :current.sync="currentPage")
+
+    // 添加设备浮层
+    modal(:show.sync="showAddModal")
+      h3(slot="header") 添加设备
+      .form(slot="body")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+          .form-row
+            label.form-control MAC地址：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入MAC地址'")
+                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required)
+              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
+                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
+                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+          .form-actions
+            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
+            button.btn.btn-primary(type="submit") 确定
 </template>
 
 <style lang="stylus">
@@ -70,6 +84,8 @@
   var api = require('../../../api');
   var Select = require('../../../components/select.vue');
   var Grid = require('../../../components/grid.vue');
+  var Pager = require('../../../components/pager.vue');
+  var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
   var filters = {
     all: function (devices) {
@@ -99,7 +115,9 @@
     components: {
       'v-select': Select,
       'grid': Grid,
-      'search-box': SearchBox
+      'modal': Modal,
+      'search-box': SearchBox,
+      'pager': Pager
     },
 
     data: function () {
@@ -114,6 +132,10 @@
           { label: '未激活', value: 'inactive' }
         ],
         devices: [],
+        currentPage: 1,
+        showAddModal: false,
+        addModel: {},
+        addValidation: {},
         deviceColumns: [{
           key: 'mac',
           label: 'MAC'
@@ -142,7 +164,7 @@
         return filters[this.visibility](this.devices);
       }
     },
-
+    /*
     ready: function () {
       var self = this;
       api.corp.refreshToken().then(function () {
@@ -150,22 +172,22 @@
           self.devices = data;
         });
       });
-    },
+    },*/
 
-    /*
     route: {
       data: function () {
         // devices: this.fetchDevices(this.$route.params['id'])
-        devices: this.getDevices()
-
+        return {
+          devices: this.getDevices()
+        };
       }
-    },*/
+    },
 
     methods: {
       getDevices: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {
-          return api.device.getList(self.$route.params.id);
+          return api.device.getList(self.$route.params.id, {filter:['id', 'mac', 'is_active', 'active_date', 'active_code']});
         });
       },
 
@@ -183,6 +205,30 @@
 
       cancelSearching: function () {
         this.setQuery('');
+      },
+
+      onAddCancel: function () {
+
+      },
+
+      onAddSubmit: function () {
+        var self = this;
+        if (this.addValidation.$valid) {
+          api.corp.refreshToken().then(function () {
+            api.device.add(self.$route.params.id, self.addModel).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.addModel = {};
+              self.showAddModal = false;
+              self.getDevices().then(function (data) {
+                self.devices = data;
+              });
+            }).catch(function (error) {
+              console.log(error);
+            });
+          });
+        }
       }
     }
   };

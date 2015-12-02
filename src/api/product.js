@@ -30,7 +30,7 @@ module.exports = function(Vue, Promise, config) {
       return new Promise(function(resolve, reject) {
         Vue.http.delete(config.apiRoot + '/product/' + product_id,
           function(data, status, request) {
-            resolve(data);
+            resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',

@@ -71,6 +71,10 @@ var configRouter = function (router) {
         }
       }
     },
+    // 设备详情
+    '/products/:product_id/devices/:device_id': {
+      component: require('./views/product/device/details.vue')
+    },
 
     // 数据管理
     '/data': {

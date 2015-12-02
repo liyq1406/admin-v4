@@ -74,7 +74,7 @@ module.exports = function(Vue, Promise, config) {
     getInfo: function(product_id, device_id) {
       return new Promise(function(resolve, reject) {
         Vue.http.get(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id, JSON.stringify(params),
+          '/device/' + device_id,
           function(data, status, request) {
             resolve(data);
           }, {
