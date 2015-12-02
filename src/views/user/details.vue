@@ -51,7 +51,7 @@
                   td {{subDevlice.authorize_code}}
       .panel
         .panel-bd
-          button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") 删除该用户
+          button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") 停用该用户
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
@@ -102,14 +102,13 @@
 
     methods: {
       deleteUser: function () {
-        if(confirm("确定要删除当前用户吗？")){
+        if(confirm("确定要停用当前用户吗？")){
           var user_id = this.user.id;
           api.corp.refreshToken().then(function () {
             api.user.putMember(user_id).then(function (data){
               if(__DEBUG__) {
                 console.log(data);
               }
-              console.log(data);
             });
           });
 
