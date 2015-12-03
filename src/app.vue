@@ -13,7 +13,6 @@
             ul
               li.sed-navigation-li
                 a(href="#", target="#",@click.prevent="quit") 退出
-                //a(href="#", target="#",@click="quit") 退出
     section.sidebar(v-if="access")
       a.logo(v-link="{ path: '/' }")
       .nav-aside
