@@ -11,26 +11,26 @@
             ul.user-details
               li
                 .label 姓名：
-                .info samxlu
+                .info {{corp_member.name}}
               li
                 .label 邮箱：
-                .info samxlu@xlink.cn
+                .info {{corp_member.email}}
               li
                 .label 手机
-                .info 路路
+                .info {{corp_member.phone}}
               li
                 .label 创建时间：
-                .info 2015-11-12 19:33:22
+                .info {{corp.create_time}}
               li
                 .label 最后登录：
-                .info 2015-11-12 19:33:22
+                .info 2015-11-12 19:33:22假数据
               li
                 .label 角色
-                .info 普通用户
+                .info 普通用户假数据
               li
                 .label 状态：
                 .info
-                  span.hl-green 正常
+                  span.hl-green 正常假数据
               button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModal = true") 编辑
         // End: 个人信息
 
@@ -42,28 +42,28 @@
             h2 企业信息
           .panel-bd
             ul.user-details
-              li
+              //li
                 .label logo:
                 .info samxlu
               li
                 .label 企业名称：
-                .info xlink云智易
+                .info {{corp.company}}
               li
                 .label 应用类型
-                .info 智能家居
+                .info {{corp.type}}
               li
                 .label 联系人：
-                .info 路路
+                .info {{corp_member.name}}
               li
                 .label 联系邮箱：
-                .info xiaolu@xlink.cn
+                .info {{corp_member.email}}
               li
                 .label 联系电话：
-                .info 13800138000
+                .info {{corp_member.phone}}
               li
                 .label 创建时间:
-                .info 2015-11-1  15:33:21
-              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModa2 = true") 编辑
+                .info {{corp.create_time}}
+              button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showModal2 = true") 编辑
         // End: 企业信息
     modal(:show.sync="showModal")
       h3(slot="header") 编辑用户信息
@@ -73,7 +73,7 @@
             label.form-control 姓名：
             .controls
               .input-text-wrap(v-placeholder="'请输入姓名'")
-                input.input-text(v-model="user.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="resetuser.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入姓名
               .form-tips.form-tips-error(v-if="validation.name")
@@ -82,7 +82,7 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入邮箱'")
-                input.input-text(v-model="user.name", type="email", v-form-ctrl, name="email", maxlength="32", required)
+                input.input-text(v-model="resetuser.name", type="email", v-form-ctrl, name="email", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入邮箱
               .form-tips.form-tips-error(v-if="validation.name")
@@ -91,7 +91,7 @@
             label.form-control 手机：
             .controls
               .input-text-wrap(v-placeholder="'请输入手机'")
-                input.input-text(v-model="user.name", type="number", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="resetuser.name", type="number", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入手机
               .form-tips.form-tips-error(v-if="validation.name")
@@ -100,7 +100,7 @@
             label.form-control 重复密码：
             .controls
               .input-text-wrap(v-placeholder="'请输入登录密码'")
-                input.input-text(v-model="user.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="resetuser.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入重复密码
               .form-tips.form-tips-error(v-if="validation.name")
@@ -109,7 +109,7 @@
             label.form-control 登录密码：
             .controls
               .input-text-wrap(v-placeholder="'请输入登录密码'")
-                input.input-text(v-model="user.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
+                input.input-text(v-model="resetuser.name", type="password", v-form-ctrl, name="phone", maxlength="11", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入登录密码
               .form-tips.form-tips-error(v-if="validation.name")
@@ -118,20 +118,20 @@
             label.form-control 状态：
             .controls
               .select
-                select(v-model="user.link_type", v-form-ctrl, name="link_type")
+                select(v-model="resetuser.link_type", v-form-ctrl, name="link_type")
                   option(value="1", selected) 启用
                   option(value="2") 停用
           .form-row
             label.form-control 角色：
             .controls
               .select
-                select(v-model="user.link_type", v-form-ctrl, name="link_type")
+                select(v-model="resetuser.link_type", v-form-ctrl, name="link_type")
                   option(value="1") 管理员
                   option(value="2", selected) 普通用户
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
             button.btn.btn-primary(type="submit") 确定
-    modal(:show.sync="showModa2")
+    modal(:show.sync="showModal2")
       h3(slot="header") 22222222
       .form(slot="body")
         form(v-form, name="validation")
@@ -139,7 +139,7 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="corp.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
+                input.input-text(v-model="resetcorp.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
                 span(v-if="validation.email.$error.required") 请输入成员邮箱
               .form-tips.form-tips-error(v-if="validation.email.$dirty")
@@ -148,7 +148,7 @@
             label.form-control 角色：
             .controls
               .select
-                select(v-model="corp.link_type", v-form-ctrl, name="link_type")
+                select(v-model="resetcorp.link_type", v-form-ctrl, name="link_type")
                   option(value="1") 管理员
                   option(value="2", selected) 普通用户
           .form-actions
@@ -184,10 +184,14 @@
         query: '',
         searching: false,
         user: {},
+        resetuser: {},
         corp:{},
+        corp_member:{},
+        resetcorp:{},
         showModal: false,
-        showModa2: false,
+        showModal2: false,
         validation: {}
+
       }
     },
 
@@ -195,14 +199,24 @@
       data: function () {
         var self = this;
 
+        var mamber_id = localStorage.getItem('member_id');
+        var corp_id = localStorage.getItem('corp_id');
         api.corp.refreshToken().then(function () {//获取成员详情
-          api.corp.getMember('407d2ac662fd001').then(function (data) {
+          api.corp.getCorp().then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }
-
-            console.log(123)
+            self.corp=data;
+            self.corp_member=data.member;
           });
+          api.corp.getCorp(corp_id).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.corp=data;
+            self.corp_member=data.member;
+          });
+
         })
         return {};
       }

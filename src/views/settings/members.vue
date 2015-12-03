@@ -100,14 +100,16 @@
     route: {
       data: function () {
         var self = this;
-        api.corp.getMembers().then(function (data) {
+        api.corp.refreshToken().then(function () {
+          api.corp.getMembers().then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }
             self.members = data
+          });
         });
 
-        return {};
+
       }
     },
     methods: {
@@ -131,7 +133,6 @@
             if(__DEBUG__) {
               console.log(data);
             }
-            console.log(data);
         });
         self.showModal = false;
       }
