@@ -130,7 +130,7 @@
                   option(value="2", selected) 普通用户
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit") 添加
+            button.btn.btn-primary(type="submit") 确定
     modal(:show.sync="showModa2")
       h3(slot="header") 22222222
       .form(slot="body")
@@ -153,7 +153,7 @@
                   option(value="2", selected) 普通用户
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit") 添加
+            button.btn.btn-primary(type="submit") 确定
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'

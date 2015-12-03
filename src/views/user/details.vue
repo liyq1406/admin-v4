@@ -4,8 +4,9 @@
       .panel
         .panel-hd
           h2
-            a.fa.fa-arrow-circle-left(v-link="{path: '/users'}")
-            | 用户详情
+            //a.fa.fa-arrow-circle-left(v-link="{path: '/users'}")
+            a(v-link="{path: '/users'}") 用户列表
+            | > 用户详情
         .panel-bd
           ul.user-details
             li
