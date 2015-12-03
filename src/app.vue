@@ -6,6 +6,13 @@
           li: a(href="#", target="#") 首页
           li: a(href="#", target="#") 开发文档
           li: a(href="#", target="#") 在线支持
+        .user-navigation
+          span.user-name admin
+          i.arrow-down
+          .sed-navigation
+            ul
+              li.sed-navigation-li
+                a(href="#", target="#") 退出
     section.sidebar(v-if="access")
       a.logo(v-link="{ path: '/' }")
       .nav-aside
@@ -107,6 +114,45 @@
       &:hover
         color red
 
+    .user-navigation
+      position absolute
+      right 25px
+      top 0
+      width auto
+      height 61px
+      line-height 61px
+      z-index 1
+      text-align right
+      .user-name
+        padding 0 5px
+        cursor default
+      .arrow-down
+        display inline-block
+        width 0
+        height 0
+        font-size 0
+        border-width 4px
+        border-color #777 transparent transparent
+        border-style solid
+      .sed-navigation
+        position relative
+        top -10px
+        text-align right
+        background #FFF
+        height 0
+        overflow hidden
+        opacity 0
+        transition all ease 0.5s
+        border 1px solid #ddd
+        .sed-navigation-li
+          margin-right 0
+          line-height 25px
+          display block
+          padding-right 3px
+    &:hover
+      .sed-navigation
+        height auto
+        opacity 1
   // 侧栏
   .sidebar
     absolute left top
