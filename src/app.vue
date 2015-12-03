@@ -12,7 +12,8 @@
           .sed-navigation
             ul
               li.sed-navigation-li
-                a(href="#", target="#") 退出
+                a(href="#", target="#",@click.prevent="quit") 退出
+                //a(href="#", target="#",@click="quit") 退出
     section.sidebar(v-if="access")
       a.logo(v-link="{ path: '/' }")
       .nav-aside
@@ -54,6 +55,11 @@
   var productsStore = require('./stores/products');
 
   module.exports = {
+    components: {
+      'productsStore': productsStore,
+      'api': api
+    },
+
     data: function () {
       return {
         access: false,
@@ -61,8 +67,25 @@
       }
     },
 
-    methods: {
+    /*route: {
+      data: function () {
+        var self = this;
+        console.log(123);
+        api.corp.auth().then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+        });
 
+        return {};
+      }
+    },*/
+
+    methods: {
+      quit:function(){
+        localStorage.clear();
+        window.location.reload(true);
+      }
     }
   };
 </script>
