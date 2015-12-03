@@ -1,6 +1,6 @@
 <template lang="jade">
   .pager.tar(v-if="total > 0")
-    button.pager-btn.pager-prev(:class="{'disabled': current === 1}", @click="current--")
+    button.pager-btn.pager-prev(:class="{'disabled': current === 1}", disabled="current === 1", @click="current--")
       i.fa.fa-chevron-left
 
     .pager-container(v-if="pages < 10")
@@ -33,7 +33,7 @@
       .pager-item(:class="{'current': current === pages}",  @click="current = pages")
         span {{pages}}
     //- input.pager-input(type="text")
-    button.pager-btn.pager-next(:class="{'disabled': current === pages}", @click="current++")
+    button.pager-btn.pager-next(:class="{'disabled': current === pages}", disabled="current === pages", @click="current++")
       i.fa.fa-chevron-right
 </template>
 
