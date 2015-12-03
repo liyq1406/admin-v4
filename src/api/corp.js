@@ -38,6 +38,28 @@ module.exports = function (Vue, Promise, config) {
       });
     },
 
+
+   /** 3.获取企业信息
+     * 获取一个成员的基本信息。。
+     * @param  {Object} params  {corp_id}
+     * @return {Promise}   {  "id":"企业ID", "company":"企业名称", "create_time":"创建时间", "type":"企业应用类型" ,"member":{"id":"成员ID","phone":"手机I号码","email":"邮箱地址","name":"姓名"}}
+     */
+    getCorp: function (corp_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(config.apiRoot + '/v2/corp/'+corp_id,  function (data, status, request) {
+          resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+
+
     /**
      * 刷新 Token
      * @param  {Vue model} vm 当前Vue实例
