@@ -1,7 +1,7 @@
 <template lang="jade">
   .panel
     .panel-hd
-          search-box(:key="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+          search-box(:key="query", :active="searching", :placeholder="'姓名、角色、状态'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
             label 查找成员
           h2.title 成员列表
           button.btn.btn-success.btn-lg.mt10.mb10.bottom_add(@click.prevent="showModal = true") +添加成员
@@ -18,7 +18,7 @@
                 th.tac 状态
             tbody
               tr(v-for="member in members")
-                td {{member.name}}
+                td {{member.name||'未设置'}}
                 //td 13800138000
                 //td 8009995558@citicib.com.cn
                 td(v-if="member.role==1") 管理员
