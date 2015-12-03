@@ -7,7 +7,7 @@
           li: a(href="#", target="#") 开发文档
           li: a(href="#", target="#") 在线支持
         .user-navigation
-          span.user-name admin
+          span.user-name {{this_user.name}}
           i.arrow-down
           .sed-navigation
             ul
@@ -62,23 +62,10 @@
     data: function () {
       return {
         access: false,
-        products: []
+        products: [],
+        this_user:{}
       }
     },
-
-    /*route: {
-      data: function () {
-        var self = this;
-        console.log(123);
-        api.corp.auth().then(function (data) {
-            if(__DEBUG__) {
-              console.log(data);
-            }
-        });
-
-        return {};
-      }
-    },*/
 
     methods: {
       quit:function(){
@@ -157,8 +144,10 @@
         border-color #777 transparent transparent
         border-style solid
       .sed-navigation
-        position relative
-        top -10px
+        position absolute
+        top 50px
+        right 0
+        max-width 60px
         text-align right
         background #FFF
         height 0
@@ -170,7 +159,8 @@
           margin-right 0
           line-height 25px
           display block
-          padding-right 3px
+          padding 0 5px 0 5px
+          min-width 50px
     &:hover
       .sed-navigation
         height auto

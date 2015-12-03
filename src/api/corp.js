@@ -92,27 +92,6 @@ module.exports = function (Vue, Promise, config) {
       });
     },
 
-    /**
-     * 7.获取账户下所有成员列表
-     * @param  {Object} params query参数
-     * @return {Promise}
-     */
-    getMembers: function (params) {
-      var today = new Date();
-
-      return new Promise(function (resolve, reject) {
-        Vue.http.get(config.apiRoot + '/corp/members', params, function (data, status, request) {
-          resolve(data.list);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
-          }
-        }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
-        });
-      });
-    },
     /**4.发起成员邀请邮件
      * 管理员可发起成员邀请，发起后向成员邮箱发送邮件并提供链接，成员通过该链接完善登陆信息。
      * @param  {Object} params  { "email":"成员邮箱地址", "content":"邮件内容","role":"角色类型"}
@@ -159,6 +138,28 @@ module.exports = function (Vue, Promise, config) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/corp/member/'+member_id,  function (data, status, request) {
           resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(JSON.parse(data).error);
+        });
+      });
+    },
+
+    /**
+     * 7.获取账户下所有成员列表
+     * @param  {Object} params query参数
+     * @return {Promise}
+     */
+    getMembers: function (params) {
+      var today = new Date();
+
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(config.apiRoot + '/corp/members', params, function (data, status, request) {
+          resolve(data.list);
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded',

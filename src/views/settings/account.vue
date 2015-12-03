@@ -194,13 +194,14 @@
     route: {
       data: function () {
         var self = this;
-        api.corp.refreshToken().then(function () {
-          api.user.profile('1207d2acbacdc801').then(function (data) {
+
+        api.corp.refreshToken().then(function () {//获取成员详情
+          api.corp.getMember('407d2ac662fd001').then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }
 
-            console.log(self.users.list)
+            console.log(123)
           });
         })
         return {};

@@ -65,6 +65,8 @@
         if (this.validation.$valid) {
           api.corp.auth(this.model).then(function (data) {
             var today = new Date();
+            localStorage.setItem('member_id', data.member_id);
+            localStorage.setItem('corp_id', data.corp_id);
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
             localStorage.setItem('expireIn', data.expire_in);

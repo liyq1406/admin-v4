@@ -155,6 +155,16 @@ var configRouter = function (router) {
             }
             router.app.products = data;
           });
+
+          var mamber_id = localStorage.getItem('member_id')
+          api.corp.getMember(mamber_id).then(function (data) {//输入当前页面的帐号id ，返回账户详情
+            if(__DEBUG__) {
+              //console.log(data);
+            }
+            router.app.this_user = data
+          });
+
+
         });
         transition.next();
       } else {
