@@ -20,7 +20,7 @@
               th 描述
               th.tac 操作
           tbody
-            tr(v-for="datapoint in datapoints", track-by="$index")
+            tr(v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount")
               td {{datapoint.index}}
               td {{datapoint.name}}
               td {{datapoint.type}}
@@ -28,12 +28,11 @@
               td {{datapoint.description}}
               td.tac
                 button.btn-link(@click="editDataPoint(datapoint)") 编辑
-        .pager.tar
-          button.pager-btn.pager-prev
-            i.fa.fa-chevron-left
-          input.pager-input(type="text")
-          button.pager-btn.pager-next
-            i.fa.fa-chevron-right
+            tr(v-if="datapoints.length === 0")
+              td.tac(colspan="6")
+                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+                .tips-null(v-else) 未搜索到设备
+        pager(:total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加数据端点
@@ -162,11 +161,13 @@
 <script>
   var api = require('../../api');
   var Modal = require('../../components/modal.vue');
+  var Pager = require('../../components/pager.vue');
   var _ = require('lodash');
 
   module.exports = {
     components: {
-      'modal': Modal
+      'modal': Modal,
+      'pager': Pager
     },
 
     props: {
@@ -181,6 +182,8 @@
     data: function () {
       return {
         datapoints: [],
+        pageCount: 2,
+        currentPage: 1,
         showAddModal: false,
         showEditModal: false,
         model: {},

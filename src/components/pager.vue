@@ -1,5 +1,5 @@
 <template lang="jade">
-  .pager.tar
+  .pager.tar(v-if="total > 0")
     button.pager-btn.pager-prev(:class="{'disabled': current === 1}", @click="current--")
       i.fa.fa-chevron-left
 

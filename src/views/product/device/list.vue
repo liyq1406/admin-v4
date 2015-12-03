@@ -16,7 +16,7 @@
       .status-bar
         .status
           | 共有
-          span 10
+          span {{filteredDevices.length}}
           | 条结果
         v-select(:options="visibilityOptions", :value="visibility", @select="setVisibility")
           span 显示：
@@ -26,20 +26,26 @@
       table.table.table-stripe.table-bordered
         thead
           tr
-            th MAC
-            th 是否激活
-            th 激活时间
-            th 激活码
-            //- th 在线状态
+            th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}") MAC
+            th(@click="sortBy('is_active')", :class="{active: sortKey === 'is_active'}") 是否激活
+            th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}") 激活时间
+            th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}") 最近一次登录
+            th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}") 在线状态
         tbody
-          tr(v-for="device in devices")
+          tr(v-for="device in filteredDevices | filterBy query in 'mac' | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
             td
-              a.hl-red(v-link="{path: device.id, append: true}") {{device.mac}}
-            td {{device.is_active}}
+              a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
+            td(v-text="device.is_active ? '是' : '未激活'")
             td {{device.active_date}}
-            td {{device.active_code}}
-            //- td {{device.is_online}}
-      pager(:total="129", :current.sync="currentPage")
+            td {{device.last_login}}
+            td
+              span.hl-green(v-if="device.is_online") 在线
+              span.hl-gray(v-else) 下线
+          tr(v-if="filteredDevices.length === 0")
+            td.tac(colspan="5")
+              i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+              .tips-null(v-else) 未搜索到设备
+      pager(:total="filteredDevices.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加设备浮层
     modal(:show.sync="showAddModal")
@@ -83,7 +89,6 @@
 <script>
   var api = require('../../../api');
   var Select = require('../../../components/select.vue');
-  var Grid = require('../../../components/grid.vue');
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
@@ -94,19 +99,19 @@
 
     online: function (devices) {
       return devices.filter(function (device) {
-        return device.online === true;
+        return device.is_online === true;
       });
     },
 
     active: function (devices) {
       return devices.filter(function (device) {
-        return device.active === true;
+        return device.is_active === true;
       });
     },
 
     inactive: function (devices) {
       return devices.filter(function (device) {
-        return device.active === false;
+        return device.is_active === false;
       });
     }
   };
@@ -114,15 +119,21 @@
   module.exports = {
     components: {
       'v-select': Select,
-      'grid': Grid,
       'modal': Modal,
       'search-box': SearchBox,
       'pager': Pager
     },
 
     data: function () {
+      var sortOrders = {};
+      ['mac', 'is_active', 'active_date', 'last_login', 'is_online'].forEach(function (key) {
+        sortOrders[key] = 1;
+      });
+
       return {
         query: '',
+        sortKey: '',
+        sortOrders: sortOrders,
         searching: false,
         visibility: 'all',
         visibilityOptions: [
@@ -133,50 +144,25 @@
         ],
         devices: [],
         currentPage: 1,
+        pageCount: 2,
         showAddModal: false,
         addModel: {},
-        addValidation: {},
-        deviceColumns: [{
-          key: 'mac',
-          label: 'MAC'
-        }, {
-          key: 'active',
-          label: '是否激活'
-        }, {
-          key: 'activate_at',
-          label: '激活时间'
-        }, {
-          key: 'last_login',
-          label: '最近一次登录'
-        }, {
-          key: 'online',
-          label: '在线状态'
-        }]
+        addValidation: {}
       }
     },
 
     computed:  {
       filteredDevices: function () {
-        if (this.visibility.length === 0) {
-          return this.devices;
-        }
-
-        return filters[this.visibility](this.devices);
+        var self = this;
+        var visableDevices = filters[this.visibility](this.devices);
+        return visableDevices.filter(function (item) {
+          return item.mac.match(self.query);
+        });
       }
     },
-    /*
-    ready: function () {
-      var self = this;
-      api.corp.refreshToken().then(function () {
-        api.device.getList(self.$route.params.id, {filter:['mac', 'is_active', 'active_date', 'active_code']}).then(function (data) {
-          self.devices = data;
-        });
-      });
-    },*/
 
     route: {
       data: function () {
-        // devices: this.fetchDevices(this.$route.params['id'])
         return {
           devices: this.getDevices()
         };
@@ -187,7 +173,7 @@
       getDevices: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {
-          return api.device.getList(self.$route.params.id, {filter:['id', 'mac', 'is_active', 'active_date', 'active_code']});
+          return api.device.getList(self.$route.params.id, {filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login']});
         });
       },
 
@@ -197,6 +183,12 @@
 
       setQuery: function (query) {
         this.query = query;
+      },
+
+      sortBy: function (key) {
+        this.sortKey = key;
+        this.sortOrders[key] = this.sortOrders[key] * -1;
+        console.log(this.sortOrders);
       },
 
       toggleSearching: function () {
