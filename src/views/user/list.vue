@@ -16,6 +16,7 @@
                 th 手机号或邮箱
                 th 创建时间
                 th 用户来源
+                th 状态
             tbody(v-for="user in users.list")
                 tr
                   td
@@ -29,6 +30,7 @@
                   td(v-if="user.source==2") Android
                   td(v-if="user.source==3") IOS
                   td(v-if="user.source==4") 微信
+                  td {{user.status}}
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left

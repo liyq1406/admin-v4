@@ -125,22 +125,28 @@
 
     .user-navigation
       position absolute
-      right 25px
+      right 0px
       top 0
       width auto
       height 61px
       line-height 61px
       z-index 1
       text-align right
+      padding 0 20px
+      background #fff
       .user-name
         padding 0 5px
         cursor default
+        color #858585
+        font-size 14px
       .arrow-down
         triangle #777 8px down
+        position relative
+        top -3px
       .sed-navigation
         position absolute
         top 50px
-        right 0
+        right 20px
         max-width 60px
         text-align right
         background #FFF

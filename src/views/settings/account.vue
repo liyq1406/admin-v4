@@ -193,14 +193,12 @@
 <script>
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
-  //var route_config = require('../../route-config');
 
   module.exports = {
     components: {
 
       'modal': Modal,
-      'api': api,
-      //'route_config':route_config
+      'api': api
     },
 
     data: function () {
@@ -222,7 +220,6 @@
     route: {
       data: function () {
         var self = this;
-        //console.log(route_config.router.app.this_user);
         var mamber_id = localStorage.getItem('member_id');
         var corp_id = localStorage.getItem('corp_id');
         api.corp.refreshToken().then(function () {//获取成员详情
@@ -249,7 +246,6 @@
     methods: {
       resetmembermessage:function(){
         var self = this;
-        console.log(router.app.this_user);
         if(self.member.name!=self.resetmember.name){
           var mamber_id = localStorage.getItem('member_id');
           api.corp.refreshToken().then(function () {
@@ -260,7 +256,7 @@
               self.showModal = false;
               if(data==200){
                 self.member.name=self.resetmember.name;
-                console.log(self.this_user.name)
+                self.$route.router.app.this_user.name=self.resetmember.name;
               }else{
                 alert("修改失败！");
               }
