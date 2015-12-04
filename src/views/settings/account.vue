@@ -5,7 +5,6 @@
         // Start: 个人信息
         .panel
           .panel-hd
-            radio-group(:items="periods", :value="period", @check="setPeriod")
             h2 个人信息
           .panel-bd
             ul.user-details
@@ -44,7 +43,6 @@
         // Start: 企业信息
         .panel
           .panel-hd
-            v-select(:options="regions", :value="region", @select="setRegion")
             h2 企业信息
           .panel-bd
             ul.user-details

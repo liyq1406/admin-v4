@@ -30,7 +30,8 @@
                   td(v-if="user.source==2") Android
                   td(v-if="user.source==3") IOS
                   td(v-if="user.source==4") 微信
-                  td {{user.status}}
+                  td(v-if="user.status==1") 正常
+                  td(v-if="user.status==2") 停用
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left
@@ -68,7 +69,7 @@
       data: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
-          api.user.list({ "filter":["id","phone","email","nickname","create_date","source"]}).then(function (data) {
+          api.user.list({ "filter":["id","phone","email","nickname","create_date","source","status"]}).then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }
