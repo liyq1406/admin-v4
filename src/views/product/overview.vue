@@ -31,13 +31,13 @@
                     | 导入设备
               .col-11.status
                 .status-item
-                  em 8888
+                  em {{productSummary.online}}
                   span 当前在线
                 .status-item
-                  em 8888
+                  em {{productSummary.activated}}
                   span 激活数
                 .status-item
-                  em 8888
+                  em {{productSummary.total}}
                   span 设备数
         // Start: 产品简介
 
@@ -102,7 +102,7 @@
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加设备
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", v-el="addForm")
           .form-row
             label.form-control MAC地址：
             .controls
@@ -143,6 +143,11 @@
 
     data: function () {
       return {
+        productSummary: {
+          online: 0,
+          activated: 0,
+          total: 0
+        },
         period: '周',
         periods: ['周', '月', '年'],
         region: '',
@@ -165,7 +170,22 @@
     ready: function () {
     },
 
+    route: {
+      data: function () {
+        return {
+          productSummary: this.getSummary()
+        }
+      }
+    },
+
     methods: {
+      getSummary: function () {
+        var self = this;
+        return api.corp.refreshToken().then(function () {
+          return api.statistics.getProductSummary(self.$route.params.id);
+        });
+      },
+
       setPeriod: function (value) {
         this.period = value;
         console.log("period: " + this.period);
@@ -215,7 +235,7 @@
       },
 
       onAddCancel: function () {
-        // body...
+        this.showAddModal = false;
       },
 
       onAddSubmit: function () {
