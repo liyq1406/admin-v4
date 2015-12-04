@@ -1,7 +1,7 @@
 module.exports = function(Vue, Promise, config) {
   return {
     /**
-     * 1.添加产品
+     * 添加产品
      * @param  {Object} params 产品信息
      * @return {Promise}
      */
@@ -22,7 +22,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 2.删除产品
+     * 删除产品
      * @param  {Object} product_id 产品Id
      * @return {Promise}
      */
@@ -43,7 +43,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 3.更新产品信息
+     * 更新产品信息
      * @param  {Object} product 产品
      * @return {Promise}
      */
@@ -69,7 +69,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 4.获取产品列表
+     * 获取产品列表
      * @return {Promise}
      */
     getProducts: function() {
@@ -89,7 +89,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 5.获取产品详细信息
+     * 获取产品详细信息
      * @param  {String} product_id 产品Id
      * @return {Promise}
      */
@@ -110,7 +110,31 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 6.添加固件版本
+     * 获取产品密钥
+     * @param  {String} product_id 产品Id
+     * @return {Promise}
+     *  {
+          "key": "产品密钥"
+        }
+     */
+    getProductKey: function(product_id) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/product/' + product_id + '/key',
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 添加固件版本
      * @param  {Object} params 产品信息
      * @return {Promise}
      */
@@ -132,7 +156,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 7.编辑固件版本
+     * 编辑固件版本
      * @param  {Object} params 产品信息
      * @return {Promise}
      */
@@ -161,7 +185,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 8.删除固件版本
+     * 删除固件版本
      * @param  {Object} product_id 产品Id
      * @param  {Object} firmware_id 固件Id
      * @return {Promise}
@@ -184,7 +208,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 9.获取固件版本列表
+     * 获取固件版本列表
      * @return {Promise}
      */
     getFirmwares: function() {
@@ -204,7 +228,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 10.添加数据端点
+     * 添加数据端点
      * @param  {String} product_id 产品Id
      * @param  {Object} params 参数
      * @return {Promise}
@@ -227,7 +251,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 11.更新数据端点
+     * 更新数据端点
      * @param  {String} product_id 产品Id
      * @param  {Object} datapoint 数据端点
      * @return {Promise}
@@ -256,7 +280,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 12.删除数据端点
+     * 删除数据端点
      * @param  {String} product_id 产品Id
      * @param  {Object} datapoint 数据端点
      * @return {Promise}
@@ -279,7 +303,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 13.获取数据端点
+     * 获取数据端点
      * @param  {String} product_id 产品Id
      * @param  {Object} datapoint 数据端点
      * @return {Promise}
@@ -302,7 +326,7 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 14.获取数据端点列表
+     * 获取数据端点列表
      * @param  {String} product_id 产品Id
      * @return {Promise}
      */

@@ -21,7 +21,7 @@
                 p
                   em 产品密钥：
                   span
-                    a.hl-red(href="#") 查看密钥
+                    a.hl-red(href="#", @click.prevent="showProductKey") 查看密钥
                 .actions
                   button.btn.btn-primary(@click="showAddModal = true")
                     i.fa.fa-plus
@@ -115,6 +115,10 @@
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
+
+    modal(:show.sync="showKeyModal")
+      h3(slot="header") 产品密钥
+      .product-key.tac(slot="body") {{productKey}}
 </template>
 
 <script>
@@ -158,12 +162,14 @@
         ],
         showEditModal: false,
         showAddModal: false,
+        showKeyModal: false,
         editModel: {},
         addModel: {},
         originModel: {},
         editValidation: {},
         addValidation: {},
-        delChecked: false
+        delChecked: false,
+        productKey: ''
       }
     },
 
@@ -183,6 +189,17 @@
         var self = this;
         return api.corp.refreshToken().then(function () {
           return api.statistics.getProductSummary(self.$route.params.id);
+        });
+      },
+
+      showProductKey: function () {
+        var self = this;
+
+        api.corp.refreshToken().then(function () {
+          api.product.getProductKey(self.$route.params.id).then(function (data) {
+            self.productKey = data.key;
+            self.showKeyModal = true;
+          });
         });
       },
 
@@ -323,4 +340,7 @@
           font-style normal
           font-size 35px
           color red
+
+  .product-key
+    font-size 20px
 </style>
