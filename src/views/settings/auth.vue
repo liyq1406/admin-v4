@@ -9,20 +9,13 @@
               tr
                 th 名称
                 th Access Key ID
-                th Access Key Secret
                 th.tac 操作
-            tbody
-              - for(var i=1; i<=3; i++)
+            tbody(v-for="empower in empowers")
                 tr
-                  td 德尔玛加湿器
-                  td 22d562243a66424485c51d75d420cb3a
-                  td 
-                    a.hl-key 查看密钥
-                  td.tac
-                    if i % 2 === 0
-                      a.hl-gray 禁用
-                    else
-                      a.hl-green 启用
+                  td {{empower.name}}
+                  td {{empower.id}}
+                  td.tac.hl-green(v-if="empower.status==1") 启用
+                  td.tac.hl-gray(v-if="empower.status==2") 禁用
           .pager.tar
             button.pager-btn.pager-prev
               i.fa.fa-chevron-left
@@ -30,3 +23,48 @@
             button.pager-btn.pager-next
               i.fa.fa-chevron-right
 </template>
+<script>
+  var Modal = require('../../components/modal.vue');
+  var api = require('../../api');
+
+  module.exports = {
+    components: {
+
+      'modal': Modal,
+      'api': api
+    },
+
+    data: function () {
+      return {
+        empowers:[]
+      }
+    },
+
+    route: {
+      data: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          /*api.empower.createEmpower({"name":"123312311223"}).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+
+            }
+          });*/
+          api.empower.getEmpowers().then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+              self.empowers=data;
+            }
+          });
+
+        })
+        return {};
+      }
+    },
+
+    methods: {
+
+    }
+  };
+
+</script>
