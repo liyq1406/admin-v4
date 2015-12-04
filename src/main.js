@@ -99,6 +99,13 @@ Vue.directive('placeholder', {
   }
 });
 
+// 过渡效果
+Vue.transition('stagger', {
+  stagger: function (index) {
+    return Math.min(300, index * 50);
+  }
+});
+
 // 路由
 router = new VueRouter({
   // history: true,

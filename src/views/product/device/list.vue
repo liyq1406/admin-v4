@@ -8,9 +8,11 @@
           button.btn.btn-default(@click="showAddModal = true")
             i.fa.fa-plus
             | 添加设备
-          button.btn.btn-default
+          label.btn.btn-default
+            input(type="file", v-el:mac-file, name="macFile", @change.prevent="importFile")
             i.fa.fa-reply-all
             | 导入设备
+          p {{macFile}}
 
       //- 状态栏
       .status-bar
@@ -32,7 +34,7 @@
             th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}") 最近一次登录
             th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}") 在线状态
         tbody
-          tr(v-for="device in filteredDevices | filterBy query in 'mac' | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
+          tr(v-for="device in filteredDevices | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td(v-text="device.is_active ? '是' : '未激活'")
@@ -92,6 +94,7 @@
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
+  var fs = require('fs');
   var filters = {
     all: function (devices) {
       return devices;
@@ -144,10 +147,11 @@
         ],
         devices: [],
         currentPage: 1,
-        pageCount: 2,
+        pageCount: 10,
         showAddModal: false,
         addModel: {},
-        addValidation: {}
+        addValidation: {},
+        macFile: ''
       }
     },
 
@@ -200,7 +204,7 @@
       },
 
       onAddCancel: function () {
-
+        this.showAddModal = false;
       },
 
       onAddSubmit: function () {
@@ -217,10 +221,38 @@
                 self.devices = data;
               });
             }).catch(function (error) {
-              console.log(error);
+              if (error.code === 4001021) {
+                alert('该设备 MAC 地址已存在');
+              }
+
+              if (__DEBUG__) {
+                console.log(status);
+              }
             });
           });
         }
+      },
+
+      importFile: function () {
+        var file = this.$els.macFile;
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          var reader = new FileReader();
+          reader.onloadend = function (evt) {
+            if (evt.target.readyState === FileReader.DONE) {
+              console.log(evt.target.result.split(',')[1]);
+            }
+          };
+          reader.readAsText(file);
+        } else {
+          alert('您的浏览器过于低级，不支持 HTML5 上传');
+        }
+        // var data = new FormData();
+        // data.append('macFile', file);
+        // var data = fs.readFileSync(file);
+        // console.log(data.toString());
+        // console.log(fs);
+
+        // console.log(file);
       }
     }
   };
