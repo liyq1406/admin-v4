@@ -4,6 +4,39 @@ module.exports = function(Vue, Promise, config) {
      * 获取产品摘要信息
      * @return {Object} 返回产品摘要
      *  {
+          "device":
+          {
+            "activated":"设备总激活数",
+            "total":"设备总数",
+            "online":"设备在线数量"
+          },
+          "user":
+          {
+            "total":"用户总数"
+          }
+        }
+     */
+    getSummary: function() {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/statistics/summary',
+          function(data, status, request) {
+            console.log(data);
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获取产品摘要信息
+     * @return {Object} 返回产品摘要
+     *  {
           "total":"总设备量",
           "activated":"激活总数",
           "online":"设备在线数",
