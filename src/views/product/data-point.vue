@@ -182,7 +182,7 @@
     data: function () {
       return {
         datapoints: [],
-        pageCount: 2,
+        pageCount: 10,
         currentPage: 1,
         showAddModal: false,
         showEditModal: false,

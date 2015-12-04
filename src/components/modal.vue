@@ -14,7 +14,8 @@
 module.exports = {
   props: {
     width: {
-      type: Number
+      type: Number,
+      default: 500
     },
     show: {
       type: Boolean,
@@ -26,10 +27,7 @@ module.exports = {
   data: function () {
     return {
       dialogStyle: {
-        width: this.width + 'px',
-        height: this.height + 'px',
-        marginLeft: -this.width / 2 + 'px',
-        marginTop: -this.height / 2 + 'px'
+        width: this.width + 'px'
       }
     };
   },

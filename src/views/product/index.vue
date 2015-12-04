@@ -51,15 +51,15 @@
           }, {
             label: '通知与告警',
             link: { path: '/products/' + this.$route.params.id + '/notice' }
-          }, {
-            label: '设备互联',
-            link: { path: '/products/' + this.$route.params.id + '/interconnection' }
+          // }, {
+            // label: '设备互联',
+            // link: { path: '/products/' + this.$route.params.id + '/interconnection' }
           }, {
             label: '固件升级',
             link: { path: '/products/' + this.$route.params.id + '/upgrade' }
-          }, {
-            label: '虚拟设备',
-            link: { path: '/products/' + this.$route.params.id + '/virtual-device' }
+          // }, {
+            // label: '虚拟设备',
+            // link: { path: '/products/' + this.$route.params.id + '/virtual-device' }
           }]
         };
       }

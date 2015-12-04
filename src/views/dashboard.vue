@@ -12,33 +12,39 @@
               .statistic
                 .statistic-item.device-count
                   .fa.fa-link
-                  .num 316000
+                  .num {{totalSummary.total}}
                   .label 总设备量
                 .statistic-item.active-count
                   .fa.fa-magic
-                  .num 32890
+                  .num {{totalSummary.activated}}
                   .label 激活数
                 .statistic-item.online-count
                   .fa.fa-wifi
-                  .num 9182
+                  .num {{totalSummary.online}}
                   .label 当前在线
                 .statistic-item.user-count
                   .fa.fa-users
-                  .num 15322
+                  .num {{userSummary.user}}
                   .label 用户数
           // Start: 管理台
 
       .row
-        .col-9
+        .col-12
           // Start: 快速指南
           .panel
             .panel-hd
               h2 快速指南
             .panel-bd
-              post-list(:posts="guides")
+              .post-list
+                ul
+                  li
+                    | [
+                    a(href="#") 分类
+                    != '] '
+                    a(href="#") 标题
           // End: 快速指南
 
-        .col-5
+        .col-8
           // Start: 文档
           .panel
             .panel-hd
@@ -65,14 +71,6 @@
                     p 云智易平台提供了丰富的接口
           // End: 文档
 
-        .col-6
-          // Start: 通知
-          .panel
-            .panel-hd
-              h2 通知
-            .panel-bd
-              post-list(:posts="notifications")
-          // End: 通知
 </template>
 
 <style lang="stylus">
@@ -109,6 +107,7 @@
       .num
         font-size 38px
         line-height 44px
+        height 44px
 
       .label
         color #999
@@ -137,12 +136,28 @@
       .fa
         background #3A749A
 
-    .user-count
-      .num
-        color #FA6659
+  .user-count
+    .num
+      color #FA6659
 
-      .fa
-        background #FA6659
+    .fa
+      background #FA6659
+
+  // 文章列表
+  .post-list
+    padding 5px 0
+
+    ul
+      reset-list()
+
+    li
+      position relative
+      margin 18px 0
+      padding-left 20px
+
+      &:before
+        absolute left 2px top
+        content "\2022"
 
   // 文档
   .doc-list
@@ -199,28 +214,15 @@
 </style>
 
 <script>
-  var Promise = require('promise');
-  var PostList = require('../components/post-list.vue');
   var api = require('../api');
-  var productsStore = require('../stores/products');
 
   module.exports = {
     documentTitle: '概览',
-
-    components: {
-      'post-list': PostList
-    },
-
     data: function () {
       return {
-        notifications: [],
-        guides: [],
-        productsState: productsStore.state
+        totalSummary: {},
+        userSummary: {}
       };
-    },
-
-    ready: function () {
-      
     },
 
     filters: {
@@ -229,16 +231,20 @@
         var year = date.getFullYear();
         var month = date.getMonth();
         var day = date.getDate();
-        return year + '年' + month + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+        return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
       }
     },
 
     route: {
       data: function (transition) {
-        return {
-          guides: [],
-          notifications: []
-        };
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.statistics.getSummary().then(function (data) {
+            self.totalSummary = data.total;
+            self.userSummary = data.user;
+            transition.next();
+          });
+        });
       }
     },
 
