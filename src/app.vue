@@ -136,13 +136,7 @@
         padding 0 5px
         cursor default
       .arrow-down
-        display inline-block
-        width 0
-        height 0
-        font-size 0
-        border-width 4px
-        border-color #777 transparent transparent
-        border-style solid
+        triangle #777 8px down
       .sed-navigation
         position absolute
         top 50px
