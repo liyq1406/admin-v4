@@ -3,7 +3,8 @@
     .main
       .panel
         .panel-hd
-          search-box(:key="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+          search-box(:key="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @search="searchUser", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching")
+            input.search.btn.btn-success(type="button",value="搜索",@click="handleInput(key)",slot="search-button")
             label 查找用户
           h2 用户列表
         .panel-bd
@@ -75,15 +76,29 @@
             self.users=data.list;
             console.log(self.users)
           });
+          /*api.user.list({ "filter":["id","phone","email","nickname","create_date","source","status"]}).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.users=data.list;
+            console.log(self.users)
+          });*/
         })
         return {};
       }
     },
 
     methods: {
-      setQuery: function (query) {
-        this.query = query;
-      },
+      searchUser: function (key) {
+        var self = this;
+        console.log(123);
+        api.user.list({ "query":{"filed1":{"$in":[key]}},"filter":["id","phone","email","nickname","create_date","source","status"]}).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.users=data.list;
+          });
+        },
 
       toggleSearching: function () {
         this.searching = !this.searching;
@@ -92,6 +107,7 @@
       cancelSearching: function () {
         this.setQuery('');
       }
+      //searchuser
     }
   };
 

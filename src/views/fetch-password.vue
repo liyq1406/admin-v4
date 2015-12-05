@@ -167,9 +167,7 @@
             console.log(data);
           }
           if(data==200){
-            console.log(self.resetsuccess);
             self.resetsuccess=true;
-            console.log(self.resetsuccess);
           }
         });
       }
