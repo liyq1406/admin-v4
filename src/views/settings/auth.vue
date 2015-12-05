@@ -44,12 +44,11 @@
       data: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
-          /*api.empower.createEmpower({"name":"123312311223"}).then(function (data) {
+          api.empower.createEmpower({"name":"123312311223"}).then(function (data) {
             if(__DEBUG__) {
               console.log(data);
-
             }
-          });*/
+          });
           api.empower.getEmpowers().then(function (data) {
             if(__DEBUG__) {
               console.log(data);
