@@ -8,7 +8,8 @@ var fakeData = {
   products: [],
   devices: [],
   guides: [],
-  notifications: []
+  notifications: [],
+  productTrends: []
 };
 
 for (i = 1; i <= 5; i++) {

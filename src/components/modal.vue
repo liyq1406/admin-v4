@@ -7,7 +7,7 @@
           h3 提示
       .modal-body
         slot(name="body")
-      span.fa.fa-times-circle(@click="show = false")
+      span.fa.fa-times-circle(@click="dismiss")
 </template>
 
 <script>
@@ -32,8 +32,11 @@ module.exports = {
     };
   },
 
-  ready: function () {
-
+  methods: {
+    dismiss: function () {
+      this.show = false;
+      this.$dispatch('close');
+    }
   }
 };
 </script>

@@ -46,18 +46,23 @@
         // Start: 趋势
         .panel
           .panel-hd
-            radio-group(:items="periods", :value="period", @check="setPeriod")
+            radio-group(:items="periods", :value.sync="period", @select="getProductTrends")
+              span.label(slot="label") 最近
             h2 趋势
           .panel-bd
+            #trendChart(style="height:300px")
+            pre {{productTrends | json}}
         // End: 趋势
 
       .col-10
         // Start: 设备分布
         .panel
           .panel-hd
-            v-select(:options="regions", :value="region", @select="setRegion")
+            radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
             h2 设备分布
           .panel-bd
+            #regionChart(style="width:100%; height:300px")
+            pre {{productRegion | json}}
         // End: 设备分布
 
     modal(:show.sync="showEditModal")
@@ -128,11 +133,15 @@
   var productsStore = require('../../stores/products');
   var api = require('../../api');
   var _ = require('lodash');
+  var dateFormat = require('date-format');
+  var echarts = require('echarts/echarts');
+  require('echarts/chart/line');
+  // require('echarts/chart/wordCloud');
+  // var regionChart = echarts.init(document.getElementById('regionChart'));
 
   module.exports = {
     components: {
       'radio-group': RadioGroup,
-      'v-select': Select,
       'modal': Modal
     },
 
@@ -152,13 +161,18 @@
           activated: 0,
           total: 0
         },
-        period: '周',
-        periods: ['周', '月', '年'],
-        region: '',
+        productTrends: [],
+        productRegion: {},
+        period: 7,
+        periods: [
+          { label: '7天', value: 7 },
+          { label: '30天', value: 30 },
+          { label: '90天', value: 90 }
+        ],
+        region: 'global',
         regions: [
-          { label: '广州', value: 'guangzhou' },
-          { label: '深圳', value: 'shenzhen' },
-          { label: '上海', value: 'shanghai' }
+          { label: '全球', value: 'global'},
+          { label: '国内', value: 'domestic' }
         ],
         showEditModal: false,
         showAddModal: false,
@@ -170,17 +184,41 @@
         addValidation: {},
         delChecked: false,
         productKey: ''
+        // trendChart: {},
+        // regionChart: {}
+      }
+    },
+
+    computed: {
+      trendLabels: function () {
+        var gap = Math.floor(this.period / 6);
+        var labels = [];
+        var getPast = function (gap) {
+          var today = new Date();
+          var past = new Date(today.getTime() - gap * 24 * 3600 * 1000);
+          return dateFormat('MM/dd', past);
+        };
+
+        for(var i=6; i>=0; i--) {
+          labels.push(getPast(gap * i));
+        }
+
+        return labels;
       }
     },
 
     ready: function () {
+      this.getProductTrends();
     },
 
     route: {
       data: function () {
+        this.getProductTrends();
+        this.getProductRegion();
+
         return {
           productSummary: this.getSummary()
-        }
+        };
       }
     },
 
@@ -189,6 +227,86 @@
         var self = this;
         return api.corp.refreshToken().then(function () {
           return api.statistics.getProductSummary(self.$route.params.id);
+        });
+      },
+
+      getProductTrends: function () {
+        var self = this;
+        var today = new Date();
+        var past = today.getTime() - this.period * 24 * 3600 * 1000;
+        var start_day = dateFormat('yyyy-MM-dd', new Date(past));
+        var end_day = dateFormat('yyyy-MM-dd', today);
+
+        // return [{start_day:start_day, end_day:end_day, period:this.period}];
+
+        api.corp.refreshToken().then(function () {
+          api.statistics.getProductTrend(self.$route.params.id, start_day, end_day).then(function (data) {
+            var option;
+            self.productTrends = data;
+
+            // 假数据
+            var activatedDevices = [{
+              "day":"2015-12-04",
+              "activated":2005,
+              "active":1599,
+              "send_times":20991,
+              "send_bytes":350189,
+              "recv_times":15990,
+              "recv_bytes":248796
+            }];
+
+            // 趋势图表
+            var trendOptions = {
+              tooltip : {
+                trigger: 'axis'
+              },
+              grid: {
+                x: 50,
+                y: 32,
+                x2: 15
+              },
+              legend: {
+                x: 'right',
+                y: 10,
+                data:['活跃设备', '激活设备']
+              },
+              calculable : true,
+              xAxis: [{
+                type: 'category',
+                boundaryGap: false,
+                data: self.trendLabels
+              }],
+              yAxis: [{
+                type: 'value'
+              }],
+              series: [{
+                name: '活跃设备',
+                type: 'line',
+                data: [12099,13299,10199,13499,9099,23990,21990]
+              }, {
+                name: '激活设备',
+                type: 'line',
+                data: [22099,20099,23199,9099,24409,28990,26990]
+              }]
+            };
+            // this.productTrends
+            var trendChart = echarts.init(document.getElementById('trendChart'));
+            trendChart.setOption(trendOptions);
+            // option = {
+              // series: data
+            // };
+            // trendChart.setOption(option);
+          });
+        });
+
+      },
+
+      getProductRegion: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.statistics.getProductRegion(self.$route.params.id).then(function (data) {
+            self.productRegion = data;
+          });
         });
       },
 
@@ -201,11 +319,6 @@
             self.showKeyModal = true;
           });
         });
-      },
-
-      setPeriod: function (value) {
-        this.period = value;
-        console.log("period: " + this.period);
       },
 
       setRegion: function (value) {

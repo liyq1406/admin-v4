@@ -211,9 +211,10 @@ module.exports = function(Vue, Promise, config) {
      * 获取固件版本列表
      * @return {Promise}
      */
-    getFirmwares: function() {
+    getFirmwares: function(product_id) {
       return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/products/' + firmwares,
+        Vue.http.get(config.apiRoot + '/product/' + product_id +
+          '/firmwares',
           function(data, status, request) {
             resolve(data);
           }, {

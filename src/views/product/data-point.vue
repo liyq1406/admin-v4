@@ -31,7 +31,7 @@
             tr(v-if="datapoints.length === 0")
               td.tac(colspan="6")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                .tips-null(v-else) 未搜索到设备
+                .tips-null(v-else) 未搜索到数据端点
         pager(:total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showAddModal")

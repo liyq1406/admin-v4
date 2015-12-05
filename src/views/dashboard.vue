@@ -220,8 +220,14 @@
     documentTitle: '概览',
     data: function () {
       return {
-        totalSummary: {},
-        userSummary: {}
+        totalSummary: {
+          total: 0,
+          activated: 0,
+          online: 0
+        },
+        userSummary: {
+          user: 0
+        }
       };
     },
 

@@ -3,7 +3,7 @@
     .panel-bd
       //- 操作栏
       .action-bar
-        search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+        search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="searchDevices", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
         .action-group
           button.btn.btn-default(@click="showAddModal = true")
             i.fa.fa-plus
@@ -34,7 +34,7 @@
             th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}") 最近一次登录
             th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}") 在线状态
         tbody
-          tr(v-for="device in filteredDevices | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
+          tr(v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td(v-text="device.is_active ? '是' : '未激活'")
@@ -185,8 +185,21 @@
         this.visibility = value;
       },
 
-      setQuery: function (query) {
+      // TODO
+      searchDevices: function (query) {
+        var self = this;
         this.query = query;
+        api.corp.refreshToken().then(function () {
+          api.device.getList(self.$route.params.id,{
+            query: {
+              mac: {
+                $in: self.query
+              }
+            }
+          }).then(function (data) {
+            self.devices = data;
+          });
+        })
       },
 
       sortBy: function (key) {
@@ -200,7 +213,7 @@
       },
 
       cancelSearching: function () {
-        this.setQuery('');
+        this.searchDevices('');
       },
 
       onAddCancel: function () {
