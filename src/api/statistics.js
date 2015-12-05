@@ -1,7 +1,7 @@
 module.exports = function(Vue, Promise, config) {
   return {
     /**
-     * 获取产品摘要信息
+     * 获取汇总摘要信息
      * @return {Object} 返回产品摘要
      *  {
           "device":
@@ -20,7 +20,6 @@ module.exports = function(Vue, Promise, config) {
       return new Promise(function(resolve, reject) {
         Vue.http.get(config.apiRoot + '/statistics/summary',
           function(data, status, request) {
-            console.log(data);
             resolve(data);
           }, {
             headers: {
@@ -88,7 +87,7 @@ module.exports = function(Vue, Promise, config) {
               'Access-Token': localStorage.getItem('accessToken')
             }
           }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -116,7 +115,7 @@ module.exports = function(Vue, Promise, config) {
               'Access-Token': localStorage.getItem('accessToken')
             }
           }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -147,7 +146,76 @@ module.exports = function(Vue, Promise, config) {
               'Access-Token': localStorage.getItem('accessToken')
             }
           }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获取产品区域分布
+     * @param {String} product_id 产品id
+     * @return {Object} 返回产品区域分布
+     *  {
+         "China":
+          {
+            "guangdong":
+            {
+              "activated":4,
+              "shenzhen":
+              {
+                "activated":4
+              }
+            },
+            "activated":4
+          }
+        }
+     */
+    getProductRegion: function(product_id) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/statistics/product/' + product_id + '/region',
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获取用户区域分布
+     * @return {Object} 返回用户区域分布
+     *  {
+         "China":
+          {
+            "register":4,
+            "guangdong":
+            {
+              "register":4,
+              "shenzhen":
+              {
+                "register":4
+              }
+            }
+          }
+        }
+     */
+    getUserRegion: function() {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/statistics/user/region',
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
         });
       });
     }

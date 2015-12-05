@@ -14,7 +14,7 @@ module.exports = function (Vue, Promise, config) {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -33,7 +33,7 @@ module.exports = function (Vue, Promise, config) {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -54,7 +54,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -84,7 +84,7 @@ module.exports = function (Vue, Promise, config) {
               'Access-Token': localStorage.getItem('accessToken')
             }
           }).error(function (data, status, request) {
-            reject(JSON.parse(data).error);
+            reject(data.error);
           });
         } else if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime()) {
           vm.$route.router.go({path: '/login'});
@@ -109,7 +109,7 @@ module.exports = function (Vue, Promise, config) {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -129,7 +129,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -147,7 +147,7 @@ module.exports = function (Vue, Promise, config) {
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -166,7 +166,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -207,7 +207,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -227,7 +227,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -246,7 +246,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -265,7 +265,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     },
@@ -284,7 +284,7 @@ module.exports = function (Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function (data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     }

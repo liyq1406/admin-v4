@@ -20,7 +20,7 @@ module.exports = function(Vue, Promise, config) {
             'Access-Token': localStorage.getItem('accessToken')
           }
         }).error(function(data, status, request) {
-          reject(JSON.parse(data).error);
+          reject(data.error);
         });
       });
     }
