@@ -102,8 +102,8 @@ module.exports = function (Vue, Promise, config) {
      */
     resetPassword: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.put(config.apiRoot + '/corp/password/forgot', JSON.stringify(params), function (data, status, request) {
-          resolve(data);
+        Vue.http.post(config.apiRoot + '/corp/password/forgot', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
         }, {
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
