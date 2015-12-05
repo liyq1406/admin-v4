@@ -17,7 +17,7 @@
                 //th 最后一次登录
                 th.tac 状态
             tbody
-              tr(v-for="member in members")
+              tr(v-for="member in members | limitBy pageCount (currentPage-1)*pageCount")
                 td {{member.name||'未设置'}}
                 //td 13800138000
                 //td 8009995558@citicib.com.cn
@@ -30,12 +30,7 @@
                     span.hl-gray 正常
                 td.tac(v-if="member.status==2")
                     span.hl-red 已停用
-          .pager.tar
-            button.pager-btn.pager-prev
-              i.fa.fa-chevron-left
-            input.pager-input(type="text")
-            button.pager-btn.pager-next
-              i.fa.fa-chevron-right
+          pager(:total="members.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showModal")
       h3(slot="header") 添加成员
@@ -77,11 +72,13 @@
   var SearchBox = require('../../components/search-box.vue');
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
+  var Pager = require('../../components/pager.vue');
 
   module.exports = {
     components: {
       'search-box': SearchBox,
-      'modal': Modal
+      'modal': Modal,
+      'pager': Pager
     },
 
     data: function () {
@@ -93,7 +90,9 @@
         model: {},
         validation: {},
         members:[],
-        newuseremail:{}
+        newuseremail:{},
+        currentPage: 1,
+        pageCount: 10
       }
     },
 

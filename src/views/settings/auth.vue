@@ -10,33 +10,32 @@
                 th 名称
                 th Access Key ID
                 th.tac 操作
-            tbody(v-for="empower in empowers")
+            tbody(v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount")
                 tr
                   td {{empower.name}}
                   td {{empower.id}}
                   td.tac.hl-green(v-if="empower.status==1") 启用
                   td.tac.hl-gray(v-if="empower.status==2") 禁用
-          .pager.tar
-            button.pager-btn.pager-prev
-              i.fa.fa-chevron-left
-            input.pager-input(type="text")
-            button.pager-btn.pager-next
-              i.fa.fa-chevron-right
+          pager(:total="empowers.length", :current.sync="currentPage", :page-count="pageCount")
 </template>
 <script>
   var Modal = require('../../components/modal.vue');
+  var Pager = require('../../components/pager.vue');
   var api = require('../../api');
 
   module.exports = {
     components: {
 
       'modal': Modal,
-      'api': api
+      'api': api,
+      'pager': Pager
     },
 
     data: function () {
       return {
-        empowers:[]
+        empowers:[],
+        currentPage: 1,
+        pageCount: 10
       }
     },
 
@@ -44,7 +43,7 @@
       data: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
-          /*api.empower.createEmpower({"name":"123312311223"}).then(function (data) {
+          /*api.empower.createEmpower({"name":"99999999999"}).then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }

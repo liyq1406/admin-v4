@@ -17,7 +17,8 @@
                 th 创建时间
                 th 用户来源
                 th 状态
-            tbody(v-for="user in users.list")
+            //tbody(v-for="user in users | limitBy pageCount (currentPage-1)*pageCount")
+            tbody(v-for="user in users")
                 tr
                   td
                     a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
@@ -32,12 +33,7 @@
                   td(v-if="user.source==4") 微信
                   td(v-if="user.status==1") 正常
                   td(v-if="user.status==2") 停用
-          .pager.tar
-            button.pager-btn.pager-prev
-              i.fa.fa-chevron-left
-            input.pager-input(type="text")
-            button.pager-btn.pager-next
-              i.fa.fa-chevron-right
+          pager(:total="users.length", :current.sync="currentPage", :page-count="pageCount")
 </template>
 
 <style lang="stylus">
@@ -49,19 +45,23 @@
   var SearchBox = require('../../components/search-box.vue');
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
+  var Pager = require('../../components/pager.vue');
 
   module.exports = {
     components: {
       'search-box': SearchBox,
       'modal': Modal,
-      'api': api
+      'api': api,
+      'pager': Pager
     },
 
     data: function () {
       return {
         query: '',
         searching: false,
-        users: {}
+        users: {},
+        currentPage: 1,
+        pageCount: 1
       }
     },
 
@@ -73,8 +73,8 @@
             if(__DEBUG__) {
               console.log(data);
             }
-            self.users=data;
-            console.log(self.users.list)
+            self.users=data.list;
+            console.log(self.users)
           });
         })
         return {};
