@@ -17,8 +17,7 @@
                 th 创建时间
                 th 用户来源
                 th 状态
-            //tbody(v-for="user in users | limitBy pageCount (currentPage-1)*pageCount")
-            tbody(v-for="user in users")
+            tbody(v-for="user in users | limitBy pageCount (currentPage-1)*pageCount")
                 tr
                   td
                     a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
@@ -59,7 +58,7 @@
       return {
         query: '',
         searching: false,
-        users: {},
+        users: [],
         currentPage: 1,
         pageCount: 1
       }

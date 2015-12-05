@@ -2,7 +2,8 @@
   .search-box(:class="{'active': active && key.length}")
     slot
     .search-box-input
-      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
+      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)")
+      input.search.btn.btn-success(type="buttom",value="搜索",@mousedown="handleInput(key)")
       .fa.fa-times-circle(@mousedown="handleCancelClick")
 </template>
 
@@ -20,20 +21,27 @@
     display inline-block
     position relative
     background #F1F3F7
-    size 180px 30px
+    size 220px 30px
 
     input
       background transparent
       border none
       appearance none
-      size 100% 30px
+      size 62% 30px
       line-height 30px
-      padding 0 36px 0 10px
+      padding 0 6px 0 10px
       font-size 12px
       box-sizing border-box
+    .search
+      background #35aa47
+      width 80px
+      text-align center
+      font-size 14px
+      padding 0
+      cursor pointer
 
     .fa
-      absolute right 5px top 6px
+      absolute right 90px top 6px
       display none
       size 20px
       font-size 18px
