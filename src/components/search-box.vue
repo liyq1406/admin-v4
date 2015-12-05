@@ -2,8 +2,8 @@
   .search-box(:class="{'active': active && key.length}")
     slot
     .search-box-input
-      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)")
-      input.search.btn.btn-success(type="buttom",value="搜索",@mousedown="handleInput(key)")
+      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
+      slot(name="search-button")
       .fa.fa-times-circle(@mousedown="handleCancelClick")
 </template>
 
@@ -68,6 +68,10 @@
         type: String,
         default: ''
       },
+      auto: {
+        type: Boolean,
+        default: false
+      },
       placeholder: {
         type: String,
         default: ''
@@ -84,7 +88,9 @@
       },
 
       handleInput: function (key) {
-        this.$dispatch('search', key);
+        if (this.auto) {
+          this.$dispatch('search', key);
+        }
       },
 
       handleFocus: function (key) {
