@@ -50,8 +50,7 @@
               span.label(slot="label") 最近
             h2 趋势
           .panel-bd
-            #trendChart(style="height:300px")
-            pre {{productTrends | json}}
+            #trendChart(style="height:320px")
         // End: 趋势
 
       .col-10
@@ -61,7 +60,7 @@
             radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
             h2 设备分布
           .panel-bd
-            #regionChart(style="width:100%; height:300px")
+            #regionChart(style="height:320px")
             pre {{productRegion | json}}
         // End: 设备分布
 
@@ -136,6 +135,9 @@
   var dateFormat = require('date-format');
   var echarts = require('echarts/echarts');
   require('echarts/chart/line');
+  require('echarts/chart/map');
+  var ecConfig = require('echarts/config');
+  var zrEvent = require('zrender/src/tool/event');
   // require('echarts/chart/wordCloud');
   // var regionChart = echarts.init(document.getElementById('regionChart'));
 
@@ -161,7 +163,6 @@
           activated: 0,
           total: 0
         },
-        productTrends: [],
         productRegion: {},
         period: 7,
         periods: [
@@ -169,10 +170,10 @@
           { label: '30天', value: 30 },
           { label: '90天', value: 90 }
         ],
-        region: 'global',
+        region: 'world',
         regions: [
-          { label: '全球', value: 'global'},
-          { label: '国内', value: 'domestic' }
+          { label: '全球', value: 'world'},
+          { label: '国内', value: 'china' }
         ],
         showEditModal: false,
         showAddModal: false,
@@ -209,6 +210,7 @@
 
     ready: function () {
       this.getProductTrends();
+      this.getProductRegion();
     },
 
     route: {
@@ -237,27 +239,22 @@
         var start_day = dateFormat('yyyy-MM-dd', new Date(past));
         var end_day = dateFormat('yyyy-MM-dd', today);
 
-        // return [{start_day:start_day, end_day:end_day, period:this.period}];
-
         api.corp.refreshToken().then(function () {
           api.statistics.getProductTrend(self.$route.params.id, start_day, end_day).then(function (data) {
-            var option;
-            self.productTrends = data;
-
-            // 假数据
-            var activatedDevices = [{
-              "day":"2015-12-04",
-              "activated":2005,
-              "active":1599,
-              "send_times":20991,
-              "send_bytes":350189,
-              "recv_times":15990,
-              "recv_bytes":248796
-            }];
+            var dates = data.map(function (item) {
+              return dateFormat('MM-dd', new Date(item.day));
+            });
+            var activatedTrends = data.map(function (item) {
+              return item.activated;
+            });
+            var activeTrends = data.map(function (item) {
+              return item.active;
+            });
 
             // 趋势图表
             var trendOptions = {
-              tooltip : {
+              calculable: true,
+              tooltip: {
                 trigger: 'axis'
               },
               grid: {
@@ -270,11 +267,11 @@
                 y: 10,
                 data:['活跃设备', '激活设备']
               },
-              calculable : true,
+              calculable: true,
               xAxis: [{
                 type: 'category',
                 boundaryGap: false,
-                data: self.trendLabels
+                data: dates
               }],
               yAxis: [{
                 type: 'value'
@@ -282,20 +279,16 @@
               series: [{
                 name: '活跃设备',
                 type: 'line',
-                data: [12099,13299,10199,13499,9099,23990,21990]
+                data: activeTrends
               }, {
                 name: '激活设备',
                 type: 'line',
-                data: [22099,20099,23199,9099,24409,28990,26990]
+                data: activatedTrends
               }]
             };
-            // this.productTrends
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
-            // option = {
-              // series: data
-            // };
-            // trendChart.setOption(option);
+            // window.onresize = trendChart.resize;
           });
         });
 
@@ -306,6 +299,158 @@
         api.corp.refreshToken().then(function () {
           api.statistics.getProductRegion(self.$route.params.id).then(function (data) {
             self.productRegion = data;
+
+
+            var regionOptions;
+            var regionChart = echarts.init(document.getElementById('regionChart'));
+            if (self.region === 'world') {
+              var worldData = [];
+              for(var country in data) {
+                worldData.push({
+                  name: country,
+                  value: data[country].activated
+                });
+              }
+
+              regionOptions = {
+                tooltip: {
+                  trigger: 'item',
+                  formatter: function (params) {
+                    var value = (params.value + '').split('.');
+                    if (value[0] === '-') {
+                      value = 0
+                    }
+                    return '设备数<br/>' + params.name + ': ' + value;
+                  }
+                },
+                dataRange: {
+                  min: 0,
+                  max: 100,
+                  text:['High','Low'],
+                  realtime: false,
+                  calculable: true,
+                  color: ['orangered','yellow','lightskyblue']
+                },
+                series: [{
+                  type: 'map',
+                  mapType: 'world',
+                  roam: true,
+                  mapLocation: {
+                    y: 10
+                  },
+                  data: worldData
+                }]
+              };
+              regionChart.setOption(regionOptions);
+            } else {
+
+              var curIndx = 0;
+              var option;
+              var mapType = [
+                'china',
+                // 23个省
+                '广东', '青海', '四川', '海南', '陕西',
+                '甘肃', '云南', '湖南', '湖北', '黑龙江',
+                '贵州', '山东', '江西', '河南', '河北',
+                '山西', '安徽', '福建', '浙江', '江苏',
+                '吉林', '辽宁', '台湾',
+                // 5个自治区
+                '新疆', '广西', '宁夏', '内蒙古', '西藏',
+                // 4个直辖市
+                '北京', '天津', '上海', '重庆',
+                // 2个特别行政区
+                '香港', '澳门'
+              ];
+              document.getElementById('regionChart').onmousewheel = function (e){
+                var event = e || window.event;
+                curIndx += zrEvent.getDelta(event) > 0 ? (-1): 1;
+                if (curIndx < 0) {
+                    curIndx = mapType.length - 1;
+                }
+                var mt = mapType[curIndx % mapType.length];
+                if (mt == 'china') {
+                  option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
+                }
+                else{
+                  // option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
+                }
+                option.series[0].mapType = mt;
+                option.title.subtext = mt + ' （滚轮或点击切换）';
+                regionChart.setOption(option, true);
+
+                zrEvent.stop(event);
+              };
+              regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+                var len = mapType.length;
+                var mt = mapType[curIndx % len];
+                if (mt == 'china') {
+                  // 全国选择时指定到选中的省份
+                  var selected = param.selected;
+                  for (var i in selected) {
+                    if (selected[i]) {
+                      mt = i;
+                      while (len--) {
+                        if (mapType[len] == mt) {
+                          curIndx = len;
+                        }
+                      }
+                      break;
+                    }
+                  }
+                  // option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
+                }
+                else {
+                  curIndx = 0;
+                  mt = 'china';
+                  // option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
+                }
+                option.series[0].mapType = mt;
+                option.title.subtext = mt + ' （滚轮或点击切换）';
+                regionChart.setOption(option, true);
+              });
+              option = {
+                title: {
+                  subtext: 'china （滚轮或点击切换）'
+                },
+                tooltip: {
+                  trigger: 'item',
+                  formatter: function (params) {
+                    var value = (params.value + '').split('.');
+                    if (value[0] === '-') {
+                      value = 0
+                    }
+                    return '设备数<br/>' + params.name + ': ' + value;
+                  }
+                },
+                legend: {
+                  orient: 'vertical',
+                  x:'right',
+                  data:['设备数']
+                },
+                dataRange: {
+                  min: 0,
+                  max: 1000,
+                  color:['orange','yellow'],
+                  text:['高','低'],           // 文本，默认为数值文本
+                  calculable: true
+                },
+                series: [{
+                  name: '设备数',
+                  type: 'map',
+                  mapType: 'china',
+                  selectedMode: 'single',
+                  itemStyle:{
+                    normal:{label:{show:true}},
+                    emphasis:{label:{show:true}}
+                  },
+                  data:[
+                    {name: '广东',value: Math.round(Math.random()*1000)},
+                    {name: '广州市',value: Math.round(Math.random()*1000)}
+                  ]
+                }]
+              };
+              regionChart.setOption(option, true);
+            }
           });
         });
       },

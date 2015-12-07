@@ -185,12 +185,11 @@
         this.visibility = value;
       },
 
-      // TODO
       searchDevices: function (query) {
         var self = this;
         this.query = query;
         api.corp.refreshToken().then(function () {
-          api.device.getList(self.$route.params.id,{
+          api.device.getList(self.$route.params.id, {
             query: {
               mac: {
                 $in: self.query

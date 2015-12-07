@@ -1,7 +1,8 @@
 // https://github.com/Marak/faker.js
 var faker = require('faker');
 var format = require('date-format');
-var i, active;
+var i, active, past;
+var today = new Date();
 
 var fakeData = {
   users: [],
@@ -56,6 +57,19 @@ for (i = 1; i <= 20; i++) {
     online: active && Math.random() < 0.5,
     deviceid: faker.random.uuid(16),
     productId: Math.random() < 0.5 ? 1 : 2
+  });
+}
+
+for (i = 30; i >= 0; i--) {
+  past = today.getTime() - i * 24 * 3600 * 1000;
+  fakeData.productTrends.push({
+    'day': format('yyyy-MM-dd', new Date(past)),
+    'activated': 1000 + Math.floor(Math.random() * 500),
+    'active': 1000 + Math.floor(Math.random() * 500),
+    'send_times':20991,
+    'send_bytes':350189,
+    'recv_times':15990,
+    'recv_bytes':248796
   });
 }
 

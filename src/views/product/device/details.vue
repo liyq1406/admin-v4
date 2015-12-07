@@ -30,8 +30,8 @@
                 li
                   .label 在线状态:
                   .info
-                    span.hl-green 在线
-                    span.hl-red 离线
+                    span.hl-green(v-if="device.is_online") 在线
+                    span.hl-red(v-else) 离线
                 li
                   .label 固件版本:
                   .info
@@ -64,7 +64,7 @@
 
   ul.device-details
     margin 20px 0
-    
+
     li
       list-style none
       line-height 32px
