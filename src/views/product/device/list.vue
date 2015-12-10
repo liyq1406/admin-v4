@@ -3,12 +3,13 @@
     .panel-bd
       //- 操作栏
       .action-bar
-        search-box(:key="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="searchDevices", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+        search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="searchDevices", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+          button.btn.btn-primary(slot="search-button", @click="searchDevices(query)") 搜索
         .action-group
-          button.btn.btn-default(@click="showAddModal = true")
+          button.btn.btn-success(@click="showAddModal = true")
             i.fa.fa-plus
             | 添加设备
-          label.btn.btn-default
+          label.btn.btn-success
             input(type="file", v-el:mac-file, name="macFile", @change.prevent="importFile")
             i.fa.fa-reply-all
             | 导入设备
@@ -28,13 +29,23 @@
       table.table.table-stripe.table-bordered
         thead
           tr
-            th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}") MAC
-            th(@click="sortBy('is_active')", :class="{active: sortKey === 'is_active'}") 是否激活
-            th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}") 激活时间
-            th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}") 最近一次登录
-            th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}") 在线状态
+            th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}")
+              | MAC
+              i.fa(:class="sortOrders['mac'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
+            th(@click="sortBy('is_active')", :class="{active: sortKey === 'is_active'}")
+              | 是否激活
+              i.fa(:class="sortOrders['is_active'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
+            th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}")
+              | 激活时间
+              i.fa(:class="sortOrders['active_date'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
+            th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}")
+              | 最近一次登录
+              i.fa(:class="sortOrders['last_login'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
+            th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}")
+              | 在线状态
+              i.fa(:class="sortOrders['is_online'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
         tbody
-          tr(v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount | orderBy sortKey sortOrders[sortKey]")
+          tr(v-for="device in devices | orderBy sortKey sortOrders[sortKey] | limitBy pageCount (currentPage-1)*pageCount")
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td(v-text="device.is_active ? '是' : '未激活'")
@@ -48,6 +59,7 @@
               i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
               .tips-null(v-else) 未搜索到设备
       pager(:total="filteredDevices.length", :current.sync="currentPage", :page-count="pageCount")
+      p {{query | json}}
 
     // 添加设备浮层
     modal(:show.sync="showAddModal")
@@ -188,17 +200,26 @@
       searchDevices: function (query) {
         var self = this;
         this.query = query;
-        api.corp.refreshToken().then(function () {
-          api.device.getList(self.$route.params.id, {
-            query: {
-              mac: {
-                $in: self.query
-              }
-            }
-          }).then(function (data) {
-            self.devices = data;
+        console.log(self.query);
+        if (this.query.length === 0) {
+          api.corp.refreshToken().then(function () {
+            api.device.getList(self.$route.params.id).then(function (data) {
+              self.devices = data;
+            });
           });
-        })
+        } else {
+          api.corp.refreshToken().then(function () {
+            api.device.getList(self.$route.params.id, {
+              query: {
+                mac: {
+                  $in: [self.query]
+                }
+              }
+            }).then(function (data) {
+              self.devices = data;
+            });
+          });
+        }
       },
 
       sortBy: function (key) {

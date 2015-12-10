@@ -1,10 +1,10 @@
 <template lang="jade">
-  .search-box(:class="{'active': active && key.length}")
+  .search-box(:class="{'auto-search': auto, 'active': active && key.length}")
     slot
     .search-box-input
       input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
-      slot(name="search-button")
       .fa.fa-times-circle(@mousedown="handleCancelClick")
+    slot(name="search-button")
 </template>
 
 <style lang="stylus">
@@ -20,28 +20,24 @@
   .search-box-input
     display inline-block
     position relative
-    background #F1F3F7
-    size 220px 30px
+    background #F1F1F1
+    size 190px 30px
 
     input
       background transparent
       border none
       appearance none
-      size 62% 30px
+      size 160px 30px
       line-height 30px
       padding 0 6px 0 10px
       font-size 12px
       box-sizing border-box
-    .search
-      background #35aa47
-      width 80px
-      text-align center
-      font-size 14px
-      padding 0
+
+    .btn
       cursor pointer
 
     .fa
-      absolute right 90px top 6px
+      absolute right 6px top 6px
       display none
       size 20px
       font-size 18px
@@ -66,6 +62,7 @@
     props: {
       key: {
         type: String,
+        twoWay: true,
         default: ''
       },
       auto: {

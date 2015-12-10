@@ -1,36 +1,43 @@
 <template lang="jade">
   .panel
-    .panel-hd
-          search-box(:key="query", :active="searching", :placeholder="'姓名、角色、状态'", @search="setQuery", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
-            label 查找成员
-          h2.title 成员列表
-          button.btn.btn-success.btn-lg.mt10.mb10.bottom_add(@click.prevent="showModal = true") +添加成员
+    .panel-hd.with-actions
+      search-box(:key.sync="query", :auto="true", :active="searching", :placeholder="'请输入姓名'", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+        label 查找成员
+      h2 成员列表
+      button.btn.btn-success.ml20.mt10(@click.prevent="showModal = true")
+        i.fa.fa-plus
+        | 添加成员
     .panel-bd
-          //- 用户列表
-          table.table.table-stripe.table-bordered
-            thead
-              tr
-                th 姓名
-                //th 手机
-                //th 邮箱
-                th 角色
-                //th 最后一次登录
-                th.tac 状态
-            tbody
-              tr(v-for="member in members | limitBy pageCount (currentPage-1)*pageCount")
-                td {{member.name||'未设置'}}
-                //td 13800138000
-                //td 8009995558@citicib.com.cn
-                td(v-if="member.role==1") 管理员
-                td(v-else) 普通会员
-                //td 2015-6-3 15:38:53
-                td.tac(v-if="member.status==0")
-                    span.hl-red 待激活
-                td.tac(v-if="member.status==1")
-                    span.hl-gray 正常
-                td.tac(v-if="member.status==2")
-                    span.hl-red 已停用
-          pager(:total="members.length", :current.sync="currentPage", :page-count="pageCount")
+      //- 用户列表
+      table.table.table-stripe.table-bordered
+        thead
+          tr
+            th 姓名
+            //th 手机
+            //th 邮箱
+            th 角色
+            //th 最后一次登录
+            th.tac 状态
+        tbody
+          tr(v-for="member in members | filterBy query in 'name' | limitBy pageCount (currentPage-1)*pageCount")
+            td
+              span(v-if="member.name.length") {{member.name}}
+              span.hl-gray(v-else) 未设置
+            //td 13800138000
+            //td 8009995558@citicib.com.cn
+            td
+              span(v-if="member.role==1") 管理员
+              span(v-else) 普通会员
+            //td 2015-6-3 15:38:53
+            td.tac
+              span.hl-red(v-if="member.status==0") 待激活
+              span.hl-gray(v-if="member.status==1") 正常
+              span.hl-red(v-if="member.status==2") 已停用
+          tr(v-if="members.length === 0")
+            td.tac(colspan="3")
+              i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+              .tips-null(v-else) 搜索不到成员
+      pager(:total="members.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showModal")
       h3(slot="header") 添加成员
@@ -98,20 +105,19 @@
 
     route: {
       data: function () {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.corp.getMembers().then(function (data) {
-            if(__DEBUG__) {
-              console.log(data);
-            }
-            self.members = data
-          });
-        });
-
-
+        return {
+          members: this.getMembers()
+        };
       }
     },
+
     methods: {
+      getMembers: function () {
+        return api.corp.refreshToken().then(function () {
+          return api.corp.getMembers();
+        });
+      },
+
       setQuery: function (query) {
         this.query = query;
       },
@@ -128,12 +134,14 @@
         this.newuseremail.content = "测试邮箱内容" //待改地方debug
         console.log(self.newuseremail);
 
-        api.corp.memberInvite(self.newuseremail).then(function (data) {
+        api.corp.refreshToken().then(function () {
+          api.corp.memberInvite(self.newuseremail).then(function (data) {
             if(__DEBUG__) {
               console.log(data);
             }
+            self.showModal = false;
+          });
         });
-        self.showModal = false;
       }
     }
   };

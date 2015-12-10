@@ -14,5 +14,6 @@ module.exports = {
   user: require('./api/user')(Vue, Promise, config),
   statistics: require('./api/statistics')(Vue, Promise, config),
   product: require('./api/product')(Vue, Promise, config),
-  empower: require('./api/empower')(Vue, Promise, config)
+  empower: require('./api/empower')(Vue, Promise, config),
+  alarm: require('./api/alarm')(Vue, Promise, config)
 };

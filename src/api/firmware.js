@@ -88,7 +88,7 @@ module.exports = function(Vue, Promise, config) {
         }
      * @return status
      */
-    taskStatus: function(params) {
+    toggleTaskStatus: function(params) {
       return new Promise(function(resolve, reject) {
         Vue.http.post(config.apiRoot + '/upgrade/firmware/task/status',
           JSON.stringify(params),

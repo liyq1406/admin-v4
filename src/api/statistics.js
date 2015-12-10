@@ -126,8 +126,8 @@ module.exports = function(Vue, Promise, config) {
      *  [
           {
             "day":"日期，如2015-12-10",
-            "activated":"激活设备量",
-            "active":"活跃设备量"
+            "add":"新增用户数",
+            "active":"活跃用户数",
             "send_times":"发送指令次数",
             "send_bytes":"发送数据总数",
             "recv_times":"接收指令次数",
@@ -137,6 +137,12 @@ module.exports = function(Vue, Promise, config) {
      */
     getUserTrend: function(start_day, end_day) {
       return new Promise(function(resolve, reject) {
+        resolve([{
+          day: '2015-12-06',
+          add: 2,
+          active: 30
+        }]);
+        /*
         Vue.http.get(config.apiRoot + '/statistics/user/trend?start_day=' + start_day + '&end_day=' + end_day,
           function(data, status, request) {
             resolve(data);
@@ -147,7 +153,7 @@ module.exports = function(Vue, Promise, config) {
             }
           }).error(function(data, status, request) {
           reject(data.error);
-        });
+        });*/
       });
     },
 

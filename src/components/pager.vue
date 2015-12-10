@@ -87,7 +87,7 @@
         display inline-block
         padding 0 8px
         border 1px solid #E5E5E5
-        height 26px
+        height 24px
         line-height 24px
 
         &:hover

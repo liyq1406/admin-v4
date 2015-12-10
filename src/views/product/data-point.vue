@@ -5,7 +5,7 @@
         //- 操作栏
         .action-bar
           .action-group
-            button.btn.btn-default(@click="showAddModal = true")
+            button.btn.btn-success(@click="showAddModal = true")
               i.fa.fa-plus
               | 添加数据端点
 
@@ -23,7 +23,13 @@
             tr(v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount")
               td {{datapoint.index}}
               td {{datapoint.name}}
-              td {{datapoint.type}}
+              td
+                span(v-if="datapoint.type === 1") 布尔类型
+                span(v-if="datapoint.type === 2") 单字节
+                span(v-if="datapoint.type === 3") 16位短整型
+                span(v-if="datapoint.type === 4") 32位整型
+                span(v-if="datapoint.type === 5") 浮点
+                span(v-if="datapoint.type === 6") 字符串
               td {{datapoint.symbol}}
               td {{datapoint.description}}
               td.tac
@@ -154,7 +160,7 @@
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除数据端点
-            button.btn.btn-default(@click.prevent.stop="onCancelEdit") 取消
+            button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 </template>
 
@@ -234,7 +240,7 @@
         this.originModel = _.clone(datapoint);
       },
 
-      onCancelEdit: function () {
+      onEditCancel: function () {
         this.showEditModal = false;
         this.editModel = this.originModel;
       },

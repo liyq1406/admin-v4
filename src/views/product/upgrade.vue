@@ -35,42 +35,40 @@
     .panel
       .panel-hd
         .actions
-          button.btn.btn-success
-            i.fa.fa-refresh
-            | 升级任务列表
+          button.btn.btn-success(@click="showAddModal2 = true")
+            i.fa.fa-plus
+            | 创建自动升级任务
         h2 升级任务列表
       .panel-bd
         //- 版本列表
         table.table.table-stripe.table-bordered
           thead
             tr
-              th 版本号
+              th 序号
               th 任务名称
               th 起始版本
               th 目标版本
-              th 启动时间
-              th 终止时间
+              //- th 启动时间
+              //- th 终止时间
               th 已升级设备
               th.tac 操作
           tbody
-            - for(var i=5; i>=1; i--)
-              tr
-                td= i
-                td 修正版本3的bug，版本3一定要升级
-                td 3
-                td 4
-                td 2015-06-03 17:53:01
-                td 2015-06-03 17:53:01
-                td 58,977
-                td.tac
-                  if i % 2 == 0
-                    button.btn.btn-success.btn-sm
-                      i.fa.fa-play
-                      | 启动
-                  else
-                    button.btn.btn-primary.btn-sm
-                      i.fa.fa-stop
-                      | 停止
+            tr(v-for="task in tasks")
+              td {{$index + 1}}
+              td {{task.name}}
+              td {{task.from_version}}
+              td {{task.target_version}}
+              //- td 2015-06-03 17:53:01
+              //- td 2015-06-03 17:53:01
+              td {{task.upgrade_count}}
+              td.tac
+                button.btn.btn-primary.btn-sm(:class="{'btn-primary': task.status, 'btn-success': !task.status}", @click="toggleTaskStatus(task)")
+                  i.fa(:class="{'fa-stop': task.status, 'fa-play': !task.status}")
+                  | {{task.status ? '停止' : '启动'}}
+            tr(v-if="tasks.length === 0")
+              td.tac(colspan="6")
+                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+                .tips-null(v-else) 暂无升级任务
 
     // 添加固件版本浮层
     modal(:show.sync="showAddModal", @close="onAddCancel")
@@ -198,6 +196,73 @@
               | 删除数据端点
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit") 确定
+
+    // 添加固件版本浮层
+    modal(:show.sync="showAddModal2", @close="onAddCancel2")
+      h3(slot="header") 添加固件升级任务
+      .form(slot="body")
+        form(v-form, name="addValidation2", @submit.prevent="onAddSubmit2")
+          .form-row
+            label.form-control 任务名称：
+            .controls
+              .input-text-wrap(v-placeholder="'升级任务名称'")
+                input.input-text(v-model="addModel2.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.name.$pristine")
+                span(v-if="addValidation2.name.$error.required") 请输入任务名称
+              .form-tips.form-tips-error(v-if="addValidation2.name.$dirty")
+                span(v-if="addValidation2.name.$error.required") 请输入任务名称
+                span(v-if="addValidation2.name.$error.maxlength") 固件型号最多不能超过32个字符
+          .form-row
+            label.form-control 描述：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入描述'")
+                textarea.input-text(v-model="addModel2.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.description.$pristine")
+                span(v-if="addValidation2.description.$error.required") 请输入描述
+              .form-tips.form-tips-error(v-if="addValidation2.description.$dirty")
+                span(v-if="addValidation2.description.$error.required") 请输入描述
+                span(v-if="addValidation2.description.$error.maxlength") 描述最多不能超过250个字符
+          .form-row
+            label.form-control 起始版本号：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入起始版本号'")
+                input.input-text(v-model="addModel2.from_version", type="number", v-form-ctrl, name="from_version", max="4294967296", required, number)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version.$pristine")
+                span(v-if="addValidation2.from_version.$error.required") 请输入起始版本号
+              .form-tips.form-tips-error(v-if="addValidation2.from_version.$dirty")
+                span(v-if="addValidation2.from_version.$error.required") 请输入起始版本号
+          .form-row
+            label.form-control 起始版本地址：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入起始版本文件地址'")
+                input.input-text(v-model="addModel2.from_version_url", type="text", v-form-ctrl, name="from_version_url", maxlength="250", required)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version_url.$pristine")
+                span(v-if="addValidation2.from_version_url.$error.required") 请输入起始版本文件地址
+              .form-tips.form-tips-error(v-if="addValidation2.from_version_url.$dirty")
+                span(v-if="addValidation2.from_version_url.$error.required") 请输入起始版本文件地址
+                span(v-if="addValidation2.from_version_url.$error.maxlength") 起始版本文件地址最多不能超过250个字符
+          .form-row
+            label.form-control 目标版本号：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入目标版本号'")
+                input.input-text(v-model="addModel2.target_version", type="number", v-form-ctrl, name="target_version", max="4294967296", required, number)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version.$pristine")
+                span(v-if="addValidation2.target_version.$error.required") 请输入目标版本号
+              .form-tips.form-tips-error(v-if="addValidation2.target_version.$dirty")
+                span(v-if="addValidation2.target_version.$error.required") 请输入目标版本号
+          .form-row
+            label.form-control 目标版本地址：
+            .controls
+              .input-text-wrap(v-placeholder="'请输入目标版本文件地址'")
+                input.input-text(v-model="addModel2.target_version_url", type="text", v-form-ctrl, name="target_version_url", maxlength="250", required)
+              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version_url.$pristine")
+                span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
+              .form-tips.form-tips-error(v-if="addValidation2.target_version_url.$dirty")
+                span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
+                span(v-if="addValidation2.target_version_url.$error.maxlength") 目标版本文件地址最多不能超过250个字符
+          .form-actions
+            button.btn.btn-default(@click.prevent.stop="onAddCancel2") 取消
+            button.btn.btn-primary(type="submit") 确定
 </template>
 
 <script>
@@ -214,12 +279,18 @@
       return {
         firmwares: [],
         showAddModal: false,
+        showAddModal2: false,
         showEditModal: false,
         addModel: {
           is_release: false
         },
+        addModel2: {
+          product_id: this.$route.params.id
+        },
+        tasks: [],
         editModel: {},
         addValidation: {},
+        addValidation2: {},
         editValidation: {},
         originModel:{},
         delChecked: false
@@ -229,7 +300,8 @@
     route: {
       data: function () {
         return {
-          firmwares: this.getFirmwares()
+          firmwares: this.getFirmwares(),
+          tasks: this.getTasks()
         };
       }
     },
@@ -239,6 +311,13 @@
         var self = this;
         return api.corp.refreshToken().then(function () {
           return api.product.getFirmwares(self.$route.params.id);
+        });
+      },
+
+      getTasks: function () {
+        var self = this;
+        return api.corp.refreshToken().then(function () {
+          return api.firmware.taskList(self.$route.params.id);
         });
       },
 
@@ -274,7 +353,6 @@
       },
 
       onEditSubmit: function () {
-        console.log(22222);
         var self = this;
         if (this.delChecked) {
           api.corp.refreshToken().then(function () {
@@ -301,9 +379,53 @@
         }
       },
 
+      onAddSubmit2: function () {
+        var self = this;
+
+        if (this.addValidation2.$valid) {
+          api.corp.refreshToken().then(function () {
+            api.firmware.task(self.addModel2).then(function (data) {
+              self.showAddModal2 = false;
+              self.tasks.push(data);
+            }).catch(function (error) {
+              self.handleError(error);
+            });
+          });
+        }
+      },
+
+      onAddCancel2: function () {
+        this.showAddModal2 = false;
+      },
+
+      toggleTaskStatus: function (task) {
+        var self = this;
+
+        api.corp.refreshToken().then(function () {
+          api.firmware.toggleTaskStatus({
+            product_id: self.$route.params.id,
+            upgrade_task_id: task.id,
+            status: task.status ? 0 : 1
+          }).then(function (data) {
+            self.getTasks().then(function (data) {
+              self.tasks = data;
+            });
+          });
+        });
+      },
+
       handleError: function (error) {
-        if (error.code === 4001001) {
-          alert('日期格式错误，请重新输入');
+        switch (error.code) {
+          case 4001001:
+            alert('日期格式错误，请重新输入');
+            break;
+          case 4001017:
+            alert('版本号不能重复');
+            break;
+          case 4001035:
+            alert('任务名称不能重复');
+            break;
+          default:
         }
       }
     }

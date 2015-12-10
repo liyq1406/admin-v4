@@ -11,6 +11,7 @@
             .panel-hd
               h2 设备详情
             .panel-bd
+              //- #diviceMap(style="height: 300px")
               ul.device-details
                 li
                   .label ID：
@@ -45,6 +46,23 @@
               h2 数据端点
             .panel-bd
               table.table
+                thead
+                  tr
+                    th 索引
+                    th 端点ID
+                    th 备注
+                    th 当前值
+                tbody
+                  tr(v-for="datapoint in datapoints")
+                    td {{$index + 1}}
+                    td {{datapoint.name}}
+                    td {{datapoint.description}}
+                    td 0
+                  tr(v-if="datapoints.length === 0")
+                    td.tac(colspan="4")
+                      i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+                      .tips-null(v-else) 暂无端点信息
+
           // End: 数据端点
 
         .col-7
@@ -53,11 +71,95 @@
             .panel-hd
               h2 设备日志
             .panel-bd
-              p 设备日志
+              pre.output-log
+                div.log 21:15:20.139 100003563: {"msg":{"type":"PING","resp":true}}
+                div.log 21:15:20.138 100003563: {"msg":{"type":"PING","resp":false}}
+                div.log 21:14:59.278 100003563: {"msg":{"msg_id":257,"code":0,"type":"SYNC","resp":true}}
+                div.log 21:14:59.278 100003563: {"msg":{"device":{"id":100003563,"datapoint":[{"index":5,"5":6941,"value":6941}],"flags":2,"msg_id":257},"type":"SYNC","resp":false}}
+                div.log 21:14:56.322 100003563: {"msg":{"msg_id":257,"code":0,"type":"SYNC","resp":true}}
+                div.log 21:14:56.321 100003563: {"msg":{"device":{"id":100003563,"datapoint":[{"index":5,"5":7197,"value":7197}],"flags":2,"msg_id":257},"type":"SYNC","resp":false}}
+                div.log 21:14:46.073 100003563: {"msg":{"type":"PING","resp":true}}
+                div.log 21:14:46.073 100003563: {"msg":{"type":"PING","resp":false}}
+                div.log 21:14:25.054 100003563: {"msg":{"type":"PING","resp":true}}
+                div.log 21:14:25.054 100003563: {"msg":{"type":"PING","resp":false}}
+                div.log 21:14:04.032 100003563: {"msg":{"type":"PING","resp":true}}
+                div.log 21:14:04.032 100003563: {"msg":{"type":"PING","resp":false}}
+                div.log 21:13:43.693 200: OK
           // End: 设备日志
 
 
 </template>
+
+<script>
+  var api = require('../../../api');
+  var Promise = require('promise');
+
+  module.exports = {
+    data: function () {
+      return {
+        device: {},
+        datapoints: []
+      };
+    },
+
+    route: {
+      data: function () {
+        /*alert(111);
+        //百度地图API功能
+      	function loadJScript() {
+          alert("load js");
+          var script = document.createElement("script");
+
+      		script.type = "text/javascript";
+      		script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
+      		document.body.appendChild(script);
+      	}
+      	window.init = function() {
+          alert("init");
+      		var map = new BMap.Map("diviceMap");            // 创建Map实例
+      		var point = new BMap.Point(116.404, 39.915); // 创建点坐标
+      		map.centerAndZoom(point,15);
+      		map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+      	}
+      	// document.getElementById('diviceMap').addEventListener('load', loadJScript);  //异步加载地图
+
+        // document.addEventListener('load', loadJScript);
+        document.addEventListener('load', function (e) {
+          alert(1223323);
+          // body...
+        });
+        // window.onload=loadJScript;
+        alert(222);*/
+
+        return {
+          device: this.getDeviceInfo(),
+          datapoints: this.getDatapoints()
+        };
+      }
+    },
+
+    methods: {
+      loadMapApi: function () {
+        return new Promise(function (resolve, reject) {
+        });
+      },
+
+      getDeviceInfo: function () {
+        var self = this;
+        return api.corp.refreshToken().then(function () {
+          return api.device.getInfo(self.$route.params.product_id, self.$route.params.device_id);
+        });
+      },
+
+      getDatapoints: function () {
+        var self = this;
+        return api.corp.refreshToken(this).then(function () {
+          return api.product.getDatapoints(self.$route.params.product_id)
+        });
+      }
+    }
+  };
+</script>
 
 <style lang="stylus">
   @import '../../../assets/stylus/common'
@@ -75,35 +177,8 @@
 
       .info
         display inline-block
+
+  .output-log
+    height 360px
+    overflow auto
 </style>
-
-<script>
-  var api = require('../../../api');
-
-  module.exports = {
-    data: function () {
-      return {
-        device: {},
-        datapoints: []
-      };
-    },
-
-    route: {
-      data: function () {
-        return {
-          device: this.getDeviceInfo(),
-          datapoints: []
-        };
-      }
-    },
-
-    methods: {
-      getDeviceInfo: function () {
-        var self = this;
-        return api.corp.refreshToken().then(function () {
-          return api.device.getInfo(self.$route.params.product_id, self.$route.params.device_id);
-        });
-      }
-    }
-  };
-</script>

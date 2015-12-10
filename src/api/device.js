@@ -136,7 +136,6 @@ module.exports = function(Vue, Promise, config) {
         Vue.http.post(config.apiRoot + '/product/' + product_id +
           '/devices', JSON.stringify(params),
           function(data, status, request) {
-            console.log(data);
             resolve(data.list);
           }, {
             headers: {

@@ -60,8 +60,7 @@
             radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
             h2 设备分布
           .panel-bd
-            #regionChart(style="height:320px")
-            pre {{productRegion | json}}
+            #regionChart(style="height:320px; overflow:hidden;")
         // End: 设备分布
 
     modal(:show.sync="showEditModal")
@@ -163,7 +162,6 @@
           activated: 0,
           total: 0
         },
-        productRegion: {},
         period: 7,
         periods: [
           { label: '7天', value: 7 },
@@ -187,24 +185,6 @@
         productKey: ''
         // trendChart: {},
         // regionChart: {}
-      }
-    },
-
-    computed: {
-      trendLabels: function () {
-        var gap = Math.floor(this.period / 6);
-        var labels = [];
-        var getPast = function (gap) {
-          var today = new Date();
-          var past = new Date(today.getTime() - gap * 24 * 3600 * 1000);
-          return dateFormat('MM/dd', past);
-        };
-
-        for(var i=6; i>=0; i--) {
-          labels.push(getPast(gap * i));
-        }
-
-        return labels;
       }
     },
 
@@ -288,7 +268,7 @@
             };
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
-            // window.onresize = trendChart.resize;
+            window.onresize = trendChart.resize;
           });
         });
 
@@ -298,9 +278,6 @@
         var self = this;
         api.corp.refreshToken().then(function () {
           api.statistics.getProductRegion(self.$route.params.id).then(function (data) {
-            self.productRegion = data;
-
-
             var regionOptions;
             var regionChart = echarts.init(document.getElementById('regionChart'));
             if (self.region === 'world') {
@@ -343,7 +320,6 @@
               };
               regionChart.setOption(regionOptions);
             } else {
-
               var curIndx = 0;
               var option;
               var mapType = [
@@ -361,6 +337,26 @@
                 // 2个特别行政区
                 '香港', '澳门'
               ];
+
+              var chinaData = [];
+              for(var province in data['China']) {
+                if (province !== 'activated') {
+                  chinaData.push({
+                    name: province,
+                    value: data['China'][province].activated
+                  });
+
+                  for(var city in data['China'][province]) {
+                    if (city != 'activated') {
+                      chinaData.push({
+                        name: city,
+                        value: data['China'][province][city].activated
+                      });
+                    }
+                  }
+                }
+              }
+
               document.getElementById('regionChart').onmousewheel = function (e){
                 var event = e || window.event;
                 curIndx += zrEvent.getDelta(event) > 0 ? (-1): 1;
@@ -368,18 +364,12 @@
                     curIndx = mapType.length - 1;
                 }
                 var mt = mapType[curIndx % mapType.length];
-                if (mt == 'china') {
-                  option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
-                }
-                else{
-                  // option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
-                }
                 option.series[0].mapType = mt;
-                option.title.subtext = mt + ' （滚轮或点击切换）';
                 regionChart.setOption(option, true);
 
                 zrEvent.stop(event);
               };
+
               regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 var len = mapType.length;
                 var mt = mapType[curIndx % len];
@@ -397,21 +387,15 @@
                       break;
                     }
                   }
-                  // option.tooltip.formatter = '滚轮切换省份或点击返回全国<br/>{b}';
                 }
                 else {
                   curIndx = 0;
                   mt = 'china';
-                  // option.tooltip.formatter = '滚轮切换或点击进入该省<br/>{b}';
                 }
                 option.series[0].mapType = mt;
-                option.title.subtext = mt + ' （滚轮或点击切换）';
                 regionChart.setOption(option, true);
               });
               option = {
-                title: {
-                  subtext: 'china （滚轮或点击切换）'
-                },
                 tooltip: {
                   trigger: 'item',
                   formatter: function (params) {
@@ -443,10 +427,7 @@
                     normal:{label:{show:true}},
                     emphasis:{label:{show:true}}
                   },
-                  data:[
-                    {name: '广东',value: Math.round(Math.random()*1000)},
-                    {name: '广州市',value: Math.round(Math.random()*1000)}
-                  ]
+                  data: chinaData
                 }]
               };
               regionChart.setOption(option, true);

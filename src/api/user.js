@@ -38,7 +38,7 @@ module.exports = function(Vue, Promise, config) {
       return new Promise(function(resolve, reject) {
         Vue.http.post(config.apiRoot + '/users', JSON.stringify(params),
           function(data, status, request) {
-            resolve(data);
+            resolve(data.list);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
@@ -103,7 +103,7 @@ module.exports = function(Vue, Promise, config) {
           }
         ]
      */
-    subDevliceList: function(user_id) {
+    subDeviceList: function(user_id) {
       return new Promise(function(resolve, reject) {
         Vue.http.get(config.apiRoot + '/user/' + user_id +
           '/subscribe/devices',
