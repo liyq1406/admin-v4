@@ -1,3 +1,5 @@
+var request = require('superagent');
+
 module.exports = function (Vue, Promise, config) {
   return {
     /**
@@ -70,7 +72,7 @@ module.exports = function (Vue, Promise, config) {
 
       return new Promise(function (resolve, reject) {
         // if (localStorage.getItem('expireAt') < today.getTime() + 10000) {
-        if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime() + localStorage.getItem('expireIn') / 2) {
+        if (localStorage.getItem('expireAt') !== null && today.getTime() < localStorage.getItem('expireAt') && today.getTime() > localStorage.getItem('expireAt') -  localStorage.getItem('expireIn') / 2) {
           Vue.http.post(config.apiRoot + '/corp/token/refresh', JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}), function (data, status, request) {
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);

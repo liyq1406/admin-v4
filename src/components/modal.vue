@@ -7,6 +7,7 @@
           h3 提示
       .modal-body
         slot(name="body")
+      slot(name="footer")
       span.fa.fa-times-circle(@click="dismiss")
 </template>
 
@@ -89,6 +90,9 @@ module.exports = {
   .modal-body
     padding 30px
 
+    .table
+      margin 0
+
   .form
     .form-row
       .controls
@@ -107,4 +111,10 @@ module.exports = {
 
       .btn
         margin-left 10px
+
+  .modal-footer
+    padding 0 30px 20px
+    text-align right
+    clearfix()
+
 </style>

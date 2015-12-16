@@ -16,7 +16,7 @@
               th 版本说明
               th 添加日期
               th 发布日期
-              th 文件大小(byte)
+              //- th 文件大小(byte)
               th.tac 操作
           tbody
             tr(v-for="firmware in firmwares")
@@ -24,11 +24,11 @@
               td {{firmware.description}}
               td {{firmware.create_date}}
               td {{firmware.release_date}}
-              td 缺API
+              //- td 缺API
               td.tac
                 button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") 编辑
             tr(v-if="firmwares.length === 0")
-              td.tac(colspan="6")
+              td.tac(colspan="5")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                 .tips-null(v-else) 暂无固件版本
 
@@ -114,20 +114,18 @@
               .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
                 span(v-if="addValidation.description.$error.required") 请输入描述
                 span(v-if="addValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          .form-row
+          .form-row.date-row
             label.form-control 发布日期：
             .controls
-              .input-text-wrap(v-placeholder="'请输入发布日期'")
-                input.input-text(v-model="addModel.release_date", type="text", v-form-ctrl, name="release_date", required)
-                .form-tips 例：2015-10-09T08:15:40.843Z
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.release_date.$pristine")
-                span(v-if="addValidation.release_date.$error.required") 请输入发布日期
-              .form-tips.form-tips-error(v-if="addValidation.release_date.$dirty")
-                span(v-if="addValidation.release_date.$error.required") 请输入发布日期
+              datepicker(:value.sync="addReleaseDate", @select-day="updateAddModelRelease")
+              timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease")
+              //- .form-tips 例：2015-10-09T08:15:40.843Z
           .form-row
             label.form-control 是否发布：
             .controls
-              input(type="checkbox", name="is_release", v-model="addModel.is_release")
+              .checkbox-group
+                label.checkbox
+                  input(type="checkbox", name="is_release", v-model="addModel.is_release")
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
@@ -176,20 +174,17 @@
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
                 span(v-if="editValidation.description.$error.required") 请输入描述
                 span(v-if="editValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          .form-row
+          .form-row.date-row
             label.form-control 发布日期：
             .controls
-              .input-text-wrap(v-placeholder="'请输入发布日期'")
-                input.input-text(v-model="editModel.release_date", type="text", v-form-ctrl, name="release_date", required)
-                .form-tips 例：2015-10-09T08:15:40.843Z
-              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.release_date.$pristine")
-                span(v-if="editValidation.release_date.$error.required") 请输入发布日期
-              .form-tips.form-tips-error(v-if="editValidation.release_date.$dirty")
-                span(v-if="editValidation.release_date.$error.required") 请输入发布日期
+              datepicker(:value.sync="editReleaseDate", @select-day="updateEditModelRelease")
+              timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease")
           .form-row
             label.form-control 是否发布：
             .controls
-              input(type="checkbox", name="is_release", v-model="editModel.is_release")
+              .checkbox-group
+                label.checkbox
+                  input(type="checkbox", name="is_release", v-model="editModel.is_release")
           .form-actions
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
@@ -268,11 +263,16 @@
 <script>
   var api = require('../../api');
   var Modal = require('../../components/modal.vue');
+  var Datepicker = require('../../components/datepicker.vue');
+  var Timepicker = require('../../components/timepicker.vue');
+  var dateFormat = require('date-format');
   var _ = require('lodash');
 
   module.exports = {
     components: {
-      'modal': Modal
+      'modal': Modal,
+      'datepicker': Datepicker,
+      'timepicker': Timepicker
     },
 
     data: function () {
@@ -282,7 +282,8 @@
         showAddModal2: false,
         showEditModal: false,
         addModel: {
-          is_release: false
+          is_release: false,
+          release_date: dateFormat('yyyy-MM-dd', new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) + 'T00:00:00.00Z'
         },
         addModel2: {
           product_id: this.$route.params.id
@@ -293,7 +294,11 @@
         addValidation2: {},
         editValidation: {},
         originModel:{},
-        delChecked: false
+        delChecked: false,
+        addReleaseDate: dateFormat('yyyy-MM-dd', new Date(new Date().getTime() + 24 * 60 * 60 * 1000)),
+        addReleaseTime: '00:00:00',
+        editReleaseDate: '',
+        editReleaseTime: ''
       };
     },
 
@@ -341,15 +346,20 @@
       },
 
       onEditFirmware: function (firmware) {
+        var rDate = new Date(firmware.release_date);
         this.showEditModal = true;
         this.editModel = firmware;
         this.originModel = _.clone(firmware);
+        this.editReleaseDate = dateFormat('yyyy-MM-dd', rDate);
+        this.editReleaseTime = dateFormat('hh:mm:ss', rDate);
       },
 
       onEditCancel: function () {
         this.showEditModal = false;
         this.delChecked = false;
         this.editModel = this.originModel;
+        this.editReleaseDate = '';
+        this.editReleaseTime = '';
       },
 
       onEditSubmit: function () {
@@ -414,6 +424,14 @@
         });
       },
 
+      updateAddModelRelease: function () {
+        this.addModel.release_date = this.addReleaseDate + 'T' + this.addReleaseTime + '.00Z';
+      },
+
+      updateEditModelRelease: function () {
+        this.editModel.release_date = this.editReleaseDate + 'T' + this.editReleaseTime + '.00Z';
+      },
+
       handleError: function (error) {
         switch (error.code) {
           case 4001001:
@@ -431,3 +449,17 @@
     }
   };
 </script>
+
+<style lang="stylus">
+  .date-row
+    .datepicker
+    .timepicker
+      float left
+
+    .datepicker
+      width 160px
+
+    .timepicker
+      width 160px
+      margin-left 10px
+</style>

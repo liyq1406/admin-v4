@@ -3,25 +3,24 @@
     .panel-bd
       //- 操作栏
       .action-bar
-        search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @search="searchDevices", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
-          button.btn.btn-primary(slot="search-button", @click="searchDevices(query)") 搜索
+        search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+          button.btn.btn-primary(slot="search-button", @click="getDevices") 搜索
         .action-group
           button.btn.btn-success(@click="showAddModal = true")
             i.fa.fa-plus
             | 添加设备
-          label.btn.btn-success
+          label.btn.btn-success.btn-upload
             input(type="file", v-el:mac-file, name="macFile", @change.prevent="importFile")
             i.fa.fa-reply-all
             | 导入设备
-          p {{macFile}}
 
       //- 状态栏
       .status-bar
         .status
           | 共有
-          span {{filteredDevices.length}}
+          span {{total}}
           | 条结果
-        v-select(:options="visibilityOptions", :value="visibility", @select="setVisibility")
+        v-select(:options="visibilityOptions", :value.sync="visibility", @select="getDevices")
           span 显示：
 
       //- 设备列表
@@ -31,21 +30,17 @@
           tr
             th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}")
               | MAC
-              i.fa(:class="sortOrders['mac'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
-            th(@click="sortBy('is_active')", :class="{active: sortKey === 'is_active'}")
+              i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
+            th
               | 是否激活
-              i.fa(:class="sortOrders['is_active'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
-            th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}")
+            th
               | 激活时间
-              i.fa(:class="sortOrders['active_date'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
-            th(@click="sortBy('last_login')", :class="{active: sortKey === 'last_login'}")
+            th
               | 最近一次登录
-              i.fa(:class="sortOrders['last_login'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
-            th(@click="sortBy('is_online')", :class="{active: sortKey === 'is_online'}")
+            th
               | 在线状态
-              i.fa(:class="sortOrders['is_online'] > 0 ? 'fa-caret-up' : 'fa-caret-down'")
         tbody
-          tr(v-for="device in devices | orderBy sortKey sortOrders[sortKey] | limitBy pageCount (currentPage-1)*pageCount")
+          tr(v-for="device in devices")
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td(v-text="device.is_active ? '是' : '未激活'")
@@ -54,12 +49,11 @@
             td
               span.hl-green(v-if="device.is_online") 在线
               span.hl-gray(v-else) 下线
-          tr(v-if="filteredDevices.length === 0")
+          tr(v-if="devices.length === 0")
             td.tac(colspan="5")
               i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
               .tips-null(v-else) 未搜索到设备
-      pager(:total="filteredDevices.length", :current.sync="currentPage", :page-count="pageCount")
-      p {{query | json}}
+      pager(:total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
 
     // 添加设备浮层
     modal(:show.sync="showAddModal")
@@ -107,6 +101,7 @@
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
   var fs = require('fs');
+  /*
   var filters = {
     all: function (devices) {
       return devices;
@@ -130,6 +125,7 @@
       });
     }
   };
+  */
 
   module.exports = {
     components: {
@@ -141,8 +137,8 @@
 
     data: function () {
       var sortOrders = {};
-      ['mac', 'is_active', 'active_date', 'last_login', 'is_online'].forEach(function (key) {
-        sortOrders[key] = 1;
+      ['mac'].forEach(function (key) {
+        sortOrders[key] = 'asc';
       });
 
       return {
@@ -158,6 +154,7 @@
           { label: '未激活', value: 'inactive' }
         ],
         devices: [],
+        total: 0,
         currentPage: 1,
         pageCount: 10,
         showAddModal: false,
@@ -168,64 +165,74 @@
     },
 
     computed:  {
+      /*
       filteredDevices: function () {
         var self = this;
         var visableDevices = filters[this.visibility](this.devices);
         return visableDevices.filter(function (item) {
           return item.mac.match(self.query);
         });
+      },
+      */
+
+      queryCondition: function () {
+        var condition = {
+          filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          order: this.sortOrders,
+          query: {}
+        };
+
+        if (this.query.length > 0) {
+          condition.query['mac'] = { $in: [this.query] };
+        }
+
+        switch (this.visibility) {
+          case 'online':
+            condition.query['is_online'] = { $in: [true] };
+            break;
+          case 'active':
+            condition.query['is_active'] = { $in: [true] };
+            break;
+          case 'inactive':
+            condition.query['is_active'] = { $in: [false] };
+            break;
+          default:
+        }
+
+        return condition;
       }
     },
 
     route: {
       data: function () {
-        return {
-          devices: this.getDevices()
-        };
+        this.getDevices();
       }
     },
 
     methods: {
       getDevices: function () {
         var self = this;
-        return api.corp.refreshToken().then(function () {
-          return api.device.getList(self.$route.params.id, {filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login']});
+
+        api.corp.refreshToken().then(function () {
+          api.device.getList(self.$route.params.id, self.queryCondition).then(function (data) {
+            self.devices = data.list;
+            self.total = data.count;
+          });
         });
       },
 
-      setVisibility: function (value) {
-        this.visibility = value;
-      },
-
-      searchDevices: function (query) {
-        var self = this;
-        this.query = query;
-        console.log(self.query);
+      handleSearch: function () {
         if (this.query.length === 0) {
-          api.corp.refreshToken().then(function () {
-            api.device.getList(self.$route.params.id).then(function (data) {
-              self.devices = data;
-            });
-          });
-        } else {
-          api.corp.refreshToken().then(function () {
-            api.device.getList(self.$route.params.id, {
-              query: {
-                mac: {
-                  $in: [self.query]
-                }
-              }
-            }).then(function (data) {
-              self.devices = data;
-            });
-          });
+          this.getDevices();
         }
       },
 
       sortBy: function (key) {
         this.sortKey = key;
-        this.sortOrders[key] = this.sortOrders[key] * -1;
-        console.log(this.sortOrders);
+        this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc';
+        this.getDevices();
       },
 
       toggleSearching: function () {
@@ -233,7 +240,10 @@
       },
 
       cancelSearching: function () {
-        this.searchDevices('');
+        var self = this;
+        this.getDevices().then(function (data) {
+          self.devices = data;
+        });
       },
 
       onAddCancel: function () {

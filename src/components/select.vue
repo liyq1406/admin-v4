@@ -2,15 +2,88 @@
   .v-select
     slot
     .btn-group(:class="{'open':active}")
-      button.btn.btn-default(:class="{'active': active || !showPlaceholder}", type="button", @click="toggleDropdown", @blur="deactivate")
-        span.placeholder(v-show="showPlaceholder") {{placeholder}}
+      button.btn.btn-default.active(@click="toggleDropdown", @blur="deactivate")
         span.content {{label}}
       .dropdown-menu(:style="dropdownMenuStyle")
         ul
           li(v-for="option in options", @mousedown="handleClick(option)")
             | {{option.label}}
             .fa.fa-check(v-show="option.value === value")
+      i.caret(@click="toggleDropdown")
 </template>
+
+<script>
+  var EventListener = require('./utils/EventListener');
+
+  module.exports = {
+    props: {
+      options: {
+        type: Array,
+        default: []
+      },
+      value: {
+        type: String,
+        default: '',
+        twoWay: true
+      },
+      height: {
+        type: Number,
+        default: 100
+      }
+    },
+
+    data: function () {
+      return {
+        dropdownMenuStyle: {
+          height: this.height + 'px'
+        },
+        active: false
+      }
+    },
+
+    computed: {
+      label: function () {
+        var self = this;
+        var option = this.options.filter(function (option) {
+          return option.value === self.value;
+        })[0];
+        return option ? option.label : '';
+      }
+    },
+
+    methods: {
+      handleClick: function (option) {
+        this.value = option.value;
+        this.$dispatch('select', option.value);
+        this.deactivate();
+      },
+
+      toggleDropdown: function () {
+        this.active = !this.active;
+      },
+
+      deactivate: function () {
+        this.active = false;
+      }
+    },
+
+    ready: function () {
+      var self = this;
+      this.$dispatch('select-created', this);
+      this._closeEvent = EventListener.listen(window, 'click', function (e) {
+        if (!self.$el.contains(e.target)) {
+          self.deactivate();
+        }
+      });
+    },
+
+    beforeDestroy() {
+      if (this._closeEvent){
+        this._closeEvent.remove();
+      }
+    }
+  };
+</script>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
@@ -19,10 +92,10 @@
     .btn-group
       display inline-block
       position relative
+      z-index 100
 
-      &:after
+      i.caret
         absolute right 10px top 10px
-        content ""
         triangle #FFF 10px down
 
       .btn
@@ -56,68 +129,3 @@
     .open > .dropdown-menu
       display block
 </style>
-
-<script>
-  module.exports = {
-    props: {
-      placeholder: {
-        type: String,
-        default: '请选择'
-      },
-      options: {
-        type: Array,
-        default: []
-      },
-      value: {
-        type: String,
-        default: ''
-      },
-      height: {
-        type: Number,
-        default: 100
-      }
-    },
-
-    data: function () {
-      return {
-        dropdownMenuStyle: {
-          height: this.height + 'px'
-        },
-        active: false
-      }
-    },
-
-    computed: {
-      showPlaceholder: function () {
-        return this.value.length <= 0;
-      },
-
-      label: function () {
-        var self = this;
-        var option = this.options.filter(function (option) {
-          return option.value === self.value;
-        })[0];
-        return option ? option.label : '';
-      }
-    },
-
-    methods: {
-      handleClick: function (option) {
-        if (this.value === option.value) {
-          this.$dispatch('select', '');
-        } else {
-          this.$dispatch('select', option.value);
-        }
-        this.deactivate();
-      },
-
-      toggleDropdown: function () {
-        this.active = !this.active;
-      },
-
-      deactivate: function () {
-        this.active = false;
-      }
-    }
-  };
-</script>

@@ -42,6 +42,7 @@
       input[type="radio"]
         absolute left top
         appearance none
+        opacity 0
 
     .label
       display inline-block

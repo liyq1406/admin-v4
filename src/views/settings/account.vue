@@ -84,7 +84,7 @@
                 span(v-if="validation.name.$error.required") 请输入姓名
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit",@click.prevent.stop="resetmembermessage") 确定
+            button.btn.btn-primary(type="submit",@click.prevent.stop="resetMemberMessage") 确定
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
@@ -134,6 +134,7 @@
         api.corp.refreshToken().then(function () {//获取成员详情
           api.corp.getCorp().then(function (data) {
             if(__DEBUG__) {
+              console.log("企业信息如下：");
               console.log(data);
             }
             self.corp=data;
@@ -141,6 +142,7 @@
           });
           api.corp.getMember(mamber_id).then(function (data) {
             if(__DEBUG__) {
+              console.log("个人信息如下：");
               console.log(data);
             }
             self.member=data;
@@ -153,7 +155,7 @@
     },
 
     methods: {
-      resetmembermessage:function(){
+      resetMemberMessage:function(){
         var self = this;
         if(self.member.name!=self.resetmember.name){
           var mamber_id = localStorage.getItem('member_id');

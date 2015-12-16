@@ -2,7 +2,7 @@
   .search-box(:class="{'auto-search': auto, 'active': active && key.length}")
     slot
     .search-box-input
-      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput(key)")
+      input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput")
       .fa.fa-times-circle(@mousedown="handleCancelClick")
     slot(name="search-button")
 </template>
@@ -81,13 +81,12 @@
 
     methods: {
       handleCancelClick: function () {
+        this.key = '';
         this.$dispatch('cancel');
       },
 
-      handleInput: function (key) {
-        if (this.auto) {
-          this.$dispatch('search', key);
-        }
+      handleInput: function () {
+        this.$dispatch('search');
       },
 
       handleFocus: function (key) {

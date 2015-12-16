@@ -9,5 +9,5 @@
             ul
               li: a(v-link="{ path: '/statistic/products' }") 产品统计
               li: a(v-link="{ path: '/statistic/users' }") 用户统计
-      router-view(class="view", transition="view", transition-mode="out-in")
+      router-view(class="view", transition="view", transition-mode="out-in", keep-alive)
 </template>

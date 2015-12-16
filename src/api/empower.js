@@ -122,11 +122,5 @@ module.exports = function(Vue, Promise, config) {
         });
       });
     },
-  }
-}
-/*
-授权状态
-取值如下：
-1：启用
-2：禁用
-*/
+  };
+};

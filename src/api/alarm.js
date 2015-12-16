@@ -1,4 +1,3 @@
-
 module.exports = function (Vue, Promise, config) {
   return {
 

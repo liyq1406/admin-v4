@@ -6,7 +6,7 @@
         .panel
           .product-card
             .thumb
-              img(src="../../assets/images/dummies/180x180.png")
+              img(src="../../assets/images/dummies/thumb.jpg")
             .info
               .col-9.summary
                 h3
@@ -26,7 +26,7 @@
                   button.btn.btn-primary(@click="showAddModal = true")
                     i.fa.fa-plus
                     | 添加设备
-                  a.btn.btn-primary(href="#")
+                  button.btn.btn-primary.btn-upload
                     i.fa.fa-reply-all
                     | 导入设备
               .col-11.status
@@ -247,7 +247,6 @@
                 y: 10,
                 data:['活跃设备', '激活设备']
               },
-              calculable: true,
               xAxis: [{
                 type: 'category',
                 boundaryGap: false,
@@ -282,11 +281,16 @@
             var regionChart = echarts.init(document.getElementById('regionChart'));
             if (self.region === 'world') {
               var worldData = [];
+              var worldMax = 0;
               for(var country in data) {
                 worldData.push({
                   name: country,
                   value: data[country].activated
                 });
+
+                if (data[country].activated > worldMax) {
+                  worldMax = data[country].activated;
+                }
               }
 
               regionOptions = {
@@ -302,8 +306,8 @@
                 },
                 dataRange: {
                   min: 0,
-                  max: 100,
-                  text:['High','Low'],
+                  max: worldMax,
+                  text:['高','低'],
                   realtime: false,
                   calculable: true,
                   color: ['orangered','yellow','lightskyblue']
@@ -311,7 +315,7 @@
                 series: [{
                   type: 'map',
                   mapType: 'world',
-                  roam: true,
+                  roam: 'move',
                   mapLocation: {
                     y: 10
                   },
@@ -339,6 +343,7 @@
               ];
 
               var chinaData = [];
+              var chinaMax = 0;
               for(var province in data['China']) {
                 if (province !== 'activated') {
                   chinaData.push({
@@ -353,7 +358,15 @@
                         value: data['China'][province][city].activated
                       });
                     }
+
+                    if (data['China'][province][city].activated > chinaMax) {
+                      chinaMax = data['China'][province][city].activated;
+                    }
                   }
+                }
+
+                if (data['China'][province].activated > chinaMax) {
+                  chinaMax = data['China'][province].activated;
                 }
               }
 
@@ -413,7 +426,7 @@
                 },
                 dataRange: {
                   min: 0,
-                  max: 1000,
+                  max: chinaMax,
                   color:['orange','yellow'],
                   text:['高','低'],           // 文本，默认为数值文本
                   calculable: true
@@ -423,6 +436,7 @@
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',
+                  roam: 'move',
                   itemStyle:{
                     normal:{label:{show:true}},
                     emphasis:{label:{show:true}}
@@ -480,7 +494,7 @@
           });
         } else if (this.editValidation.$valid) {
           api.corp.refreshToken().then(function () {
-            api.product.updateProduct(self.$route.params.id, self.editModel).then(function (data) {
+            api.product.updateProduct(self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }

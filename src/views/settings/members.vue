@@ -19,7 +19,7 @@
             //th 最后一次登录
             th.tac 状态
         tbody
-          tr(v-for="member in members | filterBy query in 'name' | limitBy pageCount (currentPage-1)*pageCount")
+          tr(v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount")
             td
               span(v-if="member.name.length") {{member.name}}
               span.hl-gray(v-else) 未设置
@@ -33,11 +33,11 @@
               span.hl-red(v-if="member.status==0") 待激活
               span.hl-gray(v-if="member.status==1") 正常
               span.hl-red(v-if="member.status==2") 已停用
-          tr(v-if="members.length === 0")
+          tr(v-if="filteredMembers.length === 0")
             td.tac(colspan="3")
               i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
               .tips-null(v-else) 搜索不到成员
-      pager(:total="members.length", :current.sync="currentPage", :page-count="pageCount")
+      pager(:total="filteredMembers.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showModal")
       h3(slot="header") 添加成员
@@ -80,6 +80,7 @@
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
+  var Vue = require('vue');
 
   module.exports = {
     components: {
@@ -108,6 +109,13 @@
         return {
           members: this.getMembers()
         };
+      }
+    },
+
+    computed: {
+      filteredMembers: function () {
+        var filter = Vue.filter('filterBy');
+        return filter(this.members, this.query, 'name');
       }
     },
 

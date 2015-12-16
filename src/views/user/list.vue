@@ -18,7 +18,7 @@
                 th 用户来源
                 th 状态
             tbody
-              tr(v-for="user in users | filterBy query in 'email' 'nickname' | limitBy pageCount (currentPage-1)*pageCount")
+              tr(v-for="user in filteredUsers | limitBy pageCount (currentPage-1)*pageCount")
                 td
                   a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
                 td {{user.nickname}}
@@ -35,11 +35,11 @@
                 td
                   span(v-if="user.status==1") 正常
                   span(v-if="user.status==2") 停用
-              tr(v-if="users.length === 0")
+              tr(v-if="filteredUsers.length === 0")
                 td.tac(colspan="6")
                   i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                   .tips-null(v-else) 查无此用户
-          pager(:total="users.length", :current.sync="currentPage", :page-count="pageCount")
+          pager(:total="filteredUsers.length", :current.sync="currentPage", :page-count="pageCount")
 </template>
 
 <script>
@@ -47,6 +47,7 @@
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
+  var Vue = require('vue');
 
   module.exports = {
     components: {
@@ -62,7 +63,14 @@
         searching: false,
         users: [],
         currentPage: 1,
-        pageCount: 1
+        pageCount: 10
+      }
+    },
+
+    computed: {
+      filteredUsers: function () {
+        var filter = Vue.filter('filterBy');
+        return filter(this.users, this.query, 'email', 'nickname');
       }
     },
 

@@ -2,7 +2,7 @@
   div
     .panel
       .panel-hd
-        radio-group(:items="periods", :value.sync="period", @select="getUserTrends")
+        radio-group(:items="periods", :value.sync="period", @select="drawUserTrends")
           span.label(slot="label") 最近
         h2 趋势
       .panel-bd
@@ -18,7 +18,7 @@
               .item
                 .cont
                   .num {{add}}
-                  .label 新增用户
+                  .label {{period}}天新增用户
               .item.no-border
                 .cont
                   .num {{active}}
@@ -30,13 +30,12 @@
 
     .panel
       .panel-hd
-        radio-group(:items="regions", :value.sync="region", @select="getUserRegion")
+        radio-group(:items="regions", :value.sync="region", @select="drawUserRegion")
         h2 区域分布
       .panel-bd
         .row
           #regionChart(style="height:320px; overflow:hidden;")
 
-          h3.table-caption 明细
           table.table.table-bordered.table-stripe
             thead
               tr
@@ -48,20 +47,20 @@
               tr(v-for="item in regionData")
                 td {{item.name}}
                 td {{item.value}}
-                td 10000
-                td {{item.value / 10000}}
+                td 2378
+                td {{(item.value * 100 / 2378).toFixed(2)}}%
 </template>
 
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
   var api = require('../../api');
+  var config = require('../../consts/config');
   var _ = require('lodash');
   var dateFormat = require('date-format');
   var echarts = require('echarts/echarts');
   require('echarts/chart/line');
   require('echarts/chart/map');
   var ecConfig = require('echarts/config');
-  var zrEvent = require('zrender/src/tool/event');
 
   module.exports = {
     components: {
@@ -74,46 +73,34 @@
         online: 0,
         add: 0,
         active: 0,
-        activated: 0,
         productRegion: {},
         period: 7,
-        periods: [
-          { label: '7天', value: 7 },
-          { label: '30天', value: 30 },
-          { label: '90天', value: 90 }
-        ],
+        periods: config.periods,
         region: 'world',
-        regions: [
-          { label: '全球', value: 'world'},
-          { label: '国内', value: 'china' }
-        ],
+        regions: config.regions,
         regionData: []
       };
     },
 
     ready: function () {
-      this.getUserTrends();
-      this.getUserRegion();
+      this.getUserSummary();
+      this.drawUserTrends();
+      this.drawUserRegion();
     },
 
-    route: {
-      data: function (transition) {
+    methods: {
+      getUserSummary: function () {
         var self = this;
-        this.getUserTrends();
-        this.getUserRegion();
 
         api.corp.refreshToken().then(function () {
           api.statistics.getUserSummary().then(function (data) {
             self.total = data.total;
             self.online = data.online;
-            transition.next();
           });
         });
-      }
-    },
+      },
 
-    methods: {
-      getUserTrends: function () {
+      drawUserTrends: function () {
         var self = this;
         var today = new Date();
         var past = today.getTime() - this.period * 24 * 3600 * 1000;
@@ -122,7 +109,6 @@
 
         api.corp.refreshToken().then(function () {
           api.statistics.getUserTrend(start_day, end_day).then(function (data) {
-
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
@@ -136,6 +122,12 @@
             var activeTrends = data.map(function (item) {
               return item.active;
             });
+
+            if (addTrends.length > 0) {
+              self.add = addTrends.reduce(function (prev, next) {
+                return prev + next;
+              });
+            }
 
             // 趋势图表
             var trendOptions = {
@@ -153,7 +145,6 @@
                 y: 10,
                 data:['新增用户', '活跃用户']
               },
-              calculable: true,
               xAxis: [{
                 type: 'category',
                 boundaryGap: false,
@@ -179,7 +170,7 @@
         });
       },
 
-      getUserRegion: function () {
+      drawUserRegion: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
           api.statistics.getUserRegion().then(function (data) {
@@ -187,11 +178,16 @@
             var regionChart = echarts.init(document.getElementById('regionChart'));
             if (self.region === 'world') {
               var worldData = [];
+              var worldMax = 0;
               for(var country in data) {
                 worldData.push({
                   name: country,
                   value: data[country].register
                 });
+
+                if (data[country].register > worldMax) {
+                  worldMax = data[country].register;
+                }
               }
               self.regionData = worldData;
 
@@ -208,8 +204,8 @@
                 },
                 dataRange: {
                   min: 0,
-                  max: 100,
-                  text:['High','Low'],
+                  max: worldMax,
+                  text:['高','低'],
                   realtime: false,
                   calculable: true,
                   color: ['orangered','yellow','lightskyblue']
@@ -217,7 +213,7 @@
                 series: [{
                   type: 'map',
                   mapType: 'world',
-                  roam: true,
+                  roam: 'move',
                   mapLocation: {
                     y: 10
                   },
@@ -245,6 +241,7 @@
               ];
 
               var chinaData = [];
+              var chinaMax = 0;
               for(var province in data['China']) {
                 if (province !== 'register') {
                   chinaData.push({
@@ -258,24 +255,19 @@
                         name: city,
                         value: data['China'][province][city].register
                       });
+
+                      if (data['China'][province][city].register > chinaMax) {
+                        chinaMax = data['China'][province][city].register;
+                      }
                     }
+                  }
+
+                  if (data['China'][province].register > chinaMax) {
+                    chinaMax = data['China'][province].register;
                   }
                 }
               }
               self.regionData = chinaData;
-
-              document.getElementById('regionChart').onmousewheel = function (e){
-                var event = e || window.event;
-                curIndx += zrEvent.getDelta(event) > 0 ? (-1): 1;
-                if (curIndx < 0) {
-                    curIndx = mapType.length - 1;
-                }
-                var mt = mapType[curIndx % mapType.length];
-                option.series[0].mapType = mt;
-                regionChart.setOption(option, true);
-
-                zrEvent.stop(event);
-              };
 
               regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 var len = mapType.length;
@@ -320,7 +312,7 @@
                 },
                 dataRange: {
                   min: 0,
-                  max: 1000,
+                  max: chinaMax,
                   color:['orange','yellow'],
                   text:['高','低'],           // 文本，默认为数值文本
                   calculable: true

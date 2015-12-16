@@ -2,7 +2,8 @@
   div
     .panel
       .panel-hd
-        radio-group(:items="periods", :value.sync="period", @select="getProductTrends")
+        v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
+        radio-group(:items="periods", :value.sync="period", @select="drawProductTrends")
           span.label(slot="label") 最近
         h2 趋势
       .panel-bd
@@ -13,29 +14,32 @@
             .statistics-info
               .item
                 .cont
-                  .num {{totalSummary.total}}
+                  .num {{productSummary.total}}
                   .label 总设备量
               .item
                 .cont
-                  .num {{totalSummary.activated}}
+                  .num {{productSummary.activated}}
                   .label 激活数
               .item.no-border
                 .cont
-                  .num {{totalSummary.online}}
+                  .num {{productSummary.online}}
                   .label 当前在线
               .item.no-border
                 .cont
                   .num 0
-                  .label 活跃设备
+                  .label
+                    span 活跃设备
+                    .tips
+                      i.fa.fa-question-circle(@mouseover="showTooltip = true", @mouseout="showTooltip = false")
+                      .tooltip(v-show="showTooltip") 指日活跃设备
     .panel
       .panel-hd
-        radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
+        radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
         h2 区域分布
       .panel-bd
         .row
           #regionChart(style="height:320px; overflow:hidden;")
 
-          h3.table-caption 明细
           table.table.table-bordered.table-stripe
             thead
               tr
@@ -47,46 +51,15 @@
               tr(v-for="item in regionData")
                 td {{item.name}}
                 td {{item.value}}
-                td 10000
-                td {{item.value / 10000}}
+                td 3620
+                td {{(item.value * 100 / 3620).toFixed(2)}}%
 
 </template>
 
-<style lang="stylus">
-  @import '../../assets/stylus/common'
-
-  .statistics-info
-    clearfix()
-    margin-top 40px
-
-    .item
-      float left
-      width 50%
-      border-right 1px solid #DEDEDE
-      box-sizing border-box
-      text-align right
-
-      .cont
-        padding 20px 30px 20px 0
-        border-bottom 1px solid #DEDEDE
-
-      .num
-        font-size 30px
-        color red
-
-      .label
-        color gray-light
-
-      &:nth-child(2n)
-        border-right none
-
-    .no-border
-      .cont
-        border-bottom none
-</style>
-
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
+  var Select = require('../../components/select.vue');
+  var config = require('../../consts/config');
   var api = require('../../api');
   var _ = require('lodash');
   var dateFormat = require('date-format');
@@ -94,59 +67,77 @@
   require('echarts/chart/line');
   require('echarts/chart/map');
   var ecConfig = require('echarts/config');
-  var zrEvent = require('zrender/src/tool/event');
 
   module.exports = {
     components: {
-      'radio-group': RadioGroup
+      'radio-group': RadioGroup,
+      'v-select': Select
     },
 
     data: function () {
       return {
-        totalSummary: {
+        productSummary: {
           total: 0,
           activated: 0,
+          active: 0,
           online: 0
         },
-        product_id: '16002caca7b59c0016002caca7b59c01',
-        productRegion: {},
+        productId: '',
+        productsOptions: [],
         period: 7,
-        periods: [
-          { label: '7天', value: 7 },
-          { label: '30天', value: 30 },
-          { label: '90天', value: 90 }
-        ],
+        periods: config.periods,
         region: 'world',
-        regions: [
-          { label: '全球', value: 'world'},
-          { label: '国内', value: 'china' }
-        ],
-        regionData: []
+        regions: config.regions,
+        productRegion: {},
+        regionData: [],
+        showTooltip: false
       };
     },
 
     ready: function () {
-      this.getProductTrends();
-      this.getProductRegion();
-    },
+      var self = this;
 
-    route: {
-      data: function (transition) {
-        var self = this;
-        this.getProductTrends();
-        this.getProductRegion();
-
-        api.corp.refreshToken().then(function () {
-          api.statistics.getSummary().then(function (data) {
-            self.totalSummary = data.total;
-            transition.next();
+      this.getProducts().then(function (data) {
+        // 产品下拉框数据
+        data.forEach(function (item) {
+          self.productsOptions.push({
+            label: item.name,
+            value: item.id
           });
         });
-      }
+
+        if (self.productId.length === 0) {
+          self.productId = data[0].id
+        }
+
+        self.getProductData();
+      });
     },
 
     methods: {
-      getProductTrends: function () {
+      getProductData: function () {
+        this.getProductSummary();
+        this.drawProductTrends();
+        this.drawProducRegion();
+      },
+
+      getProducts: function () {
+        return api.corp.refreshToken().then(function () {
+          return api.product.getProducts();
+        });
+      },
+
+      getProductSummary: function () {
+        var self = this;
+
+        api.corp.refreshToken().then(function () {
+          api.statistics.getProductSummary(self.productId).then(function (data) {
+            self.productSummary = data;
+          });
+        });
+      },
+
+      drawProductTrends: function () {
         var self = this;
         var today = new Date();
         var past = today.getTime() - this.period * 24 * 3600 * 1000;
@@ -154,7 +145,7 @@
         var end_day = dateFormat('yyyy-MM-dd', today);
 
         api.corp.refreshToken().then(function () {
-          api.statistics.getProductTrend(self.product_id, start_day, end_day).then(function (data) {
+          api.statistics.getProductTrend(self.productId, start_day, end_day).then(function (data) {
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
@@ -184,7 +175,6 @@
                 y: 10,
                 data:['总设备量', '活跃设备', '激活设备']
               },
-              calculable: true,
               xAxis: [{
                 type: 'category',
                 boundaryGap: false,
@@ -214,19 +204,24 @@
         });
       },
 
-      getProductRegion: function () {
+      drawProducRegion: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
-          api.statistics.getProductRegion(self.product_id).then(function (data) {
+          api.statistics.getProductRegion(self.productId).then(function (data) {
             var regionOptions;
             var regionChart = echarts.init(document.getElementById('regionChart'));
             if (self.region === 'world') {
               var worldData = [];
+              var worldMax = 0;
               for(var country in data) {
                 worldData.push({
                   name: country,
                   value: data[country].activated
                 });
+
+                if (data[country].activated > worldMax) {
+                  worldMax = data[country].activated;
+                }
               }
               self.regionData = worldData;
 
@@ -238,13 +233,13 @@
                     if (value[0] === '-') {
                       value = 0
                     }
-                    return '设备数<br/>' + params.name + ': ' + value;
+                    return '活跃设备<br/>' + params.name + ': ' + value;
                   }
                 },
                 dataRange: {
                   min: 0,
-                  max: 100,
-                  text:['High','Low'],
+                  max: worldMax,
+                  text:['高','低'],
                   realtime: false,
                   calculable: true,
                   color: ['orangered','yellow','lightskyblue']
@@ -252,7 +247,7 @@
                 series: [{
                   type: 'map',
                   mapType: 'world',
-                  roam: true,
+                  roam: 'move',
                   mapLocation: {
                     y: 10
                   },
@@ -280,6 +275,7 @@
               ];
 
               var chinaData = [];
+              var chinaMax = 0;
               for(var province in data['China']) {
                 if (province !== 'activated') {
                   chinaData.push({
@@ -294,23 +290,18 @@
                         value: data['China'][province][city].activated
                       });
                     }
+
+                    if (data['China'][province][city].activated > chinaMax) {
+                      chinaMax = data['China'][province][city].activated;
+                    }
                   }
+                }
+
+                if (data['China'][province].activated > chinaMax) {
+                  chinaMax = data['China'][province].activated;
                 }
               }
               self.regionData = chinaData;
-
-              document.getElementById('regionChart').onmousewheel = function (e){
-                var event = e || window.event;
-                curIndx += zrEvent.getDelta(event) > 0 ? (-1): 1;
-                if (curIndx < 0) {
-                    curIndx = mapType.length - 1;
-                }
-                var mt = mapType[curIndx % mapType.length];
-                option.series[0].mapType = mt;
-                regionChart.setOption(option, true);
-
-                zrEvent.stop(event);
-              };
 
               regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 var len = mapType.length;
@@ -355,13 +346,13 @@
                 },
                 dataRange: {
                   min: 0,
-                  max: 1000,
+                  max: chinaMax,
                   color:['orange','yellow'],
                   text:['高','低'],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
-                  name: '设备数',
+                  name: '活跃设备',
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',
@@ -380,3 +371,62 @@
     }
   };
 </script>
+
+<style lang="stylus">
+  @import '../../assets/stylus/common'
+
+  .statistics-info
+    clearfix()
+    margin-top 40px
+
+    .item
+      float left
+      width 50%
+      border-right 1px solid #DEDEDE
+      box-sizing border-box
+      text-align right
+
+      .cont
+        padding 20px 30px 20px 0
+        border-bottom 1px solid #DEDEDE
+
+      .num
+        font-size 30px
+        color red
+
+      .label
+        color gray-light
+
+        .tooltip
+          absolute left 50% top -26px
+          margin-left -43px
+          border 1px solid #DDD
+          white-space nowrap
+          background #FFF
+          padding 0 5px
+          font-size 12px
+
+          &:before
+            absolute left 50% top 18px
+            margin-left -5px
+            content ""
+            triangle #D3D3D3 10px down
+
+          &:after
+            absolute left 50% top 17px
+            margin-left -5px
+            content ""
+            triangle #FFF 10px down
+
+        .tips
+          display inline-block
+          margin-left 4px
+          position relative
+
+      &:nth-child(2n)
+        border-right none
+
+    .no-border
+      .cont
+        border-bottom none
+</style>

@@ -6,7 +6,7 @@
           h2(v-text="product.name")
         .panel-bd
           tab(:nav="secondaryNav")
-      router-view(class="view", transition="view", transition-mode="out-in", :product.sync="product")
+      router-view(class="view", transition="view", transition-mode="out-in", :product.sync="product", keep-alive)
 </template>
 
 <script>
@@ -27,16 +27,6 @@
 
     route: {
       data: function (transition) {
-        // var self = this;
-        // api.corp.refreshToken(this).then(function () {
-        //   api.product.getProduct(self.$route.params.id).then(function (data) {
-        //     if (__DEBUG__) {
-        //       console.log(data);
-        //     }
-        //     self.product = data;
-        //   })
-        // });
-
         return {
           product: this.getProduct(),
           secondaryNav: [{
@@ -50,7 +40,7 @@
             link: { path: '/products/' + this.$route.params.id + '/data-point' }
           }, {
             label: '通知与告警',
-            link: { path: '/products/' + this.$route.params.id + '/notice' }
+            link: { path: '/products/' + this.$route.params.id + '/alarm' }
           // }, {
             // label: '设备互联',
             // link: { path: '/products/' + this.$route.params.id + '/interconnection' }

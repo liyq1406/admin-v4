@@ -43,6 +43,10 @@
           // Start: 数据端点
           .panel
             .panel-hd
+              .actions
+                button.btn.btn-success
+                  | 刷新
+                  i.fa.fa-refresh
               h2 数据端点
             .panel-bd
               table.table
@@ -69,6 +73,8 @@
           // Start: 设备日志
           .panel
             .panel-hd
+              .actions
+                switch(:value.sync="showLog")
               h2 设备日志
             .panel-bd
               pre.output-log
@@ -93,12 +99,18 @@
 <script>
   var api = require('../../../api');
   var Promise = require('promise');
+  var Switch = require('../../../components/switch.vue');
 
   module.exports = {
+    components: {
+      'switch': Switch
+    },
+
     data: function () {
       return {
         device: {},
-        datapoints: []
+        datapoints: [],
+        showLog: true
       };
     },
 

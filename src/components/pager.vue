@@ -37,6 +37,86 @@
       i.fa.fa-chevron-right
 </template>
 
+
+<script>
+  var config = require('../consts/config');
+
+  module.exports = {
+    props: {
+      pageCount: {
+        type: Number,
+        default: config.pageCount
+      },
+      total: {
+        type: Number
+      },
+      current: {
+        type: Number,
+        twoWay: true,
+        default: 1
+      }
+    },
+
+    data: function () {
+      return {
+        showInput: false,
+        showInput1: false,
+        showInput2: false
+      };
+    },
+
+    watch: {
+      current: function () {
+        this.$dispatch('page-update');
+      }
+    },
+
+    computed: {
+      pages: function () {
+        return Math.ceil(this.total / this.pageCount);
+      }
+    },
+
+    methods: {
+      toggleInput: function (evt) {
+        this.showInput = !this.showInput;
+        if (this.showInput) {
+          evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        }
+      },
+
+      toggleInput1: function (evt) {
+        this.showInput1 = !this.showInput1;
+        if (this.showInput1) {
+          evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        }
+      },
+
+      toggleInput2: function (evt) {
+        this.showInput2 = !this.showInput2;
+        if (this.showInput2) {
+          evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        }
+      },
+
+      onInput: function (evt) {
+        var page = Number(evt.target.value);
+        // alert(typeof page === 'number');
+        if (typeof page === 'number') {
+          page = Math.floor(page);
+          this.showInput = false;
+          this.showInput1 = false;
+          this.showInput2 = false;
+          this.current = page;
+          evt.target.value = '';
+        } else {
+          alert('请输入数字')
+        }
+      }
+    }
+  };
+</script>
+
 <style lang="stylus">
   @import '../assets/stylus/common'
 
@@ -142,75 +222,3 @@
         margin-left 5px
 
 </style>
-<script>
-  var config = require('../consts/config');
-
-  module.exports = {
-    props: {
-      pageCount: {
-        type: Number,
-        default: config.pageCount
-      },
-      total: {
-        type: Number
-      },
-      current: {
-        type: Number,
-        twoWay: true,
-        default: 1
-      }
-    },
-
-    data: function () {
-      return {
-        showInput: false,
-        showInput1: false,
-        showInput2: false
-      };
-    },
-
-    computed: {
-      pages: function () {
-        return Math.ceil(this.total / this.pageCount);
-      }
-    },
-
-    methods: {
-      toggleInput: function (evt) {
-        this.showInput = !this.showInput;
-        if (this.showInput) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      toggleInput1: function (evt) {
-        this.showInput1 = !this.showInput1;
-        if (this.showInput1) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      toggleInput2: function (evt) {
-        this.showInput2 = !this.showInput2;
-        if (this.showInput2) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      onInput: function (evt) {
-        var page = Number(evt.target.value);
-        // alert(typeof page === 'number');
-        if (typeof page === 'number') {
-          page = Math.floor(page);
-          this.showInput = false;
-          this.showInput1 = false;
-          this.showInput2 = false;
-          this.current = page;
-          evt.target.value = '';
-        } else {
-          alert('请输入数字')
-        }
-      }
-    }
-  };
-</script>

@@ -30,6 +30,14 @@
 
       .row
         .col-12
+          // Start: 告警
+          //- .panel
+          //-   .panel-hd
+          //-     h2 告警
+          //-   .panel-bd
+          //-     #alarmTrendChart(style="height:320px;")
+          // End: 告警
+
           // Start: 快速指南
           .panel
             .panel-hd
@@ -38,10 +46,21 @@
               .post-list
                 ul
                   li
-                    | [
-                    a(href="#") 分类
-                    != '] '
-                    a(href="#") 标题
+                    a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") XLINK SDK iOS 集成文档
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") XLINK SDK Android 集成文档
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/108289/", target="_blank") [用户] 设备分享接口
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/104331/", target="_blank") [企业应用] 微信配置接口
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/102780/", target="_blank") [企业应用] 第三方身份授权管理
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/100082/", target="_blank") [企业应用] 统计分析
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/91020/", target="_blank") [用户] 接口权限调用
+                  li
+                    a(href="http://support.xlink.cn/hc/kb/article/90705/", target="_blank") [用户] 升级开发文档
           // End: 快速指南
 
         .col-8
@@ -52,18 +71,18 @@
             .panel-bd
               .doc-list
                 .doc-list-item
-                  a.fa.fa-apple(href="#", target="_blank")
+                  a.fa.fa-apple(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank")
                   .info
                     h3
-                      a(href="#", target="_blank") iOS SDK
+                      a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") iOS SDK
                     p 提供iOS开发文档说明
-                .doc-list-item(href="#", target="_blank")
-                  a.fa.fa-android(href="#", target="_blank")
+                .doc-list-item
+                  a.fa.fa-android(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank")
                   .info
                     h3
-                      a(href="#", target="_blank") Android SDK
+                      a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") Android SDK
                     p 提供Android开发文档说明
-                .doc-list-item(href="#", target="_blank")
+                .doc-list-item
                   a.fa.fa-th-large(href="#", target="_blank")
                   .info
                     h3
@@ -72,6 +91,56 @@
           // End: 文档
 
 </template>
+
+<script>
+  var api = require('../api');
+  var dateFormat = require('date-format');
+  var echarts = require('echarts/echarts');
+  require('echarts/chart/line');
+
+  module.exports = {
+    documentTitle: '概览',
+    data: function () {
+      return {
+        totalSummary: {
+          total: 0,
+          activated: 0,
+          online: 0
+        },
+        userSummary: {
+          user: 0
+        }
+      };
+    },
+
+    filters: {
+      formatDate: function (date) {
+        var d = date.toLocaleDateString('en-US').split('/');
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+      }
+    },
+
+    route: {
+      data: function (transition) {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.statistics.getSummary().then(function (data) {
+            self.totalSummary = data.total;
+            self.userSummary = data.user;
+            transition.next();
+          });
+        });
+      }
+    },
+
+    methods: {
+
+    }
+  };
+</script>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
@@ -212,50 +281,3 @@
         font-size 12px
         color #999
 </style>
-
-<script>
-  var api = require('../api');
-
-  module.exports = {
-    documentTitle: '概览',
-    data: function () {
-      return {
-        totalSummary: {
-          total: 0,
-          activated: 0,
-          online: 0
-        },
-        userSummary: {
-          user: 0
-        }
-      };
-    },
-
-    filters: {
-      formatDate: function (date) {
-        var d = date.toLocaleDateString('en-US').split('/');
-        var year = date.getFullYear();
-        var month = date.getMonth();
-        var day = date.getDate();
-        return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
-      }
-    },
-
-    route: {
-      data: function (transition) {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.statistics.getSummary().then(function (data) {
-            self.totalSummary = data.total;
-            self.userSummary = data.user;
-            transition.next();
-          });
-        });
-      }
-    },
-
-    methods: {
-
-    }
-  };
-</script>

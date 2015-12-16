@@ -102,9 +102,18 @@
       getSubDevices: function () {
         var self = this;
 
+
+        // TODO: 要换回下面注释那段
+        return [{
+          product_id: '空气净化器',
+          mac: '111111477dea',
+          is_online: false,
+          authorize_code: '1oeru7lskc3f6p'
+        }];
+        /*
         return api.corp.refreshToken().then(function () {
           return api.user.subDeviceList(self.$route.params.id);
-        });
+        });*/
       },
 
       deleteUser: function () {

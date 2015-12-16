@@ -26,7 +26,7 @@
             input(type="checkbox")
             span 记住密码
         .form-actions
-          button.btn.btn-primary.btn-block 登录
+          button.btn.btn-primary.btn-block(@keyup.enter="onSubmit") 登录
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 </template>
@@ -74,7 +74,15 @@
             // localStorage.setItem('expireAt', today.getTime() + 20000);
             self.$route.router.go({path: '/'});
           }).catch(function (error) {
-            console.log(error);
+            if (__DEBUG__) {
+              console.log(error);
+            }
+
+            switch (error.code) {
+              case 4001007:
+                alert('密码错误，请重新输入')
+                break;
+            }
           });
         }
       }

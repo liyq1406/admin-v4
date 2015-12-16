@@ -136,7 +136,8 @@ module.exports = function(Vue, Promise, config) {
         Vue.http.post(config.apiRoot + '/product/' + product_id +
           '/devices', JSON.stringify(params),
           function(data, status, request) {
-            resolve(data.list);
+            console.log(data);
+            resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',

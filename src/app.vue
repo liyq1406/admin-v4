@@ -3,16 +3,22 @@
     header.the-header(v-if="access")
       nav.nav-header
         ul
-          li: a(href="#", target="#") 首页
-          li: a(href="#", target="#") 开发文档
-          li: a(href="#", target="#") 在线支持
+          li: a(href="http://www.xlink.cn/", target="_blank") 首页
+          li: a(href="http://www.xlink.cn/platform.html", target="_blank") 平台介绍
+          li: a(href="http://www.xlink.cn/solutions/smart-home.html", target="_blank") 解决方案
+          li: a(href="http://www.xlink.cn/developer.html", target="_blank") 开发者
+          li: a(href="http://www.xlink.cn/case.html", target="_blank") 客户案例
+          li: a(href="http://support.xlink.cn/", target="_blank") 开发文档
+          li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
         .user-navigation
           span.user-name {{this_user.name}}
           i.arrow-down
           .sed-navigation
             ul
               li.sed-navigation-li
-                a(href="#", target="#",@click.prevent="quit") 退出
+                a(v-link="{path: '/settings/account'}") 账号信息
+              li.sed-navigation-li
+                a(href="#", @click.prevent="quit") 退出
     section.sidebar(v-if="access")
       a.logo(v-link="{ path: '/' }")
       .nav-aside
@@ -31,6 +37,10 @@
               i.fa.fa-plus
               | 添加产品
         .nav-aside-item
+          a(v-link="{ path: '/alarms' }")
+            i.fa.fa-bell
+            | 告警服务
+        .nav-aside-item
           a(v-link="{ path: '/data' }")
             i.fa.fa-database
             | 数据管理
@@ -46,7 +56,7 @@
           a(v-link="{ path: '/settings' }")
             i.fa.fa-cog
             | 系统设置
-    router-view(class="view", transition="view", transition-mode="out-in")
+    router-view(class="view", transition="view", transition-mode="out-in", keep-alive)
 </template>
 
 <script>
@@ -124,47 +134,62 @@
         color red
 
     .user-navigation
-      position absolute
-      right 0px
-      top 0
-      width auto
-      height 61px
+      absolute right top
+      size auto 61px
       line-height 61px
       z-index 1
       text-align right
       padding 0 20px
       background #fff
+
       .user-name
         padding 0 5px
         cursor default
         color #858585
         font-size 14px
+
       .arrow-down
         triangle #777 8px down
         position relative
         top -3px
+
       .sed-navigation
-        position absolute
-        top 50px
-        right 20px
-        max-width 60px
+        absolute top 54px right
+        size 100px 0
         text-align right
         background #FFF
-        height 0
-        overflow hidden
+        // overflow hidden
         opacity 0
         transition all ease 0.5s
         border 1px solid #ddd
+        padding 0 10px
+
         .sed-navigation-li
           margin-right 0
-          line-height 25px
+          line-height 36px
           display block
-          padding 0 5px 0 5px
+          padding 0 20px
           min-width 50px
-    &:hover
-      .sed-navigation
-        height auto
-        opacity 1
+          border-bottom 1px solid #DDD
+
+          &:last-child
+            border none
+
+        &:before
+          absolute right 20px top -11px
+          content ""
+          triangle #D3D3D3 10px up
+
+        &:after
+          absolute right 20px top -10px
+          content ""
+          triangle #FFF 10px up
+
+
+      &:hover
+        .sed-navigation
+          height auto
+          opacity 1
   // 侧栏
   .sidebar
     absolute left top

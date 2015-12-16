@@ -54,8 +54,8 @@ var configRouter = function (router) {
         'data-point': {
           component: require('./views/product/data-point.vue')
         },
-        'notice': {
-          component: require('./views/product/notice.vue')
+        'alarm': {
+          component: require('./views/product/alarm.vue')
         },
         'interconnection': {
           component: require('./views/product/interconnection.vue')
@@ -76,12 +76,17 @@ var configRouter = function (router) {
       component: require('./views/product/device/details.vue')
     },
 
+    // 告警服务
+    '/alarms': {
+      component: require('./views/alarm/index.vue')
+    },
+
     // 数据管理
     '/data': {
       component: require('./views/data/index.vue'),
       subRoutes: {
-        'list': {
-          component: require('./views/data/list.vue')
+        'tables': {
+          component: require('./views/data/tables.vue')
         },
         'api': {
           component: require('./views/data/api.vue')
@@ -90,6 +95,9 @@ var configRouter = function (router) {
     },
     '/data/intro': {
       component: require('./views/data/intro.vue'),
+    },
+    '/data/tables/:name': {
+      component: require('./views/data/details.vue'),
     },
 
     // 用户管理
@@ -134,7 +142,7 @@ var configRouter = function (router) {
   router.redirect({
     '/': '/dashboard',
     '/products/:id': '/products/:id/overview',
-    '/data': '/data/list',
+    '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth'
   });
@@ -156,12 +164,12 @@ var configRouter = function (router) {
             router.app.products = data;
           });
 
-          var mamber_id = localStorage.getItem('member_id')
+          var mamber_id = localStorage.getItem('member_id');
           api.corp.getMember(mamber_id).then(function (data) {//输入当前页面的帐号id ，返回账户详情
             if(__DEBUG__) {
               //console.log(data);
             }
-            router.app.this_user = data
+            router.app.this_user = data;
           });
 
 

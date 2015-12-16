@@ -137,12 +137,6 @@ module.exports = function(Vue, Promise, config) {
      */
     getUserTrend: function(start_day, end_day) {
       return new Promise(function(resolve, reject) {
-        resolve([{
-          day: '2015-12-06',
-          add: 2,
-          active: 30
-        }]);
-        /*
         Vue.http.get(config.apiRoot + '/statistics/user/trend?start_day=' + start_day + '&end_day=' + end_day,
           function(data, status, request) {
             resolve(data);
@@ -153,7 +147,7 @@ module.exports = function(Vue, Promise, config) {
             }
           }).error(function(data, status, request) {
           reject(data.error);
-        });*/
+        });
       });
     },
 
@@ -223,6 +217,49 @@ module.exports = function(Vue, Promise, config) {
           }).error(function(data, status, request) {
           reject(data.error);
         });
+      });
+    },
+
+    /**
+     * 获取告警趋势
+     */
+    getAlarmTrend: function (product_id) {
+      return new Promise(function(resolve, reject) {
+        var trends = [];
+        var period = 90;
+        var today = new Date();
+        var dateFormat = require('date-format');
+        var past, value;
+        var _ = require('lodash');
+
+        while (period--) {
+          past = today.getTime() - period * 24 * 3600 * 1000;
+          past = dateFormat('MM-dd', new Date(past));
+
+          switch (past) {
+          case '12-10':
+          case '12-05':
+            value = 1;
+            break;
+          case '12-09':
+          case '12-07':
+          case '12-06':
+            value = 2;
+            break;
+          case '12-04':
+            value = 5;
+            break;
+          default:
+            value = 0;
+          }
+
+          trends.push({
+            day: past,
+            value: value
+          });
+        }
+
+        resolve(trends);
       });
     }
   };
