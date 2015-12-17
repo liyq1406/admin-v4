@@ -32,6 +32,11 @@ var configRouter = function (router) {
       component: require('./views/reset-password.vue')
     },
 
+    // 激活成员邀请
+    '/member-activate/:email': {
+      component: require('./views/member-activate.vue')
+    },
+
     // 概览
     '/dashboard': {
       component: require('./views/dashboard.vue')
@@ -54,8 +59,8 @@ var configRouter = function (router) {
         'data-point': {
           component: require('./views/product/data-point.vue')
         },
-        'alarm': {
-          component: require('./views/product/alarm.vue')
+        'alert': {
+          component: require('./views/product/alert.vue')
         },
         'interconnection': {
           component: require('./views/product/interconnection.vue')
@@ -77,8 +82,8 @@ var configRouter = function (router) {
     },
 
     // 告警服务
-    '/alarms': {
-      component: require('./views/alarm/index.vue')
+    '/alerts': {
+      component: require('./views/alert/index.vue')
     },
 
     // 数据管理
@@ -149,8 +154,9 @@ var configRouter = function (router) {
 
   router.beforeEach(function (transition) {
     var today = new Date();
+    console.log(transition.to.path);
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
-    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0) {
+    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0) {
       router.app.access = false;
       transition.next();
     } else {

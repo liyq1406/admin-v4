@@ -10,7 +10,13 @@
             ul.user-details
               li
                 .label 姓名：
-                .info {{member.name}}
+                .info
+                  | {{member.name}}
+                  a.fa.fa-edit(href="#", @click.prevent="showModal = true")
+              li
+                .label 密码：
+                .info
+                  a.hl-red(href="#", @click.prevent="showModal2 = true") 修改密码
               li
                 .label 邮箱：
                 .info {{member.email}}
@@ -36,7 +42,7 @@
                   span.hl-green 正常可用
                 .info(v-if="member.status==2")
                   span.hl-red 停用
-              button.btn.btn-primary.mt10.mb10(@click.prevent="showModal = true") 编辑
+              //- button.btn.btn-primary.mt10.mb10(@click.prevent="showModal = true") 编辑
         // End: 个人信息
 
       .col-8
@@ -72,7 +78,7 @@
     modal(:show.sync="showModal")
       h3(slot="header") 编辑用户信息
       .form(slot="body")
-        form(v-form, name="validation")
+        form(v-form, name="validation", @submit.prevent="resetMemberMessage")
           .form-row
             label.form-control 姓名：
             .controls
@@ -84,21 +90,41 @@
                 span(v-if="validation.name.$error.required") 请输入姓名
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-            button.btn.btn-primary(type="submit",@click.prevent.stop="resetMemberMessage") 确定
-</template>
-<style lang="stylus">
-  @import '../../assets/stylus/common'
+            button.btn.btn-primary(type="submit") 确定
 
-  ul.user-details
-    li
-      list-style none
-      .label
-        display inline-block
-        width 103px
-        line-height 35px
-      .info
-        display inline-block
-</style>
+    modal(:show.sync="showModal2", :width="320")
+      h3(slot="header") 修改密码
+      .form(slot="body")
+        form(v-form, name="validation2", @submit.prevent="onEditSubmit")
+          .form-row
+            .input-text-wrap(v-placeholder="'旧密码'")
+              input.input-text(type="password", v-model="model.oldpassword", v-form-ctrl, required, name="oldpassword")
+            .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.oldpassword.$pristine")
+              span(v-if="validation2.oldpassword.$error.required") 请输入旧密码
+            .form-tips.form-tips-error(v-if="validation2.oldpassword.$dirty")
+              span(v-if="validation2.oldpassword.$error.required") 请输入旧密码
+          .form-row
+            .input-text-wrap(v-placeholder="'新密码'")
+              input.input-text(type="password", v-model="model.newpassword", v-form-ctrl, required, maxlength="16", minlength="6", name="newpassword")
+            .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.newpassword.$pristine")
+              span(v-if="validation2.newpassword.$error.required") 请输入新密码
+            .form-tips.form-tips-error(v-if="validation2.newpassword.$dirty")
+              span(v-if="validation2.newpassword.$error.required") 请输入新密码
+              span(v-if="validation2.newpassword.$error.minlength") 密码最小不能少于6位
+              span(v-if="validation2.newpassword.$error.maxlength") 密码最大不能超过16位
+          .form-row
+            .input-text-wrap(v-placeholder="'再次输入密码'")
+              input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword")
+            .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.confirmPassword.$pristine")
+              span(v-if="validation2.confirmPassword.$error.required") 请再一次输入密码
+            .form-tips.form-tips-error(v-if="validation2.confirmPassword.$dirty")
+              span(v-if="model.password && validation2.confirmPassword.$error.required") 请再一次输入密码
+              span(v-if="validation2.confirmPassword.$error.customValidator") 两次密码输入不一致
+          .form-actions
+            button.btn.btn-default(@click.prevent.stop="showModal2 = false") 取消
+            button.btn.btn-primary(type="submit") 确定
+</template>
+
 <script>
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
@@ -121,8 +147,10 @@
         resetcorp:{},
         showModal: false,
         showModal2: false,
-        validation: {}
-
+        validation: {},
+        validation2: {},
+        model: {},
+        confirmPassword: ''
       }
     },
 
@@ -176,9 +204,48 @@
         }else{
           self.showModal = false;
         }
+      },
 
+      checkEqualToPassword: function (value) {
+        return value === this.model.newpassword;
+      },
+
+      onEditSubmit: function () {
+        var self = this;
+        if (this.validation2.$valid) {
+          api.corp.refreshToken().then(function () {
+            api.corp.memberResetPwd(self.model).then(function (status) {
+              if (status === 200) {
+                alert('密码修改成功');
+                self.showModal2 = false;
+              }
+            }).catch(function (error) {
+            });
+          })
+        }
       }
     }
   };
 
 </script>
+
+<style lang="stylus">
+  @import '../../assets/stylus/common'
+
+  ul.user-details
+
+    li
+      list-style none
+
+      .label
+        display inline-block
+        width 103px
+        line-height 35px
+
+      .info
+        display inline-block
+
+        .fa
+          font-size 16px
+          margin 0 10px
+</style>

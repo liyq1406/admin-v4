@@ -225,41 +225,14 @@ module.exports = function(Vue, Promise, config) {
      */
     getAlarmTrend: function (product_id) {
       return new Promise(function(resolve, reject) {
-        var trends = [];
-        var period = 90;
-        var today = new Date();
-        var dateFormat = require('date-format');
-        var past, value;
-        var _ = require('lodash');
+        var trends = [{
+          day: '2015-12-06',
+          count: 30
+        }];
 
-        while (period--) {
-          past = today.getTime() - period * 24 * 3600 * 1000;
-          past = dateFormat('MM-dd', new Date(past));
-
-          switch (past) {
-          case '12-10':
-          case '12-05':
-            value = 1;
-            break;
-          case '12-09':
-          case '12-07':
-          case '12-06':
-            value = 2;
-            break;
-          case '12-04':
-            value = 5;
-            break;
-          default:
-            value = 0;
-          }
-
-          trends.push({
-            day: past,
-            value: value
-          });
-        }
-
-        resolve(trends);
+        window.setTimeout(function () {
+          resolve(trends);
+        }, 0);
       });
     }
   };

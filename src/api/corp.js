@@ -257,7 +257,7 @@ module.exports = function (Vue, Promise, config) {
      * @param   member_id,role_type
      * @return  stauts
      */
-    memberResetPwd: function (member_id,role_type) {
+    setMemberRole: function (member_id,role_type) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(config.apiRoot + '/corp/member/'+member_id+'/role/'+role_type, function (data, status, request) {
           resolve(status);
@@ -276,7 +276,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} member_id  member_id
      * @return  stauts
      */
-    memberResetPwd: function (member_id) {
+    disableMemeber: function (member_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(config.apiRoot + '/corp/member/'+member_id+'/disable', function (data, status, request) {
           resolve(status);

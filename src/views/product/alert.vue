@@ -34,11 +34,11 @@
               td.tac(colspan="5")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                 .tips-null(v-else) 暂无规则
-
+        // 分页
         pager(:total="rules.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加规则浮层
-    modal(:show.sync="showAddModal", :width="650")
+    modal(:show.sync="showAddModal", :width="650", :flag="editingTag")
       h3(slot="header") 添加规则
       .form.form-rules(slot="body")
         form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
@@ -79,7 +79,6 @@
                   select(v-model="addModel.value", v-form-ctrl, name="value")
                     option(value="online") 上线
                     option(value="offline") 下线
-
           .form-row
             label.form-control 告警内容：
             .controls
@@ -97,6 +96,10 @@
                 select(v-model="addModel.notify_type", v-form-ctrl, name="notify_type", number)
                   option(value="1") 通知类型
                   option(value="2") 告警类型
+          .form-row
+            label.form-control 标签：
+            .controls
+              tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="editingTag", @adding-tag="showAddModal = true")
           .form-row
             label.form-control 通知方式：
             .controls
@@ -199,6 +202,10 @@
                   option(value="1") 通知类型
                   option(value="2") 告警类型
           .form-row
+            label.form-control 标签：
+            .controls
+              //- tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editingTag", @adding-tag="showEditModal = true")
+          .form-row
             label.form-control 通知方式：
             .controls
               .checkbox-group
@@ -247,11 +254,13 @@
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
+  var TagInput = require('../../components/tag-input.vue');
 
   module.exports = {
     components: {
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'tag-input': TagInput
     },
 
     data: function () {
@@ -262,9 +271,16 @@
         pageCount: 10,        // 每页记录数
         showAddModal: false,  // 是否显示添加浮层
         showEditModal: false, // 是否显示编辑浮层
+        candidateTags: [      // 候选标签
+          '严重',
+          '轻微',
+          '通知'
+        ],
+        editingTag: false,
         addModel: {           // 添加数据模型
           product_id: this.$route.params.id,
           name: '',
+          tag: '',
           type: 1,
           notify_target: [],
           notify_type: 1,
@@ -306,7 +322,7 @@
       getRules: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
-          return api.alarm.getRules(self.$route.params.id)
+          return api.alert.getRules(self.$route.params.id)
         });
       },
 
@@ -320,6 +336,7 @@
       },
 
       onAddCancel: function () {
+        // this.editingTag = false;
         this.showAddModal = false;
       },
 
@@ -327,7 +344,7 @@
         var self = this;
         if (this.addValidation.$valid) {
           api.corp.refreshToken().then(function () {
-            api.alarm.addRule(self.addModel).then(function (data) {
+            api.alert.addRule(self.addModel).then(function (data) {
               self.showAddModal = false;
               self.rules.push(data);
             });
@@ -350,7 +367,7 @@
         var self = this;
         if (this.delChecked) {
           api.corp.refreshToken().then(function () {
-            api.alarm.deleteRule(self.editModel.id).then(function (data) {
+            api.alert.deleteRule(self.editModel.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
@@ -360,7 +377,7 @@
           });
         } else if (this.editValidation.$valid) {
           api.corp.refreshToken().then(function () {
-            api.alarm.updateRule(self.editModel).then(function (data) {
+            api.alert.updateRule(self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }

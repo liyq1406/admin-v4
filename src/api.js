@@ -16,5 +16,5 @@ module.exports = {
   product: require('./api/product')(Vue, Promise, config),
   empower: require('./api/empower')(Vue, Promise, config),
   dataTable: require('./api/data-table')(Vue, Promise, config),
-  alarm: require('./api/alarm')(Vue, Promise, config)
+  alert: require('./api/alert')(Vue, Promise, config)
 };

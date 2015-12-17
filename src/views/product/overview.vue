@@ -136,9 +136,6 @@
   require('echarts/chart/line');
   require('echarts/chart/map');
   var ecConfig = require('echarts/config');
-  var zrEvent = require('zrender/src/tool/event');
-  // require('echarts/chart/wordCloud');
-  // var regionChart = echarts.init(document.getElementById('regionChart'));
 
   module.exports = {
     components: {
@@ -370,19 +367,6 @@
                 }
               }
 
-              document.getElementById('regionChart').onmousewheel = function (e){
-                var event = e || window.event;
-                curIndx += zrEvent.getDelta(event) > 0 ? (-1): 1;
-                if (curIndx < 0) {
-                    curIndx = mapType.length - 1;
-                }
-                var mt = mapType[curIndx % mapType.length];
-                option.series[0].mapType = mt;
-                regionChart.setOption(option, true);
-
-                zrEvent.stop(event);
-              };
-
               regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
                 var len = mapType.length;
                 var mt = mapType[curIndx % len];
@@ -519,7 +503,14 @@
               self.addModel = {};
               self.showAddModal = false;
             }).catch(function (error) {
-              console.log(error);
+              if (__DEBUG__) {
+                console.log(error);
+              }
+              if (error.code === 4001001) {
+                alert('Mac地址不合法');
+              } else if (error.code === 4001021) {
+                alert('该设备 MAC 地址已存在');
+              }
             });
           });
         }

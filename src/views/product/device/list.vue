@@ -264,12 +264,14 @@
                 self.devices = data;
               });
             }).catch(function (error) {
-              if (error.code === 4001021) {
-                alert('该设备 MAC 地址已存在');
-              }
-
               if (__DEBUG__) {
                 console.log(status);
+              }
+
+              if (error.code === 4001001) {
+                alert('Mac地址不合法');
+              } else if (error.code === 4001021) {
+                alert('该设备 MAC 地址已存在');
               }
             });
           });

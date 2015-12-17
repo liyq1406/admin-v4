@@ -10,10 +10,10 @@
           li: a(href="http://www.xlink.cn/case.html", target="_blank") 客户案例
           li: a(href="http://support.xlink.cn/", target="_blank") 开发文档
           li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
-        .user-navigation
+        .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
           span.user-name {{this_user.name}}
           i.arrow-down
-          .sed-navigation
+          .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav", class="staggered", transition="staggered", transition-mode="out-in")
             ul
               li.sed-navigation-li
                 a(v-link="{path: '/settings/account'}") 账号信息
@@ -37,7 +37,7 @@
               i.fa.fa-plus
               | 添加产品
         .nav-aside-item
-          a(v-link="{ path: '/alarms' }")
+          a(v-link="{ path: '/alerts' }")
             i.fa.fa-bell
             | 告警服务
         .nav-aside-item
@@ -73,6 +73,7 @@
       return {
         access: false,
         products: [],
+        showUserNav: false,
         this_user:{}
       }
     },
@@ -160,7 +161,6 @@
         background #FFF
         // overflow hidden
         opacity 0
-        transition all ease 0.5s
         border 1px solid #ddd
         padding 0 10px
 
@@ -210,6 +210,7 @@
       padding-left 20px
       background #202020
       transition background .3s
+      overflow hidden
 
       .fa
         font-size 16px

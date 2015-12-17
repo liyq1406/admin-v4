@@ -1,5 +1,5 @@
 <template lang="jade">
-.modal(v-show="show", transition="modal")
+.modal(v-show="show || flag", transition="modal")
   .modal-wrapper
     .modal-dialog(:style="dialogStyle")
       .modal-header
@@ -22,6 +22,10 @@ module.exports = {
       type: Boolean,
       required: true,
       twoway: true
+    },
+    flag: {
+      type: Boolean,
+      default: false
     }
   },
 

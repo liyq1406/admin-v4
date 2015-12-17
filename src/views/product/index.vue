@@ -40,7 +40,7 @@
             link: { path: '/products/' + this.$route.params.id + '/data-point' }
           }, {
             label: '通知与告警',
-            link: { path: '/products/' + this.$route.params.id + '/alarm' }
+            link: { path: '/products/' + this.$route.params.id + '/alert' }
           // }, {
             // label: '设备互联',
             // link: { path: '/products/' + this.$route.params.id + '/interconnection' }
