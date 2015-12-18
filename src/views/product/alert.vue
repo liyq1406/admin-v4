@@ -96,7 +96,7 @@
                 select(v-model="addModel.notify_type", v-form-ctrl, name="notify_type", number)
                   option(value="1") 通知类型
                   option(value="2") 告警类型
-          .form-row
+          .form-row.tag-row
             label.form-control 标签：
             .controls
               tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="addModelEditingTag", @adding-tag="showAddModal = true")
@@ -201,7 +201,7 @@
                 select(v-model="editModel.notify_type", v-form-ctrl, name="notify_type", number)
                   option(value="1") 通知类型
                   option(value="2") 告警类型
-          .form-row
+          .form-row.tag-row
             label.form-control 标签：
             .controls
               tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editModelEditingTag", @adding-tag="showEditModal = true")
@@ -424,6 +424,9 @@
       .form-row
         .controls
           width 480px
+
+      .tag-row
+        overflow-y visible
 
       .condition-row
         .type
