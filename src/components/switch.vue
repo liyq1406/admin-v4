@@ -20,6 +20,7 @@
 
     methods: {
       toogle: function () {
+        this.$dispatch('switch-toggle');
         this.value = !this.value;
       }
     }

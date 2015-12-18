@@ -74,23 +74,42 @@
           .panel
             .panel-hd
               .actions
-                switch(:value.sync="showLog")
+                switch(:value.sync="showLog", @switch-toggle='toggleLog')
               h2 设备日志
             .panel-bd
               pre.output-log
-                div.log 21:15:20.139 100003563: {"msg":{"type":"PING","resp":true}}
-                div.log 21:15:20.138 100003563: {"msg":{"type":"PING","resp":false}}
-                div.log 21:14:59.278 100003563: {"msg":{"msg_id":257,"code":0,"type":"SYNC","resp":true}}
-                div.log 21:14:59.278 100003563: {"msg":{"device":{"id":100003563,"datapoint":[{"index":5,"5":6941,"value":6941}],"flags":2,"msg_id":257},"type":"SYNC","resp":false}}
-                div.log 21:14:56.322 100003563: {"msg":{"msg_id":257,"code":0,"type":"SYNC","resp":true}}
-                div.log 21:14:56.321 100003563: {"msg":{"device":{"id":100003563,"datapoint":[{"index":5,"5":7197,"value":7197}],"flags":2,"msg_id":257},"type":"SYNC","resp":false}}
-                div.log 21:14:46.073 100003563: {"msg":{"type":"PING","resp":true}}
-                div.log 21:14:46.073 100003563: {"msg":{"type":"PING","resp":false}}
-                div.log 21:14:25.054 100003563: {"msg":{"type":"PING","resp":true}}
-                div.log 21:14:25.054 100003563: {"msg":{"type":"PING","resp":false}}
-                div.log 21:14:04.032 100003563: {"msg":{"type":"PING","resp":true}}
-                div.log 21:14:04.032 100003563: {"msg":{"type":"PING","resp":false}}
-                div.log 21:13:43.693 200: OK
+                //-
+                  div.log(v-for="log in logs")
+                    span.time {{log.time}}
+                    template(v-if="log.type === 'user'")
+                      span.user {{log.msg[0]}}
+                      span.msg : {{log.msg[1]}}
+                    template(v-if="log.type === 'status'")
+                      span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
+                      span.msg : {{log.msg[1]}}
+                    template(v-if="log.type === 'connected'")
+                      span.msg-success {{log.msg}}
+                    template(v-if="log.type === 'disconnected'")
+                      span.msg-error {{log.msg}}
+
+                div.log
+                  span.time 21:15:20.139
+                  span.msg-success Client has connected to the server!
+                div.log
+                  span.time 21:15:20.139
+                  span.user 100003563
+                  span.msg : {"msg":{"type":"PING","resp":true}}
+                div.log
+                  span.time 21:15:20.139
+                  span.msg-error 400
+                  span.msg : Error
+                div.log
+                  span.time 21:15:20.139
+                  span.msg-success 200
+                  span.msg : OK
+                div.log
+                  span.time 21:15:20.139
+                  span.msg-error The client has disconnected!
           // End: 设备日志
 
 
@@ -100,6 +119,8 @@
   var api = require('../../../api');
   var Promise = require('promise');
   var Switch = require('../../../components/switch.vue');
+  var io = require('socket.io-client');
+  var dateFormat = require('date-format');
 
   module.exports = {
     components: {
@@ -110,12 +131,25 @@
       return {
         device: {},
         datapoints: [],
-        showLog: true
+        showLog: true,
+        deviceToken: '',
+        socket: null,
+        logs: [{
+          time: '08:12:56',
+          msg: 'Client has connected to the server!'
+        }]
       };
     },
 
     route: {
       data: function () {
+        var self = this;
+
+        if (this.showLog) {
+          this.connect();
+        }
+
+
         /*alert(111);
         //百度地图API功能
       	function loadJScript() {
@@ -151,11 +185,6 @@
     },
 
     methods: {
-      loadMapApi: function () {
-        return new Promise(function (resolve, reject) {
-        });
-      },
-
       getDeviceInfo: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {
@@ -168,6 +197,53 @@
         return api.corp.refreshToken(this).then(function () {
           return api.product.getDatapoints(self.$route.params.product_id)
         });
+      },
+
+      connect: function () {
+        var self = this;
+
+        api.corp.refreshToken().then(function () {
+          api.device.getDeviceToken(self.$route.params.device_id).then(function (data) {
+
+            self.socket = io.connect('http://' + data.addr);
+
+            self.socket.on('connect', function() {
+              self.outputLog('Client has connected to the server!', 'connected');
+        	  });
+
+            self.socket.on('disconnect', function() {
+              self.outputLog('The client has disconnected!', 'disconnected');
+        	  });
+
+            self.socket.on('trace.log', function(data) {
+              self.outputLog([data.id, data.log], 'user');
+            });
+
+            self.socket.on('trace.status', function(data) {
+              self.outputLog([data.status, data.msg], 'status');
+          	});
+
+            self.socket.emit('trace.logs', {id: self.$route.params.device_id, token: data.token});
+          });
+        });
+      },
+
+      outputLog: function (msg, type) {
+        this.logs.push({
+          time: dateFormat('hh:mm:ss.SSS', new Date()),
+          msg: msg,
+          type: type
+        });
+      },
+
+      toggleLog: function () {
+        if (!this.showLog) {
+          this.connect();
+        } else {
+          if (this.socket) {
+            this.socket.disconnect();
+          }
+        }
       }
     }
   };
@@ -193,4 +269,20 @@
   .output-log
     height 360px
     overflow auto
+
+    .time
+      margin-right 10px
+      color #999
+
+    .user
+      color orange
+
+    .msg
+      color #333
+
+    .msg-error
+      color red
+
+    .msg-success
+      color green
 </style>

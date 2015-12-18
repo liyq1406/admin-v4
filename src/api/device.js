@@ -430,6 +430,26 @@ module.exports = function(Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 获取设备访问 Token
+     * @param  {String} deviceId 设备 ID
+     */
+    getDeviceToken: function(deviceId) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.post(config.apiRoot + '/diagnosis/device/token/' +deviceId, JSON.stringify({act: 'logs'}),
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
     }
   };
 };

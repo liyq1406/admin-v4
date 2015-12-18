@@ -10,7 +10,7 @@
             i.fa.fa-plus
             | 添加设备
           label.btn.btn-success.btn-upload
-            input(type="file", v-el:mac-file, name="macFile", @change.prevent="importFile")
+            input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
             i.fa.fa-reply-all
             | 导入设备
 
@@ -100,7 +100,7 @@
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
-  var fs = require('fs');
+  // var fs = require('fs');
   /*
   var filters = {
     all: function (devices) {
@@ -160,7 +160,9 @@
         showAddModal: false,
         addModel: {},
         addValidation: {},
-        macFile: ''
+        macFile: '',
+        adding: false,
+        editing: false
       }
     },
 
@@ -179,7 +181,7 @@
         var condition = {
           filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          // offset: (this.currentPage - 1) * this.pageCount,
           order: this.sortOrders,
           query: {}
         };
@@ -247,12 +249,14 @@
       },
 
       onAddCancel: function () {
+        this.adding = false;
         this.showAddModal = false;
       },
 
       onAddSubmit: function () {
         var self = this;
-        if (this.addValidation.$valid) {
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true;
           api.corp.refreshToken().then(function () {
             api.device.add(self.$route.params.id, self.addModel).then(function (data) {
               if (__DEBUG__) {
@@ -260,44 +264,67 @@
               }
               self.addModel = {};
               self.showAddModal = false;
+              self.adding = false;
               self.getDevices().then(function (data) {
                 self.devices = data;
               });
             }).catch(function (error) {
-              if (__DEBUG__) {
-                console.log(status);
-              }
-
-              if (error.code === 4001001) {
-                alert('Mac地址不合法');
-              } else if (error.code === 4001021) {
-                alert('该设备 MAC 地址已存在');
-              }
+              self.handleError(error);
+              self.adding = false;
             });
           });
         }
       },
 
-      importFile: function () {
-        var file = this.$els.macFile;
+      batchImport: function () {
+        var self = this;
+        var file = this.$els.macFile.files[0];
+        // console.log(file);
+        // console.log(evt.target.files);
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
+          if(!/text\/\w+/.test(file.type)){
+            alert(file.name + '不是文本文件不能上传');
+            return false;
+          }
+          reader.onerror = function (evt) {
+            alert('文件读取失败。')
+          }
+          // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
-              console.log(evt.target.result.split(',')[1]);
+              var macArr = evt.target.result.split('\n');
+              console.log(macArr);
+              api.corp.refreshToken().then(function () {
+                api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
+                  if (status === 200) {
+                    alert('设备导入成功!')
+                    self.getDevices().then(function (data) {
+                      self.devices = data;
+                    });
+                  }
+                }).catch(function (error) {
+                  self.handleError(error);
+                });
+              });
             }
           };
           reader.readAsText(file);
         } else {
           alert('您的浏览器过于低级，不支持 HTML5 上传');
         }
-        // var data = new FormData();
-        // data.append('macFile', file);
-        // var data = fs.readFileSync(file);
-        // console.log(data.toString());
-        // console.log(fs);
+      },
 
-        // console.log(file);
+      handleError: function (error) {
+        if (__DEBUG__) {
+          console.log(error);
+        }
+
+        if (error.code === 4001001) {
+          alert('Mac地址不合法');
+        } else if (error.code === 4001021) {
+          alert('该设备 MAC 地址已存在');
+        }
       }
     }
   };

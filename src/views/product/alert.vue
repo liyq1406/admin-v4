@@ -299,7 +299,7 @@
           compare: 1,
           value: '',
           scope: 1,
-          is_enable: false,
+          is_enable: true,
           content: ''
         },
         addValidation: {},    // 添加验证
