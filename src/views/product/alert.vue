@@ -138,7 +138,7 @@
                   | 启用
 
           .form-actions
-            button.btn.btn-default(@click.stop="onAddCancel") 取消
+            button.btn.btn-default(type="cancel", @click.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
     // 编辑规则浮层
@@ -299,7 +299,8 @@
           compare: 1,
           value: '',
           scope: 1,
-          is_enable: false
+          is_enable: false,
+          content: ''
         },
         addValidation: {},    // 添加验证
         editValidation: {},   // 修改验证
@@ -314,7 +315,8 @@
           compare: 1,
           value: '',
           scope: 1,
-          is_enable: false
+          is_enable: false,
+          content: ''
         },
         originEditModel: {},      // 原数据模型
         delChecked: false     // 是否删除

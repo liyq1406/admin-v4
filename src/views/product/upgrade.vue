@@ -12,7 +12,7 @@
         table.table.table-stripe.table-bordered
           thead
             tr
-              th 版本号
+              th.w50 版本号
               th 版本说明
               th 添加日期
               th 发布日期

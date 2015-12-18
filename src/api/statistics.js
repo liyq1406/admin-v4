@@ -221,18 +221,46 @@ module.exports = function(Vue, Promise, config) {
     },
 
     /**
-     * 获取告警趋势
+     * 消息统计概览
+     * @param  {String} start_day 开始日期
+     * @param  {String} end_day   结束日期
+     * @return {Promise}
      */
-    getAlarmTrend: function (product_id) {
+    getAlertSummary: function(start_day, end_day) {
       return new Promise(function(resolve, reject) {
-        var trends = [{
-          day: '2015-12-06',
-          count: 30
-        }];
+        Vue.http.get(config.apiRoot + '/statistics/message/summary?start_day=' + start_day + '&end_day=' + end_day,
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
 
-        window.setTimeout(function () {
-          resolve(trends);
-        }, 0);
+    /**
+     * 消息日趋势
+     * @param  {String} start_day 开始日期
+     * @param  {String} end_day   结束日期
+     * @return {Promise}
+     */
+    getAlertTrend: function(start_day, end_day) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.get(config.apiRoot + '/statistics/message/trend?start_day=' + start_day + '&end_day=' + end_day,
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
       });
     }
   };

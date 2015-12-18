@@ -3,7 +3,7 @@
     .main
       .panel
         .panel-hd
-          radio-group(:items="periods", :value.sync="period", @select="drawTrendsChart")
+          radio-group(:items="periods", :value.sync="period")
             span.label(slot="label") 最近
           h2 告警服务
         .panel-bd
@@ -14,20 +14,20 @@
               .statistics-info
                 .item
                   .cont
-                    .num 3620
-                    .label 总设备量
+                    .num {{alertSummary.device}}
+                    .label 告警设备
                 .item
                   .cont
-                    .num 0
-                    .label 在线设备
-                .item.no-border
-                  .cont
-                    .num 13
+                    .num {{alertSummary.message}}
                     .label 告警消息
                 .item.no-border
                   .cont
-                    .num 13
-                    .label 7天新增
+                    .num {{alertSummary.unread}}
+                    .label 未读消息
+                .item.no-border
+                  .cont
+                    .num {{alertSummary.add_today}}
+                    .label 今日新增
 
       .panel
         .panel-hd
@@ -150,7 +150,14 @@
           { label: '90天', value: 90 }
         ],
         product_id: '',
-        alertTrends: []
+        alertSummary: {
+          unread: 0,
+          add_today: 0,
+          device: 0,
+          message: 0
+        },
+        alertTrends: [],
+        today: dateFormat('yyyy-MM-dd', new Date())
       }
     },
 
@@ -160,6 +167,11 @@
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount
         };
+      },
+
+      past: function () {
+        var past = new Date().getTime() - this.period * 24 * 3600 * 1000;
+        return dateFormat('yyyy-MM-dd', new Date(past));
       }
     },
 
@@ -170,21 +182,31 @@
     },
 
     ready: function () {
-      // this.drawTrendsChart()
-      var self = this;
-      this.getAlarmTrends().then(function (data) {
-        self.alertTrends = data;
-        self.drawTrendsChart();
-      });
+      // this.drawTrendsChart();
+      // var self = this;
+      // this.getAlertSummary();
     },
 
     route: {
       data: function () {
         this.getAlerts();
+        this.getAlertSummary();
+        this.drawTrendsChart();
+      }
+    },
+
+    watch: {
+      period: function () {
+        // this.getAlertSummary();
+        this.drawTrendsChart();
       }
     },
 
     methods: {
+      /**
+       * 获取单条告警信息并弹出浮层显示
+       * @param  {Object} alert 目标告警信息
+       */
       showAlert: function (alert) {
         this.model = alert;
         this.showModal = true;
@@ -195,6 +217,9 @@
         });
       },
 
+      /**
+       * 获取告警信息列表
+       */
       getAlerts: function () {
         var self = this;
 
@@ -206,11 +231,13 @@
         });
       },
 
-      getAlarmTrends: function () {
+      getAlertSummary: function () {
         var self = this;
 
-        return api.corp.refreshToken().then(function () {
-          return api.statistics.getAlarmTrend(self.product_id);
+        api.corp.refreshToken().then(function () {
+          api.statistics.getAlertSummary(self.past, self.today).then(function (data) {
+            self.alertSummary = data;
+          });
         });
       },
 
@@ -218,12 +245,12 @@
         var self = this;
 
         api.corp.refreshToken().then(function () {
-          api.statistics.getAlarmTrend(self.product_id).then(function (data) {
+          api.statistics.getAlertTrend(self.past, self.today).then(function (data) {
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
-            var countTrends = data.map(function (item) {
-              return item.count;
+            var alertCounts = data.map(function (item) {
+              return item.message;
             });
 
             // 趋势图表
@@ -253,7 +280,7 @@
               series: [{
                 name: '告警数量',
                 type: 'line',
-                data: countTrends
+                data: alertCounts
               }]
             };
             var trendChart = echarts.init(document.getElementById('trendChart'));
