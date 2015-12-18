@@ -71,7 +71,7 @@ Vue.directive('placeholder', {
 
     if (vModel) {
       this.vm.$watch(vModel, function (value, oldValue) {
-        if (value === 0) {
+        if (value === undefined || value.length === 0) {
           self.placeholder.style.display = 'inline';
         } else {
           self.placeholder.style.display = 'none';

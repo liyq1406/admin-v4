@@ -154,7 +154,6 @@ var configRouter = function (router) {
 
   router.beforeEach(function (transition) {
     var today = new Date();
-    console.log(transition.to.path);
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
     if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0) {
       router.app.access = false;

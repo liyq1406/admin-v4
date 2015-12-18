@@ -23,10 +23,14 @@
             .form-tips.form-tips-error(v-if="validation.phone.$dirty")
               span(v-if="validation.phone.$error.required") 请输入您的手机号码
               span(v-if="validation.phone.$error.pattern") 手机号码格式有误
+          .form-row.captcha-row
+            .input-text-wrap(v-placeholder="'请输入右图验证码'")
+              input.input-text(type="text", v-model="captcha")
+            captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
           .form-row.verify-code
-            .input-text-wrap(v-placeholder="'验证码'")
+            .input-text-wrap(v-placeholder="'短信验证码'")
               input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode")
-            button.btn.btn-primary.identifying_code(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled}", v-bind="{'disabled': btnDisabled}", v-text="counting ? seconds + '秒后重新获取' : '获取验证码'")
+            button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? seconds + '秒后重新获取' : '获取短信验证码'")
             .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
               span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
             .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
@@ -66,7 +70,7 @@
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .form-member-activate
+  .form-auth.form-member-activate
     .form-cont
       padding-left 100px
       padding-right 100px
@@ -80,13 +84,26 @@
 
     .form-actions
       margin-top 30px
+
+    .captcha-row
+      clearfix()
+
+      .input-text-wrap
+        float left
+        width 220px
+        margin-right 10px
+
+      .captcha
+        float left
+        width 120px
+
     .verify-code
       .input-text-wrap
         float left
         width 220px
         margin-right 10px
 
-      .identifying_code
+      .btn
         float left
         width 120px
         height 36px
@@ -94,18 +111,20 @@
 </style>
 
 <script>
-
   var api = require('../api');
   var config = require('../consts/config');
+  var Captcha = require('../components/captcha.vue');
 
   module.exports = {
     components: {
-      'api': api
+      'captcha': Captcha
     },
 
     data: function () {
       return {
         validation: {},
+        captcha: '',
+        captchaValue: '',
         model: {},
         confirmPassword: '',
         verifycodeValid: false,
@@ -155,6 +174,8 @@
         }
 
         this.btnDisabled=true;
+        this.captcha = '';
+        this.$refs.captcha.generate();
         api.sms.getVerifycode({
           phone: this.model.phone
         }).then(function (status) {

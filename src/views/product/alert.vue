@@ -38,7 +38,7 @@
         pager(:total="rules.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加规则浮层
-    modal(:show.sync="showAddModal", :width="650", :flag="editingTag")
+    modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag")
       h3(slot="header") 添加规则
       .form.form-rules(slot="body")
         form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
@@ -99,7 +99,7 @@
           .form-row
             label.form-control 标签：
             .controls
-              tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="editingTag", @adding-tag="showAddModal = true")
+              tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="addModelEditingTag", @adding-tag="showAddModal = true")
           .form-row
             label.form-control 通知方式：
             .controls
@@ -138,11 +138,11 @@
                   | 启用
 
           .form-actions
-            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
+            button.btn.btn-default(@click.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
     // 编辑规则浮层
-    modal(:show.sync="showEditModal", :width="650")
+    modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
       h3(slot="header") 编辑规则
       .form.form-rules(slot="body")
         form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
@@ -204,7 +204,7 @@
           .form-row
             label.form-control 标签：
             .controls
-              //- tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editingTag", @adding-tag="showEditModal = true")
+              tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editModelEditingTag", @adding-tag="showEditModal = true")
           .form-row
             label.form-control 通知方式：
             .controls
@@ -276,7 +276,19 @@
           '轻微',
           '通知'
         ],
-        editingTag: false,
+        addModelEditingTag: false,
+        originAddModel: {           // 添加数据模型
+          product_id: this.$route.params.id,
+          name: '',
+          tag: '',
+          type: 1,
+          notify_target: [],
+          notify_type: 1,
+          compare: 1,
+          value: '',
+          scope: 1,
+          is_enable: false
+        },
         addModel: {           // 添加数据模型
           product_id: this.$route.params.id,
           name: '',
@@ -291,8 +303,20 @@
         },
         addValidation: {},    // 添加验证
         editValidation: {},   // 修改验证
-        editModel: {},        // 编辑数据模型
-        originModel: {},      // 原数据模型
+        editModelEditingTag: false,
+        editModel: {          // 编辑数据模型
+          product_id: '',
+          name: '',
+          tag: '',
+          type: 1,
+          notify_target: [],
+          notify_type: 1,
+          compare: 1,
+          value: '',
+          scope: 1,
+          is_enable: false
+        },
+        originEditModel: {},      // 原数据模型
         delChecked: false     // 是否删除
       }
     },
@@ -336,7 +360,8 @@
       },
 
       onAddCancel: function () {
-        // this.editingTag = false;
+        // this.addModelEditingTag = false;
+        this.addModel = this.originAddModel;
         this.showAddModal = false;
       },
 
@@ -355,12 +380,12 @@
       editRule: function (rule) {
         this.showEditModal = true;
         this.editModel = rule;
-        this.originModel = _.clone(rule);
+        this.originEditModel = _.clone(rule);
       },
 
       onEditCancel: function () {
         this.showEditModal = false;
-        this.editModel = this.originModel;
+        this.editModel = this.originEditModel;
       },
 
       onEditSubmit: function () {

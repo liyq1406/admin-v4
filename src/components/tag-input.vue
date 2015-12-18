@@ -5,7 +5,7 @@
         .tag(v-for="tag in tags", track-by="$index")
           span.label {{tag}}
           i.fa.fa-times(@click.stop="deleteTag(tag)")
-      input.text-input(type="text", v-model="newTag", @keyup.enter.prevent="addTag($event)", @input="setInputWidth($event)")
+      input.text-input(type="text", v-model="newTag", @keyup.enter="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
       .temp-text#tempText(v-text="newTag")
     .candidate#candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
       .tag(v-for="tag in filteredTags", @click.stop="selectTag(tag)")
@@ -46,7 +46,7 @@
     ready: function () {
       var self = this;
       this.$dispatch('tag-input-created', this);
-      this.tags = this.value.length ? this.value.split(',') : [];
+      //this.tags = this.value.length ? this.value.split(',') : [];
       this._closeEvent = EventListener.listen(window, 'click', function (e) {
         if (!self.$el.contains(e.target)) {
           self.editing = false;
@@ -81,12 +81,22 @@
         this.$nextTick(function () {
           this.setCandidateTop();
         });
+      },
+
+      value: function () {
+        this.tags = this.value.length ? this.value.split(',') : [];
       }
     },
 
     methods: {
       deleteTag: function (tag) {
         this.tags.$remove(tag);
+      },
+
+      deleteLastTag: function () {
+        if (this.newTag.length === 0 && this.tags.length > 0) {
+          this.tags.pop();
+        }
       },
 
       selectTag: function (tag) {
@@ -96,6 +106,8 @@
       addTag: function (evt) {
         var input = evt.target;
         this.$dispatch('adding-tag');
+        evt.stopPropagation();
+        evt.preventDefault();
 
         if (this.newTag.length > 0) {
           this.tags.push(this.newTag);
@@ -122,7 +134,10 @@
 
       setInputWidth: function (evt) {
         var input = evt.target;
-        input.style.width = this.newTag.length ? document.getElementById('tempText').clientWidth + 'px' : '5px';
+        input.style.width = this.newTag.length ? document.getElementById('tempText').clientWidth + 'px' : '1px';
+        this.$nextTick(function () {
+          this.setCandidateTop();
+        });
       }
     }
   };
@@ -141,8 +156,8 @@
       display inline-block
       font-size 12px
       background #EEE
-      height 24px
-      line-height 24px
+      height 23px
+      line-height 23px
       margin 0 5px 5px 0
       padding 0 8px
       white-space nowrap
@@ -150,12 +165,13 @@
 
       span
         display inline-block
+        line-height 23px
+        height 23px
 
       i
-        display inline-block
-        size 24px
-        line-height 24px
-        margin-left 5px
+        absolute right top
+        size 23px
+        line-height 23px
         text-align center
         color red
         cursor pointer
@@ -171,21 +187,21 @@
     padding 5px 20px 0
 
     .tag
-      padding-right 0
+      padding-right 25px
 
     .text-input
       border none
       font-size 12px
-      height 24px
+      height 23px
       line-height 24px
-      width 5px
+      width 1px
 
     .temp-text
       absolute left top
       background blue
       font-size 12px
       height 20px
-      padding-right 5px
+      padding-right 1px
       opacity 0
 
   .candidate

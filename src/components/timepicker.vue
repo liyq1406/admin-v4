@@ -2,7 +2,7 @@
   .timepicker
     .input-text-wrap
       input.input-text(type="text", v-model="value", @click="inputClick")
-    .timepicker-popup(v-show="displayTimeView")
+    .timepicker-popup(v-show="displayTimeView", :class="{'timepicker-popup-right':pullLeft}")
       .timepicker-inner
         .timepicker-body
           .select.select-sm
@@ -26,6 +26,10 @@
       value: {
         type: String,
         twoWay: true
+      },
+      pullLeft: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -57,16 +61,20 @@
       }
     },
 
+    watch: {
+      displayTimeView: function () {
+        if (this.value.length > 0) {
+          var timeArr = this.value.split(':');
+          this.hour = timeArr[0];
+          this.minute = timeArr[1];
+          this.second = timeArr[2];
+        }
+      }
+    },
+
     ready: function () {
       var self = this;
-      console.log(this.value);
       this.$dispatch('timepicker-created', this);
-      if (this.value.length > 0) {
-        var timeArr = this.value.split(':');
-        this.hour = timeArr[0];
-        this.minute = timeArr[1];
-        this.second = timeArr[2];
-      }
       this._closeEvent = EventListener.listen(window, 'click', function (e) {
         if (!self.$el.contains(e.target)) {
           self.close();
@@ -95,6 +103,9 @@
     background #FFF
     z-index 1000
     box-shadow 0 6px 12px rgba(0, 0, 0, .2)
+
+  .timepicker-popup-right
+    right 0
 
   .timepicker-inner
     width 244px

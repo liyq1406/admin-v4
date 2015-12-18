@@ -118,7 +118,7 @@
             label.form-control 发布日期：
             .controls
               datepicker(:value.sync="addReleaseDate", @select-day="updateAddModelRelease")
-              timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease")
+              timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease", :pull-left="true")
               //- .form-tips 例：2015-10-09T08:15:40.843Z
           .form-row
             label.form-control 是否发布：
@@ -178,7 +178,7 @@
             label.form-control 发布日期：
             .controls
               datepicker(:value.sync="editReleaseDate", @select-day="updateEditModelRelease")
-              timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease")
+              timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease", :pull-left="true")
           .form-row
             label.form-control 是否发布：
             .controls
@@ -189,7 +189,7 @@
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除数据端点
-            button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
+            button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
     // 添加固件版本浮层
@@ -256,7 +256,7 @@
                 span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
                 span(v-if="addValidation2.target_version_url.$error.maxlength") 目标版本文件地址最多不能超过250个字符
           .form-actions
-            button.btn.btn-default(@click.prevent.stop="onAddCancel2") 取消
+            button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel2") 取消
             button.btn.btn-primary(type="submit") 确定
 </template>
 
