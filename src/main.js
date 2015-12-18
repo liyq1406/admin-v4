@@ -36,16 +36,6 @@ Vue.use(i18n, {
   locales: locales
 });
 
-// Mixins
-Vue.mixin({
-  created: function () {
-    var documentTitle = this.$options.documentTitle;
-    if (documentTitle) {
-      document.title = documentTitle + ' | 云智易物联平台';
-    }
-  }
-});
-
 // Directives
 // ------------------------------
 

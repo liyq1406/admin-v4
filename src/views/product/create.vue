@@ -45,8 +45,6 @@
   var productsStore = require('../../stores/products');
 
   module.exports = {
-    documentTitle: "添加产品",
-
     data: function () {
       return {
         model: {},

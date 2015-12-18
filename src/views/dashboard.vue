@@ -99,7 +99,6 @@
   require('echarts/chart/line');
 
   module.exports = {
-    documentTitle: '概览',
     data: function () {
       return {
         totalSummary: {

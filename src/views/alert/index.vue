@@ -116,8 +116,6 @@
   require('echarts/chart/line');
 
   module.exports = {
-    documentTitle: "告警服务",
-
     components: {
       'pager': Pager,
       'modal': Modal,

@@ -131,7 +131,6 @@
 
   module.exports = {
     components: {
-
       'modal': Modal,
       'api': api
     },
