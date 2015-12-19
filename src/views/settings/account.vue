@@ -189,18 +189,20 @@
             }
             self.corp=data;
             self.corp_member=data.member;
+          }).catch(function (error) {
+            self.handleError(error)
           });
+
           api.corp.getMember(mamber_id).then(function (data) {
             if(__DEBUG__) {
               console.log("个人信息如下：");
               console.log(data);
             }
             self.member=data;
-
+          }).catch(function (error) {
+            self.handleError(error)
           });
-
         })
-        return {};
       }
     },
 
@@ -223,6 +225,8 @@
               }else{
                 alert("修改失败！");
               }
+            }).catch(function (error) {
+              self.handleError(error)
             });
           });
         }else{
@@ -248,6 +252,7 @@
                 self.showModal2 = false;
               }
             }).catch(function (error) {
+              self.handleError(error)
             });
           })
         }

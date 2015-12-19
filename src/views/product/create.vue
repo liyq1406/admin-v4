@@ -65,7 +65,7 @@
               productsStore.addProduct(data);
               self.$route.router.go({path: '/products/' + data.id});
             }).catch(function (error) {
-              console.log(error);
+              self.handleError(error);
             });
           });
         }

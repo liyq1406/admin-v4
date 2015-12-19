@@ -8,16 +8,12 @@
       .form-body
         .form-row
           .input-text-wrap(v-placeholder="'手机号'")
-            input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.account.$pristine")
-            span(v-if="validation.account.$error.required") 请输入您的注册手机号
+            input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required, lazy)
           .form-tips.form-tips-error(v-if="validation.account.$dirty")
             span(v-if="validation.account.$error.required") 请输入您的注册手机号
         .form-row
           .input-text-wrap(v-placeholder="'密码'")
-            input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-            span(v-if="validation.password.$error.required") 请输入密码
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required, lazy)
           .form-tips.form-tips-error(v-if="validation.password.$dirty")
             span(v-if="validation.password.$error.required") 请输入密码
         .operations
@@ -74,15 +70,7 @@
             // localStorage.setItem('expireAt', today.getTime() + 20000);
             self.$route.router.go({path: '/'});
           }).catch(function (error) {
-            if (__DEBUG__) {
-              console.log(error);
-            }
-
-            switch (error.code) {
-              case 4001007:
-                alert('密码错误，请重新输入')
-                break;
-            }
+            self.handleError(error);
           });
         }
       }

@@ -154,6 +154,8 @@
               creator: 'xiaolu'
             }];
             */
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },

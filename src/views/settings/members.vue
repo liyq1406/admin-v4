@@ -148,6 +148,8 @@
               console.log(data);
             }
             self.showModal = false;
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       }

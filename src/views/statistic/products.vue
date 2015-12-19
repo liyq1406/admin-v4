@@ -133,6 +133,8 @@
         api.corp.refreshToken().then(function () {
           api.statistics.getProductSummary(self.productId).then(function (data) {
             self.productSummary = data;
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },
@@ -200,6 +202,8 @@
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
             window.onresize = trendChart.resize;
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },
@@ -365,6 +369,8 @@
               };
               regionChart.setOption(option, true);
             }
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },

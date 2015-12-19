@@ -13,6 +13,7 @@ var locales = require('./consts/locales');
 var configRouter = require('./route-config');
 var router;
 var dateFormat = require('date-format');
+var config = require('./consts/config');
 
 var App = Vue.extend(require('./app.vue'));
 
@@ -105,6 +106,14 @@ Vue.transition('stagger', {
 Vue.transition('modal', {
   afterLeave: function (el) {
     // window.location.reload(true);
+  }
+});
+
+Vue.mixin({
+  methods: {
+    handleError: function (error) {
+      alert(config.errors[error.code.toString()]);
+    }
   }
 });
 

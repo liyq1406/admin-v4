@@ -96,6 +96,8 @@
           api.statistics.getUserSummary().then(function (data) {
             self.total = data.total;
             self.online = data.online;
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },
@@ -166,6 +168,8 @@
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
             window.onresize = trendChart.resize;
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },
@@ -331,6 +335,8 @@
               };
               regionChart.setOption(option, true);
             }
+          }).catch(function (error) {
+            self.handleError(error)
           });
         });
       },

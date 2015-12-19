@@ -374,6 +374,8 @@
             api.alert.addRule(self.addModel).then(function (data) {
               self.showAddModal = false;
               self.rules.push(data);
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         }
@@ -400,6 +402,8 @@
               }
               self.rules.$remove(self.editModel);
               self.showEditModal = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         } else if (this.editValidation.$valid) {
@@ -409,6 +413,8 @@
                 console.log(data);
               }
               self.showEditModal = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         }

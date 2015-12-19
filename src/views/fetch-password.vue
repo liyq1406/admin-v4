@@ -173,10 +173,7 @@
           self.counting=true;
           self.tiktac();
         }).catch(function (error) {
-          if (__DEBUG__) {
-            console.log(error);
-            // console.log('[' + error.code + '] ' + error.msg);
-          }
+          self.handleError(error);
         });
       },
       onSubmit: function () {
@@ -190,6 +187,8 @@
           if(data==200){
             self.resetsuccess=true;
           }
+        }).catch(function (error) {
+          self.handleError(error);
         });
       }
     }

@@ -221,6 +221,8 @@
           api.device.getList(self.$route.params.id, self.queryCondition).then(function (data) {
             self.devices = data.list;
             self.total = data.count;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },

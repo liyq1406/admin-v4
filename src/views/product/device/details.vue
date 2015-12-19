@@ -224,6 +224,8 @@
           	});
 
             self.socket.emit('trace.logs', {id: self.$route.params.device_id, token: data.token});
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },

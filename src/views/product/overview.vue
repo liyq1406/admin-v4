@@ -268,6 +268,8 @@
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
             window.onresize = trendChart.resize;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
 
@@ -433,6 +435,8 @@
               };
               regionChart.setOption(option, true);
             }
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },
@@ -444,6 +448,8 @@
           api.product.getProductKey(self.$route.params.id).then(function (data) {
             self.productKey = data.key;
             self.showKeyModal = true;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },
@@ -462,13 +468,15 @@
       onEditCancel: function () {
         this.showEditModal = false;
         this.editModel = {};
+        this.editing = false;
         this.product = this.originModel;
       },
 
       onEditSubmit: function () {
         var self = this;
 
-        if (this.delChecked) {
+        if (this.delChecked && !this.editing) {
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.deleteProduct(self.$route.params.id).then(function (data) {
               if (__DEBUG__) {
@@ -476,16 +484,22 @@
               }
               self.showEditModal = false;
               productsStore.deleteProduct(self.product);
+              self.editing = false;
               self.$route.router.go('/');
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
-        } else if (this.editValidation.$valid) {
+        } else if (this.editValidation.$valid && !this.editing) {
           api.corp.refreshToken().then(function () {
             api.product.updateProduct(self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.editing = false;
               self.showEditModal = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         }
@@ -547,18 +561,6 @@
           reader.readAsText(file);
         } else {
           alert('您的浏览器过于低级，不支持 HTML5 上传');
-        }
-      },
-
-      handleError: function (error) {
-        if (__DEBUG__) {
-          console.log(error);
-        }
-
-        if (error.code === 4001001) {
-          alert('Mac地址不合法');
-        } else if (error.code === 4001021) {
-          alert('该设备 MAC 地址已存在');
         }
       }
     }

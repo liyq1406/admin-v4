@@ -22,7 +22,7 @@
   module.exports = {
     data: function () {
       return {
-        activateSuccess: false 
+        activateSuccess: false
       }
     },
 
@@ -32,6 +32,8 @@
         if (status === 200) {
           self.activateSuccess = true;
         }
+      }).catch(function (error) {
+        self.handleError(error);
       });
     },
 

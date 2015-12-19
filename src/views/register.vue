@@ -148,12 +148,7 @@
               // self.$route.router.go({path: '/login'});
             }
           }).catch(function (error) {
-            var errorCode = JSON.parse(error.response.body).error.code;
-            if (errorCode === 4001003 || errorCode === 4001004) {
-              alert("验证码有误，请重新输入！");
-            } else if (errorCode === 4001005) {
-              alert("该手机号已注册");
-            }
+            self.handleError(error);
           });
         }
       },

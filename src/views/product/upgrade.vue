@@ -374,6 +374,8 @@
               self.firmwares.$remove(self.editModel);
               self.showEditModal = false;
               self.delChecked = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         } else if (this.editValidation.$valid) {
@@ -421,6 +423,8 @@
             self.getTasks().then(function (data) {
               self.tasks = data;
             });
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },

@@ -40,9 +40,7 @@
             label.form-control 表名：
             .controls
               .input-text-wrap(v-placeholder="'请输入表名'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required)
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
-                span(v-if="addValidation.name.$error.required") 请输入表名
+                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
                 span(v-if="addValidation.name.$error.required") 请输入表名
                 span(v-if="addValidation.name.$error.minlength") 表名最少为2字符
@@ -206,7 +204,9 @@
         editFields: [],
         addValidation: {},
         editValidation: {},
-        delChecked: false
+        delChecked: false,
+        adding: false,
+        editing: false
       };
     },
 
@@ -227,12 +227,12 @@
 
       onAddCancel: function () {
         this.showAddModal = false;
-        // window.location.reload();
+        this.adding = false;
       },
 
       onEditCancel: function () {
         this.showEditModal = false;
-        // window.location.reload();
+        this.editing = false;
       },
 
       onBlur: function (field, model, fields) {
@@ -268,7 +268,8 @@
 
       onAddSubmit: function () {
         var self = this;
-        if (this.addValidation.$valid) {
+        if (this.addValidation.$valid && !this.adding) {
+          self.adding = true;
           api.corp.refreshToken().then(function () {
             api.dataTable.createTable(self.addModel).then(function (data) {
               if (__DEBUG__) {
@@ -276,11 +277,10 @@
               }
               self.tables.push(self.addModel);
               self.showAddModal = false;
+              self.adding = false;
               self.addFields = [];
             }).catch(function (error) {
-              if (__DEBUG__) {
-                console.log(status);
-              }
+              self.handleError(error);
             });
           });
         }
@@ -307,6 +307,8 @@
               }
               self.tables.$remove(self.editModel);
               self.showEditModal = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         } else if (this.editValidation.$valid) {
@@ -316,6 +318,8 @@
                 console.log(data);
               }
               self.showEditModal = false;
+            }).catch(function (error) {
+              self.handleError(error);
             });
           });
         }

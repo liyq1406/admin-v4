@@ -130,6 +130,8 @@
             self.totalSummary = data.total;
             self.userSummary = data.user;
             transition.next();
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       }

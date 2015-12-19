@@ -124,6 +124,8 @@
               if(__DEBUG__) {
                 console.log(data);
               }
+            }).catch(function (error) {
+              self.handleError(error)
             });
           });
         }

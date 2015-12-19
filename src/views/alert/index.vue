@@ -208,11 +208,14 @@
        * @param  {Object} alert 目标告警信息
        */
       showAlert: function (alert) {
+        var self = this;
         this.model = alert;
         this.showModal = true;
         api.corp.refreshToken().then(function () {
           api.alert.setAlertRead([alert.id]).then(function () {
             alert.is_read = true;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },
@@ -227,6 +230,8 @@
           api.alert.getAlerts(self.queryCondition).then(function (data) {
             self.alerts = data.list;
             self.total = data.count;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },
@@ -237,6 +242,8 @@
         api.corp.refreshToken().then(function () {
           api.statistics.getAlertSummary(self.past, self.today).then(function (data) {
             self.alertSummary = data;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       },
@@ -286,6 +293,8 @@
             var trendChart = echarts.init(document.getElementById('trendChart'));
             trendChart.setOption(trendOptions);
             window.onresize = trendChart.resize;
+          }).catch(function (error) {
+            self.handleError(error);
           });
         });
       }
