@@ -3,7 +3,7 @@ var request = require('superagent');
 module.exports = function (Vue, Promise, config) {
   return {
     /**
-     * 1.企业账户注册
+     * 1.企业帐号注册
      * @param  {Object} params 注册信息
      * @return {Promise}
      */
@@ -174,7 +174,7 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
-     * 7.获取账户下所有成员列表
+     * 7.获取帐号下所有成员列表
      * @param  {Object} params query参数
      * @return {Promise}
      */
