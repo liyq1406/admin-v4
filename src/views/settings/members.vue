@@ -47,7 +47,7 @@
             label.form-control 邮箱：
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
-                input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required)
+                input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
                 span(v-if="validation.email.$error.required") 请输入成员邮箱
               .form-tips.form-tips-error(v-if="validation.email.$dirty")

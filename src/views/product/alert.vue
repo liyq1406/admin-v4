@@ -46,7 +46,7 @@
             label.form-control 规则名称：
             .controls
               .input-text-wrap(v-placeholder="'请输入规则名称'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32")
+                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
                 span(v-if="addValidation.name.$error.required") 请输入规则名称
               .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
@@ -73,7 +73,7 @@
                     option(value="3") 小于
               .value(v-if="addModel.type === 1")
                 .input-text-wrap
-                  input.input-text(v-model="addModel.value", type="text", v-form-ctrl, name="value", required)
+                  input.input-text(v-model="addModel.value", type="text", v-form-ctrl, name="value", required, lazy)
               .value(v-if="addModel.type === 2")
                 .select
                   select(v-model="addModel.value", v-form-ctrl, name="value")
@@ -83,7 +83,7 @@
             label.form-control 告警内容：
             .controls
               .input-text-wrap(v-placeholder="'请输入告警内容'")
-                textarea.input-text(v-model="addModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250")
+                textarea.input-text(v-model="addModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.content.$pristine")
                 span(v-if="addValidation.content.$error.required") 请输入告警内容
               .form-tips.form-tips-error(v-if="addValidation.content.$dirty")
@@ -150,7 +150,7 @@
             label.form-control 规则名称：
             .controls
               .input-text-wrap(v-placeholder="'请输入规则名称'")
-                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32")
+                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
                 span(v-if="editValidation.name.$error.required") 请输入规则名称
               .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
@@ -177,7 +177,7 @@
                     option(value="3") 小于
               .value(v-if="editModel.type === 1")
                 .input-text-wrap
-                  input.input-text(v-model="editModel.value", type="text", v-form-ctrl, name="value", required)
+                  input.input-text(v-model="editModel.value", type="text", v-form-ctrl, name="value", required, lazy)
               .value(v-if="editModel.type === 2")
                 .select
                   select(v-model="editModel.value", v-form-ctrl, name="value")
@@ -188,7 +188,7 @@
             label.form-control 告警内容：
             .controls
               .input-text-wrap(v-placeholder="'请输入告警内容'")
-                textarea.input-text(v-model="editModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250")
+                textarea.input-text(v-model="editModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.content.$pristine")
                 span(v-if="editValidation.content.$error.required") 请输入告警内容
               .form-tips.form-tips-error(v-if="editValidation.content.$dirty")

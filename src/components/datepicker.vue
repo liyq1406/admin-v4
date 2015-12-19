@@ -1,7 +1,7 @@
 <template lang="jade">
   .datepicker
     .input-text-wrap
-      input.input-text(type="text", v-model="value", @click="inputClick")
+      input.input-text(type="text", v-model="value", @click="inputClick", lazy)
     .datepicker-popup(v-show="displayDayView")
       .datepicker-inner
         .datepicker-body

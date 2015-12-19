@@ -10,7 +10,7 @@
           | 登录帐号：xiaolu@xlink.cn
         .form-row
           .input-text-wrap(v-placeholder="'请输入新密码'")
-            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password")
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
           .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
             span(v-if="validation.password.$error.required") 请输入新密码
           .form-tips.form-tips-error(v-if="validation.password.$dirty")
@@ -19,7 +19,7 @@
             span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
         .form-row
           .input-text-wrap(v-placeholder="'再次输入密码'")
-            input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword")
+            input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
           .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
             span(v-if="validation.confirmPassword.$error.required") 请再一次输入密码
           .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")

@@ -64,7 +64,7 @@
             label.form-control MAC地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入MAC地址'")
-                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required)
+                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
                 span(v-if="addValidation.mac.$error.required") 请输入MAC地址
               .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")

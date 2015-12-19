@@ -1,7 +1,7 @@
 <template lang="jade">
   .timepicker
     .input-text-wrap
-      input.input-text(type="text", v-model="value", @click="inputClick")
+      input.input-text(type="text", v-model="value", @click="inputClick", lazy)
     .timepicker-popup(v-show="displayTimeView", :class="{'timepicker-popup-right':pullLeft}")
       .timepicker-inner
         .timepicker-body

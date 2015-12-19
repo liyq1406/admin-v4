@@ -92,7 +92,7 @@
             label.form-control 姓名：
             .controls
               .input-text-wrap(v-placeholder="'请输入姓名'")
-                input.input-text(v-model="resetmember.name", type="text", v-form-ctrl,value="{{member.name}}" name="name", maxlength="32", required)
+                input.input-text(v-model="resetmember.name", type="text", v-form-ctrl,value="{{member.name}}" name="name", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                 span(v-if="validation.name.$error.required") 请输入姓名
               .form-tips.form-tips-error(v-if="validation.name")
@@ -117,14 +117,14 @@
         form(v-form, name="validation2", @submit.prevent="onEditSubmit")
           .form-row
             .input-text-wrap(v-placeholder="'旧密码'")
-              input.input-text(type="password", v-model="model.oldpassword", v-form-ctrl, required, name="oldpassword")
+              input.input-text(type="password", v-model="model.oldpassword", v-form-ctrl, required, name="oldpassword", lazy)
             .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.oldpassword.$pristine")
               span(v-if="validation2.oldpassword.$error.required") 请输入旧密码
             .form-tips.form-tips-error(v-if="validation2.oldpassword.$dirty")
               span(v-if="validation2.oldpassword.$error.required") 请输入旧密码
           .form-row
             .input-text-wrap(v-placeholder="'新密码'")
-              input.input-text(type="password", v-model="model.newpassword", v-form-ctrl, required, maxlength="16", minlength="6", name="newpassword")
+              input.input-text(type="password", v-model="model.newpassword", v-form-ctrl, required, maxlength="16", minlength="6", name="newpassword", lazy)
             .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.newpassword.$pristine")
               span(v-if="validation2.newpassword.$error.required") 请输入新密码
             .form-tips.form-tips-error(v-if="validation2.newpassword.$dirty")
@@ -133,7 +133,7 @@
               span(v-if="validation2.newpassword.$error.maxlength") 密码最大不能超过16位
           .form-row
             .input-text-wrap(v-placeholder="'再次输入密码'")
-              input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword")
+              input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
             .form-tips.form-tips-error(v-if="validation2.$submitted && validation2.confirmPassword.$pristine")
               span(v-if="validation2.confirmPassword.$error.required") 请再一次输入密码
             .form-tips.form-tips-error(v-if="validation2.confirmPassword.$dirty")

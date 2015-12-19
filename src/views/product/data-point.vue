@@ -43,7 +43,7 @@
             label.form-control 索引：
             .controls
               .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
-                input.input-text(v-model="addModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic")
+                input.input-text(v-model="addModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic", lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.index.$pristine")
                 span(v-if="addValidation.index.$error.required") 请输入数据端点索引
               .form-tips.form-tips-error(v-if="addValidation.index.$dirty")
@@ -53,7 +53,7 @@
             label.form-control 变量名：
             .controls
               .input-text-wrap(v-placeholder="'英文、数字或下划线'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
                 span(v-if="addValidation.name.$error.required") 请输入数据端点名称
               .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
@@ -69,7 +69,7 @@
             label.form-control 单位符号：
             .controls
               .input-text-wrap(v-placeholder="'例如：℃'")
-                textarea.input-text(v-model="addModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required)
+                textarea.input-text(v-model="addModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.symbol.$pristine")
                 span(v-if="addValidation.symbol.$error.required") 请输入单位符号
               .form-tips.form-tips-error(v-if="addValidation.symbol.$dirty")
@@ -79,7 +79,7 @@
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请填写数据端点描述'")
-                textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted&& addValidation.description.$pristine")
                 span(v-if="addValidation.description.$error.required") 请输入数据端点描述
               .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
@@ -98,7 +98,7 @@
             label.form-control 索引：
             .controls
               .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
-                input.input-text(v-model="editModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic")
+                input.input-text(v-model="editModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic", lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.index.$pristine")
                 span(v-if="editValidation.index.$error.required") 请输入数据端点索引
               .form-tips.form-tips-error(v-if="editValidation.index.$dirty")
@@ -108,7 +108,7 @@
             label.form-control 变量名：
             .controls
               .input-text-wrap(v-placeholder="'英文、数字或下划线'")
-                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
                 span(v-if="editValidation.name.$error.required") 请输入数据端点名称
               .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
@@ -124,7 +124,7 @@
             label.form-control 单位符号：
             .controls
               .input-text-wrap(v-placeholder="'例如：℃'")
-                textarea.input-text(v-model="editModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required)
+                textarea.input-text(v-model="editModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.symbol.$pristine")
                 span(v-if="editValidation.symbol.$error.required") 请输入单位符号
               .form-tips.form-tips-error(v-if="editValidation.symbol.$dirty")
@@ -134,7 +134,7 @@
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请填写数据端点描述'")
-                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted&& editValidation.description.$pristine")
                 span(v-if="editValidation.description.$error.required") 请输入数据端点描述
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")

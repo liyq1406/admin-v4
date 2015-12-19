@@ -79,7 +79,7 @@
             label.form-control 固件型号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件型号'")
-                input.input-text(v-model="addModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required)
+                input.input-text(v-model="addModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mod.$pristine")
                 span(v-if="addValidation.mod.$error.required") 请输入固件型号
               .form-tips.form-tips-error(v-if="addValidation.mod.$dirty")
@@ -89,7 +89,7 @@
             label.form-control 固件版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件版本号'")
-                input.input-text(v-model="addModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic")
+                input.input-text(v-model="addModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.version.$pristine")
                 span(v-if="addValidation.version.$error.required") 请输入固件版本号
               .form-tips.form-tips-error(v-if="addValidation.version.$dirty")
@@ -99,7 +99,7 @@
             label.form-control 固件文件地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件文件地址'")
-                input.input-text(v-model="addModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required)
+                input.input-text(v-model="addModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.file_url.$pristine")
                 span(v-if="addValidation.file_url.$error.required") 请输入固件文件地址
               .form-tips.form-tips-error(v-if="addValidation.file_url.$dirty")
@@ -109,7 +109,7 @@
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入描述'")
-                textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.description.$pristine")
                 span(v-if="addValidation.description.$error.required") 请输入描述
               .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
@@ -140,7 +140,7 @@
             label.form-control 固件型号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件型号'")
-                input.input-text(v-model="editModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required)
+                input.input-text(v-model="editModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.mod.$pristine")
                 span(v-if="editValidation.mod.$error.required") 请输入固件型号
               .form-tips.form-tips-error(v-if="editValidation.mod.$dirty")
@@ -150,7 +150,7 @@
             label.form-control 固件版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件版本号'")
-                input.input-text(v-model="editModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic")
+                input.input-text(v-model="editModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.version.$pristine")
                 span(v-if="editValidation.version.$error.required") 请输入固件版本号
               .form-tips.form-tips-error(v-if="editValidation.version.$dirty")
@@ -160,7 +160,7 @@
             label.form-control 固件文件地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件文件地址'")
-                input.input-text(v-model="editModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required)
+                input.input-text(v-model="editModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.file_url.$pristine")
                 span(v-if="editValidation.file_url.$error.required") 请输入固件文件地址
               .form-tips.form-tips-error(v-if="editValidation.file_url.$dirty")
@@ -170,7 +170,7 @@
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入描述'")
-                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
                 span(v-if="editValidation.description.$error.required") 请输入描述
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
@@ -204,7 +204,7 @@
             label.form-control 任务名称：
             .controls
               .input-text-wrap(v-placeholder="'升级任务名称'")
-                input.input-text(v-model="addModel2.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="addModel2.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.name.$pristine")
                 span(v-if="addValidation2.name.$error.required") 请输入任务名称
               .form-tips.form-tips-error(v-if="addValidation2.name.$dirty")
@@ -214,7 +214,7 @@
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入描述'")
-                textarea.input-text(v-model="addModel2.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="addModel2.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.description.$pristine")
                 span(v-if="addValidation2.description.$error.required") 请输入描述
               .form-tips.form-tips-error(v-if="addValidation2.description.$dirty")
@@ -224,7 +224,7 @@
             label.form-control 起始版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入起始版本号'")
-                input.input-text(v-model="addModel2.from_version", type="number", v-form-ctrl, name="from_version", max="4294967296", required, number)
+                input.input-text(v-model="addModel2.from_version", type="number", v-form-ctrl, name="from_version", max="4294967296", required, number, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version.$pristine")
                 span(v-if="addValidation2.from_version.$error.required") 请输入起始版本号
               .form-tips.form-tips-error(v-if="addValidation2.from_version.$dirty")
@@ -233,7 +233,7 @@
             label.form-control 起始版本地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入起始版本文件地址'")
-                input.input-text(v-model="addModel2.from_version_url", type="text", v-form-ctrl, name="from_version_url", maxlength="250", required)
+                input.input-text(v-model="addModel2.from_version_url", type="text", v-form-ctrl, name="from_version_url", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version_url.$pristine")
                 span(v-if="addValidation2.from_version_url.$error.required") 请输入起始版本文件地址
               .form-tips.form-tips-error(v-if="addValidation2.from_version_url.$dirty")
@@ -243,7 +243,7 @@
             label.form-control 目标版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入目标版本号'")
-                input.input-text(v-model="addModel2.target_version", type="number", v-form-ctrl, name="target_version", max="4294967296", required, number)
+                input.input-text(v-model="addModel2.target_version", type="number", v-form-ctrl, name="target_version", max="4294967296", required, number, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version.$pristine")
                 span(v-if="addValidation2.target_version.$error.required") 请输入目标版本号
               .form-tips.form-tips-error(v-if="addValidation2.target_version.$dirty")
@@ -252,7 +252,7 @@
             label.form-control 目标版本地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入目标版本文件地址'")
-                input.input-text(v-model="addModel2.target_version_url", type="text", v-form-ctrl, name="target_version_url", maxlength="250", required)
+                input.input-text(v-model="addModel2.target_version_url", type="text", v-form-ctrl, name="target_version_url", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version_url.$pristine")
                 span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
               .form-tips.form-tips-error(v-if="addValidation2.target_version_url.$dirty")

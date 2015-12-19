@@ -72,7 +72,7 @@
             label.form-control 产品名称：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品名称'")
-                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
                 span(v-if="editValidation.name.$error.required") 请输入产品名称
               .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
@@ -82,7 +82,7 @@
             label.form-control 产品描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入产品描述'")
-                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
                 span(v-if="editValidation.description.$error.required") 请输入产品描述
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
@@ -111,7 +111,7 @@
             label.form-control MAC地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入MAC地址'")
-                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required)
+                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
                 span(v-if="addValidation.mac.$error.required") 请输入MAC地址
               .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")

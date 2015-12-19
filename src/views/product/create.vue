@@ -11,7 +11,7 @@
                 label.form-control 产品名称：
                 .controls
                   .input-text-wrap(v-placeholder="'请输入产品名称'")
-                    input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required)
+                    input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
                   .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                     span(v-if="validation.name.$error.required") 请输入产品名称
                   .form-tips.form-tips-error(v-if="validation.name.$dirty")
@@ -21,7 +21,7 @@
                 label.form-control 产品描述：
                 .controls
                   .input-text-wrap(v-placeholder="'请输入产品描述'")
-                    textarea.input-text(v-model="model.description", type="text", v-form-ctrl, name="description", maxlength="250", required)
+                    textarea.input-text(v-model="model.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
                   .form-tips.form-tips-error(v-if="validation.$submitted && validation.description.$pristine")
                     span(v-if="validation.description.$error.required") 请输入产品描述
                   .form-tips.form-tips-error(v-if="validation.description.$dirty")

@@ -40,7 +40,7 @@
             label.form-control 表名：
             .controls
               .input-text-wrap(v-placeholder="'请输入表名'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required)
+                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required, lazy)
               .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
                 span(v-if="addValidation.name.$error.required") 请输入表名
                 span(v-if="addValidation.name.$error.minlength") 表名最少为2字符
@@ -76,7 +76,7 @@
             .controls
               .field-row(v-for="field in addFields")
                 .input-text-wrap
-                  input.input-text(v-model="field.name", type="text", @input="updateField(addModel, addFields)", @blur="onBlur(field, addModel, addFields)")
+                  input.input-text(v-model="field.name", type="text", @input="updateField(addModel, addFields)", @blur="onBlur(field, addModel, addFields)", lazy)
                 .select
                   select(v-model="field.value", @change="updateField(addModel, addFields)")
                     option(value="string") 字符串
@@ -87,7 +87,7 @@
                 span.fa.fa-times(@click="removeField(field, addModel, addFields)")
               .field-row
                 .input-text-wrap
-                  input.input-text(v-model="newField.name", type="text")
+                  input.input-text(v-model="newField.name", type="text", lazy)
                 .select
                   select(v-model="newField.value")
                     option(value="string") 字符串
@@ -140,7 +140,7 @@
             .controls
               .field-row(v-for="field in editFields")
                 .input-text-wrap
-                  input.input-text(v-model="field.name", type="text", @input="updateField(editModel, editFields)", @blur="onBlur(field, editModel, editFields)")
+                  input.input-text(v-model="field.name", type="text", @input="updateField(editModel, editFields)", @blur="onBlur(field, editModel, editFields)", lazy)
                 .select
                   select(v-model="field.value", @change="updateField(editModel, editFields)")
                     option(value="string") 字符串
@@ -151,7 +151,7 @@
                 span.fa.fa-times(@click="removeField(field, editModel, editFields)")
               .field-row
                 .input-text-wrap
-                  input.input-text(v-model="newField.name", type="text")
+                  input.input-text(v-model="newField.name", type="text", lazy)
                 .select
                   select(v-model="newField.value")
                     option(value="string") 字符串
