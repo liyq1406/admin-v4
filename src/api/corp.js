@@ -317,7 +317,7 @@ module.exports = function (Vue, Promise, config) {
      */
     emailActivate: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.post(config.apiRoot + '/corp/emial_activate', JSON.stringify(params), function (data, status, request) {
+        Vue.http.post(config.apiRoot + '/corp/email_activate', JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {

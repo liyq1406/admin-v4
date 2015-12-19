@@ -441,9 +441,9 @@
 
       handleError: function (error) {
         switch (error.code) {
-          case 4001001:
-            alert('日期格式错误，请重新输入');
-            break;
+          // case 4001001:
+            // alert('日期格式错误，请重新输入');
+            // break;
           case 4001017:
             alert('版本号不能重复');
             break;

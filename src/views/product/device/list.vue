@@ -315,18 +315,6 @@
         } else {
           alert('您的浏览器过于低级，不支持 HTML5 上传');
         }
-      },
-
-      handleError: function (error) {
-        if (__DEBUG__) {
-          console.log(error);
-        }
-
-        if (error.code === 4001001) {
-          alert('Mac地址不合法');
-        } else if (error.code === 4001021) {
-          alert('该设备 MAC 地址已存在');
-        }
       }
     }
   };

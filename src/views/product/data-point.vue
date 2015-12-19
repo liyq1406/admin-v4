@@ -305,18 +305,6 @@
             });
           });
         }
-      },
-
-      handleError: function (error) {
-        if (__DEBUG__) {
-          console.log(error);
-        }
-        switch (error.code) {
-          case 4001019:
-            alert('该端点索引已存在')
-            break;
-          default:
-        }
       }
     }
   };

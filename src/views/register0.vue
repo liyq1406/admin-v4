@@ -214,16 +214,6 @@
             self.handleError(error);
           });
         }
-      },
-
-      /**
-       * 错误处理
-       * @param  {Object} error 错误信息
-       */
-      handleError: function (error) {
-        if (__DEBUG__) {
-          console.log(error);
-        }
       }
     }
   };
