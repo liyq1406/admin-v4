@@ -56,7 +56,7 @@
           a(v-link="{ path: '/settings' }")
             i.fa.fa-cog
             | 系统设置
-    router-view(class="view", transition="view", transition-mode="out-in", keep-alive)
+    router-view(class="view", transition="view", transition-mode="out-in")
 </template>
 
 <script>

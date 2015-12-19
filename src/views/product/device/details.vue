@@ -78,38 +78,38 @@
               h2 设备日志
             .panel-bd
               pre.output-log
-                //-
-                  div.log(v-for="log in logs")
-                    span.time {{log.time}}
-                    template(v-if="log.type === 'user'")
-                      span.user {{log.msg[0]}}
-                      span.msg : {{log.msg[1]}}
-                    template(v-if="log.type === 'status'")
-                      span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
-                      span.msg : {{log.msg[1]}}
-                    template(v-if="log.type === 'connected'")
-                      span.msg-success {{log.msg}}
-                    template(v-if="log.type === 'disconnected'")
-                      span.msg-error {{log.msg}}
+                div.log(v-for="log in logs")
+                  span.time {{log.time}}
+                  template(v-if="log.type === 'user'")
+                    span.user {{log.msg[0]}}
+                    span.msg : {{log.msg[1]}}
+                  template(v-if="log.type === 'status'")
+                    span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
+                    span.msg : {{log.msg[1]}}
+                  template(v-if="log.type === 'connected'")
+                    span.msg-success {{log.msg}}
+                  template(v-if="log.type === 'disconnected'")
+                    span.msg-error {{log.msg}}
 
-                div.log
-                  span.time 21:15:20.139
-                  span.msg-success Client has connected to the server!
-                div.log
-                  span.time 21:15:20.139
-                  span.user 100003563
-                  span.msg : {"msg":{"type":"PING","resp":true}}
-                div.log
-                  span.time 21:15:20.139
-                  span.msg-error 400
-                  span.msg : Error
-                div.log
-                  span.time 21:15:20.139
-                  span.msg-success 200
-                  span.msg : OK
-                div.log
-                  span.time 21:15:20.139
-                  span.msg-error The client has disconnected!
+                //-
+                  div.log
+                    span.time 21:15:20.139
+                    span.msg-success Client has connected to the server!
+                  div.log
+                    span.time 21:15:20.139
+                    span.user 100003563
+                    span.msg : {"msg":{"type":"PING","resp":true}}
+                  div.log
+                    span.time 21:15:20.139
+                    span.msg-error 400
+                    span.msg : Error
+                  div.log
+                    span.time 21:15:20.139
+                    span.msg-success 200
+                    span.msg : OK
+                  div.log
+                    span.time 21:15:20.139
+                    span.msg-error The client has disconnected!
           // End: 设备日志
 
 
@@ -121,6 +121,7 @@
   var Switch = require('../../../components/switch.vue');
   var io = require('socket.io-client');
   var dateFormat = require('date-format');
+  var socket= null;
 
   module.exports = {
     components: {
@@ -133,11 +134,9 @@
         datapoints: [],
         showLog: true,
         deviceToken: '',
-        socket: null,
-        logs: [{
-          time: '08:12:56',
-          msg: 'Client has connected to the server!'
-        }]
+        datapointValues: [],
+        logs: [],
+        token: ''
       };
     },
 
@@ -145,9 +144,8 @@
       data: function () {
         var self = this;
 
-        if (this.showLog) {
-          this.connect();
-        }
+        this.getDatapointValues();
+
 
 
         /*alert(111);
@@ -181,7 +179,23 @@
           device: this.getDeviceInfo(),
           datapoints: this.getDatapoints()
         };
+      },
+
+      activate: function () {
+        console.log(222);
+        if (this.showLog) {
+          this.connect();
+        }
+      },
+
+      deactivate: function () {
+        console.log(11111);
+        socket.disconnect();
+        socket = null;
       }
+    },
+
+    detroyed: function  () {
     },
 
     methods: {
@@ -195,7 +209,16 @@
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
-          return api.product.getDatapoints(self.$route.params.product_id)
+          return api.product.getDatapoints(self.$route.params.product_id);
+        });
+      },
+
+      getDatapointValues: function () {
+        var self = this;
+        api.corp.refreshToken(this).then(function () {
+          api.device.getDatapointValues(self.$route.params.device_id).then(function (data) {
+            self.datapointValues = data.datapoint;
+          });
         });
       },
 
@@ -205,25 +228,37 @@
         api.corp.refreshToken().then(function () {
           api.device.getDeviceToken(self.$route.params.device_id).then(function (data) {
 
-            self.socket = io.connect('http://' + data.addr);
+            console.log(data.addr);
+            console.log(socket);
+            self.token = data.token;
+            socket = io.connect('http://' + data.addr, {'force new connection': true});
+            // socket = io.connect('http://192.168.6.240:23775');
+            console.log(socket);
 
-            self.socket.on('connect', function() {
+            socket.on('connect', function() {
               self.outputLog('Client has connected to the server!', 'connected');
+              // socket.emit('trace.logs', {id: self.$route.params.device_id, token: data.token});
+              window.setTimeout(function  () {
+                socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
+              }, 100);
         	  });
 
-            self.socket.on('disconnect', function() {
+            socket.on('disconnect', function() {
               self.outputLog('The client has disconnected!', 'disconnected');
         	  });
 
-            self.socket.on('trace.log', function(data) {
+            socket.on('trace.log', function(data) {
               self.outputLog([data.id, data.log], 'user');
             });
 
-            self.socket.on('trace.status', function(data) {
+            socket.on('trace.status', function(data) {
               self.outputLog([data.status, data.msg], 'status');
           	});
 
-            self.socket.emit('trace.logs', {id: self.$route.params.device_id, token: data.token});
+            /*
+            window.setTimeout(function  () {
+              socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
+            }, 1000);*/
           }).catch(function (error) {
             self.handleError(error);
           });
@@ -241,9 +276,12 @@
       toggleLog: function () {
         if (!this.showLog) {
           this.connect();
+          // socket.emit('trace.logs', {id: this.$route.params.device_id, token: this.token});
         } else {
-          if (this.socket) {
-            this.socket.disconnect();
+          // socket.emit('trace.logs', {id: this.$route.params.device_id, token: this.token});
+          if (socket) {
+            socket.disconnect();
+            socket = null;
           }
         }
       }

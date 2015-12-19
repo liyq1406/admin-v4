@@ -10,5 +10,5 @@
               li: a(v-link="{ path: '/settings/auth' }") 授权管理
               li: a(v-link="{ path: '/settings/members' }") 成员管理
               li: a(v-link="{ path: '/settings/account' }") 帐号信息
-      router-view(class="view", transition="view", transition-mode="out-in", keep-alive)
+      router-view(class="view", transition="view", transition-mode="out-in")
 </template>

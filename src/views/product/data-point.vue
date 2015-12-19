@@ -38,7 +38,7 @@
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加数据端点
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
           .form-row
             label.form-control 索引：
             .controls
@@ -90,10 +90,11 @@
             button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
+    // 编辑数据端点浮层
     modal(:show.sync="showEditModal")
       h3(slot="header") 编辑数据端点
       .form(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
+        form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
           .form-row
             label.form-control 索引：
             .controls
@@ -155,8 +156,19 @@
   var Modal = require('../../components/modal.vue');
   var Pager = require('../../components/pager.vue');
   var _ = require('lodash');
+  /*
+  var originAddModel = {
+    index: '',
+    name: '',
+    type: 1,
+    description: '',
+    symbol: ''
+  };
+  var originEditModel;*/
 
   module.exports = {
+    name: 'DataPoint',
+
     components: {
       'modal': Modal,
       'pager': Pager
@@ -185,27 +197,24 @@
           type: 1,
           description: '',
           symbol: ''
-        },/*
-        originAddModel: {
-          index: '',
-          name: '',
-          type: 1,
-          description: '',
-          symbol: ''
-        },*/
+        },
         editModel: {},
         editingDatapoint: {},
-        originEditModel: {},
         addValidation: {},
         editValidation: {},
         delChecked: false,
         adding: false,
-        editing: false
+        editing: false,
+        addForm: {},
+        editForm: {},
+        originAddModel: {},
+        originEditModel: {}
       }
     },
 
     route: {
       data: function (transition) {
+        this.originAddModel = _.clone(this.addModel);
         return {
           datapoints: this.getDatapoints()
         }
@@ -219,6 +228,14 @@
     },
 
     methods: {
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+
+      editFormHook: function (form) {
+        this.editForm = form;
+      },
+
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -227,9 +244,13 @@
       },
 
       onAddCancel: function () {
+        var self = this;
         this.adding = false;
         this.showAddModal = false;
-        // this.addModel = this.originAddModel;
+        this.addModel = _.clone(this.originAddModel);
+        this.$nextTick(function () {
+          self.addForm.setPristine();
+        });
       },
 
       onAddSubmit: function () {
@@ -256,13 +277,17 @@
       editDataPoint: function (datapoint) {
         this.showEditModal = true;
         this.editModel = datapoint;
-        this.originEditModel = _.clone(datapoint);
+        this.originEditModel = _.clone(this.editModel);
       },
 
       onEditCancel: function () {
+        var self = this;
         this.editing = false;
         this.showEditModal = false;
-        this.editModel = this.originEditModel;
+        this.editModel = _.clone(this.originEditModel);
+        this.$nextTick(function () {
+          self.editForm.setValidity();
+        });
       },
 
       onEditSubmit: function () {

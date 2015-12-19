@@ -119,7 +119,9 @@ Vue.mixin({
     },
 
     handleError: function (error) {
-      alert(config.errors[error.code.toString()]);
+      if (/^400/.test(error.code)) {
+        alert(config.errors[error.code.toString()]);
+      }
     }
   }
 });
