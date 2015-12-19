@@ -289,6 +289,45 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 企业帐号邮箱注册
+     * @param  {Object} params 注册信息
+     * @return {Promise}
+     */
+    emailRegister: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/corp_register_email', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 企业帐号邮箱激活
+     * @param  {Object} params 激活参数
+     * @return {Promise}
+     */
+    emailActivate: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/corp/emial_activate', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
+
   };
 };

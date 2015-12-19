@@ -181,8 +181,8 @@
     },
 
     ready: function () {
-      // this.getProductTrends();
-      // this.getProductRegion();
+      this.getProductTrends();
+      this.getProductRegion();
     },
 
     route: {

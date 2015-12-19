@@ -64,12 +64,7 @@
             .controls
               .select
                 select(v-model="addModel.type", v-form-ctrl, name="type")
-                  option(value="1", selected) 布尔类型
-                  option(value="2") 单字节
-                  option(value="3") 16位短整型
-                  option(value="4") 32位整型
-                  option(value="5") 浮点
-                  option(value="6") 字符串
+                  option(v-for="type in datapointTypes", :value="$index + 1", :selected="$index===0") {{type}}
           .form-row
             label.form-control 单位符号：
             .controls
@@ -124,12 +119,7 @@
             .controls
               .select
                 select(v-model="editModel.type", v-form-ctrl, name="type")
-                  option(value="1", selected) 布尔类型
-                  option(value="2") 单字节
-                  option(value="3") 16位短整型
-                  option(value="4") 32位整型
-                  option(value="5") 浮点
-                  option(value="6") 字符串
+                  option(v-for="type in datapointTypes", :value="$index + 1") {{type}}
           .form-row
             label.form-control 单位符号：
             .controls
@@ -184,11 +174,25 @@
     data: function () {
       return {
         datapoints: [],
+        datapointTypes: config.datapointTypes,
         pageCount: 10,
         currentPage: 1,
         showAddModal: false,
         showEditModal: false,
-        addModel: {},
+        addModel: {
+          index: '',
+          name: '',
+          type: 1,
+          description: '',
+          symbol: ''
+        },/*
+        originAddModel: {
+          index: '',
+          name: '',
+          type: 1,
+          description: '',
+          symbol: ''
+        },*/
         editModel: {},
         editingDatapoint: {},
         originEditModel: {},
@@ -210,7 +214,7 @@
 
     filters: {
       typeLabel: function (value) {
-        return config.datapointTypes[value - 1];
+        return this.datapointTypes[value - 1];
       }
     },
 
@@ -229,6 +233,7 @@
       onAddCancel: function () {
         this.adding = false;
         this.showAddModal = false;
+        // this.addModel = this.originAddModel;
       },
 
       onAddSubmit: function () {

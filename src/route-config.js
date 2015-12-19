@@ -37,6 +37,11 @@ var configRouter = function (router) {
       component: require('./views/member-activate.vue')
     },
 
+    // 邮箱激活
+    '/email-activate/:email/:verifycode': {
+      component: require('./views/email-activate.vue')
+    },
+
     // 概览
     '/dashboard': {
       component: require('./views/dashboard.vue')
@@ -155,7 +160,7 @@ var configRouter = function (router) {
   router.beforeEach(function (transition) {
     var today = new Date();
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
-    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0) {
+    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0 || transition.to.path.indexOf('/email-activate') >= 0) {
       router.app.access = false;
       transition.next();
     } else {

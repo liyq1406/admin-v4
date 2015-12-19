@@ -1,7 +1,7 @@
 <template lang="jade">
   .panel
     .panel-bd
-      .alert.alert-success
+      .alert-text.alert-text--success
         p 创建Accesskey,Access Key ID 为公钥,Access Key Secret 为私钥 用于数据接口访问的系统认证.相关文档http://www.xlink.cn/developer.html "用户身份集成接口"开发文档中第三方身份集成等接口。
       //- 用户列表
       table.table.table-stripe.table-bordered

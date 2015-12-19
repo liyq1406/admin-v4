@@ -58,11 +58,11 @@
         | 2015 &copy; 广州云湾信息技术有限公司.
     .form-cont.reset-password-success(v-show="activateSuccess")
       .alert.alert-success
-        .icon.icon-success
+        .fa.fa-check-circle-o
         h2 激活成功
         p 您的成员邀请已成功激活。
-      .form-actions
-        a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") 确定
+        .actions
+          a.btn.btn-primary(v-link="{ path: '/login'}") 确定
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 </template>
