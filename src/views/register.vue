@@ -3,10 +3,10 @@
     .form-logo
     form.form-cont(v-form, name="validation", @submit.prevent="onSubmit")
       .form-header
-        a(v-link="{ path: '/login' }") 登录账号
-        span 注册账号
+        a(v-link="{ path: '/login' }") 登录帐号
+        span 注册帐号
       .form-body
-        .form-hints 请输入您的账号信息：
+        .form-hints 请输入您的帐号信息：
         .form-row-group
           .form-row
             .input-text-wrap(v-placeholder="'电子邮箱'")
@@ -192,23 +192,24 @@
           self.counting=true;
           self.tiktac();
         }).catch(function (error) {
-          if (__DEBUG__) {
-            console.log(error);
-            // console.log('[' + error.code + '] ' + error.msg);
-          }
+          self.handleError(error)
         });
       },
 
+      /**
+       * 提交注册
+       */
       onSubmit: function () {
         var self = this;
         if (this.validation.$valid) {
           api.corp.register(this.model).then(function (status) {
-            console.log(status);
             if (__DEBUG__) {
               console.log('[' + status + '] 注册成功');
             }
-            alert("注册成功!");
-            self.$route.router.go({path: '/login'});
+            if (status === 200) {
+              alert("注册成功!");
+              self.$route.router.go({path: '/login'});
+            }
           }).catch(function (error) {
             var errorCode = JSON.parse(error.response.body).error.code;
             if (errorCode === 4001003 || errorCode === 4001004) {
@@ -217,6 +218,16 @@
               alert("该手机号已注册");
             }
           });
+        }
+      },
+
+      /**
+       * 错误处理
+       * @param  {Object} error 错误信息
+       */
+      handleError: function (error) {
+        if (__DEBUG__) {
+          console.log(error);
         }
       }
     }

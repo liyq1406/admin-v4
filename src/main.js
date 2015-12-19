@@ -12,6 +12,7 @@ var locales = require('./consts/locales');
 // 路由设置
 var configRouter = require('./route-config');
 var router;
+var dateFormat = require('date-format');
 
 var App = Vue.extend(require('./app.vue'));
 
@@ -87,6 +88,11 @@ Vue.directive('placeholder', {
   update: function (value) {
     this.placeholder.innerText = value;
   }
+});
+
+// 过滤器
+Vue.filter('formatDate', function (value, template) {
+  return dateFormat(template || 'yyyy-MM-dd hh:mm:ss', new Date(value));
 });
 
 // 过渡效果

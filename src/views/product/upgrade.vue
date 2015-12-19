@@ -22,7 +22,7 @@
             tr(v-for="firmware in firmwares")
               td {{firmware.version}}
               td {{firmware.description}}
-              td {{firmware.create_date}}
+              td {{firmware.create_date | formatDate}}
               //- td {{firmware.release_date}}
               //- td 缺API
               td.tac

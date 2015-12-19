@@ -23,7 +23,7 @@ module.exports = function (Vue, Promise, config) {
 
     /**
      * 2.企业认证
-     * @param  {Object} params 账号与密码信息
+     * @param  {Object} params 帐号与密码信息
      * @return {Promise}
      */
     auth: function (params) {

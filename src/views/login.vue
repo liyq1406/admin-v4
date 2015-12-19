@@ -3,8 +3,8 @@
     .form-logo
     form.form-cont(v-form, name="validation", @submit.prevent="onSubmit")
       .form-header
-        span 登录账号
-        a(v-link="{ path: '/register' }") 注册账号
+        span 登录帐号
+        a(v-link="{ path: '/register' }") 注册帐号
       .form-body
         .form-row
           .input-text-wrap(v-placeholder="'手机号'")

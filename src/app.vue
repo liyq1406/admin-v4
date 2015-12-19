@@ -16,7 +16,7 @@
           .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav", class="staggered", transition="staggered", transition-mode="out-in")
             ul
               li.sed-navigation-li
-                a(v-link="{path: '/settings/account'}") 账号信息
+                a(v-link="{path: '/settings/account'}") 帐号信息
               li.sed-navigation-li
                 a(href="#", @click.prevent="quit") 退出
     section.sidebar(v-if="access")

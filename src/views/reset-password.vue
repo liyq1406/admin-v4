@@ -7,7 +7,7 @@
         p 请在下方的输入框中输入您zza的新密码完成修改密码操作。
       .form-body
         .form-row
-          | 登录账号：xiaolu@xlink.cn
+          | 登录帐号：xiaolu@xlink.cn
         .form-row
           .input-text-wrap(v-placeholder="'请输入新密码'")
             input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password")

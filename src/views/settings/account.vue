@@ -31,17 +31,26 @@
                 .info {{member.last_auth_time}}
               li
                 .label 角色
-                .info(v-if="member.role==1") 管理员
-                .info(v-if="member.role==2") 普通成员
+                .info
+                  span(v-if="member.role==1") 管理员
+                  span(v-if="member.role==2") 普通成员
                 //.info {{member.role}}
               li
                 .label 状态：
-                .info(v-if="member.status==0")
-                  span.hl-red 待激活
-                .info(v-if="member.status==1")
-                  span.hl-green 正常可用
-                .info(v-if="member.status==2")
-                  span.hl-red 停用
+                .info
+                  span.hl-gray(v-if="member.status==0") 待激活
+                  span.hl-green(v-if="member.status==1") 正常可用
+                  span.hl-red(v-if="member.status==2") 停用
+              li
+                .label 是否接受通知:
+                .info
+                  span.hl-green(v-if="member.is_notice") 是
+                  span.hl-red(v-else) 否
+              li
+                .label 是否接受告警:
+                .info
+                  span.hl-green(v-if="member.is_alert") 是
+                  span.hl-red(v-else) 否
               //- button.btn.btn-primary.mt10.mb10(@click.prevent="showModal = true") 编辑
         // End: 个人信息
 
@@ -88,6 +97,16 @@
                 span(v-if="validation.name.$error.required") 请输入姓名
               .form-tips.form-tips-error(v-if="validation.name")
                 span(v-if="validation.name.$error.required") 请输入姓名
+          .form-row
+            label.form-control 通知与告警：
+            .controls
+              .checkbox-group
+                label.checkbox
+                  input(type="checkbox", v-model="resetmember.is_notice")
+                  | 接受通知
+                label.checkbox
+                  input(type="checkbox", v-model="resetmember.is_alert")
+                  | 接受告警
           .form-actions
             button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
             button.btn.btn-primary(type="submit") 确定
@@ -140,7 +159,11 @@
         query: '',
         searching: false,
         member:{},
-        resetmember: {},
+        resetmember: {
+          name: '',
+          is_notice: true,
+          is_alert: true
+        },
         corp:{},
         corp_member:{},
         resetcorp:{},
@@ -194,6 +217,8 @@
               self.showModal = false;
               if(data==200){
                 self.member.name=self.resetmember.name;
+                self.member.is_notice=self.resetmember.is_notice;
+                self.member.is_alert=self.resetmember.is_alert;
                 self.$route.router.app.this_user.name=self.resetmember.name;
               }else{
                 alert("修改失败！");
@@ -205,6 +230,10 @@
         }
       },
 
+      /**
+       * 检查密码是否相等
+       * @param  {String} value 密码值
+       */
       checkEqualToPassword: function (value) {
         return value === this.model.newpassword;
       },
