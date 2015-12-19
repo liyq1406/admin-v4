@@ -102,6 +102,12 @@ Vue.transition('stagger', {
   }
 });
 
+Vue.transition('modal', {
+  afterLeave: function (el) {
+    // window.location.reload(true);
+  }
+});
+
 // 路由
 router = new VueRouter({
   // history: true,

@@ -32,13 +32,13 @@
                     | 导入设备
               .col-11.status
                 .status-item
-                  em {{productSummary.online}}
+                  em {{* productSummary.online}}
                   span 当前在线
                 .status-item
-                  em {{productSummary.activated}}
+                  em {{* productSummary.activated}}
                   span 激活数
                 .status-item
-                  em {{productSummary.total}}
+                  em {{* productSummary.total}}
                   span 设备数
         // Start: 产品简介
 
@@ -144,17 +144,9 @@
       'modal': Modal
     },
 
-    props: {
-      product: {
-        type: Object,
-        default: function () {
-          return {};
-        }
-      }
-    },
-
     data: function () {
       return {
+        product: {},
         productSummary: {
           online: 0,
           activated: 0,
@@ -189,8 +181,8 @@
     },
 
     ready: function () {
-      this.getProductTrends();
-      this.getProductRegion();
+      // this.getProductTrends();
+      // this.getProductRegion();
     },
 
     route: {
@@ -199,12 +191,20 @@
         this.getProductRegion();
 
         return {
-          productSummary: this.getSummary()
+          productSummary: this.getSummary(),
+          product: this.getProduct()
         };
       }
     },
 
     methods: {
+      getProduct: function () {
+        var self = this;
+        return api.corp.refreshToken(this).then(function () {
+          return api.product.getProduct(self.$route.params.id);
+        });
+      },
+
       getSummary: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {

@@ -10,5 +10,6 @@ module.exports = {
   regions: [
     { label: '全球', value: 'world'},
     { label: '国内', value: 'china' }
-  ]
+  ],
+  datapointTypes: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串']
 };

@@ -6,7 +6,7 @@
           h2(v-text="product.name")
         .panel-bd
           tab(:nav="secondaryNav")
-      router-view(class="view", transition="view", transition-mode="out-in", :product.sync="product", keep-alive)
+      router-view(class="view", transition="view", transition-mode="out-in", keep-alive)
 </template>
 
 <script>
@@ -20,7 +20,11 @@
 
     data: function () {
       return {
-        product: {},
+        product: {
+          name: '',
+          description: '',
+          id: ''
+        },
         secondaryNav: []
       };
     },
