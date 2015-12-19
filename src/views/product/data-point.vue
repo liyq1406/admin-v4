@@ -48,12 +48,12 @@
             label.form-control 索引：
             .controls
               .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
-                input.input-text(v-model="model.index", type="number", v-form-ctrl, name="index", max="4294967296", required)
+                input.input-text(v-model="model.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic")
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.index.$pristine")
                 span(v-if="addValidation.index.$error.required") 请输入数据端点索引
               .form-tips.form-tips-error(v-if="addValidation.index.$dirty")
                 span(v-if="addValidation.index.$error.required") 请输入数据端点索引
-                span(v-if="addValidation.index.$error.maxlength") 数据端点索引应为不超过32位的整数
+                span(v-if="addValidation.index.$error.customValidator") 数据端点索引应为不超过32位的整数
           .form-row
             label.form-control 变量名：
             .controls
@@ -97,7 +97,7 @@
                 span(v-if="addValidation.description.$error.maxlength") 产品描述最大不能超过250字符
 
           .form-actions
-            button.btn.btn-default(@click.prevent.stop="showAddModal = false") 取消
+            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
     modal(:show.sync="showEditModal")
@@ -198,7 +198,9 @@
         originModel: {},
         addValidation: {},
         editValidation: {},
-        delChecked: false
+        delChecked: false,
+        adding: false,
+        editing: false
       }
     },
 
@@ -211,6 +213,10 @@
     },
 
     methods: {
+      numberic: function (value) {
+        return /^\d*$/.test(value);
+      },
+
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -218,9 +224,15 @@
         });
       },
 
+      onAddCancel: function () {
+        this.adding = false;
+        this.showAddModal = false;
+      },
+
       onAddSubmit: function () {
         var self = this;
-        if (this.addValidation.$valid) {
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true;
           api.corp.refreshToken().then(function () {
             api.product.addDataPoint(self.$route.params.id, self.model).then(function (data) {
               if (__DEBUG__) {
@@ -229,6 +241,10 @@
               self.datapoints.push(data);
               self.model = {};
               self.showAddModal = false;
+              self.adding = false;
+            }).catch(function (error) {
+              self.handleError(error);
+              self.adding = false;
             });
           });
         }
@@ -241,13 +257,15 @@
       },
 
       onEditCancel: function () {
+        this.editing = false;
         this.showEditModal = false;
         this.editModel = this.originModel;
       },
 
       onEditSubmit: function () {
         var self = this;
-        if (this.delChecked) {
+        if (this.delChecked && !this.editing) {
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.deleteDataPoint(self.$route.params.id, self.editModel.id).then(function (data) {
               if (__DEBUG__) {
@@ -255,17 +273,32 @@
               }
               self.datapoints.$remove(self.editModel);
               self.showEditModal = false;
+              self.editing = false;
             });
           });
-        } else if (this.editValidation.$valid) {
+        } else if (this.editValidation.$valid && !this.editing) {
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.updateDataPoint(self.$route.params.id, self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
               self.showEditModal = false;
+              self.editing = false;
             });
           });
+        }
+      },
+
+      handleError: function (error) {
+        if (__DEBUG__) {
+          console.log(error);
+        }
+        switch (error.code) {
+          case 4001019:
+            alert('该端点索引已存在')
+            break;
+          default:
         }
       }
     }
