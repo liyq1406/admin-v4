@@ -15,7 +15,7 @@
               th.w50 版本号
               th 版本说明
               th 添加日期
-              th 发布日期
+              //- th 发布日期
               //- th 文件大小(byte)
               th.tac 操作
           tbody
@@ -23,12 +23,12 @@
               td {{firmware.version}}
               td {{firmware.description}}
               td {{firmware.create_date}}
-              td {{firmware.release_date}}
+              //- td {{firmware.release_date}}
               //- td 缺API
               td.tac
                 button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") 编辑
             tr(v-if="firmwares.length === 0")
-              td.tac(colspan="5")
+              td.tac(colspan="4")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                 .tips-null(v-else) 暂无固件版本
 
@@ -114,12 +114,12 @@
               .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
                 span(v-if="addValidation.description.$error.required") 请输入描述
                 span(v-if="addValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          .form-row.date-row
-            label.form-control 发布日期：
-            .controls
-              datepicker(:value.sync="addReleaseDate", @select-day="updateAddModelRelease")
-              timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease", :pull-left="true")
-              //- .form-tips 例：2015-10-09T08:15:40.843Z
+          //-
+            .form-row.date-row
+              label.form-control 发布日期：
+              .controls
+                datepicker(:value.sync="addReleaseDate", @select-day="updateAddModelRelease")
+                timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease", :pull-left="true")
           .form-row
             label.form-control 是否发布：
             .controls
@@ -174,11 +174,12 @@
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
                 span(v-if="editValidation.description.$error.required") 请输入描述
                 span(v-if="editValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          .form-row.date-row
-            label.form-control 发布日期：
-            .controls
-              datepicker(:value.sync="editReleaseDate", @select-day="updateEditModelRelease")
-              timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease", :pull-left="true")
+          //-
+            .form-row.date-row
+              label.form-control 发布日期：
+              .controls
+                datepicker(:value.sync="editReleaseDate", @select-day="updateEditModelRelease")
+                timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease", :pull-left="true")
           .form-row
             label.form-control 是否发布：
             .controls
@@ -192,7 +193,7 @@
             button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
-    // 添加固件版本浮层
+    // 添加固件升级任务浮层
     modal(:show.sync="showAddModal2", @close="onAddCancel2")
       h3(slot="header") 添加固件升级任务
       .form(slot="body")
@@ -263,16 +264,16 @@
 <script>
   var api = require('../../api');
   var Modal = require('../../components/modal.vue');
-  var Datepicker = require('../../components/datepicker.vue');
-  var Timepicker = require('../../components/timepicker.vue');
+  // var Datepicker = require('../../components/datepicker.vue');
+  // var Timepicker = require('../../components/timepicker.vue');
   var dateFormat = require('date-format');
   var _ = require('lodash');
 
   module.exports = {
     components: {
-      'modal': Modal,
-      'datepicker': Datepicker,
-      'timepicker': Timepicker
+      // 'datepicker': Datepicker,
+      // 'timepicker': Timepicker,
+      'modal': Modal
     },
 
     data: function () {
@@ -282,8 +283,8 @@
         showAddModal2: false,
         showEditModal: false,
         addModel: {
-          is_release: false,
-          release_date: dateFormat('yyyy-MM-dd', new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) + 'T00:00:00.00Z'
+          is_release: false/*,
+          release_date: dateFormat('yyyy-MM-dd', new Date(new Date().getTime() + 24 * 60 * 60 * 1000)) + 'T00:00:00.00Z'*/
         },
         addModel2: {
           product_id: this.$route.params.id
@@ -294,11 +295,11 @@
         addValidation2: {},
         editValidation: {},
         originModel:{},
-        delChecked: false,
+        delChecked: false/*,
         addReleaseDate: dateFormat('yyyy-MM-dd', new Date(new Date().getTime() + 24 * 60 * 60 * 1000)),
         addReleaseTime: '00:00:00',
         editReleaseDate: '',
-        editReleaseTime: ''
+        editReleaseTime: ''*/
       };
     },
 
@@ -424,6 +425,7 @@
         });
       },
 
+      /*
       updateAddModelRelease: function () {
         this.addModel.release_date = this.addReleaseDate + 'T' + this.addReleaseTime + '.00Z';
       },
@@ -431,6 +433,7 @@
       updateEditModelRelease: function () {
         this.editModel.release_date = this.editReleaseDate + 'T' + this.editReleaseTime + '.00Z';
       },
+      */
 
       handleError: function (error) {
         switch (error.code) {

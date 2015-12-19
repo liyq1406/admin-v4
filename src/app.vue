@@ -206,7 +206,7 @@
       color #999
       height 40px
       line-height 40px
-      padding-right 4px
+      padding-right 14px
       padding-left 20px
       background #202020
       transition background .3s

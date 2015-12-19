@@ -197,7 +197,7 @@
 
     watch: {
       period: function () {
-        // this.getAlertSummary();
+        this.getAlertSummary();
         this.drawTrendsChart();
       }
     },
