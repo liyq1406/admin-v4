@@ -89,11 +89,12 @@
             label.form-control 固件版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件版本号'")
-                input.input-text(v-model="addModel.version", type="number", v-form-ctrl, name="version", max="4294967296", required, number)
+                input.input-text(v-model="addModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic")
               .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.version.$pristine")
                 span(v-if="addValidation.version.$error.required") 请输入固件版本号
               .form-tips.form-tips-error(v-if="addValidation.version.$dirty")
                 span(v-if="addValidation.version.$error.required") 请输入固件版本号
+                span(v-if="addValidation.version.$error.customValidator") 固件版本号应为不超过32位的整数
           .form-row
             label.form-control 固件文件地址：
             .controls
@@ -149,11 +150,12 @@
             label.form-control 固件版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入固件版本号'")
-                input.input-text(v-model="editModel.version", type="number", v-form-ctrl, name="version", max="4294967296", required, number)
+                input.input-text(v-model="editModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic")
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.version.$pristine")
                 span(v-if="editValidation.version.$error.required") 请输入固件版本号
               .form-tips.form-tips-error(v-if="editValidation.version.$dirty")
                 span(v-if="editValidation.version.$error.required") 请输入固件版本号
+                span(v-if="addValidation.version.$error.customValidator") 固件版本号应为不超过32位的整数
           .form-row
             label.form-control 固件文件地址：
             .controls

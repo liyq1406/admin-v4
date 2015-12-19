@@ -111,6 +111,13 @@ Vue.transition('modal', {
 
 Vue.mixin({
   methods: {
+    /**
+     * 检验数字
+     */
+    numberic: function (value) {
+      return /^\d*$/.test(value);
+    },
+
     handleError: function (error) {
       alert(config.errors[error.code.toString()]);
     }

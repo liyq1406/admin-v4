@@ -98,12 +98,12 @@
             label.form-control 索引：
             .controls
               .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
-                input.input-text(v-model="editModel.index", type="number", v-form-ctrl, name="index", max="4294967296", required)
+                input.input-text(v-model="editModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic")
               .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.index.$pristine")
                 span(v-if="editValidation.index.$error.required") 请输入数据端点索引
               .form-tips.form-tips-error(v-if="editValidation.index.$dirty")
                 span(v-if="editValidation.index.$error.required") 请输入数据端点索引
-                span(v-if="editValidation.index.$error.maxlength") 数据端点索引应为不超过32位的整数
+                span(v-if="editValidation.index.$error.customValidator") 数据端点索引应为不超过32位的整数
           .form-row
             label.form-control 变量名：
             .controls
@@ -219,10 +219,6 @@
     },
 
     methods: {
-      numberic: function (value) {
-        return /^\d*$/.test(value);
-      },
-
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
