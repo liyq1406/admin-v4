@@ -8,12 +8,12 @@
       .form-body
         .form-row
           .input-text-wrap(v-placeholder="'手机号'")
-            input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required, lazy)
+            input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required)
           .form-tips.form-tips-error(v-if="validation.account.$dirty")
             span(v-if="validation.account.$error.required") 请输入您的注册手机号
         .form-row
           .input-text-wrap(v-placeholder="'密码'")
-            input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required, lazy)
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required)
           .form-tips.form-tips-error(v-if="validation.password.$dirty")
             span(v-if="validation.password.$error.required") 请输入密码
         .operations

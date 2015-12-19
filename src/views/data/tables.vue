@@ -40,7 +40,7 @@
             label.form-control 表名：
             .controls
               .input-text-wrap(v-placeholder="'请输入表名'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required, lazy)
+                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required)
               .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
                 span(v-if="addValidation.name.$error.required") 请输入表名
                 span(v-if="addValidation.name.$error.minlength") 表名最少为2字符
