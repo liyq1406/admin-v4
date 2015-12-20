@@ -9,7 +9,7 @@
           li: a(href="http://www.xlink.cn/developer.html", target="_blank") 开发者
           li: a(href="http://www.xlink.cn/case.html", target="_blank") 客户案例
           li: a(href="http://support.xlink.cn/", target="_blank") 开发文档
-          li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
+          //-li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
         .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
           span.user-name {{this_user.name}}
           i.arrow-down
