@@ -209,29 +209,25 @@
     methods: {
       resetMemberMessage:function(){
         var self = this;
-        if(self.member.name!=self.resetmember.name){
-          var mamber_id = localStorage.getItem('member_id');
-          api.corp.refreshToken().then(function () {
-            api.corp.putMember(mamber_id,{"name":self.resetmember.name}).then(function (data) {
-              if(__DEBUG__) {
-                console.log(data);
-              }
-              self.showModal = false;
-              if(data==200){
-                self.member.name=self.resetmember.name;
-                self.member.is_notice=self.resetmember.is_notice;
-                self.member.is_alert=self.resetmember.is_alert;
-                self.$route.router.app.this_user.name=self.resetmember.name;
-              }else{
-                alert("修改失败！");
-              }
-            }).catch(function (error) {
-              self.handleError(error)
-            });
+        var mamber_id = localStorage.getItem('member_id');
+        api.corp.refreshToken().then(function () {
+          api.corp.putMember(mamber_id,self.resetmember).then(function (data) {
+            if(__DEBUG__) {
+              console.log(data);
+            }
+            self.showModal = false;
+            if(data==200){
+              self.member.name=self.resetmember.name;
+              self.member.is_notice=self.resetmember.is_notice;
+              self.member.is_alert=self.resetmember.is_alert;
+              self.$route.router.app.this_user.name=self.resetmember.name;
+            }else{
+              alert("修改失败！");
+            }
+          }).catch(function (error) {
+            self.handleError(error)
           });
-        }else{
-          self.showModal = false;
-        }
+        });
       },
 
       /**
