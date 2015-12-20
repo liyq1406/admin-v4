@@ -276,15 +276,15 @@
 
       editDataPoint: function (datapoint) {
         this.showEditModal = true;
-        this.editModel = datapoint;
-        this.originEditModel = _.clone(this.editModel);
+        this.editModel = _.clone(datapoint);
+        this.originEditModel = _.clone(datapoint);
       },
 
       onEditCancel: function () {
         var self = this;
         this.editing = false;
         this.showEditModal = false;
-        this.editModel = _.clone(this.originEditModel);
+        this.editModel = this.originEditModel;
         this.$nextTick(function () {
           self.editForm.setValidity();
         });
