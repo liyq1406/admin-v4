@@ -48,10 +48,11 @@
             .controls
               .input-text-wrap(v-placeholder="'请输入成员邮箱'")
                 input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required, lazy)
-              .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
+              //.form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
                 span(v-if="validation.email.$error.required") 请输入成员邮箱
               .form-tips.form-tips-error(v-if="validation.email.$dirty")
                 span(v-if="validation.email.$error.required") 请输入成员邮箱
+                span(v-if="validation.email.$error.email") 邮箱地址格式不正确
           .form-row
             label.form-control 角色：
             .controls
