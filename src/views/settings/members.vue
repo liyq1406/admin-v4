@@ -42,7 +42,7 @@
     modal(:show.sync="showModal")
       h3(slot="header") 添加成员
       .form(slot="body")
-        form(v-form, name="validation")
+        form(v-form, name="validation", hook="FormHook")
           .form-row
             label.form-control 邮箱：
             .controls
@@ -101,7 +101,9 @@
         members:[],
         newuseremail:{},
         currentPage: 1,
-        pageCount: 10
+        pageCount: 10,
+        addForm:[],
+        centervalue:{}
       }
     },
 
@@ -116,10 +118,24 @@
     computed: {
       filteredMembers: function () {
         var filter = Vue.filter('filterBy');
+        console.log(filter(this.members, this.query, 'name'))
         return filter(this.members, this.query, 'name');
       }
     },
-
+    watch:{
+      showModal:function(){//是否有弹出的编辑框
+        var self = this;
+        for(var i = 0;i<self.addForm.length;i++){
+          self.addForm[i].setPristine();
+          self.addForm[i].setValidity();
+        }
+        if(!self.showModal){//当编辑框关掉的时候
+          setTimeout(function(){
+            self.newuseremail.email = undefined;
+          },100)
+        };
+      }
+    },
     methods: {
       getMembers: function () {
         return api.corp.refreshToken().then(function () {
@@ -148,12 +164,23 @@
             if(__DEBUG__) {
               console.log(data);
             }
+            if(data-0 == 200){
+              self.getMembers().then(function(data){
+                self.members = data;
+              })
+
+            };
             self.showModal = false;
           }).catch(function (error) {
             self.handleError(error)
           });
         });
+      },
+      // 表单钩子
+      FormHook: function (form) {
+        this.addForm.push(form);
       }
+
     }
   };
 
