@@ -2,10 +2,12 @@
   div
     .panel
       .panel-hd
-        v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
-        radio-group(:items="periods", :value.sync="period", @select="drawProductTrends")
-          span.label(slot="label") 最近
         h2 趋势
+        .leftbox
+          v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
+          radio-group(:items="periods", :value.sync="period", @select="drawProductTrends")
+            span.label(slot="label") 最近
+
       .panel-bd
         .row
           .col-13
@@ -34,8 +36,10 @@
                       .tooltip(v-show="showTooltip") 指日活跃设备
     .panel
       .panel-hd
-        radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
         h2 区域分布
+        .leftbox
+          radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
+
       .panel-bd
         .row
           #regionChart(style="height:320px; overflow:hidden;")
@@ -55,7 +59,14 @@
                 td {{(item.value * 100 / 3620).toFixed(2)}}%
 
 </template>
-
+<style lang="stylus">
+.panel-hd
+  position relative
+  .leftbox
+    position absolute
+    top 6px
+    left 80px
+</style>
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
   var Select = require('../../components/select.vue');
