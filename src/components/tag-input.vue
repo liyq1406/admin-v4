@@ -1,13 +1,13 @@
 <template lang="jade">
   .tag-input
-    .tag-input-container#tagContainer(@click="editTag($event)")
+    .tag-input-container(@click="editTag($event)")
       template(v-if="value.length")
         .tag(v-for="tag in tags", track-by="$index")
           span.label {{tag}}
           i.fa.fa-times(@click.stop="deleteTag(tag)")
       input.text-input(type="text", v-model="newTag", @keyup.enter="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
-      .temp-text#tempText(v-text="newTag")
-    .candidate#candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
+      .temp-text(v-text="newTag")
+    .candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
       .tag(v-for="tag in filteredTags", @click.stop="selectTag(tag)")
         span.label() {{tag}}
 </template>
@@ -129,12 +129,12 @@
       },
 
       setCandidateTop: function () {
-        document.getElementById('candidate').style.top = document.getElementById('tagContainer').clientHeight + 3 + 'px';
+        this.$el.getElementsByClassName('candidate')[0].style.top = this.$el.getElementsByClassName('tag-input-container')[0].clientHeight + 3 + 'px';
       },
 
       setInputWidth: function (evt) {
         var input = evt.target;
-        input.style.width = this.newTag.length ? document.getElementById('tempText').clientWidth + 'px' : '1px';
+        input.style.width = this.newTag.length ? this.$el.getElementsByClassName('temp-text')[0].clientWidth + 'px' : '1px';
         this.$nextTick(function () {
           this.setCandidateTop();
         });

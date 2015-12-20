@@ -53,7 +53,8 @@ module.exports = function (Vue, Promise, config) {
           param: rule.param,
           compare: rule.compare,
           value: rule.value,
-          scope: rule.scope
+          scope: rule.scope,
+          tag: rule.tag
         };
 
         Vue.http.put(config.apiRoot + '/alert/rule/' + rule.id, JSON.stringify(params), function (data, status, request) {

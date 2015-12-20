@@ -376,6 +376,7 @@
       resetEdit: function () {
         var self = this;
         this.editing = false;
+        this.delChecked = false;
         this.showEditModal = false;
         this.editModel = this.originEditModel;
         this.$nextTick(function (){
@@ -385,7 +386,6 @@
 
       // 取消添加
       onAddCancel: function () {
-        console.log('111');
         this.resetAdd();
       },
 
@@ -431,7 +431,9 @@
                 console.log(data);
               }
               self.resetEdit();
-              self.rules.$remove(self.editModel);
+              self.getRules().then(function (data) {
+                self.rules = data;
+              });
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
