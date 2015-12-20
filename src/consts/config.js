@@ -12,6 +12,9 @@ module.exports = {
     { label: '国内', value: 'china' }
   ],
   datapointTypes: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串'],
+  ruleTypes: ['数据端点', '设备状态'],
+  enableStates: ['启用', '禁用'],
+  candidateTags: ['严重', '轻微', '通知'],
   errors: {
     '4001001': 'Mac地址不合法',
     '4001003': '验证码有误，请重新输入！',

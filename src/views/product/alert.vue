@@ -20,11 +20,9 @@
               th.tac 操作
           tbody
             tr(v-for="rule in rules")
-              td {{rule.name}}
-              td
-                span(v-if="rule.type === 1") 数据端点
-                span(v-if="rule.type === 2") 设备状态
-              td {{rule.content}}
+              td {{* rule.name}}
+              td {{* rule.type | ruleLabel}}
+              td {{* rule.content}}
               td
                 span.hl-green(v-if="is_enable") 启用
                 span.hl-gray(v-else) 禁用
@@ -38,10 +36,10 @@
         pager(:total="rules.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加规则浮层
-    modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag")
+    modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag", @close="onAddCancel")
       h3(slot="header") 添加规则
       .form.form-rules(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
           .form-row
             label.form-control 规则名称：
             .controls
@@ -138,14 +136,14 @@
                   | 启用
 
           .form-actions
-            button.btn.btn-default(type="cancel", @click.stop="onAddCancel") 取消
+            button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
             button.btn.btn-primary(type="submit") 确定
 
     // 编辑规则浮层
     modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
       h3(slot="header") 编辑规则
       .form.form-rules(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
+        form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
           .form-row
             label.form-control 规则名称：
             .controls
@@ -252,9 +250,11 @@
 
 <script>
   var api = require('../../api');
+  var config = require('../../consts/config');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
   var TagInput = require('../../components/tag-input.vue');
+  var _ = require('lodash');
 
   module.exports = {
     components: {
@@ -266,29 +266,13 @@
     data: function () {
       return {
         rules: [],            // 规则列表
+        ruleTypes: config.ruleTypes,
         datapoints: [],       // 数据端点
         currentPage: 1,       // 当前页
         pageCount: 10,        // 每页记录数
         showAddModal: false,  // 是否显示添加浮层
         showEditModal: false, // 是否显示编辑浮层
-        candidateTags: [      // 候选标签
-          '严重',
-          '轻微',
-          '通知'
-        ],
-        addModelEditingTag: false,
-        originAddModel: {           // 添加数据模型
-          product_id: this.$route.params.id,
-          name: '',
-          tag: '',
-          type: 1,
-          notify_target: [],
-          notify_type: 1,
-          compare: 1,
-          value: '',
-          scope: 1,
-          is_enable: false
-        },
+        candidateTags: config.candidateTags,      // 候选标签
         addModel: {           // 添加数据模型
           product_id: this.$route.params.id,
           name: '',
@@ -304,28 +288,25 @@
         },
         addValidation: {},    // 添加验证
         editValidation: {},   // 修改验证
-        editModelEditingTag: false,
-        editModel: {          // 编辑数据模型
-          product_id: '',
-          name: '',
-          tag: '',
-          type: 1,
-          notify_target: [],
-          notify_type: 1,
-          compare: 1,
-          value: '',
-          scope: 1,
-          is_enable: false,
-          content: ''
+        addModelEditingTag: false, // 是否正在编辑添加浮层的标签
+        editModelEditingTag: false, // 是否正在编辑编辑浮层的标签
+        editModel: {
+          tag: ''
         },
-        originEditModel: {},      // 原数据模型
-        delChecked: false     // 是否删除
+        delChecked: false,    // 是否删除
+        adding: false,
+        editing: false,
+        addForm: {},
+        editForm: {},
+        originAddModel: {},
+        originEditModel: {}
       }
     },
 
     route: {
       data: function () {
         var self = this;
+        this.originAddModel = _.clone(this.addModel);
         this.getDatapoints().then(function (data) {
           self.datapoints = data;
           self.addModel.param = data[0].id;
@@ -337,7 +318,14 @@
       }
     },
 
+    filters: {
+      ruleLabel: function (value) {
+        return this.ruleTypes[value - 1];
+      }
+    },
+
     methods: {
+      // 获取数据端点列表
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -345,6 +333,7 @@
         });
       },
 
+      // 获取告警规则列表
       getRules: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -352,6 +341,7 @@
         });
       },
 
+      // 选择告警类型
       onSelectType: function () {
         if (this.addModel.type === 1) {
           this.addModel.compare = 1;
@@ -361,60 +351,106 @@
         }
       },
 
-      onAddCancel: function () {
-        // this.addModelEditingTag = false;
-        this.addModel = this.originAddModel;
+      // 添加表单钩子
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+
+      // 编辑表单钩子
+      editFormHook: function (form) {
+        this.editForm = form;
+      },
+
+      // 关闭添加浮层并净化添加表单
+      resetAdd: function () {
+        var self = this;
+        this.adding = false;
         this.showAddModal = false;
+        this.addModel = _.clone(this.originAddModel);
+        this.$nextTick(function () {
+          self.addForm.setPristine();
+        });
+      },
+
+      // 关闭编辑浮层并净化编辑表单
+      resetEdit: function () {
+        var self = this;
+        this.editing = false;
+        this.showEditModal = false;
+        this.editModel = this.originEditModel;
+        this.$nextTick(function (){
+          self.editForm.setValidity();
+        });
+      },
+
+      // 取消添加
+      onAddCancel: function () {
+        console.log('111');
+        this.resetAdd();
       },
 
       onAddSubmit: function () {
         var self = this;
-        if (this.addValidation.$valid) {
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true;
           api.corp.refreshToken().then(function () {
             api.alert.addRule(self.addModel).then(function (data) {
-              self.showAddModal = false;
+              if (__DEBUG__) {
+                console.log(data);
+              }
               self.rules.push(data);
+              self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
+              self.adding = false;
             });
           });
         }
       },
 
+      // 初始化编辑表单
       editRule: function (rule) {
         this.showEditModal = true;
-        this.editModel = rule;
+        this.editModel = _.clone(rule);
         this.originEditModel = _.clone(rule);
       },
 
+      // 取消编辑
       onEditCancel: function () {
-        this.showEditModal = false;
-        this.editModel = this.originEditModel;
+        this.resetEdit();
       },
 
+      // 提交编辑表单
       onEditSubmit: function () {
         var self = this;
-        if (this.delChecked) {
+        if (this.delChecked && !this.editing) { // 删除
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.alert.deleteRule(self.editModel.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.resetEdit();
               self.rules.$remove(self.editModel);
-              self.showEditModal = false;
             }).catch(function (error) {
               self.handleError(error);
+              self.editing = false;
             });
           });
-        } else if (this.editValidation.$valid) {
+        } else if (this.editValidation.$valid && !this.editing) { // 更新
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.alert.updateRule(self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.showEditModal = false;
+              self.resetEdit();
+              self.getRules().then(function (data) {
+                self.rules = data;
+              });
             }).catch(function (error) {
               self.handleError(error);
+              self.editing = false;
             });
           });
         }

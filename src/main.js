@@ -118,9 +118,9 @@ Vue.mixin({
       return /^\d*$/.test(value);
     },
 
+    // 错误处理
     handleError: function (error) {
       if (/^400/.test(error.code)) {
-
         alert(config.errors[error.msg] || error.msg);
       }
     }

@@ -35,7 +35,7 @@
         pager(:total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加数据端点浮层
-    modal(:show.sync="showAddModal")
+    modal(:show.sync="showAddModal", @close="onAddCancel")
       h3(slot="header") 添加数据端点
       .form(slot="body")
         form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
@@ -156,15 +156,6 @@
   var Modal = require('../../components/modal.vue');
   var Pager = require('../../components/pager.vue');
   var _ = require('lodash');
-  /*
-  var originAddModel = {
-    index: '',
-    name: '',
-    type: 1,
-    description: '',
-    symbol: ''
-  };
-  var originEditModel;*/
 
   module.exports = {
     name: 'DataPoint',
@@ -228,14 +219,7 @@
     },
 
     methods: {
-      addFormHook: function (form) {
-        this.addForm = form;
-      },
-
-      editFormHook: function (form) {
-        this.editForm = form;
-      },
-
+      // 获取数据端点列表
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -243,7 +227,18 @@
         });
       },
 
-      onAddCancel: function () {
+      // 添加表单钩子
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+
+      // 编辑表单钩子
+      editFormHook: function (form) {
+        this.editForm = form;
+      },
+
+      // 关闭添加浮层并净化添加表单
+      resetAdd: function () {
         var self = this;
         this.adding = false;
         this.showAddModal = false;
@@ -253,6 +248,23 @@
         });
       },
 
+      // 关闭编辑浮层并净化编辑表单
+      resetEdit: function () {
+        var self = this;
+        this.editing = false;
+        this.showEditModal = false;
+        this.editModel = this.originEditModel;
+        this.$nextTick(function (){
+          self.editForm.setValidity();
+        });
+      },
+
+      // 取消添加
+      onAddCancel: function () {
+        this.resetAdd();
+      },
+
+      // 添加操作
       onAddSubmit: function () {
         var self = this;
         if (this.addValidation.$valid && !this.adding) {
@@ -263,9 +275,7 @@
                 console.log(data);
               }
               self.datapoints.push(data);
-              self.addModel = {};
-              self.showAddModal = false;
-              self.adding = false;
+              self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
               self.adding = false;
@@ -274,49 +284,44 @@
         }
       },
 
+      // 初始化编辑表单
       editDataPoint: function (datapoint) {
         this.showEditModal = true;
         this.editModel = _.clone(datapoint);
         this.originEditModel = _.clone(datapoint);
       },
 
+      // 取消编辑
       onEditCancel: function () {
-        var self = this;
-        this.editing = false;
-        this.showEditModal = false;
-        this.editModel = this.originEditModel;
-        this.$nextTick(function () {
-          self.editForm.setValidity();
-        });
+        this.resetEdit();
       },
 
+      // 提交编辑表单
       onEditSubmit: function () {
         var self = this;
-        if (this.delChecked && !this.editing) {
+        if (this.delChecked && !this.editing) { // 删除
           this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.deleteDataPoint(self.$route.params.id, self.editModel.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.datapoints.$remove(self.editModel);
-              self.showEditModal = false;
-              self.editing = false;
+              self.resetEdit();
               self.delChecked = false;
+              self.datapoints.$remove(self.editModel);
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
             });
           });
-        } else if (this.editValidation.$valid && !this.editing) {
+        } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.updateDataPoint(self.$route.params.id, self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.showEditModal = false;
-              self.editing = false;
+              self.resetEdit();
               self.getDatapoints().then(function (data) {
                 self.datapoints = data;
               });
@@ -326,7 +331,7 @@
             });
           });
         }
-      }
+      } // onEditSubmit end
     }
   };
 </script>
