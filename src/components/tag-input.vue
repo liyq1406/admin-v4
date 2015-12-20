@@ -5,7 +5,7 @@
         .tag(v-for="tag in tags", track-by="$index")
           span.label {{tag}}
           i.fa.fa-times(@click.stop="deleteTag(tag)")
-      input.text-input(type="text", v-model="newTag", @keyup.enter="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
+      input.text-input(type="text", v-model="newTag", @keyup.enter.stop.prevent="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
       .temp-text(v-text="newTag")
     .candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
       .tag(v-for="tag in filteredTags", @click.stop="selectTag(tag)")
@@ -106,8 +106,8 @@
       addTag: function (evt) {
         var input = evt.target;
         this.$dispatch('adding-tag');
-        evt.stopPropagation();
-        evt.preventDefault();
+        // evt.stopPropagation();
+        // evt.preventDefault();
 
         if (this.newTag.length > 0) {
           this.tags.push(this.newTag);

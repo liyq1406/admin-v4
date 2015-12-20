@@ -442,7 +442,7 @@
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true;
           api.corp.refreshToken().then(function () {
-            api.alert.updateRule(self.editModel).then(function (data) {
+            api.alert.updateRule(self.editModel, self.$route.params.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }

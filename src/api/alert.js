@@ -41,9 +41,10 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} 告警规则参数
      * @return {Promise}
      */
-    updateRule: function (rule) {
+    updateRule: function (rule, product_id) {
       return new Promise(function (resolve, reject) {
         var params = {
+          product_id: product_id,
           name: rule.name,
           content: rule.content,
           type: rule.type,
@@ -56,6 +57,8 @@ module.exports = function (Vue, Promise, config) {
           scope: rule.scope,
           tag: rule.tag
         };
+
+        console.log(params);
 
         Vue.http.put(config.apiRoot + '/alert/rule/' + rule.id, JSON.stringify(params), function (data, status, request) {
           resolve(status);

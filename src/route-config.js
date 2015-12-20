@@ -22,14 +22,19 @@ var configRouter = function (router) {
       component: require('./views/login.vue')
     },
 
-    // 找回密码
+    // 手机找回密码
     '/fetch-password': {
       component: require('./views/fetch-password.vue')
     },
 
+    // 邮箱找回密码
+    '/fetch-password-bymail': {
+      component: require('./views/fetch-password-bymail.vue')
+    },
+
     // 重设密码
-    '/reset-password': {
-      component: require('./views/reset-password.vue')
+    '/password-reset/:email/:verifycode': {
+      component: require('./views/password-reset.vue')
     },
 
     // 激活成员邀请
@@ -160,7 +165,7 @@ var configRouter = function (router) {
   router.beforeEach(function (transition) {
     var today = new Date();
     //if (transition.to.path === '/login' || transition.to.path === '/register') {
-    if (['/login', '/register', '/fetch-password', '/reset-password'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0 || transition.to.path.indexOf('/email-activate') >= 0) {
+    if (['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0 || transition.to.path.indexOf('/email-activate') >= 0 || transition.to.path.indexOf('/password-reset') >= 0) {
       router.app.access = false;
       transition.next();
     } else {

@@ -327,6 +327,42 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 发起企业邮箱密码重置
+     * @param  {Object} params 重置参数
+     */
+    fetchPasswordByMail: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/corp/password/forgot/email', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 企业邮箱重置密码
+     * @param  {[type]} params 重置参数
+     */
+    resetPasswordByMail: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/corp/password/reset/email', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
 
   };
