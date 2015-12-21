@@ -44,8 +44,10 @@
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td(v-text="device.is_active ? '是' : '未激活'")
-            td {{device.active_date}}
-            td {{device.last_login}}
+            td
+              span(v-if="device.active_date") {{device.active_date | formatDate}}
+            td
+              span(v-if="device.last_login") {{device.last_login | formatDate}}
             td
               span.hl-green(v-if="device.is_online") 在线
               span.hl-gray(v-else) 下线
