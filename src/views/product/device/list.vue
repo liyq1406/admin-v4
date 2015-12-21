@@ -181,7 +181,7 @@
         var condition = {
           filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.pageCount,
-          // offset: (this.currentPage - 1) * this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
           order: this.sortOrders,
           query: {}
         };
