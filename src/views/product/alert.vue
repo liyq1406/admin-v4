@@ -24,7 +24,7 @@
               td {{* rule.type | ruleLabel}}
               td {{* rule.content}}
               td
-                span.hl-green(v-if="is_enable") 启用
+                span.hl-green(v-if="rule.is_enable") 启用
                 span.hl-gray(v-else) 禁用
               td.tac
                 button.btn.btn-link.btn-sm(@click="editRule(rule)") 编辑
@@ -137,7 +137,7 @@
 
           .form-actions
             button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
 
     // 编辑规则浮层
     modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
@@ -245,7 +245,7 @@
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除告警规则
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'") 确定
 </template>
 
 <script>
@@ -281,7 +281,7 @@
           notify_target: [],
           notify_type: 1,
           compare: 1,
-          value: '',
+          value: '0',
           scope: 1,
           is_enable: true,
           content: ''
@@ -300,6 +300,7 @@
         editForm: {},
         originAddModel: {},
         originEditModel: {}
+
       }
     },
 
@@ -380,7 +381,7 @@
         this.showEditModal = false;
         this.editModel = this.originEditModel;
         this.$nextTick(function (){
-          self.editForm.setValidity();
+          //self.editForm.setValidity();
         });
       },
 
