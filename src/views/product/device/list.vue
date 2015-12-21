@@ -100,32 +100,6 @@
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
-  // var fs = require('fs');
-  /*
-  var filters = {
-    all: function (devices) {
-      return devices;
-    },
-
-    online: function (devices) {
-      return devices.filter(function (device) {
-        return device.is_online === true;
-      });
-    },
-
-    active: function (devices) {
-      return devices.filter(function (device) {
-        return device.is_active === true;
-      });
-    },
-
-    inactive: function (devices) {
-      return devices.filter(function (device) {
-        return device.is_active === false;
-      });
-    }
-  };
-  */
 
   module.exports = {
     components: {
@@ -167,16 +141,6 @@
     },
 
     computed:  {
-      /*
-      filteredDevices: function () {
-        var self = this;
-        var visableDevices = filters[this.visibility](this.devices);
-        return visableDevices.filter(function (item) {
-          return item.mac.match(self.query);
-        });
-      },
-      */
-
       queryCondition: function () {
         var condition = {
           filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],

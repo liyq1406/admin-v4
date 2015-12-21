@@ -22,7 +22,7 @@
             input(type="checkbox")
             span 记住密码
         .form-actions
-          button.btn.btn-primary.btn-block(@keyup.enter="onSubmit") 登录
+          button.btn.btn-primary.btn-block(@keyup.enter="onSubmit", :disabled="logining", :class="{'disabled':logining}", v-text="logining ? '登录中...' : '登录'") 登录
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 </template>
@@ -51,15 +51,18 @@
     data: function () {
       return {
         validation: {},
-        model: {}
+        model: {},
+        logining: false
       }
     },
 
     methods: {
       onSubmit: function () {
         var self = this;
+        this.logining = true;
         if (this.validation.$valid) {
           api.corp.auth(this.model).then(function (data) {
+            self.logining = false;
             var today = new Date();
             localStorage.setItem('member_id', data.member_id);
             localStorage.setItem('corp_id', data.corp_id);
@@ -70,6 +73,7 @@
             // localStorage.setItem('expireAt', today.getTime() + 20000);
             self.$route.router.go({path: '/'});
           }).catch(function (error) {
+            self.logining = false;
             self.handleError(error);
           });
         }

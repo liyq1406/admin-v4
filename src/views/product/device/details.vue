@@ -36,7 +36,7 @@
                 li
                   .label 固件版本:
                   .info
-                    span 1.0
+                    span {{device.firmware_version}}
 
       .row
         .col-13
@@ -44,9 +44,9 @@
           .panel
             .panel-hd
               .actions
-                button.btn.btn-success
+                button.btn.btn-success(:disabled="!device.is_online || refreshing", :class="{'disabled':!device.is_online || refreshing}", @click="getDatapointValues")
                   | 刷新
-                  i.fa.fa-refresh
+                  i.fa.fa-refresh(:class="{'fa-spin':refreshing}")
               h2 数据端点
             .panel-bd
               table.table
@@ -61,7 +61,7 @@
                     td {{$index + 1}}
                     td {{datapoint.name}}
                     td {{datapoint.description}}
-                    td 0
+                    td {{datapointValues[$index] ? datapointValues[$index].value : ''}}
                   tr(v-if="datapoints.length === 0")
                     td.tac(colspan="4")
                       i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
@@ -90,26 +90,6 @@
                     span.msg-success {{log.msg}}
                   template(v-if="log.type === 'disconnected'")
                     span.msg-error {{log.msg}}
-
-                //-
-                  div.log
-                    span.time 21:15:20.139
-                    span.msg-success Client has connected to the server!
-                  div.log
-                    span.time 21:15:20.139
-                    span.user 100003563
-                    span.msg : {"msg":{"type":"PING","resp":true}}
-                  div.log
-                    span.time 21:15:20.139
-                    span.msg-error 400
-                    span.msg : Error
-                  div.log
-                    span.time 21:15:20.139
-                    span.msg-success 200
-                    span.msg : OK
-                  div.log
-                    span.time 21:15:20.139
-                    span.msg-error The client has disconnected!
           // End: 设备日志
 
 
@@ -136,7 +116,8 @@
         deviceToken: '',
         datapointValues: [],
         logs: [],
-        token: ''
+        token: '',
+        refreshing: false
       };
     },
 
@@ -145,8 +126,6 @@
         var self = this;
 
         this.getDatapointValues();
-
-
 
         /*alert(111);
         //百度地图API功能
@@ -182,23 +161,45 @@
       },
 
       activate: function () {
-        console.log(222);
         if (this.showLog) {
           this.connect();
         }
       },
 
       deactivate: function () {
-        console.log(11111);
         socket.disconnect();
         socket = null;
       }
     },
 
-    detroyed: function  () {
+    ready: function () {
+      /*
+      //百度地图API功能
+      function loadJScript() {
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
+        document.body.appendChild(script);
+      }
+      window.init = function() {
+        var map = new BMap.Map("diviceMap");            // 创建Map实例
+        var point = new BMap.Point(116.404, 39.915); // 创建点坐标
+        map.centerAndZoom(point,15);
+        map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+      }
+      // document.getElementById('diviceMap').addEventListener('load', loadJScript);  //异步加载地图
+
+      // document.addEventListener('load', loadJScript);
+      // document.addEventListener('load', function (e) {
+        // alert(1223323);
+        // body...
+      // });
+      window.onload=loadJScript;
+      */
     },
 
     methods: {
+      // 获取设备信息
       getDeviceInfo: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {
@@ -206,6 +207,7 @@
         });
       },
 
+      // 获取设备端点列表
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -213,58 +215,63 @@
         });
       },
 
+      // 获取设备端点值
       getDatapointValues: function () {
         var self = this;
+        this.refreshing = true;
         api.corp.refreshToken(this).then(function () {
           api.device.getDatapointValues(self.$route.params.device_id).then(function (data) {
-            self.datapointValues = data.datapoint;
+            self.refreshing = false;
+            if (data.status === 200) {
+              self.datapointValues = data.datapoint;
+            } else if (data.status === 202) {
+              console.log('设备离线！');
+            }
+          }).catch(function () {
+            self.refreshing = false;
           });
         });
       },
 
+      // 连接
       connect: function () {
         var self = this;
 
         api.corp.refreshToken().then(function () {
           api.device.getDeviceToken(self.$route.params.device_id).then(function (data) {
 
-            console.log(data.addr);
-            console.log(socket);
             self.token = data.token;
             socket = io.connect('http://' + data.addr, {'force new connection': true});
-            // socket = io.connect('http://192.168.6.240:23775');
-            console.log(socket);
 
+            // 连接 socket
             socket.on('connect', function() {
               self.outputLog('Client has connected to the server!', 'connected');
-              // socket.emit('trace.logs', {id: self.$route.params.device_id, token: data.token});
               window.setTimeout(function  () {
                 socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
               }, 100);
         	  });
 
+            // 断开 socket 连接
             socket.on('disconnect', function() {
               self.outputLog('The client has disconnected!', 'disconnected');
         	  });
 
+            // 输入日志
             socket.on('trace.log', function(data) {
               self.outputLog([data.id, data.log], 'user');
             });
 
+            // 输出状态
             socket.on('trace.status', function(data) {
               self.outputLog([data.status, data.msg], 'status');
           	});
-
-            /*
-            window.setTimeout(function  () {
-              socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
-            }, 1000);*/
           }).catch(function (error) {
             self.handleError(error);
           });
         });
       },
 
+      // 收集日志信息并格式化输出
       outputLog: function (msg, type) {
         this.logs.push({
           time: dateFormat('hh:mm:ss.SSS', new Date()),
@@ -273,12 +280,11 @@
         });
       },
 
+      // 切换日志显示
       toggleLog: function () {
         if (!this.showLog) {
           this.connect();
-          // socket.emit('trace.logs', {id: this.$route.params.device_id, token: this.token});
         } else {
-          // socket.emit('trace.logs', {id: this.$route.params.device_id, token: this.token});
           if (socket) {
             socket.disconnect();
             socket = null;

@@ -9,7 +9,8 @@
         .panel-bd
           .row
             .col-13
-              #trendChart(style="height:320px;")
+              #trendChart(style="height:320px;", v-if="trends.length")
+              .trend-null(v-else) 暂无数据
             .col-7
               .statistics-info
                 .item
@@ -125,6 +126,7 @@
     data: function () {
       return {
         alerts: [],
+        trends: [],
         total: 0,
         pageCount: 10,
         currentPage: 1,
@@ -253,6 +255,7 @@
 
         api.corp.refreshToken().then(function () {
           api.statistics.getAlertTrend(self.past, self.today).then(function (data) {
+            this.trends = data;
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });

@@ -206,6 +206,7 @@
     route: {
       data: function (transition) {
         this.originAddModel = _.clone(this.addModel);
+
         return {
           datapoints: this.getDatapoints()
         }
@@ -253,6 +254,7 @@
         var self = this;
         this.editing = false;
         this.showEditModal = false;
+        this.delChecked = false;
         this.editModel = this.originEditModel;
         this.$nextTick(function (){
           self.editForm.setValidity();

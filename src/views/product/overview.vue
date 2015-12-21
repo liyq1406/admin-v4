@@ -51,7 +51,8 @@
               span.label(slot="label") 最近
             h2 趋势
           .panel-bd
-            #trendChart(style="height:320px")
+            #trendChart(style="height:320px", v-if="trends.length")
+            .trend-null(v-else) 暂无数据
         // End: 趋势
 
       .col-10
@@ -67,7 +68,7 @@
     modal(:show.sync="showEditModal")
       h3(slot="header") 编辑产品
       .form(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
+        form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
           .form-row
             label.form-control 产品名称：
             .controls
@@ -101,12 +102,12 @@
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除产品
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
 
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加设备
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", v-el="addForm")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", v-el="addForm", hook="addFormHook")
           .form-row
             label.form-control MAC地址：
             .controls
@@ -118,7 +119,7 @@
                 span(v-if="addValidation.mac.$error.required") 请输入MAC地址
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
 
     modal(:show.sync="showKeyModal")
       h3(slot="header") 产品密钥
@@ -147,6 +148,7 @@
     data: function () {
       return {
         product: {},
+        trends: [],
         productSummary: {
           online: 0,
           activated: 0,
@@ -167,8 +169,11 @@
         showAddModal: false,
         showKeyModal: false,
         editModel: {},
-        addModel: {},
-        originModel: {},
+        addModel: {
+          mac: ''
+        },
+        originAddModel: {},
+        originEditModel: {},
         editValidation: {},
         addValidation: {},
         delChecked: false,
@@ -187,6 +192,7 @@
 
     route: {
       data: function () {
+        this.originAddModel = _.clone(this.addModel);
         this.getProductTrends();
         this.getProductRegion();
 
@@ -198,6 +204,7 @@
     },
 
     methods: {
+      // 获取当前产品
       getProduct: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
@@ -205,6 +212,7 @@
         });
       },
 
+      // 获取产品统计信息
       getSummary: function () {
         var self = this;
         return api.corp.refreshToken().then(function () {
@@ -212,6 +220,7 @@
         });
       },
 
+      // 获取产品趋势
       getProductTrends: function () {
         var self = this;
         var today = new Date();
@@ -221,6 +230,7 @@
 
         api.corp.refreshToken().then(function () {
           api.statistics.getProductTrend(self.$route.params.id, start_day, end_day).then(function (data) {
+            this.trends = data;
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
@@ -275,6 +285,7 @@
 
       },
 
+      // 获取产品区域
       getProductRegion: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
@@ -441,6 +452,7 @@
         });
       },
 
+      // 查看产品密钥
       showProductKey: function () {
         var self = this;
 
@@ -456,20 +468,78 @@
 
       setRegion: function (value) {
         this.region = value;
-        console.log("region: " + this.region);
+        if (__DEBUG__) {
+          console.log("region: " + this.region);
+        }
       },
 
+      // 添加表单钩子
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+
+      // 编辑表单钩子
+      editFormHook: function (form) {
+        this.editForm = form;
+      },
+
+      // 关闭添加浮层并净化添加表单
+      resetAdd: function () {
+        var self = this;
+        this.adding = false;
+        this.showAddModal = false;
+        this.addModel = _.clone(this.originAddModel);
+        this.$nextTick(function () {
+          self.addForm.setPristine();
+        });
+      },
+
+      // 关闭编辑浮层并净化编辑表单
+      resetEdit: function () {
+        var self = this;
+        this.editing = false;
+        this.showEditModal = false;
+        this.delChecked = false;
+        this.editModel = this.originEditModel;
+        this.$nextTick(function (){
+          self.editForm.setValidity();
+        });
+      },
+
+      // 取消添加
+      onAddCancel: function () {
+        this.resetAdd();
+      },
+
+      // 添加操作
+      onAddSubmit: function () {
+        var self = this;
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true;
+          api.corp.refreshToken().then(function () {
+            api.device.add(self.$route.params.id, self.addModel).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.resetAdd();
+            }).catch(function (error) {
+              self.handleError(error);
+              self.adding = false;
+            });
+          });
+        }
+      },
+
+      // 初始化产品编辑表单
       editProduct: function () {
         this.showEditModal = true;
-        this.editModel = this.product;
-        this.originModel = _.clone(this.product);
+        this.editModel = _.clone(this.product);
+        this.originEditModel = _.clone(this.product);
       },
 
       onEditCancel: function () {
-        this.showEditModal = false;
-        this.editModel = {};
-        this.editing = false;
-        this.product = this.originModel;
+        this.resetEdit();
+        // this.product = this.originEditModel;
       },
 
       onEditSubmit: function () {
@@ -477,17 +547,17 @@
 
         if (this.delChecked && !this.editing) {
           this.editing = true;
-          this.showEditModal = false;
           api.corp.refreshToken().then(function () {
             api.product.deleteProduct(self.$route.params.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.resetEdit();
               productsStore.deleteProduct(self.product);
-              self.editing = false;
               self.$route.router.go('/');
             }).catch(function (error) {
               self.handleError(error);
+              self.editing = false;
             });
           });
         } else if (this.editValidation.$valid && !this.editing) {
@@ -496,39 +566,16 @@
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.resetEdit();
+            }).catch(function (error) {
+              self.handleError(error);
               self.editing = false;
-            }).catch(function (error) {
-              self.handleError(error);
             });
           });
         }
       },
 
-      onAddCancel: function () {
-        this.adding = false;
-        this.showAddModal = false;
-      },
-
-      onAddSubmit: function () {
-        var self = this;
-        if (this.addValidation.$valid && !this.adding) {
-          this.adding = true;
-          this.showAddModal = false;
-          api.corp.refreshToken().then(function () {
-            api.device.add(self.$route.params.id, self.addModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.addModel = {};
-              self.adding = false;
-            }).catch(function (error) {
-              self.handleError(error);
-              self.adding = false;
-            });
-          });
-        }
-      },
-
+      // 批量导入
       batchImport: function () {
         var self = this;
         var file = this.$els.macFile.files[0];
@@ -635,4 +682,11 @@
 
   .product-key
     font-size 20px
+
+  .trend-null
+    height 300px
+    line-height 320px
+    text-align center
+    background #FBFBFB
+    margin-bottom 20px
 </style>
