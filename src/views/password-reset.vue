@@ -60,8 +60,8 @@
 
     route: {
       data: function () {
-        this.email = this.$route.params.email;
-        this.verifycode = this.$route.params.verifycode;
+        this.email = window.atob(this.$route.params.email);
+        this.verifycode = window.atob(this.$route.params.verifycode);
       }
     },
 

@@ -136,7 +136,7 @@
     },
 
     ready: function () {
-      this.model.email = this.$route.params.email;
+      this.model.email = window.atob(this.$route.params.email);
     },
 
     methods: {

@@ -28,7 +28,9 @@
 
     ready: function () {
       var self = this;
-      api.corp.emailActivate({email: this.$route.params.email, verifycode: this.$route.params.verifycode}).then(function (status) {
+      var email = window.atob(this.$route.params.email);
+      var verifycode = window.atob(this.$route.params.verifycode);
+      api.corp.emailActivate({email: email, verifycode: verifycode}).then(function (status) {
         if (status === 200) {
           self.activateSuccess = true;
         }
