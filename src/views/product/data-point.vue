@@ -88,7 +88,7 @@
 
           .form-actions
             button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
 
     // 编辑数据端点浮层
     modal(:show.sync="showEditModal")
@@ -147,7 +147,7 @@
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除数据端点
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
 </template>
 
 <script>
@@ -257,7 +257,7 @@
         this.delChecked = false;
         this.editModel = this.originEditModel;
         this.$nextTick(function (){
-          self.editForm.setValidity();
+          // self.editForm.setValidity();
         });
       },
 
