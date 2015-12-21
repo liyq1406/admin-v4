@@ -26,7 +26,7 @@
                   button.btn.btn-primary(@click="showAddModal = true")
                     i.fa.fa-plus
                     | 添加设备
-                  button.btn.btn-primary.btn-upload
+                  label.btn.btn-primary.btn-upload
                     input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
                     i.fa.fa-reply-all
                     | 导入设备
@@ -477,12 +477,12 @@
 
         if (this.delChecked && !this.editing) {
           this.editing = true;
+          this.showEditModal = false;
           api.corp.refreshToken().then(function () {
             api.product.deleteProduct(self.$route.params.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.showEditModal = false;
               productsStore.deleteProduct(self.product);
               self.editing = false;
               self.$route.router.go('/');
@@ -497,7 +497,6 @@
                 console.log(data);
               }
               self.editing = false;
-              self.showEditModal = false;
             }).catch(function (error) {
               self.handleError(error);
             });
@@ -514,13 +513,13 @@
         var self = this;
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true;
+          this.showAddModal = false;
           api.corp.refreshToken().then(function () {
             api.device.add(self.$route.params.id, self.addModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
               self.addModel = {};
-              self.showAddModal = false;
               self.adding = false;
             }).catch(function (error) {
               self.handleError(error);
@@ -607,6 +606,7 @@
 
       .btn
         margin-right 10px
+        vertical-align middle
 
     .status
       clearfix()
