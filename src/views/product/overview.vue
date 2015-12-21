@@ -145,6 +145,15 @@
       'modal': Modal
     },
 
+    props: {
+      products: {
+        type: Array,
+        default: function () {
+          return [];
+        }
+      }
+    },
+
     data: function () {
       return {
         product: {},
@@ -561,12 +570,17 @@
             });
           });
         } else if (this.editValidation.$valid && !this.editing) {
+          this.editing = true;
           api.corp.refreshToken().then(function () {
             api.product.updateProduct(self.editModel).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.getProduct().then(function (data) {
+                self.product = data;
+              });
               self.resetEdit();
+              self.$dispatch('edit-product-name');
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
@@ -635,6 +649,7 @@
       h3
         margin 0 0 15px
         font-size 20px
+        min-height 30px
 
         .fa
           margin-left 5px

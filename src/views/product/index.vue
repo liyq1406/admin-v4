@@ -6,7 +6,7 @@
           h2(v-text="product.name")
         .panel-bd
           tab(:nav="secondaryNav")
-      router-view(class="view", transition="view", transition-mode="out-in")
+      router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProduct")
 </template>
 
 <script>
@@ -31,8 +31,9 @@
 
     route: {
       data: function (transition) {
+        this.getProduct();
+
         return {
-          product: this.getProduct(),
           secondaryNav: [{
             label: '概览',
             link: { path: '/products/' + this.$route.params.id + '/overview' }
@@ -62,8 +63,10 @@
     methods: {
       getProduct: function () {
         var self = this;
-        return api.corp.refreshToken(this).then(function () {
-          return api.product.getProduct(self.$route.params.id);
+        api.corp.refreshToken(this).then(function () {
+          api.product.getProduct(self.$route.params.id).then(function (data) {
+            self.product = data;
+          });
         });
       }
     }

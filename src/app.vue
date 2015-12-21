@@ -56,19 +56,13 @@
           a(v-link="{ path: '/settings' }")
             i.fa.fa-cog
             | 系统设置
-    router-view(class="view", transition="view", transition-mode="out-in")
+    router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
 </template>
 
 <script>
   var api = require('./api');
-  var productsStore = require('./stores/products');
 
   module.exports = {
-    components: {
-      'productsStore': productsStore,
-      'api': api
-    },
-
     data: function () {
       return {
         access: false,
@@ -82,6 +76,15 @@
       quit:function(){
         localStorage.clear();
         window.location.reload(true);
+      },
+
+      getProducts: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.product.getProducts().then(function (data) {
+            self.products = data;
+          });
+        });
       }
     }
   };
