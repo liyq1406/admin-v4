@@ -1,3 +1,4 @@
+
 module.exports = {
   apiRoot: 'http://42.121.122.228:8887/v2',
   verifycodeDuration: 90,
@@ -26,6 +27,7 @@ module.exports = {
     '4001045': '表名已存在',
     '[email] is not a email ':'邮箱格式不合法',
     'verifycode not exists': '验证码不存在',
-    '[tag] length vaild error ':'标签的长度不合法'
+    '[tag] length vaild error ':'标签的长度不合法',
+    'datapoint not exists':'数据点不存在'
   }
 };
