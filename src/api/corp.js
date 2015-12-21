@@ -89,6 +89,7 @@ module.exports = function (Vue, Promise, config) {
             reject(data.error);
           });
         } else if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime()) {
+          alert('页面连接已过期，请重新登录');
           vm.$route.router.go({path: '/login'});
           //reject('Token expired.');
         } else {
