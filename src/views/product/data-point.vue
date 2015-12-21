@@ -310,7 +310,9 @@
               }
               self.resetEdit();
               self.delChecked = false;
-              self.datapoints.$remove(self.editModel);
+              self.getDatapoints().then(function (data) {
+                self.datapoints = data;
+              });
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
