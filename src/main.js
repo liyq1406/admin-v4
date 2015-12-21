@@ -118,6 +118,13 @@ Vue.mixin({
       return /^\d*$/.test(value);
     },
 
+    /**
+     * 检验字符串中是否以非空格字符开头和结尾
+     */
+    noSpaceEnds: function (value) {
+      return /^\S+$/.test(value);
+    },
+
     // 错误处理
     handleError: function (error) {
       if (/^400/.test(error.code)) {

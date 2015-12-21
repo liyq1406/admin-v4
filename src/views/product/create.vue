@@ -11,12 +11,13 @@
                 label.form-control 产品名称：
                 .controls
                   .input-text-wrap(v-placeholder="'请输入产品名称'")
-                    input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
+                    input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpaceEnds", lazy)
                   .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                     span(v-if="validation.name.$error.required") 请输入产品名称
                   .form-tips.form-tips-error(v-if="validation.name.$dirty")
                     span(v-if="validation.name.$error.required") 请输入产品名称
                     span(v-if="validation.name.$error.maxlength") 产品名称最大不能超过32位
+                    span(v-if="validation.name.$error.customValidator") 产品名称前后不能带空格
               .form-row
                 label.form-control 产品描述：
                 .controls
