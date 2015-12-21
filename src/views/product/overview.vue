@@ -511,7 +511,7 @@
         this.delChecked = false;
         this.editModel = this.originEditModel;
         this.$nextTick(function (){
-          self.editForm.setValidity();
+          // self.editForm.setValidity();
         });
       },
 
