@@ -25,7 +25,7 @@ module.exports = {
     'account vaild error': '帐号不存在',
     '4001019': '该端点索引已存在',
     'mac address exists': '该设备MAC地址已存在',
-    '4001045': '表名已存在',
+    'table name exists': '表名已存在',
     '[email] is not a email ':'邮箱格式不合法',
     'verifycode not exists': '验证码不存在',
     '[tag] length vaild error ':'标签的长度不合法',

@@ -35,7 +35,7 @@
     modal(:show.sync="showAddModal")
       h3(slot="header") 新建数据表
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit",hook="addFormHook")
           .form-row
             label.form-control 表名：
             .controls
@@ -98,13 +98,13 @@
               button.btn.btn-success(@click.prevent.stop="createField(addModel, addFields)") 添加字段
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
 
     // 修改数据表浮层
     modal(:show.sync="showEditModal")
       h3(slot="header") 修改数据表
       .form(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit")
+        form(v-form, name="editValidation", @submit.prevent="onEditSubmit",hook="editFormHook")
           .form-row
             label.form-control 表名：
             .controls
@@ -165,7 +165,7 @@
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除数据表
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'") 确定
 </template>
 
 <script>
@@ -265,9 +265,20 @@
         fields.$remove(field);
         this.updateField(model, fields);
       },
-
+      // 添加表单钩子
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+      // 编辑表单钩子
+      editFormHook: function (form) {
+        this.editForm = form;
+      },
       onAddSubmit: function () {
         var self = this;
+
+        if(!self.addModel.name){
+          alert("请输入表名！")
+        };
         if (this.addValidation.$valid && !this.adding) {
           self.adding = true;
           api.corp.refreshToken().then(function () {
@@ -299,6 +310,7 @@
 
       onEditSubmit: function () {
         var self = this;
+        self.editing = true;
         if (this.delChecked) {
           api.corp.refreshToken().then(function () {
             api.dataTable.deleteTable(self.editModel.name).then(function (data) {
@@ -307,8 +319,10 @@
               }
               self.tables.$remove(self.editModel);
               self.showEditModal = false;
+              self.editing = false;
             }).catch(function (error) {
               self.handleError(error);
+              self.editing = false;
             });
           });
         } else if (this.editValidation.$valid) {
@@ -318,8 +332,10 @@
                 console.log(data);
               }
               self.showEditModal = false;
+              self.editing = false;
             }).catch(function (error) {
               self.handleError(error);
+              self.editing = false;
             });
           });
         }
