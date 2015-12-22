@@ -222,10 +222,10 @@
         api.corp.refreshToken(this).then(function () {
           api.device.getDatapointValues(self.$route.params.device_id).then(function (data) {
             self.refreshing = false;
-            if (data.status === 200) {
-              self.datapointValues = data.datapoint;
-            } else if (data.status === 202) {
+            if (data.status === 202) {
               console.log('设备离线！');
+            } else {
+              self.datapointValues = data.datapoint;
             }
           }).catch(function () {
             self.refreshing = false;

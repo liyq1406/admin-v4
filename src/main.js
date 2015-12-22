@@ -92,20 +92,18 @@ Vue.directive('placeholder', {
 });
 
 // 过滤器
-Vue.filter('formatDate', function (value, template) {
-  return dateFormat(template || 'yyyy-MM-dd hh:mm:ss', new Date(value));
+Vue.filter('formatDate', function (value) {
+  if (value !== undefined && value.length > 0) {
+    return value.replace('T', ' ').replace('Z', '');
+  } else {
+    return value;
+  }
 });
 
 // 过渡效果
 Vue.transition('stagger', {
   stagger: function (index) {
     return Math.min(300, index * 50);
-  }
-});
-
-Vue.transition('modal', {
-  afterLeave: function (el) {
-    // window.location.reload(true);
   }
 });
 

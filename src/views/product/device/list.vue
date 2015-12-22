@@ -9,10 +9,10 @@
           button.btn.btn-success(@click="showAddModal = true")
             i.fa.fa-plus
             | 添加设备
-          label.btn.btn-success.btn-upload
+          label.btn.btn-success.btn-upload(:class="{'disabled':importing}")
             input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
             i.fa.fa-reply-all
-            | 导入设备
+            | {{importing ? '处理中...' : '导入设备'}}
 
       //- 状态栏
       .status-bar
@@ -61,7 +61,7 @@
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加设备
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
           .form-row
             label.form-control MAC地址：
             .controls
@@ -73,7 +73,7 @@
                 span(v-if="addValidation.mac.$error.required") 请输入MAC地址
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit") 确定
+            button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
 </template>
 
 <style lang="stylus">
@@ -134,11 +134,13 @@
         currentPage: 1,
         pageCount: 10,
         showAddModal: false,
-        addModel: {},
+        addModel: {
+          mac: ''
+        },
         addValidation: {},
-        macFile: '',
+        originAddModel: {},
         adding: false,
-        editing: false
+        importing: false
       }
     },
 
@@ -175,11 +177,13 @@
 
     route: {
       data: function () {
+        this.originAddModel = _.clone(this.addModel);
         this.getDevices();
       }
     },
 
     methods: {
+      // 获取设备列表
       getDevices: function () {
         var self = this;
 
@@ -193,36 +197,56 @@
         });
       },
 
+      // 搜索
       handleSearch: function () {
         if (this.query.length === 0) {
           this.getDevices();
         }
       },
 
+      // 排序
       sortBy: function (key) {
         this.sortKey = key;
         this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc';
         this.getDevices();
       },
 
+      // 切换搜索
       toggleSearching: function () {
         this.searching = !this.searching;
       },
 
+      // 取消搜索
       cancelSearching: function () {
         var self = this;
-        this.getDevices().then(function (data) {
-          self.devices = data;
+        this.getDevices();
+      },
+
+      // 添加表单钩子
+      addFormHook: function (form) {
+        this.addForm = form;
+      },
+
+      // 关闭添加浮层并净化添加表单
+      resetAdd: function () {
+        var self = this;
+        this.adding = false;
+        this.showAddModal = false;
+        this.addModel = _.clone(this.originAddModel);
+        this.$nextTick(function () {
+          self.addForm.setPristine();
         });
       },
 
+      // 取消添加
       onAddCancel: function () {
-        this.adding = false;
-        this.showAddModal = false;
+        this.resetAdd();
       },
 
+      // 添加操作
       onAddSubmit: function () {
         var self = this;
+
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true;
           api.corp.refreshToken().then(function () {
@@ -230,12 +254,8 @@
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.addModel = {};
-              self.showAddModal = false;
-              self.adding = false;
-              self.getDevices().then(function (data) {
-                self.devices = data;
-              });
+              self.resetAdd();
+              self.getDevices();
             }).catch(function (error) {
               self.handleError(error);
               self.adding = false;
@@ -244,11 +264,10 @@
         }
       },
 
+      // 批量导入
       batchImport: function () {
         var self = this;
         var file = this.$els.macFile.files[0];
-        // console.log(file);
-        // console.log(evt.target.files);
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
           if(!/text\/\w+/.test(file.type)){
@@ -258,21 +277,21 @@
           reader.onerror = function (evt) {
             alert('文件读取失败。')
           }
+          this.importing = true;
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
               var macArr = evt.target.result.split('\n');
-              console.log(macArr);
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
                     alert('设备导入成功!')
-                    self.getDevices().then(function (data) {
-                      self.devices = data;
-                    });
+                    self.getDevices();
                   }
+                  self.importing = false;
                 }).catch(function (error) {
                   self.handleError(error);
+                  self.importing = false;
                 });
               });
             }

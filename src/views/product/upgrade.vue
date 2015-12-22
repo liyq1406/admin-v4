@@ -199,65 +199,65 @@
     modal(:show.sync="showAddModal2", @close="onAddCancel2")
       h3(slot="header") 添加固件升级任务
       .form(slot="body")
-        form(v-form, name="addValidation2", @submit.prevent="onAddSubmit2")
+        form(v-form, name="addTaskValidation", @submit.prevent="onAddSubmit2")
           .form-row
             label.form-control 任务名称：
             .controls
               .input-text-wrap(v-placeholder="'升级任务名称'")
                 input.input-text(v-model="addModel2.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.name.$pristine")
-                span(v-if="addValidation2.name.$error.required") 请输入任务名称
-              .form-tips.form-tips-error(v-if="addValidation2.name.$dirty")
-                span(v-if="addValidation2.name.$error.required") 请输入任务名称
-                span(v-if="addValidation2.name.$error.maxlength") 固件型号最多不能超过32个字符
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine")
+                span(v-if="addTaskValidation.name.$error.required") 请输入任务名称
+              .form-tips.form-tips-error(v-if="addTaskValidation.name.$dirty")
+                span(v-if="addTaskValidation.name.$error.required") 请输入任务名称
+                span(v-if="addTaskValidation.name.$error.maxlength") 固件型号最多不能超过32个字符
           .form-row
             label.form-control 描述：
             .controls
               .input-text-wrap(v-placeholder="'请输入描述'")
                 textarea.input-text(v-model="addModel2.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.description.$pristine")
-                span(v-if="addValidation2.description.$error.required") 请输入描述
-              .form-tips.form-tips-error(v-if="addValidation2.description.$dirty")
-                span(v-if="addValidation2.description.$error.required") 请输入描述
-                span(v-if="addValidation2.description.$error.maxlength") 描述最多不能超过250个字符
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine")
+                span(v-if="addTaskValidation.description.$error.required") 请输入描述
+              .form-tips.form-tips-error(v-if="addTaskValidation.description.$dirty")
+                span(v-if="addTaskValidation.description.$error.required") 请输入描述
+                span(v-if="addTaskValidation.description.$error.maxlength") 描述最多不能超过250个字符
           .form-row
             label.form-control 起始版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入起始版本号'")
                 input.input-text(v-model="addModel2.from_version", type="number", v-form-ctrl, name="from_version", max="4294967296", required, number, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version.$pristine")
-                span(v-if="addValidation2.from_version.$error.required") 请输入起始版本号
-              .form-tips.form-tips-error(v-if="addValidation2.from_version.$dirty")
-                span(v-if="addValidation2.from_version.$error.required") 请输入起始版本号
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.from_version.$pristine")
+                span(v-if="addTaskValidation.from_version.$error.required") 请输入起始版本号
+              .form-tips.form-tips-error(v-if="addTaskValidation.from_version.$dirty")
+                span(v-if="addTaskValidation.from_version.$error.required") 请输入起始版本号
           .form-row
             label.form-control 起始版本地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入起始版本文件地址'")
                 input.input-text(v-model="addModel2.from_version_url", type="text", v-form-ctrl, name="from_version_url", maxlength="250", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.from_version_url.$pristine")
-                span(v-if="addValidation2.from_version_url.$error.required") 请输入起始版本文件地址
-              .form-tips.form-tips-error(v-if="addValidation2.from_version_url.$dirty")
-                span(v-if="addValidation2.from_version_url.$error.required") 请输入起始版本文件地址
-                span(v-if="addValidation2.from_version_url.$error.maxlength") 起始版本文件地址最多不能超过250个字符
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.from_version_url.$pristine")
+                span(v-if="addTaskValidation.from_version_url.$error.required") 请输入起始版本文件地址
+              .form-tips.form-tips-error(v-if="addTaskValidation.from_version_url.$dirty")
+                span(v-if="addTaskValidation.from_version_url.$error.required") 请输入起始版本文件地址
+                span(v-if="addTaskValidation.from_version_url.$error.maxlength") 起始版本文件地址最多不能超过250个字符
           .form-row
             label.form-control 目标版本号：
             .controls
               .input-text-wrap(v-placeholder="'请输入目标版本号'")
                 input.input-text(v-model="addModel2.target_version", type="number", v-form-ctrl, name="target_version", max="4294967296", required, number, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version.$pristine")
-                span(v-if="addValidation2.target_version.$error.required") 请输入目标版本号
-              .form-tips.form-tips-error(v-if="addValidation2.target_version.$dirty")
-                span(v-if="addValidation2.target_version.$error.required") 请输入目标版本号
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.target_version.$pristine")
+                span(v-if="addTaskValidation.target_version.$error.required") 请输入目标版本号
+              .form-tips.form-tips-error(v-if="addTaskValidation.target_version.$dirty")
+                span(v-if="addTaskValidation.target_version.$error.required") 请输入目标版本号
           .form-row
             label.form-control 目标版本地址：
             .controls
               .input-text-wrap(v-placeholder="'请输入目标版本文件地址'")
                 input.input-text(v-model="addModel2.target_version_url", type="text", v-form-ctrl, name="target_version_url", maxlength="250", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation2.$submitted && addValidation2.target_version_url.$pristine")
-                span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
-              .form-tips.form-tips-error(v-if="addValidation2.target_version_url.$dirty")
-                span(v-if="addValidation2.target_version_url.$error.required") 请输入目标版本文件地址
-                span(v-if="addValidation2.target_version_url.$error.maxlength") 目标版本文件地址最多不能超过250个字符
+              .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.target_version_url.$pristine")
+                span(v-if="addTaskValidation.target_version_url.$error.required") 请输入目标版本文件地址
+              .form-tips.form-tips-error(v-if="addTaskValidation.target_version_url.$dirty")
+                span(v-if="addTaskValidation.target_version_url.$error.required") 请输入目标版本文件地址
+                span(v-if="addTaskValidation.target_version_url.$error.maxlength") 目标版本文件地址最多不能超过250个字符
           .form-actions
             button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel2") 取消
             button.btn.btn-primary(type="submit") 确定
@@ -294,7 +294,7 @@
         tasks: [],
         editModel: {},
         addValidation: {},
-        addValidation2: {},
+        addTaskValidation: {},
         editValidation: {},
         originModel:{},
         delChecked: false/*,
@@ -397,7 +397,7 @@
       onAddSubmit2: function () {
         var self = this;
 
-        if (this.addValidation2.$valid) {
+        if (this.addTaskValidation.$valid) {
           api.corp.refreshToken().then(function () {
             api.firmware.task(self.addModel2).then(function (data) {
               self.showAddModal2 = false;

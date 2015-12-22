@@ -346,6 +346,24 @@ module.exports = function(Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    uploadFirmware: function(product_id, contentLength) {
+      return new Promise(function(resolve, reject) {
+        Vue.http.post(config.apiRoot + '/uplaod/product/' + product_id +
+          '/firmware',
+          function(data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Content-Length': contentLength,
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }).error(function(data, status, request) {
+          reject(data.error);
+        });
+      });
     }
   };
 };

@@ -136,7 +136,7 @@
 
       setInputWidth: function (evt) {
         var input = evt.target;
-        input.style.width = this.newTag.length ? this.$el.getElementsByClassName('temp-text')[0].clientWidth + 'px' : '1px';
+        input.style.width = this.newTag.length ? this.$el.getElementsByClassName('temp-text')[0].clientWidth + 10 + 'px' : '1px';
         this.$nextTick(function () {
           this.setCandidateTop();
         });

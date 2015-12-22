@@ -5,13 +5,14 @@
         h2 趋势
         .leftbox
           v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
-          radio-group(:items="periods", :value.sync="period", @select="drawProductTrends")
+          radio-group(:items="periods", :value.sync="period")
             span.label(slot="label") 最近
 
       .panel-bd
         .row
           .col-13
             #trendChart(style="height:320px;")
+            //- .trend-null(v-show="!trends.length") 暂无数据
           .col-7
             .statistics-info
               .item
@@ -55,8 +56,8 @@
               tr(v-for="item in regionData")
                 td {{item.name}}
                 td {{item.value}}
-                td 3620
-                td {{(item.value * 100 / 3620).toFixed(2)}}%
+                td {{productSummary.total}}
+                td {{(item.value * 100 / productSummary.total).toFixed(2)}}%
 
 </template>
 <style lang="stylus">
@@ -105,24 +106,34 @@
       };
     },
 
-    ready: function () {
-      var self = this;
+    route: {
+      data: function () {
+        var self = this;
 
-      this.getProducts().then(function (data) {
-        // 产品下拉框数据
-        data.forEach(function (item) {
-          self.productsOptions.push({
-            label: item.name,
-            value: item.id
+        this.getProducts().then(function (data) {
+          // 产品下拉框数据
+          data.forEach(function (item) {
+            self.productsOptions.push({
+              label: item.name,
+              value: item.id
+            });
           });
+
+          if (self.productId.length === 0) {
+            self.productId = data[0].id
+          }
+
+          self.getProductData();
         });
+      }
+    },
 
-        if (self.productId.length === 0) {
-          self.productId = data[0].id
-        }
-
-        self.getProductData();
-      });
+    // 监听属性变动
+    watch: {
+      period: function () {
+        this.getProductSummary();
+        this.drawProductTrends();
+      }
     },
 
     methods: {
@@ -162,9 +173,9 @@
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
-            var totalTrends = data.map(function (item) {
-              return item.total;
-            });
+            // var totalTrends = data.map(function (item) {
+              // return item.total;
+            // });
             var activatedTrends = data.map(function (item) {
               return item.activated;
             });
@@ -174,6 +185,17 @@
 
             // 趋势图表
             var trendOptions = {
+              noDataLoadingOption: {
+                text: '暂无数据',
+                effect: '',
+                effectOption: {
+                  backgroundColor: '#FFF'
+                },
+                textStyle: {
+                  fontSize: 14,
+                  color: '#999'
+                }
+              },
               calculable: true,
               tooltip: {
                 trigger: 'axis'
@@ -196,11 +218,11 @@
               yAxis: [{
                 type: 'value'
               }],
-              series: [{
+              series: [/*{
                 name: '总设备量',
                 type: 'line',
                 data: totalTrends
-              }, {
+              }, */{
                 name: '活跃设备',
                 type: 'line',
                 data: activeTrends

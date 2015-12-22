@@ -38,7 +38,7 @@ module.exports = function(Vue, Promise, config) {
       return new Promise(function(resolve, reject) {
         Vue.http.post(config.apiRoot + '/users', JSON.stringify(params),
           function(data, status, request) {
-            resolve(data.list);
+            resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',

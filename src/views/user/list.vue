@@ -3,7 +3,8 @@
     .main
       .panel
         .panel-hd
-          search-box(:key.sync="query", :auto="true", :active="searching", :placeholder="'用户名、邮箱、昵称'", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching")
+          search-box(:key.sync="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @cancel="getUsers", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+            button.btn.btn-primary(slot="search-button", @click="getUsers") 搜索
             label 查找用户
           h2 用户列表
         .panel-bd
@@ -18,7 +19,7 @@
                 th 用户来源
                 th 状态
             tbody
-              tr(v-for="user in filteredUsers | limitBy pageCount (currentPage-1)*pageCount")
+              tr(v-for="user in users")
                 td
                   a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
                 td {{user.nickname}}
@@ -26,7 +27,7 @@
                   span(v-if="user.phone&&user.email") {{user.phone}}/{{user.email}}
                   span(v-if="user.phone") {{user.phone}}
                   span(v-if="user.email") {{user.email}}
-                td {{user.create_date}}
+                td {{user.create_date | formatDate}}
                 td
                   span(v-if="user.source===1") Web
                   span(v-if="user.source===2") Android
@@ -35,11 +36,11 @@
                 td
                   span(v-if="user.status==1") 正常
                   span(v-if="user.status==2") 停用
-              tr(v-if="filteredUsers.length === 0")
+              tr(v-if="total === 0")
                 td.tac(colspan="6")
                   i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                   .tips-null(v-else) 查无此用户
-          pager(:total="filteredUsers.length", :current.sync="currentPage", :page-count="pageCount")
+          pager(:total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
 </template>
 
 <script>
@@ -62,32 +63,53 @@
         query: '',
         searching: false,
         users: [],
+        total: 0,
         currentPage: 1,
         pageCount: 10
       }
     },
 
-    computed: {
-      filteredUsers: function () {
-        var filter = Vue.filter('filterBy');
-        return filter(this.users, this.query, 'email', 'nickname');
+    route: {
+      data: function () {
+        this.getUsers();
       }
     },
 
-    route: {
-      data: function () {
-        return {
-          users: this.getUsers()
+    computed:  {
+      queryCondition: function () {
+        var condition = {
+          filter:['id', 'phone', 'email', 'nickname', 'create_date', 'source', 'status'],
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          order: this.sortOrders,
+          query: {}
+        };
+
+        if (this.query.length > 0) {
+          condition.query['nickname'] = { $in: [this.query] };
         }
+
+        return condition;
       }
     },
 
     methods: {
+      // 获取用户
       getUsers: function () {
         var self = this;
-        return api.corp.refreshToken().then(function () {
-          return api.user.list({ filter:["id","phone","email","nickname","create_date","source","status"]});
+        api.corp.refreshToken().then(function () {
+          api.user.list(self.queryCondition).then(function (data) {
+            self.users = data.list;
+            self.total = data.count;
+          });
         });
+      },
+
+      // 搜索
+      handleSearch: function () {
+        if (this.query.length === 0) {
+          this.getUsers();
+        }
       },
 
       toggleSearching: function () {

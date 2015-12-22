@@ -26,10 +26,10 @@
                   button.btn.btn-primary(@click="showAddModal = true")
                     i.fa.fa-plus
                     | 添加设备
-                  label.btn.btn-primary.btn-upload
+                  label.btn.btn-primary.btn-upload(:class="{'disabled':importing}")
                     input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
                     i.fa.fa-reply-all
-                    | 导入设备
+                    | {{importing ? '处理中...' : '导入设备'}}
               .col-11.status
                 .status-item
                   em {{productSummary.online}}
@@ -104,10 +104,11 @@
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
 
+    // 添加设备浮层
     modal(:show.sync="showAddModal")
       h3(slot="header") 添加设备
       .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", v-el="addForm", hook="addFormHook")
+        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
           .form-row
             label.form-control MAC地址：
             .controls
@@ -188,7 +189,8 @@
         delChecked: false,
         productKey: '',
         adding: false,
-        editing: false
+        editing: false,
+        importing: false
         // trendChart: {},
         // regionChart: {}
       }
@@ -239,7 +241,7 @@
 
         api.corp.refreshToken().then(function () {
           api.statistics.getProductTrend(self.$route.params.id, start_day, end_day).then(function (data) {
-            this.trends = data;
+            self.trends = data;
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
@@ -530,6 +532,9 @@
               if (__DEBUG__) {
                 console.log(data);
               }
+              self.getSummary().then(function (data) {
+                self.productSummary = data;
+              });
               self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
@@ -546,11 +551,13 @@
         this.originEditModel = _.clone(this.product);
       },
 
+      // 取消编辑
       onEditCancel: function () {
         this.resetEdit();
         // this.product = this.originEditModel;
       },
 
+      // 提交更新
       onEditSubmit: function () {
         var self = this;
 
@@ -602,18 +609,23 @@
           reader.onerror = function (evt) {
             alert('文件读取失败。')
           }
+          this.importing = true;
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
               var macArr = evt.target.result.split('\n');
-              console.log(macArr);
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
                     alert('设备导入成功!')
                   }
+                  self.getSummary().then(function (data) {
+                    self.productSummary = data;
+                  });
+                  self.importing = false;
                 }).catch(function (error) {
                   self.handleError(error);
+                  self.importing = false;
                 });
               });
             }
@@ -702,6 +714,6 @@
     height 300px
     line-height 320px
     text-align center
-    background #FBFBFB
+    background #FFF
     margin-bottom 20px
 </style>

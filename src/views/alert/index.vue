@@ -9,8 +9,7 @@
         .panel-bd
           .row
             .col-13
-              #trendChart(style="height:320px;", v-if="trends.length")
-              .trend-null(v-else) 暂无数据
+              #trendChart(style="height:320px;")
             .col-7
               .statistics-info
                 .item
@@ -126,7 +125,6 @@
     data: function () {
       return {
         alerts: [],
-        trends: [],
         total: 0,
         pageCount: 10,
         currentPage: 1,
@@ -184,7 +182,7 @@
     },
 
     ready: function () {
-      // this.drawTrendsChart();
+      this.drawTrendsChart();
       // var self = this;
       // this.getAlertSummary();
     },
@@ -197,6 +195,7 @@
       }
     },
 
+    // 监听属性变动
     watch: {
       period: function () {
         this.getAlertSummary();
@@ -238,6 +237,7 @@
         });
       },
 
+      // 告警统计信息
       getAlertSummary: function () {
         var self = this;
 
@@ -250,12 +250,12 @@
         });
       },
 
+      // 趋势图表
       drawTrendsChart: function () {
         var self = this;
 
         api.corp.refreshToken().then(function () {
           api.statistics.getAlertTrend(self.past, self.today).then(function (data) {
-            this.trends = data;
             var dates = data.map(function (item) {
               return dateFormat('MM-dd', new Date(item.day));
             });
@@ -265,6 +265,17 @@
 
             // 趋势图表
             var trendOptions = {
+              noDataLoadingOption: {
+                text: '暂无数据',
+                effect: '',
+                effectOption: {
+                  backgroundColor: '#FFF'
+                },
+                textStyle: {
+                  fontSize: 14,
+                  color: '#999'
+                }
+              },
               calculable: true,
               tooltip: {
                 trigger: 'axis'

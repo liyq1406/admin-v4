@@ -72,6 +72,12 @@
       }
     },
 
+    ready: function () {
+      this.$on('update-member', function (member) {
+        this.this_user = member;
+      });
+    },
+
     methods: {
       quit:function(){
         localStorage.clear();

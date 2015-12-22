@@ -2,9 +2,10 @@
   div
     .panel
       .panel-hd
-        radio-group(:items="periods", :value.sync="period", @select="drawUserTrends")
-          span.label(slot="label") 最近
         h2 趋势
+        .leftbox
+          radio-group(:items="periods", :value.sync="period")
+            span.label(slot="label") 最近
       .panel-bd
         .row
           .col-13
@@ -30,8 +31,9 @@
 
     .panel
       .panel-hd
-        radio-group(:items="regions", :value.sync="region", @select="drawUserRegion")
         h2 区域分布
+        .leftbox
+          radio-group(:items="regions", :value.sync="region", @select="drawUserRegion")
       .panel-bd
         .row
           #regionChart(style="height:320px; overflow:hidden;")
@@ -47,8 +49,8 @@
               tr(v-for="item in regionData")
                 td {{item.name}}
                 td {{item.value}}
-                td 2378
-                td {{(item.value * 100 / 2378).toFixed(2)}}%
+                td {{total}}
+                td {{(item.value * 100 / total).toFixed(2)}}%
 </template>
 
 <script>
@@ -88,6 +90,12 @@
       this.drawUserRegion();
     },
 
+    watch: {
+      period: function () {
+        this.drawUserTrends();
+      }
+    },
+
     methods: {
       getUserSummary: function () {
         var self = this;
@@ -125,14 +133,27 @@
               return item.active;
             });
 
+            /*
             if (addTrends.length > 0) {
               self.add = addTrends.reduce(function (prev, next) {
                 return prev + next;
               });
             }
+            */
 
             // 趋势图表
             var trendOptions = {
+              noDataLoadingOption: {
+                text: '暂无数据',
+                effect: '',
+                effectOption: {
+                  backgroundColor: '#FFF'
+                },
+                textStyle: {
+                  fontSize: 14,
+                  color: '#999'
+                }
+              },
               calculable: true,
               tooltip: {
                 trigger: 'axis'
@@ -203,7 +224,7 @@
                     if (value[0] === '-') {
                       value = 0
                     }
-                    return '用户数<br/>' + params.name + ': ' + value;
+                    return '活跃用户数<br/>' + params.name + ': ' + value;
                   }
                 },
                 dataRange: {
@@ -306,13 +327,13 @@
                     if (value[0] === '-') {
                       value = 0
                     }
-                    return '用户数<br/>' + params.name + ': ' + value;
+                    return '活跃用户数<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
                   x:'right',
-                  data:['用户数']
+                  data:['活跃用户数']
                 },
                 dataRange: {
                   min: 0,
@@ -322,7 +343,7 @@
                   calculable: true
                 },
                 series: [{
-                  name: '用户数',
+                  name: '活跃用户数',
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',
