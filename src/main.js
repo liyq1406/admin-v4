@@ -1,7 +1,5 @@
 var Vue = require('vue');
 
-// require('input-placeholder-polyfill');
-// var VueResource = require('vue-resource');
 var VueRouter = require('vue-router');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
@@ -12,16 +10,15 @@ var locales = require('./consts/locales');
 // 路由设置
 var configRouter = require('./route-config');
 var router;
-var dateFormat = require('date-format');
+
+// 配置
 var config = require('./consts/config');
 
+// 创建 vue 实例
 var App = Vue.extend(require('./app.vue'));
 
-Vue.config.debug = true;
-
-// 使用资源插件
-// Vue.use(VueResource);
-// Vue.http.options.root = 'http://42.121.122.228:8887/v2';
+// 调试模式
+Vue.config.debug = __DEBUG__;
 
 // 加载路由插件
 Vue.use(VueRouter);
@@ -38,10 +35,10 @@ Vue.use(i18n, {
   locales: locales
 });
 
-// Directives
+// 指令
 // ------------------------------
 
-// 占位符
+// input/textarea占位符
 Vue.directive('placeholder', {
   bind: function () {
     var self = this;
@@ -92,6 +89,9 @@ Vue.directive('placeholder', {
 });
 
 // 过滤器
+// ------------------------------
+
+// 日期格式化
 Vue.filter('formatDate', function (value) {
   if (value !== undefined && value.length > 0) {
     return value.replace('T', ' ').replace('Z', '');
@@ -101,12 +101,17 @@ Vue.filter('formatDate', function (value) {
 });
 
 // 过渡效果
+// ------------------------------
+
+// 渐进过渡
 Vue.transition('stagger', {
   stagger: function (index) {
     return Math.min(300, index * 50);
   }
 });
 
+// 混合
+// ------------------------------
 Vue.mixin({
   methods: {
     /**
@@ -123,7 +128,7 @@ Vue.mixin({
       return /^\S+$/.test(value);
     },
 
-    // 错误处理
+    // 统一的错误处理
     handleError: function (error) {
       if (/^400/.test(error.code)) {
         alert(config.errors[error.msg] || error.msg);

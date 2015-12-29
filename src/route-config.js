@@ -1,5 +1,4 @@
 var api = require('./api');
-// var productsStore = require('./stores/products');
 
 var configRouter = function (router) {
   router.map({
@@ -8,6 +7,7 @@ var configRouter = function (router) {
       component: require('./views/not-found.vue')
     },
 
+    // 禁止访问
     '/forbidden': {
       component: require('./views/forbidden.vue')
     },
@@ -162,6 +162,7 @@ var configRouter = function (router) {
     '/settings': '/settings/auth'
   });
 
+  // 路由切换开始时执行
   router.beforeEach(function (transition) {
     var today = new Date();
     //if (transition.to.path === '/login' || transition.to.path === '/register') {

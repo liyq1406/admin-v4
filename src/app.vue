@@ -73,18 +73,21 @@
     },
 
     ready: function () {
+      // 监听子组件的更新成员信息事件
       this.$on('update-member', function (member) {
         this.this_user = member;
       });
     },
 
     methods: {
+      // 退出
       quit:function(){
         localStorage.clear();
         this.$route.router.go({path: '/login'});
         // window.location.reload(true);
       },
 
+      // 获取产品
       getProducts: function () {
         var self = this;
         api.corp.refreshToken().then(function () {

@@ -15,8 +15,6 @@
               th.w50 版本号
               th 版本说明
               th 添加日期
-              //- th 发布日期
-              //- th 文件大小(byte)
               th.tac 操作
           tbody
             template(v-if="firmwares.length > 0 && !loadingFirmwares")
@@ -24,8 +22,6 @@
                 td {{firmware.version}}
                 td {{firmware.description}}
                 td {{firmware.create_date | formatDate}}
-                //- td {{firmware.release_date}}
-                //- td 缺API
                 td.tac
                   button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") 编辑
             tr(v-if="loadingFirmwares")
@@ -54,8 +50,6 @@
               th 任务名称
               th 起始版本
               th 目标版本
-              //- th 启动时间
-              //- th 终止时间
               th 已升级设备
               th.tac.w80 操作
           tbody
@@ -65,8 +59,6 @@
                 td {{task.name}}
                 td {{task.from_version}}
                 td {{task.target_version}}
-                //- td 2015-06-03 17:53:01
-                //- td 2015-06-03 17:53:01
                 td {{task.upgrade_count}}
                 td.tac
                   button.btn.btn-primary.btn-sm(:class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}", :disabled="toggling", @click="toggleTaskStatus(task)")
@@ -115,16 +107,6 @@
                 i.fa.fa-reply-all
                 | {{uploading ? '文件上传中，请稍等...' : '上传固件文件'}}
               .form-tips.mt5(v-if="addModel.file_url.length > 0") url: {{addModel.file_url}}
-            //-
-              label.form-control 固件文件地址：
-              .controls
-                .input-text-wrap(v-placeholder="'请输入固件文件地址'")
-                  input.input-text(v-model="addModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required, lazy)
-                .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.file_url.$pristine")
-                  span(v-if="addValidation.file_url.$error.required") 请输入固件文件地址
-                .form-tips.form-tips-error(v-if="addValidation.file_url.$dirty")
-                  span(v-if="addValidation.file_url.$error.required") 请输入固件文件地址
-                  span(v-if="addValidation.file_url.$error.maxlength") 固件文件地址最多不能超过250个字符
           .form-row
             label.form-control 描述：
             .controls
@@ -135,12 +117,6 @@
               .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
                 span(v-if="addValidation.description.$error.required") 请输入描述
                 span(v-if="addValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          //-
-            .form-row.date-row
-              label.form-control 发布日期：
-              .controls
-                datepicker(:value.sync="addReleaseDate", @select-day="updateAddModelRelease")
-                timepicker(:value.sync="addReleaseTime", @select-time="updateAddModelRelease", :pull-left="true")
           .form-row
             label.form-control 是否发布：
             .controls
@@ -194,12 +170,6 @@
               .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
                 span(v-if="editValidation.description.$error.required") 请输入描述
                 span(v-if="editValidation.description.$error.maxlength") 描述最多不能超过250个字符
-          //-
-            .form-row.date-row
-              label.form-control 发布日期：
-              .controls
-                datepicker(:value.sync="editReleaseDate", @select-day="updateEditModelRelease")
-                timepicker(:value.sync="editReleaseTime", @select-time="updateEditModelRelease", :pull-left="true")
           .form-row
             label.form-control 是否发布：
             .controls
@@ -246,23 +216,8 @@
                   option(selected, value="0") 请选择起始版本号
                   option(v-for="firmware in fromFirmwares", :value="firmware.version") {{firmware.version}}
               .form-tips.mt5(v-if="addTaskModel.from_version > 0") url: {{addTaskModel.from_version | firmwareUrl}}
-              //- .form-hints {{addTaskModel.from_version}}
               .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
                 span(v-if="addTaskValidation.from_version.$error.customValidator") 请选择起始版本号
-              //-
-                .input-text-wrap(v-placeholder="'请输入起始版本号'")
-                input.input-text(v-model="addTaskModel.from_version", type="number", v-form-ctrl, name="from_version", max="4294967296", required, number, lazy)
-          //-
-            .form-row
-              label.form-control 起始版本地址：
-              .controls
-                .input-text-wrap(v-placeholder="'请输入起始版本文件地址'")
-                  input.input-text(v-model="addTaskModel.from_version_url", type="text", v-form-ctrl, name="from_version_url", maxlength="250", required, lazy)
-                .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.from_version_url.$pristine")
-                  span(v-if="addTaskValidation.from_version_url.$error.required") 请输入起始版本文件地址
-                .form-tips.form-tips-error(v-if="addTaskValidation.from_version_url.$dirty")
-                  span(v-if="addTaskValidation.from_version_url.$error.required") 请输入起始版本文件地址
-                  span(v-if="addTaskValidation.from_version_url.$error.maxlength") 起始版本文件地址最多不能超过250个字符
           .form-row
             label.form-control 目标版本号：
             .controls
@@ -273,17 +228,6 @@
               .form-tips.mt5(v-if="addTaskModel.target_version > 0") url: {{addTaskModel.target_version | firmwareUrl}}
               .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
                 span(v-if="addTaskValidation.target_version.$error.customValidator") 请选择目标版本号
-          //-
-            .form-row
-              label.form-control 目标版本地址：
-              .controls
-                .input-text-wrap(v-placeholder="'请输入目标版本文件地址'")
-                  input.input-text(v-model="addTaskModel.target_version_url", type="text", v-form-ctrl, name="target_version_url", maxlength="250", required, lazy)
-                .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.target_version_url.$pristine")
-                  span(v-if="addTaskValidation.target_version_url.$error.required") 请输入目标版本文件地址
-                .form-tips.form-tips-error(v-if="addTaskValidation.target_version_url.$dirty")
-                  span(v-if="addTaskValidation.target_version_url.$error.required") 请输入目标版本文件地址
-                  span(v-if="addTaskValidation.target_version_url.$error.maxlength") 目标版本文件地址最多不能超过250个字符
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddTaskCancel") 取消
             button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
@@ -618,7 +562,6 @@
               }
             }
           };
-          // reader.readAsText(file);
           reader.readAsArrayBuffer(file);
         } else {
           alert('您的浏览器过于低级，不支持 HTML5 上传');
