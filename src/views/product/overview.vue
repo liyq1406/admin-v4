@@ -6,7 +6,7 @@
         .panel
           .product-card
             .thumb
-              img(src="../../assets/images/dummies/thumb.jpg")
+              img(src="../../assets/images/device_thumb.png")
             .info
               .col-9.summary
                 h3
@@ -94,7 +94,7 @@
             .controls
               .select
                 select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
-                  option(value="1", selected) wifi设备
+                  option(value="1", selected) WiFi设备
                   option(value="2") Zigbee网关
                   option(value="3") 蓝牙设备
           .form-actions
@@ -139,8 +139,11 @@
   require('echarts/chart/line');
   require('echarts/chart/map');
   var ecConfig = require('echarts/config');
+  var config = require('../../consts/config');
 
   module.exports = {
+    name: 'Overview',
+
     components: {
       'radio-group': RadioGroup,
       'modal': Modal
@@ -350,21 +353,7 @@
             } else {
               var curIndx = 0;
               var option;
-              var mapType = [
-                'china',
-                // 23个省
-                '广东', '青海', '四川', '海南', '陕西',
-                '甘肃', '云南', '湖南', '湖北', '黑龙江',
-                '贵州', '山东', '江西', '河南', '河北',
-                '山西', '安徽', '福建', '浙江', '江苏',
-                '吉林', '辽宁', '台湾',
-                // 5个自治区
-                '新疆', '广西', '宁夏', '内蒙古', '西藏',
-                // 4个直辖市
-                '北京', '天津', '上海', '重庆',
-                // 2个特别行政区
-                '香港', '澳门'
-              ];
+              var mapType = config.mapType;
 
               var chinaData = [];
               var chinaMax = 0;
@@ -613,7 +602,14 @@
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
-              var macArr = evt.target.result.split('\n');
+              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
+              var a = [];
+              macArr.forEach(function(element, index){
+                if (element !== '') {
+                  a.push(element);
+                }
+              });
+              macArr = a;
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {

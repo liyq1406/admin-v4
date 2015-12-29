@@ -99,6 +99,8 @@
   require('echarts/chart/line');
 
   module.exports = {
+    name: 'Dashboard',
+
     data: function () {
       return {
         totalSummary: {

@@ -32,30 +32,41 @@
               | MAC
               i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
             th
+              | 设备ID
+            th
               | 是否激活
             th
               | 激活时间
-            th
-              | 最近一次登录
+            //-
+              th
+                | 最近一次登录
             th
               | 在线状态
         tbody
-          tr(v-for="device in devices")
-            td
-              a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
-            td(v-text="device.is_active ? '是' : '未激活'")
-            td
-              span(v-if="device.active_date") {{device.active_date | formatDate}}
-            td
-              span(v-if="device.last_login") {{device.last_login | formatDate}}
-            td
-              span.hl-green(v-if="device.is_online") 在线
-              span.hl-gray(v-else) 下线
-          tr(v-if="devices.length === 0")
+          template(v-if="devices.length > 0 && !loadingData")
+            tr(v-for="device in devices")
+              td
+                a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
+              td {{device.id}}
+              td(v-text="device.is_active ? '是' : '未激活'")
+              td
+                span(v-if="device.active_date") {{device.active_date | formatDate}}
+              //-
+                td
+                  span(v-if="device.last_login") {{device.last_login | formatDate}}
+              td
+                span.hl-green(v-if="device.is_online") 在线
+                span.hl-gray(v-else) 下线
+          tr(v-if="loadingData")
             td.tac(colspan="5")
-              i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-              .tips-null(v-else) 未搜索到设备
-      pager(:total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
+              .tips-null
+                i.fa.fa-refresh.fa-spin
+                span 数据加载中...
+          tr(v-if="devices.length === 0 && !loadingData")
+            td.tac(colspan="5")
+              .tips-null
+                span 暂无相关记录
+      pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
 
     // 添加设备浮层
     modal(:show.sync="showAddModal")
@@ -104,6 +115,8 @@
   var SearchBox = require('../../../components/search-box.vue');
 
   module.exports = {
+    name: 'DeviceList',
+
     components: {
       'v-select': Select,
       'modal': Modal,
@@ -140,7 +153,8 @@
         addValidation: {},
         originAddModel: {},
         adding: false,
-        importing: false
+        importing: false,
+        loadingData: false
       }
     },
 
@@ -187,12 +201,15 @@
       getDevices: function () {
         var self = this;
 
+        this.loadingData = true;
         api.corp.refreshToken().then(function () {
           api.device.getList(self.$route.params.id, self.queryCondition).then(function (data) {
             self.devices = data.list;
             self.total = data.count;
+            self.loadingData = false;
           }).catch(function (error) {
             self.handleError(error);
+            self.loadingData = false;
           });
         });
       },
@@ -281,7 +298,14 @@
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
-              var macArr = evt.target.result.split('\n');
+              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
+              var a = [];
+              macArr.forEach(function(element, index){
+                if (element !== '') {
+                  a.push(element);
+                }
+              });
+              macArr = a;
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {

@@ -57,7 +57,7 @@
               //- th 启动时间
               //- th 终止时间
               th 已升级设备
-              th.tac.w80 操作
+              th.tac 操作
           tbody
             template(v-if="tasks.length > 0 && !loadingTasks")
               tr(v-for="task in tasks")
@@ -111,10 +111,9 @@
             label.form-control 固件文件：
             .controls
               label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
-                input(type="file", v-el:add-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)", :disabled="uploading")
+                input(type="file", v-el:firmware-file, name="firmwareFile", @change.prevent="uploadFirmware")
                 i.fa.fa-reply-all
                 | {{uploading ? '文件上传中，请稍等...' : '上传固件文件'}}
-              .form-tips.mt5(v-if="addModel.file_url.length > 0") url: {{addModel.file_url}}
             //-
               label.form-control 固件文件地址：
               .controls
@@ -179,11 +178,13 @@
           .form-row
             label.form-control 固件文件地址：
             .controls
-              label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
-                input(type="file", v-el:edit-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)", :disabled="uploading")
-                i.fa.fa-reply-all
-                | {{uploading ? '文件上传中，请稍等...' : '上传固件文件'}}
-              .form-tips.mt5(v-if="editModel.file_url") url: {{editModel.file_url}}
+              .input-text-wrap(v-placeholder="'请输入固件文件地址'")
+                input.input-text(v-model="editModel.file_url", type="text", v-form-ctrl, name="file_url", maxlength="250", required, lazy)
+              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.file_url.$pristine")
+                span(v-if="editValidation.file_url.$error.required") 请输入固件文件地址
+              .form-tips.form-tips-error(v-if="editValidation.file_url.$dirty")
+                span(v-if="editValidation.file_url.$error.required") 请输入固件文件地址
+                span(v-if="editValidation.file_url.$error.maxlength") 固件文件地址最多不能超过250个字符
           .form-row
             label.form-control 描述：
             .controls
@@ -467,8 +468,7 @@
           api.corp.refreshToken().then(function () {
             api.product.addFirmware(self.$route.params.id, self.addModel).then(function (data) {
               self.resetAdd();
-              self.getFirmwares();
-              // self.firmwares.push(data);
+              self.firmwares.push(data);
             }).catch(function (error) {
               self.handleError(error);
               self.adding = false;
@@ -513,7 +513,6 @@
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.getFirmwares();
               self.resetEdit();
             }).catch(function (error) {
               self.handleError(error);
@@ -569,8 +568,7 @@
               upgrade_task_id: task.id,
               status: task.status ? 0 : 1
             }).then(function (data) {
-              // self.getTasks();
-              task.status = !task.status;
+              self.getTasks();
               self.toggling = false;
             }).catch(function (error) {
               self.handleError(error);
@@ -581,17 +579,9 @@
       },
 
       // 上传固件文件
-      uploadFirmware: function (model, firmwareFile, event) {
+      uploadFirmware: function () {
         var self = this;
-        var file = this.$els[firmwareFile].files[0];
-        var input = event.target;
-
-        console.log(input.value);
-
-        if (file && file.size > 1024 * 1024) {
-          alert('文件大小不能大于1MB');
-          return;
-        }
+        var file = this.$els.firmwareFile.files[0];
 
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
@@ -607,9 +597,6 @@
                 api.corp.refreshToken().then(function () {
                   api.product.uploadFirmware(self.$route.params.id, evt.target.result/*, file.size*/).then(function (data) {
                     console.log(data);
-                    input.value = '';
-                    self[model].file_url = data.url;
-                    self.uploading = false;
                   }).catch(function (error) {
                     self.handleError(error);
                     self.uploading = false;

@@ -17,19 +17,25 @@
               th 数据表类型
               th.tac 操作
           tbody
-            tr(v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount")
-              td
-                a.hl-red(v-link="{path: '/data/tables/' + table.name}") {{table.name}}
-              td
-                span(v-if="table.type === 1") 用户公开表
-                span(v-if="table.type === 2") 用户私有表
-              td.tac
-                button.btn.btn-link.btn-sm(@click="editTable(table)") 编辑
-            tr(v-if="tables.length === 0")
+            template(v-if="tables.length > 0 && !loadingData")
+              tr(v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount")
+                td
+                  a.hl-red(v-link="{path: '/data/tables/' + table.name}") {{table.name}}
+                td
+                  span(v-if="table.type === 1") 用户公开表
+                  span(v-if="table.type === 2") 用户私有表
+                td.tac
+                  button.btn.btn-link.btn-sm(@click="editTable(table)") 编辑
+            tr(v-if="loadingData")
               td.tac(colspan="3")
-                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                .tips-null(v-else) 暂无数据表
-        pager(:total="tables.length", :current.sync="currentPage", :page-count="pageCount")
+                .tips-null
+                  i.fa.fa-refresh.fa-spin
+                  span 数据加载中...
+            tr(v-if="tables.length === 0 && !loadingData")
+              td.tac(colspan="3")
+                .tips-null
+                  span 暂无相关记录
+        pager(v-if="!loadingData", :total="tables.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加数据表浮层
     modal(:show.sync="showAddModal")
@@ -56,21 +62,9 @@
             label.form-control 访问权限：
             .controls
               .checkbox-group
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.permission", name="permission", value="create")
-                  | 添加
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.permission", name="permission", value="get")
-                  | 获取
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.permission", name="permission", value="find")
-                  | 查找
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.permission", name="permission", value="update")
-                  | 修改
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.permission", name="permission", value="delete")
-                  | 删除
+                label.checkbox(v-for="type in permissionTypes")
+                  input(type="checkbox", v-model="addModel.permission", name="permission", :value="type.value")
+                  | {{type.label}}
           .form-row
             label.form-control 字段：
             .controls
@@ -79,22 +73,14 @@
                   input.input-text(v-model="field.name", type="text", @input="updateField(addModel, addFields)", @blur="onBlur(field, addModel, addFields)", lazy)
                 .select
                   select(v-model="field.value", @change="updateField(addModel, addFields)")
-                    option(value="string") 字符串
-                    option(value="int") 32位整形数字
-                    option(value="boolean") 布尔类型
-                    option(value="float") 浮点类型
-                    option(value="date") 日期类型
+                    option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
                 span.fa.fa-times(@click="removeField(field, addModel, addFields)")
               .field-row
                 .input-text-wrap
                   input.input-text(v-model="newField.name", type="text", lazy)
                 .select
                   select(v-model="newField.value")
-                    option(value="string") 字符串
-                    option(value="int") 32位整形数字
-                    option(value="boolean") 布尔类型
-                    option(value="float") 浮点类型
-                    option(value="date") 日期类型
+                    option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
               button.btn.btn-success(@click.prevent.stop="createField(addModel, addFields)") 添加字段
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
@@ -120,21 +106,9 @@
             label.form-control 访问权限：
             .controls
               .checkbox-group
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.permission", name="permission", value="create")
-                  | 添加
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.permission", name="permission", value="get")
-                  | 获取
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.permission", name="permission", value="find")
-                  | 查找
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.permission", name="permission", value="update")
-                  | 修改
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.permission", name="permission", value="delete")
-                  | 删除
+                label.checkbox(v-for="type in permissionTypes")
+                  input(type="checkbox", v-model="editModel.permission", name="permission", :value="type.value")
+                  | {{type.label}}
           .form-row
             label.form-control 字段：
             .controls
@@ -143,22 +117,14 @@
                   input.input-text(v-model="field.name", type="text", @input="updateField(editModel, editFields)", @blur="onBlur(field, editModel, editFields)", lazy)
                 .select
                   select(v-model="field.value", @change="updateField(editModel, editFields)")
-                    option(value="string") 字符串
-                    option(value="int") 32位整形数字
-                    option(value="boolean") 布尔类型
-                    option(value="float") 浮点类型
-                    option(value="date") 日期类型
+                    option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
                 span.fa.fa-times(@click="removeField(field, editModel, editFields)")
               .field-row
                 .input-text-wrap
                   input.input-text(v-model="newField.name", type="text", lazy)
                 .select
                   select(v-model="newField.value")
-                    option(value="string") 字符串
-                    option(value="int") 32位整形数字
-                    option(value="boolean") 布尔类型
-                    option(value="float") 浮点类型
-                    option(value="date") 日期类型
+                    option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
               button.btn.btn-success(@click.prevent.stop="createField(editModel, editFields)") 添加字段
           .form-actions
             label.del-check
@@ -172,8 +138,12 @@
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
+  var config = require('../../consts/config');
+  var _ = require('lodash');
 
   module.exports = {
+    name: 'DataTables',
+
     components: {
       'modal': Modal,
       'pager': Pager
@@ -182,6 +152,8 @@
     data: function () {
       return {
         tables: [],
+        fieldTypes: config.fieldTypes,
+        permissionTypes: config.permissionTypes,
         currentPage: 1,
         pageCount: 10,
         showAddModal: false,
@@ -192,10 +164,14 @@
           permission: [],
           field: {}
         },
-        editModel: {
+        originAddModel: {
+          name: '',
+          type: 1,
           permission: [],
           field: {}
         },
+        editModel: {},
+        originEditModel: {},
         newField: {
           name: '',
           value: 'string'
@@ -206,35 +182,36 @@
         editValidation: {},
         delChecked: false,
         adding: false,
-        editing: false
+        editing: false,
+        loadingData: false
       };
     },
 
     route: {
       data: function () {
-        return {
-          tables: this.getTables()
-        };
+        // this.originAddModel = _.clone(this.addModel);
+        this.getTables();
       }
     },
 
     methods: {
+      // 获取数据表
       getTables: function () {
-        return api.corp.refreshToken().then(function () {
-          return api.dataTable.getTables();
-        })
+        var self = this;
+
+        self.loadingData = true;
+        api.corp.refreshToken().then(function () {
+          api.dataTable.getTables().then(function (data) {
+            self.tables = data;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
+          });
+        });
       },
 
-      onAddCancel: function () {
-        this.showAddModal = false;
-        this.adding = false;
-      },
-
-      onEditCancel: function () {
-        this.showEditModal = false;
-        this.editing = false;
-      },
-
+      // 失焦
       onBlur: function (field, model, fields) {
         if (field.name.length === 0) {
           fields.$remove(field);
@@ -242,6 +219,7 @@
         }
       },
 
+      // 更新字段
       updateField: function (model, fields) {
         var field = {};
         fields.forEach(function (item) {
@@ -250,6 +228,7 @@
         model.field = field;
       },
 
+      // 创建字段
       createField: function (model, fields) {
         if (this.newField.name.length > 0) {
           // this.addModel.field[this.newField.name] = this.newField.value;
@@ -261,18 +240,55 @@
         }
       },
 
+      // 移除字段
       removeField: function (field, model, fields) {
         fields.$remove(field);
         this.updateField(model, fields);
       },
+
       // 添加表单钩子
       addFormHook: function (form) {
         this.addForm = form;
       },
+
       // 编辑表单钩子
       editFormHook: function (form) {
         this.editForm = form;
       },
+
+      // 关闭添加浮层并净化添加表单
+      resetAdd: function () {
+        var self = this;
+        this.adding = false;
+        this.showAddModal = false;
+        this.addModel = _.clone(this.originAddModel);
+        this.addFields = [];
+        this.newField = { name: '', value: 'string' };
+        this.$nextTick(function () {
+          self.addForm.setPristine();
+        });
+      },
+
+      // 关闭编辑浮层并净化编辑表单
+      resetEdit: function () {
+        var self = this;
+        this.editing = false;
+        this.showEditModal = false;
+        this.delChecked = false;
+        this.editModel = _.clone(this.originEditModel);
+        this.editModel.permission = _.clone(this.originEditModel.permission);
+        this.newField = { name: '', value: 'string' };
+        this.$nextTick(function (){
+          // self.editForm.setValidity();
+        });
+      },
+
+      // 取消添加
+      onAddCancel: function () {
+        this.resetAdd();
+      },
+
+      // 添加操作
       onAddSubmit: function () {
         var self = this;
 
@@ -287,9 +303,7 @@
                 console.log(data);
               }
               self.tables.push(self.addModel);
-              self.showAddModal = false;
-              self.adding = false;
-              self.addFields = [];
+              self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
             });
@@ -297,9 +311,13 @@
         }
       },
 
+      // 编辑数据表
       editTable: function (table) {
         this.showEditModal = true;
-        this.editModel = table;
+        this.editModel = _.clone(table);
+        this.editModel.permission = _.clone(table.permission);
+        this.originEditModel = _.clone(table);
+        this.originEditModel.permission = _.clone(table.permission);
         this.editFields = [];
         for (var key in this.editModel.field) {
           if (this.editModel.field.hasOwnProperty(key)) {
@@ -308,6 +326,13 @@
         }
       },
 
+      // 取消编辑
+      onEditCancel: function () {
+        this.resetEdit();
+        // this.product = this.originEditModel;
+      },
+
+      // 提交更新
       onEditSubmit: function () {
         var self = this;
         self.editing = true;
@@ -317,9 +342,10 @@
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.tables.$remove(self.editModel);
-              self.showEditModal = false;
-              self.editing = false;
+              self.resetEdit();
+              self.getTables().then(function (data) {
+                self.tables = data;
+              });
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
@@ -331,7 +357,7 @@
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.showEditModal = false;
+              self.resetEdit();
               self.editing = false;
             }).catch(function (error) {
               self.handleError(error);

@@ -12,3 +12,10 @@
               li: a(v-link="{ path: '/settings/account' }") 帐号信息
       router-view(class="view", transition="view", transition-mode="out-in")
 </template>
+
+<script>
+  module.exports = {
+    name: 'Settings'
+  };
+</script>
+

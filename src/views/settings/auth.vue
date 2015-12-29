@@ -11,18 +11,24 @@
             th Access Key ID
             th.tac 状态
         tbody
-          tr(v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount")
-            td {{empower.name}}
-            td {{empower.id}}
-            td.tac
-              span.hl-green(v-if="empower.status===1") 启用
-              span.hl-gray(v-if="empower.status===2") 禁用
-          tr(v-if="empowers.length === 0")
+          template(v-if="empowers.length > 0 && !loadingData")
+            tr(v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount")
+              td {{empower.name}}
+              td {{empower.id}}
+              td.tac
+                span.hl-green(v-if="empower.status===1") 启用
+                span.hl-gray(v-if="empower.status===2") 禁用
+          tr(v-if="loadingData")
             td.tac(colspan="3")
-              i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-              .tips-null(v-else) 暂无授权信息
+              .tips-null
+                i.fa.fa-refresh.fa-spin
+                span 数据加载中...
+          tr(v-if="empowers.length === 0 && !loadingData")
+            td.tac(colspan="3")
+              .tips-null
+                span 暂无相关记录
 
-      pager(:total="empowers.length", :current.sync="currentPage", :page-count="pageCount")
+      pager(v-if="!loadingData", :total="empowers.length", :current.sync="currentPage", :page-count="pageCount")
 </template>
 <script>
   var Modal = require('../../components/modal.vue');
@@ -30,6 +36,8 @@
   var api = require('../../api');
 
   module.exports = {
+    name: 'AuthSettings',
+
     components: {
       'modal': Modal,
       'pager': Pager
@@ -39,22 +47,30 @@
       return {
         empowers: [],
         currentPage: 1,
-        pageCount: 10
+        pageCount: 10,
+        loadingData: false
       }
     },
 
     route: {
       data: function () {
-        return {
-          empowers: this.getEmpowers()
-        }
+        this.getEmpowers();
       }
     },
 
     methods: {
       getEmpowers: function () {
-        return api.corp.refreshToken().then(function () {
-          return api.empower.getEmpowers();
+        var self = this;
+
+        this.loadingData = true;
+        api.corp.refreshToken().then(function () {
+          api.empower.getEmpowers().then(function (data) {
+            self.empowers = data;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
+          });
         });
       }
     }

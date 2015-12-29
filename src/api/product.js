@@ -348,16 +348,16 @@ module.exports = function(Vue, Promise, config) {
       });
     },
 
-    uploadFirmware: function(product_id, contentLength) {
+    uploadFirmware: function(product_id, file) {
       return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/uplaod/product/' + product_id +
-          '/firmware',
+        Vue.http.post(config.apiRoot + '/upload/product/' + product_id +
+          '/firmware', file,
           function(data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
-              'Content-Length': contentLength,
+              // 'Content-Length': contentLength,
               'Access-Token': localStorage.getItem('accessToken')
             }
           }).error(function(data, status, request) {

@@ -179,18 +179,20 @@ var configRouter = function (router) {
             router.app.products = data;
           });
 
-          var mamber_id = localStorage.getItem('member_id');
-          api.corp.getMember(mamber_id).then(function (data) {//输入当前页面的帐号id ，返回帐号详情
+          var member_id = localStorage.getItem('member_id');
+          api.corp.getMember(member_id).then(function (data) {//输入当前页面的帐号id ，返回帐号详情
             if(__DEBUG__) {
               //console.log(data);
             }
             router.app.this_user = data;
           });
-
-
         });
         transition.next();
       } else {
+        localStorage.clear();
+        if (['/login'].indexOf(transition.to.path) < 0) {
+          alert('页面连接已过期，请重新登录');
+        }
         router.go({path: '/login'});
       }
     }

@@ -70,6 +70,8 @@
   // var SearchBox = require('../../components/search-box.vue');
 
   module.exports = {
+    name: 'TableDetails',
+
     components: {
       'modal': Modal,
       // 'search-box': SearchBox,

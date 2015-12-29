@@ -12,3 +12,9 @@
               li: a(href="http://support.xlink.cn/hc/", target="_blank") API
       router-view(class="view", transition="view", transition-mode="out-in")
 </template>
+
+<script>
+  module.exports = {
+    name: 'Data'
+  };
+</script>

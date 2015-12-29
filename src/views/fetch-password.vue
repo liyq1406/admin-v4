@@ -4,10 +4,15 @@
       a.fa.fa-chevron-circle-left.link-return(v-link="{path: '/login'}")
     form.form-cont(v-show="!resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
       .form-header
-        span 手机找回
-        a(v-link="{ path: '/fetch-password-bymail' }") 邮箱找回
+        h2 找回密码
+        p 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
+      //-
+        .form-header
+          span 手机找回
+          a(v-link="{ path: '/fetch-password-bymail' }") 邮箱找回
       .form-body
-        .form-hints 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
+        //-
+          .form-hints 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
         .form-row
           .input-text-wrap(v-placeholder="'手机号码'")
             input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
@@ -116,6 +121,8 @@
   var Captcha = require('../components/captcha.vue');
 
   module.exports = {
+    name: 'FetchPwdForm',
+
     components: {
       'captcha': Captcha
     },

@@ -19,28 +19,34 @@
                 th 用户来源
                 th 状态
             tbody
-              tr(v-for="user in users")
-                td
-                  a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
-                td {{user.nickname}}
-                td
-                  span(v-if="user.phone&&user.email") {{user.phone}}/{{user.email}}
-                  span(v-if="user.phone") {{user.phone}}
-                  span(v-if="user.email") {{user.email}}
-                td {{user.create_date | formatDate}}
-                td
-                  span(v-if="user.source===1") Web
-                  span(v-if="user.source===2") Android
-                  span(v-if="user.source===3") iOS
-                  span(v-if="user.source===4") 微信
-                td
-                  span(v-if="user.status==1") 正常
-                  span(v-if="user.status==2") 停用
-              tr(v-if="total === 0")
+              template(v-if="users.length > 0 && !loadingData")
+                tr(v-for="user in users")
+                  td
+                    a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
+                  td {{user.nickname}}
+                  td
+                    span(v-if="user.phone&&user.email") {{user.phone}}/{{user.email}}
+                    span(v-if="user.phone") {{user.phone}}
+                    span(v-if="user.email") {{user.email}}
+                  td {{user.create_date | formatDate}}
+                  td
+                    span(v-if="user.source===1") Web
+                    span(v-if="user.source===2") Android
+                    span(v-if="user.source===3") iOS
+                    span(v-if="user.source===4") 微信
+                  td
+                    span(v-if="user.status==1") 正常
+                    span(v-if="user.status==2") 停用
+              tr(v-if="loadingData")
                 td.tac(colspan="6")
-                  i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                  .tips-null(v-else) 查无此用户
-          pager(:total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
+                  .tips-null
+                    i.fa.fa-refresh.fa-spin
+                    span 数据加载中...
+              tr(v-if="total === 0 && !loadingData")
+                td.tac(colspan="6")
+                  .tips-null
+                    span 暂无相关记录
+          pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
 </template>
 
 <script>
@@ -51,6 +57,8 @@
   var Vue = require('vue');
 
   module.exports = {
+    name: 'UserList',
+
     components: {
       'search-box': SearchBox,
       'modal': Modal,
@@ -65,7 +73,8 @@
         users: [],
         total: 0,
         currentPage: 1,
-        pageCount: 10
+        pageCount: 10,
+        loadingData: false
       }
     },
 
@@ -97,10 +106,16 @@
       // 获取用户
       getUsers: function () {
         var self = this;
+
+        this.loadingData = true;
         api.corp.refreshToken().then(function () {
           api.user.list(self.queryCondition).then(function (data) {
             self.users = data.list;
             self.total = data.count;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
           });
         });
       },

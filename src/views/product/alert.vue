@@ -19,21 +19,27 @@
               th 状态
               th.tac 操作
           tbody
-            tr(v-for="rule in rules")
-              td {{* rule.name}}
-              td {{* rule.type | ruleLabel}}
-              td {{* rule.content}}
-              td
-                span.hl-green(v-if="rule.is_enable") 启用
-                span.hl-gray(v-else) 禁用
-              td.tac
-                button.btn.btn-link.btn-sm(@click="editRule(rule)") 编辑
-            tr(v-if="rules.length === 0")
+            template(v-if="rules.length > 0 && !loadingData")
+              tr(v-for="rule in rules")
+                td {{* rule.name}}
+                td {{* rule.type | ruleLabel}}
+                td {{* rule.content}}
+                td
+                  span.hl-green(v-if="rule.is_enable") 启用
+                  span.hl-gray(v-else) 禁用
+                td.tac
+                  button.btn.btn-link.btn-sm(@click="editRule(rule)") 编辑
+            tr(v-if="loadingData")
               td.tac(colspan="5")
-                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                .tips-null(v-else) 暂无规则
+                .tips-null
+                  i.fa.fa-refresh.fa-spin
+                  span 数据加载中...
+            tr(v-if="rules.length === 0 && !loadingData")
+              td.tac(colspan="5")
+                .tips-null
+                  span 暂无相关记录
         // 分页
-        pager(:total="rules.length", :current.sync="currentPage", :page-count="pageCount")
+        pager(v-if="!loadingData", :total="rules.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加规则浮层
     modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag", @close="onAddCancel")
@@ -257,6 +263,8 @@
   var _ = require('lodash');
 
   module.exports = {
+    name: 'Alert',
+
     components: {
       'modal': Modal,
       'pager': Pager,
@@ -299,8 +307,8 @@
         addForm: {},
         editForm: {},
         originAddModel: {},
-        originEditModel: {}
-
+        originEditModel: {},
+        loadingData: false
       }
     },
 
@@ -312,10 +320,7 @@
           self.datapoints = data;
           self.addModel.param = data[0].id;
         });
-
-        return {
-          rules: this.getRules()
-        }
+        this.getRules();
       }
     },
 
@@ -337,8 +342,16 @@
       // 获取告警规则列表
       getRules: function () {
         var self = this;
-        return api.corp.refreshToken(this).then(function () {
-          return api.alert.getRules(self.$route.params.id)
+
+        this.loadingData = true;
+        api.corp.refreshToken(this).then(function () {
+          api.alert.getRules(self.$route.params.id).then(function (data) {
+            self.rules = data;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
+          });
         });
       },
 
@@ -432,9 +445,7 @@
                 console.log(data);
               }
               self.resetEdit();
-              self.getRules().then(function (data) {
-                self.rules = data;
-              });
+              self.getRules();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
@@ -448,9 +459,7 @@
                 console.log(data);
               }
               self.resetEdit();
-              self.getRules().then(function (data) {
-                self.rules = data;
-              });
+              self.getRules();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;

@@ -100,15 +100,24 @@
 
       .btn
         padding 0 30px 0 20px
+        max-width 140px
+        box-sizing border-box
+
+        span
+          display block
+          overflow hidden
+          white-space nowrap
+          text-overflow "…"
 
       .dropdown-menu
         absolute right top 26px
         display none
-        width 100px
+        width 140px
         height 0
         border 1px solid red
         background #FFF
         overflow auto
+        box-sizing border-box
 
         li
           position relative
@@ -118,6 +127,9 @@
           color red
           cursor pointer
           padding 0 10px
+          overflow hidden
+          white-space nowrap
+          text-overflow "…"
 
           &:hover
             background red

@@ -24,7 +24,7 @@
                   .info {{device.is_active ? '已激活' : '未激活'}}
                 li
                   .label 激活时间：
-                  .info {{device.active_date}}
+                  .info {{device.active_date | formatDate}}
                 //- li
                 //-   .label 最后一次登录：
                 //-   .info 2015-11-12 19:33:22
@@ -104,6 +104,8 @@
   var socket= null;
 
   module.exports = {
+    name: 'DeviceDetails',
+
     components: {
       'switch': Switch
     },

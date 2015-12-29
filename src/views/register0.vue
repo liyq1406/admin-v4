@@ -126,6 +126,8 @@
   var Captcha = require('../components/captcha.vue');
 
   module.exports = {
+    name: 'RegisterForm',
+
     components: {
       'captcha': Captcha
     },

@@ -29,7 +29,7 @@
         .nav-aside-group
           h3 产品管理
           .nav-aside-item(v-for="product in products")
-            a(v-link="{ name: 'products', params: { id: product.id} }")
+            a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
               i.fa.fa-link
               | {{ product.name }}
           .nav-aside-actions
@@ -81,7 +81,8 @@
     methods: {
       quit:function(){
         localStorage.clear();
-        window.location.reload(true);
+        this.$route.router.go({path: '/login'});
+        // window.location.reload(true);
       },
 
       getProducts: function () {
@@ -220,6 +221,8 @@
       background #202020
       transition background .3s
       overflow hidden
+      white-space nowrap
+      text-overflow "…"
 
       .fa
         font-size 16px

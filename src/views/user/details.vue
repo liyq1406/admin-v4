@@ -70,6 +70,8 @@
   var api = require('../../api');
 
   module.exports = {
+    name: 'UserDetails',
+
     components: {
       'api': api
     },

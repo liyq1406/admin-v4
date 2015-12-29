@@ -43,23 +43,29 @@
                 th 是否已读
                 th.tac 操作
             tbody
-              tr(v-for="alert in alerts")
-                td {{alert.product_name}}
-                td
-                  template(v-if="alert.tags")
-                    span.text-label(v-for="tag in alert.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
-                  | {{alert.content}}
-                td {{alert.create_date}}
-                td
-                  span.hl-gray(v-if="alert.is_read") 已读
-                  span(v-else) 未读
-                td.tac
-                  button.btn.btn-link.btn-sm(@click="showAlert(alert)") 查看
-              tr(v-if="alerts.length === 0")
+              template(v-if="alerts.length > 0 && !loadingData")
+                tr(v-for="alert in alerts")
+                  td {{alert.product_name}}
+                  td
+                    template(v-if="alert.tags")
+                      span.text-label(v-for="tag in alert.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
+                    | {{alert.content}}
+                  td {{alert.create_date | formatDate}}
+                  td
+                    span.hl-gray(v-if="alert.is_read") 已读
+                    span(v-else) 未读
+                  td.tac
+                    button.btn.btn-link.btn-sm(@click="showAlert(alert)") 查看
+              tr(v-if="loadingData")
                 td.tac(colspan="5")
-                  i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                  .tips-null(v-else) 暂无数据记录
-          pager(:total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
+                  .tips-null
+                    i.fa.fa-refresh.fa-spin
+                    span 数据加载中...
+              tr(v-if="alerts.length === 0 && !loadingData")
+                td.tac(colspan="5")
+                  .tips-null
+                    span 暂无数据记录
+          pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
 
     // 查看告警信息浮层
     modal(:show.sync="showModal")
@@ -116,6 +122,8 @@
   require('echarts/chart/line');
 
   module.exports = {
+    name: 'Alerts',
+
     components: {
       'pager': Pager,
       'modal': Modal,
@@ -157,7 +165,8 @@
           message: 0
         },
         alertTrends: [],
-        today: dateFormat('yyyy-MM-dd', new Date())
+        today: dateFormat('yyyy-MM-dd', new Date()),
+        loadingData: false
       }
     },
 
@@ -227,12 +236,15 @@
       getAlerts: function () {
         var self = this;
 
+        this.loadingData = true;
         api.corp.refreshToken().then(function () {
           api.alert.getAlerts(self.queryCondition).then(function (data) {
             self.alerts = data.list;
             self.total = data.count;
+            self.loadingData = false;
           }).catch(function (error) {
             self.handleError(error);
+            self.loadingData = false;
           });
         });
       },

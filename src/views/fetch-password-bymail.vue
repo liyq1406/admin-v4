@@ -27,6 +27,8 @@
   var api = require('../api');
 
   module.exports = {
+    name: 'FetchPwdByMailForm',
+
     data: function () {
       return {
         validation: {},

@@ -44,8 +44,11 @@
 <script>
   var api = require('../api');
   var config = require('../consts/config');
+  var base64 = require('../helpers/base64');
 
   module.exports = {
+    name: 'PwdResetForm',
+
     data: function () {
       return {
         email: '',
@@ -60,8 +63,8 @@
 
     route: {
       data: function () {
-        this.email = window.atob(this.$route.params.email);
-        this.verifycode = window.atob(this.$route.params.verifycode);
+        this.email = base64.decode(this.$route.params.email);
+        this.verifycode = base64.decode(this.$route.params.verifycode);
       }
     },
 

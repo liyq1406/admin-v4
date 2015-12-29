@@ -114,8 +114,11 @@
   var api = require('../api');
   var config = require('../consts/config');
   var Captcha = require('../components/captcha.vue');
+  var base64 = require('../helpers/base64');
 
   module.exports = {
+    name: 'MemberActivateForm',
+
     components: {
       'captcha': Captcha
     },
@@ -136,7 +139,7 @@
     },
 
     ready: function () {
-      this.model.email = window.atob(this.$route.params.email);
+      this.model.email = base64.decode(this.$route.params.email);
     },
 
     methods: {

@@ -33,7 +33,7 @@
                 .controls
                   .select
                     select(v-model="model.link_type", v-form-ctrl, name="link_type")
-                      option(value="1", selected) wifi设备
+                      option(value="1", selected) WiFi设备
                       option(value="2") Zigbee网关
                       option(value="3") 蓝牙设备
               .form-actions
@@ -46,6 +46,8 @@
   var productsStore = require('../../stores/products');
 
   module.exports = {
+    name: 'CreateProductForm',
+
     data: function () {
       return {
         model: {},

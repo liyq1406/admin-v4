@@ -61,12 +61,13 @@
 
 </template>
 <style lang="stylus">
-.panel-hd
-  position relative
-  .leftbox
-    position absolute
-    top 6px
-    left 80px
+  .panel-hd
+    position relative
+
+    .leftbox
+      position absolute
+      top 6px
+      left 80px
 </style>
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
@@ -81,6 +82,8 @@
   var ecConfig = require('echarts/config');
 
   module.exports = {
+    name: 'ProductStatistic',
+
     components: {
       'radio-group': RadioGroup,
       'v-select': Select
@@ -260,6 +263,7 @@
                   worldMax = data[country].activated;
                 }
               }
+              console.log(worldData);
               self.regionData = worldData;
 
               regionOptions = {
@@ -295,21 +299,7 @@
             } else {
               var curIndx = 0;
               var option;
-              var mapType = [
-                'china',
-                // 23个省
-                '广东', '青海', '四川', '海南', '陕西',
-                '甘肃', '云南', '湖南', '湖北', '黑龙江',
-                '贵州', '山东', '江西', '河南', '河北',
-                '山西', '安徽', '福建', '浙江', '江苏',
-                '吉林', '辽宁', '台湾',
-                // 5个自治区
-                '新疆', '广西', '宁夏', '内蒙古', '西藏',
-                // 4个直辖市
-                '北京', '天津', '上海', '重庆',
-                // 2个特别行政区
-                '香港', '澳门'
-              ];
+              var mapType = config.mapType;
 
               var chinaData = [];
               var chinaMax = 0;
@@ -338,6 +328,7 @@
                   chinaMax = data['China'][province].activated;
                 }
               }
+              console.log(chinaData);
               self.regionData = chinaData;
 
               regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){

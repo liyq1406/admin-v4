@@ -7,7 +7,10 @@
           .panel-hd
             h2 个人信息
           .panel-bd
-            ul.user-details
+            .tips-null(v-if="loadingAccount")
+              i.fa.fa-refresh.fa-spin
+              span 数据加载中...
+            ul.user-details(v-else)
               li
                 .label 姓名：
                 .info
@@ -21,7 +24,7 @@
                 .label 邮箱：
                 .info {{member.email}}
               li
-                .label 手机
+                .label 手机：
                 .info {{member.phone}}
               li
                 .label 创建时间：
@@ -30,7 +33,7 @@
                 .label 最后登录：
                 .info {{member.last_auth_time | formatDate}}
               li
-                .label 角色
+                .label 角色：
                 .info
                   span(v-if="member.role==1") 管理员
                   span(v-if="member.role==2") 普通成员
@@ -60,7 +63,10 @@
           .panel-hd
             h2 企业信息
           .panel-bd
-            ul.user-details
+            .tips-null(v-if="loadingCorp")
+              i.fa.fa-refresh.fa-spin
+              span 数据加载中...
+            ul.user-details(v-else)
               //li
                 .label logo:
                 .info samxlu
@@ -68,8 +74,11 @@
                 .label 企业名称：
                 .info {{corp.company}}
               li
-                .label 应用类型
-                .info {{corp.type}}
+                .label 企业ID：
+                .info {{corp.id}}
+              li
+                .label 应用类型：
+                .info {{accountTypes[corp.type - 1]}}
               li
                 .label 联系人：
                 .info {{corp_member.name}}
@@ -146,10 +155,13 @@
 
 <script>
   var Modal = require('../../components/modal.vue');
+  var config = require('../../consts/config');
   var api = require('../../api');
   var _ = require('lodash');
 
   module.exports = {
+    name: 'AccountSettings',
+
     components: {
       'modal': Modal,
       'api': api
@@ -157,6 +169,7 @@
 
     data: function () {
       return {
+        accountTypes: config.accountTypes,
         query: '',
         searching: false,
         corp:{},
@@ -174,7 +187,9 @@
         accountValidation: {},
         confirmPassword: '',
         pwdValidation: {},
-        editing: false
+        editing: false,
+        loadingAccount: false,
+        loadingCorp: false
       }
     },
 
@@ -184,7 +199,7 @@
         this.getMemberInfo();
         /*
         var self = this;
-        var mamber_id = localStorage.getItem('member_id');
+        var member_id = localStorage.getItem('member_id');
         var corp_id = localStorage.getItem('corp_id');
         api.corp.refreshToken().then(function () {//获取成员详情
           api.corp.getCorp().then(function (data) {
@@ -198,7 +213,7 @@
             self.handleError(error)
           });
 
-          api.corp.getMember(mamber_id).then(function (data) {
+          api.corp.getMember(member_id).then(function (data) {
             if(__DEBUG__) {
               console.log("个人信息如下：");
               console.log(data);
@@ -223,16 +238,19 @@
       getCorpInfo: function () {
         var self = this;
         // var corp_id = localStorage.getItem('corp_id');
+        this.loadingCorp = true
         api.corp.refreshToken().then(function () {//获取成员详情
           api.corp.getCorp().then(function (data) {
             if(__DEBUG__) {
               console.log("企业信息如下：");
               console.log(data);
             }
-            self.corp=data;
-            self.corp_member=data.member;
+            self.corp = data;
+            self.corp_member = data.member;
+            self.loadingCorp = false;
           }).catch(function (error) {
             self.handleError(error)
+            self.loadingCorp = false;
           });
         });
       },
@@ -240,16 +258,20 @@
       // 获取个人信息
       getMemberInfo: function () {
         var self = this;
-        var mamber_id = localStorage.getItem('member_id');
+        var member_id = localStorage.getItem('member_id');
+
+        this.loadingAccount = true;
         api.corp.refreshToken().then(function () {//获取成员详情
-          api.corp.getMember(mamber_id).then(function (data) {
+          api.corp.getMember(member_id).then(function (data) {
             if(__DEBUG__) {
               console.log("个人信息如下：");
               console.log(data);
             }
-            self.member=data;
+            self.member = data;
+            self.loadingAccount = false;
           }).catch(function (error) {
             self.handleError(error)
+            self.loadingAccount = false;
           });
         });
       },
@@ -319,11 +341,11 @@
       // 提交编辑用户信息
       onSubmitAccount:function(){
         var self = this;
-        var mamber_id = localStorage.getItem('member_id');
+        var member_id = localStorage.getItem('member_id');
         if (this.accountValidation.$valid && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {
-            api.corp.putMember(mamber_id, self.editModel).then(function (data) {
+            api.corp.putMember(member_id, self.editModel).then(function (data) {
               if(__DEBUG__) {
                 console.log(data);
               }

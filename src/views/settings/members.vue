@@ -19,25 +19,31 @@
             //th 最后一次登录
             th.tac 状态
         tbody
-          tr(v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount")
-            td
-              span(v-if="member.name.length") {{member.name}}
-              span.hl-gray(v-else) 未设置
-            //td 13800138000
-            //td 8009995558@citicib.com.cn
-            td
-              span(v-if="member.role==1") 管理员
-              span(v-else) 普通会员
-            //td 2015-6-3 15:38:53
-            td.tac
-              span.hl-red(v-if="member.status==0") 待激活
-              span.hl-gray(v-if="member.status==1") 正常
-              span.hl-red(v-if="member.status==2") 已停用
-          tr(v-if="filteredMembers.length === 0")
+          template(v-if="filteredMembers.length > 0 && !loadingData")
+            tr(v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount")
+              td
+                span(v-if="member.name.length") {{member.name}}
+                span.hl-gray(v-else) 未设置
+              //td 13800138000
+              //td 8009995558@citicib.com.cn
+              td
+                span(v-if="member.role==1") 管理员
+                span(v-else) 普通会员
+              //td 2015-6-3 15:38:53
+              td.tac
+                span.hl-red(v-if="member.status==0") 待激活
+                span.hl-gray(v-if="member.status==1") 正常
+                span.hl-red(v-if="member.status==2") 已停用
+          tr(v-if="loadingData")
             td.tac(colspan="3")
-              i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-              .tips-null(v-else) 搜索不到成员
-      pager(:total="filteredMembers.length", :current.sync="currentPage", :page-count="pageCount")
+              .tips-null
+                i.fa.fa-refresh.fa-spin
+                span 数据加载中...
+          tr(v-if="filteredMembers.length === 0 && !loadingData")
+            td.tac(colspan="3")
+              .tips-null
+                span 暂无相关记录
+      pager(v-if="!loadingData", :total="filteredMembers.length", :current.sync="currentPage", :page-count="pageCount")
 
     modal(:show.sync="showModal")
       h3(slot="header") 添加成员
@@ -84,6 +90,8 @@
   var Vue = require('vue');
 
   module.exports = {
+    name: 'MemberSettings',
+
     components: {
       'search-box': SearchBox,
       'modal': Modal,
@@ -103,15 +111,14 @@
         currentPage: 1,
         pageCount: 10,
         addForm:[],
-        centervalue:{}
+        centervalue:{},
+        loadingData: false
       }
     },
 
     route: {
       data: function () {
-        return {
-          members: this.getMembers()
-        };
+        this.getMembers();
       }
     },
 
@@ -138,8 +145,17 @@
     },
     methods: {
       getMembers: function () {
-        return api.corp.refreshToken().then(function () {
-          return api.corp.getMembers();
+        var self = this;
+
+        this.loadingData = true;
+        api.corp.refreshToken().then(function () {
+          api.corp.getMembers().then(function (data) {
+            self.members = data;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
+          });
         });
       },
 
@@ -165,10 +181,7 @@
               console.log(data);
             }
             if(data-0 == 200){
-              self.getMembers().then(function(data){
-                self.members = data;
-              })
-
+              self.getMembers();
             };
             self.showModal = false;
           }).catch(function (error) {

@@ -20,19 +20,25 @@
               th 描述
               th.tac 操作
           tbody
-            tr(v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount")
-              td {{* datapoint.index}}
-              td {{* datapoint.name}}
-              td {{* datapoint.type | typeLabel}}
-              td {{* datapoint.symbol}}
-              td {{* datapoint.description}}
-              td.tac
-                button.btn-link(@click="editDataPoint(datapoint)") 编辑
-            tr(v-if="datapoints.length === 0")
+            template(v-if="datapoints.length > 0 && !loadingData")
+              tr(v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount")
+                td {{* datapoint.index}}
+                td {{* datapoint.name}}
+                td {{* datapoint.type | typeLabel}}
+                td {{* datapoint.symbol}}
+                td {{* datapoint.description}}
+                td.tac
+                  button.btn-link(@click="editDataPoint(datapoint)") 编辑
+            tr(v-if="loadingData")
               td.tac(colspan="6")
-                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                .tips-null(v-else) 未搜索到数据端点
-        pager(:total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
+                .tips-null
+                  i.fa.fa-refresh.fa-spin
+                  span 数据加载中...
+            tr(v-if="datapoints.length === 0 && !loadingData")
+              td.tac(colspan="6")
+                .tips-null
+                  span 暂无相关记录
+        pager(v-if="!loadingData", :total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
 
     // 添加数据端点浮层
     modal(:show.sync="showAddModal", @close="onAddCancel")
@@ -199,17 +205,15 @@
         addForm: {},
         editForm: {},
         originAddModel: {},
-        originEditModel: {}
+        originEditModel: {},
+        loadingData: false
       }
     },
 
     route: {
       data: function (transition) {
         this.originAddModel = _.clone(this.addModel);
-
-        return {
-          datapoints: this.getDatapoints()
-        }
+        this.getDatapoints();
       }
     },
 
@@ -223,8 +227,15 @@
       // 获取数据端点列表
       getDatapoints: function () {
         var self = this;
-        return api.corp.refreshToken(this).then(function () {
-          return api.product.getDatapoints(self.$route.params.id)
+        this.loadingData = true;
+        api.corp.refreshToken(this).then(function () {
+          api.product.getDatapoints(self.$route.params.id).then(function (data) {
+            self.datapoints = data;
+            self.loadingData = false;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.loadingData = false;
+          });
         });
       },
 
@@ -310,9 +321,7 @@
               }
               self.resetEdit();
               self.delChecked = false;
-              self.getDatapoints().then(function (data) {
-                self.datapoints = data;
-              });
+              self.getDatapoints();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
@@ -326,9 +335,7 @@
                 console.log(data);
               }
               self.resetEdit();
-              self.getDatapoints().then(function (data) {
-                self.datapoints = data;
-              });
+              self.getDatapoints();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;

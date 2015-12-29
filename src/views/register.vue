@@ -52,11 +52,7 @@
             .select
               select(v-model="model.type", v-form-ctrl, name="type", custom-validator="checkTypeValid")
                 option(selected) 请选择应用类型
-                option(value="1") 消费电子（含穿戴设备/娱乐产品等）
-                option(value="2") 智能家居
-                option(value="3") 智能安防
-                option(value="4") 商用/工控设备
-                option(value="5") 其它
+                option(v-for="type in accountTypes", :value="$index + 1") {{type}}
             .form-tips.form-tips-error(v-if="validation.$submitted")
               span(v-if="validation.type.$error.customValidator") 请选择您的应用类型
         .form-actions
@@ -68,6 +64,8 @@
         .fa.fa-check-circle-o
         h2 注册成功
         p 系统已经发了一封激活邮件到您的邮箱，请查阅。
+        .actions
+          a.btn.btn-primary(v-link="{ path: '/login'}") 确定
       .form-footer
         | 2015 &copy; 广州云湾信息技术有限公司.
 </template>
@@ -108,9 +106,11 @@
   var config = require('../consts/config');
 
   module.exports = {
+    name: 'RegisterForm',
 
     data: function () {
       return {
+        accountTypes: config.accountTypes,
         validation: {},
         captcha: '',
         captchaValue: '',

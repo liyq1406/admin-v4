@@ -74,6 +74,7 @@ module.exports = function (Vue, Promise, config) {
         // if (localStorage.getItem('expireAt') < today.getTime() + 10000) {
         if (localStorage.getItem('expireAt') !== null && today.getTime() < localStorage.getItem('expireAt') && today.getTime() > localStorage.getItem('expireAt') -  localStorage.getItem('expireIn') / 2) {
           Vue.http.post(config.apiRoot + '/corp/token/refresh', JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}), function (data, status, request) {
+            localStorage.clear();
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
             localStorage.setItem('expireIn', data.expire_in);
@@ -89,6 +90,7 @@ module.exports = function (Vue, Promise, config) {
             reject(data.error);
           });
         } else if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime()) {
+          localStorage.clear();
           alert('页面连接已过期，请重新登录');
           vm.$route.router.go({path: '/login'});
           //reject('Token expired.');

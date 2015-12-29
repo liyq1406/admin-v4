@@ -11,3 +11,9 @@
               li: a(v-link="{ path: '/statistic/users' }") 用户统计
       router-view(class="view", transition="view", transition-mode="out-in")
 </template>
+
+<script>
+  module.exports = {
+    name: 'Statistic'
+  };
+</script>

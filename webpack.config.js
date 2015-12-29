@@ -118,6 +118,8 @@ var webpackConfig = {
     fs: 'empty'
   },
 
+  watch: true,
+
   // 入口文件
   entry : merge({
     app: [

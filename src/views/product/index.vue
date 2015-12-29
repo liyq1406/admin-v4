@@ -14,6 +14,8 @@
   var api = require('../../api');
 
   module.exports = {
+    name: 'Products',
+
     components: {
       'tab': Tab
     },
