@@ -1,5 +1,9 @@
 var api = require('./api');
 
+var isInAuthPage = function (path) {
+  return ['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0;
+};
+
 var configRouter = function (router) {
   router.map({
     // 404
@@ -37,14 +41,24 @@ var configRouter = function (router) {
       component: require('./views/password-reset.vue')
     },
 
+    // 重设密码
+    '/user-password-reset/:corp_id/:email/:verifycode': {
+      component: require('./views/user-password-reset.vue')
+    },
+
     // 激活成员邀请
     '/member-activate/:email': {
       component: require('./views/member-activate.vue')
     },
 
-    // 邮箱激活
+    // 企业成员邮箱激活
     '/email-activate/:email/:verifycode': {
       component: require('./views/email-activate.vue')
+    },
+
+    // 用户邮箱激活
+    '/user-email-activate/:corp_id/:email/:verifycode': {
+      component: require('./views/user-email-activate.vue')
     },
 
     // 概览
@@ -89,6 +103,11 @@ var configRouter = function (router) {
     // 设备详情
     '/products/:product_id/devices/:device_id': {
       component: require('./views/product/device/details.vue')
+    },
+
+    // 应用管理
+    '/apps': {
+      component: require('./views/app/index.vue')
     },
 
     // 告警服务
@@ -164,38 +183,58 @@ var configRouter = function (router) {
 
   // 路由切换开始时执行
   router.beforeEach(function (transition) {
-    var today = new Date();
-    //if (transition.to.path === '/login' || transition.to.path === '/register') {
-    if (['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(transition.to.path) >= 0 || transition.to.path.indexOf('/member-activate') >= 0 || transition.to.path.indexOf('/email-activate') >= 0 || transition.to.path.indexOf('/password-reset') >= 0) {
-      router.app.access = false;
-      transition.next();
-    } else {
-      if (localStorage.getItem('accessToken') !== null && localStorage.getItem('expireAt') > today.getTime()) {
-        router.app.access = true;
-        api.corp.refreshToken(this).then(function () {
-          api.product.getProducts().then(function (data) {
-            if (__DEBUG__) {
-              // console.log(data);
-            }
-            router.app.products = data;
-          });
+    var today = new Date().getTime();
 
-          var member_id = localStorage.getItem('member_id');
-          api.corp.getMember(member_id).then(function (data) {//输入当前页面的帐号id ，返回帐号详情
-            if(__DEBUG__) {
-              //console.log(data);
-            }
-            router.app.this_user = data;
-          });
-        });
-        transition.next();
-      } else {
-        localStorage.clear();
-        if (['/login'].indexOf(transition.to.path) < 0) {
+    // token存在
+    if (localStorage.accessToken) {
+      // token 过期
+      if (today > localStorage.expireAt) {
+        if (isInAuthPage(transition.to.path)) {
+          router.app.access = false;
+        } else {
+          localStorage.removeItem('accessToken');
           alert('页面连接已过期，请重新登录');
+          router.go({path: '/login'});
+          router.app.access = false;
+          location.reload();
         }
-        router.go({path: '/login'});
+        transition.next();
       }
+      else {
+        if (isInAuthPage(transition.to.path)) {
+          router.app.access = false;
+        } else {
+          router.app.access = true;
+          api.corp.refreshToken(this).then(function () {
+            api.product.getProducts().then(function (data) {
+              if (__DEBUG__) {
+                // console.log(data);
+              }
+              router.app.products = data;
+            });
+
+            var member_id = localStorage.getItem('member_id');
+            api.corp.getMember(member_id).then(function (data) {//输入当前页面的帐号id ，返回帐号详情
+              if(__DEBUG__) {
+                //console.log(data);
+              }
+              router.app.this_user = data;
+            });
+          });
+        }
+        transition.next();
+      }
+    }
+    // token 不存在
+    else {
+      if (isInAuthPage(transition.to.path)) {
+        router.app.access = false;
+      } else {
+        router.go({path: '/login'});
+        router.app.access = false;
+        // location.reload();
+      }
+      transition.next();
     }
   });
 

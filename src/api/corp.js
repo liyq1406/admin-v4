@@ -1,5 +1,3 @@
-//var request = require('superagent');
-
 module.exports = function (Vue, Promise, config) {
   return {
     /**
@@ -74,12 +72,12 @@ module.exports = function (Vue, Promise, config) {
         // if (localStorage.getItem('expireAt') < today.getTime() + 10000) {
         if (localStorage.getItem('expireAt') !== null && today.getTime() < localStorage.getItem('expireAt') && today.getTime() > localStorage.getItem('expireAt') -  localStorage.getItem('expireIn') / 2) {
           Vue.http.post(config.apiRoot + '/corp/token/refresh', JSON.stringify({refresh_token: localStorage.getItem('refreshToken')}), function (data, status, request) {
-            localStorage.clear();
+            // localStorage.clear();
             localStorage.setItem('accessToken', data.access_token);
             localStorage.setItem('refreshToken', data.refresh_token);
             localStorage.setItem('expireIn', data.expire_in);
             localStorage.setItem('expireAt', today.getTime() + data.expire_in * 1000);
-            // localStorage.setItem('expireAt', today.getTime() + 20000);
+            // localStorage.setItem('expireAt', today.getTime() + 10000);
             resolve(data);
           }, {
             headers: {
@@ -89,11 +87,6 @@ module.exports = function (Vue, Promise, config) {
           }).error(function (data, status, request) {
             reject(data.error);
           });
-        } else if (localStorage.getItem('expireAt') !== null && localStorage.getItem('expireAt') < today.getTime()) {
-          localStorage.clear();
-          alert('页面连接已过期，请重新登录');
-          vm.$route.router.go({path: '/login'});
-          //reject('Token expired.');
         } else {
           resolve(true);
         }
@@ -333,6 +326,26 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
+     * 用户帐号邮箱激活
+     * @param  {Object} params 激活参数
+     * @return {Promise}
+     */
+    userEmailActivate: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/user_email_activate', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+
+    /**
      * 发起企业邮箱密码重置
      * @param  {Object} params 重置参数
      */
@@ -357,6 +370,24 @@ module.exports = function (Vue, Promise, config) {
     resetPasswordByMail: function (params) {
       return new Promise(function (resolve, reject) {
         Vue.http.post(config.apiRoot + '/corp/password/reset/email', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 用户邮箱重置密码
+     * @param  {[type]} params 重置参数
+     */
+    resetUserPasswordByMail: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/user/password/foundback', JSON.stringify(params), function (data, status, request) {
           resolve(status);
         }, {
           headers: {

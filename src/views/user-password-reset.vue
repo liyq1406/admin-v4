@@ -11,13 +11,13 @@
       .form-body
         .form-row
           .input-text-wrap(v-placeholder="'密码'")
-            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-            span(v-if="validation.password.$error.required") 请输入密码
-          .form-tips.form-tips-error(v-if="validation.password.$dirty")
-            span(v-if="validation.password.$error.required") 请输入密码
-            span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
-            span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
+            input.input-text(type="password", v-model="model.new_password", v-form-ctrl, required, maxlength="16", minlength="6", name="new_password", lazy)
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.new_password.$pristine")
+            span(v-if="validation.new_password.$error.required") 请输入密码
+          .form-tips.form-tips-error(v-if="validation.new_password.$dirty")
+            span(v-if="validation.new_password.$error.required") 请输入密码
+            span(v-if="validation.new_password.$error.minlength") 密码最小不能少于6位
+            span(v-if="validation.new_password.$error.maxlength") 密码最大不能超过16位
         .form-row
           .input-text-wrap(v-placeholder="'再次输入密码'")
             input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
@@ -51,6 +51,7 @@
 
     data: function () {
       return {
+        corp_id: '',
         email: '',
         verifycode: '',
         validation: {},
@@ -63,6 +64,7 @@
 
     route: {
       data: function () {
+        this.corp_id = base64.decode(this.$route.params.corp_id);
         this.email = base64.decode(this.$route.params.email);
         this.verifycode = base64.decode(this.$route.params.verifycode);
       }
@@ -70,15 +72,20 @@
 
     methods: {
       checkEqualToPassword: function (value) {
-        return value === this.model.password;
+        return value === this.model.new_password;
       },
 
       onSubmit: function () {
-        var params = {email: this.email, verifycode: this.verifycode, password: this.model.password};
+        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode, new_password: this.model.new_password};
         var self = this;
+
+        if (__DEBUG__) {
+          console.log(params);
+        }
+
         if (this.validation.$valid && !this.sending) {
           this.sending = true;
-          api.corp.resetPasswordByMail(params).then(function (data){
+          api.corp.resetUserPasswordByMail(params).then(function (data){
             if(__DEBUG__) {
               console.log(data);
             }

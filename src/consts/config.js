@@ -1,7 +1,10 @@
 
 module.exports = {
   // apiRoot: 'http://42.121.122.228:8887/v2',
-  apiRoot: 'http://120.26.209.230:8887/v2',
+  // apiRoot: 'http://120.26.209.230:8887/v2',
+  // apiRoot: 'http://wx-js.xlink.cn:8887/v2',
+  // 正式地址
+  apiRoot: 'http://api2.xlink.cn:80/v2',
 
   // 刷新验证码等待间隔
   verifycodeDuration: 90,
@@ -39,11 +42,19 @@ module.exports = {
     '香港', '澳门'
   ],
 
+  deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备'],
+
   // 数据端点类型
   datapointTypes: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串'],
 
   // 告警规则类型
   ruleTypes: ['数据端点', '设备状态'],
+
+  // 通知方式
+  notifyTypes: ['短信', '邮箱', '应用内推送', 'APN推送'],
+
+  // 可见范围
+  scopeTypes: ['企业可见', '用户可见', '全部可见'],
 
   // 启用状态(通用)
   enableStates: ['启用', '禁用'],
@@ -72,6 +83,14 @@ module.exports = {
     { label: '删除', value: 'delete' }
   ],
 
+  // APP 类型
+  appTypes: [
+    { label: 'iOS', disabled: false },
+    { label: 'Android', disabled: true },
+    { label: 'Web', disabled: true },
+    { label: '微信', disabled: true }
+  ],
+
   // 错误定义
   errors: {
     '[mac] is not mac address': 'Mac地址不合法',
@@ -88,6 +107,7 @@ module.exports = {
     'verifycode not exists': '验证码不存在',
     '[tag] length vaild error ': '标签的长度不合法',
     'datapoint not exists': '数据点不存在',
-    'firmware version exists': '固件版本已存在'
+    'firmware version exists': '固件版本已存在',
+    'can not delete release product': '不允许删除已发布的产品'
   }
 };

@@ -108,28 +108,21 @@
             label.form-control 通知方式：
             .controls
               .checkbox-group
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.notify_target", name="notify_target", value="1", number)
-                  | 短信
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.notify_target", name="notify_target", value="2", number)
-                  | 邮箱
-                label.checkbox
-                  input(type="checkbox", v-model="addModel.notify_target", name="notify_target", value="3", number)
-                  | 移动应用推送
+                label.checkbox(v-for="type in notifyTypes")
+                  input(type="checkbox", v-model="addModel.notify_target", name="notify_target", :value="$index+1", number)
+                  | {{type}}
+              .apn-list(v-show="showApps('addModel')")
+                .checkbox-group
+                  label.checkbox(v-for="app in apps")
+                    input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
+                    | {{app.name}}
           .form-row
             label.form-control 可见范围：
             .controls
               .radio-group
-                label.radio
-                  input(type="radio", v-model="addModel.scope", name="addModel.scope", value="1", number)
-                  | 企业可见
-                label.radio
-                  input(type="radio", v-model="addModel.scope", name="addModel.scope", value="2", number)
-                  | 用户可见
-                label.radio
-                  input(type="radio", v-model="addModel.scope", name="addModel.scope", value="3", number)
-                  | 全部可见
+                label.radio(v-for="type in scopeTypes")
+                  input(type="radio", v-model="addModel.scope", name="addModel.scope", :value="$index+1", number)
+                  | {{type}}
           .form-row
             label.form-control 状态：
             .controls
@@ -213,28 +206,21 @@
             label.form-control 通知方式：
             .controls
               .checkbox-group
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.notify_target", name="notify_target", value="1", number)
-                  | 短信
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.notify_target", name="notify_target", value="2", number)
-                  | 邮箱
-                label.checkbox
-                  input(type="checkbox", v-model="editModel.notify_target", name="notify_target", value="3", number)
-                  | 移动应用推送
+                label.checkbox(v-for="type in notifyTypes")
+                  input(type="checkbox", v-model="editModel.notify_target", name="notify_target", :value="$index+1", number)
+                  | {{type}}
+              .apn-list(v-show="showApps('editModel')")
+                .checkbox-group
+                  label.checkbox(v-for="app in apps")
+                    input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
+                    | {{app.name}}
           .form-row
             label.form-control 可见范围：
             .controls
               .radio-group
-                label.radio
-                  input(type="radio", v-model="editModel.scope", name="scope", value="1", number)
-                  | 企业可见
-                label.radio
-                  input(type="radio", v-model="editModel.scope", name="scope", value="2", number)
-                  | 用户可见
-                label.radio
-                  input(type="radio", v-model="editModel.scope", name="scope", value="3", number)
-                  | 全部可见
+                label.radio(v-for="type in scopeTypes")
+                  input(type="radio", v-model="editModel.scope", name="scope", :value="$index+1", number)
+                  | {{type}}
           .form-row
             label.form-control 状态：
             .controls
@@ -274,7 +260,10 @@
     data: function () {
       return {
         rules: [],            // 规则列表
+        apps: [],              // app 列表
         ruleTypes: config.ruleTypes,
+        notifyTypes: config.notifyTypes,
+        scopeTypes: config.scopeTypes,
         datapoints: [],       // 数据端点
         currentPage: 1,       // 当前页
         pageCount: 10,        // 每页记录数
@@ -287,6 +276,7 @@
           tag: '',
           type: 1,
           notify_target: [],
+          notify_apps: [],
           notify_type: 1,
           compare: 1,
           value: '0',
@@ -321,6 +311,7 @@
           self.addModel.param = data[0].id;
         });
         this.getRules();
+        this.getApps();
       }
     },
 
@@ -353,6 +344,21 @@
             self.loadingData = false;
           });
         });
+      },
+
+      // 获取 APP 列表
+      getApps: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.app.list().then(function (data) {
+            self.apps = data;
+          });
+        });
+      },
+
+      // 是否显示 apps
+      showApps: function (model) {
+        return _.includes(this[model].notify_target, 4);
       },
 
       // 选择告警类型
@@ -412,7 +418,7 @@
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.rules.push(data);
+              self.getRules();
               self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
@@ -483,6 +489,11 @@
 
       .tag-row
         overflow-y visible
+
+      .apn-list
+        background #FFF
+        border 1px solid #DDD
+        padding 5px 10px
 
       .condition-row
         .type

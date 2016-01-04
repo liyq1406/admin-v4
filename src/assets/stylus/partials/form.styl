@@ -58,6 +58,8 @@
 
   // 单选/多选按钮组
   .radio-group
+    clearfix()
+
     .radio
       float left
       white-space normal
@@ -67,6 +69,8 @@
         margin-right 4px
 
   .checkbox-group
+    clearfix()
+
     .checkbox
       float left
       white-space normal
@@ -74,6 +78,14 @@
 
       input[type="checkbox"]
         margin-right 4px
+
+  .radio-group-v
+    .radio
+      width 100%
+
+  .checkbox-group-v
+    .checkbox
+      width 100%
 
   .form-row
     position relative
@@ -130,6 +142,9 @@
 
   .form-actions
     padding-left 110px
+
+  .without-label
+    margin-left 110px
 
 .form-auth
   width 550px

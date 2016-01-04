@@ -94,13 +94,20 @@
             .controls
               .select
                 select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
-                  option(value="1", selected) WiFi设备
-                  option(value="2") Zigbee网关
-                  option(value="3") 蓝牙设备
+                  option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
+          .form-row.without-label
+            .controls
+              .checkbox-group
+                label.checkbox
+                  input(type="checkbox", name="is_registerable", v-model="editModel.is_registerable")
+                  | 允许用户注册设备
           .form-actions
             label.del-check
               input(type="checkbox", name="del", v-model="delChecked")
               | 删除产品
+            label.del-check
+              input(type="checkbox", name="is_release", v-model="editModel.is_release")
+              | 发布产品
             button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
             button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
 
@@ -160,6 +167,7 @@
 
     data: function () {
       return {
+        deviceTypes: config.deviceTypes,
         product: {},
         trends: [],
         productSummary: {
@@ -168,16 +176,9 @@
           total: 0
         },
         period: 7,
-        periods: [
-          { label: '7天', value: 7 },
-          { label: '30天', value: 30 },
-          { label: '90天', value: 90 }
-        ],
+        periods: config.periods,
         region: 'world',
-        regions: [
-          { label: '全球', value: 'world'},
-          { label: '国内', value: 'china' }
-        ],
+        regions: config.regions,
         showEditModal: false,
         showAddModal: false,
         showKeyModal: false,

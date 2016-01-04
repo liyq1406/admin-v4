@@ -49,6 +49,7 @@ module.exports = function (Vue, Promise, config) {
           content: rule.content,
           type: rule.type,
           notify_type: rule.notify_type,
+          notify_apps: rule.notify_apps,
           notify_target: rule.notify_target,
           is_enable: rule.is_enable,
           param: rule.param,

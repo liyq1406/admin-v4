@@ -125,13 +125,13 @@
     },
 
     route: {
-      data: function (transition) {
+      data: function () {
         var self = this;
         api.corp.refreshToken().then(function () {
           api.statistics.getSummary().then(function (data) {
             self.totalSummary = data.total;
             self.userSummary = data.user;
-            transition.next();
+            // transition.next();
           }).catch(function (error) {
             self.handleError(error);
           });

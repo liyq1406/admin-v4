@@ -169,7 +169,7 @@
         };
 
         if (this.query.length > 0) {
-          condition.query['mac'] = { $in: [this.query] };
+          condition.query['mac'] = { $like: this.query };
         }
 
         switch (this.visibility) {

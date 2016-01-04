@@ -212,7 +212,7 @@
             label.form-control 起始版本号：
             .controls
               .select
-                select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid")
+                select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid", @change="selectFrom")
                   option(selected, value="0") 请选择起始版本号
                   option(v-for="firmware in fromFirmwares", :value="firmware.version") {{firmware.version}}
               .form-tips.mt5(v-if="addTaskModel.from_version > 0") url: {{addTaskModel.from_version | firmwareUrl}}
@@ -222,7 +222,7 @@
             label.form-control 目标版本号：
             .controls
               .select
-                select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid")
+                select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid", @change="selectTarget")
                   option(selected, value="0") 请选择目标版本号
                   option(v-for="firmware in targetFirmwares", :value="firmware.version") {{firmware.version}}
               .form-tips.mt5(v-if="addTaskModel.target_version > 0") url: {{addTaskModel.target_version | firmwareUrl}}
@@ -266,8 +266,12 @@
           product_id: this.$route.params.id,
           from_version: 1,
           from_version_url: '',
+          from_version_md5: '',
+          from_version_size: 0,
           target_version: 2,
-          target_version_url: ''
+          target_version_url: '',
+          target_version_md5: '',
+          target_version_size: 0
         },
         originAddTaskModel: {},
         tasks: [],
@@ -321,6 +325,10 @@
         });
         return url;
       }
+    },
+
+    watch: {
+
     },
 
     methods: {
@@ -380,7 +388,6 @@
         this.showAddModal = false;
         this.addModel = _.clone(this.originAddModel);
         this.$nextTick(function () {
-          console.log(self.addForm);
           self.addForm.setPristine();
         });
       },
@@ -467,6 +474,22 @@
         }
       },
 
+      // 选择起始版本号
+      selectFrom: function () {
+        var firmware = this.firmwares[this.addTaskModel.from_version - 1];
+        this.addTaskModel.from_version_url = firmware.file_url;
+        this.addTaskModel.from_version_md5 = firmware.file_md5;
+        this.addTaskModel.from_version_size = firmware.file_size;
+      },
+
+      // 选择目标版本号
+      selectTarget: function () {
+        var firmware = this.firmwares[this.addTaskModel.target_version - 1];
+        this.addTaskModel.target_version_url = firmware.file_url;
+        this.addTaskModel.target_version_md5 = firmware.file_md5;
+        this.addTaskModel.target_version_size = firmware.file_size;
+      },
+
       // 关闭添加固件版本浮层并净化添加表单
       resetAddTask: function () {
         var self = this;
@@ -530,8 +553,6 @@
         var file = this.$els[firmwareFile].files[0];
         var input = event.target;
 
-        console.log(input.value);
-
         if (file && file.size > 1024 * 1024) {
           alert('文件大小不能大于1MB');
           return;
@@ -544,15 +565,16 @@
           }
           // 读取完成
           reader.onloadend = function (evt) {
-            console.log(evt.target);
             if (evt.target.readyState === FileReader.DONE) {
               if (!self.uploading) {
                 self.uploading = true;
                 api.corp.refreshToken().then(function () {
                   api.product.uploadFirmware(self.$route.params.id, evt.target.result/*, file.size*/).then(function (data) {
-                    console.log(data);
                     input.value = '';
+                    console.log(data);
                     self[model].file_url = data.url;
+                    self[model].file_md5 = data.md5;
+                    self[model].file_size = data.size;
                     self.uploading = false;
                   }).catch(function (error) {
                     self.handleError(error);

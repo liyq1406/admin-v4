@@ -53,6 +53,7 @@ module.exports = function(Vue, Promise, config) {
         params.name = product.name;
         params.description = product.description;
         params.link_type = product.link_type;
+        params.is_registerable = product.is_registerable;
         params.is_release = product.is_release;
         Vue.http.put(config.apiRoot + '/product/' + product.id, JSON.stringify(
           params), function(data, status, request) {
@@ -348,6 +349,17 @@ module.exports = function(Vue, Promise, config) {
       });
     },
 
+    /**
+     * 产品固件上传
+     * @param  {String} product_id  产品 ID
+     * @param  {File} file        文件流数据
+     * @return {Promise}
+      {
+        "url":"固件文件资源地址",
+        "md5":"文件MD5值",
+        "size":"文件大小"
+      }
+     */
     uploadFirmware: function(product_id, file) {
       return new Promise(function(resolve, reject) {
         Vue.http.post(config.apiRoot + '/upload/product/' + product_id +

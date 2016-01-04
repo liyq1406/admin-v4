@@ -108,7 +108,7 @@ module.exports = {
 
       .del-check
         float left
-        margin-top 10px
+        margin 10px 30px 0 0
 
         input
           margin-right 5px

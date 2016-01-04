@@ -37,6 +37,10 @@
               i.fa.fa-plus
               | 添加产品
         .nav-aside-item
+          a(v-link="{ path: '/apps' }")
+            i.fa.fa-th
+            | 应用管理
+        .nav-aside-item
           a(v-link="{ path: '/alerts' }")
             i.fa.fa-bell
             | 告警服务
@@ -82,7 +86,8 @@
     methods: {
       // 退出
       quit:function(){
-        localStorage.clear();
+        localStorage.removeItem('accessToken');
+        this.$route.router.app.access = false;
         this.$route.router.go({path: '/login'});
         // window.location.reload(true);
       },

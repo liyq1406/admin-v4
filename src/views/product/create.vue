@@ -33,9 +33,7 @@
                 .controls
                   .select
                     select(v-model="model.link_type", v-form-ctrl, name="link_type")
-                      option(value="1", selected) WiFi设备
-                      option(value="2") Zigbee网关
-                      option(value="3") 蓝牙设备
+                      option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
               .form-actions
                 button.btn.btn-primary.btn-lg(type="submit") 添加
 
@@ -44,12 +42,14 @@
 <script>
   var api = require('../../api');
   var productsStore = require('../../stores/products');
+  var config = require('../../consts/config');
 
   module.exports = {
     name: 'CreateProductForm',
 
     data: function () {
       return {
+        deviceTypes: config.deviceTypes,
         model: {},
         validation: {},
         state: productsStore.state
