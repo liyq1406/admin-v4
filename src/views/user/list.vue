@@ -3,7 +3,7 @@
     .main
       .panel
         .panel-hd
-          search-box(:key.sync="query", :active="searching", :placeholder="'用户名、邮箱、昵称'", @cancel="getUsers", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+          search-box(:key.sync="query", :active="searching", :placeholder="'昵称'", @cancel="getUsers", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
             button.btn.btn-primary(slot="search-button", @click="getUsers") 搜索
             label 查找用户
           h2 用户列表

@@ -442,6 +442,7 @@
                     normal:{label:{show:true}},
                     emphasis:{label:{show:true}}
                   },
+                  nameMap: require('../../consts/name-map'),
                   data: chinaData
                 }]
               };
