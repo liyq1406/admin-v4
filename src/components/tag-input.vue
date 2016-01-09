@@ -1,15 +1,15 @@
 <template lang="jade">
-  .tag-input
-    .tag-input-container(@click="editTag($event)")
-      template(v-if="value.length")
-        .tag(v-for="tag in tags", track-by="$index")
-          span.label {{tag}}
-          i.fa.fa-times(@click.stop="deleteTag(tag)")
-      input.text-input(type="text", v-model="newTag", @keydown.enter.prevent="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
-      .temp-text(v-text="newTag")
-    .candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
-      .tag(v-for="tag in filteredTags", @click.stop="selectTag(tag)")
-        span.label() {{tag}}
+.tag-input
+  .tag-input-container(@click="editTag($event)")
+    template(v-if="value.length")
+      .tag(v-for="tag in tags", track-by="$index")
+        span.label {{tag}}
+        i.fa.fa-times(@click.stop="deleteTag(tag)")
+    input.text-input(type="text", v-model="newTag", @keydown.enter.prevent="addTag($event)", @keyup.8="deleteLastTag", @input="setInputWidth($event)")
+    .temp-text(v-text="newTag")
+  .candidate(:style="styleCandidate", v-show="filteredTags.length && editing")
+    .tag(v-for="tag in filteredTags", @click.stop="selectTag(tag)")
+      span.label() {{tag}}
 </template>
 
 <script>
@@ -46,7 +46,7 @@
     ready: function () {
       var self = this;
       this.$dispatch('tag-input-created', this);
-      //this.tags = this.value.length ? this.value.split(',') : [];
+      // this.tags = this.value.length ? this.value.split(',') : [];
       this._closeEvent = EventListener.listen(window, 'click', function (e) {
         if (!self.$el.contains(e.target)) {
           self.editing = false;
@@ -54,8 +54,8 @@
       });
     },
 
-    beforeDestroy() {
-      if (this._closeEvent){
+    beforeDestroy: function () {
+      if (this._closeEvent) {
         this._closeEvent.remove();
       }
     },
@@ -80,7 +80,7 @@
 
         this.value = this.tags.join(',');
         this.$nextTick(function () {
-          //this.setCandidateTop();
+          // this.setCandidateTop();
         });
       },
 
@@ -109,7 +109,6 @@
         this.$dispatch('adding-tag');
         // evt.stopPropagation();
         // evt.preventDefault();
-
 
         if (this.newTag.length > 0) {
           this.tags.push(this.newTag);

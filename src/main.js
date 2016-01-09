@@ -1,5 +1,4 @@
 var Vue = require('vue');
-
 var VueRouter = require('vue-router');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');

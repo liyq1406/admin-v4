@@ -1,90 +1,90 @@
 <template lang="jade">
-  .panel
-    .panel-bd
-      //- 操作栏
-      .action-bar
-        search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
-          button.btn.btn-primary(slot="search-button", @click="getDevices") 搜索
-        .action-group
-          button.btn.btn-success(@click="showAddModal = true")
-            i.fa.fa-plus
-            | 添加设备
-          label.btn.btn-success.btn-upload(:class="{'disabled':importing}")
-            input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
-            i.fa.fa-reply-all
-            | {{importing ? '处理中...' : '导入设备'}}
+.panel
+  .panel-bd
+    //- 操作栏
+    .action-bar
+      search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+        button.btn.btn-primary(slot="search-button", @click="getDevices") 搜索
+      .action-group
+        button.btn.btn-success(@click="showAddModal = true")
+          i.fa.fa-plus
+          | 添加设备
+        label.btn.btn-success.btn-upload(:class="{'disabled':importing}")
+          input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
+          i.fa.fa-reply-all
+          | {{importing ? '处理中...' : '导入设备'}}
 
-      //- 状态栏
-      .status-bar
-        .status
-          | 共有
-          span {{total}}
-          | 条结果
-        v-select(:options="visibilityOptions", :value.sync="visibility", @select="getDevices")
-          span 显示：
+    //- 状态栏
+    .status-bar
+      .status
+        | 共有
+        span {{total}}
+        | 条结果
+      v-select(:options="visibilityOptions", :value.sync="visibility", @select="getDevices")
+        span 显示：
 
-      //- 设备列表
-      //- grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
-      table.table.table-stripe.table-bordered
-        thead
-          tr
-            th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}")
-              | MAC
-              i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
+    //- 设备列表
+    //- grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
+    table.table.table-stripe.table-bordered
+      thead
+        tr
+          th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}")
+            | MAC
+            i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
+          th
+            | 设备ID
+          th
+            | 是否激活
+          th
+            | 激活时间
+          //-
             th
-              | 设备ID
-            th
-              | 是否激活
-            th
-              | 激活时间
+              | 最近一次登录
+          th
+            | 在线状态
+      tbody
+        template(v-if="devices.length > 0 && !loadingData")
+          tr(v-for="device in devices")
+            td
+              a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
+            td {{device.id}}
+            td(v-text="device.is_active ? '是' : '未激活'")
+            td
+              span(v-if="device.active_date") {{device.active_date | formatDate}}
             //-
-              th
-                | 最近一次登录
-            th
-              | 在线状态
-        tbody
-          template(v-if="devices.length > 0 && !loadingData")
-            tr(v-for="device in devices")
               td
-                a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
-              td {{device.id}}
-              td(v-text="device.is_active ? '是' : '未激活'")
-              td
-                span(v-if="device.active_date") {{device.active_date | formatDate}}
-              //-
-                td
-                  span(v-if="device.last_login") {{device.last_login | formatDate}}
-              td
-                span.hl-green(v-if="device.is_online") 在线
-                span.hl-gray(v-else) 下线
-          tr(v-if="loadingData")
-            td.tac(colspan="5")
-              .tips-null
-                i.fa.fa-refresh.fa-spin
-                span 数据加载中...
-          tr(v-if="devices.length === 0 && !loadingData")
-            td.tac(colspan="5")
-              .tips-null
-                span 暂无相关记录
-      pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
+                span(v-if="device.last_login") {{device.last_login | formatDate}}
+            td
+              span.hl-green(v-if="device.is_online") 在线
+              span.hl-gray(v-else) 下线
+        tr(v-if="loadingData")
+          td.tac(colspan="5")
+            .tips-null
+              i.fa.fa-refresh.fa-spin
+              span 数据加载中...
+        tr(v-if="devices.length === 0 && !loadingData")
+          td.tac(colspan="5")
+            .tips-null
+              span 暂无相关记录
+    pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
 
-    // 添加设备浮层
-    modal(:show.sync="showAddModal")
-      h3(slot="header") 添加设备
-      .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
-          .form-row
-            label.form-control MAC地址：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入MAC地址'")
-                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
-                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
-              .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
-                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
-          .form-actions
-            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+  // 添加设备浮层
+  modal(:show.sync="showAddModal")
+    h3(slot="header") 添加设备
+    .form(slot="body")
+      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
+        .form-row
+          label.form-control MAC地址：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入MAC地址'")
+              input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
+            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
+              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+            .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
+              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+        .form-actions
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
 </template>
 
 <style lang="stylus">
@@ -113,6 +113,7 @@
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
+  var _ = require('lodash');
 
   module.exports = {
     name: 'DeviceList',
@@ -155,13 +156,13 @@
         adding: false,
         importing: false,
         loadingData: false
-      }
+      };
     },
 
-    computed:  {
+    computed: {
       queryCondition: function () {
         var condition = {
-          filter:['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: this.sortOrders,
@@ -235,7 +236,6 @@
 
       // 取消搜索
       cancelSearching: function () {
-        var self = this;
         this.getDevices();
       },
 
@@ -287,20 +287,20 @@
         var file = this.$els.macFile.files[0];
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
-          if(!/text\/\w+/.test(file.type)){
+          if (!/text\/\w+/.test(file.type)) {
             alert(file.name + '不是文本文件不能上传');
             return false;
           }
           reader.onerror = function (evt) {
-            alert('文件读取失败。')
-          }
+            alert('文件读取失败。');
+          };
           this.importing = true;
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
               var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
               var a = [];
-              macArr.forEach(function(element, index){
+              macArr.forEach(function (element, index) {
                 if (element !== '') {
                   a.push(element);
                 }
@@ -309,7 +309,7 @@
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
-                    alert('设备导入成功!')
+                    alert('设备导入成功!');
                     self.getDevices();
                   }
                   self.importing = false;

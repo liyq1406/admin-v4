@@ -1,40 +1,40 @@
 <template lang="jade">
-  .pager.tar(v-if="total > 0")
-    button.pager-btn.pager-prev(:class="{'disabled': current === 1}", :disabled="current === 1", @click="current = current - 1")
-      i.fa.fa-chevron-left
+.pager.tar(v-if="total > 0")
+  button.pager-btn.pager-prev(:class="{'disabled': current === 1}", :disabled="current === 1", @click="current = current - 1")
+    i.fa.fa-chevron-left
 
-    .pager-container(v-if="pages < 10")
-      .pager-item(v-for="page in pages", :class="{'current': current === page + 1}",  @click="current = page + 1")
-        span {{page + 1}}
+  .pager-container(v-if="pages < 10")
+    .pager-item(v-for="page in pages", :class="{'current': current === page + 1}",  @click="current = page + 1")
+      span {{page + 1}}
 
-    .pager-container(v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)")
-      .pager-item(v-for="page in 3", :class="{'current': current === page + 1}",  @click="current = page + 1")
-        span {{page + 1}}
-      .pager-more
-        span(@click="toggleInput($event)") ...
-        .pager-input(v-show="showInput")
-          input(type="number", max="{{pages}}", @change="onInput")
-      .pager-item(v-for="offset in 3", :class="{'current': current === pages - 2 + offset}",  @click="current = pages - 2 + offset")
-        span {{pages - 2 + offset}}
+  .pager-container(v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)")
+    .pager-item(v-for="page in 3", :class="{'current': current === page + 1}",  @click="current = page + 1")
+      span {{page + 1}}
+    .pager-more
+      span(@click="toggleInput($event)") ...
+      .pager-input(v-show="showInput")
+        input(type="number", max="{{pages}}", @change="onInput")
+    .pager-item(v-for="offset in 3", :class="{'current': current === pages - 2 + offset}",  @click="current = pages - 2 + offset")
+      span {{pages - 2 + offset}}
 
-    .pager-container(v-if="pages >= 10 && current > 3 && current < pages - 2")
-      .pager-item(:class="{'current': current === 1}",  @click="current = 1")
-        span 1
-      .pager-more
-        span(@click="toggleInput1($event)") ...
-        .pager-input(v-show="showInput1")
-          input(type="number", max="{{pages}}", @change="onInput")
-      .pager-item(v-for="offset in 3", :class="{'current': current === current - 1 + offset}",  @click="current = current - 1 + offset")
-        span {{current - 1 + offset}}
-      .pager-more
-        span(@click="toggleInput2($event)") ...
-        .pager-input(v-show="showInput2")
-          input(type="number", max="{{pages}}", @change="onInput")
-      .pager-item(:class="{'current': current === pages}",  @click="current = pages")
-        span {{pages}}
-    //- input.pager-input(type="text")
-    button.pager-btn.pager-next(:class="{'disabled': current === pages}", :disabled="current === pages", @click="current = current + 1")
-      i.fa.fa-chevron-right
+  .pager-container(v-if="pages >= 10 && current > 3 && current < pages - 2")
+    .pager-item(:class="{'current': current === 1}",  @click="current = 1")
+      span 1
+    .pager-more
+      span(@click="toggleInput1($event)") ...
+      .pager-input(v-show="showInput1")
+        input(type="number", max="{{pages}}", @change="onInput")
+    .pager-item(v-for="offset in 3", :class="{'current': current === current - 1 + offset}",  @click="current = current - 1 + offset")
+      span {{current - 1 + offset}}
+    .pager-more
+      span(@click="toggleInput2($event)") ...
+      .pager-input(v-show="showInput2")
+        input(type="number", max="{{pages}}", @change="onInput")
+    .pager-item(:class="{'current': current === pages}",  @click="current = pages")
+      span {{pages}}
+  //- input.pager-input(type="text")
+  button.pager-btn.pager-next(:class="{'disabled': current === pages}", :disabled="current === pages", @click="current = current + 1")
+    i.fa.fa-chevron-right
 </template>
 
 
@@ -110,7 +110,7 @@
           this.current = page;
           evt.target.value = '';
         } else {
-          alert('请输入数字')
+          alert('请输入数字');
         }
       }
     }

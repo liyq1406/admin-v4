@@ -5,7 +5,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 数据表参数
      */
     createTable: function (params) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.post(config.apiRoot + '/table', JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
@@ -24,7 +24,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} table 数据表
      */
     updateTable: function (table) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         var params = {};
         params.type = table.type;
         params.permission = table.permission;
@@ -48,7 +48,7 @@ module.exports = function (Vue, Promise, config) {
      * 获取单个数据表
      */
     getTable: function (table_name) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/table/' + table_name, function (data, status, request) {
           resolve(data);
         }, {
@@ -66,7 +66,7 @@ module.exports = function (Vue, Promise, config) {
      * 获取数据表列表
      */
     getTables: function () {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/tables', function (data, status, request) {
           resolve(data);
         }, {
@@ -85,7 +85,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {String} table_name 表名
      */
     deleteTable: function (table_name) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.delete(config.apiRoot + '/table/' + table_name, function (data, status, request) {
           resolve(data);
         }, {
@@ -104,7 +104,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 数据参数
      */
     createData: function (table_name, params) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.post(config.apiRoot + '/data/' + table_name, JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
@@ -124,7 +124,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {String} object_id 数据 id
      */
     getData: function (table_name, object_id) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/data/' + table_name + '/' + object_id, function (data, status, request) {
           resolve(data);
         }, {
@@ -144,7 +144,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 数据参数
      */
     queryData: function (table_name, params) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.post(config.apiRoot + '/datas/' + table_name, JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
@@ -165,7 +165,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 数据参数
      */
     updateData: function (table_name, object_id, params) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.put(config.apiRoot + '/data/' + table_name + '/' + object_id, JSON.stringify(params), function (data, status, request) {
           resolve(data);
         }, {
@@ -185,7 +185,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {String} object_id 数据 id
      */
     deleteData: function (table_name, object_id) {
-      return new Promise(function(resolve, reject) {
+      return new Promise(function (resolve, reject) {
         Vue.http.delete(config.apiRoot + '/data/' + table_name + '/' + object_id, function (data, status, request) {
           resolve(data);
         }, {

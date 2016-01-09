@@ -1,4 +1,4 @@
-module.exports = function(Vue, Promise, config) {
+module.exports = function (Vue, Promise, config) {
   return {
     /**
      * 获取汇总摘要信息
@@ -16,17 +16,19 @@ module.exports = function(Vue, Promise, config) {
           }
         }
      */
-    getSummary: function() {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/summary',
-          function(data, status, request) {
+    getSummary: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/summary',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -45,17 +47,19 @@ module.exports = function(Vue, Promise, config) {
           "recv_bytes":"接收指令总字节数"
         }
      */
-    getProductSummary: function(product_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/product/' + product_id + '/summary',
-          function(data, status, request) {
+    getProductSummary: function (product_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/product/' + product_id + '/summary',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -76,17 +80,19 @@ module.exports = function(Vue, Promise, config) {
           }
         ]
      */
-    getProductTrend: function(product_id, start_day, end_day) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/product/' + product_id + '/trend?start_day=' + start_day + '&end_day=' + end_day,
-          function(data, status, request) {
+    getProductTrend: function (product_id, start_day, end_day) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/product/' + product_id + '/trend?start_day=' + start_day + '&end_day=' + end_day,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -104,17 +110,19 @@ module.exports = function(Vue, Promise, config) {
           "recv_bytes":"接收指令总字节数"
         }
      */
-    getUserSummary: function() {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/user/summary',
-          function(data, status, request) {
+    getUserSummary: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/user/summary',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -135,17 +143,19 @@ module.exports = function(Vue, Promise, config) {
           }
         ]
      */
-    getUserTrend: function(start_day, end_day) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/user/trend?start_day=' + start_day + '&end_day=' + end_day,
-          function(data, status, request) {
+    getUserTrend: function (start_day, end_day) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/user/trend?start_day=' + start_day + '&end_day=' + end_day,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -170,17 +180,19 @@ module.exports = function(Vue, Promise, config) {
           }
         }
      */
-    getProductRegion: function(product_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/product/' + product_id + '/region',
-          function(data, status, request) {
+    getProductRegion: function (product_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/product/' + product_id + '/region',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -204,17 +216,19 @@ module.exports = function(Vue, Promise, config) {
           }
         }
      */
-    getUserRegion: function() {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/user/region',
-          function(data, status, request) {
+    getUserRegion: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/user/region',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -226,17 +240,19 @@ module.exports = function(Vue, Promise, config) {
      * @param  {String} end_day   结束日期
      * @return {Promise}
      */
-    getAlertSummary: function(start_day, end_day) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/message/summary?start_day=' + start_day + '&end_day=' + end_day,
-          function(data, status, request) {
+    getAlertSummary: function (start_day, end_day) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/message/summary?start_day=' + start_day + '&end_day=' + end_day,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -248,17 +264,19 @@ module.exports = function(Vue, Promise, config) {
      * @param  {String} end_day   结束日期
      * @return {Promise}
      */
-    getAlertTrend: function(start_day, end_day) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/statistics/message/trend?start_day=' + start_day + '&end_day=' + end_day,
-          function(data, status, request) {
+    getAlertTrend: function (start_day, end_day) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/statistics/message/trend?start_day=' + start_day + '&end_day=' + end_day,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

@@ -1,70 +1,70 @@
 <template lang="jade">
-  .form.form-auth.form-member-activate
-    .form-logo
-    form.form-cont(v-show="!activateSuccess",v-form, name="validation", @submit.prevent="onSubmit")
-      .form-header
-        h2 成员邀请激活
-        p 请输入您的姓名、登录密码、注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
-      .form-body
+.form.form-auth.form-member-activate
+  .form-logo
+  form.form-cont(v-show="!activateSuccess",v-form, name="validation", @submit.prevent="onSubmit")
+    .form-header
+      h2 成员邀请激活
+      p 请输入您的姓名、登录密码、注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
+    .form-body
+      .form-row
+        .input-text-wrap(v-placeholder="'姓名'")
+          input.input-text(type="text", v-model="model.name", v-form-ctrl, required, maxlength="32", minlength="2", name="name", lazy)
+        .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
+          span(v-if="validation.name.$error.required") 请输入姓名
+        .form-tips.form-tips-error(v-if="validation.name.$dirty")
+          span(v-if="validation.name.$error.required") 请输入姓名
+          span(v-if="validation.name.$error.minlength") 姓名长度不能小于2
+          span(v-if="validation.name.$error.maxlength") 电话号码长度不能大于32
+      .form-row
+          .input-text-wrap(v-placeholder="'手机号码'")
+            input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.phone.$pristine")
+            span(v-if="validation.phone.$error.required") 请输入您的手机号码
+          .form-tips.form-tips-error(v-if="validation.phone.$dirty")
+            span(v-if="validation.phone.$error.required") 请输入您的手机号码
+            span(v-if="validation.phone.$error.pattern") 手机号码格式有误
+        .form-row.captcha-row
+          .input-text-wrap(v-placeholder="'请输入右图验证码'")
+            input.input-text(type="text", v-model="captcha", lazy)
+          captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
+        .form-row.verify-code
+          .input-text-wrap(v-placeholder="'短信验证码'")
+            input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode", lazy)
+          button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? seconds + '秒后重新获取' : '获取短信验证码'")
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
+            span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
+          .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
+            span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
         .form-row
-          .input-text-wrap(v-placeholder="'姓名'")
-            input.input-text(type="text", v-model="model.name", v-form-ctrl, required, maxlength="32", minlength="2", name="name", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-            span(v-if="validation.name.$error.required") 请输入姓名
-          .form-tips.form-tips-error(v-if="validation.name.$dirty")
-            span(v-if="validation.name.$error.required") 请输入姓名
-            span(v-if="validation.name.$error.minlength") 姓名长度不能小于2
-            span(v-if="validation.name.$error.maxlength") 电话号码长度不能大于32
+          .input-text-wrap(v-placeholder="'密码'")
+            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
+            span(v-if="validation.password.$error.required") 请输入密码
+          .form-tips.form-tips-error(v-if="validation.password.$dirty")
+            span(v-if="validation.password.$error.required") 请输入密码
+            span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
+            span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
         .form-row
-            .input-text-wrap(v-placeholder="'手机号码'")
-              input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
-            .form-tips.form-tips-error(v-if="validation.$submitted && validation.phone.$pristine")
-              span(v-if="validation.phone.$error.required") 请输入您的手机号码
-            .form-tips.form-tips-error(v-if="validation.phone.$dirty")
-              span(v-if="validation.phone.$error.required") 请输入您的手机号码
-              span(v-if="validation.phone.$error.pattern") 手机号码格式有误
-          .form-row.captcha-row
-            .input-text-wrap(v-placeholder="'请输入右图验证码'")
-              input.input-text(type="text", v-model="captcha", lazy)
-            captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
-          .form-row.verify-code
-            .input-text-wrap(v-placeholder="'短信验证码'")
-              input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode", lazy)
-            button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? seconds + '秒后重新获取' : '获取短信验证码'")
-            .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
-              span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
-            .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
-              span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
-          .form-row
-            .input-text-wrap(v-placeholder="'密码'")
-              input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
-            .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-              span(v-if="validation.password.$error.required") 请输入密码
-            .form-tips.form-tips-error(v-if="validation.password.$dirty")
-              span(v-if="validation.password.$error.required") 请输入密码
-              span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
-              span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
-          .form-row
-            .input-text-wrap(v-placeholder="'再次输入密码'")
-              input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
-            .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
-              span(v-if="validation.confirmPassword.$error.required") 请再一次输入密码
-            .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-              span(v-if="model.password && validation.confirmPassword.$error.required") 请再一次输入密码
-              span(v-if="validation.confirmPassword.$error.customValidator") 两次密码输入不一致
-        .form-actions
-          button.btn.btn-primary.btn-block(type="submit") 确定
-      .form-footer
-        | 2015 &copy; 广州云湾信息技术有限公司.
-    .form-cont.reset-password-success(v-show="activateSuccess")
-      .alert.alert-success
-        .fa.fa-check-circle-o
-        h2 激活成功
-        p 您的成员邀请已成功激活。
-        .actions
-          a.btn.btn-primary(v-link="{ path: '/login'}") 确定
-      .form-footer
-        | 2015 &copy; 广州云湾信息技术有限公司.
+          .input-text-wrap(v-placeholder="'再次输入密码'")
+            input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
+          .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
+            span(v-if="validation.confirmPassword.$error.required") 请再一次输入密码
+          .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
+            span(v-if="model.password && validation.confirmPassword.$error.required") 请再一次输入密码
+            span(v-if="validation.confirmPassword.$error.customValidator") 两次密码输入不一致
+      .form-actions
+        button.btn.btn-primary.btn-block(type="submit") 确定
+    .form-footer
+      | 2015 &copy; 广州云湾信息技术有限公司.
+  .form-cont.reset-password-success(v-show="activateSuccess")
+    .alert.alert-success
+      .fa.fa-check-circle-o
+      h2 激活成功
+      p 您的成员邀请已成功激活。
+      .actions
+        a.btn.btn-primary(v-link="{ path: '/login'}") 确定
+    .form-footer
+      | 2015 &copy; 广州云湾信息技术有限公司.
 </template>
 
 <style lang="stylus">
@@ -134,8 +134,8 @@
         counting: false,
         btnDisabled: false,
         seconds: config.verifycodeDuration,
-        activateSuccess:false
-      }
+        activateSuccess: false
+      };
     },
 
     ready: function () {
@@ -143,7 +143,7 @@
     },
 
     methods: {
-      getObjLength:function(obj){
+      getObjLength: function (obj) {
         return Object.keys(obj).length;
       },
 
@@ -176,7 +176,7 @@
           return;
         }
 
-        this.btnDisabled=true;
+        this.btnDisabled = true;
         this.captcha = '';
         this.$refs.captcha.generate();
         api.sms.getVerifycode({
@@ -186,22 +186,22 @@
           if (__DEBUG__) {
             console.log('[' + status + '] 获取验证码成功');
           }
-          self.counting=true;
+          self.counting = true;
           self.tiktac();
         }).catch(function (error) {
           self.handleError(error);
         });
       },
       onSubmit: function () {
-        var content = {"phone":this.model.phone,"verifycode":this.model.verifycode,"password":this.model.password};
+        var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password};
         var self = this;
         // console.log(content);
-        api.corp.memberActivate(content).then(function (status){
-          if(__DEBUG__) {
-            console.log(data);
+        api.corp.memberActivate(content).then(function (status) {
+          if (__DEBUG__) {
+            console.log(status);
           }
-          if(status===200){
-            self.activateSuccess=true;
+          if (status === 200) {
+            self.activateSuccess = true;
           }
         }).catch(function (error) {
           self.handleError(error);

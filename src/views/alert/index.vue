@@ -1,115 +1,115 @@
 <template lang="jade">
-  section.main-wrap
-    .main
-      .panel
-        .panel-hd
-          radio-group(:items="periods", :value.sync="period")
-            span.label(slot="label") 最近
-          h2 告警服务
-        .panel-bd
-          .row
-            .col-13
-              #trendChart(style="height:320px;")
-            .col-7
-              .statistics-info
-                .item
-                  .cont
-                    .num {{alertSummary.device}}
-                    .label 告警设备
-                .item
-                  .cont
-                    .num {{alertSummary.message}}
-                    .label 告警消息
-                .item.no-border
-                  .cont
-                    .num {{alertSummary.unread}}
-                    .label 未读消息
-                .item.no-border
-                  .cont
-                    .num {{alertSummary.add_today}}
-                    .label 今日新增
+section.main-wrap
+  .main
+    .panel
+      .panel-hd
+        radio-group(:items="periods", :value.sync="period")
+          span.label(slot="label") 最近
+        h2 告警服务
+      .panel-bd
+        .row
+          .col-13
+            #trendChart(style="height:320px;")
+          .col-7
+            .statistics-info
+              .item
+                .cont
+                  .num {{alertSummary.device}}
+                  .label 告警设备
+              .item
+                .cont
+                  .num {{alertSummary.message}}
+                  .label 告警消息
+              .item.no-border
+                .cont
+                  .num {{alertSummary.unread}}
+                  .label 未读消息
+              .item.no-border
+                .cont
+                  .num {{alertSummary.add_today}}
+                  .label 今日新增
 
-      .panel
-        .panel-hd
-          h2 告警信息
-        .panel-bd
-          //- 数据
-          table.table.table-stripe.table-bordered
-            thead
-              tr
-                th 产品名称
-                th 告警内容
-                th 上报时间
-                th 是否已读
-                th.tac 操作
-            tbody
-              template(v-if="alerts.length > 0 && !loadingData")
-                tr(v-for="alert in alerts")
-                  td {{alert.product_name}}
-                  td
-                    template(v-if="alert.tags")
-                      span.text-label(v-for="tag in alert.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
-                    | {{alert.content}}
-                  td {{alert.create_date | formatDate}}
-                  td
-                    span.hl-gray(v-if="alert.is_read") 已读
-                    span(v-else) 未读
-                  td.tac
-                    button.btn.btn-link.btn-sm(@click="showAlert(alert)") 查看
-              tr(v-if="loadingData")
-                td.tac(colspan="5")
-                  .tips-null
-                    i.fa.fa-refresh.fa-spin
-                    span 数据加载中...
-              tr(v-if="alerts.length === 0 && !loadingData")
-                td.tac(colspan="5")
-                  .tips-null
-                    span 暂无数据记录
-          pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
+    .panel
+      .panel-hd
+        h2 告警信息
+      .panel-bd
+        //- 数据
+        table.table.table-stripe.table-bordered
+          thead
+            tr
+              th 产品名称
+              th 告警内容
+              th 上报时间
+              th 是否已读
+              th.tac 操作
+          tbody
+            template(v-if="alerts.length > 0 && !loadingData")
+              tr(v-for="alert in alerts")
+                td {{alert.product_name}}
+                td
+                  template(v-if="alert.tags")
+                    span.text-label(v-for="tag in alert.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
+                  | {{alert.content}}
+                td {{alert.create_date | formatDate}}
+                td
+                  span.hl-gray(v-if="alert.is_read") 已读
+                  span(v-else) 未读
+                td.tac
+                  button.btn.btn-link.btn-sm(@click="showAlert(alert)") 查看
+            tr(v-if="loadingData")
+              td.tac(colspan="5")
+                .tips-null
+                  i.fa.fa-refresh.fa-spin
+                  span 数据加载中...
+            tr(v-if="alerts.length === 0 && !loadingData")
+              td.tac(colspan="5")
+                .tips-null
+                  span 暂无数据记录
+        pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
 
-    // 查看告警信息浮层
-    modal(:show.sync="showModal")
-      h3(slot="header") 告警信息
-      //- 数据
-      table.table.table-stripe.table-bordered(slot="body")
-        tbody
-          tr
-            td 产品名称
-            td {{model.product_name}}
-          tr
-            td 告警名称
-            td {{model.alert_name}}
-          tr
-            td 告警内容
-            td {{model.content}}
-          tr
-            td 标签
-            td
-              template(v-if="model.tags")
-                span.text-label(v-for="tag in model.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
-          tr
-            td 消息类型
-            td
-              span(v-if="model.type === 1") 通知与预警
-          tr
-            td 通知类型
-            td
-              span(v-if="model.notify_type === 1") 通知类型
-              span(v-if="model.notify_type === 2") 告警类型
-          tr
-            td 告警状态值
-            td {{model.alert_value}}
-          tr
-            td 消息发送者
-            td {{model.from}}
-          tr
-            td 消息接受者
-            td {{model.to}}
-          tr
-            td 上报时间
-            td {{model.create_date}}
-      .modal-footer(slot="footer")
-        button.btn.btn-primary(@click.prevent.stop="showModal = false") 确定
+  // 查看告警信息浮层
+  modal(:show.sync="showModal")
+    h3(slot="header") 告警信息
+    //- 数据
+    table.table.table-stripe.table-bordered(slot="body")
+      tbody
+        tr
+          td 产品名称
+          td {{model.product_name}}
+        tr
+          td 告警名称
+          td {{model.alert_name}}
+        tr
+          td 告警内容
+          td {{model.content}}
+        tr
+          td 标签
+          td
+            template(v-if="model.tags")
+              span.text-label(v-for="tag in model.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
+        tr
+          td 消息类型
+          td
+            span(v-if="model.type === 1") 通知与预警
+        tr
+          td 通知类型
+          td
+            span(v-if="model.notify_type === 1") 通知类型
+            span(v-if="model.notify_type === 2") 告警类型
+        tr
+          td 告警状态值
+          td {{model.alert_value}}
+        tr
+          td 消息发送者
+          td {{model.from}}
+        tr
+          td 消息接受者
+          td {{model.to}}
+        tr
+          td 上报时间
+          td {{model.create_date}}
+    .modal-footer(slot="footer")
+      button.btn.btn-primary(@click.prevent.stop="showModal = false") 确定
 </template>
 
 <script>
@@ -167,7 +167,7 @@
         alertTrends: [],
         today: dateFormat('yyyy-MM-dd', new Date()),
         loadingData: false
-      }
+      };
     },
 
     computed: {
@@ -300,7 +300,7 @@
               legend: {
                 x: 'right',
                 y: 10,
-                data:['告警数量']
+                data: ['告警数量']
               },
               xAxis: [{
                 type: 'category',

@@ -1,142 +1,141 @@
 <template lang="jade">
-  div
-    .row
-      .col-20
-        // Start: 产品简介
-        .panel
-          .product-card
-            .thumb
-              img(src="../../assets/images/device_thumb.png")
-            .info
-              .col-9.summary
-                h3
-                  | {{ product.name }}
-                  a.fa.fa-edit(href="#", @click.prevent="editProduct")
-                p
-                  em 产品描述：
-                  span {{ product.description }}
-                p
-                  em 产品PID：
-                  span {{ product.id }}
-                p
-                  em 产品密钥：
-                  span
-                    a.hl-red(href="#", @click.prevent="showProductKey") 查看密钥
-                .actions
-                  button.btn.btn-primary(@click="showAddModal = true")
-                    i.fa.fa-plus
-                    | 添加设备
-                  label.btn.btn-primary.btn-upload(:class="{'disabled':importing}")
-                    input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
-                    i.fa.fa-reply-all
-                    | {{importing ? '处理中...' : '导入设备'}}
-              .col-11.status
-                .status-item
-                  em {{productSummary.online}}
-                  span 当前在线
-                .status-item
-                  em {{productSummary.activated}}
-                  span 激活数
-                .status-item
-                  em {{productSummary.total}}
-                  span 设备数
-        // Start: 产品简介
+div
+  .row
+    .col-20
+      // Start: 产品简介
+      .panel
+        .product-card
+          .thumb
+            img(src="../../assets/images/device_thumb.png")
+          .info
+            .col-9.summary
+              h3
+                | {{ product.name }}
+                a.fa.fa-edit(href="#", @click.prevent="editProduct")
+              p
+                em 产品描述：
+                span {{ product.description }}
+              p
+                em 产品PID：
+                span {{ product.id }}
+              p
+                em 产品密钥：
+                span
+                  a.hl-red(href="#", @click.prevent="showProductKey") 查看密钥
+              .actions
+                button.btn.btn-primary(@click="showAddModal = true")
+                  i.fa.fa-plus
+                  | 添加设备
+                label.btn.btn-primary.btn-upload(:class="{'disabled':importing}")
+                  input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
+                  i.fa.fa-reply-all
+                  | {{importing ? '处理中...' : '导入设备'}}
+            .col-11.status
+              .status-item
+                em {{productSummary.online}}
+                span 当前在线
+              .status-item
+                em {{productSummary.activated}}
+                span 激活数
+              .status-item
+                em {{productSummary.total}}
+                span 设备数
+      // Start: 产品简介
 
-    .row
-      .col-10
-        // Start: 趋势
-        .panel
-          .panel-hd
-            radio-group(:items="periods", :value.sync="period", @select="getProductTrends")
-              span.label(slot="label") 最近
-            h2 趋势
-          .panel-bd
-            #trendChart(style="height:320px", v-if="trends.length")
-            .trend-null(v-else) 暂无数据
-        // End: 趋势
+  .row
+    .col-10
+      // Start: 趋势
+      .panel
+        .panel-hd
+          radio-group(:items="periods", :value.sync="period", @select="getProductTrends")
+            span.label(slot="label") 最近
+          h2 趋势
+        .panel-bd
+          #trendChart(style="height:320px", v-if="trends.length")
+          .trend-null(v-else) 暂无数据
+      // End: 趋势
 
-      .col-10
-        // Start: 设备分布
-        .panel
-          .panel-hd
-            radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
-            h2 设备分布
-          .panel-bd
-            #regionChart(style="height:320px; overflow:hidden;")
-        // End: 设备分布
+    .col-10
+      // Start: 设备分布
+      .panel
+        .panel-hd
+          radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
+          h2 设备分布
+        .panel-bd
+          #regionChart(style="height:320px; overflow:hidden;")
+      // End: 设备分布
 
-    modal(:show.sync="showEditModal")
-      h3(slot="header") 编辑产品
-      .form(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
-          .form-row
-            label.form-control 产品名称：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入产品名称'")
-                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
-              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-                span(v-if="editValidation.name.$error.required") 请输入产品名称
-              .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-                span(v-if="editValidation.name.$error.required") 请输入产品名称
-                span(v-if="editValidation.name.$error.maxlength") 产品名称最大不能超过32位
-          .form-row
-            label.form-control 产品描述：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入产品描述'")
-                textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
-                span(v-if="editValidation.description.$error.required") 请输入产品描述
-              .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
-                span(v-if="editValidation.description.$error.required") 请输入产品描述
-                span(v-if="editValidation.description.$error.maxlength") 产品描述最大不能超过250字
-          .form-row
-            label.form-control 设备类型：
-            .controls
-              .select
-                select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
-                  option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
-          .form-row.without-label
-            .controls
-              .checkbox-group
-                label.checkbox
-                  input(type="checkbox", name="is_registerable", v-model="editModel.is_registerable")
-                  | 允许用户注册设备
-          .form-actions
-            label.del-check
-              input(type="checkbox", name="del", v-model="delChecked")
-              | 删除产品
-            label.del-check
-              input(type="checkbox", name="is_release", v-model="editModel.is_release")
-              | 发布产品
-            button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+  modal(:show.sync="showEditModal")
+    h3(slot="header") 编辑产品
+    .form(slot="body")
+      form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
+        .form-row
+          label.form-control 产品名称：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入产品名称'")
+              input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
+            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
+              span(v-if="editValidation.name.$error.required") 请输入产品名称
+            .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
+              span(v-if="editValidation.name.$error.required") 请输入产品名称
+              span(v-if="editValidation.name.$error.maxlength") 产品名称最大不能超过32位
+        .form-row
+          label.form-control 产品描述：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入产品描述'")
+              textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
+            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
+              span(v-if="editValidation.description.$error.required") 请输入产品描述
+            .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
+              span(v-if="editValidation.description.$error.required") 请输入产品描述
+              span(v-if="editValidation.description.$error.maxlength") 产品描述最大不能超过250字
+        .form-row
+          label.form-control 设备类型：
+          .controls
+            .select
+              select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
+                option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
+        .form-row.without-label
+          .controls
+            .checkbox-group
+              label.checkbox
+                input(type="checkbox", name="is_registerable", v-model="editModel.is_registerable")
+                | 允许用户注册设备
+        .form-actions
+          label.del-check
+            input(type="checkbox", name="del", v-model="delChecked")
+            | 删除产品
+          label.del-check
+            input(type="checkbox", name="is_release", v-model="editModel.is_release")
+            | 发布产品
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
 
-    // 添加设备浮层
-    modal(:show.sync="showAddModal")
-      h3(slot="header") 添加设备
-      .form(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
-          .form-row
-            label.form-control MAC地址：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入MAC地址'")
-                input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
-                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
-              .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
-                span(v-if="addValidation.mac.$error.required") 请输入MAC地址
-          .form-actions
-            button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+  // 添加设备浮层
+  modal(:show.sync="showAddModal")
+    h3(slot="header") 添加设备
+    .form(slot="body")
+      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
+        .form-row
+          label.form-control MAC地址：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入MAC地址'")
+              input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
+            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
+              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+            .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
+              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+        .form-actions
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
 
-    modal(:show.sync="showKeyModal")
-      h3(slot="header") 产品密钥
-      .product-key.tac(slot="body") {{productKey}}
+  modal(:show.sync="showKeyModal")
+    h3(slot="header") 产品密钥
+    .product-key.tac(slot="body") {{productKey}}
 </template>
 
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
-  var Select = require('../../components/select.vue');
   var Modal = require('../../components/modal.vue');
   var productsStore = require('../../stores/products');
   var api = require('../../api');
@@ -197,7 +196,7 @@
         importing: false
         // trendChart: {},
         // regionChart: {}
-      }
+      };
     },
 
     ready: function () {
@@ -270,7 +269,7 @@
               legend: {
                 x: 'right',
                 y: 10,
-                data:['活跃设备', '激活设备']
+                data: ['活跃设备', '激活设备']
               },
               xAxis: [{
                 type: 'category',
@@ -310,7 +309,7 @@
             if (self.region === 'world') {
               var worldData = [];
               var worldMax = 0;
-              for(var country in data) {
+              for (var country in data) {
                 worldData.push({
                   name: country,
                   value: data[country].activated
@@ -327,7 +326,7 @@
                   formatter: function (params) {
                     var value = (params.value + '').split('.');
                     if (value[0] === '-') {
-                      value = 0
+                      value = 0;
                     }
                     return '设备数<br/>' + params.name + ': ' + value;
                   }
@@ -335,10 +334,10 @@
                 dataRange: {
                   min: 0,
                   max: worldMax,
-                  text:['高','低'],
+                  text: ['高', '低'],
                   realtime: false,
                   calculable: true,
-                  color: ['orangered','yellow','lightskyblue']
+                  color: ['orangered', 'yellow', 'lightskyblue']
                 },
                 series: [{
                   type: 'map',
@@ -358,15 +357,15 @@
 
               var chinaData = [];
               var chinaMax = 0;
-              for(var province in data['China']) {
+              for (var province in data['China']) {
                 if (province !== 'activated') {
                   chinaData.push({
                     name: province,
                     value: data['China'][province].activated
                   });
 
-                  for(var city in data['China'][province]) {
-                    if (city != 'activated') {
+                  for (var city in data['China'][province]) {
+                    if (city !== 'activated') {
                       chinaData.push({
                         name: city,
                         value: data['China'][province][city].activated
@@ -384,25 +383,24 @@
                 }
               }
 
-              regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+              regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param) {
                 var len = mapType.length;
                 var mt = mapType[curIndx % len];
-                if (mt == 'china') {
+                if (mt === 'china') {
                   // 全国选择时指定到选中的省份
                   var selected = param.selected;
                   for (var i in selected) {
                     if (selected[i]) {
                       mt = i;
                       while (len--) {
-                        if (mapType[len] == mt) {
+                        if (mapType[len] === mt) {
                           curIndx = len;
                         }
                       }
                       break;
                     }
                   }
-                }
-                else {
+                } else {
                   curIndx = 0;
                   mt = 'china';
                 }
@@ -415,21 +413,21 @@
                   formatter: function (params) {
                     var value = (params.value + '').split('.');
                     if (value[0] === '-') {
-                      value = 0
+                      value = 0;
                     }
                     return '设备数<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
-                  x:'right',
-                  data:['设备数']
+                  x: 'right',
+                  data: ['设备数']
                 },
                 dataRange: {
                   min: 0,
                   max: chinaMax,
-                  color:['orange','yellow'],
-                  text:['高','低'],           // 文本，默认为数值文本
+                  color: ['orange', 'yellow'],
+                  text: ['高', '低'],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
@@ -438,9 +436,9 @@
                   mapType: 'china',
                   selectedMode: 'single',
                   roam: 'move',
-                  itemStyle:{
-                    normal:{label:{show:true}},
-                    emphasis:{label:{show:true}}
+                  itemStyle: {
+                    normal: {label: {show: true}},
+                    emphasis: {label: {show: true}}
                   },
                   nameMap: require('../../consts/name-map'),
                   data: chinaData
@@ -471,7 +469,7 @@
       setRegion: function (value) {
         this.region = value;
         if (__DEBUG__) {
-          console.log("region: " + this.region);
+          console.log('region: ' + this.region);
         }
       },
 
@@ -498,14 +496,10 @@
 
       // 关闭编辑浮层并净化编辑表单
       resetEdit: function () {
-        var self = this;
         this.editing = false;
         this.showEditModal = false;
         this.delChecked = false;
         this.editModel = this.originEditModel;
-        this.$nextTick(function (){
-          // self.editForm.setValidity();
-        });
       },
 
       // 取消添加
@@ -593,20 +587,20 @@
         var file = this.$els.macFile.files[0];
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
-          if(!/text\/\w+/.test(file.type)){
+          if (!/text\/\w+/.test(file.type)) {
             alert(file.name + '不是文本文件不能上传');
             return false;
           }
           reader.onerror = function (evt) {
-            alert('文件读取失败。')
-          }
+            alert('文件读取失败。');
+          };
           this.importing = true;
           // 读取完成
           reader.onloadend = function (evt) {
             if (evt.target.readyState === FileReader.DONE) {
               var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
               var a = [];
-              macArr.forEach(function(element, index){
+              macArr.forEach(function (element, index) {
                 if (element !== '') {
                   a.push(element);
                 }
@@ -615,7 +609,7 @@
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
-                    alert('设备导入成功!')
+                    alert('设备导入成功!');
                   }
                   self.getSummary().then(function (data) {
                     self.productSummary = data;

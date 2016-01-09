@@ -1,15 +1,15 @@
 <template lang="jade">
-  .v-select
-    slot
-    .btn-group(:class="{'open':active}")
-      button.btn.btn-default.active(@click="toggleDropdown", @blur="deactivate")
-        span.content {{label}}
-      .dropdown-menu(:style="dropdownMenuStyle")
-        ul
-          li(v-for="option in options", @mousedown="handleClick(option)")
-            | {{option.label}}
-            .fa.fa-check(v-show="option.value === value")
-      i.caret(@click="toggleDropdown")
+.v-select
+  slot
+  .btn-group(:class="{'open':active}")
+    button.btn.btn-default.active(@click="toggleDropdown", @blur="deactivate")
+      span.content {{label}}
+    .dropdown-menu(:style="dropdownMenuStyle")
+      ul
+        li(v-for="option in options", @mousedown="handleClick(option)")
+          | {{option.label}}
+          .fa.fa-check(v-show="option.value === value")
+    i.caret(@click="toggleDropdown")
 </template>
 
 <script>
@@ -38,7 +38,7 @@
           height: this.height + 'px'
         },
         active: false
-      }
+      };
     },
 
     computed: {
@@ -77,8 +77,8 @@
       });
     },
 
-    beforeDestroy() {
-      if (this._closeEvent){
+    beforeDestroy: function () {
+      if (this._closeEvent) {
         this._closeEvent.remove();
       }
     }

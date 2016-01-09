@@ -1,243 +1,243 @@
 <template lang="jade">
-  div
-    .panel
-      .panel-bd
-        //- 操作栏
-        .action-bar
-          .action-group
-            button.btn.btn-success(@click="showAddModal = true")
-              i.fa.fa-plus
-              | 添加规则
+div
+  .panel
+    .panel-bd
+      //- 操作栏
+      .action-bar
+        .action-group
+          button.btn.btn-success(@click="showAddModal = true")
+            i.fa.fa-plus
+            | 添加规则
 
-        //- 通知与告警列表
-        table.table.table-stripe.table-bordered
-          thead
-            tr
-              th 规则名称
-              th 告警类型
-              th 内容
-              th 状态
-              th.tac 操作
-          tbody
-            template(v-if="rules.length > 0 && !loadingData")
-              tr(v-for="rule in rules")
-                td {{* rule.name}}
-                td {{* rule.type | ruleLabel}}
-                td {{* rule.content}}
-                td
-                  span.hl-green(v-if="rule.is_enable") 启用
-                  span.hl-gray(v-else) 禁用
-                td.tac
-                  button.btn.btn-link.btn-sm(@click="editRule(rule)") 编辑
-            tr(v-if="loadingData")
-              td.tac(colspan="5")
-                .tips-null
-                  i.fa.fa-refresh.fa-spin
-                  span 数据加载中...
-            tr(v-if="rules.length === 0 && !loadingData")
-              td.tac(colspan="5")
-                .tips-null
-                  span 暂无相关记录
-        // 分页
-        pager(v-if="!loadingData", :total="rules.length", :current.sync="currentPage", :page-count="pageCount")
+      //- 通知与告警列表
+      table.table.table-stripe.table-bordered
+        thead
+          tr
+            th 规则名称
+            th 告警类型
+            th 内容
+            th 状态
+            th.tac 操作
+        tbody
+          template(v-if="rules.length > 0 && !loadingData")
+            tr(v-for="rule in rules")
+              td {{* rule.name}}
+              td {{* rule.type | ruleLabel}}
+              td {{* rule.content}}
+              td
+                span.hl-green(v-if="rule.is_enable") 启用
+                span.hl-gray(v-else) 禁用
+              td.tac
+                button.btn.btn-link.btn-sm(@click="editRule(rule)") 编辑
+          tr(v-if="loadingData")
+            td.tac(colspan="5")
+              .tips-null
+                i.fa.fa-refresh.fa-spin
+                span 数据加载中...
+          tr(v-if="rules.length === 0 && !loadingData")
+            td.tac(colspan="5")
+              .tips-null
+                span 暂无相关记录
+      // 分页
+      pager(v-if="!loadingData", :total="rules.length", :current.sync="currentPage", :page-count="pageCount")
 
-    // 添加规则浮层
-    modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag", @close="onAddCancel")
-      h3(slot="header") 添加规则
-      .form.form-rules(slot="body")
-        form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
-          .form-row
-            label.form-control 规则名称：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入规则名称'")
-                input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
-                span(v-if="addValidation.name.$error.required") 请输入规则名称
-              .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
-                span(v-if="addValidation.name.$error.required") 请输入规则名称
-                span(v-if="addValidation.name.$error.minlength") 规则名称不能少于2个字符
-                span(v-if="addValidation.name.$error.maxlength") 规则名称不能超过32个字符
-          .form-row.condition-row
-            label.form-control 告警条件：
-            .controls
-              .type
-                .select
-                  select(v-model="addModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
-                    option(value="1") 数据端点
-                    option(value="2") 设备状态
-              .data(v-show="addModel.type === 1")
-                .select
-                  select(v-model="addModel.param", v-form-ctrl, name="param")
-                    option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
-              .compare(v-show="addModel.type === 1")
-                .select
-                  select(v-model="addModel.compare", v-form-ctrl, name="compare", number)
-                    option(value="1") 等于
-                    option(value="2") 大于
-                    option(value="3") 小于
-              .value(v-if="addModel.type === 1")
-                .input-text-wrap
-                  input.input-text(v-model="addModel.value", type="text", v-form-ctrl, name="value", required, lazy)
-              .value(v-if="addModel.type === 2")
-                .select
-                  select(v-model="addModel.value", v-form-ctrl, name="value")
-                    option(value="online") 上线
-                    option(value="offline") 下线
-          .form-row
-            label.form-control 告警内容：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入告警内容'")
-                textarea.input-text(v-model="addModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
-              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.content.$pristine")
-                span(v-if="addValidation.content.$error.required") 请输入告警内容
-              .form-tips.form-tips-error(v-if="addValidation.content.$dirty")
-                span(v-if="addValidation.content.$error.required") 请输入告警内容
-                span(v-if="addValidation.content.$error.maxlength") 告警内容不能超过250个字符
-          .form-row
-            label.form-control 通知类型：
-            .controls
+  // 添加规则浮层
+  modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag", @close="onAddCancel")
+    h3(slot="header") 添加规则
+    .form.form-rules(slot="body")
+      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
+        .form-row
+          label.form-control 规则名称：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入规则名称'")
+              input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
+            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
+              span(v-if="addValidation.name.$error.required") 请输入规则名称
+            .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
+              span(v-if="addValidation.name.$error.required") 请输入规则名称
+              span(v-if="addValidation.name.$error.minlength") 规则名称不能少于2个字符
+              span(v-if="addValidation.name.$error.maxlength") 规则名称不能超过32个字符
+        .form-row.condition-row
+          label.form-control 告警条件：
+          .controls
+            .type
               .select
-                select(v-model="addModel.notify_type", v-form-ctrl, name="notify_type", number)
-                  option(value="1") 通知类型
-                  option(value="2") 告警类型
-          .form-row.tag-row
-            label.form-control 标签：
-            .controls
-              tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="addModelEditingTag", @adding-tag="showAddModal = true")
-          .form-row
-            label.form-control 通知方式：
-            .controls
-              .checkbox-group
-                label.checkbox(v-for="type in notifyTypes")
-                  input(type="checkbox", v-model="addModel.notify_target", name="notify_target", :value="$index+1", number)
-                  | {{type}}
-              .apn-list(v-show="showApps('addModel')")
-                .checkbox-group
-                  label.checkbox(v-for="app in apps")
-                    input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
-                    | {{app.name}}
-          .form-row
-            label.form-control 可见范围：
-            .controls
-              .radio-group
-                label.radio(v-for="type in scopeTypes")
-                  input(type="radio", v-model="addModel.scope", name="addModel.scope", :value="$index+1", number)
-                  | {{type}}
-          .form-row
-            label.form-control 状态：
-            .controls
-              .radio-group
-                label.radio
-                  input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="false")
-                  | 禁用
-                label.radio
-                  input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="true")
-                  | 启用
-
-          .form-actions
-            button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
-            button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
-
-    // 编辑规则浮层
-    modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
-      h3(slot="header") 编辑规则
-      .form.form-rules(slot="body")
-        form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
-          .form-row
-            label.form-control 规则名称：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入规则名称'")
-                input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
-              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-                span(v-if="editValidation.name.$error.required") 请输入规则名称
-              .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-                span(v-if="editValidation.name.$error.required") 请输入规则名称
-                span(v-if="editValidation.name.$error.minlength") 规则名称不能少于2个字符
-                span(v-if="editValidation.name.$error.maxlength") 规则名称不能超过32个字符
-          .form-row.condition-row
-            label.form-control 告警条件：
-            .controls
-              .type
-                .select
-                  select(v-model="editModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
-                    option(value="1") 数据端点
-                    option(value="2") 设备状态
-              .data(v-show="editModel.type === 1")
-                .select
-                  select(v-model="editModel.param", v-form-ctrl, name="param")
-                    option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
-              .compare(v-show="editModel.type === 1")
-                .select
-                  select(v-model="editModel.compare", v-form-ctrl, name="compare", number)
-                    option(value="1") 等于
-                    option(value="2") 大于
-                    option(value="3") 小于
-              .value(v-if="editModel.type === 1")
-                .input-text-wrap
-                  input.input-text(v-model="editModel.value", type="text", v-form-ctrl, name="value", required, lazy)
-              .value(v-if="editModel.type === 2")
-                .select
-                  select(v-model="editModel.value", v-form-ctrl, name="value")
-                    option(value="online") 上线
-                    option(value="offline") 下线
-
-          .form-row
-            label.form-control 告警内容：
-            .controls
-              .input-text-wrap(v-placeholder="'请输入告警内容'")
-                textarea.input-text(v-model="editModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
-              .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.content.$pristine")
-                span(v-if="editValidation.content.$error.required") 请输入告警内容
-              .form-tips.form-tips-error(v-if="editValidation.content.$dirty")
-                span(v-if="editValidation.content.$error.required") 请输入告警内容
-                span(v-if="editValidation.content.$error.maxlength") 告警内容不能超过250个字符
-          .form-row
-            label.form-control 通知类型：
-            .controls
+                select(v-model="addModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
+                  option(value="1") 数据端点
+                  option(value="2") 设备状态
+            .data(v-show="addModel.type === 1")
               .select
-                select(v-model="editModel.notify_type", v-form-ctrl, name="notify_type", number)
-                  option(value="1") 通知类型
-                  option(value="2") 告警类型
-          .form-row.tag-row
-            label.form-control 标签：
-            .controls
-              tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editModelEditingTag", @adding-tag="showEditModal = true")
-          .form-row
-            label.form-control 通知方式：
-            .controls
+                select(v-model="addModel.param", v-form-ctrl, name="param")
+                  option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
+            .compare(v-show="addModel.type === 1")
+              .select
+                select(v-model="addModel.compare", v-form-ctrl, name="compare", number)
+                  option(value="1") 等于
+                  option(value="2") 大于
+                  option(value="3") 小于
+            .value(v-if="addModel.type === 1")
+              .input-text-wrap
+                input.input-text(v-model="addModel.value", type="text", v-form-ctrl, name="value", required, lazy)
+            .value(v-if="addModel.type === 2")
+              .select
+                select(v-model="addModel.value", v-form-ctrl, name="value")
+                  option(value="online") 上线
+                  option(value="offline") 下线
+        .form-row
+          label.form-control 告警内容：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入告警内容'")
+              textarea.input-text(v-model="addModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
+            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.content.$pristine")
+              span(v-if="addValidation.content.$error.required") 请输入告警内容
+            .form-tips.form-tips-error(v-if="addValidation.content.$dirty")
+              span(v-if="addValidation.content.$error.required") 请输入告警内容
+              span(v-if="addValidation.content.$error.maxlength") 告警内容不能超过250个字符
+        .form-row
+          label.form-control 通知类型：
+          .controls
+            .select
+              select(v-model="addModel.notify_type", v-form-ctrl, name="notify_type", number)
+                option(value="1") 通知类型
+                option(value="2") 告警类型
+        .form-row.tag-row
+          label.form-control 标签：
+          .controls
+            tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="addModelEditingTag", @adding-tag="showAddModal = true")
+        .form-row
+          label.form-control 通知方式：
+          .controls
+            .checkbox-group
+              label.checkbox(v-for="type in notifyTypes")
+                input(type="checkbox", v-model="addModel.notify_target", name="notify_target", :value="$index+1", number)
+                | {{type}}
+            .apn-list(v-show="showApps('addModel')")
               .checkbox-group
-                label.checkbox(v-for="type in notifyTypes")
-                  input(type="checkbox", v-model="editModel.notify_target", name="notify_target", :value="$index+1", number)
-                  | {{type}}
-              .apn-list(v-show="showApps('editModel')")
-                .checkbox-group
-                  label.checkbox(v-for="app in apps")
-                    input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
-                    | {{app.name}}
-          .form-row
-            label.form-control 可见范围：
-            .controls
-              .radio-group
-                label.radio(v-for="type in scopeTypes")
-                  input(type="radio", v-model="editModel.scope", name="scope", :value="$index+1", number)
-                  | {{type}}
-          .form-row
-            label.form-control 状态：
-            .controls
-              .radio-group
-                label.radio
-                  input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="false")
-                  | 禁用
-                label.radio
-                  input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="true")
-                  | 启用
+                label.checkbox(v-for="app in apps")
+                  input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
+                  | {{app.name}}
+        .form-row
+          label.form-control 可见范围：
+          .controls
+            .radio-group
+              label.radio(v-for="type in scopeTypes")
+                input(type="radio", v-model="addModel.scope", name="addModel.scope", :value="$index+1", number)
+                | {{type}}
+        .form-row
+          label.form-control 状态：
+          .controls
+            .radio-group
+              label.radio
+                input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="false")
+                | 禁用
+              label.radio
+                input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="true")
+                | 启用
 
-          .form-actions
-            label.del-check
-              input(type="checkbox", name="del", v-model="delChecked")
-              | 删除告警规则
-            button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-            button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'") 确定
+        .form-actions
+          button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
+          button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
+
+  // 编辑规则浮层
+  modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
+    h3(slot="header") 编辑规则
+    .form.form-rules(slot="body")
+      form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
+        .form-row
+          label.form-control 规则名称：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入规则名称'")
+              input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
+            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
+              span(v-if="editValidation.name.$error.required") 请输入规则名称
+            .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
+              span(v-if="editValidation.name.$error.required") 请输入规则名称
+              span(v-if="editValidation.name.$error.minlength") 规则名称不能少于2个字符
+              span(v-if="editValidation.name.$error.maxlength") 规则名称不能超过32个字符
+        .form-row.condition-row
+          label.form-control 告警条件：
+          .controls
+            .type
+              .select
+                select(v-model="editModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
+                  option(value="1") 数据端点
+                  option(value="2") 设备状态
+            .data(v-show="editModel.type === 1")
+              .select
+                select(v-model="editModel.param", v-form-ctrl, name="param")
+                  option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
+            .compare(v-show="editModel.type === 1")
+              .select
+                select(v-model="editModel.compare", v-form-ctrl, name="compare", number)
+                  option(value="1") 等于
+                  option(value="2") 大于
+                  option(value="3") 小于
+            .value(v-if="editModel.type === 1")
+              .input-text-wrap
+                input.input-text(v-model="editModel.value", type="text", v-form-ctrl, name="value", required, lazy)
+            .value(v-if="editModel.type === 2")
+              .select
+                select(v-model="editModel.value", v-form-ctrl, name="value")
+                  option(value="online") 上线
+                  option(value="offline") 下线
+
+        .form-row
+          label.form-control 告警内容：
+          .controls
+            .input-text-wrap(v-placeholder="'请输入告警内容'")
+              textarea.input-text(v-model="editModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
+            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.content.$pristine")
+              span(v-if="editValidation.content.$error.required") 请输入告警内容
+            .form-tips.form-tips-error(v-if="editValidation.content.$dirty")
+              span(v-if="editValidation.content.$error.required") 请输入告警内容
+              span(v-if="editValidation.content.$error.maxlength") 告警内容不能超过250个字符
+        .form-row
+          label.form-control 通知类型：
+          .controls
+            .select
+              select(v-model="editModel.notify_type", v-form-ctrl, name="notify_type", number)
+                option(value="1") 通知类型
+                option(value="2") 告警类型
+        .form-row.tag-row
+          label.form-control 标签：
+          .controls
+            tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editModelEditingTag", @adding-tag="showEditModal = true")
+        .form-row
+          label.form-control 通知方式：
+          .controls
+            .checkbox-group
+              label.checkbox(v-for="type in notifyTypes")
+                input(type="checkbox", v-model="editModel.notify_target", name="notify_target", :value="$index+1", number)
+                | {{type}}
+            .apn-list(v-show="showApps('editModel')")
+              .checkbox-group
+                label.checkbox(v-for="app in apps")
+                  input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
+                  | {{app.name}}
+        .form-row
+          label.form-control 可见范围：
+          .controls
+            .radio-group
+              label.radio(v-for="type in scopeTypes")
+                input(type="radio", v-model="editModel.scope", name="scope", :value="$index+1", number)
+                | {{type}}
+        .form-row
+          label.form-control 状态：
+          .controls
+            .radio-group
+              label.radio
+                input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="false")
+                | 禁用
+              label.radio
+                input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="true")
+                | 启用
+
+        .form-actions
+          label.del-check
+            input(type="checkbox", name="del", v-model="delChecked")
+            | 删除告警规则
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
+          button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'") 确定
 </template>
 
 <script>
@@ -299,7 +299,7 @@
         originAddModel: {},
         originEditModel: {},
         loadingData: false
-      }
+      };
     },
 
     route: {
@@ -326,7 +326,7 @@
       getDatapoints: function () {
         var self = this;
         return api.corp.refreshToken(this).then(function () {
-          return api.product.getDatapoints(self.$route.params.id)
+          return api.product.getDatapoints(self.$route.params.id);
         });
       },
 
@@ -394,14 +394,10 @@
 
       // 关闭编辑浮层并净化编辑表单
       resetEdit: function () {
-        var self = this;
         this.editing = false;
         this.delChecked = false;
         this.showEditModal = false;
         this.editModel = this.originEditModel;
-        this.$nextTick(function (){
-          //self.editForm.setValidity();
-        });
       },
 
       // 取消添加

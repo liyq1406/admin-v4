@@ -1,65 +1,65 @@
 <template lang="jade">
-  div
-    .panel
-      .panel-hd
-        h2 趋势
-        .leftbox
-          v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
-          radio-group(:items="periods", :value.sync="period")
-            span.label(slot="label") 最近
+div
+  .panel
+    .panel-hd
+      h2 趋势
+      .leftbox
+        v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
+        radio-group(:items="periods", :value.sync="period")
+          span.label(slot="label") 最近
 
-      .panel-bd
-        .row
-          .col-13
-            #trendChart(style="height:320px;")
-            //- .trend-null(v-show="!trends.length") 暂无数据
-          .col-7
-            .statistics-info
-              .item
-                .cont
-                  .num {{productSummary.total}}
-                  .label 总设备量
-              .item
-                .cont
-                  .num {{productSummary.activated}}
-                  .label 激活数
-              .item.no-border
-                .cont
-                  .num {{productSummary.online}}
-                  .label 当前在线
-              .item.no-border
-                .cont
-                  .num 0
-                  .label
-                    span 活跃设备
-                    .tips
-                      i.fa.fa-question-circle(@mouseover="showTooltip = true", @mouseout="showTooltip = false")
-                      .tooltip(v-show="showTooltip") 指日活跃设备
-    .panel
-      .panel-hd
-        h2 区域分布
-        .leftbox
-          radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
+    .panel-bd
+      .row
+        .col-13
+          #trendChart(style="height:320px;")
+          //- .trend-null(v-show="!trends.length") 暂无数据
+        .col-7
+          .statistics-info
+            .item
+              .cont
+                .num {{productSummary.total}}
+                .label 总设备量
+            .item
+              .cont
+                .num {{productSummary.activated}}
+                .label 激活数
+            .item.no-border
+              .cont
+                .num {{productSummary.online}}
+                .label 当前在线
+            .item.no-border
+              .cont
+                .num 0
+                .label
+                  span 活跃设备
+                  .tips
+                    i.fa.fa-question-circle(@mouseover="showTooltip = true", @mouseout="showTooltip = false")
+                    .tooltip(v-show="showTooltip") 指日活跃设备
+  .panel
+    .panel-hd
+      h2 区域分布
+      .leftbox
+        radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
 
-      .panel-bd
-        .row
-          #regionChart(style="height:320px; overflow:hidden;")
+    .panel-bd
+      .row
+        #regionChart(style="height:320px; overflow:hidden;")
 
-          table.table.table-bordered.table-stripe
-            thead
-              tr
-                th 地区
-                th 活跃设备
-                th 设备量
-                th 占比
-            tbody
-              tr(v-for="item in regionData")
-                td {{item.name}}
-                td {{item.value}}
-                td {{productSummary.total}}
-                td {{(item.value * 100 / productSummary.total).toFixed(2)}}%
-
+        table.table.table-bordered.table-stripe
+          thead
+            tr
+              th 地区
+              th 活跃设备
+              th 设备量
+              th 占比
+          tbody
+            tr(v-for="item in regionData")
+              td {{item.name}}
+              td {{item.value}}
+              td {{productSummary.total}}
+              td {{(item.value * 100 / productSummary.total).toFixed(2)}}%
 </template>
+
 <style lang="stylus">
   .panel-hd
     position relative
@@ -69,12 +69,12 @@
       top 6px
       left 80px
 </style>
+
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
   var Select = require('../../components/select.vue');
   var config = require('../../consts/config');
   var api = require('../../api');
-  var _ = require('lodash');
   var dateFormat = require('date-format');
   var echarts = require('echarts/echarts');
   require('echarts/chart/line');
@@ -123,7 +123,7 @@
           });
 
           if (self.productId.length === 0) {
-            self.productId = data[0].id
+            self.productId = data[0].id;
           }
 
           self.getProductData();
@@ -159,7 +159,7 @@
           api.statistics.getProductSummary(self.productId).then(function (data) {
             self.productSummary = data;
           }).catch(function (error) {
-            self.handleError(error)
+            self.handleError(error);
           });
         });
       },
@@ -211,7 +211,7 @@
               legend: {
                 x: 'right',
                 y: 10,
-                data:['总设备量', '活跃设备', '激活设备']
+                data: ['总设备量', '活跃设备', '激活设备']
               },
               xAxis: [{
                 type: 'category',
@@ -221,11 +221,7 @@
               yAxis: [{
                 type: 'value'
               }],
-              series: [/*{
-                name: '总设备量',
-                type: 'line',
-                data: totalTrends
-              }, */{
+              series: [{
                 name: '活跃设备',
                 type: 'line',
                 data: activeTrends
@@ -239,7 +235,7 @@
             trendChart.setOption(trendOptions);
             window.onresize = trendChart.resize;
           }).catch(function (error) {
-            self.handleError(error)
+            self.handleError(error);
           });
         });
       },
@@ -253,7 +249,7 @@
             if (self.region === 'world') {
               var worldData = [];
               var worldMax = 0;
-              for(var country in data) {
+              for (var country in data) {
                 worldData.push({
                   name: country,
                   value: data[country].activated
@@ -272,7 +268,7 @@
                   formatter: function (params) {
                     var value = (params.value + '').split('.');
                     if (value[0] === '-') {
-                      value = 0
+                      value = 0;
                     }
                     return '活跃设备<br/>' + params.name + ': ' + value;
                   }
@@ -280,10 +276,10 @@
                 dataRange: {
                   min: 0,
                   max: worldMax,
-                  text:['高','低'],
+                  text: ['高', '低'],
                   realtime: false,
                   calculable: true,
-                  color: ['orangered','yellow','lightskyblue']
+                  color: ['orangered', 'yellow', 'lightskyblue']
                 },
                 series: [{
                   type: 'map',
@@ -303,15 +299,15 @@
 
               var chinaData = [];
               var chinaMax = 0;
-              for(var province in data['China']) {
+              for (var province in data['China']) {
                 if (province !== 'activated') {
                   chinaData.push({
                     name: province,
                     value: data['China'][province].activated
                   });
 
-                  for(var city in data['China'][province]) {
-                    if (city != 'activated') {
+                  for (var city in data['China'][province]) {
+                    if (city !== 'activated') {
                       chinaData.push({
                         name: city,
                         value: data['China'][province][city].activated
@@ -331,25 +327,24 @@
               console.log(chinaData);
               self.regionData = chinaData;
 
-              regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param){
+              regionChart.on(ecConfig.EVENT.MAP_SELECTED, function (param) {
                 var len = mapType.length;
                 var mt = mapType[curIndx % len];
-                if (mt == 'china') {
+                if (mt === 'china') {
                   // 全国选择时指定到选中的省份
                   var selected = param.selected;
                   for (var i in selected) {
                     if (selected[i]) {
                       mt = i;
                       while (len--) {
-                        if (mapType[len] == mt) {
+                        if (mapType[len] === mt) {
                           curIndx = len;
                         }
                       }
                       break;
                     }
                   }
-                }
-                else {
+                } else {
                   curIndx = 0;
                   mt = 'china';
                 }
@@ -362,21 +357,21 @@
                   formatter: function (params) {
                     var value = (params.value + '').split('.');
                     if (value[0] === '-') {
-                      value = 0
+                      value = 0;
                     }
                     return '活跃设备<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
-                  x:'right',
-                  data:['活跃设备']
+                  x: 'right',
+                  data: ['活跃设备']
                 },
                 dataRange: {
                   min: 0,
                   max: chinaMax,
-                  color:['orange','yellow'],
-                  text:['高','低'],           // 文本，默认为数值文本
+                  color: ['orange', 'yellow'],
+                  text: ['高', '低'],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
@@ -384,9 +379,9 @@
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',
-                  itemStyle:{
-                    normal:{label:{show:true}},
-                    emphasis:{label:{show:true}}
+                  itemStyle: {
+                    normal: { label: { show: true } },
+                    emphasis: { label: { show: true } }
                   },
                   data: chinaData
                 }]
@@ -394,69 +389,10 @@
               regionChart.setOption(option, true);
             }
           }).catch(function (error) {
-            self.handleError(error)
+            self.handleError(error);
           });
         });
-      },
+      }
     }
   };
 </script>
-
-<style lang="stylus">
-  @import '../../assets/stylus/common'
-
-  .statistics-info
-    clearfix()
-    margin-top 40px
-
-    .item
-      float left
-      width 50%
-      border-right 1px solid #DEDEDE
-      box-sizing border-box
-      text-align right
-
-      .cont
-        padding 20px 30px 20px 0
-        border-bottom 1px solid #DEDEDE
-
-      .num
-        font-size 30px
-        color red
-
-      .label
-        color gray-light
-
-        .tooltip
-          absolute left 50% top -26px
-          margin-left -43px
-          border 1px solid #DDD
-          white-space nowrap
-          background #FFF
-          padding 0 5px
-          font-size 12px
-
-          &:before
-            absolute left 50% top 18px
-            margin-left -5px
-            content ""
-            triangle #D3D3D3 10px down
-
-          &:after
-            absolute left 50% top 17px
-            margin-left -5px
-            content ""
-            triangle #FFF 10px down
-
-        .tips
-          display inline-block
-          margin-left 4px
-          position relative
-
-      &:nth-child(2n)
-        border-right none
-
-    .no-border
-      .cont
-        border-bottom none
-</style>

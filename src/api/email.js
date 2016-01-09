@@ -1,4 +1,4 @@
-module.exports = function(Vue, Promise, config) {
+module.exports = function (Vue, Promise, config) {
   return {
     /**
      * 发送邮件验证码
@@ -9,17 +9,20 @@ module.exports = function(Vue, Promise, config) {
         }
      * @return status
      */
-    getVerifycode: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/email/verifycode', JSON.stringify(
-          params), function(data, status, request) {
-          resolve(status);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+    getVerifycode: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/email/verifycode',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
           }
-        }).error(function(data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

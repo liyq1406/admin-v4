@@ -1,4 +1,4 @@
-module.exports = function(Vue, Promise, config) {
+module.exports = function (Vue, Promise, config) {
   return {
     /** 升级开发文档
      * 1.创建自动升级任务
@@ -27,17 +27,20 @@ module.exports = function(Vue, Promise, config) {
           "status":"任务状态"
         }
      */
-    task: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/upgrade/firmware/task', JSON.stringify(
-          params), function(data, status, request) {
-          resolve(data);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+    task: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upgrade/firmware/task',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
           }
-        }).error(function(data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -61,18 +64,19 @@ module.exports = function(Vue, Promise, config) {
         }
       ]
      */
-    taskList: function(product_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot +
-          '/upgrade/firmware/tasks?product_id=' + product_id,
-          function(data, status, request) {
+    taskList: function (product_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/upgrade/firmware/tasks?product_id=' + product_id,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -88,18 +92,20 @@ module.exports = function(Vue, Promise, config) {
         }
      * @return status
      */
-    toggleTaskStatus: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/upgrade/firmware/task/status',
+    toggleTaskStatus: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upgrade/firmware/task/status',
           JSON.stringify(params),
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -119,18 +125,20 @@ module.exports = function(Vue, Promise, config) {
           "description":"升级描述"
         }
       */
-    newestVersion: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/upgrade/device/newest_version',
+    newestVersion: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upgrade/device/newest_version',
           JSON.stringify(params),
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -145,17 +153,20 @@ module.exports = function(Vue, Promise, config) {
         }
      * @return status
      */
-    upgrade: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/upgrade/device', JSON.stringify(
-          params), function(data, status, request) {
-          resolve(status);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+    upgrade: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upgrade/device',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
           }
-        }).error(function(data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

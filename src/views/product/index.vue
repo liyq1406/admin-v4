@@ -1,12 +1,12 @@
 <template lang="jade">
-  section.main-wrap
-    .main
-      .panel
-        .panel-hd
-          h2(v-text="product.name")
-        .panel-bd
-          tab(:nav="secondaryNav")
-      router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProduct")
+section.main-wrap
+  .main
+    .panel
+      .panel-hd
+        h2(v-text="product.name")
+      .panel-bd
+        tab(:nav="secondaryNav")
+    router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProduct")
 </template>
 
 <script>

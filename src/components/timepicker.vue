@@ -1,21 +1,21 @@
 <template lang="jade">
-  .timepicker
-    .input-text-wrap
-      input.input-text(type="text", v-model="value", @click="inputClick", lazy)
-    .timepicker-popup(v-show="displayTimeView", :class="{'timepicker-popup-right':pullLeft}")
-      .timepicker-inner
-        .timepicker-body
-          .select.select-sm
-            select(v-model="hour", @change="updateValue")
-              option(v-for="option in 24", v-bind:value="zeroPrefix(option)", v-bind:selected="hour === zeroPrefix(option)") {{zeroPrefix(option)}}
-          .divide :
-          .select.select-sm
-            select(v-model="minute", @change="updateValue")
-              option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="minute === zeroPrefix(option)") {{zeroPrefix(option)}}
-          .divide :
-          .select.select-sm
-            select(v-model="second", @change="updateValue")
-              option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="second === zeroPrefix(option)") {{zeroPrefix(option)}}
+.timepicker
+  .input-text-wrap
+    input.input-text(type="text", v-model="value", @click="inputClick", lazy)
+  .timepicker-popup(v-show="displayTimeView", :class="{'timepicker-popup-right':pullLeft}")
+    .timepicker-inner
+      .timepicker-body
+        .select.select-sm
+          select(v-model="hour", @change="updateValue")
+            option(v-for="option in 24", v-bind:value="zeroPrefix(option)", v-bind:selected="hour === zeroPrefix(option)") {{zeroPrefix(option)}}
+        .divide :
+        .select.select-sm
+          select(v-model="minute", @change="updateValue")
+            option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="minute === zeroPrefix(option)") {{zeroPrefix(option)}}
+        .divide :
+        .select.select-sm
+          select(v-model="second", @change="updateValue")
+            option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="second === zeroPrefix(option)") {{zeroPrefix(option)}}
 </template>
 
 <script>

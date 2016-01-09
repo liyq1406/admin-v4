@@ -1,6 +1,6 @@
 <template lang="jade">
-  .switch(@click="toogle", :class="{'switch-on':value}")
-    .switch-block(v-text="value ? '开启' : '关闭'")
+.switch(@click="toogle", :class="{'switch-on':value}")
+  .switch-block(v-text="value ? '开启' : '关闭'")
 </template>
 
 <script>

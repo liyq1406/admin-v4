@@ -1,4 +1,4 @@
-module.exports = function(Vue, Promise, config) {
+module.exports = function (Vue, Promise, config) {
   return {
     /**
      * 向目标手机发送短信验证码
@@ -6,19 +6,19 @@ module.exports = function(Vue, Promise, config) {
      * @example
      *   api.sms.getVerifycode({phone: '13800138000'})
      */
-    getVerifycode: function(params) {
-      return new Promise(function(resolve, reject) {
+    getVerifycode: function (params) {
+      return new Promise(function (resolve, reject) {
         Vue.http.post(
           config.apiRoot + '/sms/verifycode',
           JSON.stringify(params),
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
             }
           }
-        ).error(function(data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

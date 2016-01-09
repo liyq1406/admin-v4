@@ -1,38 +1,38 @@
 <template lang="jade">
-  .datepicker
-    .input-text-wrap
-      input.input-text(type="text", v-model="value", @click="inputClick", lazy)
-    .datepicker-popup(v-show="displayDayView")
-      .datepicker-inner
-        .datepicker-body
-          .datepicker-ctrl
-            span.month-btn.datepicker-prev-btn(@click="preNextMonthClick(0)") &lt;
-            span.month-btn.datepicker-next-btn(@click="preNextMonthClick(1)") &gt;
-            p(@click="switchMonthView") {{stringifyDayHeader(currDate)}}
-          .datepicker-week-range
-            span(v-for="w in weekRange") {{w}}
-          .datepicker-date-range
-            span(v-for="d in dateRange", v-bind:class="d.sclass", @click="daySelect(d.date, this)") {{d.text}}
-    .datepicker-popup(v-show="displayMonthView")
-      .datepicker-inner
-        .datepicker-body
-          .datepicker-ctrl
-            span.month-btn.datepicker-prev-btn(@click="preNextYearClick(0)") &lt;
-            span.month-btn.datepicker-next-btn(@click="preNextYearClick(1)") &gt;
-            p(@click="switchDecadeView") {{stringifyYearHeader(currDate)}}
-          .datepicker-month-range
-            template(v-for="m in monthNames")
-              span(v-bind:class="{'datepicker-date-range-item-active': this.monthNames[this.parse(this.value).getMonth()] === m && (this.currDate.getFullYear() === this.parse(this.value).getFullYear())}", @click="monthSelect($index)") {{m.substr(0,3)}}
-    .datepicker-popup(v-show="displayYearView")
-      .datepicker-inner
-        .datepicker-body
-          .datepicker-ctrl
-            span.month-btn.datepicker-prev-btn(@click="preNextDecadeClick(0)") &lt;
-            span.month-btn.datepicker-next-btn(@click="preNextDecadeClick(1)") &gt;
-            p {{stringifyDecadeHeader(currDate)}}
-          .datepicker-month-range.decade-range
-            template(v-for="decade in decadeRange")
-              span(v-bind:class="{'datepicker-date-range-item-active': this.parse(this.value).getFullYear() === decade.text}", @click.stop="yearSelect(decade.text)") {{decade.text}}
+.datepicker
+  .input-text-wrap
+    input.input-text(type="text", v-model="value", @click="inputClick", lazy)
+  .datepicker-popup(v-show="displayDayView")
+    .datepicker-inner
+      .datepicker-body
+        .datepicker-ctrl
+          span.month-btn.datepicker-prev-btn(@click="preNextMonthClick(0)") &lt;
+          span.month-btn.datepicker-next-btn(@click="preNextMonthClick(1)") &gt;
+          p(@click="switchMonthView") {{stringifyDayHeader(currDate)}}
+        .datepicker-week-range
+          span(v-for="w in weekRange") {{w}}
+        .datepicker-date-range
+          span(v-for="d in dateRange", v-bind:class="d.sclass", @click="daySelect(d.date, this)") {{d.text}}
+  .datepicker-popup(v-show="displayMonthView")
+    .datepicker-inner
+      .datepicker-body
+        .datepicker-ctrl
+          span.month-btn.datepicker-prev-btn(@click="preNextYearClick(0)") &lt;
+          span.month-btn.datepicker-next-btn(@click="preNextYearClick(1)") &gt;
+          p(@click="switchDecadeView") {{stringifyYearHeader(currDate)}}
+        .datepicker-month-range
+          template(v-for="m in monthNames")
+            span(v-bind:class="{'datepicker-date-range-item-active': this.monthNames[this.parse(this.value).getMonth()] === m && (this.currDate.getFullYear() === this.parse(this.value).getFullYear())}", @click="monthSelect($index)") {{m.substr(0,3)}}
+  .datepicker-popup(v-show="displayYearView")
+    .datepicker-inner
+      .datepicker-body
+        .datepicker-ctrl
+          span.month-btn.datepicker-prev-btn(@click="preNextDecadeClick(0)") &lt;
+          span.month-btn.datepicker-next-btn(@click="preNextDecadeClick(1)") &gt;
+          p {{stringifyDecadeHeader(currDate)}}
+        .datepicker-month-range.decade-range
+          template(v-for="decade in decadeRange")
+            span(v-bind:class="{'datepicker-date-range-item-active': this.parse(this.value).getFullYear() === decade.text}", @click.stop="yearSelect(decade.text)") {{decade.text}}
 </template>
 
 <script>

@@ -1,66 +1,65 @@
 <template lang="jade">
-  section.main-wrap
-    .main
-      .breadcrumb
-        a(v-link="{path: '/data/tables' }")
-          i.fa.fa-arrow-circle-left
-          | 数据管理
-      .row
-        .col-20
-          .panel
-            .panel-hd
-              h2 数据表详情
-            .panel-bd
-              //- 数据
-              table.table.table-stripe.table-bordered
-                thead
-                  tr
-                    th ID
-                    th 创建时间
-                    th 更新时间
-                    th 创建者
-                    th.tac 操作
-                tbody
-                  tr(v-for="record in records")
-                    td {{record.object_id}}
-                    td {{record.create}}
-                    td {{record.update}}
-                    td {{record.creator}}
-                    td.tac
-                      button.btn.btn-link.btn-sm(@click="showRecord(record)") 查看
-                  tr(v-if="records.length === 0")
-                    td.tac(colspan="5")
-                      i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                      .tips-null(v-else) 暂无数据记录
-              pager(:total="total", :current.sync="currentPage", :page-count="pageCount")
+section.main-wrap
+  .main
+    .breadcrumb
+      a(v-link="{path: '/data/tables' }")
+        i.fa.fa-arrow-circle-left
+        | 数据管理
+    .row
+      .col-20
+        .panel
+          .panel-hd
+            h2 数据表详情
+          .panel-bd
+            //- 数据
+            table.table.table-stripe.table-bordered
+              thead
+                tr
+                  th ID
+                  th 创建时间
+                  th 更新时间
+                  th 创建者
+                  th.tac 操作
+              tbody
+                tr(v-for="record in records")
+                  td {{record.object_id}}
+                  td {{record.create}}
+                  td {{record.update}}
+                  td {{record.creator}}
+                  td.tac
+                    button.btn.btn-link.btn-sm(@click="showRecord(record)") 查看
+                tr(v-if="records.length === 0")
+                  td.tac(colspan="5")
+                    i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+                    .tips-null(v-else) 暂无数据记录
+            pager(:total="total", :current.sync="currentPage", :page-count="pageCount")
 
-    // 查看数据浮层
-    modal(:show.sync="showModal")
-      h3(slot="header") 数据详情
-      //- 数据
-      table.table.table-stripe.table-bordered(slot="body")
-        tbody
-          tr
-            td ID
-            td {{model.object_id}}
-          tr
-            td 创建时间
-            td {{model.create}}
-          tr
-            td 更新时间
-            td {{model.update}}
-          tr
-            td 创建者
-            td {{model.creator}}
-          tr
-            td(colspan="2")
-              strong 字段值
-          tr(v-for="(key, val) in tableInfo.field")
-            td {{key}}
-            td {{model[key]}}
-      .modal-footer(slot="footer")
-        button.btn.btn-primary(@click.prevent.stop="showModal = false") 确定
-
+  // 查看数据浮层
+  modal(:show.sync="showModal")
+    h3(slot="header") 数据详情
+    //- 数据
+    table.table.table-stripe.table-bordered(slot="body")
+      tbody
+        tr
+          td ID
+          td {{model.object_id}}
+        tr
+          td 创建时间
+          td {{model.create}}
+        tr
+          td 更新时间
+          td {{model.update}}
+        tr
+          td 创建者
+          td {{model.creator}}
+        tr
+          td(colspan="2")
+            strong 字段值
+        tr(v-for="(key, val) in tableInfo.field")
+          td {{key}}
+          td {{model[key]}}
+    .modal-footer(slot="footer")
+      button.btn.btn-primary(@click.prevent.stop="showModal = false") 确定
 </template>
 
 <script>
@@ -102,12 +101,9 @@
     route: {
       data: function () {
         this.getRecords();
-
         return {
-          // records: this.getRecords(),
-          // records: [],
           tableInfo: this.getTableInfo()
-        }
+        };
       }
     },
 
@@ -117,6 +113,7 @@
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount
         };
+        return condition;
       }
     },
 
@@ -166,7 +163,7 @@
         var self = this;
         return api.corp.refreshToken().then(function () {
           return api.dataTable.getTable(self.$route.params.name);
-        })
+        });
       },
 
       showRecord: function (record) {

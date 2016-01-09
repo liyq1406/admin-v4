@@ -1,107 +1,104 @@
 <template lang="jade">
-  section.main-wrap
-    .main
-      .breadcrumb
-        a(v-link="{path: '/products/' + $route.params.product_id + '/devices' }")
-          i.fa.fa-arrow-circle-left
-          | 设备管理
-      .row
-        .col-20
-          .panel
-            .panel-hd
-              h2 设备详情
-            .panel-bd
-              //- #diviceMap(style="height: 300px")
-              ul.device-details
-                li
-                  .label ID：
-                  .info {{device.id}}
-                li
-                  .label MAC：
-                  .info {{device.mac}}
-                li
-                  .label 激活:
-                  .info {{device.is_active ? '已激活' : '未激活'}}
-                li
-                  .label 激活时间：
-                  .info {{device.active_date | formatDate}}
-                //- li
-                //-   .label 最后一次登录：
-                //-   .info 2015-11-12 19:33:22
-                li
-                  .label 在线状态:
-                  .info
-                    span.hl-green(v-if="device.is_online") 在线
-                    span.hl-red(v-else) 离线
-                li
-                  .label 固件版本:
-                  .info
-                    span {{device.firmware_version}}
+section.main-wrap
+  .main
+    .breadcrumb
+      a(v-link="{path: '/products/' + $route.params.product_id + '/devices' }")
+        i.fa.fa-arrow-circle-left
+        | 设备管理
+    .row
+      .col-20
+        .panel
+          .panel-hd
+            h2 设备详情
+          .panel-bd
+            //- #diviceMap(style="height: 300px")
+            ul.device-details
+              li
+                .label ID：
+                .info {{device.id}}
+              li
+                .label MAC：
+                .info {{device.mac}}
+              li
+                .label 激活:
+                .info {{device.is_active ? '已激活' : '未激活'}}
+              li
+                .label 激活时间：
+                .info {{device.active_date | formatDate}}
+              //- li
+              //-   .label 最后一次登录：
+              //-   .info 2015-11-12 19:33:22
+              li
+                .label 在线状态:
+                .info
+                  span.hl-green(v-if="device.is_online") 在线
+                  span.hl-red(v-else) 离线
+              li
+                .label 固件版本:
+                .info
+                  span {{device.firmware_version}}
 
-      .row
-        .col-13
-          // Start: 数据端点
-          .panel
-            .panel-hd
-              .actions
-                button.btn.btn-success(:disabled="!device.is_online || refreshing", :class="{'disabled':!device.is_online || refreshing}", @click="getDatapointValues")
-                  | 刷新
-                  i.fa.fa-refresh(:class="{'fa-spin':refreshing}")
-              h2 数据端点
-            .panel-bd
-              table.table
-                thead
-                  tr
-                    th 索引
-                    th 端点ID
-                    th 备注
-                    th 当前值
-                tbody
-                  tr(v-for="datapoint in datapoints")
-                    td {{$index + 1}}
-                    td {{datapoint.name}}
-                    td {{datapoint.description}}
-                    td {{datapointValues[$index] ? datapointValues[$index].value : ''}}
-                  tr(v-if="datapoints.length === 0")
-                    td.tac(colspan="4")
-                      i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                      .tips-null(v-else) 暂无端点信息
+    .row
+      .col-13
+        // Start: 数据端点
+        .panel
+          .panel-hd
+            .actions
+              button.btn.btn-success(:disabled="!device.is_online || refreshing", :class="{'disabled':!device.is_online || refreshing}", @click="getDatapointValues")
+                | 刷新
+                i.fa.fa-refresh(:class="{'fa-spin':refreshing}")
+            h2 数据端点
+          .panel-bd
+            table.table
+              thead
+                tr
+                  th 索引
+                  th 端点ID
+                  th 备注
+                  th 当前值
+              tbody
+                tr(v-for="datapoint in datapoints")
+                  td {{$index + 1}}
+                  td {{datapoint.name}}
+                  td {{datapoint.description}}
+                  td {{datapointValues[$index] ? datapointValues[$index].value : ''}}
+                tr(v-if="datapoints.length === 0")
+                  td.tac(colspan="4")
+                    i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
+                    .tips-null(v-else) 暂无端点信息
 
-          // End: 数据端点
+        // End: 数据端点
 
-        .col-7
-          // Start: 设备日志
-          .panel
-            .panel-hd
-              .actions
-                switch(:value.sync="showLog", @switch-toggle='toggleLog')
-              h2 设备日志
-            .panel-bd
-              pre.output-log
-                div.log(v-for="log in logs")
-                  span.time {{log.time}}
-                  template(v-if="log.type === 'user'")
-                    span.user {{log.msg[0]}}
-                    span.msg : {{log.msg[1]}}
-                  template(v-if="log.type === 'status'")
-                    span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
-                    span.msg : {{log.msg[1]}}
-                  template(v-if="log.type === 'connected'")
-                    span.msg-success {{log.msg}}
-                  template(v-if="log.type === 'disconnected'")
-                    span.msg-error {{log.msg}}
-          // End: 设备日志
-
-
+      .col-7
+        // Start: 设备日志
+        .panel
+          .panel-hd
+            .actions
+              switch(:value.sync="showLog", @switch-toggle='toggleLog')
+            h2 设备日志
+          .panel-bd
+            pre.output-log
+              div.log(v-for="log in logs")
+                span.time {{log.time}}
+                template(v-if="log.type === 'user'")
+                  span.user {{log.msg[0]}}
+                  span.msg : {{log.msg[1]}}
+                template(v-if="log.type === 'status'")
+                  span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
+                  span.msg : {{log.msg[1]}}
+                template(v-if="log.type === 'connected'")
+                  span.msg-success {{log.msg}}
+                template(v-if="log.type === 'disconnected'")
+                  span.msg-error {{log.msg}}
+        // End: 设备日志
 </template>
 
 <script>
   var api = require('../../../api');
-  var Promise = require('promise');
   var Switch = require('../../../components/switch.vue');
   var io = require('socket.io-client');
   var dateFormat = require('date-format');
-  var socket= null;
+  var socket = null;
 
   module.exports = {
     name: 'DeviceDetails',
@@ -125,11 +122,9 @@
 
     route: {
       data: function () {
-        var self = this;
-
         this.getDatapointValues();
 
-        /*alert(111);
+        /* alert(111);
         //百度地图API功能
       	function loadJScript() {
           alert("load js");
@@ -139,7 +134,7 @@
       		script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
       		document.body.appendChild(script);
       	}
-      	window.init = function() {
+      	window.init = function () {
           alert("init");
       		var map = new BMap.Map("diviceMap");            // 创建Map实例
       		var point = new BMap.Point(116.404, 39.915); // 创建点坐标
@@ -183,7 +178,7 @@
         script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
         document.body.appendChild(script);
       }
-      window.init = function() {
+      window.init = function () {
         var map = new BMap.Map("diviceMap");            // 创建Map实例
         var point = new BMap.Point(116.404, 39.915); // 创建点坐标
         map.centerAndZoom(point,15);
@@ -246,27 +241,27 @@
             socket = io.connect('http://' + data.addr, {'force new connection': true});
 
             // 连接 socket
-            socket.on('connect', function() {
+            socket.on('connect', function () {
               self.outputLog('Client has connected to the server!', 'connected');
-              window.setTimeout(function  () {
+              window.setTimeout(function () {
                 socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
               }, 100);
-        	  });
+            });
 
             // 断开 socket 连接
-            socket.on('disconnect', function() {
+            socket.on('disconnect', function () {
               self.outputLog('The client has disconnected!', 'disconnected');
-        	  });
+            });
 
             // 输入日志
-            socket.on('trace.log', function(data) {
+            socket.on('trace.log', function (data) {
               self.outputLog([data.id, data.log], 'user');
             });
 
             // 输出状态
-            socket.on('trace.status', function(data) {
+            socket.on('trace.status', function (data) {
               self.outputLog([data.status, data.msg], 'status');
-          	});
+            });
           }).catch(function (error) {
             self.handleError(error);
           });

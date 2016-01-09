@@ -16,17 +16,19 @@ module.exports = function (Vue, Promise, config) {
         "create_time":"创建时间"
       }
      */
-    create: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/developer/app', JSON.stringify(params),
-          function(data, status, request) {
+    create: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/developer/app', JSON.stringify(params),
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -37,23 +39,26 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} app 目标应用
      * @return {Promise}
      */
-    update: function(app) {
-      return new Promise(function(resolve, reject) {
+    update: function (app) {
+      return new Promise(function (resolve, reject) {
         var params = {};
         params.name = app.name;
         params.type = app.type;
         params.apn_enable = app.apn_enable;
         params.apn_license_url = app.apn_license_url;
         params.apn_license_pwd = app.apn_license_pwd;
-        Vue.http.put(config.apiRoot + '/developer/app/' + app.id, JSON.stringify(params),
-          function(data, status, request) {
+        Vue.http.put(
+          config.apiRoot + '/developer/app/' + app.id,
+          JSON.stringify(params),
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -63,17 +68,19 @@ module.exports = function (Vue, Promise, config) {
      * 获取应用列表
      * @return {Promise}
      */
-    list: function() {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/developer/apps',
-          function(data, status, request) {
+    list: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/developer/apps',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -84,17 +91,19 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} app 目标应用
      * @return {Promise}
      */
-    remove: function(id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/developer/app/' + id,
-          function(data, status, request) {
+    remove: function (id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(
+          config.apiRoot + '/developer/app/' + id,
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -108,10 +117,12 @@ module.exports = function (Vue, Promise, config) {
         "url":"apn密钥文件下载地址"
       }
      */
-    uploadApn: function(file) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/upload/app/apn_license', file,
-          function(data, status, request) {
+    uploadApn: function (file) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upload/app/apn_license',
+          file,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
@@ -119,7 +130,8 @@ module.exports = function (Vue, Promise, config) {
               // 'Content-Length': contentLength,
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

@@ -1,24 +1,27 @@
-module.exports = function(Vue, Promise, config) {
+module.exports = function (Vue, Promise, config) {
   return {
     /**
-     * 1.添加设备
+     * 添加设备
      * 调用本接口在某个产品下添加一个设备。
      * @param   product_id
      * @param  {"mac":"MAC地址"}
      * @return status
      */
-    add: function(product_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/device', JSON.stringify(params),
-          function(data, status, request) {
+    add: function (product_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/product/' + product_id +
+          '/device',
+          JSON.stringify(params),
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -31,24 +34,28 @@ module.exports = function(Vue, Promise, config) {
      * @param           product_id
      * @return status
      */
-    batchImport: function(product_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/device_batch', JSON.stringify(params),
-          function(data, status, request) {
+    batchImport: function (product_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/product/' + product_id +
+          '/device_batch',
+          JSON.stringify(params),
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
 
-    /**3.获取设备信息
+    /**
+     * 获取设备信息
      * 获取单个设备详细信息。
      * @param  {product_id}
      * @param  {device_id}
@@ -71,25 +78,27 @@ module.exports = function(Vue, Promise, config) {
         "region_id":"所在区域ID"
       }
      */
-    getInfo: function(product_id, device_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id +
+    getInfo: function (product_id, device_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/product/' + product_id +
           '/device/' + device_id,
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
 
     /**
-     * 4.查询设备列表
+     * 查询设备列表
      * @param  {product_id}
      * @param  {Object} params
         {
@@ -131,11 +140,13 @@ module.exports = function(Vue, Promise, config) {
           ]
         }
      */
-    getList: function(product_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/devices', JSON.stringify(params),
-          function(data, status, request) {
+    getList: function (product_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/product/' + product_id +
+          '/devices',
+          JSON.stringify(params),
+          function (data, status, request) {
             console.log(data);
             resolve(data);
           }, {
@@ -143,7 +154,8 @@ module.exports = function(Vue, Promise, config) {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -156,141 +168,160 @@ module.exports = function(Vue, Promise, config) {
      * @param  {device_id}
      * @return status
      */
-    delete: function(product_id, device_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id, '',
-          function(data, status, request) {
+    delete: function (product_id, device_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id,
+          '',
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
-
-
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /*6.设置设备扩展属性
+
+    /**
+     * 设置设备扩展属性
      * 调用本接口可以设置设备的扩展属性，扩展属性以Key-Value方式设置储存，扩展属性限制为10个。注意：扩展属性字段名不得包含小数点、空字符，不能以美元符号（$）开头。
      * @param  {Object} params {"{key}":"{value}", "{key}":"{value}"}
      * @param  {product_id}
      * @param  {device_id}
      * @return {Promise} {"{key}":"{value}", "{key}":"{value}"}
      */
-    setProperty: function(product_id, device_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/property', JSON.stringify(params),
-          function(data, status, request) {
+    setProperty: function (product_id, device_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/property',
+          JSON.stringify(params),
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /** 7.获取设备扩展属性
-     *获取设备扩展属性列表。
+
+    /**
+     * 获取设备扩展属性列表
      * @param  {product_id}
      * @param  {device_id}
 
      * @return  {Promise}  {"{key}":"{value}", "{key}":"{value}"}
      */
-    addProperty: function(product_id, device_id) {
-      return new Promise(function(resolve, reject) {
+    addProperty: function (product_id, device_id) {
+      return new Promise(function (resolve, reject) {
         Vue.http.get(config.apiRoot + '/product/' + product_id +
           '/device/' + device_id + '/property',
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /** 8.修改设备扩展属性
-     * 修改设备扩展属性值。
+
+    /**
+     * 修改设备扩展属性值
      * @param  {Object} params  {"{key}":"{value}", "{key}":"{value}"}
      * @param  {product_id}
      * @param  {device_id}
      * @return status
      */
-    alertProperty: function(product_id, device_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.put(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/property', JSON.stringify(params),
-          function(data, status, request) {
+    alertProperty: function (product_id, device_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/property',
+          JSON.stringify(params),
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /** 9.获取设备单个扩展属性
-     * 获取设备某个扩展属性。
+
+    /**
+     * 获取设备某个扩展属性
      * @param  {product_id}
      * @param  {device_id}
      * @return  {Promise}  {"{key}":"{value}"}
      */
-    getProperty: function(product_id, device_id, key) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id +
+    getProperty: function (product_id, device_id, key) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/product/' + product_id +
           '/device/' + device_id + '/property/' + key,
-          function(data, status, request) {
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /**10.删除设备扩展属性
-     * 删除某个设备扩展属性。
+
+    /**
+     * 删除某个设备扩展属性
      * @param  {product_id}
      * @param  {device_id}
      * @param  {key}
      * @return  stauts
      */
-    delProperty: function(product_id, device_id, key) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/property/' + key, JSON.stringify(
-            params),
-          function(data, status, request) {
+    delProperty: function (product_id, device_id, key) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/property/' + key,
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /**11.设备激活
-      *@param  {Object} params
+
+    /**
+     * 设备激活
+     *@param  {Object} params
         {
           "mac":"MAC地址",
           "mcu_mod":"MCU型号",
@@ -299,73 +330,86 @@ module.exports = function(Vue, Promise, config) {
           "frimware_version":"固件版本号",
           "active_code":"激活码"
         }
-      * @return  {Promise}
+     * @return  {Promise}
         {
           "device_id":"设备ID",
           "authorize_code":"认证码"
         }
-      */
-    activate: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/device_activate', JSON.stringify(
-          params), function(data, status, request) {
-          resolve(data);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+     */
+    activate: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/device_activate',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
           }
-        }).error(function(data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /** 12.设备认证
-      * @param {params}
+
+    /** 设备认证
+     * @param {params}
         {
           "device_id":"设备ID",
           "authorize_code":"认证码"
         }
      * @return  stauts
      */
-    auth: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/device_auth', '', function(
-          data, status, request) {
-          resolve(status);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
-          }
-        }).error(function(data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
-    /**13.更新设备所在区域
-     * @param  {product_id}
-     * @param  {device_id}
-     * @param {params}  {"region_id":"所在区域ID"}
-     * @return  stauts
-     */
-    updateRegion: function(product_id, device_id, params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.put(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/region', JSON.stringify(params),
-          function(data, status, request) {
+    auth: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/device_auth',
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /**14.获取订阅设备的用户列表
+
+    /**
+     * 更新设备所在区域
+     * @param  {product_id}
+     * @param  {device_id}
+     * @param {params}  {"region_id":"所在区域ID"}
+     * @return  stauts
+     */
+    updateRegion: function (product_id, device_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/region',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获取订阅设备的用户列表
      * @param  {product_id}
      * @param  {device_id}
      * @return  {Promise}
@@ -375,58 +419,68 @@ module.exports = function(Vue, Promise, config) {
           }
         ]
      */
-    subUserList: function(product_id, device_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/subscribe/users', '',
-          function(data, status, request) {
+    subUserList: function (product_id, device_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/subscribe/users',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /**15.设备清除所有订阅用户
+
+    /**
+     * 设备清除所有订阅用户
      * @param  {product_id}
      * @param  {device_id}
      * @return  status
      */
-    clearSubUses: function(product_id, device_id) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/product/' + product_id +
-          '/device/' + device_id + '/subscribe/clear', '',
-          function(data, status, request) {
+    clearSubUses: function (product_id, device_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/product/' + product_id +
+          '/device/' + device_id + '/subscribe/clear',
+          function (data, status, request) {
             resolve(status);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
-    /**16.订阅设备
+
+    /**
+     * 订阅设备
      * @param  {params}  {"user_id":"用户ID","device_id":"设备ID","device_authorize_code":"设备认证码"}
      * @return  status
      */
-    deviceSub: function(params) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/device_subscribe', '',
-          function(data, status, request) {
+    deviceSub: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/device_subscribe',
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
@@ -436,36 +490,41 @@ module.exports = function(Vue, Promise, config) {
      * 获取设备访问 Token
      * @param  {String} deviceId 设备 ID
      */
-    getDeviceToken: function(deviceId) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.post(config.apiRoot + '/diagnosis/device/token/' +deviceId, JSON.stringify({act: 'logs'}),
-          function(data, status, request) {
+    getDeviceToken: function (deviceId) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/diagnosis/device/token/' + deviceId,
+          JSON.stringify({act: 'logs'}),
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
 
-    getDatapointValues: function(deviceId) {
-      return new Promise(function(resolve, reject) {
-        Vue.http.get(config.apiRoot + '/diagnosis/device/probe/' + deviceId,
-          function(data, status, request) {
+    getDatapointValues: function (deviceId) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/diagnosis/device/probe/' + deviceId,
+          function (data, status, request) {
             resolve(data);
           }, {
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded',
               'Access-Token': localStorage.getItem('accessToken')
             }
-          }).error(function(data, status, request) {
+          }
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });
-    },
+    }
   };
 };
