@@ -39,82 +39,82 @@
 
 
 <script>
-  var config = require('../consts/config');
+import config from '../consts/config';
 
-  module.exports = {
-    props: {
-      pageCount: {
-        type: Number,
-        default: config.pageCount
-      },
-      total: {
-        type: Number
-      },
-      current: {
-        type: Number,
-        twoWay: true,
-        default: 1
+export default {
+  props: {
+    pageCount: {
+      type: Number,
+      default: config.pageCount
+    },
+    total: {
+      type: Number
+    },
+    current: {
+      type: Number,
+      twoWay: true,
+      default: 1
+    }
+  },
+
+  data () {
+    return {
+      showInput: false,
+      showInput1: false,
+      showInput2: false
+    };
+  },
+
+  watch: {
+    current: function () {
+      this.$dispatch('page-update');
+    }
+  },
+
+  computed: {
+    pages () {
+      return Math.ceil(this.total / this.pageCount);
+    }
+  },
+
+  methods: {
+    toggleInput (evt) {
+      this.showInput = !this.showInput;
+      if (this.showInput) {
+        evt.target.parentNode.getElementsByTagName('input')[0].focus();
       }
     },
 
-    data: function () {
-      return {
-        showInput: false,
-        showInput1: false,
-        showInput2: false
-      };
-    },
-
-    watch: {
-      current: function () {
-        this.$dispatch('page-update');
+    toggleInput1 (evt) {
+      this.showInput1 = !this.showInput1;
+      if (this.showInput1) {
+        evt.target.parentNode.getElementsByTagName('input')[0].focus();
       }
     },
 
-    computed: {
-      pages: function () {
-        return Math.ceil(this.total / this.pageCount);
+    toggleInput2 (evt) {
+      this.showInput2 = !this.showInput2;
+      if (this.showInput2) {
+        evt.target.parentNode.getElementsByTagName('input')[0].focus();
       }
     },
 
-    methods: {
-      toggleInput: function (evt) {
-        this.showInput = !this.showInput;
-        if (this.showInput) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      toggleInput1: function (evt) {
-        this.showInput1 = !this.showInput1;
-        if (this.showInput1) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      toggleInput2: function (evt) {
-        this.showInput2 = !this.showInput2;
-        if (this.showInput2) {
-          evt.target.parentNode.getElementsByTagName('input')[0].focus();
-        }
-      },
-
-      onInput: function (evt) {
-        var page = Number(evt.target.value);
-        // alert(typeof page === 'number');
-        if (typeof page === 'number') {
-          page = Math.floor(page);
-          this.showInput = false;
-          this.showInput1 = false;
-          this.showInput2 = false;
-          this.current = page;
-          evt.target.value = '';
-        } else {
-          alert('请输入数字');
-        }
+    onInput (evt) {
+      var page = Number(evt.target.value);
+      // alert(typeof page === 'number');
+      if (typeof page === 'number') {
+        page = Math.floor(page);
+        this.showInput = false;
+        this.showInput1 = false;
+        this.showInput2 = false;
+        this.current = page;
+        evt.target.value = '';
+      } else {
+        alert('请输入数字');
       }
     }
-  };
+  }
+};
 </script>
 
 <style lang="stylus">
