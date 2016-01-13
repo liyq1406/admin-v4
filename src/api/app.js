@@ -47,6 +47,7 @@ module.exports = function (Vue, Promise, config) {
         params.apn_enable = app.apn_enable;
         params.apn_license_url = app.apn_license_url;
         params.apn_license_pwd = app.apn_license_pwd;
+        params.apn_license_production = app.apn_license_production;
         Vue.http.put(
           config.apiRoot + '/developer/app/' + app.id,
           JSON.stringify(params),

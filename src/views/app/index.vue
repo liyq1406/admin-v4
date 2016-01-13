@@ -16,6 +16,7 @@ section.main-wrap
         table.table.table-stripe.table-bordered
           thead
             tr
+              th 应用ID
               th 应用名称
               th 应用类型
               th 创建时间
@@ -23,6 +24,7 @@ section.main-wrap
           tbody
             template(v-if="apps.length > 0 && !loadingApps")
               tr(v-for="app in apps")
+                td {{app.id}}
                 td {{app.name}}
                 td {{app.type | typeLabel}}
                 td {{app.create_time | formatDate}}
@@ -102,6 +104,12 @@ section.main-wrap
           .controls
             .input-text-wrap(v-placeholder="'请输入授权文件的密码'")
               input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
+        .form-row.without-label(v-show="editModel.apn_enable")
+          .controls
+            .checkbox-group
+              label.checkbox
+                input(type="checkbox", name="apn_license_production", v-model="editModel.apn_license_production")
+                | 正式发布APN密钥文件
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
@@ -134,7 +142,8 @@ section.main-wrap
           type: 1,
           apn_enable: false,
           apn_license_url: '',
-          apn_license_pwd: ''
+          apn_license_pwd: '',
+          apn_license_production: false
         },
         editModel: {
           type: 1
