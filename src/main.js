@@ -31,6 +31,7 @@ Vue.use(VueForm);
 // 详见：https://github.com/kazupon/vue-i18n
 Vue.use(i18n, {
   lang: 'zh_cn',
+  // lang: 'en',
   locales: locales
 });
 

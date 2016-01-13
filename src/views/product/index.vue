@@ -37,22 +37,22 @@ section.main-wrap
 
         return {
           secondaryNav: [{
-            label: '概览',
+            label: this.$t('sub_nav.product.overview'),
             link: { path: '/products/' + this.$route.params.id + '/overview' }
           }, {
-            label: '设备管理',
+            label: this.$t('sub_nav.product.devices'),
             link: { path: '/products/' + this.$route.params.id + '/devices' }
           }, {
-            label: '数据端点',
+            label: this.$t('sub_nav.product.datapoints'),
             link: { path: '/products/' + this.$route.params.id + '/data-point' }
           }, {
-            label: '通知与告警',
+            label: this.$t('sub_nav.product.alerts'),
             link: { path: '/products/' + this.$route.params.id + '/alert' }
           // }, {
             // label: '设备互联',
             // link: { path: '/products/' + this.$route.params.id + '/interconnection' }
           }, {
-            label: '固件升级',
+            label: this.$t('sub_nav.product.upgrade'),
             link: { path: '/products/' + this.$route.params.id + '/upgrade' }
           // }, {
             // label: '虚拟设备',

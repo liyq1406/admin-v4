@@ -6,11 +6,9 @@ var jade = require('gulp-jade');
 var webpack = require('webpack');
 var rimraf = require('rimraf');
 var browserSync = require('browser-sync');
-var jsonServer = require('json-server');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config').webpackConfig;
 var config = require('./webpack.config').config;
-var fakeData = require('./data');
 
 var DEV = webpackConfig.debug;
 
@@ -45,19 +43,6 @@ gulp.task('webpack-server', function (cb) {
 
   cb();
 
-});
-
-// JSON 服务器
-gulp.task('json-server', function() {
-  var server = jsonServer.create();
-  var router;
-
-  router = jsonServer.router(fakeData);
-
-  server.use(jsonServer.defaults());
-  server.use(router);
-
-  server.listen(9090);
 });
 
 // HTTP 服务器

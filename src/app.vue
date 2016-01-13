@@ -3,12 +3,12 @@
   header.the-header(v-if="access")
     nav.nav-header
       ul
-        li: a(href="http://www.xlink.cn/", target="_blank") 首页
-        li: a(href="http://www.xlink.cn/platform.html", target="_blank") 平台介绍
-        li: a(href="http://www.xlink.cn/solutions/smart-home.html", target="_blank") 解决方案
-        li: a(href="http://www.xlink.cn/developer.html", target="_blank") 开发者
-        li: a(href="http://www.xlink.cn/case.html", target="_blank") 客户案例
-        li: a(href="http://support.xlink.cn/", target="_blank") 开发文档
+        li: a(href="http://www.xlink.cn/", target="_blank") {{$t("nav_head.home")}}
+        li: a(href="http://www.xlink.cn/platform.html", target="_blank") {{$t("nav_head.platform")}}
+        li: a(href="http://www.xlink.cn/solutions/smart-home.html", target="_blank") {{$t("nav_head.solutions")}}
+        li: a(href="http://www.xlink.cn/developer.html", target="_blank") {{$t("nav_head.developer")}}
+        li: a(href="http://www.xlink.cn/case.html", target="_blank") {{$t("nav_head.cases")}}
+        li: a(href="http://support.xlink.cn/", target="_blank") {{$t("nav_head.documents")}}
         //-li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
       .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
         span.user-name {{currUser.name}}
@@ -16,18 +16,18 @@
         .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav", class="staggered", transition="staggered", transition-mode="out-in")
           ul
             li.sed-navigation-li
-              a(v-link="{path: '/settings/account'}") 帐号信息
+              a(v-link="{path: '/settings/account'}") {{$t("user_menu.account")}}
             li.sed-navigation-li
-              a(href="#", @click.prevent="quit") 退出
+              a(href="#", @click.prevent="quit") {{$t("user_menu.quit")}}
   section.sidebar(v-if="access")
     a.logo(v-link="{ path: '/' }")
     .nav-aside
       .nav-aside-item
         a(v-link="{ path: '/dashboard' }")
           i.fa.fa-home
-          | 概览
+          | {{$t("nav_aside.dashboard")}}
       .nav-aside-group
-        h3 产品管理
+        h3 {{$t("nav_aside.products")}}
         .nav-aside-item(v-for="product in products")
           a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
             i.fa.fa-link
@@ -35,31 +35,31 @@
         .nav-aside-actions
           a(v-link="{ path: '/product/create' }")
             i.fa.fa-plus
-            | 添加产品
+            | {{$t("nav_aside.add_product")}}
       .nav-aside-item
         a(v-link="{ path: '/apps' }")
           i.fa.fa-th
-          | 应用管理
+          | {{$t("nav_aside.apps")}}
       .nav-aside-item
         a(v-link="{ path: '/alerts' }")
           i.fa.fa-bell
-          | 告警服务
+          | {{$t("nav_aside.alerts")}}
       .nav-aside-item
         a(v-link="{ path: '/data' }")
           i.fa.fa-database
-          | 数据管理
+          | {{$t("nav_aside.data")}}
       .nav-aside-item
         a(v-link="{ path: '/users' }")
           i.fa.fa-user
-          | 用户管理
+          | {{$t("nav_aside.users")}}
       .nav-aside-item
         a(v-link="{ path: '/statistic' }")
           i.fa.fa-bar-chart
-          | 统计分析
+          | {{$t("nav_aside.statistic")}}
       .nav-aside-item
         a(v-link="{ path: '/settings' }")
           i.fa.fa-cog
-          | 系统设置
+          | {{$t("nav_aside.settings")}}
   router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
 </template>
 

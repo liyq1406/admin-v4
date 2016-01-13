@@ -85,7 +85,7 @@
       // 读取 Cookies
       getCookie: function (name) {
         var reg = new RegExp('(^| )' + name + '=([^;]*)(;|$)');
-        var arr = document.cookie.match(reg);
+        var arr = document.cookie.match(reg) || {};
         if (arr.length) {
           return unescape(arr[2]);
         } else {
