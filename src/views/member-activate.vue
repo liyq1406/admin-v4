@@ -193,7 +193,7 @@
         });
       },
       onSubmit: function () {
-        var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password};
+        var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password, 'email': this.model.email};
         var self = this;
         // console.log(content);
         api.corp.memberActivate(content).then(function (status) {

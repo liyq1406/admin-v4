@@ -1,6 +1,7 @@
 
 module.exports = {
   apiRoot: 'http://42.121.122.228:8887/v2',
+  // apiRoot: 'http://ic.heiman.cn:8887/v2',
   // apiRoot: 'http://120.26.209.230:8887/v2',
   // apiRoot: 'http://wx-js.xlink.cn:8887/v2',
   // 正式地址

@@ -389,23 +389,3 @@ div
   };
 
 </script>
-
-<style lang="stylus">
-  @import '../../assets/stylus/common'
-
-  ul.user-details
-    li
-      list-style none
-
-      .label
-        display inline-block
-        width 103px
-        line-height 35px
-
-      .info
-        display inline-block
-
-        .fa
-          font-size 16px
-          margin 0 10px
-</style>

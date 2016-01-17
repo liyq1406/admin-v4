@@ -31,12 +31,12 @@ section.main-wrap
                 td.tac
                   button.btn.btn-link.btn-sm(@click="onEditApp(app)") 编辑
             tr(v-if="loadingApps")
-              td.tac(colspan="4")
+              td.tac(colspan="5")
                 .tips-null
                   i.fa.fa-refresh.fa-spin
                   span 数据加载中...
             tr(v-if="apps.length === 0 && !loadingApps")
-              td.tac(colspan="4")
+              td.tac(colspan="5")
                 .tips-null
                   span 暂无相关记录
 

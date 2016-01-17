@@ -24,13 +24,16 @@ gulp.task('webpack-server', function (cb) {
       publicPath: webpackConfig.output.publicPath,
       // quiet: true,
       filename: 'app.js',
-      stats: { colors: true },
+      stats: {
+        colors: true
+      },
       historyApiFallback: true
     });
 
     // 资源伺服
     webpackServer.listen(config.port, config.devIP, function () {
-      gutil.log('Webpack-dev-server is serving files from http://' + config.devIP + ':' + config.port + '...');
+      gutil.log('Webpack-dev-server is serving files from http://' +
+        config.devIP + ':' + config.port + '...');
     });
 
   }
@@ -49,7 +52,9 @@ gulp.task('webpack-server', function (cb) {
 gulp.task('serve', function () {
   browserSync({
     server: {
-      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules', './' + config.dirs.src + '/vendors'] : ['./' + config.dirs.dist]
+      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules', './' +
+        config.dirs.src + '/vendors'
+      ] : ['./' + config.dirs.dist]
     }
   });
 });
@@ -58,7 +63,7 @@ gulp.task('serve', function () {
 gulp.task('bundle', function (cb) {
   var bundler = webpack(webpackConfig);
 
-  function bundle(err, stats) {
+  function bundle (err, stats) {
     if (err) {
       throw new gutil.PluginError('webpack', err);
     }
@@ -98,12 +103,12 @@ gulp.task('markup', ['clean'], function () {
 });
 
 // 清理
-gulp.task('clean', function(cb) {
+gulp.task('clean', function (cb) {
   rimraf(DEV ? './' + config.dirs.pub : './' + config.dirs.dist, cb);
 });
 
 // 资源
-gulp.task('vendors', function() {
+gulp.task('vendors', function () {
   gulp.src('./' + config.dirs.src + '/vendors/**/*.[css|js|jpg|png|gif]')
     .pipe(gulp.dest('./' + config.dirs.dist + '/vendors'));
 });
@@ -117,7 +122,7 @@ gulp.task('watch', function () {
 });
 
 // 默认任务
-gulp.task('default', function(cb) {
+gulp.task('default', function (cb) {
   if (DEV) {
     sequence('webpack-server', 'markup', 'serve', 'watch', cb);
   } else {

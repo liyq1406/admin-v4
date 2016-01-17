@@ -37,10 +37,12 @@ section.main-wrap
           }, {
             label: '帐号信息',
             link: { path: '/settings/account' }
+          }, {
+            label: '邮件模板',
+            link: { path: '/settings/mail-templates' }
           }]
         };
       }
     }
   };
 </script>
-

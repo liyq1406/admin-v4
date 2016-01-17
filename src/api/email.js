@@ -26,6 +26,74 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 创建邮件模板
+     * @return status
+     */
+    createTemplate: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/email/template',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 创建邮件模板
+     * @return status
+     */
+    updateTemplate: function (id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(
+          config.apiRoot + '/email/template/' + id,
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获得邮件模板列表
+     * @return status
+     */
+    getTemplateList: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/email/template_list',
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
   };
 };

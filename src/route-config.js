@@ -315,6 +315,13 @@ var configRouter = function (router) {
               resolve(require('./views/settings/account.vue'));
             }, 'settings');
           }
+        },
+        'mail-templates': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/settings/mail-templates.vue'));
+            }, 'settings');
+          }
         }
       }
     }
