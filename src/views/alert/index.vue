@@ -114,6 +114,7 @@ section.main-wrap
 
 <script>
   var api = require('../../api');
+  var config = require('../../consts/config');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
   var RadioGroup = require('../../components/radio-group.vue');
@@ -152,11 +153,7 @@ section.main-wrap
           tags: ''
         },
         period: 7,
-        periods: [
-          { label: '7天', value: 7 },
-          { label: '30天', value: 30 },
-          { label: '90天', value: 90 }
-        ],
+        periods: config.periods,
         product_id: '',
         alertSummary: {
           unread: 0,

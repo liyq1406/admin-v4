@@ -7,12 +7,10 @@ div
         v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
         radio-group(:items="periods", :value.sync="period")
           span.label(slot="label") 最近
-
     .panel-bd
       .row
         .col-13
           #trendChart(style="height:320px;")
-          //- .trend-null(v-show="!trends.length") 暂无数据
         .col-7
           .statistics-info
             .item
@@ -40,7 +38,6 @@ div
       h2 区域分布
       .leftbox
         radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
-
     .panel-bd
       .row
         #regionChart(style="height:320px; overflow:hidden;")
@@ -109,6 +106,27 @@ div
       };
     },
 
+    ready: function () {
+      var self = this;
+
+      this.getProducts().then(function (data) {
+        // 产品下拉框数据
+        data.forEach(function (item) {
+          self.productsOptions.push({
+            label: item.name,
+            value: item.id
+          });
+        });
+
+        if (self.productId.length === 0) {
+          self.productId = data[0].id;
+        }
+
+        self.getProductData();
+      });
+    },
+
+    /*
     route: {
       data: function () {
         var self = this;
@@ -130,6 +148,7 @@ div
         });
       }
     },
+    */
 
     // 监听属性变动
     watch: {

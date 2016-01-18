@@ -145,16 +145,16 @@ export default {
         api.email.getTemplateList().then(function (data) {
           var model1 = {
             name: '激活邮件模板',
-            subject: 'Hi %username%, 欢迎注册云智易',
+            subject: '欢迎注册云智易',
             sender: '',
-            content: '亲爱的 %username%，\n\n\t欢迎注册云智易，请点击下方的链接完成帐号激活。\nhttp://admin.xlink.cn/#!/user-email-activate/%corp_id%/%email%/%verifycode%\n（本链接将在48小时后失效）\n本邮件由系统自动发出，请勿回复\n---------\n云智易\n%date%\n',
+            content: '<p>亲爱的&nbsp;%username%，</p>\n\n<div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>\n\n<div>&nbsp;http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</div>\n\n<div>&nbsp;（本链接将在48小时后失效）</div>\n\n<div>&nbsp;</div>\n\n<div>本邮件由系统自动发出，请勿回复</div>\n\n<div>&nbsp;</div>\n\n<div>云智易</div>\n\n<div>%date%</div>',
             type: 1
           };
           var model2 = {
             name: '重置密码邮件模板',
             subject: '云智易找回密码',
             sender: '',
-            content: '亲爱的 %username%，\n\n\t我们收到了您找回密码的请求，请点击下方链接重置密码：\nhttp://admin.xlink.cn/#!/user-password-reset/%corp_id%/%email%/%verifycode%\n（本链接将在48小时后失效）\n本邮件由系统自动发出，请勿回复\n---------\n云智易\n%date%\n',
+            content: '<p>亲爱的&nbsp;&nbsp; %username%，</p>\n\n<p>我们收到了您找回密码的请求，请点击下方链接完成密码找回：</p>\n\n<p>http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%</p>\n\n<p>（本链接将在48小时后失效）</p>\n\n<p>本邮件由系统自动发出，请勿回复</p>\n\n<p>&nbsp;</p>\n\n<p>云智易</p>\n\n<p>%date%</p>',
             type: 2
           };
           var template, i;
