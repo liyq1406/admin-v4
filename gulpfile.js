@@ -6,11 +6,9 @@ var jade = require('gulp-jade');
 var webpack = require('webpack');
 var rimraf = require('rimraf');
 var browserSync = require('browser-sync');
-var jsonServer = require('json-server');
 var WebpackDevServer = require('webpack-dev-server');
 var webpackConfig = require('./webpack.config').webpackConfig;
 var config = require('./webpack.config').config;
-var fakeData = require('./data');
 
 var DEV = webpackConfig.debug;
 
@@ -26,13 +24,16 @@ gulp.task('webpack-server', function (cb) {
       publicPath: webpackConfig.output.publicPath,
       // quiet: true,
       filename: 'app.js',
-      stats: { colors: true },
+      stats: {
+        colors: true
+      },
       historyApiFallback: true
     });
 
     // 资源伺服
     webpackServer.listen(config.port, config.devIP, function () {
-      gutil.log('Webpack-dev-server is serving files from http://' + config.devIP + ':' + config.port + '...');
+      gutil.log('Webpack-dev-server is serving files from http://' +
+        config.devIP + ':' + config.port + '...');
     });
 
   }
@@ -47,24 +48,13 @@ gulp.task('webpack-server', function (cb) {
 
 });
 
-// JSON 服务器
-gulp.task('json-server', function() {
-  var server = jsonServer.create();
-  var router;
-
-  router = jsonServer.router(fakeData);
-
-  server.use(jsonServer.defaults());
-  server.use(router);
-
-  server.listen(9090);
-});
-
 // HTTP 服务器
 gulp.task('serve', function () {
   browserSync({
     server: {
-      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules', './' + config.dirs.src + '/vendors'] : ['./' + config.dirs.dist]
+      baseDir: DEV ? ['./' + config.dirs.pub, 'node_modules', './' +
+        config.dirs.src + '/vendors'
+      ] : ['./' + config.dirs.dist]
     }
   });
 });
@@ -73,7 +63,7 @@ gulp.task('serve', function () {
 gulp.task('bundle', function (cb) {
   var bundler = webpack(webpackConfig);
 
-  function bundle(err, stats) {
+  function bundle (err, stats) {
     if (err) {
       throw new gutil.PluginError('webpack', err);
     }
@@ -113,12 +103,12 @@ gulp.task('markup', ['clean'], function () {
 });
 
 // 清理
-gulp.task('clean', function(cb) {
+gulp.task('clean', function (cb) {
   rimraf(DEV ? './' + config.dirs.pub : './' + config.dirs.dist, cb);
 });
 
 // 资源
-gulp.task('vendors', function() {
+gulp.task('vendors', function () {
   gulp.src('./' + config.dirs.src + '/vendors/**/*.[css|js|jpg|png|gif]')
     .pipe(gulp.dest('./' + config.dirs.dist + '/vendors'));
 });
@@ -132,7 +122,7 @@ gulp.task('watch', function () {
 });
 
 // 默认任务
-gulp.task('default', function(cb) {
+gulp.task('default', function (cb) {
   if (DEV) {
     sequence('webpack-server', 'markup', 'serve', 'watch', cb);
   } else {

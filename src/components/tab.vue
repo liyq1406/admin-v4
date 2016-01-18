@@ -2,7 +2,8 @@
 nav.tab
   ul
     li(v-for="item in nav")
-      a(v-link="item.link") {{item.label}}
+      a(v-if="item.link", v-link="item.link") {{item.label}}
+      a(v-else, href="{{item.url}}", target="_blank") {{item.label}}
 </template>
 
 <style lang="stylus">

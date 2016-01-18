@@ -1,8 +1,6 @@
 var path = require('path');
 var minimist = require('minimist');
-var vue = require('vue-loader');
 var devip = require('dev-ip');
-var autoprefixer = require('autoprefixer');
 var webpack = require('webpack');
 var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -30,16 +28,6 @@ var DEV_IP = devip()[0];
 // 资源服务端口
 // 如果默认端口8090被占用，可通过命令行参数 --port 指定
 var PORT = argv.port || 8090;
-
-// 样式表需要兼容的最低系统或浏览器版本
-var AUTOPREFIXER_BROWSERS = [
-  // 'Android 2.3',
-  'Android >= 4',
-  'Chrome >= 36',
-  'Explorer >= 9',
-  'iOS >= 7',
-  'Safari >= 7'
-];
 
 // 指定图片转换成BASE64的最大比特数
 // 当图片大小小于指定比特数时转换为BASE64以减少请求数，否则直接使用图片文件
@@ -118,21 +106,22 @@ var webpackConfig = {
     fs: 'empty'
   },
 
+  watch: true,
+
   // 入口文件
-  entry : merge({
+  entry: merge({
     app: [
       './' + dirs.src + '/main'
     ].concat(DEV ? [
       'webpack/hot/dev-server',
-      'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
-    ] : []),
-
+      'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT
+    ] : [])
   }, DEV ? {
     test: [
       'mocha!./' + dirs.test + '/apiTest'
     ].concat(DEV ? [
       'webpack/hot/dev-server',
-      'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT,
+      'webpack-dev-server/client?http://' + DEV_IP + ':' + PORT
     ] : [])
   } : {}),
 
@@ -143,7 +132,6 @@ var webpackConfig = {
   },
 
   resolve: {
-    modulesDirectories: ['node_modules'],
     // 设置自动扩展名识别
     extensions: ['', '.js', '.json']
   },
@@ -153,6 +141,10 @@ var webpackConfig = {
       test: /\.vue$/,
       // exclude: /node_modules/,
       loader: 'vue'
+    }, {
+      test: /\.js$/,
+      loader: 'babel!eslint',
+      exclude: /node_modules/
     }, {
       test: /\.(woff|woff2)(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'url?name=fonts/[name].[ext]&limit=10000&mimetype=application/font-woff&prefix=fonts'
@@ -179,23 +171,25 @@ var webpackConfig = {
 
   vue: {
     loaders: {
-      //css: DEV ? 'style!css?sourceMap!postcss' : ExtractTextPlugin.extract('css!postcss'),
-      //stylus: DEV ? 'style!css?sourceMap!postcss!stylus' : ExtractTextPlugin.extract('css!postcss!stylus')
+      js: 'babel!eslint',
       css: DEV ? 'style!css?sourceMap' : ExtractTextPlugin.extract('css'),
       stylus: DEV ? 'style!css?sourceMap!stylus' : ExtractTextPlugin.extract('css!stylus')
     }
   },
 
-  // postcss: function () {
-  //   return [autoprefixer(AUTOPREFIXER_BROWSERS)];
-  // },
+  // 定义不打包的文件
+  /*
+  externals: DEV ? [] :
+    {
+      'echarts/echarts': 'echarts',
+      'echarts/config': 'ecConfig'
+    },
+    'echarts/chart/line',
+    'echarts/chart/map'
+  ],
+  */
 
-  // 如果是调试模式，则不打包库文件以加速编译速度
-  // externals: DEV ? [{
-    // 'vue': 'Vue'
-  // }] : [],
-
-  plugins:[
+  plugins: [
     // 优化模块加载顺序
     new webpack.optimize.OccurenceOrderPlugin(true),
 
@@ -210,7 +204,13 @@ var webpackConfig = {
     new webpack.NoErrorsPlugin()
   ] : [
     // 抽取 CSS 到独立的文件
-    new ExtractTextPlugin('styles/[name].css'),
+    new ExtractTextPlugin('styles/[name].css', {
+      allChunks: true
+    }),
+
+    new webpack.ProvidePlugin({
+      echarts: 'echarts/echarts'
+    }),
 
     // 合并相同
     new webpack.optimize.DedupePlugin(),

@@ -1,79 +1,144 @@
 <template lang="jade">
-  section.main-wrap
-    .main
-      .row
-        .col-20
-          // Start: 管理台
-          .panel
-            .panel-hd
-              .date(v-text="new Date() | formatDate")
-              h2 管理台
-            .panel-bd
-              .statistic
-                .statistic-item.device-count
-                  .fa.fa-link
-                  .num 316000
-                  .label 总设备量
-                .statistic-item.active-count
-                  .fa.fa-magic
-                  .num 32890
-                  .label 激活数
-                .statistic-item.online-count
-                  .fa.fa-wifi
-                  .num 9182
-                  .label 当前在线
-                .statistic-item.user-count
-                  .fa.fa-users
-                  .num 15322
-                  .label 用户数
-          // Start: 管理台
+section.main-wrap
+  .main
+    .row
+      .col-20
+        // Start: 管理台
+        .panel
+          .panel-hd
+            .date(v-text="new Date() | formatDate")
+            h2 管理台
+          .panel-bd
+            .statistic
+              .statistic-item.device-count
+                .fa.fa-link
+                .num {{totalSummary.total}}
+                .label 总设备量
+              .statistic-item.active-count
+                .fa.fa-magic
+                .num {{totalSummary.activated}}
+                .label 激活数
+              .statistic-item.online-count
+                .fa.fa-wifi
+                .num {{totalSummary.online}}
+                .label 当前在线
+              .statistic-item.user-count
+                .fa.fa-users
+                .num {{userSummary.user}}
+                .label 用户数
+        // Start: 管理台
 
-      .row
-        .col-9
-          // Start: 快速指南
-          .panel
-            .panel-hd
-              h2 快速指南
-            .panel-bd
-              post-list(:posts="guides")
-          // End: 快速指南
+    .row
+      .col-12
+        // Start: 告警
+        //- .panel
+        //-   .panel-hd
+        //-     h2 告警
+        //-   .panel-bd
+        //-     #alarmTrendChart(style="height:320px;")
+        // End: 告警
 
-        .col-5
-          // Start: 文档
-          .panel
-            .panel-hd
-              h2 文档
-            .panel-bd
-              .doc-list
-                .doc-list-item
-                  a.fa.fa-apple(href="#", target="_blank")
-                  .info
-                    h3
-                      a(href="#", target="_blank") iOS SDK
-                    p 提供iOS开发文档说明
-                .doc-list-item(href="#", target="_blank")
-                  a.fa.fa-android(href="#", target="_blank")
-                  .info
-                    h3
-                      a(href="#", target="_blank") Android SDK
-                    p 提供Android开发文档说明
-                .doc-list-item(href="#", target="_blank")
-                  a.fa.fa-th-large(href="#", target="_blank")
-                  .info
-                    h3
-                      a(href="#", target="_blank") APP 开发示例
-                    p 云智易平台提供了丰富的接口
-          // End: 文档
+        // Start: 快速指南
+        .panel
+          .panel-hd
+            h2 快速指南
+          .panel-bd
+            .post-list
+              ul
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") XLINK SDK iOS 集成文档
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") XLINK SDK Android 集成文档
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/108289/", target="_blank") [用户] 设备分享接口
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/104331/", target="_blank") [企业应用] 微信配置接口
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/102780/", target="_blank") [企业应用] 第三方身份授权管理
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/100082/", target="_blank") [企业应用] 统计分析
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/91020/", target="_blank") [用户] 接口权限调用
+                li
+                  a(href="http://support.xlink.cn/hc/kb/article/90705/", target="_blank") [用户] 升级开发文档
+        // End: 快速指南
 
-        .col-6
-          // Start: 通知
-          .panel
-            .panel-hd
-              h2 通知
-            .panel-bd
-              post-list(:posts="notifications")
-          // End: 通知
+      .col-8
+        // Start: 文档
+        .panel
+          .panel-hd
+            h2 文档
+          .panel-bd
+            .doc-list
+              .doc-list-item
+                a.fa.fa-apple(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank")
+                .info
+                  h3
+                    a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") iOS SDK
+                  p 提供iOS开发文档说明
+              .doc-list-item
+                a.fa.fa-android(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank")
+                .info
+                  h3
+                    a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") Android SDK
+                  p 提供Android开发文档说明
+              .doc-list-item
+                a.fa.fa-th-large(href="#", target="_blank")
+                .info
+                  h3
+                    a(href="#", target="_blank") APP 开发示例
+                  p 云智易平台提供了丰富的接口
+        // End: 文档
 </template>
+
+<script>
+  var api = require('../api');
+
+  module.exports = {
+    name: 'Dashboard',
+
+    data: function () {
+      return {
+        totalSummary: {
+          total: 0,
+          activated: 0,
+          online: 0
+        },
+        userSummary: {
+          user: 0
+        }
+      };
+    },
+
+    filters: {
+      formatDate: function (date) {
+        var year = date.getFullYear();
+        var month = date.getMonth();
+        var day = date.getDate();
+        return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+      }
+    },
+
+    route: {
+      data: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.statistics.getSummary().then(function (data) {
+            self.totalSummary = data.total;
+            self.userSummary = data.user;
+            // transition.next();
+          }).catch(function (error) {
+            self.handleError(error);
+          });
+        });
+      }
+    },
+
+    methods: {
+
+    }
+  };
+</script>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
@@ -109,6 +174,7 @@
       .num
         font-size 38px
         line-height 44px
+        height 44px
 
       .label
         color #999
@@ -137,12 +203,28 @@
       .fa
         background #3A749A
 
-    .user-count
-      .num
-        color #FA6659
+  .user-count
+    .num
+      color #FA6659
 
-      .fa
-        background #FA6659
+    .fa
+      background #FA6659
+
+  // 文章列表
+  .post-list
+    padding 5px 0
+
+    ul
+      reset-list()
+
+    li
+      position relative
+      margin 18px 0
+      padding-left 20px
+
+      &:before
+        absolute left 2px top
+        content "\2022"
 
   // 文档
   .doc-list
@@ -197,50 +279,3 @@
         font-size 12px
         color #999
 </style>
-
-<script>
-var Promise = require('promise');
-var PostList = require('../components/post-list.vue');
-var api = require('../api');
-
-module.exports = {
-  documentTitle: '概览',
-
-  components: {
-    'post-list': PostList
-  },
-
-  data: function () {
-    return {
-      notifications: [],
-      guides: []
-    };
-  },
-
-  ready: function () {
-  },
-
-  filters: {
-    formatDate: function (date) {
-      var d = date.toLocaleDateString('en-US').split('/');
-      var year = date.getFullYear();
-      var month = date.getMonth();
-      var day = date.getDate();
-      return year + '年' + month + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
-    }
-  },
-
-  route: {
-    data: function (transition) {
-      return {
-        guides: [],
-        notifications: []
-      };
-    }
-  },
-
-  methods: {
-
-  }
-}
-</script>

@@ -33,24 +33,65 @@
       border 1px solid #D9D9D9
       width 100%
       border-radius 0
-      padding 6px 6px 6px 20px
+      padding 7px 6px 6px 20px
       background #FFF
-      appearance none
+      // -webkit-appearance none
       outline none
 
-    &:after
-      absolute right 10px top 15px
-      content ""
-      triangle #999 10px down
-      z-index 1
+    &.select-sm
+      select
+        padding 3px 3px 3px 14px
+        font-size 12px
+
+      &:after
+        top 11px
 
   .input-text-wrap
     .vf-dirty.vf-invalid
       border-color red
 
+  // 单选
+  label.radio
+  label.checkbox
+    display inline-block
+    line-height 30px
+
+  // 单选/多选按钮组
+  .radio-group
+    clearfix()
+
+    .radio
+      float left
+      white-space normal
+      margin-right 20px
+
+      input[type="radio"]
+        margin-right 4px
+
+  .checkbox-group
+    clearfix()
+
+    .checkbox
+      float left
+      white-space normal
+      margin-right 20px
+
+      input[type="checkbox"]
+        margin-right 4px
+
+  .radio-group-v
+    .radio
+      width 100%
+
+  .checkbox-group-v
+    .checkbox
+      width 100%
+
   .form-row
     position relative
     margin-bottom 12px
+    max-height 240px
+    overflow-y auto
     clearfix()
 
     .form-control
@@ -64,13 +105,18 @@
       width 40%
       min-width 250px
 
+    .control-text
+      display inline-block
+      line-height 35px
 
   .form-hints
     margin-top 20px
     margin-bottom 10px
+    font-size 12px
 
   .form-tips
     font-size 12px
+    word-wrap break-word
 
     i
       margin-right 5px
@@ -95,7 +141,10 @@
       margin-top 40px
 
   .form-actions
-    padding-left 120px
+    padding-left 110px
+
+  .without-label
+    margin-left 110px
 
 .form-auth
   width 550px
@@ -168,3 +217,26 @@
     font-size 12px
     text-align center
     padding 20px 0
+
+// 邮件模板表单
+.template-form
+  .form-row
+    max-height none
+
+    .controls
+      max-width 640px
+      width 60%
+
+    .form-hints-inline
+      float left
+      width 20%
+      margin-left 20px
+
+      p
+        font-size 12px
+        color #999
+        margin 0
+
+  .input-text-wrap
+    textarea.input-text
+      height 240px

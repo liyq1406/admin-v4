@@ -1,16 +1,16 @@
 <template lang="jade">
-  .btn-group(data-toggle="buttons")
-    label.btn.btn-default(v-for="item in items", :class="{'active': item === value}")
-      input(type="radio", autocomplete="off", checked="{{checked}}", @click="handleClick(item)")
-      | {{item}}
+.btn-group(data-toggle="buttons")
+  slot(name="label")
+  label.btn.btn-default(v-for="item in items", :class="{'active': item.value === value}")
+    input(type="radio", autocomplete="off", checked="{{checked}}", @click="onSelect(item.value)")
+    | {{item.label}}
 </template>
 
 <script>
   module.exports = {
     props: {
       value: {
-        type: String,
-        default: ''
+        twoWay: true
       },
       items: {
         type: Array,
@@ -19,11 +19,12 @@
     },
 
     methods: {
-      handleClick: function (data) {
-        this.$dispatch('check', data);
+      onSelect: function (value) {
+        this.value = value;
+        this.$dispatch('select', value);
       }
     }
-};
+  };
 </script>
 
 <style lang="stylus">
@@ -41,4 +42,9 @@
       input[type="radio"]
         absolute left top
         appearance none
+        opacity 0
+
+    .label
+      display inline-block
+      margin-right 5px
 </style>

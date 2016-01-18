@@ -7,11 +7,16 @@
   line-height 30px
   padding 0 15px
   font-size 12px
+  white-space nowrap
 
   .fa
     margin-right 5px
 
+
 a.btn
+  &:visited
+    color #FFF
+
   &:hover
     text-decoration none
 
@@ -61,6 +66,7 @@ button.btn-link
   background transparent
   border none
   appearance none
+  outline none
 
   &:hover
     color darken(red, 10%)
@@ -82,3 +88,14 @@ button.btn-link
   display block
   width 100%
   padding 0
+
+// 上传按钮
+.btn-upload
+  position relative
+  overflow hidden
+  cursor pointer
+
+  input[type="file"]
+    absolute left top -50px
+    opacity 0
+    cursor pointer

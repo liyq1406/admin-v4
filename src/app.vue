@@ -3,68 +3,106 @@
   header.the-header(v-if="access")
     nav.nav-header
       ul
-        li: a(href="#", target="#") 首页
-        li: a(href="#", target="#") 开发文档
-        li: a(href="#", target="#") 在线支持
+        li: a(href="http://www.xlink.cn/", target="_blank") {{$t("nav_head.home")}}
+        li: a(href="http://www.xlink.cn/platform.html", target="_blank") {{$t("nav_head.platform")}}
+        li: a(href="http://www.xlink.cn/solutions/smart-home.html", target="_blank") {{$t("nav_head.solutions")}}
+        li: a(href="http://www.xlink.cn/developer.html", target="_blank") {{$t("nav_head.developer")}}
+        li: a(href="http://www.xlink.cn/case.html", target="_blank") {{$t("nav_head.cases")}}
+        li: a(href="http://support.xlink.cn/", target="_blank") {{$t("nav_head.documents")}}
+        //-li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
+      .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
+        span.user-name {{currUser.name}}
+        i.arrow-down
+        .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav", class="staggered", transition="staggered", transition-mode="out-in")
+          ul
+            li.sed-navigation-li
+              a(v-link="{path: '/settings/account'}") {{$t("user_menu.account")}}
+            li.sed-navigation-li
+              a(href="#", @click.prevent="quit") {{$t("user_menu.quit")}}
   section.sidebar(v-if="access")
     a.logo(v-link="{ path: '/' }")
     .nav-aside
       .nav-aside-item
         a(v-link="{ path: '/dashboard' }")
           i.fa.fa-home
-          | 概览
+          | {{$t("nav_aside.dashboard")}}
       .nav-aside-group
-        h3 产品管理
+        h3 {{$t("nav_aside.products")}}
         .nav-aside-item(v-for="product in products")
-          a(v-link="{ name: 'products', params: { id: product.id} }")
+          a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
             i.fa.fa-link
             | {{ product.name }}
         .nav-aside-actions
           a(v-link="{ path: '/product/create' }")
             i.fa.fa-plus
-            | 添加产品
+            | {{$t("nav_aside.add_product")}}
+      .nav-aside-item
+        a(v-link="{ path: '/apps' }")
+          i.fa.fa-th
+          | {{$t("nav_aside.apps")}}
+      .nav-aside-item
+        a(v-link="{ path: '/alerts' }")
+          i.fa.fa-bell
+          | {{$t("nav_aside.alerts")}}
       .nav-aside-item
         a(v-link="{ path: '/data' }")
           i.fa.fa-database
-          | 数据管理
+          | {{$t("nav_aside.data")}}
       .nav-aside-item
         a(v-link="{ path: '/users' }")
           i.fa.fa-user
-          | 用户管理
+          | {{$t("nav_aside.users")}}
       .nav-aside-item
         a(v-link="{ path: '/statistic' }")
           i.fa.fa-bar-chart
-          | 统计分析
+          | {{$t("nav_aside.statistic")}}
       .nav-aside-item
         a(v-link="{ path: '/settings' }")
           i.fa.fa-cog
-          | 系统设置
-  router-view(class="view", transition="view", transition-mode="out-in")
+          | {{$t("nav_aside.settings")}}
+  router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
 </template>
 
 <script>
-module.exports = {
-  data: function () {
-    return {
-      access: false,
-      products: []
-    }
-  },
+  var api = require('./api');
 
-  route: {
+  module.exports = {
     data: function () {
-      if (access) {
-        return {
-          products: []
-        }
+      return {
+        access: false,
+        products: [],
+        showUserNav: false,
+        currUser: {}
+      };
+    },
+
+    ready: function () {
+      // 监听子组件的更新成员信息事件
+      this.$on('update-member', function (member) {
+        this.currUser = member;
+      });
+    },
+
+    methods: {
+      // 退出
+      quit: function () {
+        localStorage.removeItem('accessToken');
+        this.$route.router.app.access = false;
+        this.$route.router.go({path: '/login'});
+        // window.location.reload(true);
+      },
+
+      // 获取产品
+      getProducts: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.product.getProducts().then(function (data) {
+            self.products = data;
+          });
+        });
       }
     }
-  },
-
-  methods: {
-
-  }
-};
+  };
 </script>
 
 <style lang="stylus">
@@ -114,6 +152,62 @@ module.exports = {
       &:hover
         color red
 
+    .user-navigation
+      absolute right top
+      size auto 61px
+      line-height 61px
+      z-index 1
+      text-align right
+      padding 0 20px
+      background #fff
+
+      .user-name
+        padding 0 5px
+        cursor default
+        color #858585
+        font-size 14px
+
+      .arrow-down
+        triangle #777 8px down
+        position relative
+        top -3px
+
+      .sed-navigation
+        absolute top 54px right
+        size 100px 0
+        text-align right
+        background #FFF
+        // overflow hidden
+        opacity 0
+        border 1px solid #ddd
+        padding 0 10px
+
+        .sed-navigation-li
+          margin-right 0
+          line-height 36px
+          display block
+          padding 0 20px
+          min-width 50px
+          border-bottom 1px solid #DDD
+
+          &:last-child
+            border none
+
+        &:before
+          absolute right 20px top -11px
+          content ""
+          triangle #D3D3D3 10px up
+
+        &:after
+          absolute right 20px top -10px
+          content ""
+          triangle #FFF 10px up
+
+
+      &:hover
+        .sed-navigation
+          height auto
+          opacity 1
   // 侧栏
   .sidebar
     absolute left top
@@ -130,10 +224,13 @@ module.exports = {
       color #999
       height 40px
       line-height 40px
-      padding-right 4px
+      padding-right 14px
       padding-left 20px
       background #202020
       transition background .3s
+      overflow hidden
+      white-space nowrap
+      text-overflow "…"
 
       .fa
         font-size 16px
