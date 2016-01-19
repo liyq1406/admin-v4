@@ -38,7 +38,7 @@ div
       pager(v-if="!loadingData", :total="tables.length", :current.sync="currentPage", :page-count="pageCount")
 
   // 添加数据表浮层
-  modal(:show.sync="showAddModal")
+  modal(:show.sync="showAddModal", @close="onAddCancel")
     h3(slot="header") 新建数据表
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit",hook="addFormHook")
@@ -87,7 +87,7 @@ div
           button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
 
   // 修改数据表浮层
-  modal(:show.sync="showEditModal")
+  modal(:show.sync="showEditModal", @close="onEditCancel")
     h3(slot="header") 修改数据表
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit",hook="editFormHook")
@@ -295,13 +295,11 @@ div
           self.adding = true;
           api.corp.refreshToken().then(function () {
             api.dataTable.createTable(self.addModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
               self.tables.push(self.addModel);
               self.resetAdd();
             }).catch(function (error) {
               self.handleError(error);
+              self.adding = false;
             });
           });
         }
@@ -335,9 +333,6 @@ div
         if (this.delChecked) {
           api.corp.refreshToken().then(function () {
             api.dataTable.deleteTable(self.editModel.name).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
               self.resetEdit();
               self.getTables().then(function (data) {
                 self.tables = data;
@@ -350,9 +345,6 @@ div
         } else if (this.editValidation.$valid) {
           api.corp.refreshToken().then(function () {
             api.dataTable.updateTable(self.editModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
               self.resetEdit();
               self.editing = false;
             }).catch(function (error) {

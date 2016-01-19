@@ -11,7 +11,7 @@ var configRouter = require('./route-config');
 var router;
 
 // 配置
-var config = require('./consts/config');
+// var config = require('./consts/config');
 
 // 创建 vue 实例
 var App = Vue.extend(require('./app.vue'));
@@ -34,6 +34,8 @@ Vue.use(i18n, {
   // lang: 'en',
   locales: locales
 });
+
+// console.log(Vue.config.lang);
 
 // 指令
 // ------------------------------
@@ -130,8 +132,19 @@ Vue.mixin({
 
     // 统一的错误处理
     handleError: function (error) {
-      if (/^400/.test(error.code)) {
-        alert(config.errors[error.msg] || error.msg);
+      // if (/^400/.test(error.code)) {
+        // alert(config.errors[error.msg] || error.msg);
+      // }
+      // alert(locales[Vue.config.lang][error.code]);
+      if (error.code && /^[4|5]/.test(error.code)) {
+        // console.log(error);
+
+        if (error.code === 4031003) {
+          this.$route.router.app.access = false;
+          this.$route.router.go('/login');
+        } else {
+          alert(locales[Vue.config.lang].errors[error.code]);
+        }
       }
     }
   }

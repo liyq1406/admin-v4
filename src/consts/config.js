@@ -90,25 +90,5 @@ module.exports = {
     { label: 'Android', disabled: true },
     { label: 'Web', disabled: true },
     { label: '微信', disabled: true }
-  ],
-
-  // 错误定义
-  errors: {
-    '[mac] is not mac address': 'Mac地址不合法',
-    'datapoint index exists': '该数据端点索引已存在',
-    '4001003': '验证码有误，请重新输入！',
-    '4001004': '验证码有误，请重新输入！',
-    '4001005': '该手机号已注册',
-    'password error': '帐号或密码错误，请重试',
-    'account vaild error': '帐号或密码错误，请重试',
-    '4001019': '该端点索引已存在',
-    'mac address exists': '该设备MAC地址已存在',
-    'table name exists': '表名已存在',
-    '[email] is not a email ': '邮箱格式不合法',
-    'verifycode not exists': '验证码不存在',
-    '[tag] length vaild error ': '标签的长度不合法',
-    'datapoint not exists': '数据点不存在',
-    'firmware version exists': '固件版本已存在',
-    'can not delete release product': '不允许删除已发布的产品'
-  }
+  ]
 };

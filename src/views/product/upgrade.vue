@@ -179,7 +179,7 @@
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除数据端点
+            | 删除固件版本
           button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") 取消
           button.btn.btn-primary(type="submit") 确定
 

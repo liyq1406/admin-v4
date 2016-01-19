@@ -126,30 +126,6 @@ div
       });
     },
 
-    /*
-    route: {
-      data: function () {
-        var self = this;
-
-        this.getProducts().then(function (data) {
-          // 产品下拉框数据
-          data.forEach(function (item) {
-            self.productsOptions.push({
-              label: item.name,
-              value: item.id
-            });
-          });
-
-          if (self.productId.length === 0) {
-            self.productId = data[0].id;
-          }
-
-          self.getProductData();
-        });
-      }
-    },
-    */
-
     // 监听属性变动
     watch: {
       period: function () {

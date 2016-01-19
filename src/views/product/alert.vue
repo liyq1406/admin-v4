@@ -481,7 +481,7 @@ div
     .form-rules
       .form-row
         .controls
-          width 480px
+          width 480px !important
 
       .tag-row
         overflow-y visible
