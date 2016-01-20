@@ -346,6 +346,7 @@ div
                   mapLocation: {
                     y: 10
                   },
+                  nameMap: require('../../consts/world-names'),
                   data: worldData
                 }]
               };
@@ -440,7 +441,7 @@ div
                     normal: {label: {show: true}},
                     emphasis: {label: {show: true}}
                   },
-                  nameMap: require('../../consts/name-map'),
+                  nameMap: require('../../consts/china-names'),
                   data: chinaData
                 }]
               };

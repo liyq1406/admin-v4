@@ -21,7 +21,7 @@
         .form-tips.form-tips-error(v-if="validation.password.$dirty")
           span(v-if="validation.password.$error.required") 请输入密码
       .operations
-        a.fetch-password(v-link="{ path: '/fetch-password' }") 忘记密码?
+        a.fetch-password(v-link="{ path: '/fetch-password-bymail' }") 忘记密码?
         label.remember-password
           input(type="checkbox", v-model="rememberPwd")
           span 记住密码
