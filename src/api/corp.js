@@ -200,14 +200,17 @@ module.exports = function (Vue, Promise, config) {
      */
     delMember: function (member_id) {
       return new Promise(function (resolve, reject) {
-        Vue.http.delete(config.apiRoot + '/corp/member/' + member_id, function (data, status, request) {
-          resolve(status);
-        }, {
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Access-Token': localStorage.getItem('accessToken')
+        Vue.http.delete(
+          config.apiRoot + '/corp/member/' + member_id,
+          function (data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
           }
-        }).error(function (data, status, request) {
+        ).error(function (data, status, request) {
           reject(data.error);
         });
       });

@@ -13,19 +13,24 @@
       thead
         tr
           th 姓名
-          //th 手机
-          //th 邮箱
+          th 手机
+          th 邮箱
           th 角色
           //th 最后一次登录
           th.tac 状态
+          th.tac 操作
       tbody
         template(v-if="filteredMembers.length > 0 && !loadingData")
           tr(v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount")
             td
               span(v-if="member.name.length") {{member.name}}
               span.hl-gray(v-else) 未设置
-            //td 13800138000
-            //td 8009995558@citicib.com.cn
+            td
+              span(v-if="member.phone.length") {{member.phone}}
+              span.hl-gray(v-else) 未设置
+            td
+              span(v-if="member.email.length") {{member.email}}
+              span.hl-gray(v-else) 未设置
             td
               span(v-if="member.role==1") 管理员
               span(v-else) 普通会员
@@ -34,13 +39,15 @@
               span.hl-red(v-if="member.status==0") 待激活
               span.hl-gray(v-if="member.status==1") 正常
               span.hl-red(v-if="member.status==2") 已停用
+            td.tac
+              button.btn.btn-link.btn-sm(@click="deleteMember(member)") 删除
         tr(v-if="loadingData")
-          td.tac(colspan="3")
+          td.tac(colspan="6")
             .tips-null
               i.fa.fa-refresh.fa-spin
               span 数据加载中...
         tr(v-if="filteredMembers.length === 0 && !loadingData")
-          td.tac(colspan="3")
+          td.tac(colspan="6")
             .tips-null
               span 暂无相关记录
     pager(v-if="!loadingData", :total="filteredMembers.length", :current.sync="currentPage", :page-count="pageCount")
@@ -125,7 +132,6 @@
     computed: {
       filteredMembers: function () {
         var filter = Vue.filter('filterBy');
-        console.log(filter(this.members, this.query, 'name'));
         return filter(this.members, this.query, 'name');
       }
     },
@@ -179,14 +185,13 @@
       adduser: function () {
         var self = this;
         this.newuseremail.content = '测试邮箱内容'; // 待改地方debug
-        console.log(self.newuseremail);
 
         api.corp.refreshToken().then(function () {
-          api.corp.memberInvite(self.newuseremail).then(function (data) {
+          api.corp.memberInvite(self.newuseremail).then(function (status) {
             if (__DEBUG__) {
-              console.log(data);
+              console.log(status);
             }
-            if (data - 0 === 200) {
+            if (status === 200) {
               self.getMembers();
             };
             self.showModal = false;
@@ -195,6 +200,24 @@
           });
         });
       },
+
+      /**
+       * 删除企业成员
+       * @param  {Object} member 待删除成员
+       */
+      deleteMember: function (member) {
+        var self = this;
+        if (confirm('确定要删除此成员吗？')) {
+          api.corp.refreshToken().then(function () {
+            api.corp.delMember(member.id).then(function () {
+              self.members.$remove(member);
+            }).catch(function (error) {
+              self.handleError(error);
+            });
+          });
+        }
+      },
+
       // 表单钩子
       FormHook: function (form) {
         this.addForm.push(form);

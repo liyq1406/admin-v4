@@ -47,7 +47,7 @@ div
               th 占比
           tbody
             tr(v-for="item in regionData")
-              td {{item.name}}
+              td {{ wroldNames[item.name] || chinaNames[item.name] || item.name}}
               td {{item.value}}
               td {{total}}
               td {{(item.value * 100 / total).toFixed(2)}}%
@@ -81,7 +81,9 @@ div
         periods: config.periods,
         region: 'world',
         regions: config.regions,
-        regionData: []
+        regionData: [],
+        wroldNames: require('../../consts/world-names'),
+        chinaNames: require('../../consts/china-names')
       };
     },
 
@@ -243,7 +245,7 @@ div
                   mapLocation: {
                     y: 10
                   },
-                  nameMap: require('../../consts/world-names'),
+                  nameMap: self.wroldNames,
                   data: worldData
                 }]
               };
@@ -338,7 +340,7 @@ div
                     normal: { label: { show: true } },
                     emphasis: { label: { show: true } }
                   },
-                  nameMap: require('../../consts/china-names'),
+                  nameMap: self.chinaNames,
                   data: chinaData
                 }]
               };

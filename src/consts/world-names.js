@@ -30,6 +30,7 @@ module.exports = {
   // 'Chad': 'Chad',
   // 'Chile': 'Chile',
   'china': 'China',
+  '中国': 'China',
   // 'Colombia': 'Colombia',
   // 'Costa Rica': 'Costa Rica',
   // 'Croatia': 'Croatia',
