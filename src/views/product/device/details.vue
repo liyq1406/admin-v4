@@ -58,7 +58,7 @@ section.main-wrap
                   th 当前值
               tbody
                 tr(v-for="datapoint in datapoints")
-                  td {{$index + 1}}
+                  td {{datapoint.index}}
                   td {{datapoint.name}}
                   td {{datapoint.description}}
                   td {{datapointValues[$index] ? datapointValues[$index].value : ''}}

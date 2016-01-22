@@ -57,16 +57,6 @@ div
               td {{(item.value * 100 / productSummary.total).toFixed(2)}}%
 </template>
 
-<style lang="stylus">
-  .panel-hd
-    position relative
-
-    .leftbox
-      position absolute
-      top 6px
-      left 80px
-</style>
-
 <script>
   var RadioGroup = require('../../components/radio-group.vue');
   var Select = require('../../components/select.vue');

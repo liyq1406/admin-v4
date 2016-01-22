@@ -90,5 +90,11 @@ module.exports = {
     { label: 'Android', disabled: true },
     { label: 'Web', disabled: true },
     { label: '微信', disabled: true }
+  ],
+
+  // 邮件模板语言类型
+  templateLanguages: [
+    { label: '中文(简体)', value: 'zh-cn' },
+    { label: '英语(美国)', value: 'en-us' }
   ]
 };
