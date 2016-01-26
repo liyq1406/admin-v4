@@ -11,7 +11,7 @@ div
             label.form-control {{ $t("mail_templates.fields.sender") }}:
             .controls
               .input-text-wrap(v-placeholder="$t('mail_templates.placeholders.sender')")
-                input.input-text(v-model="sender", type="text", v-form-ctrl, name="sender", required, lazy, custom-validator="noSpaceEnds")
+                input.input-text(v-model="sender", type="text", v-form-ctrl, name="sender", required, lazy, custom-validator="noSpaces")
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.sender.$pristine")
                 span(v-if="validation.sender.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}
               .form-tips.form-tips-error(v-if="validation.sender.$dirty")

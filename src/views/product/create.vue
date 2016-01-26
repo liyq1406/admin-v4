@@ -11,7 +11,7 @@ section.main-wrap
               label.form-control {{ $t("product.fields.name") }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('product.placeholders.name')")
-                  input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpaceEnds", lazy)
+                  input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpacesPrefixAndSuffix", lazy)
                 .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
                   span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
                 .form-tips.form-tips-error(v-if="validation.name.$dirty")

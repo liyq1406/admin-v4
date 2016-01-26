@@ -22,44 +22,45 @@
   section.sidebar(v-if="access")
     a.logo(v-link="{ path: '/' }")
     .nav-aside
-      .nav-aside-item
-        a(v-link="{ path: '/dashboard' }")
-          i.fa.fa-home
-          | {{$t("nav_aside.dashboard")}}
-      .nav-aside-group
-        h3 {{$t("nav_aside.products")}}
-        .nav-aside-item(v-for="product in products")
-          a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
-            i.fa.fa-link
-            | {{ product.name }}
-        .nav-aside-actions
-          a(v-link="{ path: '/product/create' }")
-            i.fa.fa-plus
-            | {{$t("nav_aside.add_product")}}
-      .nav-aside-item
-        a(v-link="{ path: '/apps' }")
-          i.fa.fa-th
-          | {{$t("nav_aside.apps")}}
-      .nav-aside-item
-        a(v-link="{ path: '/alerts' }")
-          i.fa.fa-bell
-          | {{$t("nav_aside.alerts")}}
-      .nav-aside-item
-        a(v-link="{ path: '/data' }")
-          i.fa.fa-database
-          | {{$t("nav_aside.data")}}
-      .nav-aside-item
-        a(v-link="{ path: '/users' }")
-          i.fa.fa-user
-          | {{$t("nav_aside.users")}}
-      .nav-aside-item
-        a(v-link="{ path: '/statistic' }")
-          i.fa.fa-bar-chart
-          | {{$t("nav_aside.statistic")}}
-      .nav-aside-item
-        a(v-link="{ path: '/settings' }")
-          i.fa.fa-cog
-          | {{$t("nav_aside.settings")}}
+      .nav-aside-wrap
+        .nav-aside-item
+          a(v-link="{ path: '/dashboard' }")
+            i.fa.fa-home
+            | {{$t("nav_aside.dashboard")}}
+        .nav-aside-group
+          h3 {{$t("nav_aside.products")}}
+          .nav-aside-item(v-for="product in products")
+            a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
+              i.fa.fa-link
+              | {{ product.name }}
+          .nav-aside-actions
+            a(v-link="{ path: '/product/create' }")
+              i.fa.fa-plus
+              | {{$t("nav_aside.add_product")}}
+        .nav-aside-item
+          a(v-link="{ path: '/apps' }")
+            i.fa.fa-th
+            | {{$t("nav_aside.apps")}}
+        .nav-aside-item
+          a(v-link="{ path: '/alerts' }")
+            i.fa.fa-bell
+            | {{$t("nav_aside.alerts")}}
+        .nav-aside-item
+          a(v-link="{ path: '/data' }")
+            i.fa.fa-database
+            | {{$t("nav_aside.data")}}
+        .nav-aside-item
+          a(v-link="{ path: '/users' }")
+            i.fa.fa-user
+            | {{$t("nav_aside.users")}}
+        .nav-aside-item
+          a(v-link="{ path: '/statistic' }")
+            i.fa.fa-bar-chart
+            | {{$t("nav_aside.statistic")}}
+        .nav-aside-item
+          a(v-link="{ path: '/settings' }")
+            i.fa.fa-cog
+            | {{$t("nav_aside.settings")}}
   router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
 </template>
 
@@ -128,7 +129,7 @@
 
   // Logo
   .logo
-    display block
+    absolute left top
     size 100% 62px
     background url("assets/images/logo.png") no-repeat
 
@@ -216,7 +217,13 @@
 
   // 侧栏导航
   .nav-aside
-    margin-top 5px
+    padding-top 67px
+    height 100%
+    box-sizing border-box
+
+  .nav-aside-wrap
+    height 100%
+    overflow-y auto
 
   .nav-aside-item
     a

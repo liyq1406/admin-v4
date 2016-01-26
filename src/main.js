@@ -125,10 +125,17 @@ Vue.mixin({
     },
 
     /**
-     * 检验字符串中是否以非空格字符开头和结尾
+     * 检验字符串中是否不含空格
      */
-    noSpaceEnds: function (value) {
+    noSpaces: function (value) {
       return /^\S+$/.test(value);
+    },
+
+    /**
+     * 检验字符串中是否不以空格开头或结尾
+     */
+    noSpacesPrefixAndSuffix: function (value) {
+      return /^\S(.*\S)*$/.test(value);
     },
 
     // 统一的错误处理
