@@ -73,12 +73,13 @@ div
           label.form-control {{ $t("product.fields.name")}}:
           .controls
             .input-text-wrap(v-placeholder="$t('product.placeholders.name')")
-              input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
+              input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpacesPrefixAndSuffix", lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
               span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
             .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
               span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
               span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}
+              span(v-if="editValidation.name.$error.customValidator") {{ $t('validation.format', {field: $t('product.fields.name')}) }}
         .form-row
           label.form-control {{ $t("product.fields.desc")}}:
           .controls
