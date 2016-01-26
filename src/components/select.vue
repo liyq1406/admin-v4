@@ -102,12 +102,12 @@
         padding 0 30px 0 20px
         max-width 140px
         box-sizing border-box
+        height 25px
+        line-height 25px
 
         span
           display block
-          overflow hidden
-          white-space nowrap
-          text-overflow "…"
+          text-overflow 100%
 
       .dropdown-menu
         absolute right top 26px
