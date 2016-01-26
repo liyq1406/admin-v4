@@ -93,6 +93,7 @@ section.main-wrap
 
 <script>
   var api = require('../api');
+  var Vue = require('vue');
 
   module.exports = {
     name: 'Dashboard',
@@ -115,7 +116,12 @@ section.main-wrap
         var year = date.getFullYear();
         var month = date.getMonth();
         var day = date.getDate();
-        return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+        if (Vue.config.lang === 'en-us') {
+          var weekArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+          return year + '-' + (month + 1) + '-' + day + ', ' + weekArr[date.getDay()];
+        } else {
+          return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+        }
       }
     },
 
