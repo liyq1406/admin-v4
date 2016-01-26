@@ -7,66 +7,64 @@ div
         .action-group
           button.btn.btn-success(@click="showAddModal = true")
             i.fa.fa-plus
-            | 新建数据表
+            | {{ $t("table.create_table") }}
 
       //- 数据
       table.table.table-stripe.table-bordered
         thead
           tr
-            th 名称
-            th 数据表类型
-            th.tac 操作
+            th {{ $t("table.fields.name") }}
+            th {{ $t("table.fields.type") }}
+            th.tac {{ $t("common.action") }}
         tbody
           template(v-if="tables.length > 0 && !loadingData")
             tr(v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount")
               td
                 a.hl-red(v-link="{path: '/data/tables/' + table.name}") {{table.name}}
               td
-                span(v-if="table.type === 1") 用户公开表
-                span(v-if="table.type === 2") 用户私有表
+                span {{ tableTypes[table.type-1] }}
               td.tac
-                button.btn.btn-link.btn-sm(@click="editTable(table)") 编辑
+                button.btn.btn-link.btn-sm(@click="editTable(table)") {{ $t("common.edit") }}
           tr(v-if="loadingData")
             td.tac(colspan="3")
               .tips-null
                 i.fa.fa-refresh.fa-spin
-                span 数据加载中...
+                span {{ $t("common.data_loading") }}
           tr(v-if="tables.length === 0 && !loadingData")
             td.tac(colspan="3")
               .tips-null
-                span 暂无相关记录
+                span {{ $t("common.no_records") }}
       pager(v-if="!loadingData", :total="tables.length", :current.sync="currentPage", :page-count="pageCount")
 
   // 添加数据表浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
-    h3(slot="header") 新建数据表
+    h3(slot="header") {{ $t("table.create_table") }}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit",hook="addFormHook")
         .form-row
-          label.form-control 表名：
+          label.form-control {{ $t("table.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入表名'")
+            .input-text-wrap(v-placeholder="$t('table.placeholders.name')")
               input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="64", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
-              span(v-if="addValidation.name.$error.required") 请输入表名
-              span(v-if="addValidation.name.$error.minlength") 表名最少为2字符
-              span(v-if="addValidation.name.$error.maxlength") 表名最多为64字符
+              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('table.fields.name')}) }}
+              span(v-if="addValidation.name.$error.minlength") {{ $t('validation.minlength', [ $t('table.fields.name'), 2]) }}
+              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('table.fields.name'), 64]) }}
         .form-row
-          label.form-control 数据表类型：
+          label.form-control {{ $t("table.fields.type") }}:
           .controls
             .select
               select(v-model="addModel.type", v-form-ctrl, name="type", number)
-                option(value="1", selected) 用户公开表
-                option(value="2") 用户私有表
+                option(v-for="type in tableTypes", :value="$index + 1", :selected="$index===0") {{type}}
         .form-row
-          label.form-control 访问权限：
+          label.form-control {{ $t("table.fields.permission") }}:
           .controls
             .checkbox-group
               label.checkbox(v-for="type in permissionTypes")
                 input(type="checkbox", v-model="addModel.permission", name="permission", :value="type.value")
                 | {{type.label}}
         .form-row
-          label.form-control 字段：
+          label.form-control {{ $t("table.fields.field") }}:
           .controls
             .field-row(v-for="field in addFields")
               .input-text-wrap
@@ -81,36 +79,35 @@ div
               .select
                 select(v-model="newField.value")
                   option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
-            button.btn.btn-success(@click.prevent.stop="createField(addModel, addFields)") 添加字段
+            button.btn.btn-success(@click.prevent.stop="createField(addModel, addFields)") {{ $t("table.add_field") }}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'") 确定
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
   // 修改数据表浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
-    h3(slot="header") 修改数据表
+    h3(slot="header") {{ $t("table.edit_table") }}
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit",hook="editFormHook")
         .form-row
-          label.form-control 表名：
+          label.form-control {{ $t("table.fields.name") }}:
           .controls
             span.control-text {{editModel.name}}
         .form-row
-          label.form-control 数据表类型：
+          label.form-control {{ $t("table.fields.type") }}:
           .controls
             .select
               select(v-model="editModel.type", v-form-ctrl, name="type", number)
-                option(value="1", selected) 用户公开表
-                option(value="2") 用户私有表
+                option(v-for="type in tableTypes", :value="$index + 1", :selected="$index===0") {{type}}
         .form-row
-          label.form-control 访问权限：
+          label.form-control {{ $t("table.fields.permission") }}:
           .controls
             .checkbox-group
               label.checkbox(v-for="type in permissionTypes")
                 input(type="checkbox", v-model="editModel.permission", name="permission", :value="type.value")
                 | {{type.label}}
         .form-row
-          label.form-control 字段：
+          label.form-control {{ $t("table.fields.field") }}:
           .controls
             .field-row(v-for="field in editFields")
               .input-text-wrap
@@ -125,20 +122,21 @@ div
               .select
                 select(v-model="newField.value")
                   option(v-for="type in fieldTypes", :value="type.value") {{type.label}}
-            button.btn.btn-success(@click.prevent.stop="createField(editModel, editFields)") 添加字段
+            button.btn.btn-success(@click.prevent.stop="createField(editModel, editFields)") {{ $t("table.add_field") }}
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除数据表
-          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-          button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'") 确定
+            | {{ $t("table.del_table") }}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
+  var Vue = require('vue');
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var _ = require('lodash');
 
   module.exports = {
@@ -152,8 +150,9 @@ div
     data: function () {
       return {
         tables: [],
-        fieldTypes: config.fieldTypes,
-        permissionTypes: config.permissionTypes,
+        tableTypes: locales[Vue.config.lang].table.types,
+        fieldTypes: locales[Vue.config.lang].table.field_types,
+        permissionTypes: locales[Vue.config.lang].table.permission_types,
         currentPage: 1,
         pageCount: 10,
         showAddModal: false,
@@ -236,7 +235,7 @@ div
           this.updateField(model, fields);
           this.newField = { name: '', value: 'string' };
         } else {
-          alert('请输入字段名!');
+          alert(this.$t('table.field_msg'));
         }
       },
 
@@ -289,7 +288,7 @@ div
         var self = this;
 
         if (!self.addModel.name) {
-          alert('请输入表名！');
+          alert(this.$t('table.table_msg'));
         };
         if (this.addValidation.$valid && !this.adding) {
           self.adding = true;

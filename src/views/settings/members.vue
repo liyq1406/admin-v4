@@ -1,81 +1,75 @@
 <template lang="jade">
 .panel
   .panel-hd.with-actions
-    search-box(:key.sync="query", :auto="true", :active="searching", :placeholder="'请输入姓名'", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
-      label 查找成员
-    h2 成员列表
+    search-box(:key.sync="query", :auto="true", :active="searching", :placeholder="$t('member.search_palceholder')", @cancel="cancelSearching", @search-activate="toggleSearching", @search-deactivate="toggleSearching",)
+      label {{ $t('member.search_label') }}
+    h2 {{ $t('member.member_list') }}
     button.btn.btn-success.ml20.mt10(@click.prevent="showModal = true")
       i.fa.fa-plus
-      | 添加成员
+      | {{ $t('member.add_member') }}
   .panel-bd
     //- 用户列表
     table.table.table-stripe.table-bordered
       thead
         tr
-          th 姓名
-          th 手机
-          th 邮箱
-          th 角色
+          th {{ $t('member.fields.name') }}
+          th {{ $t('member.fields.phone') }}
+          th {{ $t('member.fields.email') }}
+          th {{ $t('member.fields.role') }}
           //th 最后一次登录
-          th.tac 状态
-          th.tac 操作
+          th.tac {{ $t('common.status') }}
+          th.tac {{ $t('common.action') }}
       tbody
         template(v-if="filteredMembers.length > 0 && !loadingData")
           tr(v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount")
             td
               span(v-if="member.name.length") {{member.name}}
-              span.hl-gray(v-else) 未设置
+              span.hl-gray(v-else) {{ $t('common.not_set') }}
             td
               span(v-if="member.phone.length") {{member.phone}}
-              span.hl-gray(v-else) 未设置
+              span.hl-gray(v-else) {{ $t('common.not_set') }}
             td
               span(v-if="member.email.length") {{member.email}}
-              span.hl-gray(v-else) 未设置
+              span.hl-gray(v-else) {{ $t('common.not_set') }}
             td
-              span(v-if="member.role==1") 管理员
-              span(v-else) 普通会员
+              span {{ memberTypes[member.role-1] }}
             //td 2015-6-3 15:38:53
             td.tac
-              span.hl-red(v-if="member.status==0") 待激活
-              span.hl-gray(v-if="member.status==1") 正常
-              span.hl-red(v-if="member.status==2") 已停用
+              span(:class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}") {{ statusTypes[member.status] }}
             td.tac
-              button.btn.btn-link.btn-sm(@click="deleteMember(member)") 删除
+              button.btn.btn-link.btn-sm(@click="deleteMember(member)") {{ $t('common.del') }}
         tr(v-if="loadingData")
           td.tac(colspan="6")
             .tips-null
               i.fa.fa-refresh.fa-spin
-              span 数据加载中...
+              span {{ $t("common.data_loading") }}
         tr(v-if="filteredMembers.length === 0 && !loadingData")
           td.tac(colspan="6")
             .tips-null
-              span 暂无相关记录
+              span {{ $t("common.no_records") }}
     pager(v-if="!loadingData", :total="filteredMembers.length", :current.sync="currentPage", :page-count="pageCount")
 
   modal(:show.sync="showModal")
-    h3(slot="header") 添加成员
+    h3(slot="header") {{ $t('member.add_member') }}
     .form(slot="body")
       form(v-form, name="validation", hook="FormHook")
         .form-row
-          label.form-control 邮箱：
+          label.form-control {{ $t("member.fields.email") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入成员邮箱'")
+            .input-text-wrap(v-placeholder="$t('member.placeholders.email')")
               input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required, lazy)
-            //.form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
-              span(v-if="validation.email.$error.required") 请输入成员邮箱
             .form-tips.form-tips-error(v-if="validation.email.$dirty")
-              span(v-if="validation.email.$error.required") 请输入成员邮箱
-              span(v-if="validation.email.$error.email") 邮箱地址格式不正确
+              span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('member.fields.email')}) }}
+              span(v-if="validation.email.$error.email") $t('validation.format', {field: $t('member.fields.email')}) }}
         .form-row
-          label.form-control 角色：
+          label.form-control {{ $t("member.fields.role") }}:
           .controls
             .select
               select(v-model="newuseremail.role", v-form-ctrl, name="role")
-                option(value="1") 管理员
-                option(value="2", selected) 普通用户
+                option(v-for="type in memberTypes", :value="$index + 1", :selected="$index===1") {{type}}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="showModal = false") 取消
-          button.btn.btn-primary(type="submit",@click.prevent.stop="adduser") 添加
+          button.btn.btn-default(@click.prevent.stop="showModal = false") {{ $t('common.cancel') }}
+          button.btn.btn-primary(type="submit",@click.prevent.stop="adduser") {{ $t('common.add') }}
 </template>
 <style lang="stylus">
   @import '../../assets/stylus/common'
@@ -90,11 +84,12 @@
 </style>
 
 <script>
+  var Vue = require('vue');
   var SearchBox = require('../../components/search-box.vue');
   var Modal = require('../../components/modal.vue');
   var api = require('../../api');
   var Pager = require('../../components/pager.vue');
-  var Vue = require('vue');
+  var locales = require('../../consts/locales');
 
   module.exports = {
     name: 'MemberSettings',
@@ -119,7 +114,9 @@
         pageCount: 10,
         addForm: [],
         centervalue: {},
-        loadingData: false
+        loadingData: false,
+        memberTypes: locales[Vue.config.lang].member.types,
+        statusTypes: locales[Vue.config.lang].member.status_types
       };
     },
 
@@ -207,7 +204,7 @@
        */
       deleteMember: function (member) {
         var self = this;
-        if (confirm('确定要删除此成员吗？')) {
+        if (confirm(this.$t('member.del_msg'))) {
           api.corp.refreshToken().then(function () {
             api.corp.delMember(member.id).then(function () {
               self.members.$remove(member);

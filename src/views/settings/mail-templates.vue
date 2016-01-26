@@ -3,38 +3,38 @@ div
   //- Start: 通用设置
   .panel
     .panel-hd
-      h2 通用设置
+      h2 {{ $t("mail_templates.general") }}
     .panel-bd
       .form
         form(v-form, name="validation", @submit.prevent="onSenderSubmit")
           .form-row
-            label.form-control 发件者：
+            label.form-control {{ $t("mail_templates.fields.sender") }}:
             .controls
-              .input-text-wrap(v-placeholder="'如：noreply'")
+              .input-text-wrap(v-placeholder="$t('mail_templates.placeholders.sender')")
                 input.input-text(v-model="sender", type="text", v-form-ctrl, name="sender", required, lazy, custom-validator="noSpaceEnds")
               .form-tips.form-tips-error(v-if="validation.$submitted && validation.sender.$pristine")
-                span(v-if="validation.sender.$error.required") 请输入发件者
+                span(v-if="validation.sender.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}
               .form-tips.form-tips-error(v-if="validation.sender.$dirty")
-                span(v-if="validation.sender.$error.required") 请输入发件者
-                span(v-if="validation.sender.$error.customValidator") 发件者不能带空格
+                span(v-if="validation.sender.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}
+                span(v-if="validation.sender.$error.customValidator") {{ $t('validation.format', {field: $t('mail_templates.fields.sender')}) }}
           .form-actions
-            button.btn.btn-primary.btn-lg(type="submit", :disabled="savingActivate || savingReset", :class="{'disabled': savingActivate || savingReset}") 保存
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="savingActivate || savingReset", :class="{'disabled': savingActivate || savingReset}") {{ $t('common.save') }}
   //- End: 通用设置
 
   //- Start: 激活邮件模板
   .panel.panel-mail-template
     .panel-hd
       .status(v-show="!loading && activateLang === 'zh-cn'")
-        | 状态：
-        span(v-if="activateStatus === 0") 待审核
-        span.hl-red(v-if="activateStatus === -1") 审核不通过
-        span.hl-green(v-if="activateStatus === 1 || activateStatus === -2") 审核通过
+        | {{ $t('common.status') }}:
+        span(v-if="activateStatus === 0") {{ $t('mail_templates.check_pending') }}
+        span.hl-red(v-if="activateStatus === -1") {{ $t('mail_templates.check_reject') }}
+        span.hl-green(v-if="activateStatus === 1 || activateStatus === -2") {{ $t('mail_templates.check_pass') }}
       .status(v-show="!loading && activateLang === 'en-us'")
-        | 状态：
-        span(v-if="activateStatus2 === 0") 待审核
-        span.hl-red(v-if="activateStatus2 === -1") 审核不通过
-        span.hl-green(v-if="activateStatus2 === 1 || activateStatus2 === -2") 审核通过
-      h2 激活邮件模板
+        | {{ $t('common.status') }}:
+        span(v-if="activateStatus2 === 0") {{ $t('mail_templates.check_pending') }}
+        span.hl-red(v-if="activateStatus2 === -1") {{ $t('mail_templates.check_reject') }}
+        span.hl-green(v-if="activateStatus2 === 1 || activateStatus2 === -2") {{ $t('mail_templates.check_pass') }}
+      h2 {{ $t('mail_templates.activate_template') }}
       .leftbox
         radio-group(:items="languages", :value.sync="activateLang")
     .panel-bd
@@ -42,65 +42,65 @@ div
       .form.template-form(v-show="activateLang === 'zh-cn'")
         form(v-form, name="activateValidation", @submit.prevent="onActivateSubmit")
           .form-row
-            label.form-control 邮件标题：
+            label.form-control {{ $t("mail_templates.fields.subject") }}:
             .controls
               .input-text-wrap
                 input.input-text(v-model="activateModel.subject", type="text", v-form-ctrl, name="subject", required, lazy)
               .form-tips.form-tips-error(v-if="activateValidation.$submitted && activateValidation.subject.$pristine")
-                span(v-if="activateValidation.subject.$error.required") 请输入邮件标题
+                span(v-if="activateValidation.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
               .form-tips.form-tips-error(v-if="activateValidation.subject.$dirty")
-                span(v-if="activateValidation.subject.$error.required") 请输入邮件标题
+                span(v-if="activateValidation.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
           .form-row
-            label.form-control 邮件内容：
+            label.form-control {{ $t("mail_templates.fields.content") }}:
             .controls
               .input-text-wrap
                 textarea.input-text(v-model="activateModel.content", type="text", v-form-ctrl, name="content", required, lazy)
               .form-tips.form-tips-error(v-if="activateValidation.$submitted && activateValidation.content.$pristine")
-                span(v-if="activateValidation.content.$error.required") 请输入邮件内容
+                span(v-if="activateValidation.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
               .form-tips.form-tips-error(v-if="activateValidation.content.$dirty")
-                span(v-if="activateValidation.content.$error.required") 请输入邮件内容
+                span(v-if="activateValidation.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
           .form-actions
-            button.btn.btn-primary.btn-lg(type="submit", :disabled="activateStatus === 0 || savingActivate", :class="{'disabled': activateStatus === 0 || savingActivate}", v-text="savingActivate ? '处理中...' : '保存'")
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="activateStatus === 0 || savingActivate", :class="{'disabled': activateStatus === 0 || savingActivate}", v-text="savingActivate ? $t('common.handling') : $t('common.save')")
 
       //- 英文
       .form.template-form(v-show="activateLang === 'en-us'")
         form(v-form, name="activateValidation2", @submit.prevent="onActivateSubmit2")
           .form-row
-            label.form-control 邮件标题：
+            label.form-control {{ $t("mail_templates.fields.subject") }}:
             .controls
               .input-text-wrap
                 input.input-text(v-model="activateModel2.subject", type="text", v-form-ctrl, name="subject", required, lazy)
               .form-tips.form-tips-error(v-if="activateValidation2.$submitted && activateValidation2.subject.$pristine")
-                span(v-if="activateValidation2.subject.$error.required") 请输入邮件标题
+                span(v-if="activateValidation2.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
               .form-tips.form-tips-error(v-if="activateValidation2.subject.$dirty")
-                span(v-if="activateValidation2.subject.$error.required") 请输入邮件标题
+                span(v-if="activateValidation2.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
           .form-row
-            label.form-control 邮件内容：
+            label.form-control {{ $t("mail_templates.fields.content") }}:
             .controls
               .input-text-wrap
                 textarea.input-text(v-model="activateModel2.content", type="text", v-form-ctrl, name="content", required, lazy)
               .form-tips.form-tips-error(v-if="activateValidation2.$submitted && activateValidation2.content.$pristine")
-                span(v-if="activateValidation2.content.$error.required") 请输入邮件内容
+                span(v-if="activateValidation2.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
               .form-tips.form-tips-error(v-if="activateValidation2.content.$dirty")
-                span(v-if="activateValidation2.content.$error.required") 请输入邮件内容
+                span(v-if="activateValidation2.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
           .form-actions
-            button.btn.btn-primary.btn-lg(type="submit", :disabled="activateStatus2 === 0 || savingActivate", :class="{'disabled': activateStatus2 === 0 || savingActivate}", v-text="savingActivate ? '处理中...' : '保存'")
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="activateStatus2 === 0 || savingActivate", :class="{'disabled': activateStatus2 === 0 || savingActivate}", v-text="savingActivate ? $t('common.handling') : $t('common.save')")
   //- End: 激活邮件模板
 
   //- Start: 重置密码邮件模板
   .panel.panel-mail-template
     .panel-hd
       .status(v-show="!loading && resetLang === 'zh-cn'")
-        | 状态：
-        span(v-if="resetStatus === 0") 待审核
-        span.hl-red(v-if="resetStatus === -1") 审核不通过
-        span.hl-green(v-if="resetStatus === 1 || resetStatus === -2") 审核通过
+        | {{ $t('common.status') }}:
+        span(v-if="resetStatus === 0") {{ $t('mail_templates.check_pending') }}
+        span.hl-red(v-if="resetStatus === -1") {{ $t('mail_templates.check_reject') }}
+        span.hl-green(v-if="resetStatus === 1 || resetStatus === -2") {{ $t('mail_templates.check_pass') }}
       .status(v-show="!loading && resetLang === 'en-us'")
-        | 状态：
-        span(v-if="resetStatus2 === 0") 待审核
-        span.hl-red(v-if="resetStatus2 === -1") 审核不通过
-        span.hl-green(v-if="resetStatus2 === 1 || resetStatus2 === -2") 审核通过
-      h2 重置密码邮件模板
+        | {{ $t('common.status') }}:
+        span(v-if="resetStatus2 === 0") {{ $t('mail_templates.check_pending') }}
+        span.hl-red(v-if="resetStatus2 === -1") {{ $t('mail_templates.check_reject') }}
+        span.hl-green(v-if="resetStatus2 === 1 || resetStatus2 === -2") {{ $t('mail_templates.check_pass') }}
+      h2 {{ $t('mail_templates.reset_template') }}
       .leftbox
         radio-group(:items="languages", :value.sync="resetLang")
     .panel-bd
@@ -108,56 +108,57 @@ div
       .form.template-form(v-show="resetLang === 'zh-cn'")
         form(v-form, name="resetValidation", @submit.prevent="onResetSubmit")
           .form-row
-            label.form-control 邮件标题：
+            label.form-control {{ $t("mail_templates.fields.subject") }}:
             .controls
               .input-text-wrap
                 input.input-text(v-model="resetModel.subject", type="text", v-form-ctrl, name="subject", required, lazy)
               .form-tips.form-tips-error(v-if="resetValidation.$submitted && resetValidation.subject.$pristine")
-                span(v-if="resetValidation.subject.$error.required") 请输入邮件标题
+                span(v-if="resetValidation.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
               .form-tips.form-tips-error(v-if="resetValidation.subject.$dirty")
-                span(v-if="resetValidation.subject.$error.required") 请输入邮件标题
+                span(v-if="resetValidation.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
           .form-row
-            label.form-control 邮件内容：
+            label.form-control {{ $t("mail_templates.fields.content") }}:
             .controls
               .input-text-wrap
                 textarea.input-text(v-model="resetModel.content", type="text", v-form-ctrl, name="content", required, lazy)
               .form-tips.form-tips-error(v-if="resetValidation.$submitted && resetValidation.content.$pristine")
-                span(v-if="resetValidation.content.$error.required") 请输入邮件内容
+                span(v-if="resetValidation.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
               .form-tips.form-tips-error(v-if="resetValidation.content.$dirty")
-                span(v-if="resetValidation.content.$error.required") 请输入邮件内容
+                span(v-if="resetValidation.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
           .form-actions
-            button.btn.btn-primary.btn-lg(type="submit", :disabled="resetStatus === 0 || savingReset", :class="{'disabled': resetStatus === 0 || savingReset}", v-text="savingReset ? '处理中...' : '保存'")
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="resetStatus === 0 || savingReset", :class="{'disabled': resetStatus === 0 || savingReset}", v-text="savingReset ? $t('common.handling') : $t('common.save')")
 
       //- 英文
       .form.template-form(v-show="resetLang === 'en-us'")
         form(v-form, name="resetValidation2", @submit.prevent="onResetSubmit2")
           .form-row
-            label.form-control 邮件标题：
+            label.form-control {{ $t("mail_templates.fields.subject") }}:
             .controls
               .input-text-wrap
                 input.input-text(v-model="resetModel2.subject", type="text", v-form-ctrl, name="subject", required, lazy)
               .form-tips.form-tips-error(v-if="resetValidation2.$submitted && resetValidation2.subject.$pristine")
-                span(v-if="resetValidation2.subject.$error.required") 请输入邮件标题
+                span(v-if="resetValidation2.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
               .form-tips.form-tips-error(v-if="resetValidation2.subject.$dirty")
-                span(v-if="resetValidation2.subject.$error.required") 请输入邮件标题
+                span(v-if="resetValidation2.subject.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}
           .form-row
-            label.form-control 邮件内容：
+            label.form-control {{ $t("mail_templates.fields.content") }}:
             .controls
               .input-text-wrap
                 textarea.input-text(v-model="resetModel2.content", type="text", v-form-ctrl, name="content", required, lazy)
               .form-tips.form-tips-error(v-if="resetValidation2.$submitted && resetValidation2.content.$pristine")
-                span(v-if="resetValidation2.content.$error.required") 请输入邮件内容
+                span(v-if="resetValidation2.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
               .form-tips.form-tips-error(v-if="resetValidation2.content.$dirty")
-                span(v-if="resetValidation2.content.$error.required") 请输入邮件内容
+                span(v-if="resetValidation2.content.$error.required") {{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}
           .form-actions
-            button.btn.btn-primary.btn-lg(type="submit", :disabled="resetStatus2 === 0 || savingReset", :class="{'disabled': resetStatus2 === 0 || savingReset}", v-text="savingReset ? '处理中...' : '保存'")
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="resetStatus2 === 0 || savingReset", :class="{'disabled': resetStatus2 === 0 || savingReset}", v-text="savingReset ? $t('common.handling') : $t('common.save')")
   //- End: 重置密码邮件模板
 </template>
 
 <script>
+import Vue from 'vue';
 import api from '../../api';
 import RadioGroup from '../../components/radio-group.vue';
-import config from '../../consts/config';
+import locales from '../../consts/locales';
 
 export default {
   name: 'MailTemplates',
@@ -168,7 +169,7 @@ export default {
 
   data () {
     return {
-      languages: config.templateLanguages,
+      languages: locales[Vue.config.lang].mail_templates.languages,
       validation: {},
       loading: true,
       activateLang: 'zh-cn',
@@ -309,7 +310,7 @@ export default {
     onActivateSubmit () {
       var self = this;
       if (!this.validation.$valid) {
-        alert('请输入合法的发件者');
+        alert(this.$t('mail_templates.messages.illegal_sender'));
         return;
       }
       if (this.validation.$valid && this.activateValidation.$valid) {
@@ -323,7 +324,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingActivate = false;
-              alert('激活邮件模板创建失败。');
+              alert(self.$t('mail_templates.messages.creation_fail'));
             });
           });
         } else { // 修改
@@ -336,7 +337,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingActivate = false;
-              alert('激活邮件模板修改失败。');
+              alert(self.$t('mail_templates.messages.update_fail'));
             });
           });
         }
@@ -349,7 +350,7 @@ export default {
     onActivateSubmit2 () {
       var self = this;
       if (!this.validation.$valid) {
-        alert('请输入合法的发件者');
+        alert(this.$t('mail_templates.messages.illegal_sender'));
         return;
       }
       if (this.validation.$valid && this.activateValidation2.$valid) {
@@ -363,7 +364,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingActivate = false;
-              alert('激活英文邮件模板创建失败。');
+              alert(self.$t('mail_templates.messages.creation_fail'));
             });
           });
         } else { // 修改
@@ -376,7 +377,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingActivate = false;
-              alert('激活英文邮件模板修改失败。');
+              alert(self.$t('mail_templates.messages.update_fail'));
             });
           });
         }
@@ -389,7 +390,7 @@ export default {
     onResetSubmit () {
       var self = this;
       if (!this.validation.$valid) {
-        alert('请输入合法的发件者');
+        alert(this.$t('mail_templates.messages.illegal_sender'));
         return;
       }
       if (this.validation.$valid && this.resetValidation.$valid) {
@@ -403,7 +404,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingReset = false;
-              alert('重置密码邮件模板创建失败。');
+              alert(self.$t('mail_templates.messages.creation_fail'));
             });
           });
         } else { // 修改
@@ -416,7 +417,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingReset = false;
-              alert('重置密码邮件模板修改失败。');
+              alert(self.$t('mail_templates.messages.update_fail'));
             });
           });
         }
@@ -429,7 +430,7 @@ export default {
     onResetSubmit2 () {
       var self = this;
       if (!this.validation.$valid) {
-        alert('请输入合法的发件者');
+        alert(this.$t('mail_templates.messages.illegal_sender'));
         return;
       }
       if (this.validation.$valid && this.resetValidation2.$valid) {
@@ -443,7 +444,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingReset = false;
-              alert('重置密码英文邮件模板创建失败。');
+              alert(self.$t('mail_templates.messages.creation_fail'));
             });
           });
         } else { // 修改
@@ -456,7 +457,7 @@ export default {
             }).catch(function (error) {
               console.log(error);
               self.savingReset = false;
-              alert('重置密码英文邮件模板修改失败。');
+              alert(self.$t('mail_templates.messages.update_fail'));
             });
           });
         }

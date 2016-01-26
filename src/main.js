@@ -2,6 +2,7 @@ var Vue = require('vue');
 var VueRouter = require('vue-router');
 var VueForm = require('vue-form');
 var i18n = require('vue-i18n');
+var browser = require('./helpers/browser');
 
 // 多语言配置文件
 var locales = require('./consts/locales');
@@ -30,8 +31,8 @@ Vue.use(VueForm);
 // 切换语言设置 `Vue.config.lang = 'en'`
 // 详见：https://github.com/kazupon/vue-i18n
 Vue.use(i18n, {
-  lang: 'zh_cn',
-  // lang: 'en',
+  lang: browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us',
+  // lang: 'en-us',
   locales: locales
 });
 

@@ -4,8 +4,8 @@
     a.fa.fa-chevron-circle-left.link-return(v-link="{path: '/login'}")
   form.form-cont(v-show="!resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
     .form-header
-      h2 找回密码
-      p 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
+      h2 {{ $t("auth.fetch") }}
+      p {{ $t("auth.by_phone_tips") }}
     //-
       .form-header
         span 手机找回
@@ -14,55 +14,55 @@
       //-
         .form-hints 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
       .form-row
-        .input-text-wrap(v-placeholder="'手机号码'")
+        .input-text-wrap(v-placeholder="$t('auth.fields.phone')")
           input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.phone.$pristine")
-          span(v-if="validation.phone.$error.required") 请输入您的手机号码
+          span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
         .form-tips.form-tips-error(v-if="validation.phone.$dirty")
-          span(v-if="validation.phone.$error.required") 请输入您的手机号码
-          span(v-if="validation.phone.$error.pattern") 手机号码格式有误
+          span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
+          span(v-if="validation.phone.$error.pattern") {{ $t('validation.format', {field: $t('auth.fields.phone')}) }}
       .form-row.captcha-row
-        .input-text-wrap(v-placeholder="'请输入右图验证码'")
+        .input-text-wrap(v-placeholder="$t('auth.insert_code')")
           input.input-text(type="text", v-model="captcha", lazy)
         captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
       .form-row.verify-code
-        .input-text-wrap(v-placeholder="'短信验证码'")
+        .input-text-wrap(v-placeholder="$t('auth.verifycode')")
           input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode", lazy)
-        button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? seconds + '秒后重新获取' : '获取短信验证码'")
+        button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')")
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
-          span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
+          span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
         .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
-          span(v-if="validation.verifycode.$error.required") 请输入手机收到的验证码
+          span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
       .form-row
-        .input-text-wrap(v-placeholder="'密码'")
+        .input-text-wrap(v-placeholder="$t('auth.password')")
           input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-          span(v-if="validation.password.$error.required") 请输入密码
+          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
         .form-tips.form-tips-error(v-if="validation.password.$dirty")
-          span(v-if="validation.password.$error.required") 请输入密码
-          span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
-          span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
+          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
+          span(v-if="validation.password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
+          span(v-if="validation.password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
       .form-row
-        .input-text-wrap(v-placeholder="'再次输入密码'")
+        .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
           input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
-          span(v-if="validation.confirmPassword.$error.required") 请再一次输入密码
+          span(v-if="validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
         .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-          span(v-if="model.password && validation.confirmPassword.$error.required") 请再一次输入密码
-          span(v-if="validation.confirmPassword.$error.customValidator") 两次密码输入不一致
+          span(v-if="model.password && validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
+          span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
       .form-actions
-        button.btn.btn-primary.btn-block(type="submit") 确定
+        button.btn.btn-primary.btn-block(type="submit") {{ $t("common.ok") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
   .form-cont.reset-password-success(v-show="resetsuccess")
     .alert.alert-success
       .icon.icon-success
-      h2 修改成功
-      p 您的密码已重置成功，请重新登录。
+      h2 {{ $t("auth.by_phone_success") }}
+      p {{ $t("auth.by_phone_success_msg") }}
     .form-actions
-      a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") 确定
+      a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") {{ $t("common.ok") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
 <style lang="stylus">
@@ -173,7 +173,7 @@
         var self = this;
 
         if (this.validation.phone.$invalid) {
-          alert('请填写正确的手机号');
+          alert(this.$t('auth.phone_msg'));
           return;
         }
 

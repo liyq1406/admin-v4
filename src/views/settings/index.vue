@@ -3,7 +3,7 @@ section.main-wrap
   .main
     .panel
       .panel-hd
-        h2 系统设置
+        h2 {{ $t("nav_aside.settings") }}
       .panel-bd
         tab(:nav="secondaryNav")
     router-view(class="view", transition="view", transition-mode="out-in")
@@ -29,16 +29,16 @@ section.main-wrap
       data: function () {
         return {
           secondaryNav: [{
-            label: '授权管理',
+            label: this.$t('sub_nav.settings.auth'),
             link: { path: '/settings/auth' }
           }, {
-            label: '成员管理',
+            label: this.$t('sub_nav.settings.members'),
             link: { path: '/settings/members' }
           }, {
-            label: '帐号信息',
+            label: this.$t('sub_nav.settings.account'),
             link: { path: '/settings/account' }
           }, {
-            label: '邮件模板',
+            label: this.$t('sub_nav.settings.mail_templates'),
             link: { path: '/settings/mail-templates' }
           }]
         };

@@ -5,17 +5,17 @@
       .actions
         button.btn.btn-success(@click="showAddModal = true")
           i.fa.fa-plus
-          | 添加固件版本
-      h2 版本列表
+          | {{ $t('firmware.add_firmware') }}
+      h2 {{ $t('firmware.firmware_list') }}
     .panel-bd
       //- 版本列表
       table.table.table-stripe.table-bordered
         thead
           tr
-            th.w50 版本号
-            th 版本说明
-            th 添加日期
-            th.tac 操作
+            th.w50 {{ $t('firmware.fields.version') }}
+            th {{ $t('firmware.fields.description') }}
+            th {{ $t('firmware.fields.create_date') }}
+            th.tac {{ $t('common.action') }}
         tbody
           template(v-if="firmwares.length > 0 && !loadingFirmwares")
             tr(v-for="firmware in firmwares")
@@ -23,35 +23,35 @@
               td {{firmware.description}}
               td {{firmware.create_date | formatDate}}
               td.tac
-                button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") 编辑
+                button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") {{ $t('common.edit') }}
           tr(v-if="loadingFirmwares")
             td.tac(colspan="4")
               .tips-null
                 i.fa.fa-refresh.fa-spin
-                span 数据加载中...
+                span {{ $t("common.data_loading") }}
           tr(v-if="firmwares.length === 0 && !loadingFirmwares")
             td.tac(colspan="4")
               .tips-null
-                span 暂无相关记录
+                span {{ $t("common.no_records") }}
 
   .panel
     .panel-hd
       .actions
         button.btn.btn-success(:disabled="firmwares.length < 2", :class="{'disabled':firmwares.length < 2}", @click="showAddTaskModal = true")
           i.fa.fa-plus
-          | 创建自动升级任务
-      h2 升级任务列表
+          | {{ $t('task.create_task') }}
+      h2 {{ $t('task.task_list') }}
     .panel-bd
       //- 版本列表
       table.table.table-stripe.table-bordered
         thead
           tr
-            th 序号
-            th 任务名称
-            th 起始版本
-            th 目标版本
-            th 已升级设备
-            th.tac.w80 操作
+            th {{ $t('task.fields.order') }}
+            th {{ $t('task.fields.description') }}
+            th {{ $t('task.fields.from_version') }}
+            th {{ $t('task.fields.target_version') }}
+            th {{ $t('task.fields.upgrade_count') }}
+            th.tac.w80 {{ $t('common.action') }}
         tbody
           template(v-if="tasks.length > 0 && !loadingTasks")
             tr(v-for="task in tasks")
@@ -63,115 +63,115 @@
               td.tac
                 button.btn.btn-primary.btn-sm(:class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}", :disabled="toggling", @click="toggleTaskStatus(task)")
                   i.fa(:class="{'fa-stop': task.status, 'fa-play': !task.status}")
-                  | {{task.status ? '停止' : '启动'}}
+                  | {{task.status ? $t('task.stop') : $t('task.start')}}
           tr(v-if="loadingTasks")
             td.tac(colspan="6")
               .tips-null
                 i.fa.fa-refresh.fa-spin
-                span 数据加载中...
+                span {{ $t("common.data_loading") }}
           tr(v-if="tasks.length === 0 && !loadingTasks")
             td.tac(colspan="6")
               .tips-null
-                span 暂无相关记录
+                span {{ $t("common.no_records") }}
 
   // 添加固件版本浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
-    h3(slot="header") 添加固件版本
+    h3(slot="header") {{ $t('firmware.add_firmware') }}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFirmwareHook")
         .form-row
-          label.form-control 固件型号：
+          label.form-control {{ $t("firmware.fields.mod") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入固件型号'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.mod')")
               input.input-text(v-model="addModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mod.$pristine")
-              span(v-if="addValidation.mod.$error.required") 请输入固件型号
+              span(v-if="addValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
             .form-tips.form-tips-error(v-if="addValidation.mod.$dirty")
-              span(v-if="addValidation.mod.$error.required") 请输入固件型号
-              span(v-if="addValidation.mod.$error.maxlength") 固件型号最多不能超过20个字符
+              span(v-if="addValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
+              span(v-if="addValidation.mod.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}
         .form-row
-          label.form-control 固件版本号：
+          label.form-control {{ $t("firmware.fields.version") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入固件版本号'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.version')")
               input.input-text(v-model="addModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.version.$pristine")
-              span(v-if="addValidation.version.$error.required") 请输入固件版本号
+              span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
             .form-tips.form-tips-error(v-if="addValidation.version.$dirty")
-              span(v-if="addValidation.version.$error.required") 请输入固件版本号
-              span(v-if="addValidation.version.$error.customValidator") 固件版本号应为不超过32位的整数
+              span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
+              span(v-if="addValidation.version.$error.customValidator") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 32]) }}
         .form-row
-          label.form-control 固件文件：
+          label.form-control {{ $t("firmware.file") }}:
           .controls
             label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
               input(type="file", v-el:add-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)", :disabled="uploading")
               i.fa.fa-reply-all
-              | {{uploading ? '文件上传中，请稍等...' : '上传固件文件'}}
+              | {{uploading ? $t('firmware.uploading') : $t('firmware.upload')}}
             .form-tips.mt5(v-if="addModel.file_url.length > 0") url: {{addModel.file_url}}
         .form-row
-          label.form-control 描述：
+          label.form-control {{ $t("firmware.fields.description") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入描述'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.description')")
               textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.description.$pristine")
-              span(v-if="addValidation.description.$error.required") 请输入描述
+              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
             .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
-              span(v-if="addValidation.description.$error.required") 请输入描述
-              span(v-if="addValidation.description.$error.maxlength") 描述最多不能超过250个字符
+              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
+              span(v-if="addValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}
         .form-row
-          label.form-control 是否发布：
+          label.form-control {{ $t("firmware.fields.is_release") }}:
           .controls
             .checkbox-group
               label.checkbox
                 input(type="checkbox", name="is_release", v-model="addModel.is_release")
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
   // 编辑固件版本浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
-    h3(slot="header") 编辑固件版本
+    h3(slot="header") {{ $t('firmware.edit_firmware') }}
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFirmwareHook")
         .form-row
-          label.form-control 固件型号：
+          label.form-control {{ $t("firmware.fields.mod") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入固件型号'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.mod')")
               input.input-text(v-model="editModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.mod.$pristine")
-              span(v-if="editValidation.mod.$error.required") 请输入固件型号
+              span(v-if="editValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
             .form-tips.form-tips-error(v-if="editValidation.mod.$dirty")
-              span(v-if="editValidation.mod.$error.required") 请输入固件型号
-              span(v-if="editValidation.mod.$error.maxlength") 固件型号最多不能超过20个字符
+              span(v-if="editValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
+              span(v-if="editValidation.mod.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}
         .form-row
-          label.form-control 固件版本号：
+          label.form-control {{ $t("firmware.fields.version") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入固件版本号'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.version')")
               input.input-text(v-model="editModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.version.$pristine")
-              span(v-if="editValidation.version.$error.required") 请输入固件版本号
+              span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
             .form-tips.form-tips-error(v-if="editValidation.version.$dirty")
-              span(v-if="editValidation.version.$error.required") 请输入固件版本号
-              span(v-if="editValidation.version.$error.customValidator") 固件版本号应为不超过32位的整数
+              span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
+              span(v-if="editValidation.version.$error.customValidator") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 32]) }}
         .form-row
-          label.form-control 固件文件地址：
+          label.form-control {{ $t("firmware.file") }}:
           .controls
             label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
               input(type="file", v-el:edit-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)", :disabled="uploading")
               i.fa.fa-reply-all
-              | {{uploading ? '文件上传中，请稍等...' : '上传固件文件'}}
+              | {{uploading ? $t('firmware.uploading') : $t('firmware.upload')}}
             .form-tips.mt5(v-if="editModel.file_url") url: {{editModel.file_url}}
         .form-row
-          label.form-control 描述：
+          label.form-control {{ $t("firmware.fields.description") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入描述'")
+            .input-text-wrap(v-placeholder="$t('firmware.placeholders.description')")
               textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
-              span(v-if="editValidation.description.$error.required") 请输入描述
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
             .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
-              span(v-if="editValidation.description.$error.required") 请输入描述
-              span(v-if="editValidation.description.$error.maxlength") 描述最多不能超过250个字符
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
+              span(v-if="editValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}
         .form-row
-          label.form-control 是否发布：
+          label.form-control {{ $t("firmware.fields.is_release") }}:
           .controls
             .checkbox-group
               label.checkbox
@@ -179,58 +179,58 @@
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除固件版本
-          button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") 取消
-          button.btn.btn-primary(type="submit") 确定
+            | {{ $t("firmware.del_firmware") }}
+          button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 
   // 添加固件升级任务浮层
   modal(:show.sync="showAddTaskModal", @close="onAddTaskCancel")
-    h3(slot="header") 添加固件升级任务
+    h3(slot="header") {{ $t("task.create_task") }}
     .form(slot="body")
       form(v-form, name="addTaskValidation", @submit.prevent="onAddTaskSubmit", hook="addTaskHook")
         .form-row
-          label.form-control 任务名称：
+          label.form-control {{ $t("task.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'升级任务名称'")
+            .input-text-wrap(v-placeholder="$t('task.placeholders.name')")
               input.input-text(v-model="addTaskModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine")
-              span(v-if="addTaskValidation.name.$error.required") 请输入任务名称
+              span(v-if="addTaskValidation.name.$error.required") {{ $t('validation.required', {field: $t('task.fields.name')}) }}
             .form-tips.form-tips-error(v-if="addTaskValidation.name.$dirty")
-              span(v-if="addTaskValidation.name.$error.required") 请输入任务名称
-              span(v-if="addTaskValidation.name.$error.maxlength") 固件型号最多不能超过32个字符
+              span(v-if="addTaskValidation.name.$error.required") {{ $t('validation.required', {field: $t('task.fields.name')}) }}
+              span(v-if="addTaskValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('task.fields.name'), 32]) }}
         .form-row
-          label.form-control 描述：
+          label.form-control {{ $t("task.fields.description") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入描述'")
+            .input-text-wrap(v-placeholder="$t('task.placeholders.description')")
               textarea.input-text(v-model="addTaskModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine")
-              span(v-if="addTaskValidation.description.$error.required") 请输入描述
+              span(v-if="addTaskValidation.description.$error.required") {{ $t('validation.required', {field: $t('task.fields.description')}) }}
             .form-tips.form-tips-error(v-if="addTaskValidation.description.$dirty")
-              span(v-if="addTaskValidation.description.$error.required") 请输入描述
-              span(v-if="addTaskValidation.description.$error.maxlength") 描述最多不能超过250个字符
+              span(v-if="addTaskValidation.description.$error.required") {{ $t('validation.required', {field: $t('task.fields.description')}) }}
+              span(v-if="addTaskValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('task.fields.description'), 250]) }}
         .form-row
-          label.form-control 起始版本号：
+          label.form-control {{ $t("task.fields.from_version") }}:
           .controls
             .select
               select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid", @change="selectFrom")
-                option(selected, value="0") 请选择起始版本号
+                option(selected, value="0") {{ $t("task.select_from_version") }}
                 option(v-for="firmware in fromFirmwares", :value="firmware.version") {{firmware.version}}
             .form-tips.mt5(v-if="addTaskModel.from_version > 0") url: {{addTaskModel.from_version | firmwareUrl}}
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
-              span(v-if="addTaskValidation.from_version.$error.customValidator") 请选择起始版本号
+              span(v-if="addTaskValidation.from_version.$error.customValidator") {{ $t("task.select_from_version") }}
         .form-row
-          label.form-control 目标版本号：
+          label.form-control {{ $t("task.fields.target_version") }}:
           .controls
             .select
               select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid", @change="selectTarget")
-                option(selected, value="0") 请选择目标版本号
+                option(selected, value="0") {{ $t("task.select_target_version") }}
                 option(v-for="firmware in targetFirmwares", :value="firmware.version") {{firmware.version}}
             .form-tips.mt5(v-if="addTaskModel.target_version > 0") url: {{addTaskModel.target_version | firmwareUrl}}
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
-              span(v-if="addTaskValidation.target_version.$error.customValidator") 请选择目标版本号
+              span(v-if="addTaskValidation.target_version.$error.customValidator") {{ $t("task.select_target_version") }}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddTaskCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onAddTaskCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
@@ -549,14 +549,14 @@
         var input = event.target;
 
         if (file && file.size > 1024 * 1024) {
-          alert('文件大小不能大于1MB');
+          alert(self.$t('task.file_size_msg'));
           return;
         }
 
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
           reader.onerror = function (evt) {
-            alert('文件读取失败。');
+            alert(self.$t('upload.read_err'));
           };
           // 读取完成
           reader.onloadend = function (evt) {
@@ -581,7 +581,7 @@
           };
           reader.readAsArrayBuffer(file);
         } else {
-          alert('您的浏览器过于低级，不支持 HTML5 上传');
+          alert(self.$t('upload.compatiblity'));
         }
       }
     }

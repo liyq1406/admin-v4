@@ -2,10 +2,10 @@
 div
   .panel
     .panel-hd
-      h2 趋势
+      h2 {{ $t("statistic.trends") }}
       .leftbox
         radio-group(:items="periods", :value.sync="period")
-          span.label(slot="label") 最近
+          span.label(slot="label") {{ $t("common.recent") }}
     .panel-bd
       .row
         .col-13
@@ -15,23 +15,23 @@ div
             .item
               .cont
                 .num {{total}}
-                .label 用户总数
+                .label {{ $t("statistic.users.total") }}
             .item
               .cont
                 .num {{add}}
-                .label {{period}}天新增用户
+                .label {{ $t("statistic.users.newbie", {period:period}) }}
             .item.no-border
               .cont
                 .num {{active}}
-                .label 活跃用户
+                .label {{ $t("statistic.users.active") }}
             .item.no-border
               .cont
                 .num {{online}}
-                .label 当前在线
+                .label {{ $t("statistic.users.online") }}
 
   .panel
     .panel-hd
-      h2 区域分布
+      h2 {{ $t("statistic.regions") }}
       .leftbox
         radio-group(:items="regions", :value.sync="region", @select="drawUserRegion")
     .panel-bd
@@ -41,10 +41,10 @@ div
         table.table.table-bordered.table-stripe
           thead
             tr
-              th 地区
-              th 活跃用户
-              th 用户数
-              th 占比
+              th {{ $t("statistic.district") }}
+              th {{ $t("statistic.users.active") }}
+              th {{ $t("statistic.users.sum") }}
+              th {{ $t("statistic.percentage") }}
           tbody
             tr(v-for="item in regionData")
               td {{ wroldNames[item.name] || chinaNames[item.name] || item.name}}
@@ -54,9 +54,10 @@ div
 </template>
 
 <script>
+  var Vue = require('vue');
   var RadioGroup = require('../../components/radio-group.vue');
   var api = require('../../api');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var dateFormat = require('date-format');
   var echarts = require('echarts/echarts');
   require('echarts/chart/line');
@@ -78,9 +79,9 @@ div
         active: 0,
         productRegion: {},
         period: 7,
-        periods: config.periods,
+        periods: locales[Vue.config.lang].periods,
         region: 'world',
-        regions: config.regions,
+        regions: locales[Vue.config.lang].regions,
         regionData: [],
         wroldNames: require('../../consts/world-names'),
         chinaNames: require('../../consts/china-names')
@@ -147,7 +148,7 @@ div
             // 趋势图表
             var trendOptions = {
               noDataLoadingOption: {
-                text: '暂无数据',
+                text: self.$t('common.no_data'),
                 effect: '',
                 effectOption: {
                   backgroundColor: '#FFF'
@@ -169,7 +170,7 @@ div
               legend: {
                 x: 'right',
                 y: 10,
-                data: ['新增用户', '活跃用户']
+                data: [self.$t('statistic.users.newbie', {period: self.period}), self.$t('statistic.users.active')]
               },
               xAxis: [{
                 type: 'category',
@@ -180,11 +181,11 @@ div
                 type: 'value'
               }],
               series: [{
-                name: '活跃用户',
+                name: self.$t('statistic.users.active'),
                 type: 'line',
                 data: activeTrends
               }, {
-                name: '新增用户',
+                name: self.$t('statistic.users.newbie', {period: self.period}),
                 type: 'line',
                 data: addTrends
               }]
@@ -227,13 +228,13 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '活跃用户数<br/>' + params.name + ': ' + value;
+                    return self.$t('statistic.users.active') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 dataRange: {
                   min: 0,
                   max: worldMax,
-                  text: ['高', '低'],
+                  text: [self.$t('common.high'), self.$t('common.low')],
                   realtime: false,
                   calculable: true,
                   color: ['orangered', 'yellow', 'lightskyblue']
@@ -253,7 +254,7 @@ div
             } else {
               var curIndx = 0;
               var option;
-              var mapType = config.mapType;
+              var mapType = locales[Vue.config.lang].mapType;
 
               var chinaData = [];
               var chinaMax = 0;
@@ -316,23 +317,23 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '活跃用户数<br/>' + params.name + ': ' + value;
+                    return self.$t('statistic.users.active') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
                   x: 'right',
-                  data: ['活跃用户数']
+                  data: [self.$t('statistic.users.active')]
                 },
                 dataRange: {
                   min: 0,
                   max: chinaMax,
                   color: ['orange', 'yellow'],
-                  text: ['高', '低'],           // 文本，默认为数值文本
+                  text: [self.$t('common.high'), self.$t('common.low')],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
-                  name: '活跃用户数',
+                  name: self.$t('statistic.users.active'),
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',

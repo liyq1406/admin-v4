@@ -3,53 +3,54 @@ section.main-wrap
   .main
     .panel
       .panel-hd
-        h2 添加产品
+        h2 {{ $t('product.add_product') }}
       .panel-bd
         .form
           form(v-form, name="validation", @submit.prevent="onSubmit")
             .form-row
-              label.form-control 产品名称：
+              label.form-control {{ $t("product.fields.name") }}:
               .controls
-                .input-text-wrap(v-placeholder="'请输入产品名称'")
+                .input-text-wrap(v-placeholder="$t('product.placeholders.name')")
                   input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpaceEnds", lazy)
                 .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                  span(v-if="validation.name.$error.required") 请输入产品名称
+                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
                 .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                  span(v-if="validation.name.$error.required") 请输入产品名称
-                  span(v-if="validation.name.$error.maxlength") 产品名称最大不能超过32位
-                  span(v-if="validation.name.$error.customValidator") 产品名称前后不能带空格
+                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
+                  span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}
+                  span(v-if="validation.name.$error.customValidator") {{ $t('validation.format', {field: $t('product.fields.name')}) }}
             .form-row
-              label.form-control 产品描述：
+              label.form-control {{ $t("product.fields.desc") }}:
               .controls
-                .input-text-wrap(v-placeholder="'请输入产品描述'")
+                .input-text-wrap(v-placeholder="$t('product.placeholders.desc')")
                   textarea.input-text(v-model="model.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
                 .form-tips.form-tips-error(v-if="validation.$submitted && validation.description.$pristine")
-                  span(v-if="validation.description.$error.required") 请输入产品描述
+                  span(v-if="validation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
                 .form-tips.form-tips-error(v-if="validation.description.$dirty")
-                  span(v-if="validation.description.$error.required") 请输入产品描述
-                  span(v-if="validation.description.$error.maxlength") 产品描述最大不能超过250字
+                  span(v-if="validation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
+                  span(v-if="validation.description.$error.maxlength")  {{ $t('validation.maxlength', [ $t('product.fields.name'), 250]) }}
             .form-row
-              label.form-control 设备类型：
+              label.form-control {{ $t("product.fields.link_type") }}:
               .controls
                 .select
                   select(v-model="model.link_type", v-form-ctrl, name="link_type")
                     option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
             .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") 添加
+              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.add") }}
 
 </template>
 
 <script>
+  var Vue = require('vue');
   var api = require('../../api');
   var productsStore = require('../../stores/products');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
 
   module.exports = {
     name: 'CreateProductForm',
 
     data: function () {
       return {
-        deviceTypes: config.deviceTypes,
+        deviceTypes: locales[Vue.config.lang].deviceTypes,
         model: {},
         validation: {},
         state: productsStore.state

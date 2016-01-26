@@ -7,25 +7,25 @@ section.main-wrap
         .panel
           .panel-hd
             .date(v-text="new Date() | formatDate")
-            h2 管理台
+            h2 {{ $t("dashboard.platform") }}
           .panel-bd
             .statistic
               .statistic-item.device-count
                 .fa.fa-link
                 .num {{totalSummary.total}}
-                .label 总设备量
+                .label {{ $t("dashboard.statistic.total") }}
               .statistic-item.active-count
                 .fa.fa-magic
                 .num {{totalSummary.activated}}
-                .label 激活数
+                .label {{ $t("dashboard.statistic.activated") }}
               .statistic-item.online-count
                 .fa.fa-wifi
                 .num {{totalSummary.online}}
-                .label 当前在线
+                .label {{ $t("dashboard.statistic.online") }}
               .statistic-item.user-count
                 .fa.fa-users
                 .num {{userSummary.user}}
-                .label 用户数
+                .label {{ $t("dashboard.statistic.user") }}
         // Start: 管理台
 
     .row
@@ -41,7 +41,7 @@ section.main-wrap
         // Start: 快速指南
         .panel
           .panel-hd
-            h2 快速指南
+            h2 {{ $t("dashboard.guide") }}
           .panel-bd
             .post-list
               ul
@@ -67,7 +67,7 @@ section.main-wrap
         // Start: 文档
         .panel
           .panel-hd
-            h2 文档
+            h2 {{ $t("dashboard.documents") }}
           .panel-bd
             .doc-list
               .doc-list-item

@@ -4,8 +4,8 @@ section.main-wrap
     .panel
       .panel-hd
         radio-group(:items="periods", :value.sync="period")
-          span.label(slot="label") 最近
-        h2 告警服务
+          span.label(slot="label") {{ $t("common.recent") }}
+        h2 {{ $t("alert.service") }}
       .panel-bd
         .row
           .col-13
@@ -15,33 +15,33 @@ section.main-wrap
               .item
                 .cont
                   .num {{alertSummary.device}}
-                  .label 告警设备
+                  .label {{ $t("alert.statistic.device") }}
               .item
                 .cont
                   .num {{alertSummary.message}}
-                  .label 告警消息
+                  .label {{ $t("alert.statistic.message") }}
               .item.no-border
                 .cont
                   .num {{alertSummary.unread}}
-                  .label 未读消息
+                  .label {{ $t("alert.statistic.unread") }}
               .item.no-border
                 .cont
                   .num {{alertSummary.add_today}}
-                  .label 今日新增
+                  .label {{ $t("alert.statistic.add_today") }}
 
     .panel
       .panel-hd
-        h2 告警信息
+        h2 {{ $t("alert.info") }}
       .panel-bd
         //- 数据
         table.table.table-stripe.table-bordered
           thead
             tr
-              th 产品名称
-              th 告警内容
-              th 上报时间
-              th 是否已读
-              th.tac 操作
+              th {{ $t("alert.info_list.product_name") }}
+              th {{ $t("alert.info_list.content") }}
+              th {{ $t("alert.info_list.create_date") }}
+              th {{ $t("alert.info_list.is_read") }}
+              th.tac {{ $t("common.action") }}
           tbody
             template(v-if="alerts.length > 0 && !loadingData")
               tr(v-for="alert in alerts")
@@ -52,69 +52,69 @@ section.main-wrap
                   | {{alert.content}}
                 td {{alert.create_date | formatDate}}
                 td
-                  span.hl-gray(v-if="alert.is_read") 已读
-                  span(v-else) 未读
+                  span.hl-gray(v-if="alert.is_read") {{ $t("common.read") }}
+                  span(v-else) {{ $t("common.unread") }}
                 td.tac
-                  button.btn.btn-link.btn-sm(@click="showAlert(alert)") 查看
+                  button.btn.btn-link.btn-sm(@click="showAlert(alert)") {{ $t("common.details") }}
             tr(v-if="loadingData")
               td.tac(colspan="5")
                 .tips-null
                   i.fa.fa-refresh.fa-spin
-                  span 数据加载中...
+                  span {{ $t("common.data_loading") }}
             tr(v-if="alerts.length === 0 && !loadingData")
               td.tac(colspan="5")
                 .tips-null
-                  span 暂无数据记录
+                  span {{ $t("common.no_records") }}
         pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
 
   // 查看告警信息浮层
   modal(:show.sync="showModal")
-    h3(slot="header") 告警信息
+    h3(slot="header") {{ $t("alert.info") }}
     //- 数据
     table.table.table-stripe.table-bordered(slot="body")
       tbody
         tr
-          td 产品名称
+          td {{ $t("alert.info_list.product_name") }}
           td {{model.product_name}}
         tr
-          td 告警名称
+          td {{ $t("alert.info_list.alert_name") }}
           td {{model.alert_name}}
         tr
-          td 告警内容
+          td {{ $t("alert.info_list.content") }}
           td {{model.content}}
         tr
-          td 标签
+          td {{ $t("alert.info_list.tags") }}
           td
             template(v-if="model.tags")
               span.text-label(v-for="tag in model.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
         tr
-          td 消息类型
+          td {{ $t("alert.info_list.type") }}
           td
-            span(v-if="model.type === 1") 通知与预警
+            span {{ infoTypes[model.type - 1] }}
         tr
-          td 通知类型
+          td {{ $t("alert.info_list.notify_type") }}
           td
-            span(v-if="model.notify_type === 1") 通知类型
-            span(v-if="model.notify_type === 2") 告警类型
+            span {{ alertTypes[model.notify_type - 1] }}
         tr
-          td 告警状态值
+          td {{ $t("alert.info_list.alert_value") }}
           td {{model.alert_value}}
         tr
-          td 消息发送者
+          td {{ $t("alert.info_list.from") }}
           td {{model.from}}
         tr
-          td 消息接受者
+          td {{ $t("alert.info_list.to") }}
           td {{model.to}}
         tr
-          td 上报时间
-          td {{model.create_date}}
+          td {{ $t("alert.info_list.create_date") }}
+          td {{model.create_date | formatDate}}
     .modal-footer(slot="footer")
-      button.btn.btn-primary(@click.prevent.stop="showModal = false") 确定
+      button.btn.btn-primary(@click.prevent.stop="showModal = false") {{ $t("common.ok") }}
 </template>
 
 <script>
+  var Vue = require('vue');
   var api = require('../../api');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var Pager = require('../../components/pager.vue');
   var Modal = require('../../components/modal.vue');
   var RadioGroup = require('../../components/radio-group.vue');
@@ -153,8 +153,10 @@ section.main-wrap
           tags: ''
         },
         period: 7,
-        periods: config.periods,
+        periods: locales[Vue.config.lang].periods,
         product_id: '',
+        alertTypes: locales[Vue.config.lang].alertTypes,
+        infoTypes: locales[Vue.config.lang].infoTypes,
         alertSummary: {
           unread: 0,
           add_today: 0,
@@ -275,7 +277,7 @@ section.main-wrap
             // 趋势图表
             var trendOptions = {
               noDataLoadingOption: {
-                text: '暂无数据',
+                text: self.$t('common.no_data'),
                 effect: '',
                 effectOption: {
                   backgroundColor: '#FFF'
@@ -297,7 +299,7 @@ section.main-wrap
               legend: {
                 x: 'right',
                 y: 10,
-                data: ['告警数量']
+                data: [self.$t('alert.counts')]
               },
               xAxis: [{
                 type: 'category',
@@ -308,7 +310,7 @@ section.main-wrap
                 type: 'value'
               }],
               series: [{
-                name: '告警数量',
+                name: self.$t('alert.counts'),
                 type: 'line',
                 data: alertCounts
               }]

@@ -3,71 +3,71 @@
   .form-logo
   form.form-cont(v-form, name="validation", @submit.prevent="onSubmit", v-show="!registerSuccess")
     .form-header
-      a(v-link="{ path: '/login' }") 登录帐号
-      span 注册帐号
+      a(v-link="{ path: '/login' }") {{ $t("auth.login") }}
+      span {{ $t("auth.register") }}
     .form-body
-      .form-hints 请输入您的帐号信息：
+      .form-hints {{ $t("auth.account_tips") }}
       .form-row-group
         .form-row
-          .input-text-wrap(v-placeholder="'电子邮箱'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.email')")
             input.input-text(type="email", v-model="model.email", v-form-ctrl, name="email", required, lazy)
           .form-tips.form-tips-error(v-if="validation.email.$dirty")
-            span(v-if="validation.email.$error.required") 请输入您的电子邮件地址
-            span(v-if="validation.email.$error.email") 电子邮件地址格式不正确
+            span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('auth.fields.email')}) }}
+            span(v-if="validation.email.$error.email") {{ $t('validation.format', {field: $t('auth.fields.email')}) }}
         .form-row
-          .input-text-wrap(v-placeholder="'密码'")
+          .input-text-wrap(v-placeholder="$t('auth.password')")
             input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
           .form-tips.form-tips-error(v-if="validation.password.$dirty")
-            span(v-if="validation.password.$error.required") 请输入密码
-            span(v-if="validation.password.$error.minlength") 密码最小不能少于6位
-            span(v-if="validation.password.$error.maxlength") 密码最大不能超过16位
+            span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
+            span(v-if="validation.password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
+            span(v-if="validation.password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
         .form-row
-          .input-text-wrap(v-placeholder="'再次输入密码'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
             input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
           .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-            span(v-if="model.password && validation.confirmPassword.$error.required") 请再一次输入密码
-            span(v-if="validation.confirmPassword.$error.customValidator") 两次密码输入不一致
-      .form-hints 请输入您的基本信息：
+            span(v-if="model.password && validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
+            span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
+      .form-hints {{ $t("auth.basic_tips") }}
       .form-row-group
         .form-row
-          .input-text-wrap(v-placeholder="'姓名'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.name')")
             input.input-text(type="text", v-model="model.name", v-form-ctrl, required, maxlength="32", minlength="2", name="name", lazy)
           .form-tips.form-tips-error(v-if="validation.name.$dirty")
-            span(v-if="validation.name.$error.required") 请输入姓名
-            span(v-if="validation.name.$error.minlength") 姓名长度不能小于2
-            span(v-if="validation.name.$error.maxlength") 电话号码长度不能大于32
+            span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('auth.fields.name')}) }}
+            span(v-if="validation.name.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.name'), 2]) }}
+            span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.name'), 32]) }}
         .form-row
-          .input-text-wrap(v-placeholder="'手机号码'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.phone')")
             input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
           .form-tips.form-tips-error(v-if="validation.phone.$dirty")
-            span(v-if="validation.phone.$error.required") 请输入您的手机号码
-            span(v-if="validation.phone.$error.pattern") 手机号码格式有误
+            span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
+            span(v-if="validation.phone.$error.pattern") {{ $t('validation.format', {field: $t('auth.fields.phone')}) }}
         .form-row
-          .input-text-wrap(v-placeholder="'公司名称'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.company')")
             input.input-text(type="text", v-model="model.company", v-form-ctrl, required, maxlength="32", name="company", lazy)
           .form-tips.form-tips-error(v-if="validation.company.$dirty")
-            span(v-if="validation.company.$error.required") 请输入您的公司名称
-            span(v-if="validation.company.$error.maxlength") 公司名称长度不能大于32
+            span(v-if="validation.company.$error.required") {{ $t('validation.required', {field: $t('auth.fields.company')}) }}
+            span(v-if="validation.company.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.company'), 32]) }}
         .form-row
           .select
             select(v-model="model.type", v-form-ctrl, name="type", custom-validator="checkTypeValid")
-              option(selected) 请选择应用类型
+              option(selected) {{ $t("auth.type_tips") }}
               option(v-for="type in accountTypes", :value="$index + 1") {{type}}
           .form-tips.form-tips-error(v-if="validation.$submitted")
-            span(v-if="validation.type.$error.customValidator") 请选择您的应用类型
+            span(v-if="validation.type.$error.customValidator") {{ $t("auth.type_tips") }}
       .form-actions
-        button.btn.btn-primary.btn-block(type="submit") 注册
+        button.btn.btn-primary.btn-block(type="submit") {{ $t("auth.register_submit") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
   .form-cont.reset-password-success(v-show="registerSuccess")
     .alert.alert-success
       .fa.fa-check-circle-o
-      h2 注册成功
-      p 系统已经发了一封激活邮件到您的邮箱，请查阅。
+      h2 {{ $t("auth.register_success") }}
+      p {{ $t("auth.register_success_msg") }}
       .actions
-        a.btn.btn-primary(v-link="{ path: '/login'}") 确定
+        a.btn.btn-primary(v-link="{ path: '/login'}") {{ $t("common.ok") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
 <style lang="stylus">
@@ -103,14 +103,15 @@
 
 <script>
   var api = require('../api');
-  var config = require('../consts/config');
+  var locales = require('../consts/locales');
+  var Vue = require('vue');
 
   module.exports = {
     name: 'RegisterForm',
 
     data: function () {
       return {
-        accountTypes: config.accountTypes,
+        accountTypes: locales[Vue.config.lang].accountTypes,
         validation: {},
         captcha: '',
         captchaValue: '',

@@ -5,55 +5,52 @@ div
       // Start: 个人信息
       .panel
         .panel-hd
-          h2 个人信息
+          h2 {{ $t('account.personal') }}
         .panel-bd
           .tips-null(v-if="loadingAccount")
             i.fa.fa-refresh.fa-spin
-            span 数据加载中...
+            span {{ $t("common.data_loading") }}
           ul.user-details(v-else)
             li
-              .label 姓名：
+              .label {{ $t("member.fields.name") }}:
               .info
                 | {{member.name}}
                 a.fa.fa-edit(href="#", @click.prevent="editAccount")
             li
-              .label 密码：
+              .label {{ $t("member.fields.password") }}:
               .info
                 a.hl-red(href="#", @click.prevent="editPwd") 修改密码
             li
-              .label 邮箱：
+              .label {{ $t("member.fields.email") }}:
               .info {{member.email}}
             li
-              .label 手机：
+              .label {{ $t("member.fields.phone") }}:
               .info {{member.phone}}
             li
-              .label 创建时间：
+              .label {{ $t("member.fields.create_time") }}:
               .info {{member.create_time | formatDate}}
             li
-              .label 最后登录：
+              .label {{ $t("member.fields.last_auth_time") }}:
               .info {{member.last_auth_time | formatDate}}
             li
-              .label 角色：
+              .label {{ $t("member.fields.role") }}:
               .info
-                span(v-if="member.role==1") 管理员
-                span(v-if="member.role==2") 普通成员
+                span {{ memberTypes[member.role-1] }}
               //.info {{member.role}}
             li
-              .label 状态：
+              .label {{ $t("common.status") }}:
               .info
-                span.hl-gray(v-if="member.status==0") 待激活
-                span.hl-green(v-if="member.status==1") 正常可用
-                span.hl-red(v-if="member.status==2") 停用
+                span(:class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}") {{ statusTypes[member.status] }}
             li
-              .label 是否接受通知:
+              .label {{ $t("member.fields.is_notice") }}:
               .info
-                span.hl-green(v-if="member.is_notice") 是
-                span.hl-red(v-else) 否
+                span.hl-green(v-if="member.is_notice") {{ $t("common.yes") }}
+                span.hl-red(v-else) {{ $t("common.no") }}
             li
-              .label 是否接受告警:
+              .label {{ $t("member.fields.is_alert") }}:
               .info
-                span.hl-green(v-if="member.is_alert") 是
-                span.hl-red(v-else) 否
+                span.hl-green(v-if="member.is_alert") {{ $t("common.yes") }}
+                span.hl-red(v-else) {{ $t("common.no") }}
             //- button.btn.btn-primary.mt10.mb10(@click.prevent="showEditAccountModal = true") 编辑
       // End: 个人信息
 
@@ -61,101 +58,102 @@ div
       // Start: 企业信息
       .panel
         .panel-hd
-          h2 企业信息
+          h2 {{ $t('account.corp') }}
         .panel-bd
           .tips-null(v-if="loadingCorp")
             i.fa.fa-refresh.fa-spin
-            span 数据加载中...
+            span {{ $t("common.data_loading") }}
           ul.user-details(v-else)
             //li
               .label logo:
               .info samxlu
             li
-              .label 企业名称：
+              .label {{ $t("corp.fields.company") }}:
               .info {{corp.company}}
             li
-              .label 企业ID：
+              .label {{ $t("corp.fields.id") }}:
               .info {{corp.id}}
             li
-              .label 应用类型：
+              .label {{ $t("corp.fields.type") }}:
               .info {{accountTypes[corp.type - 1]}}
             li
-              .label 联系人：
+              .label {{ $t("corp.fields.name") }}:
               .info {{corp_member.name}}
             li
-              .label 联系邮箱：
+              .label {{ $t("corp.fields.email") }}:
               .info {{corp_member.email}}
             li
-              .label 联系电话：
+              .label {{ $t("corp.fields.phone") }}:
               .info {{corp_member.phone}}
             li
-              .label 创建时间:
+              .label {{ $t("corp.fields.create_time") }}:
               .info {{corp.create_time | formatDate}}
             //button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showEditPwdModal = true") 编辑
       // End: 企业信息
   modal(:show.sync="showEditAccountModal")
-    h3(slot="header") 编辑用户信息
+    h3(slot="header") {{ $t('account.edit_member') }}
     .form(slot="body")
       form(v-form, name="accountValidation", @submit.prevent="onSubmitAccount")
         .form-row
-          label.form-control 姓名：
+          label.form-control {{ $t("member.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入姓名'")
+            .input-text-wrap(v-placeholder="$t('member.placeholders.name')")
               input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="accountValidation.$submitted && accountValidation.name.$pristine")
-              span(v-if="accountValidation.name.$error.required") 请输入姓名
+              span(v-if="accountValidation.name.$error.required") {{ $t('validation.required', {field: $t('member.fields.name')}) }}
             .form-tips.form-tips-error(v-if="accountValidation.name")
-              span(v-if="accountValidation.name.$error.required") 请输入姓名
+              span(v-if="accountValidation.name.$error.required") {{ $t('validation.required', {field: $t('member.fields.name')}) }}
         .form-row
-          label.form-control 通知与告警：
+          label.form-control {{ $t("member.alert_settings") }}:
           .controls
             .checkbox-group
               label.checkbox
                 input(type="checkbox", v-model="editModel.is_notice")
-                | 接受通知
+                | {{ $t("member.fields.is_notice") }}
               label.checkbox
                 input(type="checkbox", v-model="editModel.is_alert")
-                | 接受告警
+                | {{ $t("member.fields.is_alert") }}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onEditAccountCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onEditAccountCancel") {{ $t('common.cancel') }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 
   modal(:show.sync="showEditPwdModal", :width="320")
-    h3(slot="header") 修改密码
+    h3(slot="header") {{ $t("auth.reset") }}
     .form(slot="body")
       form(v-form, name="pwdValidation", @submit.prevent="onSubmitPwd", hook="editPwdHook")
         .form-row
-          .input-text-wrap(v-placeholder="'旧密码'")
+          .input-text-wrap(v-placeholder="$t('account.placeholders.old_password')")
             input.input-text(type="password", v-model="editPwdModel.oldpassword", v-form-ctrl, required, name="oldpassword", lazy)
           .form-tips.form-tips-error(v-if="pwdValidation.$submitted && pwdValidation.oldpassword.$pristine")
-            span(v-if="pwdValidation.oldpassword.$error.required") 请输入旧密码
+            span(v-if="pwdValidation.oldpassword.$error.required") {{ $t('validation.required', {field: $t('account.fields.old_password')}) }}
           .form-tips.form-tips-error(v-if="pwdValidation.oldpassword.$dirty")
-            span(v-if="pwdValidation.oldpassword.$error.required") 请输入旧密码
+            span(v-if="pwdValidation.oldpassword.$error.required") {{ $t('validation.required', {field: $t('account.fields.old_password')}) }}
         .form-row
-          .input-text-wrap(v-placeholder="'新密码'")
+          .input-text-wrap(v-placeholder="$t('account.placeholders.new_password')")
             input.input-text(type="password", v-model="editPwdModel.newpassword", v-form-ctrl, required, maxlength="16", minlength="6", name="newpassword", lazy)
           .form-tips.form-tips-error(v-if="pwdValidation.$submitted && pwdValidation.newpassword.$pristine")
-            span(v-if="pwdValidation.newpassword.$error.required") 请输入新密码
+            span(v-if="pwdValidation.newpassword.$error.required") {{ $t('validation.required', {field: $t('account.fields.new_password')}) }}
           .form-tips.form-tips-error(v-if="pwdValidation.newpassword.$dirty")
-            span(v-if="pwdValidation.newpassword.$error.required") 请输入新密码
-            span(v-if="pwdValidation.newpassword.$error.minlength") 密码最小不能少于6位
-            span(v-if="pwdValidation.newpassword.$error.maxlength") 密码最大不能超过16位
+            span(v-if="pwdValidation.newpassword.$error.required") {{ $t('validation.required', {field: $t('account.fields.new_password')}) }}
+            span(v-if="pwdValidation.newpassword.$error.minlength") {{ $t('validation.minlength', [ $t('account.fields.new_password'), 6]) }}
+            span(v-if="pwdValidation.newpassword.$error.maxlength") {{ $t('validation.maxlength', [ $t('account.fields.new_password'), 16]) }}
         .form-row
-          .input-text-wrap(v-placeholder="'再次输入密码'")
+          .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
             input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
           .form-tips.form-tips-error(v-if="pwdValidation.$submitted && pwdValidation.confirmPassword.$pristine")
-            span(v-if="pwdValidation.confirmPassword.$error.required") 请再一次输入密码
+            span(v-if="pwdValidation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
           .form-tips.form-tips-error(v-if="pwdValidation.confirmPassword.$dirty")
-            span(v-if="editPwdModel.newpassword && pwdValidation.confirmPassword.$error.required") 请再一次输入密码
-            span(v-if="pwdValidation.confirmPassword.$error.customValidator") 两次密码输入不一致
+            span(v-if="editPwdModel.newpassword && pwdValidation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
+            span(v-if="pwdValidation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onEditPwdCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onEditPwdCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
+  var Vue = require('vue');
   var Modal = require('../../components/modal.vue');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var api = require('../../api');
   var _ = require('lodash');
 
@@ -168,7 +166,9 @@ div
 
     data: function () {
       return {
-        accountTypes: config.accountTypes,
+        accountTypes: locales[Vue.config.lang].accountTypes,
+        memberTypes: locales[Vue.config.lang].member.types,
+        statusTypes: locales[Vue.config.lang].member.status_types,
         query: '',
         searching: false,
         corp: {},
@@ -347,8 +347,6 @@ div
               self.resetEditAccount();
               if (data === 200) {
                 self.getMemberInfo();
-              } else {
-                alert('修改失败！');
               }
             }).catch(function (error) {
               self.handleError(error);
@@ -375,7 +373,7 @@ div
           api.corp.refreshToken().then(function () {
             api.corp.memberResetPwd(self.editPwdModel).then(function (status) {
               if (status === 200) {
-                alert('密码修改成功');
+                alert(self.$t('account.password_msg'));
               }
               self.resetEditPassword();
             }).catch(function (error) {

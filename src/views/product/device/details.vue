@@ -4,37 +4,37 @@ section.main-wrap
     .breadcrumb
       a(v-link="{path: '/products/' + $route.params.product_id + '/devices' }")
         i.fa.fa-arrow-circle-left
-        | 设备管理
+        | {{ $t('device.management') }}
     .row
       .col-20
         .panel
           .panel-hd
-            h2 设备详情
+            h2 {{ $t('device.details') }}
           .panel-bd
             //- #diviceMap(style="height: 300px")
             ul.device-details
               li
-                .label ID：
+                .label ID:
                 .info {{device.id}}
               li
-                .label MAC：
+                .label MAC:
                 .info {{device.mac}}
               li
-                .label 激活:
-                .info {{device.is_active ? '已激活' : '未激活'}}
+                .label {{ $t('device.is_active') }}:
+                .info {{device.is_active ? $t('device.active') : $t('device.not_active') }}
               li
-                .label 激活时间：
+                .label {{ $t('device.active_date') }}:
                 .info {{device.active_date | formatDate}}
               //- li
               //-   .label 最后一次登录：
               //-   .info 2015-11-12 19:33:22
               li
-                .label 在线状态:
+                .label {{ $t('device.is_online') }}:
                 .info
-                  span.hl-green(v-if="device.is_online") 在线
-                  span.hl-red(v-else) 离线
+                  span.hl-green(v-if="device.is_online") {{ $t('common.online') }}
+                  span.hl-red(v-else) {{ $t('common.offline') }}
               li
-                .label 固件版本:
+                .label {{ $t('device.firmware_version') }}:
                 .info
                   span {{device.firmware_version}}
 
@@ -45,17 +45,17 @@ section.main-wrap
           .panel-hd
             .actions
               button.btn.btn-success(:disabled="!device.is_online || refreshing", :class="{'disabled':!device.is_online || refreshing}", @click="getDatapointValues")
-                | 刷新
+                | {{ $t('common.refresh') }}
                 i.fa.fa-refresh(:class="{'fa-spin':refreshing}")
-            h2 数据端点
+            h2 {{ $t('device.datapoint') }}
           .panel-bd
             table.table
               thead
                 tr
-                  th 索引
-                  th 端点ID
-                  th 备注
-                  th 当前值
+                  th {{ $t('datapoint.fields.index') }}
+                  th {{ $t('datapoint.fields.name') }}
+                  th {{ $t('datapoint.fields.description') }}
+                  th {{ $t('device.current_value') }}
               tbody
                 tr(v-for="datapoint in datapoints")
                   td {{datapoint.index}}
@@ -65,7 +65,7 @@ section.main-wrap
                 tr(v-if="datapoints.length === 0")
                   td.tac(colspan="4")
                     i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                    .tips-null(v-else) 暂无端点信息
+                    .tips-null(v-else) {{ $t('device.no_datapoint') }}
 
         // End: 数据端点
 
@@ -75,7 +75,7 @@ section.main-wrap
           .panel-hd
             .actions
               switch(:value.sync="showLog", @switch-toggle='toggleLog')
-            h2 设备日志
+            h2 {{ $t('device.log') }}
           .panel-bd
             pre.output-log
               div.log(v-for="log in logs")

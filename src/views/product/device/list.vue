@@ -3,25 +3,25 @@
   .panel-bd
     //- 操作栏
     .action-bar
-      search-box(:key.sync="query", :active="searching", :placeholder="'请输入 mac 地址'", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
-        button.btn.btn-primary(slot="search-button", @click="getDevices") 搜索
+      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+        button.btn.btn-primary(slot="search-button", @click="getDevices") {{ $t('common.search') }}
       .action-group
         button.btn.btn-success(@click="showAddModal = true")
           i.fa.fa-plus
-          | 添加设备
+          | {{ $t("overview.add_device") }}
         label.btn.btn-success.btn-upload(:class="{'disabled':importing}")
           input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
           i.fa.fa-reply-all
-          | {{importing ? '处理中...' : '导入设备'}}
+          | {{importing ? $t("common.handling") : $t("overview.import_devices")}}
 
     //- 状态栏
     .status-bar
-      .status
-        | 共有
-        span {{total}}
-        | 条结果
+      .status {{{ $t('common.total_results', {count:total}) }}}
+        //- | 共有
+        //- span {{total}}
+        //- | 条结果
       v-select(:options="visibilityOptions", :value.sync="visibility", @select="getDevices")
-        span 显示：
+        span {{ $t('common.display') }}：
 
     //- 设备列表
     //- grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
@@ -32,59 +32,59 @@
             | MAC
             i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
           th
-            | 设备ID
+            | {{ $t('device.id') }}
           th
-            | 是否激活
+            | {{ $t('device.is_active') }}
           th
-            | 激活时间
+            | {{ $t('device.active_date') }}
           //-
             th
               | 最近一次登录
           th
-            | 在线状态
+            | {{ $t('device.is_online') }}
       tbody
         template(v-if="devices.length > 0 && !loadingData")
           tr(v-for="device in devices")
             td
               a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
             td {{device.id}}
-            td(v-text="device.is_active ? '是' : '未激活'")
+            td(v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')")
             td
               span(v-if="device.active_date") {{device.active_date | formatDate}}
             //-
               td
                 span(v-if="device.last_login") {{device.last_login | formatDate}}
             td
-              span.hl-green(v-if="device.is_online") 在线
-              span.hl-gray(v-else) 下线
+              span.hl-green(v-if="device.is_online") {{ $t('device_list.online') }}
+              span.hl-gray(v-else) {{ $t('device_list.offline') }}
         tr(v-if="loadingData")
           td.tac(colspan="5")
             .tips-null
               i.fa.fa-refresh.fa-spin
-              span 数据加载中...
+              span {{ $t("common.data_loading") }}
         tr(v-if="devices.length === 0 && !loadingData")
           td.tac(colspan="5")
             .tips-null
-              span 暂无相关记录
+              span {{ $t("common.no_records") }}
     pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
 
   // 添加设备浮层
   modal(:show.sync="showAddModal")
-    h3(slot="header") 添加设备
+    h3(slot="header") {{ $t("overview.add_device")}}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
         .form-row
-          label.form-control MAC地址：
+          label.form-control {{ $t("overview.addForm.mac")}}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入MAC地址'")
+            .input-text-wrap(v-placeholder="$t('overview.addForm.mac_placeholder')")
               input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
-              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')})
             .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
-              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')})
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <style lang="stylus">
@@ -108,11 +108,13 @@
 </style>
 
 <script>
+  var Vue = require('vue');
   var api = require('../../../api');
   var Select = require('../../../components/select.vue');
   var Pager = require('../../../components/pager.vue');
   var Modal = require('../../../components/modal.vue');
   var SearchBox = require('../../../components/search-box.vue');
+  var locales = require('../../../consts/locales');
   var _ = require('lodash');
 
   module.exports = {
@@ -137,12 +139,7 @@
         sortOrders: sortOrders,
         searching: false,
         visibility: 'all',
-        visibilityOptions: [
-          { label: '全部', value: 'all' },
-          { label: '在线', value: 'online' },
-          { label: '激活', value: 'active' },
-          { label: '未激活', value: 'inactive' }
-        ],
+        visibilityOptions: locales[Vue.config.lang].visibilityOptions,
         devices: [],
         total: 0,
         currentPage: 1,
@@ -288,11 +285,11 @@
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
           if (!/text\/\w+/.test(file.type)) {
-            alert(file.name + '不是文本文件不能上传');
+            alert(file.name + self.$t('upload.type_tips'));
             return false;
           }
           reader.onerror = function (evt) {
-            alert('文件读取失败。');
+            alert(self.$t('upload.read_err'));
           };
           this.importing = true;
           // 读取完成
@@ -309,7 +306,7 @@
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
-                    alert('设备导入成功!');
+                    alert(self.$t('upload.success_msg'));
                     self.getDevices();
                   }
                   self.importing = false;
@@ -322,7 +319,7 @@
           };
           reader.readAsText(file);
         } else {
-          alert('您的浏览器过于低级，不支持 HTML5 上传');
+          alert(self.$t('upload.compatiblity'));
         }
       }
     }

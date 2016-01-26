@@ -2,11 +2,11 @@
 div
   .panel
     .panel-hd
-      h2 趋势
+      h2 {{ $t("statistic.trends") }}
       .leftbox
         v-select(:options="productsOptions", :value.sync="productId", @select="getProductData")
         radio-group(:items="periods", :value.sync="period")
-          span.label(slot="label") 最近
+          span.label(slot="label") {{ $t("common.recent") }}
     .panel-bd
       .row
         .col-13
@@ -16,26 +16,26 @@ div
             .item
               .cont
                 .num {{productSummary.total}}
-                .label 总设备量
+                .label {{ $t("statistic.products.total") }}
             .item
               .cont
                 .num {{productSummary.activated}}
-                .label 激活数
+                .label {{ $t("statistic.products.activated") }}
             .item.no-border
               .cont
                 .num {{productSummary.online}}
-                .label 当前在线
+                .label {{ $t("statistic.products.online") }}
             .item.no-border
               .cont
                 .num 0
                 .label
-                  span 活跃设备
+                  span {{ $t("statistic.products.active") }}
                   .tips
                     i.fa.fa-question-circle(@mouseover="showTooltip = true", @mouseout="showTooltip = false")
-                    .tooltip(v-show="showTooltip") 指日活跃设备
+                    .tooltip(v-show="showTooltip") {{ $t("statistic.products.active_tips") }}
   .panel
     .panel-hd
-      h2 区域分布
+      h2 {{ $t("statistic.regions") }}
       .leftbox
         radio-group(:items="regions", :value.sync="region", @select="drawProducRegion")
     .panel-bd
@@ -45,10 +45,10 @@ div
         table.table.table-bordered.table-stripe
           thead
             tr
-              th 地区
-              th 活跃设备
-              th 设备量
-              th 占比
+              th {{ $t("statistic.district") }}
+              th {{ $t("statistic.products.active") }}
+              th {{ $t("statistic.products.sum") }}
+              th {{ $t("statistic.percentage") }}
           tbody
             tr(v-for="item in regionData")
               td {{item.name}}
@@ -58,9 +58,10 @@ div
 </template>
 
 <script>
+  var Vue = require('vue');
   var RadioGroup = require('../../components/radio-group.vue');
   var Select = require('../../components/select.vue');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var api = require('../../api');
   var dateFormat = require('date-format');
   var echarts = require('echarts/echarts');
@@ -87,9 +88,9 @@ div
         productId: '',
         productsOptions: [],
         period: 7,
-        periods: config.periods,
+        periods: locales[Vue.config.lang].periods,
         region: 'world',
-        regions: config.regions,
+        regions: locales[Vue.config.lang].regions,
         productRegion: {},
         regionData: [],
         showTooltip: false
@@ -174,7 +175,7 @@ div
             // 趋势图表
             var trendOptions = {
               noDataLoadingOption: {
-                text: '暂无数据',
+                text: self.$t('common.no_data'),
                 effect: '',
                 effectOption: {
                   backgroundColor: '#FFF'
@@ -196,7 +197,7 @@ div
               legend: {
                 x: 'right',
                 y: 10,
-                data: ['总设备量', '活跃设备', '激活设备']
+                data: [self.$t('statistic.products.total'), self.$t('statistic.products.active'), self.$t('statistic.products.activated')]
               },
               xAxis: [{
                 type: 'category',
@@ -207,11 +208,11 @@ div
                 type: 'value'
               }],
               series: [{
-                name: '活跃设备',
+                name: self.$t('statistic.products.active'),
                 type: 'line',
                 data: activeTrends
               }, {
-                name: '激活设备',
+                name: self.$t('statistic.products.activated'),
                 type: 'line',
                 data: activatedTrends
               }]
@@ -255,13 +256,13 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '活跃设备<br/>' + params.name + ': ' + value;
+                    return self.$t('statistic.products.active') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 dataRange: {
                   min: 0,
                   max: worldMax,
-                  text: ['高', '低'],
+                  text: [self.$t('common.high'), self.$t('common.low')],
                   realtime: false,
                   calculable: true,
                   color: ['orangered', 'yellow', 'lightskyblue']
@@ -281,7 +282,7 @@ div
             } else {
               var curIndx = 0;
               var option;
-              var mapType = config.mapType;
+              var mapType = locales[Vue.config.lang].mapType;
 
               var chinaData = [];
               var chinaMax = 0;
@@ -345,23 +346,23 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '活跃设备<br/>' + params.name + ': ' + value;
+                    return self.$t('statistic.products.active') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
                   x: 'right',
-                  data: ['活跃设备']
+                  data: [self.$t('statistic.products.active')]
                 },
                 dataRange: {
                   min: 0,
                   max: chinaMax,
                   color: ['orange', 'yellow'],
-                  text: ['高', '低'],           // 文本，默认为数值文本
+                  text: [self.$t('common.high'), self.$t('common.low')],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
-                  name: '活跃设备',
+                  name: self.$t('statistic.products.active'),
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',

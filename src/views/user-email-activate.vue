@@ -5,19 +5,19 @@ div
     .form-cont.reset-password-success
       .alert.alert-success
         .fa.fa-check-circle-o
-        h2 激活成功
-        p 您的帐号已成功激活。
+        h2 {{ $t("auth.activate_success") }}
+        p {{ $t("auth.activate_success_msg") }}
       .form-footer
-        | 2015 &copy; 广州云湾信息技术有限公司.
+        | 2015 &copy; {{ $t("common.company") }}.
   .form.form-auth.form-member-activate(v-show="activateFail")
     .form-logo
     .form-cont.reset-password-success
       .alert.alert-success
         .fa.fa-times-circle-o
-        h2 激活失败
-        p 该邮件验证码已失效。
+        h2 {{ $t("auth.activate_fail") }}
+        p {{ $t("auth.activate_fail_msg") }}
       .form-footer
-        | 2015 &copy; 广州云湾信息技术有限公司.
+        | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
 <style lang="stylus">

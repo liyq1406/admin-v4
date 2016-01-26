@@ -13,33 +13,33 @@ div
                 | {{ product.name }}
                 a.fa.fa-edit(href="#", @click.prevent="editProduct")
               p
-                em 产品描述：
+                em {{ $t("overview.desc") }}:
                 span {{ product.description }}
               p
-                em 产品PID：
+                em {{ $t("overview.pid") }}:
                 span {{ product.id }}
               p
-                em 产品密钥：
+                em {{ $t("overview.key") }}:
                 span
-                  a.hl-red(href="#", @click.prevent="showProductKey") 查看密钥
+                  a.hl-red(href="#", @click.prevent="showProductKey") {{ $t("overview.show_key") }}
               .actions
                 button.btn.btn-primary(@click="showAddModal = true")
                   i.fa.fa-plus
-                  | 添加设备
+                  | {{ $t("overview.add_device") }}
                 label.btn.btn-primary.btn-upload(:class="{'disabled':importing}")
                   input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
                   i.fa.fa-reply-all
-                  | {{importing ? '处理中...' : '导入设备'}}
+                  | {{importing ? $t("common.handling") : $t("overview.import_devices")}}
             .col-11.status
               .status-item
                 em {{productSummary.online}}
-                span 当前在线
+                span {{ $t("overview.statistic.online") }}
               .status-item
                 em {{productSummary.activated}}
-                span 激活数
+                span {{ $t("overview.statistic.activated") }}
               .status-item
                 em {{productSummary.total}}
-                span 设备数
+                span {{ $t("overview.statistic.total") }}
       // Start: 产品简介
 
   .row
@@ -48,11 +48,11 @@ div
       .panel
         .panel-hd
           radio-group(:items="periods", :value.sync="period", @select="getProductTrends")
-            span.label(slot="label") 最近
-          h2 趋势
+            span.label(slot="label") {{ $t("common.recent")}}
+          h2 {{ $t("overview.trends")}}
         .panel-bd
           #trendChart(style="height:320px", v-if="trends.length")
-          .trend-null(v-else) 暂无数据
+          .trend-null(v-else) {{ $t("common.no_data")}}
       // End: 趋势
 
     .col-10
@@ -60,37 +60,37 @@ div
       .panel
         .panel-hd
           radio-group(:items="regions", :value.sync="region", @select="getProductRegion")
-          h2 设备分布
+          h2 {{ $t("overview.regions")}}
         .panel-bd
           #regionChart(style="height:320px; overflow:hidden;")
       // End: 设备分布
 
   modal(:show.sync="showEditModal")
-    h3(slot="header") 编辑产品
+    h3(slot="header") {{ $t("overview.editForm.header")}}
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
         .form-row
-          label.form-control 产品名称：
+          label.form-control {{ $t("product.fields.name")}}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入产品名称'")
+            .input-text-wrap(v-placeholder="$t('product.placeholders.name')")
               input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-              span(v-if="editValidation.name.$error.required") 请输入产品名称
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
             .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-              span(v-if="editValidation.name.$error.required") 请输入产品名称
-              span(v-if="editValidation.name.$error.maxlength") 产品名称最大不能超过32位
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
+              span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}
         .form-row
-          label.form-control 产品描述：
+          label.form-control {{ $t("product.fields.desc")}}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入产品描述'")
+            .input-text-wrap(v-placeholder="$t('product.placeholders.desc')")
               textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
-              span(v-if="editValidation.description.$error.required") 请输入产品描述
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
             .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
-              span(v-if="editValidation.description.$error.required") 请输入产品描述
-              span(v-if="editValidation.description.$error.maxlength") 产品描述最大不能超过250字
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
+              span(v-if="editValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('product.fields.desc'), 250]) }}
         .form-row
-          label.form-control 设备类型：
+          label.form-control {{ $t("product.fields.link_type")}}:
           .controls
             .select
               select(v-model="editModel.link_type", v-form-ctrl, name="link_type")
@@ -100,41 +100,42 @@ div
             .checkbox-group
               label.checkbox
                 input(type="checkbox", name="is_registerable", v-model="editModel.is_registerable")
-                | 允许用户注册设备
+                | {{ $t("product.fields.is_registerable")}}
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除产品
+            | {{ $t("overview.editForm.del")}}
           label.del-check
             input(type="checkbox", name="is_release", v-model="editModel.is_release")
-            | 发布产品
-          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+            | {{ $t("product.fields.is_release")}}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 
   // 添加设备浮层
   modal(:show.sync="showAddModal")
-    h3(slot="header") 添加设备
+    h3(slot="header") {{ $t("overview.add_device")}}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
         .form-row
-          label.form-control MAC地址：
+          label.form-control {{ $t("overview.addForm.mac")}}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入MAC地址'")
+            .input-text-wrap(v-placeholder="$t('overview.addForm.mac_placeholder')")
               input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
-              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')}) }}
             .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
-              span(v-if="addValidation.mac.$error.required") 请输入MAC地址
+              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')}) }}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
   modal(:show.sync="showKeyModal")
-    h3(slot="header") 产品密钥
+    h3(slot="header") {{ $t("overview.key")}}
     .product-key.tac(slot="body") {{productKey}}
 </template>
 
 <script>
+  var Vue = require('vue');
   var RadioGroup = require('../../components/radio-group.vue');
   var Modal = require('../../components/modal.vue');
   var productsStore = require('../../stores/products');
@@ -145,7 +146,7 @@ div
   require('echarts/chart/line');
   require('echarts/chart/map');
   var ecConfig = require('echarts/config');
-  var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
 
   module.exports = {
     name: 'Overview',
@@ -166,7 +167,7 @@ div
 
     data: function () {
       return {
-        deviceTypes: config.deviceTypes,
+        deviceTypes: locales[Vue.config.lang].deviceTypes,
         product: {},
         trends: [],
         productSummary: {
@@ -175,9 +176,9 @@ div
           total: 0
         },
         period: 7,
-        periods: config.periods,
+        periods: locales[Vue.config.lang].periods,
         region: 'world',
-        regions: config.regions,
+        regions: locales[Vue.config.lang].regions,
         showEditModal: false,
         showAddModal: false,
         showKeyModal: false,
@@ -269,7 +270,7 @@ div
               legend: {
                 x: 'right',
                 y: 10,
-                data: ['活跃设备', '激活设备']
+                data: [self.$t('overview.active_devices'), self.$t('overview.activated_devices')]
               },
               xAxis: [{
                 type: 'category',
@@ -280,11 +281,11 @@ div
                 type: 'value'
               }],
               series: [{
-                name: '活跃设备',
+                name: self.$t('overview.active_devices'),
                 type: 'line',
                 data: activeTrends
               }, {
-                name: '激活设备',
+                name: self.$t('overview.activated_devices'),
                 type: 'line',
                 data: activatedTrends
               }]
@@ -328,13 +329,13 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '设备数<br/>' + params.name + ': ' + value;
+                    return self.$t('overview.statistic.total') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 dataRange: {
                   min: 0,
                   max: worldMax,
-                  text: ['高', '低'],
+                  text: [self.$t('common.high'), self.$t('common.low')],
                   realtime: false,
                   calculable: true,
                   color: ['orangered', 'yellow', 'lightskyblue']
@@ -354,7 +355,7 @@ div
             } else {
               var curIndx = 0;
               var option;
-              var mapType = config.mapType;
+              var mapType = locales[Vue.config.lang].mapType;
 
               var chinaData = [];
               var chinaMax = 0;
@@ -416,23 +417,23 @@ div
                     if (value[0] === '-') {
                       value = 0;
                     }
-                    return '设备数<br/>' + params.name + ': ' + value;
+                    return self.$t('overview.statistic.total') + '<br/>' + params.name + ': ' + value;
                   }
                 },
                 legend: {
                   orient: 'vertical',
                   x: 'right',
-                  data: ['设备数']
+                  data: [self.$t('overview.statistic.total')]
                 },
                 dataRange: {
                   min: 0,
                   max: chinaMax,
                   color: ['orange', 'yellow'],
-                  text: ['高', '低'],           // 文本，默认为数值文本
+                  text: [self.$t('common.high'), self.$t('common.low')],           // 文本，默认为数值文本
                   calculable: true
                 },
                 series: [{
-                  name: '设备数',
+                  name: self.$t('overview.statistic.total'),
                   type: 'map',
                   mapType: 'china',
                   selectedMode: 'single',
@@ -589,11 +590,11 @@ div
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
           if (!/text\/\w+/.test(file.type)) {
-            alert(file.name + '不是文本文件不能上传');
+            alert(file.name + self.$t('upload.type_tips'));
             return false;
           }
           reader.onerror = function (evt) {
-            alert('文件读取失败。');
+            alert(self.$t('upload.read_err'));
           };
           this.importing = true;
           // 读取完成
@@ -610,7 +611,7 @@ div
               api.corp.refreshToken().then(function () {
                 api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
                   if (status === 200) {
-                    alert('设备导入成功!');
+                    alert(self.$t('upload.success_msg'));
                   }
                   self.getSummary().then(function (data) {
                     self.productSummary = data;
@@ -625,7 +626,7 @@ div
           };
           reader.readAsText(file);
         } else {
-          alert('您的浏览器过于低级，不支持 HTML5 上传');
+          alert(self.$t('upload.compatiblity'));
         }
       }
     }

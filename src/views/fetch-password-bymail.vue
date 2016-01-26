@@ -4,23 +4,23 @@
     a.fa.fa-chevron-circle-left.link-return(v-link="{path: '/login'}")
   form.form-cont(v-form, name="validation", @submit.prevent="onSubmit")
     .form-header
-      a(v-link="{ path: '/fetch-password' }") 手机找回
-      span 邮箱找回
+      a(v-link="{ path: '/fetch-password' }") {{ $t("auth.by_phone") }}
+      span {{ $t("auth.by_mail") }}
     .form-body
-      .form-hints 请输入您的注册邮箱，我们会将重设密码的链接发到您的邮箱中。
+      .form-hints {{ $t("auth.by_mail_tips") }}
       .form-row
       .form-row
-        .input-text-wrap(v-placeholder="'电子邮箱'")
+        .input-text-wrap(v-placeholder="$t('auth.fields.email')")
           input.input-text(type="email", v-model="model.email", v-form-ctrl, name="email", required, lazy)
         .form-tips.form-tips-error(v-if="validation.email.$dirty")
-          span(v-if="validation.email.$error.required") 请输入您的电子邮件地址
-          span(v-if="validation.email.$error.email") 电子邮件地址格式不正确
+          span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('auth.fields.email')}) }}
+          span(v-if="validation.email.$error.email") {{ $t('validation.format', {field: $t('auth.fields.email')}) }}
         .form-tips.form-tips-success(v-if="sendSuccess")
-          span 一封找回密码的邮件已发送到您的邮箱，请查收
+          span {{ $t("auth.by_mail_success_msg") }}
       .form-actions
-        button.btn.btn-primary.btn-block(type="submit") 确定
+        button.btn.btn-primary.btn-block(type="submit") {{ $t("common.ok") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
 <script>

@@ -3,7 +3,7 @@ section.main-wrap
   .main
     .panel
       .panel-hd
-        h2 数据管理
+        h2 {{ $t("nav_aside.data") }}
       .panel-bd
         tab(:nav="secondaryNav")
     router-view(class="view", transition="view", transition-mode="out-in")
@@ -29,7 +29,7 @@ section.main-wrap
       data: function () {
         return {
           secondaryNav: [{
-            label: '数据表',
+            label: this.$t('sub_nav.data.tables'),
             link: { path: '/data/tables' }
           }, {
             label: 'API',

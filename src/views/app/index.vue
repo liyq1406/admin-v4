@@ -3,24 +3,24 @@ section.main-wrap
   .main
     .panel
       .panel-hd
-        h2 应用管理
+        h2 {{ $t("nav_aside.apps") }}
       .panel-bd
         //- 操作栏
         .action-bar
           .action-group
             button.btn.btn-success(@click="showAddModal = true")
               i.fa.fa-plus
-              | 新建应用
+              | {{ $t("app.create_app") }}
 
         //- 数据
         table.table.table-stripe.table-bordered
           thead
             tr
-              th 应用ID
-              th 应用名称
-              th 应用类型
-              th 创建时间
-              th.tac 操作
+              th {{ $t("app.fields.id") }}
+              th {{ $t("app.fields.name") }}
+              th {{ $t("app.fields.type") }}
+              th {{ $t("app.fields.create_time") }}
+              th.tac {{ $t("common.action") }}
           tbody
             template(v-if="apps.length > 0 && !loadingApps")
               tr(v-for="app in apps")
@@ -29,99 +29,100 @@ section.main-wrap
                 td {{app.type | typeLabel}}
                 td {{app.create_time | formatDate}}
                 td.tac
-                  button.btn.btn-link.btn-sm(@click="onEditApp(app)") 编辑
+                  button.btn.btn-link.btn-sm(@click="onEditApp(app)") {{ $t("common.edit") }}
             tr(v-if="loadingApps")
               td.tac(colspan="5")
                 .tips-null
                   i.fa.fa-refresh.fa-spin
-                  span 数据加载中...
+                  span {{ $t("common.data_loading") }}
             tr(v-if="apps.length === 0 && !loadingApps")
               td.tac(colspan="5")
                 .tips-null
-                  span 暂无相关记录
+                  span {{ $t("common.no_records") }}
 
   // 添加应用浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
-    h3(slot="header") 添加应用
+    h3(slot="header") {{ $t("app.create_app") }}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addAppHook")
         .form-row
-          label.form-control 应用名称：
+          label.form-control {{ $t("app.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入应用名称'")
+            .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
               input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
-              span(v-if="addValidation.name.$error.required") 请输入应用名称
+              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
             .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
-              span(v-if="addValidation.name.$error.required") 请输入应用名称
-              span(v-if="addValidation.name.$error.maxlength") 应用名称不能少于2个字符
-              span(v-if="addValidation.name.$error.maxlength") 应用名称不能超过32个字符
+              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
         .form-row
-          label.form-control 应用类型：
+          label.form-control {{ $t("app.fields.type") }}:
           .controls
             .radio-group.radio-group-v
               label.radio(v-for="type in appTypes")
                 input(type="radio", v-model="addModel.type", name="type", :value="$index+1", :disabled="type.disabled")
                 | {{type.label}}
         .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
   // 编辑应用浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
     //- h3(slot="header") 编辑应用({{editModel.type | typeLabel}})
-    h3(slot="header") 编辑应用 ({{editModel.type | typeLabel}})
+    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type | typeLabel}})
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editAppHook")
         .form-row
-          label.form-control 应用名称：
+          label.form-control {{ $t("app.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入应用名称'")
+            .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
               input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-              span(v-if="editValidation.name.$error.required") 请输入应用名称
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
             .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-              span(v-if="editValidation.name.$error.required") 请输入应用名称
-              span(v-if="editValidation.name.$error.maxlength") 应用名称不能少于2个字符
-              span(v-if="editValidation.name.$error.maxlength") 应用名称不能超过32个字符
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+              span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+              span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
         .form-row
-          label.form-control 消息通知：
+          label.form-control {{ $t("app.inform") }}:
           .controls
             .checkbox-group
               label.checkbox
                 input(type="checkbox", name="apn_enable", v-model="editModel.apn_enable")
-                | 启用苹果APN服务
+                | {{ $t("app.fields.apn_enable") }}
         .form-row(v-show="editModel.apn_enable")
-          label.form-control APN授权文件：
+          label.form-control {{ $t("app.apn_file") }}:
           .controls
             label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
               input(type="file", v-el:edit-apn-file, name="apnFile", @change.prevent="uploadApn('editModel', 'editApnFile', $event)", :disabled="uploading")
               i.fa.fa-reply-all
-              | {{uploading ? '文件上传中，请稍等...' : '上传P12文件'}}
+              | {{uploading ? $t('app.uploading') : $t('app.upload') }}
             .form-tips.mt5(v-if="editModel.apn_license_url") url: {{editModel.apn_license_url}}
         .form-row(v-show="editModel.apn_enable")
-          label.form-control 文件密码：
+          label.form-control {{ $t("app.fields.apn_license_pwd") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请输入授权文件的密码'")
+            .input-text-wrap(v-placeholder="$t('app.placeholders.apn_license_pwd')")
               input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
         .form-row.without-label(v-show="editModel.apn_enable")
           .controls
             .checkbox-group
               label.checkbox
                 input(type="checkbox", name="apn_license_production", v-model="editModel.apn_license_production")
-                | 正式发布APN密钥文件
+                | {{ $t("app.is_release") }}
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除应用
-          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+            | {{ $t("app.del_app") }}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
+  var Vue = require('vue');
+  var locales = require('../../consts/locales');
   var api = require('../../api');
   var Modal = require('../../components/modal.vue');
-  var config = require('../../consts/config');
   var _ = require('lodash');
 
   module.exports = {
@@ -134,7 +135,7 @@ section.main-wrap
     data: function () {
       return {
         apps: [],
-        appTypes: config.appTypes,
+        appTypes: locales[Vue.config.lang].app.types,
         showAddModal: false,
         showEditModal: false,
         addModel: {
@@ -289,14 +290,14 @@ section.main-wrap
         var input = event.target;
 
         if (file && file.size > 1024 * 1024) {
-          alert('文件大小不能大于1MB');
+          alert(self.$t('task.file_size_msg'));
           return;
         }
 
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new FileReader();
           reader.onerror = function (evt) {
-            alert('文件读取失败。');
+            alert(self.$t('upload.read_err'));
           };
           // 读取完成
           reader.onloadend = function (evt) {
@@ -319,7 +320,7 @@ section.main-wrap
           };
           reader.readAsArrayBuffer(file);
         } else {
-          alert('您的浏览器过于低级，不支持 HTML5 上传');
+          alert(self.$t('upload.compatiblity'));
         }
       }
     }

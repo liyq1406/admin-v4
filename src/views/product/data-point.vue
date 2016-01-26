@@ -7,18 +7,18 @@ div
         .action-group
           button.btn.btn-success(@click="showAddModal = true")
             i.fa.fa-plus
-            | 添加数据端点
+            | {{ $t("datapoint.add_datapoint") }}
 
       //- 数据端点列表
       table.table.table-stripe.table-bordered
         thead
           tr
-            th 索引
-            th 变量名
-            th 数据类型
-            th 单位符号
-            th 描述
-            th.tac 操作
+            th {{ $t("datapoint.fields.index") }}
+            th {{ $t("datapoint.fields.name") }}
+            th {{ $t("datapoint.fields.type") }}
+            th {{ $t("datapoint.fields.symbol") }}
+            th {{ $t("datapoint.fields.description") }}
+            th.tac {{ $t("common.action") }}
         tbody
           template(v-if="datapoints.length > 0 && !loadingData")
             tr(v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount")
@@ -28,132 +28,132 @@ div
               td {{* datapoint.symbol}}
               td {{* datapoint.description}}
               td.tac
-                button.btn-link(@click="editDataPoint(datapoint)") 编辑
+                button.btn-link(@click="editDataPoint(datapoint)") {{ $t("common.edit") }}
           tr(v-if="loadingData")
             td.tac(colspan="6")
               .tips-null
                 i.fa.fa-refresh.fa-spin
-                span 数据加载中...
+                span {{ $t("common.data_loading") }}
           tr(v-if="datapoints.length === 0 && !loadingData")
             td.tac(colspan="6")
               .tips-null
-                span 暂无相关记录
+                span {{ $t("common.no_records") }}
       pager(v-if="!loadingData", :total="datapoints.length", :current.sync="currentPage", :page-count="pageCount")
 
   // 添加数据端点浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
-    h3(slot="header") 添加数据端点
+    h3(slot="header") {{ $t("datapoint.add_datapoint") }}
     .form(slot="body")
       form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
         .form-row
-          label.form-control 索引：
+          label.form-control {{ $t("datapoint.fields.index") }}:
           .controls
-            .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.index')")
               input.input-text(v-model="addModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic", lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.index.$pristine")
-              span(v-if="addValidation.index.$error.required") 请输入数据端点索引
+              span(v-if="addValidation.index.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}
             .form-tips.form-tips-error(v-if="addValidation.index.$dirty")
-              span(v-if="addValidation.index.$error.required") 请输入数据端点索引
-              span(v-if="addValidation.index.$error.customValidator") 数据端点索引应为不超过32位的整数
+              span(v-if="addValidation.index.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}
+              span(v-if="addValidation.index.$error.customValidator") {{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}
         .form-row
-          label.form-control 变量名：
+          label.form-control {{ $t("datapoint.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'英文、数字或下划线'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.name')")
               input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
-              span(v-if="addValidation.name.$error.required") 请输入数据端点名称
+              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}
             .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
-              span(v-if="addValidation.name.$error.required") 请输入数据端点名称
-              span(v-if="addValidation.name.$error.maxlength") 数据端点名称最大不能超过32位
+              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}
+              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}
         .form-row
-          label.form-control 数据类型：
+          label.form-control {{ $t("datapoint.fields.type") }}:
           .controls
             .select
               select(v-model="addModel.type", v-form-ctrl, name="type")
                 option(v-for="type in datapointTypes", :value="$index + 1", :selected="$index===0") {{type}}
         .form-row
-          label.form-control 单位符号：
+          label.form-control {{ $t("datapoint.fields.symbol") }}:
           .controls
-            .input-text-wrap(v-placeholder="'例如：℃'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.symbol')")
               textarea.input-text(v-model="addModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.symbol.$pristine")
-              span(v-if="addValidation.symbol.$error.required") 请输入单位符号
+              span(v-if="addValidation.symbol.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}
             .form-tips.form-tips-error(v-if="addValidation.symbol.$dirty")
-              span(v-if="addValidation.symbol.$error.required") 请输入单位符号
-              span(v-if="addValidation.symbol.$error.maxlength") 单位符号最大不能超过10字符
+              span(v-if="addValidation.symbol.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}
+              span(v-if="addValidation.symbol.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])
         .form-row
-          label.form-control 描述：
+          label.form-control {{ $t("datapoint.fields.description") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请填写数据端点描述'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.description')")
               textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="addValidation.$submitted&& addValidation.description.$pristine")
-              span(v-if="addValidation.description.$error.required") 请输入数据端点描述
+              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}
             .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
-              span(v-if="addValidation.description.$error.required") 请输入数据端点描述
-              span(v-if="addValidation.description.$error.maxlength") 产品描述最大不能超过250字符
+              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}
+              span(v-if="addValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.description'), 250])
 
         .form-actions
-          button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? '处理中...' : '确定'")
+          button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
   // 编辑数据端点浮层
   modal(:show.sync="showEditModal")
-    h3(slot="header") 编辑数据端点
+    h3(slot="header") {{ $t("datapoint.edit_datapoint") }}
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
         .form-row
-          label.form-control 索引：
+          label.form-control {{ $t("datapoint.fields.index") }}:
           .controls
-            .input-text-wrap(v-placeholder="'数据端点索引不能重复'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.index')")
               input.input-text(v-model="editModel.index", type="text", v-form-ctrl, name="index", required, custom-validator="numberic", lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.index.$pristine")
-              span(v-if="editValidation.index.$error.required") 请输入数据端点索引
+              span(v-if="editValidation.index.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}
             .form-tips.form-tips-error(v-if="editValidation.index.$dirty")
-              span(v-if="editValidation.index.$error.required") 请输入数据端点索引
-              span(v-if="editValidation.index.$error.customValidator") 数据端点索引应为不超过32位的整数
+              span(v-if="editValidation.index.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}
+              span(v-if="editValidation.index.$error.customValidator") {{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}
         .form-row
-          label.form-control 变量名：
+          label.form-control {{ $t("datapoint.fields.name") }}:
           .controls
-            .input-text-wrap(v-placeholder="'英文、数字或下划线'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.name')")
               input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-              span(v-if="editValidation.name.$error.required") 请输入数据端点名称
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}
             .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-              span(v-if="editValidation.name.$error.required") 请输入数据端点名称
-              span(v-if="editValidation.name.$error.maxlength") 数据端点名称最大不能超过32位
+              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}
+              span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}
         .form-row
-          label.form-control 数据类型：
+          label.form-control {{ $t("datapoint.fields.type") }}:
           .controls
             .select
               select(v-model="editModel.type", v-form-ctrl, name="type")
                 option(v-for="type in datapointTypes", :value="$index + 1") {{type}}
         .form-row
-          label.form-control 单位符号：
+          label.form-control {{ $t("datapoint.fields.symbol") }}:
           .controls
-            .input-text-wrap(v-placeholder="'例如：℃'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.symbol')")
               textarea.input-text(v-model="editModel.symbol", type="text", v-form-ctrl, name="symbol", maxlength="10", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.symbol.$pristine")
-              span(v-if="editValidation.symbol.$error.required") 请输入单位符号
+              span(v-if="editValidation.symbol.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}
             .form-tips.form-tips-error(v-if="editValidation.symbol.$dirty")
-              span(v-if="editValidation.symbol.$error.required") 请输入单位符号
-              span(v-if="editValidation.symbol.$error.maxlength") 单位符号最大不能超过10字符
+              span(v-if="editValidation.symbol.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}
+              span(v-if="editValidation.symbol.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])
         .form-row
-          label.form-control 描述：
+          label.form-control {{ $t("datapoint.fields.description") }}:
           .controls
-            .input-text-wrap(v-placeholder="'请填写数据端点描述'")
+            .input-text-wrap(v-placeholder="$t('datapoint.placeholders.description')")
               textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
             .form-tips.form-tips-error(v-if="editValidation.$submitted&& editValidation.description.$pristine")
-              span(v-if="editValidation.description.$error.required") 请输入数据端点描述
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}
             .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
-              span(v-if="editValidation.description.$error.required") 请输入数据端点描述
-              span(v-if="editValidation.description.$error.maxlength") 产品描述最大不能超过250字符
+              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}
+              span(v-if="editValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('datapoint.fields.description'), 250])
 
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
-            | 删除数据端点
-          button.btn.btn-default(@click.prevent.stop="onEditCancel") 取消
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? '处理中...' : '确定'")
+            | {{ $t('datapoint.del_datapoint') }}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>

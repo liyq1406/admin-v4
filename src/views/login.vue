@@ -3,32 +3,32 @@
   .form-logo
   form.form-cont(v-form, name="validation", @submit.prevent="onSubmit", hook="loginFormHook")
     .form-header
-      span 登录帐号
-      a(v-link="{ path: '/register' }") 注册帐号
+      span {{ $t("auth.login") }}
+      a(v-link="{ path: '/register' }") {{ $t("auth.register") }}
     .form-body
       .form-row
-        .input-text-wrap(v-placeholder="'邮箱/手机号'")
+        .input-text-wrap(v-placeholder="$t('auth.email_phone')")
           input.input-text(type="text", v-model="model.account", v-form-ctrl, name="account", required, lazy)
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.account.$pristine")
-          span(v-if="validation.account.$error.required") 请输入您的登录帐号
+          span(v-if="validation.account.$error.required") {{ $t('validation.required', {field: $t('auth.fields.account')}) }}
         .form-tips.form-tips-error(v-if="validation.account.$dirty")
-          span(v-if="validation.account.$error.required") 请输入您的登录帐号
+          span(v-if="validation.account.$error.required") {{ $t('validation.required', {field: $t('auth.fields.account')}) }}
       .form-row
-        .input-text-wrap(v-placeholder="'密码'")
+        .input-text-wrap(v-placeholder="$t('auth.password')")
           input.input-text(type="password", v-model="model.password", v-form-ctrl, name="password", required, lazy)
         .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-          span(v-if="validation.password.$error.required") 请输入密码
+          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
         .form-tips.form-tips-error(v-if="validation.password.$dirty")
-          span(v-if="validation.password.$error.required") 请输入密码
+          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
       .operations
-        a.fetch-password(v-link="{ path: '/fetch-password-bymail' }") 忘记密码?
+        a.fetch-password(v-link="{ path: '/fetch-password-bymail' }") {{ $t("auth.forget") }}
         label.remember-password
           input(type="checkbox", v-model="rememberPwd")
-          span 记住密码
+          span {{ $t("auth.remember") }}
       .form-actions
-        button.btn.btn-primary.btn-block(@keyup.enter="onSubmit", :disabled="logining", :class="{'disabled':logining}", v-text="logining ? '登录中...' : '登录'") 登录
+        button.btn.btn-primary.btn-block(@keyup.enter="onSubmit", :disabled="logining", :class="{'disabled':logining}", v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')") {{ $t("auth.login_submit") }}
     .form-footer
-      | 2015 &copy; 广州云湾信息技术有限公司.
+      | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
 <style lang="stylus">

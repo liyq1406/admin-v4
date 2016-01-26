@@ -41,11 +41,11 @@ section.main-wrap
               td.tac(colspan="6")
                 .tips-null
                   i.fa.fa-refresh.fa-spin
-                  span 数据加载中...
+                  span {{ $t("common.data_loading") }}
             tr(v-if="total === 0 && !loadingData")
               td.tac(colspan="6")
                 .tips-null
-                  span 暂无相关记录
+                  span {{ $t("common.no_records") }}
         pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
 </template>
 
