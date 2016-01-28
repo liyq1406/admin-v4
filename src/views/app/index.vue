@@ -54,7 +54,7 @@ section.main-wrap
               span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
             .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
               span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
-              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+              span(v-if="addValidation.name.$error.minlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
               span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
         .form-row
           label.form-control {{ $t("app.fields.type") }}:
@@ -72,7 +72,7 @@ section.main-wrap
     //- h3(slot="header") 编辑应用({{editModel.type | typeLabel}})
     h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type | typeLabel}})
     .form(slot="body")
-      form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editAppHook")
+      form(v-form, name="editValidation", @submit.prevent="onEditSubmit(editModel)", hook="editAppHook")
         .form-row
           label.form-control {{ $t("app.fields.name") }}:
           .controls
@@ -138,21 +138,23 @@ section.main-wrap
         appTypes: locales[Vue.config.lang].app.types,
         showAddModal: false,
         showEditModal: false,
+        showEditModal4: false,
         addModel: {
           name: '',
-          type: 1,
-          apn_enable: false,
-          apn_license_url: '',
-          apn_license_pwd: '',
-          apn_license_production: false
+          type: 1
         },
         editModel: {
           type: 1
         },
+        editModel4: {
+          type: 1
+        },
         originAddModel: {},
         originEditModel: {},
+        originEditModel4: {},
         addValidation: {},
         editValidation: {},
+        editValidation4: {},
         adding: false,
         editing: false,
         uploading: false,
@@ -195,6 +197,11 @@ section.main-wrap
         this.editForm = form;
       },
 
+      // 修改微信应用表单钩子
+      editAppHook4: function (form) {
+        this.editForm4 = form;
+      },
+
       // 关闭添加应用浮层并净化添加表单
       resetAdd: function () {
         var self = this;
@@ -214,6 +221,14 @@ section.main-wrap
         this.editModel = this.originEditModel;
       },
 
+      // 关闭微信编辑浮层并净化编辑表单
+      resetEdit4: function () {
+        this.editing = false;
+        this.showEditModal4 = false;
+        this.delChecked = false;
+        this.editModel4 = this.originEditModel4;
+      },
+
       // 取消添加
       onAddCancel: function () {
         this.resetAdd();
@@ -224,6 +239,20 @@ section.main-wrap
         var self = this;
 
         if (this.addValidation.$valid && !this.adding) {
+          if (self.addModel.type === 1) { // iOS应用
+            self.addModel.apn_enable = false;
+            self.addModel.apn_license_url = '';
+            self.addModel.apn_license_pwd = '';
+            self.addModel.apn_license_production = false;
+          } else if (self.addModel.type === 4) { // 微信应用
+            self.addModel.wechat = {};
+            self.addModel.wechat.id = '';
+            self.addModel.wechat.app_id = '';
+            self.addModel.wechat.app_secrect = '';
+            self.addModel.wechat.encrypt = 1;
+            self.addModel.wechat.key = '';
+            self.addModel.app_url = '';
+          }
           this.adding = true;
           api.corp.refreshToken().then(function () {
             api.app.create(self.addModel).then(function (data) {
@@ -240,8 +269,8 @@ section.main-wrap
       // 初始化应用编辑表单
       onEditApp: function (app) {
         this.showEditModal = true;
-        this.editModel = _.clone(app);
-        this.originEditModel = _.clone(app);
+        this.editModel = _.cloneDeep(app);
+        this.originEditModel = _.cloneDeep(app);
       },
 
       // 取消应用编辑
@@ -249,24 +278,33 @@ section.main-wrap
         this.resetEdit();
       },
 
+      // 取消微信应用编辑
+      onEditCancel4: function () {
+        this.resetEdit4();
+      },
+
       // 提交应用更新
-      onEditSubmit: function () {
+      onEditSubmit: function (model) {
         var self = this;
         if (this.delChecked && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {
-            api.app.remove(self.editModel.id).then(function (data) {
+            api.app.remove(model.id).then(function (data) {
               if (__DEBUG__) {
                 console.log(data);
               }
-              self.resetEdit();
+              if (model.type === 1) {
+                self.resetEdit();
+              } else if (model.type === 4) {
+                self.resetEdit4();
+              }
               self.getApps();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
             });
           });
-        } else if (this.editValidation.$valid && !this.editing) {
+        } else if (model.type === 1 && this.editValidation.$valid && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {
             api.app.update(self.editModel).then(function (data) {
@@ -275,6 +313,20 @@ section.main-wrap
               }
               self.getApps();
               self.resetEdit();
+            }).catch(function (error) {
+              self.handleError(error);
+              self.editing = false;
+            });
+          });
+        } else if (model.type === 4 && this.editValidation.$valid && !this.editing) {
+          this.editing = true;
+          api.corp.refreshToken().then(function () {
+            api.app.update(self.editModel4).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.getApps();
+              self.resetEdit4();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;

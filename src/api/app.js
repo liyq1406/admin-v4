@@ -44,10 +44,20 @@ module.exports = function (Vue, Promise, config) {
         var params = {};
         params.name = app.name;
         params.type = app.type;
-        params.apn_enable = app.apn_enable;
-        params.apn_license_url = app.apn_license_url;
-        params.apn_license_pwd = app.apn_license_pwd;
-        params.apn_license_production = app.apn_license_production;
+        if (app.type === 1) { // iOS应用
+          params.apn_enable = app.apn_enable;
+          params.apn_license_url = app.apn_license_url;
+          params.apn_license_pwd = app.apn_license_pwd;
+          params.apn_license_production = app.apn_license_production;
+        } else if (app.type === 4) { // 微信应用
+          params.wechat = {};
+          params.wechat.id = app.wechat.id; // 微信公众号中的微信号
+          params.wechat.app_id = app.wechat.app_id; // 微信公众号中的 appID
+          params.wechat.app_secrect = app.wechat.app_secrect; // 微信公众号的 appsecrect
+          params.wechat.encrypt = app.wechat.encrypt; // 消息加解密方式
+          params.wechat.key = app.wechat.key; // 43位 AESKey
+          params.app_url = app.app_url; // 云智易 APP 接收微信消息 URL
+        }
         Vue.http.put(
           config.apiRoot + '/developer/app/' + app.id,
           JSON.stringify(params),

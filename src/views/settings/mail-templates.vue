@@ -228,7 +228,7 @@ export default {
             name: '激活邮件英文模板',
             subject: 'Welcome to XLINK',
             sender: '',
-            content: '<p>Dear %username%，</p>\n\n<p>Welcome to register XLINK,please click the link below to activate your account.</p>\n\n<p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate<a></p>\n\n<p>(this link will be valid within 48 hours)<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p><br />\n\nXLINK<br />\n\n%date%</p>',
+            content: '<p>Dear %username%,</p>\n\n<p>Welcome to register XLINK,please click the link below to activate your account.</p>\n\n<p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate<a></p>\n\n<p>(this link will be valid within 48 hours)<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p><br />\n\nXLINK<br />\n\n%date%</p>',
             type: 1,
             lang: 'en-us'
           };
@@ -244,7 +244,7 @@ export default {
             name: '重置密码邮件英文模板',
             subject: 'Reset XLINK password?',
             sender: '',
-            content: '<p>Dear %username%，</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp;</p>\n\n<p><a href="http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-password-reset/</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
+            content: '<p>Dear %username%,</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp;</p>\n\n<p><a href="http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-password-reset/</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
             type: 2,
             lang: 'en-us'
           };
