@@ -52,7 +52,7 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
-     * 创建邮件模板
+     * 修改邮件模板
      * @return status
      */
     updateTemplate: function (id, params) {
