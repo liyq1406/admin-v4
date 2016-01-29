@@ -3,7 +3,7 @@
   .panel-bd
     //- 操作栏
     .action-bar
-      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
+      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices")
         button.btn.btn-primary(slot="search-button", @click="getDevices") {{ $t('common.search') }}
       .action-group
         button.btn.btn-success(@click="showAddModal = true")

@@ -86,7 +86,8 @@ module.exports = {
       status: '状态',
       online: '上线',
       offline: '下线',
-      not_set: '未设置'
+      not_set: '未设置',
+      wechat: '微信'
     },
 
     // 图表地区
@@ -703,13 +704,42 @@ module.exports = {
         creation_fail: '邮件模板创建失败',
         update_fail: '邮件模板修改失败'
       }
+    },
+
+    user: {
+      list: '用户列表',
+      details: '用户详情',
+      search_user: '查找用户',
+      devices_bound: '绑定设备列表',
+      no_devices_bound: '该用户未绑定任何设备',
+      ban_user: '停用该用户',
+      product_name: '产品名称',
+      device_mac: '设备mac',
+      device_status: '设备状态',
+      device_authorize_code: '认证码',
+      status: {
+        normal: '正常',
+        banned: '停用'
+      },
+      fields: {
+        id: '用户ID',
+        corp_id: '企业ID',
+        nick_name: '昵称',
+        phone: '手机号码',
+        account: '帐号',
+        create_time: '创建时间',
+        authorize_code: '用户认证码',
+        region_id: '所在区域ID',
+        source: '用户来源',
+        status: '状态'
+      }
     }
   },
 
   'en-us': {
     // 侧栏导航
     nav_aside: {
-      dashboard: 'Dashboard',
+      dashboard: '概览',
       products: '产品管理',
       apps: '应用管理',
       alerts: '告警服务',
@@ -1224,9 +1254,19 @@ module.exports = {
         { label: 'Web', disabled: true },
         { label: '微信', disabled: false }
       ],
+      encrypt_types: [
+        { label: '明文模式', info: '明文模式下，不使用消息体加解密功能，安全系数较低' },
+        { label: '兼容模式', info: '兼容模式下，明文、密文将共存，方便开发者调试和维护' },
+        { label: '安全模式（推荐）', info: '安全模式下，消息包为纯密文，需要开发者加密和解密，安全系数高' }
+      ],
       placeholders: {
         name: '请输入应用名称',
-        apn_license_pwd: '请输入授权文件的密码'
+        apn_license_pwd: '请输入授权文件的密码',
+        wechat_id: '请输入微信公众号ID',
+        wechat_app_id: '请输入微信公众号APPID',
+        wechat_app_secret: '请输入微信公众号APPSecret',
+        wechat_key: '请输入43位微信秘钥',
+        app_url: '请输入云智易APP接收微信消息URL'
       },
       fields: {
         id: '应用ID',
@@ -1234,7 +1274,13 @@ module.exports = {
         type: '应用类型',
         create_time: '创建时间',
         apn_enable: '启用苹果APN服务',
-        apn_license_pwd: '文件密码'
+        apn_license_pwd: '文件密码',
+        wechat_id: '微信公众号ID',
+        wechat_app_id: 'APPID',
+        wechat_app_secret: 'APPSecret',
+        wechat_encrypt: '消息加解密方式',
+        wechat_key: '微信秘钥',
+        app_url: 'APPUrl'
       }
     },
 

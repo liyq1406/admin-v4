@@ -3,40 +3,37 @@ section.main-wrap
   .main
     .panel
       .panel-hd
-        search-box(:key.sync="query", :active="searching", :placeholder="'昵称'", @cancel="getUsers", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch")
-          button.btn.btn-primary(slot="search-button", @click="getUsers") 搜索
-          label 查找用户
-        h2 用户列表
+        search-box(:key.sync="query", :active="searching", @cancel="getUsers", :placeholder="$t('user.fields.account')", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getUsers")
+          button.btn.btn-primary(slot="search-button", @click="getUsers") {{ $t('common.search') }}
+          label {{ $t('user.search_user') }}
+        h2 {{ $t('user.list') }}
       .panel-bd
         //- 用户列表
         table.table.table-stripe.table-bordered
           thead
             tr
-              th id
-              th 昵称
-              th 手机号或邮箱
-              th 创建时间
-              th 用户来源
-              th 状态
+              th ID
+              th {{ $t('user.fields.nick_name') }}
+              th {{ $t('user.fields.account') }}
+              th {{ $t('user.fields.create_time') }}
+              th {{ $t('user.fields.source') }}
+              th {{ $t('common.status') }}
           tbody
             template(v-if="users.length > 0 && !loadingData")
               tr(v-for="user in users")
                 td
                   a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
                 td {{user.nickname}}
-                td
-                  span(v-if="user.phone&&user.email") {{user.phone}}/{{user.email}}
-                  span(v-if="user.phone") {{user.phone}}
-                  span(v-if="user.email") {{user.email}}
+                td {{user.account}}
                 td {{user.create_date | formatDate}}
                 td
                   span(v-if="user.source===1") Web
                   span(v-if="user.source===2") Android
                   span(v-if="user.source===3") iOS
-                  span(v-if="user.source===4") 微信
+                  span(v-if="user.source===4") {{ $('common.wechat') }}
                 td
-                  span(v-if="user.status==1") 正常
-                  span(v-if="user.status==2") 停用
+                  span(v-if="user.status==1") {{ $t('user.status.normal') }}
+                  span(v-if="user.status==2") {{ $t('user.status.banned') }}
             tr(v-if="loadingData")
               td.tac(colspan="6")
                 .tips-null
@@ -86,15 +83,15 @@ section.main-wrap
     computed: {
       queryCondition: function () {
         var condition = {
-          filter: ['id', 'phone', 'email', 'nickname', 'create_date', 'source', 'status'],
+          filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
-          order: this.sortOrders,
+          order: {'create_date': 'desc'},
           query: {}
         };
 
         if (this.query.length > 0) {
-          condition.query['nickname'] = { $in: [this.query] };
+          condition.query['account'] = { $like: this.query };
         }
 
         return condition;

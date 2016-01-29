@@ -2,7 +2,7 @@
 .search-box(:class="{'auto-search': auto, 'active': active && key.length}")
   slot
   .search-box-input
-    input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput")
+    input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput", @keyup.enter="$dispatch('press-enter')")
     .fa.fa-times-circle(@mousedown="handleCancelClick")
   slot(name="search-button")
 </template>
