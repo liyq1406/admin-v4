@@ -167,6 +167,8 @@
         cursor default
         color #858585
         font-size 14px
+        display inline-block
+        white-space nowrap
 
       .arrow-down
         triangle #777 8px down

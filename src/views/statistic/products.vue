@@ -46,14 +46,12 @@ div
           thead
             tr
               th {{ $t("statistic.district") }}
-              th {{ $t("statistic.products.active") }}
-              th {{ $t("statistic.products.sum") }}
+              th {{ $t("statistic.products.activated") }}
               th {{ $t("statistic.percentage") }}
           tbody
             tr(v-for="item in regionData")
               td {{item.name}}
               td {{item.value}}
-              td {{productSummary.total}}
               td {{(item.value * 100 / productSummary.total).toFixed(2)}}%
 </template>
 

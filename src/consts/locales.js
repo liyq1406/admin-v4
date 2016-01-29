@@ -674,6 +674,7 @@ module.exports = {
         total: '用户总数',
         newbie: '{period}天新增用户',
         active: '活跃用户',
+        registered: '注册用户',
         online: '当前在线',
         sum: '用户数'
       }
