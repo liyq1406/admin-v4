@@ -517,10 +517,19 @@ module.exports = {
         { label: 'Web', disabled: true },
         { label: '微信', disabled: false }
       ],
+      encrypt_types: [
+        { label: '明文模式', info: '明文模式下，不使用消息体加解密功能，安全系数较低' },
+        { label: '兼容模式', info: '兼容模式下，明文、密文将共存，方便开发者调试和维护' },
+        { label: '安全模式（推荐）', info: '安全模式下，消息包为纯密文，需要开发者加密和解密，安全系数高' }
+      ],
       placeholders: {
         name: '请输入应用名称',
         apn_license_pwd: '请输入授权文件的密码',
-        wechat_id: '请输入微信公众号ID'
+        wechat_id: '请输入微信公众号ID',
+        wechat_app_id: '请输入微信公众号APPID',
+        wechat_app_secret: '请输入微信公众号APPSecret',
+        wechat_key: '请输入43位微信秘钥',
+        app_url: '请输入云智易APP接收微信消息URL'
       },
       fields: {
         id: '应用ID',
@@ -529,7 +538,12 @@ module.exports = {
         create_time: '创建时间',
         apn_enable: '启用苹果APN服务',
         apn_license_pwd: '文件密码',
-        wechat_id: '微信公众号ID'
+        wechat_id: '微信公众号ID',
+        wechat_app_id: 'APPID',
+        wechat_app_secret: 'APPSecret',
+        wechat_encrypt: '消息加解密方式',
+        wechat_key: '微信秘钥',
+        app_url: 'APPUrl'
       }
     },
 

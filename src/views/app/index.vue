@@ -67,7 +67,7 @@ section.main-wrap
           button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 
-  // 编辑应用浮层
+  // 编辑iOS应用浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
     //- h3(slot="header") 编辑应用({{editModel.type | typeLabel}})
     h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type | typeLabel}})
@@ -116,6 +116,64 @@ section.main-wrap
             | {{ $t("app.del_app") }}
           button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
+
+  // 编辑安卓应用浮层
+  modal(:show.sync="showEditModal4", @close="onEditCancel4", :width="640")
+    //- h3(slot="header") 编辑应用({{editModel4.type | typeLabel}})
+    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel4.type | typeLabel}})
+    .form.form-edit-apk(slot="body")
+      form(v-form, name="editValidation4", @submit.prevent="onEditSubmit(editModel4)", hook="editAppHook4")
+        .form-row
+          label.form-control {{ $t("app.fields.name") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
+              input.input-text(v-model="editModel4.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="32", required, lazy)
+            .form-tips.form-tips-error(v-if="editValidation4.$submitted && editValidation4.name.$pristine")
+              span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+            .form-tips.form-tips-error(v-if="editValidation4.name.$dirty")
+              span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+              span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+              span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
+        .form-row
+          label.form-control {{ $t("app.fields.wechat_id") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_id')")
+              input.input-text(v-model="editModel4.wechat.id", type="text", v-form-ctrl, name="wechat_id", lazy)
+        .form-row
+          label.form-control {{ $t("app.fields.wechat_app_id") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_id')")
+              input.input-text(v-model="editModel4.wechat.app_id", type="text", v-form-ctrl, name="wechat_app_id", lazy)
+        .form-row
+          label.form-control {{ $t("app.fields.wechat_app_secret") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_secret')")
+              input.input-text(v-model="editModel4.wechat.app_secret", type="text", v-form-ctrl, name="wechat_app_secret", lazy)
+        .form-row
+          label.form-control {{ $t("app.fields.wechat_encrypt") }}:
+          .controls
+            .radio-group.radio-group-v
+              template(v-for="type in encryptTypes")
+                label.radio
+                  input(type="radio", name="wechat_encrypt", v-model="editModel4.wechat.encrypt", :value="$index+1")
+                  | {{ type.label }}
+                p {{ type.info }}
+        .form-row
+          label.form-control {{ $t("app.fields.wechat_key") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_key')")
+              textarea.input-text(v-model="editModel4.wechat.key", type="text", v-form-ctrl, name="wechat_key", lazy)
+        .form-row
+          label.form-control {{ $t("app.fields.app_url") }}:
+          .controls
+            .input-text-wrap(v-placeholder="$t('app.placeholders.app_url')")
+              input.input-text(v-model="editModel4.app_url", type="text", v-form-ctrl, name="app_url", lazy)
+        .form-actions
+          label.del-check
+            input(type="checkbox", name="del", v-model="delChecked")
+            | {{ $t("app.del_app") }}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel4") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
@@ -136,6 +194,7 @@ section.main-wrap
       return {
         apps: [],
         appTypes: locales[Vue.config.lang].app.types,
+        encryptTypes: locales[Vue.config.lang].app.encrypt_types,
         showAddModal: false,
         showEditModal: false,
         showEditModal4: false,
@@ -147,7 +206,14 @@ section.main-wrap
           type: 1
         },
         editModel4: {
-          type: 1
+          type: 1,
+          wechat: {
+            id: '',
+            app_id: '',
+            app_secret: '',
+            encrypt: 1,
+            key: ''
+          }
         },
         originAddModel: {},
         originEditModel: {},
@@ -268,9 +334,15 @@ section.main-wrap
 
       // 初始化应用编辑表单
       onEditApp: function (app) {
-        this.showEditModal = true;
-        this.editModel = _.cloneDeep(app);
-        this.originEditModel = _.cloneDeep(app);
+        if (app.type === 1) {
+          this.showEditModal = true;
+          this.editModel = _.cloneDeep(app);
+          this.originEditModel = _.cloneDeep(app);
+        } else if (app.type === 4) {
+          this.showEditModal4 = true;
+          this.editModel4 = _.cloneDeep(app);
+          this.originEditModel4 = _.cloneDeep(app);
+        }
       },
 
       // 取消应用编辑
@@ -318,7 +390,7 @@ section.main-wrap
               self.editing = false;
             });
           });
-        } else if (model.type === 4 && this.editValidation.$valid && !this.editing) {
+        } else if (model.type === 4 && this.editValidation4.$valid && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {
             api.app.update(self.editModel4).then(function (data) {
@@ -378,3 +450,11 @@ section.main-wrap
     }
   };
 </script>
+
+<style lang="stylus">
+.modal
+  .form-edit-apk
+    .form-row
+      .controls
+        width 470px
+</style>

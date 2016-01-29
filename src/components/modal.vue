@@ -97,25 +97,6 @@ module.exports = {
     .table
       margin 0
 
-  .form
-    .form-row
-      .controls
-        width 330px
-
-    .form-actions
-      padding-left 0
-      text-align right
-
-      .del-check
-        float left
-        margin 10px 30px 0 0
-
-        input
-          margin-right 5px
-
-      .btn
-        margin-left 10px
-
   .modal-footer
     padding 0 30px 20px
     text-align right
