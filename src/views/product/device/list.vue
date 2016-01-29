@@ -35,8 +35,9 @@
             | {{ $t('device.id') }}
           th
             | {{ $t('device.is_active') }}
-          th
+          th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}")
             | {{ $t('device.active_date') }}
+            i.fa(:class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
           //-
             th
               | 最近一次登录
@@ -129,6 +130,10 @@
 
     data: function () {
       var sortOrders = {};
+      ['active_date'].forEach(function (key) {
+        sortOrders[key] = 'desc';
+      });
+
       ['mac'].forEach(function (key) {
         sortOrders[key] = 'asc';
       });
