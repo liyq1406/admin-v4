@@ -142,6 +142,7 @@ module.exports = {
     validation: {
       required: '{field}为必填项',
       format: '{field}格式有误',
+      numberic: '请填写数字格式',
       maxlength: '{0}不能多于{1}位',
       minlength: '{0}不能少于{1}位'
     },
@@ -287,6 +288,7 @@ module.exports = {
       reset: '修改密码',
       reset_success: '修改成功',
       reset_success_msg: '您的密码已重置成功，请重新登录。',
+      reset_fail: '修改失败',
       // 表单项
       fields: {
         account: '登录帐号',
@@ -824,7 +826,8 @@ module.exports = {
       status: '状态',
       online: '上线',
       offline: '下线',
-      not_set: '未设置'
+      not_set: '未设置',
+      wechat: '微信'
     },
 
     // 图表地区
@@ -879,6 +882,7 @@ module.exports = {
     validation: {
       required: '{field}为必填项',
       format: '{field}格式有误',
+      numberic: '请填写数字格式',
       maxlength: '{0}不能多于{1}位',
       minlength: '{0}不能少于{1}位'
     },
@@ -1024,6 +1028,7 @@ module.exports = {
       reset: '修改密码',
       reset_success: '修改成功',
       reset_success_msg: '您的密码已重置成功，请重新登录。',
+      reset_fail: '修改失败',
       // 表单项
       fields: {
         account: '登录帐号',
@@ -1411,6 +1416,7 @@ module.exports = {
         total: '用户总数',
         newbie: '{period}天新增用户',
         active: '活跃用户',
+        registered: '注册用户',
         online: '当前在线',
         sum: '用户数'
       }
@@ -1440,6 +1446,35 @@ module.exports = {
         illegal_sender: '请输入合法的发件者',
         creation_fail: '邮件模板创建失败',
         update_fail: '邮件模板修改失败'
+      }
+    },
+
+    user: {
+      list: '用户列表',
+      details: '用户详情',
+      search_user: '查找用户',
+      devices_bound: '绑定设备列表',
+      no_devices_bound: '该用户未绑定任何设备',
+      ban_user: '停用该用户',
+      product_name: '产品名称',
+      device_mac: '设备mac',
+      device_status: '设备状态',
+      device_authorize_code: '认证码',
+      status: {
+        normal: '正常',
+        banned: '停用'
+      },
+      fields: {
+        id: '用户ID',
+        corp_id: '企业ID',
+        nick_name: '昵称',
+        phone: '手机号码',
+        account: '帐号',
+        create_time: '创建时间',
+        authorize_code: '用户认证码',
+        region_id: '所在区域ID',
+        source: '用户来源',
+        status: '状态'
       }
     }
   }

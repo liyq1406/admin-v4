@@ -18,7 +18,7 @@
             th.tac {{ $t('common.action') }}
         tbody
           template(v-if="firmwares.length > 0 && !loadingFirmwares")
-            tr(v-for="firmware in firmwares")
+            tr(v-for="firmware in firmwares | orderBy 'version'")
               td {{firmware.version}}
               td {{firmware.description}}
               td {{firmware.create_date | formatDate}}
@@ -98,7 +98,7 @@
               span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
             .form-tips.form-tips-error(v-if="addValidation.version.$dirty")
               span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-              span(v-if="addValidation.version.$error.customValidator") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 32]) }}
+              span(v-if="addValidation.version.$error.customValidator") {{ $t('validation.numberic') }}
         .form-row
           label.form-control {{ $t("firmware.file") }}:
           .controls
@@ -151,7 +151,7 @@
               span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
             .form-tips.form-tips-error(v-if="editValidation.version.$dirty")
               span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-              span(v-if="editValidation.version.$error.customValidator") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 32]) }}
+              span(v-if="editValidation.version.$error.customValidator") {{ $t('validation.numberic') }}
         .form-row
           label.form-control {{ $t("firmware.file") }}:
           .controls
@@ -212,9 +212,9 @@
           label.form-control {{ $t("task.fields.from_version") }}:
           .controls
             .select
-              select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid", @change="selectFrom")
+              select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid", @change="selectFrom", number)
                 option(selected, value="0") {{ $t("task.select_from_version") }}
-                option(v-for="firmware in fromFirmwares", :value="firmware.version") {{firmware.version}}
+                option(v-for="firmware in fromFirmwares | orderBy 'version'", :value="firmware.version") {{firmware.version}}
             .form-tips.mt5(v-if="addTaskModel.from_version > 0") url: {{addTaskModel.from_version | firmwareUrl}}
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
               span(v-if="addTaskValidation.from_version.$error.customValidator") {{ $t("task.select_from_version") }}
@@ -222,9 +222,9 @@
           label.form-control {{ $t("task.fields.target_version") }}:
           .controls
             .select
-              select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid", @change="selectTarget")
+              select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid", @change="selectTarget", number)
                 option(selected, value="0") {{ $t("task.select_target_version") }}
-                option(v-for="firmware in targetFirmwares", :value="firmware.version") {{firmware.version}}
+                option(v-for="firmware in targetFirmwares | orderBy 'version'", :value="firmware.version") {{firmware.version}}
             .form-tips.mt5(v-if="addTaskModel.target_version > 0") url: {{addTaskModel.target_version | firmwareUrl}}
             .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
               span(v-if="addTaskValidation.target_version.$error.customValidator") {{ $t("task.select_target_version") }}
@@ -263,11 +263,11 @@
           name: '',
           description: '',
           product_id: this.$route.params.id,
-          from_version: 1,
+          from_version: 0,
           from_version_url: '',
           from_version_md5: '',
           from_version_size: 0,
-          target_version: 2,
+          target_version: 0,
           target_version_url: '',
           target_version_md5: '',
           target_version_size: 0
@@ -301,16 +301,32 @@
     computed: {
       fromFirmwares: function () {
         var self = this;
-        return this.firmwares.filter(function (item, index) {
-          return index < self.firmwares.length - 1;
+        return this.firmwares.filter(function (item) {
+          return item.version < (self.addTaskModel.target_version || self.maxVersion);
         });
       },
 
       targetFirmwares: function () {
         var self = this;
-        return this.firmwares.filter(function (item, index) {
-          return index > self.addTaskModel.from_version - 1 && index < self.firmwares.length;
+        return this.firmwares.filter(function (item) {
+          return item.version > (self.addTaskModel.from_version || self.minVersion);
         });
+      },
+
+      maxVersion: function () {
+        var max = 0;
+        this.firmwares.map(function (item) {
+          max = Math.max(max, item.version);
+        });
+        return max;
+      },
+
+      minVersion: function () {
+        var min = Number.MAX_VALUE;
+        this.firmwares.map(function (item) {
+          min = Math.min(min, item.version);
+        });
+        return min;
       }
     },
 
@@ -446,7 +462,7 @@
                 console.log(data);
               }
               self.resetEdit();
-              self.firmwares.$remove(self.editModel);
+              self.getFirmwares();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;
@@ -471,7 +487,10 @@
 
       // 选择起始版本号
       selectFrom: function () {
-        var firmware = this.firmwares[this.addTaskModel.from_version - 1];
+        var self = this;
+        var firmware = this.firmwares.filter(function (item) {
+          return item.version === self.addTaskModel.from_version;
+        })[0];
         this.addTaskModel.from_version_url = firmware.file_url;
         this.addTaskModel.from_version_md5 = firmware.file_md5;
         this.addTaskModel.from_version_size = firmware.file_size;
@@ -479,7 +498,10 @@
 
       // 选择目标版本号
       selectTarget: function () {
-        var firmware = this.firmwares[this.addTaskModel.target_version - 1];
+        var self = this;
+        var firmware = this.firmwares.filter(function (item) {
+          return item.version === self.addTaskModel.target_version;
+        })[0];
         this.addTaskModel.target_version_url = firmware.file_url;
         this.addTaskModel.target_version_md5 = firmware.file_md5;
         this.addTaskModel.target_version_size = firmware.file_size;

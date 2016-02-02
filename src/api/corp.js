@@ -410,6 +410,24 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 验证找回密码邮件链接是否过期
+     * @param  {[type]} params 参数
+     */
+    validVerifycode: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/user/password/valid_verifycode', JSON.stringify(params), function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
   };
 };

@@ -1,7 +1,7 @@
 <template lang="jade">
-.form.form-auth.form-fetch-password
+.form.form-auth.form-fetch-password(v-show="!validating")
   .form-logo
-  form.form-cont(v-show="!resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
+  form.form-cont(v-show="verifycodeValid && !resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
     .form-header
       h2 {{ $t("auth.reset") }}
       //-
@@ -17,8 +17,8 @@
           span(v-if="validation.new_password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
         .form-tips.form-tips-error(v-if="validation.new_password.$dirty")
           span(v-if="validation.new_password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-          span(v-if="validation.password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
-          span(v-if="validation.password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
+          span(v-if="validation.new_password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
+          span(v-if="validation.new_password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
       .form-row
         .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
           input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
@@ -29,6 +29,12 @@
           span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
       .form-actions
         button.btn.btn-primary.btn-block(type="submit") {{ $t("common.ok") }}
+    .form-footer
+      | 2015 &copy; {{ $t("common.company") }}.
+  .form-cont.reset-password-fail(v-show="!verifycodeValid && !resetsuccess")
+    .alert.alert-fail
+      .fa.fa-times-circle-o
+      h2 {{ $t("auth.activate_fail_msg") }}
     .form-footer
       | 2015 &copy; {{ $t("common.company") }}.
   .form-cont.reset-password-success(v-show="resetsuccess")
@@ -58,15 +64,32 @@
         model: {},
         confirmPassword: '',
         resetsuccess: false,
-        sending: false
+        sending: false,
+        verifycodeValid: false,
+        validating: true
       };
     },
 
     route: {
       data: function () {
+        var self = this;
         this.corp_id = base64.decode(this.$route.params.corp_id);
         this.email = base64.decode(this.$route.params.email);
         this.verifycode = base64.decode(this.$route.params.verifycode);
+
+        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode};
+        api.corp.validVerifycode(params).then(function (status) {
+          if (status === 200) {
+            self.verifycodeValid = true;
+          }
+          self.validating = false;
+        }).catch(function (error) {
+          if (error.code === 4001028) {
+            self.validating = false;
+          } else {
+            self.handleError(error);
+          }
+        });
       }
     },
 
@@ -102,3 +125,10 @@
     }
   };
 </script>
+
+<style lang="stylus">
+.reset-password-fail
+  .alert
+    h2
+      padding-top 10px
+</style>
