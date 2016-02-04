@@ -52,15 +52,15 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var RadioGroup = require('../../components/radio-group.vue');
-  var api = require('../../api');
-  var locales = require('../../consts/locales');
-  var dateFormat = require('date-format');
-  var echarts = require('echarts/echarts');
+  import Vue from 'vue';
+  import RadioGroup from '../../components/radio-group.vue';
+  import api from '../../api';
+  import locales from '../../consts/locales';
+  import dateFormat from 'date-format';
+  import echarts from 'echarts/echarts';
   require('echarts/chart/line');
   require('echarts/chart/map');
-  var ecConfig = require('echarts/config');
+  import ecConfig from 'echarts/config';
 
   module.exports = {
     name: 'UsersStatistic',

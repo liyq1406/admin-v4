@@ -1,3 +1,7 @@
+/**
+ * 检测当前浏览器的内核、语言等
+ * @type {Object}
+ */
 var browser = {
   versions: (function () {
     var ua = navigator.userAgent;

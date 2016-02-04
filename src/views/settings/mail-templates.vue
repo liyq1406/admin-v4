@@ -158,7 +158,7 @@ div
 import Vue from 'vue';
 import api from '../../api';
 import RadioGroup from '../../components/radio-group.vue';
-import locales from '../../consts/locales';
+import locales from '../../consts/locales';;
 
 export default {
   name: 'MailTemplates',

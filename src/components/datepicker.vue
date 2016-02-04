@@ -36,7 +36,7 @@
 </template>
 
 <script>
-  var EventListener = require('./utils/EventListener');
+  import EventListener from './utils/EventListener';
 
   module.exports = {
     props: {

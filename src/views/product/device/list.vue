@@ -109,14 +109,14 @@
 </style>
 
 <script>
-  var Vue = require('vue');
-  var api = require('../../../api');
-  var Select = require('../../../components/select.vue');
-  var Pager = require('../../../components/pager.vue');
-  var Modal = require('../../../components/modal.vue');
-  var SearchBox = require('../../../components/search-box.vue');
-  var locales = require('../../../consts/locales');
-  var _ = require('lodash');
+  import Vue from 'vue';
+  import api from '../../../api';
+  import Select from '../../../components/select.vue';
+  import Pager from '../../../components/pager.vue';
+  import Modal from '../../../components/modal.vue';
+  import SearchBox from '../../../components/search-box.vue';
+  import locales from '../../../consts/locales';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'DeviceList',

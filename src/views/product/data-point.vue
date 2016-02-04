@@ -157,13 +157,12 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var api = require('../../api');
-  // var config = require('../../consts/config');
-  var locales = require('../../consts/locales');
-  var Modal = require('../../components/modal.vue');
-  var Pager = require('../../components/pager.vue');
-  var _ = require('lodash');
+  import Vue from 'vue';
+  import api from '../../api';
+  import locales from '../../consts/locales';
+  import Modal from '../../components/modal.vue';
+  import Pager from '../../components/pager.vue';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'DataPoint',

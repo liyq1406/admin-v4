@@ -136,18 +136,18 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var RadioGroup = require('../../components/radio-group.vue');
-  var Modal = require('../../components/modal.vue');
-  var productsStore = require('../../stores/products');
-  var api = require('../../api');
-  var _ = require('lodash');
-  var dateFormat = require('date-format');
-  var echarts = require('echarts/echarts');
+  import Vue from 'vue';
+  import RadioGroup from '../../components/radio-group.vue';
+  import Modal from '../../components/modal.vue';
+  import productsStore from '../../stores/products';
+  import api from '../../api';
+  import _ from 'lodash';
+  import dateFormat from 'date-format';
+  import echarts from 'echarts/echarts';
   require('echarts/chart/line');
   require('echarts/chart/map');
-  var ecConfig = require('echarts/config');
-  var locales = require('../../consts/locales');
+  import ecConfig from 'echarts/config';
+  import locales from '../../consts/locales';
 
   module.exports = {
     name: 'Overview',

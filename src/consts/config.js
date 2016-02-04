@@ -1,5 +1,5 @@
 
-module.exports = {
+export default {
   // 测试服务器
   apiRoot: 'http://42.121.122.228:8887/v2',
   // 开发本地

@@ -112,14 +112,14 @@ section.main-wrap
 </template>
 
 <script>
-  var Vue = require('vue');
-  var api = require('../../api');
-  var locales = require('../../consts/locales');
-  var Pager = require('../../components/pager.vue');
-  var Modal = require('../../components/modal.vue');
-  var RadioGroup = require('../../components/radio-group.vue');
-  var dateFormat = require('date-format');
-  var echarts = require('echarts/echarts');
+  import Vue from 'vue';
+  import api from '../../api';
+  import locales from '../../consts/locales';
+  import Pager from '../../components/pager.vue';
+  import Modal from '../../components/modal.vue';
+  import RadioGroup from '../../components/radio-group.vue';
+  import dateFormat from 'date-format';
+  import echarts from 'echarts/echarts';
   require('echarts/chart/line');
 
   module.exports = {

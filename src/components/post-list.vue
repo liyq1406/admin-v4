@@ -1,7 +1,7 @@
 <template lang="jade">
 .post-list
   ul
-    li(v-for="post in posts", transition="staggered", stagger="100")
+    li(v-for="post in posts")
       a(href="{{ post.url }}") {{ post.title }}
 </template>
 
@@ -31,14 +31,6 @@ module.exports = {
       type: Array,
       default: function () {
         return [];
-      }
-    }
-  },
-
-  transitions: {
-    stagger: {
-      stagger: function (index) {
-        return Math.min(300, index * 50);
       }
     }
   }

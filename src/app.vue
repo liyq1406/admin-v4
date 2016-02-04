@@ -13,7 +13,7 @@
       .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
         span.user-name {{currUser.name}}
         i.arrow-down
-        .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav", class="staggered", transition="staggered", transition-mode="out-in")
+        .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav")
           ul
             li.sed-navigation-li
               a(v-link="{path: '/settings/account'}") {{$t("user_menu.account")}}
@@ -65,7 +65,7 @@
 </template>
 
 <script>
-  var api = require('./api');
+  import api from './api';
 
   module.exports = {
     data: function () {
@@ -85,15 +85,19 @@
     },
 
     methods: {
-      // 退出
+      /**
+       * 退出登录
+       * 移除保存在 localStorage中的 accessToken
+       */
       quit: function () {
         localStorage.removeItem('accessToken');
         this.$route.router.app.access = false;
         this.$route.router.go({path: '/login'});
-        // window.location.reload(true);
       },
 
-      // 获取产品
+      /**
+       * 获取产品
+       */
       getProducts: function () {
         var self = this;
         api.corp.refreshToken().then(function () {

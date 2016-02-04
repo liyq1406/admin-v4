@@ -1,7 +1,7 @@
-var config = require('./consts/config');
-var Promise = require('promise');
-var Vue = require('vue');
-var VueResource = require('vue-resource');
+import config from './consts/config';
+import Promise from 'promise';
+import Vue from 'vue';
+import VueResource from 'vue-resource';
 Vue.use(VueResource);
 
 module.exports = {

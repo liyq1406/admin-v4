@@ -56,16 +56,16 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var RadioGroup = require('../../components/radio-group.vue');
-  var Select = require('../../components/select.vue');
-  var locales = require('../../consts/locales');
-  var api = require('../../api');
-  var dateFormat = require('date-format');
-  var echarts = require('echarts/echarts');
+  import Vue from 'vue';
+  import RadioGroup from '../../components/radio-group.vue';
+  import Select from '../../components/select.vue';
+  import locales from '../../consts/locales';
+  import api from '../../api';
+  import dateFormat from 'date-format';
+  import echarts from 'echarts/echarts';
   require('echarts/chart/line');
   require('echarts/chart/map');
-  var ecConfig = require('echarts/config');
+  import ecConfig from 'echarts/config';
 
   module.exports = {
     name: 'ProductStatistic',

@@ -116,9 +116,9 @@
 </style>
 
 <script>
-  var api = require('../api');
-  var config = require('../consts/config');
-  var Captcha = require('../components/captcha.vue');
+  import api from '../api';
+  import config from '../consts/config';
+  import Captcha from '../components/captcha.vue';
 
   module.exports = {
     name: 'FetchPwdForm',

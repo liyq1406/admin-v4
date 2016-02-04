@@ -10,8 +10,8 @@ section.main-wrap
 </template>
 
 <script>
-  var Tab = require('../../components/tab.vue');
-  var api = require('../../api');
+  import Tab from '../../components/tab.vue';
+  import api from '../../api';
 
   module.exports = {
     name: 'Products',

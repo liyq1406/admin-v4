@@ -102,9 +102,9 @@
 </style>
 
 <script>
-  var api = require('../api');
-  var locales = require('../consts/locales');
-  var Vue = require('vue');
+  import api from '../api';
+  import locales from '../consts/locales';
+  import Vue from 'vue';
 
   module.exports = {
     name: 'RegisterForm',

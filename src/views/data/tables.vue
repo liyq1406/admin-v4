@@ -132,12 +132,12 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var api = require('../../api');
-  var Pager = require('../../components/pager.vue');
-  var Modal = require('../../components/modal.vue');
-  var locales = require('../../consts/locales');
-  var _ = require('lodash');
+  import Vue from 'vue';
+  import api from '../../api';
+  import Pager from '../../components/pager.vue';
+  import Modal from '../../components/modal.vue';
+  import locales from '../../consts/locales';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'DataTables',

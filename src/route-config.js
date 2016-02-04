@@ -1,10 +1,42 @@
-var api = require('./api');
+import api from './api';
 
-var isInAuthPage = function (path) {
+/**
+ * 判断路由是否为非管理界面页面
+ * @param  {String}  path 路由
+ * @return {Boolean}
+ */
+let isInAuthPage = function (path) {
   return ['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0;
 };
 
-var configRouter = function (router) {
+let configRouter = (router) => {
+
+  /**
+   * 路由地址映射
+   * 注：使用`require.ensure`并作同一块名称声明的路由最终会打包在同一文件中
+   *
+   * 比如注册与登录这两个路由：
+   *
+   * // 注册
+   * '/register': {
+   *   component: function (resolve) {
+   *     require.ensure([], function (require) {
+   *       resolve(require('./views/register.vue'));
+   *     }, 'auth');
+   *   }
+   * },
+   *
+   * // 登录
+   * '/login': {
+   *   component: function (resolve) {
+   *     require.ensure([], function (require) {
+   *       resolve(require('./views/login.vue'));
+   *     }, 'auth');
+   *   }
+   * },
+   *
+   * 最终会打包在 `auth.js` 这个文件中
+   */
   router.map({
     // 404
     '*': {
@@ -61,16 +93,7 @@ var configRouter = function (router) {
       }
     },
 
-    // 重设密码
-    '/user-password-reset/:corp_id/:email/:verifycode': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/user-password-reset.vue'));
-        }, 'auth');
-      }
-    },
-
-    // 激活成员邀请
+    // 激活企业成员邀请
     '/member-activate/:email': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -88,7 +111,16 @@ var configRouter = function (router) {
       }
     },
 
-    // 用户邮箱激活
+    // 普通用户重设密码
+    '/user-password-reset/:corp_id/:email/:verifycode': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/user-password-reset.vue'));
+        }, 'auth');
+      }
+    },
+
+    // 普通用户邮箱激活
     '/user-email-activate/:corp_id/:email/:verifycode': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -114,6 +146,7 @@ var configRouter = function (router) {
         }, 'product');
       }
     },
+    // 产品详情
     '/products/:id': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -122,6 +155,7 @@ var configRouter = function (router) {
       },
       name: 'products',
       subRoutes: {
+        // 概览
         'overview': {
           component: function (resolve) {
             require.ensure(['echarts'], function (require) {
@@ -129,6 +163,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 设备管理
         'devices': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -136,6 +171,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 数据端点
         'data-point': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -143,6 +179,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 通知与告警
         'alert': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -150,6 +187,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 设备互联
         'interconnection': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -157,6 +195,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 固件升级
         'upgrade': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -164,6 +203,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 虚拟设备
         'virtual-device': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -171,6 +211,7 @@ var configRouter = function (router) {
             }, 'product');
           }
         },
+        // 默认子路由
         '/': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -215,13 +256,15 @@ var configRouter = function (router) {
         }, 'data');
       },
       subRoutes: {
+        // 数据表
         'tables': {
           component: function (resolve) {
             require.ensure([], function (require) {
               resolve(require('./views/data/tables.vue'));
             }, 'data');
           }
-        },
+        }/* ,
+        // api
         'api': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -229,8 +272,11 @@ var configRouter = function (router) {
             }, 'data');
           }
         }
+        */
       }
     },
+    /*
+    // 数据管理介绍
     '/data/intro': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -238,6 +284,8 @@ var configRouter = function (router) {
         }, 'data');
       }
     },
+    */
+    // 数据表详情
     '/data/tables/:name': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -254,6 +302,7 @@ var configRouter = function (router) {
         }, 'user');
       }
     },
+    // 用户详情
     '/users/:id': {
       component: function (resolve) {
         require.ensure([], function (require) {
@@ -270,6 +319,7 @@ var configRouter = function (router) {
         }, 'statistic');
       },
       subRoutes: {
+        // 产品统计
         'products': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -277,6 +327,7 @@ var configRouter = function (router) {
             }, 'statistic');
           }
         },
+        // 用户统计
         'users': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -295,6 +346,7 @@ var configRouter = function (router) {
         }, 'settings');
       },
       subRoutes: {
+        // 授权管理
         'auth': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -302,6 +354,7 @@ var configRouter = function (router) {
             }, 'settings');
           }
         },
+        // 成员管理
         'members': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -309,6 +362,7 @@ var configRouter = function (router) {
             }, 'settings');
           }
         },
+        // 帐号信息
         'account': {
           component: function (resolve) {
             require.ensure([], function (require) {
@@ -316,6 +370,7 @@ var configRouter = function (router) {
             }, 'settings');
           }
         },
+        // 邮件模板
         'mail-templates': {
           component: function (resolve) {
             require.ensure([], function (require) {

@@ -47,10 +47,10 @@ section.main-wrap
 </template>
 
 <script>
-  var SearchBox = require('../../components/search-box.vue');
-  var Modal = require('../../components/modal.vue');
-  var api = require('../../api');
-  var Pager = require('../../components/pager.vue');
+  import SearchBox from '../../components/search-box.vue';
+  import Modal from '../../components/modal.vue';
+  import api from '../../api';
+  import Pager from '../../components/pager.vue';
 
   module.exports = {
     name: 'UserList',

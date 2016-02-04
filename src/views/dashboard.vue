@@ -92,8 +92,8 @@ section.main-wrap
 </template>
 
 <script>
-  var api = require('../api');
-  var Vue = require('vue');
+  import api from '../api';
+  import Vue from 'vue';
 
   module.exports = {
     name: 'Dashboard',

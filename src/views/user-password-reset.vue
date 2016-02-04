@@ -49,8 +49,8 @@
 </template>
 
 <script>
-  var api = require('../api');
-  var base64 = require('../helpers/base64');
+  import api from '../api';
+  import base64 from '../helpers/base64';
 
   module.exports = {
     name: 'PwdResetForm',

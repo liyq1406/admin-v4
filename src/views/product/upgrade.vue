@@ -234,9 +234,9 @@
 </template>
 
 <script>
-  var api = require('../../api');
-  var Modal = require('../../components/modal.vue');
-  var _ = require('lodash');
+  import api from '../../api';
+  import Modal from '../../components/modal.vue';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'Upgrade',

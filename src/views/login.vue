@@ -49,7 +49,7 @@
 </style>
 
 <script>
-  var api = require('../api');
+  import api from '../api';
 
   module.exports = {
     name: 'LoginForm',

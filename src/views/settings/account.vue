@@ -151,11 +151,11 @@ div
 </template>
 
 <script>
-  var Vue = require('vue');
-  var Modal = require('../../components/modal.vue');
-  var locales = require('../../consts/locales');
-  var api = require('../../api');
-  var _ = require('lodash');
+  import Vue from 'vue';
+  import Modal from '../../components/modal.vue';
+  import locales from '../../consts/locales';
+  import api from '../../api';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'AccountSettings',

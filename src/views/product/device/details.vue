@@ -94,10 +94,10 @@ section.main-wrap
 </template>
 
 <script>
-  var api = require('../../../api');
-  var Switch = require('../../../components/switch.vue');
-  var io = require('socket.io-client');
-  var dateFormat = require('date-format');
+  import api from '../../../api';
+  import Switch from '../../../components/switch.vue';
+  import io from 'socket.io-client';
+  import dateFormat from 'date-format';
   var socket = null;
 
   module.exports = {

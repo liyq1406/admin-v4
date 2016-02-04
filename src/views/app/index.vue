@@ -177,11 +177,11 @@ section.main-wrap
 </template>
 
 <script>
-  var Vue = require('vue');
-  var locales = require('../../consts/locales');
-  var api = require('../../api');
-  var Modal = require('../../components/modal.vue');
-  var _ = require('lodash');
+  import Vue from 'vue';
+  import locales from '../../consts/locales';
+  import api from '../../api';
+  import Modal from '../../components/modal.vue';
+  import _ from 'lodash';
 
   module.exports = {
     name: 'Applications',

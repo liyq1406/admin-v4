@@ -84,12 +84,12 @@
 </style>
 
 <script>
-  var Vue = require('vue');
-  var SearchBox = require('../../components/search-box.vue');
-  var Modal = require('../../components/modal.vue');
-  var api = require('../../api');
-  var Pager = require('../../components/pager.vue');
-  var locales = require('../../consts/locales');
+  import Vue from 'vue';
+  import SearchBox from '../../components/search-box.vue';
+  import Modal from '../../components/modal.vue';
+  import api from '../../api';
+  import Pager from '../../components/pager.vue';
+  import locales from '../../consts/locales';
 
   module.exports = {
     name: 'MemberSettings',

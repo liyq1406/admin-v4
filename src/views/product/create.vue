@@ -40,10 +40,10 @@ section.main-wrap
 </template>
 
 <script>
-  var Vue = require('vue');
-  var api = require('../../api');
-  var productsStore = require('../../stores/products');
-  var locales = require('../../consts/locales');
+  import Vue from 'vue';
+  import api from '../../api';
+  import productsStore from '../../stores/products';
+  import locales from '../../consts/locales';
 
   module.exports = {
     name: 'CreateProductForm',

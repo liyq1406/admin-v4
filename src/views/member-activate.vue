@@ -111,10 +111,10 @@
 </style>
 
 <script>
-  var api = require('../api');
-  var config = require('../consts/config');
-  var Captcha = require('../components/captcha.vue');
-  var base64 = require('../helpers/base64');
+  import api from '../api';
+  import config from '../consts/config';
+  import Captcha from '../components/captcha.vue';
+  import base64 from '../helpers/base64';
 
   module.exports = {
     name: 'MemberActivateForm',

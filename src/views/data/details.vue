@@ -63,9 +63,9 @@ section.main-wrap
 </template>
 
 <script>
-  var api = require('../../api');
-  var Pager = require('../../components/pager.vue');
-  var Modal = require('../../components/modal.vue');
+  import api from '../../api';
+  import Pager from '../../components/pager.vue';
+  import Modal from '../../components/modal.vue';
 
   module.exports = {
     name: 'TableDetails',

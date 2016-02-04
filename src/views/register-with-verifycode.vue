@@ -117,10 +117,11 @@
 </style>
 
 <script>
-  var api = require('../api');
-  var config = require('../consts/config');
-  var locales = require('../consts/locales');
-  var Captcha = require('../components/captcha.vue');
+  import api from '../api';
+  import config from '../consts/config';
+  // import config from '../../consts/config';
+  import locales from '../consts/locales';
+  import Captcha from '../components/captcha.vue';
 
   module.exports = {
     name: 'RegisterForm',
