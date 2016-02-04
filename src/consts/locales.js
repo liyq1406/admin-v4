@@ -415,6 +415,7 @@ module.exports = {
       add_datapoint: '添加数据端点',
       edit_datapoint: '编辑数据端点',
       del_datapoint: '删除数据端点',
+      types: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串'],
       placeholders: {
         index: '数据端点索引不能重复',
         name: '英文、数字或下划线',
@@ -674,7 +675,8 @@ module.exports = {
       },
       users: {
         total: '用户总数',
-        newbie: '{period}天新增用户',
+        newbie_period: '{period}天新增用户',
+        newbie: '新增用户',
         active: '活跃用户',
         registered: '注册用户',
         online: '当前在线',
@@ -1155,6 +1157,7 @@ module.exports = {
       add_datapoint: '添加数据端点',
       edit_datapoint: '编辑数据端点',
       del_datapoint: '删除数据端点',
+      types: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串'],
       placeholders: {
         index: '数据端点索引不能重复',
         name: '英文、数字或下划线',
@@ -1414,7 +1417,8 @@ module.exports = {
       },
       users: {
         total: '用户总数',
-        newbie: '{period}天新增用户',
+        newbie_period: '{period}天新增用户',
+        newbie: '新增用户',
         active: '活跃用户',
         registered: '注册用户',
         online: '当前在线',

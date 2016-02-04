@@ -195,7 +195,7 @@ div
               legend: {
                 x: 'right',
                 y: 10,
-                data: [self.$t('statistic.products.total'), self.$t('statistic.products.active'), self.$t('statistic.products.activated')]
+                data: [self.$t('statistic.products.active'), self.$t('statistic.products.activated')]
               },
               xAxis: [{
                 type: 'category',

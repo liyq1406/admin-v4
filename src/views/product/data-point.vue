@@ -157,8 +157,10 @@ div
 </template>
 
 <script>
+  var Vue = require('vue');
   var api = require('../../api');
-  var config = require('../../consts/config');
+  // var config = require('../../consts/config');
+  var locales = require('../../consts/locales');
   var Modal = require('../../components/modal.vue');
   var Pager = require('../../components/pager.vue');
   var _ = require('lodash');
@@ -183,7 +185,7 @@ div
     data: function () {
       return {
         datapoints: [],
-        datapointTypes: config.datapointTypes,
+        datapointTypes: locales[Vue.config.lang].datapoint.types,
         pageCount: 10,
         currentPage: 1,
         showAddModal: false,

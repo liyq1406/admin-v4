@@ -19,7 +19,7 @@ div
             .item
               .cont
                 .num {{add}}
-                .label {{ $t("statistic.users.newbie", {period:period}) }}
+                .label {{ $t("statistic.users.newbie_period", {period:period}) }}
             .item.no-border
               .cont
                 .num {{active}}
@@ -135,13 +135,11 @@ div
               return item.active;
             });
 
-            /*
             if (addTrends.length > 0) {
               self.add = addTrends.reduce(function (prev, next) {
                 return prev + next;
               });
             }
-            */
 
             // 趋势图表
             var trendOptions = {

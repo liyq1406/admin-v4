@@ -1,13 +1,13 @@
 <template lang="jade">
 div
   .form.form-auth.form-member-activate(v-show="activateSuccess")
-    .form-logo
+    //- .form-logo
     .form-cont.reset-password-success
       .alert.alert-success
         .fa.fa-check-circle-o
         h2 {{ $t("auth.activate_success") }}
         p {{ $t("auth.activate_success_msg") }}
-      .form-footer
+      //- .form-footer
         | 2015 &copy; {{ $t("common.company") }}.
   .form.form-auth.form-member-activate(v-show="activateFail")
     .form-logo
@@ -16,7 +16,7 @@ div
         .fa.fa-times-circle-o
         h2 {{ $t("auth.activate_fail") }}
         p {{ $t("auth.activate_fail_msg") }}
-      .form-footer
+      //- .form-footer
         | 2015 &copy; {{ $t("common.company") }}.
 </template>
 

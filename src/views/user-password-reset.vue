@@ -1,6 +1,6 @@
 <template lang="jade">
 .form.form-auth.form-fetch-password(v-show="!validating")
-  .form-logo
+  //- .form-logo
   form.form-cont(v-show="verifycodeValid && !resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
     .form-header
       h2 {{ $t("auth.reset") }}
@@ -35,7 +35,7 @@
     .alert.alert-fail
       .fa.fa-times-circle-o
       h2 {{ $t("auth.activate_fail_msg") }}
-    .form-footer
+    //- .form-footer
       | 2015 &copy; {{ $t("common.company") }}.
   .form-cont.reset-password-success(v-show="resetsuccess")
     .alert.alert-success
@@ -44,7 +44,7 @@
       p {{ $t("auth.reset_success_msg") }}
     .form-actions
       a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") {{ $t("common.ok") }}
-    .form-footer
+    //- .form-footer
       | 2015 &copy; {{ $t("common.company") }}.
 </template>
 
