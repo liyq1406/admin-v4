@@ -379,6 +379,33 @@ let configRouter = (router) => {
           }
         }
       }
+    },
+
+    // 饮食管理
+    '/diet': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/index.vue'));
+        }, 'diet');
+      },
+      subRoutes: {
+        // 菜谱管理
+        'recipe': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/diet/recipe.vue'));
+            }, 'diet');
+          }
+        },
+        // 食材管理
+        'food': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/diet/food.vue'));
+            }, 'diet');
+          }
+        }
+      }
     }
   });
 
@@ -388,7 +415,8 @@ let configRouter = (router) => {
     '/products/:id': '/products/:id/overview',
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
-    '/settings': '/settings/auth'
+    '/settings': '/settings/auth',
+    '/diet': '/diet/recipe'
   });
 
   // 路由切换开始时执行

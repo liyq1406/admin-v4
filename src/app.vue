@@ -61,6 +61,10 @@
           a(v-link="{ path: '/settings' }")
             i.fa.fa-cog
             | {{$t("nav_aside.settings")}}
+        .nav-aside-item
+          a(v-link="{ path: '/diet' }")
+            i.fa.fa-calculator
+            | {{$t("nav_aside.diet")}}
   router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
 </template>
 

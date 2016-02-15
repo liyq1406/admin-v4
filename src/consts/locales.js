@@ -10,6 +10,7 @@ module.exports = {
       users: '用户管理',
       statistic: '统计分析',
       settings: '系统设置',
+      diet: '饮食管理',
       add_product: '添加产品'
     },
 
@@ -752,6 +753,7 @@ module.exports = {
       users: '用户管理',
       statistic: '统计分析',
       settings: '系统设置',
+      diet: '饮食管理',
       add_product: '添加产品'
     },
 
