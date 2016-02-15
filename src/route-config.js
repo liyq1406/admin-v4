@@ -420,6 +420,20 @@ let configRouter = (router) => {
           resolve(require('./views/diet/food/edit.vue'));
         }, 'diet');
       }
+    },
+    '/diet/recipe/add': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/recipe/add.vue'));
+        }, 'diet');
+      }
+    },
+    '/diet/recipe/:id/edit': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/recipe/edit.vue'));
+        }, 'diet');
+      }
     }
   });
 

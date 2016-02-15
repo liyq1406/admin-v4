@@ -1,60 +1,100 @@
 <template lang="jade">
-.panel
-  .panel-bd
-    //- 操作栏
-    .action-bar
-      search-box(:placeholder="'请输入关键字'")
-        button.btn.btn-primary(slot="search-button") {{ $t('common.search') }}
-      .action-group
-        button.btn.btn-success()
-          i.fa.fa-plus
-          | 添加菜谱
-        button.btn.btn-success()
-          i.fa.fa-list-ol
-          | 类别管理
-
-    //- 状态栏
-    .status-bar
-      .status 123
-        //- | 共有
-        //- span {{total}}
-        //- | 条结果
-      v-select(:options="categoryOptions",@select="getRecipes")
-        span 类别：
-
-
+div.recipe-box
+  .panel
+    .panel-bd
+      //- 操作栏
+      .action-bar
+        search-box
+          button.btn.btn-primary(slot="search-button", @click="getFoods") {{ $t('common.search') }}
+        .action-group
+          a.btn.btn-success(v-link="{path: '/diet/recipe/add'}")
+            i.fa.fa-plus
+            | 添加食材
+          button.btn.btn-success(@click="showCategoryModal = true")
+            i.fa.fa-list-ul
+            | 类别管理
+      //- 状态栏
+      .status-bar
+        .status {{{ $t('common.total_results', {count:total}) }}}
+        v-select(:options="categoryOptions", :value.sync="category", @select="getFoods")
+          span 类别：
+        v-select(:options="deviceOptions", :value.sync="device", @select="getFoods")
+          span 烹饪设备：
+      //- 食材列表
+      table.table.table-stripe.table-bordered
+        thead
+          tr
+            th
+              | 标题
+            th
+              | 创建者
+            th
+              | 创建时间
+            th.tac {{ $t('common.action') }}
+        tbody
+          td 小炒肉
+          td xiaolu@xlink.cn
+          td 2015-06-11 12:09:11
+          td.tac
+            a.btn-link.btn-sm(v-link="{path: '/diet/recipe/123/edit'}") 编辑
+      pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
 </template>
 
 <script>
-// import Vue from 'vue';
 // import api from '../../api';
 import Select from '../../../components/select.vue';
-// import Pager from '../../components/pager.vue';
-// import Modal from '../../components/modal.vue';
+import Pager from '../../../components/pager.vue';
+import Modal from '../../../components/modal.vue';
 import SearchBox from '../../../components/search-box.vue';
-// import locales from '../../consts/locales';
-// import _ from 'lodash';
 
 export default {
+  name: 'FoodList',
 
   components: {
     'v-select': Select,
-    'search-box': SearchBox
+    'modal': Modal,
+    'search-box': SearchBox,
+    'pager': Pager
   },
+
   data () {
     return {
-      categoryOptions: []
+      showCategoryModal: false,
+      showPushModal: false,
+      total: 0,
+      category: '全部',
+      categoryOptions: [
+        {label: '全部', value: '全部'},
+        {label: '粤菜', value: '粤菜'},
+        {label: '东北菜', value: '东北菜'},
+        {label: '湘菜', value: '湘菜'},
+        {label: '西餐', value: '西餐'}
+      ],
+      device: '全部',
+      deviceOptions: [
+        {label: '全部', value: '全部'},
+        {label: '隔水炖', value: '隔水炖'},
+        {label: '云炖锅', value: '云炖锅'},
+        {label: '电饭煲', value: '电饭煲'},
+        {label: '电水壶', value: '电水壶'}
+      ],
+      currentPage: 1,
+      pageCount: 10,
+      loadingData: false
     };
   },
 
   methods: {
-    getRecipes () {
-      var self = this;
-      console.log(self);
+    getFoods () {
+
     }
   }
 };
 </script>
 
 <style lang="stylus">
+.recipe-box
+  .v-select
+    display inline-block
+    margin-right 30px
 </style>
