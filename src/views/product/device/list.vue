@@ -88,26 +88,6 @@
           button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 </template>
 
-<style lang="stylus">
-  @import '../../../assets/stylus/common'
-
-  .status-bar
-    border 1px solid #E4E4E4
-    background #F9F9F9
-    padding 5px 20px
-    margin-bottom 10px
-    clearfix()
-
-    .status
-      float right
-      font-size 12px
-      line-height 25px
-
-      span
-        font-weight bold
-        color red
-</style>
-
 <script>
   import Vue from 'vue';
   import api from '../../../api';
