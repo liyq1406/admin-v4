@@ -11,8 +11,10 @@ div
             i.fa.fa-plus
             | 添加食材
           button.btn.btn-success(@click="showCategoryModal = true")
+            i.fa.fa-list-ul
             | 类别管理
           button.btn.btn-success(@click="showPushModal = true")
+            i.fa.fa-share
             | 推送管理
       //- 状态栏
       .status-bar
@@ -20,7 +22,7 @@ div
         v-select(:options="categoryOptions", :value.sync="category", @select="getFoods")
           span 类别：
 
-      //- 设备列表
+      //- 食材列表
       table.table.table-stripe.table-bordered
         thead
           tr
@@ -36,7 +38,7 @@ div
           td xiaolu@xlink.cn
           td 2015-06-11 12:09:11
           td.tac
-            a.btn.btn-link.btn-sm(v-link="{path: '/diet/food/123/edit'}") 编辑
+            a.btn-link.btn-sm(v-link="{path: '/diet/food/123/edit'}") 编辑
       pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
 </template>
 

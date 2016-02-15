@@ -406,6 +406,20 @@ let configRouter = (router) => {
           }
         }
       }
+    },
+    '/diet/food/add': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/food/add.vue'));
+        }, 'diet');
+      }
+    },
+    '/diet/food/:id/edit': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/food/edit.vue'));
+        }, 'diet');
+      }
     }
   });
 
