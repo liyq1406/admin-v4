@@ -401,7 +401,7 @@ let configRouter = (router) => {
         'food': {
           component: function (resolve) {
             require.ensure([], function (require) {
-              resolve(require('./views/diet/food.vue'));
+              resolve(require('./views/diet/food/index.vue'));
             }, 'diet');
           }
         }
