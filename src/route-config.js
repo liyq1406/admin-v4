@@ -393,7 +393,7 @@ let configRouter = (router) => {
         'recipe': {
           component: function (resolve) {
             require.ensure([], function (require) {
-              resolve(require('./views/diet/recipe.vue'));
+              resolve(require('./views/diet/recipe/index.vue'));
             }, 'diet');
           }
         },
