@@ -32,12 +32,13 @@ div.recipe-box
               | 创建时间
             th.tac {{ $t('common.action') }}
         tbody
-          td 小炒肉
-          td xiaolu@xlink.cn
-          td 2015-06-11 12:09:11
-          td.tac
-            a.btn-link.btn-sm(v-link="{path: '/diet/recipe/123/edit'}") 编辑
-      pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
+          tr(v-for="n in 10")
+            td 小炒肉{{n}}
+            td xiaolu@xlink.cn
+            td 2015-06-11 12:09:11
+            td.tac
+              a.btn-link.btn-sm(v-link="{path: '/diet/recipe/123/edit'}") 编辑
+        pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
 </template>
 
 <script>
