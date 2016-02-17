@@ -17,5 +17,6 @@ module.exports = {
   empower: require('./api/empower')(Vue, Promise, config),
   dataTable: require('./api/data-table')(Vue, Promise, config),
   alert: require('./api/alert')(Vue, Promise, config),
-  app: require('./api/app')(Vue, Promise, config)
+  app: require('./api/app')(Vue, Promise, config),
+  diet: require('./api/diet')(Vue, Promise, config)
 };

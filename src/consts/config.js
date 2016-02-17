@@ -8,6 +8,7 @@ export default {
   // apiRoot: 'http://ic.heiman.cn:8887/v2',
   // 正式地址
   // apiRoot: 'https://api2.xlink.cn:443/v2',
+  recipeApiRoot: 'http://42.121.122.228:8887/v2',
 
   // 刷新验证码等待间隔
   verifycodeDuration: 90,

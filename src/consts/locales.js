@@ -1491,6 +1491,7 @@ module.exports = {
     },
 
     food: {
+      del: '删除该食材',
       placeholders: {
         name: '请填写食材标题',
         instructions: '请填写食材描述'

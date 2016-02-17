@@ -26,7 +26,7 @@ section.main-wrap
               label.form-control {{ $t("food.fields.images") }}:
               .controls.controls-image
                 .image-uploader
-                  image-uploader(v-for="n in 4", :image.sync="model.images[n]")
+                  image-uploader(v-for="n in model.images.length", :image.sync="model.images[n]")
                 .form-tips 建议上传640像素*480像素成品图，最多不超过3张
             .form-row
               label.form-control {{ $t("food.fields.classification") }}:
@@ -69,7 +69,7 @@ export default {
       model: {
         name: '',
         classification: [],
-        images: ['https://camo.githubusercontent.com/f842ed0f5ce5aa10c6b225996ad67fe43fac5605/687474703a2f2f73322e75706c6f61642e74662f4762762e706e67', '', '', ''],
+        images: [''],
         instructions: ''
       },
       validation: {},
@@ -78,6 +78,9 @@ export default {
   },
 
   methods: {
+    /**
+     * 添加食材表单提交
+     */
     onSubmit () {
 
     }
