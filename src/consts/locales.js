@@ -739,6 +739,12 @@ module.exports = {
         source: '用户来源',
         status: '状态'
       }
+    },
+
+    food: {
+      fields: {
+        name: '标题'
+      }
     }
   },
 
@@ -1481,6 +1487,19 @@ module.exports = {
         region_id: '所在区域ID',
         source: '用户来源',
         status: '状态'
+      }
+    },
+
+    food: {
+      placeholders: {
+        name: '请填写食材标题',
+        instructions: '请填写食材描述'
+      },
+      fields: {
+        name: '标题',
+        images: '成品图',
+        classification: '类别',
+        instructions: '摘要'
       }
     }
   }

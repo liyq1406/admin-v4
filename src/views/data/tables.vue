@@ -63,7 +63,7 @@ div
               label.checkbox(v-for="type in permissionTypes")
                 input(type="checkbox", v-model="addModel.permission", name="permission", :value="type.value")
                 | {{type.label}}
-        .form-row
+        .form-row.mxh
           label.form-control {{ $t("table.fields.field") }}:
           .controls
             .field-row(v-for="field in addFields")

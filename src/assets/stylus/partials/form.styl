@@ -95,10 +95,26 @@
       float none
       width 100%
 
+  .select-group
+    clearfix()
+
+    .select
+      float left
+      position relative
+      width 140px
+      margin 0 10px 10px 0
+      padding-right 30px
+
+      .fa
+        absolute right top
+        width 20px
+        line-height 30px
+        color red
+        cursor pointer
+
   .form-row
     position relative
     margin-bottom 12px
-    max-height 240px
     overflow-y auto
     clearfix()
 
@@ -109,13 +125,20 @@
 
     .controls
       float left
-      max-width 500px
+      max-width 506px
       width 40%
       min-width 250px
+
+      &.controls-image
+        max-width 688px
+        width 60%
 
     .control-text
       display inline-block
       line-height 35px
+
+    &.mxh
+      max-height 240px
 
   .form-hints
     margin-top 20px
