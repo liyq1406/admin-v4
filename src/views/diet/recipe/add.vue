@@ -40,28 +40,37 @@ section.main-wrap.diet
                 span 类别：
               search-box
                 button.btn.btn-primary(slot="search-button", @click="searchFoods") {{ $t('common.search') }}
-            .toSelectList
-              table.table.table-stripe.table-bordered
-                thead
-                  tr
-                    th
-                      | 标题
-                    th.tac {{ $t('common.action') }}
-                tbody
-                  tr(v-for="n in 5")
-                    td 小炒肉
-                    td.tac
-                      a.btn-link.btn-sm 添加
-              pager(:page-count="1",:total="15",:current.sync="3")
-            .selectedList
-              table.table.table-stripe.table-bordered
-                thead
-                  tr
-                    th
-                      | 已选择
-                tbody
-                  td.tac
-                    a.btn-link.btn-sm 编辑
+            .food-list
+              .toSelectList
+                table.table.table-stripe.table-bordered
+                  thead
+                    tr
+                      th
+                        | 标题
+                      th.tac {{ $t('common.action') }}
+                  tbody
+                    tr(v-for="toSelectFood in toSelectFoodList")
+                      td
+                        span {{toSelectFood.name}}
+                      td.tac.w70
+                        a.btn-link(v-show="!toSelectFood.selected",@click.stop="selectedFood(toSelectFood)") 添加
+                        span(v-show="toSelectFood.selected") 已添加
+                pager(:page-count="1",:total="15",:current.sync="1")
+              .selectedList
+                table.table.table-stripe.table-bordered
+                  thead
+                    tr
+                      th
+                        | 已选择
+                  tbody
+                    tr(v-for="selectedFood in selectedFoodList")
+                      td
+                        span {{selectedFood.name}}
+                        i.fa.fa-times-circle()
+            .button-box
+              .form-actions
+                button.btn.btn-default(@click.prevent.stop="showSelectFoods=false") {{ $t("common.cancel") }}
+                button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
@@ -81,6 +90,7 @@ export default {
   },
   data () {
     return {
+      adding: false,
       showSelectFoods: false,
       toAddrecipeObj: {
         title: ''
@@ -90,17 +100,90 @@ export default {
         {label: '全部', value: '全部'},
         {label: '蔬菜', value: '蔬菜'},
         {label: '水果', value: '水果'}
+      ],
+      foodList: [
+        {
+          name: '小草肉456'
+        },
+        {
+          name: '小草肉123'
+        },
+        {
+          name: '小草肉1223'
+        },
+        {
+          name: '小草肉13323'
+        },
+        {
+          name: '小草肉234'
+        }
+      ],
+      selectedFoodList: [
+        {
+          name: '小草肉456'
+        },
+        {
+          name: '小草肉123'
+        },
+        {
+          name: '小草肉234'
+        }
       ]
     };
   },
 
+  computed: {
+    toSelectFoodList () {
+      var self = this;
+      var retArr = self.foodList;
+      retArr.map(function (food) {
+        food.selected = false;
+        for (let i = 0;i < self.selectedFoodList.length;i++) {
+          if (food.name === self.selectedFoodList[i].name) {
+            food.selected = true;
+          }
+        };
+      });
+      return retArr;
+
+    }
+  },
+
+  watch: {
+    selectedFoodList () {
+      var self = this;
+      self.updateToSelectedList();
+    }
+  },
+
+  ready () {
+  },
+
   methods: {
+    selectedFood (food) {
+      var self = this;
+      self.selectedFoodList.push(food);
+      self.updateToSelectedList();
+    },
     selectClass () {
       var self = this;
       console.log(self);
     },
     searchFoods () {
 
+    },
+    updateToSelectedList () {
+      var self = this;
+      var retArr = self.foodList;
+      retArr.map(function (food) {
+        food.selected = false;
+        for (let i = 0;i < self.selectedFoodList.length;i++) {
+          if (food.name === self.selectedFoodList[i].name) {
+            food.selected = true;
+          }
+        };
+      });
+      self.toSelectFoodList = retArr;
     }
   }
 };
@@ -154,19 +237,40 @@ export default {
         .modal-body
           clearfix()
           .status-bar
+            padding 0
+            border 0
             .v-select
               float left
               display inline-block
+              padding-left 10px
+              .btn-group
+                margin-left 15px
             .search-box
               float right
-          .toSelectList
-            width 68%
-            float left
-            .pager
-              margin-top 10px
-          .selectedList
-            width 30%
-            float right
-
+          .food-list
+            clearfix()
+            .toSelectList
+              width 68%
+              float left
+              .pager
+                margin-top 10px
+            .selectedList
+              width 30%
+              float right
+              .table
+                tbody
+                  tr
+                    td
+                      position relative
+                      i.fa
+                        height 100%
+                        top 0
+                        line-height 30px
+          .button-box
+            width 100%
+            box-sizing border-box
+            text-align right
+            .btn
+              margin-left 10px
 
 </style>
