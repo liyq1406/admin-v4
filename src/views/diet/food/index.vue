@@ -49,7 +49,7 @@ div
         .form-row
           .form-tips.mb10 请输入食材类别，每行一个类别
           .input-text-wrap
-            textarea.input-text(v-model="categories", rows="8")
+            textarea.input-text(v-model="categories | formatCategories", rows="8")
         .form-actions
           button.btn.btn-default(@click.prevent.stop="onCateCancel") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
@@ -78,12 +78,18 @@ export default {
       showPushModal: false,
       total: 0,
       category: '全部',
-      categories: '蔬菜\n水果',
+      categories: [],
       currentPage: 1,
       pageCount: 10,
       loadingData: false,
       editing: false
     };
+  },
+
+  watch: {
+    formattedCategories () {
+      console.log(this.categories);
+    }
   },
 
   computed: {
@@ -94,6 +100,10 @@ export default {
         {label: '水果', value: '水果'}
       ];
     }
+  },
+
+  ready () {
+    this.getCategories();
   },
 
   methods: {
@@ -109,7 +119,7 @@ export default {
      */
     getCategories () {
       // @TODO 调用获取分类接口
-      this.categories = '蔬菜\n水果';
+      this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
     },
 
     /**
@@ -118,7 +128,7 @@ export default {
     onCateCancel () {
       this.editing = false;
       this.showCategoryModal = false;
-      this.getCategories();
+      // this.getCategories();
     },
 
     /**

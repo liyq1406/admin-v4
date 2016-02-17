@@ -60,6 +60,52 @@ Object.keys(filters).forEach(function (key) {
   Vue.filter(key, filters[key]);
 });
 
+Vue.filter('formatCategories', {
+  read (val) {
+    let cateStr = '';
+    val.map((category, index) => {
+      cateStr += category.main;
+      if (category.sub.length) {
+        cateStr += ':';
+        category.sub.map((item, i) => {
+          cateStr += item;
+          if (i < category.sub.length - 1) {
+            cateStr += ',';
+          }
+        });
+      }
+      if (index < val.length - 1) {
+        cateStr += '\n';
+      }
+    });
+    return cateStr;
+  },
+
+  write (val, oldVal) {
+    let ret = [];
+    let arr = val.split('\n');
+    console.log(arr);
+    arr.map((item, index) => {
+      if (item.length) {
+        let obj = {};
+        let temp = item.split(':');
+        obj.main = temp[0].trim();
+        if (temp[1]) {
+          let subArr = temp[1].split(',');
+          subArr = subArr.map((item) => {
+            return item.trim();
+          });
+          obj.sub = subArr;
+        } else {
+          obj.sub = [];
+        }
+        ret.push(obj);
+      }
+    });
+    return ret;
+  }
+});
+
 // 注册全局全局混合
 // ------------------------------
 Vue.mixin(globalMixin);
