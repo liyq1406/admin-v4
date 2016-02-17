@@ -49,11 +49,11 @@ section.main-wrap.diet
                         | 标题
                       th.tac {{ $t('common.action') }}
                   tbody
-                    tr(v-for="toSelectFood in toSelectFoodList")
+                    tr(v-for="toSelectFood in toSelectFoodList",track-by = "$index")
                       td
                         span {{toSelectFood.name}}
                       td.tac.w70
-                        a.btn-link(v-show="!toSelectFood.selected",@click.stop="selectedFood(toSelectFood)") 添加
+                        a.btn-link(v-show="!toSelectFood.selected",@click.stop="addFood(toSelectFood)") 添加
                         span(v-show="toSelectFood.selected") 已添加
                 pager(:page-count="1",:total="15",:current.sync="1")
               .selectedList
@@ -66,7 +66,7 @@ section.main-wrap.diet
                     tr(v-for="selectedFood in selectedFoodList")
                       td
                         span {{selectedFood.name}}
-                        i.fa.fa-times-circle()
+                        i.fa.fa-times-circle(@click="delectFood(selectedFood)")
             .button-box
               .form-actions
                 button.btn.btn-default(@click.prevent.stop="showSelectFoods=false") {{ $t("common.cancel") }}
@@ -103,66 +103,51 @@ export default {
       ],
       foodList: [
         {
-          name: '小草肉456'
+          name: '小草肉456',
+          selected: false
         },
         {
-          name: '小草肉123'
+          name: '小草肉123',
+          selected: false
         },
         {
-          name: '小草肉1223'
+          name: '小草肉1223',
+          selected: false
         },
         {
-          name: '小草肉13323'
+          name: '小草肉13323',
+          selected: false
         },
         {
-          name: '小草肉234'
+          name: '小草肉234',
+          selected: false
+        }
+      ],
+      toSelectFoodList: [
+        {
+          name: '123',
+          selected: false
         }
       ],
       selectedFoodList: [
-        {
-          name: '小草肉456'
-        },
-        {
-          name: '小草肉123'
-        },
-        {
-          name: '小草肉234'
-        }
       ]
     };
   },
 
-  computed: {
-    toSelectFoodList () {
-      var self = this;
-      var retArr = self.foodList;
-      retArr.map(function (food) {
-        food.selected = false;
-        for (let i = 0;i < self.selectedFoodList.length;i++) {
-          if (food.name === self.selectedFoodList[i].name) {
-            food.selected = true;
-          }
-        };
-      });
-      return retArr;
-
-    }
-  },
-
-  watch: {
-    selectedFoodList () {
-      var self = this;
-      self.updateToSelectedList();
-    }
-  },
-
   ready () {
+    var self = this;
+    self.updateToSelectedList();
   },
 
   methods: {
-    selectedFood (food) {
+    addFood (food) {
       var self = this;
       self.selectedFoodList.push(food);
+      self.updateToSelectedList();
+    },
+    delectFood (food) {
+      var self = this;
+      self.selectedFoodList.$remove(food);
       self.updateToSelectedList();
     },
     selectClass () {
@@ -175,6 +160,9 @@ export default {
     updateToSelectedList () {
       var self = this;
       var retArr = self.foodList;
+      // for (var i = 0; i < retArr.length; i++) {
+      //   retArr[i].selected = false;
+      // }
       retArr.map(function (food) {
         food.selected = false;
         for (let i = 0;i < self.selectedFoodList.length;i++) {
@@ -183,7 +171,8 @@ export default {
           }
         };
       });
-      self.toSelectFoodList = retArr;
+      self.toSelectFoodList = [].concat(retArr);
+
     }
   }
 };
@@ -257,6 +246,9 @@ export default {
             .selectedList
               width 30%
               float right
+              min-height 192px
+              border 1px solid #e4e4e4
+              box-sizing border-box
               .table
                 tbody
                   tr
