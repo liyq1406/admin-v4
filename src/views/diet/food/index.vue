@@ -77,7 +77,7 @@ export default {
       showCategoryModal: false,
       showPushModal: false,
       total: 0,
-      category: '全部',
+      category: 'all',
       categories: [],
       currentPage: 1,
       pageCount: 10,
@@ -86,19 +86,16 @@ export default {
     };
   },
 
-  watch: {
-    formattedCategories () {
-      console.log(this.categories);
-    }
-  },
-
   computed: {
     categoryOptions () {
-      return [
-        {label: '全部', value: '全部'},
-        {label: '蔬菜', value: '蔬菜'},
-        {label: '水果', value: '水果'}
-      ];
+      var arr = [{label: '全部', value: 'all'}];
+      this.categories.map((item) => {
+        let obj = {};
+        obj.label = item.main;
+        obj.value = item.main;
+        arr.push(obj);
+      });
+      return arr;
     }
   },
 

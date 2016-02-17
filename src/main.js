@@ -60,6 +60,9 @@ Object.keys(filters).forEach(function (key) {
   Vue.filter(key, filters[key]);
 });
 
+/**
+ * 食材/菜谱类别过滤器
+ */
 Vue.filter('formatCategories', {
   read (val) {
     let cateStr = '';
@@ -84,7 +87,6 @@ Vue.filter('formatCategories', {
   write (val, oldVal) {
     let ret = [];
     let arr = val.split('\n');
-    console.log(arr);
     arr.map((item, index) => {
       if (item.length) {
         let obj = {};
