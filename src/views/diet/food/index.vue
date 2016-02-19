@@ -4,7 +4,7 @@ div
     .panel-bd
       //- 操作栏
       .action-bar
-        search-box
+        search-box(:key.sync="query", :active="searching", :placeholder="$t('food.placeholders.search')", @cancel="getFoods", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getFoods")
           button.btn.btn-primary(slot="search-button", @click="getFoods") {{ $t('common.search') }}
         .action-group
           a.btn.btn-success(v-link="{path: '/diet/food/add'}")
@@ -34,12 +34,23 @@ div
               | 创建时间
             th.tac {{ $t('common.action') }}
         tbody
-          td 小炒肉
-          td xiaolu@xlink.cn
-          td 2015-06-11 12:09:11
-          td.tac
-            a.btn-link.btn-sm(v-link="{path: '/diet/food/123/edit'}") 编辑
-      pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
+          template(v-if="foods.length > 0 && !loadingData")
+            tr(v-for="food in foods")
+              td {{food.name}}
+              td {{food.created_by}}
+              td {{food.created_at | formatDate}}
+              td.tac
+                a.btn-link.btn-sm(v-link="{path: '/diet/food/123/edit'}") 编辑
+          tr(v-if="loadingData")
+            td.tac(colspan="4")
+              .tips-null
+                i.fa.fa-refresh.fa-spin
+                span {{ $t("common.data_loading") }}
+          tr(v-if="foods.length === 0 && !loadingData")
+            td.tac(colspan="4")
+              .tips-null
+                span {{ $t("common.no_records") }}
+      pager(v-if="!loadingData && total > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
 
   // 类别管理浮层
   modal(:show.sync="showCategoryModal")
@@ -56,7 +67,7 @@ div
 </template>
 
 <script>
-// import api from '../../api';
+import api from '../../../api';
 import Select from '../../../components/select.vue';
 import Pager from '../../../components/pager.vue';
 import Modal from '../../../components/modal.vue';
@@ -72,11 +83,14 @@ export default {
     'pager': Pager
   },
 
-  data () {
+  data (a, b, c) {
     return {
       showCategoryModal: false,
       showPushModal: false,
+      query: '',
+      searching: false,
       total: 0,
+      foods: [],
       category: 'all',
       categories: [],
       currentPage: 1,
@@ -87,6 +101,10 @@ export default {
   },
 
   computed: {
+    /**
+     * 构建食材分类选项
+     * @return {Array} 分类选项
+     */
     categoryOptions () {
       var arr = [{label: '全部', value: 'all'}];
       this.categories.map((item) => {
@@ -96,11 +114,42 @@ export default {
         arr.push(obj);
       });
       return arr;
+    },
+
+    /**
+     * 食材查询条件
+     * @return {Object} 查询条件
+     */
+    queryCondition () {
+      var condition = {
+        filter: ['_id', 'name', 'classification', 'created_by', 'created_at'],
+        limit: this.pageCount,
+        offset: (this.currentPage - 1) * this.pageCount,
+        query: {},
+        order: {
+          created_at: 'desc'
+        }
+      };
+
+      if (this.query.length > 0) {
+        condition.query['name'] = { $like: this.query };
+      }
+
+      if (this.category === 'all') {
+        delete condition.query['classification.main'];
+      } else {
+        condition.query['classification.main'] = { $in: [this.category] };
+      }
+
+      return condition;
     }
   },
 
-  ready () {
-    this.getCategories();
+  route: {
+    data () {
+      this.getCategories();
+      this.getFoods();
+    }
   },
 
   methods: {
@@ -108,6 +157,17 @@ export default {
      * 获取食材列表
      */
     getFoods () {
+      this.loadingData = true;
+      api.diet.listFood(this.queryCondition).then((data) => {
+        // 食材列表
+        this.foods = data.list;
+        // 记录数
+        this.total = data.total;
+        this.loadingData = false;
+      }).catch((error) => {
+        this.handleError(error);
+        this.loadingData = false;
+      });
 
     },
 
@@ -115,8 +175,16 @@ export default {
      * 获取分类
      */
     getCategories () {
-      // @TODO 调用获取分类接口
-      this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
+      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
+      api.diet.listCategory('recipe_Ingredients').then((data) => {
+        if (data.value !== undefined) {
+          this.categories = data.value;
+        } else {
+          this.categories = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
     },
 
     /**
@@ -125,14 +193,38 @@ export default {
     onCateCancel () {
       this.editing = false;
       this.showCategoryModal = false;
-      // this.getCategories();
+      this.getCategories();
     },
 
     /**
      * 提交类别编辑
      */
     onCateSubmit () {
+      this.editing = true;
+      api.diet.editCategory('recipe_Ingredients', this.categories).then((data) => {
+        console.log(data.status);
+        this.onCateCancel();
+      }).catch((error) => {
+        this.onCateCancel();
+        self.handleError(error);
+      });
+    },
 
+    // 搜索
+    handleSearch: function () {
+      if (this.query.length === 0) {
+        this.getFoods();
+      }
+    },
+
+    // 切换搜索
+    toggleSearching: function () {
+      this.searching = !this.searching;
+    },
+
+    // 取消搜索
+    cancelSearching: function () {
+      this.getFoods();
     }
   }
 };

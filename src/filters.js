@@ -31,3 +31,15 @@ export function filterRepeatName (value, arr) {
   console.log(result);
   return result;
 };
+
+export function dropSlected (value, arr, curr) {
+  return value.filter((cate) => {
+    var flag = true;
+    arr.forEach(function (item) {
+      if (cate.main === item.main && curr.main !== item.main) {
+        flag = false;
+      }
+    });
+    return flag;
+  });
+}

@@ -8,6 +8,7 @@ section.main-wrap
     .panel
       .panel-hd
         h2 添加食材
+        pre {{model | json}}
       .panel-bd
         .form
           form(v-form, name="validation", @submit.prevent="onSubmit")
@@ -32,30 +33,26 @@ section.main-wrap
               label.form-control {{ $t("food.fields.classification") }}:
               .controls
                 .select-group
-                  .select
-                    select(v-model="model.classification", v-form-ctrl, name="classification")
-                      option(v-for="category in categories", :value="", :selected="$index===0") {{category}}
+                  .select(v-for="category in model.classification")
+                    select(v-model="category.main")
+                      option(v-for="opt in categories | dropSlected model.classification category", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
                     span.fa.fa-times
-                  .select
-                    select(v-model="model.classification", v-form-ctrl, name="classification")
-                      option(v-for="category in categories", :value="", :selected="$index===0") {{category}}
-                    span.fa.fa-times
-                button.btn.btn-success
+                button.btn.btn-success(@click.prevent="AddCategory")
                   i.fa.fa-plus
                   | 添加类别
             .form-row
               label.form-control {{ $t("food.fields.instructions") }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('food.placeholders.instructions')")
-                  textarea.input-text(v-model="model.instructions", type="text", v-form-ctrl, name="instructions", maxlength="250", lazy)
-                .form-tips.form-tips-error(v-if="validation.instructions.$dirty")
-                  span(v-if="validation.instructions.$error.maxlength")  {{ $t('validation.maxlength', [ $t('food.fields.instructions'), 250]) }}
+                  textarea.input-text(v-model="model.instructions", type="text", name="instructions", maxlength="250", lazy)
             .form-actions
               button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
 </template>
 
 <script>
+import api from '../../../api';
 import ImageUploader from '../../../components/image-uploader.vue';
+// import _ from 'lodash';
 
 export default {
   name: 'AddFoodForm',
@@ -68,21 +65,72 @@ export default {
     return {
       model: {
         name: '',
-        classification: [],
         images: [''],
+        classification: [{main: 'aaa', sub: []}],
         instructions: ''
       },
       validation: {},
-      categories: ['蔬菜', '水果']
+      categories: []
     };
+  },
+
+  route: {
+    data () {
+      this.getCategories();
+    }
+  },
+
+  computed: {
+    categoryOptions () {
+      return this.categories.filter((cate) => {
+        var flag = true;
+        this.model.classification.forEach(function (item) {
+          if (cate.main === item.main) {
+            flag = false;
+          }
+        });
+        return flag;
+      });
+    }
   },
 
   methods: {
     /**
+     * 获取分类
+     */
+    getCategories () {
+      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
+      api.diet.listCategory('recipe_Ingredients').then((data) => {
+        if (data.value !== undefined) {
+          this.categories = data.value;
+        } else {
+          this.categories = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    AddCategory () {
+      var newCate = {sub: []};
+      newCate.main = this.categoryOptions[0].main;
+      this.model.classification.push(newCate);
+    },
+
+    /**
      * 添加食材表单提交
      */
     onSubmit () {
-
+      var self = this;
+      if (this.validation.$valid) {
+        this.model.classification = [];
+        api.diet.addFood(this.model).then(function (data) {
+          alert('食材添加成功！');
+          self.$route.router.go({path: '/diet/food'});
+        }).catch(function (error) {
+          self.handleError(error);
+        });
+      }
     }
   }
 };

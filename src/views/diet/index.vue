@@ -13,7 +13,7 @@ section.main-wrap
   import Tab from '../../components/tab.vue';
 
   export default {
-    name: 'Statistic',
+    name: 'Diet',
 
     components: {
       'tab': Tab

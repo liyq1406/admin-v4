@@ -745,7 +745,8 @@ module.exports = {
       del: '删除该食材',
       placeholders: {
         name: '请填写食材标题',
-        instructions: '请填写食材描述'
+        instructions: '请填写食材描述',
+        search: '请输入关键字进行查询'
       },
       fields: {
         name: '标题',
