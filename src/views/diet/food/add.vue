@@ -36,8 +36,8 @@ section.main-wrap
                   .select(v-for="category in model.classification")
                     select(v-model="category.main")
                       option(v-for="opt in categories | dropSlected model.classification category", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
-                    span.fa.fa-times
-                button.btn.btn-success(@click.prevent="AddCategory")
+                    span.fa.fa-times(@click="delCategory(category)")
+                button.btn.btn-success(@click.prevent="AddCategory", :disabled="model.classification.length === categories.length", :class="{'disabled': model.classification.length === categories.length}")
                   i.fa.fa-plus
                   | 添加类别
             .form-row
@@ -66,7 +66,7 @@ export default {
       model: {
         name: '',
         images: [''],
-        classification: [{main: 'aaa', sub: []}],
+        classification: [],
         instructions: ''
       },
       validation: {},
@@ -111,10 +111,21 @@ export default {
       });
     },
 
+    /**
+     * 添加类别
+     */
     AddCategory () {
       var newCate = {sub: []};
       newCate.main = this.categoryOptions[0].main;
       this.model.classification.push(newCate);
+    },
+
+    /**
+     * 删除已选类别
+     * @return {[type]} [description]
+     */
+    delCategory (cate) {
+      this.model.classification.$remove(cate);
     },
 
     /**

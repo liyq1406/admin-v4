@@ -118,35 +118,6 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
-    },
-
-    /**
-     * APN密钥文件上传
-     * @param  {File} file 文件流数据
-     * @return {Promise}
-      {
-        "url":"apn密钥文件下载地址"
-      }
-     */
-    uploadApn: function (file) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.apiRoot + '/upload/app/apn_license',
-          file,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              // 'Content-Length': contentLength,
-              'Access-Token': localStorage.getItem('accessToken')
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
     }
-
   };
 };

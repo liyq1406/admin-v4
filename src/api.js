@@ -18,5 +18,6 @@ module.exports = {
   dataTable: require('./api/data-table')(Vue, Promise, config),
   alert: require('./api/alert')(Vue, Promise, config),
   app: require('./api/app')(Vue, Promise, config),
+  upload: require('./api/upload')(Vue, Promise, config),
   diet: require('./api/diet')(Vue, Promise, config)
 };

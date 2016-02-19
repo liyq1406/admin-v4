@@ -586,7 +586,7 @@
               if (!self.uploading) {
                 self.uploading = true;
                 api.corp.refreshToken().then(function () {
-                  api.product.uploadFirmware(self.$route.params.id, evt.target.result).then(function (data) {
+                  api.upload.firmware(self.$route.params.id, evt.target.result).then(function (data) {
                     input.value = '';
                     console.log(data);
                     self[model].file_url = data.url;

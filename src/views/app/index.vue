@@ -429,7 +429,7 @@ section.main-wrap
               if (!self.uploading) {
                 self.uploading = true;
                 api.corp.refreshToken().then(function () {
-                  api.app.uploadApn(evt.target.result).then(function (data) {
+                  api.upload.apn(evt.target.result).then(function (data) {
                     console.log(data);
                     input.value = '';
                     self[model].apn_license_url = data.url;
