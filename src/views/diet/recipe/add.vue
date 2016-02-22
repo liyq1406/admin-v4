@@ -35,16 +35,28 @@ section.main-wrap.diet
                   .select
                     select(v-model="toAddrecipeObj.difficulties", v-form-ctrl, name="classification")
                       option(v-for="difficulty in difficulties", :value="", :selected="$index===0") {{difficulty}}
-                    span.fa.fa-times
+                    //- span.fa.fa-times
+
+            //- .form-row
+            //-   label.form-control {{ $t("food.fields.classification") }}:
+            //-   .controls
+            //-     .select-group
+            //-       .select.clear(v-for="selectedclassification in toAddrecipeObj.classifications")
+            //-         select(v-model="selectedclassification.main")
+            //-           option(v-for="classification in classifications | dropSlected toAddrecipeObj.classifications selectedclassification", :selected="classification===selectedclassification.main") {{classification}}
+            //-         span.fa.fa-times(@click="removeObj(selectedclassification,toAddrecipeObj.classifications)")
+            //-     button.btn.btn-success()
+            //-       i.fa.fa-plus
+            //-       | 添加类别
             .form-row
               label.form-control {{ $t("food.fields.classification") }}:
               .controls
                 .select-group
-                  .select.clear(v-for="selectedclassification in toAddrecipeObj.classifications")
-                    select(@change="selectclassEvent(selectedclassification,$event)",v-form-ctrl, name="classification")
-                      option(v-for="classification in classifications", :value="", :selected="$index===0") {{classification}}
-                    span.fa.fa-times(@click="removeObj(selectedclassification,toAddrecipeObj.classifications)")
-                button.btn.btn-success(@click.prevent="addClassification")
+                  .select(v-for="category in toAddrecipeObj.classifications")
+                    select(v-model="category.main")
+                      option(v-for="opt in categories | dropSlected toAddrecipeObj.classifications category", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
+                    span.fa.fa-times(@click="removeObj(category,toAddrecipeObj.classifications)")
+                button.btn.btn-success(@click.prevent="AddCategory", :disabled="toAddrecipeObj.classifications.length === categories.length", :class="{'disabled': toAddrecipeObj.classifications.length === categories.length}")
                   i.fa.fa-plus
                   | 添加类别
             .form-row
@@ -63,19 +75,19 @@ section.main-wrap.diet
             .form-row
               label.form-control 烹饪设备:
               .controls
-                .select-group(v-for="n in 3")
+                .select-group(v-for="cookingDevice in cookingDevices")
                   .select.inline
-                    select(v-form-ctrl, name="classification")
-                      option(v-for="classification in classifications", :value="", :selected="$index===0") {{classification}}
+                    select(v-model="cookingDevice.device")
+                      option(v-for="opt in cookingDevicesList", :value="opt", :selected="$index===0") {{opt}}
                   .input-text-wrap.inline
-                    input.input-text-time(type="text")
+                    input.input-text-time(type="text",v-model="cookingDevice.time")
                     span.text-time 分钟
                   .delete-input.inline
-                    span.fa.fa-times
-                  .input-text-wrap.block.margin10(v-placeholder="'请输入设备烹饪指令'")
-                    textarea.input-text(v-model="toAddrecipeObj.instructions", type="text",lazy)
+                    span.fa.fa-times.pointer(@click="removeObj(cookingDevice,cookingDevices)")
+                  .input-text-wrap.block.margin10
+                    textarea.input-text(placeholder="请输入设备烹饪指令",v-model="cookingDevice.code", type="text")
 
-                button.btn.btn-success
+                button.btn.btn-success(@click.prevent="AddCookingDevice")
                   i.fa.fa-plus
                   | 添加烹饪设备
             .form-row
@@ -110,7 +122,7 @@ section.main-wrap.diet
           h3(slot="header") 选择食材
           .food-box(slot="body")
             .status-bar
-              v-select(:options="categoryOptions", :value.sync="category", @select="selectClass")
+              v-select(:options="foodCategoryOptions", :value.sync="category", @select="selectClass")
                 span 类别：
               search-box
                 button.btn.btn-primary(slot="search-button", @click="searchFoods") {{ $t('common.search') }}
@@ -148,6 +160,7 @@ section.main-wrap.diet
 </template>
 
 <script>
+import api from '../../../api';
 import Modal from '../../../components/modal.vue';
 import Pager from '../../../components/pager.vue';
 import Select from '../../../components/select.vue';
@@ -171,15 +184,15 @@ export default {
       showSelectFoods: false,
       toAddrecipeObj: {
         name: '',
-        classifications: [{main: '湘菜', sub: ''}, {main: '粤菜', sub: ''}],
+        classifications: [],
         difficulties: [],
         images: ['', '', ''],
         instructions: ''
       },
       difficulties: ['不限', '新手', '初级', '中极', '高级', '厨神'],
-      classifications: ['测试菜', '粤菜', '湘菜', '东北菜', '养生'],
+      cookingDevicesList: ['云炖锅', '隔水炖', '电饭煲', '某某煲'],
       category: '全部',
-      categoryOptions: [
+      foodCategoryOptions: [
         {label: '全部', value: '全部'},
         {label: '蔬菜', value: '蔬菜'},
         {label: '水果', value: '水果'}
@@ -206,35 +219,24 @@ export default {
           selected: false
         }
       ],
-      toSelectFoodList: [
-        {
-          name: '123',
-          selected: false
-        }
-      ],
-      selectedFoodList: [
-      ],
+      toSelectFoodList: [],
+      selectedFoodList: [],
+      cookingDevices: [],
       cookingSteps: [
         {
           index: 0,
           description: '',
-          time: 30,
-          images: ''
-        },
-        {
-          index: 0,
-          description: '',
-          time: 30,
-          images: ''
-        },
-        {
-          index: 1,
-          description: '',
-          time: 30,
           images: ''
         }
-      ]
+      ],
+      categories: []
     };
+  },
+
+  route: {
+    data () {
+      this.getCategories();
+    }
   },
 
   ready () {
@@ -242,31 +244,65 @@ export default {
     self.updateToSelectedList();
   },
 
-  methods: {
-    selectclassEvent (obj, event) {
-      console.log(event.target.value);
-      obj.main = event.target.value;
-    },
-    addClassification () {
-      var self = this;
-      var noRepeatName = function () {
-        for (var i = 0; i < self.classifications.length; i++) {
-          console.log(self.toAddrecipeObj.classifications[0]);
-          for (var j = 0; j < self.toAddrecipeObj.classifications.length; i++) {
-            if (self.toAddrecipeObj.classifications[j].main !== self.classifications[i]) {
-
-              return self.classifications[i];
-            }
+  computed: {
+    categoryOptions () {
+      console.log(this.categories);
+      return this.categories.filter((cate) => {
+        var flag = true;
+        this.toAddrecipeObj.classifications.forEach(function (item) {
+          if (cate.main === item.main) {
+            flag = false;
           }
-        }
+        });
+        return flag;
+      });
+    }
+  },
+
+  methods: {
+    /**
+     * 添加烹饪设备
+     */
+    AddCookingDevice () {
+      var self = this;
+      var newDevice = {
+        device: '',
+        code: '',
+        time: ''
       };
-      console.log(noRepeatName());
-      var newclass = {
-        main: noRepeatName(),
-        sub: ''
-      };
-      self.toAddrecipeObj.classifications.push(newclass);
+      self.cookingDevices.push(newDevice);
     },
+    /**
+     * 获取分类
+     */
+    getCategories () {
+      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
+      api.diet.listCategory('recipe_Ingredients').then((data) => {
+        if (data.value !== undefined) {
+          this.categories = data.value;
+        } else {
+          this.categories = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
+     * 添加类别
+     */
+    AddCategory () {
+      var newCate = {sub: []};
+      newCate.main = this.categoryOptions[0].main;
+      this.toAddrecipeObj.classifications.push(newCate);
+    },
+    /**
+     * 菜谱步骤右边四个小操作按钮的事件
+     * @param  {[type]} step      当前操作的步骤对象
+     * @param  {[type]} index     当前操作的步骤index
+     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+     * @return {[type]}           无返回
+     */
     stepEvent (step, index, eventType) {
       var self = this;
       var newstep = {
@@ -289,33 +325,54 @@ export default {
         self.cookingSteps.$remove(step);
       }
     },
+    /**
+     * 通用删除事件
+     * @param  {[type]} obj 要删除的对象
+     * @param  {[type]} arr 要删除的对象的父数组
+     */
     removeObj (obj, arr) {
-      console.log(123);
       arr.$remove(obj);
     },
+    /**
+     * 添加食材弹出浮层的添加事件
+     * @param {[type]} food [description]
+     */
     addFood (food) {
       var self = this;
       self.selectedFoodList.push(food);
       self.updateToSelectedList();
     },
+    /**
+     * 添加食材弹出浮层的删除事件
+     * @param {[type]} food [description]
+     */
     deleteFood (food) {
       var self = this;
       self.selectedFoodList.$remove(food);
       self.updateToSelectedList();
     },
+    /**
+     * 添加食材弹出浮层的类别选择事件
+     * @param {[type]} food [description]
+     */
     selectClass () {
       var self = this;
       console.log(self);
     },
+    /**
+     * 添加食材弹出浮层的搜索事件
+     * @param {[type]} food [description]
+     */
     searchFoods () {
-
+      console.log('添加食材弹出浮层的搜索事件被调用');
     },
+    /**
+     * 添加食材弹出浮层的左边被选择列表更新事件，根据已选择的食材给每个食材添加已选择或者未选择属性
+     * @param {[type]} food [description]
+     */
     updateToSelectedList () {
       var self = this;
       var retArr = self.foodList;
-      // for (var i = 0; i < retArr.length; i++) {
-      //   retArr[i].selected = false;
-      // }
       retArr.map(function (food) {
         food.selected = false;
         for (let i = 0;i < self.selectedFoodList.length;i++) {
@@ -340,6 +397,8 @@ export default {
     display block
   .clear
     clear both
+  .pointer
+    cursor pointer
   .diet
     .panel
       .panel-bd
@@ -400,7 +459,6 @@ export default {
           .controls
             width 70%
             .select-group
-              margin-bottom 20px
               position relative
               .margin10
                 margin-top 10px
