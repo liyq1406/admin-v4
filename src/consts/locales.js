@@ -715,6 +715,7 @@ module.exports = {
     user: {
       list: '用户列表',
       details: '用户详情',
+      setting: '用户设置',
       search_user: '查找用户',
       devices_bound: '绑定设备列表',
       no_devices_bound: '该用户未绑定任何设备',
@@ -1473,6 +1474,7 @@ module.exports = {
     user: {
       list: '用户列表',
       details: '用户详情',
+      setting: '用户设置',
       search_user: '查找用户',
       devices_bound: '绑定设备列表',
       no_devices_bound: '该用户未绑定任何设备',
