@@ -32,15 +32,11 @@ section.main-wrap
               label.form-control {{ $t("food.fields.classification") }}:
               .controls
                 .select-group
-                  .select
-                    select(v-model="model.classification", v-form-ctrl, name="classification")
-                      option(v-for="category in categories", :value="", :selected="$index===0") {{category}}
-                    span.fa.fa-times
-                  .select
-                    select(v-model="model.classification", v-form-ctrl, name="classification")
-                      option(v-for="category in categories", :value="", :selected="$index===0") {{category}}
-                    span.fa.fa-times
-                button.btn.btn-success
+                  .select(v-for="category in model.classification")
+                    select(v-model="category.main")
+                      option(v-for="opt in categories | dropSlected model.classification category", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
+                    span.fa.fa-times(@click="delCategory(category)")
+                button.btn.btn-success(@click.prevent="AddCategory", :disabled="model.classification.length === categories.length", :class="{'disabled': model.classification.length === categories.length}")
                   i.fa.fa-plus
                   | 添加类别
             .form-row
@@ -58,6 +54,7 @@ section.main-wrap
 </template>
 
 <script>
+import api from '../../../api';
 import ImageUploader from '../../../components/image-uploader.vue';
 
 export default {
@@ -76,28 +73,93 @@ export default {
         instructions: ''
       },
       validation: {},
-      categories: ['蔬菜', '水果']
+      categories: []
     };
   },
 
-  ready () {
-    // @TODO 获取目标食材
-
+  route: {
+    data () {
+      // 获取目标食材
+      this.getFood();
+      // 获取分类
+      this.getCategories();
+    }
   },
 
   methods: {
     /**
+     * 获取分类
+     */
+    getCategories () {
+      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
+      api.diet.listCategory('recipe_Ingredients').then((data) => {
+        if (data.value !== undefined) {
+          this.categories = data.value;
+        } else {
+          this.categories = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
+     * 获取食材
+     */
+    getFood () {
+      api.diet.getFood(this.$route.params.id).then((data) => {
+        console.log(data);
+        this.model.name = data.name;
+        this.model.instructions = data.instructions;
+        this.model.images = data.images;
+        this.model.classification = data.classification;
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
+     * 添加类别
+     */
+    AddCategory () {
+      var newCate = {sub: []};
+      newCate.main = this.categoryOptions[0].main;
+      this.model.classification.push(newCate);
+    },
+
+    /**
+     * 删除已选类别
+     * @return {[type]} [description]
+     */
+    delCategory (cate) {
+      this.model.classification.$remove(cate);
+    },
+
+    /**
      * 编辑食材表单提交
      */
     onSubmit () {
-
+      if (this.validation.$valid) {
+        api.diet.updateFood(this.$route.params.id, this.model).then((data) => {
+          alert('食材修改成功！');
+          this.$route.router.go({path: '/diet/food'});
+        }).catch(function (error) {
+          this.handleError(error);
+        });
+      }
     },
 
     /**
      * 删除食材
      */
     deleteFood () {
-
+      if (confirm('确定要删除该食材吗？')) {
+        api.diet.deleteFood(this.$route.params.id).then((data) => {
+          this.$route.router.go({path: '/diet/food'});
+        }).catch((error) => {
+          this.handleError(error);
+        });
+      }
     }
   }
 };

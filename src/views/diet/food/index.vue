@@ -40,7 +40,7 @@ div
               td {{food.created_by}}
               td {{food.created_at | formatDate}}
               td.tac
-                a.btn-link.btn-sm(v-link="{path: '/diet/food/123/edit'}") 编辑
+                a.btn-link.btn-sm(v-link="{path: '/diet/food/'+food._id+'/edit'}") 编辑
           tr(v-if="loadingData")
             td.tac(colspan="4")
               .tips-null
@@ -230,7 +230,7 @@ export default {
 };
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 .form
   .input-text-wrap
     textarea.input-text

@@ -57,6 +57,34 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 图片文件上传
+     * @param  {File} file 文件流数据
+     * @return {Promise}
+      {
+        "url":"图片文件地址"
+      }
+     */
+    image: function (file) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upload/image',
+          file,
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              // 'Content-Length': contentLength,
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
 
   };

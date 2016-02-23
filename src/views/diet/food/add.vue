@@ -8,7 +8,7 @@ section.main-wrap
     .panel
       .panel-hd
         h2 添加食材
-        pre {{model | json}}
+        //- pre {{model | json}}
       .panel-bd
         .form
           form(v-form, name="validation", @submit.prevent="onSubmit")
@@ -134,7 +134,6 @@ export default {
     onSubmit () {
       var self = this;
       if (this.validation.$valid) {
-        this.model.classification = [];
         api.diet.addFood(this.model).then(function (data) {
           alert('食材添加成功！');
           self.$route.router.go({path: '/diet/food'});
