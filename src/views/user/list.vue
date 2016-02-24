@@ -1,49 +1,47 @@
 <template lang="jade">
-section.main-wrap
-  .main
-    .panel
-      .panel-hd
-        search-box(:key.sync="query", :active="searching", @cancel="getUsers", :placeholder="$t('user.fields.account')", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getUsers")
-          button.btn.btn-primary(slot="search-button", @click="getUsers") {{ $t('common.search') }}
-          label {{ $t('user.search_user') }}
-        h2 {{ $t('user.list') }}
-      .panel-bd
-        //- 用户列表
-        table.table.table-stripe.table-bordered
-          thead
-            tr
-              th ID
-              th {{ $t('user.fields.nick_name') }}
-              th {{ $t('user.fields.account') }}
-              th {{ $t('user.fields.create_time') }}
-              th {{ $t('user.fields.source') }}
-              th {{ $t('common.status') }}
-          tbody
-            template(v-if="users.length > 0 && !loadingData")
-              tr(v-for="user in users")
-                td
-                  a.hl-red(v-link="{path: '/users/'+user.id}") {{user.id}}
-                td {{user.nickname}}
-                td {{user.account}}
-                td {{user.create_date | formatDate}}
-                td
-                  span(v-if="user.source===1") Web
-                  span(v-if="user.source===2") Android
-                  span(v-if="user.source===3") iOS
-                  span(v-if="user.source===4") {{ $('common.wechat') }}
-                td
-                  span(v-if="user.status==1") {{ $t('user.status.normal') }}
-                  span(v-if="user.status==2") {{ $t('user.status.banned') }}
-            tr(v-if="loadingData")
-              td.tac(colspan="6")
-                .tips-null
-                  i.fa.fa-refresh.fa-spin
-                  span {{ $t("common.data_loading") }}
-            tr(v-if="total === 0 && !loadingData")
-              td.tac(colspan="6")
-                .tips-null
-                  span {{ $t("common.no_records") }}
-        pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
+.panel
+  .panel-hd
+    search-box(:key.sync="query", :active="searching", @cancel="getUsers", :placeholder="$t('user.fields.account')", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getUsers")
+      button.btn.btn-primary(slot="search-button", @click="getUsers") {{ $t('common.search') }}
+      label {{ $t('user.search_user') }}
+    h2 {{ $t('user.list') }}
+  .panel-bd
+    //- 用户列表
+    table.table.table-stripe.table-bordered
+      thead
+        tr
+          th ID
+          th {{ $t('user.fields.nick_name') }}
+          th {{ $t('user.fields.account') }}
+          th {{ $t('user.fields.create_time') }}
+          th {{ $t('user.fields.source') }}
+          th {{ $t('common.status') }}
+      tbody
+        template(v-if="users.length > 0 && !loadingData")
+          tr(v-for="user in users")
+            td
+              a.hl-red(v-link="{path: '/user/'+user.id}") {{user.id}}
+            td {{user.nickname}}
+            td {{user.account}}
+            td {{user.create_date | formatDate}}
+            td
+              span(v-if="user.source===1") Web
+              span(v-if="user.source===2") Android
+              span(v-if="user.source===3") iOS
+              span(v-if="user.source===4") {{ $('common.wechat') }}
+            td
+              span(v-if="user.status==1") {{ $t('user.status.normal') }}
+              span(v-if="user.status==2") {{ $t('user.status.banned') }}
+        tr(v-if="loadingData")
+          td.tac(colspan="6")
+            .tips-null
+              i.fa.fa-refresh.fa-spin
+              span {{ $t("common.data_loading") }}
+        tr(v-if="total === 0 && !loadingData")
+          td.tac(colspan="6")
+            .tips-null
+              span {{ $t("common.no_records") }}
+    pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
 </template>
 
 <script>

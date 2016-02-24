@@ -298,12 +298,31 @@ let configRouter = (router) => {
     '/users': {
       component: function (resolve) {
         require.ensure([], function (require) {
-          resolve(require('./views/user/list.vue'));
-        }, 'user');
+          resolve(require('./views/user/index.vue'));
+        }, 'data');
+      },
+      subRoutes: {
+        // 用户列表
+        'list': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/user/list.vue'));
+            }, 'data');
+          }
+        },
+        // 用户设置
+        'usersetting': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/user/usersetting.vue'));
+            }, 'data');
+          }
+        }
       }
     },
+
     // 用户详情
-    '/users/:id': {
+    '/user/:id': {
       component: function (resolve) {
         require.ensure([], function (require) {
           resolve(require('./views/user/details.vue'));
@@ -346,6 +365,15 @@ let configRouter = (router) => {
         }, 'settings');
       },
       subRoutes: {
+        // 新tab
+        'newtab': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/settings/newtab.vue'));
+            }, 'settings');
+          }
+        },
+
         // 授权管理
         'auth': {
           component: function (resolve) {
@@ -378,61 +406,7 @@ let configRouter = (router) => {
             }, 'settings');
           }
         }
-      }
-    },
 
-    // 饮食管理
-    '/diet': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/diet/index.vue'));
-        }, 'diet');
-      },
-      subRoutes: {
-        // 菜谱管理
-        'recipe': {
-          component: function (resolve) {
-            require.ensure([], function (require) {
-              resolve(require('./views/diet/recipe/index.vue'));
-            }, 'diet');
-          }
-        },
-        // 食材管理
-        'food': {
-          component: function (resolve) {
-            require.ensure([], function (require) {
-              resolve(require('./views/diet/food/index.vue'));
-            }, 'diet');
-          }
-        }
-      }
-    },
-    '/diet/food/add': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/diet/food/add.vue'));
-        }, 'diet');
-      }
-    },
-    '/diet/food/:id/edit': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/diet/food/edit.vue'));
-        }, 'diet');
-      }
-    },
-    '/diet/recipe/add': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/diet/recipe/add.vue'));
-        }, 'diet');
-      }
-    },
-    '/diet/recipe/:id/edit': {
-      component: function (resolve) {
-        require.ensure([], function (require) {
-          resolve(require('./views/diet/recipe/edit.vue'));
-        }, 'diet');
       }
     }
   });
@@ -444,7 +418,7 @@ let configRouter = (router) => {
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
-    '/diet': '/diet/recipe'
+    '/users': '/users/list'
   });
 
   // 路由切换开始时执行

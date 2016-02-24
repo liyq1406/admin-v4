@@ -428,6 +428,49 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 获取url,token信息
+     * @param
+     * @return
+     */
+    getUserSetting: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(config.apiRoot + '/corp_setting', function (data, status, request) {
+          resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 更新url,token信息
+     * @param
+     *  @return
+     */
+    updateUserSetting: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(config.apiRoot + '/corp_setting',
+        JSON.stringify(params),
+        function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
+
   };
 };
