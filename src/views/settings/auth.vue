@@ -1,7 +1,7 @@
 <template lang="jade">
 .panel
   .panel-bd
-    .alert-text.alert-text-success
+    .alert-text.alert-text-success.mt20.mb20
       p {{ $t("auth_management.intro") }}
     //- 用户列表
     table.table.table-stripe.table-bordered

@@ -4,22 +4,22 @@ div
     .panel-bd
       //- 操作栏
       .action-bar
-        search-box(:key.sync="query", :active="searching", :placeholder="$t('food.placeholders.search')", @cancel="getFoods", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getFoods")
-          button.btn.btn-primary(slot="search-button", @click="getFoods") {{ $t('common.search') }}
+        search-box(:key.sync="query", :active="searching", :placeholder="$t('ingredient.placeholders.search')", @cancel="getIngredients", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getIngredients")
+          button.btn.btn-primary(slot="search-button", @click="getIngredients") {{ $t('common.search') }}
         .action-group
-          a.btn.btn-success(v-link="{path: '/diet/food/add'}")
+          a.btn.btn-success(v-link="{path: '/diet/ingredient/add'}")
             i.fa.fa-plus
             | 添加食材
-          button.btn.btn-success(@click="showCategoryModal = true")
+          button.btn.btn-success(@click="showCategoryModal=true")
             i.fa.fa-list-ul
             | 类别管理
-          button.btn.btn-success(@click="showPushModal = true")
+          button.btn.btn-success(@click="showPushModal=true")
             i.fa.fa-share
             | 推送管理
       //- 状态栏
       .status-bar
         .status {{{ $t('common.total_results', {count:total}) }}}
-        v-select(:options="categoryOptions", :value.sync="category", @select="getFoods")
+        v-select(:options="categoryOptions", :value.sync="category", @select="getIngredients")
           span 类别：
 
       //- 食材列表
@@ -34,23 +34,23 @@ div
               | 创建时间
             th.tac {{ $t('common.action') }}
         tbody
-          template(v-if="foods.length > 0 && !loadingData")
-            tr(v-for="food in foods")
-              td {{food.name}}
-              td {{food.created_by}}
-              td {{food.created_at | formatDate}}
+          template(v-if="ingredients.length > 0 && !loadingData")
+            tr(v-for="ingredient in ingredients")
+              td {{ingredient.name}}
+              td {{ingredient.created_by}}
+              td {{ingredient.created_at | formatDate}}
               td.tac
-                a.btn-link.btn-sm(v-link="{path: '/diet/food/'+food._id+'/edit'}") 编辑
+                a.btn-link.btn-sm(v-link="{path: '/diet/ingredient/'+ingredient._id+'/edit'}") 编辑
           tr(v-if="loadingData")
             td.tac(colspan="4")
               .tips-null
                 i.fa.fa-refresh.fa-spin
                 span {{ $t("common.data_loading") }}
-          tr(v-if="foods.length === 0 && !loadingData")
+          tr(v-if="ingredients.length === 0 && !loadingData")
             td.tac(colspan="4")
               .tips-null
                 span {{ $t("common.no_records") }}
-      pager(v-if="!loadingData && total > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getFoods")
+      pager(v-if="!loadingData && total > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getIngredients")
 
   // 类别管理浮层
   modal(:show.sync="showCategoryModal")
@@ -74,7 +74,7 @@ import Modal from '../../../components/modal.vue';
 import SearchBox from '../../../components/search-box.vue';
 
 export default {
-  name: 'FoodList',
+  name: 'IngredientList',
 
   components: {
     'v-select': Select,
@@ -90,7 +90,7 @@ export default {
       query: '',
       searching: false,
       total: 0,
-      foods: [],
+      ingredients: [],
       category: 'all',
       categories: [],
       currentPage: 1,
@@ -148,7 +148,7 @@ export default {
   route: {
     data () {
       this.getCategories();
-      this.getFoods();
+      this.getIngredients();
     }
   },
 
@@ -156,11 +156,11 @@ export default {
     /**
      * 获取食材列表
      */
-    getFoods () {
+    getIngredients () {
       this.loadingData = true;
-      api.diet.listFood(this.queryCondition).then((data) => {
+      api.diet.listIngredient(this.queryCondition).then((data) => {
         // 食材列表
-        this.foods = data.list;
+        this.ingredients = data.list;
         // 记录数
         this.total = data.total;
         this.loadingData = false;
@@ -176,7 +176,7 @@ export default {
      */
     getCategories () {
       // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
-      api.diet.listCategory('recipe_Ingredients').then((data) => {
+      api.diet.listCategory('ingredient_classification').then((data) => {
         if (data.value !== undefined) {
           this.categories = data.value;
         } else {
@@ -201,8 +201,7 @@ export default {
      */
     onCateSubmit () {
       this.editing = true;
-      api.diet.editCategory('recipe_Ingredients', this.categories).then((data) => {
-        console.log(data.status);
+      api.diet.updateCategory('ingredient_classification', this.categories).then((data) => {
         this.onCateCancel();
       }).catch((error) => {
         this.onCateCancel();
@@ -213,7 +212,7 @@ export default {
     // 搜索
     handleSearch: function () {
       if (this.query.length === 0) {
-        this.getFoods();
+        this.getIngredients();
       }
     },
 
@@ -224,7 +223,7 @@ export default {
 
     // 取消搜索
     cancelSearching: function () {
-      this.getFoods();
+      this.getIngredients();
     }
   }
 };

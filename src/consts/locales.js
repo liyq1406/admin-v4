@@ -742,7 +742,7 @@ module.exports = {
       }
     },
 
-    food: {
+    ingredient: {
       del: '删除该食材',
       placeholders: {
         name: '请填写食材标题',
@@ -754,6 +754,22 @@ module.exports = {
         images: '成品图',
         classification: '类别',
         instructions: '摘要'
+      }
+    },
+
+    recipe: {
+      del: '删除该菜谱',
+      placeholders: {
+        name: '请填写菜谱标题',
+        instructions: '请填写菜谱描述',
+        tips: '请填写菜谱备注'
+      },
+      fields: {
+        name: '标题',
+        images: '成品图',
+        classification: '类别',
+        instructions: '摘要',
+        tips: '备注'
       }
     }
   },
@@ -1501,7 +1517,7 @@ module.exports = {
       }
     },
 
-    food: {
+    ingredient: {
       del: '删除该食材',
       placeholders: {
         name: '请填写食材标题',
@@ -1512,6 +1528,22 @@ module.exports = {
         images: '成品图',
         classification: '类别',
         instructions: '摘要'
+      }
+    },
+
+    recipe: {
+      del: '删除该菜谱',
+      placeholders: {
+        name: '请填写菜谱标题',
+        instructions: '请填写菜谱描述',
+        tips: '请填写菜谱备注'
+      },
+      fields: {
+        name: '标题',
+        images: '成品图',
+        classification: '类别',
+        instructions: '摘要',
+        tips: '备注'
       }
     }
   }

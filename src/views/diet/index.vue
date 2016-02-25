@@ -33,7 +33,7 @@ section.main-wrap
             link: { path: '/diet/recipe' }
           }, {
             label: '食材管理',
-            link: { path: '/diet/food' }
+            link: { path: '/diet/ingredient' }
           }]
         };
       }

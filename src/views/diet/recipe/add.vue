@@ -10,130 +10,144 @@ section.main-wrap.diet
         h2 添加菜谱
       .panel-bd
         .form
-          form(v-form, name="validation")
+          form(v-form, name="validation", @submit.prevent="onRecipeSubmit")
             .form-row
-              label.form-control {{ $t("food.fields.name") }}:
+              label.form-control {{ $t("recipe.fields.name") }}:
               .controls
                 .input-text-wrap(v-placeholder="'请填写菜谱名称'")
-                  input.input-text(v-model="toAddrecipeObj.name",type="text", v-form-ctrl, name="name", maxlength="250", required, lazy)
+                  input.input-text(v-model="model.name",type="text", v-form-ctrl, name="name", maxlength="250", required, lazy)
                 .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('food.fields.name')}) }}
+                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}
                 .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('food.fields.name')}) }}
-                  span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('food.fields.name'), 250]) }}
-                  span(v-if="validation.name.$error.customValidator") {{ $t('validation.format', {field: $t('food.fields.name')}) }}
+                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}
+                  span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}
+                  span(v-if="validation.name.$error.customValidator") {{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}
             .form-row
-              label.form-control {{ $t("food.fields.images") }}:
+              label.form-control {{ $t("ingredient.fields.images") }}:
               .controls.controls-image
                 .image-uploader
-                  image-uploader(v-for="n in toAddrecipeObj.images.length", :image.sync="toAddrecipeObj.images[n]")
+                  image-uploader(v-for="n in model.images.length", :image.sync="model.images[n]")
                 .form-tips 建议上传640像素*480像素成品图，最多不超过3张
             .form-row
               label.form-control 难度:
               .controls
                 .select-group
                   .select
-                    select(v-model="toAddrecipeObj.difficulties", v-form-ctrl, name="classification")
-                      option(v-for="difficulty in difficulties", :value="", :selected="$index===0") {{difficulty}}
+                    select(v-model="model.properties.difficulty", name="difficulty")
+                      option(v-for="difficulty in difficulties", :value="difficulty", :selected="difficulty===model.properties.difficulty") {{difficulty}}
                     //- span.fa.fa-times
 
             //- .form-row
-            //-   label.form-control {{ $t("food.fields.classification") }}:
+            //-   label.form-control {{ $t("ingredient.fields.classification") }}:
             //-   .controls
             //-     .select-group
-            //-       .select.clear(v-for="selectedclassification in toAddrecipeObj.classifications")
+            //-       .select.clear(v-for="selectedclassification in model.classifications")
             //-         select(v-model="selectedclassification.main")
-            //-           option(v-for="classification in classifications | dropSlected toAddrecipeObj.classifications selectedclassification", :selected="classification===selectedclassification.main") {{classification}}
-            //-         span.fa.fa-times(@click="removeObj(selectedclassification,toAddrecipeObj.classifications)")
+            //-           option(v-for="classification in classifications | dropSlected model.classifications selectedclassification", :selected="classification===selectedclassification.main") {{classification}}
+            //-         span.fa.fa-times(@click="removeObj(selectedclassification,model.classifications)")
             //-     button.btn.btn-success()
             //-       i.fa.fa-plus
             //-       | 添加类别
             .form-row
-              label.form-control {{ $t("food.fields.classification") }}:
+              label.form-control {{ $t("ingredient.fields.classification") }}:
               .controls
                 .select-group
-                  .select(v-for="category in toAddrecipeObj.classifications")
+                  .select(v-for="category in model.classification")
                     select(v-model="category.main")
-                      option(v-for="opt in categories | dropSlected toAddrecipeObj.classifications category", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
-                    span.fa.fa-times(@click="removeObj(category,toAddrecipeObj.classifications)")
-                button.btn.btn-success(@click.prevent="AddCategory", :disabled="toAddrecipeObj.classifications.length === categories.length", :class="{'disabled': toAddrecipeObj.classifications.length === categories.length}")
+                      option(v-for="opt in categories | dropSlected model.classification category 'main'", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
+                    span.fa.fa-times(@click="removeObj(category,model.classification)")
+                button.btn.btn-success(@click.prevent="addCategory", :disabled="model.classification.length === categories.length", :class="{'disabled': model.classification.length === categories.length}")
                   i.fa.fa-plus
                   | 添加类别
             .form-row
-              label.form-control {{ $t("food.fields.instructions") }}:
+              label.form-control {{ $t("recipe.fields.instructions") }}:
               .controls
-                .input-text-wrap(v-placeholder="$t('food.placeholders.instructions')")
-                  textarea.input-text(v-model="toAddrecipeObj.instructions", type="text", v-form-ctrl, name="instructions", maxlength="250", lazy)
-                .form-tips.form-tips-error(v-if="validation.instructions.$dirty")
-                  span(v-if="validation.instructions.$error.maxlength")  {{ $t('validation.maxlength', [ $t('food.fields.instructions'), 250]) }}
-            .form-row
+                .input-text-wrap(v-placeholder="$t('recipe.placeholders.instructions')")
+                  textarea.input-text(v-model="model.instructions", type="text", name="instructions", lazy)
+            .form-row.ingredient-row
               label.form-control 食材:
               .controls
-                .input-text-wrap(v-for="major_ingredient in toAddrecipeObj.major_ingredients")
-                  .foodname.inline
-                    span {{major_ingredient.name}}
-                  .input-text-wrap.inline
-                    input.input-text-time(type="text",placeholder="请填写用量",v-model="major_ingredient.unit")
-                  span.fa.fa-times.pointer(@click="removeObj(major_ingredient,toAddrecipeObj.major_ingredients)")
-                button.btn.btn-success(@click.prevent="showSelectFoodModal")
+                table(v-if="model.major_ingredients.length")
+                  tbody
+                    tr(v-for="ingredient in model.major_ingredients")
+                      td
+                        span.ingredient-name {{ingredient.name}}
+                      td
+                        .input-text-wrap.inline
+                          input.input-text-time(type="text",placeholder="请填写用量",v-model="ingredient.unit")
+                        span.fa.fa-times.pointer(@click="removeObj(ingredient,model.major_ingredients)")
+                //-
+                  .input-text-wrap.mb5(v-for="ingredient in model.major_ingredients")
+                    .ingredientname.inline
+                      span {{ingredient.name}}
+                    .input-text-wrap.inline
+                      input.input-text-time(type="text",placeholder="请填写用量",v-model="ingredient.unit")
+                    span.fa.fa-times.pointer(@click="removeObj(ingredient,model.major_ingredients)")
+                button.btn.btn-success(@click.prevent="ingredientSelectModal.show=true")
                   i.fa.fa-plus
                   | 添加食材
             .form-row
               label.form-control 烹饪设备:
               .controls
-                .select-group(v-for="cookingDevice in cookingDevices")
+                .select-group(v-for="cookingDevice in model.devices")
                   .select.inline
-                    select(v-model="cookingDevice.device")
-                      option(v-for="opt in cookingDevicesList", :value="opt", :selected="$index===0") {{opt}}
+                    select(v-model="cookingDevice")
+                      option(v-for="opt in devices | dropSlected model.devices cookingDevice 'name'", :value="opt", :selected="opt.name===cookingDevice.name") {{opt.name}}
                   .input-text-wrap.inline
                     input.input-text-time(type="text",v-model="cookingDevice.time",placeholder="请填写时长")
                     span.text-time 分钟
                   .delete-input.inline
-                    span.fa.fa-times.pointer(@click="removeObj(cookingDevice,cookingDevices)")
-                  .input-text-wrap.block.margin10
-                    textarea.input-text(placeholder="请输入设备烹饪指令",v-model="cookingDevice.code", type="text")
-
-                button.btn.btn-success(@click.prevent="AddCookingDevice")
+                    span.fa.fa-times.pointer(@click="removeObj(cookingDevice, model.devices)")
+                  .input-text-wrap.block.mb20
+                    textarea.input-text(placeholder="请输入设备烹饪指令",v-model="cookingDevice.autoexec", type="text")
+                button.btn.btn-success(@click.prevent="addCookingDevice", :disabled="model.devices.length === devices.length", :class="{'disabled': model.devices.length === devices.length}")
                   i.fa.fa-plus
                   | 添加烹饪设备
             .form-row
               label.form-control 步骤:
               .controls
-                .prompt-box
+                .alert-text
                   |小提示：
                   br
                   |1、步骤图宽度在150像素至150像素；
                   br
                   |2、每个步骤用一段话描述，如果不需要可将内容留空；
 
-                .step-box(v-for="cookingstep in cookingSteps")
+                .step-box(v-for="cooking_step in model.cooking_steps")
                   label.form-control 第{{$index+1}}步:
                   .controls.controls-image
                     .image-uploader
-                      image-uploader(:image.sync="cookingstep.images")
+                      image-uploader(:image.sync="cooking_step.images")
                   .input-text-wrap.step-text
-                    textarea.input-text(v-model="cookingstep.description",type="text",lazy,placeholder="请填写步骤的描述")
+                    textarea.input-text(v-model="cooking_step.description",type="text",lazy,placeholder="请填写步骤的描述")
                   .button-list
-                    .controlButton.button-up(v-show="cookingSteps.length>1&&$index>0",@click="stepEvent(cookingstep,$index,'up')")
+                    .control-button.button-up(v-show="model.cooking_steps.length>1&&$index>0",@click="handleStepEvent('MOVE_UP', cooking_step, $index)")
                       i.icon.fa.fa-long-arrow-up
-                    .controlButton.button-down(v-show="cookingSteps.length>1&&$index<(cookingSteps.length-1)",@click="stepEvent(cookingstep,$index,'down')")
+                    .control-button.button-down(v-show="model.cooking_steps.length>1&&$index<(model.cooking_steps.length-1)",@click="handleStepEvent('MOVE_DOWN', cooking_step, $index)")
                       i.icon.fa.fa-long-arrow-down
-                    .controlButton.button-add(@click="stepEvent(cookingstep,$index,'add')")
+                    .control-button.button-add(@click="handleStepEvent('ADD', cooking_step, $index)")
                       i.icon.fa.fa-plus
-                    .controlButton.button-del(v-show="cookingSteps.length>1",@click="stepEvent(cookingstep,$index,'del')")
+                    .control-button.button-del(v-show="model.cooking_steps.length>1",@click="handleStepEvent('DEL', cooking_step, $index)")
                       i.icon.fa.fa-times
+            .form-row
+              label.form-control {{ $t('recipe.fields.tips') }}:
+              .controls
+                .input-text-wrap(v-placeholder="$t('recipe.placeholders.tips')")
+                  textarea.input-text(v-model="model.tips", type="text", name="tips", lazy)
             .form-actions
               button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
-        modal(:show.sync="foodSelectModal.show",:width="800")
+
+        //- 选择食材浮层
+        modal(:show.sync="ingredientSelectModal.show", :width="800")
           h3(slot="header") 选择食材
-          .food-box(slot="body")
+          .ingredient-box(slot="body")
             .status-bar
-              v-select(:options="foodSelectModal.foodCategoryOptions", :value.sync="foodSelectModal.category", @select="selectClass")
+              v-select(:options="ingredientCategoryOptions", :value.sync="ingredientSelectModal.category", @select="getIngredients")
                 span 类别：
-              search-box
-                button.btn.btn-primary(slot="search-button", @click="searchFoods") {{ $t('common.search') }}
-            .food-list
-              .toSelectList
+              search-box(:key.sync="ingredientSelectModal.query", :active="ingredientSelectModal.searching", :placeholder="$t('ingredient.placeholders.search')", @cancel="getIngredients", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getIngredients")
+                button.btn.btn-primary(slot="search-button", @click="getIngredients") {{ $t('common.search') }}
+            .ingredient-list.clearfix.mb20
+              .to-select-list
                 table.table.table-stripe.table-bordered
                   thead
                     tr
@@ -141,28 +155,33 @@ section.main-wrap.diet
                         | 标题
                       th.tac {{ $t('common.action') }}
                   tbody
-                    tr(v-for="toSelectFood in foodSelectModal.toSelectFoodList",track-by = "$index")
-                      td
-                        span {{toSelectFood.name}}
-                      td.tac.w70
-                        a.btn-link(v-show="!toSelectFood.selected",@click.stop="addFood(toSelectFood)") 添加
-                        span(v-show="toSelectFood.selected") 已添加
-                pager(:page-count="1",:total="15",:current.sync="1")
-              .selectedList
-                table.table.table-stripe.table-bordered
-                  thead
-                    tr
-                      th
-                        | 已选择
-                  tbody
-                    tr(v-for="selectedFood in foodSelectModal.selectedFoodList")
-                      td
-                        span {{selectedFood.name}}
-                        i.fa.fa-times-circle(@click="deleteFood(selectedFood)")
+                    template(v-if="filteredIngredientList.length > 0 && !ingredientSelectModal.loadingData")
+                      tr(v-for="ingredient in filteredIngredientList")
+                        td
+                          span {{ingredient.name}}
+                        td.tac.w70
+                          a.btn-link(v-show="!ingredient.selected",@click.stop="addIngredient(ingredient)") 添加
+                          span(v-show="ingredient.selected") 已添加
+                    tr(v-if="ingredientSelectModal.loadingData")
+                      td.tac(colspan="2")
+                        .tips-null
+                          i.fa.fa-refresh.fa-spin
+                          span {{ $t("common.data_loading") }}
+                    tr(v-if="filteredIngredientList.length === 0 && !ingredientSelectModal.loadingData")
+                      td.tac(colspan="2")
+                        .tips-null
+                          span {{ $t("common.no_records") }}
+                pager(v-if="!ingredientSelectModal.loadingData && ingredientSelectModal.total > ingredientSelectModal.pageCount", :total="ingredientSelectModal.total", :current.sync="ingredientSelectModal.currentPage", :page-count="ingredientSelectModal.pageCount", @page-update="getIngredients")
+              .selected-list
+                h3 已选择
+                ul
+                  li(v-for="selectedIngredient in ingredientSelectModal.selectedIngredientList")
+                    span {{selectedIngredient.name}}
+                    i.fa.fa-times-circle(@click="deleteIngredient(selectedIngredient)")
             .button-box
               .form-actions
-                button.btn.btn-default(@click.prevent.stop="foodSelectModal.show=false") {{ $t("common.cancel") }}
-                button.btn.btn-primary(type="submit", :disabled="foodSelectModal.adding", :class="{'disabled':foodSelectModal.adding}", v-text="foodSelectModal.adding ? $t('common.handling') : $t('common.ok')",@click.prevent.stop="selectedFoodEvent")
+                button.btn.btn-default(@click.prevent.stop="ingredientSelectModal.show=false") {{ $t("common.cancel") }}
+                button.btn.btn-primary(type="submit", :disabled="ingredientSelectModal.adding", :class="{'disabled':ingredientSelectModal.adding}", v-text="ingredientSelectModal.adding ? $t('common.handling') : $t('common.ok')",@click.prevent.stop="confirmSelected")
 </template>
 
 <script>
@@ -172,6 +191,7 @@ import Pager from '../../../components/pager.vue';
 import Select from '../../../components/select.vue';
 import SearchBox from '../../../components/search-box.vue';
 import ImageUploader from '../../../components/image-uploader.vue';
+import _ from 'lodash';
 
 export default {
   name: 'AddForm',
@@ -186,108 +206,145 @@ export default {
   data () {
     return {
       validation: {},
-      toAddrecipeObj: {
+      model: {
         name: '',
-        classifications: [],
+        classification: [],
         major_ingredients: [],
+        minor_ingredients: [],
+        cooking_steps: [{
+          description: '',
+          time: '',
+          images: ''
+        }],
+        properties: {
+          difficulty: '不限'
+        },
+        devices: [],
+        tags: [],
+        tips: '',
         difficulties: [],
         images: ['', '', ''],
         instructions: ''
       },
       difficulties: ['不限', '新手', '初级', '中极', '高级', '厨神'],
-      cookingDevicesList: ['云炖锅', '隔水炖', '电饭煲', '大帅锅'],
-      foodSelectModal: {
+      devices: [
+        {id: '1', name: '云炖锅', autoexec: '', time: ''},
+        {id: '2', name: '隔水炖', autoexec: '', time: ''},
+        {id: '3', name: '电饭煲', autoexec: '', time: ''},
+        {id: '4', name: '大帅锅', autoexec: '', time: ''}
+      ],
+      ingredientSelectModal: {
         show: false,
         adding: false,
-        category: '全部',
-        foodCategoryOptions: [
-          {label: '全部', value: '全部'},
-          {label: '蔬菜', value: '蔬菜'},
-          {label: '水果', value: '水果'}
-        ],
-        foodList: [
-          {
-            name: '小草肉456',
-            unit: ''
-          },
-          {
-            name: '小草肉123',
-            unit: ''
-          },
-          {
-            name: '小草肉1223',
-            unit: ''
-          },
-          {
-            name: '小草肉13323',
-            unit: ''
-          },
-          {
-            name: '小草肉234',
-            unit: ''
-          }
-        ],
-        toSelectFoodList: [],
-        selectedFoodList: []
+        searching: false,
+        category: 'all',
+        pageCount: 10,
+        currentPage: 1,
+        total: 0,
+        loadingData: false,
+        query: '',
+        ingredientList: [],
+        selectedIngredientList: []
       },
-      cookingDevices: [],
-      cookingSteps: [
-        {
-          index: 0,
-          description: '',
-          images: ''
-        }
-      ],
-      categories: []
+      categories: [],
+      ingredientCategories: []
     };
   },
 
   computed: {
     categoryOptions () {
-      console.log(this.categories);
-      return this.categories.filter((cate) => {
-        var flag = true;
-        this.toAddrecipeObj.classifications.forEach(function (item) {
-          if (cate.main === item.main) {
-            flag = false;
+      return _.differenceBy(this.categories, this.model.classification, 'main');
+    },
+
+    deviceOptions () {
+      return _.differenceBy(this.devices, this.model.devices, 'name');
+    },
+
+    /**
+     * 构建食材分类选项
+     * @return {Array} 分类选项
+     */
+    ingredientCategoryOptions () {
+      var arr = [{label: '全部', value: 'all'}];
+      this.ingredientCategories.map((item) => {
+        let obj = {};
+        obj.label = item.main;
+        obj.value = item.main;
+        arr.push(obj);
+      });
+      return arr;
+    },
+
+    /**
+     * 食材查询条件
+     * @return {Object} 查询条件
+     */
+    queryCondition () {
+      var condition = {
+        filter: ['_id', 'name', 'classification'],
+        limit: this.ingredientSelectModal.pageCount,
+        offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.pageCount,
+        query: {},
+        order: {
+          created_at: 'desc'
+        }
+      };
+
+      if (this.ingredientSelectModal.query.length > 0) {
+        condition.query['name'] = { $like: this.ingredientSelectModal.query };
+      }
+
+      if (this.ingredientSelectModal.category === 'all') {
+        delete condition.query['classification.main'];
+      } else {
+        condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] };
+      }
+      return condition;
+    },
+
+    filteredIngredientList () {
+      var list = this.ingredientSelectModal.ingredientList.map((item) => {
+        var flag = false;
+        this.model.major_ingredients.map((ingredient) => {
+          if (ingredient.name === item.name) {
+            flag = true;
           }
         });
-        return flag;
+        this.ingredientSelectModal.selectedIngredientList.map((ingredient) => {
+          if (ingredient.name === item.name) {
+            flag = true;
+          }
+        });
+        item.selected = flag;
+        return item;
       });
+      return list;
     }
   },
 
   route: {
     data () {
+      // 获取所有菜谱分类
       this.getCategories();
+      // 获取所有食材分类
+      this.getIngredientCategories();
+      // 获取所有食材
+      this.getIngredients();
     }
   },
 
   ready () {
-    var self = this;
-    self.updateToSelectedList();
+    // var self = this;
+    // self.updateToSelectedList();
   },
 
   methods: {
     /**
-     * 添加烹饪设备
-     */
-    AddCookingDevice () {
-      var self = this;
-      var newDevice = {
-        device: '',
-        code: '',
-        time: ''
-      };
-      self.cookingDevices.push(newDevice);
-    },
-
-    /**
-     * 获取分类
+     * 获取菜谱分类
      */
     getCategories () {
       // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
-      api.diet.listCategory('recipe_Ingredients').then((data) => {
+      api.diet.listCategory('recipe_classification').then((data) => {
         if (data.value !== undefined) {
           this.categories = data.value;
         } else {
@@ -299,12 +356,53 @@ export default {
     },
 
     /**
-     * 添加类别
+     * 获取食材分类
      */
-    AddCategory () {
+    getIngredientCategories () {
+      api.diet.listCategory('ingredient_classification').then((data) => {
+        if (data.value !== undefined) {
+          this.ingredientCategories = data.value;
+        } else {
+          this.ingredientCategories = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
+     * 获取食材列表
+     */
+    getIngredients () {
+      this.ingredientSelectModal.loadingData = true;
+      api.diet.listIngredient(this.queryCondition).then((data) => {
+        // 食材列表
+        this.ingredientSelectModal.ingredientList = data.list.map((item) => {
+          item.selected = false;
+          return item;
+        });
+        this.ingredientSelectModal.total = data.total;
+        this.ingredientSelectModal.loadingData = false;
+      }).catch((error) => {
+        this.handleError(error);
+        this.ingredientSelectModal.loadingData = false;
+      });
+    },
+
+    /**
+     * 添加菜谱类别
+     */
+    addCategory () {
       var newCate = {sub: []};
       newCate.main = this.categoryOptions[0].main;
-      this.toAddrecipeObj.classifications.push(newCate);
+      this.model.classification.push(newCate);
+    },
+
+    /**
+     * 添加烹饪设备
+     */
+    addCookingDevice () {
+      this.model.devices.push(this.deviceOptions[0]);
     },
 
     /**
@@ -314,113 +412,105 @@ export default {
      * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
      * @return {[type]}           无返回
      */
-    stepEvent (step, index, eventType) {
-      var self = this;
+    handleStepEvent (eventType, step, index) {
       var newstep = {
-        index: 0,
         description: '',
         time: 0,
         images: ''
       };
-      if (eventType === 'up') {
-        console.log('up');
-        self.cookingSteps.splice(index, 1);
-        self.cookingSteps.splice(index - 1, 0, step);
-      }else if (eventType === 'down') {
-        console.log('down');
-        self.cookingSteps.splice(index, 1);
-        self.cookingSteps.splice(index + 1, 0, step);
-      }else if (eventType === 'add') {
-        self.cookingSteps.splice(index + 1, 0, newstep);
-      }else if (eventType === 'del') {
-        self.cookingSteps.$remove(step);
+      switch (eventType) {
+        case 'MOVE_UP':
+          this.model.cooking_steps.splice(index, 1);
+          this.model.cooking_steps.splice(index - 1, 0, step);
+          break;
+        case 'MOVE_DOWN':
+          this.model.cooking_steps.splice(index, 1);
+          this.model.cooking_steps.splice(index + 1, 0, step);
+          break;
+        case 'ADD':
+          this.model.cooking_steps.splice(index + 1, 0, newstep);
+          break;
+        case 'DEL':
+          this.model.cooking_steps.$remove(step);
+          break;
+        default:
+          break;
       }
     },
 
     /**
      * 通用删除事件
-     * @param  {[type]} obj 要删除的对象
-     * @param  {[type]} arr 要删除的对象的父数组
+     * @param  {Object} obj 要删除的对象
+     * @param  {Array}  arr 要删除的对象的父数组
      */
     removeObj (obj, arr) {
       arr.$remove(obj);
     },
 
     /**
-     * 显示食材选择弹窗以及弹窗内容的初始化
-     * @return {[type]} [description]
+     * 确定已选食材
      */
-    showSelectFoodModal () {
-      var self = this;
-      self.foodSelectModal.show = true;
-      var selectedFoods = self.toAddrecipeObj.major_ingredients;
-      self.foodSelectModal.selectedFoodList = [].concat(selectedFoods);
-      self.updateToSelectedList();// 每次更新列表被选择列表的时候都要执行下这个刷新列表函数，作用是判断哪些食材是已经被选择的
+    confirmSelected () {
+      this.ingredientSelectModal.adding = true;
+      this.ingredientSelectModal.selectedIngredientList.map((item) => {
+        var newIngredient = {};
+        newIngredient._id = item._id;
+        newIngredient.classification = item.classification;
+        newIngredient.name = item.name;
+        this.model.major_ingredients.push(newIngredient);
+      });
+      this.ingredientSelectModal.selectedIngredientList = [];
+      this.ingredientSelectModal.show = false;
+      this.ingredientSelectModal.adding = false;
     },
 
     /**
-     * 添加食材弹出浮层的确定事件（确定已选食材）
-     * @return {[type]} [description]
+     * 添加食材操作
+     * @param {Object} ingredient 食材
      */
-    selectedFoodEvent () {
-      var self = this;
-      self.toAddrecipeObj.major_ingredients = self.foodSelectModal.selectedFoodList;
-      self.foodSelectModal.show = false;
-    },
-    /**
-     * 添加食材弹出浮层的添加事件
-     * @param {[type]} food [description]
-     */
-    addFood (food) {
-      var self = this;
-      self.foodSelectModal.selectedFoodList.push(food);
-      self.updateToSelectedList();// 每次更新列表被选择列表的时候都要执行下这个刷新列表函数，作用是判断哪些食材是已经被选择的
+    addIngredient (ingredient) {
+      this.ingredientSelectModal.selectedIngredientList.push(ingredient);
     },
 
     /**
      * 添加食材弹出浮层的删除事件
-     * @param {[type]} food [description]
+     * @param {Object} ingredient 食材
      */
-    deleteFood (food) {
-      var self = this;
-      self.foodSelectModal.selectedFoodList.$remove(food);
-      self.updateToSelectedList();// 每次更新列表被选择列表的时候都要执行下这个刷新列表函数，作用是判断哪些食材是已经被选择的
+    deleteIngredient (ingredient) {
+      this.ingredientSelectModal.selectedIngredientList.$remove(ingredient);
+    },
+
+    // 搜索
+    handleSearch () {
+      if (this.ingredientSelectModal.query.length === 0) {
+        this.getIngredients();
+      }
+    },
+
+    // 切换搜索
+    toggleSearching () {
+      this.ingredientSelectModal.searching = !this.ingredientSelectModal.searching;
+    },
+
+    // 取消搜索
+    cancelSearching () {
+      this.getIngredients();
     },
 
     /**
-     * 添加食材弹出浮层的类别选择事件
-     * @param {[type]} food [description]
+     * 菜谱表单提交
      */
-    selectClass () {
-      var self = this;
-      console.log(self);
-    },
-
-    /**
-     * 添加食材弹出浮层的搜索事件
-     * @param {[type]} food [description]
-     */
-    searchFoods () {
-      console.log('添加食材弹出浮层的搜索事件被调用');
-    },
-
-    /**
-     * 添加食材弹出浮层的左边被选择列表更新事件，根据已选择的食材给每个食材添加已选择或者未选择属性
-     * @param {[type]} food [description]
-     */
-    updateToSelectedList () {
-      var self = this;
-      var retArr = self.foodSelectModal.foodList;
-      retArr.map(function (food) {
-        food.selected = false;
-        for (let i = 0;i < self.foodSelectModal.selectedFoodList.length;i++) {
-          if (food.name === self.foodSelectModal.selectedFoodList[i].name) {
-            food.selected = true;
-          }
-        };
-      });
-      self.foodSelectModal.toSelectFoodList = [].concat(retArr);
-
+    onRecipeSubmit () {
+      if (this.validation.$valid) {
+        _.compact(this.model.images);
+        api.diet.addRecipe(this.model).then((data) => {
+          alert('食材添加成功！');
+          this.$route.router.go({path: '/diet/recipe'});
+        }).catch((error) => {
+          this.handleError(error);
+          this.ingredientSelectModal.loadingData = false;
+        });
+      }
     }
   }
 };
@@ -433,8 +523,6 @@ export default {
     display inline-block
   .block
     display block
-  .clear
-    clear both
   .pointer
     cursor pointer
   .diet
@@ -450,7 +538,7 @@ export default {
             box-sizing border-box
             padding 10px
           .step-box
-            margin-bottom 20px
+            margin-top 20px
             width 100%
             position relative
             clearfix()
@@ -466,6 +554,9 @@ export default {
               width 182px
               min-width 182px
               overflow hidden
+
+              .image-uploader-item
+                margin-bottom 0
             .step-text
               float left
               width 50%
@@ -479,7 +570,7 @@ export default {
               height 120px
               opacity 0
               /*transition opacity ease 0.3s*/
-              .controlButton
+              .control-button
                 height 25px
                 width 25px
                 line-height 25px
@@ -498,9 +589,6 @@ export default {
             width 70%
             .select-group
               position relative
-            .margin10
-              margin-top 10px
-              margin-bottom 10px
             .input-text-wrap
               input.input-text-time
                 border 1px solid #d9d9d9
@@ -508,17 +596,13 @@ export default {
                 width 120px
                 box-sizing border-box
                 font-size 14px
-                height 38px
-                line-height 38px
+                height 32px
+                line-height 32px
                 padding 6px 20px
                 margin-right 10px
               span.text-time
                 margin-right 10px
-              .foodname
-                height 32px
-                padding 0 15px
-              .fa-times
-                color #c0252e
+
             .delete-input
               position absolute
               right 5px
@@ -526,6 +610,18 @@ export default {
               span.fa
                 color #c0252e
 
+        .ingredient-row
+          table
+            margin-top 0
+
+            td
+              padding 5px 0
+
+          .ingredient-name
+            margin-right 20px
+
+          .fa-times
+            color #c0252e
       .modal
         .modal-body
           clearfix()
@@ -536,37 +632,61 @@ export default {
               float left
               display inline-block
               padding-left 10px
-              .btn-group
-                margin-left 15px
             .search-box
               float right
-          .food-list
-            clearfix()
-            .toSelectList
-              width 68%
-              float left
-              .pager
-                margin-top 10px
-            .selectedList
-              width 30%
-              float right
-              min-height 192px
-              border 1px solid #e4e4e4
-              box-sizing border-box
-              .table
-                tbody
-                  tr
-                    td
-                      position relative
-                      i.fa
-                        height 100%
-                        top 0
-                        line-height 30px
-          .button-box
-            width 100%
-            box-sizing border-box
-            text-align right
-            .btn
-              margin-left 10px
+
+      clearfix()
+
+      .to-select-list
+        width 65%
+        float left
+
+      .pager
+        margin-top 10px
+
+      .selected-list
+        width 33%
+        float right
+        border 1px solid #e4e4e4
+        box-sizing border-box
+        background #FFF
+
+        h3
+          font-size 14px
+          padding 0 20px
+          line-height 35px
+          margin 0
+          border-bottom 1px solid #e4e4e4
+
+        ul
+          margin 0
+          max-height 310px
+          list-style none
+          overflow auto
+
+        li
+          border-bottom 1px solid #e4e4e4
+          font-size 12px
+          position relative
+          line-height 30px
+          padding 0 20px
+
+          .fa
+            height 100%
+            top 0
+            line-height 30px
+
+          &:nth-child(2n-1)
+            background #F9F9F9
+
+          &:last-child
+            border-bottom none
+
+    .button-box
+      width 100%
+      box-sizing border-box
+      text-align right
+      .btn
+        margin-left 10px
 
 </style>

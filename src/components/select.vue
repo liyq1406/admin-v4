@@ -2,7 +2,7 @@
 .v-select
   slot
   .btn-group(:class="{'open':active}")
-    button.btn.btn-default.active(@click="toggleDropdown", @blur="deactivate")
+    button.btn.btn-default.active(@click.prevent="toggleDropdown", @blur="deactivate")
       span.content {{label}}
     .dropdown-menu(:style="dropdownMenuStyle")
       ul

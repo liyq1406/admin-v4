@@ -365,15 +365,6 @@ let configRouter = (router) => {
         }, 'settings');
       },
       subRoutes: {
-        // 新tab
-        'newtab': {
-          component: function (resolve) {
-            require.ensure([], function (require) {
-              resolve(require('./views/settings/newtab.vue'));
-            }, 'settings');
-          }
-        },
-
         // 授权管理
         'auth': {
           component: function (resolve) {
@@ -406,7 +397,61 @@ let configRouter = (router) => {
             }, 'settings');
           }
         }
+      }
+    },
 
+    // 饮食管理
+    '/diet': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/index.vue'));
+        }, 'diet');
+      },
+      subRoutes: {
+        // 菜谱管理
+        'recipe': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/diet/recipe/index.vue'));
+            }, 'diet');
+          }
+        },
+        // 食材管理
+        'ingredient': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/diet/ingredient/index.vue'));
+            }, 'diet');
+          }
+        }
+      }
+    },
+    '/diet/ingredient/add': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/ingredient/add.vue'));
+        }, 'diet');
+      }
+    },
+    '/diet/ingredient/:id/edit': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/ingredient/edit.vue'));
+        }, 'diet');
+      }
+    },
+    '/diet/recipe/add': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/recipe/add.vue'));
+        }, 'diet');
+      }
+    },
+    '/diet/recipe/:id/edit': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/diet/recipe/edit.vue'));
+        }, 'diet');
       }
     }
   });
@@ -418,7 +463,8 @@ let configRouter = (router) => {
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
-    '/users': '/users/list'
+    '/users': '/users/list',
+    '/diet': '/diet/recipe'
   });
 
   // 路由切换开始时执行

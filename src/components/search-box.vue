@@ -37,14 +37,17 @@
       cursor pointer
 
     .fa
-      absolute right 6px top 6px
+      position absolute
+      top 6px !important
+      right 6px !important
       display none
-      size 20px
+      width 20px !important
+      height 20px !important
       font-size 18px
       cursor pointer
       color #B0B0B1
       transition color .3s
-      line-height 20px
+      line-height 20px !important
       text-align center
 
       &:hover

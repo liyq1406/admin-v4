@@ -5,13 +5,13 @@ module.exports = function (Vue, Promise, config) {
      * @param {Object} key 区分食材类别/菜谱类别的标识
      * @param {Object} params 食材参数
      */
-    editCategory (key, params) {
+    updateCategory (key, params) {
       var args = {};
       args.key = key;
       args.value = params;
       return new Promise(function (resolve, reject) {
         Vue.http.post(
-          config.recipeApiRoot + '/recipe_food/save',
+          config.recipeApiRoot + '/recipe_props/save',
           JSON.stringify(args),
           function (data, status, request) {
             resolve(data);
@@ -34,7 +34,7 @@ module.exports = function (Vue, Promise, config) {
     listCategory (key) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(
-          config.recipeApiRoot + '/recipe_food/get/' + key,
+          config.recipeApiRoot + '/recipe_props/get/' + key,
           function (data, status, request) {
             resolve(data);
           }, {
@@ -53,7 +53,7 @@ module.exports = function (Vue, Promise, config) {
      * 食材添加
      * @param {Object} params 食材参数
      */
-    addFood (params) {
+    addIngredient (params) {
       return new Promise(function (resolve, reject) {
         Vue.http.post(
           config.recipeApiRoot + '/ingredient/save',
@@ -77,7 +77,7 @@ module.exports = function (Vue, Promise, config) {
      * @param {String} id 食材ID
      * @param {Object} params 食材参数
      */
-    updateFood (id, params) {
+    updateIngredient (id, params) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(
           config.recipeApiRoot + '/ingredient/update/' + id,
@@ -100,7 +100,7 @@ module.exports = function (Vue, Promise, config) {
      * 食材查找
      * @param {Object} id 食材ID
      */
-    getFood (id) {
+    getIngredient (id) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(
           config.recipeApiRoot + '/ingredient/get/' + id,
@@ -120,10 +120,9 @@ module.exports = function (Vue, Promise, config) {
 
     /**
      * 食材查询
-     * @param  {[type]} params [description]
-     * @return {[type]}        [description]
+     * @param  {Object} params 查询参数
      */
-    listFood (params) {
+    listIngredient (params) {
       return new Promise(function (resolve, reject) {
         Vue.http.post(
           config.recipeApiRoot + '/ingredient/list',
@@ -146,10 +145,56 @@ module.exports = function (Vue, Promise, config) {
      * 食材删除
      * @param {Object} id 食材ID
      */
-    deleteFood (id) {
+    deleteIngredient (id) {
       return new Promise(function (resolve, reject) {
         Vue.http.delete(
           config.recipeApiRoot + '/ingredient/delete/' + id,
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              // 'Access-Token': localStorage.getItem('accessToken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 菜谱添加
+     * @param {Object} params 菜谱参数
+     */
+    addRecipe (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.recipeApiRoot + '/recipe/save',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              // 'Access-Token': localStorage.getItem('accessToken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 菜谱查询
+     * @param  {Object} params 查询参数
+     */
+    listRecipe (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.recipeApiRoot + '/recipe/list',
+          JSON.stringify(params),
           function (data, status, request) {
             resolve(data);
           }, {

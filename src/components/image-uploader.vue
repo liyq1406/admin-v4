@@ -23,11 +23,6 @@ export default {
     };
   },
 
-  ready () {
-    // console.log(this.$els['aaBb0'].files[0]);
-    console.log(this.$els['imageFile']);
-  },
-
   methods: {
     // 上传图片文件
     upload: function (event) {
@@ -45,7 +40,6 @@ export default {
         reader.onerror = function (evt) {
           alert(self.$t('upload.read_err'));
         };
-        console.log(1);
         // 读取完成
         reader.onloadend = function (evt) {
           if (evt.target.readyState === FileReader.DONE) {
@@ -55,7 +49,6 @@ export default {
                 api.upload.image(evt.target.result).then(function (data) {
                   self.image = data.url;
                   input.value = '';
-                  console.log(input.value);
                   self.uploading = false;
                 }).catch(function (error) {
                   self.handleError(error);
