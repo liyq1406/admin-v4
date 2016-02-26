@@ -203,6 +203,22 @@ let configRouter = (router) => {
             }, 'product');
           }
         },
+        // 微信导入
+        'wechat': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/product/wechat.vue'));
+            }, 'product');
+          }
+        },
+        // 设备数据转发
+        'data-forward': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/product/data-forward.vue'));
+            }, 'product');
+          }
+        },
         // 虚拟设备
         'virtual-device': {
           component: function (resolve) {

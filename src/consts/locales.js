@@ -37,7 +37,9 @@ module.exports = {
         devices: '设备管理',
         datapoints: '数据端点',
         alerts: '通知与告警',
-        upgrade: '固件升级'
+        upgrade: '固件升级',
+        wechat: '微信导入',
+        dataforward: '设备数据转发'
       },
       data: {
         tables: '数据表'
@@ -429,6 +431,23 @@ module.exports = {
         type: '数据类型',
         symbol: '单位符号',
         description: '描述'
+      }
+    },
+    // 设备数据转发
+    dataforward: {
+      add_dataforward: '添加设备规则',
+      edit_dataforward: '编辑设备规则',
+      del_dataforward: '删除设备规则',
+      datetype_forwards: ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线'],
+      destination_types: ['转发到外部url', '转发到内部插件处理单元'],
+      fields: {
+        id: '规则ID',
+        destination: {
+          url: '数据目的地',
+          type: '数据分发类型',
+          token: '分发url访问所需凭证'
+        },
+        data_type: '支持转发数据的类型'
       }
     },
 
@@ -813,7 +832,9 @@ module.exports = {
         devices: '设备管理',
         datapoints: '数据端点',
         alerts: '通知与告警',
-        upgrade: '固件升级'
+        upgrade: '固件升级',
+        wechat: '微信导入',
+        dataforward: '设备数据转发'
       },
       data: {
         tables: '数据表'
@@ -1205,6 +1226,26 @@ module.exports = {
         type: '数据类型',
         symbol: '单位符号',
         description: '描述'
+      }
+    },
+    // 设备数据转发
+    dataforward: {
+      add_dataforward: '添加设备规则',
+      edit_dataforward: '编辑设备规则',
+      del_dataforward: '删除设备规则',
+      types: ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串'],
+      placeholders: {
+        id: '请输入ID',
+        symbol: '例如：℃',
+        description: '请填写数据端点描述'
+      },
+      fields: {
+        id: '规则ID',
+        destination: {
+          url: '数据目的地',
+          type: '数据分发类型',
+          token: '分发url访问所需凭证'
+        }
       }
     },
 

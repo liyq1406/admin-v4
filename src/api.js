@@ -19,5 +19,6 @@ module.exports = {
   alert: require('./api/alert')(Vue, Promise, config),
   app: require('./api/app')(Vue, Promise, config),
   upload: require('./api/upload')(Vue, Promise, config),
-  diet: require('./api/diet')(Vue, Promise, config)
+  diet: require('./api/diet')(Vue, Promise, config),
+  dataForward: require('./api/data-forward')(Vue, Promise, config)
 };
