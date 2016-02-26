@@ -23,10 +23,16 @@ export function dropSlected (value, selectedArr, curr, prop) {
   return value.filter((cate) => {
     var flag = true;
     selectedArr.forEach(function (item) {
-      if (cate[prop] === item[prop] && curr[prop] !== item[prop]) {
-        flag = false;
+      if (typeof prop === 'undefined') {
+        if (cate === item && curr !== item) {
+          flag = false;
+        }
+      } else {
+        if (cate[prop] === item[prop] && curr[prop] !== item[prop]) {
+          flag = false;
+        }
       }
     });
     return flag;
   });
-}
+};

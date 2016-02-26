@@ -36,10 +36,21 @@ section.main-wrap
                   .select(v-for="category in model.classification")
                     select(v-model="category.main")
                       option(v-for="opt in categories | dropSlected model.classification category 'main'", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
-                    span.fa.fa-times(@click="delCategory(category)")
+                    span.fa.fa-times(@click="delSelected(model.classification, category)")
                 button.btn.btn-success(@click.prevent="AddCategory", :disabled="model.classification.length === categories.length", :class="{'disabled': model.classification.length === categories.length}")
                   i.fa.fa-plus
                   | 添加类别
+            .form-row
+              label.form-control {{ $t("ingredient.fields.push_rules") }}:
+              .controls
+                .select-group
+                  .select(v-for="rule in model.properties.push_rules")
+                    select(v-model="rule")
+                      option(v-for="opt in rules | dropSlected model.properties.push_rules rule", :value="opt", :selected="opt===rule") {{opt}}
+                    span.fa.fa-times(@click="delSelected(model.properties.push_rules, rule)")
+                button.btn.btn-success(@click.prevent="AddRule", :disabled="model.properties.push_rules.length === rules.length", :class="{'disabled': model.properties.push_rules.length === rules.length}")
+                  i.fa.fa-plus
+                  | 添加推送
             .form-row
               label.form-control {{ $t("ingredient.fields.instructions") }}:
               .controls
@@ -67,8 +78,12 @@ export default {
         name: '',
         images: [''],
         classification: [],
+        properties: {
+          push_rules: []
+        },
         instructions: ''
       },
+      rules: [],
       validation: {},
       categories: []
     };
@@ -76,14 +91,21 @@ export default {
 
   route: {
     data () {
-      console.log(_);
+      // 获取食材分类
       this.getCategories();
+
+      // 获取推送规则
+      this.getRules();
     }
   },
 
   computed: {
     categoryOptions () {
       return _.differenceBy(this.categories, this.model.classification, 'main');
+    },
+
+    ruleOptions () {
+      return _.difference(this.rules, this.model.properties.push_rules);
     }
   },
 
@@ -105,6 +127,21 @@ export default {
     },
 
     /**
+     * 获取规则
+     */
+    getRules () {
+      api.diet.listCategory('push_rules').then((data) => {
+        if (data.value !== undefined) {
+          this.rules = data.value;
+        } else {
+          this.rules = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
      * 添加类别
      */
     AddCategory () {
@@ -114,11 +151,19 @@ export default {
     },
 
     /**
-     * 删除已选类别
+     * 添加推送规则
+     */
+    AddRule () {
+      var newRule = this.ruleOptions[0];
+      this.model.properties.push_rules.push(newRule);
+    },
+
+    /**
+     * 删除已选
      * @return {[type]} [description]
      */
-    delCategory (cate) {
-      this.model.classification.$remove(cate);
+    delSelected (arr, obj) {
+      arr.$remove(obj);
     },
 
     /**

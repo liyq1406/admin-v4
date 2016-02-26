@@ -64,6 +64,19 @@ div
         .form-actions
           button.btn.btn-default(@click.prevent.stop="onCateCancel") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
+
+  // 推送管理浮层
+  modal(:show.sync="showPushModal")
+    h3(slot="header") 推送管理
+    .form(slot="body")
+      form(@submit.prevent="onPushSubmit")
+        .form-row
+          .form-tips.mb10 请输入推送规则，每行一个规则
+          .input-text-wrap
+            textarea.input-text(v-model="rules | formatRules", rows="8")
+        .form-actions
+          button.btn.btn-default(@click.prevent.stop="onPushCancel") {{ $t("common.cancel") }}
+          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
@@ -83,7 +96,7 @@ export default {
     'pager': Pager
   },
 
-  data (a, b, c) {
+  data () {
     return {
       showCategoryModal: false,
       showPushModal: false,
@@ -93,6 +106,7 @@ export default {
       ingredients: [],
       category: 'all',
       categories: [],
+      rules: [],
       currentPage: 1,
       pageCount: 10,
       loadingData: false,
@@ -147,8 +161,12 @@ export default {
 
   route: {
     data () {
+      // 获取食材分类
       this.getCategories();
+      // 获取食材列表
       this.getIngredients();
+      // 获取推送规则
+      this.getRules();
     }
   },
 
@@ -205,6 +223,43 @@ export default {
         this.onCateCancel();
       }).catch((error) => {
         this.onCateCancel();
+        self.handleError(error);
+      });
+    },
+
+    /**
+     * 获取规则
+     */
+    getRules () {
+      api.diet.listCategory('push_rules').then((data) => {
+        if (data.value !== undefined) {
+          this.rules = data.value;
+        } else {
+          this.rules = [];
+        }
+      }).catch((error) => {
+        this.handleError(error);
+      });
+    },
+
+    /**
+     * 取消推送编辑
+     */
+    onPushCancel () {
+      this.editing = false;
+      this.showPushModal = false;
+      this.getRules();
+    },
+
+    /**
+     * 提交推送编辑
+     */
+    onPushSubmit () {
+      this.editing = true;
+      api.diet.updateCategory('push_rules', this.rules).then((data) => {
+        this.onPushCancel();
+      }).catch((error) => {
+        this.onPushCancel();
         self.handleError(error);
       });
     },

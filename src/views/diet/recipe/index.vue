@@ -34,7 +34,9 @@ div.recipe-box
         tbody
           template(v-if="recipes.length > 0 && !loadingData")
             tr(v-for="recipe in recipes")
-              td {{recipe.name}}
+              td
+                | {{recipe.name}}
+                i.fa.fa-cloud.ml5(v-if="hasCloudRecipe(recipe.devices)", style="color: #35AA47;")
               td {{recipe.created_by}}
               td {{recipe.created_at | formatDate}}
               td.tac
@@ -126,7 +128,7 @@ export default {
      */
     queryCondition () {
       var condition = {
-        filter: ['_id', 'name', 'classification', 'created_by', 'created_at'],
+        filter: ['_id', 'name', 'classification', 'devices', 'created_by', 'created_at'],
         limit: this.pageCount,
         offset: (this.currentPage - 1) * this.pageCount,
         query: {},
@@ -221,20 +223,35 @@ export default {
     },
 
     // 搜索
-    handleSearch: function () {
+    handleSearch () {
       if (this.query.length === 0) {
         this.getRecipes();
       }
     },
 
     // 切换搜索
-    toggleSearching: function () {
+    toggleSearching () {
       this.searching = !this.searching;
     },
 
     // 取消搜索
-    cancelSearching: function () {
+    cancelSearching () {
       this.getRecipes();
+    },
+
+    /**
+     * 判断是否带有云菜谱
+     * @param  {Array}   devices 菜谱设备
+     * @return {Boolean}         是否带有云菜谱
+     */
+    hasCloudRecipe (devices) {
+      let flag = false;
+      devices.map((item) => {
+        if (item.autoexec.length) {
+          flag = true;
+        }
+      });
+      return flag;
     }
   }
 };

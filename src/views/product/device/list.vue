@@ -67,7 +67,7 @@
           td.tac(colspan="5")
             .tips-null
               span {{ $t("common.no_records") }}
-    pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
+    pager(v-if="!loadingData && total > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
 
   // 添加设备浮层
   modal(:show.sync="showAddModal")

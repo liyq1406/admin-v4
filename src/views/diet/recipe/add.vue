@@ -135,7 +135,7 @@ section.main-wrap.diet
                 .input-text-wrap(v-placeholder="$t('recipe.placeholders.tips')")
                   textarea.input-text(v-model="model.tips", type="text", name="tips", lazy)
             .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
+              button.btn.btn-primary.btn-lg(type="submit", :disabled="adding", :class="{'disabled': adding}") {{ $t("common.save") }}
 
         //- 选择食材浮层
         modal(:show.sync="ingredientSelectModal.show", :width="800")
@@ -228,10 +228,9 @@ export default {
       },
       difficulties: ['不限', '新手', '初级', '中极', '高级', '厨神'],
       devices: [
+        {id: '0', name: '电饭煲', autoexec: '', time: ''},
         {id: '1', name: '云炖锅', autoexec: '', time: ''},
-        {id: '2', name: '隔水炖', autoexec: '', time: ''},
-        {id: '3', name: '电饭煲', autoexec: '', time: ''},
-        {id: '4', name: '大帅锅', autoexec: '', time: ''}
+        {id: '2', name: '隔水炖', autoexec: '', time: ''}
       ],
       ingredientSelectModal: {
         show: false,
@@ -247,7 +246,8 @@ export default {
         selectedIngredientList: []
       },
       categories: [],
-      ingredientCategories: []
+      ingredientCategories: [],
+      adding: false
     };
   },
 
@@ -501,7 +501,8 @@ export default {
      * 菜谱表单提交
      */
     onRecipeSubmit () {
-      if (this.validation.$valid) {
+      if (this.validation.$valid && !this.adding) {
+        this.adding = true;
         _.compact(this.model.images);
         api.diet.addRecipe(this.model).then((data) => {
           alert('食材添加成功！');
@@ -509,6 +510,7 @@ export default {
         }).catch((error) => {
           this.handleError(error);
           this.ingredientSelectModal.loadingData = false;
+          this.adding = false;
         });
       }
     }

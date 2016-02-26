@@ -187,6 +187,28 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
+     * 菜谱查找
+     * @param {Object} id 菜谱ID
+     */
+    getRecipe (id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.recipeApiRoot + '/recipe/get/' + id,
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              // 'Access-Token': localStorage.getItem('accessToken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
      * 菜谱查询
      * @param  {Object} params 查询参数
      */
@@ -195,6 +217,28 @@ module.exports = function (Vue, Promise, config) {
         Vue.http.post(
           config.recipeApiRoot + '/recipe/list',
           JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              // 'Access-Token': localStorage.getItem('accessToken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 菜谱删除
+     * @param {Object} id 菜谱ID
+     */
+    deleteRecipe (id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(
+          config.recipeApiRoot + '/recipe/delete/' + id,
           function (data, status, request) {
             resolve(data);
           }, {

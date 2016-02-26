@@ -753,7 +753,8 @@ module.exports = {
         name: '标题',
         images: '成品图',
         classification: '类别',
-        instructions: '摘要'
+        instructions: '摘要',
+        push_rules: '推送'
       }
     },
 
@@ -1527,7 +1528,8 @@ module.exports = {
         name: '标题',
         images: '成品图',
         classification: '类别',
-        instructions: '摘要'
+        instructions: '摘要',
+        push_rules: '推送'
       }
     },
 

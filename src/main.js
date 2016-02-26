@@ -108,6 +108,33 @@ Vue.filter('formatCategories', {
   }
 });
 
+/**
+ * 推送规则过滤器
+ */
+Vue.filter('formatRules', {
+  read (val) {
+    let ruleStr = '';
+    val.map((rule, index) => {
+      ruleStr += rule;
+      if (index < val.length - 1) {
+        ruleStr += '\n';
+      }
+    });
+    return ruleStr;
+  },
+
+  write (val, oldVal) {
+    let ret = [];
+    let arr = val.split('\n');
+    arr.map((item, index) => {
+      if (item.trim().length) {
+        ret.push(item.trim());
+      }
+    });
+    return ret;
+  }
+});
+
 // 注册全局全局混合
 // ------------------------------
 Vue.mixin(globalMixin);
