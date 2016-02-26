@@ -426,7 +426,7 @@ export default {
       var newstep = {
         description: '',
         time: 0,
-        images: ''
+        images: ['']
       };
       switch (eventType) {
         case 'MOVE_UP':

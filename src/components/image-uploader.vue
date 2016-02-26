@@ -90,7 +90,11 @@ export default {
 
   label
   img
+    display block
     size 100%
+
+  label
+    cursor pointer
 
   input[type="file"]
     absolute top -50px
