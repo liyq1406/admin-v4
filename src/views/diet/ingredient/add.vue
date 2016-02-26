@@ -55,9 +55,9 @@ section.main-wrap
               label.form-control {{ $t("ingredient.fields.instructions") }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('ingredient.placeholders.instructions')")
-                  textarea.input-text(v-model="model.instructions", type="text", name="instructions", maxlength="250", lazy)
+                  textarea.input-text.textarea-lg(v-model="model.instructions", type="text", name="instructions", maxlength="250", lazy)
             .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
+              button.btn.btn-primary.btn-lg(type="submit", :disabled="adding", :class="{'disabled': adding}") {{ $t("common.save") }}
 </template>
 
 <script>
@@ -85,7 +85,8 @@ export default {
       },
       rules: [],
       validation: {},
-      categories: []
+      categories: [],
+      adding: false
     };
   },
 
@@ -170,13 +171,14 @@ export default {
      * 添加食材表单提交
      */
     onSubmit () {
-      var self = this;
-      if (this.validation.$valid) {
-        api.diet.addIngredient(this.model).then(function (data) {
+      if (this.validation.$valid && !this.adding) {
+        this.adding = true;
+        api.diet.addIngredient(this.model).then((data) => {
           alert('食材添加成功！');
-          self.$route.router.go({path: '/diet/ingredient'});
+          this.$route.router.go({path: '/diet/ingredient'});
         }).catch(function (error) {
-          self.handleError(error);
+          this.handleError(error);
+          this.adding = false;
         });
       }
     }

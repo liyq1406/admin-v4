@@ -187,6 +187,30 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
+     * 菜谱编辑
+     * @param {String} id     菜谱ID
+     * @param {Object} params 菜谱参数
+     */
+    updateRecipe (id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(
+          config.recipeApiRoot + '/recipe/update/' + id,
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              // 'Access-Token': localStorage.getItem('accessToken'),
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
      * 菜谱查找
      * @param {Object} id 菜谱ID
      */
