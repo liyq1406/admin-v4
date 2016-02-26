@@ -130,6 +130,27 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 获取 v1 旧版的 AccessKey 列表
+     */
+    getAccessKeys: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRootV1 + '/accesskeys',
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
   };
 };
