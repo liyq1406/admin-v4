@@ -25,10 +25,9 @@ module.exports = function (Vue, Promise, config) {
      * @param  {Object} params 注册信息
      * @return {Promise}
      */
-    deleteRule: function (product_id, dispatch_id, params) {
+    deleteRule: function (product_id, dispatch_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.delete(config.apiRoot + '/product/' + product_id + '/dds/' + dispatch_id,
-        JSON.stringify(params),
         function (data, status, request) {
           resolve(status);
         }, {

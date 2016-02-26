@@ -190,7 +190,7 @@ export default {
   route: {
     data: function () {
       // var self = this;
-      this.originAddModel = _.clone(this.addModel);
+      this.originAddModel = _.cloneDeep(this.addModel);
       this.getRule();
     }
   },
@@ -204,19 +204,14 @@ export default {
     },
     // 关闭添加浮层并净化添加表单
     resetAdd: function () {
-      // var self = this;
+      var self = this;
       this.adding = false;
       this.showAddModal = false;
-      this.addModel = _.clone(this.originAddModel);
+      this.addModel = _.cloneDeep(this.originAddModel);
       this.$nextTick(function () {
         self.addForm.setPristine();
       });
     },
-    // route: {
-    //   data: function (transition) {
-    //     this.originAddModel = _.clone(this.addModel);
-    //   }
-    // },
     // 获取转发规则列表
     getRule: function () {
       var self = this;
@@ -259,16 +254,16 @@ export default {
       this.showEditModal = false;
       this.editModel = this.originEditModel;
     },
-    // 初始化编辑表单
-    editDataPoint: function (datapoint) {
-      this.showEditModal = true;
-      this.editModel = _.clone(datapoint);
-      this.originEditModel = _.clone(datapoint);
-    },
+    // // 初始化编辑表单
+    // editDataPoint: function (datapoint) {
+    //   this.showEditModal = true;
+    //   this.editModel = _.clone(datapoint);
+    //   this.originEditModel = _.clone(datapoint);
+    // },
+
     // 初始化编辑表单
     editRule: function (rule) {
       this.showEditModal = true;
-      console.log(rule);
       this.editModel = _.clone(rule);
       this.originEditModel = _.clone(rule);
     },
@@ -285,7 +280,7 @@ export default {
       if (this.delChecked && !this.editing) { // 删除
         this.editing = true;
         api.corp.refreshToken().then(function () {
-          api.dataForward.deleteRule(self.editModel.id, self.$route.params.id).then(function (data) {
+          api.dataForward.deleteRule(self.$route.params.id, self.editModel.id).then(function (data) {
             if (__DEBUG__) {
               console.log(data);
             }
@@ -299,7 +294,7 @@ export default {
       } else if (this.editValidation.$valid && !this.editing) { // 更新
         this.editing = true;
         api.corp.refreshToken().then(function () {
-          api.dataForward.updateRule(self.editModel, self.$route.params.id).then(function (data) {
+          api.dataForward.updateRule(self.$route.params.id, self.editModel.id, self.editModel).then(function (data) {
             if (__DEBUG__) {
               console.log(data);
             }
