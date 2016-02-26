@@ -4,7 +4,7 @@ var devip = require('dev-ip');
 var webpack = require('webpack');
 var DefinePlugin = require('webpack').DefinePlugin;
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var merge = require('lodash/object/merge');
+var _ = require('lodash');
 
 // 获取命令行参数
 // --debug 输出日志
@@ -109,7 +109,7 @@ var webpackConfig = {
   watch: true,
 
   // 入口文件
-  entry: merge({
+  entry: _.merge({
     app: [
       './' + dirs.src + '/main'
     ].concat(DEV ? [
