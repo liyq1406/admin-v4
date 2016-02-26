@@ -113,11 +113,11 @@ export default {
     top 80px
 
   .fa-times
-    absolute right 10px top 10px
-    font-size 20px
+    absolute right 5px top 5px
+    font-size 14px
     size 24px
     line-height 24px
-    background rgba(0, 0, 0, .3)
+    background rgba(255, 0, 0, .5)
     color #FFF
     text-align center
     z-index 100
