@@ -21,7 +21,9 @@
             tr(v-for="rule in rules | limitBy pageCount (currentPage-1)*pageCount")
               td {{* rule.id}}
               td {{* rule.destination.url}}
-              td {{* rule.destination.type}}
+              td
+                span(v-if="rule.destination.type===1") 转发到外部url
+                span(v-if="rule.destination.type===2") 转发到内部插件处理单元
               td.tac
                 button.btn-link(@click="editRule(rule)") {{ $t("common.edit") }}
           tr(v-if="loadingData")
