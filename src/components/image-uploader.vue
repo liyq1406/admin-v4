@@ -1,9 +1,11 @@
 <template lang="jade">
-label.image-uploader-item
-  img(v-if="image.length", :src="image")
-  input(type="file", v-el:image-file, name="imageFile", @change.prevent="upload($event)")
-  i.fa.fa-plus(v-if="!image.length")
-  span.txt(v-if="!image.length") 添加图片
+div.image-uploader-item
+  label
+    img(v-if="image.length", :src="image")
+    input(type="file", v-el:image-file, name="imageFile", @change.prevent="upload($event)")
+    i.fa.fa-plus(v-if="!image.length")
+    span.txt(v-if="!image.length") 添加图片
+  i.fa.fa-times(v-if="image.length", @click.stop.prevent="removeImage")
 </template>
 
 <script>
@@ -25,7 +27,7 @@ export default {
 
   methods: {
     // 上传图片文件
-    upload: function (event) {
+    upload (event) {
       var self = this;
       var file = this.$els['imageFile'].files[0];
       var input = event.target;
@@ -62,6 +64,10 @@ export default {
       } else {
         alert(self.$t('upload.compatiblity'));
       }
+    },
+
+    removeImage () {
+      this.image = '';
     }
   }
 };
@@ -82,22 +88,37 @@ export default {
   cursor pointer
   margin 0 10px 10px 0
 
+  label
   img
+    display block
     size 100%
+
+  label
+    cursor pointer
 
   input[type="file"]
     absolute top -50px
     opacity 0
 
-  .fa
+  .fa-plus
   .txt
     absolute left top 30px
     width 100%
     text-align center
 
-  .fa
+  .fa-plus
     font-size 36px
 
   .txt
     top 80px
+
+  .fa-times
+    absolute right 5px top 5px
+    font-size 14px
+    size 24px
+    line-height 24px
+    background rgba(255, 0, 0, .5)
+    color #FFF
+    text-align center
+    z-index 100
 </style>

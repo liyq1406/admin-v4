@@ -269,6 +269,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {member_id}
      * @return  stauts
      */
+    /*
     putMember: function (user_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(
@@ -286,6 +287,7 @@ module.exports = function (Vue, Promise, config) {
         });
       });
     },
+    */
 
     /**
      * 更新用户所在区域

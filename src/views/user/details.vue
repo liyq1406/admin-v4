@@ -54,9 +54,10 @@ section.main-wrap
               td.tac(colspan="4")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                 .tips-null(v-else) {{ $t('user.no_devices_bound') }}
-    .panel
-      .panel-bd
-        button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
+    //-
+      .panel
+        .panel-bd
+          button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
 </template>
 
 <script>
@@ -100,8 +101,8 @@ section.main-wrap
         return api.corp.refreshToken().then(function () {
           return api.user.subDeviceList(self.$route.params.id);
         });
-      },
-
+      }
+      /*
       deleteUser: function () {
         if (confirm('确定要停用当前用户吗？')) {
           var user_id = this.user.id;
@@ -116,6 +117,7 @@ section.main-wrap
           });
         }
       }
+      */
     }
   };
 </script>

@@ -54,11 +54,11 @@ section.main-wrap
               label.form-control {{ $t("ingredient.fields.instructions") }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('ingredient.placeholders.instructions')")
-                  textarea.input-text(v-model="model.instructions", type="text", v-form-ctrl, name="instructions", maxlength="250", lazy)
+                  textarea.input-text.textarea-lg(v-model="model.instructions", type="text", v-form-ctrl, name="instructions", maxlength="250", lazy)
                 .form-tips.form-tips-error(v-if="validation.instructions.$dirty")
                   span(v-if="validation.instructions.$error.maxlength")  {{ $t('validation.maxlength', [ $t('ingredient.fields.instructions'), 250]) }}
             .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
+              button.btn.btn-primary.btn-lg(type="submit", :disabled="editing", :class="{'disabled': editing}") {{ $t("common.save") }}
     .panel
       .panel-bd
         button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteIngredient") {{ $t('ingredient.del') }}
@@ -89,7 +89,8 @@ export default {
       },
       validation: {},
       rules: [],
-      categories: []
+      categories: [],
+      editing: false
     };
   },
 
@@ -125,7 +126,6 @@ export default {
       api.diet.listCategory('ingredient_classification').then((data) => {
         if (data.value !== undefined) {
           this.categories = _.unionBy(this.model.classification, data.value, 'main');
-          console.log(this.categories);
         } else {
           this.categories = this.model.classification;
         }
@@ -158,6 +158,7 @@ export default {
         this.model.instructions = data.instructions;
         this.model.images = data.images;
         this.model.classification = data.classification;
+        this.model.properties.push_rules = data.properties.push_rules;
       }).catch((error) => {
         this.handleError(error);
       });
@@ -192,12 +193,14 @@ export default {
      * 编辑食材表单提交
      */
     onSubmit () {
-      if (this.validation.$valid) {
+      if (this.validation.$valid && !this.editing) {
+        this.editing = true;
         api.diet.updateIngredient(this.$route.params.id, this.model).then((data) => {
           alert('食材修改成功！');
           this.$route.router.go({path: '/diet/ingredient'});
         }).catch(function (error) {
           this.handleError(error);
+          this.editing = false;
         });
       }
     },

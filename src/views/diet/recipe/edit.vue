@@ -63,7 +63,7 @@ section.main-wrap.diet
               label.form-control {{ $t("recipe.fields.instructions") }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('recipe.placeholders.instructions')")
-                  textarea.input-text(v-model="model.instructions", type="text", name="instructions", lazy)
+                  textarea.input-text.textarea-lg(v-model="model.instructions", type="text", name="instructions", lazy)
             .form-row.ingredient-row
               label.form-control 食材:
               .controls
@@ -112,12 +112,11 @@ section.main-wrap.diet
                   |1、步骤图宽度在150像素至150像素；
                   br
                   |2、每个步骤用一段话描述，如果不需要可将内容留空；
-
                 .step-box(v-for="cooking_step in model.cooking_steps")
                   label.form-control 第{{$index+1}}步:
                   .controls.controls-image
                     .image-uploader
-                      image-uploader(:image.sync="cooking_step.images")
+                      image-uploader(v-for="img in cooking_step.images", :image.sync="img")
                   .input-text-wrap.step-text
                     textarea.input-text(v-model="cooking_step.description",type="text",lazy,placeholder="请填写步骤的描述")
                   .button-list
@@ -133,9 +132,9 @@ section.main-wrap.diet
               label.form-control {{ $t('recipe.fields.tips') }}:
               .controls
                 .input-text-wrap(v-placeholder="$t('recipe.placeholders.tips')")
-                  textarea.input-text(v-model="model.tips", type="text", name="tips", lazy)
+                  textarea.input-text.textarea-lg(v-model="model.tips", type="text", name="tips", lazy)
             .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.save") }}
+              button.btn.btn-primary.btn-lg(type="submit", :disabled="editing", :class="{'disabled': editing}") {{ $t("common.save") }}
 
         //- 选择食材浮层
         modal(:show.sync="ingredientSelectModal.show", :width="800")
@@ -217,7 +216,7 @@ export default {
         cooking_steps: [{
           description: '',
           time: '',
-          images: ''
+          images: ['']
         }],
         properties: {
           difficulty: '不限'
@@ -229,7 +228,7 @@ export default {
         images: ['', '', ''],
         instructions: ''
       },
-      difficulties: ['不限', '新手', '初级', '中极', '高级', '厨神'],
+      difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
       devices: [
         {id: '0', name: '电饭煲', autoexec: '', time: ''},
         {id: '1', name: '云炖锅', autoexec: '', time: ''},
@@ -249,7 +248,8 @@ export default {
         selectedIngredientList: []
       },
       categories: [],
-      ingredientCategories: []
+      ingredientCategories: [],
+      editing: false
     };
   },
 
@@ -327,7 +327,11 @@ export default {
   route: {
     data () {
       api.diet.getRecipe(this.$route.params.id).then((data) => {
-        console.dir(data.devices[0].time);
+        var images = ['', '', ''];
+        data.images.forEach((item, index) => {
+          images[index] = item;
+        });
+        data.images = images;
         this.model = data;
       });
       // 获取所有菜谱分类
@@ -422,7 +426,7 @@ export default {
       var newstep = {
         description: '',
         time: 0,
-        images: ''
+        images: ['']
       };
       switch (eventType) {
         case 'MOVE_UP':
@@ -507,14 +511,16 @@ export default {
      * 菜谱表单提交
      */
     onRecipeSubmit () {
-      if (this.validation.$valid) {
-        _.compact(this.model.images);
-        api.diet.addRecipe(this.model).then((data) => {
+      if (this.validation.$valid && !this.editing) {
+        this.editing = true;
+        this.model.images = _.compact(this.model.images);
+        api.diet.updateRecipe(this.$route.params.id, this.model).then((data) => {
           alert('菜谱修改成功！');
           this.$route.router.go({path: '/diet/recipe'});
         }).catch((error) => {
           this.handleError(error);
           this.ingredientSelectModal.loadingData = false;
+          this.editing = false;
         });
       }
     },
@@ -524,10 +530,12 @@ export default {
      */
     deleteRecipe () {
       if (confirm('确定要删除该菜谱吗？')) {
+        this.editing = true;
         api.diet.deleteRecipe(this.$route.params.id).then((data) => {
           this.$route.router.go({path: '/diet/recipe'});
         }).catch((error) => {
           this.handleError(error);
+          this.editing = false;
         });
       }
     },
