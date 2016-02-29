@@ -93,6 +93,9 @@ module.exports = {
 
   .modal-body
     padding 30px
+    max-height 500px
+    overflow-y auto
+    box-sizing border-box
 
     .table
       margin 0

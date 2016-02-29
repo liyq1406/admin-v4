@@ -57,7 +57,7 @@ section.main-wrap
             strong {{ $t("table_record.value") }}
         tr(v-for="(key, val) in tableInfo.field")
           td {{key}}
-          td
+          td(style="word-break: break-all;")
             span(v-if="key==='createAt' || key==='updateAt'") {{model[key] | formatDate}}
             span(v-else) {{model[key]}}
     .modal-footer(slot="footer")
@@ -135,7 +135,7 @@ section.main-wrap
 
       showRecord: function (record) {
         api.corp.refreshToken().then(() => {
-          api.dataTable.getData(this.$route.params.name, record.objectId).then((data) => {
+          api.dataTable.getData(this.$route.params.name, escape(record.objectId)).then((data) => {
             this.model = data;
             this.showModal = true;
           });
