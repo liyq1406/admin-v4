@@ -22,9 +22,9 @@ section.main-wrap
                   th.tac {{ $t("common.action") }}
               tbody
                 tr(v-for="record in records")
-                  td {{record.object_id}}
-                  td {{record.create}}
-                  td {{record.update}}
+                  td {{record.objectId}}
+                  td {{record.createAt | formatDate}}
+                  td {{record.updateAt | formatDate}}
                   td {{record.creator}}
                   td.tac
                     button.btn.btn-link.btn-sm(@click="showRecord(record)") {{ $t("common.details") }}
@@ -32,7 +32,7 @@ section.main-wrap
                   td.tac(colspan="5")
                     i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                     .tips-null(v-else) {{ $t("common.no_records") }}
-            pager(:total="total", :current.sync="currentPage", :page-count="pageCount")
+            pager(v-if="records.length > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount")
 
   // 查看数据浮层
   modal(:show.sync="showModal")
@@ -42,13 +42,13 @@ section.main-wrap
       tbody
         tr
           td ID
-          td {{model.object_id}}
+          td {{model.objectId}}
         tr
           td {{ $t("table_record.fields.create") }}
-          td {{model.create}}
+          td {{model.createAt | formatDate}}
         tr
           td {{ $t("table_record.fields.update") }}
-          td {{model.update}}
+          td {{model.updateAt | formatDate}}
         tr
           td {{ $t("table_record.fields.creator") }}
           td {{model.creator}}
@@ -57,7 +57,9 @@ section.main-wrap
             strong {{ $t("table_record.value") }}
         tr(v-for="(key, val) in tableInfo.field")
           td {{key}}
-          td {{model[key]}}
+          td
+            span(v-if="key==='createAt' || key==='updateAt'") {{model[key] | formatDate}}
+            span(v-else) {{model[key]}}
     .modal-footer(slot="footer")
       button.btn.btn-primary(@click.prevent.stop="showModal = false") {{ $t("common.ok") }}
 </template>
@@ -84,9 +86,9 @@ section.main-wrap
         pageCount: 10,
         showModal: false,
         model: {
-          object_id: '',
-          create: '',
-          update: '',
+          objectId: '',
+          createAt: '',
+          updateAt: '',
           creator: ''
         }
       };
@@ -132,10 +134,13 @@ section.main-wrap
       },
 
       showRecord: function (record) {
-        this.model = record;
-        this.showModal = true;
+        api.corp.refreshToken().then(() => {
+          api.dataTable.getData(this.$route.params.name, record.objectId).then((data) => {
+            this.model = data;
+            this.showModal = true;
+          });
+        });
       }
-
     }
   };
 </script>
