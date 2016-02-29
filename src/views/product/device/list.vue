@@ -3,8 +3,8 @@
   .panel-bd
     //- 操作栏
     .action-bar
-      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices")
-        button.btn.btn-primary(slot="search-button", @click="getDevices") {{ $t('common.search') }}
+      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
+        button.btn.btn-primary(slot="search-button", @click="getDevices(true)") {{ $t('common.search') }}
       .action-group
         button.btn.btn-success(@click="showAddModal = true")
           i.fa.fa-plus
@@ -135,6 +135,7 @@
         },
         addValidation: {},
         originAddModel: {},
+        // querying: false,
         adding: false,
         importing: false,
         loadingData: false
@@ -181,8 +182,12 @@
 
     methods: {
       // 获取设备列表
-      getDevices: function () {
+      getDevices: function (querying) {
         var self = this;
+
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1;
+        }
 
         this.loadingData = true;
         api.corp.refreshToken().then(function () {
