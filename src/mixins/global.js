@@ -7,7 +7,9 @@ export default {
     // 且会被视图中声明的同名方法覆盖
 
     /**
-     * 检验数字
+     * 检验目标是否为数字类型
+     * @param  {Object} value 待检验目标
+     * @return {Boolean}
      */
     numberic (value) {
       return /^\d*$/.test(value);
@@ -15,6 +17,8 @@ export default {
 
     /**
      * 检验字符串中是否不含空格
+     * @param  {String} value 待检验目标字符串
+     * @return {Boolean}
      */
     noSpaces (value) {
       return /^\S+$/.test(value);
@@ -22,6 +26,8 @@ export default {
 
     /**
      * 检验字符串中是否不以空格开头或结尾
+     * @param  {String} value 待检验目标字符串
+     * @return {Boolean}
      */
     noSpacesPrefixAndSuffix (value) {
       return /^\S(.*\S)*$/.test(value);

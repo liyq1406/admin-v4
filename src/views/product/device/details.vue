@@ -57,7 +57,7 @@ section.main-wrap
                   th {{ $t('datapoint.fields.description') }}
                   th {{ $t('device.current_value') }}
               tbody
-                tr(v-for="datapoint in datapoints")
+                tr(v-for="datapoint in datapoints | orderBy 'index'")
                   td {{datapoint.index}}
                   td {{datapoint.name}}
                   td {{datapoint.description}}
