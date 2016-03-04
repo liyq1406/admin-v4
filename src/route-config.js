@@ -254,6 +254,24 @@ let configRouter = (router) => {
         }, 'apps');
       }
     },
+    // 微信应用查看
+    '/apps/wechat/:id': {
+      component: function (resolve) {
+        require.ensure([], function (require) {
+          resolve(require('./views/app/wechat/index.vue'));
+        }, 'apps');
+      },
+      subRoutes: {
+        // 修改
+        'update': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/app/wechat/update.vue'));
+            }, 'data');
+          }
+        }
+      }
+    },
 
     // 告警服务
     '/alerts': {
@@ -480,7 +498,8 @@ let configRouter = (router) => {
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
     '/users': '/users/list',
-    '/diet': '/diet/recipe'
+    '/diet': '/diet/recipe',
+    '/apps/wechat/:id': '/apps/wechat/:id/update'
   });
 
   // 路由切换开始时执行

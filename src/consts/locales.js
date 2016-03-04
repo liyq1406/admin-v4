@@ -537,7 +537,7 @@ module.exports = {
       // APP 类型
       types: [
         { label: 'iOS', disabled: false },
-        { label: 'Android', disabled: true },
+        { label: 'Android', disabled: false },
         { label: 'Web', disabled: true },
         { label: '微信', disabled: false }
       ],
@@ -1335,7 +1335,7 @@ module.exports = {
       // APP 类型
       types: [
         { label: 'iOS', disabled: false },
-        { label: 'Android', disabled: true },
+        { label: 'Android', disabled: false },
         { label: 'Web', disabled: true },
         { label: '微信', disabled: false }
       ],

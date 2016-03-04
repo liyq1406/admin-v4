@@ -28,17 +28,21 @@ section.main-wrap
                 td {{app.name}}
                 td {{app.type | typeLabel}}
                 td {{app.create_time | formatDate}}
-                td.tac
+                //- td.tac
+                //-   button.btn.btn-link.btn-sm(@click="onEditApp(app)") {{ $t("common.edit") }}
+                td.tac(v-if='app.type===4')
+                  button.btn-link.btn-sm(v-link="{ path: '/apps/wechat/'+app.id }") {{'查看'}}
+                td.tac(v-else)
                   button.btn.btn-link.btn-sm(@click="onEditApp(app)") {{ $t("common.edit") }}
-            tr(v-if="loadingApps")
-              td.tac(colspan="5")
-                .tips-null
-                  i.fa.fa-refresh.fa-spin
-                  span {{ $t("common.data_loading") }}
-            tr(v-if="apps.length === 0 && !loadingApps")
-              td.tac(colspan="5")
-                .tips-null
-                  span {{ $t("common.no_records") }}
+              tr(v-if="loadingApps")
+                td.tac(colspan="5")
+                  .tips-null
+                    i.fa.fa-refresh.fa-spin
+                    span {{ $t("common.data_loading") }}
+              tr(v-if="apps.length === 0 && !loadingApps")
+                td.tac(colspan="5")
+                  .tips-null
+                    span {{ $t("common.no_records") }}
 
   // 添加应用浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
@@ -70,7 +74,7 @@ section.main-wrap
   // 编辑iOS应用浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
     //- h3(slot="header") 编辑应用({{editModel.type | typeLabel}})
-    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type | typeLabel}})
+    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type}})
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit(editModel)", hook="editAppHook")
         .form-row
@@ -118,62 +122,98 @@ section.main-wrap
           button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 
   // 编辑安卓应用浮层
-  modal(:show.sync="showEditModal4", @close="onEditCancel4", :width="640")
-    //- h3(slot="header") 编辑应用({{editModel4.type | typeLabel}})
-    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel4.type | typeLabel}})
-    .form.form-edit-apk(slot="body")
-      form(v-form, name="editValidation4", @submit.prevent="onEditSubmit(editModel4)", hook="editAppHook4")
+  modal(:show.sync="showEditModal2", @close="onEditCancel2")
+    //- h3(slot="header") 编辑应用({{editModel2.type | typeLabel}})
+    h3(slot="header") {{ '编辑应用' }} ({{editModel2.type | typeLabel}})
+    .form(slot="body")
+      form(v-form, name="editValidation2", @submit.prevent="onEditSubmit(editModel2)", hook="editAppHook2")
         .form-row
-          label.form-control {{ $t("app.fields.name") }}:
+          label.form-control {{ '应用名称' }}:
           .controls
             .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
-              input.input-text(v-model="editModel4.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="32", required, lazy)
-            .form-tips.form-tips-error(v-if="editValidation4.$submitted && editValidation4.name.$pristine")
-              span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
-            .form-tips.form-tips-error(v-if="editValidation4.name.$dirty")
-              span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
-              span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
-              span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
+              input.input-text(v-model="editModel2.name", type="text", name="name", minlength="2", maxlength="32", required, lazy)
         .form-row
-          label.form-control {{ $t("app.fields.wechat_id") }}:
+          label.form-control {{ $t("app.inform") }}:
           .controls
-            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_id')")
-              input.input-text(v-model="editModel4.wechat.id", type="text", v-form-ctrl, name="wechat_id", lazy)
-        .form-row
-          label.form-control {{ $t("app.fields.wechat_app_id") }}:
+            .checkbox-group
+              label.checkbox
+                input(type="checkbox", name="apn_enable", v-model="editModel.apn_enable")
+                | {{ '启用GooglePlay服务' }}
+        .form-row(v-show="editModel.apn_enable")
+          label.form-control {{ $t("app.fields.apn_license_pwd") }}:
           .controls
-            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_id')")
-              input.input-text(v-model="editModel4.wechat.app_id", type="text", v-form-ctrl, name="wechat_app_id", lazy)
-        .form-row
-          label.form-control {{ $t("app.fields.wechat_app_secret") }}:
+            .input-text-wrap(v-placeholder="$t('app.placeholders.apn_license_pwd')")
+              input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
+        .form-row.without-label(v-show="editModel.apn_enable")
           .controls
-            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_secret')")
-              input.input-text(v-model="editModel4.wechat.app_secret", type="text", v-form-ctrl, name="wechat_app_secret", lazy)
-        .form-row
-          label.form-control {{ $t("app.fields.wechat_encrypt") }}:
-          .controls
-            .radio-group.radio-group-v
-              template(v-for="type in encryptTypes")
-                label.radio
-                  input(type="radio", name="wechat_encrypt", v-model="editModel4.wechat.encrypt", :value="$index+1")
-                  | {{ type.label }}
-                p {{ type.info }}
-        .form-row
-          label.form-control {{ $t("app.fields.wechat_key") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_key')")
-              textarea.input-text(v-model="editModel4.wechat.key", type="text", v-form-ctrl, name="wechat_key", lazy)
-        .form-row
-          label.form-control {{ $t("app.fields.app_url") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('app.placeholders.app_url')")
-              input.input-text(v-model="editModel4.app_url", type="text", v-form-ctrl, name="app_url", lazy)
+            .checkbox-group
+              label.checkbox
+                input(type="checkbox", name="apn_license_production", v-model="editModel.apn_license_production")
+                | {{ $t("app.is_release") }}
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
             | {{ $t("app.del_app") }}
-          button.btn.btn-default(@click.prevent.stop="onEditCancel4") {{ $t("common.cancel") }}
+          button.btn.btn-default(@click.prevent.stop="onEditCancel2") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
+
+  //- // 编辑微信应用浮层
+  //- modal(:show.sync="showEditModal4", @close="onEditCancel4", :width="640")
+  //-   //- h3(slot="header") 编辑应用({{editModel4.type | typeLabel}})
+  //-   h3(slot="header") {{ $t("app.edit_app") }} ({{editModel4.type | typeLabel}})
+  //-   .form.form-edit-apk(slot="body")
+  //-     form(v-form, name="editValidation4", @submit.prevent="onEditSubmit(editModel4)", hook="editAppHook4")
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.name") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
+  //-             input.input-text(v-model="editModel4.name", type="text", v-form-ctrl, name="name", minlength="2", maxlength="32", required, lazy)
+  //-           .form-tips.form-tips-error(v-if="editValidation4.$submitted && editValidation4.name.$pristine")
+  //-             span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+  //-           .form-tips.form-tips-error(v-if="editValidation4.name.$dirty")
+  //-             span(v-if="editValidation4.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+  //-             span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+  //-             span(v-if="editValidation4.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.wechat_id") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_id')")
+  //-             input.input-text(v-model="editModel4.wechat.id", type="text", v-form-ctrl, name="wechat_id", lazy)
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.wechat_app_id") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_id')")
+  //-             input.input-text(v-model="editModel4.wechat.app_id", type="text", v-form-ctrl, name="wechat_app_id", lazy)
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.wechat_app_secret") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_app_secret')")
+  //-             input.input-text(v-model="editModel4.wechat.app_secret", type="text", v-form-ctrl, name="wechat_app_secret", lazy)
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.wechat_encrypt") }}:
+  //-         .controls
+  //-           .radio-group.radio-group-v
+  //-             template(v-for="type in encryptTypes")
+  //-               label.radio
+  //-                 input(type="radio", name="wechat_encrypt", v-model="editModel4.wechat.encrypt", :value="$index+1")
+  //-                 | {{ type.label }}
+  //-               p {{ type.info }}
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.wechat_key") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.wechat_key')")
+  //-             textarea.input-text(v-model="editModel4.wechat.key", type="text", v-form-ctrl, name="wechat_key", lazy)
+  //-       .form-row
+  //-         label.form-control {{ $t("app.fields.app_url") }}:
+  //-         .controls
+  //-           .input-text-wrap(v-placeholder="$t('app.placeholders.app_url')")
+  //-             input.input-text(v-model="editModel4.app_url", type="text", v-form-ctrl, name="app_url", lazy)
+  //-       .form-actions
+  //-         label.del-check
+  //-           input(type="checkbox", name="del", v-model="delChecked")
+  //-           | {{ $t("app.del_app") }}
+  //-         button.btn.btn-default(@click.prevent.stop="onEditCancel4") {{ $t("common.cancel") }}
+  //-         button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
 </template>
 
 <script>
@@ -197,7 +237,8 @@ section.main-wrap
         encryptTypes: locales[Vue.config.lang].app.encrypt_types,
         showAddModal: false,
         showEditModal: false,
-        showEditModal4: false,
+        showEditModal2: false,
+        // showEditModal4: false,
         addModel: {
           name: '',
           type: 1
@@ -205,22 +246,27 @@ section.main-wrap
         editModel: {
           type: 1
         },
-        editModel4: {
-          type: 1,
-          wechat: {
-            id: '',
-            app_id: '',
-            app_secret: '',
-            encrypt: 1,
-            key: ''
-          }
+        editModel2: {
+          type: 1
         },
+        // editModel4: {
+        //   type: 1,
+        //   wechat: {
+        //     id: '',
+        //     app_id: '',
+        //     app_secret: '',
+        //     encrypt: 1,
+        //     key: ''
+        //   }
+        // },
         originAddModel: {},
         originEditModel: {},
-        originEditModel4: {},
+        originEditModel2: {},
+        // originEditModel4: {},
         addValidation: {},
         editValidation: {},
-        editValidation4: {},
+        editValidation2: {},
+        // editValidation4: {},
         adding: false,
         editing: false,
         uploading: false,
@@ -263,10 +309,15 @@ section.main-wrap
         this.editForm = form;
       },
 
-      // 修改微信应用表单钩子
-      editAppHook4: function (form) {
-        this.editForm4 = form;
+      // 修改安卓应用表单钩子
+      editAppHook2: function (form) {
+        this.editForm2 = form;
       },
+
+      // 修改微信应用表单钩子
+      // editAppHook4: function (form) {
+      //   this.editForm4 = form;
+      // },
 
       // 关闭添加应用浮层并净化添加表单
       resetAdd: function () {
@@ -287,13 +338,21 @@ section.main-wrap
         this.editModel = this.originEditModel;
       },
 
-      // 关闭微信编辑浮层并净化编辑表单
-      resetEdit4: function () {
+      // 关闭安卓编辑浮层并净化编辑表单
+      resetEdit2: function () {
         this.editing = false;
-        this.showEditModal4 = false;
+        this.showEditModal2 = false;
         this.delChecked = false;
-        this.editModel4 = this.originEditModel4;
+        this.editModel2 = this.originEditModel2;
       },
+
+      // 关闭微信编辑浮层并净化编辑表单
+      // resetEdit4: function () {
+      //   this.editing = false;
+      //   this.showEditModal4 = false;
+      //   this.delChecked = false;
+      //   this.editModel4 = this.originEditModel4;
+      // },
 
       // 取消添加
       onAddCancel: function () {
@@ -310,15 +369,16 @@ section.main-wrap
             self.addModel.apn_license_url = '';
             self.addModel.apn_license_pwd = '';
             self.addModel.apn_license_production = false;
-          } else if (self.addModel.type === 4) { // 微信应用
-            self.addModel.wechat = {};
-            self.addModel.wechat.id = '';
-            self.addModel.wechat.app_id = '';
-            self.addModel.wechat.app_secrect = '';
-            self.addModel.wechat.encrypt = 1;
-            self.addModel.wechat.key = '';
-            self.addModel.app_url = '';
           }
+          // else if (self.addModel.type === 4) { // 微信应用
+          //   self.addModel.wechat = {};
+          //   self.addModel.wechat.id = '';
+          //   self.addModel.wechat.app_id = '';
+          //   self.addModel.wechat.app_secrect = '';
+          //   self.addModel.wechat.encrypt = 1;
+          //   self.addModel.wechat.key = '';
+          //   self.addModel.app_url = '';
+          // }
           this.adding = true;
           api.corp.refreshToken().then(function () {
             api.app.create(self.addModel).then(function (data) {
@@ -338,11 +398,16 @@ section.main-wrap
           this.showEditModal = true;
           this.editModel = _.cloneDeep(app);
           this.originEditModel = _.cloneDeep(app);
-        } else if (app.type === 4) {
-          this.showEditModal4 = true;
-          this.editModel4 = _.cloneDeep(app);
-          this.originEditModel4 = _.cloneDeep(app);
+        } else if (app.type === 2) {
+          this.showEditModal2 = true;
+          this.editModel2 = _.cloneDeep(app);
+          this.originEditModel2 = _.cloneDeep(app);
         }
+        // else if (app.type === 4) {
+        //   this.showEditModal4 = true;
+        //   this.editModel4 = _.cloneDeep(app);
+        //   this.originEditModel4 = _.cloneDeep(app);
+        // }
       },
 
       // 取消应用编辑
@@ -350,10 +415,15 @@ section.main-wrap
         this.resetEdit();
       },
 
-      // 取消微信应用编辑
-      onEditCancel4: function () {
-        this.resetEdit4();
+      // 取消安卓应用编辑
+      onEditCancel2: function () {
+        this.resetEdit2();
       },
+
+      // 取消微信应用编辑
+      // onEditCancel4: function () {
+      //   this.resetEdit4();
+      // },
 
       // 提交应用更新
       onEditSubmit: function (model) {
@@ -367,9 +437,10 @@ section.main-wrap
               }
               if (model.type === 1) {
                 self.resetEdit();
-              } else if (model.type === 4) {
-                self.resetEdit4();
               }
+              // else if (model.type === 4) {
+              //   self.resetEdit4();
+              // }
               self.getApps();
             }).catch(function (error) {
               self.handleError(error);
@@ -390,21 +461,22 @@ section.main-wrap
               self.editing = false;
             });
           });
-        } else if (model.type === 4 && this.editValidation4.$valid && !this.editing) {
-          this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.app.update(self.editModel4).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.getApps();
-              self.resetEdit4();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
-            });
-          });
         }
+        // else if (model.type === 4 && this.editValidation4.$valid && !this.editing) {
+        //   this.editing = true;
+        //   api.corp.refreshToken().then(function () {
+        //     api.app.update(self.editModel4).then(function (data) {
+        //       if (__DEBUG__) {
+        //         console.log(data);
+        //       }
+        //       self.getApps();
+        //       self.resetEdit4();
+        //     }).catch(function (error) {
+        //       self.handleError(error);
+        //       self.editing = false;
+        //     });
+        //   });
+        // }
       },
 
       // 上传APN文件

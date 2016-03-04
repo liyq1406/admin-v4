@@ -5,3 +5,4 @@ node_modules/
 public/
 dist/
 dist
+src/views/app/wechat/tab2.vue
