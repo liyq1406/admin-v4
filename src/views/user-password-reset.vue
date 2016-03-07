@@ -42,8 +42,8 @@
       .fa.fa-check-circle-o
       h2 {{ $t("auth.reset_success") }}
       p {{ $t("auth.reset_success_msg") }}
-    .form-actions
-      a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") {{ $t("common.ok") }}
+      .actions
+        a.btn.btn-primary(v-link="{ path: '/login'}") {{ $t("common.ok") }}
     //- .form-footer
       | 2015 &copy; {{ $t("common.company") }}.
 </template>

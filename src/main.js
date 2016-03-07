@@ -2,7 +2,7 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 import VueForm from 'vue-form';
 import i18n from 'vue-i18n';
-// import browser from './helpers/browser';
+import browser from './helpers/browser';
 
 // 多语言配置文件
 import locales from './consts/locales';
@@ -43,8 +43,8 @@ Vue.use(VueForm);
 // 详见：https://github.com/kazupon/vue-i18n
 Vue.use(i18n, {
   // 根据浏览器语言自动进行语言切换，默认为'en-us'
-  // lang: browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us',
-  lang: 'zh-cn',
+  lang: browser.language === 'zh-cn' || browser.language === 'zh-tw' ? 'zh-cn' : 'en-us',
+  // lang: 'zh-cn',
   locales: locales
 });
 

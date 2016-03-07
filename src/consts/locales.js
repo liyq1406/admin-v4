@@ -855,13 +855,13 @@ module.exports = {
         activated: '激活数',
         total: ' 所有'
       },
-      ok: '确定',
-      cancel: '取消',
-      edit: '编辑',
+      ok: 'OK',
+      cancel: 'Cancel',
+      edit: 'Edit',
       add: '添加',
       del: '删除',
-      save: '保存',
-      company: '广州云湾信息技术有限公司',
+      save: 'Save',
+      company: 'xlink.cn All rights reserved',
       name: '名称',
       recent: '最近',
       action: '操作',
@@ -912,7 +912,7 @@ module.exports = {
     ],
 
     // 账号类型
-    accountTypes: ['消费电子（含穿戴设备/娱乐产品等）', '智能家居', '智能安防', '商用/工控设备', '其它'],
+    accountTypes: ['Consumer electronics (including wearable device / entertainment products, etc.)', 'Smart Home', 'Smart Security', 'Commercial / industrial equipment', 'Others'],
 
     // 告警类型
     alertTypes: ['通知类型', '告警类型'],
@@ -938,11 +938,11 @@ module.exports = {
 
     // 表单验证
     validation: {
-      required: '{field}为必填项',
-      format: '{field}格式有误',
-      numberic: '请填写数字格式',
-      maxlength: '{0}不能多于{1}位',
-      minlength: '{0}不能少于{1}位'
+      required: '{field} is required',
+      format: '{field} format error',
+      numberic: 'Please insert a number',
+      maxlength: '{0} cannot be more than {1} characters',
+      minlength: '{0} cannot be less than {1} characters'
     },
 
     // 错误信息
@@ -1040,62 +1040,61 @@ module.exports = {
       compatiblity: '您的浏览器过于低级，不支持 HTML5 上传'
     },
 
-    // 权限相关
     auth: {
       // 登录
-      login: '登录帐号',
-      register: '注册帐号',
-      remember: '记住密码',
-      forget: '忘记密码?',
-      email_phone: '邮箱/手机号',
-      password: '密码',
-      login_submit: '登录',
-      login_submiting: '登录中...',
+      login: 'Log In',
+      register: 'Register',
+      remember: 'Remember Me',
+      forget: 'Forgot Password?',
+      email_phone: 'Email/Phone',
+      password: 'Password',
+      login_submit: 'Login',
+      login_submiting: 'Login In Progress…',
       // 注册
-      account_tips: '请输入您的帐号信息：',
-      basic_tips: '请输入您的基本信息：',
-      confirm_password: '请再一次输入密码',
-      confirm_password_tips: '两次密码输入不一致',
-      type_tips: '请选择应用类型',
-      register_submit: '注册',
-      register_success: '注册成功',
-      register_success_msg: '系统已经发了一封激活邮件到您的邮箱，请查阅。',
+      account_tips: 'Please enter your account information:',
+      basic_tips: 'Please enter your basic information:',
+      confirm_password: 'Please confirm your password again',
+      confirm_password_tips: 'Passwords different.',
+      type_tips: 'Please select Application type',
+      register_submit: 'Submit',
+      register_success: 'Register Succeed',
+      register_success_msg: 'An activation email had sent to you, please check your email.',
       // 找回密码
-      by_phone: '手机找回',
-      by_mail: '邮箱找回',
-      by_mail_tips: '请输入您的注册邮箱，我们会将重设密码的链接发到您的邮箱中。',
-      by_mail_success_msg: '一封找回密码的邮件已发送到您的邮箱，请查收',
-      fetch: '找回密码',
-      by_phone_tips: '请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。',
-      by_phone_success: '修改成功',
-      by_phone_success_msg: '您的密码已重置成功，请重新登录。',
-      insert_code: '请输入右图验证码',
-      verifycode: '短信验证码',
-      get_code: '获取短信验证码',
-      wating: '{seconds}秒后重新获取',
-      phone_msg: '请填写正确的手机号',
+      by_phone: 'Via Mobile Phone',
+      by_mail: 'Via Email',
+      by_mail_tips: 'Please enter your Email Address, we will send password reset URL via Email.',
+      by_mail_success_msg: 'Succeed, please check your email to continue the process.',
+      fetch: 'Reset Password',
+      by_phone_tips: 'Please enter your registration Mobile Number, click send button, and fill in the Verification code into the placeholder.',
+      by_phone_success: 'Reset success',
+      by_phone_success_msg: 'Your password has successfully reset, please re-login。',
+      insert_code: 'Please enter the verification code.',
+      verifycode: 'SMS Verification Code',
+      get_code: 'Retrieve SMS Verification Code',
+      wating: 'Retrieve it again after {seconds} seconds',
+      phone_msg: 'Please enter the correct Mobile Number',
       // 激活帐号
-      activate_success: '激活成功',
-      activate_success_msg: '您的帐号已成功激活。',
-      activate_fail: '激活失败',
-      activate_fail_msg: '该邮件验证码已失效。',
+      activate_success: 'Activation Success',
+      activate_success_msg: 'You account has successfully activated.',
+      activate_fail: 'Activation Failed.',
+      activate_fail_msg: 'Activation Code Expired',
       // 成员邀请激活
-      member_activate: '成员邀请激活',
-      member_activate_tips: '请输入您的姓名、登录密码、注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。',
+      member_activate: 'Activate Member',
+      member_activate_tips: 'Please enter your Username, Password, Mobile Phone Number and Verification Code. Please click ',
       // 修改密码
-      reset: '修改密码',
-      reset_success: '修改成功',
-      reset_success_msg: '您的密码已重置成功，请重新登录。',
-      reset_fail: '修改失败',
+      reset: 'Reset Password',
+      reset_success: 'Reset Success.',
+      reset_success_msg: 'Your Password had successfully reset, please re-login. ',
+      reset_fail: 'Reset Fail.',
       // 表单项
       fields: {
-        account: '登录帐号',
-        password: '密码',
-        confirm_password: '再次输入密码',
-        email: '电子邮箱',
-        name: '姓名',
-        phone: '手机号码',
-        company: '公司名称'
+        account: 'Account',
+        password: 'Password',
+        confirm_password: 'Confirm Password',
+        email: 'Email',
+        name: 'Name',
+        phone: 'Mobile Phone Number',
+        company: 'Company Name'
       }
     },
 

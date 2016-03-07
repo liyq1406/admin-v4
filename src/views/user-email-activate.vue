@@ -10,7 +10,7 @@ div
       //- .form-footer
         | 2015 &copy; {{ $t("common.company") }}.
   .form.form-auth.form-member-activate(v-show="activateFail")
-    .form-logo
+    //- .form-logo
     .form-cont.reset-password-success
       .alert.alert-success
         .fa.fa-times-circle-o
