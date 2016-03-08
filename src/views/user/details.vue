@@ -59,7 +59,7 @@ section.main-wrap
         //- button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
         button.btn.sxten(:class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}", :disabled="toggling", @click="toggleMember(user)")
           i.fa(:class="{'fa-stop': user.status, 'fa-play': !user.status}")
-          | {{user.status-0===1 ? $t('task.stop') : $t('task.start')}}
+          | {{user.status-0===1 ? '停用' : '启用'}}
 
 </template>
 
