@@ -114,40 +114,124 @@ module.exports = function (Vue, Promise, config) {
         }
       ]
     */
-    getEmpowers: function () {
+    // getEmpowers: function () {
+    //   return new Promise(function (resolve, reject) {
+    //     Vue.http.get(
+    //       config.apiRoot + '/empowers',
+    //       function (data, status, request) {
+    //         resolve(data);
+    //       }, {
+    //         headers: {
+    //           'Content-Type': 'application/x-www-form-urlencoded',
+    //           'Access-Token': localStorage.getItem('accessToken')
+    //         }
+    //       }
+    //     ).error(function (data, status, request) {
+    //       reject(data.error);
+    //     });
+    //   });
+    // },
+
+    // /**
+    //  * 获取 v1 旧版的 AccessKey 列表
+    //  */
+    // getAccessKeys: function () {
+    //   return new Promise(function (resolve, reject) {
+    //     Vue.http.get(
+    //       config.apiRootV1 + '/accesskeys',
+    //       function (data, status, request) {
+    //         resolve(data);
+    //       }, {
+    //         headers: {
+    //           'Content-Type': 'application/x-www-form-urlencoded',
+    //           'Access-Token': localStorage.getItem('accessToken')
+    //         }
+    //       }
+    //     ).error(function (data, status, request) {
+    //       reject(data.error);
+    //     });
+    //   });
+    // }
+    //
+
+    /**
+     * 创建Access Key
+     * @param  {Object} params 注册信息
+     * @return {Promise}
+     */
+    addKeys: function (params) {
       return new Promise(function (resolve, reject) {
-        Vue.http.get(
-          config.apiRoot + '/empowers',
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Access-Token': localStorage.getItem('accessToken')
-            }
+        Vue.http.post(config.apiRoot + '/accesskey', JSON.stringify(params),
+        function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
           }
-        ).error(function (data, status, request) {
+        }).error(function (data, status, request) {
           reject(data.error);
         });
       });
     },
 
     /**
-     * 获取 v1 旧版的 AccessKey 列表
+     * 启用或禁用Access Key
+     * @param  {Object} params 注册信息
+     * @return {Promise}
      */
-    getAccessKeys: function () {
+    toggleKeys: function (accesskey_id, status) {
       return new Promise(function (resolve, reject) {
-        Vue.http.get(
-          config.apiRootV1 + '/accesskeys',
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded',
-              'Access-Token': localStorage.getItem('accessToken')
-            }
+        Vue.http.put(config.apiRoot + '/accesskey/' + accesskey_id + '/status/' + status,
+        function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
           }
-        ).error(function (data, status, request) {
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 删除Access Key
+     * @param  {Object} params 注册信息
+     * @return {Promise}
+     */
+    deleteKeys: function (accesskey_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.delete(config.apiRoot + '/accesskey/' + accesskey_id,
+        function (data, status, request) {
+          resolve(status);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 获取Access Key列表
+     * @param  {Object} params 注册信息
+     * @return {Promise}
+     */
+    getKeys: function (accesskey_id) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(config.apiRoot + '/accesskeys', function (data, status, request) {
+          resolve(data);
+        }, {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Access-Token': localStorage.getItem('accessToken')
+          }
+        }).error(function (data, status, request) {
           reject(data.error);
         });
       });

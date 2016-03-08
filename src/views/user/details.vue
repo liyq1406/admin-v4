@@ -54,10 +54,13 @@ section.main-wrap
               td.tac(colspan="4")
                 i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
                 .tips-null(v-else) {{ $t('user.no_devices_bound') }}
-    //-
-      .panel
-        .panel-bd
-          button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
+    .panel
+      .panel-bd
+        //- button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
+        button.btn.sxten(:class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}", :disabled="toggling", @click="toggleMember(user)")
+          i.fa(:class="{'fa-stop': user.status, 'fa-play': !user.status}")
+          | {{user.status-0===1 ? $t('task.stop') : $t('task.start')}}
+
 </template>
 
 <script>
@@ -101,8 +104,8 @@ section.main-wrap
         return api.corp.refreshToken().then(function () {
           return api.user.subDeviceList(self.$route.params.id);
         });
-      }
-      /*
+      },
+
       deleteUser: function () {
         if (confirm('确定要停用当前用户吗？')) {
           var user_id = this.user.id;
@@ -116,8 +119,34 @@ section.main-wrap
             });
           });
         }
+      },
+
+      // 新版切换状态
+      toggleMember: function (user) {
+        var self = this;
+        if (!this.toggling) {
+          this.toggling = true;
+          api.corp.refreshToken().then(function () {
+            api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1)
+            .then(function (data) {
+              // self.getTasks();
+              if (data === 200) {
+                user.status = user.status - 0 === 1 ? 2 : 1;
+              }
+              self.toggling = false;
+            }).catch(function (error) {
+              self.handleError(error);
+              self.toggling = false;
+            });
+          });
+        }
       }
-      */
     }
   };
 </script>
+
+<style lang="stylus" scoped>
+.sxten
+  margin-top 10px
+  margin-bottom 10px
+</style>

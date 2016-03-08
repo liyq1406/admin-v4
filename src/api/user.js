@@ -269,7 +269,6 @@ module.exports = function (Vue, Promise, config) {
      * @param  {member_id}
      * @return  stauts
      */
-    /*
     putMember: function (user_id) {
       return new Promise(function (resolve, reject) {
         Vue.http.put(
@@ -287,7 +286,31 @@ module.exports = function (Vue, Promise, config) {
         });
       });
     },
-    */
+
+    /**
+     * 新版停用启用用户
+     * 成员编辑本成员的基本信息。
+     * @param  {Object} params  {"name":"成员姓名"}
+     * @param  {member_id}
+     * @return  stauts
+     */
+    toggleMember: function (user_id, status) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.put(
+          config.apiRoot + '/user/' + user_id + '/status/' + status,
+          function (data, status, request) {
+            resolve(status);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
 
     /**
      * 更新用户所在区域
