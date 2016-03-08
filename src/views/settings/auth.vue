@@ -11,19 +11,19 @@
     table.table.table-stripe.table-bordered
       thead
         tr
-          th {{ $t("common.name") }}
           th Access Key ID
           th.tac Access Key Secret
+          th {{ $t("common.name") }}
           th.tac 创建时间
           th.tac 操作
 
       tbody
         template(v-if="accessKeys.length > 0 && !loadingData")
           tr(v-for="accessKey in accessKeys | limitBy pageCount (currentPage-1)*pageCount")
-            td {{accessKey.name}}
             td {{accessKey.id}}
             td.tac
               button.btn.btn-link.btn-sm(@click="viewAccessKeys(accessKey)") {{ $t('common.details') }}
+            td {{accessKey.name}}
             td {{accessKey.create_time}}
             td.tac
               button.btn.btn-primary.btn-sm(:class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}", :disabled="toggling", @click="togglekeys(accessKey)")
@@ -83,13 +83,29 @@
   modal(:show.sync="showKeyModal")
     h3(slot="header") Access Key Secret
     .form(slot="body")
-      form(@submit.prevent="onKeyCode")
-        .secret-key.tac.mrbthr(slot="body") {{key.secret}}
-        .form-actions
-          button.btn.btn-default(@click="onKeyCode") {{ $t("common.cancel") }}
-          button.btn.btn-primary.fr(type="submit",:disabled="editing",@click="deleteKeyCode(key.id)") 删除
+      .secret-key.tac.mrbthr(slot="body") {{key.secret}}
+      //- .form-actions
+      //-   button.btn.btn-default(@click="onViewCancel") {{ $t("common.cancel") }}
+      //-   button.btn.btn-primary.fr(type="submit",:disabled="editing",@click="deleteKeyCode(key.id)") 删除
+      .form-actions
+        label.del-check
+          input(type="checkbox", name="del", v-model="delChecked")
+          | 删除授权
+        button.btn.btn-primary(@click="onViewConfirm(key.id)",v-text="deleting ? $t('common.handling') : $t('common.ok')", :disabled="deleting", :class="{'disabled':deleting}")
 </template>
 <script>
+/**
+ * 页面初始化：
+ * 1. 请求授权列表
+ *
+ * 点击添加按钮：
+ *
+ * 点击查看：
+ *
+ * 点击启用/停用按钮：
+ *
+ */
+
 import Modal from '../../components/modal.vue';
 import Pager from '../../components/pager.vue';
 import api from '../../api';
@@ -134,7 +150,8 @@ export default {
       loadingData: false,
       showKeyModal: false,
       key: '',
-      delChecked: false
+      delChecked: false,
+      deleting: false
     };
   },
 
@@ -203,17 +220,23 @@ export default {
         });
       }
     },
-    // 提交删除
-    deleteKeyCode: function (id) {
+
+    /**
+     * 确定查看授权
+     * @param  {String} id 目标授权id
+     * @return {void}
+     */
+    onViewConfirm: function (id) {
       var self = this;
-      if (this.addValidation.$valid && !this.adding) {
-        console.log(this);
+      if (this.delChecked) {
+        self.deleting = true;
         api.corp.refreshToken().then(function () {
           api.empower.deleteKeys(id).then(function (data) {
             self.getKeys();
+            self.onViewCancel();
           }).catch(function (error) {
+            self.onViewCancel();
             self.handleError(error);
-            self.adding = false;
           });
         });
       }
@@ -271,7 +294,14 @@ export default {
       this.showKeyModal = true;
       console.log(this.key);
     },
-    onKeyCode () {
+
+    /**
+     * 取消查看授权
+     * @return {void}
+     */
+    onViewCancel () {
+      this.deleting = false;
+      this.delChecked = false;
       this.showKeyModal = false;
     }
 
