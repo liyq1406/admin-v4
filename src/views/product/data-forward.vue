@@ -59,12 +59,12 @@
           label.form-control {{ '数据分发目的地' }}:
           .controls
             .input-text-wrap(v-placeholder="'请输入URL'")
-              input.input-text(v-model="addModel.destination.url", type="text", name="url", required, minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="addModel.destination.url", type="text", name="url", required, minlength="2", maxlength="250", lazy)
         .form-row
           label.form-control {{ 'token' }}:
           .controls
             .input-text-wrap(v-placeholder="'请输入token'")
-              input.input-text(v-model="addModel.destination.token", type="text", name="token", required, minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="addModel.destination.token", type="text", name="token", required, minlength="2", maxlength="250", lazy)
         .form-actions
           button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") {{ '取消' }}
           button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
@@ -91,12 +91,12 @@
           label.form-control {{ '数据分发目的地' }}:
           .controls
             .input-text-wrap(v-placeholder="'请输入URL'")
-              input.input-text(v-model="editModel.destination.url", type="text", name="url", required, minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="editModel.destination.url", type="text", name="url", required, minlength="2", maxlength="250", lazy)
         .form-row
           label.form-control {{ 'token' }}:
           .controls
             .input-text-wrap(v-placeholder="'请输入token'")
-              input.input-text(v-model="editModel.destination.token", type="text", name="token", required, minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="editModel.destination.token", type="text", name="token", required, minlength="2", maxlength="250", lazy)
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
