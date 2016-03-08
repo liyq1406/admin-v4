@@ -69,6 +69,7 @@
 </template>
 
 <script>
+  import Vue from 'vue';
   import api from './api';
 
   module.exports = {
@@ -82,6 +83,7 @@
     },
 
     ready: function () {
+      document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform';
       // 监听子组件的更新成员信息事件
       this.$on('update-member', function (member) {
         this.currUser = member;
