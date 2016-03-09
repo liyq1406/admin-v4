@@ -149,7 +149,7 @@ export default {
       pageCount: 10,
       loadingData: false,
       showKeyModal: false,
-      key: '',
+      key: {},
       delChecked: false,
       deleting: false
     };
