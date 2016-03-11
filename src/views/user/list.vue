@@ -13,7 +13,7 @@
           th ID
           th {{ $t('user.fields.nick_name') }}
           th {{ $t('user.fields.account') }}
-          th {{ $t('user.fields.create_time') }}
+          th {{ $t('user.fields.create_date') }}
           th {{ $t('user.fields.source') }}
           th {{ $t('common.status') }}
       tbody
@@ -30,8 +30,7 @@
               span(v-if="user.source===3") iOS
               span(v-if="user.source===4") {{ $('common.wechat') }}
             td
-              span(v-if="user.status==1") {{ $t('user.status.normal') }}
-              span(v-if="user.status==2") {{ $t('user.status.banned') }}
+              span {{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate')}}
         tr(v-if="loadingData")
           td.tac(colspan="6")
             .tips-null
@@ -81,7 +80,7 @@
     computed: {
       queryCondition: function () {
         var condition = {
-          filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status'],
+          filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: {'create_date': 'desc'},
