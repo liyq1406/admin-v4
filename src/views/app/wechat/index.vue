@@ -1,6 +1,8 @@
 <template lang="jade">
 section.main-wrap
   .main
+    .breadcrumb
+      a.fa.fa-arrow-circle-left(v-link="{path: '../../'}") 返回应用列表
     .panel
       .panel-hd
         h2 {{ '微信应用查看' }}
@@ -29,8 +31,11 @@ section.main-wrap
         var appId = this.$route.params.id;
         return {
           secondaryNav: [{
-            label: '修改微信应用',
+            label: '修改应用',
             link: { path: '/apps/wechat/' + appId + '/update' }
+          }, {
+            label: '设备授权管理',
+            link: { path: '/apps/wechat/' + appId + '/manage' }
           }]
         };
       }

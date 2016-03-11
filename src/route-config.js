@@ -269,6 +269,13 @@ let configRouter = (router) => {
               resolve(require('./views/app/wechat/update.vue'));
             }, 'data');
           }
+        },
+        'manage': {
+          component: function (resolve) {
+            require.ensure([], function (require) {
+              resolve(require('./views/app/wechat/manage.vue'));
+            }, 'data');
+          }
         }
       }
     },
