@@ -12,20 +12,23 @@ section.main-wrap
             .label {{ $t('user.fields.id') }}:
             .info {{user.id}}
           li
-            .label 企业ID:
-            .info {{user.corp_id}}
+            .label {{ $t('user.fields.account') }}:
+            .info {{user.account}}
           li
             .label {{ $t('user.fields.nick_name') }}:
             .info {{user.nickname}}
           li
-            .label {{ $t('user.fields.authorize_code') }}:
-            .info {{user.authorize_code}}
-          li
             .label {{ $t('user.fields.phone') }}:
             .info {{user.phone}}
           li
-            .label {{ $t('user.fields.create_time') }}:
+            .label {{ $t('user.fields.create_date') }}:
             .info {{user.create_date | formatDate}}
+          li
+            .label {{ $t('user.fields.active_date') }}:
+            .info {{user.active_date | formatDate}}
+          li
+            .label {{ $t('user.fields.is_vaild') }}:
+            .info {{user.is_vaild ? $t('user.status.activate') :  $t('user.status.deactivate')}}
           li
             .label {{ $t('user.fields.region_id') }}:
             .info {{user.region_id}}
