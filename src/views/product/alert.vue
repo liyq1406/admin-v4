@@ -112,6 +112,11 @@ div
                 label.checkbox(v-for="app in apps")
                   input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
                   | {{app.name}}
+            //- .apn-list(v-show="showAndroids('addModel')")
+            //-   .checkbox-group
+            //-     label.checkbox(v-for="app in apps")
+            //-       input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
+            //-       | {{app.name}}
         .form-row
           label.form-control {{ $t("rule.fields.scope") }}:
           .controls
@@ -206,6 +211,12 @@ div
                 label.checkbox(v-for="app in apps")
                   input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
                   | {{app.name}}
+            //- .apn-list(v-show="showAndroids('editModel')")
+            //-   .checkbox-group
+            //-     label.checkbox(v-for="app in apps")
+            //-       input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
+            //-       | {{app.name}}
+
         .form-row
           label.form-control {{ $t("rule.fields.scope") }}:
           .controls
@@ -300,7 +311,7 @@ div
     route: {
       data: function () {
         var self = this;
-        this.originAddModel = _.clone(this.addModel);
+        this.originAddModel = _.cloneDeep(this.addModel);
         this.getDatapoints().then(function (data) {
           self.datapoints = data;
           self.addModel.param = data[0].id;
@@ -356,6 +367,10 @@ div
         return _.includes(this[model].notify_target, 4);
       },
 
+      // 是否显示 安卓
+      // showAndroids: function (model) {
+      //   return _.includes(this[model].notify_target, 5);
+      // },
       // 选择告警类型
       onSelectType: function () {
         if (this.addModel.type === 1) {
@@ -381,7 +396,7 @@ div
         var self = this;
         this.adding = false;
         this.showAddModal = false;
-        this.addModel = _.clone(this.originAddModel);
+        this.addModel = _.cloneDeep(this.originAddModel);
         this.$nextTick(function () {
           self.addForm.setPristine();
         });

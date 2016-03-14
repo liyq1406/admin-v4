@@ -137,19 +137,20 @@ section.main-wrap
           .controls
             .checkbox-group
               label.checkbox
-                input(type="checkbox", name="apn_enable", v-model="editModel.apn_enable")
+                input(type="checkbox", name="gcm_enable", v-model="editModel2.android.gcm_enable")
                 | {{ '启用GooglePlay服务' }}
-        .form-row(v-show="editModel.apn_enable")
+        .form-row(v-show="editModel2.android.gcm_enable")
           label.form-control {{ $t("app.fields.apn_license_pwd") }}:
           .controls
             .input-text-wrap(v-placeholder="$t('app.placeholders.apn_license_pwd')")
-              input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
-        .form-row.without-label(v-show="editModel.apn_enable")
-          .controls
-            .checkbox-group
-              label.checkbox
-                input(type="checkbox", name="apn_license_production", v-model="editModel.apn_license_production")
-                | {{ $t("app.is_release") }}
+              //- input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
+              input.input-text(v-model="editModel2.android.gcm_api_key", type="text", v-form-ctrl, name="gcm_api_key")
+        //- .form-row.without-label(v-show="editModel.apn_enable")
+        //-   .controls
+        //-     .checkbox-group
+        //-       label.checkbox
+        //-         input(type="checkbox", name="apn_license_production", v-model="editModel.apn_license_production")
+        //-         | {{ $t("app.is_release") }}
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")
@@ -247,7 +248,11 @@ section.main-wrap
           type: 1
         },
         editModel2: {
-          type: 1
+          type: 1,
+          android: {
+            gcm_api_key: '',
+            gcm_enable: false
+          }
         },
         // editModel4: {
         //   type: 1,
@@ -369,6 +374,9 @@ section.main-wrap
             self.addModel.apn_license_url = '';
             self.addModel.apn_license_pwd = '';
             self.addModel.apn_license_production = false;
+          }else if (self.addModel.type === 2) { // 安卓应用
+            self.addModel.gcm_api_key = '';
+            // self.addModel.gcm_enable = false;
           }
           // else if (self.addModel.type === 4) { // 微信应用
           //   self.addModel.wechat = {};
@@ -437,6 +445,8 @@ section.main-wrap
               }
               if (model.type === 1) {
                 self.resetEdit();
+              }else if (model.type === 2) {
+                self.resetEdit2();
               }
               // else if (model.type === 4) {
               //   self.resetEdit4();
@@ -456,6 +466,27 @@ section.main-wrap
               }
               self.getApps();
               self.resetEdit();
+            }).catch(function (error) {
+              self.handleError(error);
+              self.editing = false;
+            });
+          });
+        } else if (model.type === 2 && this.editValidation2.$valid && !this.editing) {
+          this.editing = true;
+          // var n = { };
+          // n.id = self.editModel2.id;
+          // n.name = self.editModel2.name;
+          // n.type = self.editModel2.type;
+          // n.gcm_api_key = self.editModel2.android.gcm_api_key;
+          // n.gcm_enable = self.editModel2.android.gcm_enable;
+          console.log(model);
+          api.corp.refreshToken().then(function () {
+            api.app.update(self.editModel2).then(function (data) {
+              if (__DEBUG__) {
+                console.log(data);
+              }
+              self.getApps();
+              self.resetEdit2();
             }).catch(function (error) {
               self.handleError(error);
               self.editing = false;

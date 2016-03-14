@@ -6,7 +6,7 @@ module.exports = function (Vue, Promise, config) {
      * @param  {[type]} product_id [description]
      * @param  {[type]} params     [description]
      * @return {Promise}
-      {
+      {//IOS
         "id":"APP的标识ID",
         "name":"APP名称",
         "type":"APP类型",
@@ -14,6 +14,14 @@ module.exports = function (Vue, Promise, config) {
         "apn_license_url":"APN密钥文件地址",
         "apn_license_pwd":"APN密钥文件密码",
         "create_time":"创建时间"
+      }
+      {//安卓
+        "name":"APP名称",
+        "type":"APP类型",
+        "android":{
+            "gcm_api_key":"安卓调用推送所需要的api key",
+            "gcm_enable":"gcm推送是否启用"
+        }
       }
      */
     create: function (params) {
@@ -49,7 +57,12 @@ module.exports = function (Vue, Promise, config) {
           params.apn_license_url = app.apn_license_url;
           params.apn_license_pwd = app.apn_license_pwd;
           params.apn_license_production = app.apn_license_production;
-        } else if (app.type === 4) { // 微信应用
+        } else if (app.type === 2) { // 安卓应用
+          params.name = app.name;
+          params.type = app.type;
+          params.gcm_api_key = app.android.gcm_api_key;
+          params.gcm_enable = app.android.gcm_enable;
+        }else if (app.type === 4) { // 微信应用
           params.wechat = {};
           params.wechat.id = app.wechat.id; // 微信公众号中的微信号
           params.wechat.app_id = app.wechat.app_id; // 微信公众号中的 appID
