@@ -487,7 +487,7 @@ module.exports = {
       types: ['数据端点', '设备状态'],
       compare_types: ['等于', '大于', '小于'],
       inform_types: ['通知类型', '告警类型'],
-      notify_types: ['短信', '邮箱', '应用内推送', '离线推送'],
+      notify_types: ['短信', '邮箱', '应用内推送', 'APN推送', 'Google推送'],
       scope_types: ['企业可见', '用户可见', '全部可见'],
       candidate_tags: ['严重', '轻微', '通知'],
       placeholders: {
@@ -1315,7 +1315,7 @@ module.exports = {
       types: ['数据端点', '设备状态'],
       compare_types: ['等于', '大于', '小于'],
       inform_types: ['通知类型', '告警类型'],
-      notify_types: ['短信', '邮箱', '应用内推送', '离线推送'],
+      notify_types: ['短信', '邮箱', '应用内推送', 'APN推送', 'Google推送'],
       scope_types: ['企业可见', '用户可见', '全部可见'],
       candidate_tags: ['严重', '轻微', '通知'],
       placeholders: {

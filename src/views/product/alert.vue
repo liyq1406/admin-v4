@@ -109,14 +109,14 @@ div
                 | {{type}}
             .apn-list(v-show="showApps('addModel')")
               .checkbox-group
-                label.checkbox(v-for="app in apps")
+                label.checkbox(v-for="app in apps",v-if="app.type===1")
                   input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
                   | {{app.name}}
-            //- .apn-list(v-show="showAndroids('addModel')")
-            //-   .checkbox-group
-            //-     label.checkbox(v-for="app in apps")
-            //-       input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
-            //-       | {{app.name}}
+            .apn-list(v-show="showAndroids('addModel')")
+              .checkbox-group
+                label.checkbox(v-for="app in apps", v-if="app.type===2")
+                  input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
+                  | {{app.name}}
         .form-row
           label.form-control {{ $t("rule.fields.scope") }}:
           .controls
@@ -208,14 +208,14 @@ div
                 | {{type}}
             .apn-list(v-show="showApps('editModel')")
               .checkbox-group
-                label.checkbox(v-for="app in apps")
+                label.checkbox(v-for="app in apps",v-if="app.type===1")
                   input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
                   | {{app.name}}
-            //- .apn-list(v-show="showAndroids('editModel')")
-            //-   .checkbox-group
-            //-     label.checkbox(v-for="app in apps")
-            //-       input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
-            //-       | {{app.name}}
+            .apn-list(v-show="showAndroids('editModel')")
+              .checkbox-group
+                label.checkbox(v-for="app in apps",v-if="app.type===2")
+                  input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
+                  | {{app.name}}
 
         .form-row
           label.form-control {{ $t("rule.fields.scope") }}:
@@ -362,15 +362,15 @@ div
         });
       },
 
-      // 是否显示 apps
+      // 是否显示 APN推送
       showApps: function (model) {
         return _.includes(this[model].notify_target, 4);
       },
 
-      // 是否显示 安卓
-      // showAndroids: function (model) {
-      //   return _.includes(this[model].notify_target, 5);
-      // },
+      // 是否显示 Google推送
+      showAndroids: function (model) {
+        return _.includes(this[model].notify_target, 5);
+      },
       // 选择告警类型
       onSelectType: function () {
         if (this.addModel.type === 1) {
