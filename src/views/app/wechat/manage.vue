@@ -181,28 +181,7 @@ div
         setModel: {},
         addModel: {},
         reEmpowers: [],
-        devices: [
-          {
-            'device_id': '设备ID',
-            'app_id': '应用ID',
-            'product_id': '产品ID',
-            'mac': 'MAC地址',
-            'w_device_id': '微信设备ID',
-            'w_device_type': '微信设备类型',
-            'status': '授权状态',
-            'selected': false
-          },
-          {
-            'device_id': '设备ID',
-            'app_id': '应用ID',
-            'product_id': '产品ID',
-            'mac': 'MAC地址',
-            'w_device_id': '微信设备ID',
-            'w_device_type': '微信设备类型',
-            'status': '授权状态',
-            'selected': false
-          }
-        ],
+        devices: [],
         currentPage: 1,
         pageCount: 10,
         loadingData: false
