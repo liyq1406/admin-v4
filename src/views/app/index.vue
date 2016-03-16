@@ -128,20 +128,21 @@ section.main-wrap
     .form(slot="body")
       form(v-form, name="editValidation2", @submit.prevent="onEditSubmit(editModel2)", hook="editAppHook2")
         .form-row
-          label.form-control {{ '应用名称' }}:
-          .controls
+          label.form-control.wid130 {{ '应用名称' }}:
+          .controls.wid310
             .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
               input.input-text(v-model="editModel2.name", type="text", name="name", minlength="2", maxlength="32", required, lazy)
         .form-row
-          label.form-control {{ $t("app.inform") }}:
-          .controls
+          label.form-control.wid130 {{ $t("app.inform") }}:
+          .controls.wid310
             .checkbox-group
               label.checkbox
                 input(type="checkbox", name="gcm_enable", v-model="editModel2.android.gcm_enable")
                 | {{ '启用GooglePlay服务' }}
         .form-row(v-show="editModel2.android.gcm_enable")
-          label.form-control {{ $t("app.fields.apn_license_pwd") }}:
-          .controls
+          //- label.form-control {{ $t("app.fields.apn_license_pwd") }}:
+          label.form-control.wid130 Server API Key:
+          .controls.wid310
             .input-text-wrap(v-placeholder="$t('app.placeholders.apn_license_pwd')")
               //- input.input-text(v-model="editModel.apn_license_pwd", type="text", v-form-ctrl, name="apn_license_pwd")
               input.input-text(v-model="editModel2.android.gcm_api_key", type="text", v-form-ctrl, name="gcm_api_key")
@@ -560,4 +561,9 @@ section.main-wrap
     .form-row
       .controls
         width 470px
+
+.wid130
+  width 130px!important
+.wid310
+  width 310px!important
 </style>
