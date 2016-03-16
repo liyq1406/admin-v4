@@ -18,13 +18,17 @@ div
           .form-row.mxh
             label.form-control 授权设置:
             .controls
-              button.btn.btn-primary(@click.prevent.stop="showSetModal = true") 设置
+              button.btn.btn-primary(@click.prevent.stop="showwechat") 设置
           .form-row
-            button.btn.btn-success.mrr20(@click.prevent.stop="showAddModal = true") 新增授权设备
+            button.btn.btn-success.mrr20.frl(@click.prevent.stop="showAddModal = true") 新增授权设备
             //- button.btn.btn-success.mrr60 批量导入授权设备
-            button.btn.btn-success.mrr60( @click.prevent.stop="showAddTaskModal = true")
-              i.fa.fa-plus
-              | 批量导入授权设备
+            //- button.btn.btn-success.mrr60( @click.prevent.stop="showAddTaskModal = true")
+            //-   i.fa.fa-plus
+            //-   | 批量导入授权设备
+            label.btn.btn-success.btn-upload.mrr60.frl(:class="{'disabled':importing}")
+              input(type="file",  v-el:device-file, name="deviceFile", @change.prevent="createMultiWechat")
+              i.fa.fa-reply-all
+              | {{importing ? $t("common.handling") : $t("overview.import_devices")}}
             button.btn.btn-primary(@click.prevent.stop="reEmpowerWechat") 再次授权
         //- 用户列表
         table.table.table-stripe.table-bordered
@@ -307,6 +311,21 @@ div
           });
         }
       },
+
+      // 微信授权
+      showwechat: function () {
+        var self = this;
+        this.showSetModal = true;
+        api.corp.refreshToken().then(function () {
+          console.log(JSON.stringify(self.setModel));
+          api.app.getWechat(self.$route.params.id, self.currProduct.id).then(function (data) {
+            self.setModel = data;
+          }).catch(function (error) {
+            self.handleError(error);
+            self.adding = false;
+          });
+        });
+      },
       /**
        * 再次授权
        */
@@ -347,6 +366,52 @@ div
             });
           });
         }
+      },
+
+      // 批量导入
+      createMultiWechat: function () {
+        var self = this;
+        var file = this.$els.deviceFile.files[0];
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          var reader = new FileReader();
+          if (!/text\/\w+/.test(file.type)) {
+            alert(file.name + self.$t('upload.type_tips'));
+            return false;
+          }
+          reader.onerror = function (evt) {
+            alert(self.$t('upload.read_err'));
+          };
+          this.importing = true;
+          // 读取完成
+          reader.onloadend = function (evt) {
+            if (evt.target.readyState === FileReader.DONE) {
+              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
+              var a = [];
+              macArr.forEach(function (element, index) {
+                if (element !== '') {
+                  a.push(element);
+                }
+              });
+              macArr = a;
+              api.corp.refreshToken().then(function () {
+                api.app.createMultiWechat(self.$route.params.id, self.currProduct.id, macArr).then(function (status) {
+                  console.log(self.currProduct.id);
+                  if (status === 200) {
+                    alert(self.$t('upload.success_msg'));
+                    // self.getDevices();
+                  }
+                  self.importing = false;
+                }).catch(function (error) {
+                  self.handleError(error);
+                  self.importing = false;
+                });
+              });
+            }
+          };
+          reader.readAsText(file);
+        } else {
+          alert(self.$t('upload.compatiblity'));
+        }
       }
     }
   };
@@ -361,4 +426,6 @@ div
     margin-right 60px
   .pleft30
     padding-left 30px
+  .frl
+    float left
 </style>

@@ -33,9 +33,9 @@ section.main-wrap
           secondaryNav: [{
             label: '修改应用',
             link: { path: '/apps/wechat/' + appId + '/update' }
-          // }, {
-          //   label: '设备授权管理',
-          //   link: { path: '/apps/wechat/' + appId + '/manage' }
+          }, {
+            label: '设备授权管理',
+            link: { path: '/apps/wechat/' + appId + '/manage' }
           }]
         };
       }

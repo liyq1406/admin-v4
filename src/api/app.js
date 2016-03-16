@@ -357,7 +357,7 @@ module.exports = function (Vue, Promise, config) {
     getWechat: function (app_id, product_id, params) {
       return new Promise(function (resolve, reject) {
         Vue.http.get(
-          config.apiRoot + 'developer/app/' + app_id + '/wechat_auth/product/' + product_id + '/config', JSON.stringify(params),
+          config.apiRoot + '/developer/app/' + app_id + '/wechat_auth/product/' + product_id + '/config', JSON.stringify(params),
           function (data, status, request) {
             resolve(data);
           }, {
