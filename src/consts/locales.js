@@ -38,7 +38,7 @@ module.exports = {
         datapoints: '数据端点',
         alerts: '通知与告警',
         upgrade: '固件升级',
-        wechat: '微信导入',
+        wechat: '微信授权',
         dataforward: '设备数据转发'
       },
       data: {
@@ -61,6 +61,8 @@ module.exports = {
         total: ' 所有'
       },
       ok: '确定',
+      empower: '产品授权',
+      unempower: '授权中',
       cancel: '取消',
       edit: '编辑',
       add: '添加',
@@ -864,7 +866,7 @@ module.exports = {
         datapoints: '数据端点',
         alerts: '通知与告警',
         upgrade: '固件升级',
-        wechat: '微信导入',
+        wechat: '微信授权',
         dataforward: '设备数据转发'
       },
       data: {
@@ -888,6 +890,8 @@ module.exports = {
       },
       ok: 'OK',
       cancel: 'Cancel',
+      empower: 'empower',
+      unempower: 'empowering',
       edit: 'Edit',
       add: '添加',
       del: '删除',

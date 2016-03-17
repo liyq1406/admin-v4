@@ -55,10 +55,10 @@ div
             .form-row
               label.form-control {{ $t("app.fields.app_url") }}:
               .controls
-                .input-text-wrap
-                  input.input-text(type="text",v-model='editModel4.wechat.url', placeholder="请输入云智易APP接收微信消息", name="app_url", lazy)
-            .form-actions
-              label.del-check
+                .input-text-wrap.lh35 {{ editModel4.wechat.url }}
+                  //- input.input-text(type="text",v-model='editModel4.wechat.url', placeholder="请输入云智易APP接收微信消息", name="app_url", lazy)
+            .form-actions.tsbt
+              label.del-check.mr40
                 input(type="checkbox", name="del", v-model="delChecked")
                 | {{ $t("app.del_app") }}
               //- button.btn.btn-default(@click.prevent.stop="onEditCancel4") {{ $t("common.cancel") }}
@@ -223,3 +223,12 @@ div
     }
   };
 </script>
+<style lang="stylus">
+  .lh35
+    line-height 35px!important
+    height 35px!important
+  .tsbt
+    padding-left 0!important
+  .mr40
+    margin-right 40px
+</style>

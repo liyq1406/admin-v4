@@ -63,6 +63,9 @@ section.main-wrap
           }, {
             label: this.$t('sub_nav.product.dataforward'),
             link: { path: '/products/' + this.$route.params.id + '/data-forward' }
+          }, {
+            label: this.$t('sub_nav.product.wechat'),
+            link: { path: '/products/' + this.$route.params.id + '/wechat' }
           }]
         };
       }

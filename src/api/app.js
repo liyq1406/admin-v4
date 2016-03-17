@@ -335,6 +335,51 @@ module.exports = function (Vue, Promise, config) {
     },
 
     /**
+     * 产品授权
+     */
+    productEmpower: function (app_id, product_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/developer/app/' + app_id + '/wechat_auth/product/' + product_id, JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+    /**
+     * 获取产品授权状态
+     * @return
+     * {
+        "status": 授权状态
+      }
+     */
+    productEmpowerStatus: function (app_id, product_id, params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/developer/app/' + app_id + '/wechat_auth/product/' + product_id + '/status', JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
      * 获取微信授权配置
      * @param  {Object}
      * @return {Promise}
