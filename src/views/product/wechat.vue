@@ -41,7 +41,7 @@
               //- th 勾选
               th 设备ID
               th MAC
-              th 微信设备ID
+              //- th 微信设备ID
               th 微信设备TYPE
               th 授权状态
           tbody
@@ -55,17 +55,17 @@
                 //-         | {{type}}
                 td {{ device.device_id }}
                 td {{ device.mac }}
-                td {{ device.w_device_id }}
+                //- td {{ device.w_device_id }}
                 td {{ device.w_device_type }}
                 td(v-if='device.status -0 === 0') 未授权
                 td(v-else) 已授权
             tr(v-if="loadingData")
-              td.tac(colspan="6")
+              td.tac(colspan="4")
                 .tips-null
                   i.fa.fa-refresh.fa-spin
                   span {{ $t("common.data_loading") }}
             tr(v-if="devices.length === 0 && !loadingData")
-              td.tac(colspan="6")
+              td.tac(colspan="4")
                 .tips-null
                   span {{ $t("common.no_records") }}
         pager(v-if="!loadingData", :total="devices.length", :current.sync="currentPage", :page-count="pageCount")
@@ -295,9 +295,10 @@
         this.getApps();
         // this.ifEmpower();
         console.log(this.currProduct);
-        if (this.currProduct - 0) {
-          this.searchWechatList();
-        }
+        // if (Object.keys(this.currProduct).length !== 0) {
+        //   this.searchWechatList();
+        //   this.empowerStatus();
+        // }
 
       }
     },
@@ -343,7 +344,11 @@
         this.loadingData = true;
         api.corp.refreshToken().then(function () {
           api.app.searchWechatList(self.currProduct.id, self.$route.params.id).then(function (data) {
-            this.ifEmpower();
+            // this.ifEmpower();
+            // 获取产品授权状态
+            self.empowerStatus();
+            self.devices = data.list;
+            console.log(self.devices);
             if (__DEBUG__) {
               console.log(data);
             };
@@ -485,6 +490,25 @@
           });
         }
       },
+      // 获取产品授权状态
+      empowerStatus: function () {
+        var self = this;
+        api.corp.refreshToken().then(function () {
+          api.app.productEmpowerStatus(self.currProduct.id, self.$route.params.id).then(function (data) {
+            console.log(data.status);
+            if (data.status - 0 === 0) {
+              self.empowering = false;
+            } else {
+              self.empowering = true;
+              setTimeout(self.empowerStatus, 2000);
+            }
+          }).catch(function (error) {
+            self.handleError(error);
+            self.empowering = false;
+          });
+        });
+      },
+
       // 产品授权
       productEmpower: function () {
         var self = this;
@@ -494,18 +518,19 @@
             // self.resetAdd();
             // self.getKeys();
             // 获取产品授权状态
-            api.corp.refreshToken().then(function () {
-              api.app.productEmpowerStatus(self.currProduct.id, self.$route.params.id).then(function (data) {
-                if (data.status - 0 === 0) {
-                  self.empowering = false;
-                } else {
-                  self.empowering = true;
-                }
-              }).catch(function (error) {
-                self.handleError(error);
-                self.empowering = false;
-              });
-            });
+            // api.corp.refreshToken().then(function () {
+            //   api.app.productEmpowerStatus(self.currProduct.id, self.$route.params.id).then(function (data) {
+            //     if (data.status - 0 === 0) {
+            //       self.empowering = false;
+            //     } else {
+            //       self.empowering = true;
+            //     }
+            //   }).catch(function (error) {
+            //     self.handleError(error);
+            //     self.empowering = false;
+            //   });
+            // });
+            self.empowerStatus();
           }).catch(function (error) {
             self.handleError(error);
             self.empowering = false;
@@ -578,9 +603,9 @@
   .lh35
     line-height 35px!important
     height 35px!important
-  .wid250
+  .modal .form-rules .form-row .controls.wid250
     width 250px!important
-  .wid160
+  .modal .form-rules .form-row .wid160
     width 160px!important
   .datatip
     z-index 9
