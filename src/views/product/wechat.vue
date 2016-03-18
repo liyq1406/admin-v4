@@ -102,19 +102,19 @@
         .form-row
           label.form-control product_id:
             i.fa.fa-question-circle(@mouseover="showTips1 = true", @mouseout="showTips1 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .input-text-wrap
               input.input-text(v-model="setModel.product_id",type="text", name="product_id",placeholder="请输入微信产品ID" minlength="2", maxlength="32", lazy)
         .form-row
           label.form-control auth_key:
             i.fa.fa-question-circle(@mouseover="showTips2 = true", @mouseout="showTips2 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .input-text-wrap
               input.input-text(v-model="setModel.auth_key",type="text", name="auth_key",placeholder="请输入32位加密key" minlength="2", maxlength="32", lazy)
         .form-row
           label.form-control.wid160 close_strategy:
             i.fa.fa-question-circle(@mouseover="showTips3 = true", @mouseout="showTips3 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '2']")
                 input(type="radio", v-model="setModel.close_strategy",name="close_strategy", :value="type", number)
@@ -123,7 +123,7 @@
         .form-row
           label.form-control.wid160 conn_strategy:
             i.fa.fa-question-circle(@mouseover="showTips4 = true", @mouseout="showTips4 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '4']")
                 input(type="radio", v-model="setModel.conn_strategy", name="conn_strategy", :value="type", number)
@@ -132,7 +132,7 @@
         .form-row
           label.form-control.wid160 crypt_method:
             i.fa.fa-question-circle(@mouseover="showTips5 = true", @mouseout="showTips5 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['0', '1']")
                 input(type="radio", v-model="setModel.crypt_method", name="crypt_method", :value="type", number)
@@ -141,7 +141,7 @@
         .form-row
           label.form-control.wid160 auth_ver:
             i.fa.fa-question-circle(@mouseover="showTips6 = true", @mouseout="showTips6 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['0', '1']")
                 input(type="radio", v-model="setModel.auth_ver", name="auth_ver", :value="type", number)
@@ -150,7 +150,7 @@
         .form-row
           label.form-control.wid160 manu_mac_pos:
             i.fa.fa-question-circle(@mouseover="showTips7 = true", @mouseout="showTips7 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['-1', '-2']")
                 input(type="radio", v-model="setModel.manu_mac_pos", name="manu_mac_pos", :value="type", number)
@@ -159,7 +159,7 @@
         .form-row
           label.form-control.wid160 ser_mac_pos:
             i.fa.fa-question-circle(@mouseover="showTips8 = true", @mouseout="showTips8 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['-1', '-2']")
                 input(type="radio", v-model="setModel.ser_mac_pos", name="ser_mac_pos", :value="type", number)
@@ -167,7 +167,7 @@
         .form-row
           label.form-control.wid160 connect_protocol:
             i.fa.fa-question-circle(@mouseover="showTips9 = true", @mouseout="showTips9 = false")
-          .controls.wid250
+          .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '2', '3', '4']")
                 input(type="radio", v-model="setModel.connect_protocol", name="connect_protocol", :value="type", number)
@@ -611,4 +611,6 @@
     top 308px
   .datatip_connect_protocol
     top 210px
+  .inline
+    display inline-block!important
 </style>
