@@ -500,7 +500,7 @@
               self.empowering = false;
             } else {
               self.empowering = true;
-              setTimeout(self.empowerStatus, 2000);
+              setTimeout(self.empowerStatus, 10000);
             }
           }).catch(function (error) {
             self.handleError(error);
