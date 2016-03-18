@@ -14,8 +14,8 @@
                   option(v-for="app in apps", :value="app") {{app.name}}
             .controls.frr
               button.btn.btn-primary.frr(@click.prevent.stop="productEmpower", :disabled="empowering", :class="{'disabled':empowering}", v-text="empowering ? $t('common.unempower') : $t('common.empower')") 产品授权
-              button.btn.btn-success.mrr20.frl(@click.prevent.stop="showAddModal = true") 添加测试设备
-              button.btn.btn-primary.mrr20.frr(@click.prevent.stop="showAlertModal = true") 授权设置
+              button.btn.btn-primary.mrr20.frr(@click.prevent.stop="showAlertModal = true" , :disabled="currProductEmpty", :class="{'disabled':currProductEmpty}") 授权设置
+              button.btn.btn-success.mrr20.frr(@click.prevent.stop="showAddModal = true") 添加测试设备
           //- .form-row
           //-   label.form-control 产品名称:
           //-   .controls.lin35 {{currProduct.name}}
@@ -162,7 +162,7 @@
           .controls.wid250
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['-1', '-2']")
-                input(type="radio", v-model="setModel.ser_moc_pos", name="ser_moc_pos", :value="type", number)
+                input(type="radio", v-model="setModel.ser_mac_pos", name="ser_mac_pos", :value="type", number)
                 | {{ type }}
         .form-row
           label.form-control.wid160 connect_protocol:
@@ -197,7 +197,7 @@
     .form.form-rules(slot="body")
       //- form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
       .form-row
-        p 确定要进行微信授权吗？
+        p 确定要修改微信授权吗？
       .form-actions
         button.btn.btn-default(@click.prevent.stop="showAlertModal=false") 取消
         button.btn.btn-primary(@click.prevent.stop="showwechat") 确定
@@ -240,7 +240,17 @@
         setValidation: {},
         originSetModel: {},
         originAddModel: {},
-        setModel: {},
+        setModel: {
+          auth_key: '',
+          close_strategy: '',
+          conn_strategy: '',
+          crypt_method: '',
+          auth_ver: '',
+          connect_protocol: '',
+          manu_mac_pos: '',
+          ser_mac_pos: '',
+          product_id: ''
+        },
         addModel: {},
         alertModel: {},
         reEmpowers: [],
@@ -283,11 +293,19 @@
       data: function () {
         // this.getProducts();
         this.getApps();
+        // this.ifEmpower();
         console.log(this.currProduct);
         if (this.currProduct - 0) {
           this.searchWechatList();
         }
 
+      }
+    },
+
+    computed: {
+      // 判断授权设置是否可按
+      currProductEmpty: function () {
+        return Object.keys(this.currProduct).length === 0;
       }
     },
 
@@ -325,6 +343,7 @@
         this.loadingData = true;
         api.corp.refreshToken().then(function () {
           api.app.searchWechatList(self.currProduct.id, self.$route.params.id).then(function (data) {
+            this.ifEmpower();
             if (__DEBUG__) {
               console.log(data);
             };
@@ -391,10 +410,11 @@
           api.corp.refreshToken().then(function () {
             console.log(JSON.stringify(self.setModel));
             api.app.empowerWechat(self.currProduct.id, self.$route.params.id, self.setModel).then(function (data) {
-              self.resetAdd();
+              self.resetSet();
+              self.setting = false;
             }).catch(function (error) {
               self.handleError(error);
-              self.adding = false;
+              self.setting = false;
             });
           });
         }
@@ -412,7 +432,12 @@
         api.corp.refreshToken().then(function () {
           console.log(JSON.stringify(self.setModel));
           api.app.getWechat(self.currProduct.id, self.$route.params.id).then(function (data) {
-            self.setModel = data;
+            if (Object.keys(data).length === 0) {
+              self.setModel = [];
+            } else {
+              self.setModel = data.auth_config;
+            }
+            console.log(self.setModel);
           }).catch(function (error) {
             self.handleError(error);
             self.adding = false;
