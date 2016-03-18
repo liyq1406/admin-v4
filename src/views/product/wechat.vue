@@ -433,7 +433,7 @@
           console.log(JSON.stringify(self.setModel));
           api.app.getWechat(self.currProduct.id, self.$route.params.id).then(function (data) {
             if (Object.keys(data).length === 0) {
-              self.setModel = [];
+              self.setModel = {};
             } else {
               self.setModel = data.auth_config;
             }
