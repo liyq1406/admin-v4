@@ -480,7 +480,7 @@
         if (this.addValidation.$valid && !this.adding) {
           // var obj = {name: self.addModel.name};
           api.corp.refreshToken().then(function () {
-            api.app.createWechat(self.currProduct.id, self.$route.params.id, self.addModel.mac).then(function (data) {
+            api.app.createWechat(self.currProduct.id, self.$route.params.id, self.addModel).then(function (data) {
               self.resetAdd();
               // self.getKeys();
             }).catch(function (error) {
