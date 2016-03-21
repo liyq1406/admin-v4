@@ -216,6 +216,18 @@ section.main-wrap
   //-           | {{ $t("app.del_app") }}
   //-         button.btn.btn-default(@click.prevent.stop="onEditCancel4") {{ $t("common.cancel") }}
   //-         button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
+
+  // 新增授权警告浮层
+  //- modal(:show.sync="showAlertModal",@close="onAlertCancel")
+  //-   h3(slot="header") 确认删除
+  //-   .form.form-rules(slot="body")
+  //-     //- form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
+  //-     .form-row
+  //-       p 确认删除该应用吗？
+  //-     .form-actions
+  //-       button.btn.btn-default(@click.prevent.stop="showAlertModal=false,this.editing=false") 取消
+  //-       button.btn.btn-primary() 确定
+
 </template>
 
 <script>
@@ -277,7 +289,8 @@ section.main-wrap
         editing: false,
         uploading: false,
         delChecked: false,
-        loadingApps: false
+        loadingApps: false,
+        showAlertModal: false
       };
     },
 
@@ -305,6 +318,11 @@ section.main-wrap
         });
       },
 
+      // 取消删除确认提醒
+      onAlertCancel: function () {
+        self.alertModel = false;
+        self.editing = false;
+      },
       // 添加应用表单钩子
       addAppHook: function (form) {
         this.addForm = form;
@@ -439,25 +457,50 @@ section.main-wrap
         var self = this;
         if (this.delChecked && !this.editing) {
           this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.app.remove(model.id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              if (model.type === 1) {
-                self.resetEdit();
-              }else if (model.type === 2) {
-                self.resetEdit2();
-              }
-              // else if (model.type === 4) {
-              //   self.resetEdit4();
-              // }
-              self.getApps();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
+          var result = confirm('确认删除该应用吗?');
+          if (result === true) {
+            api.corp.refreshToken().then(function () {
+              api.app.remove(model.id).then(function (data) {
+                if (__DEBUG__) {
+                  console.log(data);
+                }
+                if (model.type === 1) {
+                  self.resetEdit();
+                }else if (model.type === 2) {
+                  self.resetEdit2();
+                }
+                // else if (model.type === 4) {
+                //   self.resetEdit4();
+                // }
+                self.getApps();
+              }).catch(function (error) {
+                self.handleError(error);
+                self.editing = false;
+              });
             });
-          });
+          } else {
+            self.editing = false;
+          }
+          // api.corp.refreshToken().then(function () {
+          //   api.app.remove(model.id).then(function (data) {
+          //     if (__DEBUG__) {
+          //       console.log(data);
+          //     }
+          //     if (model.type === 1) {
+          //       self.resetEdit();
+          //     }else if (model.type === 2) {
+          //       self.resetEdit2();
+          //     }
+          //     // else if (model.type === 4) {
+          //     //   self.resetEdit4();
+          //     // }
+          //     self.getApps();
+          //   }).catch(function (error) {
+          //     self.handleError(error);
+          //     self.editing = false;
+          //   });
+          // });
+          this.showAlertModal = true;
         } else if (model.type === 1 && this.editValidation.$valid && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {

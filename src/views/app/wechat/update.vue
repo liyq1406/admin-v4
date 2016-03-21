@@ -183,25 +183,30 @@ div
         var self = this;
         if (this.delChecked && !this.editing) {
           this.editing = true;
-          console.log(111);
-          api.corp.refreshToken().then(function () {
-            api.app.remove(self.$route.params.id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              // if (model.type === 1) {
-              //   self.resetEdit();
-              // }
-              self.$route.router.go('../../');
-              if (model.type === 4) {
-                self.resetEdit4();
-              }
-              // self.getApps();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
+          var result = confirm('确认删除该应用吗?');
+          if (result === true) {
+            api.corp.refreshToken().then(function () {
+              api.app.remove(self.$route.params.id).then(function (data) {
+                if (__DEBUG__) {
+                  console.log(data);
+                }
+                // if (model.type === 1) {
+                //   self.resetEdit();
+                // }
+                self.$route.router.go('../../');
+                if (model.type === 4) {
+                  self.resetEdit4();
+                }
+                // self.getApps();
+              }).catch(function (error) {
+                self.handleError(error);
+                self.editing = false;
+              });
             });
-          });
+          } else {
+            self.editing = false;
+          }
+
         } else {
           this.editing = true;
           api.corp.refreshToken().then(function () {

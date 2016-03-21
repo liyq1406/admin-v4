@@ -2,14 +2,14 @@
 .row
   .panel
     .panel-bd
-      modal
+      pre {{selectedAppId}}
       .form.form-edit-apk
         form
           .form-row
             label.form-control 选择应用:
             .controls
               .select
-                select(v-model="currProduct", name="app" @change="searchWechatList")
+                select(v-model="currProduct", name="app" @change="Appstatus")
                   //- option(selected) 请选择微信应用
                   option(v-for="app in apps", :value="app") {{app.name}}
             .controls.frr
@@ -57,8 +57,9 @@
                 td {{ device.mac }}
                 //- td {{ device.w_device_id }}
                 td {{ device.w_device_type }}
-                td(v-if='device.status -0 === 0') 未授权
-                td(v-else) 已授权
+                td(v-if="device.status -0 === 0") 未授权
+                td(v-if="device.status -0 === 1") 已授权
+                td(v-if="device.status -0 === 2") 授权中
             tr(v-if="loadingData")
               td.tac(colspan="4")
                 .tips-null
@@ -68,7 +69,7 @@
               td.tac(colspan="4")
                 .tips-null
                   span {{ $t("common.no_records") }}
-        pager(v-if="!loadingData", :total="devices.length", :current.sync="currentPage", :page-count="pageCount")
+        pager(v-if="!loadingData && devices.length > pageCount", :total="devices.length", :current.sync="currentPage", :page-count="pageCount")
 
   // 授权设置浮层
   modal(:show.sync="showSetModal", @close="onSetCancel")
@@ -105,6 +106,7 @@
           .controls.wid250.inline
             .input-text-wrap
               input.input-text(v-model="setModel.product_id",type="text", name="product_id",placeholder="请输入微信产品ID" minlength="2", maxlength="32", lazy)
+        p.redf 已经授权过的设备不支持更改产品ID
         .form-row
           label.form-control auth_key:
             i.fa.fa-question-circle(@mouseover="showTips2 = true", @mouseout="showTips2 = false")
@@ -285,7 +287,8 @@
         showTips6: false,
         showTips7: false,
         showTips8: false,
-        showTips9: false
+        showTips9: false,
+        deviceEmpowering: false
       };
     },
 
@@ -294,7 +297,9 @@
         // this.getProducts();
         this.getApps();
         // this.ifEmpower();
+        console.log(123);
         console.log(this.currProduct);
+
         // if (Object.keys(this.currProduct).length !== 0) {
         //   this.searchWechatList();
         //   this.empowerStatus();
@@ -307,6 +312,13 @@
       // 判断授权设置是否可按
       currProductEmpty: function () {
         return Object.keys(this.currProduct).length === 0;
+      }
+    },
+
+    watch: {
+      currProduct: function () {
+        // console.log(1111);
+        this.searchWechatList();
       }
     },
 
@@ -324,18 +336,30 @@
       // 获取 微信APP 列表
       getApps: function () {
         var self = this;
+        // var app_name = localStorage.getItem('app_name');
         api.corp.refreshToken().then(function () {
           api.app.list().then(function (data) {
             var arr = [];
             data.forEach(function (item) {
               if (item.type - 0 === 4) {
                 arr.push(item);
+                if (item.id === window.localStorage.selectedAppId) {
+                  self.currProduct = item;
+                }
               }
             });
             self.apps = arr;
+            // self.currProduct = app_name;
           });
         });
       },
+      // 更改应用后获取列表与状态
+      Appstatus: function () {
+        var self = this;
+        self.searchWechatList();
+        self.empowerStatus();
+      },
+
       /**
        * 查询授权设备列表
        */
@@ -346,7 +370,7 @@
           api.app.searchWechatList(self.currProduct.id, self.$route.params.id).then(function (data) {
             // this.ifEmpower();
             // 获取产品授权状态
-            self.empowerStatus();
+            // self.empowerStatus();
             self.devices = data.list;
             console.log(self.devices);
             if (__DEBUG__) {
@@ -417,6 +441,7 @@
             api.app.empowerWechat(self.currProduct.id, self.$route.params.id, self.setModel).then(function (data) {
               self.resetSet();
               self.setting = false;
+              localStorage.setItem('selectedAppId', self.currProduct.id);
             }).catch(function (error) {
               self.handleError(error);
               self.setting = false;
@@ -482,6 +507,7 @@
           api.corp.refreshToken().then(function () {
             api.app.createWechat(self.currProduct.id, self.$route.params.id, self.addModel).then(function (data) {
               self.resetAdd();
+              self.searchWechatList();
               // self.getKeys();
             }).catch(function (error) {
               self.handleError(error);
@@ -493,14 +519,17 @@
       // 获取产品授权状态
       empowerStatus: function () {
         var self = this;
+        self.deviceEmpowering = true;
         api.corp.refreshToken().then(function () {
           api.app.productEmpowerStatus(self.currProduct.id, self.$route.params.id).then(function (data) {
             console.log(data.status);
             if (data.status - 0 === 0) {
               self.empowering = false;
+              self.deviceEmpowering = false;
+              self.searchWechatList();
             } else {
               self.empowering = true;
-              setTimeout(self.empowerStatus, 10000);
+              setTimeout(self.empowerStatus, 3000);
             }
           }).catch(function (error) {
             self.handleError(error);
@@ -621,21 +650,25 @@
   .datatip_product_id
     top 100px
   .datatip_auth_key
-    top 147px
+    top 197px
   .datatip_close_strategy
-    top 194px
+    top 244px
   .datatip_conn_strategy
-    top 241px
+    top 291px
   .datatip_crypt_method
-    top 288px
+    top 338px
   .datatip_auth_ver
-    top 335px
+    top 385px
   .datatip_manu_mac_pos
-    top 262px
+    top 292px
   .datatip_ser_mac_pos
-    top 308px
+    top 338px
   .datatip_connect_protocol
-    top 210px
+    top 240px
   .inline
     display inline-block!important
+  .modal .modal-body
+    max-height 600px!important
+  .redf
+    color red
 </style>

@@ -7,7 +7,7 @@
       form(v-form, name="validation", @submit.prevent="onSubmit")
         .form-row.textcen
           input(type="checkbox",v-model="model.is_user_active")
-          label  用户注册是否需要激活
+          label  注册用户无需激活便可登录平台
         .form-row
           p.settingtit 第三方验证
         .form-row
