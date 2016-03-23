@@ -51,7 +51,7 @@
             th {{ $t('task.fields.from_version') }}
             th {{ $t('task.fields.target_version') }}
             th {{ $t('task.fields.upgrade_count') }}
-            th.tac.w80 {{ $t('common.action') }}
+            th.tac {{ $t('common.action') }}
         tbody
           template(v-if="tasks.length > 0 && !loadingTasks")
             tr(v-for="task in tasks")
@@ -61,9 +61,10 @@
               td {{task.target_version}}
               td {{task.upgrade_count}}
               td.tac
-                button.btn.btn-primary.btn-sm(:class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}", :disabled="toggling", @click="toggleTaskStatus(task)")
+                button.btn.btn-primary.btn-sm.btnrr(:class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}", :disabled="toggling", @click="toggleTaskStatus(task)")
                   i.fa(:class="{'fa-stop': task.status, 'fa-play': !task.status}")
                   | {{task.status ? $t('task.stop') : $t('task.start')}}
+                button.btn.btn-primary.btn-sm(@click="removeTask(task)") 删除
           tr(v-if="loadingTasks")
             td.tac(colspan="6")
               .tips-null
@@ -273,7 +274,14 @@
           target_version_size: 0
         },
         originAddTaskModel: {},
-        tasks: [],
+        tasks: [
+          // {
+          //   'name': '123',
+          //   'from_version': '1',
+          //   'target_version': '2',
+          //   'upgrade_count': '3'
+          // }
+        ],
         editModel: {},
         addValidation: {},
         addTaskValidation: {},
@@ -564,6 +572,26 @@
         }
       },
 
+      // 删除升级任务
+      removeTask: function (task) {
+        var self = this;
+        var result = confirm('确认删除该应用吗?');
+        if (result === true) {
+          console.log(task.id);
+          api.corp.refreshToken().then(function () {
+            api.firmware.removeTask({
+              id: task.id,
+              product_id: self.$route.params.id
+            }).then(function (data) {
+              self.getTasks();
+            }).catch(function (error) {
+              self.handleError(error);
+              self.toggling = false;
+            });
+          });
+        }
+      },
+
       // 上传固件文件
       uploadFirmware: function (model, firmwareFile, event) {
         var self = this;
@@ -622,4 +650,6 @@
     .timepicker
       width 160px
       margin-left 10px
+  .btnrr
+    margin-right 20px
 </style>

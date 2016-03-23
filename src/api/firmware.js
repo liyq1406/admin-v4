@@ -144,6 +144,30 @@ module.exports = function (Vue, Promise, config) {
       });
     },
     /**
+     * 删除升级任务
+     *
+     * @param
+     * @return
+      */
+    removeTask: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/upgrade/firmware/task/delete',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+    /**
      * 5.用户手动升级设备
      * 通过本接口升级设备固件。
      * @param  {Object} params 注册信息

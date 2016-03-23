@@ -45,22 +45,37 @@ section.main-wrap
           .panel-bd
             .post-list
               ul
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") XLINK SDK iOS 集成文档
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") XLINK SDK Android 集成文档
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/108289/", target="_blank") [用户] 设备分享接口
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/104331/", target="_blank") [企业应用] 微信配置接口
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/102780/", target="_blank") [企业应用] 第三方身份授权管理
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/100082/", target="_blank") [企业应用] 统计分析
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/91020/", target="_blank") [用户] 接口权限调用
+                //- li
+                //-   a(href="http://support.xlink.cn/hc/kb/article/90705/", target="_blank") [用户] 升级开发文档
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") XLINK SDK iOS 集成文档
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md", target="_blank") XLINK SDK iOS 集成文档
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") XLINK SDK Android 集成文档
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md", target="_blank") XLINK SDK Android 集成文档
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/108289/", target="_blank") [用户] 设备分享接口
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_share", target="_blank") [用户] 设备分享接口
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/104331/", target="_blank") [企业应用] 微信配置接口
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_newest_version", target="_blank") [用户] 设备升级接口
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/102780/", target="_blank") [企业应用] 第三方身份授权管理
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/微信智能硬件接入指南.md", target="_blank") [企业应用] 微信接入指南
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/100082/", target="_blank") [企业应用] 统计分析
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/授权管理.md", target="_blank") [企业应用] 授权管理
                 li
-                  a(href="http://support.xlink.cn/hc/kb/article/91020/", target="_blank") [用户] 接口权限调用
-                li
-                  a(href="http://support.xlink.cn/hc/kb/article/90705/", target="_blank") [用户] 升级开发文档
+                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/数据统计分析接口.md", target="_blank") [企业应用] 统计分析
+
         // End: 快速指南
 
       .col-8
@@ -74,13 +89,13 @@ section.main-wrap
                 a.fa.fa-apple(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank")
                 .info
                   h3
-                    a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") iOS SDK
+                    a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md", target="_blank") iOS SDK
                   p 提供iOS开发文档说明
               .doc-list-item
                 a.fa.fa-android(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank")
                 .info
                   h3
-                    a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") Android SDK
+                    a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md", target="_blank") Android SDK
                   p 提供Android开发文档说明
               .doc-list-item
                 a.fa.fa-th-large(href="#", target="_blank")
