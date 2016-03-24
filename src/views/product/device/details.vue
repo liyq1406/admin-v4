@@ -164,8 +164,10 @@ section.main-wrap
       },
 
       deactivate: function () {
-        socket.disconnect();
-        socket = null;
+        if (socket) {
+          socket.disconnect();
+          socket = null;
+        }
       }
     },
 

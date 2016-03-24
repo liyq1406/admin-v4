@@ -109,7 +109,7 @@
             .input-text-wrap
               input.input-text(v-model="setModel.product_id",type="text", name="product_id", placeholder="请输入微信产品ID", v-form-ctrl, required)
             .form-tips.form-tips-error(v-if="setValidation.$submitted")
-              span(v-if="setValidation.product_id.$error.required"){{ $t('validation.required', {field: $t('wechat.product_id')}) }}
+              span(v-if="setValidation.product_id.$error.required") {{ $t('validation.required', {field: $t('wechat.product_id')}) }}
         p.redf 已经授权过的设备不支持更改产品ID
         .form-row
           label.form-control auth_key:
@@ -118,7 +118,7 @@
             .input-text-wrap
               input.input-text(v-model="setModel.auth_key",type="text", name="auth_key", placeholder="请输入32位加密key", v-form-ctrl, minlength="2", maxlength="32", required)
             .form-tips.form-tips-error(v-if="setValidation.$submitted")
-              span(v-if="setValidation.auth_key.$error.required"){{ $t('validation.required', {field: $t('wechat.auth_key')}) }}
+              span(v-if="setValidation.auth_key.$error.required") {{ $t('validation.required', {field: $t('wechat.auth_key')}) }}
         .form-row
           label.form-control.wid160 close_strategy:
             i.fa.fa-question-circle(@mouseover="showTips3 = true", @mouseout="showTips3 = false")
