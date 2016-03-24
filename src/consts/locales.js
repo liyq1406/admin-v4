@@ -149,7 +149,8 @@ module.exports = {
       format: '{field}格式有误',
       numberic: '请填写数字格式',
       maxlength: '{0}不能多于{1}位',
-      minlength: '{0}不能少于{1}位'
+      minlength: '{0}不能少于{1}位',
+      length: '必须是{field}位'
     },
 
     // 错误信息
@@ -231,6 +232,7 @@ module.exports = {
       '4001075': 'DDS数据转发规则中的url对应服务器不相应',
       '4001076': '用户不是设备管理员',
       '4001077': '微信配置相关参数类型不明确',
+      '4001078': '授权设置不正确',
       '4031001': '禁止访问',
       '4031002': '禁止访问，需要Access-Token',
       '4031003': '无效的Access-Token',
@@ -264,6 +266,7 @@ module.exports = {
       '4041021': '产品转发规则不存在',
       '4041022': '设备不在线',
       '4041024': 'accesskey不存在',
+      '4041025': '微信授权配置不存在',
       '5031001': '服务端发生异常'
     },
 
@@ -551,6 +554,19 @@ module.exports = {
         target_version: '目标版本',
         upgrade_count: '已升级设备'
       }
+    },
+
+    // 微信授权
+    wechat: {
+      product_id: 'product_id',
+      auth_key: 'auth_key',
+      close_strategy: 'close_strategy',
+      conn_strategy: 'conn_strategy',
+      crypt_method: 'crypt_method',
+      auth_ver: 'auth_ver',
+      manu_mac_pos: 'manu_mac_pos',
+      ser_mac_pos: 'ser_mac_pos',
+      connect_protocol: 'connect_protocol'
     },
 
     // 应用管理
@@ -1059,6 +1075,7 @@ module.exports = {
       '4001075': 'DDS数据转发规则中的url对应服务器不相应',
       '4001076': '用户不是设备管理员',
       '4001077': '微信配置相关参数类型不明确',
+      '4001078': '授权设置不正确',
       '4031001': '禁止访问',
       '4031002': '禁止访问，需要Access-Token',
       '4031003': '无效的Access-Token',
@@ -1092,6 +1109,7 @@ module.exports = {
       '4041021': '产品转发规则不存在',
       '4041022': '设备不在线',
       '4041024': 'accesskey不存在',
+      '4041025': '微信授权配置不存在',
       '5031001': '服务端发生异常'
     },
 
@@ -1381,6 +1399,19 @@ module.exports = {
         target_version: '目标版本',
         upgrade_count: '已升级设备'
       }
+    },
+
+    // 微信授权
+    wechat: {
+      product_id: 'product_id',
+      auth_key: 'auth_key',
+      close_strategy: 'close_strategy',
+      conn_strategy: 'conn_strategy',
+      crypt_method: 'crypt_method',
+      auth_ver: 'auth_ver',
+      manu_mac_pos: 'manu_mac_pos',
+      ser_mac_pos: 'ser_mac_pos',
+      connect_protocol: 'connect_protocol'
     },
 
     // 应用管理

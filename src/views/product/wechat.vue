@@ -100,27 +100,35 @@
           | 表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：<br/>  -1：表示在尾部 <br/>  -2：表示不包含mac地址 <br/>  其他：非法偏移
         .datatip.datatip_connect_protocol(v-show="showTips9")
           | 支持以下四种连接协议： <br/>android classic bluetooth – 1<br/>ios classic bluetooth – 2<br/>ble – 3<br/>wifi -- 4<br/>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：<br/>1：表示设备仅支持andiod classic bluetooth <br/>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接<br/>（注：安卓平台不同时支持BLE和classic类型）
+        p.redf(style='display:inline-block;margin-top:0;') 具体参数说明:
+        a(href= 'http://iot.weixin.qq.com/wiki/index.html', target="view_window") http://iot.weixin.qq.com/wiki/index.html
         .form-row
           label.form-control product_id:
             i.fa.fa-question-circle(@mouseover="showTips1 = true", @mouseout="showTips1 = false")
           .controls.wid250.inline
             .input-text-wrap
-              input.input-text(v-model="setModel.product_id",type="text", name="product_id",placeholder="请输入微信产品ID" minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="setModel.product_id",type="text", name="product_id", placeholder="请输入微信产品ID", v-form-ctrl, required)
+            .form-tips.form-tips-error(v-if="setValidation.$submitted")
+              span(v-if="setValidation.product_id.$error.required"){{ $t('validation.required', {field: $t('wechat.product_id')}) }}
         p.redf 已经授权过的设备不支持更改产品ID
         .form-row
           label.form-control auth_key:
             i.fa.fa-question-circle(@mouseover="showTips2 = true", @mouseout="showTips2 = false")
           .controls.wid250.inline
             .input-text-wrap
-              input.input-text(v-model="setModel.auth_key",type="text", name="auth_key",placeholder="请输入32位加密key" minlength="2", maxlength="32", lazy)
+              input.input-text(v-model="setModel.auth_key",type="text", name="auth_key", placeholder="请输入32位加密key", v-form-ctrl, minlength="2", maxlength="32", required)
+            .form-tips.form-tips-error(v-if="setValidation.$submitted")
+              span(v-if="setValidation.auth_key.$error.required"){{ $t('validation.required', {field: $t('wechat.auth_key')}) }}
         .form-row
           label.form-control.wid160 close_strategy:
             i.fa.fa-question-circle(@mouseover="showTips3 = true", @mouseout="showTips3 = false")
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '2']")
-                input(type="radio", v-model="setModel.close_strategy",name="close_strategy", :value="type", number)
+                input(type="radio", v-model="setModel.close_strategy",name="close_strategy", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.close_strategy.$error.required"){{ $t('validation.required', {field: $t('wechat.close_strategy')}) }}
 
         .form-row
           label.form-control.wid160 conn_strategy:
@@ -128,8 +136,10 @@
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '4']")
-                input(type="radio", v-model="setModel.conn_strategy", name="conn_strategy", :value="type", number)
+                input(type="radio", v-model="setModel.conn_strategy", name="conn_strategy", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.conn_strategy.$error.required"){{ $t('validation.required', {field: $t('wechat.conn_strategy')}) }}
 
         .form-row
           label.form-control.wid160 crypt_method:
@@ -137,8 +147,10 @@
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['0', '1']")
-                input(type="radio", v-model="setModel.crypt_method", name="crypt_method", :value="type", number)
+                input(type="radio", v-model="setModel.crypt_method", name="crypt_method",  :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.crypt_method.$error.required"){{ $t('validation.required', {field: $t('wechat.crypt_method')}) }}
 
         .form-row
           label.form-control.wid160 auth_ver:
@@ -146,8 +158,10 @@
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['0', '1']")
-                input(type="radio", v-model="setModel.auth_ver", name="auth_ver", :value="type", number)
+                input(type="radio", v-model="setModel.auth_ver", name="auth_ver", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.auth_ver.$error.required"){{ $t('validation.required', {field: $t('wechat.auth_ver')}) }}
 
         .form-row
           label.form-control.wid160 manu_mac_pos:
@@ -155,8 +169,10 @@
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['-1', '-2']")
-                input(type="radio", v-model="setModel.manu_mac_pos", name="manu_mac_pos", :value="type", number)
+                input(type="radio", v-model="setModel.manu_mac_pos", name="manu_mac_pos", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.manu_mac_pos.$error.required"){{ $t('validation.required', {field: $t('wechat.manu_mac_pos')}) }}
 
         .form-row
           label.form-control.wid160 ser_mac_pos:
@@ -164,16 +180,20 @@
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['-1', '-2']")
-                input(type="radio", v-model="setModel.ser_mac_pos", name="ser_mac_pos", :value="type", number)
+                input(type="radio", v-model="setModel.ser_mac_pos", name="ser_mac_pos", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.ser_mac_pos.$error.required"){{ $t('validation.required', {field: $t('wechat.ser_mac_pos')}) }}
         .form-row
           label.form-control.wid160 connect_protocol:
             i.fa.fa-question-circle(@mouseover="showTips9 = true", @mouseout="showTips9 = false")
           .controls.wid250.inline
             .radio-group.pleft30
               label.radio.lh35(v-for="type in ['1', '2', '3', '4']")
-                input(type="radio", v-model="setModel.connect_protocol", name="connect_protocol", :value="type", number)
+                input(type="radio", v-model="setModel.connect_protocol", name="connect_protocol", :value="type", number, required)
                 | {{ type }}
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.connect_protocol.$error.required"){{ $t('validation.required', {field: $t('wechat.connect_protocol')}) }}
         .form-actions
           button.btn.btn-default(@click.prevent.stop="onSetCancel") {{ $t("common.cancel") }}
           button.btn.btn-primary(type="submit", :disabled="setting", :class="{'disabled':setting}", v-text="setting ? $t('common.handling') : $t('common.ok')")
@@ -240,6 +260,7 @@
         addValidation: {},
         alertValidation: {},
         setValidation: {},
+        originSetValidation: {},
         originSetModel: {},
         originAddModel: {},
         setModel: {
@@ -325,13 +346,14 @@
     methods: {
       // 关闭授权浮层并净化表单
       resetSet: function () {
-        // var self = this;
+        var self = this;
         this.setting = false;
         this.showSetModal = false;
         this.setModel = _.clone(this.originSetModel);
-        // this.$nextTick(function () {
-        //   self.setForm.setPristine();
-        // });
+        // this.setValidation = _.clone(this.originSetValidation);
+        this.$nextTick(function () {
+          self.setForm.setPristine();
+        });
       },
       // 获取 微信APP 列表
       getApps: function () {
@@ -463,7 +485,17 @@
           console.log(JSON.stringify(self.setModel));
           api.app.getWechat(self.currProduct.id, self.$route.params.id).then(function (data) {
             if (Object.keys(data).length === 0) {
-              self.setModel = {};
+              self.setModel = {
+                auth_key: '',
+                close_strategy: 1,
+                conn_strategy: 1,
+                crypt_method: 0,
+                auth_ver: 0,
+                connect_protocol: 1,
+                manu_mac_pos: -1,
+                ser_mac_pos: -1,
+                product_id: ''
+              };
             } else {
               self.setModel = data.auth_config;
             }
@@ -648,23 +680,23 @@
     padding 5px 10px
     font-size 12px
   .datatip_product_id
-    top 100px
+    top 135px
   .datatip_auth_key
-    top 197px
+    top 120px
   .datatip_close_strategy
-    top 244px
+    top 279px
   .datatip_conn_strategy
-    top 291px
+    top 324px
   .datatip_crypt_method
-    top 338px
+    top 373px
   .datatip_auth_ver
-    top 385px
+    top 415px
   .datatip_manu_mac_pos
-    top 292px
+    top 330px
   .datatip_ser_mac_pos
-    top 338px
+    top 378px
   .datatip_connect_protocol
-    top 240px
+    top 275px
   .inline
     display inline-block!important
   .modal .modal-body
