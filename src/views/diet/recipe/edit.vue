@@ -232,7 +232,8 @@ export default {
       devices: [
         {id: '0', name: '电饭煲', autoexec: '', time: ''},
         {id: '1', name: '云炖锅', autoexec: '', time: ''},
-        {id: '2', name: '隔水炖', autoexec: '', time: ''}
+        {id: '2', name: '隔水炖', autoexec: '', time: ''},
+        {id: '3', name: '电水壶', autoexec: '', time: ''}
       ],
       ingredientSelectModal: {
         show: false,
