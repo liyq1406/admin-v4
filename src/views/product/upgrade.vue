@@ -575,7 +575,7 @@
       // 删除升级任务
       removeTask: function (task) {
         var self = this;
-        var result = confirm('确认删除该应用吗?');
+        var result = confirm('确认删除该升级任务吗？');
         if (result === true) {
           console.log(task.id);
           api.corp.refreshToken().then(function () {

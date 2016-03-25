@@ -14,16 +14,16 @@
           label.form-control URL:
           .controls
             .input-text-wrap(v-placeholder="'请输入URL'")
-              input.input-text(v-form-ctrl, v-model="model.user_auth_third.url",type="text",placeholder='',name='url',custom-validator="noSpacesPrefixAndSuffix")
-            .form-tips.form-tips-error(v-if="validation.url.$dirty")
-              span(v-if="validation.url.$error.customValidator") {{'格式错误'}}
+              input.input-text(v-model="model.user_auth_third.url",type="text",placeholder='',name='url',custom-validator="noSpacesPrefixAndSuffix", required)
+            //- .form-tips.form-tips-error(v-if="validation.$submitted && validation.url.$pristine")
+            //-   span(v-if="validation.url.$error.required") URL不可为空
         .form-row
           label.form-control Token:
           .controls
             .input-text-wrap(v-placeholder="'请输入Token'")
-              input.input-text(v-form-ctrl,v-model="model.user_auth_third.token",type="text",name="token",custom-validator="noSpacesPrefixAndSuffix")
-            .form-tips.form-tips-error(v-if="validation.token.$dirty")
-              span(v-if="validation.token.$error.customValidator") {{ '格式错误' }}
+              input.input-text(v-model="model.user_auth_third.token",type="text",name="token",custom-validator="noSpacesPrefixAndSuffix", required)
+            //- .form-tips.form-tips-error(v-if="validation.$submitted && validation.token.$pristine")
+            //-   span(v-if="validation.token.$error.required") Token不可为空
         .form-actions
           button.btn.btn-primary.btn-lg(type="submit") {{ '確定' }}
 </template>

@@ -74,7 +74,7 @@ section.main-wrap
   // 编辑iOS应用浮层
   modal(:show.sync="showEditModal", @close="onEditCancel")
     //- h3(slot="header") 编辑应用({{editModel.type | typeLabel}})
-    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type}})
+    h3(slot="header") {{ $t("app.edit_app") }} ({{editModel.type | typeLabel}})
     .form(slot="body")
       form(v-form, name="editValidation", @submit.prevent="onEditSubmit(editModel)", hook="editAppHook")
         .form-row
@@ -131,7 +131,13 @@ section.main-wrap
           label.form-control.wid130 {{ '应用名称' }}:
           .controls.wid310
             .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
-              input.input-text(v-model="editModel2.name", type="text", name="name", minlength="2", maxlength="32", required, lazy)
+              input.input-text(v-model="editModel2.name", type="text", name="name", minlength="2", maxlength="32", v-form-ctrl, required, lazy)
+            .form-tips.form-tips-error(v-if="editValidation2.$submitted && editValidation2.name.$pristine")
+              span(v-if="editValidation2.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+            .form-tips.form-tips-error(v-if="editValidation2.name.$dirty")
+              span(v-if="editValidation2.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+              span(v-if="editValidation2.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+              span(v-if="editValidation2.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
         .form-row
           label.form-control.wid130 {{ $t("app.inform") }}:
           .controls.wid310

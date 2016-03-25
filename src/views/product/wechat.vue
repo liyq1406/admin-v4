@@ -116,9 +116,9 @@
             i.fa.fa-question-circle(@mouseover="showTips2 = true", @mouseout="showTips2 = false")
           .controls.wid250.inline
             .input-text-wrap
-              input.input-text(v-model="setModel.auth_key",type="text", name="auth_key", placeholder="请输入32位加密key", v-form-ctrl, minlength="2", maxlength="32", required)
-            .form-tips.form-tips-error(v-if="setValidation.$submitted")
-              span(v-if="setValidation.auth_key.$error.required") {{ $t('validation.required', {field: $t('wechat.auth_key')}) }}
+              input.input-text(v-model="setModel.auth_key",type="text", name="auth_key", placeholder="请输入32位加密key", minlength="2", maxlength="32", required)
+            //- .form-tips.form-tips-error(v-if="setValidation.$submitted")
+            //-   span(v-if="setValidation.auth_key.$error.required") {{ $t('validation.required', {field: $t('wechat.auth_key')}) }}
         .form-row
           label.form-control.wid160 close_strategy:
             i.fa.fa-question-circle(@mouseover="showTips3 = true", @mouseout="showTips3 = false")

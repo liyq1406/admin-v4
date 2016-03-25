@@ -51,7 +51,13 @@
             label.form-control 授权名称:
             .controls
               .input-text-wrap(v-placeholder="$t('app.placeholders.name')")
-                input.input-text(v-model="addModel.name", type="text", name="name", minlength="2", maxlength="32", required, lazy)
+                input.input-text(v-model="addModel.name",  v-form-ctrl, type="text", name="name", minlength="2", maxlength="32", required, lazy)
+              .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
+                span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+              .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
+                span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('app.fields.name')}) }}
+                span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}
+                span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}
           .form-actions
             button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
             button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
