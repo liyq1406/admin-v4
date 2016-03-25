@@ -101,7 +101,7 @@
         .datatip.datatip_connect_protocol(v-show="showTips9")
           | 支持以下四种连接协议： <br/>android classic bluetooth – 1<br/>ios classic bluetooth – 2<br/>ble – 3<br/>wifi -- 4<br/>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：<br/>1：表示设备仅支持andiod classic bluetooth <br/>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接<br/>（注：安卓平台不同时支持BLE和classic类型）
         p.redf(style='display:inline-block;margin-top:0;') 具体参数说明:
-        a(href= 'http://iot.weixin.qq.com/wiki/index.html', target="view_window") http://iot.weixin.qq.com/wiki/index.html
+        a(href= 'http://iot.weixin.qq.com/wiki/document-2_6.html', target="view_window") http://iot.weixin.qq.com/wiki/index.html
         .form-row
           label.form-control product_id:
             i.fa.fa-question-circle(@mouseover="showTips1 = true", @mouseout="showTips1 = false")
