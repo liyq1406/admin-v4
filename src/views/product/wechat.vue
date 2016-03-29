@@ -5,6 +5,7 @@
       pre {{selectedAppId}}
       .form.form-edit-apk
         form
+          a.nontip(v-show='wetips' ,v-link="{ path: '/apps' }" )没有微信应用，点击此处跳转添加页面
           .form-row
             label.form-control 选择应用:
             .controls
@@ -309,7 +310,8 @@
         showTips7: false,
         showTips8: false,
         showTips9: false,
-        deviceEmpowering: false
+        deviceEmpowering: false,
+        wetips: false
       };
     },
 
@@ -368,6 +370,9 @@
                 if (item.id === window.localStorage.selectedAppId) {
                   self.currProduct = item;
                 }
+              };
+              if (arr.length - 0 === 0) {
+                self.wetips = true;
               }
             });
             self.apps = arr;
@@ -703,4 +708,7 @@
     max-height 600px!important
   .redf
     color red
+  .nontip
+    margin-left 150px
+    color red!important
 </style>
