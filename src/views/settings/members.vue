@@ -60,7 +60,7 @@
               input.input-text(v-model="newuseremail.email", type="email", v-form-ctrl, name="email", maxlength="32", required, lazy)
             .form-tips.form-tips-error(v-if="validation.email.$dirty")
               span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('member.fields.email')}) }}
-              span(v-if="validation.email.$error.email") $t('validation.format', {field: $t('member.fields.email')}) }}
+              span(v-if="validation.email.$error.email") {{ $t('validation.format', {field: $t('member.fields.email')}) }}
         .form-row
           label.form-control {{ $t("member.fields.role") }}:
           .controls

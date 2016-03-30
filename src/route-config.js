@@ -413,6 +413,24 @@ let configRouter = (router) => {
               resolve(require('./views/settings/auth.vue'));
             }, 'settings');
           }
+          // subRoutes: {
+          //   // 旧版V1
+          //   // 'oldlist': {
+          //   //   component: function (resolve) {
+          //   //     require.ensure([], function (require) {
+          //   //       resolve(require('./views/settings/oldlist.vue'));
+          //   //     }, 'settings');
+          //   //   }
+          //   // },
+          //   // 新版
+          //   'auth': {
+          //     component: function (resolve) {
+          //       require.ensure([], function (require) {
+          //         resolve(require('./views/settings/auth.vue'));
+          //       }, 'settings');
+          //     }
+          //   }
+          // }
         },
         // 成员管理
         'members': {
