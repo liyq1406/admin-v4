@@ -18,6 +18,7 @@ section.main-wrap
             tr
               th {{ $t("app.fields.id") }}
               th {{ $t("app.fields.name") }}
+              th.tac Access Key Secret
               th {{ $t("app.fields.type") }}
               th {{ $t("app.fields.create_time") }}
               th.tac {{ $t("common.action") }}
@@ -26,6 +27,8 @@ section.main-wrap
               tr(v-for="app in apps")
                 td {{app.id}}
                 td {{app.name}}
+                td.tac
+                  button.btn.btn-link.btn-sm(@click="viewAccessKeys(app)") {{ $t('common.details') }}
                 td {{app.type | typeLabel}}
                 td {{app.create_time | formatDate}}
                 //- td.tac
@@ -43,6 +46,17 @@ section.main-wrap
                 td.tac(colspan="5")
                   .tips-null
                     span {{ $t("common.no_records") }}
+      // 查看密钥浮层
+    modal(:show.sync="showKeyModal")
+      h3(slot="header") Access Key Secret
+      .form(slot="body")
+        .secret-key.tac.mrbthr.secret-key(slot="body") {{key.secret}}
+        //- .form-actions
+        //-   button.btn.btn-default(@click="onViewCancel") {{ $t("common.cancel") }}
+        //-   button.btn.btn-primary.fr(type="submit",:disabled="editing",@click="deleteKeyCode(key.id)") 删除
+        .form-actions
+          button.btn.btn-primary(@click='showKeyModal=false') 确定
+
 
   // 添加应用浮层
   modal(:show.sync="showAddModal", @close="onAddCancel")
@@ -252,6 +266,7 @@ section.main-wrap
 
     data: function () {
       return {
+        key: {},
         apps: [],
         appTypes: locales[Vue.config.lang].app.types,
         encryptTypes: locales[Vue.config.lang].app.encrypt_types,
@@ -296,7 +311,8 @@ section.main-wrap
         uploading: false,
         delChecked: false,
         loadingApps: false,
-        showAlertModal: false
+        showAlertModal: false,
+        showKeyModal: false
       };
     },
 
@@ -322,6 +338,15 @@ section.main-wrap
             self.apps = data;
           });
         });
+      },
+      /**
+       * 查看密钥
+       * @param  {String} accessKey AccessKey
+       */
+      viewAccessKeys (app) {
+        this.key = app;
+        this.showKeyModal = true;
+        console.log(this.key.secret);
       },
 
       // 取消删除确认提醒
@@ -615,4 +640,8 @@ section.main-wrap
   width 130px!important
 .wid310
   width 310px!important
+.secret-key
+  font-size 20px
+.mrbthr
+  margin-bottom 30px
 </style>
