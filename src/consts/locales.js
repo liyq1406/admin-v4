@@ -39,7 +39,7 @@ module.exports = {
         alerts: '通知与告警',
         upgrade: '固件升级',
         wechat: '微信授权',
-        dataforward: '设备数据转发'
+        dataforward: '数据转发'
       },
       data: {
         tables: '数据表'
@@ -134,7 +134,7 @@ module.exports = {
     ],
 
     // 设备类型
-    deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备'],
+    deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备'],
 
     visibilityOptions: [
       { label: '全部', value: 'all' },
@@ -233,6 +233,7 @@ module.exports = {
       '4001076': '用户不是设备管理员',
       '4001077': '微信配置相关参数类型不明确',
       '4001078': '授权设置不正确',
+      '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
       '4031001': '禁止访问',
       '4031002': '禁止访问，需要Access-Token',
       '4031003': '无效的Access-Token',
@@ -465,7 +466,7 @@ module.exports = {
         description: '描述'
       }
     },
-    // 设备数据转发
+    // 数据转发
     dataforward: {
       add_dataforward: '添加设备规则',
       edit_dataforward: '编辑设备规则',
@@ -762,10 +763,12 @@ module.exports = {
         { label: '英语(美国)', value: 'en-us' }
       ],
       placeholders: {
-        sender: '如：noreply'
+        sender: '如：noreply',
+        address: '请输入邮件发送域名'
       },
       fields: {
         sender: '发件者',
+        address: '邮件域名',
         subject: '邮件标题',
         content: '邮件内容'
       },
@@ -883,7 +886,7 @@ module.exports = {
         alerts: '通知与告警',
         upgrade: '固件升级',
         wechat: '微信授权',
-        dataforward: '设备数据转发'
+        dataforward: '数据转发'
       },
       data: {
         tables: '数据表'
@@ -978,7 +981,7 @@ module.exports = {
     ],
 
     // 设备类型
-    deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备'],
+    deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备'],
 
     visibilityOptions: [
       { label: '全部', value: 'all' },
@@ -1076,6 +1079,7 @@ module.exports = {
       '4001076': '用户不是设备管理员',
       '4001077': '微信配置相关参数类型不明确',
       '4001078': '授权设置不正确',
+      '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
       '4031001': '禁止访问',
       '4031002': '禁止访问，需要Access-Token',
       '4031003': '无效的Access-Token',
@@ -1307,7 +1311,7 @@ module.exports = {
         description: '描述'
       }
     },
-    // 设备数据转发
+    // 数据转发
     dataforward: {
       add_dataforward: '添加设备规则',
       edit_dataforward: '编辑设备规则',
@@ -1607,10 +1611,12 @@ module.exports = {
         { label: '英语(美国)', value: 'en-us' }
       ],
       placeholders: {
-        sender: '如：noreply'
+        sender: '如：noreply',
+        address: '请输入邮件发送域名'
       },
       fields: {
         sender: '发件者',
+        address: '邮件域名',
         subject: '邮件标题',
         content: '邮件内容'
       },

@@ -13,6 +13,9 @@ section.main-wrap
           .panel-bd
             //- #diviceMap(style="height: 300px")
             ul.device-details
+              li(v-if='device.name')
+                .label 设备名称:
+                .info {{device.name}}
               li
                 .label ID:
                 .info {{device.id}}
@@ -289,6 +292,10 @@ section.main-wrap
             socket = null;
           }
         }
+      },
+
+      handleError: function (error) {
+        console.log(error);
       }
     }
   };

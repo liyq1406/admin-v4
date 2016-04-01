@@ -94,6 +94,52 @@ module.exports = function (Vue, Promise, config) {
           reject(data.error);
         });
       });
+    },
+
+    /**
+     * 获取邮件发送域名
+     * @return status
+     */
+    getAddress: function () {
+      return new Promise(function (resolve, reject) {
+        Vue.http.get(
+          config.apiRoot + '/corp/email_domain',
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
+    },
+
+    /**
+     * 设置邮件发送域名
+     * @return status
+     */
+    setAddress: function (params) {
+      return new Promise(function (resolve, reject) {
+        Vue.http.post(
+          config.apiRoot + '/corp/email_domain',
+          JSON.stringify(params),
+          function (data, status, request) {
+            resolve(data);
+          }, {
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+              'Access-Token': localStorage.getItem('accessToken')
+            }
+          }
+        ).error(function (data, status, request) {
+          reject(data.error);
+        });
+      });
     }
+
   };
 };

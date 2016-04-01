@@ -152,6 +152,26 @@ div
           .form-actions
             button.btn.btn-primary.btn-lg(type="submit", :disabled="resetStatus2 === 0 || savingReset", :class="{'disabled': resetStatus2 === 0 || savingReset}", v-text="savingReset ? $t('common.handling') : $t('common.save')")
   //- End: 重置密码邮件模板
+  //- Start: 高级设置
+  .panel
+    .panel-hd
+      .status
+        | {{ $t('common.status') }}:
+        span.hl-red(v-if="validation2.state === 1") 未验证
+        span(v-if="validation2.state === 2") 可使用
+        span.hl-green(v-if="validation2.state === 3") 已验证
+      h2 高级设置
+    .panel-bd
+      .form
+        form(v-form, name="validation2", @submit.prevent="onSenderSubmit2")
+          .form-row
+            label.form-control 邮件发送域名:
+            .controls
+              .input-text-wrap(v-placeholder="$t('mail_templates.placeholders.address')")
+                input.input-text(v-model="validation2.domain", type="text", name="address", lazy, custom-validator="noSpaces")
+          .form-actions
+            button.btn.btn-primary.btn-lg(type="submit", :disabled="editingAddress", :class="{'disabled': editingAddress}") {{ $t('common.save') }}
+  //- End: 通用设置
 </template>
 
 <script>
@@ -171,6 +191,7 @@ export default {
     return {
       languages: locales[Vue.config.lang].mail_templates.languages,
       validation: {},
+      validation2: {},
       loading: true,
       activateLang: 'zh-cn',
       resetLang: 'zh-cn',
@@ -196,7 +217,8 @@ export default {
       resetValidation2: {},
       sender: '',
       savingActivate: false,
-      savingReset: false
+      savingReset: false,
+      editingAddress: false
     };
   },
 
@@ -212,6 +234,7 @@ export default {
   route: {
     data: function () {
       var self = this;
+      self.getAddress();
       // var list = [];
       api.corp.refreshToken().then(function () {
         api.email.getTemplateList().then(function (data) {
@@ -302,6 +325,14 @@ export default {
         this.onResetSubmit();
         this.onResetSubmit2();
       }
+    },
+    /**
+     * 提交邮件域名
+     */
+    onSenderSubmit2 () {
+      var self = this;
+      self.setAddress();
+      self.getAddress();
     },
 
     /**
@@ -462,6 +493,46 @@ export default {
           });
         }
       }
+    },
+    /**
+     * 获取邮件发送域名
+     */
+    getAddress: function () {
+      var self = this;
+      api.corp.refreshToken().then(function () {
+        api.email.getAddress().then(function (data) {
+          self.validation2 = data;
+          console.log(self.validation2);
+        });
+      });
+    },
+    /**
+     * 设置邮件发送域名
+     */
+    setAddress: function () {
+      var self = this;
+      self.editingAddress = true;
+      // api.corp.refreshToken().then(function () {
+      //   console.log(self.validation2.domain);
+      //   var params = {
+      //     domain: self.validation2.domain
+      //   };
+      //   api.email.setAddress(params).then(function (data) {
+      //     console.log(self.validation2);
+      //   });
+      // });
+      api.corp.refreshToken().then(function () {
+        var params = {
+          domain: self.validation2.domain
+        };
+        api.email.setAddress(params).then(function (data) {
+          console.log(self.validation2);
+          self.editingAddress = false;
+        }).catch(function (error) {
+          self.handleError(error);
+          self.editingAddress = false;
+        });
+      });
     }
   }
 };

@@ -102,6 +102,12 @@ div
               label.checkbox
                 input(type="checkbox", name="is_registerable", v-model="editModel.is_registerable")
                 | {{ $t("product.fields.is_registerable")}}
+        .form-row.without-label
+          .controls
+            .checkbox-group
+              label.checkbox
+                input(type="checkbox", name="is_active_register", v-model="editModel.is_active_register")
+                | 允许动态注册设备
         .form-actions
           label.del-check
             input(type="checkbox", name="del", v-model="delChecked")

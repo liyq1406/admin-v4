@@ -211,7 +211,7 @@ let configRouter = (router) => {
             }, 'product');
           }
         },
-        // 设备数据转发
+        // 数据转发
         'data-forward': {
           component: function (resolve) {
             require.ensure([], function (require) {
