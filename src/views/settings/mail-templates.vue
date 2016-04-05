@@ -171,6 +171,111 @@ div
                 input.input-text(v-model="validation2.domain", type="text", name="address", lazy, custom-validator="noSpaces")
           .form-actions
             button.btn.btn-primary.btn-lg(type="submit", :disabled="editingAddress", :class="{'disabled': editingAddress}") {{ $t('common.save') }}
+      p.bigfont 相关信息
+      table.table.table-stripe.table-bordered
+        thead
+          tr
+            th 名称
+            th 状态
+            th 类型
+            th 主机记录
+            th 主域名
+            th 需配置的记录值
+            th 现有记录值
+        tbody
+          tr
+            td VERIFY_KEY
+            td.bhx.tg(v-if="validation2.info&&validation2.info.verify===31") 通过
+            td.bhx.btg(v-else) 不通过
+            td TXT
+            td mail
+            td {{validation2.domain}}
+            td {{validation2.info&&validation2.info['verifyKey.value']}}
+            td {{validation2.info&&validation2.info['verifyKey.domain']}}
+          tr
+            td SPF
+            td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)") 通过
+            td.bhx.btg(v-else) 不通过
+            td TXT
+            td mail
+            td {{validation2.domain}}
+            td {{validation2.info&&validation2.info['spf.value']}}
+            td {{validation2.info&&validation2.info['spf.domain']}}
+          tr
+            td DKIM
+            td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)") 通过
+            td.bhx.btg(v-else) 不通过
+            td TXT
+            td mail
+            td {{validation2.domain}}
+            td.hx {{validation2.info&&validation2.info['dkim.value']}}
+            td {{validation2.info&&validation2.info['dkim.domain']}}
+          tr
+            td CNAME
+            td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)") 通过
+            td.bhx.btg(v-else) 不通过
+            td TXT
+            td mail
+            td {{validation2.domain}}
+            td {{validation2.info&&validation2.info['cname.value']}}
+            td {{validation2.info&&validation2.info['cname.domain']}}
+          tr
+            td MX
+            td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)") 通过
+            td.bhx.btg(v-else) 不通过
+            td TXT
+            td mail
+            td {{validation2.domain}}
+            td {{validation2.info&&validation2.info['mx.value']}}
+            td {{validation2.info&&validation2.info['mx.domain']}}
+      //- table.table.table-stripe.table-bordered
+      //-   tbody
+      //-     tr
+      //-       td.sxtd 名称
+      //-       td {{validation2.info&&validation2.info.name}}
+      //-     tr
+      //-       td.sxtd 域名类型
+      //-       td {{validation2.info&&validation2.info.type}}
+      //-     tr
+      //-       td.sxtd 域名验证值
+      //-       td {{validation2.info&&validation2.info.verify}}
+      //-     tr
+      //-       td.sxtd 此域名VERIFY_KEY的主机记录
+      //-       td {{validation2.info&&validation2.info['verifyKey.domain']}}
+      //-     tr
+      //-       td.sxtd 此域名VERIFY_KEY 的配置值
+      //-       td {{validation2.info&&validation2.info['verifyKey.value']}}
+      //-     tr
+      //-       td.sxtd 此域名SPF 的主机记录
+      //-       td {{validation2.info&&validation2.info['spf.domain']}}
+      //-     tr
+      //-       td.sxtd 此域名SPF 的配置值
+      //-       td {{validation2.info&&validation2.info['spf.value']}}
+      //-     tr
+      //-       td.sxtd 此域名DKIM 的主机记录
+      //-       td {{validation2.info&&validation2.info['dkim.domain']}}
+      //-     tr
+      //-       td.sxtd 此域名DKIM 的配置值
+      //-       td {{validation2.info&&validation2.info['dkim.value']}}
+      //-     tr
+      //-       td.sxtd 此域名CNAME 的主机记录
+      //-       td {{validation2.info&&validation2.info['cname.domain']}}
+      //-     tr
+      //-       td.sxtd 此域名CNAME 的配置值
+      //-       td {{validation2.info&&validation2.info['cname.value']}}
+      //-     tr
+      //-       td.sxtd 此域名MX 的主机记录
+      //-       td {{validation2.info&&validation2.info['mx.domain']}}
+      //-     tr
+      //-       td.sxtd 此域名MX 的配置值
+      //-       td {{validation2.info&&validation2.info['mx.value']}}
+      //-     tr
+      //-       td.sxtd 域名创建时间
+      //-       td {{validation2.info&&validation2.info.gmtCreated}}
+      //-     tr
+      //-       td.sxtd 域名修改时间
+      //-       td {{validation2.info&&validation2.info.gmtUpdated}}
+
   //- End: 通用设置
 </template>
 
@@ -191,7 +296,35 @@ export default {
     return {
       languages: locales[Vue.config.lang].mail_templates.languages,
       validation: {},
-      validation2: {},
+      validation2: {
+        info: {
+          name: '123',
+          type: '123',
+          verify: '123',
+          verifyKey: {
+            domain: '',
+            value: ''
+          },
+          spf: {
+            domain: '',
+            value: ''
+          },
+          dkim: {
+            domain: '',
+            value: ''
+          },
+          cname: {
+            domain: '',
+            value: ''
+          },
+          mx: {
+            domain: '',
+            value: ''
+          },
+          gmtCreated: '',
+          gmtUpdated: ''
+        }
+      },
       loading: true,
       activateLang: 'zh-cn',
       resetLang: 'zh-cn',
@@ -502,7 +635,7 @@ export default {
       api.corp.refreshToken().then(function () {
         api.email.getAddress().then(function (data) {
           self.validation2 = data;
-          console.log(self.validation2);
+          console.log(data);
         });
       });
     },
@@ -543,4 +676,29 @@ export default {
   .panel-hd
     .leftbox
       left 160px
+.bigfont
+  font-size 18px
+  border-bottom 1px solid #e4e4e4
+.panel-bd .form
+  padding 30px 0 10px
+ul.device-details
+  padding-bottom 30px
+ul.device-details li
+  line-height 32px
+ul.device-details li .label
+  display inline-block
+  width 180px
+ul.device-details li .info
+  display inline-block
+.sxtd
+  width 180px
+  text-align left
+.hx
+  word-break break-all
+.bhx
+  white-space nowrap
+.btg
+  color #c0252e
+.tg
+  color #35aa47
 </style>

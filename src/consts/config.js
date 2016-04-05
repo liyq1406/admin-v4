@@ -2,6 +2,8 @@
 export default {
   // 测试服务器
   apiRoot: 'http://api-test.xlink.cn:8887/v2',
+  // 测试邮件模板相关信息
+  // apiRoot: 'http://42.121.122.228:8887/v2',
   // 开发本地
   // apiRoot: 'http://localhost:8887/v2',
   // 海曼
