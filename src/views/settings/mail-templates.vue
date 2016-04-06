@@ -188,8 +188,9 @@ div
             td.bhx.tg(v-if="validation2.info&&validation2.info.verify===31") 通过
             td.bhx.btg(v-else) 不通过
             td TXT
-            td mail
-            td {{validation2.domain}}
+            td(v-if='!validation2.IPfront') @
+            td(v-else) {{validation2.IPfront}}
+            td {{validation2.IPbehind}}
             td {{validation2.info&&validation2.info['verifyKey.value']}}
             td {{validation2.info&&validation2.info['verifyKey.domain']}}
           tr
@@ -197,8 +198,9 @@ div
             td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)") 通过
             td.bhx.btg(v-else) 不通过
             td TXT
-            td mail
-            td {{validation2.domain}}
+            td(v-if='!validation2.IPfront') @
+            td(v-else) {{validation2.IPfront}}
+            td {{validation2.IPbehind}}
             td {{validation2.info&&validation2.info['spf.value']}}
             td {{validation2.info&&validation2.info['spf.domain']}}
           tr
@@ -206,26 +208,29 @@ div
             td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)") 通过
             td.bhx.btg(v-else) 不通过
             td TXT
-            td mail
-            td {{validation2.domain}}
+            td(v-if='!validation2.IPfront') mail._domainkey
+            td(v-else) {{'mail._domainkey.'+validation2.IPfront}}
+            td {{validation2.IPbehind}}
             td.hx {{validation2.info&&validation2.info['dkim.value']}}
             td {{validation2.info&&validation2.info['dkim.domain']}}
           tr
             td CNAME
             td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)") 通过
             td.bhx.btg(v-else) 不通过
-            td TXT
-            td mail
-            td {{validation2.domain}}
+            td CNAME
+            td(v-if='!validation2.IPfront') sctrack
+            td(v-else) {{'sctrack.'+validation2.IPfront}}
+            td {{validation2.IPbehind}}
             td {{validation2.info&&validation2.info['cname.value']}}
             td {{validation2.info&&validation2.info['cname.domain']}}
           tr
             td MX
             td.bhx.tg(v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)") 通过
             td.bhx.btg(v-else) 不通过
-            td TXT
-            td mail
-            td {{validation2.domain}}
+            td MX
+            td(v-if='!validation2.IPfront') @
+            td(v-else) {{validation2.IPfront}}
+            td {{validation2.IPbehind}}
             td {{validation2.info&&validation2.info['mx.value']}}
             td {{validation2.info&&validation2.info['mx.domain']}}
       //- table.table.table-stripe.table-bordered
@@ -635,6 +640,22 @@ export default {
       api.corp.refreshToken().then(function () {
         api.email.getAddress().then(function (data) {
           self.validation2 = data;
+          var IPaddress = self.validation2.domain;
+          var IParry = IPaddress.split('.');
+          var IPlast1 = IParry.pop();
+          var IPlast2 = IParry.pop();
+          var IPbehind;
+          var IPlast3;
+          if ((IPlast1 === 'cn' && IPlast2 === 'com') || (IPlast1 === 'cn' && IPlast2 === 'net') || (IPlast1 === 'cn' && IPlast2 === 'gov') || (IPlast1 === 'cn' && IPlast2 === 'org')) {
+            IPlast3 = IParry.pop();
+            IPbehind = IPlast3 + '.' + IPlast2 + '.' + IPlast1 ;
+          } else {
+            IPbehind = IPlast2 + '.' + IPlast1;
+          }
+          var IPfront = IParry.join('.');
+          self.validation2.IPfront = IPfront;
+          self.validation2.IPbehind = IPbehind;
+          console.log(IPfront);
           console.log(data);
         });
       });

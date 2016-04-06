@@ -554,7 +554,6 @@ div
       // 提交更新
       onEditSubmit: function () {
         var self = this;
-
         if (this.delChecked && !this.editing) {
           this.editing = true;
           api.corp.refreshToken().then(function () {
@@ -572,6 +571,7 @@ div
           });
         } else if (this.editValidation.$valid && !this.editing) {
           this.editing = true;
+          console.log(JSON.stringify(self.editModel));
           api.corp.refreshToken().then(function () {
             api.product.updateProduct(self.editModel).then(function (data) {
               if (__DEBUG__) {

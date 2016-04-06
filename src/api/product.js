@@ -60,6 +60,7 @@ module.exports = function (Vue, Promise, config) {
         params.link_type = product.link_type;
         params.is_registerable = product.is_registerable;
         params.is_release = product.is_release;
+        params.is_active_register = product.is_active_register;
         Vue.http.put(
           config.apiRoot + '/product/' + product.id,
           JSON.stringify(params),
