@@ -1,9 +1,13 @@
 <template lang="jade">
 .panel
   .panel-bd
+    //- pre {{condi}}
     //- 操作栏
     .action-bar
-      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
+      //- search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
+      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.search_condi')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
+        select.selcss(v-model="condi", name="condi")
+          option(v-for="type in searchCondi" ,:value="type.value", :selected="$index===0") {{type.label}}
         button.btn.btn-primary(slot="search-button", @click="getDevices(true)") {{ $t('common.search') }}
       .action-group
         button.btn.btn-success(@click="showAddModal = true")
@@ -138,7 +142,12 @@
         // querying: false,
         adding: false,
         importing: false,
-        loadingData: false
+        loadingData: false,
+        searchCondi: [
+          { label: 'MAC', value: 'mac' },
+          { label: '设备ID', value: 'id' }
+        ],
+        condi: 'mac'
       };
     },
 
@@ -153,7 +162,8 @@
         };
 
         if (this.query.length > 0) {
-          condition.query['mac'] = { $like: this.query };
+          console.log(this.condi);
+          condition.query[this.condi] = { $like: this.query };
         }
 
         switch (this.visibility) {
@@ -315,3 +325,7 @@
     }
   };
 </script>
+<style lang="stylus">
+.selcss
+  height 30px
+</style>
