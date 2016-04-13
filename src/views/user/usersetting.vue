@@ -77,7 +77,9 @@
     methods: {
       getData () {
         api.corp.getUserSetting(this.model).then((res) => {
-          this.model = res.data
+          // this.model = res.data
+          this.model.user_auth_third = res.data.user_auth_third
+          this.model.is_user_active = !res.data.is_user_active
         }).catch((error) => {
           this.handleError(error)
         })
@@ -85,10 +87,15 @@
 
       onSubmit () {
         if (this.validation.$valid) {
-          api.corp.updateUserSetting(this.model).then((res) => {
+          var params = {
+            is_user_active: !this.model.is_user_active,
+            user_auth_third: this.model.user_auth_third
+          }
+          api.corp.updateUserSetting(params).then((res) => {
             if (res.status === 200) {
               window.alert('已成功修改！')
             }
+            this.getData()
           }).catch((error) => {
             this.handleError(error)
           })

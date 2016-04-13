@@ -553,33 +553,58 @@
 
       // 提交更新
       onEditSubmit () {
-        if (this.delChecked && !this.editing) {
-          this.editing = true
-          api.product.deleteProduct(this.$route.params.id).then((res) => {
+        var self = this
+        if (self.delChecked && !self.editing) {
+          self.editing = true
+          api.product.deleteProduct(self.$route.params.id).then((res) => {
             if (res.status === 200) {
-              this.resetEdit()
-              productsStore.deleteProduct(this.product)
-              this.$route.router.go('/')
+              self.resetEdit()
+              productsStore.deleteProduct(self.product)
+              self.$route.router.go('/')
             }
           }).catch((error) => {
-            this.handleError(error)
-            this.editing = false
+            self.handleError(error)
+            self.editing = false
           })
-        } else if (this.editValidation.$valid && !this.editing) {
-          this.editing = true
-          api.product.updateProduct(this.editModel)
-          .then(() => {
-            api.product.getProduct(this.$route.params.id).then((res) => {
-              if (res.status === 200) {
-                this.product = res.data
-                this.resetEdit()
-                this.$dispatch('edit-product-name')
-              }
+        } else if (self.editValidation.$valid && !self.editing) {
+          self.editing = true
+          if (self.editModel.link_type === 5) {
+            api.product.updateProduct(self.editModel)
+            .then(() => {
+              api.product.getProduct(self.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                  self.product = res.data
+                  self.resetEdit()
+                  self.$dispatch('edit-product-name')
+                }
+              })
+            }).catch((error) => {
+              self.handleError(error)
+              self.editing = false
             })
-          }).catch((error) => {
-            this.handleError(error)
-            this.editing = false
-          })
+          } else {
+            var dates = {
+              name: self.editModel.name,
+              description: self.editModel.description,
+              link_type: self.editModel.link_type,
+              is_registerable: self.editModel.is_registerable,
+              is_release: self.editModel.is_release,
+              id: self.editModel.id
+            }
+            api.product.updateProduct(dates)
+            .then(() => {
+              api.product.getProduct(self.$route.params.id).then((res) => {
+                if (res.status === 200) {
+                  self.product = res.data
+                  self.resetEdit()
+                  self.$dispatch('edit-product-name')
+                }
+              })
+            }).catch((error) => {
+              self.handleError(error)
+              self.editing = false
+            })
+          }
         }
       },
 

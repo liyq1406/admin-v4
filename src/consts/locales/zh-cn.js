@@ -72,6 +72,7 @@ export default {
     add: '添加',
     del: '删除',
     save: '保存',
+    change: '修改',
     company: '广州云湾信息技术有限公司',
     name: '名称',
     recent: '最近',

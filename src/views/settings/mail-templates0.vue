@@ -167,20 +167,19 @@
             <div class="form-row">
               <label class="form-control">邮件发送域名:</label>
               <div class="controls">
-                <!-- <div v-placeholder="$t('mail_templates.placeholders.address')" class="input-text-wrap"> -->
-                <div class="input-text-wrap">
-                  <span v-if="ifxlink" style="line-height:35px">{{validation2.domain}}</span>
+                <div v-placeholder="$t('mail_templates.placeholders.address')" class="input-text-wrap">
+                  <span v-show = "ifxlink" style="line-height:35px">{{validation2.domain}}</span>
                   <input v-else v-model="validation2.domain" type="text" name="address" lazy custom-validator="noSpaces" class="input-text"/>
                 </div>
               </div>
             </div>
             <div class="form-actions">
-              <button v-if="ifxlinkbtn" type="submit" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
-              <button v-else @click="changeAddress" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">修改</button>
+              <button  type="submit" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
+              <!-- <button v-else @click="changeaddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">修改</button> -->
             </div>
           </form>
         </div>
-        <div v-if="showform">
+        <div v-show="showform">
           <p class="bigfont">相关信息</p>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -331,9 +330,8 @@ export default {
       savingActivate: false,
       savingReset: false,
       editingAddress: false,
-      ifxlink: false,
-      ifxlinkbtn: true,
-      showform: false
+      showform: true,
+      ifxlink: false
     }
   },
 
@@ -597,13 +595,11 @@ export default {
     getAddress () {
       api.email.getAddress().then((res) => {
         this.validation2 = res.data
-        if (res.data.domain === 'mail.xlink.cn') {
+        if (this.validation2.domain === 'mail.xlink.cn') {
           this.ifxlink = true
-          this.ifxlinkbtn = false
           this.showform = false
         } else {
-          this.ifxlink = false
-          this.ifxlinkbtn = true
+          this.iflink = false
           this.showform = true
         }
         var IPaddress = this.validation2.domain
@@ -623,11 +619,9 @@ export default {
         this.validation2.IPbehind = IPbehind
       })
     },
-    // 修改域名
-    changeAddress () {
+    //  修改域名
+    changeaddress () {
       this.ifxlink = false
-      this.ifxlinkbtn = true
-      this.showform = false
     },
     /**
      * 设置邮件发送域名
