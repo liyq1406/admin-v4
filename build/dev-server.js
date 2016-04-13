@@ -32,10 +32,10 @@ app.use(hotMiddleware)
 // serve pure static assets
 app.use('/static', express.static('./static'))
 
-app.listen(8090, function (err) {
+app.listen(9000, function (err) {
   if (err) {
     console.log(err)
     return
   }
-  console.log('Listening at http://localhost:8090')
+  console.log('Listening at http://localhost:9000')
 })
