@@ -60,7 +60,7 @@ export default {
   background rgba(0, 0, 0, .6)
   z-index 1000
   display table
-  transition opacity .3s ease
+  transition opacity .2s ease
 
   .modal-wrapper
     display table-cell
@@ -109,5 +109,4 @@ export default {
     padding 0 30px 20px
     text-align right
     clearfix()
-
 </style>
