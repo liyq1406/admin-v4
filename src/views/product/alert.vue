@@ -1,258 +1,334 @@
-<template lang="jade">
-div
-  .panel
-    .panel-bd
-      //- 操作栏
-      .action-bar
-        .action-group
-          button.btn.btn-success(@click="showAddModal = true")
-            i.fa.fa-plus
-            | {{ $t("rule.add_rule") }}
-
-      //- 通知与告警列表
-      table.table.table-stripe.table-bordered
-        thead
-          tr
-            th {{ $t("rule.fields.name") }}
-            th {{ $t("rule.fields.type") }}
-            th {{ $t("rule.fields.content") }}
-            th {{ $t("common.status") }}
-            th.tac {{ $t("common.action") }}
-        tbody
-          template(v-if="rules.length > 0 && !loadingData")
-            tr(v-for="rule in rules")
-              td {{* rule.name}}
-              td {{* rule.type | ruleLabel}}
-              td {{* rule.content}}
-              td
-                span.hl-green(v-if="rule.is_enable") {{ $t("common.enable") }}
-                span.hl-gray(v-else) {{ $t("common.disabled") }}
-              td.tac
-                button.btn.btn-link.btn-sm(@click="editRule(rule)") {{ $t("common.edit") }}
-          tr(v-if="loadingData")
-            td.tac(colspan="5")
-              .tips-null
-                i.fa.fa-refresh.fa-spin
-                span {{ $t("common.data_loading") }}
-          tr(v-if="rules.length === 0 && !loadingData")
-            td.tac(colspan="5")
-              .tips-null
-                span {{ $t("common.no_records") }}
-      // 分页
-      pager(v-if="!loadingData", :total="rules.length", :current.sync="currentPage", :page-count="pageCount")
-
-  // 添加规则浮层
-  modal(:show.sync="showAddModal", :width="650", :flag="addModelEditingTag", @close="onAddCancel")
-    h3(slot="header") {{ $t("rule.add_rule") }}
-    .form.form-rules(slot="body")
-      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
-        .form-row
-          label.form-control {{ $t("rule.fields.name") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('rule.placeholders.name')")
-              input.input-text(v-model="addModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.name.$pristine")
-              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('rule.fields.name')}) }}
-            .form-tips.form-tips-error(v-if="addValidation.name.$dirty")
-              span(v-if="addValidation.name.$error.required") {{ $t('validation.required', {field: $t('rule.fields.name')}) }}
-              span(v-if="addValidation.name.$error.minlength") {{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}
-              span(v-if="addValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}
-        .form-row.condition-row
-          label.form-control {{ $t("rule.condition") }}:
-          .controls
-            .type
-              .select
-                select(v-model="addModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
-                  option(v-for="type in ruleTypes", :value="$index+1", :selected="$index===0") {{type}}
-            .data(v-show="addModel.type === 1")
-              .select
-                select(v-model="addModel.param", v-form-ctrl, name="param")
-                  option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
-            .compare(v-show="addModel.type === 1")
-              .select
-                select(v-model="addModel.compare", v-form-ctrl, name="compare", number)
-                  option(v-for="type in compareTypes", :value="$index+1", :selected="$index===0") {{type}}
-            .value(v-if="addModel.type === 1")
-              .input-text-wrap
-                input.input-text(v-model="addModel.value", type="text", v-form-ctrl, name="value", required, lazy)
-            .value(v-if="addModel.type === 2")
-              .select
-                select(v-model="addModel.value", v-form-ctrl, name="value")
-                  option(value="online") {{ $t("common.online") }}
-                  option(value="offline") {{ $t("common.offline") }}
-        .form-row
-          label.form-control {{ $t("rule.fields.content") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('rule.placeholders.content')")
-              textarea.input-text(v-model="addModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.content.$pristine")
-              span(v-if="addValidation.content.$error.required") {{ $t('validation.required', {field: $t('rule.fields.content')}) }}
-            .form-tips.form-tips-error(v-if="addValidation.content.$dirty")
-              span(v-if="addValidation.content.$error.required") {{ $t('validation.required', {field: $t('rule.fields.content')}) }}
-              span(v-if="addValidation.content.$error.maxlength") {{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}
-        .form-row
-          label.form-control {{ $t("rule.fields.inform_type") }}:
-          .controls
-            .select
-              select(v-model="addModel.notify_type", v-form-ctrl, name="notify_type", number)
-                option(v-for="type in informTypes", :value="$index+1", :selected="$index===0") {{type}}
-        .form-row.tag-row
-          label.form-control {{ $t("rule.fields.tags") }}:
-          .controls
-            tag-input(:value.sync="addModel.tag", :candidate="candidateTags", :editing.sync="addModelEditingTag", @adding-tag="showAddModal = true")
-        .form-row
-          label.form-control {{ $t("rule.fields.notify_type") }}:
-          .controls
-            .checkbox-group
-              label.checkbox(v-for="type in notifyTypes")
-                input(type="checkbox", v-model="addModel.notify_target", name="notify_target", :value="$index+1", number)
-                | {{type}}
-            .apn-list(v-show="showApps('addModel')")
-              .checkbox-group
-                label.checkbox(v-for="app in apps",v-if="app.type===1")
-                  input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
-                  | {{app.name}}
-            .apn-list(v-show="showAndroids('addModel')")
-              .checkbox-group
-                label.checkbox(v-for="app in apps", v-if="app.type===2")
-                  input(type="checkbox", v-model="addModel.notify_apps", name="notify_apps", :value="app.id", number)
-                  | {{app.name}}
-        .form-row
-          label.form-control {{ $t("rule.fields.scope") }}:
-          .controls
-            .radio-group
-              label.radio(v-for="type in scopeTypes")
-                input(type="radio", v-model="addModel.scope", name="addModel.scope", :value="$index+1", number)
-                | {{type}}
-        .form-row
-          label.form-control {{ $t("common.status") }}:
-          .controls
-            .radio-group
-              label.radio
-                input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="false")
-                | {{ $t("common.disabled") }}
-              label.radio
-                input(type="radio", v-model="addModel.is_enable", name="is_enable", :value="true")
-                | {{ $t("common.enable") }}
-
-        .form-actions
-          button.btn.btn-default(type="reset", @click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit",:disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
-
-  // 编辑规则浮层
-  modal(:show.sync="showEditModal", :width="650", :flag="editModelEditingTag")
-    h3(slot="header") {{ $t("rule.edit_rule") }}
-    .form.form-rules(slot="body")
-      form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFormHook")
-        .form-row
-          label.form-control {{ $t("rule.fields.name") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('rule.placeholders.name')")
-              input.input-text(v-model="editModel.name", type="text", v-form-ctrl, name="name", required, minlength="2", maxlength="32", lazy)
-            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.name.$pristine")
-              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('rule.fields.name')}) }}
-            .form-tips.form-tips-error(v-if="editValidation.name.$dirty")
-              span(v-if="editValidation.name.$error.required") {{ $t('validation.required', {field: $t('rule.fields.name')}) }}
-              span(v-if="editValidation.name.$error.minlength") {{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}
-              span(v-if="editValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}
-        .form-row.condition-row
-          label.form-control {{ $t("rule.condition") }}:
-          .controls
-            .type
-              .select
-                select(v-model="editModel.type", v-form-ctrl, name="type", number, @input="onSelectType")
-                  option(v-for="type in ruleTypes", :value="$index+1", :selected="$index===0") {{type}}
-            .data(v-show="editModel.type === 1")
-              .select
-                select(v-model="editModel.param", v-form-ctrl, name="param")
-                  option(v-for="option in datapoints", v-bind:value="option.id") {{option.name}}
-            .compare(v-show="editModel.type === 1")
-              .select
-                select(v-model="editModel.compare", v-form-ctrl, name="compare", number)
-                  option(v-for="type in compareTypes", :value="$index+1", :selected="$index===0") {{type}}
-            .value(v-if="editModel.type === 1")
-              .input-text-wrap
-                input.input-text(v-model="editModel.value", type="text", v-form-ctrl, name="value", required, lazy)
-            .value(v-if="editModel.type === 2")
-              .select
-                select(v-model="editModel.value", v-form-ctrl, name="value")
-                  option(value="online") {{ $t("common.online") }}
-                  option(value="offline") {{ $t("common.offline") }}
-
-        .form-row
-          label.form-control {{ $t("rule.fields.content") }}:
-          .controls
-            .input-text-wrap(v-placeholder="'请输入告警内容'")
-              textarea.input-text(v-model="editModel.content", type="text", v-form-ctrl, name="content", required, maxlength="250", lazy)
-            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.content.$pristine")
-              span(v-if="editValidation.content.$error.required") {{ $t('validation.required', {field: $t('rule.fields.content')}) }}
-            .form-tips.form-tips-error(v-if="editValidation.content.$dirty")
-              span(v-if="editValidation.content.$error.required") {{ $t('validation.required', {field: $t('rule.fields.content')}) }}
-              span(v-if="editValidation.content.$error.maxlength") {{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}
-        .form-row
-          label.form-control {{ $t("rule.fields.inform_type") }}:
-          .controls
-            .select
-              select(v-model="editModel.notify_type", v-form-ctrl, name="notify_type", number)
-                option(v-for="type in informTypes", :value="$index+1", :selected="$index===0") {{type}}
-        .form-row.tag-row
-          label.form-control {{ $t("rule.fields.tags") }}:
-          .controls
-            tag-input(:value.sync="editModel.tag", :candidate="candidateTags", :editing.sync="editModelEditingTag", @adding-tag="showEditModal = true")
-        .form-row
-          label.form-control {{ $t("rule.fields.notify_type") }}:
-          .controls
-            .checkbox-group
-              label.checkbox(v-for="type in notifyTypes")
-                input(type="checkbox", v-model="editModel.notify_target", name="notify_target", :value="$index+1", number)
-                | {{type}}
-            .apn-list(v-show="showApps('editModel')")
-              .checkbox-group
-                label.checkbox(v-for="app in apps",v-if="app.type===1")
-                  input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
-                  | {{app.name}}
-            .apn-list(v-show="showAndroids('editModel')")
-              .checkbox-group
-                label.checkbox(v-for="app in apps",v-if="app.type===2")
-                  input(type="checkbox", v-model="editModel.notify_apps", name="notify_apps", :value="app.id", number)
-                  | {{app.name}}
-
-        .form-row
-          label.form-control {{ $t("rule.fields.scope") }}:
-          .controls
-            .radio-group
-              label.radio(v-for="type in scopeTypes")
-                input(type="radio", v-model="editModel.scope", name="scope", :value="$index+1", number)
-                | {{type}}
-        .form-row
-          label.form-control {{ $t("common.status") }}:
-          .controls
-            .radio-group
-              label.radio
-                input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="false")
-                | {{ $t("common.disabled") }}
-              label.radio
-                input(type="radio", v-model="editModel.is_enable", name="is_enable", :value="true")
-                | {{ $t("common.enable") }}
-
-        .form-actions
-          label.del-check
-            input(type="checkbox", name="del", v-model="delChecked")
-            | {{ $t("rule.del_rule") }}
-          button.btn.btn-default(@click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit",:disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
+<template>
+  <div>
+    <div class="panel">
+      <div class="panel-bd">
+        <div class="action-bar">
+          <div class="action-group">
+            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+          </div>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>{{ $t("rule.fields.name") }}</th>
+              <th>{{ $t("rule.fields.type") }}</th>
+              <th>{{ $t("rule.fields.content") }}</th>
+              <th>{{ $t("common.status") }}</th>
+              <th class="tac">{{ $t("common.action") }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="rules.length > 0 && !loadingData">
+              <tr v-for="rule in rules">
+                <td>{{* rule.name }}</td>
+                <td>{{* rule.type | ruleLabel }}</td>
+                <td>{{* rule.content }}</td>
+                <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else="v-else" class="hl-gray">{{ $t("common.disabled") }}</span></td>
+                <td class="tac">
+                  <button @click="editRule(rule)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="loadingData">
+              <td colspan="5" class="tac">
+                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+              </td>
+            </tr>
+            <tr v-if="rules.length === 0 && !loadingData">
+              <td colspan="5" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- 分页-->
+        <pager v-if="!loadingData" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+      </div>
+    </div>
+    <!-- 添加规则浮层-->
+    <modal :show.sync="showAddModal" :width="650" :flag="addModelEditingTag" @close="onAddCancel">
+      <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
+      <div slot="body" class="form form-rules">
+        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.name") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
+                <input v-model="addModel.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row condition-row">
+            <label class="form-control">{{ $t("rule.condition") }}:</label>
+            <div class="controls">
+              <div class="type">
+                <div class="select">
+                  <select v-model="addModel.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                    <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-show="addModel.type === 1" class="data">
+                <div class="select">
+                  <select v-model="addModel.param" v-form-ctrl name="param">
+                    <option v-for="option in datapoints" v-bind:value="option.id">{{ option.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-show="addModel.type === 1" class="compare">
+                <div class="select">
+                  <select v-model="addModel.compare" v-form-ctrl name="compare" number="number">
+                    <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-if="addModel.type === 1" class="value">
+                <div class="input-text-wrap">
+                  <input v-model="addModel.value" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                </div>
+              </div>
+              <div v-if="addModel.type === 2" class="value">
+                <div class="select">
+                  <select v-model="addModel.value" v-form-ctrl name="value">
+                    <option value="online">{{ $t("common.online") }}</option>
+                    <option value="offline">{{ $t("common.offline") }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.content") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('rule.placeholders.content')" class="input-text-wrap">
+                <textarea v-model="addModel.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
+              <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
+            <div class="controls">
+              <div class="select">
+                <select v-model="addModel.notify_type" v-form-ctrl name="notify_type" number="number">
+                  <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-row tag-row">
+            <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
+            <div class="controls">
+              <tag-input :value.sync="addModel.tag" :candidate="candidateTags" :editing.sync="addModelEditingTag" @adding-tag="showAddModal = true"></tag-input>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
+            <div class="controls">
+              <div class="checkbox-group">
+                <label v-for="type in notifyTypes" class="checkbox">
+                  <input type="checkbox" v-model="addModel.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                </label>
+              </div>
+              <div v-show="showApps('addModel')" class="apn-list">
+                <div class="checkbox-group">
+                  <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                    <input type="checkbox" v-model="addModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                  </label>
+                </div>
+              </div>
+              <div v-show="showAndroids('addModel')" class="apn-list">
+                <div class="checkbox-group">
+                  <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                    <input type="checkbox" v-model="addModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.scope") }}:</label>
+            <div class="controls">
+              <div class="radio-group">
+                <label v-for="type in scopeTypes" class="radio">
+                  <input type="radio" v-model="addModel.scope" name="addModel.scope" :value="$index+1" number="number"/>{{ type }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("common.status") }}:</label>
+            <div class="controls">
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" v-model="addModel.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
+                </label>
+                <label class="radio">
+                  <input type="radio" v-model="addModel.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="reset" @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 编辑规则浮层-->
+    <modal :show.sync="showEditModal" :width="650" :flag="editModelEditingTag">
+      <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
+      <div slot="body" class="form form-rules">
+        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.name") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
+                <input v-model="editModel.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row condition-row">
+            <label class="form-control">{{ $t("rule.condition") }}:</label>
+            <div class="controls">
+              <div class="type">
+                <div class="select">
+                  <select v-model="editModel.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                    <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-show="editModel.type === 1" class="data">
+                <div class="select">
+                  <select v-model="editModel.param" v-form-ctrl name="param">
+                    <option v-for="option in datapoints" v-bind:value="option.id">{{ option.name }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-show="editModel.type === 1" class="compare">
+                <div class="select">
+                  <select v-model="editModel.compare" v-form-ctrl name="compare" number="number">
+                    <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </div>
+              </div>
+              <div v-if="editModel.type === 1" class="value">
+                <div class="input-text-wrap">
+                  <input v-model="editModel.value" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                </div>
+              </div>
+              <div v-if="editModel.type === 2" class="value">
+                <div class="select">
+                  <select v-model="editModel.value" v-form-ctrl name="value">
+                    <option value="online">{{ $t("common.online") }}</option>
+                    <option value="offline">{{ $t("common.offline") }}</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.content") }}:</label>
+            <div class="controls">
+              <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
+                <textarea v-model="editModel.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
+              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
+            <div class="controls">
+              <div class="select">
+                <select v-model="editModel.notify_type" v-form-ctrl name="notify_type" number="number">
+                  <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="form-row tag-row">
+            <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
+            <div class="controls">
+              <tag-input :value.sync="editModel.tag" :candidate="candidateTags" :editing.sync="editModelEditingTag" @adding-tag="showEditModal = true"></tag-input>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
+            <div class="controls">
+              <div class="checkbox-group">
+                <label v-for="type in notifyTypes" class="checkbox">
+                  <input type="checkbox" v-model="editModel.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                </label>
+              </div>
+              <div v-show="showApps('editModel')" class="apn-list">
+                <div class="checkbox-group">
+                  <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                    <input type="checkbox" v-model="editModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                  </label>
+                </div>
+              </div>
+              <div v-show="showAndroids('editModel')" class="apn-list">
+                <div class="checkbox-group">
+                  <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                    <input type="checkbox" v-model="editModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("rule.fields.scope") }}:</label>
+            <div class="controls">
+              <div class="radio-group">
+                <label v-for="type in scopeTypes" class="radio">
+                  <input type="radio" v-model="editModel.scope" name="scope" :value="$index+1" number="number"/>{{ type }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("common.status") }}:</label>
+            <div class="controls">
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" v-model="editModel.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
+                </label>
+                <label class="radio">
+                  <input type="radio" v-model="editModel.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("rule.del_rule") }}
+            </label>
+            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+  </div>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import api from '../../api';
-  import locales from '../../consts/locales';
-  import Pager from '../../components/pager.vue';
-  import Modal from '../../components/modal.vue';
-  import TagInput from '../../components/tag-input.vue';
-  import _ from 'lodash';
+  import Vue from 'vue'
+  import api from '../../api'
+  import locales from '../../consts/locales'
+  import Pager from '../../components/Pager'
+  import Modal from '../../components/Modal'
+  import TagInput from '../../components/TagInput'
+  import _ from 'lodash'
 
-  module.exports = {
+  export default {
     name: 'Alert',
 
     components: {
@@ -261,7 +337,7 @@ div
       'tag-input': TagInput
     },
 
-    data: function () {
+    data () {
       return {
         rules: [],            // 规则列表
         apps: [],              // app 列表
@@ -305,183 +381,165 @@ div
         originAddModel: {},
         originEditModel: {},
         loadingData: false
-      };
+      }
     },
 
     route: {
-      data: function () {
-        var self = this;
-        this.originAddModel = _.cloneDeep(this.addModel);
-        this.getDatapoints().then(function (data) {
-          self.datapoints = data;
-          self.addModel.param = data[0].id;
-        });
-        this.getRules();
-        this.getApps();
+      data () {
+        this.originAddModel = _.cloneDeep(this.addModel)
+        this.getDatapoints().then((res) => {
+          if (res.status === 200) {
+            this.datapoints = res.data
+            this.addModel.param = res.data[0].id
+          }
+        })
+        this.getRules()
+        this.getApps()
       }
     },
 
     filters: {
-      ruleLabel: function (value) {
-        return this.ruleTypes[value - 1];
+      ruleLabel (value) {
+        return this.ruleTypes[value - 1]
       }
     },
 
     methods: {
       // 获取数据端点列表
-      getDatapoints: function () {
-        var self = this;
-        return api.corp.refreshToken(this).then(function () {
-          return api.product.getDatapoints(self.$route.params.id);
-        });
+      getDatapoints () {
+        return api.product.getDatapoints(this.$route.params.id)
       },
 
       // 获取告警规则列表
-      getRules: function () {
-        var self = this;
-
-        this.loadingData = true;
-        api.corp.refreshToken(this).then(function () {
-          api.alert.getRules(self.$route.params.id).then(function (data) {
-            self.rules = data;
-            self.loadingData = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingData = false;
-          });
-        });
+      getRules () {
+        this.loadingData = true
+        api.alert.getRules(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.rules = res.data
+            this.loadingData = false
+          }
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingData = false
+        })
       },
 
       // 获取 APP 列表
-      getApps: function () {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.app.list().then(function (data) {
-            self.apps = data;
-          });
-        });
+      getApps () {
+        api.app.list().then((res) => {
+          if (res.status === 200) {
+            this.apps = res.data
+          }
+        })
       },
 
       // 是否显示 APN推送
-      showApps: function (model) {
-        return _.includes(this[model].notify_target, 4);
+      showApps (model) {
+        return _.includes(this[model].notify_target, 4)
       },
 
       // 是否显示 Google推送
-      showAndroids: function (model) {
-        return _.includes(this[model].notify_target, 5);
+      showAndroids (model) {
+        return _.includes(this[model].notify_target, 5)
       },
       // 选择告警类型
-      onSelectType: function () {
+      onSelectType () {
         if (this.addModel.type === 1) {
-          this.addModel.compare = 1;
-          this.addModel.value = 'online';
+          this.addModel.compare = 1
+          this.addModel.value = 'online'
         } else {
-          this.addModel.value = '';
+          this.addModel.value = ''
         }
       },
 
       // 添加表单钩子
-      addFormHook: function (form) {
-        this.addForm = form;
+      addFormHook (form) {
+        this.addForm = form
       },
 
       // 编辑表单钩子
-      editFormHook: function (form) {
-        this.editForm = form;
+      editFormHook (form) {
+        this.editForm = form
       },
 
       // 关闭添加浮层并净化添加表单
-      resetAdd: function () {
-        var self = this;
-        this.adding = false;
-        this.showAddModal = false;
-        this.addModel = _.cloneDeep(this.originAddModel);
-        this.$nextTick(function () {
-          self.addForm.setPristine();
-        });
+      resetAdd () {
+        this.adding = false
+        this.showAddModal = false
+        this.addModel = _.cloneDeep(this.originAddModel)
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
       },
 
       // 关闭编辑浮层并净化编辑表单
-      resetEdit: function () {
-        this.editing = false;
-        this.delChecked = false;
-        this.showEditModal = false;
-        this.editModel = this.originEditModel;
+      resetEdit () {
+        this.editing = false
+        this.delChecked = false
+        this.showEditModal = false
+        this.editModel = this.originEditModel
       },
 
       // 取消添加
-      onAddCancel: function () {
-        this.resetAdd();
+      onAddCancel () {
+        this.resetAdd()
       },
 
-      onAddSubmit: function () {
-        var self = this;
+      onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
-          this.adding = true;
-          api.corp.refreshToken().then(function () {
-            api.alert.addRule(self.addModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.getRules();
-              self.resetAdd();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.adding = false;
-            });
-          });
+          this.adding = true
+          api.alert.addRule(this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.getRules()
+              this.resetAdd()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.adding = false
+          })
         }
       },
 
       // 初始化编辑表单
-      editRule: function (rule) {
-        this.showEditModal = true;
-        this.editModel = _.clone(rule);
-        this.originEditModel = _.clone(rule);
+      editRule (rule) {
+        this.showEditModal = true
+        this.editModel = _.clone(rule)
+        this.originEditModel = _.clone(rule)
       },
 
       // 取消编辑
-      onEditCancel: function () {
-        this.resetEdit();
+      onEditCancel () {
+        this.resetEdit()
       },
 
       // 提交编辑表单
-      onEditSubmit: function () {
-        var self = this;
+      onEditSubmit () {
         if (this.delChecked && !this.editing) { // 删除
-          this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.alert.deleteRule(self.editModel.id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.resetEdit();
-              self.getRules();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
-            });
-          });
+          this.editing = true
+          api.alert.deleteRule(this.editModel.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getRules()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.editing = false
+          })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
-          this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.alert.updateRule(self.editModel, self.$route.params.id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.resetEdit();
-              self.getRules();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
-            });
-          });
+          this.editing = true
+          api.alert.updateRule(this.editModel, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getRules()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.editing = false
+          })
         }
       }
-
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

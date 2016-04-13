@@ -1,108 +1,95 @@
-<template lang="jade">
-.panel
-  .panel-bd
-    //- pre {{condi}}
-    //- 操作栏
-    .action-bar
-      //- search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.mac_placeholder')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
-      search-box(:key.sync="query", :active="searching", :placeholder="$t('overview.addForm.search_condi')", @cancel="getDevices(true)", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getDevices(true)")
-        select.selcss(v-model="condi", name="condi")
-          option(v-for="type in searchCondi" ,:value="type.value", :selected="$index===0") {{type.label}}
-        button.btn.btn-primary(slot="search-button", @click="getDevices(true)") {{ $t('common.search') }}
-      .action-group
-        button.btn.btn-success(@click="showAddModal = true")
-          i.fa.fa-plus
-          | {{ $t("overview.add_device") }}
-        label.btn.btn-success.btn-upload(:class="{'disabled':importing}")
-          input(type="file", v-el:mac-file, name="macFile", @change.prevent="batchImport")
-          i.fa.fa-reply-all
-          | {{importing ? $t("common.handling") : $t("overview.import_devices")}}
-
-    //- 状态栏
-    .status-bar
-      .status {{{ $t('common.total_results', {count:total}) }}}
-        //- | 共有
-        //- span {{total}}
-        //- | 条结果
-      v-select(:options="visibilityOptions", :value.sync="visibility", @select="getDevices")
-        span {{ $t('common.display') }}：
-
-    //- 设备列表
-    //- grid(:data="filteredDevices | filterBy query in 'mac'", :columns="deviceColumns")
-    table.table.table-stripe.table-bordered
-      thead
-        tr
-          th(@click="sortBy('mac')", :class="{active: sortKey === 'mac'}")
-            | MAC
-            i.fa(:class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
-          th
-            | {{ $t('device.id') }}
-          th
-            | {{ $t('device.is_active') }}
-          th(@click="sortBy('active_date')", :class="{active: sortKey === 'active_date'}")
-            | {{ $t('device.active_date') }}
-            i.fa(:class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'")
-          //-
-            th
-              | 最近一次登录
-          th
-            | {{ $t('device.is_online') }}
-      tbody
-        template(v-if="devices.length > 0 && !loadingData")
-          tr(v-for="device in devices")
-            td
-              a.hl-red(v-link="'/products/' + $route.params.id + '/devices/' + device.id") {{device.mac}}
-            td {{device.id}}
-            td(v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')")
-            td
-              span(v-if="device.active_date") {{device.active_date | formatDate}}
-            //-
-              td
-                span(v-if="device.last_login") {{device.last_login | formatDate}}
-            td
-              span.hl-green(v-if="device.is_online") {{ $t('device_list.online') }}
-              span.hl-gray(v-else) {{ $t('device_list.offline') }}
-        tr(v-if="loadingData")
-          td.tac(colspan="5")
-            .tips-null
-              i.fa.fa-refresh.fa-spin
-              span {{ $t("common.data_loading") }}
-        tr(v-if="devices.length === 0 && !loadingData")
-          td.tac(colspan="5")
-            .tips-null
-              span {{ $t("common.no_records") }}
-    pager(v-if="!loadingData && total > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getDevices")
-
-  // 添加设备浮层
-  modal(:show.sync="showAddModal")
-    h3(slot="header") {{ $t("overview.add_device")}}
-    .form(slot="body")
-      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFormHook")
-        .form-row
-          label.form-control {{ $t("overview.addForm.mac")}}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('overview.addForm.mac_placeholder')")
-              input.input-text(v-model="addModel.mac", type="text", v-form-ctrl, name="mac", required, lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mac.$pristine")
-              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')})
-            .form-tips.form-tips-error(v-if="addValidation.mac.$dirty")
-              span(v-if="addValidation.mac.$error.required") {{ $t('validation.required', {field: $t('overview.addForm.mac')})
-        .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
+<template>
+  <div class="panel">
+    <div class="panel-bd">
+      <div class="action-bar">
+        <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+          <select v-model="condi" name="condi" class="selcss">
+            <option v-for="type in searchCondi" :value="type.value" :selected="$index===0">{{ type.label }}</option>
+          </select>
+          <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
+        </search-box>
+        <div class="action-group">
+          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("overview.add_device") }}</button>
+          <label :class="{'disabled':importing}" class="btn btn-success btn-upload">
+            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("overview.import_devices") }}
+          </label>
+        </div>
+      </div>
+      <div class="status-bar">
+        <div class="status">{{{ $t('common.total_results', {count:total}) }}}
+        </div>
+        <v-select :options="visibilityOptions" :value.sync="visibility" @select="getDevices"><span>{{ $t('common.display') }}：</span></v-select>
+      </div>
+      <table class="table table-stripe table-bordered">
+        <thead>
+          <tr>
+            <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+            <th>{{ $t('device.id') }}</th>
+            <th>{{ $t('device.is_active') }}</th>
+            <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+            <th>{{ $t('device.is_online') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="devices.length > 0 && !loadingData">
+            <tr v-for="device in devices">
+              <td><a v-link="'/products/' + $route.params.id + '/devices/' + device.id" class="hl-red">{{ device.mac }}</a></td>
+              <td>{{ device.id }}</td>
+              <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
+              <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
+              <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else="v-else" class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+            </tr>
+          </template>
+          <tr v-if="loadingData">
+            <td colspan="5" class="tac">
+              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+            </td>
+          </tr>
+          <tr v-if="devices.length === 0 && !loadingData">
+            <td colspan="5" class="tac">
+              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
+    </div>
+    <!-- 添加设备浮层-->
+    <modal :show.sync="showAddModal">
+      <h3 slot="header">{{ $t("overview.add_device") }}</h3>
+      <div slot="body" class="form">
+        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("overview.addForm.mac") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
+                <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')})</span></div>
+              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')})</span></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+  </div>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import api from '../../../api';
-  import Select from '../../../components/select.vue';
-  import Pager from '../../../components/pager.vue';
-  import Modal from '../../../components/modal.vue';
-  import SearchBox from '../../../components/search-box.vue';
-  import locales from '../../../consts/locales';
-  import _ from 'lodash';
+  import Vue from 'vue'
+  import api from '../../../api'
+  import Select from '../../../components/Select'
+  import Pager from '../../../components/Pager'
+  import Modal from '../../../components/Modal'
+  import SearchBox from '../../../components/SearchBox'
+  import locales from '../../../consts/locales'
+  import _ from 'lodash'
 
-  module.exports = {
+  export default {
     name: 'DeviceList',
 
     components: {
@@ -112,15 +99,18 @@
       'pager': Pager
     },
 
-    data: function () {
-      var sortOrders = {};
-      ['active_date'].forEach(function (key) {
-        sortOrders[key] = 'desc';
-      });
+    data () {
+      var sortOrders = {}
+      var descProperties = ['active_date']
+      var ascProperties = ['mac']
 
-      ['mac'].forEach(function (key) {
-        sortOrders[key] = 'asc';
-      });
+      descProperties.forEach((key) => {
+        sortOrders[key] = 'desc'
+      })
+
+      ascProperties.forEach((key) => {
+        sortOrders[key] = 'asc'
+      })
 
       return {
         query: '',
@@ -148,182 +138,168 @@
           { label: '设备ID', value: 'id' }
         ],
         condi: 'mac'
-      };
+      }
     },
 
     computed: {
-      queryCondition: function () {
+      queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: this.sortOrders,
           query: {}
-        };
+        }
 
         if (this.query.length > 0) {
-          console.log(this.condi);
-          condition.query[this.condi] = { $like: this.query };
+          condition.query[this.condi] = { $like: this.query }
         }
 
         switch (this.visibility) {
           case 'online':
-            condition.query['is_online'] = { $in: [true] };
-            break;
+            condition.query['is_online'] = { $in: [true] }
+            break
           case 'active':
-            condition.query['is_active'] = { $in: [true] };
-            break;
+            condition.query['is_active'] = { $in: [true] }
+            break
           case 'inactive':
-            condition.query['is_active'] = { $in: [false] };
-            break;
+            condition.query['is_active'] = { $in: [false] }
+            break
           default:
         }
 
-        return condition;
+        return condition
       }
     },
 
     route: {
-      data: function () {
-        this.originAddModel = _.clone(this.addModel);
-        this.getDevices();
+      data () {
+        this.originAddModel = _.clone(this.addModel)
+        this.getDevices()
       }
     },
 
     methods: {
       // 获取设备列表
-      getDevices: function (querying) {
-        var self = this;
-
+      getDevices (querying) {
         if (typeof querying !== 'undefined') {
-          this.currentPage = 1;
+          this.currentPage = 1
         }
 
-        this.loadingData = true;
-        api.corp.refreshToken().then(function () {
-          api.device.getList(self.$route.params.id, self.queryCondition).then(function (data) {
-            self.devices = data.list;
-            self.total = data.count;
-            self.loadingData = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingData = false;
-          });
-        });
+        this.loadingData = true
+        api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+          this.devices = res.data.list
+          this.total = res.data.count
+          this.loadingData = false
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingData = false
+        })
       },
 
       // 搜索
-      handleSearch: function () {
+      handleSearch () {
         if (this.query.length === 0) {
-          this.getDevices();
+          this.getDevices()
         }
       },
 
       // 排序
-      sortBy: function (key) {
-        this.sortKey = key;
-        this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc';
-        this.getDevices();
+      sortBy (key) {
+        this.sortKey = key
+        this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
+        this.getDevices()
       },
 
       // 切换搜索
-      toggleSearching: function () {
-        this.searching = !this.searching;
+      toggleSearching () {
+        this.searching = !this.searching
       },
 
       // 取消搜索
-      cancelSearching: function () {
-        this.getDevices();
+      cancelSearching () {
+        this.getDevices()
       },
 
       // 添加表单钩子
-      addFormHook: function (form) {
-        this.addForm = form;
+      addFormHook (form) {
+        this.addForm = form
       },
 
       // 关闭添加浮层并净化添加表单
-      resetAdd: function () {
-        var self = this;
-        this.adding = false;
-        this.showAddModal = false;
-        this.addModel = _.clone(this.originAddModel);
-        this.$nextTick(function () {
-          self.addForm.setPristine();
-        });
+      resetAdd () {
+        this.adding = false
+        this.showAddModal = false
+        this.addModel = _.clone(this.originAddModel)
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
       },
 
       // 取消添加
-      onAddCancel: function () {
-        this.resetAdd();
+      onAddCancel () {
+        this.resetAdd()
       },
 
       // 添加操作
-      onAddSubmit: function () {
-        var self = this;
-
+      onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
-          this.adding = true;
-          api.corp.refreshToken().then(function () {
-            api.device.add(self.$route.params.id, self.addModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.resetAdd();
-              self.getDevices();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.adding = false;
-            });
-          });
+          this.adding = true
+          api.device.add(this.$route.params.id, this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.resetAdd()
+              this.getDevices()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.adding = false
+          })
         }
       },
 
       // 批量导入
-      batchImport: function () {
-        var self = this;
-        var file = this.$els.macFile.files[0];
+      batchImport () {
+        var file = this.$els.macFile.files[0]
         if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new FileReader();
+          var reader = new window.FileReader()
           if (!/text\/\w+/.test(file.type)) {
-            alert(file.name + self.$t('upload.type_tips'));
-            return false;
+            window.alert(file.name + this.$t('upload.type_tips'))
+            return false
           }
-          reader.onerror = function (evt) {
-            alert(self.$t('upload.read_err'));
-          };
-          this.importing = true;
+          reader.onerror = (evt) => {
+            window.alert(this.$t('upload.read_err'))
+          }
+          this.importing = true
           // 读取完成
-          reader.onloadend = function (evt) {
-            if (evt.target.readyState === FileReader.DONE) {
-              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n');
-              var a = [];
-              macArr.forEach(function (element, index) {
+          reader.onloadend = (evt) => {
+            if (evt.target.readyState === window.FileReader.DONE) {
+              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
+              var a = []
+              macArr.forEach((element, index) => {
                 if (element !== '') {
-                  a.push(element);
+                  a.push(element)
                 }
-              });
-              macArr = a;
-              api.corp.refreshToken().then(function () {
-                api.device.batchImport(self.$route.params.id, macArr).then(function (status) {
-                  if (status === 200) {
-                    alert(self.$t('upload.success_msg'));
-                    self.getDevices();
-                  }
-                  self.importing = false;
-                }).catch(function (error) {
-                  self.handleError(error);
-                  self.importing = false;
-                });
-              });
+              })
+              macArr = a
+              api.device.batchImport(this.$route.params.id, macArr).then((res) => {
+                if (res.status === 200) {
+                  window.alert(this.$t('upload.success_msg'))
+                  this.getDevices()
+                }
+                this.importing = false
+              }).catch((error) => {
+                this.handleError(error)
+                this.importing = false
+              })
             }
-          };
-          reader.readAsText(file);
+          }
+          reader.readAsText(file)
         } else {
-          alert(self.$t('upload.compatiblity'));
+          window.alert(this.$t('upload.compatiblity'))
         }
       }
     }
-  };
+  }
 </script>
 <style lang="stylus">
 .selcss

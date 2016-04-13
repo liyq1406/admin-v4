@@ -1,88 +1,87 @@
-<template lang="jade">
-.form.form-auth.form-register
-  .form-logo
-  form.form-cont(v-form, name="validation", @submit.prevent="onSubmit")
-    .form-header
-      a(v-link="{ path: '/login' }") {{ $t("auth.login") }}
-      span {{ $t("auth.register") }}
-    .form-body
-      .form-hints {{ $t("auth.account_tips") }}
-      .form-row-group
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.fields.email')")
-            input.input-text(type="email", v-model="model.email", v-form-ctrl, name="email", required, lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.email.$pristine")
-            span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('auth.fields.email')}) }}
-          .form-tips.form-tips-error(v-if="validation.email.$dirty")
-            span(v-if="validation.email.$error.required") {{ $t('validation.required', {field: $t('auth.fields.email')}) }}
-            span(v-if="validation.email.$error.email") {{ $t('validation.format', {field: $t('auth.fields.email')}) }}
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.password')")
-            input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-            span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-          .form-tips.form-tips-error(v-if="validation.password.$dirty")
-            span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-            span(v-if="validation.password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
-            span(v-if="validation.password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
-            input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
-            span(v-if="validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-          .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-            span(v-if="model.password && validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-            span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
-      .form-hints {{ $t("auth.basic_tips") }}
-      .form-row-group
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.fields.name')")
-            input.input-text(type="text", v-model="model.name", v-form-ctrl, required, maxlength="32", minlength="2", name="name", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-            span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('auth.fields.name')}) }}
-          .form-tips.form-tips-error(v-if="validation.name.$dirty")
-            span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('auth.fields.name')}) }}
-            span(v-if="validation.name.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.name'), 2]) }}
-            span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.name'), 32]) }}
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.fields.phone')")
-            input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.phone.$pristine")
-            span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
-          .form-tips.form-tips-error(v-if="validation.phone.$dirty")
-            span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
-            span(v-if="validation.phone.$error.pattern") {{ $t('validation.format', {field: $t('auth.fields.phone')}) }}
-        .form-row.captcha-row
-          .input-text-wrap(v-placeholder="$t('auth.insert_code')")
-            input.input-text(type="text", v-model="captcha", lazy)
-          captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
-        .form-row.verify-code
-          .input-text-wrap(v-placeholder="$t('auth.verifycode')")
-            input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode", lazy)
-          button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')")
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
-            span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
-          .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
-            span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
-        .form-row
-          .input-text-wrap(v-placeholder="$t('auth.fields.company')")
-            input.input-text(type="text", v-model="model.company", v-form-ctrl, required, maxlength="32", name="company", lazy)
-          .form-tips.form-tips-error(v-if="validation.$submitted && validation.company.$pristine")
-            span(v-if="validation.company.$error.required") {{ $t('validation.required', {field: $t('auth.fields.company')}) }}
-          .form-tips.form-tips-error(v-if="validation.company.$dirty")
-            span(v-if="validation.company.$error.required") {{ $t('validation.required', {field: $t('auth.fields.company')}) }}
-            span(v-if="validation.company.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.company'), 32]) }}
-        .form-row
-          .select
-            select(v-model="model.type", v-form-ctrl, name="type", custom-validator="checkTypeValid")
-              option(selected) {{ $t("auth.type_tips") }}
-              option(v-for="type in accountTypes", :value="$index + 1") {{type}}
-          .form-tips.form-tips-error(v-if="validation.$submitted")
-            span(v-if="validation.type.$error.customValidator") {{ $t("auth.type_tips") }}
-      .form-actions
-        button.btn.btn-primary.btn-block(type="submit") {{ $t("auth.register_submit") }}
-    .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
+<template>
+  <div class="form form-auth form-register">
+    <div class="form-logo"></div>
+    <form v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+      <div class="form-header"><a v-link="{ path: '/login' }">{{ $t("auth.login") }}</a><span>{{ $t("auth.register") }}</span></div>
+      <div class="form-body">
+        <div class="form-hints">{{ $t("auth.account_tips") }}</div>
+        <div class="form-row-group">
+          <div class="form-row">
+            <div v-placeholder="$t('auth.fields.email')" class="input-text-wrap">
+              <input type="email" v-model="model.email" v-form-ctrl name="email" required lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.email.$pristine" class="form-tips form-tips-error"><span v-if="validation.email.$error.required">{{ $t('validation.required', {field: $t('auth.fields.email')}) }}</span></div>
+            <div v-if="validation.email.$dirty" class="form-tips form-tips-error"><span v-if="validation.email.$error.required">{{ $t('validation.required', {field: $t('auth.fields.email')}) }}</span><span v-if="validation.email.$error.email">{{ $t('validation.format', {field: $t('auth.fields.email')}) }}</span></div>
+          </div>
+          <div class="form-row">
+            <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+              <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
+            <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
+          </div>
+          <div class="form-row">
+            <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
+              <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span></div>
+            <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span></div>
+          </div>
+        </div>
+        <div class="form-hints">{{ $t("auth.basic_tips") }}</div>
+        <div class="form-row-group">
+          <div class="form-row">
+            <div v-placeholder="$t('auth.fields.name')" class="input-text-wrap">
+              <input type="text" v-model="model.name" v-form-ctrl required maxlength="32" minlength="2" name="name" lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('auth.fields.name')}) }}</span></div>
+            <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('auth.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.name'), 32]) }}</span></div>
+          </div>
+          <div class="form-row">
+            <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
+              <input type="text" v-model="model.phone" v-form-ctrl required pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" name="phone" lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.phone.$pristine" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span></div>
+            <div v-if="validation.phone.$dirty" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span><span v-if="validation.phone.$error.pattern">{{ $t('validation.format', {field: $t('auth.fields.phone')}) }}</span></div>
+          </div>
+          <div class="form-row captcha-row">
+            <div v-placeholder="$t('auth.insert_code')" class="input-text-wrap">
+              <input type="text" v-model="captcha" lazy class="input-text"/>
+            </div>
+            <captcha :width="120" :height="32" :value.sync="captchaValue" v-ref:captcha></captcha>
+          </div>
+          <div class="form-row verify-code">
+            <div v-placeholder="$t('auth.verifycode')" class="input-text-wrap">
+              <input type="text" v-model="model.verifycode" v-form-ctrl required name="verifycode" lazy class="input-text"/>
+            </div>
+            <button @click.stop.prevent="fetchVerifyCode" :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')" class="btn btn-primary"></button>
+            <div v-if="validation.$submitted && validation.verifycode.$pristine" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
+            <div v-if="validation.verifycode.$dirty" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
+          </div>
+          <div class="form-row">
+            <div v-placeholder="$t('auth.fields.company')" class="input-text-wrap">
+              <input type="text" v-model="model.company" v-form-ctrl required maxlength="32" name="company" lazy class="input-text"/>
+            </div>
+            <div v-if="validation.$submitted && validation.company.$pristine" class="form-tips form-tips-error"><span v-if="validation.company.$error.required">{{ $t('validation.required', {field: $t('auth.fields.company')}) }}</span></div>
+            <div v-if="validation.company.$dirty" class="form-tips form-tips-error"><span v-if="validation.company.$error.required">{{ $t('validation.required', {field: $t('auth.fields.company')}) }}</span><span v-if="validation.company.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.company'), 32]) }}</span></div>
+          </div>
+          <div class="form-row">
+            <div class="select">
+              <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
+                <option selected="selected">{{ $t("auth.type_tips") }}</option>
+                <option v-for="type in accountTypes" :value="$index + 1">{{ type }}</option>
+              </select>
+            </div>
+            <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("auth.type_tips") }}</span></div>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("auth.register_submit") }}</button>
+        </div>
+      </div>
+      <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+    </form>
+  </div>
 </template>
 
 <style lang="stylus">
@@ -117,20 +116,20 @@
 </style>
 
 <script>
-  import api from '../api';
-  import config from '../consts/config';
-  // import config from '../../consts/config';
-  import locales from '../consts/locales';
-  import Captcha from '../components/captcha.vue';
+  import api from '../api'
+  import config from '../consts/config'
+  // import config from '../../consts/config'
+  import locales from '../consts/locales'
+  import Captcha from '../components/Captcha'
 
-  module.exports = {
+  export default {
     name: 'RegisterForm',
 
     components: {
       'captcha': Captcha
     },
 
-    data: function () {
+    data () {
       return {
         validation: {},
         captcha: '',
@@ -142,80 +141,71 @@
         btnDisabled: false,
         accountTypes: locales[Vue.config.lang].accountTypes,
         seconds: config.verifycodeDuration
-      };
+      }
     },
 
     methods: {
       getObjLength:function (obj){
-        return Object.keys(obj).length;
+        return Object.keys(obj).length
       },
 
-      checkEqualToPassword: function (value) {
-        return value === this.model.password;
+      checkEqualToPassword (value) {
+        return value === this.model.password
       },
 
-      checkTypeValid: function (value) {
-        return Number(value) > 0;
+      checkTypeValid (value) {
+        return Number(value) > 0
       },
 
-      tiktac: function () {
-        var self = this;
-        var itvl = window.setInterval(function () {
-          if (self.seconds) {
-            self.seconds--;
+      tiktac () {
+        var itvl = window.setInterval(() => {
+          if (this.seconds) {
+            this.seconds--
           } else {
-            self.seconds = config.verifycodeDuration;
-            self.counting = false;
-            self.btnDisabled = false;
-            window.clearInterval(itvl);
+            this.seconds = config.verifycodeDuration
+            this.counting = false
+            this.btnDisabled = false
+            window.clearInterval(itvl)
           }
-        }, 1000);
+        }, 1000)
       },
 
-      fetchVerifyCode: function () {
-        var self = this;
-
+      fetchVerifyCode () {
         if (this.validation.phone.$invalid) {
-          alert(this.$t('auth.phone_msg'));
-          return;
+          window.alert(this.$t('auth.phone_msg'))
+          return
         }
 
-        this.btnDisabled=true;
-        this.captcha = '';
-        this.$refs.captcha.generate();
+        this.btnDisabled=true
+        this.captcha = ''
+        this.$refs.captcha.generate()
         api.sms.getVerifycode({
           phone: this.model.phone
-        }).then(function (status) {
-          console.log(status);
-          if (__DEBUG__) {
-            console.log('[' + status + '] 获取验证码成功');
+        }).then((res) => {
+          if (res.status === 200) {
+            this.counting = true
+            this.tiktac()
           }
-          self.counting=true;
-          self.tiktac();
-        }).catch(function (error) {
-          self.handleError(error)
-        });
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       /**
        * 提交注册
        */
-      onSubmit: function () {
-        var self = this;
+      onSubmit () {
         if (this.validation.$valid) {
-          api.corp.register(this.model).then(function (status) {
-            if (__DEBUG__) {
-              console.log('[' + status + '] 注册成功');
+          api.corp.register(this.model).then((res) => {
+            if (res.status === 200) {
+              window.alert(this.$t('auth.register_success'))
+              this.$route.router.go({path: '/login'})
             }
-            if (status === 200) {
-              alert(this.$t('auth.register_success'));
-              self.$route.router.go({path: '/login'});
-            }
-          }).catch(function (error) {
-            self.handleError(error);
-          });
+          }).catch((error) => {
+            this.handleError(error)
+          })
         }
       }
     }
-  };
+  }
 </script>

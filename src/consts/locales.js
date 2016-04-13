@@ -97,7 +97,7 @@ module.exports = {
 
     // 图表地区
     regions: [
-      { label: '全球', value: 'world'},
+      { label: '全球', value: 'world' },
       { label: '国内', value: 'china' }
     ],
 
@@ -945,7 +945,7 @@ module.exports = {
 
     // 图表地区
     regions: [
-      { label: '全球', value: 'world'},
+      { label: '全球', value: 'world' },
       { label: '国内', value: 'china' }
     ],
 
@@ -1694,4 +1694,4 @@ module.exports = {
       }
     }
   }
-};
+}

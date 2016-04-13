@@ -1,128 +1,160 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .panel
-      .panel-hd
-        radio-group(:items="periods", :value.sync="period")
-          span.label(slot="label") {{ $t("common.recent") }}
-        h2 {{ $t("alert.service") }}
-      .panel-bd
-        .row
-          .col-13
-            #trendChart(style="height:320px;")
-          .col-7
-            .statistics-info
-              .item
-                .cont
-                  .num {{alertSummary.device}}
-                  .label {{ $t("alert.statistic.device") }}
-              .item
-                .cont
-                  .num {{alertSummary.message}}
-                  .label {{ $t("alert.statistic.message") }}
-              .item.no-border
-                .cont
-                  .num {{alertSummary.unread}}
-                  .label {{ $t("alert.statistic.unread") }}
-              .item.no-border
-                .cont
-                  .num {{alertSummary.add_today}}
-                  .label {{ $t("alert.statistic.add_today") }}
-
-    .panel
-      .panel-hd
-        h2 {{ $t("alert.info") }}
-      .panel-bd
-        //- 数据
-        table.table.table-stripe.table-bordered
-          thead
-            tr
-              th {{ $t("alert.info_list.product_name") }}
-              th {{ $t("alert.info_list.content") }}
-              th {{ $t("alert.info_list.create_date") }}
-              th {{ $t("alert.info_list.is_read") }}
-              th.tac {{ $t("common.action") }}
-          tbody
-            template(v-if="alerts.length > 0 && !loadingData")
-              tr(v-for="alert in alerts")
-                td {{alert.product_name}}
-                td
-                  template(v-if="alert.tags")
-                    span.text-label(v-for="tag in alert.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
-                  | {{alert.content}}
-                td {{alert.create_date | formatDate}}
-                td
-                  span.hl-gray(v-if="alert.is_read") {{ $t("common.read") }}
-                  span(v-else) {{ $t("common.unread") }}
-                td.tac
-                  button.btn.btn-link.btn-sm(@click="showAlert(alert)") {{ $t("common.details") }}
-            tr(v-if="loadingData")
-              td.tac(colspan="5")
-                .tips-null
-                  i.fa.fa-refresh.fa-spin
-                  span {{ $t("common.data_loading") }}
-            tr(v-if="alerts.length === 0 && !loadingData")
-              td.tac(colspan="5")
-                .tips-null
-                  span {{ $t("common.no_records") }}
-        pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getAlerts")
-
-  // 查看告警信息浮层
-  modal(:show.sync="showModal")
-    h3(slot="header") {{ $t("alert.info") }}
-    //- 数据
-    table.table.table-stripe.table-bordered(slot="body")
-      tbody
-        tr
-          td {{ $t("alert.info_list.product_name") }}
-          td {{model.product_name}}
-        tr
-          td {{ $t("alert.info_list.alert_name") }}
-          td {{model.alert_name}}
-        tr
-          td {{ $t("alert.info_list.content") }}
-          td {{model.content}}
-        tr
-          td {{ $t("alert.info_list.tags") }}
-          td
-            template(v-if="model.tags")
-              span.text-label(v-for="tag in model.tags | toTags", :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}") {{tag}}
-        tr
-          td {{ $t("alert.info_list.type") }}
-          td
-            span {{ infoTypes[model.type - 1] }}
-        tr
-          td {{ $t("alert.info_list.notify_type") }}
-          td
-            span {{ alertTypes[model.notify_type - 1] }}
-        tr
-          td {{ $t("alert.info_list.alert_value") }}
-          td {{model.alert_value}}
-        tr
-          td {{ $t("alert.info_list.from") }}
-          td {{model.from}}
-        tr
-          td {{ $t("alert.info_list.to") }}
-          td {{model.to}}
-        tr
-          td {{ $t("alert.info_list.create_date") }}
-          td {{model.create_date | formatDate}}
-    .modal-footer(slot="footer")
-      button.btn.btn-primary(@click.prevent.stop="showModal = false") {{ $t("common.ok") }}
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="panel">
+        <div class="panel-hd">
+          <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+          <h2>{{ $t("alert.service") }}</h2>
+        </div>
+        <div class="panel-bd">
+          <div class="row">
+            <div class="col-13">
+              <div id="trendChart" style="height:320px;"></div>
+            </div>
+            <div class="col-7">
+              <div class="statistics-info">
+                <div class="item">
+                  <div class="cont">
+                    <div class="num">{{ alertSummary.device }}</div>
+                    <div class="label">{{ $t("alert.statistic.device") }}</div>
+                  </div>
+                </div>
+                <div class="item">
+                  <div class="cont">
+                    <div class="num">{{ alertSummary.message }}</div>
+                    <div class="label">{{ $t("alert.statistic.message") }}</div>
+                  </div>
+                </div>
+                <div class="item no-border">
+                  <div class="cont">
+                    <div class="num">{{ alertSummary.unread }}</div>
+                    <div class="label">{{ $t("alert.statistic.unread") }}</div>
+                  </div>
+                </div>
+                <div class="item no-border">
+                  <div class="cont">
+                    <div class="num">{{ alertSummary.add_today }}</div>
+                    <div class="label">{{ $t("alert.statistic.add_today") }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>{{ $t("alert.info") }}</h2>
+        </div>
+        <div class="panel-bd">
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t("alert.info_list.product_name") }}</th>
+                <th>{{ $t("alert.info_list.content") }}</th>
+                <th>{{ $t("alert.info_list.create_date") }}</th>
+                <th>{{ $t("alert.info_list.is_read") }}</th>
+                <th class="tac">{{ $t("common.action") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="alerts.length > 0 && !loadingData">
+                <tr v-for="alert in alerts">
+                  <td>{{ alert.product_name }}</td>
+                  <td>
+                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
+                  </td>
+                  <td>{{ alert.create_date | formatDate }}</td>
+                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else="v-else">{{ $t("common.unread") }}</span></td>
+                  <td class="tac">
+                    <button @click="showAlert(alert)" class="btn btn-link btn-sm">{{ $t("common.details") }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+                </td>
+              </tr>
+              <tr v-if="alerts.length === 0 && !loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
+        </div>
+      </div>
+    </div>
+    <!-- 查看告警信息浮层-->
+    <modal :show.sync="showModal">
+      <h3 slot="header">{{ $t("alert.info") }}</h3>
+      <table slot="body" class="table table-stripe table-bordered">
+        <tbody>
+          <tr>
+            <td>{{ $t("alert.info_list.product_name") }}</td>
+            <td>{{ model.product_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.alert_name") }}</td>
+            <td>{{ model.alert_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.content") }}</td>
+            <td>{{ model.content }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.tags") }}</td>
+            <td>
+              <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.type") }}</td>
+            <td><span>{{ infoTypes[model.type - 1] }}</span></td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.notify_type") }}</td>
+            <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.alert_value") }}</td>
+            <td>{{ model.alert_value }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.from") }}</td>
+            <td>{{ model.from }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.to") }}</td>
+            <td>{{ model.to }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.create_date") }}</td>
+            <td>{{ model.create_date | formatDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
+      </div>
+    </modal>
+  </section>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import api from '../../api';
-  import locales from '../../consts/locales';
-  import Pager from '../../components/pager.vue';
-  import Modal from '../../components/modal.vue';
-  import RadioGroup from '../../components/radio-group.vue';
-  import dateFormat from 'date-format';
-  import echarts from 'echarts/echarts';
-  require('echarts/chart/line');
+  import Vue from 'vue'
+  import api from '../../api'
+  import locales from '../../consts/locales'
+  import Pager from '../../components/Pager'
+  import Modal from '../../components/Modal'
+  import RadioGroup from '../../components/RadioGroup'
+  import dateFormat from 'date-format'
+  import echarts from 'echarts/echarts'
+  require('echarts/chart/line')
 
-  module.exports = {
+  export default {
     name: 'Alerts',
 
     components: {
@@ -131,7 +163,7 @@ section.main-wrap
       'radio-group': RadioGroup
     },
 
-    data: function () {
+    data () {
       return {
         alerts: [],
         total: 0,
@@ -166,48 +198,48 @@ section.main-wrap
         alertTrends: [],
         today: dateFormat('yyyy-MM-dd', new Date()),
         loadingData: false
-      };
+      }
     },
 
     computed: {
-      queryCondition: function () {
+      queryCondition () {
         return {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount
-        };
+        }
       },
 
-      past: function () {
-        var past = new Date().getTime() - this.period * 24 * 3600 * 1000;
-        return dateFormat('yyyy-MM-dd', new Date(past));
+      past () {
+        var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+        return dateFormat('yyyy-MM-dd', new Date(past))
       }
     },
 
     filters: {
-      toTags: function (value) {
-        return value.length ? value.split(',') : [];
+      toTags (value) {
+        return value.length ? value.split(',') : []
       }
     },
 
-    ready: function () {
-      this.drawTrendsChart();
-      // var self = this;
-      // this.getAlertSummary();
+    ready () {
+      this.drawTrendsChart()
+      // var this = this
+      // this.getAlertSummary()
     },
 
     route: {
-      data: function () {
-        this.getAlerts();
-        this.getAlertSummary();
-        this.drawTrendsChart();
+      data () {
+        this.getAlerts()
+        this.getAlertSummary()
+        this.drawTrendsChart()
       }
     },
 
     // 监听属性变动
     watch: {
-      period: function () {
-        this.getAlertSummary();
-        this.drawTrendsChart();
+      period () {
+        this.getAlertSummary()
+        this.drawTrendsChart()
       }
     },
 
@@ -216,113 +248,104 @@ section.main-wrap
        * 获取单条告警信息并弹出浮层显示
        * @param  {Object} alert 目标告警信息
        */
-      showAlert: function (alert) {
-        var self = this;
-        this.model = alert;
-        this.showModal = true;
-        api.corp.refreshToken().then(function () {
-          api.alert.setAlertRead([alert.id]).then(function () {
-            alert.is_read = true;
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+      showAlert (alert) {
+        this.model = alert
+        this.showModal = true
+        api.alert.setAlertRead([alert.id]).then((res) => {
+          if (res.status === 200) {
+            alert.is_read = true
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       /**
        * 获取告警信息列表
        */
-      getAlerts: function () {
-        var self = this;
-
-        this.loadingData = true;
-        api.corp.refreshToken().then(function () {
-          api.alert.getAlerts(self.queryCondition).then(function (data) {
-            self.alerts = data.list;
-            self.total = data.count;
-            self.loadingData = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingData = false;
-          });
-        });
+      getAlerts () {
+        this.loadingData = true
+        api.alert.getAlerts(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.alerts = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingData = false
+        })
       },
 
       // 告警统计信息
-      getAlertSummary: function () {
-        var self = this;
-
-        api.corp.refreshToken().then(function () {
-          api.statistics.getAlertSummary(self.past, self.today).then(function (data) {
-            self.alertSummary = data;
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+      getAlertSummary () {
+        api.statistics.getAlertSummary(this.past, this.today).then((res) => {
+          if (res.status === 200) {
+            this.alertSummary = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       // 趋势图表
-      drawTrendsChart: function () {
-        var self = this;
+      drawTrendsChart () {
+        api.statistics.getAlertTrend(this.past, this.today).then((res) => {
+          var dates = res.data.map((item) => {
+            return dateFormat('MM-dd', new Date(item.day))
+          })
+          var alertCounts = res.data.map((item) => {
+            return item.message
+          })
 
-        api.corp.refreshToken().then(function () {
-          api.statistics.getAlertTrend(self.past, self.today).then(function (data) {
-            var dates = data.map(function (item) {
-              return dateFormat('MM-dd', new Date(item.day));
-            });
-            var alertCounts = data.map(function (item) {
-              return item.message;
-            });
-
-            // 趋势图表
-            var trendOptions = {
-              noDataLoadingOption: {
-                text: self.$t('common.no_data'),
-                effect: '',
-                effectOption: {
-                  backgroundColor: '#FFF'
-                },
-                textStyle: {
-                  fontSize: 14,
-                  color: '#999'
-                }
+          // 趋势图表
+          var trendOptions = {
+            noDataLoadingOption: {
+              text: this.$t('common.no_data'),
+              effect: '',
+              effectOption: {
+                backgroundColor: '#FFF'
               },
-              calculable: true,
-              tooltip: {
-                trigger: 'axis'
-              },
-              grid: {
-                x: 50,
-                y: 32,
-                x2: 15
-              },
-              legend: {
-                x: 'right',
-                y: 10,
-                data: [self.$t('alert.counts')]
-              },
-              xAxis: [{
-                type: 'category',
-                boundaryGap: false,
-                data: dates
-              }],
-              yAxis: [{
-                type: 'value'
-              }],
-              series: [{
-                name: self.$t('alert.counts'),
-                type: 'line',
-                data: alertCounts
-              }]
-            };
-            var trendChart = echarts.init(document.getElementById('trendChart'));
-            trendChart.setOption(trendOptions);
-            window.onresize = trendChart.resize;
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+              textStyle: {
+                fontSize: 14,
+                color: '#999'
+              }
+            },
+            calculable: true,
+            tooltip: {
+              trigger: 'axis'
+            },
+            grid: {
+              x: 50,
+              y: 32,
+              x2: 15
+            },
+            legend: {
+              x: 'right',
+              y: 10,
+              data: [this.$t('alert.counts')]
+            },
+            xAxis: [{
+              type: 'category',
+              boundaryGap: false,
+              data: dates
+            }],
+            yAxis: [{
+              type: 'value'
+            }],
+            series: [{
+              name: this.$t('alert.counts'),
+              type: 'line',
+              data: alertCounts
+            }]
+          }
+          var trendChart = echarts.init(document.getElementById('trendChart'))
+          trendChart.setOption(trendOptions)
+          window.onresize = trendChart.resize
+        }).catch((error) => {
+          this.handleError(error)
+        })
       }
     }
-  };
+  }
 </script>

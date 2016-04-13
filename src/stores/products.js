@@ -3,15 +3,15 @@ module.exports = {
     products: []
   },
 
-  addProducts: function (products) {
-    this.state.products = this.state.products.concat(products);
+  addProducts (products) {
+    this.state.products = this.state.products.concat(products)
   },
 
-  addProduct: function (product) {
-    this.state.products.push(product);
+  addProduct (product) {
+    this.state.products.push(product)
   },
 
-  deleteProduct: function (product) {
-    this.state.products.$remove(product);
+  deleteProduct (product) {
+    this.state.products.$remove(product)
   }
-};
+}

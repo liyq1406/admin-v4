@@ -1,9 +1,9 @@
-<template lang="jade">
-nav.tab
-  ul
-    li(v-for="item in nav")
-      a(v-if="item.link", v-link="item.link") {{item.label}}
-      a(v-else, href="{{item.url}}", target="_blank") {{item.label}}
+<template>
+  <nav class="tab">
+    <ul>
+      <li v-for="item in nav"><a v-if="item.link" v-link="item.link">{{ item.label }}</a><a v-else="v-else" href="{{ item.url }}" target="_blank">{{ item.label }}</a></li>
+    </ul>
+  </nav>
 </template>
 
 <style lang="stylus">
@@ -37,7 +37,7 @@ nav.tab
 </style>
 
 <script>
-module.exports = {
+export default {
   props: ['nav']
-};
+}
 </script>

@@ -1,151 +1,164 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .breadcrumb
-      a.fa.fa-arrow-circle-left(v-link="{path: '/users'}") {{ $t('user.list') }}
-    .panel
-      .panel-hd
-        h2 {{ $t('user.details') }}
-      .panel-bd
-        ul.user-details
-          li
-            .label {{ $t('user.fields.id') }}:
-            .info {{user.id}}
-          li
-            .label {{ $t('user.fields.account') }}:
-            .info {{user.account}}
-          li
-            .label {{ $t('user.fields.nick_name') }}:
-            .info {{user.nickname}}
-          li
-            .label {{ $t('user.fields.phone') }}:
-            .info {{user.phone}}
-          li
-            .label {{ $t('user.fields.create_date') }}:
-            .info {{user.create_date | formatDate}}
-          li
-            .label {{ $t('user.fields.active_date') }}:
-            .info {{user.active_date | formatDate}}
-          li
-            .label {{ $t('user.fields.is_vaild') }}:
-            .info {{user.is_vaild ? $t('user.status.activate') :  $t('user.status.deactivate')}}
-          li
-            .label {{ $t('user.fields.region_id') }}:
-            .info {{user.region_id}}
-    .panel
-      .panel-hd
-        h2 {{ $t('user.devices_bound') }}
-      .panel-bd
-        //- 绑定设备列表
-        table.table.table-stripe.table-bordered
-          thead
-            tr
-              th {{ $t('user.product_name') }}
-              th {{ $t('user.device_mac') }}
-              th {{ $t('user.device_status') }}
-              th {{ $t('user.device_authorize_code') }}
-          tbody
-            tr(v-for="subDevice in subDevices")
-              td {{subDevice.product_id}}
-              //这里使用产品id 不是产品名称 debug
-              td {{subDevice.mac}}
-              td
-                span(v-if="subDevice.is_online==true") {{ $t('common.online') }}
-                span(v-else) {{ $t('common.offline') }}
-              td {{subDevice.authorize_code}}
-            tr(v-if="subDevices.length === 0")
-              td.tac(colspan="4")
-                i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                .tips-null(v-else) {{ $t('user.no_devices_bound') }}
-    .panel
-      .panel-bd
-        //- button.btn.btn-primary.btn-lg.mt10.mb10(@click.prevent="deleteUser") {{ $t('user.ban_user') }}
-        button.btn.sxten(:class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}", :disabled="toggling", @click="toggleMember(user)")
-          i.fa(:class="{'fa-stop': user.status, 'fa-play': !user.status}")
-          | {{user.status-0===1 ? '停用' : '启用'}}
-
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="breadcrumb"><a v-link="{path: '/users'}" class="fa fa-arrow-circle-left">{{ $t('user.list') }}</a></div>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>{{ $t('user.details') }}</h2>
+        </div>
+        <div class="panel-bd">
+          <ul class="user-details">
+            <li>
+              <div class="label">{{ $t('user.fields.id') }}:</div>
+              <div class="info">{{ user.id }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.account') }}:</div>
+              <div class="info">{{ user.account }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.nick_name') }}:</div>
+              <div class="info">{{ user.nickname }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.phone') }}:</div>
+              <div class="info">{{ user.phone }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.create_date') }}:</div>
+              <div class="info">{{ user.create_date | formatDate }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.active_date') }}:</div>
+              <div class="info">{{ user.active_date | formatDate }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.is_vaild') }}:</div>
+              <div class="info">{{ user.is_vaild ? $t('user.status.activate') :  $t('user.status.deactivate') }}</div>
+            </li>
+            <li>
+              <div class="label">{{ $t('user.fields.region_id') }}:</div>
+              <div class="info">{{ user.region_id }}</div>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>{{ $t('user.devices_bound') }}</h2>
+        </div>
+        <div class="panel-bd">
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t('user.product_name') }}</th>
+                <th>{{ $t('user.device_mac') }}</th>
+                <th>{{ $t('user.device_status') }}</th>
+                <th>{{ $t('user.device_authorize_code') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="subDevice in subDevices">
+                <td>{{ subDevice.product_id }}</td>
+                <!--这里使用产品id 不是产品名称 debug-->
+                <td>{{ subDevice.mac }}</td>
+                <td><span v-if="subDevice.is_online==true">{{ $t('common.online') }}</span><span v-else="v-else">{{ $t('common.offline') }}</span></td>
+                <td>{{ subDevice.authorize_code }}</td>
+              </tr>
+              <tr v-if="subDevices.length === 0">
+                <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                  <div v-else="v-else" class="tips-null">{{ $t('user.no_devices_bound') }}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-bd">
+          <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn sxten"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-  import api from '../../api';
+  import api from '../../api'
 
-  module.exports = {
+  export default {
     name: 'UserDetails',
 
     components: {
       'api': api
     },
 
-    data: function () {
+    data () {
       return {
         user: {}, // 用户信息
         subDevices: [] // 用户绑定设备列表
-      };
+      }
     },
 
     route: {
-      data: function () {
-        return {
-          user: this.getUserInfo(),
-          subDevices: this.getSubDevices()
-        };
+      data () {
+        this.getUserInfo()
+        this.getSubDevices()
       }
     },
 
     methods: {
-      getUserInfo: function () {
-        var self = this;
-
-        return api.corp.refreshToken().then(function () {
-          return api.user.profile(self.$route.params.id);
-        });
+      getUserInfo () {
+        api.user.profile(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.user = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
-      getSubDevices: function () {
-        var self = this;
-
-        return api.corp.refreshToken().then(function () {
-          return api.user.subDeviceList(self.$route.params.id);
-        });
+      getSubDevices () {
+        api.user.subDeviceList(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.subDevices = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
-      deleteUser: function () {
-        if (confirm('确定要停用当前用户吗？')) {
-          var user_id = this.user.id;
-          api.corp.refreshToken().then(function () {
-            api.user.putMember(user_id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-            }).catch(function (error) {
-              self.handleError(error);
-            });
-          });
+      deleteUser () {
+        if (window.confirm('确定要停用当前用户吗？')) {
+          var user_id = this.user.id
+          api.user.banMember(user_id).then((res) => {
+            if (res.status === 200) {
+              console.log('已停用用户')
+            }
+          }).catch((error) => {
+            this.handleError(error)
+          })
         }
       },
 
       // 新版切换状态
-      toggleMember: function (user) {
-        var self = this;
+      toggleMember (user) {
         if (!this.toggling) {
-          this.toggling = true;
-          api.corp.refreshToken().then(function () {
-            api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1)
-            .then(function (data) {
-              // self.getTasks();
-              if (data === 200) {
-                user.status = user.status - 0 === 1 ? 2 : 1;
-              }
-              self.toggling = false;
-            }).catch(function (error) {
-              self.handleError(error);
-              self.toggling = false;
-            });
-          });
+          this.toggling = true
+          api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
+            // this.getTasks()
+            if (res.status === 200) {
+              user.status = user.status - 0 === 1 ? 2 : 1
+            }
+            this.toggling = false
+          }).catch((error) => {
+            this.handleError(error)
+            this.toggling = false
+          })
         }
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus" scoped>

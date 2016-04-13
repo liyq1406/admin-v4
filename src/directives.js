@@ -1,51 +1,50 @@
 // input/textarea占位符
 var placeholder = {
-  bind: function () {
-    var self = this;
-    var vModel;
-    var handlePlaceholder = function () {
+  bind () {
+    var vModel
+    var handlePlaceholder = () => {
       if (this.input.value.length === 0) {
-        this.placeholder.style.display = 'inline';
+        this.placeholder.style.display = 'inline'
       } else {
-        this.placeholder.style.display = 'none';
+        this.placeholder.style.display = 'none'
       }
-    };
-
-    this.placeholder = document.createElement('span');
-    this.placeholder.className = 'placeholder';
-    this.el.appendChild(this.placeholder);
-
-    this.input = this.el.getElementsByClassName('input-text')[0];
-    vModel = this.input.getAttribute('v-model');
-
-    if (vModel) {
-      this.vm.$watch(vModel, function (value, oldValue) {
-        if (value === undefined || value.length === 0) {
-          self.placeholder.style.display = 'inline';
-        } else {
-          self.placeholder.style.display = 'none';
-        }
-      }, { immediate: true });
     }
 
-    this.input.addEventListener('input', function () {
-      handlePlaceholder.apply(self);
-    });
+    this.placeholder = document.createElement('span')
+    this.placeholder.className = 'placeholder'
+    this.el.appendChild(this.placeholder)
 
-    this.placeholder.addEventListener('click', function () {
-      self.input.focus();
-    });
+    this.input = this.el.getElementsByClassName('input-text')[0]
+    vModel = this.input.getAttribute('v-model')
 
-    this.input.addEventListener('blur', function () {
-      handlePlaceholder.apply(self);
-    });
+    if (vModel) {
+      this.vm.$watch(vModel, (value, oldValue) => {
+        if (value === undefined || value.length === 0) {
+          this.placeholder.style.display = 'inline'
+        } else {
+          this.placeholder.style.display = 'none'
+        }
+      }, { immediate: true })
+    }
 
-    handlePlaceholder.apply(this);
+    this.input.addEventListener('input', () => {
+      handlePlaceholder.apply(this)
+    })
+
+    this.placeholder.addEventListener('click', () => {
+      this.input.focus()
+    })
+
+    this.input.addEventListener('blur', () => {
+      handlePlaceholder.apply(this)
+    })
+
+    handlePlaceholder.apply(this)
   },
 
-  update: function (value) {
-    this.placeholder.innerText = value;
+  update (value) {
+    this.placeholder.innerText = value
   }
-};
+}
 
-export {placeholder};
+export {placeholder}

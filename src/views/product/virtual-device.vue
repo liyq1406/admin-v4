@@ -1,9 +1,9 @@
-<template lang="jade">
-p 虚拟设备
+<template>
+  <p>虚拟设备</p>
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'virtualDevice'
-  };
+  }
 </script>

@@ -1,23 +1,28 @@
-<template lang="jade">
-div
-  .form.form-auth.form-member-activate(v-show="activateSuccess")
-    .form-logo
-    .form-cont.reset-password-success
-      .alert.alert-success
-        .fa.fa-check-circle-o
-        h2 {{ $t("auth.activate_success") }}
-        p {{ $t("auth.activate_success_msg") }}
-      .form-footer
-        | 2015 &copy; {{ $t("common.company") }}.
-  .form.form-auth.form-member-activate(v-show="activateFail")
-    .form-logo
-    .form-cont.reset-password-success
-      .alert.alert-success
-        .fa.fa-times-circle-o
-        h2 {{ $t("auth.activate_fail") }}
-        p {{ $t("auth.activate_fail_msg") }}
-      .form-footer
-        | 2015 &copy; {{ $t("common.company") }}.
+<template>
+  <div>
+    <div v-show="activateSuccess" class="form form-auth form-member-activate">
+      <div class="form-logo"></div>
+      <div class="form-cont reset-password-success">
+        <div class="alert alert-success">
+          <div class="fa fa-check-circle-o"></div>
+          <h2>{{ $t("auth.activate_success") }}</h2>
+          <p>{{ $t("auth.activate_success_msg") }}</p>
+        </div>
+        <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+      </div>
+    </div>
+    <div v-show="activateFail" class="form form-auth form-member-activate">
+      <div class="form-logo"></div>
+      <div class="form-cont reset-password-success">
+        <div class="alert alert-success">
+          <div class="fa fa-times-circle-o"></div>
+          <h2>{{ $t("auth.activate_fail") }}</h2>
+          <p>{{ $t("auth.activate_fail_msg") }}</p>
+        </div>
+        <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <style lang="stylus">
@@ -25,39 +30,35 @@ div
 </style>
 
 <script>
-  import api from '../api';
-  import base64 from '../helpers/base64';
+  import api from '../api'
+  import base64 from '../helpers/base64'
 
-  module.exports = {
+  export default {
     name: 'EmailActivateForm',
 
-    data: function () {
+    data () {
       return {
         activateSuccess: false,
         activateFail: false
-      };
+      }
     },
 
-    ready: function () {
-      var self = this;
-      var email = base64.decode(this.$route.params.email);
-      var verifycode = base64.decode(this.$route.params.verifycode);
-      console.log(email);
-      console.log(verifycode);
-      api.corp.emailActivate({email: email, verifycode: verifycode}).then(function (status) {
-        if (status === 200) {
-          self.activateSuccess = true;
+    ready () {
+      var email = base64.decode(this.$route.params.email)
+      var verifycode = base64.decode(this.$route.params.verifycode)
+
+      api.corp.emailActivate({
+        email: email,
+        verifycode: verifycode
+      }).then((res) => {
+        if (res.status === 200) {
+          this.activateSuccess = true
         }
-      }).catch(function (error) {
+      }).catch((error) => {
         if (error.code === 4001028) {
-          self.activateFail = true;
+          this.activateFail = true
         }
-        // self.handleError(error);
-      });
-    },
-
-    methods: {
-
+      })
     }
-  };
+  }
 </script>

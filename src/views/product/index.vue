@@ -1,26 +1,31 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .panel
-      .panel-hd
-        h2(v-text="product.name")
-      .panel-bd
-        tab(:nav="secondaryNav")
-    router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProduct")
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="panel">
+        <div class="panel-hd">
+          <h2 v-text="product.name"></h2>
+        </div>
+        <div class="panel-bd">
+          <tab :nav="secondaryNav"></tab>
+        </div>
+      </div>
+      <router-view transition="view" transition-mode="out-in" @edit-product-name="getProduct" class="view"></router-view>
+    </div>
+  </section>
 </template>
 
 <script>
-  import Tab from '../../components/tab.vue';
-  import api from '../../api';
+  import Tab from '../../components/Tab'
+  import api from '../../api'
 
-  module.exports = {
+  export default {
     name: 'Products',
 
     components: {
       'tab': Tab
     },
 
-    data: function () {
+    data () {
       return {
         product: {
           name: '',
@@ -28,12 +33,12 @@ section.main-wrap
           id: ''
         },
         secondaryNav: []
-      };
+      }
     },
 
     route: {
-      data: function (transition) {
-        this.getProduct();
+      data (transition) {
+        this.getProduct()
 
         return {
           secondaryNav: [{
@@ -67,20 +72,19 @@ section.main-wrap
             label: this.$t('sub_nav.product.wechat'),
             link: { path: '/products/' + this.$route.params.id + '/wechat' }
           }]
-        };
+        }
       }
     },
 
     methods: {
-      getProduct: function () {
-        var self = this;
-        api.corp.refreshToken(this).then(function () {
-          api.product.getProduct(self.$route.params.id).then(function (data) {
-            self.product = data;
-          });
-        });
+      getProduct () {
+        api.product.getProduct(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.product = res.data
+          }
+        })
       }
     }
 
-  };
+  }
 </script>

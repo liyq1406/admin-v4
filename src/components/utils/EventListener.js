@@ -7,23 +7,23 @@ var EventListener = {
    * @param {function} callback Callback function.
    * @return {object} Object with a `remove` method.
    */
-  listen: function (target, eventType, callback) {
+  listen (target, eventType, callback) {
     if (target.addEventListener) {
-      target.addEventListener(eventType, callback, false);
+      target.addEventListener(eventType, callback, false)
       return {
-        remove: function () {
-          target.removeEventListener(eventType, callback, false);
+        remove () {
+          target.removeEventListener(eventType, callback, false)
         }
-      };
+      }
     } else if (target.attachEvent) {
-      target.attachEvent('on' + eventType, callback);
+      target.attachEvent('on' + eventType, callback)
       return {
-        remove: function () {
-          target.detachEvent('on' + eventType, callback);
+        remove () {
+          target.detachEvent('on' + eventType, callback)
         }
-      };
+      }
     }
   }
-};
+}
 
-module.exports = EventListener;
+module.exports = EventListener

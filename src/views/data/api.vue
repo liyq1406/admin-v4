@@ -1,5 +1,7 @@
-<template lang="jade">
-.panel
-  .panel-bd
-    p API
+<template>
+  <div class="panel">
+    <div class="panel-bd">
+      <p>API</p>
+    </div>
+  </div>
 </template>

@@ -1,3 +1,3 @@
-<template lang="jade">
-h1 404 not found
+<template>
+  <h1>404 not found</h1>
 </template>

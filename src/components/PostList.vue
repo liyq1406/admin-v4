@@ -1,8 +1,9 @@
-<template lang="jade">
-.post-list
-  ul
-    li(v-for="post in posts")
-      a(href="{{ post.url }}") {{ post.title }}
+<template>
+  <div class="post-list">
+    <ul>
+      <li v-for="post in posts"><a href="{{ post.url }}">{{ post.title }}</a></li>
+    </ul>
+  </div>
 </template>
 
 <style lang="stylus">
@@ -25,14 +26,14 @@
 </style>
 
 <script>
-module.exports = {
+export default {
   props: {
     posts: {
       type: Array,
-      default: function () {
-        return [];
+      default () {
+        return []
       }
     }
   }
-};
+}
 </script>

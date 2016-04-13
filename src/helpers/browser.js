@@ -3,8 +3,8 @@
  * @type {Object}
  */
 var browser = {
-  versions: (function () {
-    var ua = navigator.userAgent;
+  versions: (() => {
+    var ua = navigator.userAgent
     return {
       trident: ua.indexOf('Trident') > -1, // IE内核
       presto: ua.indexOf('Presto') > -1, // opera内核
@@ -18,9 +18,9 @@ var browser = {
       webApp: ua.indexOf('Safari') === -1, // 是否web应用程序，没有头部与底部
       weixin: ua.indexOf('MicroMessenger') > -1, // 是否微信 （2015-01-22新增）
       qq: ua.match(/\sQQ/i) === ' qq' // 是否QQ
-    };
+    }
   })(),
   language: (navigator.browserLanguage || navigator.language).toLowerCase()
-};
+}
 
-module.exports = browser;
+module.exports = browser

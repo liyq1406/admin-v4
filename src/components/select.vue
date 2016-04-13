@@ -1,21 +1,23 @@
-<template lang="jade">
-.v-select
-  slot
-  .btn-group(:class="{'open':active}")
-    button.btn.btn-default.active(@click.prevent="toggleDropdown", @blur="deactivate")
-      span.content {{label}}
-    .dropdown-menu(:style="dropdownMenuStyle")
-      ul
-        li(v-for="option in options", @mousedown="handleClick(option)")
-          | {{option.label}}
-          .fa.fa-check(v-show="option.value === value")
-    i.caret(@click="toggleDropdown")
+<template>
+  <div class="v-select">
+    <slot></slot>
+    <div :class="{'open':active}" class="btn-group">
+      <button @click.prevent="toggleDropdown" @blur="deactivate" class="btn btn-default active"><span class="content">{{ label }}</span></button>
+      <div :style="dropdownMenuStyle" class="dropdown-menu">
+        <ul>
+          <li v-for="option in options" @mousedown="handleClick(option)">{{ option.label }}
+            <div v-show="option.value === value" class="fa fa-check"></div>
+          </li>
+        </ul>
+      </div><i @click="toggleDropdown" class="caret"></i>
+    </div>
+  </div>
 </template>
 
 <script>
-  import EventListener from './utils/EventListener';
+  import EventListener from './utils/EventListener'
 
-  module.exports = {
+  export default {
     props: {
       options: {
         type: Array,
@@ -32,57 +34,55 @@
       }
     },
 
-    data: function () {
+    data () {
       return {
         dropdownMenuStyle: {
           height: this.height + 'px'
         },
         active: false
-      };
+      }
     },
 
     computed: {
-      label: function () {
-        var self = this;
-        var option = this.options.filter(function (option) {
-          return option.value === self.value;
-        })[0];
-        return option ? option.label : '';
+      label () {
+        var option = this.options.filter((option) => {
+          return option.value === this.value
+        })[0]
+        return option ? option.label : ''
       }
     },
 
     methods: {
-      handleClick: function (option) {
-        this.value = option.value;
-        this.$dispatch('select', option.value);
-        this.deactivate();
+      handleClick (option) {
+        this.value = option.value
+        this.$dispatch('select', option.value)
+        this.deactivate()
       },
 
-      toggleDropdown: function () {
-        this.active = !this.active;
+      toggleDropdown () {
+        this.active = !this.active
       },
 
-      deactivate: function () {
-        this.active = false;
+      deactivate () {
+        this.active = false
       }
     },
 
-    ready: function () {
-      var self = this;
-      this.$dispatch('select-created', this);
-      this._closeEvent = EventListener.listen(window, 'click', function (e) {
-        if (!self.$el.contains(e.target)) {
-          self.deactivate();
+    ready () {
+      this.$dispatch('select-created', this)
+      this._closeEvent = EventListener.listen(window, 'click', (e) => {
+        if (!this.$el.contains(e.target)) {
+          this.deactivate()
         }
-      });
+      })
     },
 
-    beforeDestroy: function () {
+    beforeDestroy () {
       if (this._closeEvent) {
-        this._closeEvent.remove();
+        this._closeEvent.remove()
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

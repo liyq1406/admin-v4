@@ -1,3 +1,3 @@
-<template lang="jade">
-h1 403 Forbidden
+<template>
+  <h1>403 Forbidden</h1>
 </template>

@@ -1,61 +1,55 @@
-<template lang="jade">
-.form.form-auth.form-fetch-password(v-show="!validating")
-  //- .form-logo
-  form.form-cont(v-show="verifycodeValid && !resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
-    .form-header
-      h2 {{ $t("auth.reset") }}
-      //-
-        p
-          | 请为您使用邮箱
-          strong {{email}}
-          | 注册的帐号重新设置密码
-    .form-body
-      .form-row
-        .input-text-wrap(v-placeholder="$t('auth.password')")
-          input.input-text(type="password", v-model="model.new_password", v-form-ctrl, required, maxlength="16", minlength="6", name="new_password", lazy)
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.new_password.$pristine")
-          span(v-if="validation.new_password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-        .form-tips.form-tips-error(v-if="validation.new_password.$dirty")
-          span(v-if="validation.new_password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-          span(v-if="validation.new_password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
-          span(v-if="validation.new_password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
-      .form-row
-        .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
-          input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
-          span(v-if="validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-        .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-          span(v-if="model.password && validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-          span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
-      .form-actions
-        button.btn.btn-primary.btn-block(type="submit") {{ $t("common.ok") }}
-    .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
-  .form-cont.reset-password-fail(v-show="!verifycodeValid && !resetsuccess")
-    .alert.alert-fail
-      .fa.fa-times-circle-o
-      h2 {{ $t("auth.activate_fail_msg") }}
-    //- .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
-  .form-cont.reset-password-success(v-show="resetsuccess")
-    .alert.alert-success
-      .fa.fa-check-circle-o
-      h2 {{ $t("auth.reset_success") }}
-      p {{ $t("auth.reset_success_msg") }}
-      .actions
-        a.btn.btn-primary(v-link="{ path: '/login'}") {{ $t("common.ok") }}
-    //- .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
+<template>
+  <div v-show="!validating" class="form form-auth form-fetch-password">
+    <form v-show="verifycodeValid && !resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+      <div class="form-header">
+        <h2>{{ $t("auth.reset") }}</h2>
+      </div>
+      <div class="form-body">
+        <div class="form-row">
+          <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+            <input type="password" v-model="model.new_password" v-form-ctrl required maxlength="16" minlength="6" name="new_password" lazy class="input-text"/>
+          </div>
+          <div v-if="validation.$submitted && validation.new_password.$pristine" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
+          <div v-if="validation.new_password.$dirty" class="form-tips form-tips-error"><span v-if="validation.new_password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.new_password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.new_password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
+        </div>
+        <div class="form-row">
+          <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
+            <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
+          </div>
+          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span></div>
+          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("common.ok") }}</button>
+        </div>
+      </div>
+      <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+    </form>
+    <div v-show="!verifycodeValid && !resetsuccess" class="form-cont reset-password-fail">
+      <div class="alert alert-fail">
+        <div class="fa fa-times-circle-o"></div>
+        <h2>{{ $t("auth.activate_fail_msg") }}</h2>
+      </div>
+    </div>
+    <div v-show="resetsuccess" class="form-cont reset-password-success">
+      <div class="alert alert-success">
+        <div class="fa fa-check-circle-o"></div>
+        <h2>{{ $t("auth.reset_success") }}</h2>
+        <p>{{ $t("auth.reset_success_msg") }}</p>
+        <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary">{{ $t("common.ok") }}</a></div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-  import api from '../api';
-  import base64 from '../helpers/base64';
+  import api from '../api'
+  import base64 from '../helpers/base64'
 
-  module.exports = {
+  export default {
     name: 'PwdResetForm',
 
-    data: function () {
+    data () {
       return {
         corp_id: '',
         email: '',
@@ -67,63 +61,54 @@
         sending: false,
         verifycodeValid: false,
         validating: true
-      };
+      }
     },
 
     route: {
-      data: function () {
-        var self = this;
-        this.corp_id = base64.decode(this.$route.params.corp_id);
-        this.email = base64.decode(this.$route.params.email);
-        this.verifycode = base64.decode(this.$route.params.verifycode);
+      data () {
+        this.corp_id = base64.decode(this.$route.params.corp_id)
+        this.email = base64.decode(this.$route.params.email)
+        this.verifycode = base64.decode(this.$route.params.verifycode)
 
-        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode};
-        api.corp.validVerifycode(params).then(function (status) {
-          if (status === 200) {
-            self.verifycodeValid = true;
+        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode}
+        api.corp.validVerifycode(params).then((res) => {
+          if (res.status === 200) {
+            this.verifycodeValid = true
           }
-          self.validating = false;
-        }).catch(function (error) {
+          this.validating = false
+        }).catch((error) => {
           if (error.code === 4001028) {
-            self.validating = false;
+            this.validating = false
           } else {
-            self.handleError(error);
+            this.handleError(error)
           }
-        });
+        })
       }
     },
 
     methods: {
-      checkEqualToPassword: function (value) {
-        return value === this.model.new_password;
+      checkEqualToPassword (value) {
+        return value === this.model.new_password
       },
 
-      onSubmit: function () {
-        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode, new_password: this.model.new_password};
-        var self = this;
-
-        if (__DEBUG__) {
-          console.log(params);
-        }
+      onSubmit () {
+        var params = {corp_id: this.corp_id, email: this.email, verifycode: this.verifycode, new_password: this.model.new_password}
 
         if (this.validation.$valid && !this.sending) {
-          this.sending = true;
-          api.corp.resetUserPasswordByMail(params).then(function (data) {
-            if (__DEBUG__) {
-              console.log(data);
+          this.sending = true
+          api.corp.resetUserPasswordByMail(params).then((res) => {
+            if (res.status === 200) {
+              this.resetsuccess = true
+              this.sending = false
             }
-            if (data === 200) {
-              self.resetsuccess = true;
-              self.sending = false;
-            }
-          }).catch(function (error) {
-            self.handleError(error);
-            self.sending = false;
-          });
+          }).catch((error) => {
+            this.handleError(error)
+            this.sending = false
+          })
         }
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

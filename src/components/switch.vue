@@ -1,10 +1,11 @@
-<template lang="jade">
-.switch(@click="toogle", :class="{'switch-on':value}")
-  .switch-block(v-text="value ? '开启' : '关闭'")
+<template>
+  <div @click="toogle" :class="{'switch-on':value}" class="switch">
+    <div v-text="value ? '开启' : '关闭'" class="switch-block"></div>
+  </div>
 </template>
 
 <script>
-  module.exports = {
+  export default {
     props: {
       value: {
         type: Boolean,
@@ -12,20 +13,20 @@
       }
     },
 
-    data: function () {
+    data () {
       return {
 
-      };
+      }
     },
 
     methods: {
-      toogle: function () {
-        this.$dispatch('switch-toggle');
-        this.value = !this.value;
+      toogle () {
+        this.$dispatch('switch-toggle')
+        this.value = !this.value
       }
     }
 
-  };
+  }
 </script>
 
 <style lang="stylus">

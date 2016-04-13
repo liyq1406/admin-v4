@@ -1,8 +1,4 @@
-# Node
+.DS_Store
 node_modules/
-
-# Generated files
-public/
 dist/
-dist
-src/views/app/wechat/tab2.vue
+npm-debug.log

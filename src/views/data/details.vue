@@ -1,75 +1,90 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .breadcrumb
-      a(v-link="{path: '/data/tables' }")
-        i.fa.fa-arrow-circle-left
-        | {{ $t("nav_aside.data") }}
-    .row
-      .col-20
-        .panel
-          .panel-hd
-            h2 {{ $t("table.details") }}
-          .panel-bd
-            //- 数据
-            table.table.table-stripe.table-bordered
-              thead
-                tr
-                  th ID
-                  th {{ $t("table_record.fields.create") }}
-                  th {{ $t("table_record.fields.update") }}
-                  th {{ $t("table_record.fields.creator") }}
-                  th.tac {{ $t("common.action") }}
-              tbody
-                tr(v-for="record in records")
-                  td {{record.objectId}}
-                  td {{record.createAt | formatDate}}
-                  td {{record.updateAt | formatDate}}
-                  td {{record.creator}}
-                  td.tac
-                    button.btn.btn-link.btn-sm(@click="showRecord(record)") {{ $t("common.details") }}
-                tr(v-if="records.length === 0")
-                  td.tac(colspan="5")
-                    i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                    .tips-null(v-else) {{ $t("common.no_records") }}
-            pager(v-if="records.length > pageCount", :total="total", :current.sync="currentPage", :page-count="pageCount")
-
-  // 查看数据浮层
-  modal(:show.sync="showModal")
-    h3(slot="header") {{ $t("table_record.details") }}
-    //- 数据
-    table.table.table-stripe.table-bordered(slot="body")
-      tbody
-        tr
-          td ID
-          td {{model.objectId}}
-        tr
-          td {{ $t("table_record.fields.create") }}
-          td {{model.createAt | formatDate}}
-        tr
-          td {{ $t("table_record.fields.update") }}
-          td {{model.updateAt | formatDate}}
-        tr
-          td {{ $t("table_record.fields.creator") }}
-          td {{model.creator}}
-        tr
-          td(colspan="2")
-            strong {{ $t("table_record.value") }}
-        tr(v-for="(key, val) in tableInfo.field")
-          td {{key}}
-          td(style="word-break: break-all;")
-            span(v-if="key==='createAt' || key==='updateAt'") {{model[key] | formatDate}}
-            span(v-else) {{model[key]}}
-    .modal-footer(slot="footer")
-      button.btn.btn-primary(@click.prevent.stop="showModal = false") {{ $t("common.ok") }}
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="breadcrumb"><a v-link="{path: '/data/tables' }"><i class="fa fa-arrow-circle-left"></i>{{ $t("nav_aside.data") }}</a></div>
+      <div class="row">
+        <div class="col-20">
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>{{ $t("table.details") }}</h2>
+            </div>
+            <div class="panel-bd">
+              <table class="table table-stripe table-bordered">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>{{ $t("table_record.fields.create") }}</th>
+                    <th>{{ $t("table_record.fields.update") }}</th>
+                    <th>{{ $t("table_record.fields.creator") }}</th>
+                    <th class="tac">{{ $t("common.action") }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="record in records">
+                    <td>{{ record.objectId }}</td>
+                    <td>{{ record.createAt | formatDate }}</td>
+                    <td>{{ record.updateAt | formatDate }}</td>
+                    <td>{{ record.creator }}</td>
+                    <td class="tac">
+                      <button @click="showRecord(record)" class="btn btn-link btn-sm">{{ $t("common.details") }}</button>
+                    </td>
+                  </tr>
+                  <tr v-if="records.length === 0">
+                    <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                      <div v-else="v-else" class="tips-null">{{ $t("common.no_records") }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <pager v-if="records.length > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 查看数据浮层-->
+    <modal :show.sync="showModal">
+      <h3 slot="header">{{ $t("table_record.details") }}</h3>
+      <table slot="body" class="table table-stripe table-bordered">
+        <tbody>
+          <tr>
+            <td>ID</td>
+            <td>{{ model.objectId }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("table_record.fields.create") }}</td>
+            <td>{{ model.createAt | formatDate }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("table_record.fields.update") }}</td>
+            <td>{{ model.updateAt | formatDate }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("table_record.fields.creator") }}</td>
+            <td>{{ model.creator }}</td>
+          </tr>
+          <tr>
+            <td colspan="2"><strong>{{ $t("table_record.value") }}</strong></td>
+          </tr>
+          <tr v-for="(key, val) in tableInfo.field">
+            <td>{{ key }}</td>
+            <td style="word-break: break-all;"><span v-if="key==='createAt' || key==='updateAt'">{{ model[key] | formatDate }}</span><span v-else="v-else">{{ model[key] }}</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
+      </div>
+    </modal>
+  </section>
 </template>
 
 <script>
-  import api from '../../api';
-  import Pager from '../../components/pager.vue';
-  import Modal from '../../components/modal.vue';
+  import api from '../../api'
+  import Pager from '../../components/Pager'
+  import Modal from '../../components/Modal'
 
-  module.exports = {
+  export default {
     name: 'TableDetails',
 
     components: {
@@ -77,7 +92,7 @@ section.main-wrap
       'pager': Pager
     },
 
-    data: function () {
+    data () {
       return {
         total: 0,
         tableInfo: {},
@@ -91,56 +106,52 @@ section.main-wrap
           updateAt: '',
           creator: ''
         }
-      };
+      }
     },
 
     route: {
-      data: function () {
-        this.getRecords();
+      data () {
+        this.getRecords()
         return {
           tableInfo: this.getTableInfo()
-        };
+        }
       }
     },
 
     computed: {
-      queryCondition: function () {
+      queryCondition () {
         var condition = {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount
-        };
-        return condition;
+        }
+        return condition
       }
     },
 
     methods: {
-      getRecords: function () {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.dataTable.queryData(self.$route.params.name, self.queryCondition).then(function (data) {
-            self.records = data.list;
-            self.total = data.count;
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+      getRecords () {
+        api.dataTable.queryData(this.$route.params.name, this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.records = res.data.list
+            this.total = res.data.count
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
-      getTableInfo: function () {
-        var self = this;
-        return api.corp.refreshToken().then(function () {
-          return api.dataTable.getTable(self.$route.params.name);
-        });
+      getTableInfo () {
+        return api.dataTable.getTable(this.$route.params.name)
       },
 
-      showRecord: function (record) {
-        api.corp.refreshToken().then(() => {
-          api.dataTable.getData(this.$route.params.name, escape(record.objectId)).then((data) => {
-            this.model = data;
-            this.showModal = true;
-          });
-        });
+      showRecord (record) {
+        api.dataTable.getData(this.$route.params.name, escape(record.objectId)).then((res) => {
+          if (res.status === 200) {
+            this.model = res.data
+            this.showModal = true
+          }
+        })
       }
     }
-  };
+  }
 </script>

@@ -1,280 +1,180 @@
-module.exports = function (Vue, Promise, config) {
-  return {
-    /**
-     * 类别添加、编辑
-     * @param {Object} key 区分食材类别/菜谱类别的标识
-     * @param {Object} params 食材参数
-     */
-    updateCategory (key, params) {
-      var args = {};
-      args.key = key;
-      args.value = params;
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.recipeApiRoot + '/recipe_props/save',
-          JSON.stringify(args),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+import * as http from '../http'
+import { apiServer } from '../consts/config'
 
-    /**
-     * 食材类别查询
-     * @param {Object} key 食材类别标识
-     */
-    listCategory (key) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.get(
-          config.recipeApiRoot + '/recipe_props/get/' + key,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+export default {
+  /**
+   * 类别添加、编辑
+   * @param {Object} key 区分食材类别/菜谱类别的标识
+   * @param {Object} params 食材参数
+   */
+  updateCategory (key, params) {
+    var args = {}
 
-    /**
-     * 食材添加
-     * @param {Object} params 食材参数
-     */
-    addIngredient (params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.recipeApiRoot + '/ingredient/save',
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+    args.key = key
+    args.value = params
 
-    /**
-     * 食材编辑
-     * @param {String} id 食材ID
-     * @param {Object} params 食材参数
-     */
-    updateIngredient (id, params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.put(
-          config.recipeApiRoot + '/ingredient/update/' + id,
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+    return http.post(
+      `${apiServer.recipe}/recipe_props/save`, args, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 食材查找
-     * @param {Object} id 食材ID
-     */
-    getIngredient (id) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.get(
-          config.recipeApiRoot + '/ingredient/get/' + id,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材类别查询
+   * @param {Object} key 食材类别标识
+   */
+  listCategory (key) {
+    return http.get(
+      `${apiServer.recipe}/recipe_props/get/${key}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 食材查询
-     * @param  {Object} params 查询参数
-     */
-    listIngredient (params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.recipeApiRoot + '/ingredient/list',
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材添加
+   * @param {Object} params 食材参数
+   */
+  addIngredient (params) {
+    return http.post(
+      `${apiServer.recipe}/ingredient/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 食材删除
-     * @param {Object} id 食材ID
-     */
-    deleteIngredient (id) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.delete(
-          config.recipeApiRoot + '/ingredient/delete/' + id,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材编辑
+   * @param {String} id 食材ID
+   * @param {Object} params 食材参数
+   */
+  updateIngredient (id, params) {
+    return http.put(
+      `${apiServer.recipe}/ingredient/update/${id}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 菜谱添加
-     * @param {Object} params 菜谱参数
-     */
-    addRecipe (params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.recipeApiRoot + '/recipe/save',
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材查找
+   * @param {Object} id 食材ID
+   */
+  getIngredient (id) {
+    return http.get(
+      `${apiServer.recipe}/ingredient/get/${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 菜谱编辑
-     * @param {String} id     菜谱ID
-     * @param {Object} params 菜谱参数
-     */
-    updateRecipe (id, params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.put(
-          config.recipeApiRoot + '/recipe/update/' + id,
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材查询
+   * @param  {Object} params 查询参数
+   */
+  listIngredient (params) {
+    return http.post(
+      `${apiServer.recipe}/ingredient/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 菜谱查找
-     * @param {Object} id 菜谱ID
-     */
-    getRecipe (id) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.get(
-          config.recipeApiRoot + '/recipe/get/' + id,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 食材删除
+   * @param {Object} id 食材ID
+   */
+  deleteIngredient (id) {
+    return http.del(
+      `${apiServer.recipe}/ingredient/delete/${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 菜谱查询
-     * @param  {Object} params 查询参数
-     */
-    listRecipe (params) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.post(
-          config.recipeApiRoot + '/recipe/list',
-          JSON.stringify(params),
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    },
+  /**
+   * 菜谱添加
+   * @param {Object} params 菜谱参数
+   */
+  addRecipe (params) {
+    return http.post(
+      `${apiServer.recipe}/recipe/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
 
-    /**
-     * 菜谱删除
-     * @param {Object} id 菜谱ID
-     */
-    deleteRecipe (id) {
-      return new Promise(function (resolve, reject) {
-        Vue.http.delete(
-          config.recipeApiRoot + '/recipe/delete/' + id,
-          function (data, status, request) {
-            resolve(data);
-          }, {
-            headers: {
-              // 'Access-Token': localStorage.getItem('accessToken'),
-              'Content-Type': 'application/x-www-form-urlencoded'
-            }
-          }
-        ).error(function (data, status, request) {
-          reject(data.error);
-        });
-      });
-    }
-  };
-};
+  /**
+   * 菜谱编辑
+   * @param {String} id     菜谱ID
+   * @param {Object} params 菜谱参数
+   */
+  updateRecipe (id, params) {
+    return http.put(
+      `${apiServer.recipe}/recipe/update/${id}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
+
+  /**
+   * 菜谱查找
+   * @param {Object} id 菜谱ID
+   */
+  getRecipe (id) {
+    return http.get(
+      `${apiServer.recipe}/recipe/get/${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
+
+  /**
+   * 菜谱查询
+   * @param  {Object} params 查询参数
+   */
+  listRecipe (params) {
+    return http.post(
+      `${apiServer.recipe}/recipe/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
+
+  /**
+   * 菜谱删除
+   * @param {Object} id 菜谱ID
+   */
+  deleteRecipe (id) {
+    return http.post(
+      `${apiServer.recipe}/recipe/delete/${id}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  }
+}

@@ -1,119 +1,95 @@
-<template lang="jade">
-.page-container(:class="{'auth-page':!access}")
-  header.the-header(v-if="access")
-    nav.nav-header
-      ul
-        li: a(href="http://www.xlink.cn/", target="_blank") {{$t("nav_head.home")}}
-        li: a(href="http://www.xlink.cn/platform.html", target="_blank") {{$t("nav_head.platform")}}
-        li: a(href="http://www.xlink.cn/solutions/smart-home.html", target="_blank") {{$t("nav_head.solutions")}}
-        li: a(href="http://www.xlink.cn/developer.html", target="_blank") {{$t("nav_head.developer")}}
-        li: a(href="http://www.xlink.cn/case.html", target="_blank") {{$t("nav_head.cases")}}
-        li: a(href="http://support.xlink.cn/", target="_blank") {{$t("nav_head.documents")}}
-        //-li: a(href="http://support.xlink.cn/", target="_blank") 在线支持
-      .user-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false")
-        span.user-name {{currUser.name}}
-        i.arrow-down
-        .sed-navigation(@mouseover="showUserNav = true", @mouseout="showUserNav = false", v-show="showUserNav")
-          ul
-            li.sed-navigation-li
-              a(v-link="{path: '/settings/account'}") {{$t("user_menu.account")}}
-            li.sed-navigation-li
-              a(href="#", @click.prevent="quit") {{$t("user_menu.quit")}}
-  section.sidebar(v-if="access")
-    a.logo(v-link="{ path: '/' }")
-    .nav-aside
-      .nav-aside-wrap
-        .nav-aside-item
-          a(v-link="{ path: '/dashboard' }")
-            i.fa.fa-home
-            | {{$t("nav_aside.dashboard")}}
-        .nav-aside-group
-          h3 {{$t("nav_aside.products")}}
-          .nav-aside-item(v-for="product in products")
-            a(v-link="{ name: 'products', params: { id: product.id} }", title="{{ product.name }}")
-              i.fa.fa-link
-              | {{ product.name }}
-          .nav-aside-actions
-            a(v-link="{ path: '/product/create' }")
-              i.fa.fa-plus
-              | {{$t("nav_aside.add_product")}}
-        .nav-aside-item
-          a(v-link="{ path: '/apps' }")
-            i.fa.fa-th
-            | {{$t("nav_aside.apps")}}
-        .nav-aside-item
-          a(v-link="{ path: '/alerts' }")
-            i.fa.fa-bell
-            | {{$t("nav_aside.alerts")}}
-        .nav-aside-item
-          a(v-link="{ path: '/data' }")
-            i.fa.fa-database
-            | {{$t("nav_aside.data")}}
-        .nav-aside-item
-          a(v-link="{ path: '/users' }")
-            i.fa.fa-user
-            | {{$t("nav_aside.users")}}
-        .nav-aside-item
-          a(v-link="{ path: '/statistic' }")
-            i.fa.fa-bar-chart
-            | {{$t("nav_aside.statistic")}}
-        .nav-aside-item
-          a(v-link="{ path: '/settings' }")
-            i.fa.fa-cog
-            | {{$t("nav_aside.settings")}}
-        //- .nav-aside-item
-          //- a(v-link="{ path: '/diet' }")
-            //- i.fa.fa-cutlery
-            //- | {{$t("nav_aside.diet")}}
-  router-view(class="view", transition="view", transition-mode="out-in", @edit-product-name="getProducts")
+<template>
+  <div :class="{'auth-page':!access}" class="page-container">
+    <header v-if="access" class="header the-header" transition="header" transition-mode="out-in">
+      <nav class="nav-header">
+        <ul>
+          <li><a href="http://www.xlink.cn/" target="_blank">{{ $t("nav_head.home") }}</a></li>
+          <li><a href="http://www.xlink.cn/platform.html" target="_blank">{{ $t("nav_head.platform") }}</a></li>
+          <li><a href="http://www.xlink.cn/solutions/smart-home.html" target="_blank">{{ $t("nav_head.solutions") }}</a></li>
+          <li><a href="http://www.xlink.cn/developer.html" target="_blank">{{ $t("nav_head.developer") }}</a></li>
+          <li><a href="http://www.xlink.cn/case.html" target="_blank">{{ $t("nav_head.cases") }}</a></li>
+          <li><a href="http://support.xlink.cn/" target="_blank">{{ $t("nav_head.documents") }}</a></li>
+        </ul>
+        <div @mouseover="showUserNav = true" @mouseout="showUserNav = false" class="user-navigation"><span class="user-name">{{ currUser.name }}</span><i class="arrow-down"></i>
+          <div @mouseover="showUserNav = true" @mouseout="showUserNav = false" v-show="showUserNav" class="sed-navigation">
+            <ul>
+              <li class="sed-navigation-li"><a v-link="{path: '/settings/account'}">{{ $t("user_menu.account") }}</a></li>
+              <li class="sed-navigation-li"><a href="#" @click.prevent="quit">{{ $t("user_menu.quit") }}</a></li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <section v-if="access" class="sidebar" transition="sidebar" transition-mode="out-in">
+      <a v-link="{ path: '/' }" class="logo"></a>
+      <div class="nav-aside">
+        <div class="nav-aside-wrap">
+          <div class="nav-aside-item"><a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a></div>
+          <div class="nav-aside-group">
+            <h3>{{ $t("nav_aside.products") }}</h3>
+            <div v-for="product in products" class="nav-aside-item"><a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a></div>
+            <div class="nav-aside-actions"><a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a></div>
+          </div>
+          <div class="nav-aside-item"><a v-link="{ path: '/apps' }"><i class="fa fa-th"></i>{{ $t("nav_aside.apps") }}</a></div>
+          <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
+          <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
+          <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-user"></i>{{ $t("nav_aside.users") }}</a></div>
+          <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
+          <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
+        </div>
+      </div>
+    </section>
+    <router-view transition="view" transition-mode="out-in" @edit-product-name="getProducts" class="view"></router-view>
+  </div>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import api from './api';
+  import Vue from 'vue'
+  import api from './api'
 
   module.exports = {
-    data: function () {
+    data () {
       return {
         access: false,
         products: [],
         showUserNav: false,
         currUser: {}
-      };
+      }
     },
 
-    ready: function () {
-      document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform';
+    ready () {
+      document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform'
       // 监听子组件的更新成员信息事件
-      this.$on('update-member', function (member) {
-        this.currUser = member;
-      });
+      this.$on('update-member', (member) => {
+        this.currUser = member
+      })
     },
 
     methods: {
       /**
        * 退出登录
-       * 移除保存在 localStorage中的 accessToken
+       * 移除保存在 window.localStorage中的 accessToken
        */
-      quit: function () {
-        localStorage.removeItem('accessToken');
-        this.$route.router.app.access = false;
-        this.$route.router.go({path: '/login'});
+      quit () {
+        window.localStorage.removeItem('accessToken')
+        this.$route.router.app.access = false
+        this.$route.router.go({path: '/login'})
       },
 
       /**
        * 获取产品
        */
-      getProducts: function () {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.product.getProducts().then(function (data) {
-            self.products = data;
-          });
-        });
+      getProducts () {
+        api.product.getProducts().then((res) => {
+          if (res.status === 200) {
+            this.products = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">
@@ -182,8 +158,7 @@
 
       .arrow-down
         triangle #777 8px down
-        position relative
-        top -3px
+        absolute right 10px top 28px
 
       .sed-navigation
         absolute top 54px right
@@ -306,4 +281,33 @@
 
     .main
       padding 20px 10px 0
+
+  // 视图淡入淡出
+  .view
+  .sidebar
+  .header
+    transition transform .3s ease-in-out, opacity .3s ease-in-out
+
+  .view-enter
+  .view-leave
+    opacity 0
+    transform translate3d(10px, 0, 0)
+
+  // 侧栏淡入淡出
+  .sidebar
+    transition transform .2s ease-in-out, opacity .2s ease-in-out
+
+  .sidebar-enter
+  .sidebar-leave
+    opacity 0
+    transform translate3d(-10px, 0, 0)
+
+  // 头部淡入淡出
+  .header
+    transition transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s
+
+  .header-enter
+  .header-leave
+    opacity 0
+    transform translate3d(0, -10px, 0)
 </style>

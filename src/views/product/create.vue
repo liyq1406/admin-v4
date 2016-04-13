@@ -1,79 +1,85 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .panel
-      .panel-hd
-        h2 {{ $t('product.add_product') }}
-      .panel-bd
-        .form
-          form(v-form, name="validation", @submit.prevent="onSubmit")
-            .form-row
-              label.form-control {{ $t("product.fields.name") }}:
-              .controls
-                .input-text-wrap(v-placeholder="$t('product.placeholders.name')")
-                  input.input-text(v-model="model.name", type="text", v-form-ctrl, name="name", maxlength="32", required, custom-validator="noSpacesPrefixAndSuffix", lazy)
-                .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
-                .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('product.fields.name')}) }}
-                  span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}
-                  span(v-if="validation.name.$error.customValidator") {{ $t('validation.format', {field: $t('product.fields.name')}) }}
-            .form-row
-              label.form-control {{ $t("product.fields.desc") }}:
-              .controls
-                .input-text-wrap(v-placeholder="$t('product.placeholders.desc')")
-                  textarea.input-text(v-model="model.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-                .form-tips.form-tips-error(v-if="validation.$submitted && validation.description.$pristine")
-                  span(v-if="validation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
-                .form-tips.form-tips-error(v-if="validation.description.$dirty")
-                  span(v-if="validation.description.$error.required") {{ $t('validation.required', {field: $t('product.fields.desc')}) }}
-                  span(v-if="validation.description.$error.maxlength")  {{ $t('validation.maxlength', [ $t('product.fields.name'), 250]) }}
-            .form-row
-              label.form-control {{ $t("product.fields.link_type") }}:
-              .controls
-                .select
-                  select(v-model="model.link_type", v-form-ctrl, name="link_type")
-                    option(v-for="type in deviceTypes", :value="$index+1", :selected="$index===0") {{type}}
-            .form-actions
-              button.btn.btn-primary.btn-lg(type="submit") {{ $t("common.add") }}
-
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>{{ $t('product.add_product') }}</h2>
+        </div>
+        <div class="panel-bd">
+          <div class="form">
+            <form v-form name="validation" @submit.prevent="onSubmit">
+              <div class="form-row">
+                <label class="form-control">{{ $t("product.fields.name") }}:</label>
+                <div class="controls">
+                  <div v-placeholder="$t('product.placeholders.name')" class="input-text-wrap">
+                    <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
+                  </div>
+                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span></div>
+                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('product.fields.name')}) }}</span></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t("product.fields.desc") }}:</label>
+                <div class="controls">
+                  <div v-placeholder="$t('product.placeholders.desc')" class="input-text-wrap">
+                    <textarea v-model="model.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
+                  </div>
+                  <div v-if="validation.$submitted && validation.description.$pristine" class="form-tips form-tips-error"><span v-if="validation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span></div>
+                  <div v-if="validation.description.$dirty" class="form-tips form-tips-error"><span v-if="validation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span><span v-if="validation.description.$error.maxlength"> {{ $t('validation.maxlength', [ $t('product.fields.name'), 250]) }}</span></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t("product.fields.link_type") }}:</label>
+                <div class="controls">
+                  <div class="select">
+                    <select v-model="model.link_type" v-form-ctrl name="link_type">
+                      <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.add") }}</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-  import Vue from 'vue';
-  import api from '../../api';
-  import productsStore from '../../stores/products';
-  import locales from '../../consts/locales';
+  import Vue from 'vue'
+  import api from '../../api'
+  import productsStore from '../../stores/products'
+  import locales from '../../consts/locales'
 
-  module.exports = {
+  export default {
     name: 'CreateProductForm',
 
-    data: function () {
+    data () {
       return {
         deviceTypes: locales[Vue.config.lang].deviceTypes,
         model: {},
         validation: {},
         state: productsStore.state
-      };
+      }
     },
 
     methods: {
-      onSubmit: function () {
-        var self = this;
+      onSubmit () {
         if (this.validation.$valid) {
-          api.corp.refreshToken().then(function () {
-            api.product.createProduct(self.model).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              productsStore.addProduct(data);
-              self.$route.router.go({path: '/products/' + data.id});
-            }).catch(function (error) {
-              self.handleError(error);
-            });
-          });
+          api.product.createProduct(this.model).then((res) => {
+            if (res.status === 200) {
+              productsStore.addProduct(res.data)
+              this.$route.router.go({path: '/products/' + res.data.id})
+            }
+          }).catch((error) => {
+            this.handleError(error)
+          })
         }
       }
     }
-  };
+  }
 </script>

@@ -5,11 +5,11 @@
  */
 export function formatDate (date) {
   if (typeof date !== 'undefined' && date.length > 0) {
-    return date.replace('T', ' ').replace('Z', '');
+    return date.replace('T', ' ').replace('Z', '')
   } else {
-    return date;
+    return date
   }
-};
+}
 
 /**
  * 根据条件过滤选项
@@ -21,19 +21,19 @@ export function formatDate (date) {
  */
 export function dropSlected (value, selected, curr, prop) {
   return value.filter((cate) => {
-    var flag = true;
-    selected.forEach(function (item) {
+    var flag = true
+    selected.forEach((item) => {
       // 如果没有传递 prop，就直接比对，否则拿下级的 prop 属性比对
       if (typeof prop === 'undefined') {
         if (cate === item && curr !== item) {
-          flag = false;
+          flag = false
         }
       } else {
         if (cate[prop] === item[prop] && curr[prop] !== item[prop]) {
-          flag = false;
+          flag = false
         }
       }
-    });
-    return flag;
-  });
-};
+    })
+    return flag
+  })
+}

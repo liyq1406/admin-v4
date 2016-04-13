@@ -1,45 +1,40 @@
-<template lang="jade">
-.pager.tar(v-if="total > 0")
-  button.pager-btn.pager-prev(:class="{'disabled': current === 1}", :disabled="current === 1", @click="current = current - 1")
-    i.fa.fa-chevron-left
-
-  .pager-container(v-if="pages < 10")
-    .pager-item(v-for="page in pages", :class="{'current': current === page + 1}",  @click="current = page + 1")
-      span {{page + 1}}
-
-  .pager-container(v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)")
-    .pager-item(v-for="page in 3", :class="{'current': current === page + 1}",  @click="current = page + 1")
-      span {{page + 1}}
-    .pager-more
-      span(@click="toggleInput($event)") ...
-      .pager-input(v-show="showInput")
-        input(type="number", max="{{pages}}", @change="onInput")
-    .pager-item(v-for="offset in 3", :class="{'current': current === pages - 2 + offset}",  @click="current = pages - 2 + offset")
-      span {{pages - 2 + offset}}
-
-  .pager-container(v-if="pages >= 10 && current > 3 && current < pages - 2")
-    .pager-item(:class="{'current': current === 1}",  @click="current = 1")
-      span 1
-    .pager-more
-      span(@click="toggleInput1($event)") ...
-      .pager-input(v-show="showInput1")
-        input(type="number", max="{{pages}}", @change="onInput")
-    .pager-item(v-for="offset in 3", :class="{'current': current === current - 1 + offset}",  @click="current = current - 1 + offset")
-      span {{current - 1 + offset}}
-    .pager-more
-      span(@click="toggleInput2($event)") ...
-      .pager-input(v-show="showInput2")
-        input(type="number", max="{{pages}}", @change="onInput")
-    .pager-item(:class="{'current': current === pages}",  @click="current = pages")
-      span {{pages}}
-  //- input.pager-input(type="text")
-  button.pager-btn.pager-next(:class="{'disabled': current === pages}", :disabled="current === pages", @click="current = current + 1")
-    i.fa.fa-chevron-right
+<template>
+  <div v-if="total > 0" class="pager tar">
+    <button :class="{'disabled': current === 1}" :disabled="current === 1" @click="current = current - 1" class="pager-btn pager-prev"><i class="fa fa-chevron-left"></i></button>
+    <div v-if="pages < 10" class="pager-container">
+      <div v-for="page in pages" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+    </div>
+    <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="pager-container">
+      <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+      <div class="pager-more"><span @click="toggleInput($event)">...</span>
+        <div v-show="showInput" class="pager-input">
+          <input type="number" max="{{ pages }}" @change="onInput"/>
+        </div>
+      </div>
+      <div v-for="offset in 3" :class="{'current': current === pages - 2 + offset}" @click="current = pages - 2 + offset" class="pager-item"><span>{{ pages - 2 + offset }}</span></div>
+    </div>
+    <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="pager-container">
+      <div :class="{'current': current === 1}" @click="current = 1" class="pager-item"><span>1</span></div>
+      <div class="pager-more"><span @click="toggleInput1($event)">...</span>
+        <div v-show="showInput1" class="pager-input">
+          <input type="number" max="{{ pages }}" @change="onInput"/>
+        </div>
+      </div>
+      <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="pager-item"><span>{{ current - 1 + offset }}</span></div>
+      <div class="pager-more"><span @click="toggleInput2($event)">...</span>
+        <div v-show="showInput2" class="pager-input">
+          <input type="number" max="{{ pages }}" @change="onInput"/>
+        </div>
+      </div>
+      <div :class="{'current': current === pages}" @click="current = pages" class="pager-item"><span>{{ pages }}</span></div>
+    </div>
+    <button :class="{'disabled': current === pages}" :disabled="current === pages" @click="current = current + 1" class="pager-btn pager-next"><i class="fa fa-chevron-right"></i></button>
+  </div>
 </template>
 
 
 <script>
-import config from '../consts/config';
+import config from '../consts/config'
 
 export default {
   props: {
@@ -62,59 +57,59 @@ export default {
       showInput: false,
       showInput1: false,
       showInput2: false
-    };
+    }
   },
 
   watch: {
-    current: function () {
-      this.$dispatch('page-update');
+    current () {
+      this.$dispatch('page-update')
     }
   },
 
   computed: {
     pages () {
-      return Math.ceil(this.total / this.pageCount);
+      return Math.ceil(this.total / this.pageCount)
     }
   },
 
   methods: {
     toggleInput (evt) {
-      this.showInput = !this.showInput;
+      this.showInput = !this.showInput
       if (this.showInput) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        evt.target.parentNode.getElementsByTagName('input')[0].focus()
       }
     },
 
     toggleInput1 (evt) {
-      this.showInput1 = !this.showInput1;
+      this.showInput1 = !this.showInput1
       if (this.showInput1) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        evt.target.parentNode.getElementsByTagName('input')[0].focus()
       }
     },
 
     toggleInput2 (evt) {
-      this.showInput2 = !this.showInput2;
+      this.showInput2 = !this.showInput2
       if (this.showInput2) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus();
+        evt.target.parentNode.getElementsByTagName('input')[0].focus()
       }
     },
 
     onInput (evt) {
-      var page = Number(evt.target.value);
-      // alert(typeof page === 'number');
+      var page = Number(evt.target.value)
+      // window.alert(typeof page === 'number')
       if (typeof page === 'number') {
-        page = Math.floor(page);
-        this.showInput = false;
-        this.showInput1 = false;
-        this.showInput2 = false;
-        this.current = page;
-        evt.target.value = '';
+        page = Math.floor(page)
+        this.showInput = false
+        this.showInput1 = false
+        this.showInput2 = false
+        this.current = page
+        evt.target.value = ''
       } else {
-        alert('请输入数字');
+        window.alert('请输入数字')
       }
     }
   }
-};
+}
 </script>
 
 <style lang="stylus">

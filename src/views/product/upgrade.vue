@@ -1,252 +1,293 @@
-<template lang="jade">
-.row
-  .panel
-    .panel-hd
-      .actions
-        button.btn.btn-success(@click="showAddModal = true")
-          i.fa.fa-plus
-          | {{ $t('firmware.add_firmware') }}
-      h2 {{ $t('firmware.firmware_list') }}
-    .panel-bd
-      //- 版本列表
-      table.table.table-stripe.table-bordered
-        thead
-          tr
-            th.w50 {{ $t('firmware.fields.version') }}
-            th {{ $t('firmware.fields.description') }}
-            th {{ $t('firmware.fields.create_date') }}
-            th.tac {{ $t('common.action') }}
-        tbody
-          template(v-if="firmwares.length > 0 && !loadingFirmwares")
-            tr(v-for="firmware in firmwares | orderBy 'version'")
-              td {{firmware.version}}
-              td {{firmware.description}}
-              td {{firmware.create_date | formatDate}}
-              td.tac
-                button.btn.btn-link.btn-sm(@click="onEditFirmware(firmware)") {{ $t('common.edit') }}
-          tr(v-if="loadingFirmwares")
-            td.tac(colspan="4")
-              .tips-null
-                i.fa.fa-refresh.fa-spin
-                span {{ $t("common.data_loading") }}
-          tr(v-if="firmwares.length === 0 && !loadingFirmwares")
-            td.tac(colspan="4")
-              .tips-null
-                span {{ $t("common.no_records") }}
-
-  .panel
-    .panel-hd
-      .actions
-        button.btn.btn-success(:disabled="firmwares.length < 2", :class="{'disabled':firmwares.length < 2}", @click="showAddTaskModal = true")
-          i.fa.fa-plus
-          | {{ $t('task.create_task') }}
-      h2 {{ $t('task.task_list') }}
-    .panel-bd
-      //- 版本列表
-      table.table.table-stripe.table-bordered
-        thead
-          tr
-            th {{ $t('task.fields.order') }}
-            th {{ $t('task.fields.description') }}
-            th {{ $t('task.fields.from_version') }}
-            th {{ $t('task.fields.target_version') }}
-            th {{ $t('task.fields.upgrade_count') }}
-            th.tac {{ $t('common.action') }}
-        tbody
-          template(v-if="tasks.length > 0 && !loadingTasks")
-            tr(v-for="task in tasks")
-              td {{$index + 1}}
-              td {{task.name}}
-              td {{task.from_version}}
-              td {{task.target_version}}
-              td {{task.upgrade_count}}
-              td.tac
-                button.btn.btn-primary.btn-sm.btnrr(:class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}", :disabled="toggling", @click="toggleTaskStatus(task)")
-                  i.fa(:class="{'fa-stop': task.status, 'fa-play': !task.status}")
-                  | {{task.status ? $t('task.stop') : $t('task.start')}}
-                button.btn.btn-primary.btn-sm(@click="removeTask(task)") 删除
-          tr(v-if="loadingTasks")
-            td.tac(colspan="6")
-              .tips-null
-                i.fa.fa-refresh.fa-spin
-                span {{ $t("common.data_loading") }}
-          tr(v-if="tasks.length === 0 && !loadingTasks")
-            td.tac(colspan="6")
-              .tips-null
-                span {{ $t("common.no_records") }}
-
-  // 添加固件版本浮层
-  modal(:show.sync="showAddModal", @close="onAddCancel")
-    h3(slot="header") {{ $t('firmware.add_firmware') }}
-    .form(slot="body")
-      form(v-form, name="addValidation", @submit.prevent="onAddSubmit", hook="addFirmwareHook")
-        .form-row
-          label.form-control {{ $t("firmware.fields.mod") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.mod')")
-              input.input-text(v-model="addModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.mod.$pristine")
-              span(v-if="addValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
-            .form-tips.form-tips-error(v-if="addValidation.mod.$dirty")
-              span(v-if="addValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
-              span(v-if="addValidation.mod.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}
-        .form-row
-          label.form-control {{ $t("firmware.fields.version") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.version')")
-              input.input-text(v-model="addModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.version.$pristine")
-              span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-            .form-tips.form-tips-error(v-if="addValidation.version.$dirty")
-              span(v-if="addValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-              span(v-if="addValidation.version.$error.customValidator") {{ $t('validation.numberic') }}
-        .form-row
-          label.form-control {{ $t("firmware.file") }}:
-          .controls
-            label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
-              input(type="file", v-el:add-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)", :disabled="uploading")
-              i.fa.fa-reply-all
-              | {{uploading ? $t('firmware.uploading') : $t('firmware.upload')}}
-            .form-tips.mt5(v-if="addModel.file_url.length > 0") url: {{addModel.file_url}}
-        .form-row
-          label.form-control {{ $t("firmware.fields.description") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.description')")
-              textarea.input-text(v-model="addModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-            .form-tips.form-tips-error(v-if="addValidation.$submitted && addValidation.description.$pristine")
-              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
-            .form-tips.form-tips-error(v-if="addValidation.description.$dirty")
-              span(v-if="addValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
-              span(v-if="addValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}
-        .form-row
-          label.form-control {{ $t("firmware.fields.is_release") }}:
-          .controls
-            .checkbox-group
-              label.checkbox
-                input(type="checkbox", name="is_release", v-model="addModel.is_release")
-        .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
-
-  // 编辑固件版本浮层
-  modal(:show.sync="showEditModal", @close="onEditCancel")
-    h3(slot="header") {{ $t('firmware.edit_firmware') }}
-    .form(slot="body")
-      form(v-form, name="editValidation", @submit.prevent="onEditSubmit", hook="editFirmwareHook")
-        .form-row
-          label.form-control {{ $t("firmware.fields.mod") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.mod')")
-              input.input-text(v-model="editModel.mod", type="text", v-form-ctrl, name="mod", maxlength="20", required, lazy)
-            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.mod.$pristine")
-              span(v-if="editValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
-            .form-tips.form-tips-error(v-if="editValidation.mod.$dirty")
-              span(v-if="editValidation.mod.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}
-              span(v-if="editValidation.mod.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}
-        .form-row
-          label.form-control {{ $t("firmware.fields.version") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.version')")
-              input.input-text(v-model="editModel.version", type="text", v-form-ctrl, name="version", required, custom-validator="numberic", lazy)
-            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.version.$pristine")
-              span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-            .form-tips.form-tips-error(v-if="editValidation.version.$dirty")
-              span(v-if="editValidation.version.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.version')}) }}
-              span(v-if="editValidation.version.$error.customValidator") {{ $t('validation.numberic') }}
-        .form-row
-          label.form-control {{ $t("firmware.file") }}:
-          .controls
-            label.btn.btn-success.btn-upload(:class="{'disabled':uploading}")
-              input(type="file", v-el:edit-firmware-file, name="firmwareFile", @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)", :disabled="uploading")
-              i.fa.fa-reply-all
-              | {{uploading ? $t('firmware.uploading') : $t('firmware.upload')}}
-            .form-tips.mt5(v-if="editModel.file_url") url: {{editModel.file_url}}
-        .form-row
-          label.form-control {{ $t("firmware.fields.description") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('firmware.placeholders.description')")
-              textarea.input-text(v-model="editModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-            .form-tips.form-tips-error(v-if="editValidation.$submitted && editValidation.description.$pristine")
-              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
-            .form-tips.form-tips-error(v-if="editValidation.description.$dirty")
-              span(v-if="editValidation.description.$error.required") {{ $t('validation.required', {field: $t('firmware.fields.description')}) }}
-              span(v-if="editValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}
-        .form-row
-          label.form-control {{ $t("firmware.fields.is_release") }}:
-          .controls
-            .checkbox-group
-              label.checkbox
-                input(type="checkbox", name="is_release", v-model="editModel.is_release")
-        .form-actions
-          label.del-check
-            input(type="checkbox", name="del", v-model="delChecked")
-            | {{ $t("firmware.del_firmware") }}
-          button.btn.btn-default(type="reset", @click.prevent.stop="onEditCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit", :disabled="editing", :class="{'disabled':editing}", v-text="editing ? $t('common.handling') : $t('common.ok')")
-
-  // 添加固件升级任务浮层
-  modal(:show.sync="showAddTaskModal", @close="onAddTaskCancel")
-    h3(slot="header") {{ $t("task.create_task") }}
-    .form(slot="body")
-      form(v-form, name="addTaskValidation", @submit.prevent="onAddTaskSubmit", hook="addTaskHook")
-        .form-row
-          label.form-control {{ $t("task.fields.name") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('task.placeholders.name')")
-              input.input-text(v-model="addTaskModel.name", type="text", v-form-ctrl, name="name", maxlength="32", required, lazy)
-            .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine")
-              span(v-if="addTaskValidation.name.$error.required") {{ $t('validation.required', {field: $t('task.fields.name')}) }}
-            .form-tips.form-tips-error(v-if="addTaskValidation.name.$dirty")
-              span(v-if="addTaskValidation.name.$error.required") {{ $t('validation.required', {field: $t('task.fields.name')}) }}
-              span(v-if="addTaskValidation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('task.fields.name'), 32]) }}
-        .form-row
-          label.form-control {{ $t("task.fields.description") }}:
-          .controls
-            .input-text-wrap(v-placeholder="$t('task.placeholders.description')")
-              textarea.input-text(v-model="addTaskModel.description", type="text", v-form-ctrl, name="description", maxlength="250", required, lazy)
-            .form-tips.form-tips-error(v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine")
-              span(v-if="addTaskValidation.description.$error.required") {{ $t('validation.required', {field: $t('task.fields.description')}) }}
-            .form-tips.form-tips-error(v-if="addTaskValidation.description.$dirty")
-              span(v-if="addTaskValidation.description.$error.required") {{ $t('validation.required', {field: $t('task.fields.description')}) }}
-              span(v-if="addTaskValidation.description.$error.maxlength") {{ $t('validation.maxlength', [ $t('task.fields.description'), 250]) }}
-        .form-row
-          label.form-control {{ $t("task.fields.from_version") }}:
-          .controls
-            .select
-              select(v-model="addTaskModel.from_version", v-form-ctrl, name="from_version", custom-validator="checkTypeValid", @change="selectFrom", number)
-                option(selected, value="0") {{ $t("task.select_from_version") }}
-                option(v-for="firmware in fromFirmwares | orderBy 'version'", :value="firmware.version") {{firmware.version}}
-            .form-tips.mt5(v-if="addTaskModel.from_version > 0") url: {{addTaskModel.from_version | firmwareUrl}}
-            .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
-              span(v-if="addTaskValidation.from_version.$error.customValidator") {{ $t("task.select_from_version") }}
-        .form-row
-          label.form-control {{ $t("task.fields.target_version") }}:
-          .controls
-            .select
-              select(v-model="addTaskModel.target_version", v-form-ctrl, name="target_version", custom-validator="checkTypeValid", @change="selectTarget", number)
-                option(selected, value="0") {{ $t("task.select_target_version") }}
-                option(v-for="firmware in targetFirmwares | orderBy 'version'", :value="firmware.version") {{firmware.version}}
-            .form-tips.mt5(v-if="addTaskModel.target_version > 0") url: {{addTaskModel.target_version | firmwareUrl}}
-            .form-tips.form-tips-error(v-if="addTaskValidation.$submitted")
-              span(v-if="addTaskValidation.target_version.$error.customValidator") {{ $t("task.select_target_version") }}
-        .form-actions
-          button.btn.btn-default(@click.prevent.stop="onAddTaskCancel") {{ $t("common.cancel") }}
-          button.btn.btn-primary(type="submit", :disabled="adding", :class="{'disabled':adding}", v-text="adding ? $t('common.handling') : $t('common.ok')")
+<template>
+  <div class="row">
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="actions">
+          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('firmware.add_firmware') }}</button>
+        </div>
+        <h2>{{ $t('firmware.firmware_list') }}</h2>
+      </div>
+      <div class="panel-bd">
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th class="w50">{{ $t('firmware.fields.version') }}</th>
+              <th>{{ $t('firmware.fields.description') }}</th>
+              <th>{{ $t('firmware.fields.create_date') }}</th>
+              <th class="tac">{{ $t('common.action') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="firmwares.length > 0 && !loadingFirmwares">
+              <tr v-for="firmware in firmwares | orderBy 'version'">
+                <td>{{ firmware.version }}</td>
+                <td>{{ firmware.description }}</td>
+                <td>{{ firmware.create_date | formatDate }}</td>
+                <td class="tac">
+                  <button @click="onEditFirmware(firmware)" class="btn btn-link btn-sm">{{ $t('common.edit') }}</button>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="loadingFirmwares">
+              <td colspan="4" class="tac">
+                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+              </td>
+            </tr>
+            <tr v-if="firmwares.length === 0 && !loadingFirmwares">
+              <td colspan="4" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">
+        <div class="actions">
+          <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('task.create_task') }}</button>
+        </div>
+        <h2>{{ $t('task.task_list') }}</h2>
+      </div>
+      <div class="panel-bd">
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>{{ $t('task.fields.order') }}</th>
+              <th>{{ $t('task.fields.description') }}</th>
+              <th>{{ $t('task.fields.from_version') }}</th>
+              <th>{{ $t('task.fields.target_version') }}</th>
+              <th>{{ $t('task.fields.upgrade_count') }}</th>
+              <th class="tac">{{ $t('common.action') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="tasks.length > 0 && !loadingTasks">
+              <tr v-for="task in tasks">
+                <td>{{ $index + 1 }}</td>
+                <td>{{ task.name }}</td>
+                <td>{{ task.from_version }}</td>
+                <td>{{ task.target_version }}</td>
+                <td>{{ task.upgrade_count }}</td>
+                <td class="tac">
+                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-sm btnrr"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
+                  <button @click="removeTask(task)" class="btn btn-primary btn-sm">删除</button>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="loadingTasks">
+              <td colspan="6" class="tac">
+                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+              </td>
+            </tr>
+            <tr v-if="tasks.length === 0 && !loadingTasks">
+              <td colspan="6" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- 添加固件版本浮层-->
+    <modal :show.sync="showAddModal" @close="onAddCancel">
+      <h3 slot="header">{{ $t('firmware.add_firmware') }}</h3>
+      <div slot="body" class="form">
+        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFirmwareHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.mod") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
+                <input v-model="addModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span></div>
+              <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.version") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
+                <input v-model="addModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span></div>
+              <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.file") }}:</label>
+            <div class="controls">
+              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+              </label>
+              <div v-if="addModel.file_url.length > 0" class="form-tips mt5">url: {{ addModel.file_url }}</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.description") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
+                <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
+              </div>
+              <div v-if="addValidation.$submitted && addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span></div>
+              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.is_release") }}:</label>
+            <div class="controls">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_release" v-model="addModel.is_release"/>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 编辑固件版本浮层-->
+    <modal :show.sync="showEditModal" @close="onEditCancel">
+      <h3 slot="header">{{ $t('firmware.edit_firmware') }}</h3>
+      <div slot="body" class="form">
+        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFirmwareHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.mod") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
+                <input v-model="editModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span></div>
+              <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.version") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
+                <input v-model="editModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span></div>
+              <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.file") }}:</label>
+            <div class="controls">
+              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+              </label>
+              <div v-if="editModel.file_url" class="form-tips mt5">url: {{ editModel.file_url }}</div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.description") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
+                <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("firmware.fields.is_release") }}:</label>
+            <div class="controls">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_release" v-model="editModel.is_release"/>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("firmware.del_firmware") }}
+            </label>
+            <button type="reset" @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 添加固件升级任务浮层-->
+    <modal :show.sync="showAddTaskModal" @close="onAddTaskCancel">
+      <h3 slot="header">{{ $t("task.create_task") }}</h3>
+      <div slot="body" class="form">
+        <form v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("task.fields.name") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('task.placeholders.name')" class="input-text-wrap">
+                <input v-model="addTaskModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
+              </div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('validation.required', {field: $t('task.fields.name')}) }}</span></div>
+              <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('validation.required', {field: $t('task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.name'), 32]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("task.fields.description") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('task.placeholders.description')" class="input-text-wrap">
+                <textarea v-model="addTaskModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
+              </div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('validation.required', {field: $t('task.fields.description')}) }}</span></div>
+              <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('validation.required', {field: $t('task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.description'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("task.fields.from_version") }}:</label>
+            <div class="controls">
+              <div class="select">
+                <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number="number">
+                  <option selected="selected" value="0">{{ $t("task.select_from_version") }}</option>
+                  <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                </select>
+              </div>
+              <div v-if="addTaskModel.from_version > 0" class="form-tips mt5">url: {{ addTaskModel.from_version | firmwareUrl }}</div>
+              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("task.select_from_version") }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("task.fields.target_version") }}:</label>
+            <div class="controls">
+              <div class="select">
+                <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number="number">
+                  <option selected="selected" value="0">{{ $t("task.select_target_version") }}</option>
+                  <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                </select>
+              </div>
+              <div v-if="addTaskModel.target_version > 0" class="form-tips mt5">url: {{ addTaskModel.target_version | firmwareUrl }}</div>
+              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("task.select_target_version") }}</span></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="onAddTaskCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+  </div>
 </template>
 
 <script>
-  import api from '../../api';
-  import Modal from '../../components/modal.vue';
-  import _ from 'lodash';
+  import api from '../../api'
+  import Modal from '../../components/Modal'
+  import _ from 'lodash'
 
-  module.exports = {
+  export default {
     name: 'Upgrade',
 
     components: {
       'modal': Modal
     },
 
-    data: function () {
+    data () {
       return {
         firmwares: [],
         showAddModal: false,
@@ -294,59 +335,57 @@
         toogling: false,
         loadingFirmwares: false,
         loadingTasks: false
-      };
+      }
     },
 
     route: {
-      data: function () {
-        this.originAddModel = _.clone(this.addModel);
-        this.originAddTaskModel = _.clone(this.addTaskModel);
-        this.getFirmwares();
-        this.getTasks();
+      data () {
+        this.originAddModel = _.clone(this.addModel)
+        this.originAddTaskModel = _.clone(this.addTaskModel)
+        this.getFirmwares()
+        this.getTasks()
       }
     },
 
     computed: {
-      fromFirmwares: function () {
-        var self = this;
-        return this.firmwares.filter(function (item) {
-          return item.version < (self.addTaskModel.target_version || self.maxVersion);
-        });
+      fromFirmwares () {
+        return this.firmwares.filter((item) => {
+          return item.version < (this.addTaskModel.target_version || this.maxVersion)
+        })
       },
 
-      targetFirmwares: function () {
-        var self = this;
-        return this.firmwares.filter(function (item) {
-          return item.version > (self.addTaskModel.from_version || self.minVersion);
-        });
+      targetFirmwares () {
+        return this.firmwares.filter((item) => {
+          return item.version > (this.addTaskModel.from_version || this.minVersion)
+        })
       },
 
-      maxVersion: function () {
-        var max = 0;
-        this.firmwares.map(function (item) {
-          max = Math.max(max, item.version);
-        });
-        return max;
+      maxVersion () {
+        var max = 0
+        this.firmwares.map((item) => {
+          max = Math.max(max, item.version)
+        })
+        return max
       },
 
-      minVersion: function () {
-        var min = Number.MAX_VALUE;
-        this.firmwares.map(function (item) {
-          min = Math.min(min, item.version);
-        });
-        return min;
+      minVersion () {
+        var min = Number.MAX_VALUE
+        this.firmwares.map((item) => {
+          min = Math.min(min, item.version)
+        })
+        return min
       }
     },
 
     filters: {
-      firmwareUrl: function (value) {
-        var url = '';
-        this.firmwares.forEach(function (element, index) {
+      firmwareUrl (value) {
+        var url = ''
+        this.firmwares.forEach((element, index) => {
           if (element.version === value) {
-            url = element.file_url;
+            url = element.file_url
           }
-        });
-        return url;
+        })
+        return url
       }
     },
 
@@ -355,287 +394,260 @@
     },
 
     methods: {
-      getFirmwares: function () {
-        var self = this;
-
-        this.loadingFirmwares = true;
-        api.corp.refreshToken().then(function () {
-          api.product.getFirmwares(self.$route.params.id).then(function (data) {
-            self.firmwares = data;
-            self.loadingFirmwares = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingFirmwares = false;
-          });
-        });
+      getFirmwares () {
+        this.loadingFirmwares = true
+        api.product.getFirmwares(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.firmwares = res.data
+            this.loadingFirmwares = false
+          }
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingFirmwares = false
+        })
       },
 
-      getTasks: function () {
-        var self = this;
-
-        this.loadingTasks = true;
-        api.corp.refreshToken().then(function () {
-          api.firmware.taskList(self.$route.params.id).then(function (data) {
-            self.tasks = data;
-            self.loadingTasks = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingTasks = false;
-          });
-        });
+      getTasks () {
+        this.loadingTasks = true
+        api.firmware.taskList(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.tasks = res.data
+            this.loadingTasks = false
+          }
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingTasks = false
+        })
       },
 
-      checkTypeValid: function (value) {
-        return Number(value) > 0;
+      checkTypeValid (value) {
+        return Number(value) > 0
       },
 
       // 添加固件版本表单钩子
-      addFirmwareHook: function (form) {
-        this.addForm = form;
+      addFirmwareHook (form) {
+        this.addForm = form
       },
 
       // 修改固件版本表单钩子
-      editFirmwareHook: function (form) {
-        this.editForm = form;
+      editFirmwareHook (form) {
+        this.editForm = form
       },
 
       // 添加升级任务表单钩子
-      addTaskHook: function (form) {
-        this.addTaskForm = form;
+      addTaskHook (form) {
+        this.addTaskForm = form
       },
 
       // 关闭添加固件版本浮层并净化添加表单
-      resetAdd: function () {
-        var self = this;
-        this.adding = false;
-        this.showAddModal = false;
-        this.addModel = _.clone(this.originAddModel);
-        this.$nextTick(function () {
-          self.addForm.setPristine();
-        });
+      resetAdd () {
+        this.adding = false
+        this.showAddModal = false
+        this.addModel = _.clone(this.originAddModel)
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
       },
 
       // 关闭固件版本编辑浮层并净化编辑表单
-      resetEdit: function () {
-        this.editing = false;
-        this.showEditModal = false;
-        this.delChecked = false;
-        this.editModel = this.originEditModel;
+      resetEdit () {
+        this.editing = false
+        this.showEditModal = false
+        this.delChecked = false
+        this.editModel = this.originEditModel
       },
 
       // 取消添加固件版本
-      onAddCancel: function () {
-        this.resetAdd();
+      onAddCancel () {
+        this.resetAdd()
       },
 
       // 添加固件版本操作
-      onAddSubmit: function () {
-        var self = this;
-
+      onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
-          this.adding = true;
-          api.corp.refreshToken().then(function () {
-            api.product.addFirmware(self.$route.params.id, self.addModel).then(function (data) {
-              self.resetAdd();
-              self.getFirmwares();
-              // self.firmwares.push(data);
-            }).catch(function (error) {
-              self.handleError(error);
-              self.adding = false;
-            });
-          });
+          this.adding = true
+          api.product.addFirmware(this.$route.params.id, this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.resetAdd()
+              this.getFirmwares()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.adding = false
+          })
         }
       },
 
       // 初始化固件版本编辑表单
-      onEditFirmware: function (firmware) {
-        this.showEditModal = true;
-        this.editModel = _.clone(firmware);
-        this.originEditModel = _.clone(firmware);
+      onEditFirmware (firmware) {
+        this.showEditModal = true
+        this.editModel = _.clone(firmware)
+        this.originEditModel = _.clone(firmware)
       },
 
       // 取消固件版本编辑
-      onEditCancel: function () {
-        this.resetEdit();
+      onEditCancel () {
+        this.resetEdit()
       },
 
       // 提交固件版本更新
-      onEditSubmit: function () {
-        var self = this;
+      onEditSubmit () {
         if (this.delChecked && !this.editing) {
-          this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.product.deleteFirmware(self.$route.params.id, self.editModel.id).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.resetEdit();
-              self.getFirmwares();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
-            });
-          });
+          this.editing = true
+          api.product.deleteFirmware(this.$route.params.id, this.editModel.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getFirmwares()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.editing = false
+          })
         } else if (this.editValidation.$valid && !this.editing) {
-          this.editing = true;
-          api.corp.refreshToken().then(function () {
-            api.product.updateFirmware(self.$route.params.id, self.editModel).then(function (data) {
-              if (__DEBUG__) {
-                console.log(data);
-              }
-              self.getFirmwares();
-              self.resetEdit();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.editing = false;
-            });
-          });
+          this.editing = true
+          api.product.updateFirmware(this.$route.params.id, this.editModel).then((res) => {
+            if (res.status === 200) {
+              this.getFirmwares()
+              this.resetEdit()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.editing = false
+          })
         }
       },
 
       // 选择起始版本号
-      selectFrom: function () {
-        var self = this;
-        var firmware = this.firmwares.filter(function (item) {
-          return item.version === self.addTaskModel.from_version;
-        })[0];
-        this.addTaskModel.from_version_url = firmware.file_url;
-        this.addTaskModel.from_version_md5 = firmware.file_md5;
-        this.addTaskModel.from_version_size = firmware.file_size;
+      selectFrom () {
+        var firmware = this.firmwares.filter((item) => {
+          return item.version === this.addTaskModel.from_version
+        })[0]
+        this.addTaskModel.from_version_url = firmware.file_url
+        this.addTaskModel.from_version_md5 = firmware.file_md5
+        this.addTaskModel.from_version_size = firmware.file_size
       },
 
       // 选择目标版本号
-      selectTarget: function () {
-        var self = this;
-        var firmware = this.firmwares.filter(function (item) {
-          return item.version === self.addTaskModel.target_version;
-        })[0];
-        this.addTaskModel.target_version_url = firmware.file_url;
-        this.addTaskModel.target_version_md5 = firmware.file_md5;
-        this.addTaskModel.target_version_size = firmware.file_size;
+      selectTarget () {
+        var firmware = this.firmwares.filter((item) => {
+          return item.version === this.addTaskModel.target_version
+        })[0]
+        this.addTaskModel.target_version_url = firmware.file_url
+        this.addTaskModel.target_version_md5 = firmware.file_md5
+        this.addTaskModel.target_version_size = firmware.file_size
       },
 
       // 关闭添加固件版本浮层并净化添加表单
-      resetAddTask: function () {
-        var self = this;
-        this.adding = false;
-        this.showAddTaskModal = false;
-        this.addTaskModel = _.clone(this.originAddTaskModel);
-        this.$nextTick(function () {
-          self.addTaskForm.setPristine();
-        });
+      resetAddTask () {
+        this.adding = false
+        this.showAddTaskModal = false
+        this.addTaskModel = _.clone(this.originAddTaskModel)
+        this.$nextTick(() => {
+          this.addTaskForm.setPristine()
+        })
       },
 
       // 取消添加固件版本
-      onAddTaskCancel: function () {
-        this.resetAddTask();
+      onAddTaskCancel () {
+        this.resetAddTask()
       },
 
       // 提交添加任务表单
-      onAddTaskSubmit: function () {
-        var self = this;
-
+      onAddTaskSubmit () {
         if (this.addTaskValidation.$valid && !this.adding) {
-          this.adding = true;
-          api.corp.refreshToken().then(function () {
-            api.firmware.task(self.addTaskModel).then(function (data) {
-              self.resetAddTask();
-              self.tasks.push(data);
-            }).catch(function (error) {
-              self.handleError(error);
-              self.adding = false;
-            });
-          });
+          this.adding = true
+          api.firmware.task(this.addTaskModel).then((res) => {
+            if (res.status === 200) {
+              this.resetAddTask()
+              this.tasks.push(res.data)
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.adding = false
+          })
         }
       },
 
       // 切换任务状态
-      toggleTaskStatus: function (task) {
-        var self = this;
-
+      toggleTaskStatus (task) {
         if (!this.toggling) {
-          this.toggling = true;
-          api.corp.refreshToken().then(function () {
-            api.firmware.toggleTaskStatus({
-              product_id: self.$route.params.id,
-              upgrade_task_id: task.id,
-              status: task.status ? 0 : 1
-            }).then(function (data) {
-              // self.getTasks();
-              task.status = !task.status;
-              self.toggling = false;
-            }).catch(function (error) {
-              self.handleError(error);
-              self.toggling = false;
-            });
-          });
+          this.toggling = true
+          api.firmware.toggleTaskStatus({
+            product_id: this.$route.params.id,
+            upgrade_task_id: task.id,
+            status: task.status ? 0 : 1
+          }).then((res) => {
+            if (res.status === 200) {
+              task.status = !task.status
+              this.toggling = false
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.toggling = false
+          })
         }
       },
 
       // 删除升级任务
-      removeTask: function (task) {
-        var self = this;
-        var result = confirm('确认删除该升级任务吗？');
+      removeTask (task) {
+        var result = window.confirm('确认删除该升级任务吗？')
         if (result === true) {
-          console.log(task.id);
-          api.corp.refreshToken().then(function () {
-            api.firmware.removeTask({
-              id: task.id,
-              product_id: self.$route.params.id
-            }).then(function (data) {
-              self.getTasks();
-            }).catch(function (error) {
-              self.handleError(error);
-              self.toggling = false;
-            });
-          });
+          api.firmware.removeTask({
+            id: task.id,
+            product_id: this.$route.params.id
+          }).then((res) => {
+            if (res.status === 200) {
+              this.getTasks()
+            }
+          }).catch((error) => {
+            this.handleError(error)
+            this.toggling = false
+          })
         }
       },
 
       // 上传固件文件
-      uploadFirmware: function (model, firmwareFile, event) {
-        var self = this;
-        var file = this.$els[firmwareFile].files[0];
-        var input = event.target;
+      uploadFirmware (model, firmwareFile, event) {
+        var file = this.$els[firmwareFile].files[0]
+        var input = event.target
 
         if (file && file.size > 1024 * 1024) {
-          alert(self.$t('task.file_size_msg'));
-          return;
+          window.alert(this.$t('task.file_size_msg'))
+          return
         }
 
         if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new FileReader();
-          reader.onerror = function (evt) {
-            alert(self.$t('upload.read_err'));
-          };
+          var reader = new window.FileReader()
+          reader.onerror = (evt) => {
+            window.alert(this.$t('upload.read_err'))
+          }
           // 读取完成
-          reader.onloadend = function (evt) {
-            if (evt.target.readyState === FileReader.DONE) {
-              if (!self.uploading) {
-                self.uploading = true;
-                api.corp.refreshToken().then(function () {
-                  api.upload.firmware(self.$route.params.id, evt.target.result).then(function (data) {
-                    input.value = '';
-                    console.log(data);
-                    self[model].file_url = data.url;
-                    self[model].file_md5 = data.md5;
-                    self[model].file_size = data.size;
-                    self.uploading = false;
-                  }).catch(function (error) {
-                    self.handleError(error);
-                    self.uploading = false;
-                  });
-                });
+          reader.onloadend = (evt) => {
+            if (evt.target.readyState === window.FileReader.DONE) {
+              if (!this.uploading) {
+                this.uploading = true
+                api.upload.firmware(this.$route.params.id, evt.target.result).then((res) => {
+                  if (res.status === 200) {
+                    input.value = ''
+                    this[model].file_url = res.data.url
+                    this[model].file_md5 = res.data.md5
+                    this[model].file_size = res.data.size
+                    this.uploading = false
+                  }
+                }).catch((error) => {
+                  this.handleError(error)
+                  this.uploading = false
+                })
               }
             }
-          };
-          reader.readAsArrayBuffer(file);
+          }
+          reader.readAsArrayBuffer(file)
         } else {
-          alert(self.$t('upload.compatiblity'));
+          window.alert(this.$t('upload.compatiblity'))
         }
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

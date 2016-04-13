@@ -1,5 +1,5 @@
-import Vue from 'vue';
-import locales from '../consts/locales';
+import Vue from 'vue'
+import locales from '../consts/locales'
 
 export default {
   methods: {
@@ -12,7 +12,7 @@ export default {
      * @return {Boolean}
      */
     numberic (value) {
-      return /^\d*$/.test(value);
+      return /^\d*$/.test(value)
     },
 
     /**
@@ -21,7 +21,7 @@ export default {
      * @return {Boolean}
      */
     noSpaces (value) {
-      return /^\S+$/.test(value);
+      return /^\S+$/.test(value)
     },
 
     /**
@@ -30,7 +30,7 @@ export default {
      * @return {Boolean}
      */
     noSpacesPrefixAndSuffix (value) {
-      return /^\S(.*\S)*$/.test(value);
+      return /^\S(.*\S)*$/.test(value)
     },
 
     /**
@@ -43,12 +43,12 @@ export default {
         // 对错误码为4031003的错误作跳转到登录界面的处理
         // 其余直接对用户抛出
         if (error.code === 4031003) {
-          this.$route.router.app.access = false;
-          this.$route.router.go('/login');
+          this.$route.router.app.access = false
+          this.$route.router.go('/login')
         } else {
-          alert(locales[Vue.config.lang].errors[error.code]);
+          window.alert(locales[Vue.config.lang].errors[error.code])
         }
       }
     }
   }
-};
+}

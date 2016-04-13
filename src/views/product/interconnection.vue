@@ -1,9 +1,9 @@
-<template lang="jade">
-p 设备互联
+<template>
+  <p>设备互联</p>
 </template>
 
 <script>
-  module.exports = {
+  export default {
     name: 'Interconnection'
-  };
+  }
 </script>

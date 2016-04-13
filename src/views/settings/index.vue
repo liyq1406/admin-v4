@@ -1,16 +1,21 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .panel
-      .panel-hd
-        h2 {{ $t("nav_aside.settings") }}
-      .panel-bd
-        tab(:nav="secondaryNav")
-    router-view(class="view", transition="view", transition-mode="out-in")
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>{{ $t("nav_aside.settings") }}</h2>
+        </div>
+        <div class="panel-bd">
+          <tab :nav="secondaryNav"></tab>
+        </div>
+      </div>
+      <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+    </div>
+  </section>
 </template>
 
 <script>
-  import Tab from '../../components/tab.vue';
+  import Tab from '../../components/Tab'
 
   export default {
     name: 'Settings',
@@ -22,11 +27,11 @@ section.main-wrap
     data () {
       return {
         secondaryNav: []
-      };
+      }
     },
 
     route: {
-      data: function () {
+      data () {
         return {
           secondaryNav: [{
             label: this.$t('sub_nav.settings.auth'),
@@ -41,8 +46,8 @@ section.main-wrap
             label: this.$t('sub_nav.settings.mail_templates'),
             link: { path: '/settings/mail-templates' }
           }]
-        };
+        }
       }
     }
-  };
+  }
 </script>

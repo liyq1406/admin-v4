@@ -1,55 +1,59 @@
-<template lang="jade">
-.panel
-  .panel-hd
-    search-box(:key.sync="query", :active="searching", @cancel="getUsers", :placeholder="$t('user.fields.account')", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getUsers")
-      button.btn.btn-primary(slot="search-button", @click="getUsers") {{ $t('common.search') }}
-      label {{ $t('user.search_user') }}
-    h2 {{ $t('user.list') }}
-  .panel-bd
-    //- 用户列表
-    table.table.table-stripe.table-bordered
-      thead
-        tr
-          th ID
-          th {{ $t('user.fields.nick_name') }}
-          th {{ $t('user.fields.account') }}
-          th {{ $t('user.fields.create_date') }}
-          th {{ $t('user.fields.source') }}
-          th {{ $t('common.status') }}
-      tbody
-        template(v-if="users.length > 0 && !loadingData")
-          tr(v-for="user in users")
-            td
-              a.hl-red(v-link="{path: '/user/'+user.id}") {{user.id}}
-            td {{user.nickname}}
-            td {{user.account}}
-            td {{user.create_date | formatDate}}
-            td
-              span(v-if="user.source===1") Web
-              span(v-if="user.source===2") Android
-              span(v-if="user.source===3") iOS
-              span(v-if="user.source===4") {{ $('common.wechat') }}
-            td
-              span {{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate')}}
-        tr(v-if="loadingData")
-          td.tac(colspan="6")
-            .tips-null
-              i.fa.fa-refresh.fa-spin
-              span {{ $t("common.data_loading") }}
-        tr(v-if="total === 0 && !loadingData")
-          td.tac(colspan="6")
-            .tips-null
-              span {{ $t("common.no_records") }}
-    pager(v-if="!loadingData", :total="total", :current.sync="currentPage", :page-count="pageCount", @page-update="getUsers")
+<template>
+  <div class="panel">
+    <div class="panel-hd">
+      <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
+        <button slot="search-button" @click="getUsers" class="btn btn-primary">{{ $t('common.search') }}</button>
+        <label>{{ $t('user.search_user') }}</label>
+      </search-box>
+      <h2>{{ $t('user.list') }}</h2>
+    </div>
+    <div class="panel-bd">
+      <table class="table table-stripe table-bordered">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>{{ $t('user.fields.nick_name') }}</th>
+            <th>{{ $t('user.fields.account') }}</th>
+            <th>{{ $t('user.fields.create_date') }}</th>
+            <th>{{ $t('user.fields.source') }}</th>
+            <th>{{ $t('common.status') }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="users.length > 0 && !loadingData">
+            <tr v-for="user in users">
+              <td><a v-link="{path: '/user/'+user.id}" class="hl-red">{{ user.id }}</a></td>
+              <td>{{ user.nickname }}</td>
+              <td>{{ user.account }}</td>
+              <td>{{ user.create_date | formatDate }}</td>
+              <td><span v-if="user.source===1">Web</span><span v-if="user.source===2">Android</span><span v-if="user.source===3">iOS</span><span v-if="user.source===4">{{ $('common.wechat') }}</span></td>
+              <td><span>{{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate') }}</span></td>
+            </tr>
+          </template>
+          <tr v-if="loadingData">
+            <td colspan="6" class="tac">
+              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+            </td>
+          </tr>
+          <tr v-if="total === 0 && !loadingData">
+            <td colspan="6" class="tac">
+              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager>
+    </div>
+  </div>
 </template>
 
 <script>
-  import SearchBox from '../../components/search-box.vue';
-  import Modal from '../../components/modal.vue';
-  import api from '../../api';
-  import Pager from '../../components/pager.vue';
+  import SearchBox from '../../components/SearchBox'
+  import Modal from '../../components/Modal'
+  import api from '../../api'
+  import Pager from '../../components/Pager'
 
-  module.exports = {
+  export default {
     name: 'UserList',
 
     components: {
@@ -59,7 +63,7 @@
       'pager': Pager
     },
 
-    data: function () {
+    data () {
       return {
         query: '',
         searching: false,
@@ -68,66 +72,63 @@
         currentPage: 1,
         pageCount: 10,
         loadingData: false
-      };
+      }
     },
 
     route: {
-      data: function () {
-        this.getUsers();
+      data () {
+        this.getUsers()
       }
     },
 
     computed: {
-      queryCondition: function () {
+      queryCondition () {
         var condition = {
           filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: {'create_date': 'desc'},
           query: {}
-        };
-
-        if (this.query.length > 0) {
-          condition.query['account'] = { $like: this.query };
         }
 
-        return condition;
+        if (this.query.length > 0) {
+          condition.query['account'] = { $like: this.query }
+        }
+
+        return condition
       }
     },
 
     methods: {
       // 获取用户
-      getUsers: function () {
-        var self = this;
-
-        this.loadingData = true;
-        api.corp.refreshToken().then(function () {
-          api.user.list(self.queryCondition).then(function (data) {
-            self.users = data.list;
-            self.total = data.count;
-            self.loadingData = false;
-          }).catch(function (error) {
-            self.handleError(error);
-            self.loadingData = false;
-          });
-        });
+      getUsers () {
+        this.loadingData = true
+        api.user.list(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.users = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }
+        }).catch((error) => {
+          this.handleError(error)
+          this.loadingData = false
+        })
       },
 
       // 搜索
-      handleSearch: function () {
+      handleSearch () {
         if (this.query.length === 0) {
-          this.getUsers();
+          this.getUsers()
         }
       },
 
-      toggleSearching: function () {
-        this.searching = !this.searching;
+      toggleSearching () {
+        this.searching = !this.searching
       },
 
-      cancelSearching: function () {
-        this.query = '';
+      cancelSearching () {
+        this.query = ''
       }
     }
-  };
-
+  }
 </script>

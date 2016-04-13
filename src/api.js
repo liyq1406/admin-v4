@@ -1,24 +1,52 @@
-import config from './consts/config';
-import Promise from 'promise';
-import Vue from 'vue';
-import VueResource from 'vue-resource';
-Vue.use(VueResource);
+/**
+ * API统一入口
+ *
+ * 调用方式：
+    import api from '../api'
+    api.product.get(productId).then((res) => {
+      // 请求状态
+      console.log(res.status)
+      // 请求头信息
+      console.log(res.headers())
+      // 赋值
+      this.$set('someData', response.data)
+    }, (res) => {
+      // 失败回调
+    })
+ */
 
-module.exports = {
-  sms: require('./api/sms')(Vue, Promise, config),
-  corp: require('./api/corp')(Vue, Promise, config),
-  dataStorage: require('./api/dataStorage')(Vue, Promise, config),
-  device: require('./api/device')(Vue, Promise, config),
-  email: require('./api/email')(Vue, Promise, config),
-  firmware: require('./api/firmware')(Vue, Promise, config),
-  user: require('./api/user')(Vue, Promise, config),
-  statistics: require('./api/statistics')(Vue, Promise, config),
-  product: require('./api/product')(Vue, Promise, config),
-  empower: require('./api/empower')(Vue, Promise, config),
-  dataTable: require('./api/data-table')(Vue, Promise, config),
-  alert: require('./api/alert')(Vue, Promise, config),
-  app: require('./api/app')(Vue, Promise, config),
-  upload: require('./api/upload')(Vue, Promise, config),
-  diet: require('./api/diet')(Vue, Promise, config),
-  dataForward: require('./api/data-forward')(Vue, Promise, config)
-};
+import sms from './api/sms'
+import corp from './api/corp'
+import dataStorage from './api/data-storage'
+import device from './api/device'
+import email from './api/email'
+import firmware from './api/firmware'
+import user from './api/user'
+import statistics from './api/statistics'
+import product from './api/product'
+import empower from './api/empower'
+import dataTable from './api/data-table'
+import alert from './api/alert'
+import app from './api/app'
+import upload from './api/upload'
+import diet from './api/diet'
+import dataForward from './api/data-forward'
+
+export default {
+  sms,
+  corp,
+  dataStorage,
+  device,
+  email,
+  firmware,
+  user,
+  statistics,
+  product,
+  empower,
+  dataTable,
+  alert,
+  app,
+  upload,
+  diet,
+  dataForward
+}

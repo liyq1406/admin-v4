@@ -1,69 +1,153 @@
-<template lang="jade">
-.form.form-auth.form-fetch-password
-  .form-logo
-    a.fa.fa-chevron-circle-left.link-return(v-link="{path: '/login'}")
-  form.form-cont(v-show="!resetsuccess",v-form, name="validation", @submit.prevent="onSubmit")
-    .form-header
-      h2 {{ $t("auth.fetch") }}
-      p {{ $t("auth.by_phone_tips") }}
-    //-
-      .form-header
-        span 手机找回
-        a(v-link="{ path: '/fetch-password-bymail' }") 邮箱找回
-    .form-body
-      //-
-        .form-hints 请输入您的注册手机，点击发送验证码，将手机收到的验证码填到下面的输入框中。
-      .form-row
-        .input-text-wrap(v-placeholder="$t('auth.fields.phone')")
-          input.input-text(type="text", v-model="model.phone", v-form-ctrl, required, pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$", name="phone", lazy)
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.phone.$pristine")
-          span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
-        .form-tips.form-tips-error(v-if="validation.phone.$dirty")
-          span(v-if="validation.phone.$error.required") {{ $t('validation.required', {field: $t('auth.fields.phone')}) }}
-          span(v-if="validation.phone.$error.pattern") {{ $t('validation.format', {field: $t('auth.fields.phone')}) }}
-      .form-row.captcha-row
-        .input-text-wrap(v-placeholder="$t('auth.insert_code')")
-          input.input-text(type="text", v-model="captcha", lazy)
-        captcha(:width="120", :height="36", :value.sync="captchaValue", v-ref:captcha)
-      .form-row.verify-code
-        .input-text-wrap(v-placeholder="$t('auth.verifycode')")
-          input.input-text(type="text", v-model="model.verifycode", v-form-ctrl, required, name="verifycode", lazy)
-        button.btn.btn-primary(@click.stop.prevent="fetchVerifyCode", :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}", v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')")
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.verifycode.$pristine")
-          span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
-        .form-tips.form-tips-error(v-if="validation.verifycode.$dirty")
-          span(v-if="validation.verifycode.$error.required") {{ $t('validation.required', {field: $t('auth.verifycode')}) }}
-      .form-row
-        .input-text-wrap(v-placeholder="$t('auth.password')")
-          input.input-text(type="password", v-model="model.password", v-form-ctrl, required, maxlength="16", minlength="6", name="password", lazy)
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.password.$pristine")
-          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-        .form-tips.form-tips-error(v-if="validation.password.$dirty")
-          span(v-if="validation.password.$error.required") {{ $t('validation.required', {field: $t('auth.fields.password')}) }}
-          span(v-if="validation.password.$error.minlength") {{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}
-          span(v-if="validation.password.$error.maxlength") {{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}
-      .form-row
-        .input-text-wrap(v-placeholder="$t('auth.fields.confirm_password')")
-          input.input-text(type="password", v-model="confirmPassword", v-form-ctrl, required, custom-validator="checkEqualToPassword", name="confirmPassword", lazy)
-        .form-tips.form-tips-error(v-if="validation.$submitted && validation.confirmPassword.$pristine")
-          span(v-if="validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-        .form-tips.form-tips-error(v-if="validation.confirmPassword.$dirty")
-          span(v-if="model.password && validation.confirmPassword.$error.required") {{ $t("auth.confirm_password") }}
-          span(v-if="validation.confirmPassword.$error.customValidator") {{ $t("auth.confirm_password_tips") }}
-      .form-actions
-        button.btn.btn-primary.btn-block(type="submit") {{ $t("common.ok") }}
-    .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
-  .form-cont.reset-password-success(v-show="resetsuccess")
-    .alert.alert-success
-      .icon.icon-success
-      h2 {{ $t("auth.by_phone_success") }}
-      p {{ $t("auth.by_phone_success_msg") }}
-    .form-actions
-      a.btn.btn-primary.btn-block(v-link="{ path: '/login'}") {{ $t("common.ok") }}
-    .form-footer
-      | 2015 &copy; {{ $t("common.company") }}.
+<template>
+  <div class="form form-auth form-fetch-password">
+    <div class="form-logo"><a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a></div>
+    <form v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+      <div class="form-header">
+        <h2>{{ $t("auth.fetch") }}</h2>
+        <p>{{ $t("auth.by_phone_tips") }}</p>
+      </div>
+      <div class="form-body">
+        <div class="form-row">
+          <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
+            <input type="text" v-model="model.phone" v-form-ctrl required pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" name="phone" lazy class="input-text"/>
+          </div>
+          <div v-if="validation.$submitted && validation.phone.$pristine" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span></div>
+          <div v-if="validation.phone.$dirty" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span><span v-if="validation.phone.$error.pattern">{{ $t('validation.format', {field: $t('auth.fields.phone')}) }}</span></div>
+        </div>
+        <div class="form-row captcha-row">
+          <div v-placeholder="$t('auth.insert_code')" class="input-text-wrap">
+            <input type="text" v-model="captcha" lazy class="input-text"/>
+          </div>
+          <captcha :width="120" :height="32" :value.sync="captchaValue" v-ref:captcha></captcha>
+        </div>
+        <div class="form-row verify-code">
+          <div v-placeholder="$t('auth.verifycode')" class="input-text-wrap">
+            <input type="text" v-model="model.verifycode" v-form-ctrl required name="verifycode" lazy class="input-text"/>
+          </div>
+          <button @click.stop.prevent="fetchVerifyCode" :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')" class="btn btn-primary"></button>
+          <div v-if="validation.$submitted && validation.verifycode.$pristine" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
+          <div v-if="validation.verifycode.$dirty" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
+        </div>
+        <div class="form-row">
+          <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+            <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
+          </div>
+          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
+          <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
+        </div>
+        <div class="form-row">
+          <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
+            <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
+          </div>
+          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span></div>
+          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span></div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary btn-block">{{ $t("common.ok") }}</button>
+        </div>
+      </div>
+      <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+    </form>
+    <div v-show="resetsuccess" class="form-cont reset-password-success">
+      <div class="alert alert-success">
+        <div class="icon icon-success"></div>
+        <h2>{{ $t("auth.by_phone_success") }}</h2>
+        <p>{{ $t("auth.by_phone_success_msg") }}</p>
+      </div>
+      <div class="form-actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-block">{{ $t("common.ok") }}</a></div>
+      <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
+    </div>
+  </div>
 </template>
+
+<script>
+  import api from '../api'
+  import config from '../consts/config'
+  import Captcha from '../components/Captcha'
+
+  export default {
+    name: 'FetchPwdForm',
+
+    components: {
+      'captcha': Captcha
+    },
+
+    data () {
+      return {
+        validation: {},
+        captcha: '',
+        captchaValue: '',
+        model: {},
+        confirmPassword: '',
+        verifycodeValid: false,
+        counting: false,
+        btnDisabled: false,
+        seconds: config.verifycodeDuration,
+        resetsuccess: false
+      }
+    },
+
+    methods: {
+      getObjLength (obj) {
+        return Object.keys(obj).length
+      },
+
+      checkEqualToPassword (value) {
+        return value === this.model.password
+      },
+
+      checkTypeValid (value) {
+        return Number(value) > 0
+      },
+
+      tiktac () {
+        var itvl = window.setInterval(() => {
+          if (this.seconds) {
+            this.seconds--
+          } else {
+            this.seconds = config.verifycodeDuration
+            this.counting = false
+            this.btnDisabled = false
+            window.clearInterval(itvl)
+          }
+        }, 1000)
+      },
+
+      fetchVerifyCode () {
+        if (this.validation.phone.$invalid) {
+          window.alert(this.$t('auth.phone_msg'))
+          return
+        }
+
+        this.btnDisabled = true
+        this.captcha = ''
+        this.$refs.captcha.generate()
+        api.sms.getVerifycode({
+          phone: this.model.phone
+        }).then((res) => {
+          if (res.status === 200) {
+            this.counting = true
+            this.tiktac()
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
+      },
+
+      onSubmit () {
+        var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password}
+
+        api.corp.resetPassword(content).then((res) => {
+          if (res.data === 200) {
+            this.resetsuccess = true
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
+      }
+    }
+  }
+</script>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
@@ -114,101 +198,3 @@
         height 36px
         line-height 36px
 </style>
-
-<script>
-  import api from '../api';
-  import config from '../consts/config';
-  import Captcha from '../components/captcha.vue';
-
-  module.exports = {
-    name: 'FetchPwdForm',
-
-    components: {
-      'captcha': Captcha
-    },
-
-    data: function () {
-      return {
-        validation: {},
-        captcha: '',
-        captchaValue: '',
-        model: {},
-        confirmPassword: '',
-        verifycodeValid: false,
-        counting: false,
-        btnDisabled: false,
-        seconds: config.verifycodeDuration,
-        resetsuccess: false
-      };
-    },
-
-    methods: {
-      getObjLength: function (obj) {
-        return Object.keys(obj).length;
-      },
-
-      checkEqualToPassword: function (value) {
-        return value === this.model.password;
-      },
-
-      checkTypeValid: function (value) {
-        return Number(value) > 0;
-      },
-
-      tiktac: function () {
-        var self = this;
-        var itvl = window.setInterval(function () {
-          if (self.seconds) {
-            self.seconds--;
-          } else {
-            self.seconds = config.verifycodeDuration;
-            self.counting = false;
-            self.btnDisabled = false;
-            window.clearInterval(itvl);
-          }
-        }, 1000);
-      },
-
-      fetchVerifyCode: function () {
-        var self = this;
-
-        if (this.validation.phone.$invalid) {
-          alert(this.$t('auth.phone_msg'));
-          return;
-        }
-
-        this.btnDisabled = true;
-        this.captcha = '';
-        this.$refs.captcha.generate();
-        api.sms.getVerifycode({
-          phone: this.model.phone
-        }).then(function (status) {
-          console.log(status);
-          if (__DEBUG__) {
-            console.log('[' + status + '] 获取验证码成功');
-          }
-          self.counting = true;
-          self.tiktac();
-        }).catch(function (error) {
-          self.handleError(error);
-        });
-      },
-
-      onSubmit: function () {
-        var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password};
-        var self = this;
-        console.log(content);
-        api.corp.resetPassword(content).then(function (data) {
-          if (__DEBUG__) {
-            console.log(data);
-          }
-          if (data === 200) {
-            self.resetsuccess = true;
-          }
-        }).catch(function (error) {
-          self.handleError(error);
-        });
-      }
-    }
-  };
-</script>

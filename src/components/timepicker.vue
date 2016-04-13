@@ -1,27 +1,38 @@
-<template lang="jade">
-.timepicker
-  .input-text-wrap
-    input.input-text(type="text", v-model="value", @click="inputClick", lazy)
-  .timepicker-popup(v-show="displayTimeView", :class="{'timepicker-popup-right':pullLeft}")
-    .timepicker-inner
-      .timepicker-body
-        .select.select-sm
-          select(v-model="hour", @change="updateValue")
-            option(v-for="option in 24", v-bind:value="zeroPrefix(option)", v-bind:selected="hour === zeroPrefix(option)") {{zeroPrefix(option)}}
-        .divide :
-        .select.select-sm
-          select(v-model="minute", @change="updateValue")
-            option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="minute === zeroPrefix(option)") {{zeroPrefix(option)}}
-        .divide :
-        .select.select-sm
-          select(v-model="second", @change="updateValue")
-            option(v-for="option in 60", v-bind:value="zeroPrefix(option)", v-bind:selected="second === zeroPrefix(option)") {{zeroPrefix(option)}}
+<template>
+  <div class="timepicker">
+    <div class="input-text-wrap">
+      <input type="text" v-model="value" @click="inputClick" lazy class="input-text"/>
+    </div>
+    <div v-show="displayTimeView" :class="{'timepicker-popup-right':pullLeft}" class="timepicker-popup">
+      <div class="timepicker-inner">
+        <div class="timepicker-body">
+          <div class="select select-sm">
+            <select v-model="hour" @change="updateValue">
+              <option v-for="option in 24" v-bind:value="zeroPrefix(option)" v-bind:selected="hour === zeroPrefix(option)">{{ zeroPrefix(option) }}</option>
+            </select>
+          </div>
+          <div class="divide">:</div>
+          <div class="select select-sm">
+            <select v-model="minute" @change="updateValue">
+              <option v-for="option in 60" v-bind:value="zeroPrefix(option)" v-bind:selected="minute === zeroPrefix(option)">{{ zeroPrefix(option) }}</option>
+            </select>
+          </div>
+          <div class="divide">:</div>
+          <div class="select select-sm">
+            <select v-model="second" @change="updateValue">
+              <option v-for="option in 60" v-bind:value="zeroPrefix(option)" v-bind:selected="second === zeroPrefix(option)">{{ zeroPrefix(option) }}</option>
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-  import EventListener from './utils/EventListener';
+  import EventListener from './utils/EventListener'
 
-  module.exports = {
+  export default {
     props: {
       value: {
         type: String,
@@ -33,61 +44,60 @@
       }
     },
 
-    data: function () {
+    data () {
       return {
         displayTimeView: false,
         hour: '',
         minute: '',
         second: ''
-      };
+      }
     },
 
     methods: {
-      close: function () {
-        this.displayTimeView = false;
+      close () {
+        this.displayTimeView = false
       },
 
-      inputClick: function () {
-        this.displayTimeView = !this.displayTimeView;
+      inputClick () {
+        this.displayTimeView = !this.displayTimeView
       },
 
-      zeroPrefix: function (value) {
-        return value >= 10 ? value.toString() : '0' + value;
+      zeroPrefix (value) {
+        return value >= 10 ? value.toString() : '0' + value
       },
 
-      updateValue: function () {
-        this.value = this.hour + ':' + this.minute + ':' + this.second;
-        this.$dispatch('select-time');
+      updateValue () {
+        this.value = this.hour + ':' + this.minute + ':' + this.second
+        this.$dispatch('select-time')
       }
     },
 
     watch: {
-      displayTimeView: function () {
+      displayTimeView () {
         if (this.value.length > 0) {
-          var timeArr = this.value.split(':');
-          this.hour = timeArr[0];
-          this.minute = timeArr[1];
-          this.second = timeArr[2];
+          var timeArr = this.value.split(':')
+          this.hour = timeArr[0]
+          this.minute = timeArr[1]
+          this.second = timeArr[2]
         }
       }
     },
 
-    ready: function () {
-      var self = this;
-      this.$dispatch('timepicker-created', this);
-      this._closeEvent = EventListener.listen(window, 'click', function (e) {
-        if (!self.$el.contains(e.target)) {
-          self.close();
+    ready () {
+      this.$dispatch('timepicker-created', this)
+      this._closeEvent = EventListener.listen(window, 'click', (e) => {
+        if (!this.$el.contains(e.target)) {
+          this.close()
         }
-      });
+      })
     },
 
-    beforeDestroy() {
+    beforeDestroy () {
       if (this._closeEvent){
-        this._closeEvent.remove();
+        this._closeEvent.remove()
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

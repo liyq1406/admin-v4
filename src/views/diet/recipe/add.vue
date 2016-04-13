@@ -1,197 +1,208 @@
-<template lang="jade">
-section.main-wrap.diet
-  .main
-    .breadcrumb
-      a(v-link="{path: '/diet/recipe'}")
-        i.fa.fa-arrow-circle-left
-        | 菜谱管理
-    .panel
-      .panel-hd
-        h2 添加菜谱
-      .panel-bd
-        .form
-          form(v-form, name="validation", @submit.prevent="onRecipeSubmit")
-            .form-row
-              label.form-control {{ $t("recipe.fields.name") }}:
-              .controls
-                .input-text-wrap(v-placeholder="'请填写菜谱名称'")
-                  input.input-text(v-model="model.name",type="text", v-form-ctrl, name="name", maxlength="250", required, lazy)
-                .form-tips.form-tips-error(v-if="validation.$submitted && validation.name.$pristine")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}
-                .form-tips.form-tips-error(v-if="validation.name.$dirty")
-                  span(v-if="validation.name.$error.required") {{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}
-                  span(v-if="validation.name.$error.maxlength") {{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}
-                  span(v-if="validation.name.$error.customValidator") {{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}
-            .form-row
-              label.form-control {{ $t("ingredient.fields.images") }}:
-              .controls.controls-image
-                .image-uploader
-                  image-uploader(v-for="n in model.images.length", :image.sync="model.images[n]")
-                .form-tips 建议上传640像素*480像素成品图，最多不超过3张
-            .form-row
-              label.form-control 难度:
-              .controls
-                .select-group
-                  .select
-                    select(v-model="model.properties.difficulty", name="difficulty")
-                      option(v-for="difficulty in difficulties", :value="difficulty", :selected="difficulty===model.properties.difficulty") {{difficulty}}
-                    //- span.fa.fa-times
-
-            //- .form-row
-            //-   label.form-control {{ $t("ingredient.fields.classification") }}:
-            //-   .controls
-            //-     .select-group
-            //-       .select.clear(v-for="selectedclassification in model.classifications")
-            //-         select(v-model="selectedclassification.main")
-            //-           option(v-for="classification in classifications | dropSlected model.classifications selectedclassification", :selected="classification===selectedclassification.main") {{classification}}
-            //-         span.fa.fa-times(@click="removeObj(selectedclassification,model.classifications)")
-            //-     button.btn.btn-success()
-            //-       i.fa.fa-plus
-            //-       | 添加类别
-            .form-row
-              label.form-control {{ $t("ingredient.fields.classification") }}:
-              .controls
-                .select-group
-                  .select(v-for="category in model.classification")
-                    select(v-model="category.main")
-                      option(v-for="opt in categories | dropSlected model.classification category 'main'", :value="opt.main", :selected="opt.main===category.main") {{opt.main}}
-                    span.fa.fa-times(@click="removeObj(category,model.classification)")
-                button.btn.btn-success(@click.prevent="addCategory", :disabled="model.classification.length === categories.length", :class="{'disabled': model.classification.length === categories.length}")
-                  i.fa.fa-plus
-                  | 添加类别
-            .form-row
-              label.form-control {{ $t("recipe.fields.instructions") }}:
-              .controls
-                .input-text-wrap(v-placeholder="$t('recipe.placeholders.instructions')")
-                  textarea.input-text.textarea-lg(v-model="model.instructions", type="text", name="instructions", lazy)
-            .form-row.ingredient-row
-              label.form-control 食材:
-              .controls
-                table(v-if="model.major_ingredients.length")
-                  tbody
-                    tr(v-for="ingredient in model.major_ingredients")
-                      td
-                        span.ingredient-name {{ingredient.name}}
-                      td
-                        .input-text-wrap.inline
-                          input.input-text-time(type="text",placeholder="请填写用量",v-model="ingredient.unit")
-                        span.fa.fa-times.pointer(@click="removeObj(ingredient,model.major_ingredients)")
-                //-
-                  .input-text-wrap.mb5(v-for="ingredient in model.major_ingredients")
-                    .ingredientname.inline
-                      span {{ingredient.name}}
-                    .input-text-wrap.inline
-                      input.input-text-time(type="text",placeholder="请填写用量",v-model="ingredient.unit")
-                    span.fa.fa-times.pointer(@click="removeObj(ingredient,model.major_ingredients)")
-                button.btn.btn-success(@click.prevent="ingredientSelectModal.show=true")
-                  i.fa.fa-plus
-                  | 添加食材
-            .form-row
-              label.form-control 烹饪设备:
-              .controls
-                .select-group(v-for="cookingDevice in model.devices")
-                  .select.inline
-                    select(v-model="cookingDevice")
-                      option(v-for="opt in devices | dropSlected model.devices cookingDevice 'name'", :value="opt", :selected="opt.name===cookingDevice.name") {{opt.name}}
-                  .input-text-wrap.inline
-                    input.input-text-time(type="text",v-model="cookingDevice.time",placeholder="请填写时长")
-                    span.text-time 分钟
-                  .delete-input.inline
-                    span.fa.fa-times.pointer(@click="removeObj(cookingDevice, model.devices)")
-                  .input-text-wrap.block.mb20
-                    textarea.input-text(placeholder="请输入设备烹饪指令",v-model="cookingDevice.autoexec", type="text")
-                button.btn.btn-success(@click.prevent="addCookingDevice", :disabled="model.devices.length === devices.length", :class="{'disabled': model.devices.length === devices.length}")
-                  i.fa.fa-plus
-                  | 添加烹饪设备
-            .form-row
-              label.form-control 步骤:
-              .controls
-                .alert-text
-                  |小提示：
-                  br
-                  |1、步骤图宽度在150像素至150像素；
-                  br
-                  |2、每个步骤用一段话描述，如果不需要可将内容留空；
-
-                .step-box(v-for="cooking_step in model.cooking_steps")
-                  label.form-control 第{{$index+1}}步:
-                  .controls.controls-image
-                    .image-uploader
-                      image-uploader(v-for="img in cooking_step.images", :image.sync="img")
-                  .input-text-wrap.step-text
-                    textarea.input-text(v-model="cooking_step.description",type="text",lazy,placeholder="请填写步骤的描述")
-                  .button-list
-                    .control-button.button-up(v-show="model.cooking_steps.length>1&&$index>0",@click="handleStepEvent('MOVE_UP', cooking_step, $index)")
-                      i.icon.fa.fa-long-arrow-up
-                    .control-button.button-down(v-show="model.cooking_steps.length>1&&$index<(model.cooking_steps.length-1)",@click="handleStepEvent('MOVE_DOWN', cooking_step, $index)")
-                      i.icon.fa.fa-long-arrow-down
-                    .control-button.button-add(@click="handleStepEvent('ADD', cooking_step, $index)")
-                      i.icon.fa.fa-plus
-                    .control-button.button-del(v-show="model.cooking_steps.length>1",@click="handleStepEvent('DEL', cooking_step, $index)")
-                      i.icon.fa.fa-times
-            .form-row
-              label.form-control {{ $t('recipe.fields.tips') }}:
-              .controls
-                .input-text-wrap(v-placeholder="$t('recipe.placeholders.tips')")
-                  textarea.input-text.textarea-lg(v-model="model.tips", type="text", name="tips", lazy)
-            .form-actions
-              button.btn.btn-primary.btn-lg(type="submit", :disabled="adding", :class="{'disabled': adding}") {{ $t("common.save") }}
-
-        //- 选择食材浮层
-        modal(:show.sync="ingredientSelectModal.show", :width="800")
-          h3(slot="header") 选择食材
-          .ingredient-box(slot="body")
-            .status-bar
-              v-select(:options="ingredientCategoryOptions", :value.sync="ingredientSelectModal.category", @select="getIngredients")
-                span 类别：
-              search-box(:key.sync="ingredientSelectModal.query", :active="ingredientSelectModal.searching", :placeholder="$t('ingredient.placeholders.search')", @cancel="getIngredients", @search-activate="toggleSearching", @search-deactivate="toggleSearching", @search="handleSearch", @press-enter="getIngredients")
-                button.btn.btn-primary(slot="search-button", @click="getIngredients") {{ $t('common.search') }}
-            .ingredient-list.clearfix.mb20
-              .to-select-list
-                table.table.table-stripe.table-bordered
-                  thead
-                    tr
-                      th
-                        | 标题
-                      th.tac {{ $t('common.action') }}
-                  tbody
-                    template(v-if="filteredIngredientList.length > 0 && !ingredientSelectModal.loadingData")
-                      tr(v-for="ingredient in filteredIngredientList")
-                        td
-                          span {{ingredient.name}}
-                        td.tac.w70
-                          a.btn-link(v-show="!ingredient.selected",@click.stop="addIngredient(ingredient)") 添加
-                          span(v-show="ingredient.selected") 已添加
-                    tr(v-if="ingredientSelectModal.loadingData")
-                      td.tac(colspan="2")
-                        .tips-null
-                          i.fa.fa-refresh.fa-spin
-                          span {{ $t("common.data_loading") }}
-                    tr(v-if="filteredIngredientList.length === 0 && !ingredientSelectModal.loadingData")
-                      td.tac(colspan="2")
-                        .tips-null
-                          span {{ $t("common.no_records") }}
-                pager(v-if="!ingredientSelectModal.loadingData && ingredientSelectModal.total > ingredientSelectModal.pageCount", :total="ingredientSelectModal.total", :current.sync="ingredientSelectModal.currentPage", :page-count="ingredientSelectModal.pageCount", @page-update="getIngredients")
-              .selected-list
-                h3 已选择
-                ul
-                  li(v-for="selectedIngredient in ingredientSelectModal.selectedIngredientList")
-                    span {{selectedIngredient.name}}
-                    i.fa.fa-times-circle(@click="deleteIngredient(selectedIngredient)")
-            .button-box
-              .form-actions
-                button.btn.btn-default(@click.prevent.stop="ingredientSelectModal.show=false") {{ $t("common.cancel") }}
-                button.btn.btn-primary(type="submit", :disabled="ingredientSelectModal.adding", :class="{'disabled':ingredientSelectModal.adding}", v-text="ingredientSelectModal.adding ? $t('common.handling') : $t('common.ok')",@click.prevent.stop="confirmSelected")
+<template>
+  <section class="main-wrap diet">
+    <div class="main">
+      <div class="breadcrumb"><a v-link="{path: '/diet/recipe'}"><i class="fa fa-arrow-circle-left"></i>菜谱管理</a></div>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>添加菜谱</h2>
+        </div>
+        <div class="panel-bd">
+          <div class="form">
+            <form v-form name="validation" @submit.prevent="onRecipeSubmit">
+              <div class="form-row">
+                <label class="form-control">{{ $t("recipe.fields.name") }}:</label>
+                <div class="controls">
+                  <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
+                    <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="250" required lazy class="input-text"/>
+                  </div>
+                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span></div>
+                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}</span></div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t("ingredient.fields.images") }}:</label>
+                <div class="controls controls-image">
+                  <div class="image-uploader">
+                    <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
+                  </div>
+                  <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">难度:</label>
+                <div class="controls">
+                  <div class="select-group">
+                    <div class="select">
+                      <select v-model="model.properties.difficulty" name="difficulty">
+                        <option v-for="difficulty in difficulties" :value="difficulty" :selected="difficulty===model.properties.difficulty">{{ difficulty }}</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t("ingredient.fields.classification") }}:</label>
+                <div class="controls">
+                  <div class="select-group">
+                    <div v-for="category in model.classification" class="select">
+                      <select v-model="category.main">
+                        <option v-for="opt in categories | dropSlected model.classification category 'main'" :value="opt.main" :selected="opt.main===category.main">{{ opt.main }}</option>
+                      </select><span @click="removeObj(category,model.classification)" class="fa fa-times"></span>
+                    </div>
+                  </div>
+                  <button @click.prevent="addCategory" :disabled="model.classification.length === categories.length" :class="{'disabled': model.classification.length === categories.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t("recipe.fields.instructions") }}:</label>
+                <div class="controls">
+                  <div v-placeholder="$t('recipe.placeholders.instructions')" class="input-text-wrap">
+                    <textarea v-model="model.instructions" type="text" name="instructions" lazy class="input-text textarea-lg"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row ingredient-row">
+                <label class="form-control">食材:</label>
+                <div class="controls">
+                  <table v-if="model.major_ingredients.length">
+                    <tbody>
+                      <tr v-for="ingredient in model.major_ingredients">
+                        <td><span class="ingredient-name">{{ ingredient.name }}</span></td>
+                        <td>
+                          <div class="input-text-wrap inline">
+                            <input type="text" placeholder="请填写用量" v-model="ingredient.unit" class="input-text-time"/>
+                          </div><span @click="removeObj(ingredient,model.major_ingredients)" class="fa fa-times pointer"></span>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <button @click.prevent="ingredientSelectModal.show=true" class="btn btn-success"><i class="fa fa-plus"></i>添加食材</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">烹饪设备:</label>
+                <div class="controls">
+                  <div v-for="cookingDevice in model.devices" class="select-group">
+                    <div class="select inline">
+                      <select v-model="cookingDevice">
+                        <option v-for="opt in devices | dropSlected model.devices cookingDevice 'name'" :value="opt" :selected="opt.name===cookingDevice.name">{{ opt.name }}</option>
+                      </select>
+                    </div>
+                    <div class="input-text-wrap inline">
+                      <input type="text" v-model="cookingDevice.time" placeholder="请填写时长" class="input-text-time"/><span class="text-time">分钟</span>
+                    </div>
+                    <div class="delete-input inline"><span @click="removeObj(cookingDevice, model.devices)" class="fa fa-times pointer"></span></div>
+                    <div class="input-text-wrap block mb20">
+                      <textarea placeholder="请输入设备烹饪指令" v-model="cookingDevice.autoexec" type="text" class="input-text textarea-lg"></textarea>
+                    </div>
+                  </div>
+                  <button @click.prevent="addCookingDevice" :disabled="model.devices.length === devices.length" :class="{'disabled': model.devices.length === devices.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加烹饪设备</button>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">步骤:</label>
+                <div class="controls">
+                  <div class="alert-text">小提示：<br/>1、步骤图宽度在150像素至150像素；<br/>2、每个步骤用一段话描述，如果不需要可将内容留空；</div>
+                  <div v-for="cooking_step in model.cooking_steps" class="step-box">
+                    <label class="form-control">第{{ $index+1 }}步:</label>
+                    <div class="controls controls-image">
+                      <div class="image-uploader">
+                        <image-uploader v-for="img in cooking_step.images" :image.sync="img"></image-uploader>
+                      </div>
+                    </div>
+                    <div class="input-text-wrap step-text">
+                      <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
+                    </div>
+                    <div class="button-list">
+                      <div v-show="model.cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                      <div v-show="model.cooking_steps.length>1&&$index<(model.cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                      <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add"><i class="icon fa fa-plus"></i></div>
+                      <div v-show="model.cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row">
+                <label class="form-control">{{ $t('recipe.fields.tips') }}:</label>
+                <div class="controls">
+                  <div v-placeholder="$t('recipe.placeholders.tips')" class="input-text-wrap">
+                    <textarea v-model="model.tips" type="text" name="tips" lazy class="input-text textarea-lg"></textarea>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <button type="submit" :disabled="adding" :class="{'disabled': adding}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+              </div>
+            </form>
+          </div>
+          <modal :show.sync="ingredientSelectModal.show" :width="800">
+            <h3 slot="header">选择食材</h3>
+            <div slot="body" class="ingredient-box">
+              <div class="status-bar">
+                <v-select :options="ingredientCategoryOptions" :value.sync="ingredientSelectModal.category" @select="getIngredients"><span>类别：</span></v-select>
+                <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
+                  <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
+                </search-box>
+              </div>
+              <div class="ingredient-list clearfix mb20">
+                <div class="to-select-list">
+                  <table class="table table-stripe table-bordered">
+                    <thead>
+                      <tr>
+                        <th>标题</th>
+                        <th class="tac">{{ $t('common.action') }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <template v-if="filteredIngredientList.length > 0 && !ingredientSelectModal.loadingData">
+                        <tr v-for="ingredient in filteredIngredientList">
+                          <td><span>{{ ingredient.name }}</span></td>
+                          <td class="tac w70"><a v-show="!ingredient.selected" @click.stop="addIngredient(ingredient)" class="btn-link">添加</a><span v-show="ingredient.selected">已添加</span></td>
+                        </tr>
+                      </template>
+                      <tr v-if="ingredientSelectModal.loadingData">
+                        <td colspan="2" class="tac">
+                          <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+                        </td>
+                      </tr>
+                      <tr v-if="filteredIngredientList.length === 0 && !ingredientSelectModal.loadingData">
+                        <td colspan="2" class="tac">
+                          <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <pager v-if="!ingredientSelectModal.loadingData && ingredientSelectModal.total > ingredientSelectModal.pageCount" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.pageCount" @page-update="getIngredients"></pager>
+                </div>
+                <div class="selected-list">
+                  <h3>已选择</h3>
+                  <ul>
+                    <li v-for="selectedIngredient in ingredientSelectModal.selectedIngredientList"><span>{{ selectedIngredient.name }}</span><i @click="deleteIngredient(selectedIngredient)" class="fa fa-times-circle"></i></li>
+                  </ul>
+                </div>
+              </div>
+              <div class="button-box">
+                <div class="form-actions">
+                  <button @click.prevent.stop="ingredientSelectModal.show=false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                  <button type="submit" :disabled="ingredientSelectModal.adding" :class="{'disabled':ingredientSelectModal.adding}" v-text="ingredientSelectModal.adding ? $t('common.handling') : $t('common.ok')" @click.prevent.stop="confirmSelected" class="btn btn-primary"></button>
+                </div>
+              </div>
+            </div>
+          </modal>
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-import api from '../../../api';
-import Modal from '../../../components/modal.vue';
-import Pager from '../../../components/pager.vue';
-import Select from '../../../components/select.vue';
-import SearchBox from '../../../components/search-box.vue';
-import ImageUploader from '../../../components/image-uploader.vue';
-import _ from 'lodash';
+import api from '../../../api'
+import Modal from '../../../components/Modal'
+import Pager from '../../../components/Pager'
+import Select from '../../../components/Select'
+import SearchBox from '../../../components/SearchBox'
+import ImageUploader from '../../../components/ImageUploader'
+import _ from 'lodash'
 
 export default {
   name: 'AddForm',
@@ -249,16 +260,16 @@ export default {
       categories: [],
       ingredientCategories: [],
       adding: false
-    };
+    }
   },
 
   computed: {
     categoryOptions () {
-      return _.differenceBy(this.categories, this.model.classification, 'main');
+      return _.differenceBy(this.categories, this.model.classification, 'main')
     },
 
     deviceOptions () {
-      return _.differenceBy(this.devices, this.model.devices, 'name');
+      return _.differenceBy(this.devices, this.model.devices, 'name')
     },
 
     /**
@@ -266,14 +277,14 @@ export default {
      * @return {Array} 分类选项
      */
     ingredientCategoryOptions () {
-      var arr = [{label: '全部', value: 'all'}];
+      var arr = [{label: '全部', value: 'all'}]
       this.ingredientCategories.map((item) => {
-        let obj = {};
-        obj.label = item.main;
-        obj.value = item.main;
-        arr.push(obj);
-      });
-      return arr;
+        let obj = {}
+        obj.label = item.main
+        obj.value = item.main
+        arr.push(obj)
+      })
+      return arr
     },
 
     /**
@@ -289,54 +300,49 @@ export default {
         order: {
           created_at: 'desc'
         }
-      };
+      }
 
       if (this.ingredientSelectModal.query.length > 0) {
-        condition.query['name'] = { $like: this.ingredientSelectModal.query };
+        condition.query['name'] = { $like: this.ingredientSelectModal.query }
       }
 
       if (this.ingredientSelectModal.category === 'all') {
-        delete condition.query['classification.main'];
+        delete condition.query['classification.main']
       } else {
-        condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] };
+        condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] }
       }
-      return condition;
+      return condition
     },
 
     filteredIngredientList () {
       var list = this.ingredientSelectModal.ingredientList.map((item) => {
-        var flag = false;
+        var flag = false
         this.model.major_ingredients.map((ingredient) => {
           if (ingredient.name === item.name) {
-            flag = true;
+            flag = true
           }
-        });
+        })
         this.ingredientSelectModal.selectedIngredientList.map((ingredient) => {
           if (ingredient.name === item.name) {
-            flag = true;
+            flag = true
           }
-        });
-        item.selected = flag;
-        return item;
-      });
-      return list;
+        })
+        item.selected = flag
+        return item
+      })
+      return list
     }
   },
 
   route: {
     data () {
       // 获取所有菜谱分类
-      this.getCategories();
+      this.getCategories()
       // 获取所有食材分类
-      this.getIngredientCategories();
+      this.getIngredientCategories()
       // 获取所有食材
-      this.getIngredients();
+      this.getIngredients()
     }
-  },
-
-  ready () {
-    // var self = this;
-    // self.updateToSelectedList();
   },
 
   methods: {
@@ -344,66 +350,66 @@ export default {
      * 获取菜谱分类
      */
     getCategories () {
-      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}];
-      api.diet.listCategory('recipe_classification').then((data) => {
-        if (data.value !== undefined) {
-          this.categories = data.value;
+      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
+      api.diet.listCategory('recipe_classification').then((res) => {
+        if (typeof res.data.value !== 'undefined') {
+          this.categories = res.data.value
         } else {
-          this.categories = [];
+          this.categories = []
         }
       }).catch((error) => {
-        this.handleError(error);
-      });
+        this.handleError(error)
+      })
     },
 
     /**
      * 获取食材分类
      */
     getIngredientCategories () {
-      api.diet.listCategory('ingredient_classification').then((data) => {
-        if (data.value !== undefined) {
-          this.ingredientCategories = data.value;
+      api.diet.listCategory('ingredient_classification').then((res) => {
+        if (typeof res.data.value !== 'undefined') {
+          this.ingredientCategories = res.data.value
         } else {
-          this.ingredientCategories = [];
+          this.ingredientCategories = []
         }
       }).catch((error) => {
-        this.handleError(error);
-      });
+        this.handleError(error)
+      })
     },
 
     /**
      * 获取食材列表
      */
     getIngredients () {
-      this.ingredientSelectModal.loadingData = true;
-      api.diet.listIngredient(this.queryCondition).then((data) => {
+      this.ingredientSelectModal.loadingData = true
+      api.diet.listIngredient(this.queryCondition).then((res) => {
         // 食材列表
-        this.ingredientSelectModal.ingredientList = data.list.map((item) => {
-          item.selected = false;
-          return item;
-        });
-        this.ingredientSelectModal.total = data.total;
-        this.ingredientSelectModal.loadingData = false;
+        this.ingredientSelectModal.ingredientList = res.data.list.map((item) => {
+          item.selected = false
+          return item
+        })
+        this.ingredientSelectModal.total = res.data.total
+        this.ingredientSelectModal.loadingData = false
       }).catch((error) => {
-        this.handleError(error);
-        this.ingredientSelectModal.loadingData = false;
-      });
+        this.handleError(error)
+        this.ingredientSelectModal.loadingData = false
+      })
     },
 
     /**
      * 添加菜谱类别
      */
     addCategory () {
-      var newCate = {sub: []};
-      newCate.main = this.categoryOptions[0].main;
-      this.model.classification.push(newCate);
+      var newCate = {sub: []}
+      newCate.main = this.categoryOptions[0].main
+      this.model.classification.push(newCate)
     },
 
     /**
      * 添加烹饪设备
      */
     addCookingDevice () {
-      this.model.devices.push(this.deviceOptions[0]);
+      this.model.devices.push(this.deviceOptions[0])
     },
 
     /**
@@ -418,24 +424,24 @@ export default {
         description: '',
         time: 0,
         images: ['']
-      };
+      }
       switch (eventType) {
         case 'MOVE_UP':
-          this.model.cooking_steps.splice(index, 1);
-          this.model.cooking_steps.splice(index - 1, 0, step);
-          break;
+          this.model.cooking_steps.splice(index, 1)
+          this.model.cooking_steps.splice(index - 1, 0, step)
+          break
         case 'MOVE_DOWN':
-          this.model.cooking_steps.splice(index, 1);
-          this.model.cooking_steps.splice(index + 1, 0, step);
-          break;
+          this.model.cooking_steps.splice(index, 1)
+          this.model.cooking_steps.splice(index + 1, 0, step)
+          break
         case 'ADD':
-          this.model.cooking_steps.splice(index + 1, 0, newstep);
-          break;
+          this.model.cooking_steps.splice(index + 1, 0, newstep)
+          break
         case 'DEL':
-          this.model.cooking_steps.$remove(step);
-          break;
+          this.model.cooking_steps.$remove(step)
+          break
         default:
-          break;
+          break
       }
     },
 
@@ -445,24 +451,24 @@ export default {
      * @param  {Array}  arr 要删除的对象的父数组
      */
     removeObj (obj, arr) {
-      arr.$remove(obj);
+      arr.$remove(obj)
     },
 
     /**
      * 确定已选食材
      */
     confirmSelected () {
-      this.ingredientSelectModal.adding = true;
+      this.ingredientSelectModal.adding = true
       this.ingredientSelectModal.selectedIngredientList.map((item) => {
-        var newIngredient = {};
-        newIngredient._id = item._id;
-        newIngredient.classification = item.classification;
-        newIngredient.name = item.name;
-        this.model.major_ingredients.push(newIngredient);
-      });
-      this.ingredientSelectModal.selectedIngredientList = [];
-      this.ingredientSelectModal.show = false;
-      this.ingredientSelectModal.adding = false;
+        var newIngredient = {}
+        newIngredient._id = item._id
+        newIngredient.classification = item.classification
+        newIngredient.name = item.name
+        this.model.major_ingredients.push(newIngredient)
+      })
+      this.ingredientSelectModal.selectedIngredientList = []
+      this.ingredientSelectModal.show = false
+      this.ingredientSelectModal.adding = false
     },
 
     /**
@@ -470,7 +476,7 @@ export default {
      * @param {Object} ingredient 食材
      */
     addIngredient (ingredient) {
-      this.ingredientSelectModal.selectedIngredientList.push(ingredient);
+      this.ingredientSelectModal.selectedIngredientList.push(ingredient)
     },
 
     /**
@@ -478,24 +484,24 @@ export default {
      * @param {Object} ingredient 食材
      */
     deleteIngredient (ingredient) {
-      this.ingredientSelectModal.selectedIngredientList.$remove(ingredient);
+      this.ingredientSelectModal.selectedIngredientList.$remove(ingredient)
     },
 
     // 搜索
     handleSearch () {
       if (this.ingredientSelectModal.query.length === 0) {
-        this.getIngredients();
+        this.getIngredients()
       }
     },
 
     // 切换搜索
     toggleSearching () {
-      this.ingredientSelectModal.searching = !this.ingredientSelectModal.searching;
+      this.ingredientSelectModal.searching = !this.ingredientSelectModal.searching
     },
 
     // 取消搜索
     cancelSearching () {
-      this.getIngredients();
+      this.getIngredients()
     },
 
     /**
@@ -503,20 +509,22 @@ export default {
      */
     onRecipeSubmit () {
       if (this.validation.$valid && !this.adding) {
-        this.adding = true;
-        this.model.images = _.compact(this.model.images);
-        api.diet.addRecipe(this.model).then((data) => {
-          alert('菜谱添加成功！');
-          this.$route.router.go({path: '/diet/recipe'});
+        this.adding = true
+        this.model.images = _.compact(this.model.images)
+        api.diet.addRecipe(this.model).then((res) => {
+          if (res.status === 200) {
+            window.alert('菜谱添加成功！')
+            this.$route.router.go({path: '/diet/recipe'})
+          }
         }).catch((error) => {
-          this.handleError(error);
-          this.ingredientSelectModal.loadingData = false;
-          this.adding = false;
-        });
+          this.handleError(error)
+          this.ingredientSelectModal.loadingData = false
+          this.adding = false
+        })
       }
     }
   }
-};
+}
 </script>
 
 <style lang="stylus">

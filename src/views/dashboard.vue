@@ -1,119 +1,111 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .row
-      .col-20
-        // Start: 管理台
-        .panel
-          .panel-hd
-            .date(v-text="new Date() | formatDate")
-            h2 {{ $t("dashboard.platform") }}
-          .panel-bd
-            .statistic
-              .statistic-item.device-count
-                .fa.fa-link
-                .num {{totalSummary.total}}
-                .label {{ $t("dashboard.statistic.total") }}
-              .statistic-item.active-count
-                .fa.fa-magic
-                .num {{totalSummary.activated}}
-                .label {{ $t("dashboard.statistic.activated") }}
-              .statistic-item.online-count
-                .fa.fa-wifi
-                .num {{totalSummary.online}}
-                .label {{ $t("dashboard.statistic.online") }}
-              .statistic-item.user-count
-                .fa.fa-users
-                .num {{userSummary.user}}
-                .label {{ $t("dashboard.statistic.user") }}
-        // Start: 管理台
-
-    .row
-      .col-12
-        // Start: 告警
-        //- .panel
-        //-   .panel-hd
-        //-     h2 告警
-        //-   .panel-bd
-        //-     #alarmTrendChart(style="height:320px;")
-        // End: 告警
-
-        // Start: 快速指南
-        .panel
-          .panel-hd
-            h2 {{ $t("dashboard.guide") }}
-          .panel-bd
-            .post-list
-              ul
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank") XLINK SDK iOS 集成文档
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank") XLINK SDK Android 集成文档
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/108289/", target="_blank") [用户] 设备分享接口
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/104331/", target="_blank") [企业应用] 微信配置接口
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/102780/", target="_blank") [企业应用] 第三方身份授权管理
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/100082/", target="_blank") [企业应用] 统计分析
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/91020/", target="_blank") [用户] 接口权限调用
-                //- li
-                //-   a(href="http://support.xlink.cn/hc/kb/article/90705/", target="_blank") [用户] 升级开发文档
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md", target="_blank") XLINK SDK iOS 集成文档
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md", target="_blank") XLINK SDK Android 集成文档
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_share", target="_blank") [用户] 设备分享接口
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_newest_version", target="_blank") [用户] 设备升级接口
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/微信智能硬件接入指南.md", target="_blank") [企业应用] 微信接入指南
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/授权管理.md", target="_blank") [企业应用] 授权管理
-                li
-                  a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/数据统计分析接口.md", target="_blank") [企业应用] 统计分析
-
-        // End: 快速指南
-
-      .col-8
-        // Start: 文档
-        .panel
-          .panel-hd
-            h2 {{ $t("dashboard.documents") }}
-          .panel-bd
-            .doc-list
-              .doc-list-item
-                a.fa.fa-apple(href="http://support.xlink.cn/hc/kb/article/85600/", target="_blank")
-                .info
-                  h3
-                    a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md", target="_blank") iOS SDK
-                  p 提供iOS开发文档说明
-              .doc-list-item
-                a.fa.fa-android(href="http://support.xlink.cn/hc/kb/article/85441/", target="_blank")
-                .info
-                  h3
-                    a(href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md", target="_blank") Android SDK
-                  p 提供Android开发文档说明
-              .doc-list-item
-                a.fa.fa-th-large(href="#", target="_blank")
-                .info
-                  h3
-                    a(href="#", target="_blank") APP 开发示例
-                  p 云智易平台提供了丰富的接口
-        // End: 文档
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="row">
+        <div class="col-20">
+          <!-- Start: 管理台-->
+          <div class="panel">
+            <div class="panel-hd">
+              <div v-text="new Date() | formatDate" class="date"></div>
+              <h2>{{ $t("dashboard.platform") }}</h2>
+            </div>
+            <div class="panel-bd">
+              <div class="statistic">
+                <div class="statistic-item device-count">
+                  <div class="fa fa-link"></div>
+                  <div class="num">{{ totalSummary.total }}</div>
+                  <div class="label">{{ $t("dashboard.statistic.total") }}</div>
+                </div>
+                <div class="statistic-item active-count">
+                  <div class="fa fa-magic"></div>
+                  <div class="num">{{ totalSummary.activated }}</div>
+                  <div class="label">{{ $t("dashboard.statistic.activated") }}</div>
+                </div>
+                <div class="statistic-item online-count">
+                  <div class="fa fa-wifi"></div>
+                  <div class="num">{{ totalSummary.online }}</div>
+                  <div class="label">{{ $t("dashboard.statistic.online") }}</div>
+                </div>
+                <div class="statistic-item user-count">
+                  <div class="fa fa-users"></div>
+                  <div class="num">{{ userSummary.user }}</div>
+                  <div class="label">{{ $t("dashboard.statistic.user") }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Start: 管理台-->
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <!-- Start: 告警-->
+          <!-- End: 告警-->
+          <!-- Start: 快速指南-->
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>{{ $t("dashboard.guide") }}</h2>
+            </div>
+            <div class="panel-bd">
+              <div class="post-list">
+                <ul>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md" target="_blank">XLINK SDK iOS 集成文档</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md" target="_blank">XLINK SDK Android 集成文档</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_share" target="_blank">[用户] 设备分享接口</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_newest_version" target="_blank">[用户] 设备升级接口</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/微信智能硬件接入指南.md" target="_blank">[企业应用] 微信接入指南</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/授权管理.md" target="_blank">[企业应用] 授权管理</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/数据统计分析接口.md" target="_blank">[企业应用] 统计分析</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- End: 快速指南-->
+        </div>
+        <div class="col-8">
+          <!-- Start: 文档-->
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>{{ $t("dashboard.documents") }}</h2>
+            </div>
+            <div class="panel-bd">
+              <div class="doc-list">
+                <div class="doc-list-item"><a href="http://support.xlink.cn/hc/kb/article/85600/" target="_blank" class="fa fa-apple"></a>
+                  <div class="info">
+                    <h3><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md" target="_blank">iOS SDK</a></h3>
+                    <p>提供iOS开发文档说明</p>
+                  </div>
+                </div>
+                <div class="doc-list-item"><a href="http://support.xlink.cn/hc/kb/article/85441/" target="_blank" class="fa fa-android"></a>
+                  <div class="info">
+                    <h3><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md" target="_blank">Android SDK</a></h3>
+                    <p>提供Android开发文档说明</p>
+                  </div>
+                </div>
+                <div class="doc-list-item"><a href="#" target="_blank" class="fa fa-th-large"></a>
+                  <div class="info">
+                    <h3><a href="#" target="_blank">APP 开发示例</a></h3>
+                    <p>云智易平台提供了丰富的接口</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- End: 文档-->
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-  import api from '../api';
-  import Vue from 'vue';
+  import api from '../api'
+  import Vue from 'vue'
 
-  module.exports = {
+  export default {
     name: 'Dashboard',
 
-    data: function () {
+    data () {
       return {
         totalSummary: {
           total: 0,
@@ -123,42 +115,36 @@ section.main-wrap
         userSummary: {
           user: 0
         }
-      };
+      }
     },
 
     filters: {
-      formatDate: function (date) {
-        var year = date.getFullYear();
-        var month = date.getMonth();
-        var day = date.getDate();
+      formatDate (date) {
+        var year = date.getFullYear()
+        var month = date.getMonth()
+        var day = date.getDate()
         if (Vue.config.lang === 'en-us') {
-          var weekArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-          return year + '-' + (month + 1) + '-' + day + ', ' + weekArr[date.getDay()];
+          var weekArr = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+          return year + '-' + (month + 1) + '-' + day + ', ' + weekArr[date.getDay()]
         } else {
-          return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay());
+          return year + '年' + (month + 1) + '月' + day + '日 星期' + '日一二三四五六'.charAt(date.getDay())
         }
       }
     },
 
     route: {
-      data: function () {
-        var self = this;
-        api.corp.refreshToken().then(function () {
-          api.statistics.getSummary().then(function (data) {
-            self.totalSummary = data.total;
-            self.userSummary = data.user;
-            // transition.next();
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+      data () {
+        api.statistics.getSummary().then((res) => {
+          if (res.status === 200) {
+            this.totalSummary = res.data.total
+            this.userSummary = res.data.user
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       }
-    },
-
-    methods: {
-
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

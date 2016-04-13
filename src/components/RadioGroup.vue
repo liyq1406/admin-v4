@@ -1,13 +1,14 @@
-<template lang="jade">
-.btn-group(data-toggle="buttons")
-  slot(name="label")
-  label.btn.btn-default(v-for="item in items", :class="{'active': item.value === value}")
-    input(type="radio", autocomplete="off", checked="{{checked}}", @click="onSelect(item.value)")
-    | {{item.label}}
+<template>
+  <div data-toggle="buttons" class="btn-group">
+    <slot name="label"></slot>
+    <label v-for="item in items" :class="{'active': item.value === value}" class="btn btn-default">
+      <input type="radio" autocomplete="off" checked="{{ checked }}" @click="onSelect(item.value)"/>{{ item.label }}
+    </label>
+  </div>
 </template>
 
 <script>
-  module.exports = {
+  export default {
     props: {
       value: {
         twoWay: true
@@ -19,12 +20,12 @@
     },
 
     methods: {
-      onSelect: function (value) {
-        this.value = value;
-        this.$dispatch('select', value);
+      onSelect (value) {
+        this.value = value
+        this.$dispatch('select', value)
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">

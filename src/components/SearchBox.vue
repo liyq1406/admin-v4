@@ -1,10 +1,12 @@
-<template lang="jade">
-.search-box(:class="{'auto-search': auto, 'active': active && key.length}")
-  slot
-  .search-box-input
-    input(:placeholder="placeholder", v-model="key", @focus="handleFocus(key)", @blur="handleBlur(key)", @input="handleInput", @keyup.enter="$dispatch('press-enter')")
-    .fa.fa-times-circle(@mousedown="handleCancelClick")
-  slot(name="search-button")
+<template>
+  <div :class="{'auto-search': auto, 'active': active && key.length}" class="search-box">
+    <slot></slot>
+    <div class="search-box-input">
+      <input :placeholder="placeholder" v-model="key" @focus="handleFocus(key)" @blur="handleBlur(key)" @input="handleInput" @keyup.enter="$dispatch('press-enter')"/>
+      <div @mousedown="handleCancelClick" class="fa fa-times-circle"></div>
+    </div>
+    <slot name="search-button"></slot>
+  </div>
 </template>
 
 <style lang="stylus">
@@ -61,7 +63,7 @@
 </style>
 
 <script>
-  module.exports = {
+  export default {
     props: {
       key: {
         type: String,
@@ -83,22 +85,22 @@
     },
 
     methods: {
-      handleCancelClick: function () {
-        this.key = '';
-        this.$dispatch('cancel');
+      handleCancelClick () {
+        this.key = ''
+        this.$dispatch('cancel')
       },
 
-      handleInput: function () {
-        this.$dispatch('search');
+      handleInput () {
+        this.$dispatch('search')
       },
 
-      handleFocus: function (key) {
-        this.$dispatch('search-activate', key);
+      handleFocus (key) {
+        this.$dispatch('search-activate', key)
       },
 
-      handleBlur: function (key) {
-        this.$dispatch('search-deactivate', key);
+      handleBlur (key) {
+        this.$dispatch('search-deactivate', key)
       }
     }
-  };
+  }
 </script>

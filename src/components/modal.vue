@@ -1,18 +1,23 @@
-<template lang="jade">
-.modal(v-show="show || flag", transition="modal")
-  .modal-wrapper
-    .modal-dialog(:style="dialogStyle")
-      .modal-header
-        slot(name="header")
-          h3 提示
-      .modal-body
-        slot(name="body")
-      slot(name="footer")
-      span.fa.fa-times-circle(@click="dismiss")
+<template>
+  <div v-show="show || flag" transition="modal" class="modal">
+    <div class="modal-wrapper">
+      <div :style="dialogStyle" class="modal-dialog">
+        <div class="modal-header">
+          <slot name="header">
+            <h3>提示</h3>
+          </slot>
+        </div>
+        <div class="modal-body">
+          <slot name="body"></slot>
+        </div>
+        <slot name="footer"></slot><span @click="dismiss" class="fa fa-times-circle"></span>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-module.exports = {
+export default {
   props: {
     width: {
       type: Number,
@@ -29,21 +34,21 @@ module.exports = {
     }
   },
 
-  data: function () {
+  data () {
     return {
       dialogStyle: {
         width: this.width + 'px'
       }
-    };
+    }
   },
 
   methods: {
-    dismiss: function () {
-      this.show = false;
-      this.$dispatch('close');
+    dismiss () {
+      this.show = false
+      this.$dispatch('close')
     }
   }
-};
+}
 </script>
 
 <style lang="stylus">

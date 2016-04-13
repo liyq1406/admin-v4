@@ -1,116 +1,127 @@
-<template lang="jade">
-section.main-wrap
-  .main
-    .breadcrumb
-      a(v-link="{path: '/products/' + $route.params.product_id + '/devices' }")
-        i.fa.fa-arrow-circle-left
-        | {{ $t('device.management') }}
-    .row
-      .col-20
-        .panel
-          .panel-hd
-            h2 {{ $t('device.details') }}
-          .panel-bd
-            //- #diviceMap(style="height: 300px")
-            ul.device-details
-              li(v-if='device.name')
-                .label 设备名称:
-                .info {{device.name}}
-              li
-                .label ID:
-                .info {{device.id}}
-              li
-                .label MAC:
-                .info {{device.mac}}
-              li
-                .label {{ $t('device.is_active') }}:
-                .info {{device.is_active ? $t('device.active') : $t('device.not_active') }}
-              li
-                .label {{ $t('device.active_date') }}:
-                .info {{device.active_date | formatDate}}
-              //- li
-              //-   .label 最后一次登录：
-              //-   .info 2015-11-12 19:33:22
-              li
-                .label {{ $t('device.is_online') }}:
-                .info
-                  span.hl-green(v-if="device.is_online") {{ $t('common.online') }}
-                  span.hl-red(v-else) {{ $t('common.offline') }}
-              li
-                .label {{ $t('device.firmware_version') }}:
-                .info
-                  span {{device.firmware_version}}
-
-    .row
-      .col-13
-        // Start: 数据端点
-        .panel
-          .panel-hd
-            .actions
-              button.btn.btn-success(:disabled="!device.is_online || refreshing", :class="{'disabled':!device.is_online || refreshing}", @click="getDatapointValues")
-                | {{ $t('common.refresh') }}
-                i.fa.fa-refresh(:class="{'fa-spin':refreshing}")
-            h2 {{ $t('device.datapoint') }}
-          .panel-bd
-            table.table
-              thead
-                tr
-                  th {{ $t('datapoint.fields.index') }}
-                  th {{ $t('datapoint.fields.name') }}
-                  th {{ $t('datapoint.fields.description') }}
-                  th {{ $t('device.current_value') }}
-              tbody
-                tr(v-for="datapoint in datapoints | orderBy 'index'")
-                  td {{datapoint.index}}
-                  td {{datapoint.name}}
-                  td {{datapoint.description}}
-                  td {{datapointValues[$index] ? datapointValues[$index].value : ''}}
-                tr(v-if="datapoints.length === 0")
-                  td.tac(colspan="4")
-                    i.fa.fa-refresh.fa-spin(v-if="$loadingRouteData")
-                    .tips-null(v-else) {{ $t('device.no_datapoint') }}
-
-        // End: 数据端点
-
-      .col-7
-        // Start: 设备日志
-        .panel
-          .panel-hd
-            .actions
-              switch(:value.sync="showLog", @switch-toggle='toggleLog')
-            h2 {{ $t('device.log') }}
-          .panel-bd
-            pre.output-log
-              div.log(v-for="log in logs")
-                span.time {{log.time}}
-                template(v-if="log.type === 'user'")
-                  span.user {{log.msg[0]}}
-                  span.msg : {{log.msg[1]}}
-                template(v-if="log.type === 'status'")
-                  span(:class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}") {{log.msg[0]}}
-                  span.msg : {{log.msg[1]}}
-                template(v-if="log.type === 'connected'")
-                  span.msg-success {{log.msg}}
-                template(v-if="log.type === 'disconnected'")
-                  span.msg-error {{log.msg}}
-        // End: 设备日志
+<template>
+  <section class="main-wrap">
+    <div class="main">
+      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('device.management') }}</a></div>
+      <div class="row">
+        <div class="col-20">
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>{{ $t('device.details') }}</h2>
+            </div>
+            <div class="panel-bd">
+              <ul class="device-details">
+                <li v-if="device.name">
+                  <div class="label">设备名称:</div>
+                  <div class="info">{{ device.name }}</div>
+                </li>
+                <li>
+                  <div class="label">ID:</div>
+                  <div class="info">{{ device.id }}</div>
+                </li>
+                <li>
+                  <div class="label">MAC:</div>
+                  <div class="info">{{ device.mac }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('device.is_active') }}:</div>
+                  <div class="info">{{ device.is_active ? $t('device.active') : $t('device.not_active') }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('device.active_date') }}:</div>
+                  <div class="info">{{ device.active_date | formatDate }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('device.is_online') }}:</div>
+                  <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else="v-else" class="hl-red">{{ $t('common.offline') }}</span></div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('device.firmware_version') }}:</div>
+                  <div class="info"><span>{{ device.firmware_version }}</span></div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-13">
+          <!-- Start: 数据端点-->
+          <div class="panel">
+            <div class="panel-hd">
+              <div class="actions">
+                <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-success">{{ $t('common.refresh') }}<i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
+              </div>
+              <h2>{{ $t('device.datapoint') }}</h2>
+            </div>
+            <div class="panel-bd">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>{{ $t('datapoint.fields.index') }}</th>
+                    <th>{{ $t('datapoint.fields.name') }}</th>
+                    <th>{{ $t('datapoint.fields.description') }}</th>
+                    <th>{{ $t('device.current_value') }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="datapoint in datapoints | orderBy 'index'">
+                    <td>{{ datapoint.index }}</td>
+                    <td>{{ datapoint.name }}</td>
+                    <td>{{ datapoint.description }}</td>
+                    <td>{{ datapointValues[$index] ? datapointValues[$index].value : '' }}</td>
+                  </tr>
+                  <tr v-if="datapoints.length === 0">
+                    <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                      <div v-else="v-else" class="tips-null">{{ $t('device.no_datapoint') }}</div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <!-- End: 数据端点-->
+        </div>
+        <div class="col-7">
+          <!-- Start: 设备日志-->
+          <div class="panel">
+            <div class="panel-hd">
+              <div class="actions">
+                <switch :value.sync="showLog" @switch-toggle="toggleLog"></switch>
+              </div>
+              <h2>{{ $t('device.log') }}</h2>
+            </div>
+            <div class="panel-bd">
+              <pre class="output-log">
+                <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
+                  <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                  <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                  <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
+                  <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
+                </div></pre>
+            </div>
+          </div>
+          <!-- End: 设备日志-->
+        </div>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script>
-  import api from '../../../api';
-  import Switch from '../../../components/switch.vue';
-  import io from 'socket.io-client';
-  import dateFormat from 'date-format';
-  var socket = null;
+  import api from '../../../api'
+  import Switch from '../../../components/Switch'
+  import io from 'socket.io-client'
+  import dateFormat from 'date-format'
+  var socket = null
 
-  module.exports = {
+  export default {
     name: 'DeviceDetails',
 
     components: {
       'switch': Switch
     },
 
-    data: function () {
+    data () {
       return {
         device: {},
         datapoints: [],
@@ -120,185 +131,180 @@ section.main-wrap
         logs: [],
         token: '',
         refreshing: false
-      };
+      }
     },
 
     route: {
-      data: function () {
-        this.getDatapointValues();
+      data () {
+        this.getDatapointValues()
+        this.getDeviceInfo()
+        this.getDatapoints()
 
-        /* alert(111);
+        /* window.alert(111)
         //百度地图API功能
-      	function loadJScript() {
-          alert("load js");
-          var script = document.createElement("script");
+      	function loadJScript () {
+          window.alert("load js")
+          var script = document.createElement("script")
 
-      		script.type = "text/javascript";
-      		script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
-      		document.body.appendChild(script);
+      		script.type = "text/javascript"
+      		script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init"
+      		document.body.appendChild(script)
       	}
-      	window.init = function () {
-          alert("init");
-      		var map = new BMap.Map("diviceMap");            // 创建Map实例
-      		var point = new BMap.Point(116.404, 39.915); // 创建点坐标
-      		map.centerAndZoom(point,15);
-      		map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+      	window.init = () => {
+          window.alert("init")
+      		var map = new BMap.Map("diviceMap")            // 创建Map实例
+      		var point = new BMap.Point(116.404, 39.915) // 创建点坐标
+      		map.centerAndZoom(point,15)
+      		map.enableScrollWheelZoom()                 //启用滚轮放大缩小
       	}
-      	// document.getElementById('diviceMap').addEventListener('load', loadJScript);  //异步加载地图
+      	// document.getElementById('diviceMap').addEventListener('load', loadJScript)  //异步加载地图
 
-        // document.addEventListener('load', loadJScript);
-        document.addEventListener('load', function (e) {
-          alert(1223323);
+        // document.addEventListener('load', loadJScript)
+        document.addEventListener('load', (e) => {
+          window.alert(1223323)
           // body...
-        });
-        // window.onload=loadJScript;
-        alert(222);*/
-
-        return {
-          device: this.getDeviceInfo(),
-          datapoints: this.getDatapoints()
-        };
+        })
+        // window.onload=loadJScript
+        window.alert(222)*/
       },
 
-      activate: function () {
+      activate () {
         if (this.showLog) {
-          this.connect();
+          this.connect()
         }
       },
 
-      deactivate: function () {
+      deactivate () {
         if (socket) {
-          socket.disconnect();
-          socket = null;
+          socket.disconnect()
+          socket = null
         }
       }
     },
 
-    ready: function () {
+    ready () {
       /*
       //百度地图API功能
-      function loadJScript() {
-        var script = document.createElement("script");
-        script.type = "text/javascript";
-        script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init";
-        document.body.appendChild(script);
+      function loadJScript () {
+        var script = document.createElement("script")
+        script.type = "text/javascript"
+        script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init"
+        document.body.appendChild(script)
       }
-      window.init = function () {
-        var map = new BMap.Map("diviceMap");            // 创建Map实例
-        var point = new BMap.Point(116.404, 39.915); // 创建点坐标
-        map.centerAndZoom(point,15);
-        map.enableScrollWheelZoom();                 //启用滚轮放大缩小
+      window.init = () => {
+        var map = new BMap.Map("diviceMap")            // 创建Map实例
+        var point = new BMap.Point(116.404, 39.915) // 创建点坐标
+        map.centerAndZoom(point,15)
+        map.enableScrollWheelZoom()                 //启用滚轮放大缩小
       }
-      // document.getElementById('diviceMap').addEventListener('load', loadJScript);  //异步加载地图
+      // document.getElementById('diviceMap').addEventListener('load', loadJScript)  //异步加载地图
 
-      // document.addEventListener('load', loadJScript);
-      // document.addEventListener('load', function (e) {
-        // alert(1223323);
+      // document.addEventListener('load', loadJScript)
+      // document.addEventListener('load', (e) => {
+        // window.alert(1223323)
         // body...
-      // });
-      window.onload=loadJScript;
+      // })
+      window.onload=loadJScript
       */
     },
 
     methods: {
       // 获取设备信息
-      getDeviceInfo: function () {
-        var self = this;
-        return api.corp.refreshToken().then(function () {
-          return api.device.getInfo(self.$route.params.product_id, self.$route.params.device_id);
-        });
+      getDeviceInfo () {
+        api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+          if (res.status === 200) {
+            this.device = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       // 获取设备端点列表
-      getDatapoints: function () {
-        var self = this;
-        return api.corp.refreshToken(this).then(function () {
-          return api.product.getDatapoints(self.$route.params.product_id);
-        });
+      getDatapoints () {
+        api.product.getDatapoints(this.$route.params.product_id).then((res) => {
+          if (res.status === 200) {
+            this.datapoints = res.data
+          }
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       // 获取设备端点值
-      getDatapointValues: function () {
-        var self = this;
-        this.refreshing = true;
-        api.corp.refreshToken(this).then(function () {
-          api.device.getDatapointValues(self.$route.params.device_id).then(function (data) {
-            self.refreshing = false;
-            if (data.status === 202) {
-              console.log('设备离线！');
-            } else {
-              self.datapointValues = data.datapoint;
-            }
-          }).catch(function () {
-            self.refreshing = false;
-          });
-        });
+      getDatapointValues () {
+        this.refreshing = true
+        api.device.getDatapointValues(this.$route.params.device_id, { act: 'logs' }).then((res) => {
+          this.refreshing = false
+          if (res.status === 202) {
+            console.log('设备离线！')
+          } else {
+            this.datapointValues = res.data.datapoint
+          }
+        }).catch(() => {
+          this.refreshing = false
+        })
       },
 
       // 连接
-      connect: function () {
-        var self = this;
+      connect () {
+        api.device.getDeviceToken(this.$route.params.device_id).then((res) => {
+          this.token = res.data.token
+          socket = io.connect('http://' + res.data.addr, {'force new connection': true})
 
-        api.corp.refreshToken().then(function () {
-          api.device.getDeviceToken(self.$route.params.device_id).then(function (data) {
+          // 连接 socket
+          socket.on('connect', () => {
+            this.outputLog('Client has connected to the server!', 'connected')
+            window.setTimeout(() => {
+              socket.emit('trace.logs', {id: this.$route.params.device_id, token: this.token})
+            }, 100)
+          })
 
-            self.token = data.token;
-            socket = io.connect('http://' + data.addr, {'force new connection': true});
+          // 断开 socket 连接
+          socket.on('disconnect', () => {
+            this.outputLog('The client has disconnected!', 'disconnected')
+          })
 
-            // 连接 socket
-            socket.on('connect', function () {
-              self.outputLog('Client has connected to the server!', 'connected');
-              window.setTimeout(function () {
-                socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token});
-              }, 100);
-            });
+          // 输入日志
+          socket.on('trace.log', (data) => {
+            this.outputLog([data.id, data.log], 'user')
+          })
 
-            // 断开 socket 连接
-            socket.on('disconnect', function () {
-              self.outputLog('The client has disconnected!', 'disconnected');
-            });
-
-            // 输入日志
-            socket.on('trace.log', function (data) {
-              self.outputLog([data.id, data.log], 'user');
-            });
-
-            // 输出状态
-            socket.on('trace.status', function (data) {
-              self.outputLog([data.status, data.msg], 'status');
-            });
-          }).catch(function (error) {
-            self.handleError(error);
-          });
-        });
+          // 输出状态
+          socket.on('trace.status', (data) => {
+            this.outputLog([data.status, data.msg], 'status')
+          })
+        }).catch((error) => {
+          this.handleError(error)
+        })
       },
 
       // 收集日志信息并格式化输出
-      outputLog: function (msg, type) {
+      outputLog (msg, type) {
         this.logs.push({
           time: dateFormat('hh:mm:ss.SSS', new Date()),
           msg: msg,
           type: type
-        });
+        })
       },
 
       // 切换日志显示
-      toggleLog: function () {
+      toggleLog () {
         if (!this.showLog) {
-          this.connect();
+          this.connect()
         } else {
           if (socket) {
-            socket.disconnect();
-            socket = null;
+            socket.disconnect()
+            socket = null
           }
         }
       },
 
-      handleError: function (error) {
-        console.log(error);
+      handleError (error) {
+        console.log(error)
       }
     }
-  };
+  }
 </script>
 
 <style lang="stylus">
