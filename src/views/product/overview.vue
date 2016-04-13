@@ -165,7 +165,7 @@
   require('echarts/chart/line')
   require('echarts/chart/map')
   import ecConfig from 'echarts/config'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
 
   export default {
     name: 'Overview',

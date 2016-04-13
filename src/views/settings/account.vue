@@ -176,7 +176,7 @@
 <script>
   import Vue from 'vue'
   import Modal from '../../components/Modal'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import api from '../../api'
   import _ from 'lodash'
 

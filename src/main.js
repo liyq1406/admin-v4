@@ -5,7 +5,7 @@ import i18n from 'vue-i18n'
 import browser from './helpers/browser'
 
 // 多语言配置文件
-import locales from './consts/locales'
+import locales from './consts/locales/index'
 
 // 指令
 import * as directives from './directives'

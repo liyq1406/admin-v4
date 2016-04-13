@@ -119,7 +119,7 @@
   import api from '../api'
   import config from '../consts/config'
   // import config from '../../consts/config'
-  import locales from '../consts/locales'
+  import locales from '../consts/locales/index'
   import Captcha from '../components/Captcha'
 
   export default {

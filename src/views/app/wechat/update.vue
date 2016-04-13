@@ -81,7 +81,7 @@
 
 <script>
   import Vue from 'vue'
-  import locales from '../../../consts/locales'
+  import locales from '../../../consts/locales/index'
   import api from '../../../api'
   // import Modal from '../../../components/Modal'
   import _ from 'lodash'

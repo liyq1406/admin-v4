@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import locales from '../consts/locales'
+import locales from '../consts/locales/index'
 
 export default {
   methods: {

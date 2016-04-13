@@ -257,7 +257,7 @@
 import Vue from 'vue'
 import api from '../../api'
 import RadioGroup from '../../components/RadioGroup'
-import locales from '../../consts/locales'
+import locales from '../../consts/locales/index'
 
 export default {
   name: 'MailTemplates',

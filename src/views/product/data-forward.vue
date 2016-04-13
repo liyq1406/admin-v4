@@ -147,7 +147,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
   import _ from 'lodash'

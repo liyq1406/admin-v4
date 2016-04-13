@@ -146,7 +146,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import RadioGroup from '../../components/RadioGroup'

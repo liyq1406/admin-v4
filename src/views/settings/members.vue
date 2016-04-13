@@ -87,7 +87,7 @@
   import Modal from '../../components/Modal'
   import api from '../../api'
   import Pager from '../../components/Pager'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
 
   export default {
     name: 'MemberSettings',

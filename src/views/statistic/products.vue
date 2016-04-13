@@ -84,7 +84,7 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import Select from '../../components/Select'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import api from '../../api'
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'

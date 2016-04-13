@@ -53,7 +53,7 @@
   import Vue from 'vue'
   import api from '../../api'
   import productsStore from '../../stores/products'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
 
   export default {
     name: 'CreateProductForm',

@@ -75,7 +75,7 @@
 
 <script>
   import api from '../api'
-  import locales from '../consts/locales'
+  import locales from '../consts/locales/index'
   import Vue from 'vue'
 
   export default {

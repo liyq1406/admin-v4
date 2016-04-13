@@ -180,7 +180,7 @@
   import api from '../../api'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import _ from 'lodash'
 
   export default {

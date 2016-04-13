@@ -79,7 +79,7 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import api from '../../api'
-  import locales from '../../consts/locales'
+  import locales from '../../consts/locales/index'
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'
   require('echarts/chart/line')
