@@ -234,9 +234,9 @@ export default {
       "status": 授权状态
     }
    */
-  productEmpowerStatus (app_id, product_id, params) {
-    return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/status`, params
+  productEmpowerStatus (app_id, product_id) {
+    return http.get(
+      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/status`
     )
   },
 

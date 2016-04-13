@@ -25,10 +25,6 @@
   </div>
 </template>
 
-<style lang="stylus">
-  @import '../assets/stylus/common'
-</style>
-
 <script>
   import api from '../api'
   import base64 from '../helpers/base64'

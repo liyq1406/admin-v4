@@ -11,8 +11,13 @@
           <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
             <input type="text" v-model="model.phone" v-form-ctrl required pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" name="phone" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.phone.$pristine" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span></div>
-          <div v-if="validation.phone.$dirty" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span><span v-if="validation.phone.$error.pattern">{{ $t('validation.format', {field: $t('auth.fields.phone')}) }}</span></div>
+          <div v-if="validation.$submitted && validation.phone.$pristine" class="form-tips form-tips-error">
+            <span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span>
+          </div>
+          <div v-if="validation.phone.$dirty" class="form-tips form-tips-error">
+            <span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span>
+            <span v-if="validation.phone.$error.pattern">{{ $t('validation.format', {field: $t('auth.fields.phone')}) }}</span>
+          </div>
         </div>
         <div class="form-row captcha-row">
           <div v-placeholder="$t('auth.insert_code')" class="input-text-wrap">
@@ -32,15 +37,26 @@
           <div v-placeholder="$t('auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
-          <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
+          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error">
+            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+          </div>
+          <div v-if="validation.password.$dirty" class="form-tips form-tips-error">
+            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+            <span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span>
+            <span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span>
+          </div>
         </div>
         <div class="form-row">
           <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
             <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span></div>
-          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span></div>
+          <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error">
+            <span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span>
+          </div>
+          <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error">
+            <span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span>
+            <span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span>
+          </div>
         </div>
         <div class="form-actions">
           <button type="submit" class="btn btn-primary btn-block">{{ $t("common.ok") }}</button>
@@ -54,7 +70,9 @@
         <h2>{{ $t("auth.by_phone_success") }}</h2>
         <p>{{ $t("auth.by_phone_success_msg") }}</p>
       </div>
-      <div class="form-actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-block">{{ $t("common.ok") }}</a></div>
+      <div class="form-actions">
+        <a v-link="{ path: '/login'}" class="btn btn-primary btn-block">{{ $t("common.ok") }}</a>
+      </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
     </div>
   </div>

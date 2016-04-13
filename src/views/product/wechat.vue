@@ -333,10 +333,10 @@
                   this.currProduct = item
                 }
               }
-              if (arr.length - 0 === 0) {
-                this.wetips = true
-              }
             })
+            if (arr.length === 0) {
+              this.wetips = true
+            }
             this.apps = arr
           }
         })

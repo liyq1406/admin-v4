@@ -107,7 +107,7 @@ export default {
     params.release_date = firmware.release_date
     params.is_release = firmware.is_release
 
-    return http.post(
+    return http.put(
       `${apiServer.default}/v2/product/${product_id}/firmware/${firmware.id}`, params
     )
   },

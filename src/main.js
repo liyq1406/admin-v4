@@ -132,6 +132,9 @@ Vue.filter('formatRules', {
 })
 
 // 注册全局全局混合
+// 说明：globalMixin 里面定义的方法
+//      可以直接在组件里面使用，比如：
+//      this.handleError()
 // ------------------------------
 Vue.mixin(globalMixin)
 

@@ -22,7 +22,7 @@ export default {
       }
    */
   addRule (params) {
-    return http.get(
+    return http.post(
       `${apiServer.default}/v2/alert/rule`, params
     )
   },

@@ -73,7 +73,7 @@ export default {
    */
   toggleTaskStatus (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/firmware/tasks/status`, params
+      `${apiServer.default}/v2/upgrade/firmware/task/status`, params
     )
   },
 
