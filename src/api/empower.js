@@ -99,7 +99,7 @@ export default {
    * @return {Promise}
    */
   toggleKeys (accesskey_id, status) {
-    return http.post(
+    return http.put(
       `${apiServer.default}/v2/accesskey/${accesskey_id}/status/${status}`
     )
   },
