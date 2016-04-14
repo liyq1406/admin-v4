@@ -93,7 +93,7 @@
     },
 
     beforeDestroy () {
-      if (this._closeEvent){
+      if (this._closeEvent) {
         this._closeEvent.remove()
       }
     }
