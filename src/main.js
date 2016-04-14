@@ -13,9 +13,6 @@ import * as directives from './directives'
 // 过滤器
 import * as filters from './filters'
 
-// 全局混合
-// import globalMixin from './mixins/global'
-
 // 路由设置
 import configRouter from './route-config'
 
@@ -130,13 +127,6 @@ Vue.filter('formatRules', {
     return ret
   }
 })
-
-// 注册全局全局混合
-// 说明：globalMixin 里面定义的方法
-//      可以直接在组件里面使用，比如：
-//      this.handleError()
-// ------------------------------
-// Vue.mixin(globalMixin)
 
 // 路由及其配置
 router = new VueRouter({

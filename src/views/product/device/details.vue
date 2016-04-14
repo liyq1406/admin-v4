@@ -108,11 +108,13 @@
 </template>
 
 <script>
+  import Vue from 'vue'
   import api from '../../../api'
   import Switch from '../../../components/Switch'
   import io from 'socket.io-client'
   import dateFormat from 'date-format'
   import { globalMixins } from '../../../mixins'
+  import locales from '../../../consts/locales/index'
 
   var socket = null
 
@@ -247,8 +249,12 @@
           } else {
             this.datapointValues = res.data.datapoint
           }
-        }).catch(() => {
+        }).catch((res) => {
           this.refreshing = false
+          this.showNotice({
+            type: 'error',
+            content: locales[Vue.config.lang].errors[res.data.error.code]
+          })
         })
       },
 
@@ -281,7 +287,7 @@
             this.outputLog([data.status, data.msg], 'status')
           })
         }).catch((res) => {
-          this.handleError(res)
+          // this.handleError(res)
         })
       },
 
@@ -304,10 +310,6 @@
             socket = null
           }
         }
-      },
-
-      handleError (error) {
-        console.log(error)
       }
     }
   }

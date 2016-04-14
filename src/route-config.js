@@ -1,14 +1,3 @@
-// import api from './api'
-
-/**
- * 判断路由是否为非管理界面页面
- * @param  {String}  path 路由
- * @return {Boolean}
- */
-// let isInAuthPage = (path) => {
-//   return ['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
-// }
-
 let configRouter = (router) => {
   /**
    * 路由地址映射
@@ -482,54 +471,6 @@ let configRouter = (router) => {
     '/diet': '/diet/recipe',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
   })
-
-// 路由切换开始时执行
-//   router.beforeEach((transition) => {
-//     var today = new Date().getTime()
-//
-//     if (window.localStorage.accessToken) { // token存在
-//       if (today > window.localStorage.expireAt) { // token 过期
-//         if (isInAuthPage(transition.to.path)) {
-//           router.app.access = false
-//         } else {
-//           window.localStorage.removeItem('accessToken')
-//           window.alert('页面连接已过期，请重新登录')
-//           router.go({path: '/login'})
-//           router.app.access = false
-//           window.location.reload()
-//         }
-//         transition.next()
-//       } else { // token 没过期
-//         if (isInAuthPage(transition.to.path)) { // 切换到身份验证页面
-//           router.app.access = false
-//         } else { // 切换到非身份验证页面
-//           router.app.access = true
-//             // 获取产品列表
-//           api.product.all().then((res) => {
-//             if (res.status === 200) {
-//               router.app.products = res.data
-//             }
-//           })
-//
-//           // 获取当前用户信息
-//           var member_id = window.localStorage.getItem('member_id')
-//           api.corp.getMember(member_id).then((res) => {
-//             router.app.currUser = res.data
-//           })
-//         }
-//         transition.next()
-//       }
-//     } else { // token 不存在
-//       if (isInAuthPage(transition.to.path)) {
-//         router.app.access = false
-//       } else {
-//         router.go({path: '/login'})
-//         router.app.access = false
-//         // location.reload()
-//       }
-//       transition.next()
-//     }
-//   })
 }
 
 export default configRouter
