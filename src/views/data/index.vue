@@ -41,9 +41,6 @@
           secondaryNav: [{
             label: this.$t('sub_nav.data.tables'),
             link: { path: '/data/tables' }
-          }, {
-            label: 'API',
-            url: 'http://support.xlink.cn/hc/'
           }]
         }
       }
