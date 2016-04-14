@@ -233,6 +233,40 @@ let configRouter = (router) => {
         }, 'product')
       }
     },
+    // 设备参数
+    '/products/:product_id/devices/:device_id/params': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/product/device/params/index'))
+        }, 'params')
+      },
+      subRoutes: {
+        // 基本信息
+        'basic-info': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/params/basic-info'))
+            }, 'params')
+          }
+        },
+        // 数据监控
+        'data-monitoring': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/params/data-monitoring'))
+            }, 'params')
+          }
+        },
+        // 故障记录
+        'fault-records': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/params/fault-records'))
+            }, 'params')
+          }
+        }
+      }
+    },
 
     // 应用管理
     '/apps': {
@@ -464,6 +498,7 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/dashboard',
     '/products/:id': '/products/:id/overview',
+    '/products/:product_id/devices/:device_id/params': '/products/:product_id/devices/:device_id/params/basic-info',
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',

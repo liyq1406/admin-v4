@@ -43,7 +43,10 @@ export default {
       alerts: '通知与告警',
       upgrade: '固件升级',
       wechat: '微信授权',
-      dataforward: '数据转发'
+      dataforward: '数据转发',
+      basic_info: '基本信息',
+      data_monitoring: '数据监控',
+      fault_records: '故障记录'
     },
     data: {
       tables: '数据表'
@@ -429,6 +432,7 @@ export default {
     id: '设备ID',
     management: '设备管理',
     details: '设备详情',
+    params: '设备参数',
     is_active: '是否激活',
     active_date: '激活时间',
     is_online: '在线状态',
