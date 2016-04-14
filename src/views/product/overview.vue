@@ -325,13 +325,10 @@
               data: activatedTrends
             }]
           }
-          window.setTimeout(() => {
-            var trendChart = echarts.init(document.getElementById('trendChart'))
-            trendChart.setOption(trendOptions)
-            window.onresize = trendChart.resize
-          }, 100)
+          var trendChart = echarts.init(document.getElementById('trendChart'))
+          trendChart.setOption(trendOptions)
+          window.onresize = trendChart.resize
         }).catch((res) => {
-          console.log(res)
           this.handleError(res)
         })
       },
