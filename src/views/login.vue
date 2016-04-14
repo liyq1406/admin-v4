@@ -119,7 +119,13 @@
               this.delCookie('account')
               this.delCookie('password')
             }
-            this.$route.router.go({path: '/'})
+
+            this.showNotice({
+              type: 'success',
+              content: '登录成功！'
+            })
+
+            this.$route.router.go({path: '/dashboard'})
           }).catch((res) => {
             this.logining = false
             this.handleError(res)

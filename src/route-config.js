@@ -496,7 +496,7 @@ let configRouter = (router) => {
 
   // 重定向
   router.redirect({
-    '/': '/dashboard',
+    '/': '/login',
     '/products/:id': '/products/:id/overview',
     '/products/:product_id/devices/:device_id/params': '/products/:product_id/devices/:device_id/params/basic-info',
     '/data': '/data/tables',
@@ -505,6 +505,13 @@ let configRouter = (router) => {
     '/users': '/users/list',
     '/diet': '/diet/recipe',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
+  })
+
+  router.beforeEach((transition) => {
+    if (!window.localStorage.getItem('accessToken')) {
+      router.replace('/login')
+    }
+    transition.next()
   })
 }
 
