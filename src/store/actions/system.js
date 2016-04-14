@@ -10,9 +10,15 @@ export const setLayout = ({ dispatch }, layout) => {
 }
 
 // 获取当前帐户成员
-export const getCurrentMember = ({ dispatch }, memberId) => {
+export const getCurrentMember = ({ dispatch }, memberId, vm) => {
   api.corp.getMember(memberId).then((res) => {
     dispatch(types.RECEIVE_MEMBER, res.data)
+  }).catch((res) => {
+    if (typeof res.data !== 'undefined' && typeof res.data.error !== 'undefined') {
+      if (res.data.error.code === 4031003) {
+        vm.$route.router.go('/login')
+      }
+    }
   })
 }
 

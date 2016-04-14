@@ -125,8 +125,8 @@
     watch: {
       layout () {
         if (this.layout === 'admin') {
-          this.getCurrentMember(window.localStorage.getItem('memberId'))
-          this.getAllProducts()
+          this.getCurrentMember(window.localStorage.getItem('memberId'), this)
+          this.getAllProducts(this)
         }
       }
     },
