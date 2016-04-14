@@ -500,6 +500,73 @@ let configRouter = (router) => {
           resolve(require('./views/diet/recipe/edit'))
         }, 'diet')
       }
+    },
+
+    // 维保系统-工单管理
+    '/warranty/work-orders': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/work-order/index'))
+        }, 'warranty')
+      },
+      subRoutes: {
+        // 延保工单列表
+        'extended-warranties': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/warranty/work-order/extended-warranty/list'))
+            }, 'warranty')
+          }
+        },
+        // 维修工单列表
+        'repair': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/warranty/work-order/repair/list'))
+            }, 'warranty')
+          }
+        }
+      }
+    },
+    // 维保系统-延保工单详情
+    '/warranty/work-orders/extended-warranties/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/work-order/extended-warranty/details'))
+        }, 'warranty')
+      }
+    },
+    // 维保系统-维修工单详情
+    '/warranty/work-orders/repair/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/work-order/repair/details'))
+        }, 'warranty')
+      }
+    },
+    // 维保系统-帐号列表
+    '/warranty/accounts': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/account/list'))
+        }, 'warranty')
+      }
+    },
+    // 维保系统-帐号详情
+    '/warranty/accounts/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/account/details'))
+        }, 'warranty')
+      }
+    },
+    // 维保系统-客服详情
+    '/warranty/accounts/:account_id/staffs/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/warranty/account/staff-details'))
+        }, 'warranty')
+      }
     }
   })
 
@@ -513,6 +580,7 @@ let configRouter = (router) => {
     '/settings': '/settings/auth',
     '/users': '/users/list',
     '/diet': '/diet/recipe',
+    '/warranty/work-orders': '/warranty/work-orders/extended-warranties',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
   })
 
