@@ -568,7 +568,7 @@
             if (res.status === 200) {
               self.resetEdit()
               productsStore.deleteProduct(self.product)
-              self.$route.router.go('/')
+              self.$route.router.go('/dashboard')
             }
           }).catch((res) => {
             self.handleError(res)
