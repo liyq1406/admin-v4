@@ -96,7 +96,7 @@ export default {
 
     onInput (evt) {
       var page = Number(evt.target.value)
-      // window.alert(typeof page === 'number')
+
       if (typeof page === 'number') {
         page = Math.floor(page)
         this.showInput = false
@@ -105,7 +105,10 @@ export default {
         this.current = page
         evt.target.value = ''
       } else {
-        window.alert('请输入数字')
+        this.showNotice({
+          type: 'error',
+          content: '请输入数字'
+        })
       }
     }
   }

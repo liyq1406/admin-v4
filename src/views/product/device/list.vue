@@ -268,11 +268,17 @@
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new window.FileReader()
           if (!/text\/\w+/.test(file.type)) {
-            window.alert(file.name + this.$t('upload.type_tips'))
+            this.showNotice({
+              type: 'error',
+              content: file.name + this.$t('upload.type_tips')
+            })
             return false
           }
           reader.onerror = (evt) => {
-            window.alert(this.$t('upload.read_err'))
+            this.showNotice({
+              type: 'error',
+              content: this.$t('upload.read_err')
+            })
           }
           this.importing = true
           // 读取完成
@@ -288,7 +294,10 @@
               macArr = a
               api.device.batchImport(this.$route.params.id, macArr).then((res) => {
                 if (res.status === 200) {
-                  window.alert(this.$t('upload.success_msg'))
+                  this.showNotice({
+                    type: 'success',
+                    content: this.$t('upload.success_msg')
+                  })
                   this.getDevices()
                 }
                 this.importing = false
@@ -300,7 +309,10 @@
           }
           reader.readAsText(file)
         } else {
-          window.alert(this.$t('upload.compatiblity'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('upload.compatiblity')
+          })
         }
       }
     }

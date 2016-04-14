@@ -138,7 +138,10 @@
 
       fetchVerifyCode () {
         if (this.validation.phone.$invalid) {
-          window.alert(this.$t('auth.phone_msg'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('auth.phone_msg')
+          })
           return
         }
 

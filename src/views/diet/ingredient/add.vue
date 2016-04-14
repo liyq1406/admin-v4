@@ -193,7 +193,10 @@
           this.adding = true
           api.diet.addIngredient(this.model).then((res) => {
             if (res.status === 200) {
-              window.alert('食材添加成功！')
+              this.showNotice({
+                type: 'success',
+                content: '食材添加成功！'
+              })
               this.$route.router.go({path: '/diet/ingredient'})
             }
           }).catch((res) => {

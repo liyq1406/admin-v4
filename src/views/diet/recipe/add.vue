@@ -518,7 +518,10 @@
           this.model.images = _.compact(this.model.images)
           api.diet.addRecipe(this.model).then((res) => {
             if (res.status === 200) {
-              window.alert('菜谱添加成功！')
+              this.showNotice({
+                type: 'success',
+                content: '菜谱添加成功！'
+              })
               this.$route.router.go({path: '/diet/recipe'})
             }
           }).catch((res) => {

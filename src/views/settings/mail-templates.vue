@@ -456,7 +456,10 @@
        */
       onActivateSubmit () {
         if (!this.validation.$valid) {
-          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('mail_templates.messages.illegal_sender')
+          })
           return
         }
         if (this.validation.$valid && this.activateValidation.$valid) {
@@ -469,7 +472,10 @@
               }
             }).catch((res) => {
               this.savingActivate = false
-              window.alert(this.$t('mail_templates.messages.creation_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.creation_fail')
+              })
             })
           } else { // 修改
             api.email.updateTemplate(this.activateId, this.activateModel).then((res) => {
@@ -477,10 +483,12 @@
                 this.activateStatus = res.data.status
                 this.savingActivate = false
               }
-              // window.alert('激活邮件模板修改成功。')
             }).catch((res) => {
               this.savingActivate = false
-              window.alert(this.$t('mail_templates.messages.update_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.update_fail')
+              })
             })
           }
         }
@@ -491,7 +499,10 @@
        */
       onActivateSubmit2 () {
         if (!this.validation.$valid) {
-          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('mail_templates.messages.illegal_sender')
+          })
           return
         }
         if (this.validation.$valid && this.activateValidation2.$valid) {
@@ -504,7 +515,10 @@
               }
             }).catch((res) => {
               this.savingActivate = false
-              window.alert(this.$t('mail_templates.messages.creation_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.creation_fail')
+              })
             })
           } else { // 修改
             api.email.updateTemplate(this.activateId2, this.activateModel2).then((res) => {
@@ -514,7 +528,10 @@
               }
             }).catch((res) => {
               this.savingActivate = false
-              window.alert(this.$t('mail_templates.messages.update_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.update_fail')
+              })
             })
           }
         }
@@ -525,7 +542,10 @@
        */
       onResetSubmit () {
         if (!this.validation.$valid) {
-          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('mail_templates.messages.illegal_sender')
+          })
           return
         }
         if (this.validation.$valid && this.resetValidation.$valid) {
@@ -538,7 +558,10 @@
               }
             }).catch((res) => {
               this.savingReset = false
-              window.alert(this.$t('mail_templates.messages.creation_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.creation_fail')
+              })
             })
           } else { // 修改
             api.email.updateTemplate(this.resetId, this.resetModel).then((res) => {
@@ -546,10 +569,12 @@
                 this.resetStatus = res.data.status
                 this.savingReset = false
               }
-              // window.alert('重置密码邮件模板修改成功。')
             }).catch((res) => {
               this.savingReset = false
-              window.alert(this.$t('mail_templates.messages.update_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.update_fail')
+              })
             })
           }
         }
@@ -560,7 +585,10 @@
        */
       onResetSubmit2 () {
         if (!this.validation.$valid) {
-          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('mail_templates.messages.illegal_sender')
+          })
           return
         }
         if (this.validation.$valid && this.resetValidation2.$valid) {
@@ -573,7 +601,10 @@
               }
             }).catch((res) => {
               this.savingReset = false
-              window.alert(this.$t('mail_templates.messages.creation_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.creation_fail')
+              })
             })
           } else { // 修改
             api.email.updateTemplate(this.resetId2, this.resetModel2).then((res) => {
@@ -583,7 +614,10 @@
               }
             }).catch((res) => {
               this.savingReset = false
-              window.alert(this.$t('mail_templates.messages.update_fail'))
+              this.showNotice({
+                type: 'error',
+                content: this.$t('mail_templates.messages.update_fail')
+              })
             })
           }
         }

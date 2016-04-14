@@ -349,7 +349,10 @@
           this.editing = true
           api.corp.memberResetPwd(this.editPwdModel).then((res) => {
             if (res.status === 200) {
-              window.alert(this.$t('account.password_msg'))
+              this.showNotice({
+                type: 'success',
+                content: this.$t('account.password_msg')
+              })
             }
             this.resetEditPassword()
           }).catch((res) => {

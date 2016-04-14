@@ -219,7 +219,10 @@
           this.editing = true
           api.diet.updateIngredient(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
-              window.alert('食材修改成功！')
+              this.showNotice({
+                type: 'success',
+                content: '食材修改成功！'
+              })
               this.$route.router.go({path: '/diet/ingredient'})
             }
           }).catch((res) => {

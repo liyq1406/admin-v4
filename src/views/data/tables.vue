@@ -282,7 +282,10 @@
           this.updateField(model, fields)
           this.newField = { name: '', value: 'string' }
         } else {
-          window.alert(this.$t('table.field_msg'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('table.field_msg')
+          })
         }
       },
 
@@ -332,7 +335,10 @@
       // 添加操作
       onAddSubmit () {
         if (!this.addModel.name) {
-          window.alert(this.$t('table.table_msg'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('table.table_msg')
+          })
         }
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true

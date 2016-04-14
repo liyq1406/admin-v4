@@ -148,10 +148,9 @@
         this.getDeviceInfo()
         this.getDatapoints()
 
-        /* window.alert(111)
+        /*
         //百度地图API功能
       	function loadJScript () {
-          window.alert("load js")
           var script = document.createElement("script")
 
       		script.type = "text/javascript"
@@ -159,7 +158,6 @@
       		document.body.appendChild(script)
       	}
       	window.init = () => {
-          window.alert("init")
       		var map = new BMap.Map("diviceMap")            // 创建Map实例
       		var point = new BMap.Point(116.404, 39.915) // 创建点坐标
       		map.centerAndZoom(point,15)
@@ -169,11 +167,10 @@
 
         // document.addEventListener('load', loadJScript)
         document.addEventListener('load', (e) => {
-          window.alert(1223323)
           // body...
         })
         // window.onload=loadJScript
-        window.alert(222)*/
+        */
       },
 
       activate () {
@@ -209,7 +206,6 @@
 
       // document.addEventListener('load', loadJScript)
       // document.addEventListener('load', (e) => {
-        // window.alert(1223323)
         // body...
       // })
       window.onload=loadJScript

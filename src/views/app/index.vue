@@ -500,14 +500,20 @@
         var input = event.target
 
         if (file && file.size > 1024 * 1024) {
-          window.alert(this.$t('task.file_size_msg'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('upload.compatiblity')
+          })
           return
         }
 
         if (window.File && window.FileReader && window.FileList && window.Blob) {
           var reader = new window.FileReader()
           reader.onerror = (evt) => {
-            window.alert(this.$t('upload.read_err'))
+            this.showNotice({
+              type: 'error',
+              content: this.$t('upload.read_err')
+            })
           }
           // 读取完成
           reader.onloadend = (evt) => {
@@ -529,7 +535,10 @@
           }
           reader.readAsArrayBuffer(file)
         } else {
-          window.alert(this.$t('upload.compatiblity'))
+          this.showNotice({
+            type: 'error',
+            content: this.$t('upload.compatiblity')
+          })
         }
       }
     }

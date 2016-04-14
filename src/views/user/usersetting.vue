@@ -100,7 +100,10 @@
           }
           api.corp.updateUserSetting(params).then((res) => {
             if (res.status === 200) {
-              window.alert('已成功修改！')
+              this.showNotice({
+                type: 'success',
+                content: '修改成功！'
+              })
             }
             this.getData()
           }).catch((res) => {

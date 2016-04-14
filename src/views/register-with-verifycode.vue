@@ -145,7 +145,10 @@
 
       fetchVerifyCode () {
         if (this.validation.phone.$invalid) {
-          window.alert(this.$t('auth.phone_msg'))
+          this.showNotice({
+            type: 'success',
+            content: this.$t('auth.phone_msg')
+          })
           return
         }
 
@@ -171,7 +174,10 @@
         if (this.validation.$valid) {
           api.corp.register(this.model).then((res) => {
             if (res.status === 200) {
-              window.alert(this.$t('auth.register_success'))
+              this.showNotice({
+                type: 'success',
+                content: this.$t('auth.register_success')
+              })
               this.$route.router.go({path: '/login'})
             }
           }).catch((res) => {
