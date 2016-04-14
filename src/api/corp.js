@@ -154,7 +154,7 @@ export default {
    */
   emailRegister (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/corp_register_email`, params, {
+      `${apiServer.default}/v2/corp_register_email`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
