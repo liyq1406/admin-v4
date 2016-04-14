@@ -39,8 +39,7 @@
             <h2>{{ $t("overview.trends") }}</h2>
           </div>
           <div class="panel-bd">
-            <div id="trendChart" style="height:320px" v-if="trends.length"></div>
-            <div v-else="v-else" class="trend-null">{{ $t("common.no_data") }}</div>
+            <div id="trendChart" style="height:320px"></div>
           </div>
         </div>
         <!-- End: 趋势-->
@@ -283,6 +282,17 @@
 
           // 趋势图表
           var trendOptions = {
+            noDataLoadingOption: {
+              text: this.$t('common.no_data'),
+              effect: '',
+              effectOption: {
+                backgroundColor: '#FFF'
+              },
+              textStyle: {
+                fontSize: 14,
+                color: '#999'
+              }
+            },
             calculable: true,
             tooltip: {
               trigger: 'axis'
