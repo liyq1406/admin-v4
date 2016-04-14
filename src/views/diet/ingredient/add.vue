@@ -74,129 +74,134 @@
 </template>
 
 <script>
-import api from '../../../api'
-import ImageUploader from '../../../components/ImageUploader'
-import _ from 'lodash/array'
+  import api from '../../../api'
+  import ImageUploader from '../../../components/ImageUploader'
+  import _ from 'lodash/array'
+  import { globalMixins } from '../../../mixins'
 
-export default {
-  name: 'AddIngredientForm',
+  export default {
+    name: 'AddIngredientForm',
 
-  components: {
-    'image-uploader': ImageUploader
-  },
+    layout: 'admin',
 
-  data () {
-    return {
-      model: {
-        name: '',
-        images: [''],
-        classification: [],
-        properties: {
-          push_rules: []
-        },
-        instructions: ''
-      },
-      rules: [],
-      validation: {},
-      categories: [],
-      adding: false
-    }
-  },
+    mixins: [globalMixins],
 
-  route: {
+    components: {
+      'image-uploader': ImageUploader
+    },
+
     data () {
-      // 获取食材分类
-      this.getCategories()
-
-      // 获取推送规则
-      this.getRules()
-    }
-  },
-
-  computed: {
-    categoryOptions () {
-      return _.differenceBy(this.categories, this.model.classification, 'main')
+      return {
+        model: {
+          name: '',
+          images: [''],
+          classification: [],
+          properties: {
+            push_rules: []
+          },
+          instructions: ''
+        },
+        rules: [],
+        validation: {},
+        categories: [],
+        adding: false
+      }
     },
 
-    ruleOptions () {
-      return _.difference(this.rules, this.model.properties.push_rules)
-    }
-  },
+    route: {
+      data () {
+        // 获取食材分类
+        this.getCategories()
 
-  methods: {
-    /**
-     * 获取分类
-     */
-    getCategories () {
-      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
-      api.diet.listCategory('ingredient_classification').then((res) => {
-        if (res.data.value !== undefined) {
-          this.categories = res.data.value
-        } else {
-          this.categories = []
-        }
-      }).catch((error) => {
-        this.handleError(error)
-      })
+        // 获取推送规则
+        this.getRules()
+      }
     },
 
-    /**
-     * 获取规则
-     */
-    getRules () {
-      api.diet.listCategory('push_rules').then((res) => {
-        if (res.data.value !== undefined) {
-          this.rules = res.data.value
-        } else {
-          this.rules = []
-        }
-      }).catch((error) => {
-        this.handleError(error)
-      })
+    computed: {
+      categoryOptions () {
+        return _.differenceBy(this.categories, this.model.classification, 'main')
+      },
+
+      ruleOptions () {
+        return _.difference(this.rules, this.model.properties.push_rules)
+      }
     },
 
-    /**
-     * 添加类别
-     */
-    AddCategory () {
-      var newCate = {sub: []}
-      newCate.main = this.categoryOptions[0].main
-      this.model.classification.push(newCate)
-    },
-
-    /**
-     * 添加推送规则
-     */
-    AddRule () {
-      var newRule = this.ruleOptions[0]
-      this.model.properties.push_rules.push(newRule)
-    },
-
-    /**
-     * 删除已选
-     * @return {[type]} [description]
-     */
-    delSelected (arr, obj) {
-      arr.$remove(obj)
-    },
-
-    /**
-     * 添加食材表单提交
-     */
-    onSubmit () {
-      if (this.validation.$valid && !this.adding) {
-        this.adding = true
-        api.diet.addIngredient(this.model).then((res) => {
-          if (res.status === 200) {
-            window.alert('食材添加成功！')
-            this.$route.router.go({path: '/diet/ingredient'})
+    methods: {
+      /**
+       * 获取分类
+       */
+      getCategories () {
+        // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
+        api.diet.listCategory('ingredient_classification').then((res) => {
+          if (res.data.value !== undefined) {
+            this.categories = res.data.value
+          } else {
+            this.categories = []
           }
-        }).catch((error) => {
-          this.handleError(error)
-          this.adding = false
+        }).catch((res) => {
+          this.handleError(res)
         })
+      },
+
+      /**
+       * 获取规则
+       */
+      getRules () {
+        api.diet.listCategory('push_rules').then((res) => {
+          if (res.data.value !== undefined) {
+            this.rules = res.data.value
+          } else {
+            this.rules = []
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 添加类别
+       */
+      AddCategory () {
+        var newCate = {sub: []}
+        newCate.main = this.categoryOptions[0].main
+        this.model.classification.push(newCate)
+      },
+
+      /**
+       * 添加推送规则
+       */
+      AddRule () {
+        var newRule = this.ruleOptions[0]
+        this.model.properties.push_rules.push(newRule)
+      },
+
+      /**
+       * 删除已选
+       * @return {[type]} [description]
+       */
+      delSelected (arr, obj) {
+        arr.$remove(obj)
+      },
+
+      /**
+       * 添加食材表单提交
+       */
+      onSubmit () {
+        if (this.validation.$valid && !this.adding) {
+          this.adding = true
+          api.diet.addIngredient(this.model).then((res) => {
+            if (res.status === 200) {
+              window.alert('食材添加成功！')
+              this.$route.router.go({path: '/diet/ingredient'})
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.adding = false
+          })
+        }
       }
     }
   }
-}
 </script>

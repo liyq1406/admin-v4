@@ -20,8 +20,8 @@
 export default {
   props: {
     width: {
-      type: Number,
-      default: 500
+      type: String,
+      default: '500px'
     },
     show: {
       type: Boolean,
@@ -37,7 +37,7 @@ export default {
   data () {
     return {
       dialogStyle: {
-        width: this.width + 'px'
+        width: this.width
       }
     }
   },
@@ -104,6 +104,17 @@ export default {
 
     .table
       margin 0
+
+    // 错误信息
+    .error-msg
+      text-align center
+      margin-bottom 30px
+
+  .modal-actions
+      text-align center
+
+      .btn
+        width 120px
 
   .modal-footer
     padding 0 30px 20px

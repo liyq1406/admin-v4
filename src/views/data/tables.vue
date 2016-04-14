@@ -182,9 +182,14 @@
   import Modal from '../../components/Modal'
   import locales from '../../consts/locales/index'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'DataTables',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -246,8 +251,8 @@
             this.tables = res.data
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -336,8 +341,8 @@
               this.tables.push(this.addModel)
               this.resetAdd()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -375,8 +380,8 @@
                 this.tables = res.data
               }
             })
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (this.editValidation.$valid) {
@@ -385,8 +390,8 @@
               this.resetEdit()
               this.editing = false
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

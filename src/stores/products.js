@@ -1,17 +1,17 @@
 module.exports = {
   state: {
-    products: []
+    all: []
   },
 
   addProducts (products) {
-    this.state.products = this.state.products.concat(products)
+    this.state.all = this.state.all.concat(products)
   },
 
   addProduct (product) {
-    this.state.products.push(product)
+    this.state.all.push(product)
   },
 
   deleteProduct (product) {
-    this.state.products.$remove(product)
+    this.state.all.$remove(product)
   }
 }

@@ -84,6 +84,105 @@
   </div>
 </template>
 
+<script>
+  import api from '../api'
+  import config from '../consts/config'
+  import locales from '../consts/locales/index'
+  import Captcha from '../components/Captcha'
+  import { globalMixins } from '../mixins'
+
+  export default {
+    name: 'RegisterForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
+
+    components: {
+      'captcha': Captcha
+    },
+
+    data () {
+      return {
+        validation: {},
+        captcha: '',
+        captchaValue: '',
+        model: {},
+        confirmPassword: '',
+        verifycodeValid: false,
+        counting: false,
+        btnDisabled: false,
+        accountTypes: locales[Vue.config.lang].accountTypes,
+        seconds: config.verifycode.duration
+      }
+    },
+
+    methods: {
+      getObjLength:function (obj){
+        return Object.keys(obj).length
+      },
+
+      checkEqualToPassword (value) {
+        return value === this.model.password
+      },
+
+      checkTypeValid (value) {
+        return Number(value) > 0
+      },
+
+      tiktac () {
+        var itvl = window.setInterval(() => {
+          if (this.seconds) {
+            this.seconds--
+          } else {
+            this.seconds = config.verifycode.duration
+            this.counting = false
+            this.btnDisabled = false
+            window.clearInterval(itvl)
+          }
+        }, 1000)
+      },
+
+      fetchVerifyCode () {
+        if (this.validation.phone.$invalid) {
+          window.alert(this.$t('auth.phone_msg'))
+          return
+        }
+
+        this.btnDisabled=true
+        this.captcha = ''
+        this.$refs.captcha.generate()
+        api.sms.getVerifycode({
+          phone: this.model.phone
+        }).then((res) => {
+          if (res.status === 200) {
+            this.counting = true
+            this.tiktac()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 提交注册
+       */
+      onSubmit () {
+        if (this.validation.$valid) {
+          api.corp.register(this.model).then((res) => {
+            if (res.status === 200) {
+              window.alert(this.$t('auth.register_success'))
+              this.$route.router.go({path: '/login'})
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        }
+      }
+    }
+  }
+</script>
+
 <style lang="stylus">
   @import '../assets/stylus/common'
 
@@ -114,98 +213,3 @@
         height 36px
         line-height 36px
 </style>
-
-<script>
-  import api from '../api'
-  import config from '../consts/config'
-  // import config from '../../consts/config'
-  import locales from '../consts/locales/index'
-  import Captcha from '../components/Captcha'
-
-  export default {
-    name: 'RegisterForm',
-
-    components: {
-      'captcha': Captcha
-    },
-
-    data () {
-      return {
-        validation: {},
-        captcha: '',
-        captchaValue: '',
-        model: {},
-        confirmPassword: '',
-        verifycodeValid: false,
-        counting: false,
-        btnDisabled: false,
-        accountTypes: locales[Vue.config.lang].accountTypes,
-        seconds: config.verifycodeDuration
-      }
-    },
-
-    methods: {
-      getObjLength:function (obj){
-        return Object.keys(obj).length
-      },
-
-      checkEqualToPassword (value) {
-        return value === this.model.password
-      },
-
-      checkTypeValid (value) {
-        return Number(value) > 0
-      },
-
-      tiktac () {
-        var itvl = window.setInterval(() => {
-          if (this.seconds) {
-            this.seconds--
-          } else {
-            this.seconds = config.verifycodeDuration
-            this.counting = false
-            this.btnDisabled = false
-            window.clearInterval(itvl)
-          }
-        }, 1000)
-      },
-
-      fetchVerifyCode () {
-        if (this.validation.phone.$invalid) {
-          window.alert(this.$t('auth.phone_msg'))
-          return
-        }
-
-        this.btnDisabled=true
-        this.captcha = ''
-        this.$refs.captcha.generate()
-        api.sms.getVerifycode({
-          phone: this.model.phone
-        }).then((res) => {
-          if (res.status === 200) {
-            this.counting = true
-            this.tiktac()
-          }
-        }).catch((error) => {
-          this.handleError(error)
-        })
-      },
-
-      /**
-       * 提交注册
-       */
-      onSubmit () {
-        if (this.validation.$valid) {
-          api.corp.register(this.model).then((res) => {
-            if (res.status === 200) {
-              window.alert(this.$t('auth.register_success'))
-              this.$route.router.go({path: '/login'})
-            }
-          }).catch((error) => {
-            this.handleError(error)
-          })
-        }
-      }
-    }
-  }
-</script>

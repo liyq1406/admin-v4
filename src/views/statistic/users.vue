@@ -85,9 +85,14 @@
   require('echarts/chart/line')
   require('echarts/chart/map')
   import ecConfig from 'echarts/config'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'UsersStatistic',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'radio-group': RadioGroup
@@ -129,8 +134,8 @@
             this.total = res.data.total
             this.online = res.data.online
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -209,8 +214,8 @@
           var trendChart = echarts.init(document.getElementById('trendChart'))
           trendChart.setOption(trendOptions)
           window.onresize = trendChart.resize
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -361,8 +366,8 @@
             }
             regionChart.setOption(option, true)
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       }
     }

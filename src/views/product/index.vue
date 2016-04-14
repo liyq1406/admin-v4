@@ -17,9 +17,14 @@
 <script>
   import Tab from '../../components/Tab'
   import api from '../../api'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Products',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'tab': Tab

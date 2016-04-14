@@ -50,8 +50,8 @@
                     input.value = ''
                     this.uploading = false
                   }
-                }).catch((error) => {
-                  this.handleError(error)
+                }).catch((res) => {
+                  this.handleError(res.data.error)
                   this.uploading = false
                 })
               }

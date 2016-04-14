@@ -151,9 +151,14 @@
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'DataForward',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -262,8 +267,8 @@
             this.rules = res.data.list
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -277,8 +282,8 @@
             this.getRule()
             this.resetAdd()
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.adding = false
         })
       },
@@ -319,8 +324,8 @@
               this.resetEdit()
               this.getRule()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
@@ -330,8 +335,8 @@
               this.resetEdit()
               this.getRule()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

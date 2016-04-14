@@ -46,7 +46,7 @@
       </div>
     </div>
     <!-- 添加规则浮层-->
-    <modal :show.sync="showAddModal" :width="650" :flag="addModelEditingTag" @close="onAddCancel">
+    <modal :show.sync="showAddModal" :width="'650px'" :flag="addModelEditingTag" @close="onAddCancel">
       <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
@@ -180,7 +180,7 @@
       </div>
     </modal>
     <!-- 编辑规则浮层-->
-    <modal :show.sync="showEditModal" :width="650" :flag="editModelEditingTag">
+    <modal :show.sync="showEditModal" :width="'650px'" :flag="editModelEditingTag">
       <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
@@ -327,9 +327,14 @@
   import Modal from '../../components/Modal'
   import TagInput from '../../components/TagInput'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Alert',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -418,8 +423,8 @@
             this.rules = res.data
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -493,8 +498,8 @@
               this.getRules()
               this.resetAdd()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -521,8 +526,8 @@
               this.resetEdit()
               this.getRules()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
@@ -532,8 +537,8 @@
               this.resetEdit()
               this.getRules()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

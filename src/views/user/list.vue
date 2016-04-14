@@ -52,9 +52,14 @@
   import Modal from '../../components/Modal'
   import api from '../../api'
   import Pager from '../../components/Pager'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'UserList',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'search-box': SearchBox,
@@ -109,8 +114,8 @@
             this.total = res.data.count
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },

@@ -88,9 +88,14 @@
   import SearchBox from '../../../components/SearchBox'
   import locales from '../../../consts/locales/index'
   import _ from 'lodash'
+  import { globalMixins } from '../../../mixins'
 
   export default {
     name: 'DeviceList',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'v-select': Select,
@@ -191,8 +196,8 @@
           this.devices = res.data.list
           this.total = res.data.count
           this.loadingData = false
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -250,8 +255,8 @@
               this.resetAdd()
               this.getDevices()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -287,8 +292,8 @@
                   this.getDevices()
                 }
                 this.importing = false
-              }).catch((error) => {
-                this.handleError(error)
+              }).catch((res) => {
+                this.handleError(res)
                 this.importing = false
               })
             }

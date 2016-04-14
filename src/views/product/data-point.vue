@@ -183,9 +183,14 @@
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'DataPoint',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -253,8 +258,8 @@
             this.datapoints = res.data
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -301,8 +306,8 @@
               this.datapoints.push(res.data)
               this.resetAdd()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -330,8 +335,8 @@
               this.delChecked = false
               this.getDatapoints()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
@@ -341,8 +346,8 @@
               this.resetEdit()
               this.getDatapoints()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

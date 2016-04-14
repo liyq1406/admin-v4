@@ -34,9 +34,14 @@
 
 <script>
   import api from '../api'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'LoginForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -97,8 +102,8 @@
           api.corp.auth(this.model).then((res) => {
             this.logining = false
             var today = new Date()
-            window.localStorage.setItem('member_id', res.data.member_id)
-            window.localStorage.setItem('corp_id', res.data.corp_id)
+            window.localStorage.setItem('memberId', res.data.member_id)
+            window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)
             window.localStorage.setItem('refreshToken', res.data.refresh_token)
             window.localStorage.setItem('expireIn', res.data.expire_in)
@@ -115,9 +120,9 @@
               this.delCookie('password')
             }
             this.$route.router.go({path: '/'})
-          }).catch((error) => {
+          }).catch((res) => {
             this.logining = false
-            this.handleError(error)
+            this.handleError(res)
           })
         }
       }

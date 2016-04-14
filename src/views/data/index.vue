@@ -16,9 +16,14 @@
 
 <script>
   import Tab from '../../components/Tab'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Data',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'tab': Tab

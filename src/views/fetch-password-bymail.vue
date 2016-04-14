@@ -23,9 +23,14 @@
 
 <script>
   import api from '../api'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'FetchPwdByMailForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -45,8 +50,8 @@
               this.sendSuccess = true
               this.sending = false
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.sending = false
           })
         }

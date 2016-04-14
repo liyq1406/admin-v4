@@ -112,10 +112,16 @@
   import Switch from '../../../components/Switch'
   import io from 'socket.io-client'
   import dateFormat from 'date-format'
+  import { globalMixins } from '../../../mixins'
+
   var socket = null
 
   export default {
     name: 'DeviceDetails',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'switch': Switch
@@ -215,8 +221,8 @@
           if (res.status === 200) {
             this.device = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -226,8 +232,8 @@
           if (res.status === 200) {
             this.datapoints = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -274,8 +280,8 @@
           socket.on('trace.status', (data) => {
             this.outputLog([data.status, data.msg], 'status')
           })
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 

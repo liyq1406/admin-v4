@@ -124,241 +124,246 @@
 </template>
 
 <script>
-/**
- * 页面初始化：
- * 1. 请求授权列表
- *
- * 点击添加按钮：
- *
- * 点击查看：
- *
- * 点击启用/停用按钮：
- *
- */
+  /**
+   * 页面初始化：
+   * 1. 请求授权列表
+   *
+   * 点击添加按钮：
+   *
+   * 点击查看：
+   *
+   * 点击启用/停用按钮：
+   *
+   */
 
-import Modal from '../../components/Modal'
-import Pager from '../../components/Pager'
-import api from '../../api'
-import _ from 'lodash'
+  import Modal from '../../components/Modal'
+  import Pager from '../../components/Pager'
+  import api from '../../api'
+  import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
-export default {
-  name: 'AuthSettings',
+  export default {
+    name: 'AuthSettings',
 
-  components: {
-    'modal': Modal,
-    'pager': Pager
-  },
+    layout: 'admin',
 
-  data () {
-    return {
-      empowers: [
-        // {
-        //   'name': '1',
-        //   'id': '111',
-        //   'status': '2'
-        // }
-      ],
-      accessKeys: [
-        // {
-        //   'id': '1',
-        //   'secret': '111',
-        //   'name': '111',
-        //   'create_time': '111',
-        //   'status': 0
-        // }
-        // {
-        //   'id': '2',
-        //   'secret': '222',
-        //   'name': '222',
-        //   'create_time': '222',
-        //   'status': 1
-        // }
-      ],
-      showAddModal: false,
-      addModel: {
-        name: ''
-      },
-      originAddModel: {},
-      addValidation: {},
-      adding: false,
-      currentPage: 1,
-      pageCount: 10,
-      loadingData: false,
-      showKeyModal: false,
-      key: {},
-      delChecked: false,
-      deleting: false,
-      newList: true,
-      oldList: false
-    }
-  },
+    mixins: [globalMixins],
 
-  route: {
+    components: {
+      'modal': Modal,
+      'pager': Pager
+    },
+
     data () {
-      // this.getEmpowers()
-      // this.getAccessKeys()
-      this.getKeys()
-    }
-  },
-
-  methods: {
-    /**
-     * 获取 v1 旧版的 AccessKey 列表
-     */
-    getAccessKeys () {
-      this.loadingData = true
-      api.empower.getAccessKeys().then((res) => {
-        if (res.status === 200) {
-          this.empowers = res.data
-          this.loadingData = false
-        }
-      }).catch((error) => {
-        this.handleError(error)
-        this.loadingData = false
-      })
+      return {
+        empowers: [
+          // {
+          //   'name': '1',
+          //   'id': '111',
+          //   'status': '2'
+          // }
+        ],
+        accessKeys: [
+          // {
+          //   'id': '1',
+          //   'secret': '111',
+          //   'name': '111',
+          //   'create_time': '111',
+          //   'status': 0
+          // }
+          // {
+          //   'id': '2',
+          //   'secret': '222',
+          //   'name': '222',
+          //   'create_time': '222',
+          //   'status': 1
+          // }
+        ],
+        showAddModal: false,
+        addModel: {
+          name: ''
+        },
+        originAddModel: {},
+        addValidation: {},
+        adding: false,
+        currentPage: 1,
+        pageCount: 10,
+        loadingData: false,
+        showKeyModal: false,
+        key: {},
+        delChecked: false,
+        deleting: false,
+        newList: true,
+        oldList: false
+      }
     },
 
-    // 切换V1与V2
-    toggleList () {
-      this.newList = !this.newList
-      this.oldList = !this.oldList
-      if (this.newList === true && this.oldList === false) {
+    route: {
+      data () {
+        // this.getEmpowers()
+        // this.getAccessKeys()
         this.getKeys()
-      } else {
-        this.getAccessKeys()
       }
     },
 
-    /**
-     * 获取 新版的 AccessKey 列表
-     */
-    getKeys () {
-      this.loadingData = true
-      api.empower.getKeys().then((res) => {
-        if (res.status === 200) {
-          this.accessKeys = res.data.list
-          this.loadingData = false
-        }
-      }).catch((error) => {
-        this.handleError(error)
-        this.loadingData = false
-      })
-    },
-
-    // 提交添加
-    addKeys () {
-      if (this.addValidation.$valid && !this.adding) {
-        var obj = {name: this.addModel.name}
-        api.empower.addKeys(obj).then((res) => {
+    methods: {
+      /**
+       * 获取 v1 旧版的 AccessKey 列表
+       */
+      getAccessKeys () {
+        this.loadingData = true
+        api.empower.getAccessKeys().then((res) => {
           if (res.status === 200) {
-            this.accessKeys.push(res.data)
-            this.resetAdd()
-            this.getKeys()
+            this.empowers = res.data
+            this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
-          this.adding = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
         })
-      }
-    },
+      },
 
-    /**
-     * 确定查看授权
-     * @param  {String} id 目标授权id
-     * @return {void}
-     */
-    onViewConfirm (id) {
-      if (this.delChecked) {
-        this.deleting = true
-        api.empower.deleteKeys(id).then((res) => {
+      // 切换V1与V2
+      toggleList () {
+        this.newList = !this.newList
+        this.oldList = !this.oldList
+        if (this.newList === true && this.oldList === false) {
+          this.getKeys()
+        } else {
+          this.getAccessKeys()
+        }
+      },
+
+      /**
+       * 获取 新版的 AccessKey 列表
+       */
+      getKeys () {
+        this.loadingData = true
+        api.empower.getKeys().then((res) => {
           if (res.status === 200) {
-            this.getKeys()
+            this.accessKeys = res.data.list
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
+
+      // 提交添加
+      addKeys () {
+        if (this.addValidation.$valid && !this.adding) {
+          var obj = {name: this.addModel.name}
+          api.empower.addKeys(obj).then((res) => {
+            if (res.status === 200) {
+              this.accessKeys.push(res.data)
+              this.resetAdd()
+              this.getKeys()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.adding = false
+          })
+        }
+      },
+
+      /**
+       * 确定查看授权
+       * @param  {String} id 目标授权id
+       * @return {void}
+       */
+      onViewConfirm (id) {
+        if (this.delChecked) {
+          this.deleting = true
+          api.empower.deleteKeys(id).then((res) => {
+            if (res.status === 200) {
+              this.getKeys()
+              this.onViewCancel()
+            }
+          }).catch((res) => {
             this.onViewCancel()
-          }
-        }).catch((error) => {
-          this.onViewCancel()
-          this.handleError(error)
-        })
-      }
-      this.showKeyModal = false
-    },
-
-    // 添加应用表单钩子
-    addAppHook (form) {
-      this.addForm = form
-    },
-    // 关闭添加应用浮层并净化添加表单
-    resetAdd () {
-      this.adding = false
-      this.showAddModal = false
-      this.addModel = _.clone(this.originAddModel)
-      this.$nextTick(() => {
-        this.addForm.setPristine()
-      })
-    },
-    // 取消添加
-    onAddCancel () {
-      this.resetAdd()
-    },
-    // 切换状态
-    togglekeys (accessKey) {
-      if (!this.toggling) {
-        this.toggling = true
-        api.empower.toggleKeys(accessKey.id, !accessKey.status - 0).then((res) => {
-          if (res.status === 200) {
-            accessKey.status = !accessKey.status - 0
-            this.toggling = false
-          }
-        }).catch((error) => {
-          this.handleError(error)
-          this.toggling = false
-        })
-      }
-    },
-
-    /**
-     * 查看密钥
-     * @param  {String} accessKey AccessKey
-     */
-    viewAccessKeys (accessKey) {
-      this.key = accessKey
-      this.showKeyModal = true
-    },
-
-    /**
-     * 取消查看授权
-     * @return {void}
-     */
-    onViewCancel () {
-      this.deleting = false
-      this.delChecked = false
-      this.showKeyModal = false
-    },
-    // 获取V1列表
-    getEmpowers () {
-      this.loadingData = true
-      api.empower.getEmpowers().then((res) => {
-        if (res.status === 200) {
-          this.empowers = res.data
-          this.loadingData = false
+            this.handleError(res)
+          })
         }
-      }).catch((error) => {
-        this.handleError(error)
-        this.loadingData = false
-      })
-    }
+        this.showKeyModal = false
+      },
 
+      // 添加应用表单钩子
+      addAppHook (form) {
+        this.addForm = form
+      },
+      // 关闭添加应用浮层并净化添加表单
+      resetAdd () {
+        this.adding = false
+        this.showAddModal = false
+        this.addModel = _.clone(this.originAddModel)
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
+      },
+      // 取消添加
+      onAddCancel () {
+        this.resetAdd()
+      },
+      // 切换状态
+      togglekeys (accessKey) {
+        if (!this.toggling) {
+          this.toggling = true
+          api.empower.toggleKeys(accessKey.id, !accessKey.status - 0).then((res) => {
+            if (res.status === 200) {
+              accessKey.status = !accessKey.status - 0
+              this.toggling = false
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.toggling = false
+          })
+        }
+      },
+
+      /**
+       * 查看密钥
+       * @param  {String} accessKey AccessKey
+       */
+      viewAccessKeys (accessKey) {
+        this.key = accessKey
+        this.showKeyModal = true
+      },
+
+      /**
+       * 取消查看授权
+       * @return {void}
+       */
+      onViewCancel () {
+        this.deleting = false
+        this.delChecked = false
+        this.showKeyModal = false
+      },
+      // 获取V1列表
+      getEmpowers () {
+        this.loadingData = true
+        api.empower.getEmpowers().then((res) => {
+          if (res.status === 200) {
+            this.empowers = res.data
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      }
+
+    }
   }
-}
 </script>
 
 <style lang="stylus" scoped>
-.secret-key
-  font-size 20px
-.mrbthr
-  margin-bottom 30px
-.fr
-  float left
-.panel-bd .action-group .btn.frr
-  float right!important
+  .secret-key
+    font-size 20px
+  .mrbthr
+    margin-bottom 30px
+  .fr
+    float left
+  .panel-bd .action-group .btn.frr
+    float right!important
 </style>

@@ -83,9 +83,14 @@
   import api from '../../api'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'TableDetails',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -135,8 +140,8 @@
             this.records = res.data.list
             this.total = res.data.count
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 

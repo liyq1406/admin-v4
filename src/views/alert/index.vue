@@ -153,9 +153,14 @@
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'
   require('echarts/chart/line')
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Alerts',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'pager': Pager,
@@ -255,8 +260,8 @@
           if (res.status === 200) {
             alert.is_read = true
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -271,8 +276,8 @@
             this.total = res.data.count
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -283,8 +288,8 @@
           if (res.status === 200) {
             this.alertSummary = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -342,8 +347,8 @@
           var trendChart = echarts.init(document.getElementById('trendChart'))
           trendChart.setOption(trendOptions)
           window.onresize = trendChart.resize
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       }
     }

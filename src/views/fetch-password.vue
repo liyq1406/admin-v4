@@ -82,9 +82,14 @@
   import api from '../api'
   import config from '../consts/config'
   import Captcha from '../components/Captcha'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'FetchPwdForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     components: {
       'captcha': Captcha
@@ -100,7 +105,7 @@
         verifycodeValid: false,
         counting: false,
         btnDisabled: false,
-        seconds: config.verifycodeDuration,
+        seconds: config.verifycode.duration,
         resetsuccess: false
       }
     },
@@ -123,7 +128,7 @@
           if (this.seconds) {
             this.seconds--
           } else {
-            this.seconds = config.verifycodeDuration
+            this.seconds = config.verifycode.duration
             this.counting = false
             this.btnDisabled = false
             window.clearInterval(itvl)
@@ -147,8 +152,8 @@
             this.counting = true
             this.tiktac()
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -159,8 +164,8 @@
           if (res.data === 200) {
             this.resetsuccess = true
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       }
     }

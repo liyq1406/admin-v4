@@ -28,9 +28,14 @@
 <script>
   import api from '../api'
   import base64 from '../helpers/base64'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'EmailActivateForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -50,8 +55,8 @@
         if (res.status === 200) {
           this.activateSuccess = true
         }
-      }).catch((error) => {
-        if (error.code === 4001028) {
+      }).catch((res) => {
+        if (res.error.code === 4001028) {
           this.activateFail = true
         }
       })

@@ -259,425 +259,422 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import api from '../../api'
-import RadioGroup from '../../components/RadioGroup'
-import locales from '../../consts/locales/index'
+  import Vue from 'vue'
+  import api from '../../api'
+  import RadioGroup from '../../components/RadioGroup'
+  import locales from '../../consts/locales/index'
+  import { globalMixins } from '../../mixins'
 
-export default {
-  name: 'MailTemplates',
+  export default {
+    name: 'MailTemplates',
 
-  components: {
-    'radio-group': RadioGroup
-  },
+    layout: 'admin',
 
-  data () {
-    return {
-      languages: locales[Vue.config.lang].mail_templates.languages,
-      validation: {},
-      validation2: {
-        info: {
-          name: '123',
-          type: '123',
-          verify: '123',
-          verifyKey: {
-            domain: '',
-            value: ''
-          },
-          spf: {
-            domain: '',
-            value: ''
-          },
-          dkim: {
-            domain: '',
-            value: ''
-          },
-          cname: {
-            domain: '',
-            value: ''
-          },
-          mx: {
-            domain: '',
-            value: ''
-          },
-          gmtCreated: '',
-          gmtUpdated: ''
-        }
-      },
-      loading: true,
-      activateLang: 'zh-cn',
-      resetLang: 'zh-cn',
-      // 激活邮件中文
-      activateStatus: -2,
-      activateId: '',
-      activateModel: {},
-      activateValidation: {},
-      // 激活邮件英文
-      activateStatus2: -2,
-      activateId2: '',
-      activateModel2: {},
-      activateValidation2: {},
-      // 重置密码邮件中文
-      resetStatus: -2,
-      resetId: '',
-      resetModel: {},
-      resetValidation: {},
-      // 重置密码邮件英文
-      resetStatus2: -2,
-      resetId2: '',
-      resetModel2: {},
-      resetValidation2: {},
-      sender: '',
-      savingActivate: false,
-      savingReset: false,
-      editingAddress: false,
-      ifxlink: false,
-      ifxlinkbtn: true,
-      showform: false
-    }
-  },
+    mixins: [globalMixins],
 
-  watch: {
-    sender () {
-      this.activateModel.sender = this.sender
-      this.activateModel2.sender = this.sender
-      this.resetModel.sender = this.sender
-      this.resetModel2.sender = this.sender
-    }
-  },
+    components: {
+      'radio-group': RadioGroup
+    },
 
-  route: {
     data () {
-      this.getAddress()
-      // var list = []
-      api.email.getTemplateList().then((res) => {
-        // console.log(data)
-        var aModel = {
-          name: '激活邮件模板',
-          subject: '欢迎注册云智易',
-          sender: '',
-          content: '<p>亲爱的&nbsp%username%，</p>\n\n<div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>\n\n<div>&nbsphttp://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</div>\n\n<div>&nbsp（本链接将在48小时后失效）</div>\n\n<div>&nbsp</div>\n\n<div>本邮件由系统自动发出，请勿回复</div>\n\n<div>&nbsp</div>\n\n<div>云智易</div>\n\n<div>%date%</div>',
-          type: 1,
-          lang: 'zh-cn'
-        }
-        var aModel2 = {
-          name: '激活邮件英文模板',
-          subject: 'Welcome to XLINK',
-          sender: '',
-          content: '<p>Dear %username%,</p>\n\n<p>Welcome to register XLINK,please click the link below to activate your account.</p>\n\n<p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate<a></p>\n\n<p>(this link will be valid within 48 hours)<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p><br />\n\nXLINK<br />\n\n%date%</p>',
-          type: 1,
-          lang: 'en-us'
-        }
-        var rModel = {
-          name: '重置密码邮件模板',
-          subject: '云智易找回密码',
-          sender: '',
-          content: '<p>亲爱的&nbsp&nbsp %username%，</p>\n\n<p>我们收到了您找回密码的请求，请点击下方链接完成密码找回：</p>\n\n<p>http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%</p>\n\n<p>（本链接将在48小时后失效）</p>\n\n<p>本邮件由系统自动发出，请勿回复</p>\n\n<p>&nbsp</p>\n\n<p>云智易</p>\n\n<p>%date%</p>',
-          type: 2,
-          lang: 'zh-cn'
-        }
-        var rModel2 = {
-          name: '重置密码邮件英文模板',
-          subject: 'Reset XLINK password?',
-          sender: '',
-          content: '<p>Dear %username%,</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp</p>\n\n<p><a href="http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-password-reset/</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
-          type: 2,
-          lang: 'en-us'
-        }
-        var template, i
+      return {
+        languages: locales[Vue.config.lang].mail_templates.languages,
+        validation: {},
+        validation2: {
+          info: {
+            name: '123',
+            type: '123',
+            verify: '123',
+            verifyKey: {
+              domain: '',
+              value: ''
+            },
+            spf: {
+              domain: '',
+              value: ''
+            },
+            dkim: {
+              domain: '',
+              value: ''
+            },
+            cname: {
+              domain: '',
+              value: ''
+            },
+            mx: {
+              domain: '',
+              value: ''
+            },
+            gmtCreated: '',
+            gmtUpdated: ''
+          }
+        },
+        loading: true,
+        activateLang: 'zh-cn',
+        resetLang: 'zh-cn',
+        // 激活邮件中文
+        activateStatus: -2,
+        activateId: '',
+        activateModel: {},
+        activateValidation: {},
+        // 激活邮件英文
+        activateStatus2: -2,
+        activateId2: '',
+        activateModel2: {},
+        activateValidation2: {},
+        // 重置密码邮件中文
+        resetStatus: -2,
+        resetId: '',
+        resetModel: {},
+        resetValidation: {},
+        // 重置密码邮件英文
+        resetStatus2: -2,
+        resetId2: '',
+        resetModel2: {},
+        resetValidation2: {},
+        sender: '',
+        savingActivate: false,
+        savingReset: false,
+        editingAddress: false,
+        ifxlink: false,
+        ifxlinkbtn: true,
+        showform: false
+      }
+    },
 
-        this.loading = false
+    watch: {
+      sender () {
+        this.activateModel.sender = this.sender
+        this.activateModel2.sender = this.sender
+        this.resetModel.sender = this.sender
+        this.resetModel2.sender = this.sender
+      }
+    },
 
-        for (i = 0; i < res.data.count; i++) {
-          template = res.data.list[i]
-          this.sender = template.sender
-          if (template.type === 1) {
-            if (template.lang === 'zh-cn') {
-              aModel.subject = template.subject
-              aModel.content = template.content
-              this.activateStatus = template.status
-              this.activateId = template.id
-            } else {
-              aModel2.subject = template.subject
-              aModel2.content = template.content
-              this.activateStatus2 = template.status
-              this.activateId2 = template.id
-            }
-          } else if (template.type === 2) {
-            if (template.lang === 'zh-cn') {
-              rModel.subject = template.subject
-              rModel.content = template.content
-              this.resetStatus = template.status
-              this.resetId = template.id
-            } else {
-              rModel2.subject = template.subject
-              rModel2.content = template.content
-              this.resetStatus2 = template.status
-              this.resetId2 = template.id
+    route: {
+      data () {
+        this.getAddress()
+        // var list = []
+        api.email.getTemplateList().then((res) => {
+          // console.log(data)
+          var aModel = {
+            name: '激活邮件模板',
+            subject: '欢迎注册云智易',
+            sender: '',
+            content: '<p>亲爱的&nbsp%username%，</p>\n\n<div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>\n\n<div>&nbsphttp://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</div>\n\n<div>&nbsp（本链接将在48小时后失效）</div>\n\n<div>&nbsp</div>\n\n<div>本邮件由系统自动发出，请勿回复</div>\n\n<div>&nbsp</div>\n\n<div>云智易</div>\n\n<div>%date%</div>',
+            type: 1,
+            lang: 'zh-cn'
+          }
+          var aModel2 = {
+            name: '激活邮件英文模板',
+            subject: 'Welcome to XLINK',
+            sender: '',
+            content: '<p>Dear %username%,</p>\n\n<p>Welcome to register XLINK,please click the link below to activate your account.</p>\n\n<p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate<a></p>\n\n<p>(this link will be valid within 48 hours)<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p><br />\n\nXLINK<br />\n\n%date%</p>',
+            type: 1,
+            lang: 'en-us'
+          }
+          var rModel = {
+            name: '重置密码邮件模板',
+            subject: '云智易找回密码',
+            sender: '',
+            content: '<p>亲爱的&nbsp&nbsp %username%，</p>\n\n<p>我们收到了您找回密码的请求，请点击下方链接完成密码找回：</p>\n\n<p>http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%</p>\n\n<p>（本链接将在48小时后失效）</p>\n\n<p>本邮件由系统自动发出，请勿回复</p>\n\n<p>&nbsp</p>\n\n<p>云智易</p>\n\n<p>%date%</p>',
+            type: 2,
+            lang: 'zh-cn'
+          }
+          var rModel2 = {
+            name: '重置密码邮件英文模板',
+            subject: 'Reset XLINK password?',
+            sender: '',
+            content: '<p>Dear %username%,</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp</p>\n\n<p><a href="http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-password-reset/</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
+            type: 2,
+            lang: 'en-us'
+          }
+          var template, i
+
+          this.loading = false
+
+          for (i = 0; i < res.data.count; i++) {
+            template = res.data.list[i]
+            this.sender = template.sender
+            if (template.type === 1) {
+              if (template.lang === 'zh-cn') {
+                aModel.subject = template.subject
+                aModel.content = template.content
+                this.activateStatus = template.status
+                this.activateId = template.id
+              } else {
+                aModel2.subject = template.subject
+                aModel2.content = template.content
+                this.activateStatus2 = template.status
+                this.activateId2 = template.id
+              }
+            } else if (template.type === 2) {
+              if (template.lang === 'zh-cn') {
+                rModel.subject = template.subject
+                rModel.content = template.content
+                this.resetStatus = template.status
+                this.resetId = template.id
+              } else {
+                rModel2.subject = template.subject
+                rModel2.content = template.content
+                this.resetStatus2 = template.status
+                this.resetId2 = template.id
+              }
             }
           }
+
+          this.activateModel = aModel
+          this.activateModel2 = aModel2
+          this.resetModel = rModel
+          this.resetModel2 = rModel2
+        })
+      }
+    },
+
+    methods: {
+      /**
+       * 提交发件者
+       */
+      onSenderSubmit () {
+        if (this.validation.$valid && this.activateValidation.$valid && this.activateValidation2.$valid && this.resetValidation.$valid && this.resetValidation2.$valid) {
+          this.onActivateSubmit()
+          this.onActivateSubmit2()
+          this.onResetSubmit()
+          this.onResetSubmit2()
         }
+      },
+      /**
+       * 提交邮件域名
+       */
+      onSenderSubmit2 () {
+        this.setAddress()
+        this.getAddress()
+      },
 
-        this.activateModel = aModel
-        this.activateModel2 = aModel2
-        this.resetModel = rModel
-        this.resetModel2 = rModel2
-      })
-    }
-  },
-
-  methods: {
-    /**
-     * 提交发件者
-     */
-    onSenderSubmit () {
-      if (this.validation.$valid && this.activateValidation.$valid && this.activateValidation2.$valid && this.resetValidation.$valid && this.resetValidation2.$valid) {
-        this.onActivateSubmit()
-        this.onActivateSubmit2()
-        this.onResetSubmit()
-        this.onResetSubmit2()
-      }
-    },
-    /**
-     * 提交邮件域名
-     */
-    onSenderSubmit2 () {
-      this.setAddress()
-      this.getAddress()
-    },
-
-    /**
-     * 提交激活邮件中文模板
-     */
-    onActivateSubmit () {
-      if (!this.validation.$valid) {
-        window.alert(this.$t('mail_templates.messages.illegal_sender'))
-        return
-      }
-      if (this.validation.$valid && this.activateValidation.$valid) {
-        this.savingActivate = true
-        if (this.activateStatus === -2) { // 新增
-          api.email.createTemplate(this.activateModel).then((res) => {
-            if (res.status === 200) {
-              this.activateStatus = res.data.status
+      /**
+       * 提交激活邮件中文模板
+       */
+      onActivateSubmit () {
+        if (!this.validation.$valid) {
+          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          return
+        }
+        if (this.validation.$valid && this.activateValidation.$valid) {
+          this.savingActivate = true
+          if (this.activateStatus === -2) { // 新增
+            api.email.createTemplate(this.activateModel).then((res) => {
+              if (res.status === 200) {
+                this.activateStatus = res.data.status
+                this.savingActivate = false
+              }
+            }).catch((res) => {
               this.savingActivate = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingActivate = false
-            window.alert(this.$t('mail_templates.messages.creation_fail'))
-          })
-        } else { // 修改
-          api.email.updateTemplate(this.activateId, this.activateModel).then((res) => {
-            if (res.status === 200) {
-              this.activateStatus = res.data.status
+              window.alert(this.$t('mail_templates.messages.creation_fail'))
+            })
+          } else { // 修改
+            api.email.updateTemplate(this.activateId, this.activateModel).then((res) => {
+              if (res.status === 200) {
+                this.activateStatus = res.data.status
+                this.savingActivate = false
+              }
+              // window.alert('激活邮件模板修改成功。')
+            }).catch((res) => {
               this.savingActivate = false
-            }
-            // window.alert('激活邮件模板修改成功。')
-          }).catch((error) => {
-            console.log(error)
-            this.savingActivate = false
-            window.alert(this.$t('mail_templates.messages.update_fail'))
-          })
+              window.alert(this.$t('mail_templates.messages.update_fail'))
+            })
+          }
         }
-      }
-    },
+      },
 
-    /**
-     * 提交激活英文邮件模板
-     */
-    onActivateSubmit2 () {
-      if (!this.validation.$valid) {
-        window.alert(this.$t('mail_templates.messages.illegal_sender'))
-        return
-      }
-      if (this.validation.$valid && this.activateValidation2.$valid) {
-        this.savingActivate = true
-        if (this.activateStatus2 === -2) { // 新增
-          api.email.createTemplate(this.activateModel2).then((res) => {
-            if (res.status === 200) {
-              this.activateStatus2 = res.data.status
+      /**
+       * 提交激活英文邮件模板
+       */
+      onActivateSubmit2 () {
+        if (!this.validation.$valid) {
+          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          return
+        }
+        if (this.validation.$valid && this.activateValidation2.$valid) {
+          this.savingActivate = true
+          if (this.activateStatus2 === -2) { // 新增
+            api.email.createTemplate(this.activateModel2).then((res) => {
+              if (res.status === 200) {
+                this.activateStatus2 = res.data.status
+                this.savingActivate = false
+              }
+            }).catch((res) => {
               this.savingActivate = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingActivate = false
-            window.alert(this.$t('mail_templates.messages.creation_fail'))
-          })
-        } else { // 修改
-          api.email.updateTemplate(this.activateId2, this.activateModel2).then((res) => {
-            if (res.status === 200) {
-              this.activateStatus2 = res.data.status
+              window.alert(this.$t('mail_templates.messages.creation_fail'))
+            })
+          } else { // 修改
+            api.email.updateTemplate(this.activateId2, this.activateModel2).then((res) => {
+              if (res.status === 200) {
+                this.activateStatus2 = res.data.status
+                this.savingActivate = false
+              }
+            }).catch((res) => {
               this.savingActivate = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingActivate = false
-            window.alert(this.$t('mail_templates.messages.update_fail'))
-          })
+              window.alert(this.$t('mail_templates.messages.update_fail'))
+            })
+          }
         }
-      }
-    },
+      },
 
-    /**
-     * 提交重置密码邮件模板
-     */
-    onResetSubmit () {
-      if (!this.validation.$valid) {
-        window.alert(this.$t('mail_templates.messages.illegal_sender'))
-        return
-      }
-      if (this.validation.$valid && this.resetValidation.$valid) {
-        this.savingReset = true
-        if (this.resetStatus === -2) { // 新增
-          api.email.createTemplate(this.resetModel).then((res) => {
-            if (res.status === 200) {
-              this.resetStatus = res.data.status
-              this.savingReset = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingReset = false
-            window.alert(this.$t('mail_templates.messages.creation_fail'))
-          })
-        } else { // 修改
-          api.email.updateTemplate(this.resetId, this.resetModel).then((res) => {
-            if (res.status === 200) {
-              this.resetStatus = res.data.status
-              this.savingReset = false
-            }
-            // window.alert('重置密码邮件模板修改成功。')
-          }).catch((error) => {
-            console.log(error)
-            this.savingReset = false
-            window.alert(this.$t('mail_templates.messages.update_fail'))
-          })
+      /**
+       * 提交重置密码邮件模板
+       */
+      onResetSubmit () {
+        if (!this.validation.$valid) {
+          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          return
         }
-      }
-    },
+        if (this.validation.$valid && this.resetValidation.$valid) {
+          this.savingReset = true
+          if (this.resetStatus === -2) { // 新增
+            api.email.createTemplate(this.resetModel).then((res) => {
+              if (res.status === 200) {
+                this.resetStatus = res.data.status
+                this.savingReset = false
+              }
+            }).catch((res) => {
+              this.savingReset = false
+              window.alert(this.$t('mail_templates.messages.creation_fail'))
+            })
+          } else { // 修改
+            api.email.updateTemplate(this.resetId, this.resetModel).then((res) => {
+              if (res.status === 200) {
+                this.resetStatus = res.data.status
+                this.savingReset = false
+              }
+              // window.alert('重置密码邮件模板修改成功。')
+            }).catch((res) => {
+              this.savingReset = false
+              window.alert(this.$t('mail_templates.messages.update_fail'))
+            })
+          }
+        }
+      },
 
-    /**
-     * 提交重置密码英文邮件模板
-     */
-    onResetSubmit2 () {
-      if (!this.validation.$valid) {
-        window.alert(this.$t('mail_templates.messages.illegal_sender'))
-        return
-      }
-      if (this.validation.$valid && this.resetValidation2.$valid) {
-        this.savingReset = true
-        if (this.resetStatus2 === -2) { // 新增
-          api.email.createTemplate(this.resetModel2).then((res) => {
-            if (res.status) {
-              this.resetStatus2 = res.data.status
+      /**
+       * 提交重置密码英文邮件模板
+       */
+      onResetSubmit2 () {
+        if (!this.validation.$valid) {
+          window.alert(this.$t('mail_templates.messages.illegal_sender'))
+          return
+        }
+        if (this.validation.$valid && this.resetValidation2.$valid) {
+          this.savingReset = true
+          if (this.resetStatus2 === -2) { // 新增
+            api.email.createTemplate(this.resetModel2).then((res) => {
+              if (res.status) {
+                this.resetStatus2 = res.data.status
+                this.savingReset = false
+              }
+            }).catch((res) => {
               this.savingReset = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingReset = false
-            window.alert(this.$t('mail_templates.messages.creation_fail'))
-          })
-        } else { // 修改
-          api.email.updateTemplate(this.resetId2, this.resetModel2).then((res) => {
-            if (res.status === 200) {
-              this.resetStatus2 = res.data.status
+              window.alert(this.$t('mail_templates.messages.creation_fail'))
+            })
+          } else { // 修改
+            api.email.updateTemplate(this.resetId2, this.resetModel2).then((res) => {
+              if (res.status === 200) {
+                this.resetStatus2 = res.data.status
+                this.savingReset = false
+              }
+            }).catch((res) => {
               this.savingReset = false
-            }
-          }).catch((error) => {
-            console.log(error)
-            this.savingReset = false
-            window.alert(this.$t('mail_templates.messages.update_fail'))
-          })
+              window.alert(this.$t('mail_templates.messages.update_fail'))
+            })
+          }
         }
-      }
-    },
-    /**
-     * 获取邮件发送域名
-     */
-    getAddress () {
-      api.email.getAddress().then((res) => {
-        this.validation2 = res.data
-        if (res.data.domain === 'mail.xlink.cn') {
-          this.ifxlink = true
-          this.ifxlinkbtn = false
-          this.showform = false
-        } else {
-          this.ifxlink = false
-          this.ifxlinkbtn = true
-          this.showform = true
+      },
+      /**
+       * 获取邮件发送域名
+       */
+      getAddress () {
+        api.email.getAddress().then((res) => {
+          this.validation2 = res.data
+          if (res.data.domain === 'mail.xlink.cn') {
+            this.ifxlink = true
+            this.ifxlinkbtn = false
+            this.showform = false
+          } else {
+            this.ifxlink = false
+            this.ifxlinkbtn = true
+            this.showform = true
+          }
+          var IPaddress = this.validation2.domain
+          var IParry = IPaddress.split('.')
+          var IPlast1 = IParry.pop()
+          var IPlast2 = IParry.pop()
+          var IPbehind
+          var IPlast3
+          if ((IPlast1 === 'cn' && IPlast2 === 'com') || (IPlast1 === 'cn' && IPlast2 === 'net') || (IPlast1 === 'cn' && IPlast2 === 'gov') || (IPlast1 === 'cn' && IPlast2 === 'org')) {
+            IPlast3 = IParry.pop()
+            IPbehind = IPlast3 + '.' + IPlast2 + '.' + IPlast1
+          } else {
+            IPbehind = IPlast2 + '.' + IPlast1
+          }
+          var IPfront = IParry.join('.')
+          this.validation2.IPfront = IPfront
+          this.validation2.IPbehind = IPbehind
+        })
+      },
+      // 修改域名
+      changeAddress () {
+        this.ifxlink = false
+        this.ifxlinkbtn = true
+        this.showform = false
+      },
+      /**
+       * 设置邮件发送域名
+       */
+      setAddress () {
+        this.editingAddress = true
+        var params = {
+          domain: this.validation2.domain
         }
-        var IPaddress = this.validation2.domain
-        var IParry = IPaddress.split('.')
-        var IPlast1 = IParry.pop()
-        var IPlast2 = IParry.pop()
-        var IPbehind
-        var IPlast3
-        if ((IPlast1 === 'cn' && IPlast2 === 'com') || (IPlast1 === 'cn' && IPlast2 === 'net') || (IPlast1 === 'cn' && IPlast2 === 'gov') || (IPlast1 === 'cn' && IPlast2 === 'org')) {
-          IPlast3 = IParry.pop()
-          IPbehind = IPlast3 + '.' + IPlast2 + '.' + IPlast1
-        } else {
-          IPbehind = IPlast2 + '.' + IPlast1
-        }
-        var IPfront = IParry.join('.')
-        this.validation2.IPfront = IPfront
-        this.validation2.IPbehind = IPbehind
-      })
-    },
-    // 修改域名
-    changeAddress () {
-      this.ifxlink = false
-      this.ifxlinkbtn = true
-      this.showform = false
-    },
-    /**
-     * 设置邮件发送域名
-     */
-    setAddress () {
-      this.editingAddress = true
-      var params = {
-        domain: this.validation2.domain
-      }
-      api.email.setAddress(params).then((res) => {
-        if (res.status === 200) {
+        api.email.setAddress(params).then((res) => {
+          if (res.status === 200) {
+            this.editingAddress = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
           this.editingAddress = false
-        }
-      }).catch((error) => {
-        this.handleError(error)
-        this.editingAddress = false
-      })
+        })
+      }
     }
   }
-}
 </script>
 
 <style lang="stylus">
-.panel-mail-template
-  .panel-hd
-    .leftbox
-      left 160px
-.bigfont
-  font-size 18px
-  border-bottom 1px solid #e4e4e4
-.panel-bd .form
-  padding 30px 0 10px
-ul.device-details
-  padding-bottom 30px
-ul.device-details li
-  line-height 32px
-ul.device-details li .label
-  display inline-block
-  width 180px
-ul.device-details li .info
-  display inline-block
-.sxtd
-  width 180px
-  text-align left
-.hx
-  word-break break-all
-.bhx
-  white-space nowrap
-.btg
-  color #c0252e
-.tg
-  color #35aa47
+  .panel-mail-template
+    .panel-hd
+      .leftbox
+        left 160px
+  .bigfont
+    font-size 18px
+    border-bottom 1px solid #e4e4e4
+  .panel-bd .form
+    padding 30px 0 10px
+  ul.device-details
+    padding-bottom 30px
+  ul.device-details li
+    line-height 32px
+  ul.device-details li .label
+    display inline-block
+    width 180px
+  ul.device-details li .info
+    display inline-block
+  .sxtd
+    width 180px
+    text-align left
+  .hx
+    word-break break-all
+  .bhx
+    white-space nowrap
+  .btg
+    color #c0252e
+  .tg
+    color #35aa47
 </style>

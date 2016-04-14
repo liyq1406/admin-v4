@@ -239,7 +239,7 @@ export default {
     '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
     '4031001': '禁止访问',
     '4031002': '禁止访问，需要Access-Token',
-    '4031003': '无效的Access-Token',
+    '4031003': 'Access token失效，请重新登录',
     '4031004': '需要企业的调用权限',
     '4031005': '需要企业管理员权限',
     '4031006': '需要数据操作权限',

@@ -135,7 +135,7 @@
               </div>
             </form>
           </div>
-          <modal :show.sync="ingredientSelectModal.show" :width="800">
+          <modal :show.sync="ingredientSelectModal.show" :width="'800px'">
             <h3 slot="header">选择食材</h3>
             <div slot="body" class="ingredient-box">
               <div class="status-bar">
@@ -208,9 +208,14 @@
   import SearchBox from '../../../components/SearchBox'
   import ImageUploader from '../../../components/ImageUploader'
   import _ from 'lodash'
+  import { globalMixins } from '../../../mixins'
 
   export default {
     name: 'EditForm',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'v-select': Select,
@@ -372,8 +377,8 @@
           } else {
             this.categories = []
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -387,8 +392,8 @@
           } else {
             this.ingredientCategories = []
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -407,8 +412,8 @@
             this.ingredientSelectModal.total = res.data.total
             this.ingredientSelectModal.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.ingredientSelectModal.loadingData = false
         })
       },
@@ -533,8 +538,8 @@
               window.alert('菜谱修改成功！')
               this.$route.router.go({path: '/diet/recipe'})
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.ingredientSelectModal.loadingData = false
             this.editing = false
           })
@@ -551,8 +556,8 @@
             if (res.status === 200) {
               this.$route.router.go({path: '/diet/recipe'})
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

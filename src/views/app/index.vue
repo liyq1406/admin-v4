@@ -211,9 +211,14 @@
   import api from '../../api'
   import Modal from '../../components/Modal'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Applications',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal
@@ -394,8 +399,8 @@
               this.resetAdd()
               this.getApps()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -450,8 +455,8 @@
               //   this.resetEdit4()
               // }
               this.getApps()
-            }).catch((error) => {
-              this.handleError(error)
+            }).catch((res) => {
+              this.handleError(res)
               this.editing = false
             })
           } else {
@@ -465,8 +470,8 @@
               this.getApps()
               this.resetEdit()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (model.type === 2 && this.editValidation2.$valid && !this.editing) {
@@ -482,8 +487,8 @@
               this.getApps()
               this.resetEdit2()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }
@@ -515,8 +520,8 @@
                     this[model].apn_license_url = res.data.url
                     this.uploading = false
                   }
-                }).catch((error) => {
-                  this.handleError(error)
+                }).catch((res) => {
+                  this.handleError(res)
                   this.uploading = false
                 })
               }

@@ -85,9 +85,14 @@
 
 <script>
   import api from '../../api'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'UserDetails',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'api': api
@@ -113,8 +118,8 @@
           if (res.status === 200) {
             this.user = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -123,8 +128,8 @@
           if (res.status === 200) {
             this.subDevices = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -135,8 +140,8 @@
             if (res.status === 200) {
               console.log('已停用用户')
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       },
@@ -151,8 +156,8 @@
               user.status = user.status - 0 === 1 ? 2 : 1
             }
             this.toggling = false
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.toggling = false
           })
         }

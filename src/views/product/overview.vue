@@ -166,9 +166,14 @@
   require('echarts/chart/map')
   import ecConfig from 'echarts/config'
   import locales from '../../consts/locales/index'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Overview',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'radio-group': RadioGroup,
@@ -241,8 +246,8 @@
           if (res.status === 200) {
             this.product = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -252,8 +257,8 @@
           if (res.status === 200) {
             this.productSummary = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -310,11 +315,14 @@
               data: activatedTrends
             }]
           }
-          var trendChart = echarts.init(document.getElementById('trendChart'))
-          trendChart.setOption(trendOptions)
-          window.onresize = trendChart.resize
-        }).catch((error) => {
-          this.handleError(error)
+          window.setTimeout(() => {
+            var trendChart = echarts.init(document.getElementById('trendChart'))
+            trendChart.setOption(trendOptions)
+            window.onresize = trendChart.resize
+          }, 100)
+        }).catch((res) => {
+          console.log(res)
+          this.handleError(res)
         })
       },
 
@@ -465,8 +473,8 @@
             }
             regionChart.setOption(option, true)
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -477,8 +485,8 @@
             this.productKey = res.data.key
             this.showKeyModal = true
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -531,8 +539,8 @@
               }
               this.resetAdd()
             })
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.resetAdd()
           })
         }
@@ -562,8 +570,8 @@
               productsStore.deleteProduct(self.product)
               self.$route.router.go('/')
             }
-          }).catch((error) => {
-            self.handleError(error)
+          }).catch((res) => {
+            self.handleError(res)
             self.editing = false
           })
         } else if (self.editValidation.$valid && !self.editing) {
@@ -578,8 +586,8 @@
                   self.$dispatch('edit-product-name')
                 }
               })
-            }).catch((error) => {
-              self.handleError(error)
+            }).catch((res) => {
+              self.handleError(res)
               self.editing = false
             })
           } else {
@@ -600,8 +608,8 @@
                   self.$dispatch('edit-product-name')
                 }
               })
-            }).catch((error) => {
-              self.handleError(error)
+            }).catch((res) => {
+              self.handleError(res)
               self.editing = false
             })
           }
@@ -642,8 +650,8 @@
                   }
                 })
                 this.importing = false
-              }).catch((error) => {
-                this.handleError(error)
+              }).catch((res) => {
+                this.handleError(res)
                 this.importing = false
               })
             }

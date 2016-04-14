@@ -54,9 +54,14 @@
   import api from '../../api'
   import productsStore from '../../stores/products'
   import locales from '../../consts/locales/index'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'CreateProductForm',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -75,8 +80,8 @@
               productsStore.addProduct(res.data)
               this.$route.router.go({path: '/products/' + res.data.id})
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       }

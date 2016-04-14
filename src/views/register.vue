@@ -77,9 +77,14 @@
   import api from '../api'
   import locales from '../consts/locales/index'
   import Vue from 'vue'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'RegisterForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -115,8 +120,8 @@
             if (res.status === 200) {
               this.registerSuccess = true
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       }

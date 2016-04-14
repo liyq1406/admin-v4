@@ -48,7 +48,7 @@ export default {
    * 获取产品列表
    * @return {Promise}
    */
-  getProducts () {
+  all () {
     return http.get(
       `${apiServer.default}/v2/products`
     )

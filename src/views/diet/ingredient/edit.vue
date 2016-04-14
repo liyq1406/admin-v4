@@ -83,9 +83,14 @@
   import api from '../../../api'
   import ImageUploader from '../../../components/ImageUploader'
   import _ from 'lodash'
+  import { globalMixins } from '../../../mixins'
 
   export default {
     name: 'AddIngredientForm',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'image-uploader': ImageUploader
@@ -144,8 +149,8 @@
           } else {
             this.categories = this.model.classification
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -159,8 +164,8 @@
           } else {
             this.rules = []
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -176,8 +181,8 @@
             this.model.classification = res.data.classification
             this.model.properties.push_rules = res.data.properties.push_rules
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -217,8 +222,8 @@
               window.alert('食材修改成功！')
               this.$route.router.go({path: '/diet/ingredient'})
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }
@@ -233,8 +238,8 @@
             if (res.status === 200) {
               this.$route.router.go({path: '/diet/ingredient'})
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       }

@@ -135,7 +135,7 @@
               </div>
             </form>
           </div>
-          <modal :show.sync="ingredientSelectModal.show" :width="800">
+          <modal :show.sync="ingredientSelectModal.show" :width="'800px'">
             <h3 slot="header">选择食材</h3>
             <div slot="body" class="ingredient-box">
               <div class="status-bar">
@@ -196,335 +196,340 @@
 </template>
 
 <script>
-import api from '../../../api'
-import Modal from '../../../components/Modal'
-import Pager from '../../../components/Pager'
-import Select from '../../../components/Select'
-import SearchBox from '../../../components/SearchBox'
-import ImageUploader from '../../../components/ImageUploader'
-import _ from 'lodash'
+  import api from '../../../api'
+  import Modal from '../../../components/Modal'
+  import Pager from '../../../components/Pager'
+  import Select from '../../../components/Select'
+  import SearchBox from '../../../components/SearchBox'
+  import ImageUploader from '../../../components/ImageUploader'
+  import _ from 'lodash'
+  import { globalMixins } from '../../../mixins'
 
-export default {
-  name: 'AddForm',
+  export default {
+    name: 'AddForm',
 
-  components: {
-    'v-select': Select,
-    'search-box': SearchBox,
-    'pager': Pager,
-    'modal': Modal,
-    'image-uploader': ImageUploader
-  },
-  data () {
-    return {
-      validation: {},
-      model: {
-        name: '',
-        classification: [],
-        major_ingredients: [],
-        minor_ingredients: [],
-        cooking_steps: [{
-          description: '',
-          time: '',
-          images: ['']
-        }],
-        properties: {
-          difficulty: '不限'
-        },
-        devices: [],
-        tags: [],
-        tips: '',
-        difficulties: [],
-        images: ['', '', ''],
-        instructions: ''
-      },
-      difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
-      devices: [
-        {id: '0', name: '电饭煲', autoexec: '', time: ''},
-        {id: '1', name: '云炖锅', autoexec: '', time: ''},
-        {id: '2', name: '隔水炖', autoexec: '', time: ''},
-        {id: '3', name: '电水壶', autoexec: '', time: ''}
-      ],
-      ingredientSelectModal: {
-        show: false,
-        adding: false,
-        searching: false,
-        category: 'all',
-        pageCount: 10,
-        currentPage: 1,
-        total: 0,
-        loadingData: false,
-        query: '',
-        ingredientList: [],
-        selectedIngredientList: []
-      },
-      categories: [],
-      ingredientCategories: [],
-      adding: false
-    }
-  },
+    layout: 'admin',
 
-  computed: {
-    categoryOptions () {
-      return _.differenceBy(this.categories, this.model.classification, 'main')
+    mixins: [globalMixins],
+
+    components: {
+      'v-select': Select,
+      'search-box': SearchBox,
+      'pager': Pager,
+      'modal': Modal,
+      'image-uploader': ImageUploader
     },
-
-    deviceOptions () {
-      return _.differenceBy(this.devices, this.model.devices, 'name')
-    },
-
-    /**
-     * 构建食材分类选项
-     * @return {Array} 分类选项
-     */
-    ingredientCategoryOptions () {
-      var arr = [{label: '全部', value: 'all'}]
-      this.ingredientCategories.map((item) => {
-        let obj = {}
-        obj.label = item.main
-        obj.value = item.main
-        arr.push(obj)
-      })
-      return arr
-    },
-
-    /**
-     * 食材查询条件
-     * @return {Object} 查询条件
-     */
-    queryCondition () {
-      var condition = {
-        filter: ['_id', 'name', 'classification'],
-        limit: this.ingredientSelectModal.pageCount,
-        offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.pageCount,
-        query: {},
-        order: {
-          created_at: 'desc'
-        }
-      }
-
-      if (this.ingredientSelectModal.query.length > 0) {
-        condition.query['name'] = { $like: this.ingredientSelectModal.query }
-      }
-
-      if (this.ingredientSelectModal.category === 'all') {
-        delete condition.query['classification.main']
-      } else {
-        condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] }
-      }
-      return condition
-    },
-
-    filteredIngredientList () {
-      var list = this.ingredientSelectModal.ingredientList.map((item) => {
-        var flag = false
-        this.model.major_ingredients.map((ingredient) => {
-          if (ingredient.name === item.name) {
-            flag = true
-          }
-        })
-        this.ingredientSelectModal.selectedIngredientList.map((ingredient) => {
-          if (ingredient.name === item.name) {
-            flag = true
-          }
-        })
-        item.selected = flag
-        return item
-      })
-      return list
-    }
-  },
-
-  route: {
     data () {
-      // 获取所有菜谱分类
-      this.getCategories()
-      // 获取所有食材分类
-      this.getIngredientCategories()
-      // 获取所有食材
-      this.getIngredients()
-    }
-  },
-
-  methods: {
-    /**
-     * 获取菜谱分类
-     */
-    getCategories () {
-      // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
-      api.diet.listCategory('recipe_classification').then((res) => {
-        if (typeof res.data.value !== 'undefined') {
-          this.categories = res.data.value
-        } else {
-          this.categories = []
-        }
-      }).catch((error) => {
-        this.handleError(error)
-      })
+      return {
+        validation: {},
+        model: {
+          name: '',
+          classification: [],
+          major_ingredients: [],
+          minor_ingredients: [],
+          cooking_steps: [{
+            description: '',
+            time: '',
+            images: ['']
+          }],
+          properties: {
+            difficulty: '不限'
+          },
+          devices: [],
+          tags: [],
+          tips: '',
+          difficulties: [],
+          images: ['', '', ''],
+          instructions: ''
+        },
+        difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
+        devices: [
+          {id: '0', name: '电饭煲', autoexec: '', time: ''},
+          {id: '1', name: '云炖锅', autoexec: '', time: ''},
+          {id: '2', name: '隔水炖', autoexec: '', time: ''},
+          {id: '3', name: '电水壶', autoexec: '', time: ''}
+        ],
+        ingredientSelectModal: {
+          show: false,
+          adding: false,
+          searching: false,
+          category: 'all',
+          pageCount: 10,
+          currentPage: 1,
+          total: 0,
+          loadingData: false,
+          query: '',
+          ingredientList: [],
+          selectedIngredientList: []
+        },
+        categories: [],
+        ingredientCategories: [],
+        adding: false
+      }
     },
 
-    /**
-     * 获取食材分类
-     */
-    getIngredientCategories () {
-      api.diet.listCategory('ingredient_classification').then((res) => {
-        if (typeof res.data.value !== 'undefined') {
-          this.ingredientCategories = res.data.value
-        } else {
-          this.ingredientCategories = []
-        }
-      }).catch((error) => {
-        this.handleError(error)
-      })
-    },
+    computed: {
+      categoryOptions () {
+        return _.differenceBy(this.categories, this.model.classification, 'main')
+      },
 
-    /**
-     * 获取食材列表
-     */
-    getIngredients () {
-      this.ingredientSelectModal.loadingData = true
-      api.diet.listIngredient(this.queryCondition).then((res) => {
-        // 食材列表
-        this.ingredientSelectModal.ingredientList = res.data.list.map((item) => {
-          item.selected = false
+      deviceOptions () {
+        return _.differenceBy(this.devices, this.model.devices, 'name')
+      },
+
+      /**
+       * 构建食材分类选项
+       * @return {Array} 分类选项
+       */
+      ingredientCategoryOptions () {
+        var arr = [{label: '全部', value: 'all'}]
+        this.ingredientCategories.map((item) => {
+          let obj = {}
+          obj.label = item.main
+          obj.value = item.main
+          arr.push(obj)
+        })
+        return arr
+      },
+
+      /**
+       * 食材查询条件
+       * @return {Object} 查询条件
+       */
+      queryCondition () {
+        var condition = {
+          filter: ['_id', 'name', 'classification'],
+          limit: this.ingredientSelectModal.pageCount,
+          offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.pageCount,
+          query: {},
+          order: {
+            created_at: 'desc'
+          }
+        }
+
+        if (this.ingredientSelectModal.query.length > 0) {
+          condition.query['name'] = { $like: this.ingredientSelectModal.query }
+        }
+
+        if (this.ingredientSelectModal.category === 'all') {
+          delete condition.query['classification.main']
+        } else {
+          condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] }
+        }
+        return condition
+      },
+
+      filteredIngredientList () {
+        var list = this.ingredientSelectModal.ingredientList.map((item) => {
+          var flag = false
+          this.model.major_ingredients.map((ingredient) => {
+            if (ingredient.name === item.name) {
+              flag = true
+            }
+          })
+          this.ingredientSelectModal.selectedIngredientList.map((ingredient) => {
+            if (ingredient.name === item.name) {
+              flag = true
+            }
+          })
+          item.selected = flag
           return item
         })
-        this.ingredientSelectModal.total = res.data.total
-        this.ingredientSelectModal.loadingData = false
-      }).catch((error) => {
-        this.handleError(error)
-        this.ingredientSelectModal.loadingData = false
-      })
-    },
-
-    /**
-     * 添加菜谱类别
-     */
-    addCategory () {
-      var newCate = {sub: []}
-      newCate.main = this.categoryOptions[0].main
-      this.model.classification.push(newCate)
-    },
-
-    /**
-     * 添加烹饪设备
-     */
-    addCookingDevice () {
-      this.model.devices.push(this.deviceOptions[0])
-    },
-
-    /**
-     * 菜谱步骤右边四个小操作按钮的事件
-     * @param  {[type]} step      当前操作的步骤对象
-     * @param  {[type]} index     当前操作的步骤index
-     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
-     * @return {[type]}           无返回
-     */
-    handleStepEvent (eventType, step, index) {
-      var newstep = {
-        description: '',
-        time: 0,
-        images: ['']
-      }
-      switch (eventType) {
-        case 'MOVE_UP':
-          this.model.cooking_steps.splice(index, 1)
-          this.model.cooking_steps.splice(index - 1, 0, step)
-          break
-        case 'MOVE_DOWN':
-          this.model.cooking_steps.splice(index, 1)
-          this.model.cooking_steps.splice(index + 1, 0, step)
-          break
-        case 'ADD':
-          this.model.cooking_steps.splice(index + 1, 0, newstep)
-          break
-        case 'DEL':
-          this.model.cooking_steps.$remove(step)
-          break
-        default:
-          break
+        return list
       }
     },
 
-    /**
-     * 通用删除事件
-     * @param  {Object} obj 要删除的对象
-     * @param  {Array}  arr 要删除的对象的父数组
-     */
-    removeObj (obj, arr) {
-      arr.$remove(obj)
-    },
-
-    /**
-     * 确定已选食材
-     */
-    confirmSelected () {
-      this.ingredientSelectModal.adding = true
-      this.ingredientSelectModal.selectedIngredientList.map((item) => {
-        var newIngredient = {}
-        newIngredient._id = item._id
-        newIngredient.classification = item.classification
-        newIngredient.name = item.name
-        this.model.major_ingredients.push(newIngredient)
-      })
-      this.ingredientSelectModal.selectedIngredientList = []
-      this.ingredientSelectModal.show = false
-      this.ingredientSelectModal.adding = false
-    },
-
-    /**
-     * 添加食材操作
-     * @param {Object} ingredient 食材
-     */
-    addIngredient (ingredient) {
-      this.ingredientSelectModal.selectedIngredientList.push(ingredient)
-    },
-
-    /**
-     * 添加食材弹出浮层的删除事件
-     * @param {Object} ingredient 食材
-     */
-    deleteIngredient (ingredient) {
-      this.ingredientSelectModal.selectedIngredientList.$remove(ingredient)
-    },
-
-    // 搜索
-    handleSearch () {
-      if (this.ingredientSelectModal.query.length === 0) {
+    route: {
+      data () {
+        // 获取所有菜谱分类
+        this.getCategories()
+        // 获取所有食材分类
+        this.getIngredientCategories()
+        // 获取所有食材
         this.getIngredients()
       }
     },
 
-    // 切换搜索
-    toggleSearching () {
-      this.ingredientSelectModal.searching = !this.ingredientSelectModal.searching
-    },
-
-    // 取消搜索
-    cancelSearching () {
-      this.getIngredients()
-    },
-
-    /**
-     * 菜谱表单提交
-     */
-    onRecipeSubmit () {
-      if (this.validation.$valid && !this.adding) {
-        this.adding = true
-        this.model.images = _.compact(this.model.images)
-        api.diet.addRecipe(this.model).then((res) => {
-          if (res.status === 200) {
-            window.alert('菜谱添加成功！')
-            this.$route.router.go({path: '/diet/recipe'})
+    methods: {
+      /**
+       * 获取菜谱分类
+       */
+      getCategories () {
+        // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
+        api.diet.listCategory('recipe_classification').then((res) => {
+          if (typeof res.data.value !== 'undefined') {
+            this.categories = res.data.value
+          } else {
+            this.categories = []
           }
-        }).catch((error) => {
-          this.handleError(error)
-          this.ingredientSelectModal.loadingData = false
-          this.adding = false
+        }).catch((res) => {
+          this.handleError(res)
         })
+      },
+
+      /**
+       * 获取食材分类
+       */
+      getIngredientCategories () {
+        api.diet.listCategory('ingredient_classification').then((res) => {
+          if (typeof res.data.value !== 'undefined') {
+            this.ingredientCategories = res.data.value
+          } else {
+            this.ingredientCategories = []
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取食材列表
+       */
+      getIngredients () {
+        this.ingredientSelectModal.loadingData = true
+        api.diet.listIngredient(this.queryCondition).then((res) => {
+          // 食材列表
+          this.ingredientSelectModal.ingredientList = res.data.list.map((item) => {
+            item.selected = false
+            return item
+          })
+          this.ingredientSelectModal.total = res.data.total
+          this.ingredientSelectModal.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.ingredientSelectModal.loadingData = false
+        })
+      },
+
+      /**
+       * 添加菜谱类别
+       */
+      addCategory () {
+        var newCate = {sub: []}
+        newCate.main = this.categoryOptions[0].main
+        this.model.classification.push(newCate)
+      },
+
+      /**
+       * 添加烹饪设备
+       */
+      addCookingDevice () {
+        this.model.devices.push(this.deviceOptions[0])
+      },
+
+      /**
+       * 菜谱步骤右边四个小操作按钮的事件
+       * @param  {[type]} step      当前操作的步骤对象
+       * @param  {[type]} index     当前操作的步骤index
+       * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+       * @return {[type]}           无返回
+       */
+      handleStepEvent (eventType, step, index) {
+        var newstep = {
+          description: '',
+          time: 0,
+          images: ['']
+        }
+        switch (eventType) {
+          case 'MOVE_UP':
+            this.model.cooking_steps.splice(index, 1)
+            this.model.cooking_steps.splice(index - 1, 0, step)
+            break
+          case 'MOVE_DOWN':
+            this.model.cooking_steps.splice(index, 1)
+            this.model.cooking_steps.splice(index + 1, 0, step)
+            break
+          case 'ADD':
+            this.model.cooking_steps.splice(index + 1, 0, newstep)
+            break
+          case 'DEL':
+            this.model.cooking_steps.$remove(step)
+            break
+          default:
+            break
+        }
+      },
+
+      /**
+       * 通用删除事件
+       * @param  {Object} obj 要删除的对象
+       * @param  {Array}  arr 要删除的对象的父数组
+       */
+      removeObj (obj, arr) {
+        arr.$remove(obj)
+      },
+
+      /**
+       * 确定已选食材
+       */
+      confirmSelected () {
+        this.ingredientSelectModal.adding = true
+        this.ingredientSelectModal.selectedIngredientList.map((item) => {
+          var newIngredient = {}
+          newIngredient._id = item._id
+          newIngredient.classification = item.classification
+          newIngredient.name = item.name
+          this.model.major_ingredients.push(newIngredient)
+        })
+        this.ingredientSelectModal.selectedIngredientList = []
+        this.ingredientSelectModal.show = false
+        this.ingredientSelectModal.adding = false
+      },
+
+      /**
+       * 添加食材操作
+       * @param {Object} ingredient 食材
+       */
+      addIngredient (ingredient) {
+        this.ingredientSelectModal.selectedIngredientList.push(ingredient)
+      },
+
+      /**
+       * 添加食材弹出浮层的删除事件
+       * @param {Object} ingredient 食材
+       */
+      deleteIngredient (ingredient) {
+        this.ingredientSelectModal.selectedIngredientList.$remove(ingredient)
+      },
+
+      // 搜索
+      handleSearch () {
+        if (this.ingredientSelectModal.query.length === 0) {
+          this.getIngredients()
+        }
+      },
+
+      // 切换搜索
+      toggleSearching () {
+        this.ingredientSelectModal.searching = !this.ingredientSelectModal.searching
+      },
+
+      // 取消搜索
+      cancelSearching () {
+        this.getIngredients()
+      },
+
+      /**
+       * 菜谱表单提交
+       */
+      onRecipeSubmit () {
+        if (this.validation.$valid && !this.adding) {
+          this.adding = true
+          this.model.images = _.compact(this.model.images)
+          api.diet.addRecipe(this.model).then((res) => {
+            if (res.status === 200) {
+              window.alert('菜谱添加成功！')
+              this.$route.router.go({path: '/diet/recipe'})
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.ingredientSelectModal.loadingData = false
+            this.adding = false
+          })
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="stylus">

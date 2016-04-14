@@ -52,8 +52,15 @@
 
 <script>
   import api from '../../api'
+  import { globalMixins } from '../../mixins'
 
   export default {
+    name: 'UserSetting',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
+
     data () {
       return {
         validation: {},
@@ -80,8 +87,8 @@
           // this.model = res.data
           this.model.user_auth_third = res.data.user_auth_third
           this.model.is_user_active = !res.data.is_user_active
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -96,8 +103,8 @@
               window.alert('已成功修改！')
             }
             this.getData()
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       }

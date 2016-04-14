@@ -88,9 +88,14 @@
   import api from '../../api'
   import Pager from '../../components/Pager'
   import locales from '../../consts/locales/index'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'MemberSettings',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'search-box': SearchBox,
@@ -151,8 +156,8 @@
         api.corp.getMembers().then((res) => {
           this.members = res.data
           this.loadingData = false
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -180,8 +185,8 @@
             this.getMembers()
           }
           this.showModal = false
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -195,8 +200,8 @@
             if (res.status === 200) {
               this.members.$remove(member)
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       },

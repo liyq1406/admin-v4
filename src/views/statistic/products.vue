@@ -91,9 +91,14 @@
   require('echarts/chart/line')
   require('echarts/chart/map')
   import ecConfig from 'echarts/config'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'ProductStatistic',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'radio-group': RadioGroup,
@@ -154,7 +159,7 @@
       },
 
       getProducts () {
-        return api.product.getProducts()
+        return api.product.all()
       },
 
       getProductSummary () {
@@ -162,8 +167,8 @@
           if (res.status === 200) {
             this.productSummary = res.data
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -235,8 +240,8 @@
           var trendChart = echarts.init(document.getElementById('trendChart'))
           trendChart.setOption(trendOptions)
           window.onresize = trendChart.resize
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       },
 
@@ -387,8 +392,8 @@
             }
             regionChart.setOption(option, true)
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       }
     }

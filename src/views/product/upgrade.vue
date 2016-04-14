@@ -279,9 +279,14 @@
   import api from '../../api'
   import Modal from '../../components/Modal'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'Upgrade',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal
@@ -401,8 +406,8 @@
             this.firmwares = res.data
             this.loadingFirmwares = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingFirmwares = false
         })
       },
@@ -414,8 +419,8 @@
             this.tasks = res.data
             this.loadingTasks = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingTasks = false
         })
       },
@@ -471,8 +476,8 @@
               this.resetAdd()
               this.getFirmwares()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -499,8 +504,8 @@
               this.resetEdit()
               this.getFirmwares()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         } else if (this.editValidation.$valid && !this.editing) {
@@ -510,8 +515,8 @@
               this.getFirmwares()
               this.resetEdit()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }
@@ -561,8 +566,8 @@
               this.resetAddTask()
               this.tasks.push(res.data)
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -581,8 +586,8 @@
               task.status = !task.status
               this.toggling = false
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.toggling = false
           })
         }
@@ -599,8 +604,8 @@
             if (res.status === 200) {
               this.getTasks()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.toggling = false
           })
         }
@@ -634,8 +639,8 @@
                     this[model].file_size = res.data.size
                     this.uploading = false
                   }
-                }).catch((error) => {
-                  this.handleError(error)
+                }).catch((res) => {
+                  this.handleError(res)
                   this.uploading = false
                 })
               }

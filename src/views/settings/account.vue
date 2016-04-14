@@ -138,7 +138,7 @@
         </form>
       </div>
     </modal>
-    <modal :show.sync="showEditPwdModal" :width="320">
+    <modal :show.sync="showEditPwdModal" :width="'320px'">
       <h3 slot="header">{{ $t("auth.reset") }}</h3>
       <div slot="body" class="form">
         <form v-form name="pwdValidation" @submit.prevent="onSubmitPwd" hook="editPwdHook">
@@ -179,9 +179,14 @@
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'AccountSettings',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal
@@ -236,8 +241,8 @@
           this.corp = res.data
           this.corp_member = res.data.member
           this.loadingCorp = false
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingCorp = false
         })
       },
@@ -250,8 +255,8 @@
         api.corp.getMember(member_id).then((res) => {
           this.member = res.data
           this.loadingAccount = false
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingAccount = false
         })
       },
@@ -323,8 +328,8 @@
             if (res.status === 200) {
               this.getMemberInfo()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }
@@ -347,8 +352,8 @@
               window.alert(this.$t('account.password_msg'))
             }
             this.resetEditPassword()
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

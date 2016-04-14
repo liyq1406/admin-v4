@@ -24,9 +24,17 @@ export var apiServer = {
 }
 
 export default {
-  // 刷新验证码等待间隔
-  verifycodeDuration: 90,
-
   // 表格每页记录数
-  pageCount: 10
+  pageCount: 10,
+
+  // 验证码
+  verifycode: {
+    // 刷新等待间隔(单位:秒)
+    duration: 90
+  },
+
+  notice: {
+    // 通知存活时长，默认(2000毫秒)
+    duration: 2000
+  }
 }

@@ -101,9 +101,14 @@
 <script>
   import api from '../api'
   import Vue from 'vue'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'Dashboard',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -139,8 +144,8 @@
             this.totalSummary = res.data.total
             this.userSummary = res.data.user
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
         })
       }
     }

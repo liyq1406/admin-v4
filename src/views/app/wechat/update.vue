@@ -85,9 +85,14 @@
   import api from '../../../api'
   // import Modal from '../../../components/Modal'
   import _ from 'lodash'
+  import { globalMixins } from '../../../mixins'
 
   export default {
     name: 'Applications',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       // 'modal': Modal
@@ -169,8 +174,8 @@
                   this.resetEdit4()
                 }
               }
-            }).catch((error) => {
-              this.handleError(error)
+            }).catch((res) => {
+              this.handleError(res)
               this.editing = false
             })
           } else {
@@ -183,8 +188,8 @@
             if (res.status === 200) {
               this.$route.router.go('../../')
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.editing = false
           })
         }

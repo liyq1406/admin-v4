@@ -41,9 +41,14 @@
 <script>
   import api from '../api'
   import base64 from '../helpers/base64'
+  import { globalMixins } from '../mixins'
 
   export default {
     name: 'PwdResetForm',
+
+    layout: 'auth',
+
+    mixins: [globalMixins],
 
     data () {
       return {
@@ -79,8 +84,8 @@
               this.resetsuccess = true
               this.sending = false
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.sending = false
           })
         }

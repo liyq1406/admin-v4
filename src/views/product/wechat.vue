@@ -209,9 +209,14 @@
   import Modal from '../../components/Modal'
   // import locales from '../../consts/locales/index'
   import _ from 'lodash'
+  import { globalMixins } from '../../mixins'
 
   export default {
     name: 'DataTables',
+
+    layout: 'admin',
+
+    mixins: [globalMixins],
 
     components: {
       'modal': Modal,
@@ -358,8 +363,8 @@
             this.devices = res.data.list
             this.loadingData = false
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingData = false
         })
       },
@@ -411,8 +416,8 @@
               this.setting = false
               window.localStorage.setItem('selectedAppId', this.currProduct.id)
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.setting = false
           })
         }
@@ -443,8 +448,8 @@
           } else {
             this.setModel = res.data.auth_config
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.adding = false
         })
       },
@@ -457,8 +462,8 @@
               this.resetAdd()
               this.searchWechatList()
             }
-          }).catch((error) => {
-            this.handleError(error)
+          }).catch((res) => {
+            this.handleError(res)
             this.adding = false
           })
         }
@@ -476,8 +481,8 @@
             this.empowering = true
             setTimeout(this.empowerStatus, 3000)
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.empowering = false
         })
       },
@@ -488,8 +493,8 @@
           if (res.status === 200) {
             this.empowerStatus()
           }
-        }).catch((error) => {
-          this.handleError(error)
+        }).catch((res) => {
+          this.handleError(res)
           this.empowering = false
         })
       }

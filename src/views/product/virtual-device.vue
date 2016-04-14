@@ -3,7 +3,13 @@
 </template>
 
 <script>
+  import { globalMixins } from '../../mixins'
+
   export default {
-    name: 'virtualDevice'
+    name: 'virtualDevice',
+
+    layout: 'admin',
+
+    mixins: [globalMixins]
   }
 </script>
