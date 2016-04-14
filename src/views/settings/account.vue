@@ -249,10 +249,10 @@
 
       // 获取个人信息
       getMemberInfo () {
-        var member_id = window.localStorage.getItem('member_id')
+        var memberId = window.localStorage.getItem('memberId')
 
         this.loadingAccount = true
-        api.corp.getMember(member_id).then((res) => {
+        api.corp.getMember(memberId).then((res) => {
           this.member = res.data
           this.loadingAccount = false
         }).catch((res) => {
