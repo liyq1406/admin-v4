@@ -1,3 +1,12 @@
+/**
+ * 判断路由是否为非管理界面页面
+ * @param  {String}  path 路由
+ * @return {Boolean}
+ */
+let isAccessAuthPage = (path) => {
+  return ['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
+}
+
 let configRouter = (router) => {
   /**
    * 路由地址映射
@@ -509,7 +518,9 @@ let configRouter = (router) => {
 
   router.beforeEach((transition) => {
     if (!window.localStorage.getItem('accessToken')) {
-      router.replace('/login')
+      if (!isAccessAuthPage(transition.to.path)) {
+        router.replace('/login')
+      }
     }
     transition.next()
   })
