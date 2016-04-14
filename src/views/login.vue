@@ -2,21 +2,32 @@
   <div class="form form-auth form-login">
     <div class="form-logo"></div>
     <form v-form name="validation" @submit.prevent="onSubmit" hook="loginFormHook" class="form-cont">
-      <div class="form-header"><span>{{ $t("auth.login") }}</span><a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a></div>
+      <div class="form-header">
+        <span>{{ $t("auth.login") }}</span>
+        <a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a>
+      </div>
       <div class="form-body">
         <div class="form-row">
           <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
             <input type="text" v-model="model.account" v-form-ctrl name="account" required lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.account.$pristine" class="form-tips form-tips-error"><span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span></div>
-          <div v-if="validation.account.$dirty" class="form-tips form-tips-error"><span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span></div>
+          <div v-if="validation.$submitted && validation.account.$pristine" class="form-tips form-tips-error">
+            <span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span>
+          </div>
+          <div v-if="validation.account.$dirty" class="form-tips form-tips-error">
+            <span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span>
+          </div>
         </div>
         <div class="form-row">
           <div v-placeholder="$t('auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl name="password" required lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
-          <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
+          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error">
+            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+          </div>
+          <div v-if="validation.password.$dirty" class="form-tips form-tips-error">
+            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+          </div>
         </div>
         <div class="operations"><a v-link="{ path: '/fetch-password-bymail' }" class="fetch-password">{{ $t("auth.forget") }}</a>
           <label class="remember-password">
