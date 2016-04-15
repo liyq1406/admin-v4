@@ -1,10 +1,10 @@
 <template>
   <div class="panel basic-info">
     <div class="panel-hd">
-      <h2 class="title">设备MAC：001DC9A26536</h2>
+      <h2 class="title">设备MAC：{{$route.params.mac || $route.params.device_id}}</h2>
       <div class="other-control-button-box">
-        <button @click="getDevicesInfo" class="other-control-button btn btn-success">获取设备信息</button>
-        <button @click="setControllerTime" class="other-control-button btn btn-success">设置控制器时间</button>
+        <button @click="updateDevicesInfo" class="other-control-button btn btn-success">获取设备信息</button>
+        <button @click="showEditModal5" class="other-control-button btn btn-success">设置控制器时间</button>
       </div>
     </div>
     <div class="panel-bd">
@@ -104,31 +104,43 @@
       </table>
       <!-- <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager> -->
     </div>
-    <!-- 选择时间模块 -->
+    <!-- 输入时间范围浮层 -->
     <modal :show.sync="editModal1.show" @close="modalCancel">
       <h3 slot="header">设置起止时间</h3>
       <div slot="body" class="form editModal editModal1">
-        <div class="content-box">
-          <div class="content-value">
-            <span class="name">{{editModal1.paramsName}}：</span>
-            <input type="text" class="time start-hour" v-model="editModal1.startHour">
-            <span> : </span>
-            <input type="text" class="time start-minute" v-model="editModal1.startMinute">
-            <span> - </span>
-            <input type="text" class="time end-hour" v-model="editModal1.endHour">
-            <span> : </span>
-            <input type="text" class="time end-minute" v-model="editModal1.endMinute">
+        <form v-form name="validation1" @submit.prevent="setDataEvent(editModal1,1)">
+          <div class="content-box">
+            <div class="content-value">
+              <span class="name">{{editModal1.paramsName}}：</span>
+              <input type="text" v-form-ctrl name="startHour" custom-validator="checkHour" required maxlength="2" class="time start-hour" v-model="editModal1.startHour">
+              <span> : </span>
+              <input type="text" v-form-ctrl name="startMinute" custom-validator="checkMinute" required maxlength="2" class="time start-minute" v-model="editModal1.startMinute">
+              <span> - </span>
+              <input type="text" v-form-ctrl name="endHour" custom-validator="checkHour" required maxlength="2" class="time end-hour"     v-model="editModal1.endHour">
+              <span> : </span>
+              <input type="text" v-form-ctrl name="endMinute" custom-validator="checkMinute" required maxlength="2" class="time end-minute"   v-model="editModal1.endMinute">
+            </div>
+            <div v-show="validation1.startHour.$dirty || validation1.startMinute.$dirty || validation1.endHour.$dirty || validation1.endMinute.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation1.startHour.$error.required || validation1.startMinute.$error.required || validation1.endHour.$error.required || validation1.endMinute.$error.required">时间不能留空</span>
+            </div>
+            <div v-show="validation1.startHour.$dirty || validation1.endHour.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation1.startHour.$error.customValidator || validation1.endHour.$error.customValidator">小时值不能超过23</span>
+            </div>
+            <div v-show="validation1.startMinute.$dirty || validation1.endMinute.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation1.startMinute.$error.customValidator || validation1.endMinute.$error.customValidator">分钟值不能超过59</span>
+            </div>
+            <div class="tips">
+              <span>{{editModal1.tips}}</span>
+            </div>
           </div>
-          <div class="tips">
-            <span>请输入起止时间，格式为00:00—12:00。</span>
+          <div class="form-actions">
+            <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
-        </div>
-        <div class="form-actions">
-          <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary" @click="setDataEvent(editModal1)"></button>
-        </div>
+        </form>
       </div>
     </modal>
+    <!-- 选择参数浮层 -->
     <modal :show.sync="editModal2.show" @close="modalCancel">
       <h3 slot="header">设置参数</h3>
       <div slot="body" class="form editModal editModal2">
@@ -140,49 +152,93 @@
         </div>
         <div class="form-actions">
           <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary" @click="setDataEvent(editModal2)"></button>
+          <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary" @click="setDataEvent(editModal2,2)"></button>
         </div>
       </div>
     </modal>
+    <!-- 输入参数浮层 -->
     <modal :show.sync="editModal3.show" @close="modalCancel">
       <h3 slot="header">设置参数</h3>
       <div slot="body" class="form editModal editModal3">
-        <div class="content-box">
-          <div class="content-value">
-            <span class="name">{{editModal3.paramsName}}：</span>
-            <input type="text" class="paramsValue" v-model="editModal3.value">
-            <span class="unit">{{editModal3.unit}}</span>
+        <form v-form name="validation3" @submit.prevent="setDataEvent(editModal3,3)">
+          <div class="content-box">
+            <div class="content-value">
+              <span class="name">{{editModal3.paramsName}}：</span>
+              <input type="text" v-form-ctrl name="paramsValue" required class="paramsValue" v-model="editModal3.value">
+              <span class="unit">{{editModal3.unit}}</span>
+            </div>
+            <div v-show="validation3.paramsValue.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation3.paramsValue.$error.required">{{editModal3.paramsName}}不能留空</span>
+            </div>
+            <div class="tips">
+              <span>{{editModal3.tips}}</span>
+            </div>
           </div>
-          <div class="tips">
-            <span>{{editModal3.tips}}</span>
+          <div class="form-actions">
+            <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
-        </div>
-        <div class="form-actions">
-          <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary" @click="setDataEvent(editModal3)"></button>
-        </div>
+        </form>
       </div>
     </modal>
+    <!-- 双维度输入参数浮层 -->
     <modal :show.sync="editModal4.show" @close="modalCancel">
       <h3 slot="header">设置参数</h3>
       <div slot="body" class="form editModal editModal4">
-        <div class="content-box">
-          <div class="content-value">
-            <span class="name">{{editModal4.paramsName}}：</span>
-            <select name="deviceParams" v-model="editModal4.canSetParams" class="deviceParams">
-              <option v-for="canSetParams in [true, false]" :value="canSetParams">{{canSetParams ? 'YES' : 'NO'}}</option>
-            </select>
-            <input type="text" class="paramsValue" v-model="editModal4.value" v-show="editModal4.canSetParams">
-            <span class="unit" v-show="editModal4.canSetParams">{{editModal4.unit}}</span>
+        <form v-form name="validation4" @submit.prevent="setDataEvent(editModal4,4)">
+          <div class="content-box">
+            <div class="content-value">
+              <span class="name">{{editModal4.paramsName}}：</span>
+              <select name="deviceParams" v-model="editModal4.canSetParams" class="deviceParams">
+                <option v-for="canSetParams in [true, false]" :value="canSetParams">{{canSetParams ? 'YES' : 'NO'}}</option>
+              </select>
+              <input type="text" class="paramsValue" name="paramsValue" v-form-ctrl :required="editModal4.canSetParams" v-model="editModal4.value" v-show="editModal4.canSetParams">
+              <span class="unit" v-show="editModal4.canSetParams">{{editModal4.unit}}</span>
+            </div>
+            <div v-show="validation4.paramsValue.$error.required" class="form-tips form-tips-error">
+              <span>{{editModal4.paramsName}}不能留空</span>
+            </div>
+            <div class="tips">
+              <span>{{editModal4.tips}}</span>
+            </div>
           </div>
-          <div class="tips">
-            <span>{{editModal4.tips}}</span>
+          <div class="form-actions">
+            <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
-        </div>
-        <div class="form-actions">
-          <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary" @click="setDataEvent(editModal4)"></button>
-        </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 输入时间浮层 -->
+    <modal :show.sync="editModal5.show" @close="modalCancel">
+      <h3 slot="header">设置控制器时间</h3>
+      <div slot="body" class="form editModal editModal5">
+        <form v-form name="validation5" @submit.prevent="setControllerTime()">
+          <div class="content-box">
+            <div class="content-value">
+              <span class="name">{{editModal5.paramsName}}：</span>
+              <input type="text" class="time hour" name="hour" v-form-ctrl required custom-validator="checkHour" maxlength="2" v-model="editModal5.hour">
+              <span> : </span>
+              <input type="text" class="time minute" name="minute" v-form-ctrl required custom-validator="checkMinute" maxlength="2" v-model="editModal5.minute">
+            </div>
+            <div v-show="validation5.hour.$error.required || validation5.minute.$error.required" class="form-tips form-tips-error">
+              <span>{{editModal4.paramsName}}不能留空</span>
+            </div>
+            <div v-show="validation5.hour.$error.customValidator" class="form-tips form-tips-error">
+              <span>小时格式为 00 ~ 23</span>
+            </div>
+            <div v-show="validation5.minute.$error.customValidator" class="form-tips form-tips-error">
+              <span>分钟格式为 00 ~ 59</span>
+            </div>
+            <div class="tips">
+              <span>范围为00:00—24:00。</span>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
       </div>
     </modal>
   </div>
@@ -206,6 +262,11 @@
     data () {
       return {
         // modelType 弹窗类型 1是时间选择 2是小范围选择参数 3是大范围参数输入 4是双维度
+        validation1: {},
+        validation2: {},
+        validation3: {},
+        validation4: {},
+        validation5: {},
         // 编辑浮层1
         editModal1: {
           show: false,
@@ -214,7 +275,8 @@
           startHour: '',
           startMinute: '',
           endHour: '',
-          endMinute: ''
+          endMinute: '',
+          tips: ''
         },
         // 编辑浮层2
         editModal2: {
@@ -243,15 +305,22 @@
           unit: '',
           tips: ''
         },
+        // 编辑浮层5
+        editModal5: {
+          show: false,
+          paramsName: '控制器时间',
+          hour: '00',
+          minute: '00'
+        },
         // 产品信息
         productInfos: {
           test: {
             name: '上限温度',
-            valueText: '55.0',
-            valueArr: [],
+            valueText: '55',
+            valueArr: ['自动模式', '手动模式'],
             modelType: '4',
             unit: '℃',
-            tips: '当选择YES时需要输入化霜时间，范围为1-99'
+            tips: '时间格式为 00:00 - 23:59'
           },
           paramsKey1: {
             name: '运行模式',
@@ -293,33 +362,80 @@
           valueText: '',
           modelType: ''
         },
-        settingData: false
+        // 正在设置参数
+        settingData: false,
+        // 是否更新数据  区分当前是首次获取数据还是更新数据
+        updateDate: false
       }
     },
-
+    route: {
+      data () {
+        var self = this
+        self.getProductInfos()
+      }
+    },
     methods: {
       /**
-       * 确定按钮时间
+       * 确定按钮事件
        * @param {object} productInfo 当前正在编辑的对象
        */
-      setDataEvent (productInfo) {
-        var self = this
-        self.settingData = true
-        console.log(JSON.stringify(productInfo))
-        // 这里执行数据处理
+      setDataEvent (productInfo, num) {
+        if (this['validation' + num].$valid) {
+          var self = this
+          self.settingData = true
+          console.log(JSON.stringify(productInfo))
+          // 这里执行数据处理
+          this.showNotice({
+            type: 'success',
+            content: '数据设置成功'
+          })
+        }
       },
       /**
-       * 获取设备信息
+       * 重新获取设备信息
        * @return {[type]} [description]
        */
-      getDevicesInfo () {
-        console.log('获取设备信息')
+      updateDevicesInfo () {
+        this.updateDate = true
+        this.getProductInfos()
       },
       /**
        * 设置控制器时间
        */
       setControllerTime () {
+        var self = this
+        if (self.validation5.$valid) {
+          self.settingData = true
+          setTimeout(() => {
+            self.editModal5.show = false
+            self.showNotice({
+              type: 'success',
+              content: '控制器时间设置成功'
+            })
+          }, 1000)
+        }
+      },
+      getProductInfos () {
+        var self = this
+        console.log('获取产品信息')
+        // 获取成功后调用提示
+        if (self.updateDate) {
+          self.showNotice({
+            type: 'success',
+            content: '获取设备信息成功'
+          })
+          self.updateDate = false
+        }
+      },
+      /**
+       * 显示设置控制器时间浮层
+       */
+      showEditModal5 () {
+        var self = this
         console.log('设置控制器时间')
+        // 这里需要获取最新的控制器时间
+        self.settingData = false
+        self.editModal5.show = true
       },
       /**
        * 显示编辑浮层
@@ -346,6 +462,7 @@
         self.editModal1.startMinute = self.productInfos[paramsKey].valueText.split('-')[0].split(':')[1]
         self.editModal1.endHour = self.productInfos[paramsKey].valueText.split('-')[1].split(':')[0]
         self.editModal1.endMinute = self.productInfos[paramsKey].valueText.split('-')[1].split(':')[1]
+        self.editModal1.tips = self.productInfos[paramsKey].tips
         self.editModal1.show = true
       },
       /**
@@ -404,6 +521,23 @@
         this.editModal2.show = false
         this.editModal3.show = false
         this.editModal4.show = false
+        this.editModal5.show = false
+      },
+      checkHour (hour) {
+        console.log(hour)
+        if (hour - 0 > 23) {
+          return false
+        } else {
+          return true
+        }
+      },
+      checkMinute (minute) {
+        console.log(minute)
+        if (minute - 0 > 59) {
+          return false
+        } else {
+          return true
+        }
       }
     }
   }
@@ -472,6 +606,11 @@
       .content-box
         .content-value
           padding-bottom 10px
+          .deviceParams
+            height 32px
+            box-sizing border-box
+            transform translate(0, 1px, 0)
+            font-size 14px
           .paramsValue
             width 100px
             height 32px
@@ -479,10 +618,29 @@
             background none
             border 1px solid #d9d9d9
             box-sizing border-box
-            font-size 14px
+            font-size 12px
             padding 0 15px
         .tips
           font-size 14px
           color #999
           padding 10px 0
+    .editModal5
+      .content-box
+        .content-value
+          padding-bottom 10px
+          .time
+            width 50px
+            height 32px
+            line-height 32px
+            background none
+            border 1px solid #d9d9d9
+            box-sizing border-box
+            font-size 14px
+            text-align center
+        .tips
+          font-size 14px
+          color #999
+          padding 10px 0
+    input.vf-dirty.vf-invalid
+      border 1px solid red !important
 </style>
