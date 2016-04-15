@@ -20,7 +20,7 @@
         </div>
         <div class="form-row">
           <div v-placeholder="$t('auth.password')" class="input-text-wrap">
-            <input type="password" v-model="model.password" v-form-ctrl name="password" required lazy class="input-text"/>
+            <input type="password" v-model="model.password" v-form-ctrl name="password" required lazy class="input-text focus-input"/>
           </div>
           <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error">
             <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
@@ -35,7 +35,7 @@
           </label>
         </div>
         <div class="form-actions">
-          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block">{{ $t("auth.login_submit") }}</button>
+          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
         </div>
       </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
@@ -71,6 +71,7 @@
         this.model.account = this.getCookie('account')
         this.model.password = this.getCookie('password')
       }
+      this.focus()
     },
 
     methods: {
@@ -141,6 +142,20 @@
             this.logining = false
             this.handleError(res)
           })
+        }
+      },
+      /**
+       * 首次进入光标移入密码框 然后移动到登录按钮  以解决浏览器记住密码时候v-placeholder的bug
+       * @return {[type]} [description]
+       */
+      focus () {
+        var focusInputs = document.getElementsByClassName('focus-input')
+        for (var i = 0; i < focusInputs.length; i++) {
+          setTimeout(((i) => {
+            return function () {
+              focusInputs[i].focus()
+            }
+          })(i), 50 * i)
         }
       }
     }
