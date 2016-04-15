@@ -292,7 +292,7 @@
     methods: {
       // 获取 APP 列表
       getApps () {
-        thi.loadingData = true
+        this.loadingData = true
         api.app.list().then((res) => {
           if (res.status === 200) {
             this.loadingData = false
