@@ -23,7 +23,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="apps.length > 0 && !loadingApps">
+              <template v-if="apps.length > 0 && !loadingData">
                 <tr v-for="app in apps">
                   <td>{{ app.id }}</td>
                   <td>{{ app.name }}</td>
@@ -39,12 +39,12 @@
                     <button @click="onEditApp(app)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
                   </td>
                 </tr>
-                <tr v-if="loadingApps">
+                <tr v-if="loadingData">
                   <td colspan="5" class="tac">
                     <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
                   </td>
                 </tr>
-                <tr v-if="apps.length === 0 && !loadingApps">
+                <tr v-if="apps.length === 0 && !loadingData">
                   <td colspan="5" class="tac">
                     <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                   </td>
@@ -270,7 +270,7 @@
         editing: false,
         uploading: false,
         delChecked: false,
-        loadingApps: false,
+        loadingData: false,
         showAlertModal: false,
         showKeyModal: false
       }
@@ -292,8 +292,10 @@
     methods: {
       // 获取 APP 列表
       getApps () {
+        thi.loadingData = true
         api.app.list().then((res) => {
           if (res.status === 200) {
+            this.loadingData = false
             this.apps = res.data
           }
         })
