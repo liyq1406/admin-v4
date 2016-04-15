@@ -154,7 +154,7 @@
       getMembers () {
         this.loadingData = true
         api.corp.getMembers().then((res) => {
-          this.members = res.data
+          this.members = res.data.list
           this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
