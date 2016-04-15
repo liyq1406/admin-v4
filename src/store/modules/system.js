@@ -53,7 +53,9 @@ const mutations = {
 
   // 加入通知信息
   [ADD_NOTICE] (state, notice) {
-    state.notices.push(notice)
+    if (state.notices.indexOf(notice) < 0) {
+      state.notices.push(notice)
+    }
   },
 
   // 移除通知信息
