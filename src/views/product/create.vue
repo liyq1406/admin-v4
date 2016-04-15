@@ -52,7 +52,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
-  import productsStore from '../../stores/products'
+  import { createProduct } from '../../store/actions/products'
   import locales from '../../consts/locales/index'
   import { globalMixins } from '../../mixins'
 
@@ -63,12 +63,17 @@
 
     mixins: [globalMixins],
 
+    vuex: {
+      actions: {
+        createProduct
+      }
+    },
+
     data () {
       return {
         deviceTypes: locales[Vue.config.lang].deviceTypes,
         model: {},
-        validation: {},
-        state: productsStore.state
+        validation: {}
       }
     },
 
@@ -77,7 +82,8 @@
         if (this.validation.$valid) {
           api.product.createProduct(this.model).then((res) => {
             if (res.status === 200) {
-              productsStore.addProduct(res.data)
+              // mutation
+              this.createProduct(res.data)
               this.$route.router.go({path: '/products/' + res.data.id})
             }
           }).catch((res) => {

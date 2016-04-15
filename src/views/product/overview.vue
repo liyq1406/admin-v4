@@ -156,7 +156,6 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import Modal from '../../components/Modal'
-  import productsStore from '../../stores/products'
   import api from '../../api'
   import _ from 'lodash'
   import dateFormat from 'date-format'
@@ -165,6 +164,8 @@
   require('echarts/chart/map')
   import ecConfig from 'echarts/config'
   import locales from '../../consts/locales/index'
+  import store from '../../store/index'
+  import { removeProduct, updateProduct, setCurrProduct } from '../../store/actions/products'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -174,18 +175,19 @@
 
     mixins: [globalMixins],
 
+    store,
+
+    vuex: {
+      actions: {
+        removeProduct,
+        updateProduct,
+        setCurrProduct
+      }
+    },
+
     components: {
       'radio-group': RadioGroup,
       'modal': Modal
-    },
-
-    props: {
-      products: {
-        type: Array,
-        default () {
-          return []
-        }
-      }
     },
 
     data () {
@@ -568,56 +570,55 @@
 
       // 提交更新
       onEditSubmit () {
-        var self = this
-        if (self.delChecked && !self.editing) {
-          self.editing = true
-          api.product.deleteProduct(self.$route.params.id).then((res) => {
+        if (this.delChecked && !this.editing) {
+          this.editing = true
+          api.product.deleteProduct(this.$route.params.id).then((res) => {
             if (res.status === 200) {
-              self.resetEdit()
-              productsStore.deleteProduct(self.product)
-              self.$route.router.go('/dashboard')
+              this.resetEdit()
+              this.removeProduct(this.product)
+              this.$route.router.go('/dashboard')
             }
           }).catch((res) => {
-            self.handleError(res)
-            self.editing = false
+            this.handleError(res)
+            this.editing = false
           })
-        } else if (self.editValidation.$valid && !self.editing) {
-          self.editing = true
-          if (self.editModel.link_type === 5) {
-            api.product.updateProduct(self.editModel)
-            .then(() => {
-              api.product.getProduct(self.$route.params.id).then((res) => {
+        } else if (this.editValidation.$valid && !this.editing) {
+          this.editing = true
+          if (this.editModel.link_type === 5) {
+            api.product.updateProduct(this.editModel).then(() => {
+              api.product.getProduct(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
-                  self.product = res.data
-                  self.resetEdit()
-                  self.$dispatch('edit-product-name')
+                  this.product = res.data
+                  this.resetEdit()
+                  this.updateProduct(this.product)
+                  this.setCurrProduct(this.product)
                 }
               })
             }).catch((res) => {
-              self.handleError(res)
-              self.editing = false
+              this.handleError(res)
+              this.editing = false
             })
           } else {
-            var dates = {
-              name: self.editModel.name,
-              description: self.editModel.description,
-              link_type: self.editModel.link_type,
-              is_registerable: self.editModel.is_registerable,
-              is_release: self.editModel.is_release,
-              id: self.editModel.id
+            var model = {
+              name: this.editModel.name,
+              description: this.editModel.description,
+              link_type: this.editModel.link_type,
+              is_registerable: this.editModel.is_registerable,
+              is_release: this.editModel.is_release,
+              id: this.editModel.id
             }
-            api.product.updateProduct(dates)
-            .then(() => {
-              api.product.getProduct(self.$route.params.id).then((res) => {
+            api.product.updateProduct(model).then(() => {
+              api.product.getProduct(this.$route.params.id).then((res) => {
                 if (res.status === 200) {
-                  self.product = res.data
-                  self.resetEdit()
-                  self.$dispatch('edit-product-name')
+                  this.product = res.data
+                  this.resetEdit()
+                  this.updateProduct(this.product)
+                  this.setCurrProduct(this.product)
                 }
               })
             }).catch((res) => {
-              self.handleError(res)
-              self.editing = false
+              this.handleError(res)
+              this.editing = false
             })
           }
         }

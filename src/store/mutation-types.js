@@ -31,3 +31,15 @@ export const REMOVE_NOTICES = 'REMOVE_NOTICES'
 
 // 获取到产品
 export const RECEIVE_PRODUCTS = 'RECEIVE_PRODUCTS'
+
+// 创建产品
+export const CREATE_PRODUCT = 'CREATE_PRODUCT'
+
+// 移除产品
+export const REMOVE_PRODUCT = 'REMOVE_PRODUCT'
+
+// 修改产品
+export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
+
+// 设置当前浏览产品
+export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'

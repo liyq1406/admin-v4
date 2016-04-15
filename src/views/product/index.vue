@@ -3,13 +3,13 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2 v-text="product.name"></h2>
+          <h2>{{ currentProduct.name }}</h2>
         </div>
         <div class="panel-bd">
           <tab :nav="secondaryNav"></tab>
         </div>
       </div>
-      <router-view transition="view" transition-mode="out-in" @edit-product-name="getProduct" class="view"></router-view>
+      <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     </div>
   </section>
 </template>
@@ -17,6 +17,8 @@
 <script>
   import Tab from '../../components/Tab'
   import api from '../../api'
+  import store from '../../store/index'
+  import { setCurrProduct } from '../../store/actions/products'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -26,17 +28,23 @@
 
     mixins: [globalMixins],
 
+    store,
+
+    vuex: {
+      getters: {
+        currentProduct: ({ products }) => products.curr
+      },
+      actions: {
+        setCurrProduct
+      }
+    },
+
     components: {
       'tab': Tab
     },
 
     data () {
       return {
-        product: {
-          name: '',
-          description: '',
-          id: ''
-        },
         secondaryNav: []
       }
     },
@@ -85,7 +93,8 @@
       getProduct () {
         api.product.getProduct(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.product = res.data
+            // this.product = res.data
+            this.setCurrProduct(res.data)
           }
         })
       }
