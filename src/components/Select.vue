@@ -1,86 +1,109 @@
 <template>
-  <div class="v-select">
+  <div :class="classes">
     <slot></slot>
-    <div :class="{'open':active}" class="btn-group">
-      <button @click.prevent="toggleDropdown" @blur="deactivate" class="btn btn-default active"><span class="content">{{ label }}</span></button>
-      <div :style="dropdownMenuStyle" class="dropdown-menu">
-        <ul>
-          <li v-for="option in options" @mousedown="handleClick(option)">{{ option.label }}
-            <div v-show="option.value === value" class="fa fa-check"></div>
-          </li>
-        </ul>
-      </div><i @click="toggleDropdown" class="caret"></i>
+    <div class="v-select-wrap" :style="selectWrapStyle">
+      <div class="v-select-trigger">
+        <span>{{ label }}</span>
+        <select v-model="value" @change="handleChange">
+          <option v-for="option in options" :value="option.value">{{ option.label }}</option>
+        </select>
+        <i class="caret"></i>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import EventListener from './utils/EventListener'
-
   export default {
     props: {
+      // 占位符
+      placeholder: {
+        type: String,
+        default: ''
+      },
+
+      // 选项
       options: {
         type: Array,
         default: []
       },
+
+      // 选定值
       value: {
         type: String,
         default: '',
         twoWay: true
       },
-      height: {
-        type: Number,
-        default: 100
+
+      // 宽度
+      width: {
+        type: String,
+        default: '100%'
+      },
+
+      // 尺寸
+      // 可选：['small' | 'normal' | 'large'], 默认为 'normal'
+      size: {
+        type: String,
+        default: 'normal'
+      },
+
+      // 类前缀
+      classPrefix: {
+        type: String,
+        default: 'v-select'
       }
     },
 
     data () {
       return {
-        dropdownMenuStyle: {
-          height: this.height + 'px'
+        selectWrapStyle: {
+          width: this.width
         },
         active: false
       }
     },
 
     computed: {
+      // 标签
       label () {
         var option = this.options.filter((option) => {
           return option.value === this.value
         })[0]
-        return option ? option.label : ''
+        return option ? option.label : (this.placeholder.length ? this.placeholder : '')
+      },
+
+      // 类
+      classes () {
+        var result = [this.classPrefix]
+        var sizeCls = ({
+          'small': 'sm'
+        })[this.size] || ''
+
+        if (sizeCls) {
+          result.push(`${this.classPrefix}-${sizeCls}`)
+        }
+
+        if (this.value) {
+          result.push(`${this.classPrefix}-active`)
+        }
+
+        return result.join(' ')
       }
     },
 
     methods: {
-      handleClick (option) {
-        this.value = option.value
+      handleChange (option) {
         this.$dispatch('select', option.value)
-        this.deactivate()
       },
 
       toggleDropdown () {
         this.active = !this.active
-      },
-
-      deactivate () {
-        this.active = false
       }
     },
 
     ready () {
       this.$dispatch('select-created', this)
-      this._closeEvent = EventListener.listen(window, 'click', (e) => {
-        if (!this.$el.contains(e.target)) {
-          this.deactivate()
-        }
-      })
-    },
-
-    beforeDestroy () {
-      if (this._closeEvent) {
-        this._closeEvent.remove()
-      }
     }
   }
 </script>
@@ -89,55 +112,70 @@
   @import '../assets/stylus/common'
 
   .v-select
-    .btn-group
+    & > span
       display inline-block
+      vertical-align middle
+
+    .v-select-wrap
       position relative
-      z-index 100
+      width 100%
+      display inline-block
+      background #FFF
+      min-width 70px
+      vertical-align middle
 
-      i.caret
-        absolute right 10px top 10px
-        triangle #FFF 10px down
+    .v-select-trigger
+      position relative
+      border 1px solid default-border-color
+      height 30px
+      line-height 30px
+      padding 0 25px 0 10px
+      cursor pointer
 
-      .btn
-        padding 0 30px 0 20px
-        max-width 140px
+      span
+        absolute left top
+        padding-right 25px
+        z-index 0
+        text-indent 10px
+        height 32px
         box-sizing border-box
-        height 25px
-        line-height 25px
+        color gray-light
+        text-overflow 100%
 
-        span
-          display block
-          text-overflow 100%
+      select
+        absolute left top
+        appearance none
+        size 100%
+        font-size 14px
+        opacity 0
+        z-index 10
+        font-family font-stack
+        cursor pointer
 
-      .dropdown-menu
-        absolute right top 26px
-        display none
-        width 140px
-        height 0
-        border 1px solid red
-        background #FFF
-        overflow auto
-        box-sizing border-box
+      .caret
+        absolute right 8px top 12px
+        triangle gray-dark 10px down
 
-        li
-          position relative
-          font-size 12px
-          line-height 24px
-          height 24px
-          color red
-          cursor pointer
-          padding 0 10px
-          overflow hidden
-          white-space nowrap
-          text-overflow "…"
+  .v-select-sm
+    .v-select-trigger
+      height 24px
+      line-height 24px
+      padding-left 8px
+      cursor pointer
 
-          &:hover
-            background red
-            color #FFF
+      span
+        text-indent 8px
+        height 26px
+        font-size 12px
 
-          .fa
-            absolute right 10px top 5px
+      select
+        font-size 12px
 
-    .open > .dropdown-menu
-      display block
+      .caret
+        top 10px
+
+  .v-select-active
+    .v-select-trigger
+      span
+        color gray-darker
 </style>

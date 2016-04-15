@@ -13,7 +13,7 @@
         </div>
         <div class="status-bar">
           <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-          <v-select :options="categoryOptions" :value.sync="category" @select="getIngredients"><span>类别：</span></v-select>
+          <v-select :options="categoryOptions" :value.sync="category" size="small" width="100px" @select="getIngredients"><span>类别：</span></v-select>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>

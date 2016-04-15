@@ -1,7 +1,10 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      延保工单列表
+      <div class="status-bar">
+        <div class="status">{{{ $t('common.total_results', {count:total}) }}}
+        </div>
+      </div>
     </div>
   </div>
 </template>

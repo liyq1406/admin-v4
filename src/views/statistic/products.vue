@@ -4,7 +4,7 @@
       <div class="panel-hd">
         <h2>{{ $t("statistic.trends") }}</h2>
         <div class="leftbox">
-          <v-select :options="productsOptions" :value.sync="productId" @select="getProductData"></v-select>
+          <v-select :options="productsOptions" :value.sync="productId" size="small" width="160px" @select="getProductData"></v-select>
           <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
         </div>
       </div>

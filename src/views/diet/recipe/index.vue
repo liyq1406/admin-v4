@@ -12,8 +12,8 @@
         </div>
         <div class="status-bar">
           <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-          <v-select :options="categoryOptions" :value.sync="category" @select="getRecipes"><span>类别：</span></v-select>
-          <v-select :options="deviceOptions" :value.sync="device" @select="getRecipes"><span>烹饪设备：</span></v-select>
+          <v-select :options="categoryOptions" :value.sync="category" size="small" width="100px" @select="getRecipes"><span>类别：</span></v-select>
+          <v-select :options="deviceOptions" :value.sync="device" size="small" width="100px" @select="getRecipes"><span>烹饪设备：</span></v-select>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>

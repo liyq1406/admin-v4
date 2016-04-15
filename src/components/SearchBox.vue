@@ -19,18 +19,25 @@
     label
       margin-right 10px
 
+    .v-select
+      display inline-block
+
+    .btn-primary
+      vertical-align middle
+
   .search-box-input
     display inline-block
     position relative
     background #F1F1F1
-    size 190px 30px
+    size 190px 32px
+    vertical-align middle
 
     input
       background transparent
       border none
       appearance none
-      size 160px 30px
-      line-height 30px
+      size 160px 32px
+      line-height 32px
       padding 0 6px 0 10px
       font-size 12px
       box-sizing border-box

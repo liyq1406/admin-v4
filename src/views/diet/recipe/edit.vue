@@ -139,7 +139,7 @@
             <h3 slot="header">选择食材</h3>
             <div slot="body" class="ingredient-box">
               <div class="status-bar">
-                <v-select :options="ingredientCategoryOptions" :value.sync="ingredientSelectModal.category" @select="getIngredients"><span>类别：</span></v-select>
+                <v-select :options="ingredientCategoryOptions" :value.sync="ingredientSelectModal.category" size="small" width="90px" @select="getIngredients"><span>类别：</span></v-select>
                 <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
                   <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
                 </search-box>

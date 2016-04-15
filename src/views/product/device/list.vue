@@ -3,9 +3,10 @@
     <div class="panel-bd">
       <div class="action-bar">
         <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-          <select v-model="condi" name="condi" class="selcss">
-            <option v-for="type in searchCondi" :value="type.value" :selected="$index===0">{{ type.label }}</option>
-          </select>
+          <!-- <select v-model="condi" name="condi" class="query-type">
+            <option v-for="type in queryTypeOptions" :value="type.value" :selected="$index===0">{{ type.label }}</option>
+          </select> -->
+          <v-select :options="queryTypeOptions" :value.sync="queryType" width="90px"></v-select>
           <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">
@@ -18,7 +19,7 @@
       <div class="status-bar">
         <div class="status">{{{ $t('common.total_results', {count:total}) }}}
         </div>
-        <v-select :options="visibilityOptions" :value.sync="visibility" @select="getDevices"><span>{{ $t('common.display') }}：</span></v-select>
+        <v-select :options="visibilityOptions" :value.sync="visibility" width="90px" size="small" @select="getDevices"><span>{{ $t('common.display') }}：</span></v-select>
       </div>
       <table class="table table-stripe table-bordered">
         <thead>
@@ -138,11 +139,11 @@
         adding: false,
         importing: false,
         loadingData: false,
-        searchCondi: [
+        queryTypeOptions: [
           { label: 'MAC', value: 'mac' },
           { label: '设备ID', value: 'id' }
         ],
-        condi: 'mac'
+        queryType: 'mac'
       }
     },
 
@@ -157,7 +158,7 @@
         }
 
         if (this.query.length > 0) {
-          condition.query[this.condi] = { $like: this.query }
+          condition.query[this.queryType] = { $like: this.query }
         }
 
         switch (this.visibility) {
@@ -318,7 +319,8 @@
     }
   }
 </script>
+
 <style lang="stylus">
-.selcss
-  height 30px
+  .query-type
+    height 30px
 </style>
