@@ -4,7 +4,7 @@
       <h2 class="title">设备MAC：{{$route.params.mac || $route.params.device_id}}</h2>
       <div class="other-control-button-box">
         <button @click="updateDevicesInfo" class="other-control-button btn btn-success">获取设备信息</button>
-        <button @click="showEditModal5" class="other-control-button btn btn-success">设置控制器时间</button>
+        <button @click="showEditModal5" class="other-control-button btn btn-success" :class="{'disabled': !deviceOnline}" :disabled="!deviceOnline">设置控制器时间</button>
       </div>
     </div>
     <div class="panel-bd">
@@ -245,8 +245,14 @@
 </template>
 
 <script>
+  import Vue from 'vue'
+  import api from '../../../../api'
   import { globalMixins } from '../../../../mixins'
   import Modal from '../../../../components/Modal'
+  import io from 'socket.io-client'
+  import locales from '../../../../consts/locales/index'
+  // locales = 123
+  var socket
 
   export default {
     name: 'BasicInfo',
@@ -365,15 +371,18 @@
         // 正在设置参数
         settingData: false,
         // 是否更新数据  区分当前是首次获取数据还是更新数据
-        updateDate: false
+        updateDate: false,
+        deviceOnline: true
       }
     },
     route: {
       data () {
         var self = this
         self.getProductInfos()
+        self.connect()
       }
     },
+    ready () {},
     methods: {
       /**
        * 确定按钮事件
@@ -391,6 +400,7 @@
           })
         }
       },
+
       /**
        * 重新获取设备信息
        * @return {[type]} [description]
@@ -399,6 +409,7 @@
         this.updateDate = true
         this.getProductInfos()
       },
+
       /**
        * 设置控制器时间
        */
@@ -415,6 +426,11 @@
           }, 1000)
         }
       },
+
+      /**
+       * 获取产品信息
+       * @return {[type]} [description]
+       */
       getProductInfos () {
         var self = this
         console.log('获取产品信息')
@@ -433,9 +449,59 @@
       showEditModal5 () {
         var self = this
         console.log('设置控制器时间')
-        // 这里需要获取最新的控制器时间
-        self.settingData = false
-        self.editModal5.show = true
+        if (self.deviceOnline) {
+          // 这里需要获取最新的控制器时间
+          self.settingData = false
+          self.editModal5.show = true
+        }
+      },
+
+      /**
+       * 连接设备
+       * @return {[type]} [description]
+       */
+      connect () {
+        var self = this
+        api.device.getDeviceToken(this.$route.params.device_id).then((res) => {
+          self.token = res.data.token
+          socket = io.connect('http://' + res.data.addr, {'force new connection': true})
+
+          // 连接 socket
+          socket.on('connect', () => {
+            self.showNotice({
+              type: 'success',
+              content: 'Client has connected to the server!'
+            })
+            window.setTimeout(() => {
+              socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token})
+            }, 100)
+          })
+
+          // 断开 socket 连接
+          socket.on('disconnect', () => {
+            self.showNotice({
+              type: 'error',
+              content: locales[Vue.config.lang].errors[res.data.error.code]
+            })
+          })
+
+          // 输入日志
+          socket.on('trace.log', (data) => {
+            console.log(data)
+          })
+
+          // 输出状态
+          socket.on('trace.status', (data) => {
+            console.log(data)
+          })
+        }).catch((res) => {
+          console.log(res.data.error.msg)
+          self.deviceOnline = false
+          self.showNotice({
+            type: 'error',
+            content: locales[Vue.config.lang].errors[res.data.error.code]
+          })
+        })
       },
       /**
        * 显示编辑浮层
@@ -444,9 +510,16 @@
        */
       showEditModalEvent (paramsKey) {
         var self = this
-        if (self.productInfos[paramsKey]) {
-          self.settingData = false
-          self['showEditModal' + self.productInfos[paramsKey].modelType](paramsKey)
+        if (self.deviceOnline) {
+          if (self.productInfos[paramsKey]) {
+            self.settingData = false
+            self['showEditModal' + self.productInfos[paramsKey].modelType](paramsKey)
+          }
+        } else {
+          self.showNotice({
+            type: 'error',
+            content: '设备不在线 无法进行操作'
+          })
         }
       },
       /**
@@ -524,7 +597,6 @@
         this.editModal5.show = false
       },
       checkHour (hour) {
-        console.log(hour)
         if (hour - 0 > 23) {
           return false
         } else {
@@ -532,7 +604,6 @@
         }
       },
       checkMinute (minute) {
-        console.log(minute)
         if (minute - 0 > 59) {
           return false
         } else {
