@@ -3,7 +3,7 @@
     <div class="main">
       <div class="breadcrumb"><a v-link="{path: '/warranty/work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div>
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
               <h2>工单详情</h2>

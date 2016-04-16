@@ -9,10 +9,10 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-13">
+          <div class="col-15">
             <div id="trendChart" style="height:320px"></div>
           </div>
-          <div class="col-7">
+          <div class="col-9">
             <div class="statistics-info">
               <div class="item">
                 <div class="cont">

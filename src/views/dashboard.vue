@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <!-- Start: 管理台-->
           <div class="panel">
             <div class="panel-hd">
@@ -38,7 +38,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-12">
+        <div class="col-14">
           <!-- Start: 告警-->
           <!-- End: 告警-->
           <!-- Start: 快速指南-->
@@ -62,7 +62,7 @@
           </div>
           <!-- End: 快速指南-->
         </div>
-        <div class="col-8">
+        <div class="col-10">
           <!-- Start: 文档-->
           <div class="panel">
             <div class="panel-hd">

@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
               <h2>帐号管理</h2>

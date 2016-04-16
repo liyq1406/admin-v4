@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-12">
+      <div class="col-14">
         <!-- Start: 个人信息-->
         <div class="panel">
           <div class="panel-hd">
@@ -56,7 +56,7 @@
         </div>
         <!-- End: 个人信息-->
       </div>
-      <div class="col-8">
+      <div class="col-10">
         <!-- Start: 企业信息-->
         <div class="panel">
           <div class="panel-hd">

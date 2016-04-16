@@ -3,7 +3,7 @@
     <div class="main">
       <div class="breadcrumb"><a v-link="{path: '/warranty/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
               <h2>网点详情</h2>

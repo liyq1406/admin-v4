@@ -207,6 +207,7 @@
   import api from '../../api'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
+  import Select from '../../components/Select'
   // import locales from '../../consts/locales/index'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
@@ -220,7 +221,8 @@
 
     components: {
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     data () {

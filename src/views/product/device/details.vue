@@ -3,7 +3,7 @@
     <div class="main">
       <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('device.management') }}</a></div>
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
               <h2>{{ $t('device.details') }}</h2>
@@ -44,7 +44,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-13">
+        <div class="col-16">
           <!-- Start: 数据端点-->
           <div class="panel">
             <div class="panel-hd">
@@ -81,7 +81,7 @@
           </div>
           <!-- End: 数据端点-->
         </div>
-        <div class="col-7">
+        <div class="col-8">
           <!-- Start: 设备日志-->
           <div class="panel">
             <div class="panel-hd">

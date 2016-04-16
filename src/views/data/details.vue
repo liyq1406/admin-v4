@@ -3,7 +3,7 @@
     <div class="main">
       <div class="breadcrumb"><a v-link="{path: '/data/tables' }"><i class="fa fa-arrow-circle-left"></i>{{ $t("nav_aside.data") }}</a></div>
       <div class="row">
-        <div class="col-20">
+        <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
               <h2>{{ $t("table.details") }}</h2>

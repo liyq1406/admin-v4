@@ -1,13 +1,13 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-20">
+      <div class="col-24">
         <!-- Start: 产品简介-->
         <div class="panel">
           <div class="product-card">
             <div class="thumb"><img src="../../assets/images/device_thumb.png"/></div>
             <div class="info">
-              <div class="col-9 summary">
+              <div class="col-11 summary">
                 <h3>{{ product.name }}<a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h3>
                 <p><em>{{ $t("overview.desc") }}:</em><span>{{ product.description }}</span></p>
                 <p><em>{{ $t("overview.pid") }}:</em><span>{{ product.id }}</span></p>
@@ -19,10 +19,27 @@
                   </label>
                 </div>
               </div>
-              <div class="col-11 status">
-                <div class="status-item"><em>{{ productSummary.online }}</em><span>{{ $t("overview.statistic.online") }}</span></div>
-                <div class="status-item"><em>{{ productSummary.activated }}</em><span>{{ $t("overview.statistic.activated") }}</span></div>
-                <div class="status-item"><em>{{ productSummary.total }}</em><span>{{ $t("overview.statistic.total") }}</span></div>
+              <div class="col-13">
+                <div class="row status">
+                  <div class="col-7">
+                    <div class="status-item">
+                      <em>{{ productSummary.online }}</em>
+                      <span>{{ $t("overview.statistic.online") }}</span>
+                    </div>
+                  </div>
+                  <div class="col-8">
+                    <div class="status-item">
+                      <em>{{ productSummary.activated }}</em>
+                      <span>{{ $t("overview.statistic.activated") }}</span>
+                    </div>
+                  </div>
+                  <div class="col-9">
+                    <div class="status-item">
+                      <em>{{ productSummary.total }}</em>
+                      <span>{{ $t("overview.statistic.total") }}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -31,7 +48,7 @@
       </div>
     </div>
     <div class="row">
-      <div class="col-10">
+      <div class="col-12">
         <!-- Start: 趋势-->
         <div class="panel">
           <div class="panel-hd">
@@ -44,7 +61,7 @@
         </div>
         <!-- End: 趋势-->
       </div>
-      <div class="col-10">
+      <div class="col-12">
         <!-- Start: 设备分布-->
         <div class="panel">
           <div class="panel-hd">
@@ -734,24 +751,23 @@
       margin-top 50px
 
       .status-item
-        float left
-        width 30.33%
         border-left 1px solid #E4E4E4
         box-sizing border-box
-        margin-left 3%
-
-        &:first-child
-          border none
+        margin-left 10px
 
         em
         span
           display block
-          padding-right 10px
 
         em
           font-style normal
-          font-size 35px
+          font-size 32px
           color red
+
+      :first-child
+        .status-item
+          border none
+          margin-left 0
 
   .product-key
     font-size 20px

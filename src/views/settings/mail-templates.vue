@@ -690,7 +690,7 @@
     font-size 18px
     border-bottom 1px solid #e4e4e4
   .panel-bd .form
-    padding 30px 0 10px
+    padding 30px 0 20px
   ul.device-details
     padding-bottom 30px
   ul.device-details li

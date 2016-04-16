@@ -1,11 +1,37 @@
 // 栅格
+// $col
+//   float left
+//
+// .row
+//   clearfix()
+//
+//   for i in 1..20
+//     .col-{i}
+//       @extend $col
+//       width (i * 5) %
+
 $col
+  position relative
+  display block
   float left
+  flex 0 0 auto
 
 .row
+  position relative
+  width 100%
   clearfix()
 
-  for i in 1..20
-    .col-{i}
-      @extend $col
-      width (i * 5) %
+for i in 1..grid-columns
+  .col-{i}
+    @extend $col
+    width ((100 / grid-columns) * i)%
+
+  unless i is grid-columns
+    .col-offset-{i}
+      margin-left ((100 / grid-columns) * i)%
+
+    .col-push-{i}
+      left ((100 / grid-columns) * i)%
+
+    .col-pull-{i}
+      right ((100 / grid-columns) * i)%
