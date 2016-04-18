@@ -43,7 +43,7 @@
             link: { path: '/users/list' }
           }, {
             label: '用户设置',
-            link: { path: '/users/usersetting' }
+            link: { path: '/users/settings' }
           }]
         }
       }
