@@ -50,7 +50,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/register'))
-        }, 'auth')
+        }, 'register')
       }
     },
 
@@ -59,7 +59,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/register-with-verifycode'))
-        }, 'auth')
+        }, 'register-with-verifycode')
       }
     },
 
@@ -68,7 +68,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/login'))
-        }, 'auth')
+        }, 'login')
       }
     },
 
@@ -77,7 +77,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/fetch-password'))
-        }, 'auth')
+        }, 'fetch-password')
       }
     },
 
@@ -86,7 +86,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/fetch-password-bymail'))
-        }, 'auth')
+        }, 'fetch-password-bymail')
       }
     },
 
@@ -95,7 +95,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/password-reset'))
-        }, 'auth')
+        }, 'password-reset')
       }
     },
 
@@ -104,7 +104,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/member-activate'))
-        }, 'auth')
+        }, 'member-activate')
       }
     },
 
@@ -113,7 +113,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/email-activate'))
-        }, 'auth')
+        }, 'email-activate')
       }
     },
 
@@ -122,7 +122,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/user-password-reset'))
-        }, 'auth')
+        }, 'user-password-reset')
       }
     },
 
@@ -131,7 +131,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/user-email-activate'))
-        }, 'auth')
+        }, 'user-email-activat')
       }
     },
 
@@ -149,7 +149,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/product/create'))
-        }, 'product')
+        }, 'product.create')
       }
     },
     // 产品详情
@@ -174,7 +174,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/device/list'))
-            }, 'product')
+            }, 'product.devices')
           }
         },
         // 数据端点
@@ -182,7 +182,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/data-point'))
-            }, 'product')
+            }, 'product.data-point')
           }
         },
         // 通知与告警
@@ -190,15 +190,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/alert'))
-            }, 'product')
-          }
-        },
-        // 设备互联
-        'interconnection': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/interconnection'))
-            }, 'product')
+            }, 'product.alert')
           }
         },
         // 固件升级
@@ -206,7 +198,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/upgrade'))
-            }, 'product')
+            }, 'product.upgrade')
           }
         },
         // 微信导入
@@ -214,7 +206,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/wechat'))
-            }, 'product')
+            }, 'product.wechat')
           }
         },
         // 数据转发
@@ -222,23 +214,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/data-forward'))
-            }, 'product')
-          }
-        },
-        // 虚拟设备
-        'virtual-device': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/virtual-device'))
-            }, 'product')
-          }
-        },
-        // 默认子路由
-        '/': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/overview'))
-            }, 'product')
+            }, 'product.data-forward')
           }
         }
       }
@@ -248,7 +224,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/product/device/details'))
-        }, 'product')
+        }, 'device.details')
       }
     },
     // 设备参数
@@ -256,7 +232,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/product/device/params/index'))
-        }, 'params')
+        }, 'device.params')
       },
       subRoutes: {
         // 基本信息
@@ -264,7 +240,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/device/params/basic-info'))
-            }, 'params')
+            }, 'device.params')
           }
         },
         // 数据监控
@@ -272,7 +248,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/device/params/data-monitoring'))
-            }, 'params')
+            }, 'device.params')
           }
         },
         // 故障记录
@@ -280,7 +256,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/product/device/params/fault-records'))
-            }, 'params')
+            }, 'device.params')
           }
         }
       }
@@ -307,7 +283,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/app/wechat/update'))
-            }, 'data')
+            }, 'apps')
           }
         }
       }
@@ -355,7 +331,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/user/index'))
-        }, 'data')
+        }, 'user')
       },
       subRoutes: {
         // 用户列表
@@ -363,15 +339,15 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/user/list'))
-            }, 'data')
+            }, 'user')
           }
         },
         // 用户设置
-        'usersetting': {
+        'settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/user/usersetting'))
-            }, 'data')
+              resolve(require('./views/user/settings'))
+            }, 'user.settings')
           }
         }
       }
@@ -382,7 +358,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/user/details'))
-        }, 'user')
+        }, 'user.details')
       }
     },
 
@@ -486,28 +462,28 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/diet/ingredient/add'))
-        }, 'diet')
+        }, 'diet.operations')
       }
     },
     '/diet/ingredient/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/diet/ingredient/edit'))
-        }, 'diet')
+        }, 'diet.operations')
       }
     },
     '/diet/recipe/add': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/diet/recipe/add'))
-        }, 'diet')
+        }, 'diet.operations')
       }
     },
     '/diet/recipe/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/diet/recipe/edit'))
-        }, 'diet')
+        }, 'diet.operations')
       }
     },
 

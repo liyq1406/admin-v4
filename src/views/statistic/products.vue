@@ -92,8 +92,10 @@
   import api from '../../api'
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'
-  require('echarts/chart/line')
-  require('echarts/chart/map')
+  import 'echarts/chart/line'
+  import 'echarts/chart/map'
+  import worldNames from '../../consts/world-names'
+  import chinaNames from '../../consts/china-names'
   import ecConfig from 'echarts/config'
   import { globalMixins } from '../../mixins'
 
@@ -287,7 +289,7 @@
                 mapLocation: {
                   y: 10
                 },
-                nameMap: require('../../consts/world-names'),
+                nameMap: worldNames,
                 data: worldData
               }]
             }
@@ -382,7 +384,7 @@
                   normal: { label: { show: true } },
                   emphasis: { label: { show: true } }
                 },
-                nameMap: require('../../consts/china-names'),
+                nameMap: chinaNames,
                 data: chinaData
               }]
             }

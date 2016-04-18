@@ -34,6 +34,7 @@
     },
 
     props: {
+      // 省
       province: {
         type: Object,
         required: true,
@@ -42,6 +43,8 @@
           return {}
         }
       },
+
+      // 市
       city: {
         type: Object,
         required: true,
@@ -50,6 +53,8 @@
           return {}
         }
       },
+
+      // 区
       district: {
         type: Object,
         required: true,
@@ -71,6 +76,9 @@
     },
 
     methods: {
+      /**
+       * 处理切换省
+       */
       handleProvinceChange () {
         this.districtOptions = []
 
@@ -86,6 +94,9 @@
         this.$dispatch('province-change')
       },
 
+      /**
+       * 处理切换市
+       */
       handleCityChange () {
         // 获取对应区
         this.districtOptions = _.filter(this.districts, (item) => {
@@ -98,6 +109,9 @@
         this.$dispatch('city-change')
       },
 
+      /**
+       * 处理切换区
+       */
       handleDistrictChange () {
         // 向父组件传递区改变事件
         this.$dispatch('district-change')

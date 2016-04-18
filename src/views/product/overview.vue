@@ -180,11 +180,13 @@
   import _ from 'lodash'
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'
-  require('echarts/chart/line')
-  require('echarts/chart/map')
+  import 'echarts/chart/line'
+  import 'echarts/chart/map'
   import ecConfig from 'echarts/config'
   import locales from '../../consts/locales/index'
   import store from '../../store/index'
+  import worldNames from '../../consts/world-names'
+  import chinaNames from '../../consts/china-names'
   import { removeProduct, updateProduct, setCurrProduct } from '../../store/actions/products'
   import { globalMixins } from '../../mixins'
 
@@ -402,7 +404,7 @@
                 mapLocation: {
                   y: 10
                 },
-                nameMap: require('../../consts/world-names'),
+                nameMap: worldNames,
                 data: worldData
               }]
             }
@@ -497,7 +499,7 @@
                   normal: { label: { show: true } },
                   emphasis: { label: { show: true } }
                 },
-                nameMap: require('../../consts/china-names'),
+                nameMap: chinaNames,
                 data: chinaData
               }]
             }

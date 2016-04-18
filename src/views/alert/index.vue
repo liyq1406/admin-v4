@@ -152,7 +152,7 @@
   import RadioGroup from '../../components/RadioGroup'
   import dateFormat from 'date-format'
   import echarts from 'echarts/echarts'
-  require('echarts/chart/line')
+  import 'echarts/chart/line'
   import { globalMixins } from '../../mixins'
 
   export default {

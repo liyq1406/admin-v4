@@ -15,7 +15,7 @@
   import { globalMixins } from '../../../../mixins'
   import api from '../../../../api'
   import echarts from 'echarts/echarts'
-  require('echarts/chart/line')
+  import 'echarts/chart/line'
 
   export default {
     name: 'BasicInfo',
