@@ -252,8 +252,9 @@
   // import locales from '../../../../consts/locales/index'
   // import io from 'socket.io-client'
   import XJSObject from '../../../../helpers/jssdk'
-  console.log(XJSObject)
+
   // locales = 123
+  // var socket
 
   export default {
     name: 'BasicInfo',
@@ -323,6 +324,7 @@
         // 产品信息
         productInfos: {
           test: {
+            feature: '00',
             name: '上限温度',
             valueText: '55',
             valueArr: ['自动模式', '手动模式'],
@@ -330,7 +332,8 @@
             unit: '℃',
             tips: '时间格式为 00:00 - 23:59'
           },
-          paramsKey1: {
+          paramsKey00: {
+            feature: '00',
             name: '运行模式',
             valueText: '自动模式',
             valueArr: ['自动模式', '手动模式'],
@@ -338,24 +341,28 @@
             unit: ''
           },
           paramsKey2: {
+            feature: '00',
             name: '工作时间段一',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey3: {
+            feature: '00',
             name: '工作时间段二',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey4: {
+            feature: '00',
             name: '工作时间段三',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey5: {
+            feature: '00',
             name: '上限温度',
             valueText: '55.0',
             valueArr: [],
@@ -374,18 +381,31 @@
         settingData: false,
         // 是否更新数据  区分当前是首次获取数据还是更新数据
         updateDate: false,
+        // 设备是否在线
         deviceOnline: false
       }
     },
     route: {
       data () {
-        var self = this
-        self.getProductInfos()
-        self.connect()
+        // this.getProductInfos()
+        this.connect() // 连接设备
+        this.listenDeviceData() // 监听设备数据
       }
     },
-    ready () {},
+    ready () {
+      // onRecvXDeviceData
+    },
     methods: {
+      listenDeviceData () {
+        // 设备返回数据
+        XJSObject.on('onRecvXDeviceData', function (r) {
+          console.log('设备返回数据:' + JSON.stringify(r))
+        })
+        // 设备状态改变
+        XJSObject.on('onXDeviceStateChange', function (r) {
+          console.log('设备状态改变:' + JSON.stringify(r))
+        })
+      },
       /**
        * 确定按钮事件
        * @param {object} productInfo 当前正在编辑的对象
@@ -464,9 +484,15 @@
        */
       connect () {
         var self = this
-        var device_id = self.$route.params.device_id
-        // device_id = '452873196'
-        console.log('当前设备id是：' + device_id)
+        XJSObject.invoke('loadXJSAPILib', {}, function (r) {
+          XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
+            if (r.status === 200) {
+              console.log('设备已经连接')
+              self.deviceOnline = true
+            }
+            console.log(JSON.stringify(r))
+          })
+        })
       },
       /**
        * 显示编辑浮层
