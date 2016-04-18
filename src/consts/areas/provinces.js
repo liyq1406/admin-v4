@@ -1,172 +1,172 @@
 // 省
 export default [{
-  'ProID': 1,
+  'proID': 1,
   'name': '北京市',
-  'ProSort': 1,
-  'ProRemark': '直辖市'
+  'proSort': 1,
+  'proRemark': '直辖市'
 }, {
-  'ProID': 2,
+  'proID': 2,
   'name': '天津市',
-  'ProSort': 2,
-  'ProRemark': '直辖市'
+  'proSort': 2,
+  'proRemark': '直辖市'
 }, {
-  'ProID': 3,
+  'proID': 3,
   'name': '河北省',
-  'ProSort': 5,
-  'ProRemark': '省份'
+  'proSort': 5,
+  'proRemark': '省份'
 }, {
-  'ProID': 4,
+  'proID': 4,
   'name': '山西省',
-  'ProSort': 6,
-  'ProRemark': '省份'
+  'proSort': 6,
+  'proRemark': '省份'
 }, {
-  'ProID': 5,
+  'proID': 5,
   'name': '内蒙古自治区',
-  'ProSort': 32,
-  'ProRemark': '自治区'
+  'proSort': 32,
+  'proRemark': '自治区'
 }, {
-  'ProID': 6,
+  'proID': 6,
   'name': '辽宁省',
-  'ProSort': 8,
-  'ProRemark': '省份'
+  'proSort': 8,
+  'proRemark': '省份'
 }, {
-  'ProID': 7,
+  'proID': 7,
   'name': '吉林省',
-  'ProSort': 9,
-  'ProRemark': '省份'
+  'proSort': 9,
+  'proRemark': '省份'
 }, {
-  'ProID': 8,
+  'proID': 8,
   'name': '黑龙江省',
-  'ProSort': 10,
-  'ProRemark': '省份'
+  'proSort': 10,
+  'proRemark': '省份'
 }, {
-  'ProID': 9,
+  'proID': 9,
   'name': '上海市',
-  'ProSort': 3,
-  'ProRemark': '直辖市'
+  'proSort': 3,
+  'proRemark': '直辖市'
 }, {
-  'ProID': 10,
+  'proID': 10,
   'name': '江苏省',
-  'ProSort': 11,
-  'ProRemark': '省份'
+  'proSort': 11,
+  'proRemark': '省份'
 }, {
-  'ProID': 11,
+  'proID': 11,
   'name': '浙江省',
-  'ProSort': 12,
-  'ProRemark': '省份'
+  'proSort': 12,
+  'proRemark': '省份'
 }, {
-  'ProID': 12,
+  'proID': 12,
   'name': '安徽省',
-  'ProSort': 13,
-  'ProRemark': '省份'
+  'proSort': 13,
+  'proRemark': '省份'
 }, {
-  'ProID': 13,
+  'proID': 13,
   'name': '福建省',
-  'ProSort': 14,
-  'ProRemark': '省份'
+  'proSort': 14,
+  'proRemark': '省份'
 }, {
-  'ProID': 14,
+  'proID': 14,
   'name': '江西省',
-  'ProSort': 15,
-  'ProRemark': '省份'
+  'proSort': 15,
+  'proRemark': '省份'
 }, {
-  'ProID': 15,
+  'proID': 15,
   'name': '山东省',
-  'ProSort': 16,
-  'ProRemark': '省份'
+  'proSort': 16,
+  'proRemark': '省份'
 }, {
-  'ProID': 16,
+  'proID': 16,
   'name': '河南省',
-  'ProSort': 17,
-  'ProRemark': '省份'
+  'proSort': 17,
+  'proRemark': '省份'
 }, {
-  'ProID': 17,
+  'proID': 17,
   'name': '湖北省',
-  'ProSort': 18,
-  'ProRemark': '省份'
+  'proSort': 18,
+  'proRemark': '省份'
 }, {
-  'ProID': 18,
+  'proID': 18,
   'name': '湖南省',
-  'ProSort': 19,
-  'ProRemark': '省份'
+  'proSort': 19,
+  'proRemark': '省份'
 }, {
-  'ProID': 19,
+  'proID': 19,
   'name': '广东省',
-  'ProSort': 20,
-  'ProRemark': '省份'
+  'proSort': 20,
+  'proRemark': '省份'
 }, {
-  'ProID': 20,
+  'proID': 20,
   'name': '海南省',
-  'ProSort': 24,
-  'ProRemark': '省份'
+  'proSort': 24,
+  'proRemark': '省份'
 }, {
-  'ProID': 21,
+  'proID': 21,
   'name': '广西壮族自治区',
-  'ProSort': 28,
-  'ProRemark': '自治区'
+  'proSort': 28,
+  'proRemark': '自治区'
 }, {
-  'ProID': 22,
+  'proID': 22,
   'name': '甘肃省',
-  'ProSort': 21,
-  'ProRemark': '省份'
+  'proSort': 21,
+  'proRemark': '省份'
 }, {
-  'ProID': 23,
+  'proID': 23,
   'name': '陕西省',
-  'ProSort': 27,
-  'ProRemark': '省份'
+  'proSort': 27,
+  'proRemark': '省份'
 }, {
-  'ProID': 24,
+  'proID': 24,
   'name': '新疆维吾尔自治区',
-  'ProSort': 31,
-  'ProRemark': '自治区'
+  'proSort': 31,
+  'proRemark': '自治区'
 }, {
-  'ProID': 25,
+  'proID': 25,
   'name': '青海省',
-  'ProSort': 26,
-  'ProRemark': '省份'
+  'proSort': 26,
+  'proRemark': '省份'
 }, {
-  'ProID': 26,
+  'proID': 26,
   'name': '宁夏回族自治区',
-  'ProSort': 30,
-  'ProRemark': '自治区'
+  'proSort': 30,
+  'proRemark': '自治区'
 }, {
-  'ProID': 27,
+  'proID': 27,
   'name': '重庆市',
-  'ProSort': 4,
-  'ProRemark': '直辖市'
+  'proSort': 4,
+  'proRemark': '直辖市'
 }, {
-  'ProID': 28,
+  'proID': 28,
   'name': '四川省',
-  'ProSort': 22,
-  'ProRemark': '省份'
+  'proSort': 22,
+  'proRemark': '省份'
 }, {
-  'ProID': 29,
+  'proID': 29,
   'name': '贵州省',
-  'ProSort': 23,
-  'ProRemark': '省份'
+  'proSort': 23,
+  'proRemark': '省份'
 }, {
-  'ProID': 30,
+  'proID': 30,
   'name': '云南省',
-  'ProSort': 25,
-  'ProRemark': '省份'
+  'proSort': 25,
+  'proRemark': '省份'
 }, {
-  'ProID': 31,
+  'proID': 31,
   'name': '西藏自治区',
-  'ProSort': 29,
-  'ProRemark': '自治区'
+  'proSort': 29,
+  'proRemark': '自治区'
 }, {
-  'ProID': 32,
+  'proID': 32,
   'name': '台湾省',
-  'ProSort': 7,
-  'ProRemark': '省份'
+  'proSort': 7,
+  'proRemark': '省份'
 }, {
-  'ProID': 33,
+  'proID': 33,
   'name': '澳门特别行政区',
-  'ProSort': 33,
-  'ProRemark': '特别行政区'
+  'proSort': 33,
+  'proRemark': '特别行政区'
 }, {
-  'ProID': 34,
+  'proID': 34,
   'name': '香港特别行政区',
-  'ProSort': 34,
-  'ProRemark': '特别行政区'
+  'proSort': 34,
+  'proRemark': '特别行政区'
 }]

@@ -849,5 +849,10 @@ export default {
       instructions: '摘要',
       tips: '备注'
     }
+  },
+
+  // 天际账号管理
+  account_manage: {
+    search_condi: '网点名称'
   }
 }
