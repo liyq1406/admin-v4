@@ -245,14 +245,15 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import api from '../../../../api'
+  // import Vue from 'vue'
+  // import api from '../../../../api'
   import { globalMixins } from '../../../../mixins'
   import Modal from '../../../../components/Modal'
-  import io from 'socket.io-client'
-  import locales from '../../../../consts/locales/index'
+  // import locales from '../../../../consts/locales/index'
+  // import io from 'socket.io-client'
+  import XJSObject from '../../../../helpers/jssdk'
+  console.log(XJSObject)
   // locales = 123
-  var socket
 
   export default {
     name: 'BasicInfo',
@@ -267,6 +268,7 @@
 
     data () {
       return {
+        device_id: this.$route.params.device_id,
         // modelType 弹窗类型 1是时间选择 2是小范围选择参数 3是大范围参数输入 4是双维度
         validation1: {},
         validation2: {},
@@ -372,7 +374,7 @@
         settingData: false,
         // 是否更新数据  区分当前是首次获取数据还是更新数据
         updateDate: false,
-        deviceOnline: true
+        deviceOnline: false
       }
     },
     route: {
@@ -462,46 +464,9 @@
        */
       connect () {
         var self = this
-        api.device.getDeviceToken(this.$route.params.device_id).then((res) => {
-          self.token = res.data.token
-          socket = io.connect('http://' + res.data.addr, {'force new connection': true})
-
-          // 连接 socket
-          socket.on('connect', () => {
-            self.showNotice({
-              type: 'success',
-              content: 'Client has connected to the server!'
-            })
-            window.setTimeout(() => {
-              socket.emit('trace.logs', {id: self.$route.params.device_id, token: self.token})
-            }, 100)
-          })
-
-          // 断开 socket 连接
-          socket.on('disconnect', () => {
-            self.showNotice({
-              type: 'error',
-              content: locales[Vue.config.lang].errors[res.data.error.code]
-            })
-          })
-
-          // 输入日志
-          socket.on('trace.log', (data) => {
-            console.log(data)
-          })
-
-          // 输出状态
-          socket.on('trace.status', (data) => {
-            console.log(data)
-          })
-        }).catch((res) => {
-          console.log(res.data.error.msg)
-          self.deviceOnline = false
-          self.showNotice({
-            type: 'error',
-            content: locales[Vue.config.lang].errors[res.data.error.code]
-          })
-        })
+        var device_id = self.$route.params.device_id
+        // device_id = '452873196'
+        console.log('当前设备id是：' + device_id)
       },
       /**
        * 显示编辑浮层
