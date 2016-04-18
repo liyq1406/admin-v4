@@ -58,9 +58,11 @@
             <label class="form-control">{{ $t("table.fields.type") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="addModel.type" v-form-ctrl name="type" number="number">
-                  <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="tableTypes[addModel.type-1]">
+                  <select v-model="addModel.type" v-form-ctrl name="type" number="number">
+                    <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -82,19 +84,24 @@
                   <input v-model="field.name" type="text" @input="updateField(addModel, addFields)" @blur="onBlur(field, addModel, addFields)" lazy class="input-text"/>
                 </div>
                 <div class="select">
-                  <select v-model="field.value" @change="updateField(addModel, addFields)">
-                    <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                  </select>
-                </div><span @click="removeField(field, addModel, addFields)" class="fa fa-times"></span>
+                  <v-select :label="_getTypeLabel(field.value)">
+                    <select v-model="field.value" @change="updateField(addModel, addFields)">
+                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                    </select>
+                  </v-select>
+                </div>
+                <span @click="removeField(field, addModel, addFields)" class="fa fa-times"></span>
               </div>
               <div class="field-row">
                 <div class="input-text-wrap">
                   <input v-model="newField.name" type="text" lazy class="input-text"/>
                 </div>
                 <div class="select">
-                  <select v-model="newField.value">
-                    <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                  </select>
+                  <v-select :label="_getTypeLabel(newField.value)">
+                    <select v-model="newField.value">
+                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                    </select>
+                  </v-select>
                 </div>
               </div>
               <button @click.prevent.stop="createField(addModel, addFields)" class="btn btn-success">{{ $t("table.add_field") }}</button>
@@ -120,9 +127,11 @@
             <label class="form-control">{{ $t("table.fields.type") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="editModel.type" v-form-ctrl name="type" number="number">
-                  <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="tableTypes[editModel.type-1]">
+                  <select v-model="editModel.type" v-form-ctrl name="type" number="number">
+                    <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -144,19 +153,24 @@
                   <input v-model="field.name" type="text" @input="updateField(editModel, editFields)" @blur="onBlur(field, editModel, editFields)" lazy class="input-text"/>
                 </div>
                 <div class="select">
-                  <select v-model="field.value" @change="updateField(editModel, editFields)">
-                    <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                  </select>
-                </div><span @click="removeField(field, editModel, editFields)" class="fa fa-times"></span>
+                  <v-select :label="_getTypeLabel(field.value)">
+                    <select v-model="field.value" @change="updateField(editModel, editFields)">
+                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                    </select>
+                  </v-select>
+                </div>
+                <span @click="removeField(field, editModel, editFields)" class="fa fa-times"></span>
               </div>
               <div class="field-row">
                 <div class="input-text-wrap">
                   <input v-model="newField.name" type="text" lazy class="input-text"/>
                 </div>
                 <div class="select">
-                  <select v-model="newField.value">
-                    <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                  </select>
+                  <v-select :label="_getTypeLabel(newField.value)">
+                    <select v-model="newField.value">
+                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                    </select>
+                  </v-select>
                 </div>
               </div>
               <button @click.prevent.stop="createField(editModel, editFields)" class="btn btn-success">{{ $t("table.add_field") }}</button>
@@ -180,6 +194,7 @@
   import api from '../../api'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
+  import Select from '../../components/Select'
   import locales from '../../consts/locales/index'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
@@ -193,7 +208,8 @@
 
     components: {
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     data () {
@@ -243,6 +259,18 @@
     },
 
     methods: {
+      /**
+       * 根据 value 获取对应的 label
+       * @param  {String} value 值
+       * @return {String}
+       */
+      _getTypeLabel (value) {
+        var result = _.find(this.fieldTypes, (type) => {
+          return type.value === value
+        })
+        return result.label
+      },
+
       // 获取数据表
       getTables () {
         this.loadingData = true
@@ -428,7 +456,7 @@
 
       .fa
         width 20px
-        line-height 36px
+        line-height 32px
         color red
         text-align center
         margin-left 10px

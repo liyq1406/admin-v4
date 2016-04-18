@@ -4,7 +4,7 @@
  * @return {Boolean}
  */
 let isAccessAuthPage = (path) => {
-  return ['/login', '/register', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
+  return ['/login', '/register', '/register-with-verifycode', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
 }
 
 let configRouter = (router) => {
@@ -50,6 +50,15 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/register'))
+        }, 'auth')
+      }
+    },
+
+    // 注册
+    '/register-with-verifycode': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/register-with-verifycode'))
         }, 'auth')
       }
     },

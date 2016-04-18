@@ -66,12 +66,11 @@
             <div v-if="validation.company.$dirty" class="form-tips form-tips-error"><span v-if="validation.company.$error.required">{{ $t('validation.required', {field: $t('auth.fields.company')}) }}</span><span v-if="validation.company.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.company'), 32]) }}</span></div>
           </div>
           <div class="form-row">
-            <div class="select">
+            <v-select :placeholder="$t('auth.type_tips')" :label="accountTypes[model.type-1]">
               <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
-                <option selected="selected">{{ $t("auth.type_tips") }}</option>
                 <option v-for="type in accountTypes" :value="$index + 1">{{ type }}</option>
               </select>
-            </div>
+            </v-select>
             <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("auth.type_tips") }}</span></div>
           </div>
         </div>
@@ -86,8 +85,10 @@
 
 <script>
   import api from '../api'
+  import Vue from 'vue'
   import config from '../consts/config'
   import locales from '../consts/locales/index'
+  import Select from '../components/Select'
   import Captcha from '../components/Captcha'
   import { globalMixins } from '../mixins'
 
@@ -99,7 +100,8 @@
     mixins: [globalMixins],
 
     components: {
-      'captcha': Captcha
+      'captcha': Captcha,
+      'v-select': Select
     },
 
     data () {
@@ -118,7 +120,7 @@
     },
 
     methods: {
-      getObjLength:function (obj){
+      getObjLength (obj) {
         return Object.keys(obj).length
       },
 
@@ -152,7 +154,7 @@
           return
         }
 
-        this.btnDisabled=true
+        this.btnDisabled = true
         this.captcha = ''
         this.$refs.captcha.generate()
         api.sms.getVerifycode({
@@ -198,7 +200,7 @@
 
       .input-text-wrap
         float left
-        width 190px
+        width 214px
         margin-right 10px
 
       .captcha
@@ -210,12 +212,10 @@
 
       .input-text-wrap
         float left
-        width 190px
+        width 214px
         margin-right 10px
 
       .btn
         float left
         width 120px
-        height 36px
-        line-height 36px
 </style>

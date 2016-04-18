@@ -32,9 +32,11 @@
                 <label class="form-control">{{ $t("product.fields.link_type") }}:</label>
                 <div class="controls">
                   <div class="select">
-                    <select v-model="model.link_type" v-form-ctrl name="link_type">
-                      <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                    </select>
+                    <v-select :label="deviceTypes[model.link_type-1]">
+                      <select v-model="model.link_type" v-form-ctrl name="link_type">
+                        <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                      </select>
+                    </v-select>
                   </div>
                 </div>
               </div>
@@ -55,6 +57,7 @@
   import { createProduct } from '../../store/actions/products'
   import locales from '../../consts/locales/index'
   import { globalMixins } from '../../mixins'
+  import Select from '../../components/Select'
 
   export default {
     name: 'CreateProductForm',
@@ -67,6 +70,10 @@
       actions: {
         createProduct
       }
+    },
+
+    components: {
+      'v-select': Select
     },
 
     data () {

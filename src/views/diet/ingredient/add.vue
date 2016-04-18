@@ -33,9 +33,12 @@
                 <div class="controls">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
-                      <select v-model="category.main">
-                        <option v-for="opt in categories | dropSlected model.classification category 'main'" :value="opt.main" :selected="opt.main===category.main">{{ opt.main }}</option>
-                      </select><span @click="delSelected(model.classification, category)" class="fa fa-times"></span>
+                      <v-select width="150px" :label="category.main">
+                        <select v-model="category.main">
+                          <option v-for="option in categories | dropSlected model.classification category 'main'" :value="option.main">{{ option.main }}</option>
+                        </select>
+                      </v-select>
+                      <span @click="delSelected(model.classification, category)" class="fa fa-times"></span>
                     </div>
                   </div>
                   <button @click.prevent="AddCategory" :disabled="model.classification.length === categories.length" :class="{'disabled': model.classification.length === categories.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button>
@@ -46,9 +49,12 @@
                 <div class="controls">
                   <div class="select-group">
                     <div v-for="rule in model.properties.push_rules" class="select">
-                      <select v-model="rule">
-                        <option v-for="opt in rules | dropSlected model.properties.push_rules rule" :value="opt" :selected="opt===rule">{{ opt }}</option>
-                      </select><span @click="delSelected(model.properties.push_rules, rule)" class="fa fa-times"></span>
+                      <v-select width="150px" :label="rule">
+                        <select v-model="rule">
+                          <option v-for="option in rules | dropSlected model.properties.push_rules rule" :value="option">{{ option }}</option>
+                        </select>
+                      </v-select>
+                      <span @click="delSelected(model.properties.push_rules, rule)" class="fa fa-times"></span>
                     </div>
                   </div>
                   <button @click.prevent="AddRule" :disabled="model.properties.push_rules.length === rules.length" :class="{'disabled': model.properties.push_rules.length === rules.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加推送</button>
@@ -76,6 +82,7 @@
 <script>
   import api from '../../../api'
   import ImageUploader from '../../../components/ImageUploader'
+  import Select from '../../../components/Select'
   import _ from 'lodash/array'
   import { globalMixins } from '../../../mixins'
 
@@ -87,7 +94,8 @@
     mixins: [globalMixins],
 
     components: {
-      'image-uploader': ImageUploader
+      'image-uploader': ImageUploader,
+      'v-select': Select
     },
 
     data () {

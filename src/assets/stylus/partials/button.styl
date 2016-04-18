@@ -51,9 +51,18 @@ button.btn
     color #FFF
     background darken(green, 10%)
 
+// 信息按钮样式
+.btn-info
+  background blue
+
+  &:hover
+    color #FFF
+    background darken(blue, 10%)
+
 .btn-default
 .btn-primary
 .btn-success
+.btn-info
   &.disabled
     background #CCC
     cursor not-allowed
@@ -73,6 +82,14 @@ button.btn-link
 
   &:hover
     color darken(red, 10%)
+
+// 幽灵按钮
+a.btn-ghost
+button.btn-ghost
+  background #FFF
+  border 1px solid default-border-color
+  line-height 30px
+  color gray
 
 // 按钮尺寸
 .btn-lg

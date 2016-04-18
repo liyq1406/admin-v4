@@ -2,10 +2,12 @@
   <div class="abc">
     <div v-if="newList" class="panel">
       <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
+        <div class="action-bar row">
+          <div class="action-group col-12">
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加授权</button>
-            <button @click="toggleList" class="btn btn-success frr"><i class="fa"></i>切换查看V1版本</button>
+          </div>
+          <div class="col-12">
+            <button @click="toggleList" class="btn btn-ghost fr"><i class="fa"></i>切换查看V1版本</button>
           </div>
         </div>
         <table class="table table-stripe table-bordered">
@@ -84,9 +86,9 @@
     </div>
     <div v-if="oldList" class="panel">
       <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
-            <button @click="toggleList" class="btn btn-success frr"><i class="fa"></i>返回新版</button>
+        <div class="action-bar row">
+          <div class="col-24">
+            <button @click="toggleList" class="btn btn-ghost fr"><i class="fa"></i>返回新版</button>
           </div>
         </div>
       </div>
@@ -362,8 +364,4 @@
     font-size 20px
   .mrbthr
     margin-bottom 30px
-  .fr
-    float left
-  .panel-bd .action-group .btn.frr
-    float right!important
 </style>

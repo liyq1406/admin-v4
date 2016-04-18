@@ -51,7 +51,7 @@
             <label class="form-control">{{ '数据的类型' }}:</label>
             <div class="controls">
               <div class="checkbox-group">
-                <label v-for="type in ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线']" class="checkbox">
+                <label v-for="type in dataTypes" class="checkbox">
                   <input type="checkbox" v-model="addModel.data_type" :value="$index+1"/>{{ type }}
                 </label>
               </div>
@@ -61,9 +61,11 @@
             <label class="form-control">{{ '分发类型' }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="addModel.destination.type" name="type" number="number">
-                  <option v-for="type in ['转发到外部url','转发到内部插件处理单元']" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="destinationTypes[addModel.destination.type-1]">
+                  <select v-model="addModel.destination.type" name="type" number="number">
+                    <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -99,7 +101,7 @@
             <label class="form-control">{{ '数据的类型' }}:</label>
             <div class="controls">
               <div class="checkbox-group">
-                <label v-for="type in ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线']" class="checkbox">
+                <label v-for="type in dataTypes" class="checkbox">
                   <input type="checkbox" v-model="editModel.data_type" :value="$index+1"/>{{ type }}
                 </label>
               </div>
@@ -109,9 +111,11 @@
             <label class="form-control">{{ '分发类型' }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="editModel.destination.type" name="destination_type" number="number">
-                  <option v-for="type in ['转发到外部url','转发到内部插件处理单元']" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="destinationTypes[editModel.destination.type-1]">
+                  <select v-model="editModel.destination.type" name="type" number="number">
+                    <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -150,6 +154,7 @@
   import locales from '../../consts/locales/index'
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
+  import Select from '../../components/Select'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -162,7 +167,8 @@
 
     components: {
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     data () {
@@ -196,8 +202,8 @@
         //   }
         // ],
         dataforwardTypes: locales[Vue.config.lang].dataforward.types,
-        dateTypes: locales[Vue.config.lang].dataforward.datetype_forwards,
-        destinationTypes: locales[Vue.config.lang].rule.destination_types,
+        dataTypes: locales[Vue.config.lang].dataforward.datatype_forwards,
+        destinationTypes: locales[Vue.config.lang].dataforward.destination_types,
         data_type: [],
         notify_type: [],
         pageCount: 10,

@@ -2,58 +2,55 @@
   <div class="row">
     <div class="panel">
       <div class="panel-bd">
-        <div class="form form-edit-apk">
-          <form><a v-show="wetips" v-link="{ path: '/apps' }" class="nontip">没有微信应用，点击此处跳转添加页面</a>
-            <div class="form-row">
-              <label class="form-control">选择应用:</label>
-              <div class="controls">
-                <div class="select">
-                  <select v-model="currProduct" name="app" @change="Appstatus">
-                    <option v-for="app in apps" :value="app">{{ app.name }}</option>
-                  </select>
-                </div>
-              </div>
-              <div class="controls frr">
-                <button @click.prevent.stop="productEmpower" :disabled="empowering" :class="{'disabled':empowering}" v-text="empowering ? $t('common.unempower') : $t('common.empower')" class="btn btn-primary frr">产品授权</button>
-                <button @click.prevent.stop="showAlertModal = true" :disabled="currProductEmpty" :class="{'disabled':currProductEmpty}" class="btn btn-primary mrr20 frr">授权设置</button>
-                <button @click.prevent.stop="showAddModal = true" class="btn btn-success mrr20 frr">添加测试设备</button>
-              </div>
-            </div>
-          </form>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>设备ID</th>
-                <th>MAC</th>
-                <th>微信设备TYPE</th>
-                <th>授权状态</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="devices.length > 0 && !loadingData">
-                <tr v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount">
-                  <td>{{ device.device_id }}</td>
-                  <td>{{ device.mac }}</td>
-                  <td>{{ device.w_device_type }}</td>
-                  <td v-if="device.status -0 === 0">未授权</td>
-                  <td v-if="device.status -0 === 1">已授权</td>
-                  <td v-if="device.status -0 === 2">授权中</td>
-                </tr>
-              </template>
-              <tr v-if="loadingData">
-                <td colspan="4" class="tac">
-                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                </td>
-              </tr>
-              <tr v-if="devices.length === 0 && !loadingData">
-                <td colspan="4" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+        <div class="action-bar row">
+          <div class="col-12">
+            <a v-show="wetips" v-link="{ path: '/apps' }" class="nontip">没有微信应用，点击此处跳转添加页面</a>
+            <v-select v-else="wetips" width="200px" placeholder="请选择应用" :label="currProduct.name">
+              <span slot="label">选择应用:</span>
+              <select v-model="currProduct" name="app" @change="Appstatus">
+                <option v-for="app in apps" :value="app">{{ app.name }}</option>
+              </select>
+            </v-select>
+          </div>
+          <div class="col-12">
+            <button @click.prevent.stop="productEmpower" :disabled="empowering" :class="{'disabled':empowering}" v-text="empowering ? $t('common.unempower') : $t('common.empower')" class="btn btn-primary fr">产品授权</button>
+            <button @click.prevent.stop="showAlertModal = true" :disabled="currProductEmpty" :class="{'disabled':currProductEmpty}" class="btn btn-primary mr10 fr">授权设置</button>
+            <button @click.prevent.stop="showAddModal = true" class="btn btn-success mr10 fr">添加测试设备</button>
+          </div>
         </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>设备ID</th>
+              <th>MAC</th>
+              <th>微信设备TYPE</th>
+              <th>授权状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="devices.length > 0 && !loadingData">
+              <tr v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount">
+                <td>{{ device.device_id }}</td>
+                <td>{{ device.mac }}</td>
+                <td>{{ device.w_device_type }}</td>
+                <td v-if="device.status -0 === 0">未授权</td>
+                <td v-if="device.status -0 === 1">已授权</td>
+                <td v-if="device.status -0 === 2">授权中</td>
+              </tr>
+            </template>
+            <tr v-if="loadingData">
+              <td colspan="4" class="tac">
+                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+              </td>
+            </tr>
+            <tr v-if="devices.length === 0 && !loadingData">
+              <td colspan="4" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
     <!-- 授权设置浮层-->
@@ -505,18 +502,14 @@
 </script>
 
 <style lang="stylus">
+  @import '../../assets/stylus/common'
+
   .lin35
     line-height 35px
-  .mrr20
-    margin-right 20px
   .mrr60
     margin-right 60px
   .pleft30
     padding-left 30px
-  .frl
-    float left!important
-  .frr
-    float right!important
   .lh35
     line-height 35px!important
     height 35px!important
@@ -560,6 +553,5 @@
   .redf
     color red
   .nontip
-    margin-left 150px
     color red!important
 </style>

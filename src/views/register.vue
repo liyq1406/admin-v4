@@ -47,10 +47,11 @@
           </div>
           <div class="form-row">
             <div class="select">
+            <v-select :placeholder="$t('auth.type_tips')" :label="accountTypes[model.type-1]">
               <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
-                <option selected="selected">{{ $t("auth.type_tips") }}</option>
                 <option v-for="type in accountTypes" :value="$index + 1">{{ type }}</option>
               </select>
+            </v-select>
             </div>
             <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("auth.type_tips") }}</span></div>
           </div>
@@ -75,8 +76,9 @@
 
 <script>
   import api from '../api'
-  import locales from '../consts/locales/index'
   import Vue from 'vue'
+  import locales from '../consts/locales/index'
+  import Select from '../components/Select'
   import { globalMixins } from '../mixins'
 
   export default {
@@ -86,12 +88,14 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'v-select': Select
+    },
+
     data () {
       return {
         accountTypes: locales[Vue.config.lang].accountTypes,
         validation: {},
-        captcha: '',
-        captchaValue: '',
         model: {},
         confirmPassword: '',
         registerSuccess: false
@@ -128,34 +132,3 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  @import '../assets/stylus/common'
-
-  .form-register
-    .captcha-row
-      clearfix()
-
-      .input-text-wrap
-        float left
-        width 190px
-        margin-right 10px
-
-      .captcha
-        float left
-        width 120px
-
-    .verify-code
-      clearfix()
-
-      .input-text-wrap
-        float left
-        width 190px
-        margin-right 10px
-
-      .btn
-        float left
-        width 120px
-        height 36px
-        line-height 36px
-</style>

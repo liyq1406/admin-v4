@@ -103,9 +103,11 @@
             <label class="form-control">{{ $t("product.fields.link_type") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="editModel.link_type" v-form-ctrl name="link_type">
-                  <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="deviceTypes[editModel.link_type-1]">
+                  <select v-model="editModel.link_type" v-form-ctrl name="link_type">
+                    <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -173,6 +175,7 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import Modal from '../../components/Modal'
+  import Select from '../../components/Select'
   import api from '../../api'
   import _ from 'lodash'
   import dateFormat from 'date-format'
@@ -204,7 +207,8 @@
 
     components: {
       'radio-group': RadioGroup,
-      'modal': Modal
+      'modal': Modal,
+      'v-select': Select
     },
 
     data () {

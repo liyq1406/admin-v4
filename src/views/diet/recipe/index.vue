@@ -12,8 +12,18 @@
         </div>
         <div class="status-bar">
           <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-          <v-select :options="categoryOptions" :value.sync="category" size="small" width="100px" @select="getRecipes"><span>类别：</span></v-select>
-          <v-select :options="deviceOptions" :value.sync="device" size="small" width="100px" @select="getRecipes"><span>烹饪设备：</span></v-select>
+          <v-select size="small" width="120px" placeholder="请选择类别" :label="category.label">
+            <span slot="label">类别：</span>
+            <select v-model="category" @change="getRecipes">
+              <option v-for="option in categoryOptions" :value="option">{{ option.label }}</option>
+            </select>
+          </v-select>
+          <v-select size="small" width="120px" placeholder="请选择烹饪设备" :label="device.label">
+            <span slot="label">烹饪设备：</span>
+            <select v-model="device" @change="getRecipes">
+              <option v-for="option in deviceOptions" :value="option">{{ option.label }}</option>
+            </select>
+          </v-select>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
@@ -98,9 +108,9 @@
         query: '',
         recipes: [],
         searching: false,
-        category: 'all',
+        category: {label: '全部', value: 'all'},
         categories: [],
-        device: 'all',
+        device: {label: '全部', value: 'all'},
         deviceOptions: [
           {label: '全部', value: 'all'},
           {label: '隔水炖', value: '隔水炖'},
@@ -149,16 +159,16 @@
           condition.query['name'] = { $like: this.query }
         }
 
-        if (this.category === 'all') {
+        if (this.category.value === 'all') {
           delete condition.query['classification.main']
         } else {
-          condition.query['classification.main'] = { $in: [this.category] }
+          condition.query['classification.main'] = { $in: [this.category.value] }
         }
 
-        if (this.device === 'all') {
+        if (this.device.value === 'all') {
           delete condition.query['devices.name']
         } else {
-          condition.query['devices.name'] = { $in: [this.device] }
+          condition.query['devices.name'] = { $in: [this.device.value] }
         }
 
         return condition

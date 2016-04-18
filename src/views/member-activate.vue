@@ -67,49 +67,6 @@
   </div>
 </template>
 
-<style lang="stylus">
-  @import '../assets/stylus/common'
-
-  .form-auth.form-member-activate
-    .form-cont
-      padding-left 100px
-      padding-right 100px
-
-    .form-header
-      padding 0
-      margin-bottom 30px
-
-    .form-body
-      padding 0
-
-    .form-actions
-      margin-top 30px
-
-    .captcha-row
-      clearfix()
-
-      .input-text-wrap
-        float left
-        width 220px
-        margin-right 10px
-
-      .captcha
-        float left
-        width 120px
-
-    .verify-code
-      .input-text-wrap
-        float left
-        width 220px
-        margin-right 10px
-
-      .btn
-        float left
-        width 120px
-        height 36px
-        line-height 36px
-</style>
-
 <script>
   import api from '../api'
   import config from '../consts/config'
@@ -209,3 +166,44 @@
     }
   }
 </script>
+
+<style lang="stylus">
+  @import '../assets/stylus/common'
+
+  .form-auth.form-member-activate
+    .form-cont
+      padding-left 100px
+      padding-right 100px
+
+    .form-header
+      padding 0
+      margin-bottom 30px
+
+    .form-body
+      padding 0
+
+    .form-actions
+      margin-top 30px
+
+    .captcha-row
+      clearfix()
+
+      .input-text-wrap
+        float left
+        width 220px
+        margin-right 10px
+
+      .captcha
+        float left
+        width 120px
+
+    .verify-code
+      .input-text-wrap
+        float left
+        width 220px
+        margin-right 10px
+
+      .btn
+        float left
+        width 120px
+</style>

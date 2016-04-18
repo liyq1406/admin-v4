@@ -1,12 +1,10 @@
 <template>
   <div :class="classes">
-    <slot></slot>
+    <slot name="label"></slot>
     <div class="v-select-wrap" :style="selectWrapStyle">
       <div class="v-select-trigger">
-        <span>{{ label }}</span>
-        <select v-model="value" @change="handleChange">
-          <option v-for="option in options" :value="option.value">{{ option.label }}</option>
-        </select>
+        <span>{{ label || placeholder }}</span>
+        <slot></slot>
         <i class="caret"></i>
       </div>
     </div>
@@ -15,6 +13,8 @@
 
 <script>
   export default {
+    name: 'Select',
+
     props: {
       // 占位符
       placeholder: {
@@ -22,17 +22,11 @@
         default: ''
       },
 
-      // 选项
-      options: {
-        type: Array,
-        default: []
-      },
-
-      // 选定值
-      value: {
+      // 当前值标签
+      label: {
         type: String,
-        default: '',
-        twoWay: true
+        required: true,
+        default: ''
       },
 
       // 宽度
@@ -59,20 +53,11 @@
       return {
         selectWrapStyle: {
           width: this.width
-        },
-        active: false
+        }
       }
     },
 
     computed: {
-      // 标签
-      label () {
-        var option = this.options.filter((option) => {
-          return option.value === this.value
-        })[0]
-        return option ? option.label : (this.placeholder.length ? this.placeholder : '')
-      },
-
       // 类
       classes () {
         var result = [this.classPrefix]
@@ -84,26 +69,12 @@
           result.push(`${this.classPrefix}-${sizeCls}`)
         }
 
-        if (this.value) {
+        if (this.label) {
           result.push(`${this.classPrefix}-active`)
         }
 
         return result.join(' ')
       }
-    },
-
-    methods: {
-      handleChange (option) {
-        this.$dispatch('select', option.value)
-      },
-
-      toggleDropdown () {
-        this.active = !this.active
-      }
-    },
-
-    ready () {
-      this.$dispatch('select-created', this)
     }
   }
 </script>

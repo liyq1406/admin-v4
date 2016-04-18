@@ -481,7 +481,7 @@ export default {
     add_dataforward: '添加设备规则',
     edit_dataforward: '编辑设备规则',
     del_dataforward: '删除设备规则',
-    datetype_forwards: ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线'],
+    datatype_forwards: ['设备上线', '设备下线', '设备激活', 'Pipe包', '设备同步包', '用户上线', '用户下线'],
     destination_types: ['转发到外部url', '转发到内部插件处理单元'],
     fields: {
       id: '规则ID',

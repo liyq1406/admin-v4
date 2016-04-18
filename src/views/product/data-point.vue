@@ -75,9 +75,11 @@
             <label class="form-control">{{ $t("datapoint.fields.type") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="addModel.type" v-form-ctrl name="type">
-                  <option v-for="type in datapointTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
-                </select>
+                <v-select :label="datapointTypes[addModel.type-1]">
+                  <select v-model="addModel.type" v-form-ctrl name="type">
+                    <option v-for="type in datapointTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -137,9 +139,11 @@
             <label class="form-control">{{ $t("datapoint.fields.type") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="editModel.type" v-form-ctrl name="type">
-                  <option v-for="type in datapointTypes" :value="$index + 1">{{ type }}</option>
-                </select>
+                <v-select :label="datapointTypes[editModel.type-1]">
+                  <select v-model="editModel.type" v-form-ctrl name="type">
+                    <option v-for="type in datapointTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -182,6 +186,7 @@
   import locales from '../../consts/locales/index'
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
+  import Select from '../../components/Select'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -194,7 +199,8 @@
 
     components: {
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     props: {

@@ -4,7 +4,11 @@
       <div class="panel-hd">
         <h2>{{ $t("statistic.trends") }}</h2>
         <div class="leftbox">
-          <v-select :options="productsOptions" :value.sync="productId" size="small" width="160px" @select="getProductData"></v-select>
+          <v-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
+            <select v-model="product" @change="getProductData">
+              <option v-for="option in productsOptions" :value="option">{{ option.name }}</option>
+            </select>
+          </v-select>
           <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
         </div>
       </div>
@@ -113,7 +117,7 @@
           active: 0,
           online: 0
         },
-        productId: '',
+        product: {},
         productsOptions: [],
         period: 7,
         periods: locales[Vue.config.lang].periods,
@@ -127,19 +131,11 @@
 
     ready () {
       this.getProducts().then((res) => {
-        // 产品下拉框数据
-        res.data.forEach((item) => {
-          this.productsOptions.push({
-            label: item.name,
-            value: item.id
-          })
-        })
-
-        if (this.productId.length === 0) {
-          this.productId = res.data[0].id
+        if (res.status === 200 && res.data.length > 0) {
+          this.productsOptions = res.data
+          this.product = res.data[0]
+          this.getProductData()
         }
-
-        this.getProductData()
       })
     },
 
@@ -163,7 +159,7 @@
       },
 
       getProductSummary () {
-        api.statistics.getProductSummary(this.productId).then((res) => {
+        api.statistics.getProductSummary(this.product.id).then((res) => {
           if (res.status === 200) {
             this.productSummary = res.data
           }
@@ -178,7 +174,7 @@
         var start_day = dateFormat('yyyy-MM-dd', new Date(past))
         var end_day = dateFormat('yyyy-MM-dd', today)
 
-        api.statistics.getProductTrend(this.productId, start_day, end_day).then((res) => {
+        api.statistics.getProductTrend(this.product.id, start_day, end_day).then((res) => {
           var dates = res.data.map((item) => {
             return dateFormat('MM-dd', new Date(item.day))
           })
@@ -247,7 +243,7 @@
 
       drawProducRegion () {
         var self = this
-        api.statistics.getProductRegion(this.productId).then((res) => {
+        api.statistics.getProductRegion(this.product.id).then((res) => {
           var regionOptions
           var regionChart = echarts.init(document.getElementById('regionChart'))
           if (this.region === 'world') {

@@ -155,9 +155,9 @@
       display inline-block
       font-size 12px
       background #EEE
-      height 23px
-      line-height 23px
-      margin 0 5px 5px 0
+      height 22px
+      line-height 22px
+      margin 0 3px 3px 0
       padding 0 8px
       white-space nowrap
       z-index 1
@@ -181,9 +181,9 @@
   .tag-input-container
     position relative
     font-size 0
-    min-height 29px
-    border 1px solid #D3D3D3
-    padding 5px 20px 0
+    min-height 26px
+    border 1px solid default-border-color
+    padding 4px 10px 0
 
     .tag
       padding-right 25px
@@ -191,8 +191,8 @@
     .text-input
       border none
       font-size 12px
-      height 23px
-      line-height 24px
+      height 21px
+      line-height 22px
       width 1px
 
     .temp-text
@@ -207,7 +207,7 @@
     absolute left top
     width 100%
     border 1px solid #D3D3D3
-    padding 5px 20px 0
+    padding 3px 10px 0
     box-sizing border-box
     background #FFF
     z-index 1000

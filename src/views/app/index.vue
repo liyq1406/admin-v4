@@ -39,17 +39,17 @@
                     <button @click="onEditApp(app)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
                   </td>
                 </tr>
-                <tr v-if="loadingData">
-                  <td colspan="5" class="tac">
-                    <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                  </td>
-                </tr>
-                <tr v-if="apps.length === 0 && !loadingData">
-                  <td colspan="5" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
               </template>
+              <tr v-if="loadingData">
+                <td colspan="6" class="tac">
+                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+                </td>
+              </tr>
+              <tr v-if="apps.length === 0 && !loadingData">
+                <td colspan="6" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
             </tbody>
           </table>
         </div>

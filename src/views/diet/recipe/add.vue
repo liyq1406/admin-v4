@@ -33,9 +33,11 @@
                 <div class="controls">
                   <div class="select-group">
                     <div class="select">
-                      <select v-model="model.properties.difficulty" name="difficulty">
-                        <option v-for="difficulty in difficulties" :value="difficulty" :selected="difficulty===model.properties.difficulty">{{ difficulty }}</option>
-                      </select>
+                      <v-select width="160px" placeholder="请选择类别" :label="model.properties.difficulty">
+                        <select v-model="model.properties.difficulty" name="difficulty">
+                          <option v-for="difficulty in difficulties" :value="difficulty" :selected="difficulty===model.properties.difficulty">{{ difficulty }}</option>
+                        </select>
+                      </v-select>
                     </div>
                   </div>
                 </div>
@@ -45,9 +47,12 @@
                 <div class="controls">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
-                      <select v-model="category.main">
-                        <option v-for="opt in categories | dropSlected model.classification category 'main'" :value="opt.main" :selected="opt.main===category.main">{{ opt.main }}</option>
-                      </select><span @click="removeObj(category,model.classification)" class="fa fa-times"></span>
+                      <v-select  width="160px" placeholder="请选择类别" :label="category.main">
+                        <select v-model="category.main">
+                          <option v-for="opt in categories | dropSlected model.classification category 'main'" :value="opt.main" :selected="opt.main===category.main">{{ opt.main }}</option>
+                        </select>
+                      </v-select>
+                      <span @click="removeObj(category,model.classification)" class="fa fa-times"></span>
                     </div>
                   </div>
                   <button @click.prevent="addCategory" :disabled="model.classification.length === categories.length" :class="{'disabled': model.classification.length === categories.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button>
@@ -84,9 +89,11 @@
                 <div class="controls">
                   <div v-for="cookingDevice in model.devices" class="select-group">
                     <div class="select inline">
-                      <select v-model="cookingDevice">
-                        <option v-for="opt in devices | dropSlected model.devices cookingDevice 'name'" :value="opt" :selected="opt.name===cookingDevice.name">{{ opt.name }}</option>
-                      </select>
+                      <v-select  width="180px" placeholder="请选择烹饪设备" :label="cookingDevice.name">
+                        <select v-model="cookingDevice">
+                          <option v-for="opt in devices | dropSlected model.devices cookingDevice 'name'" :value="opt" :selected="opt.name===cookingDevice.name">{{ opt.name }}</option>
+                        </select>
+                      </v-select>
                     </div>
                     <div class="input-text-wrap inline">
                       <input type="text" v-model="cookingDevice.time" placeholder="请填写时长" class="input-text-time"/><span class="text-time">分钟</span>
@@ -139,7 +146,12 @@
             <h3 slot="header">选择食材</h3>
             <div slot="body" class="ingredient-box">
               <div class="status-bar">
-                <v-select :options="ingredientCategoryOptions" :value.sync="ingredientSelectModal.category" size="small" width="100px" @select="getIngredients"><span>类别：</span></v-select>
+                <v-select size="small" width="120px" :label="ingredientSelectModal.category.label">
+                  <span slot="label">类别：</span>
+                  <select v-model="ingredientSelectModal.category" @change="getIngredients">
+                    <option v-for="option in ingredientCategoryOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </v-select>
                 <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
                   <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
                 </search-box>
@@ -253,7 +265,10 @@
           show: false,
           adding: false,
           searching: false,
-          category: 'all',
+          category: {
+            label: '全部',
+            value: 'all'
+          },
           pageCount: 10,
           currentPage: 1,
           total: 0,
@@ -311,10 +326,10 @@
           condition.query['name'] = { $like: this.ingredientSelectModal.query }
         }
 
-        if (this.ingredientSelectModal.category === 'all') {
+        if (this.ingredientSelectModal.category.value === 'all') {
           delete condition.query['classification.main']
         } else {
-          condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category] }
+          condition.query['classification.main'] = { $in: [this.ingredientSelectModal.category.value] }
         }
         return condition
       },

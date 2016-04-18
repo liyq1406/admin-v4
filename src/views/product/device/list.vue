@@ -3,10 +3,11 @@
     <div class="panel-bd">
       <div class="action-bar">
         <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-          <!-- <select v-model="condi" name="condi" class="query-type">
-            <option v-for="type in queryTypeOptions" :value="type.value" :selected="$index===0">{{ type.label }}</option>
-          </select> -->
-          <v-select :options="queryTypeOptions" :value.sync="queryType" width="90px"></v-select>
+          <v-select width="90px" :label="queryType.label">
+            <select v-model="queryType">
+              <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+            </select>
+          </v-select>
           <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">
@@ -19,7 +20,12 @@
       <div class="status-bar">
         <div class="status">{{{ $t('common.total_results', {count:total}) }}}
         </div>
-        <v-select :options="visibilityOptions" :value.sync="visibility" width="90px" size="small" @select="getDevices"><span>{{ $t('common.display') }}：</span></v-select>
+        <v-select width="90px" size="small" :label="visibility.label">
+          <span slot="label">{{ $t('common.display') }}：</span>
+          <select v-model="visibility" @change="getDevices">
+            <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+          </select>
+        </v-select>
       </div>
       <table class="table table-stripe table-bordered">
         <thead>
@@ -123,7 +129,10 @@
         sortKey: '',
         sortOrders: sortOrders,
         searching: false,
-        visibility: 'all',
+        visibility: {
+          label: '全部',
+          value: 'all'
+        },
         visibilityOptions: locales[Vue.config.lang].visibilityOptions,
         devices: [],
         total: 0,
@@ -143,7 +152,10 @@
           { label: 'MAC', value: 'mac' },
           { label: '设备ID', value: 'id' }
         ],
-        queryType: 'mac'
+        queryType: {
+          label: 'MAC',
+          value: 'mac'
+        }
       }
     },
 
@@ -158,10 +170,10 @@
         }
 
         if (this.query.length > 0) {
-          condition.query[this.queryType] = { $like: this.query }
+          condition.query[this.queryType.value] = { $like: this.query }
         }
 
-        switch (this.visibility) {
+        switch (this.visibility.value) {
           case 'online':
             condition.query['is_online'] = { $in: [true] }
             break

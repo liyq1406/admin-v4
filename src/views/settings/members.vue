@@ -65,9 +65,11 @@
             <label class="form-control">{{ $t("member.fields.role") }}:</label>
             <div class="controls">
               <div class="select">
-                <select v-model="newuseremail.role" v-form-ctrl name="role">
-                  <option v-for="type in memberTypes" :value="$index + 1" :selected="$index===1">{{ type }}</option>
-                </select>
+                <v-select :label="memberTypes[newuseremail.role-1]">
+                  <select v-model="newuseremail.role" v-form-ctrl name="role">
+                    <option v-for="type in memberTypes" :value="$index + 1" :selected="$index===1">{{ type }}</option>
+                  </select>
+                </v-select>
               </div>
             </div>
           </div>
@@ -85,6 +87,7 @@
   import Vue from 'vue'
   import SearchBox from '../../components/SearchBox'
   import Modal from '../../components/Modal'
+  import Select from '../../components/Select'
   import api from '../../api'
   import Pager from '../../components/Pager'
   import locales from '../../consts/locales/index'
@@ -100,7 +103,8 @@
     components: {
       'search-box': SearchBox,
       'modal': Modal,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     data () {

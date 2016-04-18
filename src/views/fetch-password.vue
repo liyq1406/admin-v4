@@ -221,6 +221,4 @@
       .btn
         float left
         width 120px
-        height 36px
-        line-height 36px
 </style>
