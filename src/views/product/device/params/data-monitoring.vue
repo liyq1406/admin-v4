@@ -1,6 +1,9 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
+      <div class="action-bar">
+        <button @click="getSnapshot" class="btn btn-success fr"><i class="fa fa-plus "></i>刷新数据</button>
+      </div>
       <div class="chartwrap">
         <div id="trendChart" style="height:480px"></div>
       </div>
@@ -10,6 +13,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
+  import api from '../../../../api'
   import echarts from 'echarts/echarts'
   require('echarts/chart/line')
 
@@ -53,9 +57,30 @@
     },
     ready () {
       this.drawProductTrends()
+      // console.log(1111)
+      // console.log(this.$route.params.product_id)
+      // console.log(this.$route.params.device_id)
+      this.getSnapshot()
     },
 
     methods: {
+      // 获取快照数据
+      getSnapshot (offset, limit) {
+        offset = offset || 0
+        limit = limit || 10
+        var params = {
+          offset, limit
+        }
+        api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
+          for (let i = 0; i < res.data.snapshot.length; i++) {
+            this.environmentTems.push(res.data.snapshot[i]['34'])
+            this.waterboxTems.push(res.data.snapshot[i]['43'])
+            this.dates.push(res.data.snapshot[i].lastUpdate)
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       drawProductTrends () {
           // 趋势图表
         var trendOptions = {

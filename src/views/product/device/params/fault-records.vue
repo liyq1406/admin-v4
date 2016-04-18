@@ -7,20 +7,20 @@
             <th>故障码</th>
             <th>故障</th>
             <th>时间</th>
-            <th>操作</th>
+            <!-- <th>操作</th> -->
           </tr>
         </thead>
         <tbody>
           <tr v-for="record in records| limitBy pageCount (currentPage-1)*pageCount">
-            <td>{{ record.code }}</td>
+            <td>{{ record['41'] }}</td>
             <td>{{ record.fault }}</td>
-            <td>{{ record.time }}</td>
-            <td class="tac">
+            <td>{{ record.lastUpdate }}</td>
+            <!-- <td class="tac">
               <button @click="editRecord(record)" class="btn btn-link btn-sm">{{ $t("common.del") }}</button>
-            </td>
+            </td> -->
           </tr>
           <tr v-if="records.length === 0">
-            <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+            <td colspan="3" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
               <div v-else="v-else" class="tips-null">{{ $t("common.no_records") }}</div>
             </td>
           </tr>
@@ -34,6 +34,7 @@
 <script>
   import { globalMixins } from '../../../../mixins'
   import Pager from '../../../../components/Pager'
+  import api from '../../../../api'
 
   export default {
     name: 'BasicInfo',
@@ -110,10 +111,26 @@
         pageCount: 10
       }
     },
+    ready () {
+      // console.log(1111)
+      // console.log(this.$route.params.product_id)
+      // console.log(this.$route.params.device_id)
+      this.getSnapshot()
+    },
 
     methods: {
-      editRecord (params) {
-        console.log(params)
+      // 获取快照数据
+      getSnapshot (offset, limit) {
+        offset = offset || 0
+        limit = limit || 10
+        var params = {
+          offset, limit
+        }
+        api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
+          this.records = res.data.snapshot
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
   }

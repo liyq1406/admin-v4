@@ -31,6 +31,7 @@ import app from './api/app'
 import upload from './api/upload'
 import diet from './api/diet'
 import dataForward from './api/data-forward'
+import snapshot from './api/snapshot'
 
 export default {
   sms,
@@ -48,5 +49,6 @@ export default {
   app,
   upload,
   diet,
-  dataForward
+  dataForward,
+  snapshot
 }
