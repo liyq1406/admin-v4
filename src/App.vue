@@ -62,7 +62,7 @@
     <!-- End: 路由视图 -->
 
     <!-- Start: 错误模态窗口 -->
-    <modal :show="isShowError" :width="'360px'" @disapear="removeError" @dismiss="hideError">
+    <modal :show="isShowError" width="360px" @disapear="removeError" @dismiss="hideError">
       <template slot="body">
         <div class="error-msg">{{error.msg}}</div>
         <div class="modal-actions">

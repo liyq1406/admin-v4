@@ -142,7 +142,7 @@
               </div>
             </form>
           </div>
-          <modal :show.sync="ingredientSelectModal.show" :width="'800px'">
+          <modal :show.sync="ingredientSelectModal.show" width="800px">
             <h3 slot="header">选择食材</h3>
             <div slot="body" class="ingredient-box">
               <div class="status-bar">

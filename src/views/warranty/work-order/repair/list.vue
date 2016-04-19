@@ -9,18 +9,18 @@
       </div>
 
       <div class="status-bar">
-        <div class="status">{{{ $t('common.total_results', {count:total}) }}}
-        </div>
-        <v-select :label="statusOptions[0].name" width="100px" class="work-orders-select">
-          <label slot="label">工单状态</label>
+        <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
+          <span slot="label">工单状态</span>
           <select v-model="status">
-            <option v-for="status in statusOptions" :value="status.name">{{status.name}}</option>
-            <p> {{status}}</p>
+            <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
           </select>
         </v-select>
 
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" class="mr20" label="所在地区"></area-select>
-        <date-picker><label slot="label">创建时间</label></date-picker>
+        <date-range-picker input-size="small" class="mr20" :from="startDate" :to="endDate">
+          <span slot="label">创建时间</span>
+        </date-range-picker>
+
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small"></area-select>
       </div>
       <table class="table table-stripe table-bordered">
         <thead>
@@ -48,7 +48,15 @@
           </template>
         </tbody>
       </table>
-      <pager :total="5110" :current.sync="0" :page-count="10"></pager>
+
+      <!-- Start: 分页信息 -->
+      <div class="row">
+        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
+        <div class="col-16">
+          <pager :total="51" :current.sync="0" :page-count="10"></pager>
+        </div>
+      </div>
+      <!-- End: 分页信息 -->
   </div>
 </template>
 
@@ -58,7 +66,7 @@
   import AreaSelect from '../../../../components/AreaSelect'
   import SearchBox from '../../../../components/SearchBox'
   import Pager from '../../../../components/Pager'
-  import Datepicker from '../../../../components/Datepicker'
+  import DateRangePicker from '../../../../components/DateRangePicker'
 
   export default {
     name: 'OrderList',
@@ -70,12 +78,32 @@
     data () {
       return {
         name: '',
-        status: '',
         key: '',
         curProvince: {},
         curCity: {},
         curDistrict: {},
-        statusOptions: [{name: '全部'}, {name: '已接单'}, {name: '处理中'}, {name: '处理失败'}, {name: '完成'}],
+        startDate: '',
+        endDate: '',
+        status: {
+          label: '全部',
+          value: 0
+        },
+        statusOptions: [{
+          label: '全部',
+          value: 0
+        }, {
+          label: '已接单',
+          value: 1
+        }, {
+          label: '处理中',
+          value: 2
+        }, {
+          label: '处理失败',
+          value: 3
+        }, {
+          label: '完成',
+          value: 4
+        }],
         workOrders: [
         {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '未过期'},
         {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '未过期'},
@@ -93,7 +121,7 @@
       'area-select': AreaSelect,
       'search-box': SearchBox,
       'pager': Pager,
-      'date-picker': Datepicker
+      'date-range-picker': DateRangePicker
     }
   }
 </script>

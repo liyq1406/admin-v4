@@ -9,17 +9,15 @@
       </div>
 
       <div class="status-bar">
-        <div class="status">{{{ $t('common.total_results', {count:total}) }}}
-        </div>
-        <v-select :label="statusOptions[0].name" width="100px" class="work-orders-select">
-          <label slot="label">工单状态</label>
+        <v-select :label="statusOptions[0].name" width="100px" class="work-orders-select" size="small">
+          <span slot="label">工单状态</span>
           <select v-model="status">
             <option v-for="status in statusOptions" :value="status.name">{{status.name}}</option>
             <p> {{status}}</p>
           </select>
         </v-select>
 
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区"></area-select>
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small"></area-select>
       </div>
 
       <table class="table table-stripe table-bordered">
@@ -48,7 +46,15 @@
           </template>
         </tbody>
       </table>
-      <pager :total="51" :current.sync="0" :page-count="10"></pager>
+
+      <!-- Start: 分页信息 -->
+      <div class="row">
+        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
+        <div class="col-16">
+          <pager :total="51" :current.sync="0" :page-count="10"></pager>
+        </div>
+      </div>
+      <!-- End: 分页信息 -->
   </div>
 </template>
 

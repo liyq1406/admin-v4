@@ -46,7 +46,7 @@
       </div>
     </div>
     <!-- 添加规则浮层-->
-    <modal :show.sync="showAddModal" :width="'650px'" :flag="addModelEditingTag" @close="onAddCancel">
+    <modal :show.sync="showAddModal" width="650px" :flag="addModelEditingTag" @close="onAddCancel">
       <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">

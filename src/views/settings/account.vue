@@ -138,7 +138,7 @@
         </form>
       </div>
     </modal>
-    <modal :show.sync="showEditPwdModal" :width="'320px'">
+    <modal :show.sync="showEditPwdModal" width="320px">
       <h3 slot="header">{{ $t("auth.reset") }}</h3>
       <div slot="body" class="form">
         <form v-form name="pwdValidation" @submit.prevent="onSubmitPwd" hook="editPwdHook">

@@ -1,39 +1,39 @@
 <template>
-  <div class="datepicker">
-    <div class="input-text-wrap">
+  <div :class="classes">
+    <div class="input-text-wrap" :style="inputStyle">
       <input type="text" v-model="value" @click="inputClick" lazy class="input-text"/>
     </div>
-    <div v-show="displayDayView" class="datepicker-popup">
-      <div class="datepicker-inner">
-        <div class="datepicker-body">
-          <div class="datepicker-ctrl"><span @click="preNextMonthClick(0)" class="month-btn datepicker-prev-btn"><</span><span @click="preNextMonthClick(1)" class="month-btn datepicker-next-btn">></span>
+    <div v-show="displayDayView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextMonthClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextMonthClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
             <p @click="switchMonthView">{{ stringifyDayHeader(currDate) }}</p>
           </div>
-          <div class="datepicker-week-range"><span v-for="w in weekRange">{{ w }}</span></div>
-          <div class="datepicker-date-range"><span v-for="d in dateRange" v-bind:class="d.sclass" @click="daySelect(d.date, this)">{{ d.text }}</span></div>
+          <div class="date-picker-week-range"><span v-for="w in weekRange">{{ w }}</span></div>
+          <div class="date-picker-date-range"><span v-for="d in dateRange" v-bind:class="d.sclass" @click="daySelect(d.date, this)">{{ d.text }}</span></div>
         </div>
       </div>
     </div>
-    <div v-show="displayMonthView" class="datepicker-popup">
-      <div class="datepicker-inner">
-        <div class="datepicker-body">
-          <div class="datepicker-ctrl"><span @click="preNextYearClick(0)" class="month-btn datepicker-prev-btn"><</span><span @click="preNextYearClick(1)" class="month-btn datepicker-next-btn">></span>
+    <div v-show="displayMonthView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextYearClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextYearClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
             <p @click="switchDecadeView">{{ stringifyYearHeader(currDate) }}</p>
           </div>
-          <div class="datepicker-month-range">
-            <template v-for="m in monthNames"><span v-bind:class="{'datepicker-date-range-item-active': this.monthNames[this.parse(this.value).getMonth()] === m && (this.currDate.getFullYear() === this.parse(this.value).getFullYear())}" @click="monthSelect($index)">{{ m.substr(0,3) }}</span></template>
+          <div class="date-picker-month-range">
+            <template v-for="m in monthNames"><span v-bind:class="{'date-picker-date-range-item-active': this.monthNames[this.parse(this.value).getMonth()] === m && (this.currDate.getFullYear() === this.parse(this.value).getFullYear())}" @click="monthSelect($index)">{{ m.substr(0,3) }}</span></template>
           </div>
         </div>
       </div>
     </div>
-    <div v-show="displayYearView" class="datepicker-popup">
-      <div class="datepicker-inner">
-        <div class="datepicker-body">
-          <div class="datepicker-ctrl"><span @click="preNextDecadeClick(0)" class="month-btn datepicker-prev-btn"><</span><span @click="preNextDecadeClick(1)" class="month-btn datepicker-next-btn">></span>
+    <div v-show="displayYearView" class="date-picker-popup">
+      <div class="date-picker-inner">
+        <div class="date-picker-body">
+          <div class="date-picker-ctrl"><span @click="preNextDecadeClick(0)" class="month-btn date-picker-prev-btn"><</span><span @click="preNextDecadeClick(1)" class="month-btn date-picker-next-btn">></span>
             <p>{{ stringifyDecadeHeader(currDate) }}</p>
           </div>
-          <div class="datepicker-month-range decade-range">
-            <template v-for="decade in decadeRange"><span v-bind:class="{'datepicker-date-range-item-active': this.parse(this.value).getFullYear() === decade.text}" @click.stop="yearSelect(decade.text)">{{ decade.text }}</span></template>
+          <div class="date-picker-month-range decade-range">
+            <template v-for="decade in decadeRange"><span v-bind:class="{'date-picker-date-range-item-active': this.parse(this.value).getFullYear() === decade.text}" @click.stop="yearSelect(decade.text)">{{ decade.text }}</span></template>
           </div>
         </div>
       </div>
@@ -46,12 +46,34 @@
 
   export default {
     props: {
+      // 值
       value: {
         type: String,
         twoWay: true
       },
+
+      // 格式
       format: {
         default: 'yyyy-MM-dd'
+      },
+
+      // 宽度
+      width: {
+        type: String,
+        default: '120px'
+      },
+
+      // 尺寸
+      // 可选：['small' | 'normal' | 'large'], 默认为 'normal'
+      size: {
+        type: String,
+        default: 'normal'
+      },
+
+      // 类前缀
+      classPrefix: {
+        type: String,
+        default: 'date-picker'
       }
     },
 
@@ -64,7 +86,26 @@
         displayDayView: false,
         displayMonthView: false,
         displayYearView: false,
-        monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+        monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        inputStyle: {
+          width: this.width
+        }
+      }
+    },
+
+    computed: {
+      // 类
+      classes () {
+        var result = [this.classPrefix]
+        var sizeCls = ({
+          'small': 'sm'
+        })[this.size] || ''
+
+        if (sizeCls) {
+          result.push(`${this.classPrefix}-${sizeCls}`)
+        }
+
+        return result.join(' ')
       }
     },
 
@@ -252,7 +293,7 @@
             this.dateRange.push({
               text: dayText,
               date: new Date(preMonth.year, preMonth.month, dayText),
-              sclass: 'datepicker-item-gray'
+              sclass: 'date-picker-item-gray'
             })
           }
         }
@@ -265,7 +306,7 @@
               var valueDate = this.parse(this.value)
               if (valueDate) {
                 if (valueDate.getFullYear() === time.year && valueDate.getMonth() === time.month) {
-                  sclass = 'datepicker-date-range-item-active'
+                  sclass = 'date-picker-date-range-item-active'
                 }
               }
             }
@@ -283,7 +324,7 @@
             this.dateRange.push({
               text: i,
               date: new Date(nextMonth.year, nextMonth.month, i),
-              sclass: 'datepicker-item-gray'
+              sclass: 'date-picker-item-gray'
             })
           }
         }
@@ -291,7 +332,7 @@
     },
 
     ready () {
-      this.$dispatch('datepicker-created', this)
+      this.$dispatch('date-picker-created', this)
       this.currDate = this.parse(this.value) || this.parse(new Date())
       this._closeEvent = EventListener.listen(window, 'click', (e) => {
         if (!this.$el.contains(e.target)) {
@@ -311,10 +352,12 @@
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .datepicker
+  .date-picker
+    display inline-block
     position relative
+    vertical-align middle
 
-  .datepicker-popup
+  .date-picker-popup
     position absolute
     border 1px solid #CCC
     background #FFF
@@ -322,21 +365,21 @@
     z-index 1000
     box-shadow 0 6px 12px rgba(0, 0, 0, .2)
 
-  .datepicker-inner
+  .date-picker-inner
     width 218px
 
-  .datepicker-body
+  .date-picker-body
     padding 10px
 
-  .datepicker-ctrl p,
-  .datepicker-ctrl span,
-  .datepicker-body span
+  .date-picker-ctrl p,
+  .date-picker-ctrl span,
+  .date-picker-body span
     display inline-block
     width 28px
     line-height 28px
     height 28px
 
-  .datepicker-ctrl
+  .date-picker-ctrl
     p
       width 65%
       margin 0
@@ -344,51 +387,51 @@
     span
       position absolute
 
-  .datepicker-body span
+  .date-picker-body span
     text-align center
     font-size 12px
 
-  .datepicker-month-range span
+  .date-picker-month-range span
     width 48px
     height 50px
     line-height 45px
 
   .decade-range span:first-child,
   .decade-range span:last-child,
-  .datepicker-item-gray
+  .date-picker-item-gray
     color #999
 
-  .datepicker-date-range-item-active:hover,
-  .datepicker-date-range-item-active
+  .date-picker-date-range-item-active:hover,
+  .date-picker-date-range-item-active
     background red !important
     color white !important
 
-  .datepicker-month-range
+  .date-picker-month-range
     margin-top 10px
 
-  .datepicker-month-range span,
-  .datepicker-ctrl span,
-  .datepicker-ctrl p,
-  .datepicker-date-range span
+  .date-picker-month-range span,
+  .date-picker-ctrl span,
+  .date-picker-ctrl p,
+  .date-picker-date-range span
     cursor pointer
 
-  .datepicker-month-range span:hover,
-  .datepicker-ctrl p:hover,
-  .datepicker-ctrl span:hover,
-  .datepicker-date-range span:hover,
-  .datepicker-date-range-item-hover
+  .date-picker-month-range span:hover,
+  .date-picker-ctrl p:hover,
+  .date-picker-ctrl span:hover,
+  .date-picker-date-range span:hover,
+  .date-picker-date-range-item-hover
     background-color #eee
 
-  .datepicker-week-range span
+  .date-picker-week-range span
     font-weight bold
 
-  .datepicker-label
+  .date-picker-label
     background-color #f8f8f8
     font-weight 700
     padding 7px 0
     text-align center
 
-  .datepicker-ctrl
+  .date-picker-ctrl
     position relative
     height 30px
     line-height 30px
@@ -399,10 +442,15 @@
     font-weight bold
     user-select none
 
-  .datepicker-prev-btn
+  .date-picker-prev-btn
     left 2px
 
-  .datepicker-next-btn
+  .date-picker-next-btn
     right 2px
 
+  .date-picker-sm
+    .input-text-wrap
+      .input-text
+        height 26px
+        line-height 24px
 </style>
