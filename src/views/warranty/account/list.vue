@@ -10,7 +10,9 @@
             <div class="panel-bd">
               <div class="action-bar row">
                 <div class="col-14">
-                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts"></area-select>
+                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts">
+                  <span slot="label">所在地区：</span>
+                </area-select>
                 </div>
                 <div class="col-10">
                   <button @click="showAddModal = true" class="btn btn-success fr ml10"><i class="fa fa-plus"></i>添加网点</button>
@@ -88,10 +90,7 @@
                     <div class="form-row">
                       <label class="form-control">所在地区:</label>
                       <div class="controls">
-                        <!-- <v-select class="inlineselect" :options="" :value.sync="" width="120px" @select="">
-                        </v-select>
-                        <v-select class="inlineselect" :options="" :value.sync="" width="120px" @select=""></v-select>
-                        <v-select class="inlineselect" :options="" :value.sync=""  width="120px" @select=""></v-select> -->
+                        <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts"></area-select>
                       </div>
                     </div>
                     <div class="form-row">
