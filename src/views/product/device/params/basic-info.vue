@@ -252,7 +252,7 @@
   // import locales from '../../../../consts/locales/index'
   // import io from 'socket.io-client'
   import XJSObject from '../../../../helpers/jssdk'
-
+  import decodeData from './datatools/decode'
   // locales = 123
   // var socket
 
@@ -361,7 +361,7 @@
             valueArr: [],
             modelType: '1'
           },
-          paramsKey5: {
+          paramsKey11: {
             feature: '00',
             name: '上限温度',
             valueText: '55.0',
@@ -387,7 +387,7 @@
     },
     route: {
       data () {
-        // this.getProductInfos()
+        // this.getDeviceInfos()
         this.connect() // 连接设备
         this.listenDeviceData() // 监听设备数据
       }
@@ -396,10 +396,33 @@
       // onRecvXDeviceData
     },
     methods: {
+      /**
+       * 向设备发送数据
+       * @param  {array} data 数组形式的数据
+       * @return {[type]}      [description]
+       */
+      sendDeviceData (data) {
+        var self = this
+        if (self.deviceOnline) {
+          XJSObject.invoke('sendXDeviceData', {data: data}, function (r) {
+            self.settingData = false
+          })
+        } else {
+          self.showNotice({
+            type: 'error',
+            content: '设备不在线 无法进行操作'
+          })
+        }
+      },
       listenDeviceData () {
+        var self = this
         // 设备返回数据
         XJSObject.on('onRecvXDeviceData', function (r) {
+          console.log(r.data)
           console.log('设备返回数据:' + JSON.stringify(r))
+          if (r.type === 'base64') {
+            decodeData(r.data, self)
+          }
         })
         // 设备状态改变
         XJSObject.on('onXDeviceStateChange', function (r) {
@@ -429,7 +452,7 @@
        */
       updateDevicesInfo () {
         this.updateDate = true
-        this.getProductInfos()
+        this.getDeviceInfos()
       },
 
       /**
@@ -450,12 +473,14 @@
       },
 
       /**
-       * 获取产品信息
+       * 获取设备信息
        * @return {[type]} [description]
        */
-      getProductInfos () {
+      getDeviceInfos () {
         var self = this
         console.log('获取产品信息')
+        var data = '/S100/1'
+        this.sendDeviceData(data)
         // 获取成功后调用提示
         if (self.updateDate) {
           self.showNotice({

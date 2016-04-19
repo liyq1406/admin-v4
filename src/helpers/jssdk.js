@@ -1,10 +1,11 @@
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import base64 from './base64'
 
 var _sock = false // socket已连接
 var _isDeviceConnected = false // 设备已连接
 var _host = 'http://cm.xlink.cn:23777'
 var _socketio // 当前socket实例
+var _deviceid = ''
 
 var XJSObject = {
   invoke: function (name, params, fn) {
@@ -20,6 +21,13 @@ var XJSObject = {
         break
       case 'connectXDevice': // 连接设备
         this.base.connectDevice(params, fn)
+        break
+      case 'sendXDeviceData': // 发送数据到设备
+        if (_isDeviceConnected) {
+          this.base.sendDate(params, fn)
+        } else { // 未连接设备
+          fn && fn('unconnect device!')
+        }
         break
       case 'stopSocket': // 断开连接
         this.base.stopSocket()
@@ -44,6 +52,25 @@ var XJSObject = {
     return this
   },
   base: {
+    /**
+     * 向设备发送数据
+     * @param  {String}   data base64
+     * @param  {Function} fn   [description]
+     * @return {[type]}        [description]
+     */
+    sendDate (params, fn) {
+      // var data = this.b64.encode(params.data)
+      // params.data = this.toAscii(params.data)
+      // params.data = this.b64.encode(params.data)
+      params.data = window.btoa(params.data)
+      params.appid = '1231231'
+      params.deviceid = _deviceid
+      params.token = '123123'
+      // console.log('发送的数据是： ' + JSON.stringify(params))
+      this.socketEmit('device.senddata', params, function (r) {
+        fn && fn(r)
+      })
+    },
     b64: base64,
     // 连接socket，如果此host已经创建socket就返回
     conSocket: function (host, fn) {
@@ -97,7 +124,9 @@ var XJSObject = {
         //                            data : r
         //                        });
       }).on('device.onRecvData', function (r) { // 接收到设备发送过来的数据
-        // console.log(JSON.stringify(r))
+        if (r.type === 'base64') {
+          r.data = window.atob(r.data)
+        }
         self.onRecvXDeviceData(r)
         //                        this.base.socketDevReSend({
         //                            host : this.io.uri,
@@ -107,13 +136,18 @@ var XJSObject = {
     },
     // 连接设备
     connectDevice (params, fn) {
-      this.socketEmit('device.connect', params, function (r) {
-        if (r.status === 200) {
-          _isDeviceConnected = true
-          console.log(_isDeviceConnected)
-        }
-        fn && fn(r)
-      })
+      // 延时执行 不然回调不会执行
+      window.setTimeout(() => {
+        this.socketEmit('device.connect', params, function (r) {
+          if (r.status === 200) {
+            _deviceid = params.deviceid
+            _isDeviceConnected = true
+            console.log(_isDeviceConnected)
+            console.log('_deviceid' + _deviceid)
+          }
+          fn && fn(r)
+        })
+      }, 200)
     },
     // 断开socket
     stopSocket () {
@@ -121,16 +155,25 @@ var XJSObject = {
     },
     socketEmit: function (command, params, fn) {
       if (_sock) {
-        // 延时执行 不然回调不会执行
-        window.setTimeout(() => {
-          _socketio.emit(command, params, fn)
-        }, 200)
+        console.log('command:' + command)
+        console.log('params:' + JSON.stringify(params))
+        console.log('fn:' + fn)
+        _socketio.emit(command, params, fn)
       } else {
-        this.log('设先连接socket!')
+        console.log('设先连接socket!')
       }
     },
     onRecvXDeviceData () {},
-    onXDeviceStateChange () {}
+    onXDeviceStateChange () {},
+    toAscii (data) {
+      // data = data.replace(/\//, '')
+      var result = []
+      var arr = data.split('')
+      for (var i = 0; i < arr.length; i++) {
+        result.push(arr[i].charCodeAt().toString(16))
+      }
+      return result
+    }
   }
 }
 
