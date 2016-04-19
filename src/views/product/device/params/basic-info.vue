@@ -11,94 +11,94 @@
       <table class="table table-stripe table-bordered">
         <tbody>
           <tr>
-            <th><span>运行模式：</span><a class="button" @click="showEditModalEvent('test')">自动模式</a></th>
-            <th><span>工作时间段一：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></th>
-            <th><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></th>
-            <th><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></th>
+            <td><span>运行模式：</span><a class="button" @click="showEditModalEvent('test')">自动模式</a></td>
+            <td><span>工作时间段一：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+            <td><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+            <td><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
           </tr>
           <tr>
-            <th><span>上限温度：</span><a class="button" @click="showEditModalEvent('test')">55.0℃</a></th>
-            <th><span>下限温度：</span><a class="button" @click="showEditModalEvent('test')">45.0℃</a></th>
-            <th><span>最高设定温度：</span><a class="button" @click="showEditModalEvent('test')">70.0℃</a></th>
-            <th><span>最低设定温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></th>
-          </tr>
-          <tr>
-            <td colspan="4">&nbsp;</td>
-          </tr>
-          <tr>
-            <th><span>水温探头修正：</span><a class="button" @click="showEditModalEvent('test')">0.0℃</a></th>
-            <th><span>压缩机启动延时：</span><a class="button" @click="showEditModalEvent('test')">3.0分钟</a></th>
-            <th></th>
-            <th></th>
+            <td><span>{{deviceInfos.S11.name}}：</span><a class="button" @click="showEditModalEvent('S11')">{{deviceInfos.S11.valueText}}{{deviceInfos.S11.unit}}</a></td>
+            <td><span>下限温度：</span><a class="button" @click="showEditModalEvent('test')">45.0℃</a></td>
+            <td><span>最高设定温度：</span><a class="button" @click="showEditModalEvent('test')">70.0℃</a></td>
+            <td><span>最低设定温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>化霜启动温度：</span><a class="button" @click="showEditModalEvent('test')">-3℃</a></th>
-            <th><span>下化霜结束温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></th>
-            <th><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></th>
-            <th><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></th>
-          </tr>
-          <tr>
-            <th><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></th>
-            <th><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></th>
-            <th><span>风机关联的环境温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
-            <th><span>风机关联的排期温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
+            <td><span>水温探头修正：</span><a class="button" @click="showEditModalEvent('test')">0.0℃</a></td>
+            <td><span>压缩机启动延时：</span><a class="button" @click="showEditModalEvent('test')">3.0分钟</a></td>
+            <td></td>
+            <td></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>使用过载保护：</span><a class="button" @click="showEditModalEvent('test')">???</a></th>
-            <th><span>电流显示：</span><a class="button" @click="showEditModalEvent('test')">A</a></th>
-            <th><span>压缩机额定电流：</span><a class="button" @click="showEditModalEvent('test')">A</a></th>
-            <th><span>过载动作时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></th>
+            <td><span>化霜启动温度：</span><a class="button" @click="showEditModalEvent('test')">-3℃</a></td>
+            <td><span>下化霜结束温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></td>
+            <td><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+            <td><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+          </tr>
+          <tr>
+            <td><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
+            <td><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
+            <td><span>风机关联的环境温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>风机关联的排期温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>低压告警模式：</span><a class="button" @click="showEditModalEvent('test')">2</a></th>
-            <th><span>低压告警自动恢复次数：</span><a class="button" @click="showEditModalEvent('test')">次</a></th>
-            <th><span>外部告警自动恢复次数重置时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></th>
-            <th><span>高压告警模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></th>
-          </tr>
-          <tr>
-            <th><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></th>
-            <th><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></th>
-            <th><span>排气保护温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
-            <th><span>排气保护温度回差：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
+            <td><span>使用过载保护：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
+            <td><span>电流显示：</span><a class="button" @click="showEditModalEvent('test')">A</a></td>
+            <td><span>压缩机额定电流：</span><a class="button" @click="showEditModalEvent('test')">A</a></td>
+            <td><span>过载动作时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>掉电后记忆开关机状态：</span><a class="button" @click="showEditModalEvent('test')">yes</a></th>
-            <th><span>背光延时：</span><a class="button" @click="showEditModalEvent('test')">秒</a></th>
-            <th><span>通讯波特率：</span><a class="button" @click="showEditModalEvent('test')">2.4</a></th>
-            <th></th>
+            <td><span>低压告警模式：</span><a class="button" @click="showEditModalEvent('test')">2</a></td>
+            <td><span>低压告警自动恢复次数：</span><a class="button" @click="showEditModalEvent('test')">次</a></td>
+            <td><span>外部告警自动恢复次数重置时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></td>
+            <td><span>高压告警模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
+          </tr>
+          <tr>
+            <td><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
+            <td><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
+            <td><span>排气保护温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>排气保护温度回差：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>电子膨胀阀开度查询：</span><a class="button" @click="showEditModalEvent('test')">???</a></th>
-            <th><span>电子膨胀阀控制方式：</span><a class="button" @click="showEditModalEvent('test')">0</a></th>
-            <th><span>电子膨胀阀手动设置开度：</span><a class="button" @click="showEditModalEvent('test')">350</a></th>
-            <th><span>过热度设定值：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
+            <td><span>掉电后记忆开关机状态：</span><a class="button" @click="showEditModalEvent('test')">yes</a></td>
+            <td><span>背光延时：</span><a class="button" @click="showEditModalEvent('test')">秒</a></td>
+            <td><span>通讯波特率：</span><a class="button" @click="showEditModalEvent('test')">2.4</a></td>
+            <td></td>
           </tr>
           <tr>
-            <th><span>过热度稳定区：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
-            <th><span>过热度调节方向阔度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
-            <th><span>电子膨胀阀排气设置：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
-            <th><span>环境温度显示：</span><a class="button" @click="showEditModalEvent('test')">℃</a></th>
+            <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <th><span>回气温度显示：</span><a class="button" @click="showEditModalEvent('test')">???</a></th>
-            <th><span>软件版本号：</span><a class="button" @click="showEditModalEvent('test')">263 2.1</a></th>
-            <th></th>
-            <th></th>
+            <td><span>电子膨胀阀开度查询：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
+            <td><span>电子膨胀阀控制方式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
+            <td><span>电子膨胀阀手动设置开度：</span><a class="button" @click="showEditModalEvent('test')">350</a></td>
+            <td><span>过热度设定值：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+          </tr>
+          <tr>
+            <td><span>过热度稳定区：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>过热度调节方向阔度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>电子膨胀阀排气设置：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>环境温度显示：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+          </tr>
+          <tr>
+            <td><span>回气温度显示：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
+            <td><span>软件版本号：</span><a class="button" @click="showEditModalEvent('test')">263 2.1</a></td>
+            <td></td>
+            <td></td>
           </tr>
         </tbody>
       </table>
@@ -322,7 +322,16 @@
           minute: '00'
         },
         // 产品信息
-        productInfos: {
+        deviceInfos: {
+          S11: {
+            feature: 'S11',
+            name: '上限温度',
+            valueText: '0',
+            valueArr: ['自动模式', '手动模式'],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
           test: {
             feature: '00',
             name: '上限温度',
@@ -404,8 +413,17 @@
       sendDeviceData (data) {
         var self = this
         if (self.deviceOnline) {
+          console.log('发送数据：' + data)
           XJSObject.invoke('sendXDeviceData', {data: data}, function (r) {
+            console.log('sendXDeviceData结果：' + JSON.stringify(r))
+            self.modalCancel()
             self.settingData = false
+            if (r.status === 200) {
+              self.showNotice({
+                type: 'success',
+                content: '数据设置成功'
+              })
+            }
           })
         } else {
           self.showNotice({
@@ -418,9 +436,8 @@
         var self = this
         // 设备返回数据
         XJSObject.on('onRecvXDeviceData', function (r) {
-          console.log(r.data)
-          console.log('设备返回数据:' + JSON.stringify(r))
           if (r.type === 'base64') {
+            console.log('设备返回数据:' + JSON.stringify(r))
             decodeData(r.data, self)
           }
         })
@@ -437,12 +454,8 @@
         if (this['validation' + num].$valid) {
           var self = this
           self.settingData = true
-          console.log(JSON.stringify(productInfo))
-          // 这里执行数据处理
-          this.showNotice({
-            type: 'success',
-            content: '数据设置成功'
-          })
+          // console.log(JSON.stringify(productInfo))
+          self.sendDeviceData('/' + productInfo.paramsKey + '/1/' + productInfo.value + '\n')
         }
       },
 
@@ -527,9 +540,9 @@
       showEditModalEvent (paramsKey) {
         var self = this
         if (self.deviceOnline) {
-          if (self.productInfos[paramsKey]) {
+          if (self.deviceInfos[paramsKey]) {
             self.settingData = false
-            self['showEditModal' + self.productInfos[paramsKey].modelType](paramsKey)
+            self['showEditModal' + self.deviceInfos[paramsKey].modelType](paramsKey)
           }
         } else {
           self.showNotice({
@@ -546,12 +559,12 @@
       showEditModal1 (paramsKey) {
         var self = this
         self.editModal1.paramsKey = paramsKey
-        self.editModal1.paramsName = self.productInfos[paramsKey].name
-        self.editModal1.startHour = self.productInfos[paramsKey].valueText.split('-')[0].split(':')[0]
-        self.editModal1.startMinute = self.productInfos[paramsKey].valueText.split('-')[0].split(':')[1]
-        self.editModal1.endHour = self.productInfos[paramsKey].valueText.split('-')[1].split(':')[0]
-        self.editModal1.endMinute = self.productInfos[paramsKey].valueText.split('-')[1].split(':')[1]
-        self.editModal1.tips = self.productInfos[paramsKey].tips
+        self.editModal1.paramsName = self.deviceInfos[paramsKey].name
+        self.editModal1.startHour = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[0]
+        self.editModal1.startMinute = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[1]
+        self.editModal1.endHour = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[0]
+        self.editModal1.endMinute = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[1]
+        self.editModal1.tips = self.deviceInfos[paramsKey].tips
         self.editModal1.show = true
       },
       /**
@@ -562,10 +575,10 @@
       showEditModal2 (paramsKey) {
         var self = this
         self.editModal2.paramsKey = paramsKey
-        if (self.productInfos[paramsKey].valueArr) {
-          self.editModal2.paramsName = self.productInfos[paramsKey].name
-          self.editModal2.value = self.productInfos[paramsKey].valueText
-          self.editModal2.valueArr = self.productInfos[paramsKey].valueArr
+        if (self.deviceInfos[paramsKey].valueArr) {
+          self.editModal2.paramsName = self.deviceInfos[paramsKey].name
+          self.editModal2.value = self.deviceInfos[paramsKey].valueText
+          self.editModal2.valueArr = self.deviceInfos[paramsKey].valueArr
           self.editModal2.show = true
         }
       },
@@ -577,11 +590,11 @@
       showEditModal3 (paramsKey) {
         var self = this
         self.editModal3.paramsKey = paramsKey
-        if (self.productInfos[paramsKey].valueArr) {
-          self.editModal3.paramsName = self.productInfos[paramsKey].name
-          self.editModal3.value = self.productInfos[paramsKey].valueText
-          self.editModal3.unit = self.productInfos[paramsKey].unit
-          self.editModal3.tips = self.productInfos[paramsKey].tips
+        if (self.deviceInfos[paramsKey].valueArr) {
+          self.editModal3.paramsName = self.deviceInfos[paramsKey].name
+          self.editModal3.value = self.deviceInfos[paramsKey].valueText
+          self.editModal3.unit = self.deviceInfos[paramsKey].unit
+          self.editModal3.tips = self.deviceInfos[paramsKey].tips
           self.editModal3.show = true
         }
       },
@@ -593,11 +606,11 @@
       showEditModal4 (paramsKey) {
         var self = this
         self.editModal4.paramsKey = paramsKey
-        if (self.productInfos[paramsKey].valueArr) {
-          self.editModal4.paramsName = self.productInfos[paramsKey].name
-          self.editModal4.value = self.productInfos[paramsKey].valueText
-          self.editModal4.unit = self.productInfos[paramsKey].unit
-          self.editModal4.tips = self.productInfos[paramsKey].tips
+        if (self.deviceInfos[paramsKey].valueArr) {
+          self.editModal4.paramsName = self.deviceInfos[paramsKey].name
+          self.editModal4.value = self.deviceInfos[paramsKey].valueText
+          self.editModal4.unit = self.deviceInfos[paramsKey].unit
+          self.editModal4.tips = self.deviceInfos[paramsKey].tips
           self.editModal4.show = true
         }
       },

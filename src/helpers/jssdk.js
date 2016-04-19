@@ -143,7 +143,7 @@ var XJSObject = {
             _deviceid = params.deviceid
             _isDeviceConnected = true
             console.log(_isDeviceConnected)
-            console.log('_deviceid' + _deviceid)
+            console.log('_deviceid:' + _deviceid)
           }
           fn && fn(r)
         })
@@ -155,9 +155,9 @@ var XJSObject = {
     },
     socketEmit: function (command, params, fn) {
       if (_sock) {
-        console.log('command:' + command)
-        console.log('params:' + JSON.stringify(params))
-        console.log('fn:' + fn)
+        // console.log('command:' + command)
+        // console.log('params:' + JSON.stringify(params))
+        // console.log('fn:' + fn)
         _socketio.emit(command, params, fn)
       } else {
         console.log('设先连接socket!')
