@@ -11,23 +11,23 @@
       <table class="table table-stripe table-bordered">
         <tbody>
           <tr>
-            <td><span>运行模式：</span><a class="button" @click="showEditModalEvent('test')">自动模式</a></td>
-            <td><span>工作时间段一：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
-            <td><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
-            <td><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+            <td><span>{{deviceInfos.S101.name}}：</span><a class="button" @click="showEditModalEvent('S101')">{{deviceInfos.S101.valueArr[deviceInfos.S101.valueText]}}{{deviceInfos.S101.unit}}</a></td>
+            <td><span>{{deviceInfos.S103.name}}：</span><a class="button" @click="showEditModalEvent('S103')">{{deviceInfos.S103.valueText}}{{deviceInfos.S103.unit}}</a></td>
+            <td><span>{{deviceInfos.S104.name}}：</span><a class="button" @click="showEditModalEvent('S104')">{{deviceInfos.S104.valueText}}{{deviceInfos.S104.unit}}</a></td>
+            <td><span>{{deviceInfos.S105.name}}：</span><a class="button" @click="showEditModalEvent('S105')">{{deviceInfos.S105.valueText}}{{deviceInfos.S105.unit}}</a></td>
           </tr>
           <tr>
             <td><span>{{deviceInfos.S11.name}}：</span><a class="button" @click="showEditModalEvent('S11')">{{deviceInfos.S11.valueText}}{{deviceInfos.S11.unit}}</a></td>
-            <td><span>下限温度：</span><a class="button" @click="showEditModalEvent('test')">45.0℃</a></td>
-            <td><span>最高设定温度：</span><a class="button" @click="showEditModalEvent('test')">70.0℃</a></td>
-            <td><span>最低设定温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></td>
+            <td><span>{{deviceInfos.S12.name}}：</span><a class="button" @click="showEditModalEvent('S12')">{{deviceInfos.S12.valueText}}{{deviceInfos.S12.unit}}</a></td>
+            <td><span>{{deviceInfos.S13.name}}：</span><a class="button" @click="showEditModalEvent('S13')">{{deviceInfos.S13.valueText}}{{deviceInfos.S13.unit}}</a></td>
+            <td><span>{{deviceInfos.S14.name}}：</span><a class="button" @click="showEditModalEvent('S14')">{{deviceInfos.S14.valueText}}{{deviceInfos.S14.unit}}</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>水温探头修正：</span><a class="button" @click="showEditModalEvent('test')">0.0℃</a></td>
-            <td><span>压缩机启动延时：</span><a class="button" @click="showEditModalEvent('test')">3.0分钟</a></td>
+            <td><span>{{deviceInfos.S19.name}}：</span><a class="button" @click="showEditModalEvent('S19')">{{deviceInfos.S19.valueText}}{{deviceInfos.S19.unit}}</a></td>
+            <td><span>{{deviceInfos.S21.name}}：</span><a class="button" @click="showEditModalEvent('S21')">{{deviceInfos.S21.valueText}}{{deviceInfos.S21.unit}}</a></td>
             <td></td>
             <td></td>
           </tr>
@@ -35,68 +35,68 @@
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>化霜启动温度：</span><a class="button" @click="showEditModalEvent('test')">-3℃</a></td>
-            <td><span>下化霜结束温度：</span><a class="button" @click="showEditModalEvent('test')">10.0℃</a></td>
-            <td><span>工作时间段二：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
-            <td><span>工作时间段三：</span><a class="button" @click="showEditModalEvent('test')">00:00-00:00</a></td>
+            <td><span>{{deviceInfos.S31.name}}：</span><a class="button" @click="showEditModalEvent('S31')">{{deviceInfos.S31.valueText}}{{deviceInfos.S31.unit}}</a></td>
+            <td><span>{{deviceInfos.S32.name}}：</span><a class="button" @click="showEditModalEvent('S32')">{{deviceInfos.S32.valueText}}{{deviceInfos.S32.unit}}</a></td>
+            <td><span>{{deviceInfos.S33.name}}：</span><a class="button" @click="showEditModalEvent('S33')">{{deviceInfos.S33.valueText}}{{deviceInfos.S33.unit}}</a></td>
+            <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.unit}}</a></td>
           </tr>
           <tr>
-            <td><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
-            <td><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
-            <td><span>风机关联的环境温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-            <td><span>风机关联的排期温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-          </tr>
-          <tr>
-            <td colspan="4">&nbsp;</td>
-          </tr>
-          <tr>
-            <td><span>使用过载保护：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
-            <td><span>电流显示：</span><a class="button" @click="showEditModalEvent('test')">A</a></td>
-            <td><span>压缩机额定电流：</span><a class="button" @click="showEditModalEvent('test')">A</a></td>
-            <td><span>过载动作时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></td>
+            <td><span>{{deviceInfos.S37.name}}：</span><a class="button" @click="showEditModalEvent('S37')">{{deviceInfos.S37.valueArr[deviceInfos.S37.valueText]}}{{deviceInfos.S37.unit}}</a></td>
+            <td><span>{{deviceInfos.S40.name}}：</span><a class="button" @click="showEditModalEvent('S40')">{{deviceInfos.S40.valueArr[deviceInfos.S40.valueText]}}{{deviceInfos.S40.unit}}</a></td>
+            <td><span>{{deviceInfos.S41.name}}：</span><a class="button" @click="showEditModalEvent('S41')">{{deviceInfos.S41.valueText}}{{deviceInfos.S41.unit}}</a></td>
+            <td><span>{{deviceInfos.S42.name}}：</span><a class="button" @click="showEditModalEvent('S42')">{{deviceInfos.S42.valueText}}{{deviceInfos.S42.unit}}</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>低压告警模式：</span><a class="button" @click="showEditModalEvent('test')">2</a></td>
-            <td><span>低压告警自动恢复次数：</span><a class="button" @click="showEditModalEvent('test')">次</a></td>
-            <td><span>外部告警自动恢复次数重置时间：</span><a class="button" @click="showEditModalEvent('test')">分钟</a></td>
-            <td><span>高压告警模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
-          </tr>
-          <tr>
-            <td><span>化霜四通阀模式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
-            <td><span>风机模式：</span><a class="button" @click="showEditModalEvent('test')">1</a></td>
-            <td><span>排气保护温度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-            <td><span>排气保护温度回差：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>{{deviceInfos.S44.name}}：</span><a class="button" @click="showEditModalEvent('S44')">{{deviceInfos.S44.valueArr[deviceInfos.S44.valueText]}}{{deviceInfos.S44.unit}}</a></td>
+            <td><span>{{deviceInfos.S45.name}}：</span><a class="button" @click="showEditModalEvent('S45')">{{deviceInfos.S45.valueText}}{{deviceInfos.S45.unit}}</a></td>
+            <td><span>{{deviceInfos.S46.name}}：</span><a class="button" @click="showEditModalEvent('S46')">{{deviceInfos.S46.valueText}}{{deviceInfos.S46.unit}}</a></td>
+            <td><span>{{deviceInfos.S47.name}}：</span><a class="button" @click="showEditModalEvent('S47')">{{deviceInfos.S47.valueText}}{{deviceInfos.S47.unit}}</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>掉电后记忆开关机状态：</span><a class="button" @click="showEditModalEvent('test')">yes</a></td>
-            <td><span>背光延时：</span><a class="button" @click="showEditModalEvent('test')">秒</a></td>
-            <td><span>通讯波特率：</span><a class="button" @click="showEditModalEvent('test')">2.4</a></td>
+            <td><span>{{deviceInfos.S50.name}}：</span><a class="button" @click="showEditModalEvent('S50')">{{deviceInfos.S50.valueText}}{{deviceInfos.S50.unit}}</a></td>
+            <td><span>{{deviceInfos.S51.name}}：</span><a class="button" @click="showEditModalEvent('S51')">{{deviceInfos.S51.valueText}}{{deviceInfos.S51.unit}}</a></td>
+            <td><span>{{deviceInfos.S52.name}}：</span><a class="button" @click="showEditModalEvent('S52')">{{deviceInfos.S52.valueText}}{{deviceInfos.S52.unit}}</a></td>
+            <td><span>{{deviceInfos.S54.name}}：</span><a class="button" @click="showEditModalEvent('S54')">{{deviceInfos.S54.valueText}}{{deviceInfos.S54.unit}}</a></td>
+          </tr>
+          <tr>
+            <td><span>{{deviceInfos.S55.name}}：</span><a class="button" @click="showEditModalEvent('S55')">{{deviceInfos.S55.valueText}}{{deviceInfos.S55.unit}}</a></td>
+            <td><span>{{deviceInfos.S56.name}}：</span><a class="button" @click="showEditModalEvent('S56')">{{deviceInfos.S56.valueText}}{{deviceInfos.S56.unit}}</a></td>
+            <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.unit}}</a></td>
+            <td><span>{{deviceInfos.S59.name}}：</span><a class="button" @click="showEditModalEvent('S59')">{{deviceInfos.S59.valueText}}{{deviceInfos.S59.unit}}</a></td>
+          </tr>
+          <tr>
+            <td colspan="4">&nbsp;</td>
+          </tr>
+          <tr>
+            <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueText}}{{deviceInfos.S61.unit}}</a></td>
+            <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.unit}}</a></td>
+            <td><span>通讯波特率???????：</span><a class="button" @click="showEditModalEvent('test')">?????</a></td>
             <td></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>电子膨胀阀开度查询：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
-            <td><span>电子膨胀阀控制方式：</span><a class="button" @click="showEditModalEvent('test')">0</a></td>
-            <td><span>电子膨胀阀手动设置开度：</span><a class="button" @click="showEditModalEvent('test')">350</a></td>
-            <td><span>过热度设定值：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>{{deviceInfos.S70.name}}：</span><a class="button" @click="showEditModalEvent('S70')">{{deviceInfos.S70.valueText}}{{deviceInfos.S70.unit}}</a></td>
+            <td><span>{{deviceInfos.S71.name}}：</span><a class="button" @click="showEditModalEvent('S71')">{{deviceInfos.S71.valueText}}{{deviceInfos.S71.unit}}</a></td>
+            <td><span>{{deviceInfos.S72.name}}：</span><a class="button" @click="showEditModalEvent('S72')">{{deviceInfos.S72.valueText}}{{deviceInfos.S72.unit}}</a></td>
+            <td><span>{{deviceInfos.S73.name}}：</span><a class="button" @click="showEditModalEvent('S73')">{{deviceInfos.S73.valueText}}{{deviceInfos.S73.unit}}</a></td>
           </tr>
           <tr>
-            <td><span>过热度稳定区：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-            <td><span>过热度调节方向阔度：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-            <td><span>电子膨胀阀排气设置：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
-            <td><span>环境温度显示：</span><a class="button" @click="showEditModalEvent('test')">℃</a></td>
+            <td><span>{{deviceInfos.S75.name}}：</span><a class="button" @click="showEditModalEvent('S75')">{{deviceInfos.S75.valueText}}{{deviceInfos.S75.unit}}</a></td>
+            <td><span>{{deviceInfos.S76.name}}：</span><a class="button" @click="showEditModalEvent('S76')">{{deviceInfos.S76.valueText}}{{deviceInfos.S76.unit}}</a></td>
+            <td><span>{{deviceInfos.S77.name}}：</span><a class="button" @click="showEditModalEvent('S77')">{{deviceInfos.S77.valueText}}{{deviceInfos.S77.unit}}</a></td>
+            <td><span>{{deviceInfos.S78.name}}：</span><a class="button" @click="showEditModalEvent('S78')">{{deviceInfos.S78.valueText}}{{deviceInfos.S78.unit}}</a></td>
           </tr>
           <tr>
-            <td><span>回气温度显示：</span><a class="button" @click="showEditModalEvent('test')">???</a></td>
-            <td><span>软件版本号：</span><a class="button" @click="showEditModalEvent('test')">263 2.1</a></td>
+            <td><span>{{deviceInfos.S79.name}}：</span><a class="button" @click="showEditModalEvent('S79')">{{deviceInfos.S79.valueText}}{{deviceInfos.S79.unit}}</a></td>
+            <td><span>{{deviceInfos.S90.name}}：</span><a class="button" @click="showEditModalEvent('S90')">{{deviceInfos.S90.valueText}}{{deviceInfos.S90.unit}}</a></td>
             <td></td>
             <td></td>
           </tr>
@@ -145,10 +145,15 @@
       <h3 slot="header">设置参数</h3>
       <div slot="body" class="form editModal editModal2">
         <div class="content-box">
-          <span class="name">{{editModal2.paramsName}}：</span>
-          <select name="deviceParams" v-model="editModal2.value" class="deviceParams">
-            <option :value="value" v-for="value in editModal2.valueArr">{{value}}</option>
-          </select>
+          <div class="content-value">
+            <span class="name">{{editModal2.paramsName}}：</span>
+            <select name="deviceParams" v-model="editModal2.value" class="deviceParams">
+              <option :value="$index + ''" v-for="value in editModal2.valueArr">{{value}}</option>
+            </select>
+          </div>
+          <div class="tips">
+            <span>{{editModal2.tips}}</span>
+          </div>
         </div>
         <div class="form-actions">
           <button @click.prevent.stop="modalCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -252,7 +257,7 @@
   // import locales from '../../../../consts/locales/index'
   // import io from 'socket.io-client'
   import XJSObject from '../../../../helpers/jssdk'
-  import decodeData from './datatools/decode'
+  // import decodeData from './datatools/decode'
   // locales = 123
   // var socket
 
@@ -285,6 +290,7 @@
           startMinute: '',
           endHour: '',
           endMinute: '',
+          value: '',
           tips: ''
         },
         // 编辑浮层2
@@ -293,7 +299,8 @@
           paramsKey: '',
           paramsName: '',
           valueArr: [],
-          value: ''
+          value: '',
+          tips: ''
         },
         // 编辑浮层3
         editModal3: {
@@ -324,25 +331,462 @@
         // 产品信息
         deviceInfos: {
           S11: {
-            feature: 'S11',
             name: '上限温度',
-            valueText: '0',
-            valueArr: ['自动模式', '手动模式'],
+            valueText: '55',
+            valueArr: [],
             modelType: '3',
             unit: '℃',
             tips: '温度范围-128℃~128℃'
           },
+          S12: {
+            name: '下限温度',
+            valueText: '45',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
+          S13: {
+            name: '最高设定温度',
+            valueText: '60',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
+          S14: {
+            name: '最低设定温度',
+            valueText: '10',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
+          S15: {
+            name: '电加热投入环境温度',
+            valueText: '7',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
+          S19: {
+            name: '水温探头修正',
+            valueText: '0',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '温度范围-128℃~128℃'
+          },
+          S21: {
+            name: '压缩机启动延时',
+            valueText: '3',
+            valueArr: [],
+            modelType: '3',
+            unit: '分钟',
+            tips: '0-10'
+          },
+          S22: {
+            name: '电加热启动压机连续工作时间',
+            valueText: '10',
+            valueArr: [],
+            modelType: '3',
+            unit: '小时',
+            tips: '1 - 12'
+          },
+          S23: {
+            name: '压缩机停机温度',
+            valueText: '-3',
+            valueArr: [],
+            modelType: '4',
+            unit: '℃',
+            tips: '-15-5  OFF'
+          },
+          S31: {
+            name: '化霜启动温度',
+            valueText: '-3',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '-20 – 20'
+          },
+          S32: {
+            name: '化霜结束温度',
+            valueText: '10',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '0 – 50'
+          },
+          S33: {
+            name: '化霜启动时间',
+            valueText: '30',
+            valueArr: [],
+            modelType: '3',
+            unit: '分钟',
+            tips: '1 – 999'
+          },
+          S34: {
+            name: '最大化霜时间',
+            valueText: '5',
+            valueArr: [],
+            modelType: '4',
+            unit: '分钟',
+            tips: 'Off 1 – 99 Off表示无化霜功能'
+          },
+          S37: {
+            name: '化霜四通阀模式',
+            valueText: '0', // 0制热时关，化霜时开 1制热时开，化霜时关
+            valueArr: ['制热时关，化霜时开', '制热时开，化霜时关'],
+            modelType: '2',
+            unit: '',
+            tips: '0 – 1'
+          },
+          S40: {
+            name: '风机模式',
+            valueText: '0', // 0单速风 1双速风
+            valueArr: ['单速风', '双速风'],
+            modelType: '2',
+            unit: '',
+            tips: '0 – 1'
+          },
+          S41: {
+            name: '风机关联的环境温度',
+            valueText: '27',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '15-40'
+          },
+          S42: {
+            name: '风机关联的排气温度',
+            valueText: '110',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '101-120'
+          },
+          S44: {
+            name: '是否使用过载保护',
+            valueText: '0',
+            valueArr: ['Yes', 'No'],
+            modelType: '2',
+            unit: '',
+            tips: 'Yes/No'
+          },
+          S45: {
+            name: '电流显示',
+            valueText: '-',
+            valueArr: [],
+            modelType: '3',
+            unit: 'A',
+            tips: ''
+          },
+          S46: {
+            name: '压缩机额定电流',
+            valueText: '10',
+            valueArr: [],
+            modelType: '3',
+            unit: 'A',
+            tips: '1.0 - 99.9'
+          },
+          S47: {
+            name: '过载动作时间',
+            valueText: '5',
+            valueArr: [],
+            modelType: '3',
+            unit: '秒',
+            tips: '1 - 999'
+          },
+          S48: {
+            name: '电加热判断电流',
+            valueText: '6',
+            valueArr: [],
+            modelType: '3',
+            unit: 'A',
+            tips: '1 - 20'
+          },
+          S49: {
+            name: '电加热电流显示',
+            valueText: '6',
+            valueArr: [],
+            modelType: '3',
+            unit: 'A',
+            tips: '实际读到的电加热电流'
+          },
+          S50: {
+            name: '低压告警模式',
+            valueText: '2', // 0单速风 1双速风
+            valueArr: ['无', '常开，闭合则告警', '常闭，断开则告警'],
+            modelType: '2',
+            unit: '',
+            tips: '0 - 2 0-无 1-常开，闭合则告警 2-常闭，断开则告警'
+          },
+          S51: {
+            name: '低压告警自动恢复次数',
+            valueText: '3',
+            valueArr: [],
+            modelType: '3',
+            unit: '次',
+            tips: '0 – 10'
+          },
+          S52: {
+            name: '外部告警自动恢复次数重置时间',
+            valueText: '3',
+            valueArr: [],
+            modelType: '3',
+            unit: '次',
+            tips: '0 – 10'
+          },
+          S54: {
+            name: '高压告警模式',
+            valueText: '0',
+            valueArr: ['无', '常开，闭合则告警', '常闭，断开则告警'],
+            modelType: '2',
+            unit: '',
+            tips: '0 - 2 0-无 1-常开，闭合则告警 2-常闭，断开则告警'
+          },
+          S55: {
+            name: '高压告警自动恢复次数',
+            valueText: '3',
+            valueArr: [],
+            modelType: '3',
+            unit: '次',
+            tips: '0 – 10'
+          },
+          S56: {
+            name: '高压告警自动恢复次数重置时间',
+            valueText: '60',
+            valueArr: [],
+            modelType: '3',
+            unit: '分钟',
+            tips: '0 – 999'
+          },
+          S58: {
+            name: '排气保护温度',
+            valueText: '115',
+            valueArr: [],
+            modelType: '4',
+            unit: '℃',
+            tips: '50 – 125 OFF'
+          },
+          S59: {
+            name: '排气保护温度回差',
+            valueText: '30',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '1– 50'
+          },
+          S61: {
+            name: '掉电后是否记忆开关机状态',
+            valueText: '30',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '1 – 50'
+          },
+          S63: {
+            name: '掉电后是否记忆开关机状态',
+            valueText: '30',
+            valueArr: [],
+            modelType: '3',
+            unit: '秒',
+            tips: 'Off 1 – 99 On Off表示不开背光 On表示背光常开 1-99表示按键操作后背光延时关闭'
+          },
+          S68: {
+            name: '是否使用电子膨胀阀',
+            valueText: 'Yes',
+            valueArr: ['Yes', 'No'],
+            modelType: '2',
+            unit: '',
+            tips: 'Yes/No Yes:使用  No:不使用'
+          },
+          S70: {
+            name: '电子膨胀阀开度查询',
+            valueText: '-',
+            valueArr: [],
+            modelType: '3',
+            unit: '',
+            tips: '0 - 480'
+          },
+          S71: {
+            name: '电子膨胀阀控制方式',
+            valueText: '0',
+            valueArr: ['自动', '手动', '环境'],
+            modelType: '2',
+            unit: '',
+            tips: '0 - 2  0：自动 1：手动 2：环境'
+          },
+          S72: {
+            name: '电子膨胀阀手动设置开度',
+            valueText: '350',
+            valueArr: [],
+            modelType: '3',
+            unit: '',
+            tips: '100 - 480'
+          },
+          S73: {
+            name: '过热度设定值',
+            valueText: '3',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '-15 – 15'
+          },
+          S74: {
+            name: '过热度稳定区',
+            valueText: '2',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '0-5'
+          },
+          S75: {
+            name: '过热度调节方向阔度',
+            valueText: '2',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '1-8'
+          },
+          S76: {
+            name: '电子膨胀阀排气设置',
+            valueText: '92',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '85 – 110'
+          },
+          S77: {
+            name: '电子膨胀阀排气回差',
+            valueText: '5',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: '1-30'
+          },
+          S78: {
+            name: '环境温度显示',
+            valueText: '-',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: ''
+          },
+          S79: {
+            name: '回气温度显示',
+            valueText: '-',
+            valueArr: [],
+            modelType: '3',
+            unit: '℃',
+            tips: ''
+          },
+          S90: {
+            name: '显示型号和软件版本号',
+            valueText: '-',
+            valueArr: [],
+            modelType: '0',
+            unit: '',
+            tips: '显示面板和主板的型号和软件版本号，字符串格式'
+          },
+          S101: {
+            name: '热水器运行模式',
+            valueText: '0',
+            valueArr: ['自动模式', '节能模式'],
+            modelType: '2',
+            unit: '',
+            tips: '0：自动模式 1：节能模式'
+          },
+          S102: {
+            name: '热水器状态',
+            valueText: '0',
+            valueArr: ['关机', '待机', '制热', '告警', '化霜', '加氟', '测试'],
+            modelType: '1',
+            unit: '',
+            tips: '0：关机 1：待机 2：制热 3：告警 4：化霜 5：加氟 6：测试'
+          },
+          S103: {
+            name: '时间设置1',
+            valueText: '12:00-13:10',
+            valueArr: [],
+            modelType: '1',
+            unit: '',
+            tips: '数据格式：HH:MM-HH:MM'
+          },
+          S104: {
+            name: '时间设置2',
+            valueText: '12:00-13:10',
+            valueArr: [],
+            modelType: '1',
+            unit: '',
+            tips: '数据格式：HH:MM-HH:MM'
+          },
+          S105: {
+            name: '时间设置3',
+            valueText: '12:00-13:10',
+            valueArr: [],
+            modelType: '1',
+            unit: '',
+            tips: '数据格式：HH:MM-HH:MM'
+          },
+          S106: {
+            name: '热水器上传监控数据',
+            valueText: '35.6,24.0,25,26.5',
+            valueArr: [],
+            modelType: '3',
+            unit: '',
+            tips: '数据格式：水箱温度，化霜温度，排气温度，环境温度 （备注：时间用服务器收到时间）'
+          },
+          S107: {
+            name: '故障信息上报',
+            valueText: '35.6,24.0,25,26.5',
+            valueArr: [],
+            modelType: '3',
+            unit: '',
+            tips: '故障代码，见热水器说明书 （备注：故障代码可以传多个）'
+          },
+          S108: {
+            name: '一键强制加热',
+            valueText: '1',
+            valueArr: [],
+            modelType: '3',
+            unit: '',
+            tips: '此命令由服务端发送给热水器，热水器自己判断是否强制加热'
+          },
+          S109: {
+            name: '当前水温',
+            valueText: '1',
+            valueArr: [],
+            modelType: '0',
+            unit: '℃',
+            tips: '热水器水温变化时上传'
+          },
+          S110: {
+            name: '控制器时钟',
+            valueText: '11:20',
+            valueArr: [],
+            modelType: '0',
+            unit: '℃',
+            tips: '上发：报告给服务器控制器时钟 下发：设置控制器时钟'
+          },
+          S111: {
+            name: '控制器累计运行时间',
+            valueText: '680:20',
+            valueArr: [],
+            modelType: '0',
+            unit: '℃',
+            tips: '上发：报告给服务器控制器压缩机累计运行时间 下发：清零控制器累计运行时间 数据格式：小时:分钟'
+          },
           test: {
-            feature: '00',
             name: '上限温度',
             valueText: '55',
-            valueArr: ['自动模式', '手动模式'],
+            valueArr: ['自动模式', '节能模式'],
             modelType: '4',
             unit: '℃',
             tips: '时间格式为 00:00 - 23:59'
           },
           paramsKey00: {
-            feature: '00',
             name: '运行模式',
             valueText: '自动模式',
             valueArr: ['自动模式', '手动模式'],
@@ -350,28 +794,24 @@
             unit: ''
           },
           paramsKey2: {
-            feature: '00',
             name: '工作时间段一',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey3: {
-            feature: '00',
             name: '工作时间段二',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey4: {
-            feature: '00',
             name: '工作时间段三',
             valueText: '00:00-00:00',
             valueArr: [],
             modelType: '1'
           },
           paramsKey11: {
-            feature: '00',
             name: '上限温度',
             valueText: '55.0',
             valueArr: [],
@@ -391,7 +831,7 @@
         // 是否更新数据  区分当前是首次获取数据还是更新数据
         updateDate: false,
         // 设备是否在线
-        deviceOnline: false
+        deviceOnline: true
       }
     },
     route: {
@@ -413,7 +853,6 @@
       sendDeviceData (data) {
         var self = this
         if (self.deviceOnline) {
-          console.log('发送数据：' + data)
           XJSObject.invoke('sendXDeviceData', {data: data}, function (r) {
             console.log('sendXDeviceData结果：' + JSON.stringify(r))
             self.modalCancel()
@@ -438,7 +877,7 @@
         XJSObject.on('onRecvXDeviceData', function (r) {
           if (r.type === 'base64') {
             console.log('设备返回数据:' + JSON.stringify(r))
-            decodeData(r.data, self)
+            self.decodeData(r.data, self)
           }
         })
         // 设备状态改变
@@ -451,10 +890,18 @@
        * @param {object} productInfo 当前正在编辑的对象
        */
       setDataEvent (productInfo, num) {
-        if (this['validation' + num].$valid) {
-          var self = this
+        var self = this
+        if (num === 1) {
+          self.editModal1.value = self.editModal1.startHour + ':' + self.editModal1.startMinute + '-' + self.editModal1.endHour + ':' + self.editModal1.endMinute
+        }
+        if (num === 2) {
+          if (productInfo.valueArr[0] === 'Yes') {
+            productInfo.value = productInfo.valueArr[productInfo.value]
+          }
+        }
+        if (this['validation' + num].$valid || num === 2) {
           self.settingData = true
-          // console.log(JSON.stringify(productInfo))
+          console.log('向设备发送数据：' + '/' + productInfo.paramsKey + '/1/' + productInfo.value + '\n')
           self.sendDeviceData('/' + productInfo.paramsKey + '/1/' + productInfo.value + '\n')
         }
       },
@@ -484,7 +931,32 @@
           }, 1000)
         }
       },
-
+      /**
+       * 解析设备返回的数据
+       * @param  {string} data data
+       * @return {[type]}      [description]
+       */
+      decodeData (data) {
+        var self = this
+        var key = data.split('/1/')[0].replace('/', '')
+        var value = data.split('/1/')[1] && data.split('/1/')[1].split('\r')[0]
+        if (value) {
+          if (key === 'S100') {
+            console.log('所有数据' + JSON.stringify(data))
+            var arr = self._parseData(data)
+            arr.map((item) => {
+              self.deviceInfos[item.key].valueText = item.value
+            })
+          } else {
+            if (self.deviceInfos[key]) {
+              self.deviceInfos[key].valueText = value
+              if (/yes/ig.test(value) || /no/ig.test(value)) {
+                self.deviceInfos[key].valueText = /yes/ig.test(value) ? '0' : '1'
+              }
+            }
+          }
+        }
+      },
       /**
        * 获取设备信息
        * @return {[type]} [description]
@@ -524,11 +996,13 @@
         var self = this
         XJSObject.invoke('loadXJSAPILib', {}, function (r) {
           XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
+            console.log('连接设备结果：' + JSON.stringify(r))
             if (r.status === 200) {
               console.log('设备已经连接')
               self.deviceOnline = true
+            } else {
+              self.deviceOnline = false
             }
-            console.log(JSON.stringify(r))
           })
         })
       },
@@ -540,7 +1014,7 @@
       showEditModalEvent (paramsKey) {
         var self = this
         if (self.deviceOnline) {
-          if (self.deviceInfos[paramsKey]) {
+          if (self.deviceInfos[paramsKey] && (self.deviceInfos[paramsKey].modelType - 0 > 0)) {
             self.settingData = false
             self['showEditModal' + self.deviceInfos[paramsKey].modelType](paramsKey)
           }
@@ -575,10 +1049,17 @@
       showEditModal2 (paramsKey) {
         var self = this
         self.editModal2.paramsKey = paramsKey
+        // var a = false
         if (self.deviceInfos[paramsKey].valueArr) {
+          // for (var i = 0; i < self.deviceInfos[paramsKey].valueArr.length; i++) {
+          //   if (self.deviceInfos[paramsKey].valueText === self.deviceInfos[paramsKey].valueArr[i]) {
+          //     a = true
+          //   }
+          // }
           self.editModal2.paramsName = self.deviceInfos[paramsKey].name
           self.editModal2.value = self.deviceInfos[paramsKey].valueText
           self.editModal2.valueArr = self.deviceInfos[paramsKey].valueArr
+          self.editModal2.tips = self.deviceInfos[paramsKey].tips
           self.editModal2.show = true
         }
       },
@@ -638,6 +1119,41 @@
         } else {
           return true
         }
+      },
+      /**
+       * 解析S100数据
+       * @param  {[type]} str [description]
+       * @return {[type]}     [description]
+       */
+      _parseData (str) {
+        var arr = str.replace(/\/S100\/1\//, '').split(',')
+        var tempStr = ''
+        var result = []
+
+        var abc = (a, s) => {
+          var arr = s.split('=')
+          a.push({
+            key: arr[0],
+            value: arr[1]
+          })
+        }
+
+        arr.forEach((item, index) => {
+          if (!index) {
+            tempStr = item
+          } else if (/.+=/.test(item) && tempStr.length) {
+            abc(result, tempStr)
+            tempStr = item
+            if (index === arr.length - 1) {
+              abc(result, item)
+            }
+          } else {
+            tempStr += `,${item}`
+            return
+          }
+        })
+
+        return result
       }
     }
   }
@@ -682,9 +1198,15 @@
     .editModal2
       .content-box
         padding-bottom 30px
-        .deviceParams
-          height 30px
+        .content-value
+          padding-bottom 10px
+          .deviceParams
+            height 30px
+            font-size 14px
+        .tips
           font-size 14px
+          color #999
+          padding 10px 0
     .editModal3
       .content-box
         .content-value
