@@ -87,7 +87,7 @@
         }
       },
 
-      preNextDecadeClick(flag) {
+      preNextDecadeClick (flag) {
         var year = this.currDate.getFullYear()
         var months = this.currDate.getMonth()
         var date = this.currDate.getDate()
@@ -99,7 +99,7 @@
         }
       },
 
-      preNextMonthClick(flag) {
+      preNextMonthClick (flag) {
         var year = this.currDate.getFullYear()
         var month = this.currDate.getMonth()
         var date = this.currDate.getDate()
@@ -113,7 +113,7 @@
         }
       },
 
-      preNextYearClick(flag) {
+      preNextYearClick (flag) {
         var year = this.currDate.getFullYear()
         var months = this.currDate.getMonth()
         var date = this.currDate.getDate()
@@ -125,26 +125,26 @@
         }
       },
 
-      yearSelect(year) {
+      yearSelect (year) {
         this.displayYearView = false
         this.displayMonthView = true
         this.currDate = new Date(year, this.currDate.getMonth(), this.currDate.getDate())
       },
 
-      monthSelect(index) {
+      monthSelect (index) {
         this.displayMonthView = false
         this.displayDayView = true
         this.currDate = new Date(this.currDate.getFullYear(), index, this.currDate.getDate())
       },
 
-      daySelect(date, el) {
+      daySelect (date, el) {
         this.currDate = date
         this.value = this.stringify(this.currDate)
         this.displayDayView = false
         this.$dispatch('select-day')
       },
 
-      getYearMonth(year, month) {
+      getYearMonth (year, month) {
         if (month > 11) {
           year++
           month = 0
@@ -170,22 +170,22 @@
         return date.getFullYear() + '年 ' + this.monthNames[date.getMonth()]
       },
 
-      stringifyYearHeader(date) {
+      stringifyYearHeader (date) {
         return date.getFullYear() + '年 '
       },
 
-      stringifyDecadeHeader(date) {
+      stringifyDecadeHeader (date) {
         var yearStr = date.getFullYear().toString()
         var firstYearOfDecade = yearStr.substring(0, yearStr.length - 1) + 0
         var lastYearOfDecade = parseInt(firstYearOfDecade, 10) + 10
         return firstYearOfDecade + '-' + lastYearOfDecade
       },
 
-      parseMonth(date) {
+      parseMonth (date) {
         return this.monthNames[date.getMonth()]
       },
 
-      stringify(date) {
+      stringify (date) {
         var year = date.getFullYear()
         var month = date.getMonth() + 1
         var day = date.getDate()
@@ -202,16 +202,16 @@
           .replace(/d/g, day)
       },
 
-      parse(str) {
+      parse (str) {
         // var date = new Date(str)
         // return isNaN(date.getFullYear()) ? null : date
         return new Date(str)
       },
 
-      getDayCount(year, month) {
+      getDayCount (year, month) {
         var dict = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         if (month === 1) {
-          if ( (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0) ) {
+          if ((year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0)) {
             return 29
           }
           return 28
@@ -258,7 +258,7 @@
         }
         for (i = 1; i <= dayCount; i++) {
           var date = new Date(time.year, time.month, i)
-          var week = date.getDay()
+          // var week = date.getDay()
           var sclass = ''
           if (i === time.day) {
             if (this.value) {
@@ -301,7 +301,7 @@
     },
 
     beforeDestroy () {
-      if (this._closeEvent){
+      if (this._closeEvent) {
         this._closeEvent.remove()
       }
     }
