@@ -5,6 +5,9 @@
         <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
+              <div class="actions">
+                <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加网点</button>
+              </div>
               <h2>帐号管理</h2>
             </div>
             <div class="panel-bd">
@@ -13,7 +16,6 @@
                   <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts" label="所在地区："></area-select>
                 </div>
                 <div class="col-10">
-                  <button @click="showAddModal = true" class="btn btn-success fr ml10"><i class="fa fa-plus"></i>添加网点</button>
                   <search-box :key.sync="query" :active="searching" :placeholder="$t('account_manage.search_condi')" style="float:right">
                     <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
                   </search-box>
