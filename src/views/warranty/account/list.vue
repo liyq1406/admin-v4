@@ -39,7 +39,7 @@
                     <td>{{ account.people }}</td>
                     <td>{{ account.phone }}</td>
                     <td>{{ account.date }}</td>
-                    <td><a>查看详情</a></td>
+                    <td><a v-link="{path: '/warranty/accounts/1'}">查看详情</a></td>
                   </tr>
                   <tr v-if="accounts.length === 0">
                     <td colspan="6" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
