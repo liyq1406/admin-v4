@@ -119,3 +119,12 @@
     }
   }
 </script>
+
+<style lang='stylus'>
+  .area-select
+    font-size 0 !important
+
+    .v-select
+      margin-right 5px !important
+      font-size 14px !important
+</style>
