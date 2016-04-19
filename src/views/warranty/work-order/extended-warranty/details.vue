@@ -9,7 +9,7 @@
               <h2>工单详情</h2>
             </div>
             <div class="panel-bd">
-              <ul class="device-details">
+              <ul class="order-details">
                 <li>
                   <div class="label">工单编号:</div>
                   <div class="info"></div>
@@ -18,9 +18,19 @@
                   <div class="label">创建日期:</div>
                   <div class="info"></div>
                 </li>
-                <li>
-                  <div class="detail-title">客户信息</div>
-                </li>
+              </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-24">
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>客户信息</h2>
+            </div>
+            <div class="panel-bd">
+              <ul class="order-details">
                 <li>
                   <div class="label">姓名:</div>
                   <div class="info"></div>
@@ -41,9 +51,20 @@
                   <div class="label">备注内容:</div>
                   <div class="info"></div>
                 </li>
-                <li>
-                  <div class="detail-title">产品信息</div>
-                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-24">
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>产品信息</h2>
+            </div>
+            <div class="panel-bd">
+              <ul class="order-details">
                 <li>
                   <div class="label">产品名称:</div>
                   <div class="info"></div>
@@ -65,9 +86,11 @@
                   <div class="info"></div>
                 </li>
               </ul>
+            </div>
           </div>
         </div>
       </div>
+
     </div>
   </section>
 </template>
@@ -98,4 +121,16 @@
     background-color #CCCCCC
     margin-top 10px
     margin-bottom 10px
+    line-height 46px !important
+
+  ul.order-details
+    padding-bottom 30px
+  ul.order-details li
+    line-height 32px
+    padding-top 10px
+  ul.order-details li .label
+    display inline-block
+    width 180px
+  ul.order-details li .info
+    display inline-block
 </style>
