@@ -10,8 +10,7 @@
             <div class="panel-bd">
               <div class="action-bar row">
                 <div class="col-14">
-                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts">
-                  <span slot="label">所在地区：</span>
+                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts" label="所在地区：">
                 </area-select>
                 </div>
                 <div class="col-10">

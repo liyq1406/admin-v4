@@ -1,17 +1,17 @@
 <template>
   <div class="area-select">
-    <v-select width="120px" :label="province.name" placeholder="请选择省">
-      <slot name="label"></slot>
+    <v-select width="120px" :label="province.name" placeholder="请选择省" :size="selectSize">
+      <span slot="label" v-if="label.length">{{ label }}</span>
       <select v-model="province" @change="handleProvinceChange">
         <option v-for="option in provinces" :value="option">{{ option.name }}</option>
       </select>
     </v-select>
-    <v-select v-show="cityOptions.length" width="120px" :label="city.name" placeholder="请选择市">
+    <v-select v-show="cityOptions.length" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
       <select v-model="city" @change="handleCityChange">
         <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
       </select>
     </v-select>
-    <v-select v-show="districtOptions.length" width="120px" :label="district.name" placeholder="请选择区">
+    <v-select v-show="districtOptions.length" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
       <select v-model="district" @change="handleDistrictChange">
         <option v-for="option in districtOptions" :value="option">{{ option.name }}</option>
       </select>
@@ -34,6 +34,18 @@
     },
 
     props: {
+      // 尺寸
+      selectSize: {
+        type: String,
+        default: 'normal'
+      },
+
+      // 标签
+      label: {
+        type: String,
+        default: ''
+      },
+
       // 省
       province: {
         type: Object,

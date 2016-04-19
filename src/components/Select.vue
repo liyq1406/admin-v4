@@ -128,6 +128,9 @@
         triangle gray-dark 10px down
 
   .v-select-sm
+    & > span
+      font-size 12px !important
+
     .v-select-trigger
       height 24px
       line-height 24px
