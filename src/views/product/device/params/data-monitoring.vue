@@ -13,7 +13,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
-  import api from '../../../../api'
+  // import api from '../../../../api'
   import echarts from 'echarts/echarts'
   import 'echarts/chart/line'
 
@@ -26,61 +26,104 @@
 
     data () {
       return {
-        dates: [
-          '3-01',
-          '3-02',
-          '3-03',
-          '3-04',
-          '3-05',
-          '3-06',
-          '3-07'
-        ],
-        environmentTems: [
-          '19',
-          '25',
-          '15',
-          '35',
-          '22',
-          '16',
-          '10'
-        ],
-        waterboxTems: [
-          '48',
-          '42',
-          '49',
-          '53',
-          '54',
-          '46',
-          '48'
-        ]
+        dates: [],
+        environmentTems: [],
+        waterboxTems: [],
+        fake: [{
+          lastUpdate: 1,
+          '34': 2,
+          '43': 4
+        }, {
+          lastUpdate: 2,
+          '34': 2,
+          '43': 4
+        }, {
+          lastUpdate: 3,
+          '34': 2,
+          '43': 4
+        }, {
+          lastUpdate: 4,
+          '34': 2,
+          '43': 4
+        }, {
+          lastUpdate: 5,
+          '34': 2,
+          '43': 4
+        }, {
+          lastUpdate: 40,
+          '34': 2,
+          '43': 4
+        }]
       }
     },
     ready () {
-      this.drawProductTrends()
       // console.log(1111)
       // console.log(this.$route.params.product_id)
       // console.log(this.$route.params.device_id)
+      this.init()
       this.getSnapshot()
+      this.drawProductTrends()
     },
 
     methods: {
-      // 获取快照数据
-      getSnapshot (offset, limit) {
-        offset = offset || 0
-        limit = limit || 10
-        var params = {
-          offset, limit
+      init () {
+        var now = Date.parse(new Date())
+        for (let i = 71; i >= 0; i--) {
+          this.waterboxTems.push(0)
+          this.environmentTems.push(0)
+          var date = new Date(now - i * 3600 * 1000)
+          var hour = date.getHours()
+          this.dates.push(`${hour > 9 ? hour : `0${hour}`}:00`)
         }
-        api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
-          for (let i = 0; i < res.data.snapshot.length; i++) {
-            this.environmentTems.push(res.data.snapshot[i]['34'])
-            this.waterboxTems.push(res.data.snapshot[i]['43'])
-            this.dates.push(res.data.snapshot[i].lastUpdate)
+      },
+      // 获取快照数据
+      getSnapshot (offset, limit, begintime, endtime) {
+        offset = offset || 0
+        limit = limit || 1000
+        endtime = Date.parse(new Date())
+        begintime = endtime - 72 * 60 * 60 * 1000
+        console.log(this.begintime)
+        var params = {
+          offset: offset,
+          limit: limit,
+          date: {
+            begin: begintime,
+            end: endtime
           }
-        }).catch((res) => {
-          this.handleError(res)
+        }
+        console.log(params)
+        this._handleData(this.fake)
+        // api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
+        //   // 处理数据
+        //   this._handleData(res.data.snapshot)
+        // }).catch((res) => {
+        //   this.handleError(res)
+        // })
+      },
+
+      _handleData (data) {
+        // var now = Date.parse(new Date()) / 1000
+        // const SECONDS_PER_HOUR = 3600
+        var now = 40
+        const SECONDS_PER_HOUR = 2
+        var itemToAdd = {}
+        var i = 0
+        data.forEach((item, index) => {
+          var a = Math.floor((now - item.lastUpdate) / SECONDS_PER_HOUR)
+          if (index) {
+            if (a !== i) {
+              this.environmentTems[71 - a] = itemToAdd['43']
+              this.waterboxTems[71 - a] = itemToAdd['34']
+              itemToAdd = item
+              i = a
+            }
+          } else {
+            itemToAdd = item
+            i = 0
+          }
         })
       },
+
       drawProductTrends () {
           // 趋势图表
         var trendOptions = {

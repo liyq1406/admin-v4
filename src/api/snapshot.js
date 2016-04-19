@@ -11,5 +11,15 @@ export default {
     return http.post(
       `${apiServer.default}/v2/product/${product_id}/device/${device_id}/snapshot`, params
     )
+  },
+  /**
+   * 获取故障消息列表
+   * @param  {Object} params 注册信息
+   * @return {Promise}
+   */
+  getFault (params) {
+    return http.post(
+      `${apiServer.default}/v2/corp/messages`, params
+    )
   }
 }
