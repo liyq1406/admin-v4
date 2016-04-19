@@ -10,8 +10,7 @@
             <div class="panel-bd">
               <div class="action-bar row">
                 <div class="col-14">
-                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts" label="所在地区：">
-                </area-select>
+                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts" label="所在地区："></area-select>
                 </div>
                 <div class="col-10">
                   <button @click="showAddModal = true" class="btn btn-success fr ml10"><i class="fa fa-plus"></i>添加网点</button>
