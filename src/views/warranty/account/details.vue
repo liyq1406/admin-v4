@@ -8,10 +8,10 @@
           <h2>网点详情</h2>
         </div>
         <div class="panel-bd">
-          <ul class="order-details">
-            <li>
-              <div class="label">创建日期:</div>
-              <div class="info"></div>
+          <ul class="info-details">
+            <li class="row">
+              <div class="col-8">创建日期:</div>
+              <div class="col-16"></div>
             </li>
           </ul>
         </div>
@@ -21,12 +21,12 @@
         <div class="panel-hd">
           <div class="actions">
             <button @click="showAddModal = true" class="btn btn-ghost mr10"><i class="fa"></i>编辑网点</button>
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
+            <button @click="editModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
           </div>
           <h2>网点信息</h2>
         </div>
         <div class="panel-bd">
-          <ul class="order-details">
+          <ul class="info-details">
             <li>
               <div class="label">网点名称:</div>
               <div class="info"></div>
@@ -117,7 +117,7 @@
         </div>
       </div>
     </div>
-    <modal :show="false" width="600px">
+    <modal :show="showAddModal" width="600px">
       <h3 slot="header">添加客服</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit">
@@ -272,21 +272,4 @@
 
 <style lang="stylus">
   @import '../../../assets/stylus/common'
-
-  .detail-title
-    background-color #CCC
-    margin-top 10px
-    margin-bottom 10px
-    line-height 46px !important
-
-  ul.order-details
-    padding-bottom 30px
-  ul.order-details li
-    line-height 32px
-    padding-top 10px
-  ul.order-details li .label
-    display inline-block
-    width 180px
-  ul.order-details li .info
-    display inline-block
 </style>

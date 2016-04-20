@@ -9,10 +9,10 @@
       </div>
 
       <div class="status-bar">
-        <v-select :label="statusOptions[0].name" width="100px" class="work-orders-select" size="small">
+        <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
           <span slot="label">工单状态</span>
           <select v-model="status">
-            <option v-for="status in statusOptions" :value="status.name">{{status.name}}</option>
+            <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
             <p> {{status}}</p>
           </select>
         </v-select>
@@ -76,7 +76,10 @@
     data () {
       return {
         name: '',
-        status: '',
+        status: {
+          label: '全部',
+          value: 0
+        },
         key: '',
         curProvince: {},
         curCity: {},
@@ -88,7 +91,15 @@
         {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '已过期'},
         {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '已过期'}],
 
-        statusOptions: [{name: '全部'}, {name: '未过期'}, {name: '已过期'}]
+        statusOptions: [{
+          label: '全部',
+          value: 0
+        }, {
+          label: '未过期',
+          value: 1
+        }, {
+          label: '已过期',
+          value: 2}]
       }
     },
 
@@ -118,8 +129,4 @@
 
 <style lang="stylus">
   @import '../../../../assets/stylus/common'
-
-  .total-status
-    line-height 26px
-    margin-bottom 40px
 </style>

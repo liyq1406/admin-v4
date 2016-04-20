@@ -9,7 +9,7 @@
               <h2>工单详情</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">工单编号:</div>
                   <div class="info"></div>
@@ -31,7 +31,7 @@
               <h2>网点信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">网点名称:</div>
                   <div class="info"></div>
@@ -69,7 +69,7 @@
               <h2>客户信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">客户姓名:</div>
                   <div class="info"></div>
@@ -99,7 +99,7 @@
               <h2>产品信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">产品名称:</div>
                   <div class="info"></div>
@@ -133,7 +133,7 @@
               <h2>维修信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">故障描述:</div>
                   <div class="info"></div>

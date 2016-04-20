@@ -196,9 +196,4 @@
 
 <style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
-
-
-  .inlineselect
-    display inline-block
-
 </style>

@@ -9,7 +9,7 @@
               <h2>工单详情</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">工单编号:</div>
                   <div class="info"></div>
@@ -30,7 +30,7 @@
               <h2>客户信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">姓名:</div>
                   <div class="info"></div>
@@ -64,7 +64,7 @@
               <h2>产品信息</h2>
             </div>
             <div class="panel-bd">
-              <ul class="order-details">
+              <ul class="info-details">
                 <li>
                   <div class="label">产品名称:</div>
                   <div class="info"></div>
@@ -116,21 +116,4 @@
 
 <style lang="stylus">
   @import '../../../../assets/stylus/common'
-
-  .detail-title
-    background-color #CCCCCC
-    margin-top 10px
-    margin-bottom 10px
-    line-height 46px !important
-
-  ul.order-details
-    padding-bottom 30px
-  ul.order-details li
-    line-height 32px
-    padding-top 10px
-  ul.order-details li .label
-    display inline-block
-    width 180px
-  ul.order-details li .info
-    display inline-block
 </style>

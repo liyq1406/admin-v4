@@ -7,7 +7,7 @@
           <h2>{{ $t('user.details') }}</h2>
         </div>
         <div class="panel-bd">
-          <ul class="user-details">
+          <ul class="info-details">
             <li>
               <div class="label">{{ $t('user.fields.id') }}:</div>
               <div class="info">{{ user.id }}</div>

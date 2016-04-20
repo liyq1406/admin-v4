@@ -9,7 +9,7 @@
           </div>
           <div class="panel-bd">
             <div v-if="loadingAccount" class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            <ul v-else="v-else" class="user-details">
+            <ul v-else="v-else" class="info-details">
               <li>
                 <div class="label">{{ $t("member.fields.name") }}:</div>
                 <div class="info">{{ member.name }}<a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></div>
@@ -64,7 +64,7 @@
           </div>
           <div class="panel-bd">
             <div v-if="loadingCorp" class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            <ul v-else="v-else" class="user-details">
+            <ul v-else="v-else" class="info-details">
               <!--li
               .label logo:
               .info samxlu
