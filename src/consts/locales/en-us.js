@@ -93,7 +93,7 @@ export default {
     enable: '启用',
     disabled: '禁用',
     search: '搜索',
-    total_results: '共有<span>{count}</span>条结果',
+    total_results: '共有<span class="hl-red">{count}</span>条结果',
     display: '显示',
     status: '状态',
     online: '上线',

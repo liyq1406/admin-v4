@@ -20,7 +20,7 @@
         <!-- Start: 网点信息 -->
         <div class="panel-hd">
           <div class="actions">
-            <button @click="showAddModal = true" class="btn btn-ghost mr10"><i class="fa"></i>编辑网点</button>
+            <button @click="showAddModal = true" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
             <button @click="editModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
           </div>
           <h2>网点信息</h2>
@@ -91,7 +91,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/1/staffs/1'}" class="hl-red">张三</a>
+                    <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">张三</a>
                   </td>
                   <td>13800138000</td>
                   <td>foo@bar.com</td>

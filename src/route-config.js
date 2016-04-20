@@ -488,15 +488,15 @@ let configRouter = (router) => {
     },
 
     // 维保系统-工单管理
-    '/warranty/:appid/work-orders': {
+    '/warranty/:appid': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/work-order/index'))
+          resolve(require('./views/warranty/index'))
         }, 'warranty')
       },
       subRoutes: {
         // 延保工单列表
-        'extended-warranties': {
+        'work-orders/extended-warranties': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/warranty/work-order/extended-warranty/list'))
@@ -504,10 +504,18 @@ let configRouter = (router) => {
           }
         },
         // 维修工单列表
-        'repair': {
+        'work-orders/repair': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/warranty/work-order/repair/list'))
+            }, 'warranty')
+          }
+        },
+        // 网点管理
+        'accounts': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/warranty/account/list'))
             }, 'warranty')
           }
         }
@@ -526,14 +534,6 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/repair/details'))
-        }, 'warranty')
-      }
-    },
-    // 维保系统-帐号列表
-    '/warranty/:appid/accounts': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/warranty/account/list'))
         }, 'warranty')
       }
     },

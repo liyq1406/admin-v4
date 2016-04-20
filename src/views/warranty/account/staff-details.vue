@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <div class="breadcrumb">
-        <a v-link="{path: '/warranty/accounts/' + $route.params.account_id}">
+        <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/' + $route.params.account_id}">
           <i class="fa fa-arrow-circle-left"></i>网点详情
         </a>
       </div>
@@ -22,7 +22,7 @@
         <!-- start: 客服信息 -->
         <div class="panel-hd">
           <div class="actions">
-            <button @click="editModal = true" class="btn btn-ghost mr10"><i class="fa"></i>编辑客服</button>
+            <button @click="editModal = true" class="btn btn-ghost"><i class="fa fa-edit"></i>编辑客服</button>
           </div>
           <h2>客服信息</h2>
         </div>
@@ -113,7 +113,7 @@
   import { globalMixins } from '../../../mixins'
   import Modal from '../../../components/Modal'
   import Select from '../../../components/Select'
-  
+
   export default {
     name: 'OrderDetails',
 
