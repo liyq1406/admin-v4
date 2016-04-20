@@ -308,10 +308,12 @@
       },
       // 查询定制应用是否已创建
       isAppExist (value) {
+        var result = false
         this.customApps.forEach((item) => {
-          if (item.type === 5) {
-            return true
+          if (item.type > 4) {
+            result = true
           }
+        return result
         })
       },
       /**

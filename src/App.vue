@@ -131,6 +131,7 @@
         if (this.layout === 'admin') {
           this.getCurrentMember(window.localStorage.getItem('memberId'), this)
           this.getAllProducts(this)
+          this.getApps()
         }
       }
     },
@@ -141,7 +142,6 @@
       this.$on('update-member', (member) => {
         this.currUser = member
       })
-      this.getApps()
     },
 
     methods: {
