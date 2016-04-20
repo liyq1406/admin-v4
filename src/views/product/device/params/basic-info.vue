@@ -3,7 +3,7 @@
     <div class="panel-hd">
       <h2 class="title">设备MAC：{{$route.params.mac || $route.params.device_id}}</h2>
       <div class="other-control-button-box">
-        <button @click="updateDevicesInfo" class="other-control-button btn btn-success">获取设备信息</button>
+        <!-- <button @click="updateDevicesInfo" class="other-control-button btn btn-success">获取设备信息</button> -->
         <button @click="showEditModal5" class="other-control-button btn btn-success" :class="{'disabled': !deviceOnline}" :disabled="!deviceOnline">设置控制器时间</button>
       </div>
     </div>
@@ -38,7 +38,7 @@
             <td><span>{{deviceInfos.S31.name}}：</span><a class="button" @click="showEditModalEvent('S31')">{{deviceInfos.S31.valueText}}{{deviceInfos.S31.unit}}</a></td>
             <td><span>{{deviceInfos.S32.name}}：</span><a class="button" @click="showEditModalEvent('S32')">{{deviceInfos.S32.valueText}}{{deviceInfos.S32.unit}}</a></td>
             <td><span>{{deviceInfos.S33.name}}：</span><a class="button" @click="showEditModalEvent('S33')">{{deviceInfos.S33.valueText}}{{deviceInfos.S33.unit}}</a></td>
-            <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.unit}}</a></td>
+            <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
           </tr>
           <tr>
             <td><span>{{deviceInfos.S37.name}}：</span><a class="button" @click="showEditModalEvent('S37')">{{deviceInfos.S37.valueArr[deviceInfos.S37.valueText]}}{{deviceInfos.S37.unit}}</a></td>
@@ -59,24 +59,25 @@
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S50.name}}：</span><a class="button" @click="showEditModalEvent('S50')">{{deviceInfos.S50.valueText}}{{deviceInfos.S50.unit}}</a></td>
+            <td><span>{{deviceInfos.S50.name}}：</span><a class="button" @click="showEditModalEvent('S50')">{{deviceInfos.S50.valueArr[deviceInfos.S50.valueText]}}</a></td>
             <td><span>{{deviceInfos.S51.name}}：</span><a class="button" @click="showEditModalEvent('S51')">{{deviceInfos.S51.valueText}}{{deviceInfos.S51.unit}}</a></td>
             <td><span>{{deviceInfos.S52.name}}：</span><a class="button" @click="showEditModalEvent('S52')">{{deviceInfos.S52.valueText}}{{deviceInfos.S52.unit}}</a></td>
-            <td><span>{{deviceInfos.S54.name}}：</span><a class="button" @click="showEditModalEvent('S54')">{{deviceInfos.S54.valueText}}{{deviceInfos.S54.unit}}</a></td>
+            <td><span>{{deviceInfos.S54.name}}：</span><a class="button" @click="showEditModalEvent('S54')">{{deviceInfos.S54.valueArr[deviceInfos.S54.valueText]}}</a></td>
           </tr>
           <tr>
             <td><span>{{deviceInfos.S55.name}}：</span><a class="button" @click="showEditModalEvent('S55')">{{deviceInfos.S55.valueText}}{{deviceInfos.S55.unit}}</a></td>
             <td><span>{{deviceInfos.S56.name}}：</span><a class="button" @click="showEditModalEvent('S56')">{{deviceInfos.S56.valueText}}{{deviceInfos.S56.unit}}</a></td>
-            <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.unit}}</a></td>
+            <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
             <td><span>{{deviceInfos.S59.name}}：</span><a class="button" @click="showEditModalEvent('S59')">{{deviceInfos.S59.valueText}}{{deviceInfos.S59.unit}}</a></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueText}}{{deviceInfos.S61.unit}}</a></td>
-            <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.unit}}</a></td>
-            <td><span>通讯波特率???????：</span><a class="button" @click="showEditModalEvent('test')">?????</a></td>
+            <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueArr[deviceInfos.S61.valueText]}}</a></td>
+            <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.valueText - 0 >= 0 ? deviceInfos.S63.unit : ''}}</a></td>
+            <td><span>通讯波特率：</span><a class="button" @click="showEditModalEvent('test')">2.4</a></td>
+            <!-- <td></td> -->
             <td></td>
           </tr>
           <tr>
@@ -84,7 +85,7 @@
           </tr>
           <tr>
             <td><span>{{deviceInfos.S70.name}}：</span><a class="button" @click="showEditModalEvent('S70')">{{deviceInfos.S70.valueText}}{{deviceInfos.S70.unit}}</a></td>
-            <td><span>{{deviceInfos.S71.name}}：</span><a class="button" @click="showEditModalEvent('S71')">{{deviceInfos.S71.valueText}}{{deviceInfos.S71.unit}}</a></td>
+            <td><span>{{deviceInfos.S71.name}}：</span><a class="button" @click="showEditModalEvent('S71')">{{deviceInfos.S71.valueArr[deviceInfos.S71.valueText]}}</a></td>
             <td><span>{{deviceInfos.S72.name}}：</span><a class="button" @click="showEditModalEvent('S72')">{{deviceInfos.S72.valueText}}{{deviceInfos.S72.unit}}</a></td>
             <td><span>{{deviceInfos.S73.name}}：</span><a class="button" @click="showEditModalEvent('S73')">{{deviceInfos.S73.valueText}}{{deviceInfos.S73.unit}}</a></td>
           </tr>
@@ -195,7 +196,7 @@
             <div class="content-value">
               <span class="name">{{editModal4.paramsName}}：</span>
               <select name="deviceParams" v-model="editModal4.canSetParams" class="deviceParams">
-                <option v-for="canSetParams in [true, false]" :value="canSetParams">{{canSetParams ? 'YES' : 'NO'}}</option>
+                <option v-for="canSetParams in [true, false]" :value="canSetParams">{{canSetParams ? 'On' : 'Off'}}</option>
               </select>
               <input type="text" class="paramsValue" name="paramsValue" v-form-ctrl :required="editModal4.canSetParams" v-model="editModal4.value" v-show="editModal4.canSetParams">
               <span class="unit" v-show="editModal4.canSetParams">{{editModal4.unit}}</span>
@@ -478,7 +479,7 @@
             name: '电流显示',
             valueText: '-',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: 'A',
             tips: ''
           },
@@ -486,7 +487,7 @@
             name: '压缩机额定电流',
             valueText: '10',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: 'A',
             tips: '1.0 - 99.9'
           },
@@ -580,17 +581,17 @@
           },
           S61: {
             name: '掉电后是否记忆开关机状态',
-            valueText: '30',
-            valueArr: [],
-            modelType: '3',
-            unit: '℃',
-            tips: '1 – 50'
+            valueText: '0',
+            valueArr: ['Yes', 'No'],
+            modelType: '2',
+            unit: '',
+            tips: ''
           },
           S63: {
-            name: '掉电后是否记忆开关机状态',
+            name: '背光延时',
             valueText: '30',
             valueArr: [],
-            modelType: '3',
+            modelType: '4',
             unit: '秒',
             tips: 'Off 1 – 99 On Off表示不开背光 On表示背光常开 1-99表示按键操作后背光延时关闭'
           },
@@ -606,7 +607,7 @@
             name: '电子膨胀阀开度查询',
             valueText: '-',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: '',
             tips: '0 - 480'
           },
@@ -670,7 +671,7 @@
             name: '环境温度显示',
             valueText: '-',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: '℃',
             tips: ''
           },
@@ -678,7 +679,7 @@
             name: '回气温度显示',
             valueText: '-',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: '℃',
             tips: ''
           },
@@ -857,10 +858,10 @@
             console.log('sendXDeviceData结果：' + JSON.stringify(r))
             self.modalCancel()
             self.settingData = false
-            if (r.status === 200) {
+            if (r.status === 200 && !/S100/.test(data)) {
               self.showNotice({
                 type: 'success',
-                content: '数据设置成功'
+                content: '数据发送成功'
               })
             }
           })
@@ -883,26 +884,38 @@
         // 设备状态改变
         XJSObject.on('onXDeviceStateChange', function (r) {
           console.log('设备状态改变:' + JSON.stringify(r))
+          if (r.deviceid.toString() === self.device_id && r.status === 0) {
+            self.deviceOnline = false
+          } else if (r.deviceid.toString() === self.device_id && r.status === 1) {
+            self.deviceOnline = true
+          }
         })
       },
       /**
        * 确定按钮事件
        * @param {object} productInfo 当前正在编辑的对象
        */
-      setDataEvent (productInfo, num) {
+      setDataEvent (deviceInfo, num) {
         var self = this
+        var paramsKey = deviceInfo.paramsKey
+        var value = deviceInfo.value
         if (num === 1) {
           self.editModal1.value = self.editModal1.startHour + ':' + self.editModal1.startMinute + '-' + self.editModal1.endHour + ':' + self.editModal1.endMinute
         }
         if (num === 2) {
-          if (productInfo.valueArr[0] === 'Yes') {
-            productInfo.value = productInfo.valueArr[productInfo.value]
+          if (deviceInfo.valueArr[0] === 'Yes') {
+            value = deviceInfo.valueArr[deviceInfo.value]
+          }
+        }
+        if (num === 4) {
+          if (!deviceInfo.canSetParams) {
+            value = 'Off'
           }
         }
         if (this['validation' + num].$valid || num === 2) {
           self.settingData = true
-          console.log('向设备发送数据：' + '/' + productInfo.paramsKey + '/1/' + productInfo.value + '\n')
-          self.sendDeviceData('/' + productInfo.paramsKey + '/1/' + productInfo.value + '\n')
+          console.log('向设备发送数据：' + '/' + deviceInfo.paramsKey + '/1/' + deviceInfo.value + '\n')
+          self.sendDeviceData('/' + paramsKey + '/1/' + value + '\n')
         }
       },
 
@@ -920,16 +933,11 @@
        */
       setControllerTime () {
         var self = this
-        if (self.validation5.$valid) {
-          self.settingData = true
-          setTimeout(() => {
-            self.editModal5.show = false
-            self.showNotice({
-              type: 'success',
-              content: '控制器时间设置成功'
-            })
-          }, 1000)
+        var deviceInfo = {
+          paramsKey: 'S110',
+          value: self.editModal5.hour + ':' + self.editModal5.minute
         }
+        self.setDataEvent(deviceInfo, 5)
       },
       /**
        * 解析设备返回的数据
@@ -944,13 +952,20 @@
           if (key === 'S100') {
             console.log('所有数据' + JSON.stringify(data))
             var arr = self._parseData(data)
-            arr.map((item) => {
-              self.deviceInfos[item.key].valueText = item.value
+            arr.forEach((item, index) => {
+              if (self.deviceInfos['S' + item.key]) {
+                if (item.key === '44' || item.key === '61') {
+                  self.deviceInfos['S' + item.key].valueText = (item.value === 'Yes' ? '0' : '1')
+                } else {
+                  // console.log(self.deviceInfos['S' + item.key].valueText)
+                  self.deviceInfos['S' + item.key].valueText = item.value
+                }
+              }
             })
           } else {
             if (self.deviceInfos[key]) {
               self.deviceInfos[key].valueText = value
-              if (/yes/ig.test(value) || /no/ig.test(value)) {
+              if (/yes|no/ig.test(value)) {
                 self.deviceInfos[key].valueText = /yes/ig.test(value) ? '0' : '1'
               }
             }
@@ -983,6 +998,8 @@
         console.log('设置控制器时间')
         if (self.deviceOnline) {
           // 这里需要获取最新的控制器时间
+          self.editModal5.hour = self.deviceInfos.S110.valueText.split(':')[0]
+          self.editModal5.minute = self.deviceInfos.S110.valueText.split(':')[1]
           self.settingData = false
           self.editModal5.show = true
         }
@@ -998,6 +1015,7 @@
           XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
             console.log('连接设备结果：' + JSON.stringify(r))
             if (r.status === 200) {
+              self.getDeviceInfos()
               console.log('设备已经连接')
               self.deviceOnline = true
             } else {
@@ -1017,6 +1035,11 @@
           if (self.deviceInfos[paramsKey] && (self.deviceInfos[paramsKey].modelType - 0 > 0)) {
             self.settingData = false
             self['showEditModal' + self.deviceInfos[paramsKey].modelType](paramsKey)
+          } else {
+            self.showNotice({
+              type: 'error',
+              content: '不可控'
+            })
           }
         } else {
           self.showNotice({
@@ -1088,8 +1111,14 @@
         var self = this
         self.editModal4.paramsKey = paramsKey
         if (self.deviceInfos[paramsKey].valueArr) {
+          console.log(JSON.stringify(self.editModal4))
+          if (Number(self.deviceInfos[paramsKey].valueText)) {
+            self.editModal4.canSetParams = true
+            self.editModal4.value = self.deviceInfos[paramsKey].valueText
+          } else {
+            self.editModal4.value = '0'
+          }
           self.editModal4.paramsName = self.deviceInfos[paramsKey].name
-          self.editModal4.value = self.deviceInfos[paramsKey].valueText
           self.editModal4.unit = self.deviceInfos[paramsKey].unit
           self.editModal4.tips = self.deviceInfos[paramsKey].tips
           self.editModal4.show = true
@@ -1152,7 +1181,6 @@
             return
           }
         })
-
         return result
       }
     }
