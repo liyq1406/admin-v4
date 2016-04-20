@@ -1,4 +1,4 @@
-// import io from 'socket.io-client'
+import io from 'socket.io-client'
 import base64 from './base64'
 
 var _sock = false // socket已连接

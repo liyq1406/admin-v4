@@ -38,7 +38,7 @@
             <td><span>{{deviceInfos.S31.name}}：</span><a class="button" @click="showEditModalEvent('S31')">{{deviceInfos.S31.valueText}}{{deviceInfos.S31.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S31.loading"></i></td>
             <td><span>{{deviceInfos.S32.name}}：</span><a class="button" @click="showEditModalEvent('S32')">{{deviceInfos.S32.valueText}}{{deviceInfos.S32.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S32.loading"></i></td>
             <td><span>{{deviceInfos.S33.name}}：</span><a class="button" @click="showEditModalEvent('S33')">{{deviceInfos.S33.valueText}}{{deviceInfos.S33.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S33.loading"></i></td>
-            <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
+            <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S34.loading"></i></td>
           </tr>
           <tr>
             <td><span>{{deviceInfos.S37.name}}：</span><a class="button" @click="showEditModalEvent('S37')">{{deviceInfos.S37.valueArr[deviceInfos.S37.valueText]}}{{deviceInfos.S37.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S37.loading"></i></td>
@@ -67,7 +67,7 @@
           <tr>
             <td><span>{{deviceInfos.S55.name}}：</span><a class="button" @click="showEditModalEvent('S55')">{{deviceInfos.S55.valueText}}{{deviceInfos.S55.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S55.loading"></i></td>
             <td><span>{{deviceInfos.S56.name}}：</span><a class="button" @click="showEditModalEvent('S56')">{{deviceInfos.S56.valueText}}{{deviceInfos.S56.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S56.loading"></i></td>
-            <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
+            <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.valueText - 0 >= 0 ? deviceInfos.S58.unit : ''}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S58.loading"></i></td>
             <td><span>{{deviceInfos.S59.name}}：</span><a class="button" @click="showEditModalEvent('S59')">{{deviceInfos.S59.valueText}}{{deviceInfos.S59.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S59.loading"></i></td>
           </tr>
           <tr>
@@ -75,7 +75,7 @@
           </tr>
           <tr>
             <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueArr[deviceInfos.S61.valueText]}}{{deviceInfos.S61.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S61.loading"></i></td>
-            <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.valueText - 0 >= 0 ? deviceInfos.S63.unit : ''}}</a></td>
+            <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.valueText - 0 >= 0 ? deviceInfos.S63.unit : ''}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S63.loading"></i></td>
             <td><span>通讯波特率：</span><a class="button">2.4</a></td>
             <!-- <td></td> -->
             <td></td>
@@ -918,6 +918,12 @@
               self.showNotice({
                 type: 'success',
                 content: '数据发送成功'
+              })
+            } else if (r.status === 202) {
+              self.deviceOnline = false
+              self.showNotice({
+                type: 'error',
+                content: '设备不在线'
               })
             }
           })
