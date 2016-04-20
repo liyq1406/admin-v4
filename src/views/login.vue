@@ -35,7 +35,7 @@
           </label>
         </div>
         <div class="form-actions">
-          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
+          <button @keyup.enter="onSubmit" :disabled="logining || logined" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
         </div>
       </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
@@ -62,6 +62,7 @@
           password: ''
         },
         logining: false,
+        logined: false,
         rememberPwd: Boolean(this.getCookie('rememberPwd')) || false
       }
     },
@@ -113,6 +114,7 @@
           this.logining = true
           api.corp.auth(this.model).then((res) => {
             this.logining = false
+            this.logined = true
             var today = new Date()
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
