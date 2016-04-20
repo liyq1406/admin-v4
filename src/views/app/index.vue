@@ -313,8 +313,8 @@
           if (item.type > 4) {
             result = true
           }
-        return result
         })
+        return result
       },
       /**
        * 查看密钥
