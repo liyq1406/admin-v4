@@ -29,7 +29,7 @@
     <div v-show="displayYearView" class="date-picker-popup">
       <div class="date-picker-inner">
         <div class="date-picker-body">
-          <div class="date-picker-ctrl"><span @click="preNextDecadeClick(0)" class="month-btn date-picker-prev-btn"><</span><span @click="preNextDecadeClick(1)" class="month-btn date-picker-next-btn">></span>
+          <div class="date-picker-ctrl"><span @click="preNextDecadeClick(0)" class="month-btn date-picker-prev-btn">&lt;</span><span @click="preNextDecadeClick(1)" class="month-btn date-picker-next-btn">&gt;</span>
             <p>{{ stringifyDecadeHeader(currDate) }}</p>
           </div>
           <div class="date-picker-month-range decade-range">
