@@ -85,7 +85,7 @@
             <div class="controls">
               <div class="radio-group radio-group-v">
                 <label v-for="type in appTypes" class="radio">
-                  <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="type.disabled"/>{{ type.label }}
+                  <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="isAppExist($index+1) || type.disabled"/>{{ type.label }}
                 </label>
               </div>
             </div>
@@ -272,7 +272,8 @@
         delChecked: false,
         loadingData: false,
         showAlertModal: false,
-        showKeyModal: false
+        showKeyModal: false,
+        customApps: []
       }
     },
 
@@ -297,6 +298,19 @@
           if (res.status === 200) {
             this.loadingData = false
             this.apps = res.data
+            res.data.forEach((item) => {
+              if (item.type > 4) {
+                this.customApps.push(item)
+              }
+            })
+          }
+        })
+      },
+      // 查询定制应用是否已创建
+      isAppExist (value) {
+        this.customApps.forEach((item) => {
+          if (item.type === 5) {
+            return true
           }
         })
       },

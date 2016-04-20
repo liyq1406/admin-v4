@@ -51,6 +51,9 @@
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-user"></i>{{ $t("nav_aside.users") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
+            <template v-for="app in customApps">
+              <div class="nav-aside-item" v-if="app.type === 5"><a v-link="{ path: '' }"><i class="fa fa-exchange"></i>维保系统</a></div>
+            </template>
           </div>
         </div>
       </section>
@@ -83,7 +86,7 @@
   import { removeError, hideError, getCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
   import Vue from 'vue'
-  // import api from './api'
+  import api from './api'
   import Modal from './components/Modal'
   import Toast from './components/Toast'
 
@@ -118,7 +121,8 @@
     data () {
       return {
         isShowUserNav: false,
-        debug: process.env.NODE_ENV !== 'production'
+        debug: process.env.NODE_ENV !== 'production',
+        customApps: []
       }
     },
 
@@ -137,6 +141,7 @@
       this.$on('update-member', (member) => {
         this.currUser = member
       })
+      this.getApps()
     },
 
     methods: {
@@ -148,6 +153,18 @@
         window.localStorage.removeItem('accessToken')
         this.$route.router.app.access = false
         this.$route.router.go({path: '/login'})
+      },
+      // 获取 APP 列表
+      getApps () {
+        api.app.list().then((res) => {
+          if (res.status === 200) {
+            res.data.forEach((item) => {
+              if (item.type > 4) {
+                this.customApps.push(item)
+              }
+            })
+          }
+        })
       }
     }
   }
