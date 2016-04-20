@@ -501,7 +501,7 @@ export default {
     del_rule: '删除告警规则',
     condition: '告警条件',
     types: ['数据端点', '设备状态'],
-    compare_types: ['等于', '大于', '小于'],
+    compare_types: ['等于', '大于', '小于', '大于或等于', '小于或等于', '不等于'],
     inform_types: ['通知类型', '告警类型'],
     notify_types: ['短信', '邮箱', '应用内推送', 'APN推送', 'Google推送'],
     scope_types: ['企业可见', '用户可见', '全部可见'],

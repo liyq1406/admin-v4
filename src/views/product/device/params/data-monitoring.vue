@@ -109,7 +109,7 @@
         var itemToAdd = {}
         var i = 0
         data.forEach((item, index) => {
-          var a = Math.floor((now - item.lastUpdate) / SECONDS_PER_HOUR)
+          var a = Math.floor((now - Date.parse(new Date(item.lastUpdate))) / SECONDS_PER_HOUR)
           if (index) {
             if (a !== i) {
               this.environmentTems[71 - a] = itemToAdd['43']
