@@ -2,13 +2,18 @@
   <div class="tag-input">
     <div @click="editTag($event)" class="tag-input-container">
       <template v-if="value.length">
-        <div v-for="tag in tags" track-by="$index" class="tag"><span class="label">{{ tag }}</span><i @click.stop="deleteTag(tag)" class="fa fa-times"></i></div>
+        <div v-for="tag in tags" track-by="$index" class="tag">
+          <span class="label">{{ tag }}</span>
+          <i @click.stop="deleteTag(tag)" class="fa fa-times"></i>
+        </div>
       </template>
       <input type="text" v-model="newTag" @keydown.enter.prevent="addTag($event)" @keyup.8="deleteLastTag" @input="setInputWidth($event)" class="text-input"/>
       <div v-text="newTag" class="temp-text"></div>
     </div>
     <div :style="styleCandidate" v-show="filteredTags.length && editing" class="candidate">
-      <div v-for="tag in filteredTags" @click.stop="selectTag(tag)" class="tag"><span class="label">() {{ tag }}</span></div>
+      <div v-for="tag in filteredTags" @click.stop="selectTag(tag)" class="tag">
+        <span class="label">{{ tag }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -25,7 +30,9 @@
       },
       candidate: {
         type: Array,
-        default: []
+        default () {
+          return []
+        }
       },
       editing: {
         type: Boolean,
@@ -39,7 +46,7 @@
         tags: [],
         newTag: '',
         styleCandidate: {
-          top: '38px'
+          top: '33px'
         }
       }
     },

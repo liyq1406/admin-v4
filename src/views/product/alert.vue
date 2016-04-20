@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
           </div>
         </div>
         <table class="table table-stripe table-bordered">
@@ -45,8 +45,9 @@
         <pager v-if="!loadingData" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
-    <!-- 添加规则浮层-->
-    <modal :show.sync="showAddModal" width="650px" :flag="addModelEditingTag" @close="onAddCancel">
+
+    <!-- Start: 添加规则浮层 -->
+    <modal :show.sync="addModal.show" width="670px" :flag="addModal.editingTag" @close="onAddCancel">
       <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
@@ -54,10 +55,10 @@
             <label class="form-control">{{ $t("rule.fields.name") }}:</label>
             <div class="controls">
               <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
-                <input v-model="addModel.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
+                <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
-              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [$t('rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row condition-row">
@@ -65,40 +66,40 @@
             <div class="controls">
               <div class="type">
                 <div class="select">
-                  <v-select :label="ruleTypes[addModel.type-1]">
-                    <select v-model="addModel.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                  <v-select :label="ruleTypes[addModal.model.type-1]">
+                    <select v-model="addModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-show="addModel.type === 1" class="data">
+              <div v-show="addModal.model.type === 1" class="data">
                 <div class="select">
-                  <v-select :label="datapointName(addModel)">
-                    <select v-model="addModel.param" v-form-ctrl name="param">
+                  <v-select :label="datapointName(addModal.model)">
+                    <select v-model="addModal.model.param" v-form-ctrl name="param">
                       <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-show="addModel.type === 1" class="compare">
+              <div v-show="addModal.model.type === 1" class="compare">
                 <div class="select">
-                  <v-select :label="compareTypes[addModel.compare-1]">
-                    <select v-model="addModel.compare" v-form-ctrl name="compare" number="number">
+                  <v-select :label="compareTypes[addModal.model.compare-1]">
+                    <select v-model="addModal.model.compare" v-form-ctrl name="compare" number="number">
                       <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-if="addModel.type === 1" class="value">
+              <div v-show="addModal.model.type === 1" class="value">
                 <div class="input-text-wrap">
-                  <input v-model="addModel.value" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                  <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
                 </div>
               </div>
-              <div v-if="addModel.type === 2" class="value">
+              <div v-show="addModal.model.type === 2" class="value">
                 <div class="select">
-                  <v-select :label="$t('common.'+addModel.value)">
-                    <select v-model="addModel.value" v-form-ctrl name="value">
+                  <v-select :label="$t('common.'+addModal.value2)">
+                    <select v-model="addModal.value2" v-form-ctrl name="value">
                       <option value="online">{{ $t("common.online") }}</option>
                       <option value="offline">{{ $t("common.offline") }}</option>
                     </select>
@@ -111,7 +112,7 @@
             <label class="form-control">{{ $t("rule.fields.content") }}:</label>
             <div class="controls">
               <div v-placeholder="$t('rule.placeholders.content')" class="input-text-wrap">
-                <textarea v-model="addModel.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
+                <textarea v-model="addModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
               <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
               <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
@@ -121,8 +122,8 @@
             <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
             <div class="controls">
               <div class="select">
-                <v-select :label="informTypes[addModel.notify_type-1]">
-                  <select v-model="addModel.notify_type" v-form-ctrl name="notify_type" number="number">
+                <v-select :label="informTypes[addModal.model.notify_type-1]">
+                  <select v-model="addModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -132,31 +133,53 @@
           <div class="form-row tag-row">
             <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
             <div class="controls">
-              <tag-input :value.sync="addModel.tag" :candidate="candidateTags" :editing.sync="addModelEditingTag" @adding-tag="showAddModal = true"></tag-input>
+              <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
             </div>
           </div>
           <div class="form-row">
             <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
             <div class="controls">
               <div class="checkbox-group">
-                <label v-for="type in notifyTypes" class="checkbox">
-                  <input type="checkbox" v-model="addModel.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
-                </label>
-              </div>
-              <div v-show="showApps('addModel')" class="apn-list">
-                <div class="checkbox-group">
-                  <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                    <input type="checkbox" v-model="addModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                <template v-for="type in notifyTypes">
+                  <label v-if="$index < 3" class="checkbox">
+                    <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
                   </label>
-                </div>
+                </template>
               </div>
-              <div v-show="showAndroids('addModel')" class="apn-list">
-                <div class="checkbox-group">
-                  <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                    <input type="checkbox" v-model="addModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
-                  </label>
+              <template v-for="type in notifyTypes">
+                <div class="row" v-if="$index === 3">
+                  <div class="checkbox-group col-6">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    </label>
+                  </div>
+                  <div class="col-18">
+                    <div v-show="isShowApn(addModal.model)" class="apn-list">
+                      <div class="checkbox-group">
+                        <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <div class="row" v-if="$index === 4">
+                  <div class="checkbox-group col-6">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    </label>
+                  </div>
+                  <div class="col-18">
+                    <div v-show="isShowGoogle(addModal.model)" class="apn-list">
+                      <div class="checkbox-group">
+                        <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
           <div class="form-row">
@@ -164,7 +187,7 @@
             <div class="controls">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
-                  <input type="radio" v-model="addModel.scope" name="addModel.scope" :value="$index+1" number="number"/>{{ type }}
+                  <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number="number"/>{{ type }}
                 </label>
               </div>
             </div>
@@ -174,10 +197,10 @@
             <div class="controls">
               <div class="radio-group">
                 <label class="radio">
-                  <input type="radio" v-model="addModel.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
+                  <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
                 </label>
                 <label class="radio">
-                  <input type="radio" v-model="addModel.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
+                  <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
                 </label>
               </div>
             </div>
@@ -189,8 +212,10 @@
         </form>
       </div>
     </modal>
-    <!-- 编辑规则浮层-->
-    <modal :show.sync="showEditModal" :width="'650px'" :flag="editModelEditingTag">
+    <!-- End: 添加规则浮层 -->
+
+    <!-- Start: 编辑规则浮层 -->
+    <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
       <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
@@ -198,7 +223,7 @@
             <label class="form-control">{{ $t("rule.fields.name") }}:</label>
             <div class="controls">
               <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
-                <input v-model="editModel.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
+                <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
               <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
@@ -209,40 +234,40 @@
             <div class="controls">
               <div class="type">
                 <div class="select">
-                  <v-select :label="ruleTypes[editModel.type-1]">
-                    <select v-model="editModel.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                  <v-select :label="ruleTypes[editModal.model.type-1]">
+                    <select v-model="editModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-show="editModel.type === 1" class="data">
+              <div v-show="editModal.model.type === 1" class="data">
                 <div class="select">
-                  <v-select :label="datapointName(editModel)">
-                    <select v-model="editModel.param" v-form-ctrl name="param">
+                  <v-select :label="datapointName(editModal.model)">
+                    <select v-model="editModal.model.param" v-form-ctrl name="param">
                       <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-show="editModel.type === 1" class="compare">
+              <div v-show="editModal.model.type === 1" class="compare">
                 <div class="select">
-                  <v-select :label="compareTypes[editModel.compare-1]">
-                    <select v-model="editModel.compare" v-form-ctrl name="compare" number="number">
+                  <v-select :label="compareTypes[editModal.model.compare-1]">
+                    <select v-model="editModal.model.compare" v-form-ctrl name="compare" number="number">
                       <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
               </div>
-              <div v-if="editModel.type === 1" class="value">
+              <div v-if="editModal.model.type === 1" class="value">
                 <div class="input-text-wrap">
-                  <input v-model="editModel.value" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                  <input v-model="editModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
                 </div>
               </div>
-              <div v-if="editModel.type === 2" class="value">
+              <div v-if="editModal.model.type === 2" class="value">
                 <div class="select">
-                  <v-select :label="$t('common.'+editModel.value)">
-                    <select v-model="editModel.value" v-form-ctrl name="value">
+                  <v-select :label="$t('common.'+editModal.value2)">
+                    <select v-model="editModal.value2" v-form-ctrl name="value">
                       <option value="online">{{ $t("common.online") }}</option>
                       <option value="offline">{{ $t("common.offline") }}</option>
                     </select>
@@ -255,7 +280,7 @@
             <label class="form-control">{{ $t("rule.fields.content") }}:</label>
             <div class="controls">
               <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
-                <textarea v-model="editModel.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
+                <textarea v-model="editModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
               <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
               <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
@@ -265,8 +290,8 @@
             <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
             <div class="controls">
               <div class="select">
-                <v-select :label="informTypes[editModel.notify_type-1]">
-                  <select v-model="editModel.notify_type" v-form-ctrl name="notify_type" number="number">
+                <v-select :label="informTypes[editModal.model.notify_type-1]">
+                  <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -276,31 +301,53 @@
           <div class="form-row tag-row">
             <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
             <div class="controls">
-              <tag-input :value.sync="editModel.tag" :candidate="candidateTags" :editing.sync="editModelEditingTag" @adding-tag="showEditModal = true"></tag-input>
+              <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
             </div>
           </div>
           <div class="form-row">
             <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
             <div class="controls">
               <div class="checkbox-group">
-                <label v-for="type in notifyTypes" class="checkbox">
-                  <input type="checkbox" v-model="editModel.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
-                </label>
-              </div>
-              <div v-show="showApps('editModel')" class="apn-list">
-                <div class="checkbox-group">
-                  <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                    <input type="checkbox" v-model="editModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                <template v-for="type in notifyTypes">
+                  <label v-if="$index < 3" class="checkbox">
+                    <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
                   </label>
-                </div>
+                </template>
               </div>
-              <div v-show="showAndroids('editModel')" class="apn-list">
-                <div class="checkbox-group">
-                  <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                    <input type="checkbox" v-model="editModel.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
-                  </label>
+              <template v-for="type in notifyTypes">
+                <div class="row" v-if="$index === 3">
+                  <div class="checkbox-group col-6">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    </label>
+                  </div>
+                  <div class="col-18">
+                    <div v-show="isShowApn(editModal.model)" class="apn-list">
+                      <div class="checkbox-group">
+                        <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
+                <div class="row" v-if="$index === 4">
+                  <div class="checkbox-group col-6">
+                    <label class="checkbox">
+                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    </label>
+                  </div>
+                  <div class="col-18">
+                    <div v-show="isShowGoogle(editModal.model)" class="apn-list">
+                      <div class="checkbox-group">
+                        <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </template>
             </div>
           </div>
           <div class="form-row">
@@ -308,7 +355,7 @@
             <div class="controls">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
-                  <input type="radio" v-model="editModel.scope" name="scope" :value="$index+1" number="number"/>{{ type }}
+                  <input type="radio" v-model="editModal.model.scope" name="scope" :value="$index+1" number="number"/>{{ type }}
                 </label>
               </div>
             </div>
@@ -318,10 +365,10 @@
             <div class="controls">
               <div class="radio-group">
                 <label class="radio">
-                  <input type="radio" v-model="editModel.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
+                  <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
                 </label>
                 <label class="radio">
-                  <input type="radio" v-model="editModel.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
+                  <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
                 </label>
               </div>
             </div>
@@ -336,6 +383,7 @@
         </form>
       </div>
     </modal>
+    <!-- End: 编辑规则浮层 -->
   </div>
 </template>
 
@@ -376,36 +424,68 @@
         datapoints: [],       // 数据端点
         currentPage: 1,       // 当前页
         pageCount: 10,        // 每页记录数
-        showAddModal: false,  // 是否显示添加浮层
-        showEditModal: false, // 是否显示编辑浮层
+        // addModal.show: false,  // 是否显示添加浮层
+        // editModal.show: false, // 是否显示编辑浮层
         candidateTags: locales[Vue.config.lang].rule.candidate_tags,      // 候选标签
-        addModel: {           // 添加数据模型
-          product_id: this.$route.params.id,
-          name: '',
-          tag: '',
-          type: 1,
-          notify_target: [],
-          notify_apps: [],
-          notify_type: 1,
-          compare: 1,
-          value: '0',
-          scope: 1,
-          is_enable: true,
-          content: '',
-          param: ''
+        addModal: {
+          show: false,
+          form: {},
+          editingTag: false,
+          model: {           // 添加数据模型
+            product_id: this.$route.params.id,
+            name: '',
+            tag: '',
+            type: 1,
+            notify_target: [],
+            notify_apps: [],
+            notify_type: 1,
+            compare: 1,
+            value: '0',
+            scope: 1,
+            is_enable: true,
+            content: '',
+            param: ''
+          },
+          value1: '0',
+          value2: 'online'
         },
+        editModal: {
+          show: false,
+          form: {},
+          editingTag: false,
+          model: {           // 添加数据模型
+            tag: ''
+          },
+          value1: '0',
+          value2: 'online'
+        },
+        // addModel: {           // 添加数据模型
+        //   product_id: this.$route.params.id,
+        //   name: '',
+        //   tag: '',
+        //   type: 1,
+        //   notify_target: [],
+        //   notify_apps: [],
+        //   notify_type: 1,
+        //   compare: 1,
+        //   value: '0',
+        //   scope: 1,
+        //   is_enable: true,
+        //   content: '',
+        //   param: ''
+        // },
         addValidation: {},    // 添加验证
         editValidation: {},   // 修改验证
-        addModelEditingTag: false, // 是否正在编辑添加浮层的标签
-        editModelEditingTag: false, // 是否正在编辑编辑浮层的标签
-        editModel: {
-          tag: ''
-        },
+        // addModelEditingTag: false, // 是否正在编辑添加浮层的标签
+        // editModal.modelEditingTag: false, // 是否正在编辑编辑浮层的标签
+        // editModal.model: {
+        //   tag: ''
+        // },
         delChecked: false,    // 是否删除
         adding: false,
         editing: false,
-        addForm: {},
-        editForm: {},
+        // addForm: {},
+        // editForm: {},
         originAddModel: {},
         originEditModel: {},
         loadingData: false
@@ -414,11 +494,11 @@
 
     route: {
       data () {
-        this.originAddModel = _.cloneDeep(this.addModel)
         this.getDatapoints().then((res) => {
           if (res.status === 200) {
             this.datapoints = res.data
-            this.addModel.param = res.data[0].id
+            this.addModal.model.param = res.data[0].id
+            this.originAddModel = _.cloneDeep(this.addModal.model)
           }
         })
         this.getRules()
@@ -502,41 +582,43 @@
       },
 
       // 是否显示 APN推送
-      showApps (model) {
-        return _.includes(this[model].notify_target, 4)
+      isShowApn (model) {
+        return _.includes(model.notify_target, 4)
       },
 
       // 是否显示 Google推送
-      showAndroids (model) {
-        return _.includes(this[model].notify_target, 5)
+      isShowGoogle (model) {
+        return _.includes(model.notify_target, 5)
       },
       // 选择告警类型
       onSelectType () {
-        if (this.addModel.type === 1) {
-          this.addModel.compare = 1
-          this.addModel.value = 'online'
+        if (this.addModal.model.type === 1) {
+          this.addModal.model.compare = 1
+          this.addModal.model.value = 'online'
         } else {
-          this.addModel.value = ''
+          this.addModal.model.value = ''
         }
       },
 
       // 添加表单钩子
       addFormHook (form) {
-        this.addForm = form
+        this.addModal.form = form
       },
 
       // 编辑表单钩子
       editFormHook (form) {
-        this.editForm = form
+        this.editModal.form = form
       },
 
       // 关闭添加浮层并净化添加表单
       resetAdd () {
         this.adding = false
-        this.showAddModal = false
-        this.addModel = _.cloneDeep(this.originAddModel)
+        this.addModal.show = false
+        this.addModal.model = _.cloneDeep(this.originAddModel)
+        this.addModal.value1 = '0'
+        this.addModal.value2 = 'online'
         this.$nextTick(() => {
-          this.addForm.setPristine()
+          this.addModal.form.setPristine()
         })
       },
 
@@ -544,8 +626,8 @@
       resetEdit () {
         this.editing = false
         this.delChecked = false
-        this.showEditModal = false
-        this.editModel = this.originEditModel
+        this.editModal.show = false
+        this.editModal.model = this.originEditModel
       },
 
       // 取消添加
@@ -556,7 +638,8 @@
       onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
-          api.alert.addRule(this.addModel).then((res) => {
+          this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
+          api.alert.addRule(this.addModal.model).then((res) => {
             if (res.status === 200) {
               this.getRules()
               this.resetAdd()
@@ -570,8 +653,13 @@
 
       // 初始化编辑表单
       editRule (rule) {
-        this.showEditModal = true
-        this.editModel = _.clone(rule)
+        this.editModal.show = true
+        if (rule.type === 1) {
+          this.editModal.value1 = rule.value
+        } else {
+          this.editModal.value2 = rule.value
+        }
+        this.editModal.model = _.clone(rule)
         this.originEditModel = _.clone(rule)
       },
 
@@ -584,7 +672,7 @@
       onEditSubmit () {
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
-          api.alert.deleteRule(this.editModel.id).then((res) => {
+          api.alert.deleteRule(this.editModal.model.id).then((res) => {
             if (res.status === 200) {
               this.resetEdit()
               this.getRules()
@@ -595,7 +683,8 @@
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
-          api.alert.updateRule(this.editModel, this.$route.params.id).then((res) => {
+          this.editModal.model.value = this.editModal.model.type === 1 ? this.editModal.value1 : this.editModal.value2
+          api.alert.updateRule(this.editModal.model, this.$route.params.id).then((res) => {
             if (res.status === 200) {
               this.resetEdit()
               this.getRules()
@@ -619,13 +708,14 @@
         .controls
           width 480px !important
 
-      .tag-row
-        overflow-y visible
+      /*.tag-row*/
+        /*overflow-y visible*/
 
       .apn-list
         background #FFF
         border 1px solid #DDD
-        padding 5px 10px
+        padding 0 10px
+        margin-bottom 3px
 
       .condition-row
         .type
