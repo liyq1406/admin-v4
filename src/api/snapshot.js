@@ -21,5 +21,35 @@ export default {
     return http.post(
       `${apiServer.default}/v2/corp/messages`, params
     )
+  },
+  /**
+   * 创建产品快照规则
+   * @param  {Object} params 注册信息
+   * @return {Promise}
+   */
+  createRule (product_id, params) {
+    return http.post(
+      `${apiServer.default}/v2/product/${product_id}/snapshot`, params
+    )
+  },
+  /**
+   * 获取产品快照规则
+   * @param  {Object} params 注册信息
+   * @return {Promise}
+   */
+  getRule (product_id) {
+    return http.get(
+      `${apiServer.default}/v2/product/${product_id}/snapshots`
+    )
+  },
+  /**
+   * 修改产品快照规则
+   * @param  {Object} params 注册信息
+   * @return {Promise}
+   */
+  updateRule (product_id, params) {
+    return http.put(
+      `${apiServer.default}/v2/product/${product_id}/snapshot`, params
+    )
   }
 }

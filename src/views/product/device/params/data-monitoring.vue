@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <button @click="getSnapshot" class="btn btn-success fr"><i class="fa fa-plus "></i>刷新数据</button>
+        <button @click="getNewInfo" class="btn btn-success fr"><i class="fa fa-plus "></i>刷新数据</button>
       </div>
       <div class="chartwrap">
         <div id="trendChart" style="height:480px"></div>
@@ -13,7 +13,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
-  // import api from '../../../../api'
+  import api from '../../../../api'
   import echarts from 'echarts/echarts'
   import 'echarts/chart/line'
 
@@ -92,20 +92,20 @@
           }
         }
         console.log(params)
-        this._handleData(this.fake)
-        // api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
-        //   // 处理数据
-        //   this._handleData(res.data.snapshot)
-        // }).catch((res) => {
-        //   this.handleError(res)
-        // })
+        // this._handleData(this.fake)
+        api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
+          // 处理数据
+          this._handleData(res.data.snapshot)
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
 
       _handleData (data) {
-        // var now = Date.parse(new Date()) / 1000
-        // const SECONDS_PER_HOUR = 3600
-        var now = 40
-        const SECONDS_PER_HOUR = 2
+        var now = Date.parse(new Date()) / 1000
+        const SECONDS_PER_HOUR = 3600
+        // var now = 40
+        // const SECONDS_PER_HOUR = 2
         var itemToAdd = {}
         var i = 0
         data.forEach((item, index) => {
@@ -122,6 +122,12 @@
             i = 0
           }
         })
+      },
+      // 刷新数据
+      getNewInfo () {
+        this.init()
+        this.getSnapshot()
+        this.drawProductTrends()
       },
 
       drawProductTrends () {
