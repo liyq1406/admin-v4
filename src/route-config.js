@@ -488,7 +488,7 @@ let configRouter = (router) => {
     },
 
     // 维保系统-工单管理
-    '/warranty/work-orders': {
+    '/warranty/:appid/work-orders': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/index'))
@@ -514,7 +514,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-延保工单详情
-    '/warranty/work-orders/extended-warranties/:id': {
+    '/warranty/:appid/work-orders/extended-warranties/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/extended-warranty/details'))
@@ -522,7 +522,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-维修工单详情
-    '/warranty/work-orders/repair/:id': {
+    '/warranty/:appid/work-orders/repair/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/repair/details'))
@@ -530,7 +530,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-帐号列表
-    '/warranty/accounts': {
+    '/warranty/:appid/accounts': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/account/list'))
@@ -538,7 +538,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-帐号详情
-    '/warranty/accounts/:id': {
+    '/warranty/:appid/accounts/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/account/details'))
@@ -546,7 +546,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-客服详情
-    '/warranty/accounts/:account_id/staffs/:id': {
+    '/warranty/:appid/accounts/:account_id/staffs/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/account/staff-details'))
@@ -565,7 +565,7 @@ let configRouter = (router) => {
     '/settings': '/settings/auth',
     '/users': '/users/list',
     '/diet': '/diet/recipe',
-    '/warranty/work-orders': '/warranty/work-orders/extended-warranties',
+    '/warranty/:appid/work-orders': '/warranty/:appid/work-orders/extended-warranties',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
   })
 
