@@ -51,8 +51,8 @@
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-user"></i>{{ $t("nav_aside.users") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
-            <template v-for="app in customApps">
-              <div class="nav-aside-item" v-if="app.type === 5"><a v-link="{ path: '' }"><i class="fa fa-exchange"></i>维保系统</a></div>
+            <template v-for="plugin in plugins">
+              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty/' + plugin.id }"><i class="fa fa-exchange"></i>维保系统</a></div>
             </template>
           </div>
         </div>
@@ -85,8 +85,9 @@
   import store from './store/index'
   import { removeError, hideError, getCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
+  import { getAllPlugins } from './store/actions/plugins'
   import Vue from 'vue'
-  import api from './api'
+  // import api from './api'
   import Modal from './components/Modal'
   import Toast from './components/Toast'
 
@@ -108,13 +109,15 @@
         isShowError: ({ system }) => system.isShowError,
         notices: ({ system }) => system.notices,
         currentMember: ({ system }) => system.currentMember,
-        products: ({ products }) => products.all
+        products: ({ products }) => products.all,
+        plugins: ({ plugins }) => plugins.all
       },
       actions: {
         hideError,
         removeError,
         getCurrentMember,
-        getAllProducts
+        getAllProducts,
+        getAllPlugins
       }
     },
 
@@ -131,7 +134,7 @@
         if (this.layout === 'admin') {
           this.getCurrentMember(window.localStorage.getItem('memberId'), this)
           this.getAllProducts(this)
-          this.getApps()
+          this.getAllPlugins()
         }
       }
     },
@@ -153,19 +156,19 @@
         window.localStorage.removeItem('accessToken')
         this.$route.router.app.access = false
         this.$route.router.go({path: '/login'})
-      },
-      // 获取 APP 列表
-      getApps () {
-        api.app.list().then((res) => {
-          if (res.status === 200) {
-            res.data.forEach((item) => {
-              if (item.type > 4) {
-                this.customApps.push(item)
-              }
-            })
-          }
-        })
       }
+      // 获取 APP 列表
+      // getApps () {
+      //   api.app.list().then((res) => {
+      //     if (res.status === 200) {
+      //       res.data.forEach((item) => {
+      //         if (item.type > 4) {
+      //           this.customApps.push(item)
+      //         }
+      //       })
+      //     }
+      //   })
+      // }
     }
   }
 </script>

@@ -23,9 +23,9 @@
         <tbody>
           <template v-if="filteredMembers.length > 0 && !loadingData">
             <tr v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount">
-              <td><span v-if="member.name.length">{{ member.name }}</span><span v-else="v-else" class="hl-gray">{{ $t('common.not_set') }}</span></td>
-              <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else="v-else" class="hl-gray">{{ $t('common.not_set') }}</span></td>
-              <td><span v-if="member.email.length">{{ member.email }}</span><span v-else="v-else" class="hl-gray">{{ $t('common.not_set') }}</span></td>
+              <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+              <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+              <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
               <td><span>{{ memberTypes[member.role-1] }}</span></td>
               <!--td 2015-6-3 15:38:53-->
               <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusTypes[member.status] }}</span></td>

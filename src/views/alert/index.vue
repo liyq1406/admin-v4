@@ -65,7 +65,7 @@
                     <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
                   </td>
                   <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else="v-else">{{ $t("common.unread") }}</span></td>
+                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
                   <td class="tac">
                     <button @click="showAlert(alert)" class="btn btn-link btn-sm">{{ $t("common.details") }}</button>
                   </td>

@@ -43,3 +43,18 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
 
 // 设置当前浏览产品
 export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
+
+// 插件
+// ------------------------------
+
+// 获取到插件
+export const RECEIVE_PLUGINS = 'RECEIVE_PLUGINS'
+
+// 创建插件
+export const CREATE_PLUGIN = 'CREATE_PLUGIN'
+
+// 移除插件
+export const REMOVE_PLUGIN = 'REMOVE_PLUGIN'
+
+// 修改插件
+export const UPDATE_PLUGIN = 'UPDATE_PLUGIN'

@@ -44,7 +44,7 @@
               <td>{{ device.id }}</td>
               <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
               <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-              <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else="v-else" class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+              <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
             </tr>
           </template>
           <tr v-if="loadingData">

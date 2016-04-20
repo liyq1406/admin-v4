@@ -565,7 +565,7 @@ let configRouter = (router) => {
     '/settings': '/settings/auth',
     '/users': '/users/list',
     '/diet': '/diet/recipe',
-    '/warranty/:appid/work-orders': '/warranty/:appid/work-orders/extended-warranties',
+    '/warranty/:appid': '/warranty/:appid/work-orders/extended-warranties',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
   })
 

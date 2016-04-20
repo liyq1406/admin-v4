@@ -31,7 +31,7 @@
                   </tr>
                   <tr v-if="records.length === 0">
                     <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                      <div v-else="v-else" class="tips-null">{{ $t("common.no_records") }}</div>
+                      <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
                     </td>
                   </tr>
                 </tbody>
@@ -68,7 +68,7 @@
           </tr>
           <tr v-for="(key, val) in tableInfo.field">
             <td>{{ key }}</td>
-            <td style="word-break: break-all;"><span v-if="key==='createAt' || key==='updateAt'">{{ model[key] | formatDate }}</span><span v-else="v-else">{{ model[key] }}</span></td>
+            <td style="word-break: break-all;"><span v-if="key==='createAt' || key==='updateAt'">{{ model[key] | formatDate }}</span><span v-else>{{ model[key] }}</span></td>
           </tr>
         </tbody>
       </table>

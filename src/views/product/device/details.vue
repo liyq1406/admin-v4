@@ -35,7 +35,7 @@
                 </li>
                 <li>
                   <div class="label">{{ $t('device.is_online') }}:</div>
-                  <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else="v-else" class="hl-red">{{ $t('common.offline') }}</span></div>
+                  <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else class="hl-red">{{ $t('common.offline') }}</span></div>
                 </li>
                 <li>
                   <div class="label">{{ $t('device.firmware_version') }}:</div>
@@ -75,7 +75,7 @@
                   </tr>
                   <tr v-if="datapoints.length === 0">
                     <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                      <div v-else="v-else" class="tips-null">{{ $t('device.no_datapoint') }}</div>
+                      <div v-else class="tips-null">{{ $t('device.no_datapoint') }}</div>
                     </td>
                   </tr>
                 </tbody>

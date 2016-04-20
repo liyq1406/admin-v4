@@ -198,10 +198,10 @@
               <tr>
                 <td>VERIFY_KEY</td>
                 <td v-if="validation2.info&&validation2.info.verify===31" class="bhx tg">通过</td>
-                <td v-else="v-else" class="bhx btg">不通过</td>
+                <td v-else class="bhx btg">不通过</td>
                 <td>TXT</td>
                 <td v-if="!validation2.IPfront">@</td>
-                <td v-else="v-else">{{ validation2.IPfront }}</td>
+                <td v-else>{{ validation2.IPfront }}</td>
                 <td>{{ validation2.IPbehind }}</td>
                 <td>{{ validation2.info&&validation2.info['verifyKey.value'] }}</td>
                 <!-- <td>{{ validation2.info&&validation2.info['verifyKey.domain'] }}</td> -->
@@ -209,10 +209,10 @@
               <tr>
                 <td>SPF</td>
                 <td v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)" class="bhx tg">通过</td>
-                <td v-else="v-else" class="bhx btg">不通过</td>
+                <td v-else class="bhx btg">不通过</td>
                 <td>TXT</td>
                 <td v-if="!validation2.IPfront">@</td>
-                <td v-else="v-else">{{ validation2.IPfront }}</td>
+                <td v-else>{{ validation2.IPfront }}</td>
                 <td>{{ validation2.IPbehind }}</td>
                 <td>{{ validation2.info&&validation2.info['spf.value'] }}</td>
                 <!-- <td>{{ validation2.info&&validation2.info['spf.domain'] }}</td> -->
@@ -220,10 +220,10 @@
               <tr>
                 <td>DKIM</td>
                 <td v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===3||validation2.info.verify===15)" class="bhx tg">通过</td>
-                <td v-else="v-else" class="bhx btg">不通过</td>
+                <td v-else class="bhx btg">不通过</td>
                 <td>TXT</td>
                 <td v-if="!validation2.IPfront">mail._domainkey</td>
-                <td v-else="v-else">{{ 'mail._domainkey.'+validation2.IPfront }}</td>
+                <td v-else>{{ 'mail._domainkey.'+validation2.IPfront }}</td>
                 <td>{{ validation2.IPbehind }}</td>
                 <td class="hx">{{ validation2.info&&validation2.info['dkim.value'] }}</td>
                 <!-- <td>{{ validation2.info&&validation2.info['dkim.domain'] }}</td> -->
@@ -231,10 +231,10 @@
               <tr>
                 <td>CNAME</td>
                 <td v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)" class="bhx tg">通过</td>
-                <td v-else="v-else" class="bhx btg">不通过</td>
+                <td v-else class="bhx btg">不通过</td>
                 <td>CNAME</td>
                 <td v-if="!validation2.IPfront">sctrack</td>
-                <td v-else="v-else">{{ 'sctrack.'+validation2.IPfront }}</td>
+                <td v-else>{{ 'sctrack.'+validation2.IPfront }}</td>
                 <td>{{ validation2.IPbehind }}</td>
                 <td>{{ validation2.info&&validation2.info['cname.value'] }}</td>
                 <!-- <td>{{ validation2.info&&validation2.info['cname.domain'] }}</td> -->
@@ -242,10 +242,10 @@
               <tr>
                 <td>MX</td>
                 <td v-if="validation2.info&&(validation2.info.verify===31||validation2.info.verify===15)" class="bhx tg">通过</td>
-                <td v-else="v-else" class="bhx btg">不通过</td>
+                <td v-else class="bhx btg">不通过</td>
                 <td>MX</td>
                 <td v-if="!validation2.IPfront">@</td>
-                <td v-else="v-else">{{ validation2.IPfront }}</td>
+                <td v-else>{{ validation2.IPfront }}</td>
                 <td>{{ validation2.IPbehind }}</td>
                 <td>{{ validation2.info&&validation2.info['mx.value'] }}</td>
                 <!-- <td>{{ validation2.info&&validation2.info['mx.domain'] }}</td> -->

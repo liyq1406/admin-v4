@@ -15,7 +15,8 @@ var state = {
   error: {},          // 错误信息
   isShowError: false, // 是否显示错误信息模态窗口
   after: null,        // 后续执行函数
-  notices: []         // 通知信息
+  notices: [],        // 通知信息
+  plugins: []         // 插件列表
 }
 
 // 状态变化

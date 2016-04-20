@@ -596,7 +596,7 @@ export default {
       { label: 'Android', disabled: false },
       { label: 'Web', disabled: true },
       { label: '微信', disabled: false },
-      { label: '维保管理', disabled: false }
+      { label: '延保管理', disabled: false }
     ],
     encrypt_types: [
       { label: '明文模式', info: '明文模式下，不使用消息体加解密功能，安全系数较低' },

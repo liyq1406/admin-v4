@@ -38,7 +38,7 @@
           </tr>
           <tr v-if="accounts.length === 0">
             <td colspan="6" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-              <div v-else="v-else" class="tips-null">{{ $t("common.no_records") }}</div>
+              <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
             </td>
           </tr>
         </tbody>

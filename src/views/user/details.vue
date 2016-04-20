@@ -62,12 +62,12 @@
                 <td>{{ subDevice.product_id }}</td>
                 <!--这里使用产品id 不是产品名称 debug-->
                 <td>{{ subDevice.mac }}</td>
-                <td><span v-if="subDevice.is_online==true">{{ $t('common.online') }}</span><span v-else="v-else">{{ $t('common.offline') }}</span></td>
+                <td><span v-if="subDevice.is_online==true">{{ $t('common.online') }}</span><span v-else>{{ $t('common.offline') }}</span></td>
                 <td>{{ subDevice.authorize_code }}</td>
               </tr>
               <tr v-if="subDevices.length === 0">
                 <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                  <div v-else="v-else" class="tips-null">{{ $t('user.no_devices_bound') }}</div>
+                  <div v-else class="tips-null">{{ $t('user.no_devices_bound') }}</div>
                 </td>
               </tr>
             </tbody>

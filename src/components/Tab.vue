@@ -1,7 +1,7 @@
 <template>
   <nav class="tab">
     <ul>
-      <li v-for="item in nav"><a v-if="item.link" v-link="item.link">{{ item.label }}</a><a v-else="v-else" href="{{ item.url }}" target="_blank">{{ item.label }}</a></li>
+      <li v-for="item in nav"><a v-if="item.link" v-link="item.link">{{ item.label }}</a><a v-else href="{{ item.url }}" target="_blank">{{ item.label }}</a></li>
     </ul>
   </nav>
 </template>

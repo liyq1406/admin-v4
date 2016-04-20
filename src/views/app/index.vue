@@ -35,7 +35,7 @@
                   <td v-if="app.type===4" class="tac">
                     <button v-link="{ path: '/apps/wechat/'+app.id }" class="btn-link btn-sm">{{ '查看' }}</button>
                   </td>
-                  <td v-else="v-else" class="tac">
+                  <td v-else class="tac">
                     <button @click="onEditApp(app)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
                   </td>
                 </tr>
@@ -85,7 +85,8 @@
             <div class="controls">
               <div class="radio-group radio-group-v">
                 <label v-for="type in appTypes" class="radio">
-                  <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="isAppExist($index+1) || type.disabled"/>{{ type.label }}
+                  <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="($index > 3 && isAppExist($index+1)) || type.disabled"/>
+                  <span :class="{'hl-gray': ($index > 3 && isAppExist($index+1)) || type.disabled}">{{ type.label }}</span>
                 </label>
               </div>
             </div>
@@ -158,6 +159,7 @@
         </form>
       </div>
     </modal>
+
     <!-- 编辑安卓应用浮层-->
     <modal :show.sync="showEditModal2" @close="onEditCancel2">
       <h3 slot="header">{{ '编辑应用' }} ({{ editModel2.type | typeLabel }})</h3>
@@ -202,6 +204,33 @@
       </div>
     </modal>
     <!-- 新增授权警告浮层-->
+
+    <!-- Start: 编辑延保管理应用浮层 -->
+    <modal :show.sync="showEditModal5" @close="onEditCancel5">
+      <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel5.type | typeLabel }})</h3>
+      <div slot="body" class="form">
+        <form v-form name="editValidation5" @submit.prevent="onEditSubmit(editModel5)" hook="editAppHook">
+          <div class="form-row">
+            <label class="form-control">{{ $t("app.fields.name") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <input v-model="editModel5.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation5.$submitted && editValidation5.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation5.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
+              <div v-if="editValidation5.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation5.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation5.name.$error.maxlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation5.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+            </label>
+            <button @click.prevent.stop="onEditCancel5" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- End: 编辑延保管理应用浮层 -->
   </section>
 </template>
 
@@ -210,6 +239,8 @@
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import Modal from '../../components/Modal'
+  import store from '../../store/index'
+  import { createPlugin, removePlugin } from '../../store/actions/plugins'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -219,6 +250,18 @@
     layout: 'admin',
 
     mixins: [globalMixins],
+
+    store,
+
+    vuex: {
+      getters: {
+        plugins: ({ plugins }) => plugins.all
+      },
+      actions: {
+        createPlugin,
+        removePlugin
+      }
+    },
 
     components: {
       'modal': Modal
@@ -234,6 +277,7 @@
         showEditModal: false,
         showEditModal2: false,
         // showEditModal4: false,
+        showEditModal5: false,
         addModel: {
           name: '',
           type: 1
@@ -258,22 +302,26 @@
         //     key: ''
         //   }
         // },
+        editModel5: {
+          type: 5
+        },
         originAddModel: {},
         originEditModel: {},
         originEditModel2: {},
         // originEditModel4: {},
+        originEditModel5: {},
         addValidation: {},
         editValidation: {},
         editValidation2: {},
         // editValidation4: {},
+        editValidation5: {},
         adding: false,
         editing: false,
         uploading: false,
         delChecked: false,
         loadingData: false,
         showAlertModal: false,
-        showKeyModal: false,
-        customApps: []
+        showKeyModal: false
       }
     },
 
@@ -298,18 +346,13 @@
           if (res.status === 200) {
             this.loadingData = false
             this.apps = res.data
-            res.data.forEach((item) => {
-              if (item.type > 4) {
-                this.customApps.push(item)
-              }
-            })
           }
         })
       },
       // 查询定制应用是否已创建
       isAppExist (value) {
         var result = false
-        this.customApps.forEach((item) => {
+        this.plugins.forEach((item) => {
           if (item.type > 4) {
             result = true
           }
@@ -351,6 +394,11 @@
       //   this.editForm4 = form
       // },
 
+      // 修改安卓应用表单钩子
+      editAppHook5 (form) {
+        this.editForm5 = form
+      },
+
       // 关闭添加应用浮层并净化添加表单
       resetAdd () {
         this.adding = false
@@ -384,6 +432,13 @@
       //   this.delChecked = false
       //   this.editModel4 = this.originEditModel4
       // },
+      // 关闭安卓编辑浮层并净化编辑表单
+      resetEdit5 () {
+        this.editing = false
+        this.showEditModal5 = false
+        this.delChecked = false
+        this.editModel5 = this.originEditModel5
+      },
 
       // 取消添加
       onAddCancel () {
@@ -414,6 +469,9 @@
           this.adding = true
           api.app.create(this.addModel).then((res) => {
             if (res.status === 200) {
+              if (this.addModel.type > 4) {
+                this.createPlugin(res.data)
+              }
               this.resetAdd()
               this.getApps()
             }
@@ -434,6 +492,10 @@
           this.showEditModal2 = true
           this.editModel2 = _.cloneDeep(app)
           this.originEditModel2 = _.cloneDeep(app)
+        } else if (app.type === 5) {
+          this.showEditModal5 = true
+          this.editModel5 = _.cloneDeep(app)
+          this.originEditModel5 = _.cloneDeep(app)
         }
         // else if (app.type === 4) {
         //   this.showEditModal4 = true
@@ -456,6 +518,10 @@
       // onEditCancel4 () {
       //   this.resetEdit4()
       // },
+      // 取消安卓应用编辑
+      onEditCancel5 () {
+        this.resetEdit5()
+      },
 
       // 提交应用更新
       onEditSubmit (model) {
@@ -468,6 +534,9 @@
                 this.resetEdit()
               } else if (model.type === 2) {
                 this.resetEdit2()
+              } else if (model.type === 5) {
+                this.removePlugin(model)
+                this.resetEdit5()
               }
               // else if (model.type === 4) {
               //   this.resetEdit4()
@@ -504,6 +573,23 @@
             if (res.status === 200) {
               this.getApps()
               this.resetEdit2()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else if (model.type === 5 && this.editValidation5.$valid && !this.editing) {
+          this.editing = true
+          // var n = { }
+          // n.id = this.editModel2.id
+          // n.name = this.editModel2.name
+          // n.type = this.editModel2.type
+          // n.gcm_api_key = this.editModel2.android.gcm_api_key
+          // n.gcm_enable = this.editModel2.android.gcm_enable
+          api.app.update(this.editModel5).then((res) => {
+            if (res.status === 200) {
+              this.getApps()
+              this.resetEdit5()
             }
           }).catch((res) => {
             this.handleError(res)
