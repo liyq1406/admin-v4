@@ -75,6 +75,7 @@
         <!-- End: 设备分布-->
       </div>
     </div>
+    <!-- 编辑产品浮层-->
     <modal :show.sync="showEditModal">
       <h3 slot="header">{{ $t("overview.editForm.header") }}</h3>
       <div slot="body" class="form">
@@ -125,6 +126,15 @@
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row without-label">
+            <div class="controls">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>是否开启设备快照
                 </label>
               </div>
             </div>
@@ -642,6 +652,44 @@
             }).catch((res) => {
               this.handleError(res)
               this.editing = false
+            })
+          }
+          if (this.editModel.ifsnapshot) {
+            var index = []
+            for (let i = 0; i < 45; i++) {
+              index.push(i)
+            }
+            var params = {
+              rule: 3,
+              interval: 30,
+              storage: {
+                // limit: 0,
+                expire: 86400
+              },
+              datapoint: index
+            }
+            api.snapshot.getRule(this.$route.params.id).then((res) => {
+              if (res.data.snapshots.length === 0) {
+                console.log(params)
+                // console.log(res)
+                api.snapshot.createRule(this.$route.params.id, params).then((res) => {
+                  console.log(111)
+                })
+              } else {
+                var newParams = {
+                  _id: res.data.snapshots[0].id,
+                  rule: 3,
+                  interval: 30,
+                  storage: {
+                    // limit: 0,
+                    expire: 86400
+                  },
+                  datapoint: index
+                }
+                api.snapshot.updateRule(this.$route.params.id, newParams).then((res) => {
+                  console.log(111)
+                })
+              }
             })
           }
         }
