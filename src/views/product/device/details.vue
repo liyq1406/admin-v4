@@ -292,6 +292,10 @@
           })
         }).catch((res) => {
           // this.handleError(res)
+          this.showNotice({
+            type: 'error',
+            content: locales[Vue.config.lang].errors[res.data.error.code]
+          })
         })
       },
 
