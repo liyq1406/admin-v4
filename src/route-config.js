@@ -228,7 +228,7 @@ let configRouter = (router) => {
       }
     },
     // 设备参数
-    '/products/:product_id/devices/:device_id/params': {
+    '/products/:product_id/devices/:device_id/:mac/params': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/product/device/params/index'))
@@ -559,7 +559,7 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/login',
     '/products/:id': '/products/:id/overview',
-    '/products/:product_id/devices/:device_id/params': '/products/:product_id/devices/:device_id/params/basic-info',
+    '/products/:product_id/devices/:device_id/:mac/params': '/products/:product_id/devices/:device_id/:mac/params/basic-info',
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',

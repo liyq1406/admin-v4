@@ -6,6 +6,9 @@
         <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
+              <div class="actions">
+                <a v-link="{path: '/products/' + $route.params.product_id + '/devices/' + $route.params.device_id + '/' + device.mac + '/params'}" class="btn btn-ghost btn-sm"><i class="fa fa-eye"></i>设备参数</a>
+              </div>
               <h2>{{ $t('device.details') }}</h2>
             </div>
             <div class="panel-bd">
@@ -68,7 +71,7 @@
                     <td>{{ datapoint.index }}</td>
                     <td>{{ datapoint.name }}</td>
                     <td>{{ datapoint.description }}</td>
-                    <td>{{ datapointValues[$index] ? datapointValues[$index].value : '' }}</td>
+                    <td>{{ datapointValues[datapoint.index] ? datapointValues[datapoint.index].value : '' }}</td>
                   </tr>
                   <tr v-if="datapoints.length === 0">
                     <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
@@ -91,13 +94,14 @@
               <h2>{{ $t('device.log') }}</h2>
             </div>
             <div class="panel-bd">
-              <pre class="output-log">
+              <code class="output-log">
                 <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
                   <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
                   <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
                   <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
                   <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
-                </div></pre>
+                </div>
+              </code>
             </div>
           </div>
           <!-- End: 设备日志-->
@@ -136,7 +140,11 @@
         showLog: true,
         deviceToken: '',
         datapointValues: [],
-        logs: [],
+        logs: [
+          // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'connected' },
+          // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'disconnected' },
+          // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: [200, 'Welcome to xlink'], type: 'user' }
+        ],
         token: '',
         refreshing: false
       }
@@ -329,8 +337,13 @@
         display inline-block
 
   .output-log
+    display block
     height 360px
     overflow auto
+    font-size 12px
+
+    .log
+      margin 10px 0
 
     .time
       margin-right 10px

@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('device.management') }}</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices/' + $route.params.device_id }"><i class="fa fa-arrow-circle-left"></i>{{ $t('device.management') }}</a></div>
       <div class="panel">
         <div class="panel-hd">
           <h2>{{ $t('device.params') }}</h2>
@@ -41,13 +41,13 @@
         return {
           secondaryNav: [{
             label: this.$t('sub_nav.product.basic_info'),
-            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/params/basic-info` }
+            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/${this.$route.params.mac}/params/basic-info` }
           }, {
             label: this.$t('sub_nav.product.data_monitoring'),
-            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/params/data-monitoring` }
+            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/${this.$route.params.mac}/params/data-monitoring` }
           }, {
             label: this.$t('sub_nav.product.fault_records'),
-            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/params/fault-records` }
+            link: { path: `/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}/${this.$route.params.mac}/params/fault-records` }
           }]
         }
       }
