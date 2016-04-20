@@ -78,6 +78,7 @@ var XJSObject = {
         this.socketInit(host || _host, fn)
       } else {
         console.log('socket已初始化')
+        fn()
       }
     },
     // 初始化

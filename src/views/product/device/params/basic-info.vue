@@ -11,23 +11,23 @@
       <table class="table table-stripe table-bordered">
         <tbody>
           <tr>
-            <td><span>{{deviceInfos.S101.name}}：</span><a class="button" @click="showEditModalEvent('S101')">{{deviceInfos.S101.valueArr[deviceInfos.S101.valueText]}}{{deviceInfos.S101.unit}}</a></td>
-            <td><span>{{deviceInfos.S103.name}}：</span><a class="button" @click="showEditModalEvent('S103')">{{deviceInfos.S103.valueText}}{{deviceInfos.S103.unit}}</a></td>
-            <td><span>{{deviceInfos.S104.name}}：</span><a class="button" @click="showEditModalEvent('S104')">{{deviceInfos.S104.valueText}}{{deviceInfos.S104.unit}}</a></td>
-            <td><span>{{deviceInfos.S105.name}}：</span><a class="button" @click="showEditModalEvent('S105')">{{deviceInfos.S105.valueText}}{{deviceInfos.S105.unit}}</a></td>
+            <td><span>{{deviceInfos.S101.name}}：</span><a class="button" @click="showEditModalEvent('S101')">{{deviceInfos.S101.valueArr[deviceInfos.S101.valueText]}}{{deviceInfos.S101.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S101.loading"></i></td>
+            <td><span>{{deviceInfos.S103.name}}：</span><a class="button" @click="showEditModalEvent('S103')">&nbsp;{{deviceInfos.S103.valueText}}{{deviceInfos.S103.unit}}&nbsp;</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S103.loading"></i></td>
+            <td><span>{{deviceInfos.S104.name}}：</span><a class="button" @click="showEditModalEvent('S104')">&nbsp;{{deviceInfos.S104.valueText}}{{deviceInfos.S104.unit}}&nbsp;</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S104.loading"></i></td>
+            <td><span>{{deviceInfos.S105.name}}：</span><a class="button" @click="showEditModalEvent('S105')">&nbsp;{{deviceInfos.S105.valueText}}{{deviceInfos.S105.unit}}&nbsp;</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S105.loading"></i></td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S11.name}}：</span><a class="button" @click="showEditModalEvent('S11')">{{deviceInfos.S11.valueText}}{{deviceInfos.S11.unit}}</a></td>
-            <td><span>{{deviceInfos.S12.name}}：</span><a class="button" @click="showEditModalEvent('S12')">{{deviceInfos.S12.valueText}}{{deviceInfos.S12.unit}}</a></td>
-            <td><span>{{deviceInfos.S13.name}}：</span><a class="button" @click="showEditModalEvent('S13')">{{deviceInfos.S13.valueText}}{{deviceInfos.S13.unit}}</a></td>
-            <td><span>{{deviceInfos.S14.name}}：</span><a class="button" @click="showEditModalEvent('S14')">{{deviceInfos.S14.valueText}}{{deviceInfos.S14.unit}}</a></td>
+            <td><span>{{deviceInfos.S11.name}}：</span><a class="button" @click="showEditModalEvent('S11')">{{deviceInfos.S11.valueText}}{{deviceInfos.S11.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S11.loading"></i></td>
+            <td><span>{{deviceInfos.S12.name}}：</span><a class="button" @click="showEditModalEvent('S12')">{{deviceInfos.S12.valueText}}{{deviceInfos.S12.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S12.loading"></i></td>
+            <td><span>{{deviceInfos.S13.name}}：</span><a class="button" @click="showEditModalEvent('S13')">{{deviceInfos.S13.valueText}}{{deviceInfos.S13.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S13.loading"></i></td>
+            <td><span>{{deviceInfos.S14.name}}：</span><a class="button" @click="showEditModalEvent('S14')">{{deviceInfos.S14.valueText}}{{deviceInfos.S14.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S14.loading"></i></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S19.name}}：</span><a class="button" @click="showEditModalEvent('S19')">{{deviceInfos.S19.valueText}}{{deviceInfos.S19.unit}}</a></td>
-            <td><span>{{deviceInfos.S21.name}}：</span><a class="button" @click="showEditModalEvent('S21')">{{deviceInfos.S21.valueText}}{{deviceInfos.S21.unit}}</a></td>
+            <td><span>{{deviceInfos.S19.name}}：</span><a class="button" @click="showEditModalEvent('S19')">{{deviceInfos.S19.valueText}}{{deviceInfos.S19.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S19.loading"></i></td>
+            <td><span>{{deviceInfos.S21.name}}：</span><a class="button" @click="showEditModalEvent('S21')">{{deviceInfos.S21.valueText}}{{deviceInfos.S21.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S21.loading"></i></td>
             <td></td>
             <td></td>
           </tr>
@@ -35,48 +35,48 @@
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S31.name}}：</span><a class="button" @click="showEditModalEvent('S31')">{{deviceInfos.S31.valueText}}{{deviceInfos.S31.unit}}</a></td>
-            <td><span>{{deviceInfos.S32.name}}：</span><a class="button" @click="showEditModalEvent('S32')">{{deviceInfos.S32.valueText}}{{deviceInfos.S32.unit}}</a></td>
-            <td><span>{{deviceInfos.S33.name}}：</span><a class="button" @click="showEditModalEvent('S33')">{{deviceInfos.S33.valueText}}{{deviceInfos.S33.unit}}</a></td>
+            <td><span>{{deviceInfos.S31.name}}：</span><a class="button" @click="showEditModalEvent('S31')">{{deviceInfos.S31.valueText}}{{deviceInfos.S31.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S31.loading"></i></td>
+            <td><span>{{deviceInfos.S32.name}}：</span><a class="button" @click="showEditModalEvent('S32')">{{deviceInfos.S32.valueText}}{{deviceInfos.S32.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S32.loading"></i></td>
+            <td><span>{{deviceInfos.S33.name}}：</span><a class="button" @click="showEditModalEvent('S33')">{{deviceInfos.S33.valueText}}{{deviceInfos.S33.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S33.loading"></i></td>
             <td><span>{{deviceInfos.S34.name}}：</span><a class="button" @click="showEditModalEvent('S34')">{{deviceInfos.S34.valueText}}{{deviceInfos.S34.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S37.name}}：</span><a class="button" @click="showEditModalEvent('S37')">{{deviceInfos.S37.valueArr[deviceInfos.S37.valueText]}}{{deviceInfos.S37.unit}}</a></td>
-            <td><span>{{deviceInfos.S40.name}}：</span><a class="button" @click="showEditModalEvent('S40')">{{deviceInfos.S40.valueArr[deviceInfos.S40.valueText]}}{{deviceInfos.S40.unit}}</a></td>
-            <td><span>{{deviceInfos.S41.name}}：</span><a class="button" @click="showEditModalEvent('S41')">{{deviceInfos.S41.valueText}}{{deviceInfos.S41.unit}}</a></td>
-            <td><span>{{deviceInfos.S42.name}}：</span><a class="button" @click="showEditModalEvent('S42')">{{deviceInfos.S42.valueText}}{{deviceInfos.S42.unit}}</a></td>
+            <td><span>{{deviceInfos.S37.name}}：</span><a class="button" @click="showEditModalEvent('S37')">{{deviceInfos.S37.valueArr[deviceInfos.S37.valueText]}}{{deviceInfos.S37.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S37.loading"></i></td>
+            <td><span>{{deviceInfos.S40.name}}：</span><a class="button" @click="showEditModalEvent('S40')">{{deviceInfos.S40.valueArr[deviceInfos.S40.valueText]}}{{deviceInfos.S40.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S40.loading"></i></td>
+            <td><span>{{deviceInfos.S41.name}}：</span><a class="button" @click="showEditModalEvent('S41')">{{deviceInfos.S41.valueText}}{{deviceInfos.S41.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S41.loading"></i></td>
+            <td><span>{{deviceInfos.S42.name}}：</span><a class="button" @click="showEditModalEvent('S42')">{{deviceInfos.S42.valueText}}{{deviceInfos.S42.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S42.loading"></i></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S44.name}}：</span><a class="button" @click="showEditModalEvent('S44')">{{deviceInfos.S44.valueArr[deviceInfos.S44.valueText]}}{{deviceInfos.S44.unit}}</a></td>
-            <td><span>{{deviceInfos.S45.name}}：</span><a class="button" @click="showEditModalEvent('S45')">{{deviceInfos.S45.valueText}}{{deviceInfos.S45.unit}}</a></td>
-            <td><span>{{deviceInfos.S46.name}}：</span><a class="button" @click="showEditModalEvent('S46')">{{deviceInfos.S46.valueText}}{{deviceInfos.S46.unit}}</a></td>
-            <td><span>{{deviceInfos.S47.name}}：</span><a class="button" @click="showEditModalEvent('S47')">{{deviceInfos.S47.valueText}}{{deviceInfos.S47.unit}}</a></td>
+            <td><span>{{deviceInfos.S44.name}}：</span><a class="button" @click="showEditModalEvent('S44')">{{deviceInfos.S44.valueArr[deviceInfos.S44.valueText]}}{{deviceInfos.S44.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S44.loading"></i></td>
+            <td><span>{{deviceInfos.S45.name}}：</span><a class="button" @click="showEditModalEvent('S45')">{{deviceInfos.S45.valueText}}{{deviceInfos.S45.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S45.loading"></i></td>
+            <td><span>{{deviceInfos.S46.name}}：</span><a class="button" @click="showEditModalEvent('S46')">{{deviceInfos.S46.valueText}}{{deviceInfos.S46.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S46.loading"></i></td>
+            <td><span>{{deviceInfos.S47.name}}：</span><a class="button" @click="showEditModalEvent('S47')">{{deviceInfos.S47.valueText}}{{deviceInfos.S47.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S47.loading"></i></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S50.name}}：</span><a class="button" @click="showEditModalEvent('S50')">{{deviceInfos.S50.valueArr[deviceInfos.S50.valueText]}}</a></td>
-            <td><span>{{deviceInfos.S51.name}}：</span><a class="button" @click="showEditModalEvent('S51')">{{deviceInfos.S51.valueText}}{{deviceInfos.S51.unit}}</a></td>
-            <td><span>{{deviceInfos.S52.name}}：</span><a class="button" @click="showEditModalEvent('S52')">{{deviceInfos.S52.valueText}}{{deviceInfos.S52.unit}}</a></td>
-            <td><span>{{deviceInfos.S54.name}}：</span><a class="button" @click="showEditModalEvent('S54')">{{deviceInfos.S54.valueArr[deviceInfos.S54.valueText]}}</a></td>
+            <td><span>{{deviceInfos.S50.name}}：</span><a class="button" @click="showEditModalEvent('S50')">{{deviceInfos.S50.valueArr[deviceInfos.S50.valueText]}}{{deviceInfos.S50.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S50.loading"></i></td>
+            <td><span>{{deviceInfos.S51.name}}：</span><a class="button" @click="showEditModalEvent('S51')">{{deviceInfos.S51.valueText}}{{deviceInfos.S51.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S51.loading"></i></td>
+            <td><span>{{deviceInfos.S52.name}}：</span><a class="button" @click="showEditModalEvent('S52')">{{deviceInfos.S52.valueText}}{{deviceInfos.S52.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S52.loading"></i></td>
+            <td><span>{{deviceInfos.S54.name}}：</span><a class="button" @click="showEditModalEvent('S54')">{{deviceInfos.S54.valueArr[deviceInfos.S54.valueText]}}{{deviceInfos.S54.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S54.loading"></i></td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S55.name}}：</span><a class="button" @click="showEditModalEvent('S55')">{{deviceInfos.S55.valueText}}{{deviceInfos.S55.unit}}</a></td>
-            <td><span>{{deviceInfos.S56.name}}：</span><a class="button" @click="showEditModalEvent('S56')">{{deviceInfos.S56.valueText}}{{deviceInfos.S56.unit}}</a></td>
+            <td><span>{{deviceInfos.S55.name}}：</span><a class="button" @click="showEditModalEvent('S55')">{{deviceInfos.S55.valueText}}{{deviceInfos.S55.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S55.loading"></i></td>
+            <td><span>{{deviceInfos.S56.name}}：</span><a class="button" @click="showEditModalEvent('S56')">{{deviceInfos.S56.valueText}}{{deviceInfos.S56.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S56.loading"></i></td>
             <td><span>{{deviceInfos.S58.name}}：</span><a class="button" @click="showEditModalEvent('S58')">{{deviceInfos.S58.valueText}}{{deviceInfos.S58.valueText - 0 >= 0 ? deviceInfos.S34.unit : ''}}</a></td>
-            <td><span>{{deviceInfos.S59.name}}：</span><a class="button" @click="showEditModalEvent('S59')">{{deviceInfos.S59.valueText}}{{deviceInfos.S59.unit}}</a></td>
+            <td><span>{{deviceInfos.S59.name}}：</span><a class="button" @click="showEditModalEvent('S59')">{{deviceInfos.S59.valueText}}{{deviceInfos.S59.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S59.loading"></i></td>
           </tr>
           <tr>
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueArr[deviceInfos.S61.valueText]}}</a></td>
+            <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueArr[deviceInfos.S61.valueText]}}{{deviceInfos.S61.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S61.loading"></i></td>
             <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.valueText - 0 >= 0 ? deviceInfos.S63.unit : ''}}</a></td>
-            <td><span>通讯波特率：</span><a class="button" @click="showEditModalEvent('test')">2.4</a></td>
+            <td><span>通讯波特率：</span><a class="button">2.4</a></td>
             <!-- <td></td> -->
             <td></td>
           </tr>
@@ -84,20 +84,20 @@
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S70.name}}：</span><a class="button" @click="showEditModalEvent('S70')">{{deviceInfos.S70.valueText}}{{deviceInfos.S70.unit}}</a></td>
-            <td><span>{{deviceInfos.S71.name}}：</span><a class="button" @click="showEditModalEvent('S71')">{{deviceInfos.S71.valueArr[deviceInfos.S71.valueText]}}</a></td>
-            <td><span>{{deviceInfos.S72.name}}：</span><a class="button" @click="showEditModalEvent('S72')">{{deviceInfos.S72.valueText}}{{deviceInfos.S72.unit}}</a></td>
-            <td><span>{{deviceInfos.S73.name}}：</span><a class="button" @click="showEditModalEvent('S73')">{{deviceInfos.S73.valueText}}{{deviceInfos.S73.unit}}</a></td>
+            <td><span>{{deviceInfos.S70.name}}：</span><a class="button" @click="showEditModalEvent('S70')">{{deviceInfos.S70.valueText}}{{deviceInfos.S70.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S70.loading"></i></td>
+            <td><span>{{deviceInfos.S71.name}}：</span><a class="button" @click="showEditModalEvent('S71')">{{deviceInfos.S71.valueArr[deviceInfos.S71.valueText]}}{{deviceInfos.S71.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S71.loading"></i></td>
+            <td><span>{{deviceInfos.S72.name}}：</span><a class="button" @click="showEditModalEvent('S72')">{{deviceInfos.S72.valueText}}{{deviceInfos.S72.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S72.loading"></i></td>
+            <td><span>{{deviceInfos.S73.name}}：</span><a class="button" @click="showEditModalEvent('S73')">{{deviceInfos.S73.valueText}}{{deviceInfos.S73.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S73.loading"></i></td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S75.name}}：</span><a class="button" @click="showEditModalEvent('S75')">{{deviceInfos.S75.valueText}}{{deviceInfos.S75.unit}}</a></td>
-            <td><span>{{deviceInfos.S76.name}}：</span><a class="button" @click="showEditModalEvent('S76')">{{deviceInfos.S76.valueText}}{{deviceInfos.S76.unit}}</a></td>
-            <td><span>{{deviceInfos.S77.name}}：</span><a class="button" @click="showEditModalEvent('S77')">{{deviceInfos.S77.valueText}}{{deviceInfos.S77.unit}}</a></td>
-            <td><span>{{deviceInfos.S78.name}}：</span><a class="button" @click="showEditModalEvent('S78')">{{deviceInfos.S78.valueText}}{{deviceInfos.S78.unit}}</a></td>
+            <td><span>{{deviceInfos.S75.name}}：</span><a class="button" @click="showEditModalEvent('S75')">{{deviceInfos.S75.valueText}}{{deviceInfos.S75.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S75.loading"></i></td>
+            <td><span>{{deviceInfos.S76.name}}：</span><a class="button" @click="showEditModalEvent('S76')">{{deviceInfos.S76.valueText}}{{deviceInfos.S76.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S76.loading"></i></td>
+            <td><span>{{deviceInfos.S77.name}}：</span><a class="button" @click="showEditModalEvent('S77')">{{deviceInfos.S77.valueText}}{{deviceInfos.S77.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S77.loading"></i></td>
+            <td><span>{{deviceInfos.S78.name}}：</span><a class="button" @click="showEditModalEvent('S78')">{{deviceInfos.S78.valueText}}{{deviceInfos.S78.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S78.loading"></i></td>
           </tr>
           <tr>
-            <td><span>{{deviceInfos.S79.name}}：</span><a class="button" @click="showEditModalEvent('S79')">{{deviceInfos.S79.valueText}}{{deviceInfos.S79.unit}}</a></td>
-            <td><span>{{deviceInfos.S90.name}}：</span><a class="button" @click="showEditModalEvent('S90')">{{deviceInfos.S90.valueText}}{{deviceInfos.S90.unit}}</a></td>
+            <td><span>{{deviceInfos.S79.name}}：</span><a class="button" @click="showEditModalEvent('S79')">{{deviceInfos.S79.valueText}}{{deviceInfos.S79.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S79.loading"></i></td>
+            <td><span>{{deviceInfos.S90.name}}：</span><a class="button" @click="showEditModalEvent('S90')">{{deviceInfos.S90.valueText}}{{deviceInfos.S90.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S90.loading"></i></td>
             <td></td>
             <td></td>
           </tr>
@@ -275,7 +275,7 @@
 
     data () {
       return {
-        device_id: this.$route.params.device_id,
+        device_id: this.$route.params.device_id || 452873196,
         // modelType 弹窗类型 1是时间选择 2是小范围选择参数 3是大范围参数输入 4是双维度
         validation1: {},
         validation2: {},
@@ -332,6 +332,7 @@
         // 产品信息
         deviceInfos: {
           S11: {
+            loading: false,
             name: '上限温度',
             valueText: '55',
             valueArr: [],
@@ -340,6 +341,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S12: {
+            loading: false,
             name: '下限温度',
             valueText: '45',
             valueArr: [],
@@ -348,6 +350,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S13: {
+            loading: false,
             name: '最高设定温度',
             valueText: '60',
             valueArr: [],
@@ -356,6 +359,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S14: {
+            loading: false,
             name: '最低设定温度',
             valueText: '10',
             valueArr: [],
@@ -364,6 +368,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S15: {
+            loading: false,
             name: '电加热投入环境温度',
             valueText: '7',
             valueArr: [],
@@ -372,6 +377,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S19: {
+            loading: false,
             name: '水温探头修正',
             valueText: '0',
             valueArr: [],
@@ -380,6 +386,7 @@
             tips: '温度范围-128℃~128℃'
           },
           S21: {
+            loading: false,
             name: '压缩机启动延时',
             valueText: '3',
             valueArr: [],
@@ -388,6 +395,7 @@
             tips: '0-10'
           },
           S22: {
+            loading: false,
             name: '电加热启动压机连续工作时间',
             valueText: '10',
             valueArr: [],
@@ -396,6 +404,7 @@
             tips: '1 - 12'
           },
           S23: {
+            loading: false,
             name: '压缩机停机温度',
             valueText: '-3',
             valueArr: [],
@@ -404,6 +413,7 @@
             tips: '-15-5  OFF'
           },
           S31: {
+            loading: false,
             name: '化霜启动温度',
             valueText: '-3',
             valueArr: [],
@@ -412,6 +422,7 @@
             tips: '-20 – 20'
           },
           S32: {
+            loading: false,
             name: '化霜结束温度',
             valueText: '10',
             valueArr: [],
@@ -420,6 +431,7 @@
             tips: '0 – 50'
           },
           S33: {
+            loading: false,
             name: '化霜启动时间',
             valueText: '30',
             valueArr: [],
@@ -428,6 +440,7 @@
             tips: '1 – 999'
           },
           S34: {
+            loading: false,
             name: '最大化霜时间',
             valueText: '5',
             valueArr: [],
@@ -436,6 +449,7 @@
             tips: 'Off 1 – 99 Off表示无化霜功能'
           },
           S37: {
+            loading: false,
             name: '化霜四通阀模式',
             valueText: '0', // 0制热时关，化霜时开 1制热时开，化霜时关
             valueArr: ['制热时关，化霜时开', '制热时开，化霜时关'],
@@ -444,6 +458,7 @@
             tips: '0 – 1'
           },
           S40: {
+            loading: false,
             name: '风机模式',
             valueText: '0', // 0单速风 1双速风
             valueArr: ['单速风', '双速风'],
@@ -452,6 +467,7 @@
             tips: '0 – 1'
           },
           S41: {
+            loading: false,
             name: '风机关联的环境温度',
             valueText: '27',
             valueArr: [],
@@ -460,6 +476,7 @@
             tips: '15-40'
           },
           S42: {
+            loading: false,
             name: '风机关联的排气温度',
             valueText: '110',
             valueArr: [],
@@ -468,6 +485,7 @@
             tips: '101-120'
           },
           S44: {
+            loading: false,
             name: '是否使用过载保护',
             valueText: '0',
             valueArr: ['Yes', 'No'],
@@ -476,6 +494,7 @@
             tips: 'Yes/No'
           },
           S45: {
+            loading: false,
             name: '电流显示',
             valueText: '-',
             valueArr: [],
@@ -484,6 +503,7 @@
             tips: ''
           },
           S46: {
+            loading: false,
             name: '压缩机额定电流',
             valueText: '10',
             valueArr: [],
@@ -492,6 +512,7 @@
             tips: '1.0 - 99.9'
           },
           S47: {
+            loading: false,
             name: '过载动作时间',
             valueText: '5',
             valueArr: [],
@@ -500,6 +521,7 @@
             tips: '1 - 999'
           },
           S48: {
+            loading: false,
             name: '电加热判断电流',
             valueText: '6',
             valueArr: [],
@@ -508,6 +530,7 @@
             tips: '1 - 20'
           },
           S49: {
+            loading: false,
             name: '电加热电流显示',
             valueText: '6',
             valueArr: [],
@@ -516,6 +539,7 @@
             tips: '实际读到的电加热电流'
           },
           S50: {
+            loading: false,
             name: '低压告警模式',
             valueText: '2', // 0单速风 1双速风
             valueArr: ['无', '常开，闭合则告警', '常闭，断开则告警'],
@@ -524,6 +548,7 @@
             tips: '0 - 2 0-无 1-常开，闭合则告警 2-常闭，断开则告警'
           },
           S51: {
+            loading: false,
             name: '低压告警自动恢复次数',
             valueText: '3',
             valueArr: [],
@@ -532,6 +557,7 @@
             tips: '0 – 10'
           },
           S52: {
+            loading: false,
             name: '外部告警自动恢复次数重置时间',
             valueText: '3',
             valueArr: [],
@@ -540,6 +566,7 @@
             tips: '0 – 10'
           },
           S54: {
+            loading: false,
             name: '高压告警模式',
             valueText: '0',
             valueArr: ['无', '常开，闭合则告警', '常闭，断开则告警'],
@@ -548,6 +575,7 @@
             tips: '0 - 2 0-无 1-常开，闭合则告警 2-常闭，断开则告警'
           },
           S55: {
+            loading: false,
             name: '高压告警自动恢复次数',
             valueText: '3',
             valueArr: [],
@@ -556,6 +584,7 @@
             tips: '0 – 10'
           },
           S56: {
+            loading: false,
             name: '高压告警自动恢复次数重置时间',
             valueText: '60',
             valueArr: [],
@@ -564,6 +593,7 @@
             tips: '0 – 999'
           },
           S58: {
+            loading: false,
             name: '排气保护温度',
             valueText: '115',
             valueArr: [],
@@ -572,6 +602,7 @@
             tips: '50 – 125 OFF'
           },
           S59: {
+            loading: false,
             name: '排气保护温度回差',
             valueText: '30',
             valueArr: [],
@@ -580,6 +611,7 @@
             tips: '1– 50'
           },
           S61: {
+            loading: false,
             name: '掉电后是否记忆开关机状态',
             valueText: '0',
             valueArr: ['Yes', 'No'],
@@ -588,6 +620,7 @@
             tips: ''
           },
           S63: {
+            loading: false,
             name: '背光延时',
             valueText: '30',
             valueArr: [],
@@ -596,6 +629,7 @@
             tips: 'Off 1 – 99 On Off表示不开背光 On表示背光常开 1-99表示按键操作后背光延时关闭'
           },
           S68: {
+            loading: false,
             name: '是否使用电子膨胀阀',
             valueText: 'Yes',
             valueArr: ['Yes', 'No'],
@@ -604,6 +638,7 @@
             tips: 'Yes/No Yes:使用  No:不使用'
           },
           S70: {
+            loading: false,
             name: '电子膨胀阀开度查询',
             valueText: '-',
             valueArr: [],
@@ -612,6 +647,7 @@
             tips: '0 - 480'
           },
           S71: {
+            loading: false,
             name: '电子膨胀阀控制方式',
             valueText: '0',
             valueArr: ['自动', '手动', '环境'],
@@ -620,6 +656,7 @@
             tips: '0 - 2  0：自动 1：手动 2：环境'
           },
           S72: {
+            loading: false,
             name: '电子膨胀阀手动设置开度',
             valueText: '350',
             valueArr: [],
@@ -628,6 +665,7 @@
             tips: '100 - 480'
           },
           S73: {
+            loading: false,
             name: '过热度设定值',
             valueText: '3',
             valueArr: [],
@@ -636,6 +674,7 @@
             tips: '-15 – 15'
           },
           S74: {
+            loading: false,
             name: '过热度稳定区',
             valueText: '2',
             valueArr: [],
@@ -644,6 +683,7 @@
             tips: '0-5'
           },
           S75: {
+            loading: false,
             name: '过热度调节方向阔度',
             valueText: '2',
             valueArr: [],
@@ -652,6 +692,7 @@
             tips: '1-8'
           },
           S76: {
+            loading: false,
             name: '电子膨胀阀排气设置',
             valueText: '92',
             valueArr: [],
@@ -660,6 +701,7 @@
             tips: '85 – 110'
           },
           S77: {
+            loading: false,
             name: '电子膨胀阀排气回差',
             valueText: '5',
             valueArr: [],
@@ -668,6 +710,7 @@
             tips: '1-30'
           },
           S78: {
+            loading: false,
             name: '环境温度显示',
             valueText: '-',
             valueArr: [],
@@ -676,6 +719,7 @@
             tips: ''
           },
           S79: {
+            loading: false,
             name: '回气温度显示',
             valueText: '-',
             valueArr: [],
@@ -684,6 +728,7 @@
             tips: ''
           },
           S90: {
+            loading: false,
             name: '显示型号和软件版本号',
             valueText: '-',
             valueArr: [],
@@ -692,6 +737,7 @@
             tips: '显示面板和主板的型号和软件版本号，字符串格式'
           },
           S101: {
+            loading: false,
             name: '热水器运行模式',
             valueText: '0',
             valueArr: ['自动模式', '节能模式'],
@@ -700,6 +746,7 @@
             tips: '0：自动模式 1：节能模式'
           },
           S102: {
+            loading: false,
             name: '热水器状态',
             valueText: '0',
             valueArr: ['关机', '待机', '制热', '告警', '化霜', '加氟', '测试'],
@@ -708,6 +755,7 @@
             tips: '0：关机 1：待机 2：制热 3：告警 4：化霜 5：加氟 6：测试'
           },
           S103: {
+            loading: false,
             name: '时间设置1',
             valueText: '12:00-13:10',
             valueArr: [],
@@ -716,6 +764,7 @@
             tips: '数据格式：HH:MM-HH:MM'
           },
           S104: {
+            loading: false,
             name: '时间设置2',
             valueText: '12:00-13:10',
             valueArr: [],
@@ -724,6 +773,7 @@
             tips: '数据格式：HH:MM-HH:MM'
           },
           S105: {
+            loading: false,
             name: '时间设置3',
             valueText: '12:00-13:10',
             valueArr: [],
@@ -732,6 +782,7 @@
             tips: '数据格式：HH:MM-HH:MM'
           },
           S106: {
+            loading: false,
             name: '热水器上传监控数据',
             valueText: '35.6,24.0,25,26.5',
             valueArr: [],
@@ -740,6 +791,7 @@
             tips: '数据格式：水箱温度，化霜温度，排气温度，环境温度 （备注：时间用服务器收到时间）'
           },
           S107: {
+            loading: false,
             name: '故障信息上报',
             valueText: '35.6,24.0,25,26.5',
             valueArr: [],
@@ -748,6 +800,7 @@
             tips: '故障代码，见热水器说明书 （备注：故障代码可以传多个）'
           },
           S108: {
+            loading: false,
             name: '一键强制加热',
             valueText: '1',
             valueArr: [],
@@ -756,6 +809,7 @@
             tips: '此命令由服务端发送给热水器，热水器自己判断是否强制加热'
           },
           S109: {
+            loading: false,
             name: '当前水温',
             valueText: '1',
             valueArr: [],
@@ -764,6 +818,7 @@
             tips: '热水器水温变化时上传'
           },
           S110: {
+            loading: false,
             name: '控制器时钟',
             valueText: '11:20',
             valueArr: [],
@@ -772,6 +827,7 @@
             tips: '上发：报告给服务器控制器时钟 下发：设置控制器时钟'
           },
           S111: {
+            loading: false,
             name: '控制器累计运行时间',
             valueText: '680:20',
             valueArr: [],
@@ -914,6 +970,10 @@
         }
         if (this['validation' + num].$valid || num === 2) {
           self.settingData = true
+          self.deviceInfos[deviceInfo.paramsKey].loading = true
+          setTimeout(() => {
+            self.deviceInfos[deviceInfo.paramsKey].loading = false
+          }, 5000)
           console.log('向设备发送数据：' + '/' + deviceInfo.paramsKey + '/1/' + deviceInfo.value + '\n')
           self.sendDeviceData('/' + paramsKey + '/1/' + value + '\n')
         }
@@ -950,7 +1010,7 @@
         var value = data.split('/1/')[1] && data.split('/1/')[1].split('\r')[0]
         if (value) {
           if (key === 'S100') {
-            console.log('所有数据' + JSON.stringify(data))
+            // console.log('所有数据' + JSON.stringify(data))
             var arr = self._parseData(data)
             arr.forEach((item, index) => {
               if (self.deviceInfos['S' + item.key]) {
@@ -964,6 +1024,7 @@
             })
           } else {
             if (self.deviceInfos[key]) {
+              self.deviceInfos[key].loading = false
               self.deviceInfos[key].valueText = value
               if (/yes|no/ig.test(value)) {
                 self.deviceInfos[key].valueText = /yes/ig.test(value) ? '0' : '1'
@@ -978,7 +1039,7 @@
        */
       getDeviceInfos () {
         var self = this
-        console.log('获取产品信息')
+        // console.log('获取产品信息')
         var data = '/S100/1'
         this.sendDeviceData(data)
         // 获取成功后调用提示
@@ -995,7 +1056,7 @@
        */
       showEditModal5 () {
         var self = this
-        console.log('设置控制器时间')
+        // console.log('设置控制器时间')
         if (self.deviceOnline) {
           // 这里需要获取最新的控制器时间
           self.editModal5.hour = self.deviceInfos.S110.valueText.split(':')[0]
@@ -1056,11 +1117,18 @@
       showEditModal1 (paramsKey) {
         var self = this
         self.editModal1.paramsKey = paramsKey
+        if (self.deviceInfos[paramsKey].valueText.split('-')[1]) {
+          self.editModal1.startHour = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[0]
+          self.editModal1.startMinute = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[1]
+          self.editModal1.endHour = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[0]
+          self.editModal1.endMinute = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[1]
+        } else {
+          self.editModal1.startHour = '00'
+          self.editModal1.startMinute = '00'
+          self.editModal1.endHour = '00'
+          self.editModal1.endMinute = '00'
+        }
         self.editModal1.paramsName = self.deviceInfos[paramsKey].name
-        self.editModal1.startHour = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[0]
-        self.editModal1.startMinute = self.deviceInfos[paramsKey].valueText.split('-')[0].split(':')[1]
-        self.editModal1.endHour = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[0]
-        self.editModal1.endMinute = self.deviceInfos[paramsKey].valueText.split('-')[1].split(':')[1]
         self.editModal1.tips = self.deviceInfos[paramsKey].tips
         self.editModal1.show = true
       },
@@ -1111,7 +1179,6 @@
         var self = this
         self.editModal4.paramsKey = paramsKey
         if (self.deviceInfos[paramsKey].valueArr) {
-          console.log(JSON.stringify(self.editModal4))
           if (Number(self.deviceInfos[paramsKey].valueText)) {
             self.editModal4.canSetParams = true
             self.editModal4.value = self.deviceInfos[paramsKey].valueText
@@ -1204,6 +1271,8 @@
       .table
         .button
           color blue
+        .loading
+          margin-left 10px
     .editModal
       font-size 16px
     .editModal1
