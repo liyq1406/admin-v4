@@ -171,7 +171,7 @@
         </form>
       </div>
     </modal>
-    <modal :show="editModal.show" width="600px">
+    <modal :show="true" width="600px">
       <h3 slot="header">编辑网点</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit">
@@ -211,11 +211,15 @@
             <label class="form-control">联系地址:</label>
             <div class="controls">
               <div class="input-text-wrap">
-                <textarea></textarea>
+                <input v-model="" type="text" name="mac" required lazy class="input-text"/>
               </div>
             </div>
           </div>
+
           <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>删除网点
+            </label>
             <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
@@ -265,6 +269,9 @@
 
       },
       onAddCancel () {
+      },
+      delChecked () {
+
       }
     }
   }

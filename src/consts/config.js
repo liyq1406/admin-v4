@@ -22,7 +22,10 @@ export var apiServer = {
   default: process.env.API_SERVER || DEFAULT_API_SERVER,
 
   // 菜谱
-  recipe: `${PLUGIN_SERVER}/39352b6f8d224064832bcec9b96958d1`
+  recipe: `${PLUGIN_SERVER}/39352b6f8d224064832bcec9b96958d1`,
+
+  // 延保
+  warranty: 'http://test.plugin.xlink.cn:3000/module/warranty'
 }
 
 export default {

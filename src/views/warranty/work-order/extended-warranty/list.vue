@@ -65,6 +65,7 @@
   import AreaSelect from '../../../../components/AreaSelect'
   import SearchBox from '../../../../components/SearchBox'
   import Pager from '../../../../components/Pager'
+  import api from '../../../../api'
 
   export default {
     name: 'OrderList',
@@ -99,13 +100,26 @@
           value: 1
         }, {
           label: '已过期',
-          value: 2}]
+          value: 2}],
+
+        loadingData: false,
+        currentPage: 0
       }
     },
 
     methods: {
-      getEWOrderList () {
+      getWarrantyList () {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
 
+        this.loadingData = true
+        api.warranty.getWarrantyList(this.$route.params.id).then((res) => {
+          console.log('res')
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       }
     },
 
@@ -121,7 +135,7 @@
 
     route: {
       data () {
-        this.getEWOrderList()
+        this.getWarrantyList()
       }
     }
   }

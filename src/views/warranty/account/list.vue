@@ -45,7 +45,7 @@
       </table>
       <pager v-if="!loadingAccount && accounts.length > pageCount" :total="accounts.length" :current.sync="currentPage" :page-count="pageCount"></pager>
 
-      <!-- 添加设备浮层-->
+      <!-- 添加增加网点浮层-->
       <modal :show.sync="showAddModal" width="600px">
         <h3 slot="header">添加网点</h3>
         <div slot="body" class="form">
