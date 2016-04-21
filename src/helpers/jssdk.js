@@ -3,7 +3,8 @@ import base64 from './base64'
 
 var _sock = false // socket已连接
 var _isDeviceConnected = false // 设备已连接
-var _host = 'http://cm.xlink.cn:23777'
+// var _host = 'http://cm.xlink.cn:23777'
+var _host = (process.env.NODE_ENV !== 'production') ? 'http://42.121.122.23:23775' : 'http://cm.xlink.cn:23777'
 var _socketio // 当前socket实例
 var _deviceid = ''
 

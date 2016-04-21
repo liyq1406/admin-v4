@@ -275,7 +275,7 @@
 
     data () {
       return {
-        device_id: this.$route.params.device_id || 452873196,
+        device_id: this.$route.params.device_id || '452873196',
         // modelType 弹窗类型 1是时间选择 2是小范围选择参数 3是大范围参数输入 4是双维度
         validation1: {},
         validation2: {},
