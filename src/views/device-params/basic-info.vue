@@ -562,8 +562,8 @@
             valueText: '3',
             valueArr: [],
             modelType: '3',
-            unit: '次',
-            tips: '0 – 10'
+            unit: '分钟',
+            tips: '0 – 999'
           },
           S54: {
             loading: false,
@@ -1080,9 +1080,6 @@
         var self = this
         api.device.getDeviceToken(this.device_id).then((res) => {
           if (res.status === 200) {
-            console.error(123)
-            console.log(res)
-            console.log(res.data.addr)
             XJSObject.invoke('loadXJSAPILib', {host: 'http://' + res.data.addr}, function (r) {
               XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
                 console.log('连接设备结果：' + JSON.stringify(r))
