@@ -115,16 +115,23 @@
         data.forEach((item, index) => {
           // 去掉经过后台处理的时间的T和Z字符
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+          // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
           var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR)
           if (index) {
             if (a !== i) {
+              // 当商改变说明此数据为下一个小时的数据
+              // 将每个小时最后的数据附近图表数据数组
               this.environmentTems[71 - a] = Number(itemToAdd['43'])
               this.waterboxTems[71 - a] = Number(itemToAdd['34'])
               itemToAdd = item
+              // 将1重置为当前数据的时间
               i = a
             }
           } else {
+            // 数组内第一个元素处理
+            // 将第一个元素存进暂存对象内
             itemToAdd = item
+            // 初始经过0个小时
             i = 0
           }
         })
