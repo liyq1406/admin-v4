@@ -134,7 +134,7 @@
             <div class="controls">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>是否开启设备快照
+                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>开启快照功能
                 </label>
               </div>
             </div>
@@ -599,26 +599,29 @@
 
       // 初始化产品编辑表单
       editProduct () {
-        this.showEditModal = true
-        // this.editModel = _.clone(this.product)
-        // this.editModel.ifsnapshot = false
-        this.editModel.name = this.product.name
-        this.editModel.description = this.product.description
-        this.editModel.link_type = this.product.link_type
-        this.editModel.is_registerable = this.product.is_registerable
-        this.editModel.is_active_register = this.product.is_active_register
-        this.editModel.is_release = this.product.is_release
-        this.editModel.id = this.$route.params.id
-        console.log()
-        this.originEditModel = _.clone(this.product)
         api.snapshot.getRule(this.$route.params.id).then((res) => {
-          if (res.data.list.length === 0) {
-            this.editModel.ifsnapshot = false
+          // console.log(res.data.list[0] && res.data.list[0].rule)
+          this.showEditModal = true
+          // this.editModel = _.clone(this.product)
+          this.editModel.ifsnapshot = false
+          this.editModel.name = this.product.name
+          this.editModel.description = this.product.description
+          this.editModel.link_type = this.product.link_type
+          this.editModel.is_registerable = this.product.is_registerable
+          this.editModel.is_active_register = this.product.is_active_register
+          this.editModel.is_release = this.product.is_release
+          this.editModel.id = this.$route.params.id
+          this.originEditModel = _.clone(this.editModel)
+          if (res.data.list.length) {
+            if (res.data.list[0].rule === 0) {
+              this.editModel.ifsnapshot = false
+            } else {
+              this.editModel.ifsnapshot = true
+            }
           } else {
-            this.editModel.ifsnapshot = true
+            this.editModel.ifsnapshot = false
           }
-          console.log(this.editModel)
-          // this.editModel.set('ifsnapshot', true)
+          console.log(this.editModel.ifsnapshot)
         })
       },
 
@@ -703,6 +706,10 @@
                   console.log(111)
                 })
               } else {
+                var index = []
+                for (let i = 0; i < 45; i++) {
+                  index.push(i)
+                }
                 var newParams = {
                   _id: res.data.list[0].id,
                   rule: 3,
@@ -714,6 +721,30 @@
                   datapoint: index
                 }
                 api.snapshot.updateRule(this.$route.params.id, newParams).then((res) => {
+                  console.log(111)
+                })
+              }
+            })
+          } else {
+            api.snapshot.getRule(this.$route.params.id).then((res) => {
+              if (res.data.list.length === 0) {
+                console.log(11)
+              } else {
+                var index = []
+                for (let i = 0; i < 45; i++) {
+                  index.push(i)
+                }
+                var morNewParams = {
+                  _id: res.data.list[0].id,
+                  rule: 0,
+                  interval: 30,
+                  storage: {
+                    // limit: 0,
+                    expire: 86400
+                  },
+                  datapoint: index
+                }
+                api.snapshot.updateRule(this.$route.params.id, morNewParams).then((res) => {
                   console.log(111)
                 })
               }

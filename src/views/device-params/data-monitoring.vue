@@ -30,27 +30,27 @@
         environmentTems: [],
         waterboxTems: [],
         fake: [{
-          lastUpdate: 1,
+          snapshot_date: 1,
           '34': 2,
           '43': 4
         }, {
-          lastUpdate: 2,
+          snapshot_date: 2,
           '34': 2,
           '43': 4
         }, {
-          lastUpdate: 3,
+          snapshot_date: 3,
           '34': 2,
           '43': 4
         }, {
-          lastUpdate: 4,
+          snapshot_date: 4,
           '34': 2,
           '43': 4
         }, {
-          lastUpdate: 5,
+          snapshot_date: 5,
           '34': 2,
           '43': 4
         }, {
-          lastUpdate: 40,
+          snapshot_date: 40,
           '34': 2,
           '43': 4
         }]
@@ -62,10 +62,10 @@
       // console.log(this.$route.params.device_id)
       this.init()
       this.getSnapshot()
-      this.drawProductTrends()
     },
 
     methods: {
+      // 初始化数组数据
       init () {
         var now = Date.parse(new Date())
         for (let i = 71; i >= 0; i--) {
@@ -81,8 +81,9 @@
         offset = offset || 0
         limit = limit || 1000
         endtime = Date.parse(new Date())
+        // 取当前开始到3天前的时间
         begintime = endtime - 72 * 60 * 60 * 1000
-        console.log(this.begintime)
+        // console.log(this.begintime)
         var params = {
           offset: offset,
           limit: limit,
@@ -91,11 +92,12 @@
             end: endtime
           }
         }
-        console.log(params)
+        // console.log(params)
         // this._handleData(this.fake)
         api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
           // 处理数据
-          this._handleData(res.data.snapshot)
+          this._handleData(res.data.list)
+          this.drawProductTrends()
         }).catch((res) => {
           this.handleError(res)
         })
@@ -103,17 +105,21 @@
 
       _handleData (data) {
         var now = Date.parse(new Date()) / 1000
+        // 当前未满一小时默认取满一小时
+        now = (Math.floor(now / 3600) + 1) * 3600
         const SECONDS_PER_HOUR = 3600
         // var now = 40
         // const SECONDS_PER_HOUR = 2
         var itemToAdd = {}
         var i = 0
         data.forEach((item, index) => {
-          var a = Math.floor((now - Date.parse(new Date(item.lastUpdate))) / SECONDS_PER_HOUR)
+          // 去掉经过后台处理的时间的T和Z字符
+          var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR)
           if (index) {
             if (a !== i) {
-              this.environmentTems[71 - a] = itemToAdd['43']
-              this.waterboxTems[71 - a] = itemToAdd['34']
+              this.environmentTems[71 - a] = Number(itemToAdd['43'])
+              this.waterboxTems[71 - a] = Number(itemToAdd['34'])
               itemToAdd = item
               i = a
             }
@@ -122,12 +128,11 @@
             i = 0
           }
         })
+        // console.log(this.waterboxTems)
       },
       // 刷新数据
       getNewInfo () {
-        this.init()
         this.getSnapshot()
-        this.drawProductTrends()
       },
 
       drawProductTrends () {
