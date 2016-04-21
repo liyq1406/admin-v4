@@ -52,7 +52,7 @@
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             <template v-for="plugin in plugins">
-              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty}"><i class="fa fa-exchange"></i>延保保系统</a></div>
+              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-exchange"></i>延保保系统</a></div>
             </template>
           </div>
         </div>
