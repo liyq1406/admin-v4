@@ -76,7 +76,7 @@
           <tr>
             <td><span>{{deviceInfos.S61.name}}：</span><a class="button" @click="showEditModalEvent('S61')">{{deviceInfos.S61.valueArr[deviceInfos.S61.valueText]}}{{deviceInfos.S61.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S61.loading"></i></td>
             <td><span>{{deviceInfos.S63.name}}：</span><a class="button" @click="showEditModalEvent('S63')">{{deviceInfos.S63.valueText}}{{deviceInfos.S63.valueText - 0 >= 0 ? deviceInfos.S63.unit : ''}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S63.loading"></i></td>
-            <td><span>通讯波特率：</span><a class="button">2.4</a></td>
+            <td><span>通讯波特率：</span><a class="button">--</a></td>
             <!-- <td></td> -->
             <td></td>
           </tr>
@@ -756,7 +756,7 @@
           },
           S103: {
             loading: false,
-            name: '时间设置1',
+            name: '工作时段一',
             valueText: '12:00-13:10',
             valueArr: [],
             modelType: '1',
@@ -765,7 +765,7 @@
           },
           S104: {
             loading: false,
-            name: '时间设置2',
+            name: '工作时段二',
             valueText: '12:00-13:10',
             valueArr: [],
             modelType: '1',
@@ -774,7 +774,7 @@
           },
           S105: {
             loading: false,
-            name: '时间设置3',
+            name: '工作时段三',
             valueText: '12:00-13:10',
             valueArr: [],
             modelType: '1',
