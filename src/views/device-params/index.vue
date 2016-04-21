@@ -8,8 +8,9 @@
         <div class="panel-bd">
           <div class="action-bar">
             <v-select width="160px" :label="product.name" placeholder="请选择产品">
-              <select v-model="product" @change="setParamsCurrentProduct(product)">
-                <option v-for="option in products" :value="option">{{ option.name }}</option>
+              <span slot="label">产品：</span>
+              <select v-model="product" @change="onProductChange(product)">
+                <option v-for="option in productOptions" :value="option">{{ option.name }}</option>
               </select>
             </v-select>
             <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
@@ -78,8 +79,6 @@
   import Modal from '../../components/Modal'
   import SearchBox from '../../components/SearchBox'
   import locales from '../../consts/locales/index'
-  import store from '../../store/index'
-  import { setParamsCurrentProduct } from '../../store/actions/products'
   // import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -95,19 +94,6 @@
       'modal': Modal,
       'search-box': SearchBox,
       'pager': Pager
-    },
-
-    // 状态管理
-    store,
-
-    vuex: {
-      getters: {
-        products: ({ products }) => products.all,
-        currProduct: ({ products }) => products.paramsCurrProduct
-      },
-      actions: {
-        setParamsCurrentProduct
-      }
     },
 
     data () {
@@ -133,8 +119,8 @@
           value: 'all'
         },
         visibilityOptions: locales[Vue.config.lang].visibilityOptions,
-        product: {
-        },
+        product: {},
+        productOptions: [],
         devices: [],
         total: 0,
         currentPage: 1,
@@ -193,11 +179,40 @@
 
     route: {
       data () {
-        // this.getDevices()
+        api.product.all().then((res) => {
+          this.productOptions = res.data
+          if (!window.localStorage.getItem('paramsCurrProduct')) {
+            this.product = res.data[0]
+            window.localStorage.setItem('paramsCurrProduct', res.data[0].id)
+            this.getDevices()
+          } else {
+            api.product.getProduct(window.localStorage.getItem('paramsCurrProduct')).then((res) => {
+              if (res.status === 200) {
+                this.product = res.data
+                this.getDevices()
+              }
+            }).catch((res) => {
+              window.localStorage.removeItem('paramsCurrProduct')
+              // this.handleError(res)
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     },
 
     methods: {
+      /**
+       * 处理产品切换
+       * @param  {Object} product 选择的产品
+       */
+      onProductChange (product) {
+        this.product = product
+        window.localStorage.setItem('paramsCurrProduct', product.id)
+        this.getDevices()
+      },
+
       // 获取设备列表
       getDevices (querying) {
         if (typeof querying !== 'undefined') {
@@ -205,7 +220,7 @@
         }
 
         this.loadingData = true
-        api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+        api.device.getList(this.product.id, this.queryCondition).then((res) => {
           this.devices = res.data.list
           this.total = res.data.count
           this.loadingData = false

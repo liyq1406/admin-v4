@@ -52,7 +52,7 @@
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             <template v-for="plugin in plugins">
-              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-exchange"></i>延保保系统</a></div>
+              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-exchange"></i>延保系统</a></div>
             </template>
           </div>
         </div>
@@ -85,9 +85,9 @@
   import store from './store/index'
   import { removeError, hideError, getCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
-  import { getAllPlugins } from './store/actions/plugins'
+  import { createPlugin } from './store/actions/plugins'
   import Vue from 'vue'
-  // import api from './api'
+  import api from './api'
   import Modal from './components/Modal'
   import Toast from './components/Toast'
 
@@ -117,7 +117,7 @@
         removeError,
         getCurrentMember,
         getAllProducts,
-        getAllPlugins
+        createPlugin
       }
     },
 
@@ -133,8 +133,8 @@
       layout () {
         if (this.layout === 'admin') {
           this.getCurrentMember(window.localStorage.getItem('memberId'), this)
-          this.getAllProducts(this)
-          this.getAllPlugins()
+          this.getProducts()
+          this.getPlugins()
         }
       }
     },
@@ -148,6 +148,28 @@
     },
 
     methods: {
+      getProducts () {
+        api.product.all().then((res) => {
+          this.getAllProducts(res.data)
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      getPlugins () {
+        api.app.list().then((res) => {
+          if (res.status === 200) {
+            res.data.forEach((item) => {
+              if (item.type > 4) {
+                this.createPlugin(item)
+              }
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
       /**
        * 退出登录
        * 移除保存在 window.localStorage中的 accessToken

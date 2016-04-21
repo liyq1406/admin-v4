@@ -18,6 +18,8 @@
 <script>
   import Tab from '../../components/Tab'
   import { globalMixins } from '../../mixins'
+  import api from '../../api'
+  import { setParamsCurrentProduct } from '../../store/actions/products'
 
   export default {
     name: 'Params',
@@ -28,6 +30,12 @@
 
     components: {
       'tab': Tab
+    },
+
+    vuex: {
+      actions: {
+        setParamsCurrentProduct
+      }
     },
 
     data () {
@@ -54,7 +62,16 @@
     },
 
     methods: {
+      // 获取当前产品
+      getProduct () {
+        api.product.getProduct(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.setParamsCurrentProduct(res.data)
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      }
     }
-
   }
 </script>

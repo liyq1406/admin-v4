@@ -3,8 +3,7 @@ import {
   CREATE_PRODUCT,
   REMOVE_PRODUCT,
   UPDATE_PRODUCT,
-  SET_CURRENT_PRODUCT,
-  SET_PARAMS_CURRENT_PRODUCT
+  SET_CURRENT_PRODUCT
 } from '../mutation-types'
 import _ from 'lodash'
 // import Vue from 'vue'
@@ -12,8 +11,7 @@ import _ from 'lodash'
 // 状态初始化
 var state = {
   all: [],
-  curr: {},
-  paramsCurrProduct: {}
+  curr: {}
 }
 
 // 状态变化
@@ -46,10 +44,6 @@ const mutations = {
 
   [SET_CURRENT_PRODUCT]  (state, product) {
     state.curr = product
-  },
-
-  [SET_PARAMS_CURRENT_PRODUCT]  (state, product) {
-    state.paramsCurrProduct = product
   }
 }
 
