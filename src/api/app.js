@@ -52,6 +52,11 @@ export default {
       params.type = app.type
       params.gcm_api_key = app.android.gcm_api_key
       params.gcm_enable = app.android.gcm_enable
+    } else if (app.type === 3) {
+      params.name = app.name
+      params.type = app.type
+      params.url = app.web.url
+      params.web_enable = app.web.web_enable
     } else if (app.type === 4) { // 微信应用
       params.wechat = {}
       params.wechat.id = app.wechat.id // 微信公众号中的微信号

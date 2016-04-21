@@ -53,19 +53,22 @@
             </tbody>
           </table>
         </div>
-        <!-- 查看密钥浮层-->
       </div>
-      <modal :show.sync="showKeyModal">
-        <h3 slot="header">Access Key Secret</h3>
-        <div slot="body" class="form">
-          <div slot="body" class="secret-key tac mrbthr secret-key">{{ key.secret }}</div>
-          <div class="form-actions">
-            <button @click="showKeyModal=false" class="btn btn-primary">确定</button>
-          </div>
-        </div>
-      </modal>
     </div>
-    <!-- 添加应用浮层-->
+
+    <!-- Start: 查看密钥浮层-->
+    <modal :show.sync="showKeyModal">
+      <h3 slot="header">Access Key Secret</h3>
+      <div slot="body" class="form">
+        <div slot="body" class="secret-key tac mrbthr secret-key">{{ key.secret }}</div>
+        <div class="form-actions">
+          <button @click="showKeyModal=false" class="btn btn-primary">确定</button>
+        </div>
+      </div>
+    </modal>
+    <!-- End: 查看密钥浮层-->
+
+    <!-- Start: 新增添加应用浮层-->
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">{{ $t("app.create_app") }}</h3>
       <div slot="body" class="form">
@@ -98,7 +101,9 @@
         </form>
       </div>
     </modal>
-    <!-- 编辑iOS应用浮层-->
+    <!-- End: 新增添加应用浮层-->
+
+    <!-- Start: 编辑iOS应用浮层-->
     <modal :show.sync="showEditModal" @close="onEditCancel">
       <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel.type | typeLabel }})</h3>
       <div slot="body" class="form">
@@ -110,7 +115,7 @@
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
               <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row">
@@ -159,8 +164,9 @@
         </form>
       </div>
     </modal>
+    <!-- End: 编辑iOS应用浮层-->
 
-    <!-- 编辑安卓应用浮层-->
+    <!-- Start: 编辑安卓应用浮层-->
     <modal :show.sync="showEditModal2" @close="onEditCancel2">
       <h3 slot="header">{{ '编辑应用' }} ({{ editModel2.type | typeLabel }})</h3>
       <div slot="body" class="form">
@@ -172,7 +178,7 @@
                 <input v-model="editModel2.name" type="text" name="name" minlength="2" maxlength="32" v-form-ctrl required lazy class="input-text"/>
               </div>
               <div v-if="editValidation2.$submitted && editValidation2.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation2.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-              <div v-if="editValidation2.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation2.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation2.name.$error.maxlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation2.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation2.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation2.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation2.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation2.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row">
@@ -203,7 +209,51 @@
         </form>
       </div>
     </modal>
-    <!-- 新增授权警告浮层-->
+    <!-- End: 编辑安卓应用浮层-->
+
+    <!-- Start: 编辑Web应用浮层 -->
+    <modal :show.sync="showEditModal3" @close="onEditCancel3">
+      <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel3.type | typeLabel }})</h3>
+      <div slot="body" class="form">
+        <form v-form name="editValidation3" @submit.prevent="onEditSubmit(editModel3)" hook="editAppHook3">
+          <div class="form-row">
+            <label class="form-control">{{ $t("app.fields.name") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <input v-model="editModel3.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation3.$submitted && editValidation3.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation3.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
+              <div v-if="editValidation3.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation3.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation3.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation3.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <label class="form-control">{{ $t("app.fields.url") }}:</label>
+            <div class="controls">
+              <div v-placeholder="$t('app.placeholders.url')" class="input-text-wrap">
+                <input v-model="editModel3.web.url" type="text" v-form-ctrl name="url" minlength="2" lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation3.$submitted && editValidation3.url.$pristine" class="form-tips form-tips-error"><span v-if="editValidation3.url.$error.required">{{ $t('validation.required', {field: $t('app.fields.url')}) }}</span></div>
+              <div v-if="editValidation3.url.$dirty" class="form-tips form-tips-error"><span v-if="editValidation3.url.$error.required">{{ $t('validation.required', {field: $t('app.fields.url')}) }}</span><span v-if="editValidation3.url.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.url'), 2]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="controls without-label">
+              <div class="checkbox-group">
+                <label class="checkbox"><input type="checkbox" name="web_enable" v-model="editModel3.web.web_enable"/>启用</label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+            </label>
+            <button @click.prevent.stop="onEditCancel3" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- End: 编辑Web应用浮层 -->
 
     <!-- Start: 编辑延保管理应用浮层 -->
     <modal :show.sync="showEditModal5" @close="onEditCancel5">
@@ -217,7 +267,7 @@
                 <input v-model="editModel5.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
               <div v-if="editValidation5.$submitted && editValidation5.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation5.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-              <div v-if="editValidation5.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation5.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation5.name.$error.maxlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation5.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation5.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation5.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation5.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation5.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-actions">
@@ -240,7 +290,7 @@
   import api from '../../api'
   import Modal from '../../components/Modal'
   import store from '../../store/index'
-  import { createPlugin, removePlugin } from '../../store/actions/plugins'
+  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -259,6 +309,7 @@
       },
       actions: {
         createPlugin,
+        updatePlugin,
         removePlugin
       }
     },
@@ -276,6 +327,7 @@
         showAddModal: false,
         showEditModal: false,
         showEditModal2: false,
+        showEditModal3: false,
         // showEditModal4: false,
         showEditModal5: false,
         addModel: {
@@ -286,11 +338,15 @@
           type: 1
         },
         editModel2: {
-          type: 1,
+          type: 2,
           android: {
             gcm_api_key: '',
             gcm_enable: false
           }
+        },
+        editModel3: {
+          type: 3,
+          web: {}
         },
         // editModel4: {
         //   type: 1,
@@ -308,11 +364,13 @@
         originAddModel: {},
         originEditModel: {},
         originEditModel2: {},
+        originEditModel3: {},
         // originEditModel4: {},
         originEditModel5: {},
         addValidation: {},
         editValidation: {},
         editValidation2: {},
+        editValidation3: {},
         // editValidation4: {},
         editValidation5: {},
         adding: false,
@@ -389,6 +447,11 @@
         this.editForm2 = form
       },
 
+      // 修改Web应用表单钩子
+      editAppHook3 (form) {
+        this.editForm3 = form
+      },
+
       // 修改微信应用表单钩子
       // editAppHook4 (form) {
       //   this.editForm4 = form
@@ -423,6 +486,14 @@
         this.showEditModal2 = false
         this.delChecked = false
         this.editModel2 = this.originEditModel2
+      },
+
+      // 关闭Web编辑浮层并净化编辑表单
+      resetEdit3 () {
+        this.editing = false
+        this.showEditModal3 = false
+        this.delChecked = false
+        this.editModel3 = this.originEditModel3
       },
 
       // 关闭微信编辑浮层并净化编辑表单
@@ -469,7 +540,7 @@
           this.adding = true
           api.app.create(this.addModel).then((res) => {
             if (res.status === 200) {
-              if (this.addModel.type > 4) {
+              if (this.addModel.type === 3 || this.addModel.type > 4) {
                 this.createPlugin(res.data)
               }
               this.resetAdd()
@@ -492,6 +563,10 @@
           this.showEditModal2 = true
           this.editModel2 = _.cloneDeep(app)
           this.originEditModel2 = _.cloneDeep(app)
+        } else if (app.type === 3) {
+          this.showEditModal3 = true
+          this.editModel3 = _.cloneDeep(app)
+          this.originEditModel3 = _.cloneDeep(app)
         } else if (app.type === 5) {
           this.showEditModal5 = true
           this.editModel5 = _.cloneDeep(app)
@@ -514,6 +589,11 @@
         this.resetEdit2()
       },
 
+      // 取消Web应用编辑
+      onEditCancel3 () {
+        this.resetEdit3()
+      },
+
       // 取消微信应用编辑
       // onEditCancel4 () {
       //   this.resetEdit4()
@@ -534,6 +614,9 @@
                 this.resetEdit()
               } else if (model.type === 2) {
                 this.resetEdit2()
+              } else if (model.type === 3) {
+                this.removePlugin(model)
+                this.resetEdit3()
               } else if (model.type === 5) {
                 this.removePlugin(model)
                 this.resetEdit5()
@@ -573,6 +656,18 @@
             if (res.status === 200) {
               this.getApps()
               this.resetEdit2()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else if (model.type === 3 && this.editValidation3.$valid && !this.editing) {
+          this.editing = true
+          api.app.update(model).then((res) => {
+            if (res.status === 200) {
+              this.getApps()
+              this.updatePlugin(model)
+              this.resetEdit3()
             }
           }).catch((res) => {
             this.handleError(res)

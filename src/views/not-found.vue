@@ -1,9 +1,8 @@
 <template>
-  <h1>404 not found</h1>
   <div class="not-found-bg">
     <div style="text-align:center">
       <div class="fa wrong-fa fa-exclamation-circle "></div>
-      <p style="font-size:20px;">访问的URL错误</p>
+      <p style="font-size:16px;">抱歉，您访问的URL有误</p>
     </div>
   </div>
 </template>
@@ -25,10 +24,10 @@
 
   .not-found-bg
     background-color #fff
-    max-width: 550px;
-    margin: 0 auto;
-    padding: 50px 0;
+    max-width 500px
+    margin 200px auto 0
+    padding 50px 0
   .wrong-fa
-    font-size 150px
+    font-size 120px
     color red
 </style>

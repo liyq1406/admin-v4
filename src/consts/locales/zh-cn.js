@@ -594,7 +594,7 @@ export default {
     types: [
       { label: 'iOS', disabled: false },
       { label: 'Android', disabled: false },
-      { label: 'Web', disabled: true },
+      { label: 'Web', disabled: false },
       { label: '微信', disabled: false },
       { label: '延保管理', disabled: false }
     ],
@@ -605,6 +605,7 @@ export default {
     ],
     placeholders: {
       name: '请输入应用名称',
+      url: '请输入应用URL',
       apn_license_pwd: '请输入授权文件的密码',
       wechat_id: '请输入微信公众号ID',
       wechat_app_id: '请输入微信公众号APPID',
@@ -616,6 +617,7 @@ export default {
       id: '应用ID',
       name: '应用名称',
       type: '应用类型',
+      url: '应用URL',
       create_time: '创建时间',
       apn_enable: '启用苹果APN服务',
       apn_license_pwd: '文件密码',

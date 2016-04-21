@@ -52,6 +52,7 @@
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             <template v-for="plugin in plugins">
+              <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
               <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-exchange"></i>延保系统</a></div>
             </template>
           </div>
@@ -85,7 +86,7 @@
   import store from './store/index'
   import { removeError, hideError, getCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
-  import { createPlugin } from './store/actions/plugins'
+  import { createPlugin, getAllPlugin } from './store/actions/plugins'
   import Vue from 'vue'
   import api from './api'
   import Modal from './components/Modal'
@@ -117,7 +118,8 @@
         removeError,
         getCurrentMember,
         getAllProducts,
-        createPlugin
+        createPlugin,
+        getAllPlugin
       }
     },
 
@@ -160,9 +162,11 @@
         api.app.list().then((res) => {
           if (res.status === 200) {
             res.data.forEach((item) => {
-              if (item.type > 4) {
-                this.createPlugin(item)
+              var plugins = []
+              if (item.type === 3 || item.type > 4) {
+                plugins.push(item)
               }
+              this.getAllPlugin(plugins)
             })
           }
         }).catch((res) => {

@@ -1,5 +1,9 @@
 import * as types from '../mutation-types'
 
+export const getAllPlugin = ({ dispatch }, plugin) => {
+  dispatch(types.RECEIVE_PLUGINS, plugin)
+}
+
 export const createPlugin = ({ dispatch }, plugin) => {
   dispatch(types.CREATE_PLUGIN, plugin)
 }
