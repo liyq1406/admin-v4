@@ -240,7 +240,16 @@
         showEditModal: false,
         showAddModal: false,
         showKeyModal: false,
-        editModel: {},
+        editModel: {
+          ifsnapshot: false,
+          name: '',
+          description: '',
+          link_type: '',
+          is_registerable: false,
+          is_active_register: false,
+          is_release: false,
+          id: ''
+        },
         addModel: {
           mac: ''
         },
@@ -591,8 +600,26 @@
       // 初始化产品编辑表单
       editProduct () {
         this.showEditModal = true
-        this.editModel = _.clone(this.product)
+        // this.editModel = _.clone(this.product)
+        // this.editModel.ifsnapshot = false
+        this.editModel.name = this.product.name
+        this.editModel.description = this.product.description
+        this.editModel.link_type = this.product.link_type
+        this.editModel.is_registerable = this.product.is_registerable
+        this.editModel.is_active_register = this.product.is_active_register
+        this.editModel.is_release = this.product.is_release
+        this.editModel.id = this.$route.params.id
+        console.log()
         this.originEditModel = _.clone(this.product)
+        api.snapshot.getRule(this.$route.params.id).then((res) => {
+          if (res.data.list.length === 0) {
+            this.editModel.ifsnapshot = false
+          } else {
+            this.editModel.ifsnapshot = true
+          }
+          console.log(this.editModel)
+          // this.editModel.set('ifsnapshot', true)
+        })
       },
 
       // 取消编辑
@@ -669,7 +696,7 @@
               datapoint: index
             }
             api.snapshot.getRule(this.$route.params.id).then((res) => {
-              if (res.data.snapshots.length === 0) {
+              if (res.data.list.length === 0) {
                 console.log(params)
                 // console.log(res)
                 api.snapshot.createRule(this.$route.params.id, params).then((res) => {
@@ -677,7 +704,7 @@
                 })
               } else {
                 var newParams = {
-                  _id: res.data.snapshots[0].id,
+                  _id: res.data.list[0].id,
                   rule: 3,
                   interval: 30,
                   storage: {
