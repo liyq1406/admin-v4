@@ -11,7 +11,7 @@
       </div>
       <div class="status-bar">
         <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-        <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts" label="所在地区：" select-size="small"></area-select>
+        <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getProvince" @city-change="getCity" @district-change="getDistrict" label="所在地区：" select-size="small"></area-select>
       </div>
 
       <table class="table table-stripe table-bordered wrongcodetable">
@@ -49,51 +49,61 @@
       <modal :show.sync="showAddModal" width="600px">
         <h3 slot="header">添加网点</h3>
         <div slot="body" class="form">
-          <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+          <form v-form name="addValidation" @submit.prevent="onAddSubmit">
             <div class="form-row">
               <label class="form-control">网点:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="addBranch.name" type="text" v-form-ctrl name="branch" lazy required class="input-text"/>
                 </div>
+                <div v-if="addValidation.$submitted && addValidation.branch.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.branch.$error.required">*必须</span></div>
+                <div v-if="addValidation.branch.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.branch.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">负责人:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="addBranch.charge" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
                 </div>
+                <div v-if="addValidation.$submitted && addValidation.charge.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.charge.$error.required">*必须</span></div>
+                <div v-if="addValidation.charge.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.charge.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">联系号码:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="addBranch.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
                 </div>
+                <div v-if="addValidation.$submitted && addValidation.tel.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.tel.$error.required">*必须</span></div>
+                <div v-if="addValidation.tel.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.tel.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">邮箱地址:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="addBranch.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
                 </div>
+                  <div v-if="addValidation.$submitted && addValidation.email.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.email.$error.required">*必须</span></div>
+                  <div v-if="addValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.email.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">所在地区:</label>
               <div class="controls">
-                <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getAccounts" @city-change="getAccounts" @district-change="getAccounts"></area-select>
+                <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getProvince" @city-change="getCity" @district-change="getDistrict"></area-select>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">详细地址:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="addBranch.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
                 </div>
+                <div v-if="addValidation.$submitted && addValidation.addr.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
+                <div v-if="addValidation.addr.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-actions">
@@ -152,35 +162,48 @@
         adding: false,
         selectedProvince: {},
         selectedCity: {},
-        selectedDistrict: {}
+        selectedDistrict: {},
+        addBranch: {
+          name: '',
+          charge: '',
+          tel: '',
+          email: '',
+          area: {},
+          addr: ''
+        }
       }
     },
 
     methods: {
-      getAccounts () {
-        // TODO
-        console.log(111111)
+      getProvince () {
+
       },
 
-      // 添加表单钩子
-      addFormHook (form) {
-        this.addForm = form
+      getCity () {
+
       },
+
+      getDistrict () {
+
+      },
+
       // 关闭添加浮层并净化添加表单
       resetAdd () {
         this.adding = false
         this.showAddModal = false
         this.addModel = _.clone(this.originAddModel)
-        this.$nextTick(() => {
-          this.addForm.setPristine()
-        })
       },
       // 取消添加
       onAddCancel () {
         this.resetAdd()
       },
       // 添加操作
-      onAddSubmit () {}
+      onAddSubmit () {
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true
+          console.log('ready to send post')
+        }
+      }
     }
   }
 </script>

@@ -56,44 +56,52 @@
       <modal :show="editModal" width="600px">
         <h3 slot="header">编辑客服</h3>
         <div slot="body" class="form">
-          <form v-form name="addValidation" @submit.prevent="onAddSubmit">
+          <form v-form name="editValidation" @submit.prevent="onAddSubmit">
             <div class="form-row">
               <label class="form-control">姓名:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="editStaff.name" type="text" v-form-ctrl name="staff" required lazy class="input-text"/>
                 </div>
+                <div v-if="editValidation.$submitted && editValidation.staff.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.staff.$error.required">*必须</span></div>
+                <div v-if="editValidation.staff.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.staff.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">邮箱地址:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="editStaff.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
                 </div>
+                <div v-if="editValidation.$submitted && editValidation.email.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">*必须</span></div>
+                <div v-if="editValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">联系号码:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="editStaff.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
                 </div>
+                <div v-if="editValidation.$submitted && editValidation.tel.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.tel.$error.required">*必须</span></div>
+                <div v-if="editValidation.tel.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.tel.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">登陆密码:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="" type="text" name="mac" required lazy class="input-text"/>
+                  <input v-model="editStaff.passwd" type="text" v-form-ctrl name="passwd" required lazy class="input-text"/>
                 </div>
+                <div v-if="editValidation.$submitted && editValidation.passwd.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.passwd.$error.required">*必须</span></div>
+                <div v-if="editValidation.passwd.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.passwd.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
-              <v-select :label="addCustomOptions[0]" width="120px">
+              <v-select :label="editCustomOptions[editStaff.status.value].label" width="120px">
                 <label slot="label">状态</label>
-                <select>
-                  <option v-for="customOption in addCustomOptions" value="customOption">{{customOption}}</option>
+                <select v-model="editStaff.status">
+                  <option v-for="customOption in editCustomOptions" :value="customOption">{{customOption.label}}</option>
                 </select>
               </v-select>
             </div>
@@ -124,8 +132,25 @@
     data () {
       return {
         editModal: false,
-        addValidation: '',
-        addCustomOptions: ['启用', '停用']
+        editValidation: '',
+        editCustomOptions: [{
+          label: '启用',
+          value: 0
+        }, {
+          label: '停用',
+          value: 1}
+        ],
+        editStaff: {
+          name: '',
+          passwd: '',
+          tel: '',
+          email: '',
+          status: {
+            label: '启用',
+            value: 0
+          }
+        },
+        delChecked: false
       }
     },
 

@@ -103,7 +103,8 @@
           value: 2}],
 
         loadingData: false,
-        currentPage: 0
+        currentPage: 1,
+        pageCount: 10
       }
     },
 
@@ -114,7 +115,7 @@
         }
 
         this.loadingData = true
-        api.warranty.getWarrantyList(this.$route.params.id).then((res) => {
+        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
           console.log('res')
         }).catch((res) => {
           this.handleError(res)
@@ -124,6 +125,17 @@
     },
 
     computed: {
+      queryCondition () {
+        var condition = {
+          filter: [],
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          order: {},
+          query: {}
+        }
+
+        return condition
+      }
     },
 
     components: {
