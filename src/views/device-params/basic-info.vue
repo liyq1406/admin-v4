@@ -252,7 +252,7 @@
 
 <script>
   // import Vue from 'vue'
-  // import api from '../../../../api'
+  import api from '../../api'
   import { globalMixins } from '../../mixins'
   import Modal from '../../components/Modal'
   // import locales from '../../../../consts/locales/index'
@@ -1078,17 +1078,30 @@
        */
       connect () {
         var self = this
-        XJSObject.invoke('loadXJSAPILib', {}, function (r) {
-          XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
-            console.log('连接设备结果：' + JSON.stringify(r))
-            if (r.status === 200) {
-              self.getDeviceInfos()
-              console.log('设备已经连接')
-              self.deviceOnline = true
-            } else {
-              self.deviceOnline = false
-            }
-          })
+        api.device.getDeviceToken(this.device_id).then((res) => {
+          if (res.status === 200) {
+            console.error(123)
+            console.log(res)
+            console.log(res.data.addr)
+            XJSObject.invoke('loadXJSAPILib', {host: 'http://' + res.data.addr}, function (r) {
+              XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
+                console.log('连接设备结果：' + JSON.stringify(r))
+                if (r.status === 200) {
+                  self.getDeviceInfos()
+                  console.log('设备已经连接')
+                  self.deviceOnline = true
+                } else {
+                  self.deviceOnline = false
+                }
+              })
+            })
+          } else {
+            self.deviceOnline = false
+            console.error(res)
+          }
+        }).catch((res) => {
+          self.deviceOnline = false
+          this.handleError(res)
         })
       },
       /**

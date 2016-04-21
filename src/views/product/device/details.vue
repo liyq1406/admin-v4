@@ -6,9 +6,6 @@
         <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
-              <div class="actions">
-                <a v-link="{path: '/products/' + $route.params.product_id + '/devices/' + $route.params.device_id + '/' + device.mac + '/params'}" class="btn btn-ghost btn-sm"><i class="fa fa-eye"></i>设备参数</a>
-              </div>
               <h2>{{ $t('device.details') }}</h2>
             </div>
             <div class="panel-bd">
