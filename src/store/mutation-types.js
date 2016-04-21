@@ -44,6 +44,9 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
 // 设置当前浏览产品
 export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
 
+// 设置设备参数功能页面当前浏览的产品
+export const SET_PARAMS_CURRENT_PRODUCT = 'SET_CURRENT_PARAMS_PRODUCT'
+
 // 插件
 // ------------------------------
 

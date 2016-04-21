@@ -227,40 +227,6 @@ let configRouter = (router) => {
         }, 'device.details')
       }
     },
-    // 设备参数
-    '/products/:product_id/devices/:device_id/:mac/params': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/product/device/params/index'))
-        }, 'device.params')
-      },
-      subRoutes: {
-        // 基本信息
-        'basic-info': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/device/params/basic-info'))
-            }, 'device.params')
-          }
-        },
-        // 数据监控
-        'data-monitoring': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/device/params/data-monitoring'))
-            }, 'device.params')
-          }
-        },
-        // 故障记录
-        'fault-records': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/product/device/params/fault-records'))
-            }, 'device.params')
-          }
-        }
-      }
-    },
 
     // 应用管理
     '/apps': {
@@ -488,7 +454,7 @@ let configRouter = (router) => {
     },
 
     // 维保系统-工单管理
-    '/warranty/:appid': {
+    '/warranty': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/index'))
@@ -522,7 +488,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-延保工单详情
-    '/warranty/:appid/work-orders/extended-warranties/:id': {
+    '/warranty/work-orders/extended-warranties/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/extended-warranty/details'))
@@ -530,7 +496,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-维修工单详情
-    '/warranty/:appid/work-orders/repair/:id': {
+    '/warranty/work-orders/repair/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/work-order/repair/details'))
@@ -538,7 +504,7 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-帐号详情
-    '/warranty/:appid/accounts/:id': {
+    '/warranty/accounts/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/account/details'))
@@ -546,11 +512,54 @@ let configRouter = (router) => {
       }
     },
     // 维保系统-客服详情
-    '/warranty/:appid/accounts/:account_id/staffs/:id': {
+    '/warranty/accounts/:account_id/staffs/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/warranty/account/staff-details'))
         }, 'warranty')
+      }
+    },
+
+    // 设备参数
+    '/device-params': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/device-params/index'))
+        }, 'device.params')
+      }
+    },
+    // 设备参数详情
+    '/device-params/:product_id/:device_id/:mac': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/device-params/details'))
+        }, 'device.params')
+      },
+      subRoutes: {
+        // 基本信息
+        'basic-info': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/device-params/basic-info'))
+            }, 'device.params')
+          }
+        },
+        // 数据监控
+        'data-monitoring': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/device-params/data-monitoring'))
+            }, 'device.params')
+          }
+        },
+        // 故障记录
+        'fault-records': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/device-params/fault-records'))
+            }, 'device.params')
+          }
+        }
       }
     }
   })
@@ -559,13 +568,13 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/login',
     '/products/:id': '/products/:id/overview',
-    '/products/:product_id/devices/:device_id/:mac/params': '/products/:product_id/devices/:device_id/:mac/params/basic-info',
+    '/device-params/:product_id/:device_id/:mac': '/device-params/:product_id/:device_id/:mac/basic-info',
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
     '/users': '/users/list',
     '/diet': '/diet/recipe',
-    '/warranty/:appid': '/warranty/:appid/work-orders/extended-warranties',
+    '/warranty': '/warranty/work-orders/extended-warranties',
     '/apps/wechat/:id': '/apps/wechat/:id/update'
   })
 

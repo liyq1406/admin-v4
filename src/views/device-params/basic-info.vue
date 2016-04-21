@@ -253,11 +253,11 @@
 <script>
   // import Vue from 'vue'
   // import api from '../../../../api'
-  import { globalMixins } from '../../../../mixins'
-  import Modal from '../../../../components/Modal'
+  import { globalMixins } from '../../mixins'
+  import Modal from '../../components/Modal'
   // import locales from '../../../../consts/locales/index'
   // import io from 'socket.io-client'
-  import XJSObject from '../../../../helpers/jssdk'
+  import XJSObject from '../../helpers/jssdk'
   // import decodeData from './datatools/decode'
   // locales = 123
   // var socket
@@ -1261,7 +1261,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../assets/stylus/common'
 
   .basic-info
     font-size 13px

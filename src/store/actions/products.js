@@ -28,3 +28,7 @@ export const updateProduct = ({ dispatch }, product) => {
 export const setCurrProduct = ({ dispatch }, product) => {
   dispatch(types.SET_CURRENT_PRODUCT, product)
 }
+
+export const setParamsCurrentProduct = ({ dispatch }, product) => {
+  dispatch(types.SET_PARAMS_CURRENT_PRODUCT, product)
+}

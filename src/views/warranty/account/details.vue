@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/warranty/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
       <div class="panel">
         <!-- Start: 网点详情 -->
         <div class="panel-hd">
@@ -81,7 +81,7 @@
               <template v-for="n in 1">
                 <tr>
                   <td>
-                    <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/1/staffs/1'}" class="hl-red">张三</a>
+                    <a v-link="{path: '/warranty/accounts/1/staffs/1'}" class="hl-red">张三</a>
                   </td>
                   <td>13800138000</td>
                   <td>foo@bar.com</td>
@@ -91,7 +91,7 @@
                 </tr>
                 <tr>
                   <td>
-                    <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">张三</a>
+                    <a v-link="{path: '/warranty/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">张三</a>
                   </td>
                   <td>13800138000</td>
                   <td>foo@bar.com</td>

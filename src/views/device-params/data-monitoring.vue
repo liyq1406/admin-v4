@@ -12,8 +12,8 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
-  import api from '../../../../api'
+  import { globalMixins } from '../../mixins'
+  import api from '../../api'
   import echarts from 'echarts/echarts'
   import 'echarts/chart/line'
 
@@ -191,7 +191,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../assets/stylus/common'
   .chartwrap
     padding 20px 0
 </style>

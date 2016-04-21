@@ -33,7 +33,7 @@
             <td>{{ account.phone }}</td>
             <td>{{ account.date }}</td>
             <td>
-              <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/1'}" class="hl-red">查看详情</a>
+              <a v-link="{path: '/warranty/accounts/1'}" class="hl-red">查看详情</a>
             </td>
           </tr>
           <tr v-if="accounts.length === 0">

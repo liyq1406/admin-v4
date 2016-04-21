@@ -40,13 +40,13 @@
         return {
           secondaryNav: [{
             label: '延保工单',
-            link: { path: '/warranty/' + this.$route.params.appid + '/work-orders/extended-warranties' }
+            link: { path: '/warranty/work-orders/extended-warranties' }
           }, {
             label: '维修工单',
-            link: { path: '/warranty/' + this.$route.params.appid + '/work-orders/repair' }
+            link: { path: '/warranty/work-orders/repair' }
           }, {
             label: '网点管理',
-            link: { path: '/warranty/' + this.$route.params.appid + '/accounts' }
+            link: { path: '/warranty/accounts' }
           }]
         }
       }

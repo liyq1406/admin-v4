@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <div class="breadcrumb">
-        <a v-link="{path: '/warranty/' + $route.params.appid + '/accounts/' + $route.params.account_id}">
+        <a v-link="{path: '/warranty/accounts/' + $route.params.account_id}">
           <i class="fa fa-arrow-circle-left"></i>网点详情
         </a>
       </div>

@@ -42,9 +42,9 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
-  import Pager from '../../../../components/Pager'
-  import api from '../../../../api'
+  import { globalMixins } from '../../mixins'
+  import Pager from '../../components/Pager'
+  import api from '../../api'
 
   export default {
     name: 'BasicInfo',
@@ -110,7 +110,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../assets/stylus/common'
   .wrongcodetable,.wrongcodetable th
     text-align center
 </style>
