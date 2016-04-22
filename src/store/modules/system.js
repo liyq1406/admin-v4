@@ -1,6 +1,7 @@
 import {
   RECEIVE_MEMBER,
   SWITCH_LAYOUT,
+  SET_LOADING_STATUS,
   RECEIVE_ERROR,
   REMOVE_ERROR,
   ADD_NOTICE,
@@ -12,6 +13,7 @@ import {
 var state = {
   currentMember: {},  // 当前成员信息
   layout: 'auth',     // 当前页面布局 ['auth'|'admin']
+  loading: false,     // 是否正在加载
   error: {},          // 错误信息
   isShowError: false, // 是否显示错误信息模态窗口
   after: null,        // 后续执行函数
@@ -29,6 +31,10 @@ const mutations = {
   // 切换布局
   [SWITCH_LAYOUT] (state, layout) {
     state.layout = layout
+  },
+
+  [SET_LOADING_STATUS] (state, status) {
+    state.loading = status
   },
 
   // 接收到错误信息

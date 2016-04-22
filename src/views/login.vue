@@ -35,7 +35,7 @@
           </label>
         </div>
         <div class="form-actions">
-          <button @keyup.enter="onSubmit" :disabled="logining || logined" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
+          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
         </div>
       </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
@@ -46,6 +46,8 @@
 <script>
   import api from '../api'
   import { globalMixins } from '../mixins'
+  import { setLoadingStatus } from '../store/actions/system'
+  import store from '../store/index'
 
   export default {
     name: 'LoginForm',
@@ -54,6 +56,17 @@
 
     mixins: [globalMixins],
 
+    store,
+
+    vuex: {
+      getters: {
+        logining: ({ system }) => system.loading
+      },
+      actions: {
+        setLoadingStatus
+      }
+    },
+
     data () {
       return {
         validation: {},
@@ -61,9 +74,20 @@
           account: '',
           password: ''
         },
-        logining: false,
-        logined: false,
+        isLoginSuccess: false,
         rememberPwd: Boolean(this.getCookie('rememberPwd')) || false
+      }
+    },
+
+    route: {
+      deactivate () {
+        this.setLoadingStatus(false)
+        if (this.isLoginSuccess) {
+          this.showNotice({
+            type: 'success',
+            content: '登录成功！'
+          })
+        }
       }
     },
 
@@ -111,10 +135,8 @@
 
       onSubmit () {
         if (this.validation.$valid) {
-          this.logining = true
+          this.setLoadingStatus(true)
           api.corp.auth(this.model).then((res) => {
-            this.logining = false
-            this.logined = true
             var today = new Date()
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
@@ -133,19 +155,15 @@
               this.delCookie('account')
               this.delCookie('password')
             }
-
-            this.showNotice({
-              type: 'success',
-              content: '登录成功！'
-            })
-
+            this.isLoginSuccess = true
             this.$route.router.go({path: '/dashboard'})
           }).catch((res) => {
-            this.logining = false
+            this.setLoadingStatus(false)
             this.handleError(res)
           })
         }
       },
+
       /**
        * 首次进入光标移入密码框 然后移动到登录按钮  以解决浏览器记住密码时候v-placeholder的bug
        * @return {[type]} [description]
@@ -179,4 +197,10 @@
       .remember-password
         input
           margin-right 5px
+
+  .loading-resource
+    .form-auth
+      .form-actions
+        .btn
+          cursor wait
 </style>

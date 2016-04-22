@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'auth-page':layout==='auth'}" class="page-container">
+  <div :class="{'auth-page':layout==='auth', 'loading-resource':loading}" class="page-container">
     <template v-if="layout==='admin'">
       <!-- Start: 页头 -->
       <header class="header the-header" transition="header" transition-mode="out-in">
@@ -84,6 +84,7 @@
 
 <script>
   import store from './store/index'
+  import { globalMixins } from './mixins'
   import { removeError, hideError, getCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
   import { createPlugin, getAllPlugin } from './store/actions/plugins'
@@ -100,12 +101,15 @@
       'toast': Toast
     },
 
+    mixins: [globalMixins],
+
     // 状态管理
     store,
 
     vuex: {
       getters: {
         layout: ({ system }) => system.layout,
+        loading: ({ system }) => system.loading,
         error: ({ system }) => system.error,
         isShowError: ({ system }) => system.isShowError,
         notices: ({ system }) => system.notices,
@@ -126,7 +130,7 @@
     data () {
       return {
         isShowUserNav: false,
-        debug: process.env.NODE_ENV !== 'production',
+        // debug: process.env.NODE_ENV !== 'production',
         customApps: []
       }
     },
@@ -180,21 +184,12 @@
        */
       quit () {
         window.localStorage.removeItem('accessToken')
-        this.$route.router.app.access = false
+        this.showNotice({
+          type: 'info',
+          content: '您已退出登录'
+        })
         this.$route.router.go({path: '/login'})
       }
-      // 获取 APP 列表
-      // getApps () {
-      //   api.app.list().then((res) => {
-      //     if (res.status === 200) {
-      //       res.data.forEach((item) => {
-      //         if (item.type > 4) {
-      //           this.customApps.push(item)
-      //         }
-      //       })
-      //     }
-      //   })
-      // }
     }
   }
 </script>
@@ -212,6 +207,9 @@
   .auth-page
     background #383838
     overflow-y auto
+
+  .loading-resource
+    cursor wait
 
   // 头部
   .the-header

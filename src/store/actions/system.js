@@ -22,6 +22,11 @@ export const getCurrentMember = ({ dispatch }, memberId, vm) => {
   })
 }
 
+// 开始加载资源
+export const setLoadingStatus = ({ dispatch }, status) => {
+  dispatch(types.SET_LOADING_STATUS, status)
+}
+
 // 弹出错误提示
 export const showError = ({ dispatch }, error, fn) => {
   let err = {}

@@ -66,18 +66,9 @@
           }, {
             label: this.$t('sub_nav.product.alerts'),
             link: { path: '/products/' + this.$route.params.id + '/alert' }
-          // }, {
-            // label: '设备互联',
-            // link: { path: '/products/' + this.$route.params.id + '/interconnection' }
           }, {
             label: this.$t('sub_nav.product.upgrade'),
             link: { path: '/products/' + this.$route.params.id + '/upgrade' }
-          // }, {
-            // label: '虚拟设备',
-            // link: { path: '/products/' + this.$route.params.id + '/virtual-device' }
-          // }, {
-            // label: this.$t('sub_nav.product.wechat'),
-            // link: { path: '/products/' + this.$route.params.id + '/wechat' }
           }, {
             label: this.$t('sub_nav.product.dataforward'),
             link: { path: '/products/' + this.$route.params.id + '/data-forward' }

@@ -3,6 +3,12 @@ import { setLayout, showError, showNotice } from './store/actions/system'
 import locales from './consts/locales/index'
 
 export var globalMixins = {
+  data () {
+    return {
+      debug: process.env.NODE_ENV !== 'production'
+    }
+  },
+
   vuex: {
     actions: {
       setLayout,
