@@ -12,24 +12,14 @@
         </thead>
         <tbody>
           <tr v-for="record in records| limitBy pageCount (currentPage-1)*pageCount">
+            <td>{{ record.alert_value }}</td>
             <td>{{ record.content }}</td>
-            <td v-if="record.content==='A12'">低压告警</td>
-            <td v-if="record.content==='A13'">高压告警</td>
-            <td v-if="record.content==='A21'">水温探头故障</td>
-            <td v-if="record.content==='A22'">外机探头故障</td>
-            <td v-if="record.content==='A23'">排气探头故障</td>
-            <td v-if="record.content==='A25'">环境探头故障</td>
-            <td v-if="record.content==='A26'">回气探头故障</td>
-            <td v-if="record.content==='A41'">电流过载保护</td>
-            <td v-if="record.content==='A71'">电加热异常</td>
-            <td v-if="record.content==='A51'">和外机板连线中断</td>
-            <td v-if="record.content==='A61'">排气温度过高</td>
             <td>{{ record.create_date }}</td>
             <!-- <td class="tac">
               <button @click="editRecord(record)" class="btn btn-link btn-sm">{{ $t("common.del") }}</button>
             </td> -->
           </tr>
-          <tr v-if="records.length === 0">
+          <tr v-show="records.length === 0">
             <td colspan="3" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
               <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
             </td>
@@ -61,10 +51,12 @@
       return {
         records: [
           {
+            alert_value: '',
             content: 'A12',
             create_date: '2016-3-30 13:40'
           },
           {
+            alert_value: '',
             content: 'A13',
             create_date: '2016-3-30 13:40'
           }
@@ -91,12 +83,19 @@
           offset: offset,
           limit: limit,
           query: {
-            from: Number(device_id)
+            'from': Number(device_id)
           }
         }
         this.loadingRecord = true
         api.snapshot.getFault(params).then((res) => {
-          this.records = res.data.list
+          var records = res.data.list
+          records.map(function (item) {
+            item.create_date = item.create_date.replace(/t/i, ' ')
+            item.create_date = item.create_date.replace(/z/i, '')
+            item.create_date = item.create_date.replace('.' + item.create_date.split('.')[1], '')
+          })
+          console.log(records.reate_date)
+          this.records = records
           this.loadingRecord = false
         }).catch((res) => {
           this.handleError(res)
