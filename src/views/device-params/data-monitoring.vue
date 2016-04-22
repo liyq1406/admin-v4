@@ -72,7 +72,7 @@
           this.waterboxTems.push(0)
           this.environmentTems.push(0)
           var date = new Date(now - i * 3600 * 1000)
-          var hour = date.getHours()
+          var hour = date.getHours() + 1
           this.dates.push(`${hour > 9 ? hour : `0${hour}`}:00`)
         }
       },
@@ -104,6 +104,9 @@
       },
 
       _handleData (data) {
+        data.sort((a, b) => {
+          return new Date(a.snapshot_date) - new Date(b.snapshot_date)
+        })
         var now = Date.parse(new Date()) / 1000
         // 当前未满一小时默认取满一小时
         now = (Math.floor(now / 3600) + 1) * 3600
@@ -116,7 +119,7 @@
           // 去掉经过后台处理的时间的T和Z字符
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
-          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR)
+          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) + 1
           if (index) {
             if (a !== i) {
               // 当商改变说明此数据为下一个小时的数据
