@@ -53,7 +53,7 @@
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             <template v-for="plugin in plugins">
               <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
-              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-exchange"></i>延保系统</a></div>
+              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-wrench"></i>延保系统</a></div>
             </template>
           </div>
         </div>
