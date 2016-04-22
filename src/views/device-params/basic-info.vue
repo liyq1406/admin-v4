@@ -356,7 +356,7 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            tips: '温度范围0℃~100℃'
           },
           S14: {
             loading: false,
@@ -917,7 +917,7 @@
             if (r.status === 200 && !/S100/.test(data)) {
               self.showNotice({
                 type: 'success',
-                content: '数据发送成功'
+                content: '向设备发送设置数据'
               })
             } else if (r.status === 202) {
               self.deviceOnline = false
@@ -1014,7 +1014,17 @@
         var self = this
         var key = data.split('/1/')[0].replace('/', '')
         var value = data.split('/1/')[1] && data.split('/1/')[1].split('\r')[0]
-        if (value) {
+        var errkey = data.split('/2/')[0].replace('/', '')
+        var errvalue = data.split('/2/')[1]
+        if (errvalue) {
+          if (self.deviceInfos[errkey]) {
+            self.deviceInfos[errkey].loading = false
+            self.showNotice({
+              type: 'error',
+              content: self.deviceInfos[errkey].name + '设置失败'
+            })
+          }
+        } else if (value) {
           if (key === 'S100') {
             // console.log('所有数据' + JSON.stringify(data))
             var arr = self._parseData(data)
@@ -1078,7 +1088,7 @@
        */
       connect () {
         var self = this
-        api.device.getDeviceToken(this.device_id).then((res) => {
+        api.device.getDeviceToken(self.device_id).then((res) => {
           if (res.status === 200) {
             XJSObject.invoke('loadXJSAPILib', {host: 'http://' + res.data.addr}, function (r) {
               XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {
