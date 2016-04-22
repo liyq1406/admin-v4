@@ -91,7 +91,7 @@
           offset: offset,
           limit: limit,
           query: {
-            from: device_id
+            from: Number(device_id)
           }
         }
         this.loadingRecord = true
