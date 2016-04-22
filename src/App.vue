@@ -161,13 +161,13 @@
       getPlugins () {
         api.app.list().then((res) => {
           if (res.status === 200) {
+            var plugins = []
             res.data.forEach((item) => {
-              var plugins = []
               if (item.type === 3 || item.type > 4) {
                 plugins.push(item)
               }
-              this.getAllPlugin(plugins)
             })
+            this.getAllPlugin(plugins)
           }
         }).catch((res) => {
           this.handleError(res)
