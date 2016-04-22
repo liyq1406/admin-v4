@@ -121,8 +121,8 @@
             if (a !== i) {
               // 当商改变说明此数据为下一个小时的数据
               // 将每个小时最后的数据附近图表数据数组
-              this.environmentTems[71 - a] = Number(itemToAdd['43'])
-              this.waterboxTems[71 - a] = Number(itemToAdd['34'])
+              this.environmentTems[71 - a] = Number(itemToAdd['43']) || 0
+              this.waterboxTems[71 - a] = Number(itemToAdd['34']) || 0
               itemToAdd = item
               // 将1重置为当前数据的时间
               i = a
