@@ -928,13 +928,12 @@
     },
     route: {
       data () {
-        this.connect()
-        this.listenDeviceData()
+        this.connect() // 连接设备
+        this.listenDeviceData() // 监听设备返回数据
       }
     },
     ready () {
-      this.upDateRange()
-      this.listenDeviceData()
+      this.upDateRange() // 更新上限温度和下限温度的最大最小值
     },
     methods: {
       /**
@@ -969,6 +968,11 @@
           })
         }
       },
+
+      /**
+       * 监听返回的数据
+       * @return {[type]} [description]
+       */
       listenDeviceData () {
         var self = this
         // 设备返回数据
@@ -988,9 +992,11 @@
           }
         })
       },
+
       /**
-       * 确定按钮事件
-       * @param {object} productInfo 当前正在编辑的对象
+       * 向设备发送数据
+       * @param {[type]} deviceInfo 当前设置的设备信息
+       * @param {[type]} num        数据类型
        */
       setDataEvent (deviceInfo, num) {
         var self = this
@@ -1041,6 +1047,7 @@
         }
         self.setDataEvent(deviceInfo, 5)
       },
+
       /**
        * 解析设备返回的数据
        * @param  {string} data data
@@ -1086,6 +1093,7 @@
         }
         this.upDateRange() // 更新S11 和 S12 最小值和最大值
       },
+
       /**
        * 获取设备信息
        * @return {[type]} [description]
@@ -1104,6 +1112,7 @@
           self.updateDate = false
         }
       },
+
       /**
        * 显示设置控制器时间浮层
        */
@@ -1148,6 +1157,7 @@
           this.handleError(res)
         })
       },
+
       /**
        * 显示编辑浮层
        * @param  {string} paramsKey 当前正在编辑的属性名称
@@ -1172,6 +1182,7 @@
           })
         }
       },
+
       /**
        * 显示时间设置浮层
        * @param  {string} paramsKey 当前正在编辑的属性名称
@@ -1195,6 +1206,7 @@
         self.editModal1.tips = self.deviceInfos[paramsKey].tips
         self.editModal1.show = true
       },
+
       /**
        * 显示参数设置浮层 小范围
        * @param  {string} paramsKey 当前正在编辑的属性名称
@@ -1217,6 +1229,7 @@
           self.editModal2.show = true
         }
       },
+
       /**
        * 显示参数设置浮层 大范围
        * @param  {string} paramsKey 当前正在编辑的属性名称
@@ -1235,6 +1248,7 @@
           self.editModal3.show = true
         }
       },
+
       /**
        * 显示参数设置浮层 双维度
        * @param  {string} paramsKey 当前正在编辑的属性名称
@@ -1259,6 +1273,7 @@
           self.editModal4.show = true
         }
       },
+
       /**
        * 取消按钮事件
        * @return {[type]} [description]
@@ -1270,6 +1285,12 @@
         this.editModal4.show = false
         this.editModal5.show = false
       },
+
+      /**
+       * 检查数据是否是小时格式
+       * @param  {[type]} hour [description]
+       * @return {[type]}      [description]
+       */
       checkHour (hour) {
         if (hour - 0 > 23) {
           return false
@@ -1277,6 +1298,11 @@
           return true
         }
       },
+      /**
+       * 检查数据是否是分钟格式
+       * @param  {[type]} minute [description]
+       * @return {[type]}        [description]
+       */
       checkMinute (minute) {
         if (minute - 0 > 59) {
           return false
@@ -1284,6 +1310,12 @@
           return true
         }
       },
+
+      /**
+       * 检查浮层3的数据格式是否在最小值和最大值之间
+       * @param  {[type]} value [description]
+       * @return {[type]}       [description]
+       */
       checkData3 (value) {
         value = value - 0
         var result = true
@@ -1294,6 +1326,12 @@
         }
         return result
       },
+
+      /**
+       * 检查浮层4的数据格式是否在最小值和最大值之间
+       * @param  {[type]} value [description]
+       * @return {[type]}       [description]
+       */
       checkData4 (value) {
         value = value - 0
         var result = true
@@ -1306,6 +1344,7 @@
         }
         return result
       },
+
       /**
        * 解析S100数据
        * @param  {[type]} str [description]
@@ -1340,6 +1379,11 @@
         })
         return result
       },
+
+      /**
+       * 更新上限温度和下限温度的最大值和最小值
+       * @return {[type]} [description]
+       */
       upDateRange () {
         var self = this
         self.deviceInfos.S11.min = self.deviceInfos.S12.valueText - 0
