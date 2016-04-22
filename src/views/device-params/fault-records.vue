@@ -94,7 +94,6 @@
             item.create_date = item.create_date.replace(/z/i, '')
             item.create_date = item.create_date.replace('.' + item.create_date.split('.')[1], '')
           })
-          console.log(records.reate_date)
           this.records = records
           this.loadingRecord = false
         }).catch((res) => {
