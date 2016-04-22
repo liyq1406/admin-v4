@@ -170,11 +170,14 @@
           <div class="content-box">
             <div class="content-value">
               <span class="name">{{editModal3.paramsName}}：</span>
-              <input type="text" v-form-ctrl name="paramsValue" required class="paramsValue" v-model="editModal3.value">
+              <input type="text" v-form-ctrl lazy name="paramsValue" required custom-validator="checkData3" class="paramsValue" v-model="editModal3.value">
               <span class="unit">{{editModal3.unit}}</span>
             </div>
             <div v-show="validation3.paramsValue.$dirty" class="form-tips form-tips-error">
               <span v-show="validation3.paramsValue.$error.required">{{editModal3.paramsName}}不能留空</span>
+            </div>
+            <div v-show="validation3.paramsValue.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation3.paramsValue.$error.customValidator">{{editModal3.paramsName}}不在允许范围内</span>
             </div>
             <div class="tips">
               <span>{{editModal3.tips}}</span>
@@ -198,11 +201,14 @@
               <select name="deviceParams" v-model="editModal4.canSetParams" class="deviceParams">
                 <option v-for="canSetParams in [true, false]" :value="canSetParams">{{canSetParams ? 'On' : 'Off'}}</option>
               </select>
-              <input type="text" class="paramsValue" name="paramsValue" v-form-ctrl :required="editModal4.canSetParams" v-model="editModal4.value" v-show="editModal4.canSetParams">
+              <input type="text" class="paramsValue" name="paramsValue" v-form-ctrl lazy :required="editModal4.canSetParams" custom-validator="checkData4" v-model="editModal4.value" v-show="editModal4.canSetParams">
               <span class="unit" v-show="editModal4.canSetParams">{{editModal4.unit}}</span>
             </div>
             <div v-show="validation4.paramsValue.$error.required" class="form-tips form-tips-error">
               <span>{{editModal4.paramsName}}不能留空</span>
+            </div>
+            <div v-show="validation4.paramsValue.$error.customValidator" class="form-tips form-tips-error">
+              <span>{{editModal4.paramsName}}不在允许范围内</span>
             </div>
             <div class="tips">
               <span>{{editModal4.tips}}</span>
@@ -310,6 +316,8 @@
           paramsName: '',
           value: '',
           unit: '',
+          min: 0,
+          max: 100,
           tips: ''
         },
         // 编辑浮层4
@@ -630,6 +638,8 @@
             valueArr: [],
             modelType: '3',
             unit: '分钟',
+            min: 0,
+            max: 999,
             tips: '0 – 999'
           },
           S58: {
@@ -639,6 +649,8 @@
             valueArr: [],
             modelType: '4',
             unit: '℃',
+            min: 50,
+            max: 125,
             tips: '50 – 125 OFF'
           },
           S59: {
@@ -648,6 +660,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 1,
+            max: 50,
             tips: '1– 50'
           },
           S61: {
@@ -666,6 +680,8 @@
             valueArr: [],
             modelType: '4',
             unit: '秒',
+            min: 1,
+            max: 99,
             tips: 'Off 1 – 99 On Off表示不开背光 On表示背光常开 1-99表示按键操作后背光延时关闭'
           },
           S68: {
@@ -702,6 +718,8 @@
             valueArr: [],
             modelType: '3',
             unit: '',
+            min: 100,
+            max: 480,
             tips: '100 - 480'
           },
           S73: {
@@ -711,6 +729,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: -15,
+            max: 15,
             tips: '-15 – 15'
           },
           S74: {
@@ -720,6 +740,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 0,
+            max: 5,
             tips: '0-5'
           },
           S75: {
@@ -729,6 +751,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 1,
+            max: 8,
             tips: '1-8'
           },
           S76: {
@@ -738,6 +762,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 85,
+            max: 110,
             tips: '85 – 110'
           },
           S77: {
@@ -747,6 +773,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 1,
+            max: 30,
             tips: '1-30'
           },
           S78: {
@@ -826,8 +854,7 @@
             name: '热水器上传监控数据',
             valueText: '35.6,24.0,25,26.5',
             valueArr: [],
-            modelType: '3',
-            unit: '',
+            modelType: '0',
             tips: '数据格式：水箱温度，化霜温度，排气温度，环境温度 （备注：时间用服务器收到时间）'
           },
           S107: {
@@ -835,7 +862,7 @@
             name: '故障信息上报',
             valueText: '35.6,24.0,25,26.5',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: '',
             tips: '故障代码，见热水器说明书 （备注：故障代码可以传多个）'
           },
@@ -844,7 +871,7 @@
             name: '一键强制加热',
             valueText: '1',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: '',
             tips: '此命令由服务端发送给热水器，热水器自己判断是否强制加热'
           },
@@ -882,38 +909,6 @@
             modelType: '4',
             unit: '℃',
             tips: '时间格式为 00:00 - 23:59'
-          },
-          paramsKey00: {
-            name: '运行模式',
-            valueText: '自动模式',
-            valueArr: ['自动模式', '手动模式'],
-            modelType: '2',
-            unit: ''
-          },
-          paramsKey2: {
-            name: '工作时间段一',
-            valueText: '00:00-00:00',
-            valueArr: [],
-            modelType: '1'
-          },
-          paramsKey3: {
-            name: '工作时间段二',
-            valueText: '00:00-00:00',
-            valueArr: [],
-            modelType: '1'
-          },
-          paramsKey4: {
-            name: '工作时间段三',
-            valueText: '00:00-00:00',
-            valueArr: [],
-            modelType: '1'
-          },
-          paramsKey11: {
-            name: '上限温度',
-            valueText: '55.0',
-            valueArr: [],
-            modelType: '3',
-            unit: '℃'
           }
         },
         // 当前正在编辑的参数
@@ -933,13 +928,13 @@
     },
     route: {
       data () {
-        // this.getDeviceInfos()
-        this.connect() // 连接设备
-        this.listenDeviceData() // 监听设备数据
+        this.connect()
+        this.listenDeviceData()
       }
     },
     ready () {
-      // onRecvXDeviceData
+      this.upDateRange()
+      this.listenDeviceData()
     },
     methods: {
       /**
@@ -1089,6 +1084,7 @@
             }
           }
         }
+        this.upDateRange() // 更新S11 和 S12 最小值和最大值
       },
       /**
        * 获取设备信息
@@ -1234,6 +1230,8 @@
           self.editModal3.value = self.deviceInfos[paramsKey].valueText
           self.editModal3.unit = self.deviceInfos[paramsKey].unit
           self.editModal3.tips = self.deviceInfos[paramsKey].tips
+          self.editModal3.min = self.deviceInfos[paramsKey].min
+          self.editModal3.max = self.deviceInfos[paramsKey].max
           self.editModal3.show = true
         }
       },
@@ -1250,10 +1248,13 @@
             self.editModal4.canSetParams = true
             self.editModal4.value = self.deviceInfos[paramsKey].valueText
           } else {
-            self.editModal4.value = '0'
+            self.editModal4.canSetParams = false
+            self.editModal4.value = self.deviceInfos[paramsKey].max
           }
           self.editModal4.paramsName = self.deviceInfos[paramsKey].name
           self.editModal4.unit = self.deviceInfos[paramsKey].unit
+          self.editModal4.min = self.deviceInfos[paramsKey].min
+          self.editModal4.max = self.deviceInfos[paramsKey].max
           self.editModal4.tips = self.deviceInfos[paramsKey].tips
           self.editModal4.show = true
         }
@@ -1282,6 +1283,28 @@
         } else {
           return true
         }
+      },
+      checkData3 (value) {
+        value = value - 0
+        var result = true
+        if (value >= this.editModal3.min && value <= this.editModal3.max) {
+          result = true
+        } else {
+          result = false
+        }
+        return result
+      },
+      checkData4 (value) {
+        value = value - 0
+        var result = true
+        if (this.editModal4.canSetParams) {
+          if (value >= this.editModal4.min && value <= this.editModal4.max) {
+            result = true
+          } else {
+            result = false
+          }
+        }
+        return result
       },
       /**
        * 解析S100数据
@@ -1316,6 +1339,13 @@
           }
         })
         return result
+      },
+      upDateRange () {
+        var self = this
+        self.deviceInfos.S11.min = self.deviceInfos.S12.valueText - 0
+        self.deviceInfos.S11.max = self.deviceInfos.S13.valueText - 0
+        self.deviceInfos.S12.min = self.deviceInfos.S14.valueText - 0
+        self.deviceInfos.S12.max = self.deviceInfos.S11.valueText - 0
       }
     }
   }
