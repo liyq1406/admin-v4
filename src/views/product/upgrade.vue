@@ -70,7 +70,7 @@
                 <td>{{ task.target_version }}</td>
                 <td>{{ task.upgrade_count }}</td>
                 <td class="tac">
-                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-sm btnrr"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
+                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-sm mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
                   <button @click="removeTask(task)" class="btn btn-primary btn-sm">删除</button>
                 </td>
               </tr>
@@ -94,9 +94,9 @@
       <h3 slot="header">{{ $t('firmware.add_firmware') }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFirmwareHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.mod") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.mod") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="addModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
@@ -104,9 +104,9 @@
               <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.version") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.version") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="addModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
@@ -114,18 +114,24 @@
               <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.file") }}:</label>
-            <div class="controls">
-              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
-              </label>
-              <div v-if="addModel.file_url.length > 0" class="form-tips mt5">url: {{ addModel.file_url }}</div>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.file") }}:</label>
+            <div class="controls col-18">
+              <div class="row">
+                <div class="col-10">
+                  <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                    <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+                  </label>
+                </div>
+                <div class="col-14">
+                  <div v-if="addModel.file_url.length > 0" class="file-url">url: {{ addModel.file_url }}</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.description") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.description") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
@@ -133,12 +139,11 @@
               <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.is_release") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_release" v-model="addModel.is_release"/>
+                  <input type="checkbox" name="is_release" v-model="addModel.is_release"/>{{ $t("firmware.fields.is_release") }}
                 </label>
               </div>
             </div>
@@ -155,9 +160,9 @@
       <h3 slot="header">{{ $t('firmware.edit_firmware') }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFirmwareHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.mod") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.mod") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="editModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
@@ -165,9 +170,9 @@
               <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.version") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.version") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="editModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
@@ -175,18 +180,24 @@
               <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.file") }}:</label>
-            <div class="controls">
-              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
-              </label>
-              <div v-if="editModel.file_url" class="form-tips mt5">url: {{ editModel.file_url }}</div>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.file") }}:</label>
+            <div class="controls col-18">
+              <div class="row">
+                <div class="col-10">
+                  <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                    <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+                  </label>
+                </div>
+                <div class="col-14">
+                  <div v-if="editModel.file_url" class="file-url">url: {{ editModel.file_url }}</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.description") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("firmware.fields.description") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
@@ -194,12 +205,11 @@
               <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("firmware.fields.is_release") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_release" v-model="editModel.is_release"/>
+                  <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("firmware.fields.is_release") }}
                 </label>
               </div>
             </div>
@@ -219,9 +229,9 @@
       <h3 slot="header">{{ $t("task.create_task") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("task.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("task.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('task.placeholders.name')" class="input-text-wrap">
                 <input v-model="addTaskModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -229,9 +239,9 @@
               <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('validation.required', {field: $t('task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("task.fields.description") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("task.fields.description") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('task.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addTaskModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
@@ -239,9 +249,9 @@
               <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('validation.required', {field: $t('task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.description'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("task.fields.from_version") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("task.fields.from_version") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_from_version')" :label="addTaskModel.from_version.toString()">
                   <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number="number">
@@ -253,9 +263,9 @@
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("task.select_from_version") }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("task.fields.target_version") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("task.fields.target_version") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_target_version')" :label="addTaskModel.target_version.toString()">
                   <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number="number">
@@ -669,6 +679,8 @@
 </script>
 
 <style lang="stylus">
+  @import '../../assets/stylus/common'
+
   .date-row
     .datepicker
     .timepicker
@@ -680,6 +692,10 @@
     .timepicker
       width 160px
       margin-left 10px
-  .btnrr
-    margin-right 20px
+
+  .modal
+    .file-url
+      color gray
+      line-height 32px
+      text-overflow()
 </style>

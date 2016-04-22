@@ -25,6 +25,8 @@
     color #A9A9A9
 
 .form
+  max-width 600px
+
   .select
     position relative
 
@@ -102,22 +104,18 @@
 
     .form-control
       float left
-      width 110px
-      line-height 33px
+      // width 110px
+      line-height 32px
 
     .controls
       float left
-      max-width 506px
-      width 40%
-      min-width 250px
-
-      &.controls-image
-        max-width 688px
-        width 60%
+      // max-width 506px
+      // width 40%
+      // min-width 250px
 
     .control-text
       display inline-block
-      line-height 35px
+      line-height 32px
 
     &.mxh
       max-height 240px
@@ -154,13 +152,15 @@
       margin-top 40px
 
   .form-actions
-    padding-left 110px
+    .del-check
+      float left
+      margin 10px 30px 0 0
+
+      input
+        margin-right 5px
 
     .btn
       margin-right 10px
-
-  .without-label
-    margin-left 110px
 
 .form-auth
   max-width 550px
@@ -221,7 +221,6 @@
     padding 0 30px
 
   .form-actions
-    padding-left 0
     text-align center
 
     .btn
@@ -243,19 +242,12 @@
     .form-row
       margin-bottom 12px
 
-      .controls
-        width 330px
+      // .controls
+      //   width 330px
 
     .form-actions
       padding-left 0
       text-align right
-
-      .del-check
-        float left
-        margin 10px 30px 0 0
-
-        input
-          margin-right 5px
 
       .btn
         margin 0 0 0 10px

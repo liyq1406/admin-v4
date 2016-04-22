@@ -540,7 +540,7 @@ export default {
       version: '固件版本号',
       description: '版本说明',
       create_date: '添加日期',
-      is_release: '是否发布'
+      is_release: '发布固件'
     }
   },
 

@@ -80,9 +80,9 @@
       <h3 slot="header">{{ $t("overview.editForm.header") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("product.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("product.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('product.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
               </div>
@@ -90,9 +90,9 @@
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('validation.format', {field: $t('product.fields.name')}) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("product.fields.desc") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("product.fields.desc") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('product.placeholders.desc')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
@@ -100,9 +100,9 @@
               <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.desc'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("product.fields.link_type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("product.fields.link_type") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="deviceTypes[editModel.link_type-1]">
                   <select v-model="editModel.link_type" v-form-ctrl name="link_type">
@@ -112,8 +112,8 @@
               </div>
             </div>
           </div>
-          <div class="form-row without-label">
-            <div class="controls">
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("product.fields.is_registerable") }}
@@ -121,8 +121,8 @@
               </div>
             </div>
           </div>
-          <div class="form-row without-label" v-show="editModel.link_type===5">
-            <div class="controls">
+          <div class="form-row row" v-show="editModel.link_type===5">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
@@ -130,8 +130,8 @@
               </div>
             </div>
           </div>
-          <div class="form-row without-label">
-            <div class="controls">
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>开启快照功能
@@ -157,9 +157,9 @@
       <h3 slot="header">{{ $t("overview.add_device") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("overview.addForm.mac") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
               </div>

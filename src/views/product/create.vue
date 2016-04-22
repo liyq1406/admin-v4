@@ -8,9 +8,9 @@
         <div class="panel-bd">
           <div class="form">
             <form v-form name="validation" @submit.prevent="onSubmit">
-              <div class="form-row">
-                <label class="form-control">{{ $t("product.fields.name") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-6">{{ $t("product.fields.name") }}:</label>
+                <div class="controls col-18">
                   <div v-placeholder="$t('product.placeholders.name')" class="input-text-wrap">
                     <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
                   </div>
@@ -18,9 +18,9 @@
                   <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('product.fields.name')}) }}</span></div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("product.fields.desc") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-6">{{ $t("product.fields.desc") }}:</label>
+                <div class="controls col-18">
                   <div v-placeholder="$t('product.placeholders.desc')" class="input-text-wrap">
                     <textarea v-model="model.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
                   </div>
@@ -28,9 +28,9 @@
                   <div v-if="validation.description.$dirty" class="form-tips form-tips-error"><span v-if="validation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span><span v-if="validation.description.$error.maxlength"> {{ $t('validation.maxlength', [ $t('product.fields.name'), 250]) }}</span></div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("product.fields.link_type") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-6">{{ $t("product.fields.link_type") }}:</label>
+                <div class="controls col-18">
                   <div class="select">
                     <v-select :label="deviceTypes[model.link_type-1]">
                       <select v-model="model.link_type" v-form-ctrl name="link_type">

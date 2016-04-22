@@ -51,9 +51,9 @@
       <h3 slot="header">{{ $t("datapoint.add_datapoint") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.index") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.index") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.index')" class="input-text-wrap">
                 <input v-model="addModel.index" type="text" v-form-ctrl name="index" required custom-validator="numberic" lazy class="input-text" />
               </div>
@@ -61,9 +61,9 @@
               <div v-if="addValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span><span v-if="addValidation.index.$error.customValidator">{{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -71,9 +71,9 @@
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.type") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="datapointTypes[addModel.type-1]">
                   <select v-model="addModel.type" v-form-ctrl name="type">
@@ -83,9 +83,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.symbol") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.symbol") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.symbol')" class="input-text-wrap">
                 <textarea v-model="addModel.symbol" type="text" v-form-ctrl name="symbol" maxlength="10" required lazy class="input-text"></textarea>
               </div>
@@ -93,9 +93,9 @@
               <div v-if="addValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span><span v-if="addValidation.symbol.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.description") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.description") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
@@ -115,9 +115,9 @@
       <h3 slot="header">{{ $t("datapoint.edit_datapoint") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.index") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.index") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.index')" class="input-text-wrap">
                 <input v-model="editModel.index" type="text" v-form-ctrl name="index" required custom-validator="numberic" lazy class="input-text"/>
               </div>
@@ -125,9 +125,9 @@
               <div v-if="editValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span><span v-if="editValidation.index.$error.customValidator">{{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -135,9 +135,9 @@
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.type") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="datapointTypes[editModel.type-1]">
                   <select v-model="editModel.type" v-form-ctrl name="type">
@@ -147,9 +147,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.symbol") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.symbol") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.symbol')" class="input-text-wrap">
                 <textarea v-model="editModel.symbol" type="text" v-form-ctrl name="symbol" maxlength="10" required lazy class="input-text"></textarea>
               </div>
@@ -157,9 +157,9 @@
               <div v-if="editValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span><span v-if="editValidation.symbol.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("datapoint.fields.description") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("datapoint.fields.description") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('datapoint.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>

@@ -6,14 +6,14 @@
         <h2>{{ $t("auth.reset") }}</h2>
       </div>
       <div class="form-body">
-        <div class="form-row">
+        <div class="form-row row">
           <div v-placeholder="$t('auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
           </div>
           <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span></div>
           <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span></div>
         </div>
-        <div class="form-row">
+        <div class="form-row row">
           <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
             <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
           </div>

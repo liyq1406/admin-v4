@@ -60,10 +60,7 @@
     <modal :show.sync="showKeyModal">
       <h3 slot="header">Access Key Secret</h3>
       <div slot="body" class="form">
-        <div slot="body" class="secret-key tac mrbthr secret-key">{{ key.secret }}</div>
-        <div class="form-actions">
-          <button @click="showKeyModal=false" class="btn btn-primary">确定</button>
-        </div>
+        <div slot="body" class="secret-key tac">{{ key.secret }}</div>
       </div>
     </modal>
     <!-- End: 查看密钥浮层-->
@@ -73,9 +70,9 @@
       <h3 slot="header">{{ $t("app.create_app") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addAppHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -83,9 +80,9 @@
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.type") }}:</label>
+            <div class="controls col-18">
               <div class="radio-group radio-group-v">
                 <!-- 功能完成后改成下面的代码 -->
                 <!-- <label v-for="type in appTypes" class="radio">
@@ -119,9 +116,9 @@
       <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel.type | typeLabel }})</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit(editModel)" hook="editAppHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -129,9 +126,9 @@
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.inform") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.inform") }}:</label>
+            <div class="controls col-18">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="apn_enable" v-model="editModel.apn_enable"/>{{ $t("app.fields.apn_enable") }}
@@ -139,25 +136,31 @@
               </div>
             </div>
           </div>
-          <div v-show="editModel.apn_enable" class="form-row">
-            <label class="form-control">{{ $t("app.apn_file") }}:</label>
-            <div class="controls">
-              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editModel', 'editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('app.uploading') : $t('app.upload') }}
-              </label>
-              <div v-if="editModel.apn_license_url" class="form-tips mt5">url: {{ editModel.apn_license_url }}</div>
+          <div v-show="editModel.apn_enable" class="form-row row">
+            <label class="form-control col-6">{{ $t("app.apn_file") }}:</label>
+            <div class="controls col-18">
+              <div class="row">
+                <div class="col-10">
+                  <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                    <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editModel', 'editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('app.uploading') : $t('app.upload') }}
+                  </label>
+                </div>
+                <div class="col-14">
+                  <div v-if="editModel.apn_license_url" class="file-url">url: {{ editModel.apn_license_url }}</div>
+                </div>
+              </div>
             </div>
           </div>
-          <div v-show="editModel.apn_enable" class="form-row">
-            <label class="form-control">{{ $t("app.fields.apn_license_pwd") }}:</label>
-            <div class="controls">
+          <div v-show="editModel.apn_enable" class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.apn_license_pwd") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
                 <input v-model="editModel.apn_license_pwd" type="text" v-form-ctrl name="apn_license_pwd" class="input-text"/>
               </div>
             </div>
           </div>
-          <div v-show="editModel.apn_enable" class="form-row without-label">
-            <div class="controls">
+          <div v-show="editModel.apn_enable" class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="apn_license_production" v-model="editModel.apn_license_production"/>{{ $t("app.is_release") }}
@@ -182,9 +185,9 @@
       <h3 slot="header">{{ '编辑应用' }} ({{ editModel2.type | typeLabel }})</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation2" @submit.prevent="onEditSubmit(editModel2)" hook="editAppHook2">
-          <div class="form-row">
-            <label class="form-control wid130">{{ '应用名称' }}:</label>
-            <div class="controls wid310">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '应用名称' }}:</label>
+            <div class="controls col-17">
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel2.name" type="text" name="name" minlength="2" maxlength="32" v-form-ctrl required lazy class="input-text"/>
               </div>
@@ -192,9 +195,9 @@
               <div v-if="editValidation2.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation2.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation2.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation2.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid130">{{ $t("app.inform") }}:</label>
-            <div class="controls wid310">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ $t("app.inform") }}:</label>
+            <div class="controls col-17">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" name="gcm_enable" v-model="editModel2.android.gcm_enable"/>{{ '启用GooglePlay服务' }}
@@ -202,9 +205,9 @@
               </div>
             </div>
           </div>
-          <div v-show="editModel2.android.gcm_enable" class="form-row">
-            <label class="form-control wid130">Server API Key:</label>
-            <div class="controls wid310">
+          <div v-show="editModel2.android.gcm_enable" class="form-row row">
+            <label class="form-control col-7">Server API Key:</label>
+            <div class="controls col-17">
               <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
                 <input v-model="editModel2.android.gcm_api_key" type="text" v-form-ctrl name="gcm_api_key" class="input-text"/>
               </div>
@@ -227,9 +230,9 @@
       <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel3.type | typeLabel }})</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation3" @submit.prevent="onEditSubmit(editModel3)" hook="editAppHook3">
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel3.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -237,9 +240,9 @@
               <div v-if="editValidation3.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation3.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="editValidation3.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="editValidation3.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.url") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.url") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.url')" class="input-text-wrap">
                 <input v-model="editModel3.web.url" type="text" v-form-ctrl name="url" minlength="2" lazy class="input-text"/>
               </div>
@@ -247,8 +250,8 @@
               <div v-if="editValidation3.url.$dirty" class="form-tips form-tips-error"><span v-if="editValidation3.url.$error.required">{{ $t('validation.required', {field: $t('app.fields.url')}) }}</span><span v-if="editValidation3.url.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.url'), 2]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <div class="controls without-label">
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox"><input type="checkbox" name="web_enable" v-model="editModel3.web.web_enable"/>启用</label>
               </div>
@@ -271,9 +274,9 @@
       <h3 slot="header">{{ $t("app.edit_app") }} ({{ editModel5.type | typeLabel }})</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation5" @submit.prevent="onEditSubmit(editModel5)" hook="editAppHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("app.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel5.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -756,18 +759,18 @@
 </script>
 
 <style lang="stylus">
-  .modal
+  @import '../../assets/stylus/common'
+  /*.modal
     .form-edit-apk
       .form-row
         .controls
-          width 470px
+          width 470px*/
 
-  .wid130
-    width 130px!important
-  .wid310
-    width 310px!important
   .secret-key
     font-size 20px
-  .mrbthr
-    margin-bottom 30px
+  .modal
+    .file-url
+      color gray
+      line-height 32px
+      text-overflow()
 </style>

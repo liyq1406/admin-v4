@@ -7,9 +7,9 @@
       <div class="panel-bd">
         <div class="form">
           <form v-form name="validation" @submit.prevent="onSenderSubmit">
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.sender") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.sender") }}:</label>
+              <div class="controls col-18">
                 <div v-placeholder="$t('mail_templates.placeholders.sender')" class="input-text-wrap">
                   <input v-model="sender" type="text" v-form-ctrl name="sender" required lazy custom-validator="noSpaces" class="input-text"/>
                 </div>
@@ -17,8 +17,10 @@
                 <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">{{ $t('validation.format', {field: $t('mail_templates.fields.sender')}) }}</span></div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="savingActivate || savingReset" :class="{'disabled': savingActivate || savingReset}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button type="submit" :disabled="savingActivate || savingReset" :class="{'disabled': savingActivate || savingReset}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
+              </div>
             </div>
           </form>
         </div>
@@ -36,9 +38,9 @@
       <div class="panel-bd">
         <div v-show="activateLang === 'zh-cn'" class="form template-form">
           <form v-form name="activateValidation" @submit.prevent="onActivateSubmit">
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.subject") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="activateModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
@@ -46,9 +48,9 @@
                 <div v-if="activateValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.content") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
@@ -56,16 +58,18 @@
                 <div v-if="activateValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="activateStatus === 0 || savingActivate" :class="{'disabled': activateStatus === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button type="submit" :disabled="activateStatus === 0 || savingActivate" :class="{'disabled': activateStatus === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+              </div>
             </div>
           </form>
         </div>
         <div v-show="activateLang === 'en-us'" class="form template-form">
           <form v-form name="activateValidation2" @submit.prevent="onActivateSubmit2">
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.subject") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="activateModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
@@ -73,9 +77,9 @@
                 <div v-if="activateValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.content") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
@@ -83,8 +87,10 @@
                 <div v-if="activateValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="activateStatus2 === 0 || savingActivate" :class="{'disabled': activateStatus2 === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button type="submit" :disabled="activateStatus2 === 0 || savingActivate" :class="{'disabled': activateStatus2 === 0 || savingActivate}" v-text="savingActivate ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+              </div>
             </div>
           </form>
         </div>
@@ -102,9 +108,9 @@
       <div class="panel-bd">
         <div v-show="resetLang === 'zh-cn'" class="form template-form">
           <form v-form name="resetValidation" @submit.prevent="onResetSubmit">
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.subject") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="resetModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
@@ -112,9 +118,9 @@
                 <div v-if="resetValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.content") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
@@ -122,16 +128,18 @@
                 <div v-if="resetValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="resetStatus === 0 || savingReset" :class="{'disabled': resetStatus === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button type="submit" :disabled="resetStatus === 0 || savingReset" :class="{'disabled': resetStatus === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+              </div>
             </div>
           </form>
         </div>
         <div v-show="resetLang === 'en-us'" class="form template-form">
           <form v-form name="resetValidation2" @submit.prevent="onResetSubmit2">
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.subject") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="resetModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
@@ -139,9 +147,9 @@
                 <div v-if="resetValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("mail_templates.fields.content") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
@@ -149,8 +157,10 @@
                 <div v-if="resetValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="resetStatus2 === 0 || savingReset" :class="{'disabled': resetStatus2 === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button type="submit" :disabled="resetStatus2 === 0 || savingReset" :class="{'disabled': resetStatus2 === 0 || savingReset}" v-text="savingReset ? $t('common.handling') : $t('common.save')" class="btn btn-primary btn-lg"></button>
+              </div>
             </div>
           </form>
         </div>
@@ -164,9 +174,9 @@
       <div class="panel-bd">
         <div class="form">
           <form v-form name="validation2" @submit.prevent="onSenderSubmit2">
-            <div class="form-row">
-              <label class="form-control">邮件发送域名:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">邮件发送域名:</label>
+              <div class="controls col-18">
                 <!-- <div v-placeholder="$t('mail_templates.placeholders.address')" class="input-text-wrap"> -->
                 <div class="input-text-wrap">
                   <span v-if="ifxlink" style="line-height:35px">{{validation2.domain}}</span>
@@ -174,9 +184,11 @@
                 </div>
               </div>
             </div>
-            <div class="form-actions">
-              <button v-if="ifxlinkbtn" type="submit" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
-              <button v-else @click="changeAddress" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">修改</button>
+            <div class="form-actions row">
+              <div class="col-offset-6">
+                <button v-if="ifxlinkbtn" type="submit" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">{{ $t('common.save') }}</button>
+                <button v-else @click="changeAddress" :disabled="editingAddress" :class="{'disabled': editingAddress}" class="btn btn-primary btn-lg">修改</button>
+              </div>
             </div>
           </form>
         </div>

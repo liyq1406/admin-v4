@@ -5,7 +5,7 @@
       <div class="form-header"><a v-link="{ path: '/fetch-password' }">{{ $t("auth.by_phone") }}</a><span>{{ $t("auth.by_mail") }}</span></div>
       <div class="form-body">
         <div class="form-hints">{{ $t("auth.by_mail_tips") }}</div>
-        <div class="form-row">
+        <div class="form-row row">
           <div v-placeholder="$t('auth.fields.email')" class="input-text-wrap">
             <input type="email" v-model="model.email" v-form-ctrl name="email" required lazy class="input-text"/>
           </div>

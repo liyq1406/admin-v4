@@ -51,9 +51,9 @@
       <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
+            <div class="controls col-19">
               <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
@@ -61,56 +61,60 @@
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [$t('rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row condition-row">
-            <label class="form-control">{{ $t("rule.condition") }}:</label>
-            <div class="controls">
-              <div class="type">
-                <div class="select">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.condition") }}:</label>
+            <div class="controls col-19">
+              <div class="row">
+                <div class="col-5">
                   <v-select :label="ruleTypes[addModal.model.type-1]">
                     <select v-model="addModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
-              </div>
-              <div v-show="addModal.model.type === 1" class="data">
-                <div class="select">
-                  <v-select :label="datapointName(addModal.model)">
-                    <select v-model="addModal.model.param" v-form-ctrl name="param">
-                      <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-8">
+                  <div v-show="addModal.model.type === 1" class="ml10">
+                    <div class="select">
+                      <v-select :label="datapointName(addModal.model)">
+                        <select v-model="addModal.model.param" v-form-ctrl name="param">
+                          <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div v-show="addModal.model.type === 1" class="compare">
-                <div class="select">
-                  <v-select :label="compareTypes[addModal.model.compare-1]">
-                    <select v-model="addModal.model.compare" v-form-ctrl name="compare" number="number">
-                      <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-6">
+                  <div v-show="addModal.model.type === 1" class="ml10">
+                    <div class="select">
+                      <v-select :label="compareTypes[addModal.model.compare-1]">
+                        <select v-model="addModal.model.compare" v-form-ctrl name="compare" number="number">
+                          <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div v-show="addModal.model.type === 1" class="value">
-                <div class="input-text-wrap">
-                  <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
-                </div>
-              </div>
-              <div v-show="addModal.model.type === 2" class="value">
-                <div class="select">
-                  <v-select :label="$t('common.'+addModal.value2)">
-                    <select v-model="addModal.value2" v-form-ctrl name="value">
-                      <option value="online">{{ $t("common.online") }}</option>
-                      <option value="offline">{{ $t("common.offline") }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-5">
+                  <div class="ml10">
+                    <div class="input-text-wrap" v-show="addModal.model.type === 1">
+                      <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                    </div>
+                    <div class="select" v-show="addModal.model.type === 2">
+                      <v-select :label="$t('common.'+addModal.value2)">
+                        <select v-model="addModal.value2" v-form-ctrl name="value">
+                          <option value="online">{{ $t("common.online") }}</option>
+                          <option value="offline">{{ $t("common.offline") }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.content") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.content") }}:</label>
+            <div class="controls col-19">
               <div v-placeholder="$t('rule.placeholders.content')" class="input-text-wrap">
                 <textarea v-model="addModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
@@ -118,9 +122,9 @@
               <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.inform_type") }}:</label>
+            <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[addModal.model.notify_type-1]">
                   <select v-model="addModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
@@ -130,15 +134,15 @@
               </div>
             </div>
           </div>
-          <div class="form-row tag-row">
-            <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
-            <div class="controls">
+          <div class="form-row row tag-row">
+            <label class="form-control col-5">{{ $t("rule.fields.tags") }}:</label>
+            <div class="controls col-19">
               <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.notify_type") }}:</label>
+            <div class="controls col-19">
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
                   <label v-if="$index < 3" class="checkbox">
@@ -182,9 +186,9 @@
               </template>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.scope") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.scope") }}:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
                   <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number="number"/>{{ type }}
@@ -192,9 +196,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("common.status") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("common.status") }}:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label class="radio">
                   <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
@@ -219,9 +223,9 @@
       <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
+            <div class="controls col-19">
               <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
@@ -229,56 +233,60 @@
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
-          <div class="form-row condition-row">
-            <label class="form-control">{{ $t("rule.condition") }}:</label>
-            <div class="controls">
-              <div class="type">
-                <div class="select">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.condition") }}:</label>
+            <div class="controls col-19">
+              <div class="row">
+                <div class="col-5">
                   <v-select :label="ruleTypes[editModal.model.type-1]">
                     <select v-model="editModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
                 </div>
-              </div>
-              <div v-show="editModal.model.type === 1" class="data">
-                <div class="select">
-                  <v-select :label="datapointName(editModal.model)">
-                    <select v-model="editModal.model.param" v-form-ctrl name="param">
-                      <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-8">
+                  <div v-show="editModal.model.type === 1" class="ml10">
+                    <div class="select">
+                      <v-select :label="datapointName(editModal.model)">
+                        <select v-model="editModal.model.param" v-form-ctrl name="param">
+                          <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div v-show="editModal.model.type === 1" class="compare">
-                <div class="select">
-                  <v-select :label="compareTypes[editModal.model.compare-1]">
-                    <select v-model="editModal.model.compare" v-form-ctrl name="compare" number="number">
-                      <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-6">
+                  <div v-show="editModal.model.type === 1" class="ml10">
+                    <div class="select">
+                      <v-select :label="compareTypes[editModal.model.compare-1]">
+                        <select v-model="editModal.model.compare" v-form-ctrl name="compare" number="number">
+                          <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div v-if="editModal.model.type === 1" class="value">
-                <div class="input-text-wrap">
-                  <input v-model="editModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
-                </div>
-              </div>
-              <div v-if="editModal.model.type === 2" class="value">
-                <div class="select">
-                  <v-select :label="$t('common.'+editModal.value2)">
-                    <select v-model="editModal.value2" v-form-ctrl name="value">
-                      <option value="online">{{ $t("common.online") }}</option>
-                      <option value="offline">{{ $t("common.offline") }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-5">
+                  <div class="ml10">
+                    <div class="input-text-wrap" v-show="editModal.model.type === 1">
+                      <input v-model="editModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                    </div>
+                    <div class="select" v-show="editModal.model.type === 2">
+                      <v-select :label="$t('common.'+editModal.value2)">
+                        <select v-model="editModal.value2" v-form-ctrl name="value">
+                          <option value="online">{{ $t("common.online") }}</option>
+                          <option value="offline">{{ $t("common.offline") }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.content") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.content") }}:</label>
+            <div class="controls col-19">
               <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
                 <textarea v-model="editModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
@@ -286,9 +294,9 @@
               <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.inform_type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.inform_type") }}:</label>
+            <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[editModal.model.notify_type-1]">
                   <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
@@ -298,15 +306,15 @@
               </div>
             </div>
           </div>
-          <div class="form-row tag-row">
-            <label class="form-control">{{ $t("rule.fields.tags") }}:</label>
-            <div class="controls">
+          <div class="form-row row tag-row">
+            <label class="form-control col-5">{{ $t("rule.fields.tags") }}:</label>
+            <div class="controls col-19">
               <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.notify_type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.notify_type") }}:</label>
+            <div class="controls col-19">
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
                   <label v-if="$index < 3" class="checkbox">
@@ -350,9 +358,9 @@
               </template>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("rule.fields.scope") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("rule.fields.scope") }}:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
                   <input type="radio" v-model="editModal.model.scope" name="scope" :value="$index+1" number="number"/>{{ type }}
@@ -360,9 +368,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("common.status") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-5">{{ $t("common.status") }}:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label class="radio">
                   <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
@@ -704,9 +712,9 @@
 
   .modal
     .form-rules
-      .form-row
+      /*.form-row
         .controls
-          width 480px !important
+          width 480px !important*/
 
       /*.tag-row*/
         /*overflow-y visible*/
@@ -716,27 +724,4 @@
         border 1px solid #DDD
         padding 0 10px
         margin-bottom 3px
-
-      .condition-row
-        .type
-        .data
-        .compare
-        .value
-          float left
-
-        .type
-          width 110px
-          margin-right 10px
-
-        .data
-          width 140px
-          margin-right 10px
-
-        .compare
-          width 80px
-          margin-right 10px
-
-        .value
-          width 120px
-
 </style>

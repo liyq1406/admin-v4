@@ -47,9 +47,9 @@
       <h3 slot="header">{{ '添加转发规则' }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ '数据的类型' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '数据的类型' }}:</label>
+            <div class="controls col-17">
               <div class="checkbox-group">
                 <label v-for="type in dataTypes" class="checkbox">
                   <input type="checkbox" v-model="addModel.data_type" :value="$index+1"/>{{ type }}
@@ -57,9 +57,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ '分发类型' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '分发类型' }}:</label>
+            <div class="controls col-17">
               <div class="select">
                 <v-select :label="destinationTypes[addModel.destination.type-1]">
                   <select v-model="addModel.destination.type" name="type" number="number">
@@ -69,17 +69,17 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ '数据分发目的地' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '数据分发目的地' }}:</label>
+            <div class="controls col-17">
               <div v-placeholder="'请输入URL'" class="input-text-wrap">
                 <input v-model="addModel.destination.url" type="text" name="url" required minlength="2" maxlength="250" lazy class="input-text"/>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ 'token' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ 'token' }}:</label>
+            <div class="controls col-17">
               <div v-placeholder="'请输入token'" class="input-text-wrap">
                 <input v-model="addModel.destination.token" type="text" name="token" required minlength="2" maxlength="250" lazy class="input-text"/>
               </div>
@@ -97,9 +97,9 @@
       <h3 slot="header">{{ '修改转发规则' }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ '数据的类型' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '数据的类型' }}:</label>
+            <div class="controls col-17">
               <div class="checkbox-group">
                 <label v-for="type in dataTypes" class="checkbox">
                   <input type="checkbox" v-model="editModel.data_type" :value="$index+1"/>{{ type }}
@@ -107,9 +107,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ '分发类型' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '分发类型' }}:</label>
+            <div class="controls col-17">
               <div class="select">
                 <v-select :label="destinationTypes[editModel.destination.type-1]">
                   <select v-model="editModel.destination.type" name="type" number="number">
@@ -119,17 +119,17 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ '数据分发目的地' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ '数据分发目的地' }}:</label>
+            <div class="controls col-17">
               <div v-placeholder="'请输入URL'" class="input-text-wrap">
                 <input v-model="editModel.destination.url" type="text" name="url" required minlength="2" maxlength="250" lazy class="input-text"/>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ 'token' }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-7">{{ 'token' }}:</label>
+            <div class="controls col-17">
               <div v-placeholder="'请输入token'" class="input-text-wrap">
                 <input v-model="editModel.destination.token" type="text" name="token" required minlength="2" maxlength="250" lazy class="input-text"/>
               </div>
