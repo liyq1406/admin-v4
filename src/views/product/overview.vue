@@ -635,16 +635,21 @@
       onEditSubmit () {
         if (this.delChecked && !this.editing) {
           this.editing = true
-          api.product.deleteProduct(this.$route.params.id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.removeProduct(this.product)
-              this.$route.router.go('/dashboard')
-            }
-          }).catch((res) => {
-            this.handleError(res)
+          var result = window.confirm('确认删除该产品吗?')
+          if (result === true) {
+            api.product.deleteProduct(this.$route.params.id).then((res) => {
+              if (res.status === 200) {
+                this.resetEdit()
+                this.removeProduct(this.product)
+                this.$route.router.go('/dashboard')
+              }
+            }).catch((res) => {
+              this.handleError(res)
+              this.editing = false
+            })
+          } else {
             this.editing = false
-          })
+          }
         } else if (this.editValidation.$valid && !this.editing) {
           this.editing = true
           if (this.editModel.link_type === 5) {
