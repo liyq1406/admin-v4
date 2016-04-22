@@ -3,7 +3,7 @@
     <div class="panel-bd">
       <div class="action-bar">
         <search-box :key.sync="query" :active="searching" :placeholder="$t('account_manage.search_condi')" style="float:right">
-          <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
+          <button slot="search-button" @click="getBranchList(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">
           <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加网点</button>
@@ -27,13 +27,13 @@
         </thead>
         <tbody>
           <tr v-for="account in accounts| limitBy pageCount (currentPage-1)*pageCount">
-            <td>{{ account.num }}</td>
+            <td>{{ $index + 1 }}</td>
             <td>{{ account.name }}</td>
-            <td>{{ account.people }}</td>
+            <td>{{ account.director }}</td>
             <td>{{ account.phone }}</td>
-            <td>{{ account.date }}</td>
+            <td>{{ account.create_time }}</td>
             <td>
-              <a v-link="{path: '/warranty/accounts/1'}" class="hl-red">查看详情</a>
+              <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
             </td>
           </tr>
           <tr v-if="accounts.length === 0">
@@ -64,20 +64,20 @@
               <label class="form-control">负责人:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.charge" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
+                  <input v-model="addBranch.director" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
                 </div>
-                <div v-if="addValidation.$submitted && addValidation.charge.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.charge.$error.required">*必须</span></div>
-                <div v-if="addValidation.charge.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.charge.$error.required">*必须</span></div>
+                <div v-if="addValidation.$submitted && addValidation.director.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.director.$error.required">*必须</span></div>
+                <div v-if="addValidation.director.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.director.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
               <label class="form-control">联系号码:</label>
               <div class="controls">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
+                  <input v-model="addBranch.phone" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
                 </div>
-                <div v-if="addValidation.$submitted && addValidation.tel.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.tel.$error.required">*必须</span></div>
-                <div v-if="addValidation.tel.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.tel.$error.required">*必须</span></div>
+                <div v-if="addValidation.$submitted && addValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.phone.$error.required">*必须</span></div>
+                <div v-if="addValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.phone.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-row">
@@ -124,6 +124,7 @@
   import Select from '../../../components/Select'
   import Modal from '../../../components/Modal'
   import AreaSelect from '../../../components/AreaSelect'
+  import api from '../../../api'
   import _ from 'lodash'
 
   export default {
@@ -147,13 +148,13 @@
         currentPage: 1,
         pageCount: 10,
         accounts: [
-          {
-            num: 1,
-            name: '网点名称',
-            people: '小明',
-            phone: '123123',
-            date: '2016-4-18'
-          }
+          // {
+          //   num: 1,
+          //   name: '网点名称',
+          //   people: '小明',
+          //   phone: '123123',
+          //   date: '2016-4-18'
+          // }
         ],
         showAddModal: false,
         addModel: {},
@@ -170,13 +171,29 @@
           email: '',
           area: {},
           addr: ''
-        }
+        },
+        search: {}
       }
     },
 
-    methods: {
-      getProvince () {
+    ready () {
+      this.getBranchList()
+    },
 
+    methods: {
+      // 获取网点列表
+      getBranchList () {
+        // if (typeof querying !== 'undefined') {
+        //   this.currentPage = 1
+        // }
+        this.loadingData = true
+        api.warranty.getBranchList(this.search).then((res) => {
+          this.accounts = res.data.list
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       },
 
       getCity () {
@@ -201,6 +218,14 @@
       onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
+          api.warranty.getBranchAdd(this.addBranch).then((res) => {
+            this.adding = false
+            this.showAddModal = false
+            this.getBranchList()
+          }).catch((res) => {
+            this.handleError(res)
+            this.adding = false
+          })
           console.log('ready to send post')
         }
       }

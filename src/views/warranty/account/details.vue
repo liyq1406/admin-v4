@@ -260,6 +260,7 @@
   import SearchBox from '../../../components/SearchBox'
   import Pager from '../../../components/Pager'
   import Modal from '../../../components/Modal'
+  // import api from '../../../api'
   import _ from 'lodash'
 
   export default {
@@ -315,7 +316,12 @@
             value: 0
           }
         },
-        delChecked: false
+        total: 0,
+        currentPage: 1,
+        pageCount: 10,
+        delChecked: false,
+        quary: {},
+        loadingData: false
       }
     },
 
