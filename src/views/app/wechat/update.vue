@@ -5,41 +5,41 @@
         <!-- 编辑微信应用-->
         <div class="form form-edit-apk">
           <form v-form name="editValidation4" @submit.prevent="onEditSubmit(editModel4)" hook="editAppHook4">
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.name") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" placeholder="请输入应用名称" v-model="editModel4.name" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.wechat_id") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.wechat_id") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" placeholder="请输入微信公众号ID" v-model="editModel4.wechat.id" name="wechat_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.wechat_app_id") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.wechat_app_id") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" v-model="editModel4.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.wechat_app_secret") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.wechat_app_secret") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" v-model="editModel4.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.wechat_encrypt") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.wechat_encrypt") }}:</label>
+              <div class="controls col-18">
                 <div class="radio-group radio-group-v">
                   <template v-for="type in encryptTypes">
                     <label class="radio">
@@ -50,27 +50,28 @@
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.wechat_key") }}:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.wechat_key") }}:</label>
+              <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea type="text" v-model="editModel4.wechat.key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
                 </div>
               </div>
             </div>
-            <div class="form-row">
-              <label class="form-control">{{ $t("app.fields.app_url") }}:</label>
-              <div class="controls">
-                <div class="input-text-wrap lh35">{{ editModel4.wechat.url }}
-                </div>
-              </div>
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("app.fields.app_url") }}:</label>
+              <div class="controls col-18 control-text">{{ editModel4.wechat.url }}</div>
             </div>
-            <div class="form-actions tsbt">
-              <label class="del-check mr40">
-                <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
-              </label>
-              <button v-link="{path: '../../'}" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <div class="form-actions row">
+              <div class="col-6">
+                <label class="del-check">
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+                </label>
+              </div>
+              <div class="col-18">
+                <button v-link="{path: '../../'}" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              </div>
             </div>
           </form>
         </div>
@@ -197,12 +198,3 @@
     }
   }
 </script>
-<style lang="stylus">
-  .lh35
-    line-height 35px!important
-    height 35px!important
-  .tsbt
-    padding-left 0!important
-  .mr40
-    margin-right 40px
-</style>

@@ -63,7 +63,7 @@
       <h3 slot="header">类别管理</h3>
       <div slot="body" class="form">
         <form @submit.prevent="onCateSubmit">
-          <div class="form-row">
+          <div class="form-row row">
             <div class="form-tips mb10">请输入菜谱类别，每行一个类别</div>
             <div class="input-text-wrap">
               <textarea v-model="categories | formatCategories" rows="8" class="input-text"></textarea>

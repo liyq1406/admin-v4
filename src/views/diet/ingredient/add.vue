@@ -9,9 +9,9 @@
         <div class="panel-bd">
           <div class="form">
             <form v-form name="validation" @submit.prevent="onSubmit">
-              <div class="form-row">
-                <label class="form-control">{{ $t("ingredient.fields.name") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-4">{{ $t("ingredient.fields.name") }}:</label>
+                <div class="controls col-18">
                   <div v-placeholder="$t('ingredient.placeholders.name')" class="input-text-wrap">
                     <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="250" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
                   </div>
@@ -19,18 +19,18 @@
                   <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}</span></div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("ingredient.fields.images") }}:</label>
-                <div class="controls controls-image">
+              <div class="form-row row">
+                <label class="form-control col-4">{{ $t("ingredient.fields.images") }}:</label>
+                <div class="controls col-18 controls-image">
                   <div class="image-uploader">
                     <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
                   </div>
                   <div class="form-tips">建议上传640像素*480像素成品图</div>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("ingredient.fields.classification") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-4">{{ $t("ingredient.fields.classification") }}:</label>
+                <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
                       <v-select width="150px" :label="category.main">
@@ -44,9 +44,9 @@
                   <button @click.prevent="AddCategory" :disabled="model.classification.length === categories.length" :class="{'disabled': model.classification.length === categories.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("ingredient.fields.push_rules") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-4">{{ $t("ingredient.fields.push_rules") }}:</label>
+                <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="rule in model.properties.push_rules" class="select">
                       <v-select width="150px" :label="rule">
@@ -60,16 +60,18 @@
                   <button @click.prevent="AddRule" :disabled="model.properties.push_rules.length === rules.length" :class="{'disabled': model.properties.push_rules.length === rules.length}" class="btn btn-success"><i class="fa fa-plus"></i>添加推送</button>
                 </div>
               </div>
-              <div class="form-row">
-                <label class="form-control">{{ $t("ingredient.fields.instructions") }}:</label>
-                <div class="controls">
+              <div class="form-row row">
+                <label class="form-control col-4">{{ $t("ingredient.fields.instructions") }}:</label>
+                <div class="controls col-18">
                   <div v-placeholder="$t('ingredient.placeholders.instructions')" class="input-text-wrap">
                     <textarea v-model="model.instructions" type="text" name="instructions" maxlength="250" lazy class="input-text textarea-lg"></textarea>
                   </div>
                 </div>
               </div>
-              <div class="form-actions">
-                <button type="submit" :disabled="adding" :class="{'disabled': adding}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+              <div class="form-actions row">
+                <div class="col-offset-4">
+                  <button type="submit" :disabled="adding" :class="{'disabled': adding}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+                </div>
               </div>
             </form>
           </div>

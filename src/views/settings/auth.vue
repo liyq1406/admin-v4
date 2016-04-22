@@ -52,9 +52,9 @@
         <h3 slot="header">添加授权</h3>
         <div slot="body" class="form">
           <form v-form name="addValidation" @submit.prevent="addKeys" hook="addAppHook">
-            <div class="form-row">
-              <label class="form-control">授权名称:</label>
-              <div class="controls">
+            <div class="form-row row">
+              <label class="form-control col-6">授权名称:</label>
+              <div class="controls col-18">
                 <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                   <input v-model="addModel.name" v-form-ctrl type="text" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>

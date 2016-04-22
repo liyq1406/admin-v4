@@ -45,18 +45,18 @@
       <h3 slot="header">{{ $t("table.create_table") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('table.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="64" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('table.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('table.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('table.fields.name'), 64]) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.type") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[addModel.type-1]">
                   <select v-model="addModel.type" v-form-ctrl name="type" number="number">
@@ -66,9 +66,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.permission") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.permission") }}:</label>
+            <div class="controls col-18">
               <div class="checkbox-group">
                 <label v-for="type in permissionTypes" class="checkbox">
                   <input type="checkbox" v-model="addModel.permission" name="permission" :value="type.value"/>{{ type.label }}
@@ -76,32 +76,42 @@
               </div>
             </div>
           </div>
-          <div class="form-row mxh">
-            <label class="form-control">{{ $t("table.fields.field") }}:</label>
-            <div class="controls">
-              <div v-for="field in addFields" class="field-row">
-                <div class="input-text-wrap">
-                  <input v-model="field.name" type="text" @input="updateField(addModel, addFields)" @blur="onBlur(field, addModel, addFields)" lazy class="input-text"/>
+          <div class="form-row row mxh">
+            <label class="form-control col-6">{{ $t("table.fields.field") }}:</label>
+            <div class="controls col-18">
+              <div v-for="field in addFields" class="field-row row">
+                <div class="col-11">
+                  <div class="input-text-wrap">
+                    <input v-model="field.name" type="text" @input="updateField(addModel, addFields)" @blur="onBlur(field, addModel, addFields)" lazy class="input-text"/>
+                  </div>
                 </div>
-                <div class="select">
-                  <v-select :label="_getTypeLabel(field.value)">
-                    <select v-model="field.value" @change="updateField(addModel, addFields)">
-                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-11">
+                  <div class="ml10">
+                    <v-select :label="_getTypeLabel(field.value)">
+                      <select v-model="field.value" @change="updateField(addModel, addFields)">
+                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                      </select>
+                    </v-select>
+                  </div>
                 </div>
-                <span @click="removeField(field, addModel, addFields)" class="fa fa-times"></span>
+                <div class="col-2">
+                  <span @click="removeField(field, addModel, addFields)" class="fa fa-times"></span>
+                </div>
               </div>
-              <div class="field-row">
-                <div class="input-text-wrap">
-                  <input v-model="newField.name" type="text" lazy class="input-text"/>
+              <div class="field-row row">
+                <div class="col-11">
+                  <div class="input-text-wrap">
+                    <input v-model="newField.name" type="text" lazy class="input-text"/>
+                  </div>
                 </div>
-                <div class="select">
-                  <v-select :label="_getTypeLabel(newField.value)">
-                    <select v-model="newField.value">
-                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-11">
+                  <div class="ml10">
+                    <v-select :label="_getTypeLabel(newField.value)">
+                      <select v-model="newField.value">
+                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                      </select>
+                    </v-select>
+                  </div>
                 </div>
               </div>
               <button @click.prevent.stop="createField(addModel, addFields)" class="btn btn-success">{{ $t("table.add_field") }}</button>
@@ -119,13 +129,13 @@
       <h3 slot="header">{{ $t("table.edit_table") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.name") }}:</label>
-            <div class="controls"><span class="control-text">{{ editModel.name }}</span></div>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.name") }}:</label>
+            <div class="controls col-18"><span class="control-text">{{ editModel.name }}</span></div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.type") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.type") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[editModel.type-1]">
                   <select v-model="editModel.type" v-form-ctrl name="type" number="number">
@@ -135,9 +145,9 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.permission") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.permission") }}:</label>
+            <div class="controls col-18">
               <div class="checkbox-group">
                 <label v-for="type in permissionTypes" class="checkbox">
                   <input type="checkbox" v-model="editModel.permission" name="permission" :value="type.value"/>{{ type.label }}
@@ -145,32 +155,42 @@
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("table.fields.field") }}:</label>
-            <div class="controls">
-              <div v-for="field in editFields" class="field-row">
-                <div class="input-text-wrap">
-                  <input v-model="field.name" type="text" @input="updateField(editModel, editFields)" @blur="onBlur(field, editModel, editFields)" lazy class="input-text"/>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("table.fields.field") }}:</label>
+            <div class="controls col-18">
+              <div v-for="field in editFields" class="field-row row">
+                <div class="col-11">
+                  <div class="input-text-wrap">
+                    <input v-model="field.name" type="text" @input="updateField(editModel, editFields)" @blur="onBlur(field, editModel, editFields)" lazy class="input-text"/>
+                  </div>
                 </div>
-                <div class="select">
-                  <v-select :label="_getTypeLabel(field.value)">
-                    <select v-model="field.value" @change="updateField(editModel, editFields)">
-                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-11">
+                  <div class="ml10">
+                    <v-select :label="_getTypeLabel(field.value)">
+                      <select v-model="field.value" @change="updateField(editModel, editFields)">
+                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                      </select>
+                    </v-select>
+                  </div>
                 </div>
-                <span @click="removeField(field, editModel, editFields)" class="fa fa-times"></span>
+                <div class="col-2">
+                  <span @click="removeField(field, editModel, editFields)" class="fa fa-times"></span>
+                </div>
               </div>
-              <div class="field-row">
-                <div class="input-text-wrap">
-                  <input v-model="newField.name" type="text" lazy class="input-text"/>
+              <div class="field-row row">
+                <div class="col-11">
+                  <div class="input-text-wrap">
+                    <input v-model="newField.name" type="text" lazy class="input-text"/>
+                  </div>
                 </div>
-                <div class="select">
-                  <v-select :label="_getTypeLabel(newField.value)">
-                    <select v-model="newField.value">
-                      <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
-                    </select>
-                  </v-select>
+                <div class="col-11">
+                  <div class="ml10">
+                    <v-select :label="_getTypeLabel(newField.value)">
+                      <select v-model="newField.value">
+                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                      </select>
+                    </v-select>
+                  </div>
                 </div>
               </div>
               <button @click.prevent.stop="createField(editModel, editFields)" class="btn btn-success">{{ $t("table.add_field") }}</button>
@@ -441,18 +461,6 @@
     .field-row
       clearfix()
       margin-bottom 10px
-
-      .select
-      .input-text-wrap
-      .fa
-        float left
-
-      .input-text-wrap
-        width 140px
-
-      .select
-        width 140px
-        margin-left 10px
 
       .fa
         width 20px

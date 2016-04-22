@@ -66,9 +66,9 @@
       <h3 slot="header">{{ $t("overview.add_device") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("overview.addForm.mac") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
               </div>

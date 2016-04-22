@@ -54,7 +54,7 @@
       </div>
     </div>
     <!-- 授权设置浮层-->
-    <modal :show.sync="showSetModal" @close="onSetCancel">
+    <modal :show.sync="showSetModal" @close="onSetCancel" width="640px">
       <h3 slot="header">授权设置页面</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="setValidation" @submit.prevent="onSetSubmit" hook="setFormHook">
@@ -67,90 +67,90 @@
           <div v-show="showTips7" class="datatip datatip_manu_mac_pos">表示mac地址在厂商广播manufature data里含有mac地址的偏移，取值如下：<br/>  -1：在尾部<br/>  -2：表示不包含mac地址<br/>  其他：非法偏移</div>
           <div v-show="showTips8" class="datatip datatip_ser_mac_pos">表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：<br/>  -1：表示在尾部 <br/>  -2：表示不包含mac地址 <br/>  其他：非法偏移</div>
           <div v-show="showTips9" class="datatip datatip_connect_protocol">支持以下四种连接协议： <br/>android classic bluetooth – 1<br/>ios classic bluetooth – 2<br/>ble – 3<br/>wifi -- 4<br/>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：<br/>1：表示设备仅支持andiod classic bluetooth <br/>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接<br/>（注：安卓平台不同时支持BLE和classic类型）</div>
-          <p style="display:inline-block;margin-top:0;" class="redf">具体参数说明:</p><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="view_window">http://iot.weixin.qq.com/wiki/index.html</a>
-          <div class="form-row">
-            <label class="form-control">product_id:<i @mouseover="showTips1 = true" @mouseout="showTips1 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
+          <p style="display:inline-block;margin-top:0;"><span class="hl-red">具体参数说明: </span><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="_blank">http://iot.weixin.qq.com/wiki/index.html</a></p> 
+          <div class="form-row row">
+            <label class="form-control col-7">product_id:<i @mouseover="showTips1 = true" @mouseout="showTips1 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
               <div class="input-text-wrap">
                 <input v-model="setModel.product_id" type="text" name="product_id" placeholder="请输入微信产品ID" v-form-ctrl required class="input-text"/>
               </div>
               <div v-if="setValidation.$submitted" class="form-tips form-tips-error"><span v-if="setValidation.product_id.$error.required">{{ $t('validation.required', {field: $t('wechat.product_id')}) }}</span></div>
             </div>
           </div>
-          <p class="redf">已经授权过的设备不支持更改产品ID</p>
-          <div class="form-row">
-            <label class="form-control">auth_key:<i @mouseover="showTips2 = true" @mouseout="showTips2 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
+          <p class="hl-red">已经授权过的设备不支持更改产品ID</p>
+          <div class="form-row row">
+            <label class="form-control col-7">auth_key:<i @mouseover="showTips2 = true" @mouseout="showTips2 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
               <div class="input-text-wrap">
                 <input v-model="setModel.auth_key" type="text" name="auth_key" placeholder="请输入32位加密key" minlength="2" maxlength="32" required class="input-text"/>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">close_strategy:<i @mouseover="showTips3 = true" @mouseout="showTips3 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['1', '2']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">close_strategy:<i @mouseover="showTips3 = true" @mouseout="showTips3 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['1', '2']" class="radio">
                   <input type="radio" v-model="setModel.close_strategy" name="close_strategy" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">conn_strategy:<i @mouseover="showTips4 = true" @mouseout="showTips4 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['1', '4']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">conn_strategy:<i @mouseover="showTips4 = true" @mouseout="showTips4 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['1', '4']" class="radio">
                   <input type="radio" v-model="setModel.conn_strategy" name="conn_strategy" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">crypt_method:<i @mouseover="showTips5 = true" @mouseout="showTips5 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['0', '1']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">crypt_method:<i @mouseover="showTips5 = true" @mouseout="showTips5 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['0', '1']" class="radio">
                   <input type="radio" v-model="setModel.crypt_method" name="crypt_method" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">auth_ver:<i @mouseover="showTips6 = true" @mouseout="showTips6 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['0', '1']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">auth_ver:<i @mouseover="showTips6 = true" @mouseout="showTips6 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['0', '1']" class="radio">
                   <input type="radio" v-model="setModel.auth_ver" name="auth_ver" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">manu_mac_pos:<i @mouseover="showTips7 = true" @mouseout="showTips7 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['-1', '-2']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">manu_mac_pos:<i @mouseover="showTips7 = true" @mouseout="showTips7 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['-1', '-2']" class="radio">
                   <input type="radio" v-model="setModel.manu_mac_pos" name="manu_mac_pos" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">ser_mac_pos:<i @mouseover="showTips8 = true" @mouseout="showTips8 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['-1', '-2']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">ser_mac_pos:<i @mouseover="showTips8 = true" @mouseout="showTips8 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['-1', '-2']" class="radio">
                   <input type="radio" v-model="setModel.ser_mac_pos" name="ser_mac_pos" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control wid160">connect_protocol:<i @mouseover="showTips9 = true" @mouseout="showTips9 = false" class="fa fa-question-circle"></i></label>
-            <div class="controls wid250 inline">
-              <div class="radio-group pleft30">
-                <label v-for="type in ['1', '2', '3', '4']" class="radio lh35">
+          <div class="form-row row">
+            <label class="form-control col-7">connect_protocol:<i @mouseover="showTips9 = true" @mouseout="showTips9 = false" class="fa fa-question-circle"></i></label>
+            <div class="controls col-17">
+              <div class="radio-group">
+                <label v-for="type in ['1', '2', '3', '4']" class="radio">
                   <input type="radio" v-model="setModel.connect_protocol" name="connect_protocol" :value="type" number="number" required/>{{ type }}
                 </label>
               </div>
@@ -168,9 +168,9 @@
       <h3 slot="header">新增授权页面</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent.stop="createWechat" hook="addFormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("overview.addForm.mac") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" name="mac" required lazy class="input-text"/>
               </div>
@@ -187,7 +187,7 @@
     <modal :show.sync="showAlertModal" @close="onAlertCancel">
       <h3 slot="header">授权提醒</h3>
       <div slot="body" class="form form-rules">
-        <div class="form-row">
+        <div class="form-row row">
           <p>确定要修改微信授权吗？</p>
         </div>
         <div class="form-actions">
@@ -504,19 +504,6 @@
 <style lang="stylus">
   @import '../../assets/stylus/common'
 
-  .lin35
-    line-height 35px
-  .mrr60
-    margin-right 60px
-  .pleft30
-    padding-left 30px
-  .lh35
-    line-height 35px!important
-    height 35px!important
-  .modal .form-rules .form-row .controls.wid250
-    width 250px!important
-  .modal .form-rules .form-row .wid160
-    width 160px!important
   .datatip
     z-index 9
     position absolute
@@ -546,12 +533,8 @@
     top 378px
   .datatip_connect_protocol
     top 275px
-  .inline
-    display inline-block!important
   .modal .modal-body
     max-height 600px!important
-  .redf
-    color red
   .nontip
     color red!important
 </style>

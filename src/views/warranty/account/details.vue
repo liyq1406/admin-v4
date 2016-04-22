@@ -123,9 +123,9 @@
       <h3 slot="header">添加客服</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit">
-          <div class="form-row">
-            <label class="form-control">姓名:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">姓名:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="addStaff.name" type="text" v-form-ctrl name="staff" required lazy class="input-text"/>
               </div>
@@ -134,9 +134,9 @@
             </div>
           </div>
 
-          <div class="form-row">
-            <label class="form-control">邮箱地址:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">邮箱地址:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="addStaff.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
               </div>
@@ -145,9 +145,9 @@
             </div>
           </div>
 
-          <div class="form-row">
-            <label class="form-control">联系电话:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">联系电话:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="addStaff.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
               </div>
@@ -156,9 +156,9 @@
             </div>
           </div>
 
-          <div class="form-row">
-            <label class="form-control">登陆密码:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">登陆密码:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="addStaff.passwd" type="text" v-form-ctrl name="passwd" required lazy class="input-text"/>
               </div>
@@ -188,9 +188,9 @@
       <h3 slot="header">编辑网点</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit">
-          <div class="form-row">
-            <label class="form-control">网点:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">网点:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.name" type="text" v-form-ctrl name="branch" required lazy class="input-text"/>
               </div>
@@ -198,9 +198,9 @@
               <div v-if="editValidation.branch.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.branch.$error.required">*必须</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">负责人:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">负责人:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.charge" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
               </div>
@@ -208,9 +208,9 @@
               <div v-if="editValidation.charge.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.charge.$error.required">*必须</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">联系号码:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">联系号码:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
               </div>
@@ -218,9 +218,9 @@
               <div v-if="editValidation.tel.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.tel.$error.required">*必须</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">邮箱地址:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">邮箱地址:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
               </div>
@@ -228,9 +228,9 @@
               <div v-if="editValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.email.$error.required">*必须</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">详细地址:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">详细地址:</label>
+            <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
               </div>

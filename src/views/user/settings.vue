@@ -6,31 +6,33 @@
     <div class="pane1-bd">
       <div class="form pdb60set">
         <form v-form name="validation" @submit.prevent="onSubmit">
-          <div class="form-row textcen">
+          <div class="form-row row textcen">
             <input type="checkbox" v-model="model.is_user_active"/>
             <label> 注册用户无需激活便可登录平台</label>
           </div>
-          <div class="form-row">
+          <div class="form-row row">
             <p class="settingtit">第三方验证</p>
           </div>
-          <div class="form-row">
-            <label class="form-control">URL:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">URL:</label>
+            <div class="controls col-18">
               <div v-placeholder="'请输入URL'" class="input-text-wrap">
                 <input v-model="model.user_auth_third.url" type="text" placeholder="" name="url" custom-validator="noSpacesPrefixAndSuffix" required class="input-text"/>
               </div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">Token:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">Token:</label>
+            <div class="controls col-18">
               <div v-placeholder="'请输入Token'" class="input-text-wrap">
                 <input v-model="model.user_auth_third.token" type="text" name="token" custom-validator="noSpacesPrefixAndSuffix" required class="input-text"/>
               </div>
             </div>
           </div>
-          <div class="form-actions">
-            <button type="submit" class="btn btn-primary btn-lg">{{ '确定' }}</button>
+          <div class="form-actions row">
+            <div class="col-offset-6">
+              <button type="submit" class="btn btn-primary btn-lg">{{ '确定' }}</button>
+            </div>
           </div>
         </form>
       </div>

@@ -7,7 +7,7 @@
         <a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a>
       </div>
       <div class="form-body">
-        <div class="form-row">
+        <div class="form-row row">
           <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
             <input type="text" v-model="model.account" v-form-ctrl name="account" required lazy class="input-text"/>
           </div>
@@ -18,7 +18,7 @@
             <span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span>
           </div>
         </div>
-        <div class="form-row">
+        <div class="form-row row">
           <div v-placeholder="$t('auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl name="password" required lazy class="input-text focus-input"/>
           </div>

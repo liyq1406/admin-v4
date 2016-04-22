@@ -108,9 +108,9 @@
       <h3 slot="header">{{ $t('account.edit_member') }}</h3>
       <div slot="body" class="form">
         <form v-form name="accountValidation" @submit.prevent="onSubmitAccount">
-          <div class="form-row">
-            <label class="form-control">{{ $t("member.fields.name") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("member.fields.name") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('member.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
@@ -118,9 +118,9 @@
               <div v-if="accountValidation.name" class="form-tips form-tips-error"><span v-if="accountValidation.name.$error.required">{{ $t('validation.required', {field: $t('member.fields.name')}) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("member.alert_settings") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("member.alert_settings") }}:</label>
+            <div class="controls col-18">
               <div class="checkbox-group">
                 <label class="checkbox">
                   <input type="checkbox" v-model="editModel.is_notice"/>{{ $t("member.fields.is_notice") }}
@@ -142,21 +142,21 @@
       <h3 slot="header">{{ $t("auth.reset") }}</h3>
       <div slot="body" class="form">
         <form v-form name="pwdValidation" @submit.prevent="onSubmitPwd" hook="editPwdHook">
-          <div class="form-row">
+          <div class="form-row row">
             <div v-placeholder="$t('account.placeholders.old_password')" class="input-text-wrap">
               <input type="password" v-model="editPwdModel.oldpassword" v-form-ctrl required name="oldpassword" lazy class="input-text"/>
             </div>
             <div v-if="pwdValidation.$submitted && pwdValidation.oldpassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.oldpassword.$error.required">{{ $t('validation.required', {field: $t('account.fields.old_password')}) }}</span></div>
             <div v-if="pwdValidation.oldpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.oldpassword.$error.required">{{ $t('validation.required', {field: $t('account.fields.old_password')}) }}</span></div>
           </div>
-          <div class="form-row">
+          <div class="form-row row">
             <div v-placeholder="$t('account.placeholders.new_password')" class="input-text-wrap">
               <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="6" name="newpassword" lazy class="input-text"/>
             </div>
             <div v-if="pwdValidation.$submitted && pwdValidation.newpassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('validation.required', {field: $t('account.fields.new_password')}) }}</span></div>
             <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('validation.required', {field: $t('account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('validation.minlength', [ $t('account.fields.new_password'), 6]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('validation.maxlength', [ $t('account.fields.new_password'), 16]) }}</span></div>
           </div>
-          <div class="form-row">
+          <div class="form-row row">
             <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
               <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
             </div>

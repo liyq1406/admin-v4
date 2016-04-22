@@ -93,6 +93,10 @@
     color gray-light
     cursor pointer
     margin 0 10px 10px 0
+    box-sizing border-box
+
+    &:nth-child(3n)
+      margin-right 0
 
     label
     img

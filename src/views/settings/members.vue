@@ -52,18 +52,18 @@
       <h3 slot="header">{{ $t('member.add_member') }}</h3>
       <div slot="body" class="form">
         <form v-form name="validation" hook="FormHook">
-          <div class="form-row">
-            <label class="form-control">{{ $t("member.fields.email") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("member.fields.email") }}:</label>
+            <div class="controls col-18">
               <div v-placeholder="$t('member.placeholders.email')" class="input-text-wrap">
                 <input v-model="newuseremail.email" type="email" v-form-ctrl name="email" maxlength="32" required lazy class="input-text"/>
               </div>
               <div v-if="validation.email.$dirty" class="form-tips form-tips-error"><span v-if="validation.email.$error.required">{{ $t('validation.required', {field: $t('member.fields.email')}) }}</span><span v-if="validation.email.$error.email">{{ $t('validation.format', {field: $t('member.fields.email')}) }}</span></div>
             </div>
           </div>
-          <div class="form-row">
-            <label class="form-control">{{ $t("member.fields.role") }}:</label>
-            <div class="controls">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("member.fields.role") }}:</label>
+            <div class="controls col-18">
               <div class="select">
                 <v-select :label="memberTypes[newuseremail.role-1]">
                   <select v-model="newuseremail.role" v-form-ctrl name="role">
