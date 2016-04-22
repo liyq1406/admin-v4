@@ -2,8 +2,8 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'">
-          <button slot="search-button" class="btn btn-primary">搜索</button>
+        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList">
+          <button slot="search-button" class="btn btn-primary" @click="getWarrantyList">搜索</button>
           <label></label>
         </search-box>
       </div>
@@ -11,13 +11,13 @@
       <div class="status-bar">
         <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
           <span slot="label">工单状态</span>
-          <select v-model="status">
+          <select v-model="status" @change="getWarrantyList">
             <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
             <p> {{status}}</p>
           </select>
         </v-select>
 
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small"></area-select>
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList" @city-change="getWarrantyList" @district-change="getWarrantyList"></area-select>
       </div>
 
       <table class="table table-stripe table-bordered">
@@ -130,12 +130,29 @@
     computed: {
       queryCondition () {
         var condition = {
-          filter: [],
+          filter: ['_id', 'name', 'product_name', 'product_type', 'extended_days', 'status'],
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: {},
           query: {}
         }
+
+        if (this.curProvince.hasOwnProperty('name')) {
+          condition.query.province = this.curProvince.name
+        }
+        if (this.curCity.hasOwnProperty('name')) {
+          condition.query.city = this.curCity.name
+        }
+        if (this.curDistrict.hasOwnProperty('name')) {
+          condition.query.district = this.curDistrict.name
+        }
+        if (this.status.value !== 0) {
+          condition.query.status = this.status.label
+        }
+        if (this.key !== '') {
+          condition.query._id = this.key
+        }
+
         return condition
       }
     },
