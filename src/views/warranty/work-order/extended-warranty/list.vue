@@ -33,25 +33,35 @@
           </tr>
         </thead>
         <tbody>
-          <template v-if="workOrders.length > 0">
-            <tr v-for="order in workOrders | filterBy status in 'status'">
-              <td>{{order.id}}</td>
-              <td>{{order.clientName}}</td>
-              <td>{{order.productName}}</td>
-              <td>{{order.productModel}}</td>
-              <td>{{order.createDate}}</td>
+          <template v-if="workOrders.length > 0 && !loadingData">
+            <tr v-for="order in workOrders">
+              <td>{{order._id}}</td>
+              <td>{{order.name}}</td>
+              <td>{{order.product_name}}</td>
+              <td>{{order.product_type}}</td>
+              <td>{{order.extended_days}}</td>
               <td>{{order.status}}</td>
-              <td><a>查看详情</a></td>
+              <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
             </tr>
           </template>
+          <tr v-if="loadingData">
+            <td colspan="7" class="tac">
+              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+            </td>
+          </tr>
+          <tr v-if="workOrders.length === 0 && !loadingData">
+            <td colspan="7" class="tac">
+              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+            </td>
+          </tr>
         </tbody>
       </table>
 
       <!-- Start: 分页信息 -->
       <div class="row">
-        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
+        <div class="col-8">共有{{total}}条结果</div>
         <div class="col-16">
-          <pager :total="51" :current.sync="0" :page-count="10"></pager>
+          <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getWarrantyList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->
@@ -85,13 +95,7 @@
         curProvince: {},
         curCity: {},
         curDistrict: {},
-        workOrders: [
-        {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '未过期'},
-        {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '未过期'},
-        {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '已过期'},
-        {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '已过期'},
-        {id: 'gx12345678', clientName: '王大锤', productName: '电饭锅', productModel: 'ox1234', createDate: '2014-8-9', status: '已过期'}],
-
+        workOrders: [],
         statusOptions: [{
           label: '全部',
           value: 0
@@ -104,19 +108,18 @@
 
         loadingData: false,
         currentPage: 1,
-        pageCount: 10
+        pageCount: 10,
+        total: 0
       }
     },
 
     methods: {
       getWarrantyList () {
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
-
         this.loadingData = true
         api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          console.log('res')
+          this.total = res.data.count
+          this.workOrders = res.data.list
+          this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
@@ -133,7 +136,6 @@
           order: {},
           query: {}
         }
-
         return condition
       }
     },

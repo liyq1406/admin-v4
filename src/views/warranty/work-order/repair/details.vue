@@ -14,11 +14,11 @@
           <ul class="info-details">
             <li>
               <div class="label">工单编号:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails._id}}</div>
             </li>
             <li>
               <div class="label">创建日期:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails.create_time}}</div>
             </li>
           </ul>
         </div>
@@ -70,19 +70,19 @@
           <ul class="info-details">
             <li>
               <div class="label">客户姓名:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails.creator}}</div>
             </li>
             <li>
               <div class="label">联系电话:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails.phone}}</div>
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails._region}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails.address}}</div>
             </li>
           </ul>
         </div>
@@ -102,7 +102,7 @@
             </li>
             <li>
               <div class="label">产品序列号:</div>
-              <div class="info"></div>
+              <div class="info">{{repairDetails.product_sn}}</div>
             </li>
             <li>
               <div class="label">产品型号:</div>
@@ -155,6 +155,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
+  import api from '../../../../api'
 
   export default {
     name: 'OrderDetails',
@@ -164,10 +165,42 @@
     mixins: [globalMixins],
 
     data () {
-      return {}
+      return {
+        branch: [],
+        repairDetails: []
+      }
     },
 
     methods: {
+      getRepairOrder () {
+        api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
+          this.repairDetails = res.data.list[0]
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      }
+    },
+
+    computed: {
+      queryCondition () {
+        var condition = {
+          filter: [],
+          limit: 1,
+          offset: 0,
+          order: {},
+          query: {}
+        }
+
+        condition.query._id = this.$route.params.id
+
+        return condition
+      }
+    },
+
+    route: {
+      data () {
+        this.getRepairOrder()
+      }
     }
   }
 </script>
