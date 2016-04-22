@@ -26,9 +26,9 @@
             <td colspan="4">&nbsp;</td>
           </tr>
           <tr>
+            <td><span>{{deviceInfos.S15.name}}：</span><a class="button" @click="showEditModalEvent('S15')">{{deviceInfos.S15.valueText}}{{deviceInfos.S15.valueText - 0 >= 0 ? deviceInfos.S15.unit : ''}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S15.loading"></i></td>
             <td><span>{{deviceInfos.S19.name}}：</span><a class="button" @click="showEditModalEvent('S19')">{{deviceInfos.S19.valueText}}{{deviceInfos.S19.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S19.loading"></i></td>
             <td><span>{{deviceInfos.S21.name}}：</span><a class="button" @click="showEditModalEvent('S21')">{{deviceInfos.S21.valueText}}{{deviceInfos.S21.unit}}</a><i class="loading fa fa-refresh fa-spin" v-show="deviceInfos.S21.loading"></i></td>
-            <td></td>
             <td></td>
           </tr>
           <tr>
@@ -338,7 +338,9 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            min: 0,
+            max: 100,
+            tips: '温度范围是下限温度到最高设定温度'
           },
           S12: {
             loading: false,
@@ -347,7 +349,9 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            min: 0,
+            max: 100,
+            tips: '温度范围是最低设定温度到上限温度'
           },
           S13: {
             loading: false,
@@ -356,6 +360,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 0,
+            max: 100,
             tips: '温度范围0℃~100℃'
           },
           S14: {
@@ -365,16 +371,20 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            min: 0,
+            max: 100,
+            tips: '温度范围0℃~100℃'
           },
           S15: {
             loading: false,
             name: '电加热投入环境温度',
             valueText: '7',
             valueArr: [],
-            modelType: '3',
+            modelType: '4',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            min: -20,
+            max: 20,
+            tips: '温度范围-20 – 20， OF'
           },
           S19: {
             loading: false,
@@ -383,7 +393,9 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
-            tips: '温度范围-128℃~128℃'
+            min: -20,
+            max: 20,
+            tips: '温度范围-20 – 20'
           },
           S21: {
             loading: false,
@@ -392,6 +404,8 @@
             valueArr: [],
             modelType: '3',
             unit: '分钟',
+            min: 0,
+            max: 10,
             tips: '0-10'
           },
           S22: {
@@ -401,6 +415,8 @@
             valueArr: [],
             modelType: '3',
             unit: '小时',
+            min: 1,
+            max: 12,
             tips: '1 - 12'
           },
           S23: {
@@ -410,6 +426,8 @@
             valueArr: [],
             modelType: '4',
             unit: '℃',
+            min: -15,
+            max: 5,
             tips: '-15-5  OFF'
           },
           S31: {
@@ -419,6 +437,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: -20,
+            max: 20,
             tips: '-20 – 20'
           },
           S32: {
@@ -428,6 +448,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 0,
+            max: 50,
             tips: '0 – 50'
           },
           S33: {
@@ -437,6 +459,8 @@
             valueArr: [],
             modelType: '3',
             unit: '分钟',
+            min: 1,
+            max: 999,
             tips: '1 – 999'
           },
           S34: {
@@ -446,6 +470,8 @@
             valueArr: [],
             modelType: '4',
             unit: '分钟',
+            min: 1,
+            max: 99,
             tips: 'Off 1 – 99 Off表示无化霜功能'
           },
           S37: {
@@ -473,6 +499,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 15,
+            max: 40,
             tips: '15-40'
           },
           S42: {
@@ -482,6 +510,8 @@
             valueArr: [],
             modelType: '3',
             unit: '℃',
+            min: 101,
+            max: 120,
             tips: '101-120'
           },
           S44: {
@@ -518,6 +548,8 @@
             valueArr: [],
             modelType: '3',
             unit: '秒',
+            min: 1,
+            max: 999,
             tips: '1 - 999'
           },
           S48: {
@@ -527,6 +559,8 @@
             valueArr: [],
             modelType: '3',
             unit: 'A',
+            min: 1,
+            max: 20,
             tips: '1 - 20'
           },
           S49: {
@@ -534,7 +568,7 @@
             name: '电加热电流显示',
             valueText: '6',
             valueArr: [],
-            modelType: '3',
+            modelType: '0',
             unit: 'A',
             tips: '实际读到的电加热电流'
           },
@@ -554,6 +588,8 @@
             valueArr: [],
             modelType: '3',
             unit: '次',
+            min: 0,
+            max: 10,
             tips: '0 – 10'
           },
           S52: {
@@ -563,6 +599,8 @@
             valueArr: [],
             modelType: '3',
             unit: '分钟',
+            min: 0,
+            max: 999,
             tips: '0 – 999'
           },
           S54: {
@@ -581,6 +619,8 @@
             valueArr: [],
             modelType: '3',
             unit: '次',
+            min: 0,
+            max: 999,
             tips: '0 – 10'
           },
           S56: {
@@ -963,6 +1003,7 @@
         var value = deviceInfo.value
         if (num === 1) {
           self.editModal1.value = self.editModal1.startHour + ':' + self.editModal1.startMinute + '-' + self.editModal1.endHour + ':' + self.editModal1.endMinute
+          value = self.editModal1.value
         }
         if (num === 2) {
           if (deviceInfo.valueArr[0] === 'Yes') {
@@ -980,7 +1021,7 @@
           setTimeout(() => {
             self.deviceInfos[deviceInfo.paramsKey].loading = false
           }, 5000)
-          console.log('向设备发送数据：' + '/' + deviceInfo.paramsKey + '/1/' + deviceInfo.value + '\n')
+          console.log('向设备发送数据：' + '/' + paramsKey + '/1/' + value + '\n')
           self.sendDeviceData('/' + paramsKey + '/1/' + value + '\n')
         }
       },

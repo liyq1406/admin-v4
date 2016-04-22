@@ -2,16 +2,20 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'">
-          <button slot="search-button" class="btn btn-primary">搜索</button>
-          <label></label>
+        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入'+ queryType.label" @press-enter="getOrderWorkList">
+          <v-select width="100px" :label="queryType.label">
+            <select v-model="queryType">
+              <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+            </select>
+          </v-select>
+          <button slot="search-button" class="btn btn-primary" @click="getOrderWorkList">搜索</button>
         </search-box>
       </div>
 
       <div class="status-bar">
         <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
           <span slot="label">工单状态</span>
-          <select v-model="status">
+          <select v-model="status" @change="getOrderWorkList">
             <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
           </select>
         </v-select>
@@ -20,7 +24,7 @@
           <span slot="label">创建时间</span>
         </date-range-picker>
 
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small"></area-select>
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getOrderWorkList" @city-change="getOrderWorkList" @district-change="getOrderWorkList"></area-select>
       </div>
       <table class="table table-stripe table-bordered">
         <thead>
@@ -119,7 +123,16 @@
         loadingData: false,
         currentPage: 1,
         pageCount: 10,
-        total: 0
+        total: 0,
+        queryTypeOptions: [
+          { label: '工单编号', value: '_id' },
+          { label: '客户姓名', value: 'linkman' },
+          { label: '网点', value: 'branch' }
+        ],
+        queryType: {
+          label: '工单编号',
+          value: '_id'
+        }
       }
     },
 
@@ -146,6 +159,23 @@
           order: {},
           query: {}
         }
+
+        if (this.curProvince.hasOwnProperty('name')) {
+          condition.query.province = this.curProvince.name
+        }
+        if (this.curCity.hasOwnProperty('name')) {
+          condition.query.city = this.curCity.name
+        }
+        if (this.curDistrict.hasOwnProperty('name')) {
+          condition.query.district = this.curDistrict.name
+        }
+        if (this.status.value !== 0) {
+          condition.query.status = this.status.label
+        }
+        if (this.key !== '') {
+          condition.query[this.queryType.value] = this.key
+        }
+
         return condition
       }
     },
