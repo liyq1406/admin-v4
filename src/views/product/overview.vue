@@ -139,6 +139,15 @@
               </div>
             </div>
           </div>
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>否允许设备多个管理员
+                </label>
+              </div>
+            </div>
+          </div>
           <div class="form-actions">
             <label class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("overview.editForm.del") }}
@@ -241,6 +250,7 @@
         showAddModal: false,
         showKeyModal: false,
         editModel: {
+          is_allow_multi_admin: false,
           ifsnapshot: false,
           name: '',
           description: '',
@@ -570,7 +580,9 @@
         this.editing = false
         this.showEditModal = false
         this.delChecked = false
-        this.editModel = this.originEditModel
+        setTimeout(() => {
+          this.editModel = this.originEditModel
+        }, 1000)
       },
 
       // 取消添加
@@ -611,6 +623,7 @@
           this.editModel.is_active_register = this.product.is_active_register
           this.editModel.is_release = this.product.is_release
           this.editModel.id = this.$route.params.id
+          this.editModel.is_allow_multi_admin = this.product.is_allow_multi_admin
           this.originEditModel = _.clone(this.editModel)
           if (res.data.list.length) {
             if (res.data.list[0].rule === 0) {
@@ -621,7 +634,6 @@
           } else {
             this.editModel.ifsnapshot = false
           }
-          console.log(this.editModel.ifsnapshot)
         })
       },
 
@@ -673,6 +685,7 @@
               link_type: this.editModel.link_type,
               is_registerable: this.editModel.is_registerable,
               is_release: this.editModel.is_release,
+              is_allow_multi_admin: this.editModel.is_allow_multi_admin,
               id: this.editModel.id
             }
             api.product.updateProduct(model).then(() => {

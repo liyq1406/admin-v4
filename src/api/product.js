@@ -38,6 +38,7 @@ export default {
     params.is_registerable = product.is_registerable
     params.is_release = product.is_release
     params.is_active_register = product.is_active_register
+    params.is_allow_multi_admin = product.is_allow_multi_admin
 
     return http.put(
       `${apiServer.default}/v2/product/${product.id}`, params
