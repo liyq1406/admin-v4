@@ -143,7 +143,7 @@
             <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>否允许设备多个管理员
+                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
                 </label>
               </div>
             </div>
