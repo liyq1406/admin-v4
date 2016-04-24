@@ -31,6 +31,7 @@
     position absolute
     top 91px
     right 31px
+    z-index 1000
 
   .toast-box
     text-align right

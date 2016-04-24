@@ -14,6 +14,12 @@
     line-height 30px
     padding 0 10px
 
+    &.input-text-sm
+      font-size 12px
+      height 26px
+      line-height 24px
+      padding 0 8px
+
   textarea.input-text
     height 72px
     resize none
@@ -32,6 +38,10 @@
 
   .input-text-wrap
     .vf-dirty.vf-invalid
+      border-color red
+
+  .vf-submitted
+    .vf-pristine.vf-invalid
       border-color red
 
   // 单选
@@ -116,9 +126,6 @@
     .control-text
       display inline-block
       line-height 32px
-
-    &.mxh
-      max-height 240px
 
   .form-hints
     margin-top 20px

@@ -76,8 +76,14 @@
               <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
+                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span>
+              </div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
+                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span>
+                <span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span>
+              </div>
             </div>
           </div>
           <div class="form-row row">
