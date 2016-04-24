@@ -40,8 +40,10 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions">
-                <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.add") }}</button>
+              <div class="form-actions row">
+                <div class="col-offset-6">
+                  <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.add") }}</button>
+                </div>
               </div>
             </form>
           </div>
