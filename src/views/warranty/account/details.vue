@@ -52,18 +52,25 @@
 
           <!-- Start: 操作栏 -->
           <div class="action-bar">
-            <v-select width=120px :label="statusOptions[status.value].label">
-              <label slot="label">状态</label>
-              <select v-model="status">
-                <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
-              </select>
-            </v-select>
             <search-box :placeholder="'支持用户名、邮箱、昵称'">
               <label>查找客服</label>
               <button slot="search-button" class="btn btn-primary">搜索</button>
             </search-box>
           </div>
           <!-- End: 操作栏 -->
+
+          <!-- Start: 过滤器 -->
+          <div class="status-bar">
+            <div class="status">{{{ $t('common.total_results', {count:total}) }}}
+            </div>
+            <v-select width="120px" size="small" :label="statusOptions[status.value].label">
+              <label slot="label">状态</label>
+              <select v-model="status">
+                <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
+              </select>
+            </v-select>
+          </div>
+          <!-- End: 过滤器 -->
 
           <!-- Start: 客服人员列表 -->
           <table class="table table-stripe table-bordered">
@@ -107,12 +114,7 @@
           <!-- End: 客服人员列表 -->
 
           <!-- Start: 分页信息 -->
-          <div class="row">
-            <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
-            <div class="col-16">
-              <pager :total="51" :current.sync="0" :page-count="10"></pager>
-            </div>
-          </div>
+          <pager :total="51" :current.sync="0" :page-count="10"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>
