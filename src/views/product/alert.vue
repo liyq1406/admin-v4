@@ -25,7 +25,7 @@
                 <td>{{* rule.content }}</td>
                 <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
                 <td class="tac">
-                  <button @click="editRule(rule)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
+                  <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                 </td>
               </tr>
             </template>

@@ -16,7 +16,7 @@
             <td>{{ record.content }}</td>
             <td>{{ record.create_date }}</td>
             <!-- <td class="tac">
-              <button @click="editRecord(record)" class="btn btn-link btn-sm">{{ $t("common.del") }}</button>
+              <button @click="editRecord(record)" class="btn btn-link btn-mini">{{ $t("common.del") }}</button>
             </td> -->
           </tr>
           <tr v-show="records.length === 0">

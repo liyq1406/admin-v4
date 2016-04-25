@@ -1,5 +1,6 @@
 <template>
   <div :class="classes">
+    <!-- <pre>{{ currDate }}</pre> -->
     <div class="input-text-wrap" :style="inputStyle">
       <input type="text" v-model="value" @click="inputClick" lazy class="input-text"/>
     </div>
@@ -10,7 +11,7 @@
             <p @click="switchMonthView">{{ stringifyDayHeader(currDate) }}</p>
           </div>
           <div class="date-picker-week-range"><span v-for="w in weekRange">{{ w }}</span></div>
-          <div class="date-picker-date-range"><span v-for="d in dateRange" v-bind:class="d.sclass" @click="daySelect(d.date, this)">{{ d.text }}</span></div>
+          <div class="date-picker-date-range"><span v-for="d in dateRange" v-bind:class="d.sclass" @click="daySelect(d.date)">{{ d.text }}</span></div>
         </div>
       </div>
     </div>
@@ -21,7 +22,7 @@
             <p @click="switchDecadeView">{{ stringifyYearHeader(currDate) }}</p>
           </div>
           <div class="date-picker-month-range">
-            <template v-for="m in monthNames"><span v-bind:class="{'date-picker-date-range-item-active': this.monthNames[this.parse(this.value).getMonth()] === m && (this.currDate.getFullYear() === this.parse(this.value).getFullYear())}" @click="monthSelect($index)">{{ m.substr(0,3) }}</span></template>
+            <template v-for="m in monthNames"><span v-bind:class="{'date-picker-date-range-item-active': monthNames[parse(value).getMonth()] === m && (currDate.getFullYear() === parse(value).getFullYear())}" @click="monthSelect($index)">{{ m.substr(0,3) }}</span></template>
           </div>
         </div>
       </div>
@@ -33,7 +34,7 @@
             <p>{{ stringifyDecadeHeader(currDate) }}</p>
           </div>
           <div class="date-picker-month-range decade-range">
-            <template v-for="decade in decadeRange"><span v-bind:class="{'date-picker-date-range-item-active': this.parse(this.value).getFullYear() === decade.text}" @click.stop="yearSelect(decade.text)">{{ decade.text }}</span></template>
+            <template v-for="decade in decadeRange"><span v-bind:class="{'date-picker-date-range-item-active': parse(value).getFullYear() === decade.text}" @click.stop="yearSelect(decade.text)">{{ decade.text }}</span></template>
           </div>
         </div>
       </div>
@@ -178,7 +179,7 @@
         this.currDate = new Date(this.currDate.getFullYear(), index, this.currDate.getDate())
       },
 
-      daySelect (date, el) {
+      daySelect (date) {
         this.currDate = date
         this.value = this.stringify(this.currDate)
         this.displayDayView = false
@@ -208,6 +209,7 @@
 
       // 格式化当前日期头部
       stringifyDayHeader (date) {
+        // return '2016年4月'
         return date.getFullYear() + '年 ' + this.monthNames[date.getMonth()]
       },
 
@@ -246,7 +248,8 @@
       parse (str) {
         // var date = new Date(str)
         // return isNaN(date.getFullYear()) ? null : date
-        return new Date(str)
+        // return new Date(str)
+        return this.value && !isNaN(new Date(this.value).getFullYear()) ? new Date(this.value) : new Date()
       },
 
       getDayCount (year, month) {
@@ -394,7 +397,7 @@
   .date-picker-month-range span
     width 48px
     height 50px
-    line-height 45px
+    line-height 50px
 
   .decade-range span:first-child,
   .decade-range span:last-child,
@@ -453,4 +456,5 @@
       .input-text
         height 26px
         line-height 24px
+        font-size 12px
 </style>

@@ -26,7 +26,7 @@
                     <td>{{ record.updateAt | formatDate }}</td>
                     <td>{{ record.creator }}</td>
                     <td class="tac">
-                      <button @click="showRecord(record)" class="btn btn-link btn-sm">{{ $t("common.details") }}</button>
+                      <button @click="showRecord(record)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
                     </td>
                   </tr>
                   <tr v-if="records.length === 0">

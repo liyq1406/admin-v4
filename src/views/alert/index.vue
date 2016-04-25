@@ -67,7 +67,7 @@
                   <td>{{ alert.create_date | formatDate }}</td>
                   <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
                   <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-sm">{{ $t("common.details") }}</button>
+                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
                   </td>
                 </tr>
               </template>

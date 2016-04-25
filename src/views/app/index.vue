@@ -28,15 +28,15 @@
                   <td>{{ app.id }}</td>
                   <td>{{ app.name }}</td>
                   <td class="tac">
-                    <button @click="viewAccessKeys(app)" class="btn btn-link btn-sm">{{ $t('common.details') }}</button>
+                    <button @click="viewAccessKeys(app)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
                   </td>
                   <td>{{ app.type | typeLabel }}</td>
                   <td>{{ app.create_time | formatDate }}</td>
                   <td v-if="app.type===4" class="tac">
-                    <button v-link="{ path: '/apps/wechat/'+app.id }" class="btn-link btn-sm">{{ '查看' }}</button>
+                    <button v-link="{ path: '/apps/wechat/'+app.id }" class="btn-link btn-mini">{{ '查看' }}</button>
                   </td>
                   <td v-else class="tac">
-                    <button @click="onEditApp(app)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
+                    <button @click="onEditApp(app)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                   </td>
                 </tr>
               </template>

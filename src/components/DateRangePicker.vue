@@ -21,19 +21,21 @@
       // 起始日期
       from: {
         type: String,
-        default: ''
+        default: '',
+        twoWay: true
       },
 
       // 结束日期
       to: {
         type: String,
-        default: ''
+        default: '',
+        twoWay: true
       },
 
       // 宽度
       inputWidth: {
         type: String,
-        default: '120px'
+        default: '110px'
       },
 
       // 尺寸

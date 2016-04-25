@@ -40,7 +40,7 @@
                 <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
                 <td>{{ recipe.created_by }}</td>
                 <td>{{ recipe.created_at | formatDate }}</td>
-                <td class="tac"><a v-link="{path: '/diet/recipe/'+recipe._id+'/edit'}" class="btn-link btn-sm">编辑</a></td>
+                <td class="tac"><a v-link="{path: '/diet/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
               </tr>
             </template>
             <tr v-if="loadingData">

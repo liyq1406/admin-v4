@@ -25,12 +25,12 @@
               <tr v-for="accessKey in accessKeys | limitBy pageCount (currentPage-1)*pageCount">
                 <td>{{ accessKey.id }}</td>
                 <td class="tac">
-                  <button @click="viewAccessKeys(accessKey)" class="btn btn-link btn-sm">{{ $t('common.details') }}</button>
+                  <button @click="viewAccessKeys(accessKey)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
                 </td>
                 <td>{{ accessKey.name }}</td>
                 <td>{{ accessKey.create_time }}</td>
                 <td class="tac">
-                  <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-sm"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('task.stop') : $t('task.start') }}</button>
+                  <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('task.stop') : $t('task.start') }}</button>
                 </td>
               </tr>
             </template>

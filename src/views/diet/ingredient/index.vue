@@ -35,7 +35,7 @@
                 <td>{{ ingredient.name }}</td>
                 <td>{{ ingredient.created_by }}</td>
                 <td>{{ ingredient.created_at | formatDate }}</td>
-                <td class="tac"><a v-link="{path: '/diet/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-sm">编辑</a></td>
+                <td class="tac"><a v-link="{path: '/diet/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
               </tr>
             </template>
             <tr v-if="loadingData">

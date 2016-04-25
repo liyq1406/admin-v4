@@ -24,7 +24,7 @@
                 <td>{{ firmware.description }}</td>
                 <td>{{ firmware.create_date | formatDate }}</td>
                 <td class="tac">
-                  <button @click="onEditFirmware(firmware)" class="btn btn-link btn-sm">{{ $t('common.edit') }}</button>
+                  <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
                 </td>
               </tr>
             </template>
@@ -70,8 +70,8 @@
                 <td>{{ task.target_version }}</td>
                 <td>{{ task.upgrade_count }}</td>
                 <td class="tac">
-                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-sm mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
-                  <button @click="removeTask(task)" class="btn btn-primary btn-sm">删除</button>
+                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-mini mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
+                  <button @click="removeTask(task)" class="btn btn-primary btn-mini">删除</button>
                 </td>
               </tr>
             </template>

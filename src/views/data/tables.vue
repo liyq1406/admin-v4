@@ -21,7 +21,7 @@
                 <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
                 <td><span>{{ tableTypes[table.type-1] }}</span></td>
                 <td class="tac">
-                  <button @click="editTable(table)" class="btn btn-link btn-sm">{{ $t("common.edit") }}</button>
+                  <button @click="editTable(table)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                 </td>
               </tr>
             </template>

@@ -30,7 +30,7 @@
               <!--td 2015-6-3 15:38:53-->
               <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusTypes[member.status] }}</span></td>
               <td class="tac">
-                <button @click="deleteMember(member)" class="btn btn-link btn-sm">{{ $t('common.del') }}</button>
+                <button @click="deleteMember(member)" class="btn btn-link btn-mini">{{ $t('common.del') }}</button>
               </td>
             </tr>
           </template>

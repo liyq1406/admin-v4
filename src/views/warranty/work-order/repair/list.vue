@@ -20,7 +20,7 @@
           </select>
         </v-select>
 
-        <date-range-picker input-size="small" class="mr20" :from="startDate" :to="endDate">
+        <date-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" input-width="94px">
           <span slot="label">创建时间</span>
         </date-range-picker>
 
