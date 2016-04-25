@@ -73,46 +73,47 @@
           <!-- End: 过滤器 -->
 
           <!-- Start: 客服人员列表 -->
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>姓名</th>
-                <th>手机</th>
-                <th>邮箱</th>
-                <th>最后一次登陆</th>
-                <th>状态</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="staff in staffs">
-                <td>
-                  <a v-link="{path: '/warranty/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">{{ staff.name }}</a>
-                </td>
-                <td>{{ staff.phone }}</td>
-                <td>{{ staff.email }}</td>
-                <td>{{ staff.create_time }}</td>
-                <td v-if="staff.status-0 === 0">
-                  <span class="hl-gray">已停用</span>
-                </td>
-                <td v-else>正常</td>
-              </tr>
-              <tr v-if="loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                </td>
-              </tr>
-              <tr v-if="staffs.length === 0">
-                <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                  <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <div class="data-table">
+            <div class="icon-loading" v-show="loadingStaffs">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>姓名</th>
+                  <th>手机</th>
+                  <th>邮箱</th>
+                  <th>最后一次登陆</th>
+                  <th>状态</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="staffs.length > 0">
+                  <tr v-for="staff in staffs">
+                    <td>
+                      <a v-link="{path: '/warranty/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">{{ staff.name }}</a>
+                    </td>
+                    <td>{{ staff.phone }}</td>
+                    <td>{{ staff.email }}</td>
+                    <td>{{ staff.create_time }}</td>
+                    <td>
+                      <span v-if="staff.status-0 === 0" class="hl-gray">已停用</span>
+                      <span v-else class="hl-green">正常</span>
+                    </td>
+                  </tr>
+                </template>
+                <tr v-if="staffs.length === 0 && !loadingStaffs">
+                  <td colspan="5" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <!-- End: 客服人员列表 -->
 
           <!-- Start: 分页信息 -->
-          <!-- <pager :total="51" :current.sync="0" :page-count="10"></pager> -->
-          <pager v-if="!loadingStaffs && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>

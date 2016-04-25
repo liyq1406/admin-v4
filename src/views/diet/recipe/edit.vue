@@ -162,33 +162,33 @@
               </div>
               <div class="ingredient-list clearfix mb20">
                 <div class="to-select-list">
-                  <table class="table table-stripe table-bordered">
-                    <thead>
-                      <tr>
-                        <th>标题</th>
-                        <th class="tac">{{ $t('common.action') }}</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <template v-if="filteredIngredientList.length > 0 && !ingredientSelectModal.loadingData">
-                        <tr v-for="ingredient in filteredIngredientList">
-                          <td><span>{{ ingredient.name }}</span></td>
-                          <td class="tac w70"><a v-show="!ingredient.selected" @click.stop="addIngredient(ingredient)" class="btn-link">添加</a><span v-show="ingredient.selected">已添加</span></td>
+                  <div class="data-table">
+                    <div class="icon-loading" v-show="loadingData">
+                      <i class="fa fa-refresh fa-spin"></i>
+                    </div>
+                    <table class="table table-stripe table-bordered">
+                      <thead>
+                        <tr>
+                          <th>标题</th>
+                          <th class="tac">{{ $t('common.action') }}</th>
                         </tr>
-                      </template>
-                      <tr v-if="ingredientSelectModal.loadingData">
-                        <td colspan="2" class="tac">
-                          <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                        </td>
-                      </tr>
-                      <tr v-if="filteredIngredientList.length === 0 && !ingredientSelectModal.loadingData">
-                        <td colspan="2" class="tac">
-                          <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                  <pager v-if="!ingredientSelectModal.loadingData && ingredientSelectModal.total > ingredientSelectModal.pageCount" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.pageCount" @page-update="getIngredients"></pager>
+                      </thead>
+                      <tbody>
+                        <template v-if="filteredIngredientList.length > 0">
+                          <tr v-for="ingredient in filteredIngredientList">
+                            <td><span>{{ ingredient.name }}</span></td>
+                            <td class="tac w70"><a v-show="!ingredient.selected" @click.stop="addIngredient(ingredient)" class="btn-link">添加</a><span v-show="ingredient.selected">已添加</span></td>
+                          </tr>
+                        </template>
+                        <tr v-if="filteredIngredientList.length === 0 && !ingredientSelectModal.loadingData">
+                          <td colspan="2" class="tac">
+                            <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <pager v-if="ingredientSelectModal.total > ingredientSelectModal.pageCount" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.pageCount" @page-update="getIngredients"></pager>
                 </div>
                 <div class="selected-list">
                   <h3>已选择</h3>

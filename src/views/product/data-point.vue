@@ -7,43 +7,46 @@
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("datapoint.add_datapoint") }}</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t("datapoint.fields.index") }}</th>
-              <th>{{ $t("datapoint.fields.name") }}</th>
-              <th>{{ $t("datapoint.fields.type") }}</th>
-              <th>{{ $t("datapoint.fields.symbol") }}</th>
-              <th>{{ $t("datapoint.fields.description") }}</th>
-              <th class="tac">{{ $t("common.action") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="datapoints.length > 0 && !loadingData">
-              <tr v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount">
-                <td>{{* datapoint.index }}</td>
-                <td>{{* datapoint.name }}</td>
-                <td>{{* datapoint.type | typeLabel }}</td>
-                <td>{{* datapoint.symbol }}</td>
-                <td>{{* datapoint.description }}</td>
-                <td class="tac">
-                  <button @click="editDataPoint(datapoint)" class="btn-link">{{ $t("common.edit") }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t("datapoint.fields.index") }}</th>
+                <th>{{ $t("datapoint.fields.name") }}</th>
+                <th>{{ $t("datapoint.fields.type") }}</th>
+                <th>{{ $t("datapoint.fields.symbol") }}</th>
+                <th>{{ $t("datapoint.fields.description") }}</th>
+                <th class="tac">{{ $t("common.action") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="datapoints.length > 0">
+                <!-- 如果需要分页，改成下面这个 -->
+                <!-- <tr v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount"> -->
+                <tr v-for="datapoint in datapoints">
+                  <td>{{* datapoint.index }}</td>
+                  <td>{{* datapoint.name }}</td>
+                  <td>{{* datapoint.type | typeLabel }}</td>
+                  <td>{{* datapoint.symbol }}</td>
+                  <td>{{* datapoint.description }}</td>
+                  <td class="tac">
+                    <button @click="editDataPoint(datapoint)" class="btn-link">{{ $t("common.edit") }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="datapoints.length === 0 && !loadingData">
+                <td colspan="6" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="datapoints.length === 0 && !loadingData">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData" :total="datapoints.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+            </tbody>
+          </table>
+        </div>
+        <!-- 如果需要分页，改成下面这个 -->
+        <!-- <pager v-if="datapoints.length > pageCount" :total="datapoints.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
       </div>
     </div>
     <!-- 添加数据端点浮层-->

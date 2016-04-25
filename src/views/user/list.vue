@@ -8,41 +8,41 @@
       <h2>{{ $t('user.list') }}</h2>
     </div>
     <div class="panel-bd">
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>{{ $t('user.fields.nick_name') }}</th>
-            <th>{{ $t('user.fields.account') }}</th>
-            <th>{{ $t('user.fields.create_date') }}</th>
-            <th>{{ $t('user.fields.source') }}</th>
-            <th>{{ $t('common.status') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="users.length > 0 && !loadingData">
-            <tr v-for="user in users">
-              <td><a v-link="{path: '/user/'+user.id}" class="hl-red">{{ user.id }}</a></td>
-              <td>{{ user.nickname }}</td>
-              <td>{{ user.account }}</td>
-              <td>{{ user.create_date | formatDate }}</td>
-              <td><span v-if="user.source===1">Web</span><span v-if="user.source===2">Android</span><span v-if="user.source===3">iOS</span><span v-if="user.source===4">{{ $('common.wechat') }}</span></td>
-              <td><span>{{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate') }}</span></td>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>{{ $t('user.fields.nick_name') }}</th>
+              <th>{{ $t('user.fields.account') }}</th>
+              <th>{{ $t('user.fields.create_date') }}</th>
+              <th>{{ $t('user.fields.source') }}</th>
+              <th>{{ $t('common.status') }}</th>
             </tr>
-          </template>
-          <tr v-if="loadingData">
-            <td colspan="6" class="tac">
-              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            </td>
-          </tr>
-          <tr v-if="total === 0 && !loadingData">
-            <td colspan="6" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager>
+          </thead>
+          <tbody>
+            <template v-if="users.length > 0">
+              <tr v-for="user in users">
+                <td><a v-link="{path: '/user/'+user.id}" class="hl-red">{{ user.id }}</a></td>
+                <td>{{ user.nickname }}</td>
+                <td>{{ user.account }}</td>
+                <td>{{ user.create_date | formatDate }}</td>
+                <td><span v-if="user.source===1">Web</span><span v-if="user.source===2">Android</span><span v-if="user.source===3">iOS</span><span v-if="user.source===4">{{ $('common.wechat') }}</span></td>
+                <td><span>{{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate') }}</span></td>
+              </tr>
+            </template>
+            <tr v-if="total === 0 && !loadingData">
+              <td colspan="6" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager>
     </div>
   </div>
 </template>

@@ -55,7 +55,6 @@
                 <td><a v-link="{path: '/warranty/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
-
             <tr v-if="workOrders.length === 0 && !loadingData">
               <td colspan="7" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
@@ -67,9 +66,9 @@
 
       <!-- Start: 分页信息 -->
       <div class="row">
-        <div class="col-8">共有{{total}}条结果</div>
+        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
-          <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->
@@ -170,6 +169,7 @@
           query: {}
         }
         condition.query.name = name
+        this.loadingData = true
         api.warranty.getBranchList(condition).then((res) => {
           this.branchs = res.data.list
           api.warranty.getOrderWorkList(this.queryCondition).then((res) => {

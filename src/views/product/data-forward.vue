@@ -7,39 +7,39 @@
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t("dataforward.fields.id") }}</th>
-              <th>{{ $t("dataforward.fields.destination.url") }}</th>
-              <th>{{ $t("dataforward.fields.destination.type") }}</th>
-              <th class="tac">{{ $t("common.action") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="rules.length > 0 && !loadingData">
-              <tr v-for="rule in rules | limitBy pageCount (currentPage-1)*pageCount">
-                <td>{{* rule.id }}</td>
-                <td>{{* rule.destination.url }}</td>
-                <td><span v-if="rule.destination.type===1">转发到外部url</span><span v-if="rule.destination.type===2">转发到内部插件处理单元</span></td>
-                <td class="tac">
-                  <button @click="editRule(rule)" class="btn-link">{{ $t("common.edit") }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t("dataforward.fields.id") }}</th>
+                <th>{{ $t("dataforward.fields.destination.url") }}</th>
+                <th>{{ $t("dataforward.fields.destination.type") }}</th>
+                <th class="tac">{{ $t("common.action") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="rules.length > 0">
+                <tr v-for="rule in rules | limitBy pageCount (currentPage-1)*pageCount">
+                  <td>{{* rule.id }}</td>
+                  <td>{{* rule.destination.url }}</td>
+                  <td><span v-if="rule.destination.type===1">转发到外部url</span><span v-if="rule.destination.type===2">转发到内部插件处理单元</span></td>
+                  <td class="tac">
+                    <button @click="editRule(rule)" class="btn-link">{{ $t("common.edit") }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="rules.length === 0 && !loadingData">
+                <td colspan="4" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="rules.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+            </tbody>
+          </table>
+        </div>
+        <pager v-if="total > pageCount" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
     <!-- 添加转发规则-->
@@ -175,32 +175,6 @@
       return {
         rules: [],            // 规则列表
         datapoints: [],
-        // dataforwards: [
-        //   {
-        //     'id': '转发规则ID',
-        //     'data_type': [
-        //       '1',
-        //       '2'
-        //     ],
-        //     'destination': {
-        //       'type': '数据分发类型',
-        //       'url': '数据分发url',
-        //       'token': '分发url访问所需凭证'
-        //     }
-        //   },
-        //   {
-        //     'id': '转发规则ID',
-        //     'data_type': [
-        //       '1',
-        //       '2'
-        //     ],
-        //     'destination': {
-        //       'type': '数据分发类型',
-        //       'url': '数据分发url',
-        //       'token': '分发url访问所需凭证'
-        //     }
-        //   }
-        // ],
         dataforwardTypes: locales[Vue.config.lang].dataforward.types,
         dataTypes: locales[Vue.config.lang].dataforward.datatype_forwards,
         destinationTypes: locales[Vue.config.lang].dataforward.destination_types,
@@ -208,6 +182,7 @@
         notify_type: [],
         pageCount: 10,
         currentPage: 1,
+        total: 0,
         showAddModal: false,
         showEditModal: false,
         addModel: {
@@ -268,9 +243,11 @@
 
       // 获取转发规则列表
       getRule () {
+        this.loadingData = true
         api.dataForward.getRule(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.rules = res.data.list
+            this.total = res.data.count
             this.loadingData = false
           }
         }).catch((res) => {

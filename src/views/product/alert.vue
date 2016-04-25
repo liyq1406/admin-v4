@@ -7,42 +7,42 @@
             <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t("rule.fields.name") }}</th>
-              <th>{{ $t("rule.fields.type") }}</th>
-              <th>{{ $t("rule.fields.content") }}</th>
-              <th>{{ $t("common.status") }}</th>
-              <th class="tac">{{ $t("common.action") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="rules.length > 0 && !loadingData">
-              <tr v-for="rule in rules">
-                <td>{{* rule.name }}</td>
-                <td>{{* rule.type | ruleLabel }}</td>
-                <td>{{* rule.content }}</td>
-                <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
-                <td class="tac">
-                  <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t("rule.fields.name") }}</th>
+                <th>{{ $t("rule.fields.type") }}</th>
+                <th>{{ $t("rule.fields.content") }}</th>
+                <th>{{ $t("common.status") }}</th>
+                <th class="tac">{{ $t("common.action") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="rules.length > 0">
+                <tr v-for="rule in rules">
+                  <td>{{* rule.name }}</td>
+                  <td>{{* rule.type | ruleLabel }}</td>
+                  <td>{{* rule.content }}</td>
+                  <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
+                  <td class="tac">
+                    <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="rules.length === 0 && !loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="5" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="rules.length === 0 && !loadingData">
-              <td colspan="5" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
         <!-- 分页-->
-        <pager v-if="!loadingData" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+        <!-- <pager v-if="rules.length > pageCount" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
       </div>
     </div>
 

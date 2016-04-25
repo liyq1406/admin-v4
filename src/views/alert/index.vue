@@ -47,43 +47,43 @@
           <h2>{{ $t("alert.info") }}</h2>
         </div>
         <div class="panel-bd">
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>{{ $t("alert.info_list.product_name") }}</th>
-                <th>{{ $t("alert.info_list.content") }}</th>
-                <th>{{ $t("alert.info_list.create_date") }}</th>
-                <th>{{ $t("alert.info_list.is_read") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="alerts.length > 0 && !loadingData">
-                <tr v-for="alert in alerts">
-                  <td>{{ alert.product_name }}</td>
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                  </td>
-                  <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                  <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
+          <div class="data-table">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>{{ $t("alert.info_list.product_name") }}</th>
+                  <th>{{ $t("alert.info_list.content") }}</th>
+                  <th>{{ $t("alert.info_list.create_date") }}</th>
+                  <th>{{ $t("alert.info_list.is_read") }}</th>
+                  <th class="tac">{{ $t("common.action") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="alerts.length > 0">
+                  <tr v-for="alert in alerts">
+                    <td>{{ alert.product_name }}</td>
+                    <td>
+                      <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
+                    </td>
+                    <td>{{ alert.create_date | formatDate }}</td>
+                    <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
+                    <td class="tac">
+                      <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
+                    </td>
+                  </tr>
+                </template>
+                <tr v-if="alerts.length === 0 && !loadingData">
+                  <td colspan="5" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                   </td>
                 </tr>
-              </template>
-              <tr v-if="loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                </td>
-              </tr>
-              <tr v-if="alerts.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
+              </tbody>
+            </table>
+          </div>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
         </div>
       </div>
     </div>

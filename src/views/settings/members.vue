@@ -8,45 +8,45 @@
       <button @click.prevent="showModal = true" class="btn btn-success ml20 mt10"><i class="fa fa-plus"></i>{{ $t('member.add_member') }}</button>
     </div>
     <div class="panel-bd">
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>{{ $t('member.fields.name') }}</th>
-            <th>{{ $t('member.fields.phone') }}</th>
-            <th>{{ $t('member.fields.email') }}</th>
-            <th>{{ $t('member.fields.role') }}</th>
-            <!--th 最后一次登录-->
-            <th class="tac">{{ $t('common.status') }}</th>
-            <th class="tac">{{ $t('common.action') }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="filteredMembers.length > 0 && !loadingData">
-            <tr v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount">
-              <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-              <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-              <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-              <td><span>{{ memberTypes[member.role-1] }}</span></td>
-              <!--td 2015-6-3 15:38:53-->
-              <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusTypes[member.status] }}</span></td>
-              <td class="tac">
-                <button @click="deleteMember(member)" class="btn btn-link btn-mini">{{ $t('common.del') }}</button>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>{{ $t('member.fields.name') }}</th>
+              <th>{{ $t('member.fields.phone') }}</th>
+              <th>{{ $t('member.fields.email') }}</th>
+              <th>{{ $t('member.fields.role') }}</th>
+              <!--th 最后一次登录-->
+              <th class="tac">{{ $t('common.status') }}</th>
+              <th class="tac">{{ $t('common.action') }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="filteredMembers.length > 0">
+              <tr v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount">
+                <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                <td><span>{{ memberTypes[member.role-1] }}</span></td>
+                <!--td 2015-6-3 15:38:53-->
+                <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusTypes[member.status] }}</span></td>
+                <td class="tac">
+                  <button @click="deleteMember(member)" class="btn btn-link btn-mini">{{ $t('common.del') }}</button>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="filteredMembers.length === 0 && !loadingData">
+              <td colspan="6" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
-          </template>
-          <tr v-if="loadingData">
-            <td colspan="6" class="tac">
-              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            </td>
-          </tr>
-          <tr v-if="filteredMembers.length === 0 && !loadingData">
-            <td colspan="6" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pager v-if="!loadingData" :total="filteredMembers.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+          </tbody>
+        </table>
+      </div>
+      <pager v-if="filteredMembers.length > pageCount" :total="filteredMembers.length" :current.sync="currentPage" :page-count="pageCount"></pager>
     </div>
     <modal :show.sync="showModal">
       <h3 slot="header">{{ $t('member.add_member') }}</h3>

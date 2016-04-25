@@ -32,39 +32,39 @@
               </select>
             </v-select>
           </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-                <th>{{ $t('device.id') }}</th>
-                <th>{{ $t('device.is_active') }}</th>
-                <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-                <th>{{ $t('device.is_online') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="devices.length > 0 && !loadingData">
-                <tr v-for="device in devices">
-                  <td><a v-link="'/device-params/' + product.id + '/' + device.id + '/' + device.mac" class="hl-red">{{ device.mac }}</a></td>
-                  <td>{{ device.id }}</td>
-                  <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
-                  <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-                  <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+          <div class="data-table">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+                  <th>{{ $t('device.id') }}</th>
+                  <th>{{ $t('device.is_active') }}</th>
+                  <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+                  <th>{{ $t('device.is_online') }}</th>
                 </tr>
-              </template>
-              <tr v-if="loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                </td>
-              </tr>
-              <tr v-if="devices.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-          <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
+              </thead>
+              <tbody>
+                <template v-if="devices.length > 0">
+                  <tr v-for="device in devices">
+                    <td><a v-link="'/device-params/' + product.id + '/' + device.id + '/' + device.mac" class="hl-red">{{ device.mac }}</a></td>
+                    <td>{{ device.id }}</td>
+                    <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
+                    <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
+                    <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+                  </tr>
+                </template>
+                <tr v-if="devices.length === 0 && !loadingData">
+                  <td colspan="5" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
         </div>
       </div>
     </div>

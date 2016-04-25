@@ -8,38 +8,38 @@
         <h2>{{ $t('firmware.firmware_list') }}</h2>
       </div>
       <div class="panel-bd">
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th class="w50">{{ $t('firmware.fields.version') }}</th>
-              <th>{{ $t('firmware.fields.description') }}</th>
-              <th>{{ $t('firmware.fields.create_date') }}</th>
-              <th class="tac">{{ $t('common.action') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="firmwares.length > 0 && !loadingFirmwares">
-              <tr v-for="firmware in firmwares | orderBy 'version'">
-                <td>{{ firmware.version }}</td>
-                <td>{{ firmware.description }}</td>
-                <td>{{ firmware.create_date | formatDate }}</td>
-                <td class="tac">
-                  <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingFirmwares">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th class="w50">{{ $t('firmware.fields.version') }}</th>
+                <th>{{ $t('firmware.fields.description') }}</th>
+                <th>{{ $t('firmware.fields.create_date') }}</th>
+                <th class="tac">{{ $t('common.action') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="firmwares.length > 0">
+                <tr v-for="firmware in firmwares | orderBy 'version'">
+                  <td>{{ firmware.version }}</td>
+                  <td>{{ firmware.description }}</td>
+                  <td>{{ firmware.create_date | formatDate }}</td>
+                  <td class="tac">
+                    <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="firmwares.length === 0 && !loadingFirmwares">
+                <td colspan="4" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingFirmwares">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="firmwares.length === 0 && !loadingFirmwares">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <div class="panel">
@@ -50,43 +50,43 @@
         <h2>{{ $t('task.task_list') }}</h2>
       </div>
       <div class="panel-bd">
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t('task.fields.order') }}</th>
-              <th>{{ $t('task.fields.description') }}</th>
-              <th>{{ $t('task.fields.from_version') }}</th>
-              <th>{{ $t('task.fields.target_version') }}</th>
-              <th>{{ $t('task.fields.upgrade_count') }}</th>
-              <th class="tac">{{ $t('common.action') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="tasks.length > 0 && !loadingTasks">
-              <tr v-for="task in tasks">
-                <td>{{ $index + 1 }}</td>
-                <td>{{ task.name }}</td>
-                <td>{{ task.from_version }}</td>
-                <td>{{ task.target_version }}</td>
-                <td>{{ task.upgrade_count }}</td>
-                <td class="tac">
-                  <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-mini mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
-                  <button @click="removeTask(task)" class="btn btn-primary btn-mini">删除</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingTasks">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t('task.fields.order') }}</th>
+                <th>{{ $t('task.fields.description') }}</th>
+                <th>{{ $t('task.fields.from_version') }}</th>
+                <th>{{ $t('task.fields.target_version') }}</th>
+                <th>{{ $t('task.fields.upgrade_count') }}</th>
+                <th class="tac">{{ $t('common.action') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="tasks.length > 0">
+                <tr v-for="task in tasks">
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{ task.name }}</td>
+                  <td>{{ task.from_version }}</td>
+                  <td>{{ task.target_version }}</td>
+                  <td>{{ task.upgrade_count }}</td>
+                  <td class="tac">
+                    <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-mini mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
+                    <button @click="removeTask(task)" class="btn btn-primary btn-mini">删除</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="tasks.length === 0 && !loadingTasks">
+                <td colspan="6" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingTasks">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="tasks.length === 0 && !loadingTasks">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
     <!-- 添加固件版本浮层-->

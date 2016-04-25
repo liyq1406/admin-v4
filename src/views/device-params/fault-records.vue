@@ -1,32 +1,33 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <table class="table table-stripe table-bordered wrongcodetable">
-        <thead>
-          <tr>
-            <th>故障码</th>
-            <th>故障</th>
-            <th>时间</th>
-            <!-- <th>操作</th> -->
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="record in records| limitBy pageCount (currentPage-1)*pageCount">
-            <td>{{ record.alert_value }}</td>
-            <td>{{ record.content }}</td>
-            <td>{{ record.create_date }}</td>
-            <!-- <td class="tac">
-              <button @click="editRecord(record)" class="btn btn-link btn-mini">{{ $t("common.del") }}</button>
-            </td> -->
-          </tr>
-          <tr v-show="records.length === 0">
-            <td colspan="3" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-              <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pager v-if="!loadingRecord && records.length > pageCount" :total="records.length" :current.sync="currentPage" :page-count="pageCount"  @page-update="pageUpdate"></pager>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered wrongcodetable">
+          <thead>
+            <tr>
+              <th>故障码</th>
+              <th>故障</th>
+              <th>时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="record in records">
+              <td>{{ record.alert_value }}</td>
+              <td>{{ record.content }}</td>
+              <td>{{ record.create_date }}</td>
+            </tr>
+            <tr v-if="records.length === 0 && !loadingData">
+              <td colspan="3" class="tac">
+                <div class="tips-null">{{ $t("common.no_records") }}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount"  @page-update="pageUpdate"></pager>
     </div>
   </div>
 </template>
@@ -49,27 +50,14 @@
 
     data () {
       return {
-        records: [
-          {
-            alert_value: '',
-            content: 'A12',
-            create_date: '2016-3-30 13:40'
-          },
-          {
-            alert_value: '',
-            content: 'A13',
-            create_date: '2016-3-30 13:40'
-          }
-        ],
-        loadingRecord: false,
+        records: [],
+        loadingData: false,
         currentPage: 1,
-        pageCount: 10
+        pageCount: 10,
+        total: 0
       }
     },
     ready () {
-      // console.log(1111)
-      // console.log(this.$route.params.product_id)
-      // console.log(this.$route.params.device_id)
       this.getFault()
     },
 
@@ -86,7 +74,7 @@
             'from': Number(device_id)
           }
         }
-        this.loadingRecord = true
+        this.loadingData = true
         api.snapshot.getFault(params).then((res) => {
           var records = res.data.list
           records.map(function (item) {
@@ -95,7 +83,8 @@
             item.create_date = item.create_date.replace('.' + item.create_date.split('.')[1], '')
           })
           this.records = records
-          this.loadingRecord = false
+          this.total = res.data.count
+          this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
         })

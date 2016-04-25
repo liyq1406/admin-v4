@@ -25,37 +25,37 @@
             </select>
           </v-select>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>标题</th>
-              <th>创建者</th>
-              <th>创建时间</th>
-              <th class="tac">{{ $t('common.action') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="recipes.length > 0 && !loadingData">
-              <tr v-for="recipe in recipes">
-                <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
-                <td>{{ recipe.created_by }}</td>
-                <td>{{ recipe.created_at | formatDate }}</td>
-                <td class="tac"><a v-link="{path: '/diet/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>标题</th>
+                <th>创建者</th>
+                <th>创建时间</th>
+                <th class="tac">{{ $t('common.action') }}</th>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="recipes.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getRecipes"></pager>
+            </thead>
+            <tbody>
+              <template v-if="recipes.length > 0">
+                <tr v-for="recipe in recipes">
+                  <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
+                  <td>{{ recipe.created_by }}</td>
+                  <td>{{ recipe.created_at | formatDate }}</td>
+                  <td class="tac"><a v-link="{path: '/diet/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                </tr>
+              </template>
+              <tr v-if="recipes.length === 0 && !loadingData">
+                <td colspan="4" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getRecipes"></pager>
       </div>
     </div>
     <!-- 类别管理浮层-->

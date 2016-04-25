@@ -10,42 +10,42 @@
             <button @click="toggleList" class="btn btn-ghost fr"><i class="fa"></i>切换查看V1版本</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>Access Key ID</th>
-              <th class="tac">Access Key Secret</th>
-              <th>{{ $t("common.name") }}</th>
-              <th class="tac">创建时间</th>
-              <th class="tac">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="accessKeys.length > 0 && !loadingData">
-              <tr v-for="accessKey in accessKeys | limitBy pageCount (currentPage-1)*pageCount">
-                <td>{{ accessKey.id }}</td>
-                <td class="tac">
-                  <button @click="viewAccessKeys(accessKey)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
-                </td>
-                <td>{{ accessKey.name }}</td>
-                <td>{{ accessKey.create_time }}</td>
-                <td class="tac">
-                  <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('task.stop') : $t('task.start') }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>Access Key ID</th>
+                <th class="tac">Access Key Secret</th>
+                <th>{{ $t("common.name") }}</th>
+                <th class="tac">创建时间</th>
+                <th class="tac">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="accessKeys.length > 0">
+                <tr v-for="accessKey in accessKeys">
+                  <td>{{ accessKey.id }}</td>
+                  <td class="tac">
+                    <button @click="viewAccessKeys(accessKey)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
+                  </td>
+                  <td>{{ accessKey.name }}</td>
+                  <td>{{ accessKey.create_time }}</td>
+                  <td class="tac">
+                    <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('task.stop') : $t('task.start') }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="accessKeys.length === 0 && !loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="5" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="accessKeys.length === 0 && !loadingData">
-              <td colspan="5" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+            </tbody>
+          </table>
+        </div>
       </div>
       <!-- 添加应用浮层-->
       <modal :show.sync="showAddModal" @close="onAddCancel">
@@ -92,35 +92,35 @@
           </div>
         </div>
       </div>
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>{{ $t("common.name") }}</th>
-            <th>Access Key ID</th>
-            <th class="tac">{{ $t("common.status") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="empowers.length > 0 && !loadingData">
-            <tr v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount">
-              <td>{{ empower.name }}</td>
-              <td>{{ empower.id }}</td>
-              <td class="tac"><span v-if="empower.status-0===1" class="hl-green">{{ $t("common.enable") }}</span><span v-if="empower.status-0===2" class="hl-gray">{{ $t("common.disabled") }}</span></td>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>{{ $t("common.name") }}</th>
+              <th>Access Key ID</th>
+              <th class="tac">{{ $t("common.status") }}</th>
             </tr>
-          </template>
-          <tr v-if="loadingData">
-            <td colspan="3" class="tac">
-              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            </td>
-          </tr>
-          <tr v-if="empowers.length === 0 && !loadingData">
-            <td colspan="3" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pager v-if="!loadingData && empowers.length > pageCount" :total="empowers.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+          </thead>
+          <tbody>
+            <template v-if="empowers.length > 0">
+              <tr v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount">
+                <td>{{ empower.name }}</td>
+                <td>{{ empower.id }}</td>
+                <td class="tac"><span v-if="empower.status-0===1" class="hl-green">{{ $t("common.enable") }}</span><span v-if="empower.status-0===2" class="hl-gray">{{ $t("common.disabled") }}</span></td>
+              </tr>
+            </template>
+            <tr v-if="empowers.length === 0 && !loadingData">
+              <td colspan="3" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- <pager v-if="!loadingData && empowers.length > pageCount" :total="empowers.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
     </div>
   </div>
 </template>

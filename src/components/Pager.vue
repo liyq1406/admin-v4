@@ -6,7 +6,8 @@
     </div>
     <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="pager-container">
       <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
-      <div class="pager-more"><span @click="toggleInput($event)">...</span>
+      <div class="pager-more">
+        <span @click="toggleInput($event)">...</span>
         <div v-show="showInput" class="pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>
@@ -15,13 +16,15 @@
     </div>
     <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="pager-container">
       <div :class="{'current': current === 1}" @click="current = 1" class="pager-item"><span>1</span></div>
-      <div class="pager-more"><span @click="toggleInput1($event)">...</span>
+      <div class="pager-more">
+        <span @click="toggleInput1($event)">...</span>
         <div v-show="showInput1" class="pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>
       </div>
       <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="pager-item"><span>{{ current - 1 + offset }}</span></div>
-      <div class="pager-more"><span @click="toggleInput2($event)">...</span>
+      <div class="pager-more">
+        <span @click="toggleInput2($event)">...</span>
         <div v-show="showInput2" class="pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>
@@ -32,87 +35,99 @@
   </div>
 </template>
 
-
 <script>
-import config from '../consts/config'
+  import config from '../consts/config'
+  import { globalMixins } from '../mixins'
 
-export default {
-  props: {
-    pageCount: {
-      type: Number,
-      default: config.pageCount
-    },
-    total: {
-      type: Number
-    },
-    current: {
-      type: Number,
-      twoWay: true,
-      default: 1
-    }
-  },
+  export default {
+    name: 'Pager',
 
-  data () {
-    return {
-      showInput: false,
-      showInput1: false,
-      showInput2: false
-    }
-  },
+    mixins: [globalMixins],
 
-  watch: {
-    current () {
-      this.$dispatch('page-update')
-    }
-  },
-
-  computed: {
-    pages () {
-      return Math.ceil(this.total / this.pageCount)
-    }
-  },
-
-  methods: {
-    toggleInput (evt) {
-      this.showInput = !this.showInput
-      if (this.showInput) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus()
+    props: {
+      pageCount: {
+        type: Number,
+        default: config.pageCount
+      },
+      total: {
+        type: Number
+      },
+      current: {
+        type: Number,
+        twoWay: true,
+        default: 1
       }
     },
 
-    toggleInput1 (evt) {
-      this.showInput1 = !this.showInput1
-      if (this.showInput1) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus()
+    data () {
+      return {
+        showInput: false,
+        showInput1: false,
+        showInput2: false
       }
     },
 
-    toggleInput2 (evt) {
-      this.showInput2 = !this.showInput2
-      if (this.showInput2) {
-        evt.target.parentNode.getElementsByTagName('input')[0].focus()
+    watch: {
+      current () {
+        this.$dispatch('page-update')
       }
     },
 
-    onInput (evt) {
-      var page = Number(evt.target.value)
+    computed: {
+      pages () {
+        return Math.ceil(this.total / this.pageCount)
+      }
+    },
 
-      if (typeof page === 'number') {
-        page = Math.floor(page)
-        this.showInput = false
-        this.showInput1 = false
-        this.showInput2 = false
-        this.current = page
-        evt.target.value = ''
-      } else {
-        this.showNotice({
-          type: 'error',
-          content: '请输入数字'
+    methods: {
+      toggleInput (evt) {
+        this.showInput = !this.showInput
+        this.$nextTick(() => {
+          if (this.showInput) {
+            evt.target.parentNode.getElementsByTagName('input')[0].focus()
+          }
         })
+      },
+
+      toggleInput1 (evt) {
+        this.showInput1 = !this.showInput1
+        this.showInput2 = false
+        this.$nextTick(() => {
+          if (this.showInput1) {
+            evt.target.parentNode.getElementsByTagName('input')[0].focus()
+          }
+        })
+      },
+
+      toggleInput2 (evt) {
+        this.showInput1 = false
+        this.showInput2 = !this.showInput2
+        this.$nextTick(() => {
+          if (this.showInput2) {
+            evt.target.parentNode.getElementsByTagName('input')[0].focus()
+          }
+        })
+      },
+
+      onInput (evt) {
+        var page = Number(evt.target.value)
+
+        if (typeof page === 'number' && page >= 1 && page <= this.pages) {
+          page = Math.floor(page)
+          this.showInput = false
+          this.showInput1 = false
+          this.showInput2 = false
+          this.current = page
+          evt.target.value = ''
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '请输入合法数字'
+          })
+        }
       }
     }
   }
-}
 </script>
 
 <style lang="stylus">

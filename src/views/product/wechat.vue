@@ -18,39 +18,39 @@
             <button @click.prevent.stop="showAddModal = true" class="btn btn-success mr10 fr">添加测试设备</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>设备ID</th>
-              <th>MAC</th>
-              <th>微信设备TYPE</th>
-              <th>授权状态</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="devices.length > 0 && !loadingData">
-              <tr v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount">
-                <td>{{ device.device_id }}</td>
-                <td>{{ device.mac }}</td>
-                <td>{{ device.w_device_type }}</td>
-                <td v-if="device.status -0 === 0">未授权</td>
-                <td v-if="device.status -0 === 1">已授权</td>
-                <td v-if="device.status -0 === 2">授权中</td>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>设备ID</th>
+                <th>MAC</th>
+                <th>微信设备TYPE</th>
+                <th>授权状态</th>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="devices.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+            </thead>
+            <tbody>
+              <template v-if="devices.length > 0">
+                <tr v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount">
+                  <td>{{ device.device_id }}</td>
+                  <td>{{ device.mac }}</td>
+                  <td>{{ device.w_device_type }}</td>
+                  <td v-if="device.status -0 === 0">未授权</td>
+                  <td v-if="device.status -0 === 1">已授权</td>
+                  <td v-if="device.status -0 === 2">授权中</td>
+                </tr>
+              </template>
+              <tr v-if="devices.length === 0 && !loadingData">
+                <td colspan="4" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
       </div>
     </div>
     <!-- 授权设置浮层-->
@@ -67,7 +67,7 @@
           <div v-show="showTips7" class="datatip datatip_manu_mac_pos">表示mac地址在厂商广播manufature data里含有mac地址的偏移，取值如下：<br/>  -1：在尾部<br/>  -2：表示不包含mac地址<br/>  其他：非法偏移</div>
           <div v-show="showTips8" class="datatip datatip_ser_mac_pos">表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：<br/>  -1：表示在尾部 <br/>  -2：表示不包含mac地址 <br/>  其他：非法偏移</div>
           <div v-show="showTips9" class="datatip datatip_connect_protocol">支持以下四种连接协议： <br/>android classic bluetooth – 1<br/>ios classic bluetooth – 2<br/>ble – 3<br/>wifi -- 4<br/>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：<br/>1：表示设备仅支持andiod classic bluetooth <br/>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接<br/>（注：安卓平台不同时支持BLE和classic类型）</div>
-          <p style="display:inline-block;margin-top:0;"><span class="hl-red">具体参数说明: </span><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="_blank">http://iot.weixin.qq.com/wiki/index.html</a></p> 
+          <p style="display:inline-block;margin-top:0;"><span class="hl-red">具体参数说明: </span><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="_blank">http://iot.weixin.qq.com/wiki/index.html</a></p>
           <div class="form-row row">
             <label class="form-control col-7">product_id:<i @mouseover="showTips1 = true" @mouseout="showTips1 = false" class="fa fa-question-circle"></i></label>
             <div class="controls col-17">
@@ -327,6 +327,7 @@
 
       // 获取 微信APP 列表
       getApps () {
+        this.loadingData = true
         api.app.list().then((res) => {
           if (res.status === 200) {
             var arr = []
@@ -342,7 +343,11 @@
               this.wetips = true
             }
             this.apps = arr
+            this.loadingData = false
           }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
         })
       },
 

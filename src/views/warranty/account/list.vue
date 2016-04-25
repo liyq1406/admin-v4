@@ -14,41 +14,43 @@
         <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
       </div>
 
-      <table class="table table-stripe table-bordered wrongcodetable">
-        <thead>
-          <tr>
-            <th>序号</th>
-            <th>网点名称</th>
-            <th>负责人</th>
-            <th>联系方式</th>
-            <th>创建日期</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="account in accounts">
-            <td>{{ $index + 1 }}</td>
-            <td>{{ account.name }}</td>
-            <td>{{ account.director }}</td>
-            <td>{{ account.phone }}</td>
-            <td>{{ account.create_time }}</td>
-            <td>
-              <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
-            </td>
-          </tr>
-          <tr v-if="loadingData">
-            <td colspan="5" class="tac">
-              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            </td>
-          </tr>
-          <tr v-if="accounts.length === 0">
-            <td colspan="6" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-              <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <pager v-if="!loadingAccount && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered wrongcodetable">
+          <thead>
+            <tr>
+              <th>序号</th>
+              <th>网点名称</th>
+              <th>负责人</th>
+              <th>联系方式</th>
+              <th>创建日期</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="accounts.length > 0">
+              <tr v-for="account in accounts">
+                <td>{{ $index + 1 }}</td>
+                <td>{{ account.name }}</td>
+                <td>{{ account.director }}</td>
+                <td>{{ account.phone }}</td>
+                <td>{{ account.create_time }}</td>
+                <td>
+                  <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
+                </td>
+              </tr>
+            </template>
+            <tr v-if="accounts.length === 0 && !loadingData">
+              <td colspan="6" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
 
       <!-- 添加增加网点浮层-->
       <modal :show.sync="showAddModal" width="600px">

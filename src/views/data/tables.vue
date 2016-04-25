@@ -7,37 +7,37 @@
             <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t("table.fields.name") }}</th>
-              <th>{{ $t("table.fields.type") }}</th>
-              <th class="tac">{{ $t("common.action") }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="tables.length > 0 && !loadingData">
-              <tr v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount">
-                <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
-                <td><span>{{ tableTypes[table.type-1] }}</span></td>
-                <td class="tac">
-                  <button @click="editTable(table)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>{{ $t("table.fields.name") }}</th>
+                <th>{{ $t("table.fields.type") }}</th>
+                <th class="tac">{{ $t("common.action") }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="tables.length > 0">
+                <tr v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount">
+                  <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
+                  <td><span>{{ tableTypes[table.type-1] }}</span></td>
+                  <td class="tac">
+                    <button @click="editTable(table)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="tables.length === 0 && !loadingData">
+                <td colspan="3" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="3" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="tables.length === 0 && !loadingData">
-              <td colspan="3" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData" :total="tables.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+            </tbody>
+          </table>
+        </div>
+        <pager v-if="tables.length > pageCount" :total="tables.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
 

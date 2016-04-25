@@ -11,47 +11,47 @@
               <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("app.create_app") }}</button>
             </div>
           </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>{{ $t("app.fields.id") }}</th>
-                <th>{{ $t("app.fields.name") }}</th>
-                <th class="tac">Access Key Secret</th>
-                <th>{{ $t("app.fields.type") }}</th>
-                <th>{{ $t("app.fields.create_time") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="apps.length > 0 && !loadingData">
-                <tr v-for="app in apps">
-                  <td>{{ app.id }}</td>
-                  <td>{{ app.name }}</td>
-                  <td class="tac">
-                    <button @click="viewAccessKeys(app)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
-                  </td>
-                  <td>{{ app.type | typeLabel }}</td>
-                  <td>{{ app.create_time | formatDate }}</td>
-                  <td v-if="app.type===4" class="tac">
-                    <button v-link="{ path: '/apps/wechat/'+app.id }" class="btn-link btn-mini">{{ '查看' }}</button>
-                  </td>
-                  <td v-else class="tac">
-                    <button @click="onEditApp(app)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+          <div class="data-table">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>{{ $t("app.fields.id") }}</th>
+                  <th>{{ $t("app.fields.name") }}</th>
+                  <th class="tac">Access Key Secret</th>
+                  <th>{{ $t("app.fields.type") }}</th>
+                  <th>{{ $t("app.fields.create_time") }}</th>
+                  <th class="tac">{{ $t("common.action") }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="apps.length > 0">
+                  <tr v-for="app in apps">
+                    <td>{{ app.id }}</td>
+                    <td>{{ app.name }}</td>
+                    <td class="tac">
+                      <button @click="viewAccessKeys(app)" class="btn btn-link btn-mini">{{ $t('common.details') }}</button>
+                    </td>
+                    <td>{{ app.type | typeLabel }}</td>
+                    <td>{{ app.create_time | formatDate }}</td>
+                    <td v-if="app.type===4" class="tac">
+                      <button v-link="{ path: '/apps/wechat/'+app.id }" class="btn-link btn-mini">{{ '查看' }}</button>
+                    </td>
+                    <td v-else class="tac">
+                      <button @click="onEditApp(app)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                    </td>
+                  </tr>
+                </template>
+                <tr v-if="apps.length === 0 && !loadingData">
+                  <td colspan="6" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                   </td>
                 </tr>
-              </template>
-              <tr v-if="loadingData">
-                <td colspan="6" class="tac">
-                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-                </td>
-              </tr>
-              <tr v-if="apps.length === 0 && !loadingData">
-                <td colspan="6" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

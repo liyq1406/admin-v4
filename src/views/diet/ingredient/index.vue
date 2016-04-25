@@ -20,37 +20,37 @@
             </select>
           </v-select>
         </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>标题</th>
-              <th>创建者</th>
-              <th>创建时间</th>
-              <th class="tac">{{ $t('common.action') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="ingredients.length > 0 && !loadingData">
-              <tr v-for="ingredient in ingredients">
-                <td>{{ ingredient.name }}</td>
-                <td>{{ ingredient.created_by }}</td>
-                <td>{{ ingredient.created_at | formatDate }}</td>
-                <td class="tac"><a v-link="{path: '/diet/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+        <div class="data-table">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>标题</th>
+                <th>创建者</th>
+                <th>创建时间</th>
+                <th class="tac">{{ $t('common.action') }}</th>
               </tr>
-            </template>
-            <tr v-if="loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-              </td>
-            </tr>
-            <tr v-if="ingredients.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
-                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getIngredients"></pager>
+            </thead>
+            <tbody>
+              <template v-if="ingredients.length > 0">
+                <tr v-for="ingredient in ingredients">
+                  <td>{{ ingredient.name }}</td>
+                  <td>{{ ingredient.created_by }}</td>
+                  <td>{{ ingredient.created_at | formatDate }}</td>
+                  <td class="tac"><a v-link="{path: '/diet/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                </tr>
+              </template>
+              <tr v-if="ingredients.length === 0 && !loadingData">
+                <td colspan="4" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getIngredients"></pager>
       </div>
     </div>
     <!-- 类别管理浮层-->
