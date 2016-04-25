@@ -2,8 +2,8 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList">
-          <button slot="search-button" class="btn btn-primary" @click="getWarrantyList">搜索</button>
+        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
+          <button slot="search-button" class="btn btn-primary" @click="getWarrantyList(true)">搜索</button>
           <label></label>
         </search-box>
       </div>
@@ -11,52 +11,51 @@
       <div class="status-bar">
         <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
           <span slot="label">工单状态</span>
-          <select v-model="status" @change="getWarrantyList">
+          <select v-model="status" @change="getWarrantyList(true)">
             <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
             <p> {{status}}</p>
           </select>
         </v-select>
 
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList" @city-change="getWarrantyList" @district-change="getWarrantyList"></area-select>
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
       </div>
 
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>工单编号</th>
-            <th>客户姓名</th>
-            <th>产品名称</th>
-            <th>产品型号</th>
-            <th>创建日期</th>
-            <th>工单状态</th>
-            <th>操作</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="workOrders.length > 0 && !loadingData">
-            <tr v-for="order in workOrders">
-              <td>{{order._id}}</td>
-              <td>{{order.name}}</td>
-              <td>{{order.product_name}}</td>
-              <td>{{order.product_type}}</td>
-              <td>{{order.extended_days}}</td>
-              <td>{{order.status}}</td>
-              <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+      <div class="data-table">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>工单编号</th>
+              <th>客户姓名</th>
+              <th>产品名称</th>
+              <th>产品型号</th>
+              <th>创建日期</th>
+              <th>工单状态</th>
+              <th>操作</th>
             </tr>
-          </template>
-          <tr v-if="loadingData">
-            <td colspan="7" class="tac">
-              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
-            </td>
-          </tr>
-          <tr v-if="workOrders.length === 0 && !loadingData">
-            <td colspan="7" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
+          </thead>
+          <tbody>
+            <template v-if="workOrders.length > 0">
+              <tr v-for="order in workOrders">
+                <td>{{order._id}}</td>
+                <td>{{order.name}}</td>
+                <td>{{order.product_name}}</td>
+                <td>{{order.product_type}}</td>
+                <td>{{order.extended_days}}</td>
+                <td>{{order.status}}</td>
+                <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+              </tr>
+            </template>
+            <tr v-if="workOrders.length === 0 && !loadingData">
+              <td colspan="7" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Start: 分页信息 -->
       <div class="row">
         <div class="col-8">共有{{total}}条结果</div>
@@ -114,7 +113,10 @@
     },
 
     methods: {
-      getWarrantyList () {
+      getWarrantyList (querying) {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
         this.loadingData = true
         api.warranty.getWarrantyList(this.queryCondition).then((res) => {
           this.total = res.data.count

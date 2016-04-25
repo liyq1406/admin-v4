@@ -18,7 +18,7 @@
             </li>
             <li>
               <div class="label">创建日期:</div>
-              <div class="info">{{workOrders.expired_date}}</div>
+              <div class="info">{{workOrders.expired_date | uniformDate}}</div>
             </li>
           </ul>
         </div>
@@ -42,7 +42,7 @@
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info">{{workOrders._region}}</div>
+              <div class="info">{{workOrders.province + workOrders.city + workOrders.district}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
@@ -78,11 +78,11 @@
             </li>
             <li>
               <div class="label">购买日期:</div>
-              <div class="info">{{workOrders.purchase_date}}</div>
+              <div class="info">{{workOrders.purchase_date | uniformDate}}</div>
             </li>
             <li>
               <div class="label">延保期限:</div>
-              <div class="info">{{workOrders.extended_days}}</div>
+              <div class="info">{{workOrders.extended_days | uniformDate}}</div>
             </li>
           </ul>
         </div>

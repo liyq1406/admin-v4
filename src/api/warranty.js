@@ -36,6 +36,21 @@ export default {
   },
 
   /**
+   * 查询维修详情
+   * @param  Object 查询参数
+   * @return status
+   */
+  getRepairDetailList (params) {
+    return http.post(
+      `${apiServer.warranty}/${token}/api/repair_details/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
+  },
+
+  /**
    * 查询网点信息
    * @param  Object 查询参数
    * @return status
