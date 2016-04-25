@@ -55,7 +55,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchAdd (params) {
+  AddBranch (params) {
     return http.post(
       `${apiServer.warranty}/${token}/api/branch/save`, params, {
         headers: {
@@ -70,7 +70,7 @@ export default {
     * @param  Object 查询参数
     * @return status
     */
-  getBranchUpdate (params, branchId) {
+  UpdateBranch (params, branchId) {
     return http.post(
       `${apiServer.warranty}/${token}/api/branch/update/${branchId}`, params, {
         headers: {

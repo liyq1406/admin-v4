@@ -11,7 +11,7 @@
       </div>
       <div class="status-bar">
         <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-        <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getProvince" @city-change="getCity" @district-change="getDistrict" label="所在地区：" select-size="small"></area-select>
+        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
       </div>
 
       <table class="table table-stripe table-bordered wrongcodetable">
@@ -26,7 +26,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="account in accounts| limitBy pageCount (currentPage-1)*pageCount">
+          <tr v-for="account in accounts">
             <td>{{ $index + 1 }}</td>
             <td>{{ account.name }}</td>
             <td>{{ account.director }}</td>
@@ -43,18 +43,18 @@
           </tr>
         </tbody>
       </table>
-      <pager v-if="!loadingAccount && accounts.length > pageCount" :total="accounts.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+      <pager v-if="!loadingAccount && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
 
       <!-- 添加增加网点浮层-->
       <modal :show.sync="showAddModal" width="600px">
         <h3 slot="header">添加网点</h3>
         <div slot="body" class="form">
-          <form v-form name="addValidation" @submit.prevent="onAddSubmit">
+          <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addAcountHook">
             <div class="form-row row">
               <label class="form-control col-6">网点:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.name" type="text" v-form-ctrl name="branch" lazy required class="input-text"/>
+                  <input v-model="addModel.name" type="text" v-form-ctrl name="branch" lazy required class="input-text"/>
                 </div>
                 <div v-if="addValidation.$submitted && addValidation.branch.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.branch.$error.required">*必须</span></div>
                 <div v-if="addValidation.branch.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.branch.$error.required">*必须</span></div>
@@ -64,7 +64,7 @@
               <label class="form-control col-6">负责人:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.director" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
+                  <input v-model="addModel.director" type="text" v-form-ctrl name="director" required lazy class="input-text"/>
                 </div>
                 <div v-if="addValidation.$submitted && addValidation.director.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.director.$error.required">*必须</span></div>
                 <div v-if="addValidation.director.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.director.$error.required">*必须</span></div>
@@ -74,7 +74,7 @@
               <label class="form-control col-6">联系号码:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.phone" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
+                  <input v-model="addModel.phone" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="phone" required lazy class="input-text"/>
                 </div>
                 <div v-if="addValidation.$submitted && addValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.phone.$error.required">*必须</span></div>
                 <div v-if="addValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.phone.$error.required">*必须</span></div>
@@ -84,7 +84,7 @@
               <label class="form-control col-6">邮箱地址:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
+                  <input v-model="addModel.email" type="email" v-form-ctrl name="email" required lazy class="input-text"/>
                 </div>
                   <div v-if="addValidation.$submitted && addValidation.email.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.email.$error.required">*必须</span></div>
                   <div v-if="addValidation.email.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.email.$error.required">*必须</span></div>
@@ -93,14 +93,14 @@
             <div class="form-row row">
               <label class="form-control col-6">所在地区:</label>
               <div class="controls col-18">
-                <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict" @province-change="getProvince" @city-change="getCity" @district-change="getDistrict"></area-select>
+                <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
               </div>
             </div>
             <div class="form-row row">
               <label class="form-control col-6">详细地址:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addBranch.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
+                  <input v-model="addModel.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
                 </div>
                 <div v-if="addValidation.$submitted && addValidation.addr.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
                 <div v-if="addValidation.addr.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
@@ -157,27 +157,64 @@
           // }
         ],
         showAddModal: false,
-        addModel: {},
         addValidation: {},
         originAddModel: {},
         adding: false,
+        curProvince: {},
+        curCity: {},
+        curDistrict: {},
         selectedProvince: {},
         selectedCity: {},
         selectedDistrict: {},
-        addBranch: {
+        addModel: {
           name: '',
           charge: '',
           tel: '',
           email: '',
-          area: {},
+          province: '',
+          city: '',
+          district: '',
           addr: ''
         },
-        search: {}
+        search: {},
+        total: 0
       }
     },
 
     ready () {
       this.getBranchList()
+    },
+
+    computed: {
+      queryCondition () {
+        var condition = {
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          order: {},
+          query: {}
+        }
+
+        if (this.curProvince.hasOwnProperty('name')) {
+          condition.query.province = this.curProvince.name
+        }
+        if (this.curCity.hasOwnProperty('name')) {
+          condition.query.city = this.curCity.name
+        }
+        if (this.curDistrict.hasOwnProperty('name')) {
+          condition.query.district = this.curDistrict.name
+        }
+        if (this.key !== '') {
+          condition.query._id = this.key
+        }
+
+        return condition
+      }
+    },
+
+    route: {
+      data () {
+        this.originAddModel = _.clone(this.addModel)
+      }
     },
 
     methods: {
@@ -187,8 +224,9 @@
         //   this.currentPage = 1
         // }
         this.loadingData = true
-        api.warranty.getBranchList(this.search).then((res) => {
+        api.warranty.getBranchList(this.queryCondition).then((res) => {
           this.accounts = res.data.list
+          this.total = res.data.count
           this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
@@ -196,19 +234,21 @@
         })
       },
 
-      getCity () {
-
+      // 添加网点表单钩子
+      addAcountHook (form) {
+        this.addForm = form
       },
-
-      getDistrict () {
-
-      },
-
       // 关闭添加浮层并净化添加表单
       resetAdd () {
         this.adding = false
         this.showAddModal = false
+        this.selectedProvince = {}
+        this.selectedCity = {}
+        this.selectedDistrict = {}
         this.addModel = _.clone(this.originAddModel)
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
       },
       // 取消添加
       onAddCancel () {
@@ -218,10 +258,20 @@
       onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
-          api.warranty.getBranchAdd(this.addBranch).then((res) => {
+          // var theModel = this.addModel
+          // theModel.province = object.province
+          // theModel.city = object.city
+          // theModel.district = object.district
+          // console.log(theModel)
+          // console.log(1111)
+          this.addModel.province = this.selectedProvince.name
+          this.addModel.city = this.selectedCity.name
+          this.addModel.district = this.selectedDistrict.name
+          api.warranty.AddBranch(this.addModel).then((res) => {
             this.adding = false
             this.showAddModal = false
             this.getBranchList()
+            this.resetAdd()
           }).catch((res) => {
             this.handleError(res)
             this.adding = false

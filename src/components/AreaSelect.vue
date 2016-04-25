@@ -6,12 +6,12 @@
         <option v-for="option in provinces" :value="option">{{ option.name }}</option>
       </select>
     </v-select>
-    <v-select v-show="cityOptions.length" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
+    <v-select v-show="cityOptions.length && province.name" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
       <select v-model="city" @change="handleCityChange">
         <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
       </select>
     </v-select>
-    <v-select v-show="districtOptions.length" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
+    <v-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
       <select v-model="district" @change="handleDistrictChange">
         <option v-for="option in districtOptions" :value="option">{{ option.name }}</option>
       </select>
