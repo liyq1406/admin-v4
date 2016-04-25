@@ -103,7 +103,7 @@ export default {
    */
   getBranchStaffsList (params) {
     return http.post(
-     `${apiServer.warranty}/${token}/api/warranty/outlet_staffs/list`, params, {
+     `${apiServer.warranty}/${token}/api/outlet_staffs/list`, params, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded'
        }
@@ -116,9 +116,9 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  getBranchStaffsSave (params) {
+  AddBranchStaffs (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/warranty/outlet_staffs/save`, params, {
+      `${apiServer.warranty}/${token}/api/outlet_staffs/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -133,7 +133,7 @@ export default {
   */
   getBranchStaffsUpdate (staffId, params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/warranty/outlet_staffs/update/${staffId}`, params, {
+      `${apiServer.warranty}/${token}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -148,7 +148,7 @@ export default {
    */
   deleteStaff (params, staffId) {
     return http.del(
-      `${apiServer.warranty}/${token}/api/warranty/outlet_staffs/delete/${staffId}`, params, {
+      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

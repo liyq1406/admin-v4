@@ -36,6 +36,11 @@
               <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
             </td>
           </tr>
+          <tr v-if="loadingData">
+            <td colspan="5" class="tac">
+              <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+            </td>
+          </tr>
           <tr v-if="accounts.length === 0">
             <td colspan="6" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
               <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
@@ -177,7 +182,8 @@
           addr: ''
         },
         search: {},
-        total: 0
+        total: 0,
+        loadingData: false
       }
     },
 
