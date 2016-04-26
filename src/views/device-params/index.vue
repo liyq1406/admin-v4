@@ -31,6 +31,9 @@
                 <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
               </select>
             </v-select>
+            <button class="btn btn-success btn-sm tac" @click="reloadData">
+              <i class="fa fa-refresh" :class="{'fa-spin': loadingData}"></i><span>刷新</span>
+            </button>
           </div>
           <div class="data-table">
             <div class="icon-loading" v-show="loadingData">
@@ -41,6 +44,10 @@
                 <tr>
                   <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
                   <th>{{ $t('device.id') }}</th>
+                  <th>{{ '运行模式' }}</th>
+                  <th>{{ '水箱温度' }}</th>
+                  <th>{{ '环境温度' }}</th>
+                  <th>{{ '运行时间' }}</th>
                   <th>{{ $t('device.is_active') }}</th>
                   <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
                   <th>{{ $t('device.is_online') }}</th>
@@ -49,8 +56,12 @@
               <tbody>
                 <template v-if="devices.length > 0">
                   <tr v-for="device in devices">
-                    <td><a v-link="'/device-params/' + product.id + '/' + device.id + '/' + device.mac" class="hl-red">{{ device.mac }}</a></td>
+                    <td><a @click="linkto('/device-params/' + product.id + '/' + device.id + '/' + device.mac, device.is_online)" class="hl-red">{{ device.mac }}</a></td>
                     <td>{{ device.id }}</td>
+                    <td>{{ device.runMode }}</td>
+                    <td>{{ device.tankTemperature }}</td>
+                    <td>{{ device.ambientTemperature }}</td>
+                    <td>{{ device.runningTime }}</td>
                     <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
                     <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
                     <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
@@ -174,6 +185,13 @@
         }
 
         return condition
+      },
+      deviceIds () {
+        var result = []
+        this.devices.map((item) => {
+          result.push(item.id)
+        })
+        return result
       }
     },
 
@@ -204,6 +222,42 @@
 
     methods: {
       /**
+       * 刷新数据
+       * @return {[type]} [description]
+       */
+      reloadData () {
+        if (!this.loadingData) {
+          this.getDevices()
+        }
+      },
+
+      /**
+       * 批量获取虚拟设备数据
+       * @return {[type]} [description]
+       */
+      getDevices2 () {
+        api.device.getList2(this.product.id, this.deviceIds).then((res) => {
+          console.log(res.data.list)
+          if (res.data.list) {
+            res.data.list.map((item1) => {
+              let id = item1.device_id - 0
+              this.devices.map((item2) => {
+                if (item2.id - 0 === id) {
+                  item2.runMode = item1[36] ? (item1[36] - 0 === 0 ? '自动模式' : '节能模式') : '--'
+                  item2.tankTemperature = (item1[43] ? item1[43] + '℃' : '') || '--'
+                  item2.ambientTemperature = (item1[34] ? item1[34] + '℃' : '') || '--'
+                  item2.runningTime = item1[45] || '--'
+                }
+              })
+            })
+          }
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
+      /**
        * 处理产品切换
        * @param  {Object} product 选择的产品
        */
@@ -221,7 +275,15 @@
 
         this.loadingData = true
         api.device.getList(this.product.id, this.queryCondition).then((res) => {
-          this.devices = res.data.list
+          let deviceArr = res.data.list
+          deviceArr.map((item) => {
+            item.runMode = '--'
+            item.tankTemperature = '--'
+            item.ambientTemperature = '--'
+            item.runningTime = '--'
+          })
+          this.devices = deviceArr
+          this.getDevices2()
           this.total = res.data.count
           this.loadingData = false
         }).catch((res) => {
@@ -252,6 +314,23 @@
       // 取消搜索
       cancelSearching () {
         this.getDevices()
+      },
+
+      /**
+       * 跳转到其他页面
+       * @param  {sting} path    路由
+       * @param  {boolean} canLink 是否允许跳转
+       * @return {[type]}         [description]
+       */
+      linkto (path, canLink) {
+        if (canLink) {
+          this.$route.router.go(path)
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '设备不在线'
+          })
+        }
       }
     }
   }

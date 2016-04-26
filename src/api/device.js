@@ -106,6 +106,33 @@ export default {
       `${apiServer.default}/v2/product/${product_id}/devices`, params
     )
   },
+  /**
+   * 批量获取虚拟设备数据
+   * @param  {product_id}
+   * @param  {array} deviceIds
+    }
+   * @return {Promise}
+      {
+        "list": [
+          {
+            "0": "数据端点值",
+            "1": "数据端点值",
+            "device_id": "设备ID",
+            "cm_id": "登录CM服务器ID",
+            "ip": "登录IP",
+            "online": "是否在线",
+            "last_login": "上次登录时间,例：2015-10-09T08:15:40.843Z",
+            "last_logout": "上次离线时间,例：2015-10-09T08:15:40.843Z",
+            "last_update": "上次数据端点变化时间,例：2015-10-09T08:15:40.843Z"
+          }
+        ]
+      }
+   */
+  getList2 (product_id, deviceIds) {
+    return http.post(
+      `${apiServer.default}/v2/product/${product_id}/v_devices`, deviceIds
+    )
+  },
 
   /**
    * 获取设备访问 Token
