@@ -2,8 +2,8 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box :key.sync="query" :active="searching" :placeholder="$t('account_manage.search_condi')" style="float:right">
-          <button slot="search-button" @click="getBranchList(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
+        <search-box :key.sync="key" :active="searching" :placeholder="$t('account_manage.search_condi')" style="float:right">
+          <button slot="search-button" @click="getBranchList" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">
           <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加网点</button>
@@ -185,7 +185,8 @@
         },
         search: {},
         total: 0,
-        loadingData: false
+        loadingData: false,
+        key: ''
       }
     },
 
@@ -212,7 +213,7 @@
           condition.query.district = this.curDistrict.name
         }
         if (this.key !== '') {
-          condition.query._id = this.key
+          condition.query.name = this.key
         }
 
         return condition
@@ -222,6 +223,7 @@
     route: {
       data () {
         this.originAddModel = _.clone(this.addModel)
+        this.getBranchList()
       }
     },
 

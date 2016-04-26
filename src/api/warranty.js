@@ -101,9 +101,9 @@ export default {
    * @param  String 网点ID
    * @return status
    */
-  deleteBranch (params, branchId) {
+  deleteBranch (branchId) {
     return http.del(
-      `${apiServer.warranty}/${token}/api/branch/delete/${branchId}`, params, {
+      `${apiServer.warranty}/${token}/api/branch/delete/${branchId}`, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -146,7 +146,7 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  getBranchStaffsUpdate (staffId, params) {
+  UpdateBranchStaffs (staffId, params) {
     return http.post(
       `${apiServer.warranty}/${token}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
@@ -161,9 +161,10 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  deleteStaff (params, staffId) {
+  deleteStaff (staffId) {
+    console.log(staffId)
     return http.del(
-      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, params, {
+      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

@@ -20,7 +20,7 @@
         <!-- Start: 网点信息 -->
         <div class="panel-hd">
           <div class="actions">
-            <button @click="showEditModal = true" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
+            <button @click="editAccount" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
           </div>
           <h2>网点信息</h2>
@@ -54,7 +54,7 @@
           <div class="action-bar">
             <search-box :placeholder="'请输入用户名'">
               <label>查找客服</label>
-              <button slot="search-button" class="btn btn-primary">搜索</button>
+              <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList">搜索</button>
             </search-box>
           </div>
           <!-- End: 操作栏 -->
@@ -73,47 +73,46 @@
           <!-- End: 过滤器 -->
 
           <!-- Start: 客服人员列表 -->
-          <div class="data-table">
-            <div class="icon-loading" v-show="loadingStaffs">
-              <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <table class="table table-stripe table-bordered">
-              <thead>
-                <tr>
-                  <th>姓名</th>
-                  <th>手机</th>
-                  <th>邮箱</th>
-                  <th>最后一次登陆</th>
-                  <th>状态</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="staffs.length > 0">
-                  <tr v-for="staff in staffs">
-                    <td>
-                      <a v-link="{path: '/warranty/accounts/' + $route.params.account_id + '/staffs/1'}" class="hl-red">{{ staff.name }}</a>
-                    </td>
-                    <td>{{ staff.phone }}</td>
-                    <td>{{ staff.email }}</td>
-                    <td>{{ staff.create_time }}</td>
-                    <td>
-                      <span v-if="staff.status-0 === 0" class="hl-gray">已停用</span>
-                      <span v-else class="hl-green">正常</span>
-                    </td>
-                  </tr>
-                </template>
-                <tr v-if="staffs.length === 0 && !loadingStaffs">
-                  <td colspan="5" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>姓名</th>
+                <th>手机</th>
+                <th>邮箱</th>
+                <th>最后一次登陆</th>
+                <th>状态</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="staff in staffs">
+                <td>
+                  <a v-link="{path: '/warranty/accounts/' + this.$route.params.id + '/staffs/' + staff._id}" class="hl-red">{{ staff.name }}</a>
+                </td>
+                <td>{{ staff.phone }}</td>
+                <td>{{ staff.email }}</td>
+                <td>{{ staff.create_time }}</td>
+                <td v-if="staff.status-0 === 0">
+                  <span class="hl-gray">已停用</span>
+                </td>
+                <td v-else>正常</td>
+              </tr>
+              <tr v-if="loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
+                </td>
+              </tr>
+              <tr v-if="staffs.length === 0">
+                <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                  <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
           <!-- End: 客服人员列表 -->
 
           <!-- Start: 分页信息 -->
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
+          <!-- <pager :total="51" :current.sync="0" :page-count="10"></pager> -->
+          <pager v-if="!loadingStaffs && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>
@@ -196,9 +195,9 @@
     <modal :show.sync="showEditModal" width="600px">
       <h3 slot="header">编辑网点</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit">
+        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
           <div class="form-row row">
-            <label class="form-control col-6">网点:</label>
+            <label class="form-control col-6">网点名称:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
                 <input v-model="editModal.name" type="text" v-form-ctrl name="branch" required lazy class="input-text"/>
@@ -211,20 +210,20 @@
             <label class="form-control col-6">负责人:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
-                <input v-model="editModal.charge" type="text" v-form-ctrl name="charge" required lazy class="input-text"/>
+                <input v-model="editModal.director" type="text" v-form-ctrl name="director" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.charge.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.charge.$error.required">*必须</span></div>
-              <div v-if="editValidation.charge.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.charge.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.director.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.director.$error.required">*必须</span></div>
+              <div v-if="editValidation.director.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.director.$error.required">*必须</span></div>
             </div>
           </div>
           <div class="form-row row">
             <label class="form-control col-6">联系号码:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
-                <input v-model="editModal.tel" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="tel" required lazy class="input-text"/>
+                <input v-model="editModal.phone" type="text" pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" v-form-ctrl name="phone" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.tel.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.tel.$error.required">*必须</span></div>
-              <div v-if="editValidation.tel.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.tel.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">*必须</span></div>
+              <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">*必须</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -241,10 +240,10 @@
             <label class="form-control col-6">详细地址:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
-                <input v-model="editModal.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
+                <input v-model="editModal.address" type="text" v-form-ctrl name="address" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.addr.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.addr.$error.required">*必须</span></div>
-              <div v-if="editValidation.addr.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.addr.$error.required">*必须</span></div>
+              <div v-if="editValidation.$submitted && editValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">*必须</span></div>
+              <div v-if="editValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">*必须</span></div>
             </div>
           </div>
 
@@ -253,7 +252,7 @@
               <input type="checkbox" name="del" v-model="delChecked"/>删除网点
             </label>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
         </form>
       </div>
@@ -315,6 +314,8 @@
           value: 1}
         ],
         queryType: '',
+        adding: false,
+        editing: false,
         addValidation: {},
         editValidation: {},
         addModel: {
@@ -357,7 +358,9 @@
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
           order: {},
-          query: {}
+          query: {
+            branch_id: this.$route.params.id
+          }
         }
 
         // if (this.curProvince.hasOwnProperty('value')) {
@@ -454,6 +457,7 @@
           this.adding = true
           this.addModel.status = this.addModel.status - 0
           this.addModel.branch_id = this.$route.params.id
+          this.addModel.username = this.addModel.email
           api.warranty.AddBranchStaffs(this.addModel).then((res) => {
             this.adding = false
             this.showAddModal = false
@@ -466,9 +470,47 @@
           console.log('ready to send post')
         }
       },
+      editAccount () {
+        var condition = {
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          order: {},
+          query: {
+            _id: this.$route.params.id
+          }
+        }
+        api.warranty.getBranchList(condition).then((res) => {
+          this.editModal = res.data.list[0]
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+        this.showEditModal = true
+      },
 
+      // 提交编辑表单
       onEditSubmit () {
-
+        if (this.delChecked && !this.editing) { // 删除
+          this.editing = true
+          // console.log(this.$route.params.id)
+          api.warranty.deleteBranch(this.$route.params.id).then((res) => {
+            console.log(111)
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else if (this.editValidation.$valid && !this.editing) { // 更新
+          this.editing = true
+          api.warranty.UpdateBranch(this.editModal, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getBranchList()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
       }
     }
   }
