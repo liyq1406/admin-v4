@@ -197,7 +197,6 @@
             condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}, '$lte': {'@date': new Date(this.endDate)}}
           }
         } else {
-          console.log('only end')
           if (this.startDate !== undefined && this.endDate !== '') { // 只有结束时间
             condition.query.create_time = {'$lte': {'@date': new Date(this.endDate)}}
           }
