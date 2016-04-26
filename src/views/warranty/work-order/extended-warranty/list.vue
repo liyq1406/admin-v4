@@ -153,7 +153,7 @@
           }
         }
         if (this.key !== '') {
-          condition.query._id = {'$like': {'@string': this.key}}
+          condition.query._id = {$regex: this.key, $options: 'i'}
         }
 
         return condition

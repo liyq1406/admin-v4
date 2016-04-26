@@ -186,18 +186,19 @@
             })
             condition.query.branch_id = {'$in': ids}
           } else {
-            condition.query[this.queryType.value] = {'$like': {'@string': this.key}}
+            condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
           }
         }
         // 取时间条件
-        if (this.startTime !== undefined && this.startTime !== '') {
+        if (this.startDate !== undefined && this.startDate !== '') {
           if (this.endDate === '') { // 只有开始时间
             condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}}
           } else if (this.endDate !== '') { // 都不为空
-            // 服务器未实现
+            condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}, '$lte': {'@date': new Date(this.endDate)}}
           }
         } else {
-          if (this.endDate !== '') { // 只有结束时间
+          console.log('only end')
+          if (this.startDate !== undefined && this.endDate !== '') { // 只有结束时间
             condition.query.create_time = {'$lte': {'@date': new Date(this.endDate)}}
           }
         }
@@ -236,7 +237,7 @@
           order: {},
           query: {}
         }
-        condition.query.name = {'$like': {'@string': name}}
+        condition.query.name = {$regex: name, $options: 'i'}
         api.warranty.getBranchList(condition).then((res) => {
           this.branchs = res.data.list
           api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
