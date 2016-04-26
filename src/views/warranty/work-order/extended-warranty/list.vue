@@ -44,7 +44,8 @@
                 <td>{{order.product_name}}</td>
                 <td>{{order.product_type}}</td>
                 <td>{{order.extended_days}}</td>
-                <td>{{order.status}}</td>
+                <td v-if="order.status === 0">已过期</td>
+                <td v-else class='hl-green'>未过期</td>
                 <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
@@ -99,10 +100,10 @@
           label: '全部',
           value: 0
         }, {
-          label: '未过期',
+          label: '未到期',
           value: 1
         }, {
-          label: '已过期',
+          label: '已到期',
           value: 2}],
 
         loadingData: false,
@@ -149,10 +150,14 @@
           condition.query.district = this.curDistrict.name
         }
         if (this.status.value !== 0) {
-          condition.query.status = this.status.label
+          if (this.status.value === 1) { // 未到期
+            condition.query.status = 1
+          } else if (this.status.value === 2) { // 已到期
+            condition.query.status = 0
+          }
         }
         if (this.key !== '') {
-          condition.query._id = this.key
+          condition.query._id = {'$like': {'@string': this.key}}
         }
 
         return condition

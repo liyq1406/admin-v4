@@ -20,7 +20,7 @@
           </select>
         </v-select>
 
-        <date-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" input-width="94px">
+        <date-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" input-width="94px" @select-day="getOrderWorkList(true)">
           <span slot="label">创建时间</span>
         </date-range-picker>
 
@@ -55,6 +55,7 @@
                 <td><a v-link="{path: '/warranty/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
+
             <tr v-if="workOrders.length === 0 && !loadingData">
               <td colspan="7" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
@@ -66,9 +67,9 @@
 
       <!-- Start: 分页信息 -->
       <div class="row">
-        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
+        <div class="col-8">共有{{total}}条结果</div>
         <div class="col-16">
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
+          <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->
@@ -168,8 +169,7 @@
           order: {},
           query: {}
         }
-        condition.query.name = name
-        this.loadingData = true
+        condition.query.name = {'$like': {'@string': name}}
         api.warranty.getBranchList(condition).then((res) => {
           this.branchs = res.data.list
           api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
@@ -197,6 +197,7 @@
           query: {}
         }
 
+        // 取地区 省市区
         if (this.curProvince.hasOwnProperty('name')) {
           condition.query.province = this.curProvince.name
         }
@@ -206,9 +207,11 @@
         if (this.curDistrict.hasOwnProperty('name')) {
           condition.query.district = this.curDistrict.name
         }
+        // 去工单状态 过期和未过期
         if (this.status.value !== 0) {
           condition.query.status = this.status.label
         }
+        // 取搜索条件
         if (this.key !== '') {
           if (this.queryType.value === 'branch') {
             var ids = []
@@ -217,7 +220,19 @@
             })
             condition.query.branch_id = {'$in': ids}
           } else {
-            condition.query[this.queryType.value] = this.key
+            condition.query[this.queryType.value] = {'$like': {'@string': this.key}}
+          }
+        }
+        // 取时间条件
+        if (this.startTime !== undefined && this.startTime !== '') {
+          if (this.endDate === '') { // 只有开始时间
+            condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}}
+          } else if (this.endDate !== '') { // 都不为空
+            // 服务器未实现
+          }
+        } else {
+          if (this.endDate !== '') { // 只有结束时间
+            condition.query.create_time = {'$lte': {'@date': new Date(this.endDate)}}
           }
         }
 
