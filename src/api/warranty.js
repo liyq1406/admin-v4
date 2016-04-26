@@ -86,7 +86,7 @@ export default {
     * @return status
     */
   UpdateBranch (params, branchId) {
-    return http.post(
+    return http.put(
       `${apiServer.warranty}/${token}/api/branch/update/${branchId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -103,7 +103,7 @@ export default {
    */
   deleteBranch (branchId) {
     return http.del(
-      `${apiServer.warranty}/${token}/api/branch/delete/${branchId}`, {
+      `${apiServer.warranty}/${token}/api/branch/delete/${branchId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -147,7 +147,7 @@ export default {
   * @return status
   */
   UpdateBranchStaffs (staffId, params) {
-    return http.post(
+    return http.put(
       `${apiServer.warranty}/${token}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
@@ -164,7 +164,7 @@ export default {
   deleteStaff (staffId) {
     console.log(staffId)
     return http.del(
-      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, {
+      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

@@ -14,7 +14,7 @@
           <ul class="info-details">
             <li>
               <div class="label">创建日期:</div>
-              <div class="info">{{ detail.create_time }}</div>
+              <div class="info">{{ detail.create_time | uniformDate }}</div>
             </li>
           </ul>
         </div>
@@ -42,7 +42,7 @@
             </li>
             <li>
               <div class="label">登陆密码:</div>
-              <div class="info">{{ detail.create_time }}</div>
+              <div class="info">{{ detail.password }}</div>
             </li>
             <li>
               <div class="label">状态:</div>
@@ -238,6 +238,9 @@
           this.editing = true
           console.log(this.$route.params.id)
           api.warranty.deleteStaff(this.$route.params.id).then((res) => {
+            this.editing = false
+            this.showEditModal = false
+            this.$route.router.replace('/warranty/accounts/' + this.$route.params.account_id)
             console.log(111)
           }).catch((res) => {
             this.handleError(res)

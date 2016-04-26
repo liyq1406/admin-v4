@@ -36,7 +36,7 @@
                 <td>{{ account.name }}</td>
                 <td>{{ account.director }}</td>
                 <td>{{ account.phone }}</td>
-                <td>{{ account.create_time }}</td>
+                <td>{{ account.create_time | uniformDate}}</td>
                 <td>
                   <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
                 </td>
@@ -107,10 +107,10 @@
               <label class="form-control col-6">详细地址:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addModel.addr" type="text" v-form-ctrl name="addr" required lazy class="input-text"/>
+                  <input v-model="addModel.address" type="text" v-form-ctrl name="address" required lazy class="input-text"/>
                 </div>
-                <div v-if="addValidation.$submitted && addValidation.addr.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
-                <div v-if="addValidation.addr.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.addr.$error.required">*必须</span></div>
+                <div v-if="addValidation.$submitted && addValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.address.$error.required">*必须</span></div>
+                <div v-if="addValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.address.$error.required">*必须</span></div>
               </div>
             </div>
             <div class="form-actions">
@@ -181,7 +181,7 @@
           province: '',
           city: '',
           district: '',
-          addr: ''
+          address: ''
         },
         search: {},
         total: 0,
@@ -213,7 +213,7 @@
           condition.query.district = this.curDistrict.name
         }
         if (this.key !== '') {
-          condition.query.name = this.key
+          condition.query.name = {$regex: this.key, $options: 'i'}
         }
 
         return condition

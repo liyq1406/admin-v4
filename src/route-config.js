@@ -503,7 +503,7 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
-    // 维保系统-帐号详情
+    // 网点详情
     '/warranty/accounts/:id': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -511,7 +511,7 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
-    // 维保系统-客服详情
+    // 网点-客服详情
     '/warranty/accounts/:account_id/staffs/:id': {
       component (resolve) {
         require.ensure([], (require) => {

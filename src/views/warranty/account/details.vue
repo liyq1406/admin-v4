@@ -11,7 +11,7 @@
           <ul class="info-details">
             <li class="row">
               <div class="col-8">创建日期:</div>
-              <div class="col-16">{{ info.create_time }}</div>
+              <div class="col-16">{{ info.create_time | uniformDate }}</div>
             </li>
           </ul>
         </div>
@@ -52,8 +52,16 @@
 
           <!-- Start: 操作栏 -->
           <div class="action-bar">
-            <search-box :placeholder="'请输入用户名'">
+            <!-- <search-box :key.sync="key" :active="searching" :placeholder="'请输入用户名'">
               <label>查找客服</label>
+              <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList">搜索</button>
+            </search-box> -->
+            <search-box :key.sync="key" :active="searching" :placeholder="'请输入用户名'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
+              <v-select width="90px" :label="queryType.label">
+                <select v-model="queryType">
+                  <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
+                </select>
+              </v-select>
               <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList">搜索</button>
             </search-box>
           </div>
@@ -65,8 +73,8 @@
             </div>
             <v-select width="120px" size="small" :label="statusOptions[status.value].label">
               <label slot="label">状态</label>
-              <select v-model="status" :status.sync="">
-                <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
+              <select v-model="status" :status.sync="" @change="getBranchStaffsList(true)">
+                <option v-for="option in statusOptions" :value="option" :selected="option.value===2">{{option.label}}</option>
               </select>
             </v-select>
           </div>
@@ -90,7 +98,7 @@
                 </td>
                 <td>{{ staff.phone }}</td>
                 <td>{{ staff.email }}</td>
-                <td>{{ staff.create_time }}</td>
+                <td>{{ staff.create_time | uniformDate }}</td>
                 <td v-if="staff.status-0 === 0">
                   <span class="hl-gray">已停用</span>
                 </td>
@@ -112,7 +120,7 @@
 
           <!-- Start: 分页信息 -->
           <!-- <pager :total="51" :current.sync="0" :page-count="10"></pager> -->
-          <pager v-if="!loadingStaffs && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchStaffsList"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>
@@ -281,6 +289,7 @@
     data () {
       return {
         info: {},
+        key: '',
         staffs: [],
         showAddModal: false,
         showEditModal: false,
@@ -297,13 +306,13 @@
           value: 0
         },
         statusOptions: [{
-          label: '全部',
+          label: '停用',
           value: 0
         }, {
-          label: '停用',
+          label: '启用',
           value: 1
         }, {
-          label: '正常',
+          label: '全部',
           value: 2}
         ],
         addCustomOptions: [{
@@ -313,7 +322,6 @@
           label: '停用',
           value: 1}
         ],
-        queryType: '',
         adding: false,
         editing: false,
         addValidation: {},
@@ -333,10 +341,21 @@
         currentPage: 1,
         pageCount: 10,
         delChecked: false,
-        quary: {},
+        query: {},
         loadingData: false,
         loadingStaffs: false,
-        originAddModel: {}
+        originAddModel: {},
+        originEditModel: {},
+        queryTypeOptions: [
+          { label: '姓名', value: 'name' },
+          { label: '邮箱', value: 'email' },
+          { label: '手机', value: 'phone' }
+        ],
+        queryType: {
+          label: '姓名',
+          value: 'name'
+        },
+        searching: false
       }
     },
 
@@ -362,20 +381,16 @@
             branch_id: this.$route.params.id
           }
         }
-
-        // if (this.curProvince.hasOwnProperty('value')) {
-        //   condition.query.province = this.curProvince.name
-        // }
-        // if (this.curCity.hasOwnProperty('name')) {
-        //   condition.query.city = this.curCity.name
-        // }
-        // if (this.curDistrict.hasOwnProperty('name')) {
-        //   condition.query.district = this.curDistrict.name
-        // }
+        if (this.key.length > 0) {
+          condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
+          // condition.query[this.queryType.value] = { $like: this.key }
+        }
+        if (this.status.value !== 2) {
+          condition.query.status = this.status.value
+        }
         // if (this.key !== '') {
-        //   condition.query._id = this.key
+        //   condition.query.name = this.key
         // }
-
         return condition
       }
     },
@@ -451,6 +466,16 @@
         this.resetEdit()
         // this.product = this.originEditModel
       },
+      // 切换搜索
+      toggleSearching () {
+        this.searching = !this.searching
+      },
+      // 搜索
+      handleSearch () {
+        if (this.query.length === 0) {
+          this.getBranchStaffsList()
+        }
+      },
       // 添加操作
       onAddSubmit () {
         if (this.addValidation.$valid && !this.adding) {
@@ -495,7 +520,11 @@
           // console.log(this.$route.params.id)
           api.warranty.deleteBranch(this.$route.params.id).then((res) => {
             console.log(111)
+            this.editing = false
+            this.showEditModal = false
+            this.$route.router.replace('/warranty/accounts')
           }).catch((res) => {
+            console.log(2222)
             this.handleError(res)
             this.editing = false
           })
