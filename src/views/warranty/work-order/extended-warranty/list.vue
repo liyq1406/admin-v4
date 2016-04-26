@@ -84,6 +84,13 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'v-select': Select,
+      'area-select': AreaSelect,
+      'search-box': SearchBox,
+      'pager': Pager
+    },
+
     data () {
       return {
         name: '',
@@ -113,20 +120,9 @@
       }
     },
 
-    methods: {
-      getWarrantyList (querying) {
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
-        this.loadingData = true
-        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          this.total = res.data.count
-          this.workOrders = res.data.list
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
+    route: {
+      data () {
+        this.getWarrantyList()
       }
     },
 
@@ -164,16 +160,20 @@
       }
     },
 
-    components: {
-      'v-select': Select,
-      'area-select': AreaSelect,
-      'search-box': SearchBox,
-      'pager': Pager
-    },
-
-    route: {
-      data () {
-        this.getWarrantyList()
+    methods: {
+      getWarrantyList (querying) {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
+        this.loadingData = true
+        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
+          this.total = res.data.count
+          this.workOrders = res.data.list
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       }
     }
   }

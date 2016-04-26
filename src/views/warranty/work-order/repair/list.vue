@@ -92,6 +92,14 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'v-select': Select,
+      'area-select': AreaSelect,
+      'search-box': SearchBox,
+      'pager': Pager,
+      'date-range-picker': DateRangePicker
+    },
+
     data () {
       return {
         name: '',
@@ -139,51 +147,9 @@
       }
     },
 
-    methods: {
-      getOrderWorkList (querying) {
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
-
-        this.loadingData = true
-        // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
-        if (this.key !== '' && this.queryType.value === 'branch') {
-          this.getBranchIdByName(this.key)
-          return
-        }
-
-        api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-          this.total = res.data.count
-          this.workOrders = res.data.list
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
-      },
-      getBranchIdByName (name) {
-        var condition = {
-          filter: [],
-          limit: 1,
-          offset: 0,
-          order: {},
-          query: {}
-        }
-        condition.query.name = {'$like': {'@string': name}}
-        api.warranty.getBranchList(condition).then((res) => {
-          this.branchs = res.data.list
-          api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.loadingData = false
-          })
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
+    route: {
+      data () {
+        this.getOrderWorkList()
       }
     },
 
@@ -240,17 +206,51 @@
       }
     },
 
-    components: {
-      'v-select': Select,
-      'area-select': AreaSelect,
-      'search-box': SearchBox,
-      'pager': Pager,
-      'date-range-picker': DateRangePicker
-    },
+    methods: {
+      getOrderWorkList (querying) {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
 
-    route: {
-      data () {
-        this.getOrderWorkList()
+        this.loadingData = true
+        // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
+        if (this.key !== '' && this.queryType.value === 'branch') {
+          this.getBranchIdByName(this.key)
+          return
+        }
+
+        api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
+          this.total = res.data.count
+          this.workOrders = res.data.list
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
+      getBranchIdByName (name) {
+        var condition = {
+          filter: [],
+          limit: 1,
+          offset: 0,
+          order: {},
+          query: {}
+        }
+        condition.query.name = {'$like': {'@string': name}}
+        api.warranty.getBranchList(condition).then((res) => {
+          this.branchs = res.data.list
+          api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
+            this.total = res.data.count
+            this.workOrders = res.data.list
+            this.loadingData = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.loadingData = false
+          })
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       }
     }
   }

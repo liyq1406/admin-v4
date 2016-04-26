@@ -172,6 +172,28 @@
       }
     },
 
+    route: {
+      data () {
+        this.getRepairOrder()
+      }
+    },
+
+    computed: {
+      queryCondition () {
+        var condition = {
+          filter: [],
+          limit: 1,
+          offset: 0,
+          order: {},
+          query: {}
+        }
+
+        condition.query._id = this.$route.params.id
+
+        return condition
+      }
+    },
+
     methods: {
       getRepairOrder () {
         var condition = {
@@ -194,7 +216,7 @@
 
           // 查询维修详情信息
           condition.query = {}
-          condition.query.order_id = this.repairOrder.repair_id
+          condition.query._id = this.repairOrder.repair_id
           api.warranty.getRepairDetailList(condition).then((res) => {
             this.repairDetails = res.data.list[0]
           }).catch((res) => {
@@ -203,28 +225,6 @@
         }).catch((res) => {
           this.handleError(res)
         })
-      }
-    },
-
-    computed: {
-      queryCondition () {
-        var condition = {
-          filter: [],
-          limit: 1,
-          offset: 0,
-          order: {},
-          query: {}
-        }
-
-        condition.query._id = this.$route.params.id
-
-        return condition
-      }
-    },
-
-    route: {
-      data () {
-        this.getRepairOrder()
       }
     }
   }

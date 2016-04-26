@@ -82,7 +82,7 @@
             </li>
             <li>
               <div class="label">延保期限:</div>
-              <div class="info">{{workOrders.extended_days | uniformDate}}</div>
+              <div class="info">{{workOrders.expired_date | uniformDate}}</div>
             </li>
           </ul>
         </div>
@@ -110,16 +110,6 @@
       }
     },
 
-    methods: {
-      getDetail () {
-        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          this.workOrders = res.data.list[0]
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      }
-    },
-
     route: {
       data () {
         this.getDetail()
@@ -139,6 +129,16 @@
         condition.query._id = this.$route.params.id
 
         return condition
+      }
+    },
+
+    methods: {
+      getDetail () {
+        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
+          this.workOrders = res.data.list[0]
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
   }
