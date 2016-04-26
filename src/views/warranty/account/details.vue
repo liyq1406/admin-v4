@@ -519,12 +519,10 @@
           this.editing = true
           // console.log(this.$route.params.id)
           api.warranty.deleteBranch(this.$route.params.id).then((res) => {
-            console.log(111)
             this.editing = false
             this.showEditModal = false
             this.$route.router.replace('/warranty/accounts')
           }).catch((res) => {
-            console.log(2222)
             this.handleError(res)
             this.editing = false
           })
