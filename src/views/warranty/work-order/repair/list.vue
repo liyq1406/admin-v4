@@ -67,7 +67,7 @@
 
       <!-- Start: 分页信息 -->
       <div class="row">
-        <div class="col-8">共有{{total}}条结果</div>
+        <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
           <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
         </div>
@@ -164,13 +164,13 @@
         }
 
         // 取地区 省市区
-        if (this.curProvince.hasOwnProperty('name')) {
+        if (this.curProvince.name !== this.$t('common.any')) {
           condition.query.province = this.curProvince.name
         }
-        if (this.curCity.hasOwnProperty('name')) {
+        if (this.curCity.name !== this.$t('common.any')) {
           condition.query.city = this.curCity.name
         }
-        if (this.curDistrict.hasOwnProperty('name')) {
+        if (this.curDistrict.name !== this.$t('common.any')) {
           condition.query.district = this.curDistrict.name
         }
         // 去工单状态 过期和未过期

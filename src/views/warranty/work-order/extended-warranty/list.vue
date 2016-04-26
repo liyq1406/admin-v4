@@ -59,7 +59,7 @@
       </div>
       <!-- Start: 分页信息 -->
       <div class="row">
-        <div class="col-8">{{{ $t('common.total_results', {count:total}) }}}</div>
+        <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
           <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getWarrantyList"></pager>
         </div>
@@ -136,13 +136,13 @@
           query: {}
         }
 
-        if (this.curProvince.hasOwnProperty('name')) {
+        if (this.curProvince.name !== this.$t('common.any')) {
           condition.query.province = this.curProvince.name
         }
-        if (this.curCity.hasOwnProperty('name')) {
+        if (this.curCity.name !== this.$t('common.any')) {
           condition.query.city = this.curCity.name
         }
-        if (this.curDistrict.hasOwnProperty('name')) {
+        if (this.curDistrict.name !== this.$t('common.any')) {
           condition.query.district = this.curDistrict.name
         }
         if (this.status.value !== 0) {

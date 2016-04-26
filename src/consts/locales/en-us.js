@@ -99,7 +99,8 @@ export default {
     online: '上线',
     offline: '下线',
     not_set: '未设置',
-    wechat: '微信'
+    wechat: '微信',
+    any: '不限'
   },
 
   // 图表地区

@@ -203,13 +203,13 @@
           query: {}
         }
 
-        if (this.curProvince.hasOwnProperty('name')) {
+        if (this.curProvince.name !== this.$t('common.any')) {
           condition.query.province = this.curProvince.name
         }
-        if (this.curCity.hasOwnProperty('name')) {
+        if (this.curCity.name !== this.$t('common.any')) {
           condition.query.city = this.curCity.name
         }
-        if (this.curDistrict.hasOwnProperty('name')) {
+        if (this.curDistrict.name !== this.$t('common.any')) {
           condition.query.district = this.curDistrict.name
         }
         if (this.key !== '') {
