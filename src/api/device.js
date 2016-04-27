@@ -128,9 +128,9 @@ export default {
         ]
       }
    */
-  getList2 (product_id, deviceIds) {
-    return http.post(
-      `${apiServer.default}/v2/product/${product_id}/v_devices`, deviceIds
+  getDeviceDataPoint (product_id, deviceId) {
+    return http.get(
+      `${apiServer.default}/v2/product/${product_id}/v_device/${deviceId}`
     )
   },
 

@@ -235,27 +235,23 @@
        * 批量获取虚拟设备数据
        * @return {[type]} [description]
        */
-      getDevices2 () {
-        api.device.getList2(this.product.id, this.deviceIds).then((res) => {
-          console.log(res.data.list)
-          if (res.data.list) {
-            res.data.list.map((item1) => {
-              let id = item1.device_id - 0
-              this.devices.map((item2) => {
-                if (item2.id - 0 === id) {
-                  item2.runMode = item1[36] ? (item1[36] - 0 === 0 ? '自动模式' : '节能模式') : '--'
-                  item2.tankTemperature = (item1[43] ? item1[43] + '℃' : '') || '--'
-                  item2.ambientTemperature = (item1[34] ? item1[34] + '℃' : '') || '--'
-                  item2.runningTime = item1[45] || '--'
-                }
-              })
+      getDeviceDataPoint () {
+        console.log(this.deviceIds)
+        for (let i = 0; i < this.deviceIds.length; i++) {
+          api.device.getDeviceDataPoint(this.product.id, this.deviceIds[i]).then((res) => {
+            this.devices.map((item) => {
+              if (item.id - 0 === res.data.device_id) {
+                item.runMode = res.data[36] ? (res.data[36] - 0 === 0 ? '自动模式' : '节能模式') : '--'
+                item.tankTemperature = (res.data[43] ? res.data[43] + '℃' : '') || '--'
+                item.ambientTemperature = (res.data[34] ? res.data[34] + '℃' : '') || '--'
+                item.runningTime = res.data[45] || '--'
+              }
             })
-          }
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
+          }).catch((res) => {
+            // this.handleError(res)
+            // this.loadingData = false
+          })
+        }
       },
       /**
        * 处理产品切换
@@ -272,7 +268,6 @@
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
-
         this.loadingData = true
         api.device.getList(this.product.id, this.queryCondition).then((res) => {
           let deviceArr = res.data.list
@@ -283,7 +278,7 @@
             item.runningTime = '--'
           })
           this.devices = deviceArr
-          this.getDevices2()
+          this.getDeviceDataPoint()
           this.total = res.data.count
           this.loadingData = false
         }).catch((res) => {
