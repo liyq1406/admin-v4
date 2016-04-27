@@ -44,8 +44,10 @@
                 <td>{{order.product_name}}</td>
                 <td>{{order.product_type}}</td>
                 <td>{{order.extended_days}}</td>
-                <td v-if="order.status === 0">已过期</td>
-                <td v-else class='hl-green'>未过期</td>
+                <td>
+                  <div v-if="order.status === 0">已过期</div>
+                  <div v-else class='hl-green'>未过期</div>
+                </td>
                 <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
