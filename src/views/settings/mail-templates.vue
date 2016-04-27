@@ -412,11 +412,13 @@
               if (template.lang === 'zh-cn') {
                 aModel.subject = template.subject
                 aModel.content = template.content
+                aModel.lang = template.lang
                 this.activateStatus = template.status
                 this.activateId = template.id
               } else {
                 aModel2.subject = template.subject
                 aModel2.content = template.content
+                aModel2.lang = template.lang
                 this.activateStatus2 = template.status
                 this.activateId2 = template.id
               }
@@ -424,11 +426,13 @@
               if (template.lang === 'zh-cn') {
                 rModel.subject = template.subject
                 rModel.content = template.content
+                rModel.lang = template.lang
                 this.resetStatus = template.status
                 this.resetId = template.id
               } else {
                 rModel2.subject = template.subject
                 rModel2.content = template.content
+                rModel2.lang = template.lang
                 this.resetStatus2 = template.status
                 this.resetId2 = template.id
               }
