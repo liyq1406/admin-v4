@@ -38,31 +38,70 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-14">
-          <!-- Start: 告警-->
-          <!-- End: 告警-->
-          <!-- Start: 快速指南-->
-          <div class="panel">
+        <div class="col-16">
+          <!-- Start: 产品趋势 -->
+          <div class="panel" v-if="productsOptions.length">
             <div class="panel-hd">
-              <h2>{{ $t("dashboard.guide") }}</h2>
+              <h2>产品趋势</h2>
+              <div class="leftbox">
+                <v-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
+                  <select v-model="product" @change="getProductTrend">
+                    <option v-for="option in productsOptions" :value="option">{{ option.name }}</option>
+                  </select>
+                </v-select>
+                <radio-group :items="periods" :value.sync="productPeriod"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+              </div>
             </div>
-            <div class="panel-bd">
-              <div class="post-list">
-                <ul>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md" target="_blank">XLINK SDK iOS 集成文档</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md" target="_blank">XLINK SDK Android 集成文档</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_share" target="_blank">[用户] 设备分享接口</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_newest_version" target="_blank">[用户] 设备升级接口</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/微信智能硬件接入指南.md" target="_blank">[企业应用] 微信接入指南</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/授权管理.md" target="_blank">[企业应用] 授权管理</a></li>
-                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/数据统计分析接口.md" target="_blank">[企业应用] 统计分析</a></li>
-                </ul>
+            <div class="panel-bd with-loading">
+              <line-chart :series="productSeries" :x-axis-data="productXAxisData" v-ref:product-chart></line-chart>
+              <div class="icon-loading" v-show="loadingProductTrends">
+                <i class="fa fa-refresh fa-spin"></i>
               </div>
             </div>
           </div>
-          <!-- End: 快速指南-->
+          <!-- End: 产品趋势 -->
+
+          <!-- Start: 用户趋势 -->
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>用户趋势</h2>
+              <div class="leftbox">
+                <radio-group :items="periods" :value.sync="userPeriod"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+              </div>
+            </div>
+            <div class="panel-bd with-loading">
+              <line-chart :series="userSeries" :x-axis-data="userXAxisData" v-ref:user-chart></line-chart>
+              <div class="icon-loading" v-show="loadingUserTrends">
+                <i class="fa fa-refresh fa-spin"></i>
+              </div>
+            </div>
+          </div>
+          <!-- End: 用户趋势 -->
+
+          <!-- Start: 告警信息 -->
+          <!-- <div class="panel">
+            <div class="panel-hd">
+              <h2>告警信息</h2>
+            </div>
+            <div class="panel-bd">
+              <div class="alert-list">
+                <ul>
+                  <li v-for="n in 10" class="row">
+                    <div class="alert-info col-16">
+                      <div class="alert-conent">
+                        <span class="text-label text-label-danger">严重</span>设备下线
+                      </div>
+                      <span class="product-name">压力测试产品2</span>
+                    </div>
+                    <div class="alert-time col-8">2016-02-27 16:09:53</div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div> -->
+          <!-- End: 告警信息 -->
         </div>
-        <div class="col-10">
+        <div class="col-8">
           <!-- Start: 文档-->
           <div class="panel">
             <div class="panel-hd">
@@ -92,6 +131,27 @@
             </div>
           </div>
           <!-- End: 文档-->
+
+          <!-- Start: 快速指南-->
+          <div class="panel">
+            <div class="panel-hd">
+              <h2>{{ $t("dashboard.guide") }}</h2>
+            </div>
+            <div class="panel-bd">
+              <div class="post-list">
+                <ul>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20iOS%20SDK接口文档.md" target="_blank">XLINK SDK iOS 集成文档</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/APP%20Android%20SDK接口文档.md" target="_blank">XLINK SDK Android 集成文档</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_share" target="_blank">[用户] 设备分享接口</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/应用端RESTful接口文档/设备功能接口.md#device_newest_version" target="_blank">[用户] 设备升级接口</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/应用端开发文档/微信智能硬件接入指南.md" target="_blank">[企业应用] 微信接入指南</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/授权管理.md" target="_blank">[企业应用] 授权管理</a></li>
+                  <li><a href="https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/数据统计分析接口.md" target="_blank">[企业应用] 统计分析</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <!-- End: 快速指南-->
         </div>
       </div>
     </div>
@@ -101,6 +161,12 @@
 <script>
   import api from '../api'
   import Vue from 'vue'
+  import RadioGroup from '../components/RadioGroup'
+  import Select from '../components/Select'
+  import LineChart from '../components/LineChart'
+  import locales from '../consts/locales/index'
+  import dateFormat from 'date-format'
+  import _ from 'lodash'
   import { globalMixins } from '../mixins'
 
   export default {
@@ -110,16 +176,96 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'radio-group': RadioGroup,
+      'v-select': Select,
+      'line-chart': LineChart
+    },
+
     data () {
       return {
+        // 设备统计
         totalSummary: {
           total: 0,
           activated: 0,
           online: 0
         },
+
+        // 用户统计
         userSummary: {
           user: 0
+        },
+
+        product: {},
+        productsOptions: [],
+        productPeriod: 7,
+        userPeriod: 7,
+        periods: locales[Vue.config.lang].periods,
+        productTrends: [],
+        userTrends: [],
+        alerts: [],
+        total: 0,
+        loadingProductTrends: false,
+        loadingUserTrends: false,
+        loadingAlert: false
+      }
+    },
+
+    computed: {
+      // 产品趋势图表横轴数据
+      productXAxisData () {
+        return this._genXAxis(this.productPeriod)
+      },
+
+      // 产品趋势图表横轴数据
+      productSeries () {
+        var result = [{
+          name: this.$t('statistic.products.active'),
+          type: 'line',
+          data: []
+        }, {
+          name: this.$t('statistic.products.activated'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.productPeriod; i++) {
+          var index = _.findIndex(this.productTrends, (item) => {
+            return item.day === this.productXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.productTrends[index].active : 0
+          result[1].data[i] = index >= 0 ? this.productTrends[index].activated : 0
         }
+
+        return result
+      },
+
+      // 用户趋势图表横轴数据
+      userXAxisData () {
+        return this._genXAxis(this.userPeriod)
+      },
+
+      // 用户趋势图表数据
+      userSeries () {
+        var result = [{
+          name: this.$t('statistic.users.active'),
+          type: 'line',
+          data: []
+        }, {
+          name: this.$t('statistic.users.newbie'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.userPeriod; i++) {
+          var index = _.findIndex(this.userTrends, (item) => {
+            return item.day === this.userXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.userTrends[index].active : 0
+          result[1].data[i] = index >= 0 ? this.userTrends[index].add : 0
+        }
+
+        return result
       }
     },
 
@@ -137,6 +283,17 @@
       }
     },
 
+    // 监听属性变动
+    watch: {
+      productPeriod () {
+        this.getProductTrend()
+      },
+
+      userPeriod () {
+        this.getUserTrend()
+      }
+    },
+
     route: {
       data () {
         api.statistics.getSummary().then((res) => {
@@ -146,6 +303,107 @@
           }
         }).catch((res) => {
           this.handleError(res)
+        })
+      }
+    },
+
+    ready () {
+      api.product.all().then((res) => {
+        if (res.status === 200 && res.data.length > 0) {
+          this.productsOptions = res.data
+          this.product = res.data[0]
+          this.getProductTrend()
+          this.getUserTrend()
+          // 假数据
+          // this.productTrends = [{day: '04-26', activated: 10, active: 8}]
+          // this.userTrends = [{day: '04-26', add: 10, active: 8}]
+        }
+      })
+
+      // 监听窗口尺寸变化
+      window.onresize = () => {
+        this.$refs.productChart.chart.resize()
+        this.$refs.userChart.chart.resize()
+      }
+    },
+
+    methods: {
+      /**
+       * 生成横轴点
+       * @return {Boolean} [description]
+       */
+      _genXAxis (period) {
+        var today = new Date()
+        var result = []
+
+        for (var i = period - 1; i >= 0; i--) {
+          result[i] = dateFormat('MM-dd', new Date(today - (period - i - 1) * 24 * 3600 * 1000))
+        }
+        return result
+      },
+
+      /**
+       * 获取产品趋势
+       */
+      getProductTrend () {
+        var today = new Date()
+        var past = today.getTime() - this.productPeriod * 24 * 3600 * 1000
+        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
+        var end_day = dateFormat('yyyy-MM-dd', today)
+
+        this.loadingProductTrends = true
+        api.statistics.getProductTrend(this.product.id, start_day, end_day).then((res) => {
+          if (res.status === 200) {
+            this.productTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
+            })
+            this.loadingProductTrends = false
+          }
+        }).catch((res) => {
+          this.loadingProductTrends = false
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取用户趋势
+       */
+      getUserTrend () {
+        var today = new Date()
+        var past = today.getTime() - this.userPeriod * 24 * 3600 * 1000
+        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
+        var end_day = dateFormat('yyyy-MM-dd', today)
+
+        this.loadingUserTrends = true
+        api.statistics.getUserTrend(start_day, end_day).then((res) => {
+          if (res.status === 200) {
+            this.userTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
+            })
+            this.loadingUserTrends = false
+          }
+        }).catch((res) => {
+          this.loadingUserTrends = false
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取告警信息列表
+       */
+      getAlerts () {
+        this.loadingAlert = true
+        api.alert.getAlerts(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.alerts = res.data.list
+            this.total = res.data.count
+            this.loadingAlert = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingAlert = false
         })
       }
     }
@@ -184,7 +442,7 @@
         margin-right 25px
 
       .num
-        font-size 38px
+        font-size 36px
         line-height 44px
         height 44px
 
@@ -290,4 +548,18 @@
         margin 0
         font-size 12px
         color #999
+
+  // 告警列表
+  .alert-list
+    li
+      padding 10px 0
+
+      .text-label
+        font-size 12px
+        margin-right 5px
+
+    .alert-time
+      font-size 12px
+      color gray-light
+      text-align right
 </style>

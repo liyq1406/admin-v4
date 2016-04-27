@@ -27,7 +27,7 @@
           </select>
         </v-select>
       </div>
-      <div class="data-table">
+      <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>

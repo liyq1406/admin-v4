@@ -10,7 +10,7 @@
             <button @click="toggleList" class="btn btn-ghost fr"><i class="fa"></i>切换查看V1版本</button>
           </div>
         </div>
-        <div class="data-table">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
@@ -92,7 +92,7 @@
           </div>
         </div>
       </div>
-      <div class="data-table">
+      <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>

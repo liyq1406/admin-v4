@@ -162,7 +162,7 @@
               </div>
               <div class="ingredient-list clearfix mb20">
                 <div class="to-select-list">
-                  <div class="data-table">
+                  <div class="data-table with-loading">
                     <div class="icon-loading" v-show="loadingData">
                       <i class="fa fa-refresh fa-spin"></i>
                     </div>

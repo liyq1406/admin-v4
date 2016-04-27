@@ -7,7 +7,7 @@
             <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
           </div>
         </div>
-        <div class="data-table">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>

@@ -20,7 +20,7 @@
         <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
       </div>
 
-      <div class="data-table">
+      <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>

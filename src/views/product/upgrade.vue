@@ -8,7 +8,7 @@
         <h2>{{ $t('firmware.firmware_list') }}</h2>
       </div>
       <div class="panel-bd">
-        <div class="data-table">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingFirmwares">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
@@ -50,7 +50,7 @@
         <h2>{{ $t('task.task_list') }}</h2>
       </div>
       <div class="panel-bd">
-        <div class="data-table">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingTasks">
             <i class="fa fa-refresh fa-spin"></i>
           </div>

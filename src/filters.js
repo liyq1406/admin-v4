@@ -5,7 +5,8 @@
  */
 export function formatDate (date) {
   if (typeof date !== 'undefined' && date.length > 0) {
-    return date.replace('T', ' ').replace('Z', '')
+    date = date.replace(/T/, ' ').replace(/Z/, '')
+    return date.replace(/\.\d+$/, '')
   } else {
     return date
   }

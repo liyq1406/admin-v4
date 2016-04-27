@@ -35,7 +35,7 @@
               <i class="fa fa-refresh" :class="{'fa-spin': loadingData}"></i><span>刷新</span>
             </button>
           </div>
-          <div class="data-table">
+          <div class="data-table with-loading">
             <div class="icon-loading" v-show="loadingData">
               <i class="fa fa-refresh fa-spin"></i>
             </div>

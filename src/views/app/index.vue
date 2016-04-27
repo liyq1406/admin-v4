@@ -11,7 +11,7 @@
               <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("app.create_app") }}</button>
             </div>
           </div>
-          <div class="data-table">
+          <div class="data-table with-loading">
             <div class="icon-loading" v-show="loadingData">
               <i class="fa fa-refresh fa-spin"></i>
             </div>

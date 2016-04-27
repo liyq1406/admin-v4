@@ -18,7 +18,7 @@
             <button @click.prevent.stop="showAddModal = true" class="btn btn-success mr10 fr">添加测试设备</button>
           </div>
         </div>
-        <div class="data-table">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>

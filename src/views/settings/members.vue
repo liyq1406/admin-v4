@@ -8,7 +8,7 @@
       <button @click.prevent="showModal = true" class="btn btn-success ml20 mt10"><i class="fa fa-plus"></i>{{ $t('member.add_member') }}</button>
     </div>
     <div class="panel-bd">
-      <div class="data-table">
+      <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>

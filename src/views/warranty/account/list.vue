@@ -14,7 +14,7 @@
         <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
       </div>
 
-      <div class="data-table">
+      <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>
