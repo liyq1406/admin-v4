@@ -219,6 +219,14 @@ let configRouter = (router) => {
         }
       }
     },
+    // 上下线记录
+    '/products/:product_id/records': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/product/device/records'))
+        }, 'admin')
+      }
+    },
     // 设备详情
     '/products/:product_id/devices/:device_id': {
       component (resolve) {

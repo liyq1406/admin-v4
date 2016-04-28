@@ -3,7 +3,7 @@
     <div class="panel-bd">
       <div class="action-bar">
         <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-          <v-select width="90px" :label="queryType.label">
+          <v-select width="100px" :label="queryType.label">
             <select v-model="queryType">
               <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
             </select>
@@ -58,6 +58,9 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <div class="action-group">
+        <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-success">查看上下线历史记录</button>
       </div>
       <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
     </div>
@@ -150,7 +153,8 @@
         loadingData: false,
         queryTypeOptions: [
           { label: 'MAC', value: 'mac' },
-          { label: '设备ID', value: 'id' }
+          { label: '设备ID', value: 'id' },
+          { label: '设备名称', value: 'name' }
         ],
         queryType: {
           label: 'MAC',
@@ -176,6 +180,9 @@
         switch (this.visibility.value) {
           case 'online':
             condition.query['is_online'] = { $in: [true] }
+            break
+          case 'offline':
+            condition.query['is_online'] = { $in: [false] }
             break
           case 'active':
             condition.query['is_active'] = { $in: [true] }

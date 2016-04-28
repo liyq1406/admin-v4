@@ -148,6 +148,7 @@ export default {
   visibilityOptions: [
     { label: '全部', value: 'all' },
     { label: '在线', value: 'online' },
+    { label: '下线', value: 'offline' },
     { label: '激活', value: 'active' },
     { label: '未激活', value: 'inactive' }
   ],

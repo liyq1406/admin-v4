@@ -105,6 +105,31 @@ export default {
   },
 
   /**
+   * 添加成员
+   * 成员编辑本成员的基本信息。
+   * @param  {Object} params  {"name":"成员姓名"}
+   * @param  {member_id}
+   * @return  stauts
+   */
+  addMember (params) {
+    return http.post(
+      `${apiServer.default}/v2/corp/member_add`, params
+    )
+  },
+  /**
+   * 修改成员密码
+   * 成员编辑本成员的基本信息。
+   * @param  {Object} params  {"name":"成员姓名"}
+   * @param  {member_id}
+   * @return  stauts
+   */
+  editMember (member_id, params) {
+    return http.put(
+      `${apiServer.default}/v2/corp/member/${member_id}/password`, params
+    )
+  },
+
+  /**
    * 新版停用启用用户
    * 成员编辑本成员的基本信息。
    * @param  {Object} params  {"name":"成员姓名"}
