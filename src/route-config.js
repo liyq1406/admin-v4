@@ -127,7 +127,7 @@ let configRouter = (router) => {
     },
 
     // 普通用户邮箱激活
-    '/user-email-activat/:corp_id/:email/:verifycode': {
+    '/user-email-activate/:corp_id/:email/:verifycode': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/user-email-activate'))
