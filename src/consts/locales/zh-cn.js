@@ -111,7 +111,7 @@ export default {
   ],
 
   // 图表类型
-  mapType: [
+  mapTypes: [
     'china',
     // 23个省
     '广东', '青海', '四川', '海南', '陕西',

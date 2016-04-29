@@ -14,8 +14,11 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-15">
-            <div id="trendChart" style="height:320px"></div>
+          <div class="col-15 with-loading">
+            <line-chart :series="productTrendSeries" :x-axis-data="productXAxisData" v-ref:trend-chart></line-chart>
+            <div class="icon-loading" v-show="loadingProductTrends">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
           </div>
           <div class="col-9">
             <div class="statistics-info">
@@ -56,12 +59,17 @@
       <div class="panel-hd">
         <h2>{{ $t("statistic.regions") }}</h2>
         <div class="leftbox">
-          <radio-group :items="regions" :value.sync="region" @select="drawProducRegion"></radio-group>
+          <radio-group :items="regions" :value.sync="region" @select="getProductRegion"></radio-group>
         </div>
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div id="regionChart" style="height:320px; overflow:hidden;"></div>
+          <div class="col-24 with-loading">
+            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('statistic.products.active')"></map-chart>
+            <div class="icon-loading" v-show="loadingProductRegions">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+          </div>
           <table class="table table-bordered table-stripe">
             <thead>
               <tr>
@@ -71,7 +79,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in regionData">
+              <tr v-for="item in regionsData">
                 <td>{{ item.name }}</td>
                 <td>{{ item.value }}</td>
                 <td>{{ (item.value * 100 / productSummary.total).toFixed(2) }}%</td>
@@ -88,16 +96,13 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import Select from '../../components/Select'
+  import LineChart from '../../components/charts/Line'
+  import MapChart from '../../components/charts/Map'
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import dateFormat from 'date-format'
-  import echarts from 'echarts/echarts'
-  import 'echarts/chart/line'
-  import 'echarts/chart/map'
-  import worldNames from '../../consts/world-names'
-  import chinaNames from '../../consts/china-names'
-  import ecConfig from 'echarts/config'
   import { globalMixins } from '../../mixins'
+  import _ from 'lodash'
 
   export default {
     name: 'ProductStatistic',
@@ -108,11 +113,14 @@
 
     components: {
       'radio-group': RadioGroup,
-      'v-select': Select
+      'v-select': Select,
+      'line-chart': LineChart,
+      'map-chart': MapChart
     },
 
     data () {
       return {
+        // 产品统计
         productSummary: {
           total: 0,
           activated: 0,
@@ -125,41 +133,100 @@
         periods: locales[Vue.config.lang].periods,
         region: 'world',
         regions: locales[Vue.config.lang].regions,
-        productRegion: {},
-        regionData: [],
+        productTrends: [],
+        regionsData: [],
+        loadingProductTrends: false,
+        loadingProductRegions: false,
         showTooltip: false
       }
     },
 
+    computed: {
+      // 产品趋势图表横轴数据
+      productXAxisData () {
+        return this._genXAxis(this.period)
+      },
+
+      // 产品趋势图表数据
+      productTrendSeries () {
+        var result = [{
+          name: this.$t('statistic.products.active'),
+          type: 'line',
+          data: []
+        }, {
+          name: this.$t('statistic.products.activated'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.period; i++) {
+          var index = _.findIndex(this.productTrends, (item) => {
+            return item.day === this.productXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.productTrends[index].active : 0
+          result[1].data[i] = index >= 0 ? this.productTrends[index].activated : 0
+        }
+
+        return result
+      }
+    },
+
     ready () {
-      this.getProducts().then((res) => {
+      api.product.all().then((res) => {
         if (res.status === 200 && res.data.length > 0) {
           this.productsOptions = res.data
           this.product = res.data[0]
           this.getProductData()
+          // 假数据
+          // this.productTrends = [{day: '04-26', activated: 10, active: 8}]
+          // this.userTrends = [{day: '04-26', add: 10, active: 8}]
         }
+      }).catch((res) => {
+        this.handleError(res)
       })
+
+      // 监听窗口尺寸变化
+      window.onresize = () => {
+        this.$refs.trendChart.chart.resize()
+        this.$refs.regionChart.chart.resize()
+      }
     },
 
     // 监听属性变动
     watch: {
       period () {
         this.getProductSummary()
-        this.drawProductTrends()
+        this.getProductTrend()
       }
     },
 
     methods: {
+      /**
+       * 生成横轴点
+       * @return {Boolean} [description]
+       */
+      _genXAxis (period) {
+        var today = new Date()
+        var result = []
+
+        for (var i = period - 1; i >= 0; i--) {
+          result[i] = dateFormat('MM-dd', new Date(today - (period - i - 1) * 24 * 3600 * 1000))
+        }
+        return result
+      },
+
+      /**
+       * 获取产品信息
+       */
       getProductData () {
         this.getProductSummary()
-        this.drawProductTrends()
-        this.drawProducRegion()
+        this.getProductTrend()
+        this.getProductRegion()
       },
 
-      getProducts () {
-        return api.product.all()
-      },
-
+      /**
+       * 获取产品统计信息
+       */
       getProductSummary () {
         api.statistics.getProductSummary(this.product.id).then((res) => {
           if (res.status === 200) {
@@ -170,227 +237,68 @@
         })
       },
 
-      drawProductTrends () {
+      /**
+       * 获取产品趋势
+       */
+      getProductTrend () {
         var today = new Date()
         var past = today.getTime() - this.period * 24 * 3600 * 1000
         var start_day = dateFormat('yyyy-MM-dd', new Date(past))
         var end_day = dateFormat('yyyy-MM-dd', today)
 
+        this.loadingProductTrends = true
         api.statistics.getProductTrend(this.product.id, start_day, end_day).then((res) => {
-          var dates = res.data.map((item) => {
-            return dateFormat('MM-dd', new Date(item.day))
-          })
-          // var totalTrends = data.map((item) => {
-            // return item.total
-          // })
-          var activatedTrends = res.data.map((item) => {
-            return item.activated
-          })
-          var activeTrends = res.data.map((item) => {
-            return item.active
-          })
-
-          // 趋势图表
-          var trendOptions = {
-            noDataLoadingOption: {
-              text: this.$t('common.no_data'),
-              effect: '',
-              effectOption: {
-                backgroundColor: '#FFF'
-              },
-              textStyle: {
-                fontSize: 14,
-                color: '#999'
-              }
-            },
-            calculable: true,
-            tooltip: {
-              trigger: 'axis'
-            },
-            grid: {
-              x: 50,
-              y: 32,
-              x2: 15
-            },
-            legend: {
-              x: 'right',
-              y: 10,
-              data: [this.$t('statistic.products.active'), this.$t('statistic.products.activated')]
-            },
-            xAxis: [{
-              type: 'category',
-              boundaryGap: false,
-              data: dates
-            }],
-            yAxis: [{
-              type: 'value'
-            }],
-            series: [{
-              name: this.$t('statistic.products.active'),
-              type: 'line',
-              data: activeTrends
-            }, {
-              name: this.$t('statistic.products.activated'),
-              type: 'line',
-              data: activatedTrends
-            }]
+          if (res.status === 200) {
+            this.productTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
+            })
+            this.loadingProductTrends = false
           }
-          var trendChart = echarts.init(document.getElementById('trendChart'))
-          trendChart.setOption(trendOptions)
-          window.onresize = trendChart.resize
         }).catch((res) => {
+          this.loadingProductTrends = false
           this.handleError(res)
         })
       },
 
-      drawProducRegion () {
-        var self = this
+      /**
+       * 获取产品区域分布
+       */
+      getProductRegion () {
+        this.loadingProductRegions = true
         api.statistics.getProductRegion(this.product.id).then((res) => {
-          var regionOptions
-          var regionChart = echarts.init(document.getElementById('regionChart'))
+          // console.log(res.data)
+          var regionsData = []
           if (this.region === 'world') {
-            var worldData = []
-            var worldMax = 0
             for (var country in res.data) {
-              worldData.push({
+              regionsData.push({
                 name: country,
                 value: res.data[country].activated
               })
-
-              if (res.data[country].activated > worldMax) {
-                worldMax = res.data[country].activated
-              }
             }
-            this.regionData = worldData
-
-            regionOptions = {
-              tooltip: {
-                trigger: 'item',
-                formatter (params) {
-                  var value = (params.value + '').split('.')
-                  if (value[0] === '-') {
-                    value = 0
-                  }
-                  return self.$t('statistic.products.active') + '<br/>' + params.name + ': ' + value
-                }
-              },
-              dataRange: {
-                min: 0,
-                max: worldMax,
-                text: [this.$t('common.high'), this.$t('common.low')],
-                realtime: false,
-                calculable: true,
-                color: ['orangered', 'yellow', 'lightskyblue']
-              },
-              series: [{
-                type: 'map',
-                mapType: 'world',
-                roam: 'move',
-                mapLocation: {
-                  y: 10
-                },
-                nameMap: worldNames,
-                data: worldData
-              }]
-            }
-            regionChart.setOption(regionOptions)
-          } else {
-            var curIndx = 0
-            var option
-            var mapType = locales[Vue.config.lang].mapType
-
-            var chinaData = []
-            var chinaMax = 0
+          } else if (this.region === 'china') {
             for (var province in res.data['China']) {
               if (province !== 'activated') {
-                chinaData.push({
+                regionsData.push({
                   name: province,
                   value: res.data['China'][province].activated
                 })
 
                 for (var city in res.data['China'][province]) {
                   if (city !== 'activated') {
-                    chinaData.push({
+                    regionsData.push({
                       name: city,
                       value: res.data['China'][province][city].activated
                     })
                   }
-
-                  if (res.data['China'][province][city].activated > chinaMax) {
-                    chinaMax = res.data['China'][province][city].activated
-                  }
                 }
-              }
-
-              if (res.data['China'][province].activated > chinaMax) {
-                chinaMax = res.data['China'][province].activated
               }
             }
-            this.regionData = chinaData
-
-            regionChart.on(ecConfig.EVENT.MAP_SELECTED, (param) => {
-              var len = mapType.length
-              var mt = mapType[curIndx % len]
-              if (mt === 'china') {
-                // 全国选择时指定到选中的省份
-                var selected = param.selected
-                for (var i in selected) {
-                  if (selected[i]) {
-                    mt = i
-                    while (len--) {
-                      if (mapType[len] === mt) {
-                        curIndx = len
-                      }
-                    }
-                    break
-                  }
-                }
-              } else {
-                curIndx = 0
-                mt = 'china'
-              }
-              option.series[0].mapType = mt
-              regionChart.setOption(option, true)
-            })
-            option = {
-              tooltip: {
-                trigger: 'item',
-                formatter (params) {
-                  var value = (params.value + '').split('.')
-                  if (value[0] === '-') {
-                    value = 0
-                  }
-                  return self.$t('statistic.products.active') + '<br/>' + params.name + ': ' + value
-                }
-              },
-              legend: {
-                orient: 'vertical',
-                x: 'right',
-                data: [this.$t('statistic.products.active')]
-              },
-              dataRange: {
-                min: 0,
-                max: chinaMax,
-                color: ['orange', 'yellow'],
-                text: [this.$t('common.high'), this.$t('common.low')],           // 文本，默认为数值文本
-                calculable: true
-              },
-              series: [{
-                name: this.$t('statistic.products.active'),
-                type: 'map',
-                mapType: 'china',
-                selectedMode: 'single',
-                itemStyle: {
-                  normal: { label: { show: true } },
-                  emphasis: { label: { show: true } }
-                },
-                nameMap: chinaNames,
-                data: chinaData
-              }]
-            }
-            regionChart.setOption(option, true)
           }
+          this.regionsData = regionsData
+          this.loadingProductRegions = false
         }).catch((res) => {
+          this.loadingProductRegions = false
           this.handleError(res)
         })
       }

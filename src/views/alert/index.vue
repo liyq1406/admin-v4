@@ -8,8 +8,11 @@
         </div>
         <div class="panel-bd">
           <div class="row">
-            <div class="col-15">
-              <div id="trendChart" style="height:320px;"></div>
+            <div class="col-15 with-loading">
+              <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
+              <div class="icon-loading" v-show="loadingData">
+                <i class="fa fa-refresh fa-spin"></i>
+              </div>
             </div>
             <div class="col-9">
               <div class="statistics-info">
@@ -145,14 +148,14 @@
 
 <script>
   import Vue from 'vue'
+  import _ from 'lodash'
   import api from '../../api'
   import locales from '../../consts/locales/index'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import RadioGroup from '../../components/RadioGroup'
   import dateFormat from 'date-format'
-  import echarts from 'echarts/echarts'
-  import 'echarts/chart/line'
+  import LineChart from '../../components/charts/Line'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -165,7 +168,8 @@
     components: {
       'pager': Pager,
       'modal': Modal,
-      'radio-group': RadioGroup
+      'radio-group': RadioGroup,
+      'line-chart': LineChart
     },
 
     data () {
@@ -217,6 +221,35 @@
       past () {
         var past = new Date().getTime() - this.period * 24 * 3600 * 1000
         return dateFormat('yyyy-MM-dd', new Date(past))
+      },
+
+      // 告警图表数据
+      alertSeries () {
+        var result = [{
+          name: this.$t('alert.counts'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.period; i++) {
+          var index = _.findIndex(this.alertTrends, (item) => {
+            return item.day === this.alertXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
+        }
+
+        return result
+      },
+
+      // 告警图表横轴数据
+      alertXAxisData () {
+        var today = new Date()
+        var result = []
+
+        for (var i = this.period - 1; i >= 0; i--) {
+          result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
+        }
+        return result
       }
     },
 
@@ -227,24 +260,25 @@
     },
 
     ready () {
-      this.drawTrendsChart()
-      // var this = this
-      // this.getAlertSummary()
+      // 监听窗口尺寸变化
+      window.onresize = () => {
+        this.$refs.alertChart.chart.resize()
+      }
     },
 
     route: {
       data () {
         this.getAlerts()
+        this.getAlertTrends()
         this.getAlertSummary()
-        this.drawTrendsChart()
       }
     },
 
     // 监听属性变动
     watch: {
       period () {
+        this.getAlertTrends()
         this.getAlertSummary()
-        this.drawTrendsChart()
       }
     },
 
@@ -293,60 +327,17 @@
         })
       },
 
-      // 趋势图表
-      drawTrendsChart () {
+      /**
+       * 获取告警趋势
+       */
+      getAlertTrends () {
         api.statistics.getAlertTrend(this.past, this.today).then((res) => {
-          var dates = res.data.map((item) => {
-            return dateFormat('MM-dd', new Date(item.day))
-          })
-          var alertCounts = res.data.map((item) => {
-            return item.message
-          })
-
-          // 趋势图表
-          var trendOptions = {
-            noDataLoadingOption: {
-              text: this.$t('common.no_data'),
-              effect: '',
-              effectOption: {
-                backgroundColor: '#FFF'
-              },
-              textStyle: {
-                fontSize: 14,
-                color: '#999'
-              }
-            },
-            calculable: true,
-            tooltip: {
-              trigger: 'axis'
-            },
-            grid: {
-              x: 50,
-              y: 32,
-              x2: 15
-            },
-            legend: {
-              x: 'right',
-              y: 10,
-              data: [this.$t('alert.counts')]
-            },
-            xAxis: [{
-              type: 'category',
-              boundaryGap: false,
-              data: dates
-            }],
-            yAxis: [{
-              type: 'value'
-            }],
-            series: [{
-              name: this.$t('alert.counts'),
-              type: 'line',
-              data: alertCounts
-            }]
+          if (res.status === 200) {
+            this.alertTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
+            })
           }
-          var trendChart = echarts.init(document.getElementById('trendChart'))
-          trendChart.setOption(trendOptions)
-          window.onresize = trendChart.resize
         }).catch((res) => {
           this.handleError(res)
         })

@@ -163,7 +163,7 @@
   import Vue from 'vue'
   import RadioGroup from '../components/RadioGroup'
   import Select from '../components/Select'
-  import LineChart from '../components/LineChart'
+  import LineChart from '../components/charts/Line'
   import locales from '../consts/locales/index'
   import dateFormat from 'date-format'
   import _ from 'lodash'
@@ -190,12 +190,10 @@
           activated: 0,
           online: 0
         },
-
         // 用户统计
         userSummary: {
           user: 0
         },
-
         product: {},
         productsOptions: [],
         productPeriod: 7,
@@ -217,7 +215,7 @@
         return this._genXAxis(this.productPeriod)
       },
 
-      // 产品趋势图表横轴数据
+      // 产品趋势图表数据
       productSeries () {
         var result = [{
           name: this.$t('statistic.products.active'),
@@ -318,6 +316,8 @@
           // this.productTrends = [{day: '04-26', activated: 10, active: 8}]
           // this.userTrends = [{day: '04-26', add: 10, active: 8}]
         }
+      }).catch((res) => {
+        this.handleError(res)
       })
 
       // 监听窗口尺寸变化

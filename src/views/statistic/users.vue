@@ -9,8 +9,11 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-15">
-            <div id="trendChart" style="height:320px"></div>
+          <div class="col-15 with-loading">
+            <line-chart :series="userTrendSeries" :x-axis-data="userXAxisData" v-ref:trend-chart></line-chart>
+            <div class="icon-loading" v-show="loadingUserTrends">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
           </div>
           <div class="col-9">
             <div class="statistics-info">
@@ -47,12 +50,17 @@
       <div class="panel-hd">
         <h2>{{ $t("statistic.regions") }}</h2>
         <div class="leftbox">
-          <radio-group :items="regions" :value.sync="region" @select="drawUserRegion"></radio-group>
+          <radio-group :items="regions" :value.sync="region" @select="getUserRegion"></radio-group>
         </div>
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div id="regionChart" style="height:320px; overflow:hidden;"></div>
+          <div class="col-24 with-loading">
+            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('statistic.users.registered')"></map-chart>
+            <div class="icon-loading" v-show="loadingUserRegions">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+          </div>
           <table class="table table-bordered table-stripe">
             <thead>
               <tr>
@@ -81,10 +89,9 @@
   import api from '../../api'
   import locales from '../../consts/locales/index'
   import dateFormat from 'date-format'
-  import echarts from 'echarts/echarts'
-  require('echarts/chart/line')
-  require('echarts/chart/map')
-  import ecConfig from 'echarts/config'
+  import LineChart from '../../components/charts/Line'
+  import MapChart from '../../components/charts/Map'
+  import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -95,7 +102,9 @@
     mixins: [globalMixins],
 
     components: {
-      'radio-group': RadioGroup
+      'radio-group': RadioGroup,
+      'line-chart': LineChart,
+      'map-chart': MapChart
     },
 
     data () {
@@ -109,25 +118,73 @@
         periods: locales[Vue.config.lang].periods,
         region: 'world',
         regions: locales[Vue.config.lang].regions,
-        regionData: [],
-        wroldNames: require('../../consts/world-names'),
-        chinaNames: require('../../consts/china-names')
+        userTrends: [],
+        regionsData: [],
+        loadingUserTrends: false,
+        loadingUserRegions: false
+      }
+    },
+
+    computed: {
+      // 用户趋势图表横轴数据
+      userXAxisData () {
+        return this._genXAxis(this.period)
+      },
+
+      // 用户趋势图表数据
+      userTrendSeries () {
+        var result = [{
+          name: this.$t('statistic.users.active'),
+          type: 'line',
+          data: []
+        }, {
+          name: this.$t('statistic.users.newbie'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.period; i++) {
+          var index = _.findIndex(this.userTrends, (item) => {
+            return item.day === this.userXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.userTrends[index].active : 0
+          result[1].data[i] = index >= 0 ? this.userTrends[index].add : 0
+        }
+
+        return result
       }
     },
 
     ready () {
       this.getUserSummary()
-      this.drawUserTrends()
-      this.drawUserRegion()
+      this.getUserTrend()
+      this.getUserRegion()
     },
 
     watch: {
       period () {
-        this.drawUserTrends()
+        this.getUserTrend()
       }
     },
 
     methods: {
+      /**
+       * 生成横轴点
+       * @return {Boolean} [description]
+       */
+      _genXAxis (period) {
+        var today = new Date()
+        var result = []
+
+        for (var i = period - 1; i >= 0; i--) {
+          result[i] = dateFormat('MM-dd', new Date(today - (period - i - 1) * 24 * 3600 * 1000))
+        }
+        return result
+      },
+
+      /**
+       * 获取用户统计信息
+       */
       getUserSummary () {
         api.statistics.getUserSummary().then((res) => {
           if (res.status === 200) {
@@ -139,234 +196,68 @@
         })
       },
 
-      drawUserTrends () {
+      /**
+       * 获取用户趋势
+       */
+      getUserTrend () {
         var today = new Date()
         var past = today.getTime() - this.period * 24 * 3600 * 1000
         var start_day = dateFormat('yyyy-MM-dd', new Date(past))
         var end_day = dateFormat('yyyy-MM-dd', today)
 
+        this.loadingUserTrends = true
         api.statistics.getUserTrend(start_day, end_day).then((res) => {
-          var dates = res.data.map((item) => {
-            return dateFormat('MM-dd', new Date(item.day))
-          })
-          /*
-          var totalTrends = data.map((item) => {
-            return item.total
-          })*/
-          var addTrends = res.data.map((item) => {
-            return item.add
-          })
-          var activeTrends = res.data.map((item) => {
-            return item.active
-          })
-
-          if (addTrends.length > 0) {
-            this.add = addTrends.reduce((prev, next) => {
-              return prev + next
+          if (res.status === 200) {
+            this.userTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
             })
+            this.loadingUserTrends = false
           }
-
-          // 趋势图表
-          var trendOptions = {
-            noDataLoadingOption: {
-              text: this.$t('common.no_data'),
-              effect: '',
-              effectOption: {
-                backgroundColor: '#FFF'
-              },
-              textStyle: {
-                fontSize: 14,
-                color: '#999'
-              }
-            },
-            calculable: true,
-            tooltip: {
-              trigger: 'axis'
-            },
-            grid: {
-              x: 50,
-              y: 32,
-              x2: 15
-            },
-            legend: {
-              x: 'right',
-              y: 10,
-              data: [this.$t('statistic.users.newbie', {period: this.period}), this.$t('statistic.users.active')]
-            },
-            xAxis: [{
-              type: 'category',
-              boundaryGap: false,
-              data: dates
-            }],
-            yAxis: [{
-              type: 'value'
-            }],
-            series: [{
-              name: this.$t('statistic.users.active'),
-              type: 'line',
-              data: activeTrends
-            }, {
-              name: this.$t('statistic.users.newbie', {period: this.period}),
-              type: 'line',
-              data: addTrends
-            }]
-          }
-          var trendChart = echarts.init(document.getElementById('trendChart'))
-          trendChart.setOption(trendOptions)
-          window.onresize = trendChart.resize
         }).catch((res) => {
+          this.loadingUserTrends = false
           this.handleError(res)
         })
       },
 
-      drawUserRegion () {
-        var self = this
+      /**
+       * 获取用户区域分布
+       */
+      getUserRegion () {
+        this.loadingUserRegions = true
         api.statistics.getUserRegion().then((res) => {
-          var regionOptions
-          var regionChart = echarts.init(document.getElementById('regionChart'))
+          // console.log(res.data)
+          var regionsData = []
           if (this.region === 'world') {
-            var worldData = []
-            var worldMax = 0
-            for (var country in res.data) {
-              worldData.push({
+            for (let country in res.data) {
+              regionsData.push({
                 name: country,
-                value: res.data[country].register
+                value: res.data[country].active
               })
-
-              if (res.data[country].register > worldMax) {
-                worldMax = res.data[country].register
-              }
             }
-            this.regionData = worldData
-
-            regionOptions = {
-              tooltip: {
-                trigger: 'item',
-                formatter (params) {
-                  var value = (params.value + '').split('.')
-                  if (value[0] === '-') {
-                    value = 0
-                  }
-                  return self.$t('statistic.users.active') + '<br/>' + params.name + ': ' + value
-                }
-              },
-              dataRange: {
-                min: 0,
-                max: worldMax,
-                text: [this.$t('common.high'), this.$t('common.low')],
-                realtime: false,
-                calculable: true,
-                color: ['orangered', 'yellow', 'lightskyblue']
-              },
-              series: [{
-                type: 'map',
-                mapType: 'world',
-                roam: 'move',
-                mapLocation: {
-                  y: 10
-                },
-                nameMap: this.wroldNames,
-                data: worldData
-              }]
-            }
-            regionChart.setOption(regionOptions)
-          } else {
-            var curIndx = 0
-            var option
-            var mapType = locales[Vue.config.lang].mapType
-
-            var chinaData = []
-            var chinaMax = 0
-            for (var province in res.data['China']) {
+          } else if (this.region === 'china') {
+            for (let province in res.data['China']) {
               if (province !== 'register') {
-                chinaData.push({
+                regionsData.push({
                   name: province,
                   value: res.data['China'][province].register
                 })
 
-                for (var city in res.data['China'][province]) {
+                for (let city in res.data['China'][province]) {
                   if (city !== 'register') {
-                    chinaData.push({
+                    regionsData.push({
                       name: city,
                       value: res.data['China'][province][city].register
                     })
-
-                    if (res.data['China'][province][city].register > chinaMax) {
-                      chinaMax = res.data['China'][province][city].register
-                    }
                   }
-                }
-
-                if (res.data['China'][province].register > chinaMax) {
-                  chinaMax = res.data['China'][province].register
                 }
               }
             }
-            this.regionData = chinaData
-
-            regionChart.on(ecConfig.EVENT.MAP_SELECTED, (param) => {
-              var len = mapType.length
-              var mt = mapType[curIndx % len]
-              if (mt === 'china') {
-                // 全国选择时指定到选中的省份
-                var selected = param.selected
-                for (var i in selected) {
-                  if (selected[i]) {
-                    mt = i
-                    while (len--) {
-                      if (mapType[len] === mt) {
-                        curIndx = len
-                      }
-                    }
-                    break
-                  }
-                }
-              } else {
-                curIndx = 0
-                mt = 'china'
-              }
-              option.series[0].mapType = mt
-              regionChart.setOption(option, true)
-            })
-            option = {
-              tooltip: {
-                trigger: 'item',
-                formatter (params) {
-                  var value = (params.value + '').split('.')
-                  if (value[0] === '-') {
-                    value = 0
-                  }
-                  return self.$t('statistic.users.active') + '<br/>' + params.name + ': ' + value
-                }
-              },
-              legend: {
-                orient: 'vertical',
-                x: 'right',
-                data: [this.$t('statistic.users.active')]
-              },
-              dataRange: {
-                min: 0,
-                max: chinaMax,
-                color: ['orange', 'yellow'],
-                text: [this.$t('common.high'), this.$t('common.low')],           // 文本，默认为数值文本
-                calculable: true
-              },
-              series: [{
-                name: this.$t('statistic.users.active'),
-                type: 'map',
-                mapType: 'china',
-                selectedMode: 'single',
-                itemStyle: {
-                  normal: { label: { show: true } },
-                  emphasis: { label: { show: true } }
-                },
-                nameMap: this.chinaNames,
-                data: chinaData
-              }]
-            }
-            regionChart.setOption(option, true)
           }
+          this.regionsData = regionsData
+          this.loadingUserRegions = false
         }).catch((res) => {
+          this.loadingUserRegions = false
           this.handleError(res)
         })
       }

@@ -101,13 +101,16 @@
     },
 
     watch: {
-      options () {
-        this.chart.setOption(this.options, true)
+      series () {
+        if (Object.keys(this.chart).length) {
+          this.chart.setOption(this.options, true)
+        }
       }
     },
 
     ready () {
       this.chart = echarts.init(this.$el)
+      this.chart.setOption(this.options, true)
     }
   }
 </script>
