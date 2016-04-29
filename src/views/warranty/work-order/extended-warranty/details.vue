@@ -42,7 +42,7 @@
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info">{{workOrders.province + workOrders.city + workOrders.district}}</div>
+              <div class="info">{{workOrders.province ? workOrders.province + workOrders.city + workOrders.district : ''}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
@@ -135,7 +135,7 @@
     methods: {
       getDetail () {
         api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          this.workOrders = res.data.list[0]
+          this.workOrders = res.data.list[0] || {}
         }).catch((res) => {
           this.handleError(res)
         })

@@ -190,7 +190,7 @@
           }
         }
         api.warranty.getBranchStaffsList(condition).then((res) => {
-          this.detail = res.data.list[0]
+          this.detail = res.data.list[0] || {}
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
@@ -207,7 +207,7 @@
           }
         }
         api.warranty.getBranchStaffsList(condition).then((res) => {
-          this.editModal = res.data.list[0]
+          this.editModal = res.data.list[0] || {}
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false

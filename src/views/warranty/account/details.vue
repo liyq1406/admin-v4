@@ -10,8 +10,8 @@
         <div class="panel-bd">
           <ul class="info-details">
             <li class="row">
-              <div class="col-8">创建日期:</div>
-              <div class="col-16">{{ info.create_time | uniformDate }}</div>
+              <div class="label">创建日期:</div>
+              <div class="info">{{ info.create_time | uniformDate }}</div>
             </li>
           </ul>
         </div>
@@ -411,7 +411,7 @@
           }
         }
         api.warranty.getBranchList(condition).then((res) => {
-          this.info = res.data.list[0]
+          this.info = res.data.list[0] || {}
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
@@ -505,7 +505,7 @@
           }
         }
         api.warranty.getBranchList(condition).then((res) => {
-          this.editModal = res.data.list[0]
+          this.editModal = res.data.list[0] || {}
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false

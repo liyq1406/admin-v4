@@ -78,7 +78,7 @@
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info">{{repairOrder.province + repairOrder.city + repairOrder.district}}</div>
+              <div class="info">{{repairOrder.province ? repairOrder.province + repairOrder.city + repairOrder.district : ''}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
@@ -204,12 +204,12 @@
           query: {}
         }
         api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-          this.repairOrder = res.data.list[0]
+          this.repairOrder = res.data.list[0] || {}
 
           // 查询网点信息
           condition.query._id = this.repairOrder.branch_id
           api.warranty.getBranchList(condition).then((res) => {
-            this.branch = res.data.list[0]
+            this.branch = res.data.list[0] || {}
           }).catch((res) => {
             this.handleError(res)
           })
@@ -218,7 +218,7 @@
           condition.query = {}
           condition.query._id = this.repairOrder.repair_id
           api.warranty.getRepairDetailList(condition).then((res) => {
-            this.repairDetails = res.data.list[0]
+            this.repairDetails = res.data.list[0] || {}
           }).catch((res) => {
             this.handleError(res)
           })
