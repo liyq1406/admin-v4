@@ -2,10 +2,13 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <button @click="getNewInfo" class="btn btn-success fr"><i class="fa fa-plus "></i>刷新数据</button>
+        <button @click="getSnapshot" class="btn btn-success fr"><i class="fa fa-plus "></i>刷新数据</button>
       </div>
-      <div class="chartwrap">
-        <div id="trendChart" style="height:480px"></div>
+      <div class="chartwrap with-loading">
+        <line-chart :series="trendSeries" :x-axis-data="xAxisData" height="480px"  v-ref:trend-chart></line-chart>
+        <div class="icon-loading" v-show="loadingProductTrends">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
       </div>
     </div>
   </div>
@@ -14,8 +17,7 @@
 <script>
   import { globalMixins } from '../../mixins'
   import api from '../../api'
-  import echarts from 'echarts/echarts'
-  import 'echarts/chart/line'
+  import LineChart from '../../components/charts/Line'
 
   export default {
     name: 'BasicInfo',
@@ -24,59 +26,119 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'line-chart': LineChart
+    },
+
     data () {
       return {
-        dates: [],
-        environmentTems: [],
-        waterboxTems: [],
-        fake: [{
-          snapshot_date: 1,
-          '34': 2,
-          '43': 4
-        }, {
-          snapshot_date: 2,
-          '34': 2,
-          '43': 4
-        }, {
-          snapshot_date: 3,
-          '34': 2,
-          '43': 4
-        }, {
-          snapshot_date: 4,
-          '34': 2,
-          '43': 4
-        }, {
-          snapshot_date: 5,
-          '34': 2,
-          '43': 4
-        }, {
-          snapshot_date: 40,
-          '34': 2,
-          '43': 4
-        }]
+        // fake: [{
+        //   snapshot_date: '2016-04-29T13:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }, {
+        //   snapshot_date: '2016-04-29T13:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }, {
+        //   snapshot_date: '2016-04-28T03:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }, {
+        //   snapshot_date: '2016-04-28T08:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }, {
+        //   snapshot_date: '2016-04-28T12:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }, {
+        //   snapshot_date: '2016-04-28T14:30:31.111Z',
+        //   '34': 2,
+        //   '43': 4
+        // }],
+        snapshots: []
       }
     },
+
+    computed: {
+      // 趋势图表横轴数据
+      xAxisData () {
+        var result = []
+        var now = Date.parse(new Date())
+        for (let i = 71; i >= 0; i--) {
+          var date = new Date(now - i * 3600 * 1000)
+          var hour = date.getHours() + 1
+          result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
+        }
+        return result
+      },
+
+      // 趋势图表数据
+      trendSeries () {
+        var result = [{
+          name: '水箱温度',
+          type: 'line',
+          data: []
+        }, {
+          name: '环境温度',
+          type: 'line',
+          data: []
+        }]
+        var now = Date.parse(new Date()) / 1000
+        // 当前未满一小时默认取满一小时
+        now = (Math.floor(now / 3600) + 1) * 3600
+        const SECONDS_PER_HOUR = 3600
+        var itemToAdd = {}
+        var i = 0
+
+        for (let i = 71; i >= 0; i--) {
+          result[0].data.push(0)
+          result[1].data.push(0)
+        }
+
+        this.snapshots.forEach((item, index) => {
+          // 去掉经过后台处理的时间的T和Z字符
+          var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+          // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
+          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) + 1
+          if (index) {
+            if (a !== i) {
+              // 当商改变说明此数据为下一个小时的数据
+              // 将每个小时最后的数据附近图表数据数组
+              result[0].data[71 - a] = Number(itemToAdd['34']) || 0
+              result[1].data[71 - a] = Number(itemToAdd['43']) || 0
+              itemToAdd = item
+              // 将1重置为当前数据的时间
+              i = a
+            }
+          } else {
+            // 数组内第一个元素处理
+            // 将第一个元素存进暂存对象内
+            itemToAdd = item
+            // 初始经过0个小时
+            i = 0
+          }
+        })
+
+        return result
+      }
+    },
+
     ready () {
-      // console.log(1111)
-      // console.log(this.$route.params.product_id)
-      // console.log(this.$route.params.device_id)
-      this.init()
       this.getSnapshot()
+      // this.snapshots = this.fake
+
+      // 监听窗口尺寸变化
+      window.onresize = () => {
+        this.$refs.trendChart.chart.resize()
+      }
     },
 
     methods: {
-      // 初始化数组数据
-      init () {
-        var now = Date.parse(new Date())
-        for (let i = 71; i >= 0; i--) {
-          this.waterboxTems.push(0)
-          this.environmentTems.push(0)
-          var date = new Date(now - i * 3600 * 1000)
-          var hour = date.getHours() + 1
-          this.dates.push(`${hour > 9 ? hour : `0${hour}`}:00`)
-        }
-      },
-      // 获取快照数据
+      /**
+       * 获取快照数据
+       */
       getSnapshot (offset, limit, begintime, endtime) {
         offset = offset || 0
         limit = limit || 1000
@@ -92,27 +154,22 @@
             end: endtime
           }
         }
-        // console.log(params)
-        // this._handleData(this.fake)
         api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, params).then((res) => {
-          // 处理数据
-          this._handleData(res.data.list)
-          this.drawProductTrends()
+          if (res.status === 200) {
+            this.snapshots = res.data.list.sort((a, b) => {
+              return new Date(a.snapshot_date) - new Date(b.snapshot_date)
+            })
+          }
         }).catch((res) => {
           this.handleError(res)
         })
       },
 
       _handleData (data) {
-        data.sort((a, b) => {
-          return new Date(a.snapshot_date) - new Date(b.snapshot_date)
-        })
         var now = Date.parse(new Date()) / 1000
         // 当前未满一小时默认取满一小时
         now = (Math.floor(now / 3600) + 1) * 3600
         const SECONDS_PER_HOUR = 3600
-        // var now = 40
-        // const SECONDS_PER_HOUR = 2
         var itemToAdd = {}
         var i = 0
         data.forEach((item, index) => {
@@ -138,75 +195,7 @@
             i = 0
           }
         })
-        // console.log(this.waterboxTems)
-      },
-      // 刷新数据
-      getNewInfo () {
-        this.getSnapshot()
-      },
-
-      drawProductTrends () {
-          // 趋势图表
-        var trendOptions = {
-          noDataLoadingOption: {
-            text: this.$t('common.no_data'),
-            effect: '',
-            effectOption: {
-              backgroundColor: '#FFF'
-            },
-            textStyle: {
-              fontSize: 14,
-              color: '#999'
-            }
-          },
-          calculable: true,
-          // 鼠标移动显示提示
-          tooltip: {
-            trigger: 'axis'
-          },
-          // 图表边距
-          grid: {
-            x: 50,
-            y: 32,
-            x2: 15
-          },
-          // 图表上方显示线条对应数据
-          legend: {
-            x: 'right',
-            y: 10,
-            data: ['水箱温度', '环境温度']
-          },
-          // X轴
-          xAxis: [{
-            type: 'category',
-            boundaryGap: false,
-            data: this.dates
-          }],
-          // Y轴
-          yAxis: [{
-            type: 'value'
-          }],
-          // 每条数据详情
-          series: [{
-            name: '水箱温度',
-            type: 'line',
-            data: this.waterboxTems
-          }, {
-            name: '环境温度',
-            type: 'line',
-            data: this.environmentTems
-          }]
-        }
-        var trendChart = echarts.init(document.getElementById('trendChart'))
-        trendChart.setOption(trendOptions)
-        window.onresize = trendChart.resize
       }
     }
   }
 </script>
-
-<style lang="stylus">
-  @import '../../assets/stylus/common'
-  .chartwrap
-    padding 20px 0
-</style>
