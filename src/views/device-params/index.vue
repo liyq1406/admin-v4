@@ -68,7 +68,7 @@
                   </tr>
                 </template>
                 <tr v-if="devices.length === 0 && !loadingData">
-                  <td colspan="5" class="tac">
+                  <td colspan="9" class="tac">
                     <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                   </td>
                 </tr>
