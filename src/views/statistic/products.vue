@@ -278,14 +278,14 @@
             }
           } else if (this.region === 'china') {
             for (var province in res.data['China']) {
-              if (province !== 'activated') {
+              if (province !== 'activated' && province !== 'online') {
                 regionsData.push({
                   name: province,
                   value: res.data['China'][province].activated
                 })
 
                 for (var city in res.data['China'][province]) {
-                  if (city !== 'activated') {
+                  if (city !== 'activated' && city !== 'online') {
                     regionsData.push({
                       name: city,
                       value: res.data['China'][province][city].activated
