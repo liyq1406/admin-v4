@@ -454,5 +454,4 @@
 
 <style lang="stylus">
   @import '../../assets/stylus/common'
-
 </style>
