@@ -236,37 +236,37 @@ let configRouter = (router) => {
       }
     },
 
-    // 应用管理
-    '/apps': {
+    // 插件管理
+    '/plugins': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/app/index'))
+          resolve(require('./views/plugin/index'))
         }, 'admin')
       },
       subRoutes: {
         // 扩展插件
-        'extend': {
+        'extensions': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/app/extend'))
+              resolve(require('./views/plugin/extensions'))
             }, 'admin')
           }
         },
         // 自定义插件
-        'user_defined': {
+        'customize': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/app/application'))
+              resolve(require('./views/plugin/customize'))
             }, 'admin')
           }
         }
       }
     },
     // 微信应用查看
-    '/apps/wechat/:id': {
+    '/plugins/wechat/:id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/app/wechat/index'))
+          resolve(require('./views/plugin/wechat/index'))
         }, 'admin')
       },
       subRoutes: {
@@ -274,7 +274,7 @@ let configRouter = (router) => {
         'update': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/app/wechat/update'))
+              resolve(require('./views/plugin/wechat/update'))
             }, 'admin')
           }
         }
@@ -635,8 +635,8 @@ let configRouter = (router) => {
     '/users': '/users/list',
     '/diet': '/diet/recipe',
     '/warranty': '/warranty/work-orders/extended-warranties',
-    '/apps/wechat/:id': '/apps/wechat/:id/update',
-    '/apps': '/apps/extend',
+    '/plugins/wechat/:id': '/plugins/wechat/:id/update',
+    '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview'
   })
 
