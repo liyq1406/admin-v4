@@ -49,6 +49,7 @@
             <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
+            <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-line-chart"></i>固件管理</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             <template v-for="plugin in plugins">

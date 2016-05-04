@@ -51,6 +51,11 @@ export default {
     data: {
       tables: '数据表'
     },
+    firmware: {
+      overview: '概览',
+      management: '版本管理',
+      update: '固件升级'
+    },
     settings: {
       auth: '授权管理',
       members: '成员管理',

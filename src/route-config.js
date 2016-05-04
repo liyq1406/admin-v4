@@ -353,6 +353,40 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
+    // 固件管理
+    '/firmware': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/firmware/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 概览
+        'overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/firmware/overview'))
+            }, 'admin')
+          }
+        },
+        // 版本管理
+        'management': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/firmware/management'))
+            }, 'admin')
+          }
+        },
+        // 固件升级
+        'update': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/firmware/update'))
+            }, 'admin')
+          }
+        }
+      }
+    },
 
     // 统计分析
     '/statistic': {
@@ -602,7 +636,8 @@ let configRouter = (router) => {
     '/diet': '/diet/recipe',
     '/warranty': '/warranty/work-orders/extended-warranties',
     '/apps/wechat/:id': '/apps/wechat/:id/update',
-    '/apps': '/apps/extend'
+    '/apps': '/apps/extend',
+    '/firmware': '/firmware/overview'
   })
 
   router.beforeEach((transition) => {
