@@ -8,14 +8,15 @@ export default {
   nav_aside: {
     dashboard: '概览',
     products: '产品管理',
-    apps: '应用管理',
+    plugins: '插件管理',
     alerts: '告警服务',
     data: '数据管理',
     users: '用户管理',
     statistic: '统计分析',
     settings: '系统设置',
     diet: '饮食管理',
-    add_product: '添加产品'
+    add_product: '添加产品',
+    add_plugin: '添加插件'
   },
 
   // 头部导航
@@ -62,9 +63,9 @@ export default {
       account: '帐号信息',
       mail_templates: '邮件模板'
     },
-    application: {
-      extend: '扩展插件',
-      user_defined: '自定义插件'
+    plugins: {
+      extensions: '扩展插件',
+      customize: '自定义插件'
     }
   },
 
@@ -82,6 +83,7 @@ export default {
     unempower: 'empowering',
     edit: 'Edit',
     add: '添加',
+    added: '已添加',
     del: '删除',
     save: 'Save',
     company: 'xlink.cn All rights reserved',

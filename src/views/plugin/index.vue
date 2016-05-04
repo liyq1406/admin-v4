@@ -18,8 +18,9 @@
                     <p>让APP具备消息广播，运营通知的特性，让APP具备消息广播，运营通知的特性</p>
                   </div>
                   <span class="status">
-                    <i class="hl-green" v-if="true">已启用</i>
-                    <i class="hl-red" v-else>未启用</i>
+                    <!-- <i class="hl-green" v-if="true">已启用</i> -->
+                    <!-- <i class="hl-red" v-else>未启用</i> -->
+                    <switch size="small"></switch>
                   </span>
                 </div>
               </div>
@@ -36,6 +37,7 @@
 <script>
   import Tab from '../../components/Tab'
   import { globalMixins } from '../../mixins'
+  import Switch from '../../components/Switch'
 
   export default {
     name: 'Data',
@@ -45,7 +47,8 @@
     mixins: [globalMixins],
 
     components: {
-      'tab': Tab
+      'tab': Tab,
+      'switch': Switch
     },
 
     data () {
@@ -60,11 +63,13 @@
           secondaryNav: [{
             label: this.$t('sub_nav.plugins.extensions'),
             link: { path: '/plugins/extensions' }
-          }, {
+          },
+          {
             label: this.$t('sub_nav.plugins.customize'),
             link: { path: '/plugins/customize' }
           }
-        ]}
+        ]
+        }
       }
     }
   }
@@ -86,7 +91,7 @@
 
     .inner
       border 1px solid default-border-color
-      padding 10px 20px 10px 10px
+      padding 15px 20px 15px 15px
       position relative
       clearfix()
 
@@ -110,5 +115,5 @@
         color gray
 
     .status
-      absolute right 20px top 10px
+      absolute right 20px top 15px
 </style>

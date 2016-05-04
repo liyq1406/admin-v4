@@ -59,8 +59,8 @@
           </tbody>
         </table>
       </div>
-      <div class="action-group">
-        <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-success">查看上下线历史记录</button>
+      <div class="action-group mb40">
+        <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost"><i class="fa fa-list"></i>查看上下线历史记录</button>
       </div>
       <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
     </div>

@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '../../'}" class="fa fa-arrow-circle-left">返回应用列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/customize'}" class="fa fa-arrow-circle-left">返回应用列表</a></div>
       <div class="panel">
         <div class="panel-hd">
           <h2>{{ '微信应用查看' }}</h2>
@@ -40,7 +40,7 @@
         return {
           secondaryNav: [{
             label: '修改应用',
-            link: { path: '/apps/wechat/' + appId + '/update' }
+            link: { path: '/plugins/wechat/' + appId + '/update' }
           }]
         }
       }

@@ -39,23 +39,45 @@
         <a v-link="{ path: '/' }" class="logo"></a>
         <div class="nav-aside">
           <div class="nav-aside-wrap">
-            <div class="nav-aside-item"><a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a></div>
+            <div class="nav-aside-item">
+              <a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a>
+            </div>
+            <!-- Start: 产品管理 -->
             <div class="nav-aside-group">
               <h3>{{ $t("nav_aside.products") }}</h3>
-              <div v-for="product in products" class="nav-aside-item"><a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a></div>
-              <div class="nav-aside-actions"><a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a></div>
+              <div v-for="product in products" class="nav-aside-item">
+                <a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a>
+              </div>
+              <div class="nav-aside-actions">
+                <a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a>
+              </div>
             </div>
-            <div class="nav-aside-item"><a v-link="{ path: '/apps' }"><i class="fa fa-th"></i>{{ $t("nav_aside.apps") }}</a></div>
+            <!-- End: 产品管理 -->
+            <!-- Start: 插件管理 -->
+            <div class="nav-aside-group">
+              <h3>{{ $t("nav_aside.plugins") }}</h3>
+              <template v-for="plugin in plugins">
+                <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/update' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                <div class="nav-aside-item" v-else><a v-link="{ path: '/warranty' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                <!-- <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
+                <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-wrench"></i>延保系统</a></div> -->
+              </template>
+              <div class="nav-aside-actions">
+                <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_plugin") }}</a>
+              </div>
+            </div>
+            <!-- End: 插件管理 -->
+            <!-- <div class="nav-aside-item"><a v-link="{ path: '/apps' }"><i class="fa fa-th"></i>{{ $t("nav_aside.apps") }}</a></div> -->
             <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-line-chart"></i>固件管理</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
-            <template v-for="plugin in plugins">
+            <!-- <template v-for="plugin in plugins">
               <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
               <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-wrench"></i>延保系统</a></div>
-            </template>
+            </template> -->
           </div>
         </div>
       </section>
@@ -166,13 +188,13 @@
       getPlugins () {
         api.app.list().then((res) => {
           if (res.status === 200) {
-            var plugins = []
-            res.data.forEach((item) => {
-              if (item.type === 3 || item.type > 4) {
-                plugins.push(item)
-              }
-            })
-            this.getAllPlugin(plugins)
+            // var plugins = []
+            // res.data.forEach((item) => {
+            //   if (item.type === 3 || item.type > 4) {
+            //     plugins.push(item)
+            //   }
+            // })
+            this.getAllPlugin(res.data)
           }
         }).catch((res) => {
           this.handleError(res)
@@ -352,7 +374,7 @@
         color #FFF
 
   .nav-aside-group
-    margin-top 25px
+    margin-top 20px
 
     h3
       margin 0
@@ -362,7 +384,7 @@
       color #525252
 
   .nav-aside-actions
-    margin 5px 20px 45px
+    margin 5px 20px 30px
 
     a
       display block

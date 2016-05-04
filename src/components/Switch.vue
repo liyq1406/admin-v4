@@ -1,5 +1,5 @@
 <template>
-  <div @click="toogle" :class="{'switch-on':value}" class="switch">
+  <div @click="toogle" :class="classes">
     <div class="switch-block"></div>
   </div>
 </template>
@@ -10,12 +10,39 @@
       value: {
         type: Boolean,
         twoWay: true
+      },
+
+      // 尺寸
+      // 可选：['small' | 'normal' | 'large'], 默认为 'normal'
+      size: {
+        type: String,
+        default: 'normal'
+      },
+
+      // 类前缀
+      classPrefix: {
+        type: String,
+        default: 'v-switch'
       }
     },
 
-    data () {
-      return {
+    computed: {
+      // 类
+      classes () {
+        var result = [this.classPrefix]
+        var sizeCls = ({
+          'small': 'sm'
+        })[this.size] || ''
 
+        if (this.value) {
+          result.push(`${this.classPrefix}-on`)
+        }
+
+        if (sizeCls) {
+          result.push(`${this.classPrefix}-${sizeCls}`)
+        }
+
+        return result.join(' ')
       }
     },
 
@@ -25,14 +52,13 @@
         this.value = !this.value
       }
     }
-
   }
 </script>
 
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .switch
+  .v-switch
     position relative
     display inline-block
     background #CCC
@@ -51,10 +77,21 @@
       transition left .2s ease-in-out
       box-shadow 0 0 2px rgba(0, 0, 0, .2)
 
-  .switch-on
+  .v-switch-on
     background green
     text-align left
 
     .switch-block
       left 17px
+
+  .v-switch-sm
+    size 36px 22px
+    line-height 22px
+
+    .switch-block
+      size 20px
+
+    &.v-switch-on
+      .switch-block
+        left 15px
 </style>
