@@ -41,5 +41,11 @@ export default {
   notice: {
     // 通知存活时长，默认(2000毫秒)
     duration: 2000
-  }
+  },
+
+  // 允许上传的最大固件文件大小（单位：Mb）
+  maxFirmwareFileSize: 8,
+
+  // 允许上传的最大图片文件大小（单位：Mb）
+  maxImageFileSize: 2
 }

@@ -284,6 +284,7 @@ export default {
   },
 
   upload: {
+    file_size_msg: '文件大小不能大于{max}MB',
     type_tips: '不是文本文件不能上传',
     read_err: '文件读取失败。',
     success_msg: '设备导入成功!',
@@ -553,7 +554,6 @@ export default {
     task_list: '升级任务列表',
     select_from_version: '请选择起始版本号',
     select_target_version: '请选择目标版本号',
-    file_size_msg: '文件大小不能大于1MB',
     placeholders: {
       name: '升级任务名称',
       description: '请输入描述'
