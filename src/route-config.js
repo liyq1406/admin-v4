@@ -242,6 +242,24 @@ let configRouter = (router) => {
         require.ensure([], (require) => {
           resolve(require('./views/app/index'))
         }, 'admin')
+      },
+      subRoutes: {
+        // 扩展插件
+        'extend': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/app/extend'))
+            }, 'admin')
+          }
+        },
+        // 自定义插件
+        'user_defined': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/app/application'))
+            }, 'admin')
+          }
+        }
       }
     },
     // 微信应用查看
@@ -583,7 +601,8 @@ let configRouter = (router) => {
     '/users': '/users/list',
     '/diet': '/diet/recipe',
     '/warranty': '/warranty/work-orders/extended-warranties',
-    '/apps/wechat/:id': '/apps/wechat/:id/update'
+    '/apps/wechat/:id': '/apps/wechat/:id/update',
+    '/apps': '/apps/extend'
   })
 
   router.beforeEach((transition) => {

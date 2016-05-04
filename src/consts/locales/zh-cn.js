@@ -56,6 +56,10 @@ export default {
       members: '成员管理',
       account: '帐号信息',
       mail_templates: '邮件模板'
+    },
+    application: {
+      extend: '扩展插件',
+      user_defined: '自定义插件'
     }
   },
 
