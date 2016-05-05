@@ -287,6 +287,24 @@ let configRouter = (router) => {
         require.ensure([], (require) => {
           resolve(require('./views/alert/index'))
         }, 'admin')
+      },
+      subRoutes: {
+        // 概览
+        'overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/alert/overview'))
+            }, 'admin')
+          }
+        },
+        // 规则设置
+        'setting': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/alert/setting'))
+            }, 'admin')
+          }
+        }
       }
     },
 
