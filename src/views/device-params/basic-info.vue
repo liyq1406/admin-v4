@@ -1134,7 +1134,7 @@
        */
       connect () {
         var self = this
-        api.device.getDeviceToken(self.device_id).then((res) => {
+        api.diagnosis.getDeviceToken(self.device_id).then((res) => {
           if (res.status === 200) {
             XJSObject.invoke('loadXJSAPILib', {host: 'http://' + res.data.addr}, function (r) {
               XJSObject.invoke('connectXDevice', {deviceid: self.device_id, appid: '1144509923', token: '12311223'}, function (r) {

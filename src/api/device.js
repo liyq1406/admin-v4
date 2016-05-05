@@ -133,16 +133,6 @@ export default {
       `${apiServer.default}/v2/product/${product_id}/v_device/${deviceId}`
     )
   },
-
-  /**
-   * 获取设备访问 Token
-   * @param  {String} deviceId 设备 ID
-   */
-  getDeviceToken (deviceId, params) {
-    return http.post(
-      `${apiServer.default}/v2/diagnosis/device/token/${deviceId}`, params
-    )
-  },
   /**
    * 查询设备上下线记录
    * @param  {String} deviceId 设备 ID
