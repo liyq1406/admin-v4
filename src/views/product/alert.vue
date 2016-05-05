@@ -14,33 +14,36 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("rule.fields.name") }}</th>
-                <th>{{ $t("rule.fields.type") }}</th>
-                <th>{{ $t("rule.fields.content") }}</th>
-                <th>{{ $t("common.status") }}</th>
+                <!-- <th>{{ $t("alert.info_list.product_name") }}</th> -->
+                <th>{{ $t("alert.info_list.content") }}</th>
+                <th>{{ $t("alert.info_list.create_date") }}</th>
+                <th>{{ $t("alert.info_list.is_read") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
             <tbody>
-              <template v-if="rules.length > 0">
-                <tr v-for="rule in rules">
-                  <td>{{* rule.name }}</td>
-                  <td>{{* rule.type | ruleLabel }}</td>
-                  <td>{{* rule.content }}</td>
-                  <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
+              <template v-if="alerts.length > 0">
+                <tr v-for="alert in alerts">
+                  <!-- <td>{{ alert.product_name }}</td> -->
+                  <td>
+                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
+                  </td>
+                  <td>{{ alert.create_date | formatDate }}</td>
+                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
                   <td class="tac">
-                    <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
                   </td>
                 </tr>
               </template>
-              <tr v-if="rules.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
+              <tr v-if="alerts.length === 0 && !loadingData">
+                <td colspan="4" class="tac">
                   <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
             </tbody>
           </table>
         </div>
+        <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
         <!-- 分页-->
         <!-- <pager v-if="rules.length > pageCount" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
       </div>
@@ -217,9 +220,61 @@
       </div>
     </modal>
     <!-- End: 添加规则浮层 -->
-
+    <!-- 查看告警信息浮层-->
+    <modal :show.sync="showModal">
+      <h3 slot="header">{{ $t("alert.info") }}</h3>
+      <table slot="body" class="table table-stripe table-bordered">
+        <tbody>
+          <tr>
+            <td>{{ $t("alert.info_list.product_name") }}</td>
+            <td>{{ model.product_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.alert_name") }}</td>
+            <td>{{ model.alert_name }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.content") }}</td>
+            <td>{{ model.content }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.tags") }}</td>
+            <td>
+              <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
+            </td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.type") }}</td>
+            <td><span>{{ infoTypes[model.type - 1] }}</span></td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.notify_type") }}</td>
+            <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.alert_value") }}</td>
+            <td>{{ model.alert_value }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.from") }}</td>
+            <td>{{ model.from }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.to") }}</td>
+            <td>{{ model.to }}</td>
+          </tr>
+          <tr>
+            <td>{{ $t("alert.info_list.create_date") }}</td>
+            <td>{{ model.create_date | formatDate }}</td>
+          </tr>
+        </tbody>
+      </table>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
+      </div>
+    </modal>
     <!-- Start: 编辑规则浮层 -->
-    <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
+    <!-- <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
       <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
@@ -390,7 +445,7 @@
           </div>
         </form>
       </div>
-    </modal>
+    </modal> -->
     <!-- End: 编辑规则浮层 -->
   </div>
 </template>
@@ -422,6 +477,7 @@
 
     data () {
       return {
+        alerts: [],
         rules: [],            // 规则列表
         apps: [],              // app 列表
         ruleTypes: locales[Vue.config.lang].rule.types,
@@ -457,6 +513,22 @@
           value1: '0',
           value2: 'online'
         },
+        model: {
+          id: '',
+          type: 1,
+          product_name: '',
+          alert_name: '',
+          alert_value: '',
+          notify_type: 1,
+          from: '',
+          to: [],
+          content: '',
+          create_date: '',
+          is_read: false,
+          tags: ''
+        },
+        infoTypes: locales[Vue.config.lang].infoTypes,
+        alertTypes: locales[Vue.config.lang].alertTypes,
         editModal: {
           show: false,
           form: {},
@@ -496,27 +568,30 @@
         // editForm: {},
         originAddModel: {},
         originEditModel: {},
-        loadingData: false
+        loadingData: false,
+        productName: '',
+        query: {},
+        showModal: false
       }
     },
 
     route: {
-      data () {
-        this.getDatapoints().then((res) => {
-          if (res.status === 200) {
-            this.datapoints = res.data
-            this.addModal.model.param = res.data[0].id
-            this.originAddModel = _.cloneDeep(this.addModal.model)
-          }
-        })
-        this.getRules()
-        this.getApps()
-      }
+      // data () {
+      //   this.getDatapoints().then((res) => {
+      //     if (res.status === 200) {
+      //       this.datapoints = res.data
+      //       this.addModal.model.param = res.data[0].id
+      //       this.originAddModel = _.cloneDeep(this.addModal.model)
+      //     }
+      //   })
+      //   this.getRules()
+      //   this.getApps()
+      // }
     },
 
     filters: {
-      ruleLabel (value) {
-        return this.ruleTypes[value - 1]
+      toTags (value) {
+        return value.length ? value.split(',') : []
       }
     },
 
@@ -540,6 +615,18 @@
       //
       //   return result
       // }
+      queryCondition () {
+        return {
+          limit: this.pageCount,
+          offset: (this.currentPage - 1) * this.pageCount,
+          query: {
+            name: this.productName
+          }
+        }
+      }
+    },
+    ready () {
+      this.getProduct()
     },
 
     methods: {
@@ -559,6 +646,47 @@
         }
 
         return result
+      },
+      // 获取产品
+      getProduct () {
+        api.product.getProduct(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            // this.product = res.data
+            this.productName = res.data.name
+            this.getAlerts()
+          }
+        })
+      },
+      /**
+       * 获取告警信息列表
+       */
+      getAlerts () {
+        this.loadingData = true
+        api.alert.getAlerts(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.alerts = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
+      /**
+       * 获取单条告警信息并弹出浮层显示
+       * @param  {Object} alert 目标告警信息
+       */
+      showAlert (alert) {
+        this.model = alert
+        this.showModal = true
+        api.alert.setAlertRead([alert.id]).then((res) => {
+          if (res.status === 200) {
+            alert.is_read = true
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
 
       // 获取数据端点列表
