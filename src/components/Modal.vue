@@ -110,12 +110,6 @@ export default {
       text-align center
       margin-bottom 30px
 
-    //
-    .file-url
-      color gray
-      line-height 32px
-      text-overflow()
-
   .modal-actions
       text-align center
 
