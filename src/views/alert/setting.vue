@@ -61,8 +61,8 @@
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-5">请选择产品:</label>
-            <div col-19>
+            <label class="form-control col-5">产品:</label>
+            <div class="controls col-19">
               <v-select v-else width="200px" placeholder="请选择产品" :label="addProduct.name">
                 <select v-model="addProduct" name="addproduct" @change="addProductstatus">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
@@ -91,8 +91,11 @@
                     </select>
                   </v-select>
                 </div>
+                <div class="col-19" v-show="addModal.model.type === 1 && !datapoints.length">
+                  <a v-link="{path: '/products/' + addProduct.id + '/data-point' }" class="control-text ml20 hl-red">无数据端点，请点击添加</a>
+                </div>
                 <div class="col-8">
-                  <div v-show="addModal.model.type === 1" class="ml10">
+                  <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                     <div class="select">
                       <v-select :label="datapointName(addModal.model)">
                         <select v-model="addModal.model.param" v-form-ctrl name="param">
@@ -103,7 +106,7 @@
                   </div>
                 </div>
                 <div class="col-6">
-                  <div v-show="addModal.model.type === 1" class="ml10">
+                  <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                     <div class="select">
                       <v-select :label="compareTypes[addModal.model.compare-1]">
                         <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
@@ -115,7 +118,7 @@
                 </div>
                 <div class="col-5">
                   <div class="ml10">
-                    <div class="input-text-wrap" v-show="addModal.model.type === 1">
+                    <div class="input-text-wrap" v-show="addModal.model.type === 1 && datapoints.length">
                       <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
                     </div>
                     <div class="select" v-show="addModal.model.type === 2">
@@ -242,6 +245,12 @@
       <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+          <div class="form-row row">
+            <label class="form-control col-5">产品:</label>
+            <div class="controls col-19">
+              <div class="control-text">{{ currProduct.name }}</div>
+            </div>
+          </div>
           <div class="form-row row">
             <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
             <div class="controls col-19">
@@ -617,7 +626,7 @@
         this.getDatapoints(this.currProduct.id).then((res) => {
           if (res.status === 200) {
             this.datapoints = res.data
-            this.addModal.model.param = res.data[0].id
+            // this.addModal.model.param = res.data[0].id
             this.originAddModel = _.cloneDeep(this.addModal.model)
           }
         })
@@ -627,7 +636,9 @@
         this.getDatapoints(this.addProduct.id).then((res) => {
           if (res.status === 200) {
             this.datapoints = res.data
-            this.addModal.model.param = res.data[0].id
+            if (this.datapoints.length) {
+              this.addModal.model.param = res.data[0].id
+            }
             this.originAddModel = _.cloneDeep(this.addModal.model)
           }
         })
