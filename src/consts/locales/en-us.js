@@ -6,17 +6,18 @@
 export default {
   // 侧栏导航
   nav_aside: {
-    dashboard: '概览',
-    products: '产品管理',
-    plugins: '插件管理',
-    alerts: '告警服务',
-    data: '数据管理',
-    users: '用户管理',
-    statistic: '统计分析',
-    settings: '系统设置',
-    diet: '饮食管理',
-    add_product: '添加产品',
-    add_plugin: '添加插件'
+    dashboard: 'Dashboard', // 概览
+    products: 'Products', // 产品管理
+    plugins: 'Plugins', // 插件管理
+    alerts: 'Alerts', // 告警服务
+    data: 'Data', // 数据管理
+    firmwares: 'Firmwares', // 固件管理
+    users: 'Users', // 用户管理
+    statistic: 'Statistic', // 统计分析
+    settings: 'Settings', // 系统设置
+    diet: '饮食管理', // 饮食管理
+    add_product: 'Add product', // 添加产品
+    add_plugin: 'Add plugin' // 添加插件
   },
 
   // 头部导航

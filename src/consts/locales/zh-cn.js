@@ -11,6 +11,7 @@ export default {
     plugins: '插件管理',
     alerts: '告警服务',
     data: '数据管理',
+    firmwares: '固件管理',
     users: '用户管理',
     statistic: '统计分析',
     settings: '系统设置',
