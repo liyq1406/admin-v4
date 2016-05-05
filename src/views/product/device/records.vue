@@ -19,7 +19,7 @@
           </div>
 
           <div class="status-bar">
-            <v-select width="100px" :label="dateType.label">
+            <v-select width="100px" :label="dateType.label" size="small">
               <select v-model="dateType" @change = "getRecords(true)">
                 <option v-for="option in dateTypeOptions" :value="option">{{ option.label }}</option>
               </select>
