@@ -262,7 +262,7 @@ let configRouter = (router) => {
         }
       }
     },
-    // iOS应用查看
+    // iOS应用
     '/plugins/ios/:id': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -270,17 +270,17 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
-        // 修改
-        'update': {
+        // 配置
+        'settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/plugin/ios/update'))
+              resolve(require('./views/plugin/ios/settings'))
             }, 'admin')
           }
         }
       }
     },
-    // 安卓应用查看
+    // 安卓应用
     '/plugins/android/:id': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -288,17 +288,17 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
-        // 修改
-        'update': {
+        // 配置
+        'settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/plugin/android/update'))
+              resolve(require('./views/plugin/android/settings'))
             }, 'admin')
           }
         }
       }
     },
-    // 微信应用查看
+    // 微信应用
     '/plugins/wechat/:id': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -306,11 +306,11 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
-        // 修改
-        'update': {
+        // 配置
+        'settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/plugin/wechat/update'))
+              resolve(require('./views/plugin/wechat/settings'))
             }, 'admin')
           }
         }
@@ -432,10 +432,10 @@ let configRouter = (router) => {
           }
         },
         // 固件升级
-        'update': {
+        'upgrade': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/firmware/update'))
+              resolve(require('./views/firmware/upgrade'))
             }, 'admin')
           }
         }
@@ -689,7 +689,9 @@ let configRouter = (router) => {
     '/users': '/users/list',
     '/diet': '/diet/recipe',
     '/warranty': '/warranty/work-orders/extended-warranties',
-    '/plugins/wechat/:id': '/plugins/wechat/:id/update',
+    '/plugins/ios/:id': '/plugins/ios/:id/settings',
+    '/plugins/android/:id': '/plugins/android/:id/settings',
+    '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview'

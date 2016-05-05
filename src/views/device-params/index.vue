@@ -236,7 +236,6 @@
        * @return {[type]} [description]
        */
       getDeviceDataPoint () {
-        console.log(this.deviceIds)
         for (let i = 0; i < this.deviceIds.length; i++) {
           api.device.getDeviceDataPoint(this.product.id, this.deviceIds[i]).then((res) => {
             this.devices.map((item) => {

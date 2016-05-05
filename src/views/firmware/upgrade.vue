@@ -85,12 +85,11 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_from_version')" :label="addTaskModel.from_version.toString()">
-                  <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number="number">
-                    <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                  <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
+                    <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>
-              <div v-if="addTaskModel.from_version > 0" class="form-tips mt5">url: {{ addTaskModel.from_version | firmwareUrl }}</div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("task.select_from_version") }}</span></div>
             </div>
           </div>
@@ -99,12 +98,11 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_target_version')" :label="addTaskModel.target_version.toString()">
-                  <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number="number">
-                    <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                  <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
+                    <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>
-              <div v-if="addTaskModel.target_version > 0" class="form-tips mt5">url: {{ addTaskModel.target_version | firmwareUrl }}</div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("task.select_target_version") }}</span></div>
             </div>
           </div>
@@ -123,10 +121,7 @@
   // import locales from '../../consts/locales/index'
   import api from '../../api'
   import Modal from '../../components/Modal'
-  import store from '../../store/index'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
   import _ from 'lodash'
-  import config from '../../consts/config'
   import Select from '../../components/Select'
   import { globalMixins } from '../../mixins'
 
@@ -136,19 +131,6 @@
     layout: 'admin',
 
     mixins: [globalMixins],
-
-    store,
-
-    vuex: {
-      getters: {
-        plugins: ({ plugins }) => plugins.all
-      },
-      actions: {
-        createPlugin,
-        updatePlugin,
-        removePlugin
-      }
-    },
 
     components: {
       'modal': Modal,
@@ -160,16 +142,7 @@
         currProduct: {},
         products: [],
         firmwares: [],
-        showAddModal: false,
         showAddTaskModal: false,
-        showEditModal: false,
-        addModel: {
-          mod: '',
-          version: '',
-          file_url: '',
-          description: '',
-          is_release: false
-        },
         originAddModel: {},
         addTaskModel: {
           name: '',
@@ -196,9 +169,6 @@
         editModel: {},
         addValidation: {},
         addTaskValidation: {},
-        editValidation: {},
-        originEditModel: {},
-        delChecked: false,
         uploading: false,
         adding: false,
         editing: false,
@@ -263,9 +233,9 @@
         api.product.all().then((res) => {
           this.products = res.data
           this.currProduct = this.products[0]
-          console.log(this.products)
           if (this.products.length === 0) {
             this.tips = true
+            return
           }
           this.getFirmwares()
           this.getTasks()
@@ -303,7 +273,7 @@
         })
       },
       checkTypeValid (value) {
-        return Number(value) > 0
+        return Number(value) >= 0
       },
       // 添加升级任务表单钩子
       addTaskHook (form) {
@@ -389,55 +359,6 @@
           }).catch((res) => {
             this.handleError(res)
             this.toggling = false
-          })
-        }
-      },
-      // 上传固件文件
-      uploadFirmware (model, firmwareFile, event) {
-        var file = this.$els[firmwareFile].files[0]
-        var input = event.target
-
-        if (file && file.size > config.maxFirmwareFileSize * 1024 * 1024) {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('upload.file_size_msg', {max: config.maxFirmwareFileSize})
-          })
-          return
-        }
-
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new window.FileReader()
-          reader.onerror = (evt) => {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('upload.read_err')
-            })
-          }
-          // 读取完成
-          reader.onloadend = (evt) => {
-            if (evt.target.readyState === window.FileReader.DONE) {
-              if (!this.uploading) {
-                this.uploading = true
-                api.upload.firmware(this.currProduct.id, evt.target.result).then((res) => {
-                  if (res.status === 200) {
-                    input.value = ''
-                    this[model].file_url = res.data.url
-                    this[model].file_md5 = res.data.md5
-                    this[model].file_size = res.data.size
-                    this.uploading = false
-                  }
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.uploading = false
-                })
-              }
-            }
-          }
-          reader.readAsArrayBuffer(file)
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: this.$t('upload.compatiblity')
           })
         }
       }

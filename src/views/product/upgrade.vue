@@ -254,8 +254,8 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_from_version')" :label="addTaskModel.from_version.toString()">
-                  <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number="number">
-                    <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                  <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
+                    <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>
@@ -268,8 +268,8 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :placeholder="$t('task.select_target_version')" :label="addTaskModel.target_version.toString()">
-                  <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number="number">
-                    <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version">{{ firmware.version }}</option>
+                  <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
+                    <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>

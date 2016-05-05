@@ -67,7 +67,7 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[addModal.model.type-1]">
-                  <select v-model="addModal.model.type" v-form-ctrl name="type" number="number">
+                  <select v-model="addModal.model.type" v-form-ctrl name="type" number>
                     <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -134,7 +134,7 @@
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[editModal.model.type-1]">
-                  <select v-model="editModal.model.type" v-form-ctrl name="type" number="number">
+                  <select v-model="editModal.model.type" v-form-ctrl name="type" number>
                     <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>

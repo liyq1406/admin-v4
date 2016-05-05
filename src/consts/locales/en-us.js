@@ -55,7 +55,7 @@ export default {
     firmware: {
       overview: '概览',
       management: '版本管理',
-      update: '固件升级'
+      upgrade: '固件升级'
     },
     alert: {
       overview: '概览',
@@ -90,6 +90,8 @@ export default {
     added: '已添加',
     del: '删除',
     save: 'Save',
+    update: 'Update',
+    config: 'Config',
     company: 'xlink.cn All rights reserved',
     name: '名称',
     recent: '最近',

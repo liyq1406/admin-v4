@@ -91,7 +91,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['1', '2']" class="radio">
-                  <input type="radio" v-model="setModel.close_strategy" name="close_strategy" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.close_strategy" name="close_strategy" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -101,7 +101,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['1', '4']" class="radio">
-                  <input type="radio" v-model="setModel.conn_strategy" name="conn_strategy" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.conn_strategy" name="conn_strategy" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -111,7 +111,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['0', '1']" class="radio">
-                  <input type="radio" v-model="setModel.crypt_method" name="crypt_method" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.crypt_method" name="crypt_method" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -121,7 +121,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['0', '1']" class="radio">
-                  <input type="radio" v-model="setModel.auth_ver" name="auth_ver" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.auth_ver" name="auth_ver" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -131,7 +131,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['-1', '-2']" class="radio">
-                  <input type="radio" v-model="setModel.manu_mac_pos" name="manu_mac_pos" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.manu_mac_pos" name="manu_mac_pos" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -141,7 +141,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['-1', '-2']" class="radio">
-                  <input type="radio" v-model="setModel.ser_mac_pos" name="ser_mac_pos" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.ser_mac_pos" name="ser_mac_pos" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -151,7 +151,7 @@
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['1', '2', '3', '4']" class="radio">
-                  <input type="radio" v-model="setModel.connect_protocol" name="connect_protocol" :value="type" number="number" required/>{{ type }}
+                  <input type="radio" v-model="setModel.connect_protocol" name="connect_protocol" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>

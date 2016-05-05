@@ -79,26 +79,20 @@
           <!-- End: 用户趋势 -->
 
           <!-- Start: 告警信息 -->
-          <!-- <div class="panel">
+          <div class="panel">
             <div class="panel-hd">
               <h2>告警信息</h2>
-            </div>
-            <div class="panel-bd">
-              <div class="alert-list">
-                <ul>
-                  <li v-for="n in 10" class="row">
-                    <div class="alert-info col-16">
-                      <div class="alert-conent">
-                        <span class="text-label text-label-danger">严重</span>设备下线
-                      </div>
-                      <span class="product-name">压力测试产品2</span>
-                    </div>
-                    <div class="alert-time col-8">2016-02-27 16:09:53</div>
-                  </li>
-                </ul>
+              <div class="leftbox">
+                <radio-group :items="periods" :value.sync="alertPeriod"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
               </div>
             </div>
-          </div> -->
+            <div class="panel-bd with-loading">
+              <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
+              <div class="icon-loading" v-show="loadingAlertTrends">
+                <i class="fa fa-refresh fa-spin"></i>
+              </div>
+            </div>
+          </div>
           <!-- End: 告警信息 -->
         </div>
         <div class="col-8">
@@ -198,14 +192,14 @@
         productsOptions: [],
         productPeriod: 7,
         userPeriod: 7,
+        alertPeriod: 7,
         periods: locales[Vue.config.lang].periods,
         productTrends: [],
         userTrends: [],
-        alerts: [],
-        total: 0,
+        alertTrends: [],
         loadingProductTrends: false,
         loadingUserTrends: false,
-        loadingAlert: false
+        loadingAlertTrends: false
       }
     },
 
@@ -264,6 +258,29 @@
         }
 
         return result
+      },
+
+      // 告警趋势图表横轴数据
+      alertXAxisData () {
+        return this._genXAxis(this.alertPeriod)
+      },
+
+      // 告警趋势图表数据
+      alertSeries () {
+        var result = [{
+          name: this.$t('alert.counts'),
+          type: 'line',
+          data: []
+        }]
+
+        for (var i = 0; i < this.alertPeriod; i++) {
+          var index = _.findIndex(this.alertTrends, (item) => {
+            return item.day === this.alertXAxisData[i]
+          })
+          result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
+        }
+
+        return result
       }
     },
 
@@ -289,6 +306,10 @@
 
       userPeriod () {
         this.getUserTrend()
+      },
+
+      alertPeriod () {
+        this.getAlertTrend()
       }
     },
 
@@ -312,6 +333,7 @@
           this.product = res.data[0]
           this.getProductTrend()
           this.getUserTrend()
+          this.getAlertTrend()
           // 假数据
           // this.productTrends = [{day: '04-26', activated: 10, active: 8}]
           // this.userTrends = [{day: '04-26', add: 10, active: 8}]
@@ -324,6 +346,7 @@
       window.onresize = () => {
         this.$refs.productChart.chart.resize()
         this.$refs.userChart.chart.resize()
+        this.$refs.alertChart.chart.resize()
       }
     },
 
@@ -391,19 +414,26 @@
       },
 
       /**
-       * 获取告警信息列表
+       * 获取告警趋势
        */
-      getAlerts () {
-        this.loadingAlert = true
-        api.alert.getAlerts(this.queryCondition).then((res) => {
+      getAlertTrend () {
+        var today = new Date()
+        var past = today.getTime() - this.alertPeriod * 24 * 3600 * 1000
+        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
+        var end_day = dateFormat('yyyy-MM-dd', today)
+
+        this.loadingAlertTrends = true
+        api.statistics.getAlertTrend(start_day, end_day).then((res) => {
           if (res.status === 200) {
-            this.alerts = res.data.list
-            this.total = res.data.count
-            this.loadingAlert = false
+            this.alertTrends = res.data.map((item) => {
+              item.day = dateFormat('MM-dd', new Date(item.day))
+              return item
+            })
+            this.loadingAlertTrends = false
           }
         }).catch((res) => {
+          this.loadingAlertTrends = false
           this.handleError(res)
-          this.loadingAlert = false
         })
       }
     }

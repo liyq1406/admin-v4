@@ -55,7 +55,7 @@ export default {
     firmware: {
       overview: '概览',
       management: '版本管理',
-      update: '固件升级'
+      upgrade: '固件升级'
     },
     alert: {
       overview: '概览',
@@ -90,7 +90,8 @@ export default {
     added: '已添加',
     del: '删除',
     save: '保存',
-    change: '修改',
+    update: '修改',
+    config: '配置',
     company: '广州云湾信息技术有限公司',
     name: '名称',
     recent: '最近',

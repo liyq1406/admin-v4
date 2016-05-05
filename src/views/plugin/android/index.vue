@@ -56,7 +56,7 @@
 
         return {
           secondaryNav: [{
-            label: '修改应用',
+            label: '应用配置',
             link: { path: '/plugins/android/' + appId + '/update' }
           }]
         }

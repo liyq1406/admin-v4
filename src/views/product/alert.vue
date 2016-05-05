@@ -67,7 +67,7 @@
               <div class="row">
                 <div class="col-5">
                   <v-select :label="ruleTypes[addModal.model.type-1]">
-                    <select v-model="addModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                    <select v-model="addModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
@@ -87,7 +87,7 @@
                   <div v-show="addModal.model.type === 1" class="ml10">
                     <div class="select">
                       <v-select :label="compareTypes[addModal.model.compare-1]">
-                        <select v-model="addModal.model.compare" v-form-ctrl name="compare" number="number">
+                        <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
                           <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>
@@ -127,7 +127,7 @@
             <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[addModal.model.notify_type-1]">
-                  <select v-model="addModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
+                  <select v-model="addModal.model.notify_type" v-form-ctrl name="notify_type" number>
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -146,7 +146,7 @@
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
                   <label v-if="$index < 3" class="checkbox">
-                    <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                   </label>
                 </template>
               </div>
@@ -154,14 +154,14 @@
                 <div class="row" v-if="$index === 3">
                   <div class="checkbox-group col-6">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                     </label>
                   </div>
                   <div class="col-18">
                     <div v-show="isShowApn(addModal.model)" class="apn-list">
                       <div class="checkbox-group">
                         <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                         </label>
                       </div>
                     </div>
@@ -170,14 +170,14 @@
                 <div class="row" v-if="$index === 4">
                   <div class="checkbox-group col-6">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                      <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                     </label>
                   </div>
                   <div class="col-18">
                     <div v-show="isShowGoogle(addModal.model)" class="apn-list">
                       <div class="checkbox-group">
                         <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                          <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                         </label>
                       </div>
                     </div>
@@ -191,7 +191,7 @@
             <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
-                  <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number="number"/>{{ type }}
+                  <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number/>{{ type }}
                 </label>
               </div>
             </div>
@@ -239,7 +239,7 @@
               <div class="row">
                 <div class="col-5">
                   <v-select :label="ruleTypes[editModal.model.type-1]">
-                    <select v-model="editModal.model.type" v-form-ctrl name="type" number="number" @input="onSelectType">
+                    <select v-model="editModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
                   </v-select>
@@ -259,7 +259,7 @@
                   <div v-show="editModal.model.type === 1" class="ml10">
                     <div class="select">
                       <v-select :label="compareTypes[editModal.model.compare-1]">
-                        <select v-model="editModal.model.compare" v-form-ctrl name="compare" number="number">
+                        <select v-model="editModal.model.compare" v-form-ctrl name="compare" number>
                           <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>
@@ -299,7 +299,7 @@
             <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[editModal.model.notify_type-1]">
-                  <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number="number">
+                  <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number>
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -318,7 +318,7 @@
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
                   <label v-if="$index < 3" class="checkbox">
-                    <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                    <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                   </label>
                 </template>
               </div>
@@ -326,14 +326,14 @@
                 <div class="row" v-if="$index === 3">
                   <div class="checkbox-group col-6">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                     </label>
                   </div>
                   <div class="col-18">
                     <div v-show="isShowApn(editModal.model)" class="apn-list">
                       <div class="checkbox-group">
                         <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                         </label>
                       </div>
                     </div>
@@ -342,14 +342,14 @@
                 <div class="row" v-if="$index === 4">
                   <div class="checkbox-group col-6">
                     <label class="checkbox">
-                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number="number"/>{{ type }}
+                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                     </label>
                   </div>
                   <div class="col-18">
                     <div v-show="isShowGoogle(editModal.model)" class="apn-list">
                       <div class="checkbox-group">
                         <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number="number"/>{{ app.name }}
+                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                         </label>
                       </div>
                     </div>
@@ -363,7 +363,7 @@
             <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
-                  <input type="radio" v-model="editModal.model.scope" name="scope" :value="$index+1" number="number"/>{{ type }}
+                  <input type="radio" v-model="editModal.model.scope" name="scope" :value="$index+1" number/>{{ type }}
                 </label>
               </div>
             </div>

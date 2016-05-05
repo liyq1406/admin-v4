@@ -3,7 +3,7 @@
     <slot name="label"></slot>
     <div class="v-select-wrap" :style="selectWrapStyle">
       <div class="v-select-trigger">
-        <span>{{ label || placeholder }}</span>
+        <span>{{ label.length > 0 ? label : placeholder }}</span>
         <slot></slot>
         <i class="caret"></i>
       </div>

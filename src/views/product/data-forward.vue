@@ -62,7 +62,7 @@
             <div class="controls col-17">
               <div class="select">
                 <v-select :label="destinationTypes[addModel.destination.type-1]">
-                  <select v-model="addModel.destination.type" name="type" number="number">
+                  <select v-model="addModel.destination.type" name="type" number>
                     <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
@@ -112,7 +112,7 @@
             <div class="controls col-17">
               <div class="select">
                 <v-select :label="destinationTypes[editModel.destination.type-1]">
-                  <select v-model="editModel.destination.type" name="type" number="number">
+                  <select v-model="editModel.destination.type" name="type" number>
                     <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>

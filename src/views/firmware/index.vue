@@ -47,8 +47,8 @@
             link: { path: '/firmware/management' }
           },
           {
-            label: this.$t('sub_nav.firmware.update'),
-            link: { path: '/firmware/update' }
+            label: this.$t('sub_nav.firmware.upgrade'),
+            link: { path: '/firmware/upgrade' }
           }]
         }
       }
