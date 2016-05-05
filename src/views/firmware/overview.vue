@@ -130,7 +130,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
   @import '../../assets/stylus/common'
   .statistics-info
     margin-top 80px

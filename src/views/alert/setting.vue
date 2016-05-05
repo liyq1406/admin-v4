@@ -4,10 +4,11 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="addModal.show = true" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
-            <div>
+            <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <div class="fr">
               <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
               <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
+                <span slot="label">请选择产品：</span>
                 <select v-model="currProduct" name="product" @change="Productstatus">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
@@ -59,6 +60,16 @@
       <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+          <div class="form-row row">
+            <label class="form-control col-5">请选择产品:</label>
+            <div col-19>
+              <v-select v-else width="200px" placeholder="请选择产品" :label="addProduct.name">
+                <select v-model="addProduct" name="addproduct" @change="addProductstatus">
+                  <option v-for="product in products" :value="product">{{ product.name }}</option>
+                </select>
+              </v-select>
+            </div>
+          </div>
           <div class="form-row row">
             <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
             <div class="controls col-19">
@@ -431,6 +442,7 @@
     data () {
       return {
         currProduct: {},
+        addProduct: {},
         products: [],
         rules: [],            // 规则列表
         apps: [],              // app 列表
@@ -450,7 +462,7 @@
           form: {},
           editingTag: false,
           model: {           // 添加数据模型
-            product_id: this.$route.params.id,
+            product_id: '',
             name: '',
             tag: '',
             type: 1,
@@ -565,7 +577,7 @@
             return
           }
           this.getRules()
-          this.getDatapoints().then((res) => {
+          this.getDatapoints(this.currProduct.id).then((res) => {
             if (res.status === 200) {
               this.datapoints = res.data
               this.addModal.model.param = res.data[0].id
@@ -596,13 +608,23 @@
       },
 
       // 获取数据端点列表
-      getDatapoints () {
-        return api.product.getDatapoints(this.currProduct.id)
+      getDatapoints (id) {
+        return api.product.getDatapoints(id)
       },
       // 更改应用后获取列表与状态
       Productstatus () {
         this.getRules()
-        this.getDatapoints().then((res) => {
+        this.getDatapoints(this.currProduct.id).then((res) => {
+          if (res.status === 200) {
+            this.datapoints = res.data
+            this.addModal.model.param = res.data[0].id
+            this.originAddModel = _.cloneDeep(this.addModal.model)
+          }
+        })
+      },
+      // 更改应用后获取列表与状态
+      addProductstatus () {
+        this.getDatapoints(this.addProduct.id).then((res) => {
           if (res.status === 200) {
             this.datapoints = res.data
             this.addModal.model.param = res.data[0].id
@@ -692,7 +714,7 @@
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
           this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
-          this.addModal.model.product_id = this.currProduct.id
+          this.addModal.model.product_id = this.addProduct.id
           api.alert.addRule(this.addModal.model).then((res) => {
             if (res.status === 200) {
               this.getRules()
@@ -715,6 +737,11 @@
         }
         this.editModal.model = _.clone(rule)
         this.originEditModel = _.clone(rule)
+      },
+      // 初始化添加表单
+      addRule (rule) {
+        this.addModal.show = true
+        this.addProduct = this.currProduct
       },
 
       // 取消编辑
