@@ -6,7 +6,7 @@
           <button @click="showAddModal = true" class="btn btn-success"  :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t('firmware.add_firmware') }}</button>
         </div>
         <h2>{{ $t('firmware.firmware_list') }}</h2>
-        <div style="position:absolute; top:5px; left:90px">
+        <div style="position:absolute; top:5px; left:120px">
           <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
@@ -298,6 +298,7 @@
           console.log(this.products)
           if (this.products.length === 0) {
             this.tips = true
+            return
           }
           this.getFirmwares()
         }).catch((res) => {

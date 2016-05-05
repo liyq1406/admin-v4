@@ -6,7 +6,7 @@
           <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('task.create_task') }}</button>
         </div>
         <h2>{{ $t('task.task_list') }}</h2>
-        <div style="position:absolute; top:5px; left:90px">
+        <div style="position:absolute; top:5px; left:120px">
           <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
@@ -287,6 +287,7 @@
       },
       // 更改应用后获取列表与状态
       Productstatus () {
+        this.getFirmwares()
         this.getTasks()
       },
       getTasks () {

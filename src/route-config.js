@@ -691,7 +691,8 @@ let configRouter = (router) => {
     '/warranty': '/warranty/work-orders/extended-warranties',
     '/plugins/wechat/:id': '/plugins/wechat/:id/update',
     '/plugins': '/plugins/extensions',
-    '/firmware': '/firmware/overview'
+    '/firmware': '/firmware/overview',
+    '/alerts': '/alerts/overview'
   })
 
   router.beforeEach((transition) => {

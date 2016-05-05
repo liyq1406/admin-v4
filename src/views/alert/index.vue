@@ -3,344 +3,50 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
-          <h2>{{ $t("alert.service") }}</h2>
+          <h2>告警服务</h2>
         </div>
         <div class="panel-bd">
-          <div class="row">
-            <div class="col-15 with-loading">
-              <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
-              <div class="icon-loading" v-show="loadingData">
-                <i class="fa fa-refresh fa-spin"></i>
-              </div>
-            </div>
-            <div class="col-9">
-              <div class="statistics-info">
-                <div class="item">
-                  <div class="cont">
-                    <div class="num">{{ alertSummary.device }}</div>
-                    <div class="label">{{ $t("alert.statistic.device") }}</div>
-                  </div>
-                </div>
-                <div class="item">
-                  <div class="cont">
-                    <div class="num">{{ alertSummary.message }}</div>
-                    <div class="label">{{ $t("alert.statistic.message") }}</div>
-                  </div>
-                </div>
-                <div class="item no-border">
-                  <div class="cont">
-                    <div class="num">{{ alertSummary.unread }}</div>
-                    <div class="label">{{ $t("alert.statistic.unread") }}</div>
-                  </div>
-                </div>
-                <div class="item no-border">
-                  <div class="cont">
-                    <div class="num">{{ alertSummary.add_today }}</div>
-                    <div class="label">{{ $t("alert.statistic.add_today") }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <tab :nav="secondaryNav"></tab>
         </div>
       </div>
-      <div class="panel">
-        <div class="panel-hd">
-          <h2>{{ $t("alert.info") }}</h2>
-        </div>
-        <div class="panel-bd">
-          <div class="data-table with-loading">
-            <div class="icon-loading" v-show="loadingData">
-              <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <table class="table table-stripe table-bordered">
-              <thead>
-                <tr>
-                  <th>{{ $t("alert.info_list.product_name") }}</th>
-                  <th>{{ $t("alert.info_list.content") }}</th>
-                  <th>{{ $t("alert.info_list.create_date") }}</th>
-                  <th>{{ $t("alert.info_list.is_read") }}</th>
-                  <th class="tac">{{ $t("common.action") }}</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="alerts.length > 0">
-                  <tr v-for="alert in alerts">
-                    <td>{{ alert.product_name }}</td>
-                    <td>
-                      <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                    </td>
-                    <td>{{ alert.create_date | formatDate }}</td>
-                    <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                    <td class="tac">
-                      <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                    </td>
-                  </tr>
-                </template>
-                <tr v-if="alerts.length === 0 && !loadingData">
-                  <td colspan="5" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
-        </div>
-      </div>
+      <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     </div>
-    <!-- 查看告警信息浮层-->
-    <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("alert.info") }}</h3>
-      <table slot="body" class="table table-stripe table-bordered">
-        <tbody>
-          <tr>
-            <td>{{ $t("alert.info_list.product_name") }}</td>
-            <td>{{ model.product_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.alert_name") }}</td>
-            <td>{{ model.alert_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.content") }}</td>
-            <td>{{ model.content }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.tags") }}</td>
-            <td>
-              <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.type") }}</td>
-            <td><span>{{ infoTypes[model.type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.notify_type") }}</td>
-            <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.alert_value") }}</td>
-            <td>{{ model.alert_value }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.from") }}</td>
-            <td>{{ model.from }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.to") }}</td>
-            <td>{{ model.to }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("alert.info_list.create_date") }}</td>
-            <td>{{ model.create_date | formatDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div slot="footer" class="modal-footer">
-        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
-      </div>
-    </modal>
   </section>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import _ from 'lodash'
-  import api from '../../api'
-  import locales from '../../consts/locales/index'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import RadioGroup from '../../components/RadioGroup'
-  import dateFormat from 'date-format'
-  import LineChart from '../../components/charts/Line'
+  import Tab from '../../components/Tab'
   import { globalMixins } from '../../mixins'
 
   export default {
-    name: 'Alerts',
+    name: 'Data',
 
     layout: 'admin',
 
     mixins: [globalMixins],
 
     components: {
-      'pager': Pager,
-      'modal': Modal,
-      'radio-group': RadioGroup,
-      'line-chart': LineChart
+      'tab': Tab
     },
 
     data () {
       return {
-        alerts: [],
-        total: 0,
-        pageCount: 10,
-        currentPage: 1,
-        showModal: false,
-        model: {
-          id: '',
-          type: 1,
-          product_name: '',
-          alert_name: '',
-          alert_value: '',
-          notify_type: 1,
-          from: '',
-          to: [],
-          content: '',
-          create_date: '',
-          is_read: false,
-          tags: ''
-        },
-        period: 7,
-        periods: locales[Vue.config.lang].periods,
-        product_id: '',
-        alertTypes: locales[Vue.config.lang].alertTypes,
-        infoTypes: locales[Vue.config.lang].infoTypes,
-        alertSummary: {
-          unread: 0,
-          add_today: 0,
-          device: 0,
-          message: 0
-        },
-        alertTrends: [],
-        today: dateFormat('yyyy-MM-dd', new Date()),
-        loadingData: false
-      }
-    },
-
-    computed: {
-      queryCondition () {
-        return {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount
-        }
-      },
-
-      past () {
-        var past = new Date().getTime() - this.period * 24 * 3600 * 1000
-        return dateFormat('yyyy-MM-dd', new Date(past))
-      },
-
-      // 告警图表数据
-      alertSeries () {
-        var result = [{
-          name: this.$t('alert.counts'),
-          type: 'line',
-          data: []
-        }]
-
-        for (var i = 0; i < this.period; i++) {
-          var index = _.findIndex(this.alertTrends, (item) => {
-            return item.day === this.alertXAxisData[i]
-          })
-          result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
-        }
-
-        return result
-      },
-
-      // 告警图表横轴数据
-      alertXAxisData () {
-        var today = new Date()
-        var result = []
-
-        for (var i = this.period - 1; i >= 0; i--) {
-          result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-        }
-        return result
-      }
-    },
-
-    filters: {
-      toTags (value) {
-        return value.length ? value.split(',') : []
-      }
-    },
-
-    ready () {
-      // 监听窗口尺寸变化
-      window.onresize = () => {
-        this.$refs.alertChart.chart.resize()
+        secondaryNav: []
       }
     },
 
     route: {
       data () {
-        this.getAlerts()
-        this.getAlertTrends()
-        this.getAlertSummary()
-      }
-    },
-
-    // 监听属性变动
-    watch: {
-      period () {
-        this.getAlertTrends()
-        this.getAlertSummary()
-      }
-    },
-
-    methods: {
-      /**
-       * 获取单条告警信息并弹出浮层显示
-       * @param  {Object} alert 目标告警信息
-       */
-      showAlert (alert) {
-        this.model = alert
-        this.showModal = true
-        api.alert.setAlertRead([alert.id]).then((res) => {
-          if (res.status === 200) {
-            alert.is_read = true
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      },
-
-      /**
-       * 获取告警信息列表
-       */
-      getAlerts () {
-        this.loadingData = true
-        api.alert.getAlerts(this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            this.alerts = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
-      },
-
-      // 告警统计信息
-      getAlertSummary () {
-        api.statistics.getAlertSummary(this.past, this.today).then((res) => {
-          if (res.status === 200) {
-            this.alertSummary = res.data
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      },
-
-      /**
-       * 获取告警趋势
-       */
-      getAlertTrends () {
-        api.statistics.getAlertTrend(this.past, this.today).then((res) => {
-          if (res.status === 200) {
-            this.alertTrends = res.data.map((item) => {
-              item.day = dateFormat('MM-dd', new Date(item.day))
-              return item
-            })
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+        return {
+          secondaryNav: [{
+            label: this.$t('sub_nav.alert.overview'),
+            link: { path: '/alerts/overview' }
+          },
+          {
+            label: this.$t('sub_nav.alert.setting'),
+            link: { path: '/alerts/setting' }
+          }]
+        }
       }
     }
   }

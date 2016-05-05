@@ -57,6 +57,10 @@ export default {
       management: '版本管理',
       update: '固件升级'
     },
+    alert: {
+      overview: '概览',
+      setting: '规则设置'
+    },
     settings: {
       auth: '授权管理',
       members: '成员管理',

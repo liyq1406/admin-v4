@@ -4,7 +4,15 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <button @click="addModal.show = true" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <div>
+              <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
+              <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
+                <select v-model="currProduct" name="product" @change="Productstatus">
+                  <option v-for="product in products" :value="product">{{ product.name }}</option>
+                </select>
+              </v-select>
+            </div>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -422,6 +430,8 @@
 
     data () {
       return {
+        currProduct: {},
+        products: [],
         rules: [],            // 规则列表
         apps: [],              // app 列表
         ruleTypes: locales[Vue.config.lang].rule.types,
@@ -496,21 +506,22 @@
         // editForm: {},
         originAddModel: {},
         originEditModel: {},
-        loadingData: false
+        loadingData: false,
+        tips: false
       }
     },
 
     route: {
       data () {
-        this.getDatapoints().then((res) => {
-          if (res.status === 200) {
-            this.datapoints = res.data
-            this.addModal.model.param = res.data[0].id
-            this.originAddModel = _.cloneDeep(this.addModal.model)
-          }
-        })
-        this.getRules()
+        // this.getDatapoints().then((res) => {
+        //   if (res.status === 200) {
+        //     this.datapoints = res.data
+        //     this.addModal.model.param = res.data[0].id
+        //     this.originAddModel = _.cloneDeep(this.addModal.model)
+        //   }
+        // })
         this.getApps()
+        this.getProducts()
       }
     },
 
@@ -543,6 +554,29 @@
     },
 
     methods: {
+      // 获取产品列表
+      getProducts () {
+        api.product.all().then((res) => {
+          this.products = res.data
+          this.currProduct = this.products[0]
+          console.log(this.products)
+          if (this.products.length === 0) {
+            this.tips = true
+            return
+          }
+          this.getRules()
+          this.getDatapoints().then((res) => {
+            if (res.status === 200) {
+              this.datapoints = res.data
+              this.addModal.model.param = res.data[0].id
+              this.originAddModel = _.cloneDeep(this.addModal.model)
+            }
+            this.loadingData = false
+          })
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 数据端点名称
        */
@@ -563,13 +597,24 @@
 
       // 获取数据端点列表
       getDatapoints () {
-        return api.product.getDatapoints(this.$route.params.id)
+        return api.product.getDatapoints(this.currProduct.id)
+      },
+      // 更改应用后获取列表与状态
+      Productstatus () {
+        this.getRules()
+        this.getDatapoints().then((res) => {
+          if (res.status === 200) {
+            this.datapoints = res.data
+            this.addModal.model.param = res.data[0].id
+            this.originAddModel = _.cloneDeep(this.addModal.model)
+          }
+        })
       },
 
       // 获取告警规则列表
       getRules () {
         this.loadingData = true
-        api.alert.getRules(this.$route.params.id).then((res) => {
+        api.alert.getRules(this.currProduct.id).then((res) => {
           if (res.status === 200) {
             this.rules = res.data
             this.loadingData = false
@@ -647,6 +692,7 @@
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
           this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
+          this.addModal.model.product_id = this.currProduct.id
           api.alert.addRule(this.addModal.model).then((res) => {
             if (res.status === 200) {
               this.getRules()
@@ -692,7 +738,7 @@
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
           this.editModal.model.value = this.editModal.model.type === 1 ? this.editModal.value1 : this.editModal.value2
-          api.alert.updateRule(this.editModal.model, this.$route.params.id).then((res) => {
+          api.alert.updateRule(this.editModal.model, this.currProduct.id).then((res) => {
             if (res.status === 200) {
               this.resetEdit()
               this.getRules()

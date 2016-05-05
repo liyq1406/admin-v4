@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <button v-link="{ path: '/alerts/setting' }"class="btn btn-success">规则设置</button>
           </div>
         </div>
         <div class="data-table with-loading">
