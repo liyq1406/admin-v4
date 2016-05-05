@@ -61,3 +61,6 @@ export const REMOVE_PLUGIN = 'REMOVE_PLUGIN'
 
 // 修改插件
 export const UPDATE_PLUGIN = 'UPDATE_PLUGIN'
+
+// 设置当前浏览插件
+export const SET_CURRENT_PLUGIN = 'SET_CURRENT_PLUGIN'

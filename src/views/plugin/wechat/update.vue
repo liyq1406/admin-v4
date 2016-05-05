@@ -2,14 +2,13 @@
   <div>
     <div class="panel">
       <div class="panel-bd">
-        <!-- 编辑微信应用-->
         <div class="form form-edit-apk">
-          <form v-form name="editValidation4" @submit.prevent="onEditSubmit(editModel4)" hook="editAppHook4">
+          <form v-form name="validation" @submit.prevent="onEditSubmit(model)">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" placeholder="请输入应用名称" v-model="editModel4.name" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
+                  <input type="text" placeholder="请输入应用名称" v-model="model.name" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -17,7 +16,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" placeholder="请输入微信公众号ID" v-model="editModel4.wechat.id" name="wechat_id" lazy class="input-text"/>
+                  <input type="text" placeholder="请输入微信公众号ID" v-model="model.wechat.id" name="wechat_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -25,7 +24,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_app_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" v-model="editModel4.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
+                  <input type="text" v-model="model.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -33,7 +32,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_app_secret") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" v-model="editModel4.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
+                  <input type="text" v-model="model.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -43,7 +42,7 @@
                 <div class="radio-group radio-group-v">
                   <template v-for="type in encryptTypes">
                     <label class="radio">
-                      <input type="radio" v-model="editModel4.wechat.encrypt" name="wechat_encrypt" :value="$index+1"/>{{ type.label }}
+                      <input type="radio" v-model="model.wechat.encrypt" name="wechat_encrypt" :value="$index+1"/>{{ type.label }}
                     </label>
                     <p>{{ type.info }}</p>
                   </template>
@@ -54,13 +53,13 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_key") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <textarea type="text" v-model="editModel4.wechat.key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
+                  <textarea type="text" v-model="model.wechat.key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
                 </div>
               </div>
             </div>
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("app.fields.app_url") }}:</label>
-              <div class="controls col-18 control-text">{{ editModel4.wechat.url }}</div>
+              <div class="controls col-18 control-text">{{ model.wechat.url }}</div>
             </div>
             <div class="form-actions row">
               <div class="col-6">
@@ -69,7 +68,7 @@
                 </label>
               </div>
               <div class="col-18">
-                <button v-link="{path: '../../'}" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                <a v-link="{path: '/plugins/customize'}" class="btn btn-default">{{ $t("common.cancel") }}</a>
                 <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               </div>
             </div>
@@ -87,25 +86,27 @@
   // import Modal from '../../../components/Modal'
   import _ from 'lodash'
   import { globalMixins } from '../../../mixins'
+  import { updatePlugin, removePlugin } from '../../../store/actions/plugins'
 
   export default {
-    name: 'Applications',
+    name: 'updateForm',
 
     layout: 'admin',
 
     mixins: [globalMixins],
 
-    components: {
-      // 'modal': Modal
+    vuex: {
+      actions: {
+        updatePlugin,
+        removePlugin
+      }
     },
 
     data () {
       return {
-        apps: [],
-        appTypes: locales[Vue.config.lang].app.types,
         encryptTypes: locales[Vue.config.lang].app.encrypt_types,
-        editModel4: {
-          type: 2,
+        model: {
+          type: 4,
           name: '',
           wechat: {
             id: '',
@@ -116,50 +117,31 @@
             url: ''
           }
         },
-        originEditModel4: {},
-        editValidation4: {},
-        adding: false,
+        originModel: {},
+        validation: {},
         editing: false,
-        uploading: false,
-        delChecked: false,
-        loadingApps: false
+        delChecked: false
       }
     },
 
-    route: {
-      data () {
-        this.originAddModel = _.clone(this.addModel)
-        // this.getApps()
-      }
-    },
-
-    filters: {
-      typeLabel (value) {
-        return this.appTypes[value - 1].label
-      }
-    },
     ready () {
-      this.getinfo()
+      this.getAppInfo()
     },
+
     methods: {
       // 获取 APP 详细信息
-      getinfo () {
+      getAppInfo () {
         api.app.getinfo(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.editModel4 = res.data
+            this.model = res.data
           }
         })
       },
 
-      // 修改微信应用表单钩子
-      editAppHook4 (form) {
-        this.editForm4 = form
-      },
-
       // 初始化应用编辑表单
       onEditApp (app) {
-        this.editModel4 = _.cloneDeep(app)
-        this.originEditModel4 = _.cloneDeep(app)
+        this.model = _.cloneDeep(app)
+        this.originModel = _.cloneDeep(app)
       },
 
       // 提交应用更新
@@ -170,10 +152,8 @@
           if (result === true) {
             api.app.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.$route.router.go('../../')
-                if (model.type === 4) {
-                  this.resetEdit4()
-                }
+                this.removePlugin(this.model)
+                this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {
               this.handleError(res)
@@ -184,10 +164,10 @@
           }
         } else {
           this.editing = true
-          this.editModel4.type = 4
-          api.app.update(this.editModel4).then((res) => {
+          api.app.update(this.model).then((res) => {
             if (res.status === 200) {
-              this.$route.router.go('../../')
+              this.updatePlugin(this.model)
+              this.$route.router.go('/plugins/customize')
             }
           }).catch((res) => {
             this.handleError(res)

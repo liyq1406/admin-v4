@@ -556,9 +556,7 @@
           this.adding = true
           api.app.create(this.addModel).then((res) => {
             if (res.status === 200) {
-              if (this.addModel.type === 3 || this.addModel.type > 4) {
-                this.createPlugin(res.data)
-              }
+              this.createPlugin(res.data)
               this.resetAdd()
               this.getApps()
             }

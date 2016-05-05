@@ -57,7 +57,7 @@
         return {
           secondaryNav: [{
             label: '修改应用',
-            link: { path: '/plugins/wechat/' + appId + '/update' }
+            link: { path: '/plugins/ios/' + appId + '/update' }
           }]
         }
       }

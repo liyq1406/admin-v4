@@ -2,13 +2,15 @@ import {
   RECEIVE_PLUGINS,
   CREATE_PLUGIN,
   REMOVE_PLUGIN,
-  UPDATE_PLUGIN
+  UPDATE_PLUGIN,
+  SET_CURRENT_PLUGIN
 } from '../mutation-types'
 import _ from 'lodash'
 
 // 状态初始化
 var state = {
-  all: []
+  all: [],
+  curr: {}
 }
 
 // 状态变化
@@ -37,6 +39,10 @@ const mutations = {
       }
       return item
     })
+  },
+
+  [SET_CURRENT_PLUGIN]  (state, plugin) {
+    state.curr = plugin
   }
 }
 

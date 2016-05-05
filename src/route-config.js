@@ -262,6 +262,42 @@ let configRouter = (router) => {
         }
       }
     },
+    // iOS应用查看
+    '/plugins/ios/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/ios/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 修改
+        'update': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/ios/update'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+    // 安卓应用查看
+    '/plugins/android/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/android/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 修改
+        'update': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/android/update'))
+            }, 'admin')
+          }
+        }
+      }
+    },
     // 微信应用查看
     '/plugins/wechat/:id': {
       component (resolve) {

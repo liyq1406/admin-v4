@@ -57,27 +57,22 @@
             <div class="nav-aside-group">
               <h3>{{ $t("nav_aside.plugins") }}</h3>
               <template v-for="plugin in plugins">
+                <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/update' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/update' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                <div class="nav-aside-item" v-if="plugin.type===3"><a v-link="{ path: plugin.web.url }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                 <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/update' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-else><a v-link="{ path: '/warranty' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <!-- <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-wrench"></i>延保系统</a></div> -->
               </template>
               <div class="nav-aside-actions">
                 <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_plugin") }}</a>
               </div>
             </div>
             <!-- End: 插件管理 -->
-            <!-- <div class="nav-aside-item"><a v-link="{ path: '/apps' }"><i class="fa fa-th"></i>{{ $t("nav_aside.apps") }}</a></div> -->
             <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-line-chart"></i>固件管理</a></div>
+            <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-rocket"></i>固件管理</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
-            <!-- <template v-for="plugin in plugins">
-              <div class="nav-aside-item" v-if="plugin.type === 3 && plugin.web.web_enable"><a href="{{ plugin.web.url }}"><i class="fa fa-internet-explorer"></i>{{ plugin.name }}</a></div>
-              <div class="nav-aside-item" v-if="plugin.type === 5"><a v-link="{ path: '/warranty' }"><i class="fa fa-wrench"></i>延保系统</a></div>
-            </template> -->
           </div>
         </div>
       </section>
@@ -153,7 +148,6 @@
     data () {
       return {
         isShowUserNav: false,
-        // debug: process.env.NODE_ENV !== 'production',
         customApps: []
       }
     },
@@ -188,12 +182,6 @@
       getPlugins () {
         api.app.list().then((res) => {
           if (res.status === 200) {
-            // var plugins = []
-            // res.data.forEach((item) => {
-            //   if (item.type === 3 || item.type > 4) {
-            //     plugins.push(item)
-            //   }
-            // })
             this.getAllPlugin(res.data)
           }
         }).catch((res) => {
