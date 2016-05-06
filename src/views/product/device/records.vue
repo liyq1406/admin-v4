@@ -19,13 +19,15 @@
           </div>
 
           <div class="status-bar">
-            <v-select width="100px" :label="dateType.label" size="small">
+            <v-select width="80px" :label="dateType.label" size="small">
               <select v-model="dateType" @change = "getRecords(true)">
                 <option v-for="option in dateTypeOptions" :value="option">{{ option.label }}</option>
               </select>
             </v-select>
-            <date-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" input-width="94px" @select-day="getRecords(true)">
-            </date-range-picker>
+            <date-time-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" :from-time.sync="startTime" :to-time.sync="endTime" input-width="94px" @select-day="getRecords(true)" @select-time="getRecords(true)">
+              <span slot="label">记录时间：</span>
+            </date-time-range-picker>
+            <button class="btn btn-ghost btn-sm fa fa-refresh" @click="resetQueryCondition"></button>
           </div>
 
           <div class="data-table with-loading">
@@ -35,29 +37,27 @@
             <table class="table table-stripe table-bordered">
               <thead>
                 <tr>
-                  <th>标识ID</th>
                   <th>设备ID</th>
                   <th>IP地址</th>
-                  <th>创建时间</th>
-                  <th>在线状态</th>
-                  <th>引起状态变化的原因</th>
+                  <th>记录时间</th>
+                  <th>状态</th>
+                  <!-- <th>引起状态变化的原因</th> -->
                 </tr>
               </thead>
               <tbody>
                 <template v-if="records.length > 0">
                   <tr v-for="record in records">
-                    <td>{{ record.id }}</td>
                     <td>{{ record.device_id }}</td>
                     <td>{{ record.ip }}</td>
-                    <td>{{ record.create_time | uniformDate}}</td>
+                    <td>{{ record.create_time | formatDate}}</td>
                     <td>
-                      <span v-if = "record.status === 0" class="hl-red">离线</span>
-                      <span v-else class="hl-green">在线</span>
+                      <span v-if = "record.status === 0" class="hl-gray">下线</span>
+                      <span v-else class="hl-green">上线</span>
                     </td>
-                    <td>
+                    <!-- <td>
                       <span v-if = "record.code === 0" class="hl-green">正常</span>
                       <span v-else class="hl-red">网络异常</span>
-                    </td>
+                    </td> -->
                   </tr>
                 </template>
 
@@ -90,7 +90,7 @@
   import AreaSelect from '../../../components/AreaSelect'
   import SearchBox from '../../../components/SearchBox'
   import Pager from '../../../components/Pager'
-  import DateRangePicker from '../../../components/DateRangePicker'
+  import DateTimeRangePicker from '../../../components/DateTimeRangePicker'
   import api from '../../../api'
 
   export default {
@@ -105,22 +105,17 @@
       'area-select': AreaSelect,
       'search-box': SearchBox,
       'pager': Pager,
-      'date-range-picker': DateRangePicker
+      'date-time-range-picker': DateTimeRangePicker
     },
 
     data () {
       return {
         name: '',
         key: '',
-        curProvince: {},
-        curCity: {},
-        curDistrict: {},
         startDate: '',
+        startTime: '00:00',
         endDate: '',
-        status: {
-          label: '全部',
-          value: 0
-        },
+        endTime: '23:00',
         records: [],
         loadingData: false,
         currentPage: 1,
@@ -128,30 +123,24 @@
         total: 0,
         queryTypeOptions: [
           { label: '设备ID', value: 'device_id' },
-          { label: '标识ID', value: 'id' },
           { label: 'IP地址', value: 'ip' }
         ],
         dateTypeOptions: [
-          { label: '上线时间', value: 'online' },
-          { label: '下线时间', value: 'offline' }
+          { label: '全部', value: 'all' },
+          { label: '上线', value: 'online' },
+          { label: '下线', value: 'offline' }
         ],
         queryType: {
           label: '设备ID',
           value: 'device_id'
         },
         dateType: {
-          label: '上线时间',
-          value: 'online'
-        },
-        branchs: []
+          label: '全部',
+          value: 'all'
+        }
       }
     },
 
-    // route: {
-    //   data () {
-    //     this.getRecords()
-    //   }
-    // },
     ready () {
       this.getRecords()
     },
@@ -167,48 +156,24 @@
             product_id: this.$route.params.product_id
           }
         }
-        // 取搜索条件
+
         if (this.key !== '') {
-          if (this.queryType.value === 'branch') {
-            var ids = []
-            this.branchs.forEach((item) => {
-              ids.push({'@data': item._id})
-            })
-            condition.query.branch_id = {'$in': ids}
-          } else {
-            condition.query[this.queryType.value] = this.key
-            // condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
-          }
+          condition.query[this.queryType.value] = this.queryType.value === 'device_id' ? Number(this.key) : this.key
         }
-        // 取时间条件
-        if (this.startDate !== undefined && this.startDate !== '') {
-          if (this.endDate === '') { // 只有开始时间
-            if (this.dateType.value === 'online') {
-              condition.query.create_time = {'$gte': new Date(this.startDate)}
-              condition.query.status = 1
-            } else {
-              condition.query.create_time = {'$gte': new Date(this.startDate)}
-              condition.query.status = 0
-            }
-          } else if (this.endDate !== '') { // 都不为空
-            if (this.dateType.value === 'online') {
-              condition.query.create_time = {'$gte': new Date(this.startDate), '$lte': new Date(this.endDate)}
-              condition.query.status = 1
-            } else {
-              condition.query.create_time = {'$gte': new Date(this.startDate), '$lte': new Date(this.endDate)}
-              condition.query.status = 0
-            }
-          }
+
+        if (this.startDate !== '') {
+          condition.query.create_time = condition.query.create_time || {}
+          condition.query.create_time['$gte'] = `${this.startDate}T${this.startTime}:00.000Z`
+        }
+        if (this.endDate !== '') {
+          condition.query.create_time = condition.query.create_time || {}
+          condition.query.create_time['$lte'] = `${this.endDate}T${this.endTime}:00.000Z`
+        }
+
+        if (this.dateType.value === 'all') {
+          condition.query.status = undefined
         } else {
-          if (this.startDate !== undefined && this.endDate !== '') { // 只有结束时间
-            if (this.dateType.value === 'online') {
-              condition.query.create_time = {'$lte': new Date(this.endDate)}
-              condition.query.status = 1
-            } else {
-              condition.query.create_time = {'$lte': new Date(this.endDate)}
-              condition.query.status = 0
-            }
-          }
+          condition.query.status = this.dateType.value === 'online' ? 1 : 0
         }
 
         return condition
@@ -216,17 +181,37 @@
     },
 
     methods: {
+      /**
+       * 获取记录
+       */
       getRecords () {
         this.loadingData = true
         api.device.getRecords(this.queryCondition).then((res) => {
           this.total = res.data.count
           this.records = res.data.list
           this.loadingData = false
-          console.log(res.data)
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
         })
+      },
+
+      /**
+       * 重置查询条件
+       */
+      resetQueryCondition () {
+        this.key = ''
+        this.queryType = {
+          label: '设备ID',
+          value: 'device_id'
+        }
+        this.dateType = {
+          label: '全部',
+          value: 'all'
+        }
+        this.startDate = ''
+        this.endDate = ''
+        this.getRecords()
       }
     }
   }
