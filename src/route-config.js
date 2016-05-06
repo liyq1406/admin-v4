@@ -407,6 +407,16 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
+
+    // 设备地图
+    '/device-map': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/device-map/index'))
+        }, 'admin')
+      }
+    },
+
     // 固件管理
     '/firmware': {
       component (resolve) {

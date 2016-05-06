@@ -13,6 +13,7 @@ export default {
     data: '数据管理',
     firmwares: '固件管理',
     users: '用户管理',
+    device_map: '设备地图',
     statistic: '统计分析',
     settings: '系统设置',
     diet: '饮食管理',
