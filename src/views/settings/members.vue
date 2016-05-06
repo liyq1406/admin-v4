@@ -364,7 +364,7 @@
        */
       deleteMember (member) {
         if (window.confirm(this.$t('member.del_msg'))) {
-          api.corp.delMember(this.currentEditMember.id, member.id).then((res) => {
+          api.corp.delMember(member.id).then((res) => {
             if (res.status === 200) {
               this.members.$remove(member)
             }
