@@ -8,7 +8,7 @@
         </div>
         <div class="panel-bd">
           <div class="action-bar">
-            <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入'+ queryType.label" @press-enter="getRecords(true)">
+            <search-box class="work-order-search-box" :key.sync="key" :active="searching" :placeholder="'请输入'+ queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getRecords(true)" @cancel="getRecords(true)">
               <v-select width="100px" :label="queryType.label">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -121,6 +121,7 @@
         currentPage: 1,
         pageCount: 10,
         total: 0,
+        searching: false,
         queryTypeOptions: [
           { label: '设备ID', value: 'device_id' },
           { label: 'IP地址', value: 'ip' }
@@ -184,7 +185,11 @@
       /**
        * 获取记录
        */
-      getRecords () {
+      getRecords (querying) {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
+
         this.loadingData = true
         api.device.getRecords(this.queryCondition).then((res) => {
           this.total = res.data.count
@@ -194,6 +199,16 @@
           this.handleError(res)
           this.loadingData = false
         })
+      },
+
+      // 切换搜索
+      toggleSearching () {
+        this.searching = !this.searching
+      },
+
+      // 取消搜索
+      cancelSearching () {
+        this.getRecords(true)
       },
 
       /**
