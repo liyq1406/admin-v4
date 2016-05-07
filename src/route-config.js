@@ -362,6 +362,22 @@ let configRouter = (router) => {
         }
       }
     },
+    // 推送详情
+    '/plugins/broadcast/history/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/broadcast/details'))
+        }, 'admin')
+      }
+    },
+    // 编辑推送
+    '/plugins/broadcast/history/:id/update': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/broadcast/update'))
+        }, 'admin')
+      }
+    },
 
     // 告警服务
     '/alerts': {

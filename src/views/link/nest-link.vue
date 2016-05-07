@@ -146,14 +146,15 @@
       display inline-block
       margin-left 106px
       margin-top 20px
+      margin-right 200px
       p
         margin 0
   .nestul
     li
       min-height 180px
       border-bottom 1px solid #E4E4E4
-    li:last-child
-      border-bottom none
+      &:last-child
+        border-bottom none
   .nestli
     position relative
     padding 0 0 20px 0
