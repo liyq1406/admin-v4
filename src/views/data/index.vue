@@ -38,10 +38,16 @@
     route: {
       data () {
         return {
-          secondaryNav: [{
-            label: this.$t('sub_nav.data.tables'),
-            link: { path: '/data/tables' }
-          }]
+          secondaryNav: [
+            {
+              label: this.$t('sub_nav.data.tables'),
+              link: { path: '/data/tables' }
+            },
+            {
+              label: '数据快照',
+              link: { path: '/data/snapshot' }
+            }
+          ]
         }
       }
     }

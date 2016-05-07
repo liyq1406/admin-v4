@@ -359,6 +359,14 @@ let configRouter = (router) => {
               resolve(require('./views/data/tables'))
             }, 'admin')
           }
+        },
+        // 数据快照
+        'snapshot': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/data/snapshot'))
+            }, 'admin')
+          }
         }
       }
     },
