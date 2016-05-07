@@ -18,7 +18,8 @@ export default {
     settings: '系统设置',
     diet: '饮食管理',
     add_product: '添加产品',
-    add_plugin: '添加插件'
+    add_plugin: '添加插件',
+    link: '设备互联'
   },
 
   // 头部导航
@@ -62,6 +63,11 @@ export default {
     alert: {
       overview: '概览',
       setting: '规则设置'
+    },
+    link: {
+      devices_link: '设备联动',
+      nest_link: 'nest联动',
+      echo: 'echo'
     },
     settings: {
       auth: '授权管理',

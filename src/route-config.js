@@ -343,6 +343,40 @@ let configRouter = (router) => {
         }
       }
     },
+    // 设备互联
+    '/link': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/link/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 设备联动
+        'devices': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/link/devices-link'))
+            }, 'admin')
+          }
+        },
+        // 规则设置
+        'nest': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/link/nest-link'))
+            }, 'admin')
+          }
+        },
+        // echo
+        'echo': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/link/echo'))
+            }, 'admin')
+          }
+        }
+      }
+    },
 
     // 数据管理
     '/data': {
@@ -712,7 +746,8 @@ let configRouter = (router) => {
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
-    '/alerts': '/alerts/overview'
+    '/alerts': '/alerts/overview',
+    '/link': '/link/devices'
   })
 
   router.beforeEach((transition) => {
