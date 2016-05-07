@@ -69,6 +69,10 @@ export default {
       nest_link: 'nest联动',
       echo: 'echo'
     },
+    broadcast: {
+      add: '新建推送',
+      history: '推送历史'
+    },
     settings: {
       auth: '授权管理',
       members: '成员管理',

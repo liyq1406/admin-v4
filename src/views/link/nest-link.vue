@@ -120,7 +120,8 @@
         editModel: {},
         editValidation: {},
         ther_show: false,
-        smoke_show: false
+        smoke_show: false,
+        ul_show: true
       }
     }
   }

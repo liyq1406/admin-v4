@@ -64,6 +64,10 @@ export default {
       overview: '概览',
       setting: '规则设置'
     },
+    broadcast: {
+      add: '新建推送',
+      history: '推送历史'
+    },
     link: {
       devices_link: '设备联动',
       nest_link: 'nest联动',

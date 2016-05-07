@@ -32,7 +32,7 @@
   import { globalMixins } from '../../mixins'
 
   export default {
-    name: 'Devices_link',
+    name: 'Echo',
 
     layout: 'admin',
 
