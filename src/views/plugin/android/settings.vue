@@ -28,7 +28,7 @@
               <label class="form-control col-7">Server API Key:</label>
               <div class="controls col-17">
                 <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
-                  <input v-model="model.config.gcm.api_key" type="text" v-form-ctrl name="gcm_api_key" class="input-text"/>
+                  <input v-model="model.config.gcm.api_key" type="text" v-form-ctrl name="api_key" class="input-text"/>
                 </div>
               </div>
             </div>
@@ -129,7 +129,7 @@
           }
         } else {
           this.editing = true
-          api.app.update(this.model).then((res) => {
+          api.plugin.update(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
               this.updatePlugin(this.model)
               this.$route.router.go('/plugins/customize')

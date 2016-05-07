@@ -16,7 +16,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" placeholder="请输入微信公众号ID" v-model="model.wechat.id" name="wechat_id" lazy class="input-text"/>
+                  <input type="text" placeholder="请输入微信公众号ID" v-model="model.config.wechat.id" name="wechat_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_app_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" v-model="model.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
+                  <input type="text" v-model="model.config.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -32,7 +32,7 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_app_secret") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="text" v-model="model.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
+                  <input type="text" v-model="model.config.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -42,7 +42,7 @@
                 <div class="radio-group radio-group-v">
                   <template v-for="type in encryptTypes">
                     <label class="radio">
-                      <input type="radio" v-model="model.wechat.encrypt" name="wechat_encrypt" :value="$index+1"/>{{ type.label }}
+                      <input type="radio" v-model="model.config.wechat.encrypt" name="wechat_encrypt" :value="$index+1"/>{{ type.label }}
                     </label>
                     <p>{{ type.info }}</p>
                   </template>
@@ -53,13 +53,13 @@
               <label class="form-control col-6">{{ $t("app.fields.wechat_key") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <textarea type="text" v-model="model.wechat.key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
+                  <textarea type="text" v-model="model.config.wechat.encoding_aes_key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
                 </div>
               </div>
             </div>
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("app.fields.app_url") }}:</label>
-              <div class="controls col-18 control-text">{{ model.wechat.url }}</div>
+              <div class="controls col-18 control-text">{{ model.config.url }}</div>
             </div>
             <div class="form-actions row">
               <div class="col-6">
@@ -106,15 +106,19 @@
       return {
         encryptTypes: locales[Vue.config.lang].app.encrypt_types,
         model: {
-          type: 4,
           name: '',
-          wechat: {
-            id: '',
-            app_id: '',
-            app_secret: '',
-            encrypt: 1,
-            key: '',
-            url: ''
+          enable: false,
+          config: {
+            url: '',
+            token: '',
+            relay_url: '',
+            wechat: {
+              id: '',
+              app_id: '',
+              app_secret: '',
+              encrypt: '',
+              encoding_aes_key: ''
+            }
           }
         },
         originModel: {},
@@ -164,7 +168,7 @@
           }
         } else {
           this.editing = true
-          api.app.update(this.model).then((res) => {
+          api.plugin.update(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
               this.updatePlugin(this.model)
               this.$route.router.go('/plugins/customize')

@@ -48,8 +48,8 @@
 
     methods: {
       toogle () {
-        this.$dispatch('switch-toggle')
         this.value = !this.value
+        this.$dispatch('switch-toggle')
       }
     }
   }
