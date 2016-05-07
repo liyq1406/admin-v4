@@ -336,6 +336,33 @@ let configRouter = (router) => {
       }
     },
 
+    // 消息推送
+    '/plugins/broadcast': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/broadcast/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 新建推送
+        'add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/broadcast/add'))
+            }, 'admin')
+          }
+        },
+        // 推送历史
+        'history': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/broadcast/history'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+
     // 告警服务
     '/alerts': {
       component (resolve) {
@@ -763,6 +790,7 @@ let configRouter = (router) => {
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
+    '/plugins/broadcast': '/plugins/broadcast/add',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
