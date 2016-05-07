@@ -114,7 +114,7 @@
     methods: {
       // 获取 APP 详细信息
       getAppInfo () {
-        api.app.getinfo(this.$route.params.id).then((res) => {
+        api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.model = res.data
           }
@@ -133,7 +133,7 @@
           this.editing = true
           var result = window.confirm('确认删除该应用吗?')
           if (result === true) {
-            api.app.remove(this.$route.params.id).then((res) => {
+            api.plugin.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
                 this.removePlugin(this.model)
                 this.$route.router.go('/plugins/customize')
@@ -147,7 +147,7 @@
           }
         } else {
           this.editing = true
-          api.app.update(this.model).then((res) => {
+          api.plugin.update(this.model).then((res) => {
             if (res.status === 200) {
               this.updatePlugin(this.model)
               this.$route.router.go('/plugins/customize')

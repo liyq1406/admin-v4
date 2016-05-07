@@ -416,7 +416,7 @@
       // 获取 APP 列表
       getApps () {
         this.loadingData = true
-        api.app.list().then((res) => {
+        api.plugin.all().then((res) => {
           if (res.status === 200) {
             this.loadingData = false
             this.apps = res.data
@@ -623,7 +623,7 @@
           this.editing = true
           var result = window.confirm('确认删除该应用吗?')
           if (result === true) {
-            api.app.remove(model.id).then((res) => {
+            api.plugin.remove(model.id).then((res) => {
               if (model.type === 1) {
                 this.resetEdit()
               } else if (model.type === 2) {

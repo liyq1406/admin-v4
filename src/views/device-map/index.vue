@@ -83,6 +83,7 @@
     },
 
     ready () {
+      console.log(window.returnCitySN)
       api.product.all().then((res) => {
         if (res.status === 200) {
           this.productOptions = res.data

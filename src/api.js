@@ -28,6 +28,7 @@ import empower from './api/empower'
 import dataTable from './api/data-table'
 import alert from './api/alert'
 import app from './api/app'
+import plugin from './api/plugin'
 import upload from './api/upload'
 import diet from './api/diet'
 import dataForward from './api/data-forward'
@@ -49,6 +50,7 @@ export default {
   dataTable,
   alert,
   app,
+  plugin,
   upload,
   diet,
   dataForward,
