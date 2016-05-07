@@ -7,15 +7,15 @@
         </div>
         <div class="panel-bd">
           <div class="plugin-grid row">
-            <div class="col-12" v-for="n in 3">
+            <div class="col-12" v-for="n in pluginGrids">
               <div class="plugin-grid-item">
                 <div class="inner">
                   <div class="thumb">
                     <img src="../../assets/images/pic.png" alt="">
                   </div>
                   <div class="info">
-                    <h3>消息群发</h3>
-                    <p>让APP具备消息广播，运营通知的特性，让APP具备消息广播，运营通知的特性</p>
+                    <h3>{{n.name}}</h3>
+                    <p>{{n.description}}</p>
                   </div>
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
@@ -53,7 +53,20 @@
 
     data () {
       return {
-        secondaryNav: []
+        secondaryNav: [],
+        pluginGrids: [{
+          name: '消息群发',
+          description: '让app具备消息广播，运营通知的特性'
+        }, {
+          name: 'HelpDesk',
+          description: '管理经销商，配置商家信息和销售资源'
+        }, {
+          name: '在线维保',
+          description: '让app具备消息广播，运营通知的特性'
+        }, {
+          name: '经销商管理',
+          description: '管理经销商，配置商家信息和销售资源'
+        }]
       }
     },
 

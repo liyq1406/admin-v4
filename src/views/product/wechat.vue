@@ -328,7 +328,7 @@
       // 获取 微信APP 列表
       getApps () {
         this.loadingData = true
-        api.app.list().then((res) => {
+        api.plugin.all().then((res) => {
           if (res.status === 200) {
             var arr = []
             res.data.forEach((item) => {

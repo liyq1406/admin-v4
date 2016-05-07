@@ -710,7 +710,7 @@
 
       // 获取 APP 列表
       getApps () {
-        api.app.list().then((res) => {
+        api.plugin.all().then((res) => {
           if (res.status === 200) {
             this.apps = res.data
           }

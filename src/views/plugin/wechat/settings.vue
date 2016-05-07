@@ -131,7 +131,7 @@
     methods: {
       // 获取 APP 详细信息
       getAppInfo () {
-        api.app.getinfo(this.$route.params.id).then((res) => {
+        api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.model = res.data
           }

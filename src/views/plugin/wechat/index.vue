@@ -57,7 +57,7 @@
         return {
           secondaryNav: [{
             label: '应用配置',
-            link: { path: '/plugins/wechat/' + appId + '/update' }
+            link: { path: '/plugins/wechat/' + appId + '/settings' }
           }]
         }
       }
@@ -65,7 +65,7 @@
 
     methods: {
       getPlugin () {
-        api.app.getinfo(this.$route.params.id).then((res) => {
+        api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.setCurrPlugin(res.data)
           }

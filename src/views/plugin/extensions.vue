@@ -4,19 +4,6 @@
       <div class="extension-list">
         <ul>
           <li>
-            <h3>延保系统</h3>
-            <div class="row">
-              <div class="col-20">
-                <p>Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
-              </div>
-              <div class="col-4 tar">
-                <switch></switch>
-                <!-- <button class="btn btn-primary">{{ $t('common.add') }}</button> -->
-                <!-- <span class="btn btn-default">{{ $t('common.added') }}</span> -->
-              </div>
-            </div>
-          </li>
-          <li>
             <h3>云菜谱</h3>
             <div class="row">
               <div class="col-20">
@@ -24,7 +11,28 @@
               </div>
               <div class="col-4 tar">
                 <switch></switch>
-                <!-- <button class="btn btn-primary">{{ $t('common.add') }}</button> -->
+              </div>
+            </div>
+          </li>
+          <li>
+            <h3>Google nest互联</h3>
+            <div class="row">
+              <div class="col-20">
+                <p>Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+              </div>
+              <div class="col-4 tar">
+                <switch></switch>
+              </div>
+            </div>
+          </li>
+          <li>
+            <h3>支付网关</h3>
+            <div class="row">
+              <div class="col-20">
+                <p>Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.</p>
+              </div>
+              <div class="col-4 tar">
+                <switch></switch>
               </div>
             </div>
           </li>

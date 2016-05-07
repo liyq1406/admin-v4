@@ -19,16 +19,16 @@
               <div class="controls col-17">
                 <div class="checkbox-group">
                   <label class="checkbox">
-                    <input type="checkbox" name="gcm_enable" v-model="model.android.gcm_enable"/>{{ '启用GooglePlay服务' }}
+                    <input type="checkbox" name="gcm_enable" v-model="model.config.gcm.enable"/>{{ '启用GooglePlay服务' }}
                   </label>
                 </div>
               </div>
             </div>
-            <div v-show="model.android.gcm_enable" class="form-row row">
+            <div v-show="model.config.gcm.enable" class="form-row row">
               <label class="form-control col-7">Server API Key:</label>
               <div class="controls col-17">
                 <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
-                  <input v-model="model.android.gcm_api_key" type="text" v-form-ctrl name="gcm_api_key" class="input-text"/>
+                  <input v-model="model.config.gcm.api_key" type="text" v-form-ctrl name="gcm_api_key" class="input-text"/>
                 </div>
               </div>
             </div>
@@ -74,9 +74,11 @@
       return {
         model: {
           type: 2,
-          android: {
-            gcm_api_key: '',
-            gcm_enable: false
+          config: {
+            gcm: {
+              api_key: '',
+              enable: false
+            }
           }
         },
         originModel: {},
@@ -94,7 +96,7 @@
     methods: {
       // 获取 APP 详细信息
       getAppInfo () {
-        api.app.getinfo(this.$route.params.id).then((res) => {
+        api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.model = res.data
           }

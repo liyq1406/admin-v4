@@ -19,12 +19,12 @@
               <div class="controls col-18">
                 <div class="checkbox-group">
                   <label class="checkbox">
-                    <input type="checkbox" name="apn_enable" v-model="model.apn_enable"/>{{ $t("app.fields.apn_enable") }}
+                    <input type="checkbox" name="apn_enable" v-model="model.config.apn.enable"/>{{ $t("app.fields.apn_enable") }}
                   </label>
                 </div>
               </div>
             </div>
-            <div v-show="model.apn_enable" class="form-row row">
+            <div v-show="model.config.apn.enable" class="form-row row">
               <label class="form-control col-6">{{ $t("app.apn_file") }}:</label>
               <div class="controls col-18">
                 <div class="row">
@@ -34,24 +34,24 @@
                     </label>
                   </div>
                   <div class="col-16">
-                    <div v-if="model.apn_license_url" class="file-url">url: {{ model.apn_license_url }}</div>
+                    <div v-if="model.config.apn.license_url" class="file-url">url: {{ model.config.apn.license_url }}</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div v-show="model.apn_enable" class="form-row row">
+            <div v-show="model.config.apn.enable" class="form-row row">
               <label class="form-control col-6">{{ $t("app.fields.apn_license_pwd") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
-                  <input v-model="model.apn_license_pwd" type="text" v-form-ctrl name="apn_license_pwd" class="input-text"/>
+                  <input v-model="model.config.apn.license_pwd" type="text" v-form-ctrl name="apn_license_pwd" class="input-text"/>
                 </div>
               </div>
             </div>
-            <div v-show="model.apn_enable" class="form-row row">
+            <div v-show="model.config.apn.enable" class="form-row row">
               <div class="controls col-18 col-offset-6">
                 <div class="checkbox-group">
                   <label class="checkbox">
-                    <input type="checkbox" name="apn_license_production" v-model="model.apn_license_production"/>{{ $t("app.is_release") }}
+                    <input type="checkbox" name="apn_license_production" v-model="model.config.apn.license_production"/>{{ $t("app.is_release") }}
                   </label>
                 </div>
               </div>
@@ -97,7 +97,16 @@
     data () {
       return {
         model: {
-          type: 1
+          name: '',
+          enable: true,
+          config: {
+            apn: {
+              enable: '',
+              license_url: '',
+              license_pwd: '',
+              license_production: ''
+            }
+          }
         },
         originModel: {},
         validation: {},
@@ -116,7 +125,11 @@
       getAppInfo () {
         api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.model = res.data
+            this.model.name = res.data.name
+            this.model.config.apn.enable = res.data.config.apn.enable
+            this.model.config.apn.license_url = res.data.config.apn.license_url
+            this.model.config.apn.license_pwd = res.data.config.apn.license_pwd
+            this.model.config.apn.license_production = res.data.config.apn.license_production
           }
         })
       },
@@ -147,7 +160,7 @@
           }
         } else {
           this.editing = true
-          api.plugin.update(this.model).then((res) => {
+          api.plugin.update(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
               this.updatePlugin(this.model)
               this.$route.router.go('/plugins/customize')
@@ -188,7 +201,7 @@
                 api.upload.apn(evt.target.result).then((res) => {
                   if (res.status === 200) {
                     input.value = ''
-                    this.model.apn_license_url = res.data.url
+                    this.model.config.apn.license_url = res.data.url
                     this.uploading = false
                   }
                 }).catch((res) => {

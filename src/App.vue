@@ -59,7 +59,7 @@
               <template v-for="plugin in plugins">
                 <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                 <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===3 && plugin.web.web_enable"><a v-link="{ path: plugin.web.url }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                <div class="nav-aside-item" v-if="plugin.type===3"><a v-link="{ path: plugin.config.url }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                 <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                 <div class="nav-aside-item" v-if="plugin.type===5"><a v-link="{ path: '/warranty' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
               </template>
