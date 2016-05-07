@@ -317,6 +317,25 @@ let configRouter = (router) => {
       }
     },
 
+    // web应用
+    '/plugins/web/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/web/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 配置
+        'settings': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/web/settings'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+
     // 告警服务
     '/alerts': {
       component (resolve) {
