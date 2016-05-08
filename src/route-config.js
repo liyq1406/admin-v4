@@ -476,6 +476,15 @@ let configRouter = (router) => {
       }
     },
 
+    // 数据快照详情
+    '/data/snapshot/:name': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/data/snapshotDetails'))
+        }, 'admin')
+      }
+    },
+
     // 用户管理
     '/users': {
       component (resolve) {
