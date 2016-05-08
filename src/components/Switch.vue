@@ -61,6 +61,7 @@
   .v-switch
     position relative
     display inline-block
+    vertical-align middle
     background #CCC
     size 42px 26px
     line-height 26px

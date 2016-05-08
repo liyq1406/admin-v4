@@ -406,10 +406,10 @@ let configRouter = (router) => {
       }
     },
     // 设备互联
-    '/link': {
+    '/linkage': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/link/index'))
+          resolve(require('./views/linkage/index'))
         }, 'admin')
       },
       subRoutes: {
@@ -417,7 +417,7 @@ let configRouter = (router) => {
         'devices': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/link/devices-link'))
+              resolve(require('./views/linkage/devices'))
             }, 'admin')
           }
         },
@@ -425,7 +425,7 @@ let configRouter = (router) => {
         'nest': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/link/nest-link'))
+              resolve(require('./views/linkage/nest'))
             }, 'admin')
           }
         },
@@ -433,7 +433,7 @@ let configRouter = (router) => {
         'echo': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/link/echo'))
+              resolve(require('./views/linkage/echo'))
             }, 'admin')
           }
         }
@@ -819,7 +819,7 @@ let configRouter = (router) => {
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
-    '/link': '/link/devices'
+    '/linkage': '/linkage/devices'
   })
 
   router.beforeEach((transition) => {
