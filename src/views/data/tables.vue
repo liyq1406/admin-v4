@@ -9,53 +9,55 @@
                 <button @click="addModal.show=true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
               </div>
             </div>
-            <div class="data-table-box">
+            <div class="data-table-box" v-show="dataFirClassList.length">
               <ul>
-                <li class="data-table-li" v-for="dataFirClass in dataFirClassList" @click="selectedFirstClass(dataFirClass)">
+                <li class="data-table-li" v-for="dataFirClass in dataFirClassList" @click="selectedFirstClassEvent(dataFirClass)">
                   <a class="data-first-class" :title="dataFirClass.name" :class="{'selected': dataFirClass.selected}">{{dataFirClass.name}}</a>
                 </li>
               </ul>
             </div>
           </div>
           <div class="col-20 data-table-border details-box">
-            <div class="selected-first-class" v-show="true">
+            <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="row details-header">
                 <div class="col-8 title-box">
                   <span>数据表详情</span>
                 </div>
                 <div class="col-16 operation-box tar">
                   <div class="operation-div">
-                    <div class="operation add-line" @click="addLineEvent">
+                    <div class="operation add-line" @click="showAddLineModal">
                       <span>添加行</span>
                     </div>
-                    <div class="operation del-line" :class="{'disabled': selectedTable.length === 0}">
+                    <div class="operation del-line" :class="{'disabled': selectedTable.length === 0}" @click="deleteLineEvent">
                       <span>删除行</span>
                     </div>
                     <div class="operation add-column" @click="showAddColumnModal">
                       <span>添加列</span>
                     </div>
                     <div class="operation more">
-                      <select>
-                        <option value="0">更多</option>
-                        <option value="1">删除所有数据</option>
-                        <option value="2">删除数据表</option>
-                        <option value="3">删除列</option>
-                        <option value="4">限权设置</option>
-                        <option value="5">导出数据</option>
-                        <option value="6">导出全部数据表</option>
-                      </select>
+                      <span>更多</span>
+                      <div class="moreOperation-box">
+                        <ul>
+                          <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
+                          <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
+                          <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
+                          <li @click.stop=""><span>限权设置</span></li>
+                          <li @click.stop=""><span>导出数据</span></li>
+                          <li @click.stop=""><span>导出全部数据表</span></li>
+                        </ul>
+                      </div>
                     </div>
-                    <div class="operation filter">
+                    <div class="operation filter" @click="showFilterModal">
                       <span>过滤</span>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="details-table">
-                <intelligent-table :headers="vHeaders" :tables="vTables" :selecting="true" @selected-change="selectedTableChange"></intelligent-table>
+                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table.sync="selectedTable" :selecting.sync="true" @selected-change="selectedTableChange"></intelligent-table>
               </div>
             </div>
-            <div class="tips-box" v-show="false">
+            <div class="tips-box" v-show="!selectedFirstClass.selected">
               <p class="problem">如何管理我的数据表？</p>
               <p class="answer">
                 您可以点击创建数据表<br>
@@ -250,20 +252,20 @@
     </modal>
     <!-- End: 修改数据表浮层 -->
     <!-- start 添加行 -->
-    <modal :show.sync="false">
+    <modal :show.sync="addLineModal.show">
       <h3 slot="header">添加行</h3>
       <div slot="body" class="form">
-        <form>
+        <form @submit.prevent="addLineModalConfirm">
           <div class="form-row row" v-for="key in addListKey">
             <label class="form-control col-6">{{key}}:</label>
             <div class="controls col-18">
               <div v-placeholder="'请输入' + key" class="input-text-wrap">
-                <input v-model="addline['key']" type="text" name="name" minlength="2" maxlength="64" class="input-text"/>
+                <input v-model="addLineModal.modal[key]" type="text" name="name" minlength="2" maxlength="64" class="input-text"/>
               </div>
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button @click.prevent.stop="addLineModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
         </form>
@@ -274,7 +276,7 @@
     <modal :show.sync="addColumnModal.show">
       <h3 slot="header">添加列</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="AddColumnModalConfirm">
+        <form @submit.prevent="addColumnModalConfirm">
           <div class="form-row row">
             <label class="form-control col-6">列名:</label>
             <div class="controls col-18">
@@ -291,6 +293,58 @@
       </div>
     </modal>
     <!-- 添加列 -->
+    <!-- start 删除列 -->
+    <modal :show.sync="delColumnModal.show">
+      <h3 slot="header">删除列</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="delColumnModalConfirm">
+          <div class="form-row row">
+            <label class="form-control col-6">列名:</label>
+            <div class="controls col-12">
+              <v-select :label="delColumnModal.selectedColumn" :width="'150px'">
+                <select v-model="delColumnModal.selectedColumn">
+                  <option v-for="key in addListKey" :value="key">{{ key }}</option>
+                </select>
+              </v-select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="delColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 删除列 -->
+    <!-- start 筛选 -->
+    <modal :show.sync="filterModal.show">
+      <h3 slot="header">筛选</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="filterModalConfirm">
+          <div class="form-row row">
+            <div class="controls col-12">
+              <v-select :label="filterModal.modal.title" :width="'150px'">
+                <select v-model="filterModal.modal">
+                  <option v-for="header in vHeaders" :value="header">{{ header.title }}</option>
+                </select>
+              </v-select>
+            </div>
+            <div class="controls col-12">
+              <v-select :label="filterModal.condition.selectedCondition" :width="'150px'">
+                <select v-model="filterModal.condition.selectedCondition">
+                  <option v-for="condition in filterModal.condition.conditionList" :value="condition">{{ condition }}</option>
+                </select>
+              </v-select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="filterModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 筛选 -->
   </div>
 </template>
 
@@ -342,6 +396,9 @@
         selectedTable: [],
         // 表格头部
         vHeaders: [
+        ],
+        // 默认表格头部
+        baseVHeaders: [
           {
             key: 'id',
             title: 'ID',
@@ -367,30 +424,54 @@
             functionName: 'showEditModal'
           }
         ],
-        // 用户自己添加进去的字段
-        addListKey: ['用户自定义key'], // 每次用户添加列都需要把key丢进来
         // 表格内容
         vTables: [
-          {
-            id: '<a>idididid</a>',
-            creatTime: '123',
-            updateTime: '更新时间',
-            creater: '创建者',
-            operation: '<a style="color:#c0252e">编辑</a>',
-            tableName: '分类1'
-          },
-          {
-            id: 'idididid',
-            creatTime: '创建时间',
-            updateTime: '更新时间',
-            creater: '创建者',
-            operation: '<a style="color:#c0252e">编辑</a>',
-            tableName: '分类1'
-          }
+          // {
+          //   id: '<a>idididid</a>',
+          //   creatTime: '123',
+          //   updateTime: '更新时间',
+          //   creater: '创建者',
+          //   operation: '<a>编辑</a>',
+          //   tableName: '分类1'
+          // },
+          // {
+          //   id: 'idididid',
+          //   creatTime: '创建时间',
+          //   updateTime: '更新时间',
+          //   creater: '创建者',
+          //   operation: '<a>编辑</a>',
+          //   tableName: '分类1'
+          // }
         ],
+
+        // 添加列浮层
         addColumnModal: {
           show: false,
           content: ''
+        },
+
+        // 删除列浮层
+        delColumnModal: {
+          show: false,
+          selectedColumn: ''
+        },
+
+        // 添加行浮层
+        addLineModal: {
+          show: false,
+          modal: {}
+        },
+        // 筛选浮层
+        filterModal: {
+          show: false,
+          condition: {
+            selectedCondition: '>',
+            conditionList: ['>', '<', '>=', '<=']
+          },
+          modal: {
+            key: 'id',
+            title: ''
+          }
         },
         tables: [],
         tableTypes: locales[Vue.config.lang].table.types,
@@ -430,6 +511,33 @@
     },
 
     computed: {
+      // 用户自己添加进去的字段
+      addListKey () {
+        var result = []
+        var noUserKey = []
+        this.baseVHeaders.map((baseVHeader) => {
+          noUserKey.push(baseVHeader.key)
+        })
+        this.vHeaders.map((vHeader) => {
+          if (noUserKey.indexOf(vHeader.key) === -1) {
+            result.push(vHeader.key)
+          }
+        })
+        return result
+      },
+      /**
+       * 已经选择的大类
+       * @return {[type]} [description]
+       */
+      selectedFirstClass () {
+        var selectedFirstClass = {}
+        this.dataFirClassList.map((item) => {
+          if (item.selected) {
+            selectedFirstClass = item
+          }
+        })
+        return selectedFirstClass
+      },
       // 是否可以在添加浮层里面创建字段
       canCreateAddFields () {
         var names = _.uniq(_.compact(_.map(this.addModal.fields, 'name')))
@@ -450,13 +558,41 @@
     },
 
     methods: {
+      /**
+       * 初始化数据 用tables的数据初始化各个对象
+       * @return {[type]} [description]
+       */
+      initData () {
+        console.log(JSON.stringify(this.tables))
+        var dataFirClassList = []
+        var vHeaders = []
+        this.tables.map((table) => {
+          var dataFirClassListObj = {
+            name: table.name,
+            selected: false
+          }
+          dataFirClassList.push(dataFirClassListObj)
+          if (table.field !== {}) {
+            for (var key in table.field) {
+              var obj = {
+                key: key,
+                title: key
+              }
+              vHeaders.push(obj)
+            }
+          }
+        })
+        this.vHeaders = this.baseVHeaders.concat(vHeaders)
+        this.dataFirClassList = dataFirClassList
+        this.filterModal.modal = _.clone(this.vHeaders[0])
+      },
       // 显示添加列浮层
       showAddColumnModal () {
         this.addColumnModal.show = true
         this.addColumnModal.content = ''
       },
       // 添加列浮层确定按钮按下
-      AddColumnModalConfirm () {
+      addColumnModalConfirm () {
         var key = this.addColumnModal.content
         if (key) {
           var repeat = false
@@ -485,25 +621,149 @@
           })
         }
       },
-      selectedFirstClass (selectedFirstClass) {
+
+      /**
+       * 删除数据表
+       * @return {[type]} [description]
+       */
+      deleteDataTable () {
+        console.log(this.selectedFirstClass.name)
+        if (window.confirm('确定要删除数据表' + this.selectedFirstClass.name + '吗')) {
+          console.log('发请求删除数据表 然后重新渲染列表')
+        }
+      },
+      /**
+       * 选择大类
+       * @param  {[type]} selectedFirstClassEvent [description]
+       * @return {[type]}                    [description]
+       */
+      selectedFirstClassEvent (selectedFirstClass) {
         this.dataFirClassList.map((item) => {
           item.selected = false
         })
+        var vTables = []
+        var vHeaders = []
+        this.tables.map((table) => {
+          if (table.name === selectedFirstClass.name) {
+            var vTable = {}
+            vTable.id = ''
+            vTable.creatTime = new Date()
+            vTable.updateTime = new Date()
+            vTable.creater = '这里插入当前的用户名'
+            vTable.operation = '<a>编辑</a>'
+            for (let key in table.field) {
+              var vHeader = {
+                key: key,
+                title: key
+              }
+              vTable[key] = '暂时写死的数据'
+              vHeaders.push(vHeader)
+            }
+            vTables.push(vTable)
+          }
+        })
+        this.vTables = vTables
+        this.vHeaders = this.baseVHeaders.concat(vHeaders)
         selectedFirstClass.selected = true
+      },
+      /**
+       * 显示添加行浮层
+       * @return {[type]} [description]
+       */
+      showAddLineModal () {
+        var obj = {}
+        if (this.addListKey.length) {
+          this.addListKey.map((item) => {
+            obj[item] = ''
+          })
+          this.addLineModal.modal = obj
+          this.addLineModal.show = true
+        } else {
+          this.addLineModalConfirm()
+        }
       },
       /**
        * 添加行
        */
-      addLineEvent () {
-        var obj = {
-          id: '<a>新添加的行</a>',
-          creatTime: '123',
-          updateTime: '更新时间123',
-          creater: '创建者123',
-          operation: '操作123'
-        }
+      addLineModalConfirm () {
+        var obj = {}
+        this.addListKey.map((item) => {
+          obj[item] = this.addLineModal.modal[item]
+        })
+        obj.id = ''
+        obj.creatTime = new Date()
+        obj.updateTime = new Date()
+        obj.creater = '这里插入当前的用户名'
+        obj.operation = '<a>编辑</a>'
         this.vTables.push(obj)
+        this.addLineModal.show = false
       },
+
+      /**
+       * 删除行事件
+       * @return {[type]} [description]
+       */
+      deleteLineEvent () {
+        if (this.selectedTable.length) {
+          console.log(JSON.stringify(this.selectedTable))
+          this.selectedTable.map((item) => {
+            this.vTables.$remove(item)
+          })
+          this.selectedTable = []
+        }
+      },
+
+      /**
+       * 删除所有数据表
+       * @return {[type]} [description]
+       */
+      deleteAllData () {
+        if (window.confirm('确定要删除所有数据表？')) {
+          console.log('发请求删除所有数据 然后重新渲染列表')
+          this.tables = []
+        }
+      },
+
+      /**
+       * 显示筛选条件浮层
+       * @return {[type]} [description]
+       */
+      showFilterModal () {
+        this.filterModal.show = true
+      },
+      /**
+       * 筛选条件浮层确定按钮
+       * @return {[type]} [description]
+       */
+      filterModalConfirm () {
+        console.log('筛选条件浮层确定按钮')
+        this.filterModal.show = false
+      },
+
+      /**
+       * 显示删除列浮层
+       * @return {[type]} [description]
+       */
+      showDeleteColumnModal () {
+        if (this.addListKey.length) {
+          this.delColumnModal.selectedColumn = this.addListKey[0]
+          this.delColumnModal.show = true
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '当前没有可删除的列'
+          })
+        }
+      },
+      /**
+       * 删除列浮层确定按钮事件
+       * @return {[type]} [description]
+       */
+      delColumnModalConfirm () {
+        console.log('删除当前选中的列' + this.delColumnModal.selectedColumn)
+        console.log('然后')
+      },
+
       showEditModal (header, table) {
         // var obj =  {
         //   field: {},
@@ -545,7 +805,7 @@
         api.dataTable.getTables().then((res) => {
           if (res.status === 200) {
             this.tables = res.data
-            console.log(JSON.stringify(this.tables))
+            this.initData()
             this.loadingData = false
           }
         }).catch((res) => {
@@ -785,13 +1045,38 @@
           font-size 14px
         .disabled
           color #bbb
+          cursor no-drop
         .more
           border-right 1px solid #e0e0e0
-          padding-right 0
-          select
-            border 0
-            width 100%
-            background none
+          position relative
+          .moreOperation-box
+            height 0
+            overflow hidden
+            opacity 0
+            position absolute
+            right -1px
+            top 100%
+            white-space nowrap
+            z-index 10
+            background #fff
+            line-height 32px
+            border 1px solid #e0e0e0
+            transition all ease 0.3s
+            transform translate(0, 10px)
+            li
+              height 30px
+              line-height 30px
+              padding 0 10px
+              border-bottom 1px solid #e0e0e0
+              transition all ease 0.3s
+              &:hover
+                color red
+                transform translate(-3px)
+          &:hover
+            .moreOperation-box
+              opacity 1
+              height auto
+              transform translate(0, 0)
         .filter
           margin-left 20px
           border-right 1px solid #e0e0e0

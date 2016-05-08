@@ -17,7 +17,7 @@
           </tr>
         </template>
         <tr v-if="tables.length === 0 && !loadingData">
-          <td :colspan="headers.length" class="tac">
+          <td :colspan="headers.length + 1" class="tac">
             <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
           </td>
         </tr>
@@ -80,12 +80,11 @@
       tables: {
         type: Array,
         default: []
-      }
-    },
+      },
 
-    data () {
-      return {
-        selectedTable: []
+      selectedTable: {
+        type: Array,
+        default: []
       }
     },
     methods: {

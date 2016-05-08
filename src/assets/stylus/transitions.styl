@@ -26,3 +26,14 @@
 .rightToLeft-leave
   opacity 0
   transform translate3d(0.3rem,0, 0)
+
+// 菜单动画
+.menu-transition
+  transition opacity .3s ease, height .3s ease, transform .3s ease
+  opacity 1
+  transform translate3d(0,0,0)
+
+.menu-enter
+.menu-leave
+  opacity 0
+  transform translate3d(0, 10px, 0)
