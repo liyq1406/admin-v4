@@ -133,6 +133,7 @@ export default {
       `${apiServer.default}/v2/product/${product_id}/v_device/${deviceId}`
     )
   },
+
   /**
    * 查询设备上下线记录
    * @param  {String} deviceId 设备 ID
@@ -143,9 +144,52 @@ export default {
     )
   },
 
+  /**
+   * 获取数据端点值
+   * @param  {String} deviceId 设备 ID
+   */
   getDatapointValues (deviceId) {
     return http.get(
       `${apiServer.default}/v2/diagnosis/device/probe/${deviceId}`
+    )
+  },
+
+  /**
+   * 获取设备地理信息
+   * @param  {String} product_id 产品 ID
+   * @param  {String} deviceId   设备 ID
+   */
+  getGeography (product_id, deviceId) {
+    return http.get(
+      `${apiServer.default}/v2/product/${product_id}/device/${deviceId}/geography`
+    )
+  },
+
+  /**
+   * 通过地理信息查询设备
+   * @param  {String} product_id 产品 ID
+   * @param  {String} params     查询参数
+   */
+  getGeographies (product_id, params) {
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: {
+    //       count: 2,
+    //       devices: [{
+    //         device_id: 123456,
+    //         lat: 23,
+    //         lon: 113
+    //       }, {
+    //         device_id: 123456,
+    //         lat: 22,
+    //         lon: 114
+    //       }]
+    //     },
+    //     status: 200
+    //   })
+    // })
+    return http.post(
+      `${apiServer.default}/v2/product/${product_id}/devices/geography`, params
     )
   }
 }
