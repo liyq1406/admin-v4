@@ -7,20 +7,74 @@
         </div>
         <div class="panel-bd">
           <div class="plugin-grid row">
-            <div class="col-12" v-for="n in pluginGrids">
+            <div class="col-12">
               <div class="plugin-grid-item">
                 <div class="inner">
                   <div class="thumb">
-                    <img src="../../assets/images/pic.png" alt="">
+                    <img src='../../assets/images/broadcast.png' alt="">
                   </div>
                   <div class="info">
-                    <h3>{{n.name}}</h3>
-                    <p>{{n.description}}</p>
+                    <h3>{{pluginGrids[0].name}}</h3>
+                    <p>{{pluginGrids[0].description}}</p>
                   </div>
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
                     <!-- <i class="hl-red" v-else>未启用</i> -->
-                    <switch size="small" :value.sync='pluginStatus[n.id].enable' @switch-toggle="pluginToggle(n.id)"></switch>
+                    <switch size="small" :value.sync="pluginStatus['broadcast'].enable" @switch-toggle="pluginToggle('broadcast')"></switch>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="plugin-grid-item">
+                <div class="inner">
+                  <div class="thumb">
+                    <img src='../../assets/images/helpdesk.png' alt="">
+                  </div>
+                  <div class="info">
+                    <h3>{{pluginGrids[1].name}}</h3>
+                    <p>{{pluginGrids[1].description}}</p>
+                  </div>
+                  <span class="status">
+                    <!-- <i class="hl-green" v-if="true">已启用</i> -->
+                    <!-- <i class="hl-red" v-else>未启用</i> -->
+                    <switch size="small" :value.sync="pluginStatus['helpdesk'].enable" @switch-toggle="pluginToggle('helpdesk')"></switch>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="plugin-grid-item">
+                <div class="inner">
+                  <div class="thumb">
+                    <img src='../../assets/images/warranty.png' alt="">
+                  </div>
+                  <div class="info">
+                    <h3>{{pluginGrids[2].name}}</h3>
+                    <p>{{pluginGrids[2].description}}</p>
+                  </div>
+                  <span class="status">
+                    <!-- <i class="hl-green" v-if="true">已启用</i> -->
+                    <!-- <i class="hl-red" v-else>未启用</i> -->
+                    <switch size="small" :value.sync="pluginStatus['warranty'].enable" @switch-toggle="pluginToggle('warranty')"></switch>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="col-12">
+              <div class="plugin-grid-item">
+                <div class="inner">
+                  <div class="thumb">
+                    <img src='../../assets/images/dealer.png' alt="">
+                  </div>
+                  <div class="info">
+                    <h3>{{pluginGrids[3].name}}</h3>
+                    <p>{{pluginGrids[3].description}}</p>
+                  </div>
+                  <span class="status">
+                    <!-- <i class="hl-green" v-if="true">已启用</i> -->
+                    <!-- <i class="hl-red" v-else>未启用</i> -->
+                    <switch size="small" :value.sync="pluginStatus['dealer'].enable" @switch-toggle="pluginToggle('dealer')"></switch>
                   </span>
                 </div>
               </div>
@@ -186,7 +240,7 @@
               this.createPlugin(res.data) // 更新store
               // create 成功以后立级开启
               this.updateModel.enable = true
-              api.plugin.update(this.pluginStatus['broadcast'].data.id, this.updateModel).then((res) => {
+              api.plugin.update(res.data.id, this.updateModel).then((res) => {
                 if (res.status === 200) {
                   this.updatePlugin(res.data)
                 }
@@ -221,7 +275,7 @@
               this.createPlugin(res.data) // 更新store
               // create 成功以后立级开启
               this.updateModel.enable = true
-              api.plugin.update(this.pluginStatus['helpdesk'].data.id, this.updateModel).then((res) => {
+              api.plugin.update(res.data.id, this.updateModel).then((res) => {
                 if (res.status === 200) {
                   this.updatePlugin(res.data)
                 }
@@ -259,7 +313,7 @@
               this.createPlugin(res.data) // 更新store
               // create 成功以后立级开启
               this.updateModel.enable = true
-              api.plugin.update(this.pluginStatus['warranty'].data.id, this.updateModel).then((res) => {
+              api.plugin.update(res.data.id, this.updateModel).then((res) => {
                 if (res.status === 200) {
                   this.updatePlugin(res.data)
                 }
@@ -294,7 +348,7 @@
               this.createPlugin(res.data) // 更新store
               // create 成功以后立级开启
               this.updateModel.enable = true
-              api.plugin.update(this.pluginStatus['dealer'].data.id, this.updateModel).then((res) => {
+              api.plugin.update(res.data.id, this.updateModel).then((res) => {
                 if (res.status === 200) {
                   this.updatePlugin(res.data)
                 }
@@ -315,7 +369,7 @@
         }
         window.clearInterval(this.checkfinish)
         var specialPlugins = _.filter(this.plugins, (item) => {
-          return item.type > 4
+          return item.type === 10
         })
 
         if (specialPlugins.length > 0) {
