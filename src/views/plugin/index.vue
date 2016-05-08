@@ -116,14 +116,18 @@
           plugin: ''
         },
         updateModel: {
-          enable: false
-        }
+          name: '',
+          enable: false,
+          config: {
+            url: ''
+          }
+        },
+        checkfinish: NaN
       }
     },
 
     route: {
       data () {
-        this.checkPluginsState()
         return {
           secondaryNav: [{
             label: this.$t('sub_nav.plugins.extensions'),
@@ -136,6 +140,10 @@
         ]
         }
       }
+    },
+
+    ready () {
+      this.checkfinish = setInterval(this.checkPluginsState, 10)
     },
 
     methods: {
@@ -160,29 +168,152 @@
 
       broadcast () {
         if (this.pluginStatus['broadcast'].created) {
-          this.updateModel.enable === this.pluginStatus['broadcast'].enable
-          api.plugin.update(this.pluginStatus['broadcast'].data.id, this.updateModel)
+          this.updateModel.enable = this.pluginStatus['broadcast'].enable
+          api.plugin.update(this.pluginStatus['broadcast'].data.id, this.updateModel).then((res) => {
+            if (res.status === 200) {
+              this.updatePlugin(res.data)
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
         } else {
           this.addModel.name = 'broadcast'
           this.addModel.type = 10
           this.addModel.plugin = 'broadcast'
-          api.plugin.create(this.addModel)
+          api.plugin.create(this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.pluginStatus['broadcast'].created = true // 设置已被创建成功
+              this.createPlugin(res.data) // 更新store
+              // create 成功以后立级开启
+              this.updateModel.enable = true
+              api.plugin.update(this.pluginStatus['broadcast'].data.id, this.updateModel).then((res) => {
+                if (res.status === 200) {
+                  this.updatePlugin(res.data)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            }
+          }).catch((res) => {
+            this.pluginStatus['broadcast'].enable = !this.pluginStatus['broadcast'].enable
+            this.handleError(res)
+          })
         }
       },
 
       helpdesk () {
-
+        if (this.pluginStatus['helpdesk'].created) {
+          this.updateModel.enable = this.pluginStatus['helpdesk'].enable
+          api.plugin.update(this.pluginStatus['helpdesk'].data.id, this.updateModel).then((res) => {
+            if (res.status === 200) {
+              this.updatePlugin(res.data)
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        } else {
+          this.addModel.name = 'helpdesk'
+          this.addModel.type = 10
+          this.addModel.plugin = 'helpdesk'
+          api.plugin.create(this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.pluginStatus['helpdesk'].created = true // 设置已被创建成功
+              this.createPlugin(res.data) // 更新store
+              // create 成功以后立级开启
+              this.updateModel.enable = true
+              api.plugin.update(this.pluginStatus['helpdesk'].data.id, this.updateModel).then((res) => {
+                if (res.status === 200) {
+                  this.updatePlugin(res.data)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            }
+          }).catch((res) => {
+            this.pluginStatus['helpdesk'].enable = !this.pluginStatus['helpdesk'].enable
+            this.handleError(res)
+          })
+        }
       },
 
       warranty () {
-
+        if (this.pluginStatus['warranty'].created) {
+          this.updateModel.enable = this.pluginStatus['warranty'].enable
+          this.updateModel.name = 'warranty'
+          this.updateModel.config.url = ''
+          api.plugin.update(this.pluginStatus['warranty'].data.id, this.updateModel).then((res) => {
+            if (res.status === 200) {
+              this.updatePlugin(res.data)
+            }
+          }).catch((res) => {
+            this.pluginStatus['warranty'].enable = !this.pluginStatus['warranty'].enable
+            this.handleError(res)
+          })
+        } else {
+          this.addModel.name = 'warranty'
+          this.addModel.type = 10
+          this.addModel.plugin = 'warranty'
+          api.plugin.create(this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.pluginStatus['warranty'].created = true // 设置已被创建成功
+              this.createPlugin(res.data) // 更新store
+              // create 成功以后立级开启
+              this.updateModel.enable = true
+              api.plugin.update(this.pluginStatus['warranty'].data.id, this.updateModel).then((res) => {
+                if (res.status === 200) {
+                  this.updatePlugin(res.data)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            }
+          }).catch((res) => {
+            this.pluginStatus['warranty'].enable = !this.pluginStatus['warranty'].enable
+            this.handleError(res)
+          })
+        }
       },
 
       dealer () {
-
+        if (this.pluginStatus['dealer'].created) {
+          this.updateModel.enable = this.pluginStatus['dealer'].enable
+          api.plugin.update(this.pluginStatus['dealer'].data.id, this.updateModel).then((res) => {
+            if (res.status === 200) {
+              this.updatePlugin(res.data)
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        } else {
+          this.addModel.name = 'dealer'
+          this.addModel.type = 10
+          this.addModel.plugin = 'dealer'
+          api.plugin.create(this.addModel).then((res) => {
+            if (res.status === 200) {
+              this.pluginStatus['dealer'].created = true // 设置已被创建成功
+              this.createPlugin(res.data) // 更新store
+              // create 成功以后立级开启
+              this.updateModel.enable = true
+              api.plugin.update(this.pluginStatus['dealer'].data.id, this.updateModel).then((res) => {
+                if (res.status === 200) {
+                  this.updatePlugin(res.data)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            }
+          }).catch((res) => {
+            this.pluginStatus['dealer'].enable = !this.pluginStatus['dealer'].enable
+            this.handleError(res)
+          })
+        }
       },
 
       checkPluginsState () { // 查询各个定制应用是否被创建
+        if (this.plugins.length <= 0) {
+          return false
+        }
+        window.clearInterval(this.checkfinish)
         var specialPlugins = _.filter(this.plugins, (item) => {
           return item.type > 4
         })
@@ -193,9 +324,9 @@
             return item.plugin === 'broadcast'
           })
 
-          if (broadcast) {
-            this.pluginStatus['broadcast'].data = broadcast
-            if (broadcast.enable === true) {
+          if (broadcast.length > 0) {
+            this.pluginStatus['broadcast'].data = broadcast[0] ? broadcast[0] : {}
+            if (broadcast[0].enable === true) {
               this.pluginStatus['broadcast'].enable = true
             } else {
               this.pluginStatus['broadcast'].created = true
@@ -206,9 +337,10 @@
             return item.plugin === 'helpdesk'
           })
 
-          if (helpdesk) {
-            this.pluginStatus['helpdesk'].data = helpdesk
-            if (helpdesk.enable === true) {
+          if (helpdesk > 0) {
+            this.pluginStatus['helpdesk'].data = warranty[0] ? warranty[0] : {}
+            if (helpdesk[0].enable === true) {
+              this.pluginStatus['helpdesk'].created = true
               this.pluginStatus['helpdesk'].enable = true
             } else {
               this.pluginStatus['helpdesk'].created = true
@@ -220,9 +352,10 @@
             return item.plugin === 'warranty'
           })
 
-          if (warranty) {
-            this.pluginStatus['warranty'].data = warranty
-            if (helpdesk.enable === true) {
+          if (warranty.length > 0) {
+            this.pluginStatus['warranty'].data = warranty[0] ? warranty[0] : {}
+            if (warranty[0].enable === true) {
+              this.pluginStatus['warranty'].created = true
               this.pluginStatus['warranty'].enable = true
             } else {
               this.pluginStatus['warranty'].created = true
@@ -234,9 +367,10 @@
             return item.plugin === 'dealer'
           })
 
-          if (dealer) {
-            this.pluginStatus['dealer'].data = dealer
-            if (helpdesk.enable === true) {
+          if (dealer.length > 0) {
+            this.pluginStatus['dealer'].data = dealer[0] ? dealer[0] : {}
+            if (dealer[0].enable === true) {
+              this.pluginStatus['dealer'].created = true
               this.pluginStatus['dealer'].enable = true
             } else {
               this.pluginStatus['dealer'].created = true
