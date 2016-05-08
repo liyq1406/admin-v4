@@ -48,7 +48,7 @@
                   <div class="header-box row">
                     <div class="device-base-msg-box col-12 row">
                       <div class="device-picture col-6">
-                        图片
+                        <img>
                       </div>
                       <div class="device-base-msg row col-18">
                         <p>
@@ -67,16 +67,16 @@
                     </div>
                     <div class="operation-box col-12">
                       <div class="check-device">
-                        <button class="btn btn-primary">查看设备</button>
+                        <button class="btn btn-primary" v-link="{path: '/products/123/overview'}">查看设备</button>
                       </div>
                       <div class="radio-group-box">
-                        <radio-group :items="periods" :value.sync="7" @select=""><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+                        <radio-group :items="periods" :value.sync="period" @select=""><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
                       </div>
                     </div>
                   </div>
                   <div class="chart-box">
                     <div class="panel-bd with-loading">
-                      <line-chart :series="productTrendSeries" :x-axis-data="productXAxisData" v-ref:trend-chart></line-chart>
+                      <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart>
                       <div class="icon-loading" v-show="loadingProductTrends">
                         <i class="fa fa-refresh fa-spin"></i>
                       </div>
@@ -127,6 +127,7 @@
   import locales from '../../consts/locales/index'
   // import api from '../../api'
   import RadioGroup from '../../components/RadioGroup'
+  import dateFormat from 'date-format'
   import LineChart from '../../components/charts/Line'
   import Pager from '../../components/Pager'
   import SearchBox from '../../components/SearchBox'
@@ -152,10 +153,11 @@
 
     data () {
       return {
-        /** ***图表 start*********/
+        /** ***图表 按钮 start*********/
         loadingProductTrends: false,
         periods: locales[Vue.config.lang].periods,
-        /* ******图表 end*************/
+        period: 7,
+        /* ******图表 按钮 end*************/
         query: '',
         searching: false,
         queryTypeOptions: [
@@ -200,6 +202,13 @@
             mac: 'mac123',
             selected: false
           }
+        ],
+        snapshotSeries: [
+          {
+            name: '温度',
+            type: 'line',
+            data: [0, 0, 0, 0, 0, 0, 0]
+          }
         ]
       }
     },
@@ -218,6 +227,16 @@
           offset: (this.currentPage - 1) * this.pageCount
         }
         return condition
+      },
+
+      // 图表横轴数据
+      snapshotXAxisData () {
+        var today = new Date()
+        var result = []
+        for (var i = this.period - 1; i >= 0; i--) {
+          result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
+        }
+        return result
       }
     },
 
@@ -283,7 +302,7 @@
         .device-picture
           width 65px
           height 65px
-          background #aaa
+          background url('../../assets/images/device_thumb.png') center/100%
         .device-base-msg
           height 60px
           line-height 23px

@@ -33,7 +33,9 @@
           <div class="form-row row">
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
-              <div class="editSnapshot" @click="showEditModal=true">编辑快照数据</div>
+              <div class="editSnapshot">
+                <button class="btn btn-success" @click="showEditModal=true">编辑快照数据</button>
+              </div>
             </div>
           </div>
           <div class="form-row row">
@@ -69,7 +71,9 @@
             </thead>
             <tbody>
               <tr v-for="i in 3">
-                <td>热水器</td>
+                <td v-link="{ path: '/data/snapshot/123' }">
+                  <a>热水器</a>
+                </td>
                 <td>ted</td>
                 <td>2019.0.1</td>
                 <td>哈哈</td>
@@ -259,7 +263,6 @@
   @import '../../assets/stylus/common'
   .editSnapshot
     line-height 32px
-    color green
   .data-tag
     display inline-block
     color gray

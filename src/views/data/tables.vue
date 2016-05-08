@@ -323,7 +323,7 @@
         <form @submit.prevent="filterModalConfirm">
           <div class="form-row row">
             <div class="controls col-12 row">
-              <lable class="filterModalTitle col-8">选择列：</lable>
+              <span class="filterModalTitle col-8">选择列：</span>
               <div class="select-box col-14">
                 <v-select :label="filterModal.modal.title" :width="'100px'">
                   <select v-model="filterModal.modal">
@@ -333,7 +333,7 @@
               </div>
             </div>
             <div class="controls col-12">
-              <lable class="filterModalTitle col-8">筛选条件：</lable>
+              <span class="filterModalTitle col-8">筛选条件：</span>
               <div class="select-box col-14">
                 <v-select :label="filterModal.condition.selectedCondition" :width="'100px'">
                   <select v-model="filterModal.condition.selectedCondition">
