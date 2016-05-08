@@ -322,19 +322,25 @@
       <div slot="body" class="form">
         <form @submit.prevent="filterModalConfirm">
           <div class="form-row row">
-            <div class="controls col-12">
-              <v-select :label="filterModal.modal.title" :width="'150px'">
-                <select v-model="filterModal.modal">
-                  <option v-for="header in vHeaders" :value="header">{{ header.title }}</option>
-                </select>
-              </v-select>
+            <div class="controls col-12 row">
+              <lable class="filterModalTitle col-8">选择列：</lable>
+              <div class="select-box col-14">
+                <v-select :label="filterModal.modal.title" :width="'100px'">
+                  <select v-model="filterModal.modal">
+                    <option v-for="header in vHeaders" :value="header">{{ header.title }}</option>
+                  </select>
+                </v-select>
+              </div>
             </div>
             <div class="controls col-12">
-              <v-select :label="filterModal.condition.selectedCondition" :width="'150px'">
-                <select v-model="filterModal.condition.selectedCondition">
-                  <option v-for="condition in filterModal.condition.conditionList" :value="condition">{{ condition }}</option>
-                </select>
-              </v-select>
+              <lable class="filterModalTitle col-8">筛选条件：</lable>
+              <div class="select-box col-14">
+                <v-select :label="filterModal.condition.selectedCondition" :width="'100px'">
+                  <select v-model="filterModal.condition.selectedCondition">
+                    <option v-for="condition in filterModal.condition.conditionList" :value="condition">{{ condition }}</option>
+                  </select>
+                </v-select>
+              </div>
             </div>
           </div>
           <div class="form-actions">
@@ -1103,4 +1109,6 @@
 
         &:hover
           color red
+    .filterModalTitle
+      line-height 32px
 </style>

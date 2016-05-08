@@ -1,87 +1,136 @@
 <template>
   <section class="main-wrap">
-    <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/data/tables' }"><i class="fa fa-arrow-circle-left"></i>{{ $t("nav_aside.data") }}</a></div>
+    <div class="main snapshot-details">
+      <div class="breadcrumb"><a v-link="{path: '/data/snapshot' }"><i class="fa fa-arrow-circle-left"></i>数据快照</a></div>
       <div class="row">
         <div class="col-24">
-          <div class="panel">
+          <div class="panel row">
             <div class="panel-hd">
-              <h2>{{ $t("table.details") }}</h2>
+              <h2>净化器设备快照</h2>
             </div>
-            <div class="panel-bd">
-              <table class="table table-stripe table-bordered">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>{{ $t("table_record.fields.create") }}</th>
-                    <th>{{ $t("table_record.fields.update") }}</th>
-                    <th>{{ $t("table_record.fields.creator") }}</th>
-                    <th class="tac">{{ $t("common.action") }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="record in records">
-                    <td>{{ record.objectId }}</td>
-                    <td>{{ record.createAt | formatDate }}</td>
-                    <td>{{ record.updateAt | formatDate }}</td>
-                    <td>{{ record.creator }}</td>
-                    <td class="tac">
-                      <button @click="showRecord(record)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                    </td>
-                  </tr>
-                  <tr v-if="records.length === 0">
-                    <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                      <div v-else class="tips-null">{{ $t("common.no_records") }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-              <pager v-if="records.length > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
+            <div class="panel-bd col-8">
+              <div class="device-list-box">
+                <div class="action-bar">
+                  <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
+                    <v-select width="80px" :label="queryType.label">
+                      <select v-model="queryType">
+                        <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                      </select>
+                    </v-select>
+                    <button slot="search-button" @click="" class="btn btn-primary">{{ $t('common.search') }}</button>
+                  </search-box>
+                </div>
+                <table class="table table-stripe table-bordered">
+                  <thead>
+                    <tr>
+                      <th>设备ID</th>
+                      <th>设备标识(MAC)</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="deviceData in deviceDatas" :class="{'selected': deviceData.selected}" @click="selectedDeviceDataEvent(deviceData)">
+                      <td>{{ deviceData.id }}</td>
+                      <td>{{ deviceData.mac }}</td>
+                    </tr>
+                    <tr v-if="deviceDatas.length === 0">
+                      <td colspan="2" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                        <div v-else class="tips-null">暂无数据</div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <pager v-if="true" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
+              </div>
+            </div>
+            <div class="panel-bd col-16">
+              <div class="device-details-box">
+                <div class="device-msg-box">
+                  <div class="header-box row">
+                    <div class="device-base-msg-box col-12 row">
+                      <div class="device-picture col-6">
+                        图片
+                      </div>
+                      <div class="device-base-msg row col-18">
+                        <p>
+                          <i>设备ID：</i>
+                          <span>1999246249</span>
+                        </p>
+                        <p>
+                          <i>MAC：</i>
+                          <span>163D18E5B72E</span>
+                        </p>
+                        <p>
+                          <i>在线状态：</i>
+                          <span>下线</span>
+                        </p>
+                      </div>
+                    </div>
+                    <div class="operation-box col-12">
+                      <div class="check-device">
+                        <button class="btn btn-primary">查看设备</button>
+                      </div>
+                      <div class="radio-group-box">
+                        <radio-group :items="periods" :value.sync="7" @select=""><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="chart-box">
+                    <div class="panel-bd with-loading">
+                      <line-chart :series="productTrendSeries" :x-axis-data="productXAxisData" v-ref:trend-chart></line-chart>
+                      <div class="icon-loading" v-show="loadingProductTrends">
+                        <i class="fa fa-refresh fa-spin"></i>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="device-data-table-box">
+                  <div class="title">
+                    <span>设备数据明细 : </span>
+                  </div>
+                  <div class="table-box">
+                    <table class="table table-stripe table-bordered">
+                      <thead>
+                        <tr>
+                          <th>索引</th>
+                          <th>端点ID</th>
+                          <th>描述</th>
+                          <th>当前状态</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr v-for="n in 10">
+                          <td>{{ $index }}</td>
+                          <td>设备{{ $index }}</td>
+                          <td>{{ '描述' }}</td>
+                          <td>{{ '当前状态' }}</td>
+                        </tr>
+                        <tr v-if="false">
+                          <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                            <div v-else class="tips-null">暂无数据</div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <!-- 查看数据浮层-->
-    <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("table_record.details") }}</h3>
-      <table slot="body" class="table table-stripe table-bordered">
-        <tbody>
-          <tr>
-            <td>ID</td>
-            <td>{{ model.objectId }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("table_record.fields.create") }}</td>
-            <td>{{ model.createAt | formatDate }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("table_record.fields.update") }}</td>
-            <td>{{ model.updateAt | formatDate }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("table_record.fields.creator") }}</td>
-            <td>{{ model.creator }}</td>
-          </tr>
-          <tr>
-            <td colspan="2"><strong>{{ $t("table_record.value") }}</strong></td>
-          </tr>
-          <tr v-for="(key, val) in tableInfo.field">
-            <td>{{ key }}</td>
-            <td style="word-break: break-all;"><span v-if="key==='createAt' || key==='updateAt'">{{ model[key] | formatDate }}</span><span v-else>{{ model[key] }}</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div slot="footer" class="modal-footer">
-        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
-      </div>
-    </modal>
   </section>
 </template>
 
 <script>
-  import api from '../../api'
+  import Vue from 'vue'
+  import locales from '../../consts/locales/index'
+  // import api from '../../api'
+  import RadioGroup from '../../components/RadioGroup'
+  import LineChart from '../../components/charts/Line'
   import Pager from '../../components/Pager'
+  import SearchBox from '../../components/SearchBox'
+  import Select from '../../components/Select'
   import Modal from '../../components/Modal'
   import { globalMixins } from '../../mixins'
 
@@ -94,36 +143,75 @@
 
     components: {
       'modal': Modal,
+      'radio-group': RadioGroup,
+      'line-chart': LineChart,
+      'search-box': SearchBox,
+      'v-select': Select,
       'pager': Pager
     },
 
     data () {
       return {
-        total: 0,
-        tableInfo: {},
-        records: [],
+        /** ***图表 start*********/
+        loadingProductTrends: false,
+        periods: locales[Vue.config.lang].periods,
+        /* ******图表 end*************/
+        query: '',
+        searching: false,
+        queryTypeOptions: [
+          { label: '设备ID', value: 'id' },
+          { label: 'MAC', value: 'mac' }
+        ],
+        queryType: {
+          label: 'MAC',
+          value: 'mac'
+        },
+        total: 100,
         currentPage: 1,
         pageCount: 10,
-        showModal: false,
-        model: {
-          objectId: '',
-          createAt: '',
-          updateAt: '',
-          creator: ''
-        }
-      }
-    },
-
-    route: {
-      data () {
-        this.getRecords()
-        return {
-          tableInfo: this.getTableInfo()
-        }
+        deviceDatas: [
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: true
+          },
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: false
+          },
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: false
+          },
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: false
+          },
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: false
+          },
+          {
+            id: 'id123',
+            mac: 'mac123',
+            selected: false
+          }
+        ]
       }
     },
 
     computed: {
+      selectedDeviceData () {
+        this.deviceDatas.map((deviceData) => {
+          if (deviceData.selected) {
+            return deviceData
+          }
+        })
+      },
       queryCondition () {
         var condition = {
           limit: this.pageCount,
@@ -133,30 +221,94 @@
       }
     },
 
+    route: {
+      data () {
+      }
+    },
+
     methods: {
-      getRecords () {
-        api.dataTable.queryData(this.$route.params.name, this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            this.records = res.data.list
-            this.total = res.data.count
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      // 搜索
+      handleSearch () {
+        console.log('搜索')
       },
 
-      getTableInfo () {
-        return api.dataTable.getTable(this.$route.params.name)
+      /**
+       * 切换搜索
+       * @return {[type]} [description]
+       */
+      toggleSearching () {
+        console.log('切换搜索')
       },
 
-      showRecord (record) {
-        api.dataTable.getData(this.$route.params.name, escape(record.objectId)).then((res) => {
-          if (res.status === 200) {
-            this.model = res.data
-            this.showModal = true
-          }
+      /**
+       * 选择数据端点事件
+       * @return {[type]} [description]
+       */
+      selectedDeviceDataEvent (deviceData) {
+        this.deviceDatas.map((item) => {
+          item.selected = false
         })
+        deviceData.selected = true
       }
     }
   }
 </script>
+
+<style lang="stylus">
+
+  .snapshot-details
+    .device-list-box
+      margin 20px 20px 20px 0
+      border 1px solid #e0e0e0
+      padding 10px
+      box-sizing border-box
+      .search-box-input
+        width 100px
+        overflow hidden
+      .table-stripe tbody tr.selected:nth-child(2n+1) td
+      .table-stripe tbody tr.selected td
+        background #c0252e
+        color #fff
+      .table-stripe tbody tr:hover td
+        background #C13A42
+        color #fff
+        cursor pointer
+    .device-details-box
+      margin 20px 0 20px 0
+      .device-msg-box
+        border 1px solid #e0e0e0
+      .header-box
+        padding 15px 20px
+        box-sizing border-box
+        .device-picture
+          width 65px
+          height 65px
+          background #aaa
+        .device-base-msg
+          height 60px
+          line-height 23px
+          padding-left 10px
+          box-sizing border-box
+          p
+            font-size 12px
+            margin 0
+            i
+              display inline-block
+              width 60px
+      .device-data-table-box
+        margin-top 20px
+        .title
+          font-size 16px
+    .operation-box
+      position relative
+      height 70px
+      .check-device
+        position absolute
+        right 0
+        top 0
+      .radio-group-box
+        position absolute
+        right 0
+        bottom 0
+
+</style>
