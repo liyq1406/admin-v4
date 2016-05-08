@@ -185,7 +185,7 @@
       getPlugins () {
         api.plugin.all().then((res) => {
           if (res.status === 200) {
-            this.getAllPlugin(res.data)
+            this.getAllPlugin(res.data.list)
           }
         }).catch((res) => {
           this.handleError(res)

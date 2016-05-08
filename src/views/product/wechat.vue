@@ -331,7 +331,7 @@
         api.plugin.all().then((res) => {
           if (res.status === 200) {
             var arr = []
-            res.data.forEach((item) => {
+            res.data.list.forEach((item) => {
               if (item.type - 0 === 4) {
                 arr.push(item)
                 if (item.id === window.localStorage.selectedAppId) {

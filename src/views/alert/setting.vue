@@ -662,7 +662,7 @@
       getApps () {
         api.plugin.all().then((res) => {
           if (res.status === 200) {
-            this.apps = res.data
+            this.apps = res.data.list
           }
         })
       },
