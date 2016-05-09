@@ -384,6 +384,20 @@
       </div>
     </modal>
     <!-- 限权设置 -->
+    <!-- start 提示 -->
+    <modal :show.sync="confirmModal.show">
+      <h3 slot="header">{{confirmModal.title}}</h3>
+      <div slot="body" class="form">
+        <div class="content-box">
+          <p>{{confirmModal.content}}</p>
+        </div>
+        <div class="form-actions">
+          <button @click.prevent.stop="confirmModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          <button @click.prevent.stop="confirmModalConfirm" type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+        </div>
+      </div>
+    </modal>
+    <!-- 提示 -->
   </div>
 </template>
 
@@ -513,6 +527,7 @@
             title: ''
           }
         },
+        // 限权设置浮层
         jurisdictionModal: {
           show: false,
           model: {
@@ -522,6 +537,12 @@
             get: false,
             create: false
           }
+        },
+        // 提示浮层
+        confirmModal: {
+          show: false,
+          title: '提示',
+          content: ''
         },
         tables: [],
         tableTypes: locales[Vue.config.lang].table.types,
@@ -678,9 +699,10 @@
        */
       deleteDataTable () {
         console.log(this.selectedFirstClass.name)
-        if (window.confirm('确定要删除数据表' + this.selectedFirstClass.name + '吗')) {
+        this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
+          console.log('这里是确定按钮被按下后的逻辑')
           console.log('发请求删除数据表 然后重新渲染列表')
-        }
+        })
       },
 
       showJurisdictionModal () {
@@ -776,10 +798,11 @@
        * @return {[type]} [description]
        */
       deleteAllData () {
-        if (window.confirm('确定要删除所有数据表？')) {
+        this.confirm('确定要删除所有数据表？', () => {
           console.log('发请求删除所有数据 然后重新渲染列表')
           this.tables = []
-        }
+          this.initData()
+        })
       },
 
       /**
@@ -1046,6 +1069,28 @@
             this.editing = false
           })
         }
+      },
+
+      /**
+       * 显示自定义的confirm框
+       * @param  {[type]}   content [description]
+       * @param  {Function} fn      [description]
+       * @return {[type]}           [description]
+       */
+      confirm (content, fn) {
+        this.confirmModal.content = content
+        this.confirmModal.fn = fn
+        this.confirmModal.show = true
+      },
+      /**
+       * 提示按钮按下
+       * @param  {[type]}   content [description]
+       * @param  {Function} fn      [description]
+       * @return {[type]}           [description]
+       */
+      confirmModalConfirm () {
+        this.confirmModal.show = false
+        this.confirmModal.fn()
       }
     }
   }
