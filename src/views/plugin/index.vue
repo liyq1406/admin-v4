@@ -20,7 +20,7 @@
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
                     <!-- <i class="hl-red" v-else>未启用</i> -->
-                    <switch size="small" :value.sync="pluginStatus['broadcast'].enable" @switch-toggle="pluginToggle('broadcast')"></switch>
+                    <switch :disabled="pluginGrids[0].disabled" size="small" :value.sync="pluginStatus['broadcast'].enable" @switch-toggle="pluginToggle('broadcast')"></switch>
                   </span>
                 </div>
               </div>
@@ -38,7 +38,7 @@
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
                     <!-- <i class="hl-red" v-else>未启用</i> -->
-                    <switch size="small" :value.sync="pluginStatus['helpdesk'].enable" @switch-toggle="pluginToggle('helpdesk')"></switch>
+                    <switch :disabled="pluginGrids[1].disabled" size="small" :value.sync="pluginStatus['helpdesk'].enable" @switch-toggle="pluginToggle('helpdesk')"></switch>
                   </span>
                 </div>
               </div>
@@ -56,7 +56,7 @@
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
                     <!-- <i class="hl-red" v-else>未启用</i> -->
-                    <switch size="small" :value.sync="pluginStatus['warranty'].enable" @switch-toggle="pluginToggle('warranty')"></switch>
+                    <switch :disabled="pluginGrids[2].disabled" size="small" :value.sync="pluginStatus['warranty'].enable" @switch-toggle="pluginToggle('warranty')"></switch>
                   </span>
                 </div>
               </div>
@@ -74,7 +74,7 @@
                   <span class="status">
                     <!-- <i class="hl-green" v-if="true">已启用</i> -->
                     <!-- <i class="hl-red" v-else>未启用</i> -->
-                    <switch size="small" :value.sync="pluginStatus['dealer'].enable" @switch-toggle="pluginToggle('dealer')"></switch>
+                    <switch :disabled="pluginGrids[3].disabled" size="small" :value.sync="pluginStatus['dealer'].enable" @switch-toggle="pluginToggle('dealer')"></switch>
                   </span>
                 </div>
               </div>
@@ -128,19 +128,23 @@
         pluginGrids: [{
           name: '消息群发',
           description: '让app具备消息广播，运营通知的特性',
-          id: 'broadcast'
+          id: 'broadcast',
+          disabled: true
         }, {
           name: 'helpdesk',
           description: '管理经销商，配置商家信息和销售资源',
-          id: 'helpdesk'
+          id: 'helpdesk',
+          disabled: true
         }, {
           name: '在线维保',
           description: '让app具备消息广播，运营通知的特性',
-          id: 'warranty'
+          id: 'warranty',
+          disabled: true
         }, {
           name: '经销商管理',
           description: '管理经销商，配置商家信息和销售资源',
-          id: 'dealer'
+          id: 'dealer',
+          disabled: true
         }],
         pluginStatus: {
           broadcast: {
@@ -167,6 +171,7 @@
         addModel: {
           name: '',
           type: 0,
+          enable: true,
           plugin: ''
         },
         updateModel: {
@@ -176,12 +181,13 @@
             url: ''
           }
         },
-        checkfinish: NaN
+        specialApps: []
       }
     },
 
     route: {
       data () {
+        this.getApps()
         return {
           secondaryNav: [{
             label: this.$t('sub_nav.plugins.extensions'),
@@ -190,14 +196,12 @@
           {
             label: this.$t('sub_nav.plugins.customize'),
             link: { path: '/plugins/customize' }
-          }
-        ]
+          }]
         }
       }
     },
 
     ready () {
-      this.checkfinish = setInterval(this.checkPluginsState, 10)
     },
 
     methods: {
@@ -228,7 +232,7 @@
               this.updatePlugin(res.data)
             }
           }).catch((res) => {
-            this.handleError(res)
+            // this.handleError(res)
           })
         } else {
           this.addModel.name = 'broadcast'
@@ -238,19 +242,10 @@
             if (res.status === 200) {
               this.pluginStatus['broadcast'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.pluginStatus['broadcast'].enable = !this.pluginStatus['broadcast'].enable
-            this.handleError(res)
+            // this.handleError(res)
           })
         }
       },
@@ -263,7 +258,7 @@
               this.updatePlugin(res.data)
             }
           }).catch((res) => {
-            this.handleError(res)
+            // this.handleError(res)
           })
         } else {
           this.addModel.name = 'helpdesk'
@@ -273,19 +268,10 @@
             if (res.status === 200) {
               this.pluginStatus['helpdesk'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.pluginStatus['helpdesk'].enable = !this.pluginStatus['helpdesk'].enable
-            this.handleError(res)
+            // this.handleError(res)
           })
         }
       },
@@ -311,15 +297,6 @@
             if (res.status === 200) {
               this.pluginStatus['warranty'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.pluginStatus['warranty'].enable = !this.pluginStatus['warranty'].enable
@@ -336,7 +313,7 @@
               this.updatePlugin(res.data)
             }
           }).catch((res) => {
-            this.handleError(res)
+            // this.handleError(res)
           })
         } else {
           this.addModel.name = 'dealer'
@@ -346,29 +323,32 @@
             if (res.status === 200) {
               this.pluginStatus['dealer'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.pluginStatus['dealer'].enable = !this.pluginStatus['dealer'].enable
-            this.handleError(res)
+            // this.handleError(res)
           })
         }
       },
 
+      getApps () {
+        var self = this
+        api.plugin.all().then((res) => {
+          if (res.status === 200) {
+            this.specialApps = _.filter(res.data.list, (item) => {
+              return item.type > 4
+            })
+            self.checkPluginsState()
+          }
+        })
+      },
+
       checkPluginsState () { // 查询各个定制应用是否被创建
-        if (this.plugins.length <= 0) {
+        if (this.specialApps.length <= 0) {
           return false
         }
-        window.clearInterval(this.checkfinish)
-        var specialPlugins = _.filter(this.plugins, (item) => {
+
+        var specialPlugins = _.filter(this.specialApps, (item) => {
           return item.type === 10
         })
 
@@ -431,6 +411,11 @@
             }
           }
         }
+
+        this.pluginGrids[3].disabled = false
+        this.pluginGrids[2].disabled = false
+        this.pluginGrids[1].disabled = false
+        this.pluginGrids[0].disabled = false
       }
     }
   }

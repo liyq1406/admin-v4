@@ -85,27 +85,31 @@
             created: false,
             enable: false,
             name: '云菜谱',
-            description: 'Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
-            data: {}
+            description: '为面向厨电领域的产品提供关于菜谱的浏览、上传、智能烹饪的服务场景。让用户在app终端上除使用产品外还可以扩展和产品相关的菜谱信息服务。',
+            data: {},
+            disabled: true
           },
           nest: {
             created: false,
             enable: false,
             name: 'Google nest互联',
-            description: 'Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
-            data: {}
+            description: 'nest联动可以帮助您的产品实现和google nest恒温器、烟感器的跨平台设备联动。您可以根据产品需要随时开启或关闭nest设备联动服务。',
+            data: {},
+            disabled: true
           },
           xpay: {
             created: false,
             enable: false,
             name: '支付网关',
-            description: 'Lorem ipsum dolor sit amet,consenctetur adipiscing elit.Aenean euismod bibendum laoreet.Proin gravida dolor sit amet lacus accumsan et viverra justo commodo.',
-            data: {}
+            description: '集成支付宝、微信的第三方支付渠道。',
+            data: {},
+            disabled: true
           }
         },
         addModel: {
           name: '',
           type: 0,
+          enable: true,
           plugin: ''
         },
         updateModel: {
@@ -115,17 +119,17 @@
             url: ''
           }
         },
-        checkfinish: NaN
+        specialApps: []
       }
     },
 
     route: {
       data () {
+        this.getApps()
       }
     },
 
     ready () {
-      this.checkfinish = setInterval(this.checkPluginsState, 10)
     },
 
     filters: {
@@ -168,16 +172,6 @@
             if (res.status === 200) {
               this.extendPlugins['recipe'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.extendPlugins['recipe'].enable = !this.extendPlugins['recipe'].enable
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.extendPlugins['recipe'].enable = !this.extendPlugins['recipe'].enable
@@ -205,16 +199,6 @@
             if (res.status === 200) {
               this.extendPlugins['nest'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.extendPlugins['nest'].enable = !this.extendPlugins['nest'].enable
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.extendPlugins['nest'].enable = !this.extendPlugins['nest'].enable
@@ -232,7 +216,7 @@
               this.updatePlugin(res.data)
             }
           }).catch((res) => {
-            this.handleError(res)
+            // this.handleError(res)
           })
         } else {
           this.addModel.name = 'xpay'
@@ -242,31 +226,31 @@
             if (res.status === 200) {
               this.extendPlugins['xpay'].created = true // 设置已被创建成功
               this.createPlugin(res.data) // 更新store
-              // create 成功以后立级开启
-              this.updateModel.enable = true
-              api.plugin.update(res.data.id, this.updateModel).then((res) => {
-                if (res.status === 200) {
-                  this.updatePlugin(res.data)
-                }
-              }).catch((res) => {
-                this.extendPlugins['xpay'].enable = !this.extendPlugins['xpay'].enable
-                this.handleError(res)
-              })
             }
           }).catch((res) => {
             this.extendPlugins['xpay'].enable = !this.extendPlugins['xpay'].enable
-            this.handleError(res)
+            // this.handleError(res)
           })
         }
       },
+      getApps () {
+        var self = this
+        api.plugin.all().then((res) => {
+          if (res.status === 200) {
+            this.specialApps = _.filter(res.data.list, (item) => {
+              return item.type > 4
+            })
+            self.checkPluginsState()
+          }
+        })
+      },
 
       checkPluginsState () {
-        if (this.plugins.length <= 0) {
+        if (this.specialApps.length <= 0) {
           return false
         }
-        window.clearInterval(this.checkfinish)
 
-        var specialPlugins = _.filter(this.plugins, (item) => {
+        var specialPlugins = _.filter(this.specialApps, (item) => {
           return item.type === 10
         })
 
@@ -318,6 +302,10 @@
             this.extendPlugins['xpay'].created = true
           }
         }
+
+        this.extendPlugins['recipe'].disabled = false
+        this.extendPlugins['nest'].disabled = false
+        this.extendPlugins['xpay'].disabled = false
       }
     }
   }

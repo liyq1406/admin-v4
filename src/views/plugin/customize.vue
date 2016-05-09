@@ -192,7 +192,9 @@
         api.plugin.all().then((res) => {
           if (res.status === 200) {
             this.loadingData = false
-            this.apps = res.data.list
+            this.apps = _.filter(res.data.list, (item) => {
+              return item.type <= 4
+            })
           }
         })
       },

@@ -34,14 +34,9 @@
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
               <div class="editSnapshot">
-                <button class="btn btn-success" @click="showEditModal=true">编辑快照数据</button>
+                <div v-for="i in snapshotData" class="data-tag">{{i.label}}</div>
               </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6 height-wrap"></label>
-            <div class="controls col-18">
-              <div v-for="i in snapshotData" class="data-tag">{{i.label}}</div>
+              <button class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>编辑快照数据</button>
             </div>
           </div>
           <div class="form-row row">
@@ -67,6 +62,7 @@
                 <th>快照规则</th>
                 <th>创建时间</th>
                 <th>创建者</th>
+                <th>操作</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +73,7 @@
                 <td>ted</td>
                 <td>2019.0.1</td>
                 <td>哈哈</td>
+                <td>查看快照</td>
               </tr>
             </tbody>
           </table>

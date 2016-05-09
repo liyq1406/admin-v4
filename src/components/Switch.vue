@@ -23,6 +23,11 @@
       classPrefix: {
         type: String,
         default: 'v-switch'
+      },
+
+      disabled: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -48,6 +53,9 @@
 
     methods: {
       toogle () {
+        if (this.disabled) {
+          return
+        }
         this.value = !this.value
         this.$dispatch('switch-toggle')
       }
