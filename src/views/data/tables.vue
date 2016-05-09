@@ -41,7 +41,7 @@
                           <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
                           <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
                           <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
-                          <li @click.stop=""><span>限权设置</span></li>
+                          <li @click.stop="showJurisdictionModal"><span>限权设置</span></li>
                           <li @click.stop=""><span>导出数据</span></li>
                           <li @click.stop=""><span>导出全部数据表</span></li>
                         </ul>
@@ -304,7 +304,7 @@
             <div class="controls col-12">
               <v-select :label="delColumnModal.selectedColumn" :width="'150px'">
                 <select v-model="delColumnModal.selectedColumn">
-                  <option v-for="key in addListKey" :value="key">{{ key }}</option>
+                  <option v-for="key in addListKey" track-by="$index" :value="key">{{ key }}</option>
                 </select>
               </v-select>
             </div>
@@ -352,6 +352,26 @@
       </div>
     </modal>
     <!-- 筛选 -->
+    <!-- start 限权设置 -->
+    <modal :show.sync="jurisdictionModal.show">
+      <h3 slot="header">限权设置</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="jurisdictionModalConfirm">
+          <div class="form-row row">
+            <div class="checkbox-group">
+              <label v-for="type in permissionTypes" class="checkbox">
+                <input type="checkbox" v-model="jurisdictionModal.model[type.value]"/>{{ type.label }}
+              </label>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="jurisdictionModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 限权设置 -->
   </div>
 </template>
 
@@ -478,6 +498,16 @@
           modal: {
             key: 'id',
             title: ''
+          }
+        },
+        jurisdictionModal: {
+          show: false,
+          model: {
+            find: false,
+            update: false,
+            delete: false,
+            get: false,
+            create: false
           }
         },
         tables: [],
@@ -638,6 +668,14 @@
         if (window.confirm('确定要删除数据表' + this.selectedFirstClass.name + '吗')) {
           console.log('发请求删除数据表 然后重新渲染列表')
         }
+      },
+
+      showJurisdictionModal () {
+        this.jurisdictionModal.show = true
+      },
+      // 限权设置浮层的确定按钮
+      jurisdictionModalConfirm () {
+        this.jurisdictionModal.show = false
       },
       /**
        * 选择大类
