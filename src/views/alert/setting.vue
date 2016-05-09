@@ -586,10 +586,13 @@
             return
           }
           this.getRules()
-          this.getDatapoints(this.currProduct.id).then((res) => {
-            if (res.status === 200) {
-              this.datapoints = res.data
-              this.addModal.model.param = res.data[0].id
+          this.getDatapoints(this.currProduct.id).then((r) => {
+            if (r.status === 200) {
+              if (!r.data.length) {
+                return
+              }
+              this.datapoints = r.data
+              this.addModal.model.param = r.data[0].id
               this.originAddModel = _.cloneDeep(this.addModal.model)
             }
             this.loadingData = false
