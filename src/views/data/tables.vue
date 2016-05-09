@@ -11,8 +11,8 @@
             </div>
             <div class="data-table-box" v-show="dataFirClassList.length">
               <ul>
-                <li class="data-table-li" v-for="dataFirClass in dataFirClassList" @click="selectedFirstClassEvent(dataFirClass)">
-                  <a class="data-first-class" :title="dataFirClass.name" :class="{'selected': dataFirClass.selected}">{{dataFirClass.name}}</a>
+                <li class="data-table-li" v-for="dataFirClass in dataFirClassList" :class="{'selected': dataFirClass.selected}"  @click="selectedFirstClassEvent(dataFirClass)">
+                  <a class="data-first-class" :title="dataFirClass.name">{{dataFirClass.name}}</a>
                 </li>
               </ul>
             </div>
@@ -47,9 +47,10 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="operation filter" @click="showFilterModal">
+                    <!-- 过滤暂时注释掉 -->
+                    <!-- <div class="operation filter" @click="showFilterModal">
                       <span>过滤</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -256,7 +257,7 @@
       <h3 slot="header">添加行</h3>
       <div slot="body" class="form">
         <form @submit.prevent="addLineModalConfirm">
-          <div class="form-row row" v-for="key in addListKey">
+          <div class="form-row row" v-for="key in addListKey" track-by="$index">
             <label class="form-control col-6">{{key}}:</label>
             <div class="controls col-18">
               <div v-placeholder="'请输入' + key" class="input-text-wrap">
@@ -1019,6 +1020,8 @@
           border-bottom 1px solid #e0e0e0
           height 32px
           line-height 32px
+          &:hover
+            background rgba(0,0,0,0.08)
           .data-first-class
             /*width 100%*/
             height 100%
@@ -1027,9 +1030,12 @@
             text-overflow 100%
             transition transform ease 0.1s
             font-size 12px
+            box-sizing border-box
+            text-decoration blink
         .selected
-          color red
-          transform translate(5px)
+          .data-first-class
+            color red
+            border-right 3px solid #c0252e
     .details-box
       padding-top 20px
       box-sizing border-box

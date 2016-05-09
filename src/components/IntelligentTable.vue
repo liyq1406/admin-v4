@@ -9,7 +9,7 @@
       </thead>
       <tbody>
         <template v-if="tables.length > 0">
-          <tr v-for="table in tables" transition="rightToLeft">
+          <tr v-for="table in tables">
             <th v-show="selecting" class="tac">
               <input type="checkbox" @change="selectedTableChange(table)">
             </th>

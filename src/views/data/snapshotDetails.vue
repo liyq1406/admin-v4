@@ -8,7 +8,7 @@
             <div class="panel-hd">
               <h2>净化器设备快照</h2>
             </div>
-            <div class="panel-bd col-8">
+            <div class="panel-bd layout-left">
               <div class="device-list-box">
                 <div class="action-bar">
                   <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
@@ -42,7 +42,7 @@
                 <pager v-if="true" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
               </div>
             </div>
-            <div class="panel-bd col-16">
+            <div class="panel-bd layout-right">
               <div class="device-details-box">
                 <div class="device-msg-box">
                   <div class="header-box row">
@@ -173,33 +173,123 @@
         pageCount: 10,
         deviceDatas: [
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: true
           },
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: false
           },
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: false
           },
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: false
           },
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: false
           },
           {
-            id: 'id123',
-            mac: 'mac123',
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
+            selected: false
+          },
+          {
+            id: '1999246249',
+            mac: '163D18E5B72E',
             selected: false
           }
         ],
@@ -245,6 +335,12 @@
       }
     },
 
+    ready () {
+      // 监听窗口尺寸变化
+      window.onresize = () => {
+        this.$refs.trendChart.chart.resize()
+      }
+    },
     methods: {
       // 搜索
       handleSearch () {
@@ -276,21 +372,31 @@
 <style lang="stylus">
 
   .snapshot-details
+    .layout-left
+      width 328px
+      float left
+      z-index 1
+    .layout-right
+      width 100%
+      padding-left 328px
+      box-sizing border-box
     .device-list-box
       margin 20px 20px 20px 0
-      border 1px solid #e0e0e0
-      padding 10px
       box-sizing border-box
+      .action-bar
+        padding-top 0
       .search-box-input
-        width 100px
+        width 163px
         overflow hidden
       .table-stripe tbody tr.selected:nth-child(2n+1) td
       .table-stripe tbody tr.selected td
         background #c0252e
         color #fff
+      .table-stripe tbody tr.selected:hover td
+        background #c0252e
+        cursor pointer
       .table-stripe tbody tr:hover td
-        background #C13A42
-        color #fff
+        background lighten(#000, 93%)
         cursor pointer
     .device-details-box
       margin 20px 0 20px 0
@@ -299,6 +405,8 @@
       .header-box
         padding 15px 20px
         box-sizing border-box
+        height 90px
+        overflow hidden
         .device-picture
           width 65px
           height 65px
@@ -314,6 +422,10 @@
             i
               display inline-block
               width 60px
+      .chart-box
+        width 100%
+        padding-right 20px
+        box-sizing border-box
       .device-data-table-box
         margin-top 20px
         .title
