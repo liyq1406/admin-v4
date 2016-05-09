@@ -67,13 +67,15 @@
             </thead>
             <tbody>
               <tr v-for="i in 3">
-                <td v-link="{ path: '/data/snapshot/123' }">
+                <td @click="showAddModal=true">
                   <a>热水器</a>
                 </td>
                 <td>ted</td>
                 <td>2019.0.1</td>
                 <td>哈哈</td>
-                <td>查看快照</td>
+                <td v-link="{ path: '/data/snapshot/123' }">
+                  <a>查看快照</a>
+                </td>
               </tr>
             </tbody>
           </table>
@@ -81,6 +83,41 @@
       </div>
     </div>
     <!-- 添加选择快照数据项浮层-->
+    <modal :show.sync="showAddModal" width="600px">
+      <h3 slot="header">选择快照数据项</h3>
+      <div slot="body" class="form">
+        <div class="data-table">
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>索引</th>
+                <th>端点ID</th>
+                <th>数据类型</th>
+                <th>单位符号</th>
+                <th>描述</th>
+                <th>选择</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="i in 8">
+                <td>1</td>
+                <td>ted</td>
+                <td>tupe</td>
+                <td>kg</td>
+                <td>xxxx</td>
+                <td><input type="checkbox"/></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="form-actions snapshot-select">
+          <button @click="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          <button @click="onAddSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+        </div>
+      </div>
+    </modal>
+    <!-- 结束添加选择快照数据项浮层-->
+    <!-- 编辑快照数据项浮层-->
     <modal :show.sync="showEditModal" width="600px">
       <h3 slot="header">选择快照数据项</h3>
       <div slot="body" class="form">
@@ -114,7 +151,7 @@
         </div>
       </div>
     </modal>
-    <!-- 结束添加选择快照数据项浮层-->
+    <!-- 结束 编辑快照数据项浮层-->
   </div>
 </template>
 
@@ -143,6 +180,7 @@
 
     data () {
       return {
+        showAddModal: false,
         showEditModal: false,
         productTypes: [{
           label: '请选择产品类型',
@@ -245,6 +283,12 @@
 
     methods: {
       addSnapshotRule () {
+      },
+      onAddCancel () {
+        this.showAddModal = false
+      },
+      onAddSubmit () {
+        this.showAddModal = false
       },
       onEditCancel () {
         this.showEditModal = false
