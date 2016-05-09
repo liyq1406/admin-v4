@@ -67,6 +67,7 @@
           value: 'id'
         },
         map: {},
+        infoWindow: {},
         currCoord: [116.39, 39.9],
         loadingData: false,
         placeSearch: {},
@@ -101,9 +102,11 @@
       })
 
       // 地图初始化
-      this.map = new AMap.Map('device-map')
+      this.map = new AMap.Map('device-map', {resizeEnable: true})
 
-      // this.map.setCenter(this.currCoord)
+      this.infoWindow = new AMap.InfoWindow({
+        offset: new AMap.Pixel(0, -30)
+      })
 
       // 工具条与比例尺
       AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.CitySearch', 'AMap.PlaceSearch'], () => {
@@ -116,7 +119,6 @@
           city: '全国' // 城市
         })
 
-        console.log(scale)
         this.map.addControl(toolBar)
         this.map.addControl(scale)
 
@@ -156,17 +158,15 @@
     methods: {
       /**
        * 获取某个设备的地理信息
-       * 1725036601
+       * @param  {Number} deviceId 设备ID
        */
       getGeography (deviceId) {
         this.loadingData = true
         api.device.getGeography(this.currProduct.id, deviceId).then((res) => {
           if (res.status === 200) {
-            var pos = [res.data.lon, res.data.lat]
-            // this.map.setCenter(pos)
-            this.currCoord = pos
+            this.currCoord = [res.data.lon, res.data.lat]
             this.map.clearMap()
-            this._setMarker(pos)
+            this._setMarker(res.data)
             this.loadingData = false
           }
         }).catch((res) => {
@@ -184,7 +184,7 @@
           if (res.data.count) {
             this.map.clearMap()
             res.data.devices.forEach((item) => {
-              this._setMarker([item.lon, item.lat])
+              this._setMarker(item)
             })
           }
           this.map.setCenter(this.currCoord)
@@ -196,13 +196,37 @@
       },
 
       /**
-       * 设置标识
+       * 设置点标记
+       * @param  {Object} point 设备点
        */
-      _setMarker (pos) {
+      _setMarker (point) {
         var marker = new AMap.Marker({
-          position: pos
+          position: [point.lon, point.lat],
+          map: this.map
         })
-        marker.setMap(this.map)
+        marker.extData = `${point.device_id}`
+        marker.on('click', this._onMarkerClick)
+      },
+
+      /**
+       * 处理点标记点击
+       * @param  {Event} e 事件
+       */
+      _onMarkerClick (e) {
+        api.device.getInfo(this.currProduct.id, Number(e.target.extData)).then((res) => {
+          var content = []
+          content.push(`<strong>${this.currProduct.name}</strong>`)
+          content.push(`设备ID: ${res.data.id}`)
+          content.push(`设备MAC: ${res.data.mac}`)
+          content.push(`在线状态: ${res.data.is_online}`)
+          this.infoWindow.setContent(content.join('<br/>'))
+          this.infoWindow.open(this.map, e.target.getPosition())
+        }).catch((res) => {
+          this.showNotice({
+            type: 'error',
+            content: '设备不存在'
+          })
+        })
       },
 
       // 搜索
