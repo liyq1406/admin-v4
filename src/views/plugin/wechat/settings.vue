@@ -154,9 +154,9 @@
           this.editing = true
           var result = window.confirm('确认删除该应用吗?')
           if (result === true) {
-            api.app.remove(this.$route.params.id).then((res) => {
+            api.plugin.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.removePlugin(res.data)
+                this.removePlugin(this.model)
                 this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {
@@ -170,7 +170,7 @@
           this.editing = true
           api.plugin.update(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
-              this.updatePlugin(this.model)
+              this.updatePlugin(res.data)
               this.$route.router.go('/plugins/customize')
             }
           }).catch((res) => {
