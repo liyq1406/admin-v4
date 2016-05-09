@@ -639,7 +639,7 @@ let configRouter = (router) => {
     '/plugins/recipe': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/recipe/index'))
+          resolve(require('./views/plugin/recipe/index'))
         }, 'admin')
       },
       subRoutes: {
@@ -647,7 +647,7 @@ let configRouter = (router) => {
         'list': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/recipe/recipe/index'))
+              resolve(require('./views/plugin/recipe/recipe/index'))
             }, 'admin')
           }
         },
@@ -655,7 +655,7 @@ let configRouter = (router) => {
         'ingredient': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/recipe/ingredient/index'))
+              resolve(require('./views/plugin/recipe/ingredient/index'))
             }, 'admin')
           }
         }
