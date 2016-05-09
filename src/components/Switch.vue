@@ -47,6 +47,10 @@
           result.push(`${this.classPrefix}-${sizeCls}`)
         }
 
+        if (this.disabled) {
+          result.push('disabled')
+        }
+
         return result.join(' ')
       }
     },
@@ -85,6 +89,9 @@
       border-radius 30px
       transition left .2s ease-in-out
       box-shadow 0 0 2px rgba(0, 0, 0, .2)
+
+    &.disabled
+      cursor not-allowed
 
   .v-switch-on
     background green

@@ -26,7 +26,8 @@
                 <tr>
                   <th>数据端点ID</th>
                   <th>参数名称</th>
-                  <th>修改时间</th>
+                  <th>描述</th>
+                  <!-- <th>修改时间</th> -->
                   <th class="tac">是否可控</th>
                   <th class="tac">开启联动</th>
                 </tr>
@@ -34,9 +35,10 @@
               <tbody>
                 <template v-if="datapoints.length > 0">
                   <tr v-for="datapoint in datapoints">
-                    <td>{{ datapoint.id }}</td>
                     <td>{{ datapoint.name }}</td>
-                    <td>{{ datapoint.create_date | formatDate }}</td>
+                    <td>{{ datapoint.symbol }}</td>
+                    <td>{{ datapoint.description }}</td>
+                    <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
                       <span class="status">
                         <v-switch size="small" :value.sync="datapoint.isControlable"></v-switch>

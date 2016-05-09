@@ -38,7 +38,7 @@
                 <td>{{ account.phone }}</td>
                 <td>{{ account.create_time | uniformDate}}</td>
                 <td>
-                  <a v-link="{path: '/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
+                  <a v-link="{path: '/plugins/warranty/accounts/'+account._id}" class="hl-red">查看详情</a>
                 </td>
               </tr>
             </template>
@@ -125,13 +125,13 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../mixins'
-  import SearchBox from '../../../components/SearchBox'
-  import Pager from '../../../components/Pager'
-  import Select from '../../../components/Select'
-  import Modal from '../../../components/Modal'
-  import AreaSelect from '../../../components/AreaSelect'
-  import api from '../../../api'
+  import { globalMixins } from '../../../../mixins'
+  import SearchBox from '../../../../components/SearchBox'
+  import Pager from '../../../../components/Pager'
+  import Select from '../../../../components/Select'
+  import Modal from '../../../../components/Modal'
+  import AreaSelect from '../../../../components/AreaSelect'
+  import api from '../../../../api'
   import _ from 'lodash'
 
   export default {
@@ -294,5 +294,5 @@
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../assets/stylus/common'
+  @import '../../../../assets/stylus/common'
 </style>

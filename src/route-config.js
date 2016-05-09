@@ -636,18 +636,18 @@ let configRouter = (router) => {
     },
 
     // 饮食管理
-    '/diet': {
+    '/plugins/recipe': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/diet/index'))
+          resolve(require('./views/recipe/index'))
         }, 'admin')
       },
       subRoutes: {
         // 菜谱管理
-        'recipe': {
+        'list': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/diet/recipe/index'))
+              resolve(require('./views/recipe/recipe/index'))
             }, 'admin')
           }
         },
@@ -655,46 +655,46 @@ let configRouter = (router) => {
         'ingredient': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/diet/ingredient/index'))
+              resolve(require('./views/recipe/ingredient/index'))
             }, 'admin')
           }
         }
       }
     },
-    '/diet/ingredient/add': {
+    '/plugins/recipe/ingredient/add': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/diet/ingredient/add'))
+          resolve(require('./views/plugin/recipe/ingredient/add'))
         }, 'admin')
       }
     },
-    '/diet/ingredient/:id/edit': {
+    '/plugins/recipe/ingredient/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/diet/ingredient/edit'))
+          resolve(require('./views/plugin/recipe/ingredient/edit'))
         }, 'admin')
       }
     },
-    '/diet/recipe/add': {
+    '/plugins/recipe/add': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/diet/recipe/add'))
+          resolve(require('./views/plugin/recipe/recipe/add'))
         }, 'admin')
       }
     },
-    '/diet/recipe/:id/edit': {
+    '/plugins/recipe/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/diet/recipe/edit'))
+          resolve(require('./views/plugin/recipe/recipe/edit'))
         }, 'admin')
       }
     },
 
     // 维保系统-工单管理
-    '/warranty': {
+    '/plugins/warranty': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/index'))
+          resolve(require('./views/plugin/warranty/index'))
         }, 'admin')
       },
       subRoutes: {
@@ -702,7 +702,7 @@ let configRouter = (router) => {
         'work-orders/extended-warranties': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/warranty/work-order/extended-warranty/list'))
+              resolve(require('./views/plugin/warranty/work-order/extended-warranty/list'))
             }, 'admin')
           }
         },
@@ -710,7 +710,7 @@ let configRouter = (router) => {
         'work-orders/repair': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/warranty/work-order/repair/list'))
+              resolve(require('./views/plugin/warranty/work-order/repair/list'))
             }, 'admin')
           }
         },
@@ -718,41 +718,41 @@ let configRouter = (router) => {
         'accounts': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/warranty/account/list'))
+              resolve(require('./views/plugin/warranty/account/list'))
             }, 'admin')
           }
         }
       }
     },
     // 维保系统-延保工单详情
-    '/warranty/work-orders/extended-warranties/:id': {
+    '/plugins/warranty/work-orders/extended-warranties/:id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/work-order/extended-warranty/details'))
+          resolve(require('./views/plugin/warranty/work-order/extended-warranty/details'))
         }, 'admin')
       }
     },
     // 维保系统-维修工单详情
-    '/warranty/work-orders/repair/:id': {
+    '/plugins/warranty/work-orders/repair/:id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/work-order/repair/details'))
+          resolve(require('./views/plugin/warranty/work-order/repair/details'))
         }, 'admin')
       }
     },
     // 网点详情
-    '/warranty/accounts/:id': {
+    '/plugins/warranty/accounts/:id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/account/details'))
+          resolve(require('./views/plugin/warranty/account/details'))
         }, 'admin')
       }
     },
     // 网点-客服详情
-    '/warranty/accounts/:account_id/staffs/:id': {
+    '/plugins/warranty/accounts/:account_id/staffs/:id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/warranty/account/staff-details'))
+          resolve(require('./views/plugin/warranty/account/staff-details'))
         }, 'admin')
       }
     },
@@ -810,8 +810,8 @@ let configRouter = (router) => {
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
     '/users': '/users/list',
-    '/diet': '/diet/recipe',
-    '/warranty': '/warranty/work-orders/extended-warranties',
+    '/plugins/recipe': '/plugins/recipe/list',
+    '/plugins/warranty': '/plugins/warranty/work-orders/extended-warranties',
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',

@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <!-- Start: 面包屑 -->
-      <div class="breadcrumb"><a v-link="{path: '/warranty/work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div>
       <!-- End: 面包屑 -->
 
       <!-- Start: 工单详情 -->
@@ -154,8 +154,8 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
-  import api from '../../../../api'
+  import { globalMixins } from '../../../../../mixins'
+  import api from '../../../../../api'
 
   export default {
     name: 'OrderDetails',
@@ -231,5 +231,5 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../../../../assets/stylus/common'
 </style>

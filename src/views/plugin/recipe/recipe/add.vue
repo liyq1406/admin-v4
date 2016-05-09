@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap diet">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/diet/recipe'}"><i class="fa fa-arrow-circle-left"></i>菜谱管理</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe'}"><i class="fa fa-arrow-circle-left"></i>菜谱管理</a></div>
       <div class="panel">
         <div class="panel-hd">
           <h2>添加菜谱</h2>
@@ -212,14 +212,14 @@
 </template>
 
 <script>
-  import api from '../../../api'
-  import Modal from '../../../components/Modal'
-  import Pager from '../../../components/Pager'
-  import Select from '../../../components/Select'
-  import SearchBox from '../../../components/SearchBox'
-  import ImageUploader from '../../../components/ImageUploader'
+  import api from '../../../../api'
+  import Modal from '../../../../components/Modal'
+  import Pager from '../../../../components/Pager'
+  import Select from '../../../../components/Select'
+  import SearchBox from '../../../../components/SearchBox'
+  import ImageUploader from '../../../../components/ImageUploader'
   import _ from 'lodash'
-  import { globalMixins } from '../../../mixins'
+  import { globalMixins } from '../../../../mixins'
 
   export default {
     name: 'AddForm',
@@ -541,7 +541,7 @@
                 type: 'success',
                 content: '菜谱添加成功！'
               })
-              this.$route.router.go({path: '/diet/recipe'})
+              this.$route.router.go({path: '/plugins/recipe'})
             }
           }).catch((res) => {
             this.handleError(res)
@@ -555,7 +555,7 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../assets/stylus/common'
+  @import '../../../../assets/stylus/common'
 
   .inline
     display inline-block

@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>饮食管理</h2>
+          <h2>延保管理</h2>
         </div>
         <div class="panel-bd">
           <tab :nav="secondaryNav"></tab>
@@ -15,11 +15,11 @@
 </template>
 
 <script>
-  import Tab from '../../components/Tab'
-  import { globalMixins } from '../../mixins'
+  import Tab from '../../../components/Tab'
+  import { globalMixins } from '../../../mixins'
 
   export default {
-    name: 'Diet',
+    name: 'Params',
 
     layout: 'admin',
 
@@ -36,17 +36,24 @@
     },
 
     route: {
-      data () {
+      data (transition) {
         return {
           secondaryNav: [{
-            label: '菜谱管理',
-            link: { path: '/diet/recipe' }
+            label: '延保工单',
+            link: { path: '/plugins/warranty/work-orders/extended-warranties' }
           }, {
-            label: '食材管理',
-            link: { path: '/diet/ingredient' }
+            label: '维修工单',
+            link: { path: '/plugins/warranty/work-orders/repair' }
+          }, {
+            label: '网点管理',
+            link: { path: '/plugins/warranty/accounts' }
           }]
         }
       }
+    },
+
+    methods: {
     }
+
   }
 </script>

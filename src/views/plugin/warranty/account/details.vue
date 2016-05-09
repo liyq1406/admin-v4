@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/warranty/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
       <div class="panel">
         <!-- Start: 网点详情 -->
         <div class="panel-hd">
@@ -94,7 +94,7 @@
             <tbody>
               <tr v-for="staff in staffs">
                 <td>
-                  <a v-link="{path: '/warranty/accounts/' + this.$route.params.id + '/staffs/' + staff._id}" class="hl-red">{{ staff.name }}</a>
+                  <a v-link="{path: '/plugins/warranty/accounts/' + this.$route.params.id + '/staffs/' + staff._id}" class="hl-red">{{ staff.name }}</a>
                 </td>
                 <td>{{ staff.phone }}</td>
                 <td>{{ staff.email }}</td>
@@ -271,12 +271,12 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../mixins'
-  import Select from '../../../components/Select'
-  import SearchBox from '../../../components/SearchBox'
-  import Pager from '../../../components/Pager'
-  import Modal from '../../../components/Modal'
-  import api from '../../../api'
+  import { globalMixins } from '../../../../mixins'
+  import Select from '../../../../components/Select'
+  import SearchBox from '../../../../components/SearchBox'
+  import Pager from '../../../../components/Pager'
+  import Modal from '../../../../components/Modal'
+  import api from '../../../../api'
   import _ from 'lodash'
 
   export default {
@@ -521,7 +521,7 @@
           api.warranty.deleteBranch(this.$route.params.id).then((res) => {
             this.editing = false
             this.showEditModal = false
-            this.$route.router.replace('/warranty/accounts')
+            this.$route.router.replace('/plugins/warranty/accounts')
           }).catch((res) => {
             this.handleError(res)
             this.editing = false
@@ -544,5 +544,5 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../assets/stylus/common'
+  @import '../../../../assets/stylus/common'
 </style>

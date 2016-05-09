@@ -110,17 +110,17 @@
             <div class="controls col-19">
               <div class="radio-group mb10">
                 <label v-for="type in openTypes" class="radio">
-                  <input type="radio" v-model="model.openType" name="openType" :value="$index+1" number/>{{ type }}
+                  <input type="radio" v-model="openType" name="openType" :value="$index+1" number/>{{ type }}
                 </label>
               </div>
-              <div v-show="model.openType===1" class="input-text-wrap">
+              <div v-show="openType===1" class="input-text-wrap">
                 <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
               </div>
-              <div v-show="model.openType===2" class="input-text-wrap">
+              <div v-show="openType===2" class="input-text-wrap">
                 <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
               </div>
-              <div v-show="model.openType===3" class="input-text-wrap">
-                <textarea v-model="model.openContent" name="openContent" class="input-text"></textarea>
+              <div v-show="openType===3" class="input-text-wrap">
+                <textarea id="abc" v-model="model.openContent" name="openContent" class="input-text"></textarea>
               </div>
             </div>
           </div>
@@ -210,26 +210,33 @@
           desc: '', // 描述
           tags: [], // 标签
           startType: 1, // 推送时间类型
-          openType: 1, // 打开消息类型
           openContent: ''
-        }
+        },
+        openType: 1 // 打开消息类型
       }
     },
 
     ready () {
-      window.tinymce.init({
-        selector: 'textarea',
-        plugins: [
-          'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
-          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-          'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
-        ],
-        toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-        toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
-        menubar: false,
-        toolbar_items_size: 'small',
-        language: 'zh_CN'
-      })
+      // alert(11111)
+      window.setTimeout(() => {
+        window.tinymce.init({
+          selector: '#abc',
+          plugins: [
+            'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
+            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+            'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
+          ],
+          toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+          toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
+          menubar: false,
+          toolbar_items_size: 'small',
+          language: 'zh_CN'
+        })
+      }, 2000)
+    },
+
+    destroyed () {
+      window.tinymce.init({})
     },
 
     methods: {

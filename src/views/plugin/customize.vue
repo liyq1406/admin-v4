@@ -178,7 +178,7 @@
 
     filters: {
       typeLabel (value) {
-        if (value >= 4) {
+        if (value > 4) {
           return ''
         }
         return this.appTypes[value - 1].label
@@ -193,7 +193,7 @@
           if (res.status === 200) {
             this.loadingData = false
             this.apps = _.filter(res.data.list, (item) => {
-              return item.type <= 4
+              return item.type !== 10
             })
           }
         })
@@ -202,7 +202,7 @@
       isAppExist (value) {
         var result = false
         this.plugins.forEach((item) => {
-          if (item.type > 4) {
+          if (item.type === 10) {
             result = true
           }
         })

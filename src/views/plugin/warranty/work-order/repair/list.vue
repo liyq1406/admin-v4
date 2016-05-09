@@ -52,7 +52,7 @@
                 <td>{{order.product_sn}}</td>
                 <td>{{order.create_time | uniformDate}}</td>
                 <td>{{order.status}}</td>
-                <td><a v-link="{path: '/warranty/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
 
@@ -77,13 +77,13 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
-  import Select from '../../../../components/Select'
-  import AreaSelect from '../../../../components/AreaSelect'
-  import SearchBox from '../../../../components/SearchBox'
-  import Pager from '../../../../components/Pager'
-  import DateRangePicker from '../../../../components/DateRangePicker'
-  import api from '../../../../api'
+  import { globalMixins } from '../../../../../mixins'
+  import Select from '../../../../../components/Select'
+  import AreaSelect from '../../../../../components/AreaSelect'
+  import SearchBox from '../../../../../components/SearchBox'
+  import Pager from '../../../../../components/Pager'
+  import DateRangePicker from '../../../../../components/DateRangePicker'
+  import api from '../../../../../api'
 
   export default {
     name: 'OrderList',
@@ -257,5 +257,5 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../../../../assets/stylus/common'
 </style>

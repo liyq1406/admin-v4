@@ -1,10 +1,10 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/diet/ingredient'}"><i class="fa fa-arrow-circle-left"></i>食材管理</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe/ingredient'}"><i class="fa fa-arrow-circle-left"></i>食材管理</a></div>
       <div class="panel">
         <div class="panel-hd">
-          <h2>添加食材</h2>
+          <h2>编辑食材</h2>
         </div>
         <div class="panel-bd">
           <div class="form">
@@ -64,17 +64,23 @@
                 <label class="form-control col-4">{{ $t("ingredient.fields.instructions") }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ingredient.placeholders.instructions')" class="input-text-wrap">
-                    <textarea v-model="model.instructions" type="text" name="instructions" maxlength="250" lazy class="input-text textarea-lg"></textarea>
+                    <textarea v-model="model.instructions" type="text" v-form-ctrl name="instructions" maxlength="250" lazy class="input-text textarea-lg"></textarea>
                   </div>
+                  <div v-if="validation.instructions.$dirty" class="form-tips form-tips-error"><span v-if="validation.instructions.$error.maxlength"> {{ $t('validation.maxlength', [ $t('ingredient.fields.instructions'), 250]) }}</span></div>
                 </div>
               </div>
               <div class="form-actions row">
                 <div class="col-offset-4">
-                  <button type="submit" :disabled="adding" :class="{'disabled': adding}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+                  <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
                 </div>
               </div>
             </form>
           </div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-bd">
+          <button @click.prevent="deleteIngredient" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ingredient.del') }}</button>
         </div>
       </div>
     </div>
@@ -82,11 +88,11 @@
 </template>
 
 <script>
-  import api from '../../../api'
-  import ImageUploader from '../../../components/ImageUploader'
-  import Select from '../../../components/Select'
-  import _ from 'lodash/array'
-  import { globalMixins } from '../../../mixins'
+  import api from '../../../../api'
+  import ImageUploader from '../../../../components/ImageUploader'
+  import Select from '../../../../components/Select'
+  import _ from 'lodash'
+  import { globalMixins } from '../../../../mixins'
 
   export default {
     name: 'AddIngredientForm',
@@ -111,16 +117,19 @@
           },
           instructions: ''
         },
-        rules: [],
         validation: {},
+        rules: [],
         categories: [],
-        adding: false
+        editing: false
       }
     },
 
     route: {
       data () {
-        // 获取食材分类
+        // 获取目标食材
+        this.getIngredient()
+
+        // 获取分类
         this.getCategories()
 
         // 获取推送规则
@@ -145,10 +154,10 @@
       getCategories () {
         // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
         api.diet.listCategory('ingredient_classification').then((res) => {
-          if (res.data.value !== undefined) {
-            this.categories = res.data.value
+          if (typeof res.data.value !== 'undefined') {
+            this.categories = _.unionBy(this.model.classification, res.data.value, 'main')
           } else {
-            this.categories = []
+            this.categories = this.model.classification
           }
         }).catch((res) => {
           this.handleError(res)
@@ -160,10 +169,27 @@
        */
       getRules () {
         api.diet.listCategory('push_rules').then((res) => {
-          if (res.data.value !== undefined) {
+          if (typeof res.data.value !== 'undefined') {
             this.rules = res.data.value
           } else {
             this.rules = []
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取食材
+       */
+      getIngredient () {
+        api.diet.getIngredient(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.model.name = res.data.name
+            this.model.instructions = res.data.instructions
+            this.model.images = res.data.images
+            this.model.classification = res.data.classification
+            this.model.properties.push_rules = res.data.properties.push_rules
           }
         }).catch((res) => {
           this.handleError(res)
@@ -196,22 +222,37 @@
       },
 
       /**
-       * 添加食材表单提交
+       * 编辑食材表单提交
        */
       onSubmit () {
-        if (this.validation.$valid && !this.adding) {
-          this.adding = true
-          api.diet.addIngredient(this.model).then((res) => {
+        if (this.validation.$valid && !this.editing) {
+          this.editing = true
+          api.diet.updateIngredient(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
               this.showNotice({
                 type: 'success',
-                content: '食材添加成功！'
+                content: '食材修改成功！'
               })
-              this.$route.router.go({path: '/diet/ingredient'})
+              this.$route.router.go({path: '/plugins/recipe/ingredient'})
             }
           }).catch((res) => {
             this.handleError(res)
-            this.adding = false
+            this.editing = false
+          })
+        }
+      },
+
+      /**
+       * 删除食材
+       */
+      deleteIngredient () {
+        if (window.confirm('确定要删除该食材吗？')) {
+          api.diet.deleteIngredient(this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.$route.router.go({path: '/plugins/recipe/ingredient'})
+            }
+          }).catch((res) => {
+            this.handleError(res)
           })
         }
       }

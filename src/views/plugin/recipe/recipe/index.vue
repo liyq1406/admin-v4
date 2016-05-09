@@ -6,7 +6,7 @@
           <search-box :key.sync="query" :active="searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getRecipes" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRecipes">
             <button slot="search-button" @click="getRecipes" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
-          <div class="action-group"><a v-link="{path: '/diet/recipe/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加菜谱</a>
+          <div class="action-group"><a v-link="{path: '/plugins/recipe/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加菜谱</a>
             <button @click="showCategoryModal=true" class="btn btn-success"><i class="fa fa-list-ul"></i>类别管理</button>
           </div>
         </div>
@@ -44,7 +44,7 @@
                   <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
                   <td>{{ recipe.created_by }}</td>
                   <td>{{ recipe.created_at | formatDate }}</td>
-                  <td class="tac"><a v-link="{path: '/diet/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                  <td class="tac"><a v-link="{path: '/plugins/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
               <tr v-if="recipes.length === 0 && !loadingData">
@@ -80,12 +80,12 @@
 </template>
 
 <script>
-  import api from '../../../api'
-  import Select from '../../../components/Select'
-  import Pager from '../../../components/Pager'
-  import Modal from '../../../components/Modal'
-  import SearchBox from '../../../components/SearchBox'
-  import { globalMixins } from '../../../mixins'
+  import api from '../../../../api'
+  import Select from '../../../../components/Select'
+  import Pager from '../../../../components/Pager'
+  import Modal from '../../../../components/Modal'
+  import SearchBox from '../../../../components/SearchBox'
+  import { globalMixins } from '../../../../mixins'
 
   export default {
     name: 'IngredientList',

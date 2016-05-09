@@ -48,7 +48,7 @@
                   <div v-if="order.status === 0">已过期</div>
                   <div v-else class='hl-green'>未过期</div>
                 </td>
-                <td><a v-link="{path: '/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
             <tr v-if="workOrders.length === 0 && !loadingData">
@@ -71,13 +71,13 @@
 </template>
 
 <script>
-  // import api from '../../../../api'
-  import { globalMixins } from '../../../../mixins'
-  import Select from '../../../../components/Select'
-  import AreaSelect from '../../../../components/AreaSelect'
-  import SearchBox from '../../../../components/SearchBox'
-  import Pager from '../../../../components/Pager'
-  import api from '../../../../api'
+  // import api from '../../../../../api'
+  import { globalMixins } from '../../../../../mixins'
+  import Select from '../../../../../components/Select'
+  import AreaSelect from '../../../../../components/AreaSelect'
+  import SearchBox from '../../../../../components/SearchBox'
+  import Pager from '../../../../../components/Pager'
+  import api from '../../../../../api'
 
   export default {
     name: 'OrderList',
@@ -182,5 +182,5 @@
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+  @import '../../../../../assets/stylus/common'
 </style>
