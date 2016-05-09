@@ -52,8 +52,16 @@ export const pluginMixins = {
             this.getPlugins()
             if (plugin.enable) {
               this.createPlugin(obj)
+              this.showNotice({
+                type: 'success',
+                content: `${plugin.name}插件已启用`
+              })
             } else {
               this.removePlugin(obj)
+              this.showNotice({
+                type: 'info',
+                content: `${plugin.name}插件已禁用`
+              })
             }
           }
           this.loading = false
@@ -75,7 +83,7 @@ export const pluginMixins = {
           this.getPlugins()
           this.showNotice({
             type: 'success',
-            content: '插件已创建'
+            content: `${plugin.name}插件创建成功`
           })
         }).catch((res) => {
           this.handleError(res)
