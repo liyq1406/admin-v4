@@ -69,7 +69,7 @@
             </div>
             <!-- End: 插件管理 -->
             <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/link' }"><i class="fa fa-clone"></i>{{ $t("nav_aside.link") }}</a></div>
+            <div class="nav-aside-item"><a v-link="{ path: '/linkage' }"><i class="fa fa-clone"></i>{{ $t("nav_aside.link") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
             <div class="nav-aside-item"><a v-link="{ path: '/device-map' }"><i class="fa fa-map"></i>{{ $t("nav_aside.device_map") }}</a></div>
