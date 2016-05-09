@@ -4,8 +4,8 @@
       <div class="panel-bd">
         <div class="form">
           <div class="form-row row">
-            <label class="form-control col-6">推送渠道:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送渠道:</label>
+            <div class="controls col-19">
               <v-select :label="channel.label" width="200px">
                 <select v-model="channel" v-form-ctrl name="channel">
                   <option v-for="opt in channelOptions" :value="opt">{{ opt.label }}</option>
@@ -14,8 +14,8 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">推送类型:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送类型:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in types" class="radio">
                   <input type="radio" v-model="model.type" name="type" :value="$index+1" number/>{{ type }}
@@ -24,8 +24,8 @@
             </div>
           </div>
           <div class="form-row row" v-show="model.type>1">
-            <label class="form-control col-6">推送范围:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送范围:</label>
+            <div class="controls col-19">
               <div class="row mb10">
                 <div class="col-4 control-text">用户类型</div>
                 <div class="col-20 select-group">
@@ -60,8 +60,8 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">推送时间:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送时间:</label>
+            <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in startTypes" class="radio">
                   <input type="radio" v-model="model.startType" name="startType" :value="$index+1" number/>{{ type }}
@@ -74,8 +74,8 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">过期时间:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">过期时间:</label>
+            <div class="controls col-19">
               <date-picker :value.sync="endDate"></date-picker>
               <time-picker :value.sync="endTime"></time-picker>
             </div>
@@ -87,74 +87,45 @@
       <div class="panel-bd">
         <div class="form">
           <div class="row mb10">
-            <div class="col-18 col-offset-6 hl-gray">iOS平台填写标题即可</div>
+            <div class="col-19 col-offset-5 hl-gray">iOS平台填写标题即可</div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">推送标题:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送标题:</label>
+            <div class="controls col-19">
               <div v-placeholder="'不可超过20个字符'" class="input-text-wrap">
                 <input v-model="model.title" type="text" v-form-ctrl name="title" maxlength="20" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
               </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">推送描述:</label>
-            <div class="controls col-18">
+            <label class="form-control col-5">推送描述:</label>
+            <div class="controls col-19">
               <div v-placeholder="'不可超过30个字符'" class="input-text-wrap">
                 <input v-model="model.desc" type="text" v-form-ctrl name="desc" maxlength="30" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
               </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">打开消息:</label>
-            <div class="controls col-18">
-              <div class="row mb10">
-                <div class="col-7">
-                  <label class="radio">
-                    <input type="radio" v-model="model.openType" name="openType" :value="1" number/> 打开指定页面
-                  </label>
-                </div>
-                <div class="col-17">
-                  <div class="input-text-wrap">
-                    <input type="text" class="input-text"/>
-                  </div>
-                </div>
+            <label class="form-control col-5">打开消息:</label>
+            <div class="controls col-19">
+              <div class="radio-group mb10">
+                <label v-for="type in openTypes" class="radio">
+                  <input type="radio" v-model="model.openType" name="openType" :value="$index+1" number/>{{ type }}
+                </label>
               </div>
-              <div class="row mb10">
-                <div class="col-7">
-                  <label class="radio">
-                    <input type="radio" v-model="model.openType" name="openType" :value="2" number/> 打开指定网页
-                  </label>
-                </div>
-                <div class="col-17">
-                  <div class="input-text-wrap">
-                    <input type="text" class="input-text"/>
-                  </div>
-                </div>
+              <div v-show="model.openType===1" class="input-text-wrap">
+                <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
               </div>
-              <div class="row mb10">
-                <div class="col-7">
-                  <label class="radio">
-                    <input type="radio" v-model="model.openType" name="openType" :value="3" number/> 打开指定网页
-                  </label>
-                </div>
-                <div class="col-17">
-                  <div class="input-text-wrap">
-                    <textarea type="text" class="input-text"></textarea>
-                  </div>
-                </div>
+              <div v-show="model.openType===2" class="input-text-wrap">
+                <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
               </div>
-              <div class="row">
-                <div class="col-7">
-                  <label class="radio">
-                    <input type="radio" v-model="model.openType" name="openType" :value="4" number/> 直接打开APP
-                  </label>
-                </div>
+              <div v-show="model.openType===3" class="input-text-wrap">
+                <textarea v-model="model.openContent" name="openContent" class="input-text"></textarea>
               </div>
             </div>
           </div>
           <div class="form-actions row">
-            <div class="col-offset-6">
+            <div class="col-offset-5">
               <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
             </div>
           </div>
@@ -231,15 +202,34 @@
           label: '7天活跃用户',
           value: 1
         },
+        openTypes: ['打开指定页面', '打开指定网页', '自定义内容', '直接打开APP'],
         model: {
           channel: '', // 推送渠道
           type: 1, // 推送类型
           title: '', // 标题
           desc: '', // 描述
           tags: [], // 标签
-          startType: 1 // 推送时间类型
+          startType: 1, // 推送时间类型
+          openType: 1, // 打开消息类型
+          openContent: ''
         }
       }
+    },
+
+    ready () {
+      window.tinymce.init({
+        selector: 'textarea',
+        plugins: [
+          'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
+          'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+          'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
+        ],
+        toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+        toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
+        menubar: false,
+        toolbar_items_size: 'small',
+        language: 'zh_CN'
+      })
     },
 
     methods: {
@@ -251,6 +241,9 @@
 
 <style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
+
+  .form
+    max-width 640px
 
   .select-group
     .v-select

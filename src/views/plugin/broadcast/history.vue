@@ -1,17 +1,18 @@
 <template>
   <section>
     <div class="panel">
+      <div class="panel-hd">
+        <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getHistory(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistory(true)">
+          <v-select width="100px" :label="queryType.label">
+            <select v-model="queryType">
+              <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+            </select>
+          </v-select>
+          <button slot="search-button" @click="getHistory(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
+        </search-box>
+        <h2>推送历史列表</h2>
+      </div>
       <div class="panel-bd">
-        <div class="action-bar">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getHistory(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistory(true)">
-            <v-select width="100px" :label="queryType.label">
-              <select v-model="queryType">
-                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-            <button slot="search-button" @click="getHistory(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
-          </search-box>
-        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
