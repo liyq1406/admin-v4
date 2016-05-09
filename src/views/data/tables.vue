@@ -48,9 +48,9 @@
                       </div>
                     </div>
                     <!-- 过滤暂时注释掉 -->
-                    <!-- <div class="operation filter" @click="showFilterModal">
+                    <div class="operation filter" @click="showFilterModal">
                       <span>过滤</span>
-                    </div> -->
+                    </div>
                   </div>
                 </div>
               </div>
@@ -322,25 +322,37 @@
       <h3 slot="header">筛选</h3>
       <div slot="body" class="form">
         <form @submit.prevent="filterModalConfirm">
-          <div class="form-row row">
-            <div class="controls col-12 row">
-              <span class="filterModalTitle col-8">选择列：</span>
-              <div class="select-box col-14">
-                <v-select :label="filterModal.modal.title" :width="'100px'">
+          <div class="form-row">
+            <div class="controls row">
+              <span class="filterModalTitle col-6">选择列：</span>
+              <div class="select-box col-18">
+                <v-select :label="filterModal.modal.title">
                   <select v-model="filterModal.modal">
                     <option v-for="header in vHeaders" :value="header">{{ header.title }}</option>
                   </select>
                 </v-select>
               </div>
             </div>
-            <div class="controls col-12">
-              <span class="filterModalTitle col-8">筛选条件：</span>
-              <div class="select-box col-14">
-                <v-select :label="filterModal.condition.selectedCondition" :width="'100px'">
+          </div>
+          <div class="form-row">
+            <div class="controls row">
+              <span class="filterModalTitle col-6">筛选条件：</span>
+              <div class="select-box col-18">
+                <v-select :label="filterModal.condition.selectedCondition">
                   <select v-model="filterModal.condition.selectedCondition">
                     <option v-for="condition in filterModal.condition.conditionList" :value="condition">{{ condition }}</option>
                   </select>
                 </v-select>
+              </div>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="controls row">
+              <span class="filterModalTitle col-6">值：</span>
+              <div class="value-box col-18">
+                <div v-placeholder="'请输入值'" class="input-text-wrap">
+                  <input v-model="filterModal.condition.value" type="text" class="input-text"/>
+                </div>
               </div>
             </div>
           </div>
@@ -493,7 +505,8 @@
           show: false,
           condition: {
             selectedCondition: '>',
-            conditionList: ['>', '<', '>=', '<=']
+            conditionList: ['>', '<', '>=', '<='],
+            value: ''
           },
           modal: {
             key: 'id',
