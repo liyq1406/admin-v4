@@ -13,7 +13,7 @@
     <div class="panel">
       <div class="linkage-list">
         <linkage-item name="amazon echo">
-          <img slot="thumb" src="../../assets/images/device_thumb.png"/>
+          <img slot="thumb" src="../../assets/images/amazon-echo.png"/>
           <div class="hl-gray">Coming soon...</div>
         </linkage-item>
       </div>

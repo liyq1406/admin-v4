@@ -18,7 +18,7 @@
     <div class="panel" v-if="enableNest">
       <div class="linkage-list">
         <linkage-item name="nest thermostat">
-          <img slot="thumb" src="../../assets/images/device_thumb.png"/>
+          <img slot="thumb" src="../../assets/images/nest-smoke.png"/>
           <div class="row">
             <div class="col-2">联动服务：</div>
             <div class="col-20">
@@ -29,7 +29,7 @@
           </div>
         </linkage-item>
         <linkage-item name="nest smoke">
-          <img slot="thumb" src="../../assets/images/device_thumb.png"/>
+          <img slot="thumb" src="../../assets/images/nest-thermostat.png"/>
           <div class="row">
             <div class="col-2">联动服务：</div>
             <div class="col-20">
