@@ -156,7 +156,7 @@
           if (result === true) {
             api.app.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.removePlugin(this.model)
+                this.removePlugin(res.data)
                 this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {

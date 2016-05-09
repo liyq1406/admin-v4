@@ -36,7 +36,7 @@
                     <button v-if="app.type===1" v-link="{ path: '/plugins/ios/'+app.id+'/settings' }" class="btn btn-link btn-mini">{{ $t("common.config") }}</button>
                     <button v-if="app.type===2" v-link="{ path: '/plugins/android/'+app.id+'/settings' }" class="btn btn-link btn-mini">{{ $t("common.config") }}</button>
                     <button v-if="app.type===4" v-link="{ path: '/plugins/wechat/'+app.id+'/settings' }" class="btn btn-link btn-mini">{{ $t("common.config") }}</button>
-                    <button v-if="app.type===3" v-link="{ path: '/plugins/web/'+app.id+'/settings' }" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                    <button v-if="app.type===3" v-link="{ path: '/plugins/web/'+app.id+'/settings' }" class="btn btn-link btn-mini">{{ $t("common.config") }}</button>
                   </td>
                 </tr>
               </template>

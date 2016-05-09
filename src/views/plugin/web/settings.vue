@@ -123,7 +123,7 @@
           this.editing = true
           api.plugin.update(this.$route.params.id, this.model).then((res) => {
             if (res.status === 200) {
-              this.updatePlugin(this.model)
+              this.updatePlugin(res.data)
               this.$route.router.go('/plugins/customize')
             }
           }).catch((res) => {
