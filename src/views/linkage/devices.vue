@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
-        <v-alert :cols="7" v-if="!products.length">
+        <v-alert :cols="7" v-if="!products.length && !loadingProducts && !loadingDatapoints">
           <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
         </v-alert>
 
@@ -86,7 +86,8 @@
 
     data () {
       return {
-        loadingDatapoint: false,
+        loadingProducts: false,
+        loadingDatapoints: false,
         datapoints: [],
         currProduct: {},
         products: []
@@ -102,6 +103,7 @@
     methods: {
       // 获取产品列表
       getProducts () {
+        this.loadingProducts = true
         api.product.all().then((res) => {
           this.products = res.data
           this.currProduct = this.products[0]
@@ -109,15 +111,17 @@
             this.tips = true
             return
           }
+          this.loadingDatapoints = false
           this.getDatapoints()
         }).catch((res) => {
           this.handleError(res)
+          this.loadingDatapoints = false
         })
       },
 
       // 获取数据端点
       getDatapoints () {
-        this.loadingDatapoint = true
+        this.loadingDatapoints = true
         api.product.getDatapoints(this.currProduct.id).then((res) => {
           if (res.status === 200) {
             // TODO 接口完善时请删除这个遍历操作，并修改 HTML 中的的数据绑定字段
@@ -127,11 +131,11 @@
               return item
             })
             this.datapoints = res.data
-            this.loadingDatapoint = false
+            this.loadingDatapoints = false
           }
         }).catch((res) => {
           this.handleError(res)
-          this.loadingDatapoint = false
+          this.loadingDatapoints = false
         })
       }
     }
