@@ -67,14 +67,14 @@
             </thead>
             <tbody>
               <tr v-for="i in 3">
-                <td @click="showAddModal=true">
-                  <a>热水器</a>
+                <td>
+                  <a @click.prevent="showAddModal=true" class="hl-red">热水器</a>
                 </td>
                 <td>ted</td>
                 <td>2019.0.1</td>
                 <td>哈哈</td>
-                <td v-link="{ path: '/data/snapshot/123' }">
-                  <a>查看快照</a>
+                <td>
+                  <a v-link="{ path: '/data/snapshot/123' }" class="hl-red">查看快照</a>
                 </td>
               </tr>
             </tbody>

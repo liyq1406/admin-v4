@@ -30,6 +30,7 @@
   .linkage-list
     .linkage-item
       clearfix()
+      font-size 12px
       padding 20px 0
       border-bottom 1px solid default-border-color
 
@@ -47,6 +48,11 @@
           font-weight normal
           font-size 18px
           margin 30px 0 10px
+
+      .label-text
+        display inline-block
+        vertical-align middle
+        line-height 22px
 
       &:last-child
         border none

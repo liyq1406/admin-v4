@@ -10,7 +10,7 @@
           </pic-txt>
         </div>
         <div class="col-8 tar">
-          <span class="mr5">是否开启nest服务</span>
+          <span class="mr5">开启nest服务</span>
           <v-switch size="small" :value.sync="enableNest"></v-switch>
         </div>
       </div>
@@ -20,22 +20,26 @@
         <linkage-item name="nest thermostat">
           <img slot="thumb" src="../../assets/images/nest-smoke.png"/>
           <div class="row">
-            <div class="col-2">联动服务：</div>
+            <div class="col-2">
+              <span class="label-text">联动服务：</span>
+            </div>
             <div class="col-20">
               <v-switch size="small" :value.sync="enableThermostat"></v-switch>
-              <span v-if="!enableThermostat">未开启</span>
-              <span v-else>已开启</span>
+              <span v-if="!enableThermostat" class="label-text">未开启</span>
+              <span v-else class="label-text">已开启</span>
             </div>
           </div>
         </linkage-item>
         <linkage-item name="nest smoke">
           <img slot="thumb" src="../../assets/images/nest-thermostat.png"/>
           <div class="row">
-            <div class="col-2">联动服务：</div>
+            <div class="col-2">
+              <span class="label-text">联动服务：</span>
+            </div>
             <div class="col-20">
               <v-switch size="small" :value.sync="enableSmoke"></v-switch>
-              <span v-if="!enableSmoke">未开启</span>
-              <span v-else>已开启</span>
+              <span v-if="!enableSmoke" class="label-text">未开启</span>
+              <span v-else class="label-text">已开启</span>
             </div>
           </div>
         </linkage-item>
