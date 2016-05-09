@@ -37,3 +37,14 @@
 .menu-leave
   opacity 0
   transform translate3d(0, 10px, 0)
+
+// 从下往上渐现
+.bottomToTop-transition
+  transition opacity .3s ease, height .3s ease, transform .3s ease
+  opacity 1
+  transform translate3d(0,0,0)
+
+.bottomToTop-enter
+.bottomToTop-leave
+  opacity 0
+  transform translate3d(0, 10px, 0)

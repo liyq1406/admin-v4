@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div class="panel" v-if="enableNest">
+    <div class="panel" v-show="enableNest" transition="bottomToTop">
       <div class="linkage-list">
         <linkage-item name="nest thermostat">
           <img slot="thumb" src="../../assets/images/nest-smoke.png"/>
