@@ -7,7 +7,7 @@
             <label class="form-control col-6">产品:</label>
             <div class="controls col-18">
               <v-select :label="productTypes[productType.value].label" width="200px">
-                <select v-model="productType">
+                <select v-model="productType" @change="getProductData">
                   <option v-for="i in productTypes" :value="i">{{ i.label }}</option>
                 </select>
               </v-select>
@@ -16,13 +16,6 @@
           <div class="form-row row">
             <label class="form-control col-6">快照规则:</label>
             <div class="controls col-9">
-              <v-select :label="updateRules[updateRule.value].label" width="200px">
-                <select v-model="updateRule">
-                  <option v-for="i in updateRules" :value="i">{{ i.label }}</option>
-                </select>
-              </v-select>
-            </div>
-            <div class="controls col-9" v-if="updateRule.value==0">
               <v-select :label="timeIntervals[timeInterval.value].label" width="200px">
                 <select v-model="timeInterval">
                   <option v-for="i in timeIntervals" :value="i">{{ i.label }}</option>
@@ -34,9 +27,9 @@
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
               <div class="editSnapshot">
-                <div v-for="i in snapshotData" class="data-tag">{{i.label}}</div>
+                <div v-for="i in dataPointsShow" class="data-tag">{{i}}</div>
               </div>
-              <button class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>编辑快照数据</button>
+              <button class="btn btn-ghost btn-sm" @click="showAddModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
             </div>
           </div>
           <div class="form-row row">
@@ -68,7 +61,7 @@
             <tbody>
               <tr v-for="i in 3">
                 <td>
-                  <a @click.prevent="showAddModal=true" class="hl-red">热水器</a>
+                  <a @click.prevent="showEditModal=true" class="hl-red">热水器</a>
                 </td>
                 <td>ted</td>
                 <td>2019.0.1</td>
@@ -86,29 +79,31 @@
     <modal :show.sync="showAddModal" width="600px">
       <h3 slot="header">选择快照数据项</h3>
       <div slot="body" class="form">
-        <div class="data-table">
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>索引</th>
-                <th>端点ID</th>
-                <th>数据类型</th>
-                <th>单位符号</th>
-                <th>描述</th>
-                <th>选择</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="i in 8">
-                <td>1</td>
-                <td>ted</td>
-                <td>tupe</td>
-                <td>kg</td>
-                <td>xxxx</td>
-                <td><input type="checkbox"/></td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="table-wrap">
+          <div class="data-table">
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>索引</th>
+                  <th>端点ID</th>
+                  <th>数据类型</th>
+                  <th>单位符号</th>
+                  <th>描述</th>
+                  <th>选择</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="i in dataPoints">
+                  <td>{{i.index}}</td>
+                  <td>{{i.id}}</td>
+                  <td>{{i.type}}</td>
+                  <td>{{i.symbol}}</td>
+                  <td>{{i.description}}</td>
+                  <td><input v-model="i.selected" type="checkbox"/></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div class="form-actions snapshot-select">
           <button @click="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -134,13 +129,12 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in 8">
-                <td>1</td>
-                <td>ted</td>
-                <td>tupe</td>
-                <td>kg</td>
-                <td>xxxx</td>
-                <td><input type="checkbox"/></td>
+              <tr v-for="i in dataPoints">
+                <td>{{i.index}}</td>
+                <td>{{i.id}}</td>
+                <td>{{i.type}}</td>
+                <td>{{i.symbol}}</td>
+                <td>{{i.description}}</td>
               </tr>
             </tbody>
           </table>
@@ -164,6 +158,7 @@
   // import locales from '../../consts/locales/index'
   // import _ from 'lodash'
   import { globalMixins } from '../../mixins'
+  import api from '../../api'
 
   export default {
     name: 'DataTables',
@@ -182,42 +177,11 @@
       return {
         showAddModal: false,
         showEditModal: false,
-        productTypes: [{
-          label: '请选择产品类型',
-          value: 0
-        },
-        {
-          label: '热水器',
-          value: 1
-        },
-        {
-          label: '饮水机',
-          value: 2
-        }],
-
         productType: {
           label: '请选择产品类型',
-          value: 0
+          value: 0,
+          id: ''
         },
-
-        updateRules: [{
-          label: '定时更新',
-          value: 0
-        },
-        {
-          label: '上报更新',
-          value: 1
-        },
-        {
-          label: '变化更新',
-          value: 2
-        }],
-
-        updateRule: {
-          label: '定时更新',
-          value: 0
-        },
-
         timeIntervals: [{
           label: '5分钟',
           value: 0
@@ -246,39 +210,51 @@
           label: '5分钟',
           value: 0
         },
-        snapshotData: [{
-          label: 'led',
-          value: 0
-        },
-        {
-          label: 'POWER',
-          value: 1
-        },
-        {
-          label: 'inr',
-          value: 2
-        },
-        {
-          label: 'mode',
-          value: 3
-        },
-        {
-          label: 'mode',
-          value: 4
-        },
-        {
-          label: 'dashboard',
-          value: 5
-        }]
+        products: [{
+          name: ''
+        }],
+        dataPoints: []
       }
     },
 
     route: {
       data () {
+        this.init()
       }
     },
 
     computed: {
+      productTypes () {
+        var types = [{
+          label: '请选择产品类型',
+          value: 0,
+          id: ''
+        }]
+
+        var i = 1
+        this.products.forEach((item) => {
+          var type = {}
+          type.label = item.name
+          type.value = i
+          type.id = item.id
+          i++
+          types.push(type)
+        })
+
+        return types
+      },
+      dataPointsShow () {
+        var datas = []
+        this.dataPoints.forEach((item) => {
+          var data = ''
+          if (item.selected === true) {
+            data = item.name
+            datas.push(data)
+          }
+        })
+
+        return datas
+      }
     },
 
     methods: {
@@ -295,6 +271,35 @@
       },
       onEditSubmit () {
         this.showEditModal = false
+      },
+      init () {
+        this.getProducts()
+      },
+      getProducts () {
+        api.product.all().then((res) => {
+          this.products = res.data
+        }, (err) => {
+          this.handleError(err)
+        })
+      },
+      getProductData () {
+        api.product.getDatapoints(this.productType.id).then((res) => {
+          var datas = []
+          res.data.forEach((item) => {
+            var data = {}
+            data.selected = false
+            data.index = item.index
+            data.id = item.id
+            data.name = item.name
+            data.type = item.type
+            data.symbol = item.symbol
+            data.description = item.description
+            datas.push(data)
+          })
+          this.dataPoints = datas
+        }, (err) => {
+          this.handleError(err)
+        })
       }
     }
   }
@@ -312,4 +317,8 @@
     margin-top 30px
   .height-wrap
     height 1.5em
+  .table-wrap
+    height 100%
+    width 100%
+    overflow-x scroll
 </style>
