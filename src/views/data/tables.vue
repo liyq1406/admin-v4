@@ -1,12 +1,12 @@
 <template>
-  <div>
-    <div class="panel data-tables">
+  <div class="data-tables">
+    <div class="panel">
       <div class="panel-bd">
         <div class="row">
           <div class="col-4 data-table-border first-class-box">
             <div class="action-bar">
               <div class="action-group">
-                <button @click="addModal.show=true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
+                <button @click="addModal.show=true" class="btn btn-success btn-block"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
               </div>
             </div>
             <div class="data-table-box" v-show="dataFirClassList.length">
@@ -28,7 +28,7 @@
                     <div class="operation add-line" @click="showAddLineModal">
                       <span><i class="fa fa-plus"></i> 添加行</span>
                     </div>
-                    <div class="operation del-line" :class="{'disabled': selectedTable.length === 0}" @click="deleteLineEvent">
+                    <div class="operation del-line" :class="{'disabled': selectedLine.length === 0}" @click="deleteLineEvent">
                       <span><i class="fa fa-trash"></i> 删除行</span>
                     </div>
                     <div class="operation add-column" @click="showAddColumnModal">
@@ -47,14 +47,14 @@
                         </ul>
                       </div>
                     </div>
-                    <div class="operation filter" @click="showFilterModal">
+                    <!-- <div class="operation filter" @click="showFilterModal">
                       <span><i class="fa fa-filter"></i> 筛选</span>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
               <div class="details-table">
-                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table.sync="selectedTable" :selecting.sync="true" @selected-change="selectedTableChange"></intelligent-table>
+                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table.sync="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
               </div>
             </div>
             <div class="tips-box" v-show="!selectedFirstClass.selected">
@@ -285,6 +285,16 @@
               </div>
             </div>
           </div>
+          <div class="form-row row">
+            <label class="form-control col-6">类型:</label>
+            <div class="controls col-18">
+              <v-select :label="getTypeLabelByValue(addColumnModal.type)" size="small">
+                <select v-model="addColumnModal.type">
+                  <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                </select>
+              </v-select>
+            </div>
+          </div>
           <div class="form-actions">
             <button @click.prevent.stop="addColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -371,7 +381,7 @@
           <div class="form-row row">
             <div class="checkbox-group">
               <label v-for="type in permissionTypes" class="checkbox">
-                <input type="checkbox" v-model="jurisdictionModal.model[type.value]"/>{{ type.label }}
+                <input type="checkbox" v-model="jurisdictionModal.modal[type.value]"/>{{ type.label }}
               </label>
             </div>
           </div>
@@ -397,6 +407,53 @@
       </div>
     </modal>
     <!-- 提示 -->
+    <!-- start 添加列 -->
+    <modal :show.sync="userEditColumnModal.show" class="visible">
+      <h3 slot="header">编辑内容</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="userEditColumnModalConfirm">
+          <div class="form-row row">
+            <label class="form-control col-6">{{userEditColumnModal.columnName}}:</label>
+            <!-- 字符串 -->
+            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'string'">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+                <input v-model="userEditColumnModal.value" type="text" minlength="2" maxlength="64" class="input-text"/>
+              </div>
+            </div>
+            <!-- 整形数字 -->
+            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'int'">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+                <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
+              </div>
+            </div>
+            <!-- 浮点数字 -->
+            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'float'">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+                <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
+              </div>
+            </div>
+            <!-- 布尔 -->
+            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'boolean'">
+              <v-select :label="userEditColumnModal.value+''" size="small">
+                <select v-model="userEditColumnModal.value">
+                  <option :value="true" selected>true</option>
+                  <option :value="false">false</option>
+                </select>
+              </v-select>
+            </div>
+            <!-- 日期 -->
+            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'date'">
+              <date-picker :value.sync="userEditColumnModal.value"></date-picker>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="userEditColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 添加列 -->
   </div>
 </template>
 
@@ -406,6 +463,7 @@
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import IntelligentTable from '../../components/IntelligentTable'
+  import DatePicker from '../../components/DatePicker'
   import Select from '../../components/Select'
   import locales from '../../consts/locales/index'
   import _ from 'lodash'
@@ -420,6 +478,7 @@
 
     components: {
       'intelligent-table': IntelligentTable,
+      'date-picker': DatePicker,
       'modal': Modal,
       'pager': Pager,
       'v-select': Select
@@ -445,7 +504,7 @@
         // 当前是否正在筛选列表
         isSelecting: true,
         // 已选择的行
-        selectedTable: [],
+        selectedLine: [],
         // 表格头部
         vHeaders: [
         ],
@@ -468,13 +527,13 @@
             key: 'creater',
             title: '创建者',
             class: 'tac'
-          },
-          {
-            key: 'operation',
-            title: '操作',
-            class: 'tac',
-            functionName: 'showEditModal'
           }
+          // {
+          //   key: 'operation',
+          //   title: '操作',
+          //   class: 'tac',
+          //   functionName: 'showEditModal'
+          // }
         ],
         // 表格内容
         vTables: [
@@ -499,7 +558,8 @@
         // 添加列浮层
         addColumnModal: {
           show: false,
-          content: ''
+          content: '',
+          type: 'string'
         },
 
         // 删除列浮层
@@ -529,7 +589,7 @@
         // 限权设置浮层
         jurisdictionModal: {
           show: false,
-          model: {
+          modal: {
             find: false,
             update: false,
             delete: false,
@@ -537,16 +597,25 @@
             create: false
           }
         },
+        // 编辑用户自定义列的内容浮层
+        userEditColumnModal: {
+          show: false,
+          columnName: '提示',
+          fieldType: 'string',
+          value: ''
+        },
         // 提示浮层
         confirmModal: {
           show: false,
           title: '提示',
           content: ''
         },
+        // 后端返回的数据全部放在table里面
         tables: [],
+        // 限权种类
+        permissionTypes: locales[Vue.config.lang].table.permission_types,
         tableTypes: locales[Vue.config.lang].table.types,
         fieldTypes: locales[Vue.config.lang].table.field_types,
-        permissionTypes: locales[Vue.config.lang].table.permission_types,
         currentPage: 1,
         pageCount: 10,
         addModal: {
@@ -608,6 +677,19 @@
         })
         return selectedFirstClass
       },
+      /**
+       * 已经选择的数据表
+       * @return {[type]} [description]
+       */
+      selectedTable () {
+        var selectedTable = {}
+        this.tables.map((item) => {
+          if (item.name === this.selectedFirstClass.name) {
+            selectedTable = item
+          }
+        })
+        return selectedTable
+      },
       // 是否可以在添加浮层里面创建字段
       canCreateAddFields () {
         var names = _.uniq(_.compact(_.map(this.addModal.fields, 'name')))
@@ -642,13 +724,17 @@
             selected: false
           }
           dataFirClassList.push(dataFirClassListObj)
-          if (table.field !== {}) {
+          if (Object.keys(table.field).length) {
+            console.log(JSON.stringify(table.field))
             for (var key in table.field) {
               var obj = {
                 key: key,
-                title: key
+                title: key,
+                type: table.field[key],
+                functionName: 'showEditUserColumnModal',
+                class: 'userColumn'
               }
-              vHeaders.push(obj)
+              this.vHeaders.splice(1, 0, obj)
             }
           }
         })
@@ -664,10 +750,12 @@
       showAddColumnModal () {
         this.addColumnModal.show = true
         this.addColumnModal.content = ''
+        this.addColumnModal.type = 'string'
       },
       // 添加列浮层确定按钮按下
       addColumnModalConfirm () {
         var key = this.addColumnModal.content
+        var type = this.addColumnModal.type
         if (key) {
           var repeat = false
           this.vHeaders.map((item) => {
@@ -683,9 +771,13 @@
           } else {
             var obj = {
               key: key,
-              title: key
+              title: key,
+              type: type,
+              functionName: 'showEditUserColumnModal',
+              class: 'userColumn'
             }
-            this.vHeaders.push(obj)
+            this.vHeaders.splice(1, 0, obj)
+            // this.vHeaders.push(obj)
             this.addColumnModal.show = false
           }
         } else {
@@ -696,6 +788,28 @@
         }
       },
 
+      /**
+       * 编辑用户自定义列表
+       * @param  {[type]} line   [description]
+       * @param  {[type]} column [description]
+       * @return {[type]}        [description]
+       */
+      showEditUserColumnModal (column, line) {
+        this.userEditColumnModal.show = true
+        this.userEditColumnModal.columnName = column.key
+        this.userEditColumnModal.fieldType = column.type
+        this.userEditColumnModal.value = line[column.key]
+        this.userEditColumnModal.show = true
+      },
+
+      /**
+       * 编辑用户自定义列表浮层确定事件
+       * @return {[type]} [description]
+       */
+      userEditColumnModalConfirm () {
+        alert('确定' + JSON.stringify(this.userEditColumnModal))
+        this.userEditColumnModal.show = false
+      },
       /**
        * 删除数据表
        * @return {[type]} [description]
@@ -708,11 +822,26 @@
         })
       },
 
+      /**
+       * 显示限权浮层
+       * @return {[type]} [description]
+       */
       showJurisdictionModal () {
+        this.permissionTypes.map((item) => {
+          console.log(this.jurisdictionModal.modal)
+          this.jurisdictionModal.modal[item.value] = false
+        })
+        this.selectedTable.permission.map((item) => {
+          this.jurisdictionModal.modal[item] = true
+        })
         this.jurisdictionModal.show = true
       },
       // 限权设置浮层的确定按钮
       jurisdictionModalConfirm () {
+        this.permissionTypes.map((item) => {
+          console.log(this.jurisdictionModal.modal)
+          this.jurisdictionModal.modal[item.value] = false
+        })
         this.jurisdictionModal.show = false
       },
       /**
@@ -725,7 +854,7 @@
           item.selected = false
         })
         var vTables = []
-        var vHeaders = []
+        var vHeaders = _.clone(this.baseVHeaders)
         this.tables.map((table) => {
           if (table.name === selectedFirstClass.name) {
             var vTable = {}
@@ -737,16 +866,19 @@
             for (let key in table.field) {
               var vHeader = {
                 key: key,
-                title: key
+                title: key,
+                type: table.field[key],
+                functionName: 'showEditUserColumnModal',
+                class: 'userColumn'
               }
               vTable[key] = '暂时写死的数据'
-              vHeaders.push(vHeader)
+              vHeaders.splice(1, 0, vHeader)
             }
             vTables.push(vTable)
           }
         })
         this.vTables = vTables
-        this.vHeaders = this.baseVHeaders.concat(vHeaders)
+        this.vHeaders = vHeaders
         selectedFirstClass.selected = true
       },
       /**
@@ -787,12 +919,12 @@
        * @return {[type]} [description]
        */
       deleteLineEvent () {
-        if (this.selectedTable.length) {
-          console.log(JSON.stringify(this.selectedTable))
-          this.selectedTable.map((item) => {
+        if (this.selectedLine.length) {
+          console.log(JSON.stringify(this.selectedLine))
+          this.selectedLine.map((item) => {
             this.vTables.$remove(item)
           })
-          this.selectedTable = []
+          this.selectedLine = []
         }
       },
 
@@ -864,10 +996,10 @@
        * @param  {[type]} tables [description]
        * @return {[type]}        [description]
        */
-      selectedTableChange (tables) {
+      selectedLineChange (tables) {
         console.log('智能表格组件暴露事件 已选择的table发生变化')
-        this.selectedTable = tables
-        console.log(JSON.stringify(this.selectedTable))
+        this.selectedLine = tables
+        console.log(JSON.stringify(this.selectedLine))
       },
       /**
        * 根据 value 获取对应的 label
@@ -1094,6 +1226,17 @@
       confirmModalConfirm () {
         this.confirmModal.show = false
         this.confirmModal.fn()
+      },
+
+      // 格式化日期
+      toDate (date) {
+        date = new Date(date)
+        var year = date.getFullYear()
+        var month = date.getMonth() + 1
+        month = month > 9 ? month : '0' + month
+        var day = date.getDate()
+        day = day > 9 ? day : '0' + day
+        return year + '-' + month + '-' + day
       }
     }
   }
@@ -1102,14 +1245,11 @@
 <style lang="stylus">
   @import '../../assets/stylus/common'
 
-
   .data-tables
     padding-bottom 20px
     .first-class-box
       padding-right 20px
       box-sizing border-box
-      .btn
-        width 100%
       .data-table-box
         border 1px solid #e0e0e0
         border-bottom 0
@@ -1198,22 +1338,28 @@
         padding-left 20px
         .problem
           font-size 18px
-  .modal
-    .field-row
-      clearfix()
-      margin-bottom 10px
+      .userColumn
+        cursor text
+    .modal.visible
+      .modal-body
+        overflow-x visible
+        overflow-y visible
+    .modal
+      .field-row
+        clearfix()
+        margin-bottom 10px
 
-      .fa
-        width 26px
-        color lighten(red, 50%)
-        line-height 26px
-        text-align center
-        margin-left 10px
-        cursor pointer
-        border-radius 15px
+        .fa
+          width 26px
+          color lighten(red, 50%)
+          line-height 26px
+          text-align center
+          margin-left 10px
+          cursor pointer
+          border-radius 15px
 
-        &:hover
-          color red
-    .filterModalTitle
-      line-height 32px
+          &:hover
+            color red
+      .filterModalTitle
+        line-height 32px
 </style>
