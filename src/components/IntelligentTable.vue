@@ -3,7 +3,9 @@
     <table class="table table-stripe table-bordered">
       <thead>
         <tr>
-          <th v-show="selecting" class="tac">选择</th>
+          <th v-show="selecting" class="tac">
+            <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
+          </th>
           <th v-for="tHeader in headers" :class="tHeader.class">{{tHeader.title}}</th>
         </tr>
       </thead>
@@ -11,7 +13,7 @@
         <template v-if="tables.length > 0">
           <tr v-for="table in tables">
             <th v-show="selecting" class="tac">
-              <input type="checkbox" @change="selectedTableChange(table)">
+              <input type="checkbox" :checked="selectedTable.indexOf(table)>-1" @change="selectedTableChange(table)">
             </th>
             <td v-for="tHeader in headers" :class="tHeader.class" @click="clickDown(tHeader, table)">{{{table[tHeader.key]}}}</td>
           </tr>
@@ -87,19 +89,69 @@
         default: []
       }
     },
+    data () {
+      return {
+        selectedAll: false
+      }
+    },
+    watch: {
+      tables () {
+        this.initSelectedAll()
+      }
+    },
     methods: {
+      /**
+       * 初始化全选按钮
+       * @return {[type]} [description]
+       */
+      initSelectedAll () {
+        if (this.selecting) {
+          this.selectedAll = this.tables.length && this.tables.length === this.selectedTable.length
+        }
+      },
+
+      /**
+       * 全选按钮被点击
+       * @param  {[type]} event [description]
+       * @return {[type]}       [description]
+       */
+      selectAllEvent (event) {
+        if (this.selecting) {
+          var selected = event.target.checked
+          if (selected) {
+            this.selectedTable = [].concat(this.tables)
+          } else {
+            this.selectedTable = []
+          }
+          this.$dispatch('selected-change', this.selectedTable)
+          // alert('全选')
+        }
+      },
+
+      /**
+       * tbody被点击事件
+       * @param  {[type]} tHeader [description]
+       * @param  {[type]} table   [description]
+       * @return {[type]}         [description]
+       */
       clickDown (tHeader, table) {
         if (this.$parent[tHeader.functionName]) {
           this.$parent[tHeader.functionName](tHeader, table)
         }
       },
 
+      /**
+       * checkbox点击事件
+       * @param  {[type]} table [description]
+       * @return {[type]}       [description]
+       */
       selectedTableChange (table) {
         if (this.selectedTable.indexOf(table) >= 0) {
           this.selectedTable.$remove(table)
         } else {
           this.selectedTable.push(table)
         }
+        this.initSelectedAll()
         this.$dispatch('selected-change', this.selectedTable)
       }
     }
