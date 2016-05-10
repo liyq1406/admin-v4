@@ -26,16 +26,16 @@
                 <div class="col-16 operation-box tar">
                   <div class="operation-div">
                     <div class="operation add-line" @click="showAddLineModal">
-                      <span>添加行</span>
+                      <span><i class="fa fa-plus"></i> 添加行</span>
                     </div>
                     <div class="operation del-line" :class="{'disabled': selectedTable.length === 0}" @click="deleteLineEvent">
-                      <span>删除行</span>
+                      <span><i class="fa fa-trash"></i> 删除行</span>
                     </div>
                     <div class="operation add-column" @click="showAddColumnModal">
-                      <span>添加列</span>
+                      <span><i class="fa fa-plus"></i> 添加列</span>
                     </div>
                     <div class="operation more">
-                      <span>更多</span>
+                      <span><i class="fa fa-reorder"></i> 更多</span>
                       <div class="moreOperation-box">
                         <ul>
                           <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
@@ -47,9 +47,8 @@
                         </ul>
                       </div>
                     </div>
-                    <!-- 过滤暂时注释掉 -->
                     <div class="operation filter" @click="showFilterModal">
-                      <span>过滤</span>
+                      <span><i class="fa fa-filter"></i> 筛选</span>
                     </div>
                   </div>
                 </div>
@@ -653,8 +652,12 @@
             }
           }
         })
+
         this.vHeaders = this.baseVHeaders.concat(vHeaders)
         this.dataFirClassList = dataFirClassList
+        if (dataFirClassList[0]) {
+          this.selectedFirstClassEvent(dataFirClassList[0])
+        }
         this.filterModal.modal = _.clone(this.vHeaders[0])
       },
       // 显示添加列浮层
