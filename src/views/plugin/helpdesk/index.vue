@@ -5,9 +5,7 @@
         <div class="panel-hd">
           <h2>帮助中心</h2>
         </div>
-      </div>
-      <div class="panel">
-        <div class="panel-hd">
+        <div class="panel-bd">
           <v-alert :cols="7">
             <p>你未获得使用该插件的权限</p>
           </v-alert>

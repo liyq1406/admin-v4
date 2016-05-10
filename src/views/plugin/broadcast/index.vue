@@ -5,6 +5,9 @@
         <div class="panel-hd">
           <h2>消息推送</h2>
         </div>
+        <div class="panel-bd">
+          <tab :nav="secondaryNav"></tab>
+        </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     </div>
