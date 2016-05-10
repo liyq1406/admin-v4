@@ -378,7 +378,30 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
-
+    // 帮助中心
+    '/plugins/helpdesk': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/helpdesk/index'))
+        }, 'admin')
+      }
+    },
+    // 经销商管理
+    '/plugins/dealer': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/dealer/index'))
+        }, 'admin')
+      }
+    },
+    // 支付网关
+    '/plugins/xpay': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/xpay/index'))
+        }, 'admin')
+      }
+    },
     // 告警服务
     '/alerts': {
       component (resolve) {
@@ -819,7 +842,8 @@ let configRouter = (router) => {
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
-    '/linkage': '/linkage/devices'
+    '/linkage': '/linkage/devices',
+    '/plugins/nest': '/linkage/nest'
   })
 
   router.beforeEach((transition) => {

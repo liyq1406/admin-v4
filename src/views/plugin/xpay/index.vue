@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>消息推送</h2>
+          <h2>支付网关</h2>
         </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -35,14 +35,6 @@
     route: {
       data () {
         return {
-          secondaryNav: [{
-            label: this.$t('sub_nav.broadcast.add'),
-            link: { path: '/plugins/broadcast/add' }
-          },
-          {
-            label: this.$t('sub_nav.broadcast.history'),
-            link: { path: '/plugins/broadcast/history' }
-          }]
         }
       }
     }

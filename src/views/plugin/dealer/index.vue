@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>消息推送</h2>
+          <h2>经销商管理</h2>
         </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
