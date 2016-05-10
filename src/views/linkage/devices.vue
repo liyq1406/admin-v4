@@ -24,8 +24,8 @@
             <table class="table table-stripe table-bordered">
               <thead>
                 <tr>
-                  <th>数据端点ID</th>
-                  <th>参数名称</th>
+                  <th>索引</th>
+                  <th>端点ID</th>
                   <th>描述</th>
                   <!-- <th>修改时间</th> -->
                   <th class="tac">是否可控</th>
@@ -35,8 +35,8 @@
               <tbody>
                 <template v-if="datapoints.length > 0">
                   <tr v-for="datapoint in datapoints">
+                    <td>{{ datapoint.index }}</td>
                     <td>{{ datapoint.name }}</td>
-                    <td>{{ datapoint.symbol }}</td>
                     <td>{{ datapoint.description }}</td>
                     <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
