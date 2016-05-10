@@ -12,7 +12,12 @@
             <div class="data-table-box" v-show="dataFirClassList.length">
               <ul>
                 <li class="data-table-li" v-for="dataFirClass in dataFirClassList" :class="{'selected': dataFirClass.selected}"  @click="selectedFirstClassEvent(dataFirClass)">
-                  <a class="data-first-class" :title="dataFirClass.name">{{dataFirClass.name}}</a>
+                  <a class="data-first-class" :title="dataFirClass.name">
+                    <i class="fa fa-list" title="用户公开表" v-show="dataFirClass.type===1"></i>
+                    <i class="fa fa-lock" title="用户私有表" v-show="dataFirClass.type===2"></i>
+                    <i class="fa fa-database" title="应用数据表" v-show="dataFirClass.type===3"></i>
+                     {{dataFirClass.name}}
+                   </a>
                 </li>
               </ul>
             </div>
@@ -721,6 +726,7 @@
         this.tables.map((table) => {
           var dataFirClassListObj = {
             name: table.name,
+            type: table.type,
             selected: false
           }
           dataFirClassList.push(dataFirClassListObj)
@@ -886,16 +892,17 @@
        * @return {[type]} [description]
        */
       showAddLineModal () {
-        var obj = {}
-        if (this.addListKey.length) {
-          this.addListKey.map((item) => {
-            obj[item] = ''
-          })
-          this.addLineModal.modal = obj
-          this.addLineModal.show = true
-        } else {
-          this.addLineModalConfirm()
-        }
+        // var obj = {}
+        this.addLineModalConfirm()
+        // if (this.addListKey.length) {
+        //   this.addListKey.map((item) => {
+        //     obj[item] = ''
+        //   })
+        //   this.addLineModal.modal = obj
+        //   this.addLineModal.show = true
+        // } else {
+        //   this.addLineModalConfirm()
+        // }
       },
       /**
        * 添加行
@@ -903,13 +910,12 @@
       addLineModalConfirm () {
         var obj = {}
         this.addListKey.map((item) => {
-          obj[item] = this.addLineModal.modal[item]
+          obj[item] = ''
         })
         obj.id = ''
         obj.creatTime = new Date()
         obj.updateTime = new Date()
         obj.creater = '这里插入当前的用户名'
-        obj.operation = '<a>编辑</a>'
         this.vTables.push(obj)
         this.addLineModal.show = false
       },
@@ -1246,7 +1252,8 @@
   @import '../../assets/stylus/common'
 
   .data-tables
-    padding-bottom 20px
+    .panel
+      padding-bottom 20px
     .first-class-box
       padding-right 20px
       box-sizing border-box
@@ -1271,6 +1278,14 @@
             font-size 12px
             box-sizing border-box
             text-decoration blink
+            position relative
+            padding-right 25px
+            .fa
+              line-height 32px
+              position absolute
+              right 0
+              padding-right 10px
+              color gray-light
         .selected
           .data-first-class
             color red

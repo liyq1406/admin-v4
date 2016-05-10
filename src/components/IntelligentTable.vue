@@ -106,7 +106,7 @@
        */
       initSelectedAll () {
         if (this.selecting) {
-          this.selectedAll = this.tables.length === this.selectedTable.length
+          this.selectedAll = this.tables.length && this.tables.length === this.selectedTable.length
         }
       },
 
