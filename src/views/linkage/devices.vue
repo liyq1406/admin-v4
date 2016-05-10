@@ -3,12 +3,12 @@
     <div class="panel">
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
-        <v-alert :cols="7" v-if="!products.length && !loadingProducts && !loadingDatapoints">
+        <v-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
           <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
         </v-alert>
 
         <!-- Start: 数据端点列表 -->
-        <template v-else>
+        <template v-if="products.length && !loadingProducts">
           <div class="action-bar">
             <v-select width="200px" placeholder="请选择产品" :label="currProduct.name">
               <span slot="label">产品：</span>
@@ -107,17 +107,15 @@
       getProducts () {
         this.loadingProducts = true
         api.product.all().then((res) => {
-          this.products = res.data
-          this.currProduct = this.products[0]
-          if (this.products.length === 0) {
-            this.tips = true
-            return
+          this.loadingProducts = false
+          if (res.data.length > 0) {
+            this.products = res.data
+            this.currProduct = this.products[0]
+            this.getDatapoints()
           }
-          this.loadingDatapoints = false
-          this.getDatapoints()
         }).catch((res) => {
           this.handleError(res)
-          this.loadingDatapoints = false
+          this.loadingProducts = false
         })
       },
 
