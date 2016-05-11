@@ -30,7 +30,7 @@
                 </div>
                 <div class="col-16 operation-box tar">
                   <div class="operation-div">
-                    <div class="operation add-line" @click="showAddLineModal">
+                    <div class="operation add-line" @click="addLineEvent">
                       <span><i class="fa fa-plus"></i> 添加行</span>
                     </div>
                     <div class="operation del-line" :class="{'disabled': selectedLine.length === 0}" @click="deleteLineEvent">
@@ -60,6 +60,7 @@
               </div>
               <div class="details-table">
                 <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table.sync="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
+                <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
               </div>
             </div>
             <div class="tips-box" v-show="!selectedFirstClass.selected">
@@ -256,27 +257,6 @@
       </div>
     </modal>
     <!-- End: 修改数据表浮层 -->
-    <!-- start 添加行 -->
-    <modal :show.sync="addLineModal.show">
-      <h3 slot="header">添加行</h3>
-      <div slot="body" class="form">
-        <form @submit.prevent="addLineModalConfirm">
-          <div class="form-row row" v-for="key in addListKey" track-by="$index">
-            <label class="form-control col-6">{{key}}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请输入' + key" class="input-text-wrap">
-                <input v-model="addLineModal.modal[key]" type="text" name="name" minlength="2" maxlength="64" class="input-text"/>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button @click.prevent.stop="addLineModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
-      </div>
-    </modal>
-    <!-- 添加行 -->
     <!-- start 添加列 -->
     <modal :show.sync="addColumnModal.show">
       <h3 slot="header">添加列</h3>
@@ -403,7 +383,7 @@
       <h3 slot="header">{{confirmModal.title}}</h3>
       <div slot="body" class="form">
         <div class="content-box">
-          <p>{{confirmModal.content}}</p>
+          <p><i class="fa fa-warning "></i> {{confirmModal.content}}</p>
         </div>
         <div class="form-actions">
           <button @click.prevent.stop="confirmModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -516,20 +496,19 @@
         // 默认表格头部
         baseVHeaders: [
           {
-            key: 'id',
-            title: 'ID',
-            functionName: 'test'
+            key: 'objectId',
+            title: 'ID'
           },
           {
-            key: 'creatTime',
+            key: 'createAt',
             title: '创建时间'
           },
           {
-            key: 'updateTime',
+            key: 'updateAt',
             title: '更新时间'
           },
           {
-            key: 'creater',
+            key: 'creator',
             title: '创建者',
             class: 'tac'
           }
@@ -572,12 +551,6 @@
           show: false,
           selectedColumn: ''
         },
-
-        // 添加行浮层
-        addLineModal: {
-          show: false,
-          modal: {}
-        },
         // 筛选浮层
         filterModal: {
           show: false,
@@ -619,8 +592,12 @@
         tables: [],
         // 限权种类
         permissionTypes: locales[Vue.config.lang].table.permission_types,
+        // 表格种类
         tableTypes: locales[Vue.config.lang].table.types,
+        // 列种类
         fieldTypes: locales[Vue.config.lang].table.field_types,
+        // 数据表详情基本表头
+        baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
         currentPage: 1,
         pageCount: 10,
         addModal: {
@@ -716,22 +693,55 @@
 
     methods: {
       /**
+       * 获取数据表数据以及更新数据表
+       * @param  {[type]} table_name 表名
+       * @param  {[type]} params     过滤参数
+       * @return {[type]}            [description]
+       */
+      getTableData (table_name, params) {
+        api.dataTable.queryData(table_name, params).then((res) => {
+          this.initTableHeader() // 根据当前已选择的大类初始化表格头部
+          this.vTables = res.data.list
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      },
+      /**
+       * 根据已选择数据表更新数据表头部
+       * @return {[type]} [description]
+       */
+      initTableHeader () {
+        var vHeaders = _.clone(this.baseVHeaders)
+        for (let key in this.selectedFirstClass.field) {
+          var vHeader = {
+            key: key,
+            title: key,
+            type: this.selectedFirstClass.field[key],
+            functionName: 'showEditUserColumnModal',
+            class: 'userColumn'
+          }
+          vHeaders.splice(1, 0, vHeader)
+        }
+        this.vHeaders = vHeaders
+      },
+      /**
        * 初始化数据 用tables的数据初始化各个对象
        * @return {[type]} [description]
        */
-      initData () {
-        console.log(JSON.stringify(this.tables))
+      initTable () {
         var dataFirClassList = []
         var vHeaders = []
         this.tables.map((table) => {
           var dataFirClassListObj = {
             name: table.name,
             type: table.type,
+            field: table.field,
+            permission: table.permission,
             selected: false
           }
           dataFirClassList.push(dataFirClassListObj)
           if (Object.keys(table.field).length) {
-            console.log(JSON.stringify(table.field))
             for (var key in table.field) {
               var obj = {
                 key: key,
@@ -805,6 +815,7 @@
         this.userEditColumnModal.columnName = column.key
         this.userEditColumnModal.fieldType = column.type
         this.userEditColumnModal.value = line[column.key]
+        this.userEditColumnModal.objectId = line.objectId
         this.userEditColumnModal.show = true
       },
 
@@ -813,8 +824,65 @@
        * @return {[type]} [description]
        */
       userEditColumnModalConfirm () {
-        alert('确定' + JSON.stringify(this.userEditColumnModal))
-        this.userEditColumnModal.show = false
+        var params = {}
+        var value = this.userEditColumnModal.value
+
+        if (this.userEditColumnModal.fieldType === 'date') {
+          // 如果是日期类型 拼接秤日期类型的字符串
+          value = this.userEditColumnModal.value + 'T00:00:00.000Z'
+        } else if (this.userEditColumnModal.fieldType === 'string') {
+          // 如果是字符串 转成自趺床
+          value = value + ''
+        } else if (this.userEditColumnModal.fieldType === 'int') {
+          // 如果是整型
+          value = parseInt(value)
+        }
+
+        params[this.userEditColumnModal.columnName] = value
+        this.selectedLine = []
+        // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
+        if (this.userEditColumnModal.objectId) {
+          // 修改数据
+          this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params)
+        } else {
+          // 新增数据
+          this.createTableData(this.selectedFirstClass.name, params)
+        }
+      },
+
+      /**
+       * 修改数据表
+       * @param  {[type]} table_name 表名
+       * @param  {[type]} object_id  列表id
+       * @param  {[type]} params     参数
+       * @return {[type]}            [description]
+       */
+      updateTableData (table_name, object_id, params) {
+        api.dataTable.updateData(table_name, object_id, params).then((res) => {
+          var params = {}
+          this.getTableData(table_name, params) // 重新获取列表并且渲染
+          this.userEditColumnModal.show = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      },
+
+      /**
+       * 创建数据表并且更新
+       * @param  {[type]} table_name 表名
+       * @param  {[type]} params     参数
+       * @return {[type]}            [description]
+       */
+      createTableData (table_name, params) {
+        api.dataTable.createData(table_name, params).then((res) => {
+          var params = {}
+          this.getTableData(table_name, params) // 重新获取列表并且渲染
+          this.userEditColumnModal.show = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
       },
       /**
        * 删除数据表
@@ -823,8 +891,13 @@
       deleteDataTable () {
         console.log(this.selectedFirstClass.name)
         this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
-          console.log('这里是确定按钮被按下后的逻辑')
-          console.log('发请求删除数据表 然后重新渲染列表')
+          api.dataTable.deleteTable(this.selectedFirstClass.name).then(() => {
+            // 重新获取数据表
+            this.getTables()
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
         })
       },
 
@@ -834,19 +907,41 @@
        */
       showJurisdictionModal () {
         this.permissionTypes.map((item) => {
-          console.log(this.jurisdictionModal.modal)
           this.jurisdictionModal.modal[item.value] = false
         })
-        this.selectedTable.permission.map((item) => {
+        this.selectedFirstClass.permission.map((item) => {
           this.jurisdictionModal.modal[item] = true
         })
         this.jurisdictionModal.show = true
       },
-      // 限权设置浮层的确定按钮
+      /**
+       * 限权设置浮层的确定按钮
+       * @return {[type]} [description]
+       */
       jurisdictionModalConfirm () {
-        this.permissionTypes.map((item) => {
-          console.log(this.jurisdictionModal.modal)
-          this.jurisdictionModal.modal[item.value] = false
+        var permission = []
+        for (let key in this.jurisdictionModal.modal) {
+          if (this.jurisdictionModal.modal[key]) {
+            permission.push(key)
+          }
+        }
+        var table = {}
+        table.name = this.selectedFirstClass.name
+        table.permission = permission
+        table.type = this.selectedFirstClass.type
+        table.field = this.selectedFirstClass.field
+        api.dataTable.updateTable(table).then((res) => {
+          if (res.status === 200) {
+            var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
+            this.dataFirClassList[index].permission = permission
+            this.showNotice({
+              type: 'success',
+              content: '限权设置成功'
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
         })
         this.jurisdictionModal.show = false
       },
@@ -859,65 +954,33 @@
         this.dataFirClassList.map((item) => {
           item.selected = false
         })
-        var vTables = []
-        var vHeaders = _.clone(this.baseVHeaders)
-        this.tables.map((table) => {
-          if (table.name === selectedFirstClass.name) {
-            var vTable = {}
-            vTable.id = ''
-            vTable.creatTime = new Date()
-            vTable.updateTime = new Date()
-            vTable.creater = '这里插入当前的用户名'
-            vTable.operation = '<a>编辑</a>'
-            for (let key in table.field) {
-              var vHeader = {
-                key: key,
-                title: key,
-                type: table.field[key],
-                functionName: 'showEditUserColumnModal',
-                class: 'userColumn'
-              }
-              vTable[key] = '暂时写死的数据'
-              vHeaders.splice(1, 0, vHeader)
-            }
-            vTables.push(vTable)
-          }
-        })
-        this.vTables = vTables
-        this.vHeaders = vHeaders
+        var params = {}
+        this.getTableData(selectedFirstClass.name, params)
         selectedFirstClass.selected = true
-      },
-      /**
-       * 显示添加行浮层
-       * @return {[type]} [description]
-       */
-      showAddLineModal () {
-        // var obj = {}
-        this.addLineModalConfirm()
-        // if (this.addListKey.length) {
-        //   this.addListKey.map((item) => {
-        //     obj[item] = ''
-        //   })
-        //   this.addLineModal.modal = obj
-        //   this.addLineModal.show = true
-        // } else {
-        //   this.addLineModalConfirm()
-        // }
       },
       /**
        * 添加行
        */
-      addLineModalConfirm () {
-        var obj = {}
-        this.addListKey.map((item) => {
-          obj[item] = ''
-        })
-        obj.id = ''
-        obj.creatTime = new Date()
-        obj.updateTime = new Date()
-        obj.creater = '这里插入当前的用户名'
-        this.vTables.push(obj)
-        this.addLineModal.show = false
+      addLineEvent () {
+        var hasUserColumn = Boolean(this.addListKey.length)
+        // 判断有没有用户自定义列
+        if (hasUserColumn) {
+          var obj = {}
+          console.log(22222123)
+          console.log(this.addListKey)
+          this.addListKey.map((item) => {
+            obj[item] = ''
+          })
+          this.baseHeader.map((item) => {
+            obj[item] = ''
+          })
+          this.vTables.push(obj)
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '请先添加列'
+          })
+        }
       },
 
       /**
@@ -926,11 +989,15 @@
        */
       deleteLineEvent () {
         if (this.selectedLine.length) {
-          console.log(JSON.stringify(this.selectedLine))
-          this.selectedLine.map((item) => {
-            this.vTables.$remove(item)
+          this.selectedLine.map((line) => {
+            api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+              this.selectedLine.$remove(line)
+              this.selectedFirstClassEvent(this.selectedFirstClass)
+            }).catch((res) => {
+              this.handleError(res)
+              this.loadingData = false
+            })
           })
-          this.selectedLine = []
         }
       },
 
@@ -941,8 +1008,9 @@
       deleteAllData () {
         this.confirm('确定要删除所有数据表？', () => {
           console.log('发请求删除所有数据 然后重新渲染列表')
+          console.error('删除所有数据表功能还没实现  没有批量删除接口 现在是模拟删除功能')
           this.tables = []
-          this.initData()
+          this.initTable()
         })
       },
 
@@ -1005,6 +1073,7 @@
       selectedLineChange (tables) {
         console.log('智能表格组件暴露事件 已选择的table发生变化')
         this.selectedLine = tables
+        console.log(this.selectedLine.length)
         console.log(JSON.stringify(this.selectedLine))
       },
       /**
@@ -1027,7 +1096,7 @@
         api.dataTable.getTables().then((res) => {
           if (res.status === 200) {
             this.tables = res.data
-            this.initData()
+            this.initTable()
             this.loadingData = false
           }
         }).catch((res) => {
@@ -1355,6 +1424,8 @@
           font-size 18px
       .userColumn
         cursor text
+        &:hover
+          background rgba(0,0,0,0.08)
     .modal.visible
       .modal-body
         overflow-x visible
@@ -1377,4 +1448,7 @@
             color red
       .filterModalTitle
         line-height 32px
+      .fa-warning
+        font-size 25px
+        color #FF9D00
 </style>

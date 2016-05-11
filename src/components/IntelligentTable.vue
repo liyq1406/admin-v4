@@ -86,7 +86,7 @@
 
       selectedTable: {
         type: Array,
-        default: []
+        default: function () { return [] }
       }
     },
     data () {
@@ -146,13 +146,15 @@
        * @return {[type]}       [description]
        */
       selectedTableChange (table) {
-        if (this.selectedTable.indexOf(table) >= 0) {
-          this.selectedTable.$remove(table)
-        } else {
-          this.selectedTable.push(table)
+        if (this.selecting) {
+          if (this.selectedTable.indexOf(table) >= 0) {
+            this.selectedTable.$remove(table)
+          } else {
+            this.selectedTable.push(table)
+          }
+          this.initSelectedAll()
+          this.$dispatch('selected-change', this.selectedTable)
         }
-        this.initSelectedAll()
-        this.$dispatch('selected-change', this.selectedTable)
       }
     }
 
