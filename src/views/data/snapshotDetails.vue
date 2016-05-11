@@ -53,24 +53,26 @@
                       <div class="device-base-msg row col-18">
                         <p>
                           <i>设备ID：</i>
-                          <span>1999246249</span>
+                          <span>{{selectedDeviceData.id}}</span>
                         </p>
                         <p>
                           <i>MAC：</i>
-                          <span>163D18E5B72E</span>
+                          <span>{{selectedDeviceData.mac}}</span>
                         </p>
                         <p>
                           <i>在线状态：</i>
-                          <span>下线</span>
+                          <span v-if="selectedDeviceData.is_online=== true">在线</span>
+                          <span v-else>下线</span>
                         </p>
                       </div>
                     </div>
                     <div class="operation-box col-12">
+                      <button class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
                       <div class="check-device">
-                        <button class="btn btn-primary" v-link="{path: '/products/123/overview'}">查看设备</button>
+                        <button class="btn btn-primary" v-link="{path: '/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
                       <div class="radio-group-box">
-                        <radio-group :items="periods" :value.sync="period" @select=""><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+                        <radio-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
                       </div>
                     </div>
                   </div>
@@ -88,21 +90,15 @@
                     <span>设备数据明细 : </span>
                   </div>
                   <div class="table-box">
-                    <table class="table table-stripe table-bordered">
+                    <!-- <table class="table table-stripe table-bordered">
                       <thead>
                         <tr>
-                          <th>索引</th>
-                          <th>端点ID</th>
-                          <th>描述</th>
-                          <th>当前状态</th>
+                          <th>时间</th>
                         </tr>
                       </thead>
                       <tbody>
-                        <tr v-for="n in 10">
-                          <td>{{ $index }}</td>
-                          <td>设备{{ $index }}</td>
-                          <td>{{ '描述' }}</td>
-                          <td>{{ '当前状态' }}</td>
+                        <tr v-for="allSnapshot in allSnapshots">
+                          <td>{{ allSnapshot.last_update }}</td>
                         </tr>
                         <tr v-if="false">
                           <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
@@ -110,7 +106,8 @@
                           </td>
                         </tr>
                       </tbody>
-                    </table>
+                    </table> -->
+                    <intelligent-table :headers.sync="snapshotHeader" :tables.sync="snapshotTable"></intelligent-table>
                   </div>
                 </div>
               </div>
@@ -118,6 +115,38 @@
           </div>
         </div>
       </div>
+      <!--修改快照数据索引项浮层-->
+     <modal :show.sync="showEditModal" width="600px">
+       <h3 slot="header">选择快照数据项</h3>
+       <div slot="body" class="form">
+         <div class="table-wrap">
+           <div class="data-table">
+             <table class="table table-stripe table-bordered">
+               <thead>
+                 <tr>
+                   <th>选择</th>
+                   <th>索引</th>
+                 </tr>
+               </thead>
+               <tbody>
+                 <tr v-for="dataPoint in dataPoints">
+                   <td><input v-model="dataPoint.selected" type="checkbox"/></td>
+                   <td>{{dataPoint.index}}</td>
+                 </tr>
+               </tbody>
+             </table>
+           </div>
+           <div class="data-points-footer">
+             <!-- <pager v-if="dataPoints.length > pageCount" :total="dataPoints.length" :current.sync="currentPage" :page-count="pageCount" @page-update=""></pager> -->
+           </div>
+         </div>
+         <div class="form-actions snapshot-select">
+           <!-- <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button> -->
+           <button @click="saveDataPoints" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+         </div>
+       </div>
+     </modal>
+     <!-- 结束添加选择快照数据项浮层-->
     </div>
   </section>
 </template>
@@ -127,12 +156,13 @@
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import RadioGroup from '../../components/RadioGroup'
-  import dateFormat from 'date-format'
+  // import dateFormat from 'date-format'
   import LineChart from '../../components/charts/Line'
   import Pager from '../../components/Pager'
   import SearchBox from '../../components/SearchBox'
   import Select from '../../components/Select'
   import Modal from '../../components/Modal'
+  import IntelligentTable from '../../components/IntelligentTable'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -148,16 +178,18 @@
       'line-chart': LineChart,
       'search-box': SearchBox,
       'v-select': Select,
-      'pager': Pager
+      'pager': Pager,
+      'intelligent-table': IntelligentTable
     },
 
     data () {
       return {
         /** ***图表 按钮 start*********/
         loadingProductTrends: false,
-        periods: locales[Vue.config.lang].periods,
-        period: 7,
+        periods: locales[Vue.config.lang].shortperiods,
+        period: 15,
         /* ******图表 按钮 end*************/
+        selectedDatapoints: [],
         query: '',
         searching: false,
         queryTypeOptions: [
@@ -168,6 +200,7 @@
           label: 'MAC',
           value: 'mac'
         },
+        showEditModal: false,
         total: 100,
         currentPage: 1,
         pageCount: 10,
@@ -182,123 +215,46 @@
           //   id: '1999246249',
           //   mac: '163D18E5B72E',
           //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
-          // },
-          // {
-          //   id: '1999246249',
-          //   mac: '163D18E5B72E',
-          //   selected: false
           // }
         ],
+        dataPoints: [],
         snapshotSeries: [
           {
             name: '温度',
             type: 'line',
             data: [0, 0, 0, 0, 0, 0, 0]
+          }
+        ],
+        snapshots: [],
+        allSnapshots: [],
+        snapshotHeader: [
+          {
+            key: 'create_time', // 与tables的key对应
+            title: '时间' // 标题内容
+          // },
+          // {
+          //   key: 'creatTime',
+          //   title: 'ID'
+          // },
+          // {
+          //   key: 'updateTime',
+          //   title: '更新时间'
+          }
+        ],
+        snapshotTable: [
+          {
+            create_time: '2015'
+            // creatTime: '123',
+            // updateTime: '更新时间',
+            // creater: '创建者',
+            // operation: '操作'
+          // },
+          // {
+          //   create_time: 'idididid',
+          //   creatTime: '创建时间',
+          //   updateTime: '更新时间',
+          //   creater: '创建者',
+          //   operation: '操作'
           }
         ]
       }
@@ -329,11 +285,65 @@
 
       // 图表横轴数据
       snapshotXAxisData () {
-        var today = new Date()
+        // var today = new Date()
+        var now = Date.parse(new Date())
         var result = []
-        for (var i = this.period - 1; i >= 0; i--) {
-          result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
+        for (var i = this.period * 24 - 1; i >= 0; i--) {
+          // result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
+          var date = new Date(now - i * 3600 * 1000)
+          var hour = date.getHours() + 1
+          result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
         }
+        return result
+      },
+      // 趋势图表数据
+      snapshotSeries () {
+        var result = []
+        this.selectedDatapoints.forEach((item) => {
+          result.push({
+            name: item.index,
+            type: 'line',
+            data: []
+          })
+        })
+        var now = Date.parse(new Date()) / 1000
+        // 当前未满一小时默认取满一小时
+        now = (Math.floor(now / 3600) + 1) * 3600
+        const SECONDS_PER_HOUR = 3600
+        var itemToAdd = {}
+        var i = 0
+
+        for (let i = this.period * 24 - 1; i >= 0; i--) {
+          result.forEach((re) => {
+            re.data.push(0)
+          })
+        }
+
+        this.snapshots.forEach((item, index) => {
+          // 去掉经过后台处理的时间的T和Z字符
+          var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+          // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
+          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) + 1
+          if (index) {
+            if (a !== i) {
+              // 当商改变说明此数据为下一个小时的数据
+              // 将每个小时最后的数据附近图表数据数组
+              result.forEach((r) => {
+                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[r.index]) || 0
+              })
+              itemToAdd = item
+              // 将1重置为当前数据的时间
+              i = a
+            }
+          } else {
+            // 数组内第一个元素处理
+            // 将第一个元素存进暂存对象内
+            itemToAdd = item
+            // 初始经过0个小时
+            i = 0
+          }
+        })
+
         return result
       }
     },
@@ -342,6 +352,7 @@
       data () {
         this.getDevices()
         this.getProduct()
+        this.getRule()
       }
     },
 
@@ -352,11 +363,103 @@
       }
     },
     methods: {
+      /**
+       * 获取快照数据
+       */
+      getSnapshot (offset, limit, begintime, endtime) {
+        offset = offset || 0
+        limit = limit || 1000
+        endtime = Date.parse(new Date())
+        // 取当前开始到period天前的时间
+        begintime = endtime - this.period * 24 * 60 * 60 * 1000
+        // console.log(this.begintime)
+        var params = {
+          offset: offset,
+          limit: limit,
+          date: {
+            begin: begintime,
+            end: endtime
+          }
+        }
+        api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, params).then((res) => {
+          if (res.status === 200) {
+            this.allSnapshots = res.data.list
+            this.snapshots = res.data.list.sort((a, b) => {
+              return new Date(a.snapshot_date) - new Date(b.snapshot_date)
+            })
+            this.buildTable()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      // 生成表格
+      // buildTable () {
+      //   this.selectedDatapoints.map((item) => {
+      //     var obj = {
+      //       key: item.name,
+      //       title: item.name
+      //     }
+      //     this.snapshotHeader.push(obj)
+      //   })
+      // },
       // 搜索
       handleSearch () {
         if (this.query.length === 0) {
           this.getDevices()
         }
+      },
+      // currentPageCount () {
+      //   if (this.dataPoints.length > 0) {
+      //     var index = this.dataPoints.length - (this.currentPage - 1) * this.pageCount
+      //     return index >= 10 ? 10 : index
+      //   }
+      // },
+      // 获取当前产品快照规则
+      getRule () {
+        api.snapshot.getRule(this.$route.params.product_id).then((res) => {
+          console.log(res.data)
+          // this.products = res.data
+          if (res.data.list[1].datapoint.length !== 0) {
+            res.data.list[1].datapoint.map((item) => {
+              var dp = {
+                index: item,
+                selected: false
+              }
+              this.dataPoints.push(dp)
+            })
+          } else {
+            this.dataPoints = []
+          }
+          if (this.dataPoints.length < 3) {
+            this.dataPoints.map((item) => {
+              item.selected = true
+            })
+          } else {
+            for (let i = 0; i < 2; i++) {
+              this.dataPoints[i].selected = true
+            }
+          }
+          this.getlist()
+          console.log(this.selectedDatapoints)
+        }, (err) => {
+          this.handleError(err)
+        })
+      },
+      // 获取selected为true的列表
+      getlist () {
+        this.selectedDatapoints = []
+        this.dataPoints.map((item) => {
+          if (item.selected) {
+            this.selectedDatapoints.push(item)
+          }
+          console.log(2222)
+          this.buildTable()
+          console.log(this.snapshotHeader)
+          setTimeout(() => {
+            this.getSnapshot()
+          }, 500)
+        })
       },
       // 获取设备列表
       getDevices (querying) {
@@ -397,7 +500,9 @@
       toggleSearching () {
         this.searching = !this.searching
       },
-
+      onEditCancel () {
+        this.showEditModal = false
+      },
       /**
        * 选择数据端点事件
        * @return {[type]} [description]
@@ -407,6 +512,13 @@
           item.selected = false
         })
         deviceData.selected = true
+        // this.getRule()
+        this.getSnapshot()
+      },
+      saveDataPoints () {
+        this.getlist()
+        console.log(this.selectedDatapoints)
+        this.showEditModal = false
       }
     }
   }

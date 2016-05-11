@@ -169,6 +169,11 @@ export default {
     { label: '30天', value: 30 },
     { label: '90天', value: 90 }
   ],
+  shortperiods: [
+    { label: '1天', value: 1 },
+    { label: '7天', value: 7 },
+    { label: '15天', value: 15 }
+  ],
 
   // 设备类型
   deviceTypes: ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备'],
