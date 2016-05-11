@@ -7,7 +7,7 @@
             <label class="form-control col-6">产品:</label>
             <div class="controls col-18">
               <v-select :label="productTypes[productType.value].label" width="200px">
-                <select v-model="productType" @change="getProductData">
+                <select v-model="productType" @change="getProductData(true)">
                   <option v-for="i in productTypes" :value="i">{{ i.label }}</option>
                 </select>
               </v-select>
@@ -26,7 +26,7 @@
           <div class="form-row row">
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
-              <div class="editSnapshot">
+              <div class="edit-snapshot">
                 <div v-for="i in dataPointsShow" class="data-tag">{{i}}</div>
               </div>
               <button class="btn btn-ghost btn-sm" @click="showAddModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
@@ -49,10 +49,10 @@
       <div class="panel-bd">
         <div class="rule-type">
           <div class="rule-select">
-            <v-select :label="productTypes[productType.value].label" width="200px">
+            <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px">
               <span slot="label">选择产品</span>
-              <select v-model="productType" @change="getProductData">
-                <option v-for="i in productTypes" :value="i">{{ i.label }}</option>
+              <select v-model="ruleProductType" @change="getProductRules(true)">
+                <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
               </select>
             </v-select>
           </div>
@@ -69,15 +69,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in productsRules">
+              <tr v-for="i in currentRulePageCount">
                 <td>
-                  <a @click.prevent="showEditModal=true" class="hl-red">{{i.productName}}</a>
+                  <a class="hl-red">{{productsRules[(currentRulesPage - 1) * pageCount + i].productName}}</a>
                 </td>
-                <td><div v-if="i.rule===3">定时更新/{{i.interval}}分钟</div></td>
-                <td>2019.0.1</td>
-                <td>哈哈</td>
+                <td><div v-if="productsRules[(currentRulesPage - 1) * pageCount + i].rule===3">定时更新/{{productsRules[(currentRulesPage - 1) * pageCount + i].interval}}分钟</div></td>
+                <td>{{productsRules[(currentRulesPage - 1) * pageCount + i].create_time | formatDate}}</td>
+                <td>{{productsRules[(currentRulesPage - 1) * pageCount + i].creator}}</td>
                 <td>
-                  <a v-link="{ path: '/data/snapshot/' + i.productID}" class="hl-red">查看快照</a>
+                  <a v-link="{ path: '/data/snapshot/' + productsRules[(currentRulesPage - 1) * pageCount + i].productID}" class="hl-red">查看快照</a>
+                  <a @click.prevent="editSnapshot(productsRules[(currentRulesPage - 1) * pageCount + i])" class="hl-red ml20">编辑</a>
                 </td>
               </tr>
             </tbody>
@@ -128,32 +129,31 @@
       </div>
     </modal>
     <!-- 结束添加选择快照数据项浮层-->
-    <!-- 编辑快照数据项浮层-->
+
+    <!-- 添加 编辑快照浮层-->
     <modal :show.sync="showEditModal" width="600px">
-      <h3 slot="header">选择快照数据项</h3>
+      <h3 slot="header">编辑快照规则</h3>
       <div slot="body" class="form">
-        <div class="data-table">
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>索引</th>
-                <th>端点ID</th>
-                <th>数据类型</th>
-                <th>单位符号</th>
-                <th>描述</th>
-                <th>选择</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="i in dataPoints">
-                <td>{{i.index}}</td>
-                <td>{{i.id}}</td>
-                <td>{{i.type}}</td>
-                <td>{{i.symbol}}</td>
-                <td>{{i.description}}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="form">
+          <div class="form-row row">
+            <label class="form-control col-6">快照规则:</label>
+            <div class="controls col-9">
+              <v-select :label="timeIntervals[timeIntervalEdit.value].label" width="200px">
+                <select v-model="timeIntervalEdit">
+                  <option v-for="i in timeIntervals" :value="i">{{ i.label }}</option>
+                </select>
+              </v-select>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">快照数据:</label>
+            <div class="controls col-18">
+              <div class="edit-snapshot">
+                <div v-for="i in ruleDataPointsShow" class="data-tag">{{i}}</div>
+              </div>
+              <button class="btn btn-ghost btn-sm" @click="showEditPointModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
+            </div>
+          </div>
         </div>
         <div class="form-actions snapshot-select">
           <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -161,7 +161,48 @@
         </div>
       </div>
     </modal>
-    <!-- 结束 编辑快照数据项浮层-->
+    <!-- 结束 编辑快照浮层-->
+
+    <!-- 添加 编辑快照数据项浮层-->
+    <modal :show.sync="showEditPointModal" width="600px">
+      <h3 slot="header">修改快照数据项</h3>
+      <div slot="body" class="form">
+        <div class="table-wrap">
+          <div class="data-table">
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>选择</th>
+                  <th>索引</th>
+                  <th>端点ID</th>
+                  <th>数据类型</th>
+                  <th>单位符号</th>
+                  <th>描述</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="i in currentEditPageCount">
+                  <td><input v-model="editDataPoints[(currentEditPage - 1) * pageCount + i].selected" type="checkbox"/></td>
+                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].index}}</td>
+                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].id}}</td>
+                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].type}}</td>
+                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].symbol}}</td>
+                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].description}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="data-points-footer">
+            <pager v-if="editDataPoints.length > pageCount" :total="editDataPoints.length" :current.sync="currentEditPage" :page-count="pageCount" @page-update=""></pager>
+          </div>
+        </div>
+        <div class="form-actions snapshot-select">
+          <button @click="onEditPointCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          <button @click="onEditPointSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+        </div>
+      </div>
+    </modal>
+    <!-- 结束添加选择快照数据项浮层-->
   </div>
 </template>
 
@@ -193,12 +234,13 @@
       return {
         showAddModal: false,
         showEditModal: false,
+        showEditPointModal: false,
         productType: {
           label: '请选择产品类型',
           value: 0,
           id: ''
         },
-        productTypeForRule: {
+        ruleProductType: {
           label: '全部',
           value: 0,
           id: ''
@@ -223,14 +265,22 @@
           label: '10分钟',
           value: 0
         },
+        timeIntervalEdit: {
+          label: '10分钟',
+          value: 0
+        },
         products: [{
           name: ''
         }],
         dataPoints: [],
+        editDataPoints: [],
         pageCount: 10,
         currentPage: 1,
         currentRulesPage: 1,
-        productsRules: []
+        currentEditPage: 1,
+        productsRules: [],
+        ruleDataPointsShow: [],
+        curentEditRule: {}
       }
     },
 
@@ -260,6 +310,25 @@
 
         return types
       },
+      ruleProductTypes () {
+        var types = [{
+          label: '全部',
+          value: 0,
+          id: ''
+        }]
+
+        var i = 1
+        this.products.forEach((item) => {
+          var type = {}
+          type.label = item.name
+          type.value = i
+          type.id = item.id
+          i++
+          types.push(type)
+        })
+
+        return types
+      },
       dataPointsShow () {
         var datas = []
         this.dataPoints.forEach((item) => {
@@ -272,6 +341,25 @@
 
         return datas
       },
+      ruleDataPointsShow () {
+        var datas = []
+        this.editDataPoints.forEach((item) => {
+          var data = ''
+          if (item.selected === true) {
+            data = item.name
+            datas.push(data)
+          }
+        })
+
+        return datas
+      },
+      currentRulePageCount () {
+        if (this.productsRules.length > 0) {
+          var index = this.productsRules.length - (this.currentRulesPage - 1) * this.pageCount
+          return index >= 10 ? 10 : index
+        }
+      },
+
       currentPageCount () {
         if (this.dataPoints.length > 0) {
           var index = this.dataPoints.length - (this.currentPage - 1) * this.pageCount
@@ -279,7 +367,14 @@
         }
       },
 
-      curentRule () {
+      currentEditPageCount () {
+        if (this.editDataPoints.length > 0) {
+          var index = this.editDataPoints.length - (this.currentEditPage - 1) * this.pageCount
+          return index >= 10 ? 10 : index
+        }
+      },
+
+      addRules () {
         var rule = {
           rule: 3,
           interval: 30,
@@ -313,16 +408,63 @@
             break
         }
         return rule
+      },
+      editRules () {
+        var rule = {
+          _id: '',
+          rule: 3,
+          interval: 30,
+          storage: {
+            // limit: 0, // 不支持
+            // expire: 0 // 有效期 单位是秒（s） 0表示永久存储
+          },
+          datapoint: []
+        }
+        rule._id = this.curentEditRule.id
+        this.editDataPoints.forEach((item) => {
+          if (item.selected === true) {
+            rule.datapoint.push(item.index)
+          }
+        })
+
+        switch (this.timeIntervalEdit.value) {
+          case 0:
+            rule.interval = 10
+            break
+          case 1:
+            rule.interval = 20
+            break
+          case 2:
+            rule.interval = 30
+            break
+          case 3:
+            rule.interval = 60
+            break
+          default:
+            break
+        }
+        return rule
       }
     },
 
     methods: {
       addSnapshotRule () {
-        api.snapshot.createRule(this.productType.id, this.curentRule).then((res) => {
-          console.log(res)
+        if (this.productType.value === 0) {
+          return
+        }
+        api.snapshot.createRule(this.productType.id, this.addRules).then((res) => {
           if (res.status === 200) {
             this.productsRules = [] // 清空数组重新获取
-            this.getRules()
+            this.getProductRules(true)
+          }
+        }, (err) => {
+          this.handleError(err)
+        })
+      },
+      editSnapshotRule () {
+        api.snapshot.updateRule(this.curentEditRule.productID, this.editRules).then((res) => {
+          if (res.status === 200) {
+            this.getProductRules(true)
           }
         }, (err) => {
           this.handleError(err)
@@ -338,7 +480,14 @@
         this.showEditModal = false
       },
       onEditSubmit () {
+        this.editSnapshotRule()
         this.showEditModal = false
+      },
+      onEditPointCancel () {
+        this.showEditPointModal = false
+      },
+      onEditPointSubmit () {
+        this.showEditPointModal = false
       },
       init () {
         this.getProducts()
@@ -352,6 +501,7 @@
         })
       },
       getRules () {
+        this.productsRules = []
         this.products.forEach((item) => {
           var product = item
           api.snapshot.getRule(item.id).then((res) => {
@@ -370,8 +520,40 @@
           })
         })
       },
-      getProductData () {
-        api.product.getDatapoints(this.productType.id).then((res) => {
+      getProductRules (clearPage) {
+        if (clearPage) {
+          this.currentRulesPage = 1
+        }
+        this.productsRules = []
+        if (this.ruleProductType.value === 0) {
+          this.getRules()
+        } else {
+          var self = this
+          api.snapshot.getRule(this.ruleProductType.id).then((res) => {
+            if (res.status === 200) {
+              if (res.data.count > 0) {
+                // 循环插入
+                res.data.list.forEach((item) => {
+                  item.productName = self.ruleProductType.label
+                  item.productID = self.ruleProductType.id
+                  this.productsRules.push(item)
+                })
+              }
+            }
+          }, (err) => {
+            this.handleError(err)
+          })
+        }
+      },
+      getProductData (clearPage, rule) {
+        if (clearPage) {
+          this.currentPage = 1
+        }
+        if (this.productType.value === 0 && !rule) {
+          return
+        }
+        var id = rule ? rule.productID : this.productType.id
+        api.product.getDatapoints(id).then((res) => {
           var datas = []
           res.data.forEach((item) => {
             var data = {}
@@ -382,12 +564,55 @@
             data.type = item.type
             data.symbol = item.symbol
             data.description = item.description
+            if (rule) {
+              var finded = false
+              rule.datapoint.forEach((item) => {
+                if (data.index === item) {
+                  finded = true
+                }
+              })
+              if (finded) {
+                data.selected = true
+              }
+            }
             datas.push(data)
           })
-          this.dataPoints = datas
+          if (rule) {
+            this.editDataPoints = datas
+          } else {
+            this.dataPoints = datas
+          }
         }, (err) => {
           this.handleError(err)
         })
+      },
+      editSnapshot (rule) {
+        this.curentEditRule = rule
+        this.showEditModal = true
+        this.ruleDataPointsShow = []
+        this.getProductData(false, rule)
+        switch (rule.interval) {
+          case 10:
+            this.timeIntervalEdit.value = 0
+            break
+          case 20:
+            this.timeIntervalEdit.value = 1
+            break
+          case 30:
+            this.timeIntervalEdit.value = 2
+            break
+          case 60:
+            this.timeIntervalEdit.value = 3
+            break
+          default:
+            break
+        }
+
+        if (rule.interval === 60) {
+          this.timeIntervalEdit.label = '1小时'
+        } else {
+          this.timeIntervalEdit.label = rule.interval.toString() + '分钟'
+        }
       }
     }
   }
@@ -395,7 +620,7 @@
 
 <style lang="stylus">
   @import '../../assets/stylus/common'
-  .editSnapshot
+  .edit-snapshot
     line-height 32px
   .data-tag
     display inline-block
