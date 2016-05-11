@@ -47,6 +47,16 @@
         <h2>快照配置列表</h2>
       </div>
       <div class="panel-bd">
+        <div class="rule-type">
+          <div class="rule-select">
+            <v-select :label="productTypes[productType.value].label" width="200px">
+              <span slot="label">选择产品</span>
+              <select v-model="productType" @change="getProductData">
+                <option v-for="i in productTypes" :value="i">{{ i.label }}</option>
+              </select>
+            </v-select>
+          </div>
+        </div>
         <div class="data-table">
           <table class="table table-stripe table-bordered">
             <thead>
@@ -93,16 +103,19 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in dataPoints">
-                  <td>{{i.index}}</td>
-                  <td>{{i.id}}</td>
-                  <td>{{i.type}}</td>
-                  <td>{{i.symbol}}</td>
-                  <td>{{i.description}}</td>
-                  <td><input v-model="i.selected" type="checkbox"/></td>
+                <tr v-for="i in currentPageCount">
+                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].index}}</td>
+                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].id}}</td>
+                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].type}}</td>
+                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].symbol}}</td>
+                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].description}}</td>
+                  <td><input v-model="dataPoints[(currentPage - 1) * pageCount + i].selected" type="checkbox"/></td>
                 </tr>
               </tbody>
             </table>
+          </div>
+          <div class="data-points-footer">
+            <pager v-if="dataPoints.length > pageCount" :total="dataPoints.length" :current.sync="currentPage" :page-count="pageCount" @page-update=""></pager>
           </div>
         </div>
         <div class="form-actions snapshot-select">
@@ -213,7 +226,9 @@
         products: [{
           name: ''
         }],
-        dataPoints: []
+        dataPoints: [],
+        pageCount: 10,
+        currentPage: 1
       }
     },
 
@@ -254,6 +269,13 @@
         })
 
         return datas
+      },
+      currentPageCount () {
+        if (this.dataPoints.length > 0) {
+          var index = this.dataPoints.length - (this.currentPage - 1) * this.pageCount
+          console.log(index)
+          return index >= 10 ? 10 : index
+        }
       }
     },
 
@@ -321,4 +343,8 @@
     height 100%
     width 100%
     overflow-x scroll
+  .rule-type
+    float right
+    margin-top 10px
+    margin-bottom 10px
 </style>
