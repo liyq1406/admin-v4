@@ -6,18 +6,18 @@
         <div class="col-24">
           <div class="panel row">
             <div class="panel-hd">
-              <h2>净化器设备快照</h2>
+              <h2>{{product.name}}设备快照</h2>
             </div>
             <div class="panel-bd layout-left">
               <div class="device-list-box">
                 <div class="action-bar">
-                  <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
-                    <v-select width="80px" :label="queryType.label">
+                  <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                    <v-select width="100px" :label="queryType.label">
                       <select v-model="queryType">
                         <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                       </select>
                     </v-select>
-                    <button slot="search-button" @click="" class="btn btn-primary">{{ $t('common.search') }}</button>
+                    <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
                   </search-box>
                 </div>
                 <table class="table table-stripe table-bordered">
@@ -125,7 +125,7 @@
 <script>
   import Vue from 'vue'
   import locales from '../../consts/locales/index'
-  // import api from '../../api'
+  import api from '../../api'
   import RadioGroup from '../../components/RadioGroup'
   import dateFormat from 'date-format'
   import LineChart from '../../components/charts/Line'
@@ -171,127 +171,128 @@
         total: 100,
         currentPage: 1,
         pageCount: 10,
+        product: {},
         deviceDatas: [
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: true
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          },
-          {
-            id: '1999246249',
-            mac: '163D18E5B72E',
-            selected: false
-          }
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: true
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // },
+          // {
+          //   id: '1999246249',
+          //   mac: '163D18E5B72E',
+          //   selected: false
+          // }
         ],
         snapshotSeries: [
           {
@@ -305,16 +306,23 @@
 
     computed: {
       selectedDeviceData () {
+        var result = {}
         this.deviceDatas.map((deviceData) => {
           if (deviceData.selected) {
-            return deviceData
+            result = deviceData
           }
         })
+        return result
       },
       queryCondition () {
         var condition = {
+          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount
+          offset: (this.currentPage - 1) * this.pageCount,
+          query: {}
+        }
+        if (this.query.length > 0) {
+          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
         }
         return condition
       },
@@ -332,6 +340,8 @@
 
     route: {
       data () {
+        this.getDevices()
+        this.getProduct()
       }
     },
 
@@ -344,15 +354,48 @@
     methods: {
       // 搜索
       handleSearch () {
-        console.log('搜索')
+        if (this.query.length === 0) {
+          this.getDevices()
+        }
       },
-
+      // 获取设备列表
+      getDevices (querying) {
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
+        // this.loadingData = true
+        api.device.getList(this.$route.params.product_id, this.queryCondition).then((res) => {
+          if (res.data.list.length !== 0) {
+            res.data.list.map((item) => {
+              item.selected = false
+            })
+            res.data.list[0].selected = true
+            this.deviceDatas = []
+            this.deviceDatas = res.data.list
+            this.total = res.data.count
+          } else {
+            this.deviceDatas = []
+          }
+          // this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+          // this.loadingData = false
+        })
+      },
+      // 获取当前产品信息
+      getProduct () {
+        api.product.getProduct(this.$route.params.product_id).then((res) => {
+          if (res.status === 200) {
+            this.product = res.data
+          }
+        })
+      },
       /**
        * 切换搜索
        * @return {[type]} [description]
        */
       toggleSearching () {
-        console.log('切换搜索')
+        this.searching = !this.searching
       },
 
       /**
@@ -386,8 +429,11 @@
       .action-bar
         padding-top 0
       .search-box-input
-        width 163px
+        width 144px
         overflow hidden
+
+        input
+          width 144px
       .table-stripe tbody tr.selected:nth-child(2n+1) td
       .table-stripe tbody tr.selected td
         background #c0252e

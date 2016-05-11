@@ -491,7 +491,7 @@ let configRouter = (router) => {
     },
 
     // 数据表详情
-    '/data/tables/:product_id': {
+    '/data/tables/:name': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/data/details'))
@@ -500,7 +500,7 @@ let configRouter = (router) => {
     },
 
     // 数据快照详情
-    '/data/snapshot/:product_id': {
+    '/data/snapshot/:name': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/data/snapshotDetails'))
