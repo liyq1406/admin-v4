@@ -51,5 +51,16 @@ export default {
     return http.put(
       `${apiServer.default}/v2/product/${product_id}/snapshot`, params
     )
+  },
+
+  /**
+   * 删除产品快照规则
+   * @param  product_id 产品id， rule_id 规则id
+   * @return {Promise}
+   */
+  deleteRule (product_id, rule_id) {
+    return http.del(
+      `${apiServer.default}/v2/product/${product_id}/snapshot/${rule_id}`
+    )
   }
 }

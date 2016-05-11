@@ -156,6 +156,9 @@
           </div>
         </div>
         <div class="form-actions snapshot-select">
+          <label class="del-check">
+            <input type="checkbox" name="del" v-model="delRuleChecked"/>删除规则
+          </label>
           <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click="onEditSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
         </div>
@@ -235,6 +238,7 @@
         showAddModal: false,
         showEditModal: false,
         showEditPointModal: false,
+        delRuleChecked: false,
         productType: {
           label: '请选择产品类型',
           value: 0,
@@ -449,6 +453,23 @@
 
     methods: {
       addSnapshotRule () {
+        this.checkSnapshotExsit()
+      },
+      checkSnapshotExsit () {
+        api.snapshot.getRule(this.productType.id).then((res) => {
+          if (res.status === 200) {
+            if (res.data.count > 0) {
+              // 存在就不创建
+              alert('规则已创建')
+            } else {
+              this.createSnapshotRule()
+            }
+          }
+        }, (err) => {
+          this.handleError(err)
+        })
+      },
+      createSnapshotRule () {
         if (this.productType.value === 0) {
           return
         }
@@ -470,6 +491,16 @@
           this.handleError(err)
         })
       },
+      deleteSnapshotRule () {
+        api.snapshot.deleteRule(this.curentEditRule.productID, this.curentEditRule.id).then((res) => {
+          if (res.status === 200) {
+            this.delRuleChecked = false
+            this.getProductRules(true)
+          }
+        }, (err) => {
+          this.handleError(err)
+        })
+      },
       onAddCancel () {
         this.showAddModal = false
       },
@@ -480,8 +511,17 @@
         this.showEditModal = false
       },
       onEditSubmit () {
-        this.editSnapshotRule()
-        this.showEditModal = false
+        if (this.delRuleChecked) {
+          // 删除
+          var ret = window.confirm('确认删除快照规则')
+          if (ret) {
+            this.deleteSnapshotRule()
+            this.showEditModal = false
+          }
+        } else {
+          this.editSnapshotRule()
+          this.showEditModal = false
+        }
       },
       onEditPointCancel () {
         this.showEditPointModal = false
