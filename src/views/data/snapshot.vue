@@ -77,7 +77,7 @@
                 <td>2019.0.1</td>
                 <td>哈哈</td>
                 <td>
-                  <a v-link="{ path: '/data/snapshot/' + i.id}" class="hl-red">查看快照</a>
+                  <a v-link="{ path: '/data/snapshot/' + i.productID}" class="hl-red">查看快照</a>
                 </td>
               </tr>
             </tbody>
@@ -218,10 +218,6 @@
         {
           label: '1小时',
           value: 3
-        },
-        {
-          label: '2小时',
-          value: 4
         }],
         timeInterval: {
           label: '10分钟',
@@ -313,9 +309,6 @@
           case 3:
             rule.interval = 60
             break
-          case 4:
-            rule.interval = 120
-            break
           default:
             break
         }
@@ -326,8 +319,10 @@
     methods: {
       addSnapshotRule () {
         api.snapshot.createRule(this.productType.id, this.curentRule).then((res) => {
-          if (res.data.status === 200) {
-            console.log(res.data._id)
+          console.log(res)
+          if (res.status === 200) {
+            this.productsRules = [] // 清空数组重新获取
+            this.getRules()
           }
         }, (err) => {
           this.handleError(err)
@@ -365,6 +360,7 @@
                 // 循环插入
                 res.data.list.forEach((item) => {
                   item.productName = product.name
+                  item.productID = product.id
                   this.productsRules.push(item)
                 })
               }
