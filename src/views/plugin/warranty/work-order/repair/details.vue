@@ -46,7 +46,7 @@
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info">{{branch.province + branch.city + branch.district}}</div>
+              <div class="info">{{branchArea}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
@@ -78,7 +78,7 @@
             </li>
             <li>
               <div class="label">所在地区:</div>
-              <div class="info">{{repairOrder.province ? repairOrder.province + repairOrder.city + repairOrder.district : ''}}</div>
+              <div class="info">{{clientArea}}</div>
             </li>
             <li>
               <div class="label">详细地址:</div>
@@ -155,6 +155,7 @@
 
 <script>
   import { globalMixins } from '../../../../../mixins'
+  import { pluginMixins } from '../../../mixins'
   import api from '../../../../../api'
 
   export default {
@@ -162,7 +163,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     data () {
       return {
@@ -191,11 +192,32 @@
         condition.query._id = this.$route.params.id
 
         return condition
+      },
+
+      branchArea () {
+        var area = this.branch.province + this.branch.city + this.branch.district
+        if (area instanceof String) {
+          return area
+        } else {
+          return ''
+        }
+      },
+
+      clientArea () {
+        var area = this.repairOrder.province + this.repairOrder.city + this.repairOrder.district
+        if (area instanceof String) {
+          return area
+        } else {
+          return ''
+        }
       }
     },
 
     methods: {
       getRepairOrder () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getRepairOrder
         var condition = {
           filter: [],
           limit: 1,
@@ -203,27 +225,35 @@
           order: {},
           query: {}
         }
-        api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-          this.repairOrder = res.data.list[0] || {}
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.repairOrder = res.data.list[0] || {}
 
-          // 查询网点信息
-          condition.query._id = this.repairOrder.branch_id
-          api.warranty.getBranchList(condition).then((res) => {
-            this.branch = res.data.list[0] || {}
-          }).catch((res) => {
-            this.handleError(res)
-          })
+            // 查询网点信息
+            condition.query._id = this.repairOrder.branch_id
+            api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+              this.branch = res.data.list[0] || {}
+            }).catch((res) => {
+              this.handleError(res)
+            })
 
-          // 查询维修详情信息
-          condition.query = {}
-          condition.query._id = this.repairOrder.repair_id
-          api.warranty.getRepairDetailList(condition).then((res) => {
-            this.repairDetails = res.data.list[0] || {}
-          }).catch((res) => {
-            this.handleError(res)
+            // 查询维修详情信息
+            condition.query = {}
+            condition.query._id = this.repairOrder.repair_id
+            api.warranty.getRepairDetailList(this.$route.params.app_id, token, condition).then((res) => {
+              this.repairDetails = res.data.list[0] || {}
+            }).catch((res) => {
+              this.handleError(res)
+            })
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
           })
-        }).catch((res) => {
-          this.handleError(res)
         })
       }
     }

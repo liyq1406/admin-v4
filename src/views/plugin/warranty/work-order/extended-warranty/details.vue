@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <!-- Start: 面包屑 -->
-      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/extended-warranties'}"><i class="fa fa-arrow-circle-left"></i>延保工单列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties'}"><i class="fa fa-arrow-circle-left"></i>延保工单列表</a></div>
       <!-- : 面包屑 -->
 
       <!-- Start: 工单详情 -->
@@ -95,6 +95,7 @@
 
 <script>
   import { globalMixins } from '../../../../../mixins'
+  import { pluginMixins } from '../../../mixins'
   import api from '../../../../../api'
 
   export default {
@@ -102,7 +103,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     data () {
       return {
@@ -134,10 +135,21 @@
 
     methods: {
       getDetail () {
-        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          this.workOrders = res.data.list[0] || {}
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getDetail
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getWarrantyList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.workOrders = res.data.list[0] || {}
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       }
     }

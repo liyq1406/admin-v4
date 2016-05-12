@@ -52,7 +52,7 @@
                 <td>{{order.product_sn}}</td>
                 <td>{{order.create_time | uniformDate}}</td>
                 <td>{{order.status}}</td>
-                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
 
@@ -78,6 +78,7 @@
 
 <script>
   import { globalMixins } from '../../../../../mixins'
+  import { pluginMixins } from '../../../mixins'
   import Select from '../../../../../components/Select'
   import AreaSelect from '../../../../../components/AreaSelect'
   import SearchBox from '../../../../../components/SearchBox'
@@ -90,7 +91,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -208,6 +209,9 @@
 
     methods: {
       getOrderWorkList (querying) {
+        var self = this
+        var argvs = arguments
+        var fn = self.getOrderWorkList
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
@@ -219,16 +223,27 @@
           return
         }
 
-        api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-          this.total = res.data.count
-          this.workOrders = res.data.list
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.total = res.data.count
+            this.workOrders = res.data.list
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
         })
       },
       getBranchIdByName (name) {
+        var self = this
+        var argvs = arguments
+        var fn = self.getBranchIdByName
         var condition = {
           filter: [],
           limit: 1,
@@ -237,19 +252,27 @@
           query: {}
         }
         condition.query.name = {$regex: name, $options: 'i'}
-        api.warranty.getBranchList(condition).then((res) => {
-          this.branchs = res.data.list
-          api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+            this.branchs = res.data.list
+            api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
+              this.total = res.data.count
+              this.workOrders = res.data.list
+              this.loadingData = false
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.loadingData = false
+            })
           }).catch((res) => {
             this.handleError(res)
             this.loadingData = false
           })
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
         })
       }
     }

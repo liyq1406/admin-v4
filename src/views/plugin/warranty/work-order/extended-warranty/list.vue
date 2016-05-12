@@ -48,7 +48,7 @@
                   <div v-if="order.status === 0">已过期</div>
                   <div v-else class='hl-green'>未过期</div>
                 </td>
-                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
             <tr v-if="workOrders.length === 0 && !loadingData">
@@ -165,24 +165,26 @@
 
     methods: {
       getWarrantyList (querying) {
+        var self = this
+        var argvs = arguments
+        var fn = self.getWarrantyList
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
         this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id).then((token) => {
-          // console.log(token)
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
           api.warranty.getWarrantyList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
             this.total = res.data.count
             this.workOrders = res.data.list
             this.loadingData = false
           }).catch((err) => {
-            if (err.status === 403) {
-              if (err.data.code === 4031001) {
-                window.localStorage.warrantyAccessToken = 'invalid'
-              }
-            } else {
-              this.handleError(err)
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
             }
+            self.handlePluginError(err, env)
             this.loadingData = false
           })
         }).catch((err) => {

@@ -38,11 +38,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getRepairDetailList (appID, params) {
+  getRepairDetailList (appID, token, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/repair_details/list`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -53,11 +54,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchList (appID, params) {
+  getBranchList (appID, token, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/branch/list`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )

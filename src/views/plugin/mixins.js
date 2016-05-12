@@ -1,5 +1,6 @@
 import api from '../../api'
 import _ from 'lodash'
+const INVALID = 'invalid'
 
 export const pluginMixins = {
   methods: {
@@ -92,25 +93,75 @@ export const pluginMixins = {
       }
     },
 
-    getAppToKen (appID) {
+    getAppToKen (appID, plugin) {
+      var self = this
       return new Promise((resolve, reject) => {
-        var token = window.localStorage.warrantyAccessToken
-        if (token && token !== 'invalid') {
-          resolve(window.localStorage.warrantyAccessToken)
+        var token = self.getPluginToken(plugin)
+
+        if (token && token !== INVALID) {
+          resolve(token)
         } else {
           var params = {
             'app_id': appID
           }
           api.plugin.getAppToKen(params).then((res) => {
             if (res.status === 200) {
-              window.localStorage.warrantyAccessToken = res.data.access_token
+              self.setPluginToken(plugin, res.data.access_token)
               resolve(res.data.access_token)
             }
           }, (err) => {
-            reject(err)
+            if (reject) {
+              reject(err)
+            } else {
+              console.log(err)
+            }
           })
         }
       })
+    },
+
+    handlePluginError (err, env) {
+      var self = this
+      if (err.status === 403 && err.data.code === 4031003) {
+        // 重新请求
+        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求3次
+        self.setPluginToken(env.plugin, INVALID)
+
+        setTimeout(() => {
+          self.reRequest(env)
+        }, 0)
+      } else {
+        env.context.handleError(err)
+      }
+    },
+
+    setPluginToken (plugin, value) {
+      switch (plugin) {
+        case 'warranty':
+          window.localStorage.warrantyAccessToken = value
+          break
+        default:
+          break
+      }
+    },
+
+    getPluginToken (plugin) {
+      var token = ''
+      switch (plugin) {
+        case 'warranty':
+          token = window.localStorage.warrantyAccessToken
+          break
+        default:
+          break
+      }
+
+      return token
+    },
+
+    reRequest (env) {
+      if (env.fn instanceof Function && env.argvs instanceof Object && env.context instanceof Object) {
+        env.fn.apply(env.context, env.argvs)
+      }
     }
   }
 }
