@@ -147,8 +147,9 @@
        * @return {[type]}         [description]
        */
       clickDown (tHeader, table) {
+        var lineIndex = this.tables.indexOf(table)
         if (this.$parent[tHeader.functionName]) {
-          this.$parent[tHeader.functionName](tHeader, table)
+          this.$parent[tHeader.functionName](tHeader, table, lineIndex)
         }
       },
 
