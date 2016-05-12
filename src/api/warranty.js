@@ -1,17 +1,19 @@
 import * as http from '../http'
 import { apiServer } from '../consts/config'
-
-var appID = window.localStorage.getItem('accessToken')
-
 export default {
   /**
    * 查询所有已登记的延保纪录列表
    * @param  Object 查询参数
    * @return status
    */
-  getWarrantyList (params) {
+  getWarrantyList (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/warranty/list`, params
+      `${apiServer.warranty}/${appID}/api/warranty/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -20,11 +22,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getOrderWorkList (params) {
+  getOrderWorkList (appID, token, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/work_orders/list`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -35,7 +38,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getRepairDetailList (params) {
+  getRepairDetailList (appID, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/repair_details/list`, params, {
         headers: {
@@ -50,7 +53,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchList (params) {
+  getBranchList (appID, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/branch/list`, params, {
         headers: {
@@ -65,7 +68,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  AddBranch (params) {
+  AddBranch (appID, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/branch/save`, params, {
         headers: {
@@ -80,7 +83,7 @@ export default {
     * @param  Object 查询参数
     * @return status
     */
-  UpdateBranch (params, branchId) {
+  UpdateBranch (appID, params, branchId) {
     return http.put(
       `${apiServer.warranty}/${appID}/api/branch/update/${branchId}`, params, {
         headers: {
@@ -96,7 +99,7 @@ export default {
    * @param  String 网点ID
    * @return status
    */
-  deleteBranch (branchId) {
+  deleteBranch (appID, branchId) {
     return http.del(
       `${apiServer.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
         headers: {
@@ -111,7 +114,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchStaffsList (params) {
+  getBranchStaffsList (appID, params) {
     return http.post(
      `${apiServer.warranty}/${appID}/api/outlet_staffs/list`, params, {
        headers: {
@@ -126,7 +129,7 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  AddBranchStaffs (params) {
+  AddBranchStaffs (appID, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/save`, params, {
         headers: {
@@ -141,7 +144,7 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  UpdateBranchStaffs (staffId, params) {
+  UpdateBranchStaffs (appID, staffId, params) {
     return http.put(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
@@ -156,8 +159,8 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  deleteStaff (staffId) {
-    console.log(staffId)
+  deleteStaff (appID, staffId) {
+    console.log(appID, staffId)
     return http.del(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
