@@ -461,7 +461,7 @@
         this.selectedDatapoints.map((item) => {
           var obj = {
             key: item.index,
-            title: item.index
+            title: item.index + '-' + item.description
           }
           // console.log(222)
           // console.log(item)
