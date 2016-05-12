@@ -11,7 +11,7 @@
       </thead>
       <tbody>
         <template v-if="tables.length > 0">
-          <tr v-for="table in tables">
+          <tr v-for="table in tables" track-by="$index">
             <th v-show="selecting" class="tac">
               <input type="checkbox" :checked="selectedTable.indexOf(table)>-1" @change="selectedTableChange(table)">
             </th>
@@ -71,22 +71,26 @@
       // 是否开启选择模式
       selecting: {
         type: Boolean,
-        default: false
+        default: false,
+        twoWay: false
       },
 
       headers: {
         type: Array,
-        default: []
+        default: [],
+        twoWay: true
       },
 
       tables: {
         type: Array,
-        default: []
+        default: [],
+        twoWay: true
       },
 
       selectedTable: {
         type: Array,
-        default: function () { return [] }
+        default: function () { return [] },
+        twoWay: false
       }
     },
     data () {
@@ -96,17 +100,25 @@
     },
     watch: {
       tables () {
-        this.initSelectedAll()
+        this.initSelected() // 修正选择状态
       }
     },
     methods: {
-      /**
-       * 初始化全选按钮
-       * @return {[type]} [description]
-       */
-      initSelectedAll () {
+      initSelected () {
         if (this.selecting) {
-          this.selectedAll = this.tables.length && this.tables.length === this.selectedTable.length
+          if (this.tables.length) {
+            var arr = this.selectedTable.concat()
+            arr.map((item) => {
+              if (this.tables.indexOf(item) === -1) {
+                this.selectedTable.$remove(item)
+              }
+            })
+            this.selectedAll = this.tables.length === this.selectedTable.length
+          } else {
+            this.selectedTable = []
+            this.selectedAll = false
+          }
+          this.$dispatch('selected-change', this.selectedTable)
         }
       },
 
@@ -152,8 +164,7 @@
           } else {
             this.selectedTable.push(table)
           }
-          this.initSelectedAll()
-          this.$dispatch('selected-change', this.selectedTable)
+          this.initSelected()
         }
       }
     }
