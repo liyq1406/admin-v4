@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <div class="breadcrumb">
-        <a v-link="{path: '/plugins/warranty/accounts/' + $route.params.account_id}">
+        <a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/accounts/' + $route.params.account_id}">
           <i class="fa fa-arrow-circle-left"></i>网点详情
         </a>
       </div>
@@ -240,7 +240,7 @@
           api.warranty.deleteStaff(this.$route.params.id).then((res) => {
             this.editing = false
             this.showEditModal = false
-            this.$route.router.replace('/plugins/warranty/accounts/' + this.$route.params.account_id)
+            this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
           }).catch((res) => {
             this.handleError(res)
             this.editing = false

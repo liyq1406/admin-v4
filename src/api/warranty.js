@@ -1,8 +1,7 @@
 import * as http from '../http'
 import { apiServer } from '../consts/config'
 
-// var token = window.localStorage.getItem('accessToken')
-var token = 'edf3feed54484c37ba06f06731e4b605'
+var appID = window.localStorage.getItem('accessToken')
 
 export default {
   /**
@@ -12,11 +11,7 @@ export default {
    */
   getWarrantyList (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/warranty/list`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
+      `${apiServer.warranty}/${appID}/api/warranty/list`, params
     )
   },
 
@@ -27,7 +22,7 @@ export default {
    */
   getOrderWorkList (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/work_orders/list`, params, {
+      `${apiServer.warranty}/${appID}/api/work_orders/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -42,7 +37,7 @@ export default {
    */
   getRepairDetailList (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/repair_details/list`, params, {
+      `${apiServer.warranty}/${appID}/api/repair_details/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -57,7 +52,7 @@ export default {
    */
   getBranchList (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/branch/list`, params, {
+      `${apiServer.warranty}/${appID}/api/branch/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -72,7 +67,7 @@ export default {
    */
   AddBranch (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/branch/save`, params, {
+      `${apiServer.warranty}/${appID}/api/branch/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -87,7 +82,7 @@ export default {
     */
   UpdateBranch (params, branchId) {
     return http.put(
-      `${apiServer.warranty}/${token}/api/branch/update/${branchId}`, params, {
+      `${apiServer.warranty}/${appID}/api/branch/update/${branchId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -103,7 +98,7 @@ export default {
    */
   deleteBranch (branchId) {
     return http.del(
-      `${apiServer.warranty}/${token}/api/branch/delete/${branchId}`, {}, {
+      `${apiServer.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -118,7 +113,7 @@ export default {
    */
   getBranchStaffsList (params) {
     return http.post(
-     `${apiServer.warranty}/${token}/api/outlet_staffs/list`, params, {
+     `${apiServer.warranty}/${appID}/api/outlet_staffs/list`, params, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded'
        }
@@ -133,7 +128,7 @@ export default {
   */
   AddBranchStaffs (params) {
     return http.post(
-      `${apiServer.warranty}/${token}/api/outlet_staffs/save`, params, {
+      `${apiServer.warranty}/${appID}/api/outlet_staffs/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -148,7 +143,7 @@ export default {
   */
   UpdateBranchStaffs (staffId, params) {
     return http.put(
-      `${apiServer.warranty}/${token}/api/outlet_staffs/update/${staffId}`, params, {
+      `${apiServer.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -164,7 +159,7 @@ export default {
   deleteStaff (staffId) {
     console.log(staffId)
     return http.del(
-      `${apiServer.warranty}/${token}/api/outlet_staffs/delete/${staffId}`, {}, {
+      `${apiServer.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

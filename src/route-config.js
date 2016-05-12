@@ -714,7 +714,7 @@ let configRouter = (router) => {
     },
 
     // 维保系统-工单管理
-    '/plugins/warranty': {
+    '/plugins/warranty/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/warranty/index'))
@@ -729,11 +729,27 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 维保系统-延保工单详情
+        'work-orders/extended-warranties/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/warranty/work-order/extended-warranty/details'))
+            }, 'admin')
+          }
+        },
         // 维修工单列表
         'work-orders/repair': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/plugin/warranty/work-order/repair/list'))
+            }, 'admin')
+          }
+        },
+        // 维保系统-维修工单详情
+        'work-orders/repair/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/warranty/work-order/repair/details'))
             }, 'admin')
           }
         },
@@ -744,42 +760,25 @@ let configRouter = (router) => {
               resolve(require('./views/plugin/warranty/account/list'))
             }, 'admin')
           }
+        },
+        // 网点详情
+        'accounts/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/warranty/account/details'))
+            }, 'admin')
+          }
+        },
+        // 网点-客服详情
+        'accounts/:account_id/staffs/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/warranty/account/staff-details'))
+            }, 'admin')
+          }
         }
       }
     },
-    // 维保系统-延保工单详情
-    '/plugins/warranty/work-orders/extended-warranties/:id': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/plugin/warranty/work-order/extended-warranty/details'))
-        }, 'admin')
-      }
-    },
-    // 维保系统-维修工单详情
-    '/plugins/warranty/work-orders/repair/:id': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/plugin/warranty/work-order/repair/details'))
-        }, 'admin')
-      }
-    },
-    // 网点详情
-    '/plugins/warranty/accounts/:id': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/plugin/warranty/account/details'))
-        }, 'admin')
-      }
-    },
-    // 网点-客服详情
-    '/plugins/warranty/accounts/:account_id/staffs/:id': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/plugin/warranty/account/staff-details'))
-        }, 'admin')
-      }
-    },
-
     // 设备参数
     '/device-params': {
       component (resolve) {
@@ -834,7 +833,7 @@ let configRouter = (router) => {
     '/settings': '/settings/auth',
     '/users': '/users/list',
     '/plugins/recipe': '/plugins/recipe/list',
-    '/plugins/warranty': '/plugins/warranty/work-orders/extended-warranties',
+    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',

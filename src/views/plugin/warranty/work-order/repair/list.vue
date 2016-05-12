@@ -52,7 +52,7 @@
                 <td>{{order.product_sn}}</td>
                 <td>{{order.create_time | uniformDate}}</td>
                 <td>{{order.status}}</td>
-                <td><a v-link="{path: '/plugins/warranty/work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/repair/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
 

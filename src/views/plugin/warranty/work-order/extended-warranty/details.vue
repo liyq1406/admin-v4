@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <!-- Start: 面包屑 -->
-      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/work-orders/extended-warranties' }"><i class="fa fa-arrow-circle-left"></i>延保工单列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/extended-warranties'}"><i class="fa fa-arrow-circle-left"></i>延保工单列表</a></div>
       <!-- : 面包屑 -->
 
       <!-- Start: 工单详情 -->
