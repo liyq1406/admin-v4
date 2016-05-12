@@ -174,7 +174,7 @@
         }
 
         if (this.query.length > 0) {
-          condition.query[this.queryType.value] = { $like: this.query }
+          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
         }
 
         switch (this.visibility.value) {
