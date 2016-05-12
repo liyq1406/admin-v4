@@ -48,7 +48,7 @@
                   <div v-if="order.status === 0">已过期</div>
                   <div v-else class='hl-green'>未过期</div>
                 </td>
-                <td><a v-link="{path: '/plugins/warranty/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
               </tr>
             </template>
             <tr v-if="workOrders.length === 0 && !loadingData">

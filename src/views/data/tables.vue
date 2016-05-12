@@ -59,7 +59,7 @@
                 </div>
               </div>
               <div class="details-table">
-                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table.sync="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
+                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
                 <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
               </div>
             </div>
@@ -966,8 +966,6 @@
         // 判断有没有用户自定义列
         if (hasUserColumn) {
           var obj = {}
-          console.log(22222123)
-          console.log(this.addListKey)
           this.addListKey.map((item) => {
             obj[item] = ''
           })
@@ -990,13 +988,18 @@
       deleteLineEvent () {
         if (this.selectedLine.length) {
           this.selectedLine.map((line) => {
-            api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
-              this.selectedLine.$remove(line)
-              this.selectedFirstClassEvent(this.selectedFirstClass)
-            }).catch((res) => {
-              this.handleError(res)
-              this.loadingData = false
-            })
+            // console.log(JSON.stringify(this.selectedLine.line))
+            if (line.objectId) {
+              api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+                this.selectedLine.$remove(line)
+                this.selectedFirstClassEvent(this.selectedFirstClass)
+              }).catch((res) => {
+                this.handleError(res)
+                this.loadingData = false
+              })
+            } else {
+              this.vTables.$remove(line)
+            }
           })
         }
       },
@@ -1071,10 +1074,7 @@
        * @return {[type]}        [description]
        */
       selectedLineChange (tables) {
-        console.log('智能表格组件暴露事件 已选择的table发生变化')
         this.selectedLine = tables
-        console.log(this.selectedLine.length)
-        console.log(JSON.stringify(this.selectedLine))
       },
       /**
        * 根据 value 获取对应的 label
