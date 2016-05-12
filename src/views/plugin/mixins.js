@@ -90,6 +90,27 @@ export const pluginMixins = {
           this.loading = false
         })
       }
+    },
+
+    getAppToKen (appID) {
+      return new Promise((resolve, reject) => {
+        var token = window.localStorage.warrantyAccessToken
+        if (token && token !== 'invalid') {
+          resolve(window.localStorage.warrantyAccessToken)
+        } else {
+          var params = {
+            'app_id': appID
+          }
+          api.plugin.getAppToKen(params).then((res) => {
+            if (res.status === 200) {
+              window.localStorage.warrantyAccessToken = res.data.access_token
+              resolve(res.data.access_token)
+            }
+          }, (err) => {
+            reject(err)
+          })
+        }
+      })
     }
   }
 }

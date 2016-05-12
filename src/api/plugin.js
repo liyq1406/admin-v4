@@ -62,5 +62,15 @@ export default {
     return http.del(
       `${apiServer.default}/v2/plugin/app/${id}`
     )
+  },
+
+  /**
+   * 申请应用接口调用凭证
+   * @param  {String} id App标识ID
+   */
+  getAppToKen (params) {
+    return http.post(
+      `${apiServer.default}/v2/plugin/apply_token`, params
+    )
   }
 }

@@ -97,7 +97,6 @@
 
     route: {
       data () {
-        // this.getApps()
         this.getPlugins()
         return {
           secondaryNav: [{

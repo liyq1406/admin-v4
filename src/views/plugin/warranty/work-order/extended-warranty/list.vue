@@ -78,13 +78,14 @@
   import SearchBox from '../../../../../components/SearchBox'
   import Pager from '../../../../../components/Pager'
   import api from '../../../../../api'
+  import { pluginMixins } from '../../../mixins'
 
   export default {
     name: 'OrderList',
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -168,12 +169,24 @@
           this.currentPage = 1
         }
         this.loadingData = true
-        api.warranty.getWarrantyList(this.queryCondition).then((res) => {
-          this.total = res.data.count
-          this.workOrders = res.data.list
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
+        this.getAppToKen(this.$route.params.app_id).then((token) => {
+          // console.log(token)
+          api.warranty.getWarrantyList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.total = res.data.count
+            this.workOrders = res.data.list
+            this.loadingData = false
+          }).catch((err) => {
+            if (err.status === 403) {
+              if (err.data.code === 4031001) {
+                window.localStorage.warrantyAccessToken = 'invalid'
+              }
+            } else {
+              this.handleError(err)
+            }
+            this.loadingData = false
+          })
+        }).catch((err) => {
+          this.handleError(err)
           this.loadingData = false
         })
       }
