@@ -72,16 +72,17 @@
 
   .v-alert
     position relative
-    padding-left 70px
+    padding-left 64px
     margin 100px 0
 
     .fa
       absolute left top
-      size 50px
-      font-size 50px
+      size 44px
+      font-size 44px
       text-align center
 
     h2
+      font-size 20px
       margin 0 0 10px
       font-weight normal
 
