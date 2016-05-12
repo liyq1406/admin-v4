@@ -11,7 +11,6 @@ export const pluginMixins = {
       api.plugin.all().then((res) => {
         if (res.status === 200) {
           var pluginTypes = _.map(this.plugins, 'alias')
-          console.log(pluginTypes)
           res.data.list.forEach((item) => {
             var index = _.indexOf(pluginTypes, item.plugin)
             if (index >= 0) {
