@@ -40,7 +40,7 @@
         </div>
         <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getGeographies" :simple="true"></pager>
         <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
-          <p>未找到设备</p>
+          <p>当前区域未找到设备</p>
         </v-alert>
       </div>
     </div>
@@ -94,7 +94,7 @@
         },
         currentPage: 1,
         total: 0,
-        pageCount: 1,
+        pageCount: 8,
         currIndex: 0,
         map: {},
         points: [],
