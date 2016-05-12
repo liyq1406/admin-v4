@@ -30,7 +30,11 @@
                   <tbody>
                     <tr v-for="deviceData in deviceDatas" :class="{'selected': deviceData.selected}" @click="selectedDeviceDataEvent(deviceData)">
                       <td>{{ deviceData.id }}</td>
-                      <td>{{ deviceData.mac }}</td>
+                      <td>
+                        <div class="text-overflow w110">
+                          {{ deviceData.mac }}
+                        </div>
+                      </td>
                     </tr>
                     <tr v-if="deviceDatas.length === 0">
                       <td colspan="2" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
@@ -39,7 +43,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <pager v-if="true" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
+                <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" :simple="true" @page-update="getDevices"></pager>
               </div>
             </div>
             <div class="panel-bd layout-right">
@@ -67,7 +71,7 @@
                       </div>
                     </div>
                     <div class="operation-box col-12">
-                      <button class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
+
                       <div class="check-device">
                         <button class="btn btn-primary" v-link="{path: '/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
@@ -76,6 +80,7 @@
                       </div>
                     </div>
                   </div>
+                  <button style="margin-left:90px" class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
                   <div class="chart-box">
                     <div class="panel-bd with-loading">
                       <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart>
@@ -107,7 +112,8 @@
                         </tr>
                       </tbody>
                     </table> -->
-                    <intelligent-table :headers.sync="snapshotHeader" :tables.sync="snapshotTable"></intelligent-table>
+                    <intelligent-table :headers.sync="snapshotHeader" :tables="snapshotTable | limitBy pageCount (currentPage2-1)*pageCount"></intelligent-table>
+                    <pager v-if="snapshotTable.length > pageCount" :total="snapshotTable.length" :current.sync="currentPage2" :page-count="pageCount"></pager>
                   </div>
                 </div>
               </div>
@@ -119,19 +125,24 @@
      <modal :show.sync="showEditModal" width="600px">
        <h3 slot="header">选择快照数据项</h3>
        <div slot="body" class="form">
-         <div class="table-wrap">
+         <div class="table-wrap" style="overflow-x: hidden">
            <div class="data-table">
              <table class="table table-stripe table-bordered">
                <thead>
                  <tr>
-                   <th>选择</th>
                    <th>索引</th>
+                   <th>端点ID</th>
+                   <th>描述</th>
+                   <th>选择</th>
+                   <!-- <th>端点ID</th> -->
                  </tr>
                </thead>
                <tbody>
                  <tr v-for="dataPoint in dataPoints">
-                   <td><input v-model="dataPoint.selected" type="checkbox"/></td>
                    <td>{{dataPoint.index}}</td>
+                   <td>{{dataPoint.id}}</td>
+                   <td>{{dataPoint.description}}</td>
+                   <td><input v-model="dataPoint.selected" type="checkbox"/></td>
                  </tr>
                </tbody>
              </table>
@@ -187,7 +198,7 @@
         /** ***图表 按钮 start*********/
         loadingProductTrends: false,
         periods: locales[Vue.config.lang].shortperiods,
-        period: 15,
+        period: 1,
         /* ******图表 按钮 end*************/
         selectedDatapoints: [],
         query: '',
@@ -203,6 +214,7 @@
         showEditModal: false,
         total: 100,
         currentPage: 1,
+        currentPage2: 1,
         pageCount: 10,
         product: {},
         deviceDatas: [
@@ -229,7 +241,7 @@
         allSnapshots: [],
         snapshotHeader: [
           {
-            key: 'create_time', // 与tables的key对应
+            key: 'snapshot_date', // 与tables的key对应
             title: '时间' // 标题内容
           // },
           // {
@@ -243,7 +255,7 @@
         ],
         snapshotTable: [
           {
-            create_time: '2015'
+            snapshot_date: ''
             // creatTime: '123',
             // updateTime: '更新时间',
             // creater: '创建者',
@@ -256,11 +268,19 @@
           //   creater: '创建者',
           //   operation: '操作'
           }
-        ]
+        ],
+        allDatapoints: []
       }
     },
 
     computed: {
+      tdnames () {
+        var result = []
+        this.snapshotHeader.map((item) => {
+          result.push(item.key + '')
+        })
+        return result
+      },
       selectedDeviceData () {
         var result = {}
         this.deviceDatas.map((deviceData) => {
@@ -301,7 +321,7 @@
         var result = []
         this.selectedDatapoints.forEach((item) => {
           result.push({
-            name: item.index,
+            name: `${item.index}`,
             type: 'line',
             data: []
           })
@@ -313,7 +333,7 @@
         var itemToAdd = {}
         var i = 0
 
-        for (let i = this.period * 24 - 1; i >= 0; i--) {
+        for (let k = this.period * 24 - 1; k >= 0; k--) {
           result.forEach((re) => {
             re.data.push(0)
           })
@@ -324,12 +344,16 @@
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
           var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) + 1
+          // console.log(item.snapshot_date)
+          // console.log(a)
           if (index) {
             if (a !== i) {
               // 当商改变说明此数据为下一个小时的数据
-              // 将每个小时最后的数据附近图表数据数组
-              result.forEach((r) => {
-                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[r.index]) || 0
+              // 将每个小时最后的数据附近图表数据数组\
+              console.log(13231312313)
+              console.log(itemToAdd)
+              result.forEach((r, n) => {
+                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
               })
               itemToAdd = item
               // 将1重置为当前数据的时间
@@ -338,9 +362,16 @@
           } else {
             // 数组内第一个元素处理
             // 将第一个元素存进暂存对象内
+            console.log(121221)
             itemToAdd = item
             // 初始经过0个小时
             i = 0
+            //
+            if (this.snapshots.length === 1) {
+              result.forEach((r, n) => {
+                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
+              })
+            }
           }
         })
 
@@ -383,26 +414,72 @@
         }
         api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, params).then((res) => {
           if (res.status === 200) {
+            // 获取全部数组数据
             this.allSnapshots = res.data.list
+            console.log(res.data.list)
+            // res.data.list.map((li) => {
+            //   li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+            //   this.snapshotTableli.push(li)
+            // })
+            this.snapshotTable = res.data.list
+            this.snapshotTable.map((li) => {
+              li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+            })
+            // this.snapshotTable = res.data.list
+            // console.log(11)
+            // console.log(this.snapshotTable)
             this.snapshots = res.data.list.sort((a, b) => {
               return new Date(a.snapshot_date) - new Date(b.snapshot_date)
             })
-            this.buildTable()
+            // this.buildTable()
           }
         }).catch((res) => {
           this.handleError(res)
         })
       },
+      // 获取数据端点列表
+      getDatapoints () {
+        this.loadingData = true
+        api.product.getDatapoints(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.datapoints = res.data
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
       // 生成表格
-      // buildTable () {
-      //   this.selectedDatapoints.map((item) => {
-      //     var obj = {
-      //       key: item.name,
-      //       title: item.name
-      //     }
-      //     this.snapshotHeader.push(obj)
-      //   })
-      // },
+      buildTable () {
+        this.snapshotHeader = [
+          {
+            key: 'snapshot_date', // 与tables的key对应
+            title: '时间'
+          }
+        ]
+        this.selectedDatapoints.map((item) => {
+          var obj = {
+            key: item.index,
+            title: item.index
+          }
+          // console.log(222)
+          // console.log(item)
+          this.snapshotHeader.push(obj)
+        })
+        // this.tdnames.map((key) => {
+        //   var table = {
+        //     create_time: '',
+        //     '78789' : '',
+        //     ....
+        //   }
+        //   abc[key] =
+        // })
+        this.snapshots.map((dptd) => {
+          this.snapshotTable.push(dptd)
+        })
+        // this.snapshotTable = this.snapshots
+      },
       // 搜索
       handleSearch () {
         if (this.query.length === 0) {
@@ -418,30 +495,53 @@
       // 获取当前产品快照规则
       getRule () {
         api.snapshot.getRule(this.$route.params.product_id).then((res) => {
-          console.log(res.data)
           // this.products = res.data
-          if (res.data.list[1].datapoint.length !== 0) {
-            res.data.list[1].datapoint.map((item) => {
-              var dp = {
-                index: item,
-                selected: false
+          // 匹配数据端点信息
+          api.product.getDatapoints(this.$route.params.product_id).then((r) => {
+            console.log(res.data.list[0].datapoint)
+            console.log(r.data)
+            if (r.status === 200) {
+              res.data.list[0].datapoint.map((item) => {
+                r.data.map((l) => {
+                  if (l.index === item) {
+                    var dp = {
+                      index: item,
+                      selected: false,
+                      description: l.description,
+                      id: l.id
+                    }
+                    this.dataPoints.push(dp)
+                    return
+                  }
+                })
+              })
+              if (this.dataPoints.length < 3) {
+                this.dataPoints.map((item) => {
+                  item.selected = true
+                })
+              } else {
+                for (let i = 0; i < 3; i++) {
+                  this.dataPoints[i].selected = true
+                }
               }
-              this.dataPoints.push(dp)
-            })
-          } else {
-            this.dataPoints = []
-          }
-          if (this.dataPoints.length < 3) {
-            this.dataPoints.map((item) => {
-              item.selected = true
-            })
-          } else {
-            for (let i = 0; i < 2; i++) {
-              this.dataPoints[i].selected = true
+              this.getlist()
             }
-          }
-          this.getlist()
-          console.log(this.selectedDatapoints)
+          }).catch((res) => {
+            this.handleError(res)
+          })
+          // if (res.data.list[0].datapoint.length !== 0) {
+          //   res.data.list[0].datapoint.map((item) => {
+          //     var dp = {
+          //       index: item,
+          //       selected: false
+          //     }
+          //     this.dataPoints.push(dp)
+          //   })
+          // } else {
+          //   this.dataPoints = []
+          // }
+
+          // console.log(this.selectedDatapoints)
         }, (err) => {
           this.handleError(err)
         })
@@ -453,12 +553,13 @@
           if (item.selected) {
             this.selectedDatapoints.push(item)
           }
-          console.log(2222)
-          this.buildTable()
-          console.log(this.snapshotHeader)
+          // console.log(2222)
+          // this.buildTable()
+          // console.log(this.snapshotHeader)
           setTimeout(() => {
             this.getSnapshot()
           }, 500)
+          this.buildTable()
         })
       },
       // 获取设备列表
@@ -517,7 +618,7 @@
       },
       saveDataPoints () {
         this.getlist()
-        console.log(this.selectedDatapoints)
+        // console.log(this.selectedDatapoints)
         this.showEditModal = false
       }
     }
