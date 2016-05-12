@@ -1,35 +1,45 @@
 <template>
   <div v-if="total > 0" class="pager tar">
     <button :class="{'disabled': current === 1}" :disabled="current === 1" @click="current = current - 1" class="pager-btn pager-prev"><i class="fa fa-chevron-left"></i></button>
-    <div v-if="pages < 10" class="pager-container">
-      <div v-for="page in pages" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
-    </div>
-    <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="pager-container">
-      <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+    <template v-if="!simple">
+      <div v-if="pages < 10" class="pager-container">
+        <div v-for="page in pages" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+      </div>
+      <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="pager-container">
+        <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+        <div class="pager-more">
+          <span @click="toggleInput($event)">...</span>
+          <div v-show="showInput" class="pager-input">
+            <input type="number" max="{{ pages }}" @change="onInput"/>
+          </div>
+        </div>
+        <div v-for="offset in 3" :class="{'current': current === pages - 2 + offset}" @click="current = pages - 2 + offset" class="pager-item"><span>{{ pages - 2 + offset }}</span></div>
+      </div>
+      <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="pager-container">
+        <div :class="{'current': current === 1}" @click="current = 1" class="pager-item"><span>1</span></div>
+        <div class="pager-more">
+          <span @click="toggleInput1($event)">...</span>
+          <div v-show="showInput1" class="pager-input">
+            <input type="number" max="{{ pages }}" @change="onInput"/>
+          </div>
+        </div>
+        <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="pager-item"><span>{{ current - 1 + offset }}</span></div>
+        <div class="pager-more">
+          <span @click="toggleInput2($event)">...</span>
+          <div v-show="showInput2" class="pager-input">
+            <input type="number" max="{{ pages }}" @change="onInput"/>
+          </div>
+        </div>
+        <div :class="{'current': current === pages}" @click="current = pages" class="pager-item"><span>{{ pages }}</span></div>
+      </div>
+    </template>
+    <div v-else class="pager-container">
       <div class="pager-more">
-        <span @click="toggleInput($event)">...</span>
+        <span @click="toggleInput($event)">{{ current }}/{{ total }}页</span>
         <div v-show="showInput" class="pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>
       </div>
-      <div v-for="offset in 3" :class="{'current': current === pages - 2 + offset}" @click="current = pages - 2 + offset" class="pager-item"><span>{{ pages - 2 + offset }}</span></div>
-    </div>
-    <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="pager-container">
-      <div :class="{'current': current === 1}" @click="current = 1" class="pager-item"><span>1</span></div>
-      <div class="pager-more">
-        <span @click="toggleInput1($event)">...</span>
-        <div v-show="showInput1" class="pager-input">
-          <input type="number" max="{{ pages }}" @change="onInput"/>
-        </div>
-      </div>
-      <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="pager-item"><span>{{ current - 1 + offset }}</span></div>
-      <div class="pager-more">
-        <span @click="toggleInput2($event)">...</span>
-        <div v-show="showInput2" class="pager-input">
-          <input type="number" max="{{ pages }}" @change="onInput"/>
-        </div>
-      </div>
-      <div :class="{'current': current === pages}" @click="current = pages" class="pager-item"><span>{{ pages }}</span></div>
     </div>
     <button :class="{'disabled': current === pages}" :disabled="current === pages" @click="current = current + 1" class="pager-btn pager-next"><i class="fa fa-chevron-right"></i></button>
   </div>
@@ -45,17 +55,28 @@
     mixins: [globalMixins],
 
     props: {
+      // 每页数量
       pageCount: {
         type: Number,
         default: config.pageCount
       },
+
+      // 总数
       total: {
         type: Number
       },
+
+      // 当前页
       current: {
         type: Number,
         twoWay: true,
         default: 1
+      },
+
+      // 是否简单分页
+      simple: {
+        type: Boolean,
+        default: false
       }
     },
 
