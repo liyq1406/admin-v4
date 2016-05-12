@@ -78,13 +78,13 @@
       headers: {
         type: Array,
         default: [],
-        twoWay: true
+        twoWay: false
       },
 
       tables: {
         type: Array,
         default: [],
-        twoWay: true
+        twoWay: false
       },
 
       selectedTable: {
@@ -119,6 +119,9 @@
             this.selectedAll = false
           }
           this.$dispatch('selected-change', this.selectedTable)
+        } else {
+          this.selectedTable = []
+          this.selectedAll = false
         }
       },
 
