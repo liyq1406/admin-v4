@@ -117,7 +117,9 @@
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.name") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.name") }}:</span>
+            </label>
             <div class="controls col-18">
               <div v-placeholder="$t('table.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="64" required lazy class="input-text"/>
@@ -133,7 +135,9 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.type") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.type") }}:</span>
+            </label>
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[addModal.model.type-1]">
@@ -145,7 +149,9 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.permission") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.permission") }}:</span>
+            </label>
             <div class="controls col-18">
               <div class="checkbox-group">
                 <label v-for="type in permissionTypes" class="checkbox">
@@ -155,7 +161,9 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.field") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.field") }}:</span>
+            </label>
             <div class="controls col-18">
               <div v-for="field in addModal.fields" class="field-row row">
                 <div class="col-11">
@@ -194,13 +202,17 @@
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.name") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.name") }}:</span>
+            </label>
             <div class="controls col-18">
               <span class="control-text">{{ editModal.model.name }}</span>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.type") }}:</label>
+            <label class="form-control col-6">
+              <span>{{ $t("table.fields.type") }}:</span>
+            </label>
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="tableTypes[editModal.model.type-1]">
@@ -273,7 +285,7 @@
           <div class="form-row row">
             <label class="form-control col-6">类型:</label>
             <div class="controls col-18">
-              <v-select :label="getTypeLabelByValue(addColumnModal.type)" size="small">
+              <v-select :label="getTypeLabelByValue(addColumnModal.type)">
                 <select v-model="addColumnModal.type">
                   <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
                 </select>
@@ -298,7 +310,7 @@
             <div class="controls col-12">
               <v-select :label="delColumnModal.selectedColumn" :width="'150px'">
                 <select v-model="delColumnModal.selectedColumn">
-                  <option v-for="key in addListKey" track-by="$index" :value="key">{{ key }}</option>
+                  <option v-for="addListKey in addListKeys" track-by="$index" :value="addListKey.key">{{ addListKey.key }}</option>
                 </select>
               </v-select>
             </div>
@@ -398,22 +410,24 @@
       <div slot="body" class="form">
         <form @submit.prevent="userEditColumnModalConfirm">
           <div class="form-row row">
-            <label class="form-control col-6">{{userEditColumnModal.columnName}}:</label>
+            <label class="form-control col-6">
+              <span>{{userEditColumnModal.columnName}}:</span>
+            </label>
             <!-- 字符串 -->
             <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'string'">
-              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(字符串)'" class="input-text-wrap">
                 <input v-model="userEditColumnModal.value" type="text" minlength="2" maxlength="64" class="input-text"/>
               </div>
             </div>
             <!-- 整形数字 -->
             <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'int'">
-              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(整型数字)'" class="input-text-wrap">
                 <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
               </div>
             </div>
             <!-- 浮点数字 -->
             <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'float'">
-              <div v-placeholder="'请输入' + userEditColumnModal.columnName" class="input-text-wrap">
+              <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(浮点型数字)'" class="input-text-wrap">
                 <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
               </div>
             </div>
@@ -428,7 +442,12 @@
             </div>
             <!-- 日期 -->
             <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'date'">
-              <date-picker :value.sync="userEditColumnModal.value"></date-picker>
+              <!-- <date-picker :value.sync="userEditColumnModal.value"></date-picker> -->
+              <date-picker :value.sync="datePicker.date"></date-picker>
+              <span class="time-picker" v-show="datePicker.date">
+                <time-picker :value.sync="datePicker.time"></time-picker>
+                <!-- <input type="time" v-model="datePicker.time"> -->
+              </span>
             </div>
           </div>
           <div class="form-actions">
@@ -449,6 +468,7 @@
   import Modal from '../../components/Modal'
   import IntelligentTable from '../../components/IntelligentTable'
   import DatePicker from '../../components/DatePicker'
+  import TimePicker from '../../components/TimePicker2'
   import Select from '../../components/Select'
   import locales from '../../consts/locales/index'
   import _ from 'lodash'
@@ -464,6 +484,7 @@
     components: {
       'intelligent-table': IntelligentTable,
       'date-picker': DatePicker,
+      'time-picker': TimePicker,
       'modal': Modal,
       'pager': Pager,
       'v-select': Select
@@ -497,20 +518,23 @@
         baseVHeaders: [
           {
             key: 'objectId',
-            title: 'ID'
+            title: 'ID',
+            class: 'nowrap'
           },
           {
             key: 'createAt',
-            title: '创建时间'
+            title: '创建时间',
+            class: 'nowrap'
           },
           {
             key: 'updateAt',
-            title: '更新时间'
+            title: '更新时间',
+            class: 'nowrap'
           },
           {
             key: 'creator',
             title: '创建者',
-            class: 'tac'
+            class: 'tac nowrap'
           }
           // {
           //   key: 'operation',
@@ -582,6 +606,12 @@
           fieldType: 'string',
           value: ''
         },
+
+        // 存放时间控件的临时日期和时间
+        datePicker: {
+          date: '2016-06-06',
+          time: '00:00:00'
+        },
         // 提示浮层
         confirmModal: {
           show: false,
@@ -597,7 +627,7 @@
         // 列种类
         fieldTypes: locales[Vue.config.lang].table.field_types,
         // 数据表详情基本表头
-        baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
+        // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
         currentPage: 1,
         pageCount: 10,
         addModal: {
@@ -633,7 +663,7 @@
 
     computed: {
       // 用户自己添加进去的字段
-      addListKey () {
+      addListKeys () {
         var result = []
         var noUserKey = []
         this.baseVHeaders.map((baseVHeader) => {
@@ -641,7 +671,7 @@
         })
         this.vHeaders.map((vHeader) => {
           if (noUserKey.indexOf(vHeader.key) === -1) {
-            result.push(vHeader.key)
+            result.push(vHeader)
           }
         })
         return result
@@ -699,12 +729,17 @@
        * @return {[type]}            [description]
        */
       getTableData (table_name, params) {
+        this.loadingData = true
         api.dataTable.queryData(table_name, params).then((res) => {
           this.initTableHeader() // 根据当前已选择的大类初始化表格头部
-          this.vTables = res.data.list
+          let jsonTables = JSON.stringify(res.data.list)
+          // 将返回的数据里面的日期格式的内容转化为普通的日期格式
+          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+          this.vTables = JSON.parse(result)
+          this.loadingData = true
         }).catch((res) => {
           this.handleError(res)
-          this.editing = false
+          this.loadingData = false
         })
       },
       /**
@@ -719,7 +754,7 @@
             title: key,
             type: this.selectedFirstClass.field[key],
             functionName: 'showEditUserColumnModal',
-            class: 'userColumn'
+            class: 'userColumn' + ((this.selectedFirstClass.field[key] === 'date') ? ' nowrap' : '')
           }
           vHeaders.splice(1, 0, vHeader)
         }
@@ -778,23 +813,46 @@
             if (item.title === key) {
               repeat = true
             }
+            if (item.key === key) {
+              repeat = true
+            }
           })
           if (repeat) {
             this.showNotice({
               type: 'error',
-              content: '列名不能重复'
+              content: '该列明不可用'
             })
           } else {
-            var obj = {
-              key: key,
-              title: key,
-              type: type,
-              functionName: 'showEditUserColumnModal',
-              class: 'userColumn'
-            }
-            this.vHeaders.splice(1, 0, obj)
-            // this.vHeaders.push(obj)
-            this.addColumnModal.show = false
+            console.log('向服务器发送数据 编辑当前数据表')
+            let table = {}
+            let field = _.clone(this.selectedFirstClass.field)
+            field[key] = type
+            table.name = this.selectedFirstClass.name
+            table.permission = this.selectedFirstClass.permission
+            table.type = this.selectedFirstClass.type
+            table.field = field
+            this.editing = true
+            api.dataTable.updateTable(table).then((res) => {
+              if (res.status === 200) {
+                var obj = {
+                  key: key,
+                  title: key,
+                  type: type,
+                  functionName: 'showEditUserColumnModal',
+                  class: 'userColumn'
+                }
+                this.vHeaders.splice(1, 0, obj)
+                this.addColumnModal.show = false
+                this.editing = false
+                this.showNotice({
+                  type: 'success',
+                  content: '限权设置成功'
+                })
+              }
+            }).catch((res) => {
+              this.handleError(res)
+              this.editing = false
+            })
           }
         } else {
           this.showNotice({
@@ -806,16 +864,29 @@
 
       /**
        * 编辑用户自定义列表
-       * @param  {[type]} line   [description]
-       * @param  {[type]} column [description]
+       * @param  {[type]} line   列
+       * @param  {[type]} column 行
+       * @param  {[type]} tableIndex 当前被编辑的行的索引
        * @return {[type]}        [description]
        */
-      showEditUserColumnModal (column, line) {
+      showEditUserColumnModal (column, line, lineIndex) {
         this.userEditColumnModal.show = true
         this.userEditColumnModal.columnName = column.key
+        this.userEditColumnModal.lineIndex = lineIndex
         this.userEditColumnModal.fieldType = column.type
         this.userEditColumnModal.value = line[column.key]
         this.userEditColumnModal.objectId = line.objectId
+        console.log(this.userEditColumnModal.fieldType)
+        console.log(line[column.key])
+        if (this.userEditColumnModal.fieldType === 'date') {
+          if (line[column.key]) {
+            this.datePicker.date = line[column.key].split(' ')[0]
+            this.datePicker.time = line[column.key].split(' ')[1]
+          } else {
+            this.datePicker.date = ''
+            this.datePicker.time = ''
+          }
+        }
         this.userEditColumnModal.show = true
       },
 
@@ -829,17 +900,15 @@
 
         if (this.userEditColumnModal.fieldType === 'date') {
           // 如果是日期类型 拼接秤日期类型的字符串
-          value = this.userEditColumnModal.value + 'T00:00:00.000Z'
+          value = this.datePicker.date + 'T' + this.datePicker.time + '.000Z'
         } else if (this.userEditColumnModal.fieldType === 'string') {
-          // 如果是字符串 转成自趺床
+          // 如果是字符串 转成字符串
           value = value + ''
         } else if (this.userEditColumnModal.fieldType === 'int') {
           // 如果是整型
           value = parseInt(value)
         }
-
         params[this.userEditColumnModal.columnName] = value
-        this.selectedLine = []
         // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
         if (this.userEditColumnModal.objectId) {
           // 修改数据
@@ -858,10 +927,13 @@
        * @return {[type]}            [description]
        */
       updateTableData (table_name, object_id, params) {
+        this.editing = true
         api.dataTable.updateData(table_name, object_id, params).then((res) => {
-          var params = {}
-          this.getTableData(table_name, params) // 重新获取列表并且渲染
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
           this.userEditColumnModal.show = false
+          this.editing = false
         }).catch((res) => {
           this.handleError(res)
           this.editing = false
@@ -875,10 +947,13 @@
        * @return {[type]}            [description]
        */
       createTableData (table_name, params) {
+        this.editing = true
         api.dataTable.createData(table_name, params).then((res) => {
-          var params = {}
-          this.getTableData(table_name, params) // 重新获取列表并且渲染
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
           this.userEditColumnModal.show = false
+          this.editing = false
         }).catch((res) => {
           this.handleError(res)
           this.editing = false
@@ -891,6 +966,7 @@
       deleteDataTable () {
         console.log(this.selectedFirstClass.name)
         this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
+          this.editing = true
           api.dataTable.deleteTable(this.selectedFirstClass.name).then(() => {
             // 重新获取数据表
             this.getTables()
@@ -930,6 +1006,7 @@
         table.permission = permission
         table.type = this.selectedFirstClass.type
         table.field = this.selectedFirstClass.field
+        this.editing = true
         api.dataTable.updateTable(table).then((res) => {
           if (res.status === 200) {
             var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
@@ -938,6 +1015,7 @@
               type: 'success',
               content: '限权设置成功'
             })
+            this.editing = false
           }
         }).catch((res) => {
           this.handleError(res)
@@ -962,15 +1040,15 @@
        * 添加行
        */
       addLineEvent () {
-        var hasUserColumn = Boolean(this.addListKey.length)
+        var hasUserColumn = Boolean(this.addListKeys.length)
         // 判断有没有用户自定义列
         if (hasUserColumn) {
           var obj = {}
-          this.addListKey.map((item) => {
-            obj[item] = ''
+          this.addListKeys.map((item) => {
+            obj[item.key] = ''
           })
-          this.baseHeader.map((item) => {
-            obj[item] = ''
+          this.baseVHeaders.map((item) => {
+            obj[item.key] = ''
           })
           this.vTables.push(obj)
         } else {
@@ -987,19 +1065,19 @@
        */
       deleteLineEvent () {
         if (this.selectedLine.length) {
-          this.selectedLine.map((line) => {
-            // console.log(JSON.stringify(this.selectedLine.line))
-            if (line.objectId) {
-              api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
-                this.selectedLine.$remove(line)
-                this.selectedFirstClassEvent(this.selectedFirstClass)
-              }).catch((res) => {
-                this.handleError(res)
-                this.loadingData = false
-              })
-            } else {
-              this.vTables.$remove(line)
-            }
+          this.confirm('确定删除已选中行？', () => {
+            this.selectedLine.map((line) => {
+              if (line.objectId) {
+                api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+                  this.vTables.$remove(line)
+                }).catch((res) => {
+                  this.handleError(res)
+                  this.loadingData = false
+                })
+              } else {
+                this.vTables.$remove(line)
+              }
+            })
           })
         }
       },
@@ -1038,8 +1116,8 @@
        * @return {[type]} [description]
        */
       showDeleteColumnModal () {
-        if (this.addListKey.length) {
-          this.delColumnModal.selectedColumn = this.addListKey[0]
+        if (this.addListKeys.length) {
+          this.delColumnModal.selectedColumn = this.addListKeys[0].key
           this.delColumnModal.show = true
         } else {
           this.showNotice({
@@ -1053,8 +1131,36 @@
        * @return {[type]} [description]
        */
       delColumnModalConfirm () {
-        console.log('删除当前选中的列' + this.delColumnModal.selectedColumn)
-        console.log('然后')
+        var table = {}
+        var field = _.clone(this.selectedFirstClass.field)
+        delete field[this.delColumnModal.selectedColumn]
+        table.name = this.selectedFirstClass.name
+        table.permission = this.selectedFirstClass.permission
+        table.type = this.selectedFirstClass.type
+        table.field = field
+        this.editing = true
+        api.dataTable.updateTable(table).then((res) => {
+          if (res.status === 200) {
+            var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
+            this.dataFirClassList[index].field = field
+            this.vHeaders.map((item) => {
+              if (item.key === this.delColumnModal.selectedColumn) {
+                this.vHeaders.$remove(item)
+                return
+              }
+            })
+            this.showNotice({
+              type: 'success',
+              content: '删除' + this.delColumnModal.selectedColumn + '成功'
+            })
+          }
+          this.delColumnModal.show = false
+          this.editing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+          this.delColumnModal = false
+        })
       },
 
       showEditModal (header, table) {
@@ -1097,6 +1203,7 @@
           if (res.status === 200) {
             this.tables = res.data
             this.initTable()
+            this.editing = false
             this.loadingData = false
           }
         }).catch((res) => {
@@ -1312,6 +1419,22 @@
         var day = date.getDate()
         day = day > 9 ? day : '0' + day
         return year + '-' + month + '-' + day
+      },
+
+      /**
+       * 格式化后端返回的日期和时间
+       * @param  {[type]} date [description]
+       * @return {[type]}      [description]
+       */
+      formatDateTime (date) {
+        if (/T/.test(date)) {
+          var result = ''
+          result = date.split(/.\d+Z/)[0]
+          result.replace('T', ' ')
+          return result
+        } else {
+          return new Date(date)
+        }
       }
     }
   }
@@ -1426,6 +1549,8 @@
         cursor text
         &:hover
           background rgba(0,0,0,0.08)
+      .nowrap
+        white-space nowrap
     .modal.visible
       .modal-body
         overflow-x visible
@@ -1434,7 +1559,6 @@
       .field-row
         clearfix()
         margin-bottom 10px
-
         .fa
           width 26px
           color lighten(red, 50%)
@@ -1443,7 +1567,6 @@
           margin-left 10px
           cursor pointer
           border-radius 15px
-
           &:hover
             color red
       .filterModalTitle
@@ -1451,4 +1574,11 @@
       .fa-warning
         font-size 25px
         color #FF9D00
+      .time-picker
+        display inline-block
+        width 150px
+      .form-control
+        span
+          display inline-block
+          text-overflow 100%
 </style>
