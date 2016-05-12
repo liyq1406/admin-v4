@@ -408,31 +408,46 @@
     <modal :show.sync="userEditColumnModal.show" class="visible">
       <h3 slot="header">编辑内容</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="userEditColumnModalConfirm">
+        <form v-form name="userEditColumnModalValidation" @submit.prevent="userEditColumnModalConfirm">
           <div class="form-row row">
             <label class="form-control col-6">
               <span>{{userEditColumnModal.columnName}}:</span>
             </label>
             <!-- 字符串 -->
-            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'string'">
+            <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'string'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(字符串)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" type="text" minlength="2" maxlength="64" class="input-text"/>
+                <input v-model="userEditColumnModal.value" v-form-ctrl name="string" required type="text" class="input-text"/>
+              </div>
+              <div v-if="userEditColumnModalValidation.string.$dirty" class="form-tips form-tips-error">
+                <span v-if="userEditColumnModalValidation.string.$error.required">请输入{{userEditColumnModal.columnName}}</span>
               </div>
             </div>
             <!-- 整形数字 -->
-            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'int'">
+            <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'int'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(整型数字)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
+                <input v-model="userEditColumnModal.value" v-form-ctrl name="int" required custom-validator="checkNumber" type="text" class="input-text"/>
+              </div>
+              <div v-show="userEditColumnModalValidation.int.$dirty" class="form-tips form-tips-error">
+                <span v-show="userEditColumnModalValidation.int.$error.required">请输入{{userEditColumnModal.columnName}}</span>
+              </div>
+              <div v-show="userEditColumnModalValidation.int.$dirty" class="form-tips form-tips-error">
+                <span v-show="userEditColumnModalValidation.int.$error.customValidator">{{userEditColumnModal.columnName}}必须是数字</span>
               </div>
             </div>
             <!-- 浮点数字 -->
-            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'float'">
+            <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'float'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(浮点型数字)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
+                <input v-model="userEditColumnModal.value" v-form-ctrl name="float" required custom-validator="checkNumber" type="text" class="input-text"/>
+              </div>
+              <div v-show="userEditColumnModalValidation.float.$dirty" class="form-tips form-tips-error">
+                <span v-show="userEditColumnModalValidation.float.$error.required">请输入{{userEditColumnModal.columnName}}</span>
+              </div>
+              <div v-show="userEditColumnModalValidation.float.$dirty" class="form-tips form-tips-error">
+                <span v-show="userEditColumnModalValidation.float.$error.customValidator">{{userEditColumnModal.columnName}}必须是数字</span>
               </div>
             </div>
             <!-- 布尔 -->
-            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'boolean'">
+            <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'boolean'">
               <v-select :label="userEditColumnModal.value+''" size="small">
                 <select v-model="userEditColumnModal.value">
                   <option :value="true" selected>true</option>
@@ -441,7 +456,7 @@
               </v-select>
             </div>
             <!-- 日期 -->
-            <div class="controls col-18" v-if="userEditColumnModal.fieldType === 'date'">
+            <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'date'">
               <!-- <date-picker :value.sync="userEditColumnModal.value"></date-picker> -->
               <date-picker :value.sync="datePicker.date"></date-picker>
               <span class="time-picker" v-show="datePicker.date">
@@ -606,7 +621,8 @@
           fieldType: 'string',
           value: ''
         },
-
+        // 编辑用户自定义列的内容浮层验证器
+        userEditColumnModalValidation: {},
         // 存放时间控件的临时日期和时间
         datePicker: {
           date: '2016-06-06',
@@ -870,6 +886,7 @@
        * @return {[type]}        [description]
        */
       showEditUserColumnModal (column, line, lineIndex) {
+        // this.userEditColumnModalValidation.$dirty = true
         this.userEditColumnModal.show = true
         this.userEditColumnModal.columnName = column.key
         this.userEditColumnModal.lineIndex = lineIndex
@@ -883,8 +900,14 @@
             this.datePicker.date = line[column.key].split(' ')[0]
             this.datePicker.time = line[column.key].split(' ')[1]
           } else {
-            this.datePicker.date = ''
-            this.datePicker.time = ''
+            let date = new Date()
+            let year = date.getFullYear()
+            let month = date.getMonth() + 1
+            month = month > 9 ? month : ('0' + month)
+            let day = date.getDate()
+            day = day > 9 ? day : ('0' + day)
+            this.datePicker.date = year + '-' + month + '-' + day
+            this.datePicker.time = '00:00:00'
           }
         }
         this.userEditColumnModal.show = true
@@ -1065,19 +1088,20 @@
        */
       deleteLineEvent () {
         if (this.selectedLine.length) {
-          this.confirm('确定删除已选中行？', () => {
-            this.selectedLine.map((line) => {
-              if (line.objectId) {
-                api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
-                  this.vTables.$remove(line)
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.loadingData = false
-                })
-              } else {
+          // this.confirm('确定删除已选中行？', () => {
+          //
+          // })
+          this.selectedLine.map((line) => {
+            if (line.objectId) {
+              api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
                 this.vTables.$remove(line)
-              }
-            })
+              }).catch((res) => {
+                this.handleError(res)
+                this.loadingData = false
+              })
+            } else {
+              this.vTables.$remove(line)
+            }
           })
         }
       },
@@ -1435,6 +1459,16 @@
         } else {
           return new Date(date)
         }
+      },
+
+      /**
+       * 表单验证 验证是否为数字
+       * @param  {[type]} value [description]
+       * @return {[type]}       [description]
+       */
+      checkNumber (value) {
+        console.log(value)
+        return value - 0 === value - 0
       }
     }
   }

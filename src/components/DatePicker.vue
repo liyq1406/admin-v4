@@ -111,6 +111,18 @@
     },
 
     watch: {
+      value (value) {
+        if (!/\d\d\d\d\-\d\d\-\d\d/.test(value)) {
+          let date = new Date()
+          let year = date.getFullYear()
+          let month = date.getMonth() + 1
+          month = month > 9 ? month : ('0' + month)
+          let day = date.getDate()
+          day = day > 9 ? day : ('0' + day)
+          this.value = year + '-' + month + '-' + day
+        }
+        this.currDate = this.parse(this.value)
+      },
       currDate () {
         this.getDateRange()
       }

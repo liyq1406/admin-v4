@@ -99,13 +99,14 @@
     methods: {
       initTime () {
         if (this.value) {
-          this.hour = this.value.split(':')[0]
-          this.minute = this.value.split(':')[1]
-          this.second = this.value.split(':')[2]
+          this.hour = this.value.split(':')[0] || '00'
+          this.minute = this.value.split(':')[1] || '00'
+          this.second = this.value.split(':')[2] || '00'
         } else {
           this.hour = '00'
           this.minute = '00'
           this.second = '00'
+          this.value = '00:00:00'
         }
       }
     }
