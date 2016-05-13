@@ -8,7 +8,7 @@
             <div class="controls col-18">
               <v-select :label="productTypes[productType.value].label" width="200px">
                 <select v-model="productType" @change="getProductData(true)">
-                  <option v-for="i in productTypes" :value="i">{{ i.label }}</option>
+                  <option v-for="type in productTypes" :value="type">{{ type.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -18,7 +18,7 @@
             <div class="controls col-9">
               <v-select :label="timeIntervals[timeInterval.value].label" width="200px">
                 <select v-model="timeInterval">
-                  <option v-for="i in timeIntervals" :value="i">{{ i.label }}</option>
+                  <option v-for="time in timeIntervals" :value="time">{{ time.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -27,7 +27,7 @@
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
               <div class="edit-snapshot">
-                <div v-for="i in dataPointsShow" class="data-tag">{{i}}</div>
+                <div v-for="dp in dataPointsShow" class="data-tag">{{dp}}</div>
               </div>
               <button class="btn btn-ghost btn-sm" @click="showAddModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
             </div>
@@ -69,16 +69,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="i in currentRulePageCount">
+              <tr v-for="dp in productsRules | limitBy pageCount (currentRulesPage-1)*pageCount">
                 <td>
-                  <a class="hl-red">{{productsRules[(currentRulesPage - 1) * pageCount + i].productName}}</a>
+                  <a class="hl">{{dp.productName}}</a>
                 </td>
-                <td><div v-if="productsRules[(currentRulesPage - 1) * pageCount + i].rule===3">定时更新/{{productsRules[(currentRulesPage - 1) * pageCount + i].interval}}分钟</div></td>
-                <td>{{productsRules[(currentRulesPage - 1) * pageCount + i].create_time | formatDate}}</td>
-                <td>{{productsRules[(currentRulesPage - 1) * pageCount + i].creator}}</td>
+                <td><div v-if="dp.rule===3">定时更新/{{dp.interval}}分钟</div></td>
+                <td>{{dp.create_time | formatDate}}</td>
+                <td>{{dp.creator}}</td>
                 <td>
-                  <a v-link="{ path: '/data/snapshot/' + productsRules[(currentRulesPage - 1) * pageCount + i].productID}" class="hl-red">查看快照</a>
-                  <a @click.prevent="editSnapshot(productsRules[(currentRulesPage - 1) * pageCount + i])" class="hl-red ml20">编辑</a>
+                  <a v-link="{ path: '/data/snapshot/' + dp.productID}" class="hl-red">查看快照</a>
+                  <a @click.prevent="editSnapshot(dp)" class="hl-red ml20">编辑</a>
                 </td>
               </tr>
             </tbody>
@@ -107,13 +107,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in currentPageCount">
-                  <td><input v-model="dataPoints[(currentPage - 1) * pageCount + i].selected" type="checkbox"/></td>
-                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].index}}</td>
-                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].id}}</td>
-                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].type}}</td>
-                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].symbol}}</td>
-                  <td>{{dataPoints[(currentPage - 1) * pageCount + i].description}}</td>
+                <tr v-for="dp in dataPoints | limitBy pageCount (currentPage-1)*pageCount">
+                  <td><input v-model="dp.selected" type="checkbox"/></td>
+                  <td>{{dp.index}}</td>
+                  <td>{{dp.id}}</td>
+                  <td>{{dp.type}}</td>
+                  <td>{{dp.symbol}}</td>
+                  <td>{{dp.description}}</td>
                 </tr>
               </tbody>
             </table>
@@ -140,7 +140,7 @@
             <div class="controls col-9">
               <v-select :label="timeIntervals[timeIntervalEdit.value].label" width="200px">
                 <select v-model="timeIntervalEdit">
-                  <option v-for="i in timeIntervals" :value="i">{{ i.label }}</option>
+                  <option v-for="time in timeIntervals" :value="time">{{ time.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -149,7 +149,7 @@
             <label class="form-control col-6">快照数据:</label>
             <div class="controls col-18">
               <div class="edit-snapshot">
-                <div v-for="i in ruleDataPointsShow" class="data-tag">{{i}}</div>
+                <div v-for="dps in ruleDataPointsShow" class="data-tag">{{dps}}</div>
               </div>
               <button class="btn btn-ghost btn-sm" @click="showEditPointModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
             </div>
@@ -184,13 +184,13 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="i in currentEditPageCount">
-                  <td><input v-model="editDataPoints[(currentEditPage - 1) * pageCount + i].selected" type="checkbox"/></td>
-                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].index}}</td>
-                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].id}}</td>
-                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].type}}</td>
-                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].symbol}}</td>
-                  <td>{{editDataPoints[(currentEditPage - 1) * pageCount + i].description}}</td>
+                <tr v-for="dp in editDataPoints | limitBy pageCount (currentEditPage-1)*pageCount">
+                  <td><input v-model="dp.selected" type="checkbox"/></td>
+                  <td>{{dp.index}}</td>
+                  <td>{{dp.id}}</td>
+                  <td>{{dp.type}}</td>
+                  <td>{{dp.symbol}}</td>
+                  <td>{{dp.description}}</td>
                 </tr>
               </tbody>
             </table>
@@ -356,26 +356,6 @@
         })
 
         return datas
-      },
-      currentRulePageCount () {
-        if (this.productsRules.length > 0) {
-          var index = this.productsRules.length - (this.currentRulesPage - 1) * this.pageCount
-          return index >= 10 ? 10 : index
-        }
-      },
-
-      currentPageCount () {
-        if (this.dataPoints.length > 0) {
-          var index = this.dataPoints.length - (this.currentPage - 1) * this.pageCount
-          return index >= 10 ? 10 : index
-        }
-      },
-
-      currentEditPageCount () {
-        if (this.editDataPoints.length > 0) {
-          var index = this.editDataPoints.length - (this.currentEditPage - 1) * this.pageCount
-          return index >= 10 ? 10 : index
-        }
       },
 
       addRules () {

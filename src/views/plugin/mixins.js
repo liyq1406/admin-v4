@@ -129,7 +129,7 @@ export const pluginMixins = {
 
         setTimeout(() => {
           self.reRequest(env)
-        }, 0)
+        }, 100)
       } else {
         env.context.handleError(err)
       }

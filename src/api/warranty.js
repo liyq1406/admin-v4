@@ -162,7 +162,6 @@ export default {
    * @return status
    */
   deleteStaff (appID, staffId) {
-    console.log(appID, staffId)
     return http.del(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
