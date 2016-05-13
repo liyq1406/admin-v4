@@ -156,7 +156,16 @@ export default {
   ],
 
   // 账号类型
-  accountTypes: ['Consumer electronics (including wearable device / entertainment products, etc.)', 'Smart Home', 'Smart Security', 'Commercial / industrial equipment', 'Others'],
+  accountTypes: [
+    { label: 'Consumer electronics', value: 1 },
+    { label: 'Smart Home', value: 2 },
+    { label: 'Smart Security', value: 3 },
+    { label: 'Commercial / industrial equipment', value: 4 },
+    { label: 'Lighting Electrical', value: 6 },
+    { label: 'Living electric apparatus', value: 7 },
+    { label: 'HVAC air', value: 8 },
+    { label: 'Others', value: 5 }
+  ],
 
   // 告警类型
   alertTypes: ['通知类型', '告警类型'],

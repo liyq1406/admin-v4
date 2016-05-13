@@ -47,11 +47,11 @@
           </div>
           <div class="form-row row">
             <div class="select">
-            <v-select :placeholder="$t('auth.type_tips')" :label="accountTypes[model.type-1]">
-              <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
-                <option v-for="type in accountTypes" :value="$index + 1">{{ type }}</option>
-              </select>
-            </v-select>
+              <v-select :placeholder="$t('auth.type_tips')" :label="model.type ? accountTypes[model.type-1].label : ''">
+                <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
+                  <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
+                </select>
+              </v-select>
             </div>
             <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("auth.type_tips") }}</span></div>
           </div>

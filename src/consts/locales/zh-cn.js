@@ -156,7 +156,16 @@ export default {
   ],
 
   // 账号类型
-  accountTypes: ['消费电子（含穿戴设备/娱乐产品等）', '智能家居', '智能安防', '商用/工控设备', '其它'],
+  accountTypes: [
+    { label: '消费电子', value: 1 },
+    { label: '智能家居', value: 2 },
+    { label: '智能安防', value: 3 },
+    { label: '商用/工控设备', value: 4 },
+    { label: '照明电工', value: 6 },
+    { label: '生活电器', value: 7 },
+    { label: '暖通空气', value: 8 },
+    { label: '其他', value: 5 }
+  ],
 
   // 告警类型
   alertTypes: ['通知类型', '告警类型'],

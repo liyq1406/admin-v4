@@ -66,11 +66,13 @@
             <div v-if="validation.company.$dirty" class="form-tips form-tips-error"><span v-if="validation.company.$error.required">{{ $t('validation.required', {field: $t('auth.fields.company')}) }}</span><span v-if="validation.company.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.company'), 32]) }}</span></div>
           </div>
           <div class="form-row row">
-            <v-select :placeholder="$t('auth.type_tips')" :label="accountTypes[model.type-1]">
-              <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
-                <option v-for="type in accountTypes" :value="$index + 1">{{ type }}</option>
-              </select>
-            </v-select>
+            <div class="select">
+              <v-select :placeholder="$t('auth.type_tips')" :label="model.type ? accountTypes[model.type-1].label : ''">
+                <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
+                  <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
+                </select>
+              </v-select>
+            </div>
             <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("auth.type_tips") }}</span></div>
           </div>
         </div>

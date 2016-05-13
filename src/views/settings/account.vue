@@ -79,7 +79,7 @@
               </li>
               <li>
                 <div class="label">{{ $t("corp.fields.type") }}:</div>
-                <div class="info">{{ accountTypes[corp.type - 1] }}</div>
+                <div class="info">{{ corp.type ? accountTypes[corp.type - 1].label : '' }}</div>
               </li>
               <li>
                 <div class="label">{{ $t("corp.fields.name") }}:</div>
