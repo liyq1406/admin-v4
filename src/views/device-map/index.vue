@@ -27,7 +27,7 @@
           </search-box>
         </div>
         <div v-show="devices.length" class="device-list mb20">
-          <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index}" @click="currIndex=$index">
+          <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
             <div class="list-item-cont">
               <div class="icon-num">{{ $index+1 }}</div>
               <div class="device-id">设备ID: {{ device.id }}</div>
@@ -95,7 +95,9 @@
         currentPage: 1,
         total: 0,
         pageCount: 8,
+        oldCurrIndex: 0,
         currIndex: 0,
+        currHover: -1,
         map: {},
         points: [],
         markers: [],
@@ -153,8 +155,10 @@
         }
       },
 
-      currIndex () {
-        this.setMarkers()
+      currHover () {
+        if (this.currHover >= 0) {
+          this.markers[this.currHover].setzIndex(10000)
+        }
       }
     },
 
@@ -258,6 +262,8 @@
         this.loadingData = true
         api.device.getGeography(this.currProduct.id, deviceId).then((res) => {
           if (res.status === 200) {
+            this.currIndex = 0
+            this.oldCurrIndex = 0
             this.ids = [res.data.device_id]
             this.points = [res.data]
             this.mapCenter = [res.data.lon, res.data.lat]
@@ -291,6 +297,8 @@
           } else {
             this.ids = []
           }
+          this.currIndex = 0
+          this.oldCurrIndex = 0
           this.points = res.data.devices
           this.total = res.data.count
           this.map.setCenter(this.mapCenter)
@@ -310,13 +318,13 @@
        * 设置点标记
        */
       setMarkers () {
+        var markers = []
         this.map.clearMap()
 
         // this.drawRegion()
         // 点
         this.points.forEach((point, index) => {
           point.index = index
-          console.log(this.devices)
           point.device = this.devices[index]
           var classes = ['map-marker']
           if (index === this.currIndex) {
@@ -331,11 +339,54 @@
           })
           marker.extData = point
           marker.on('click', this.onMarkerClick)
+          marker.on('mouseover', this.onMarkerMouseOver)
+          marker.on('mouseout', this.onMarkerMouseOut)
           if (index === this.currIndex) {
-            marker.setzIndex(10000)
+            marker.setzIndex(1000)
           }
-          this.markers.push(marker)
+          markers.push(marker)
         })
+        this.markers = markers
+      },
+
+      /**
+       * 处理侧栏设备点击
+       * @param  {Number} index 设备索引
+       */
+      handleDeviceItemClick (index) {
+        var currMarker = this.markers[index]
+        this.currIndex = index
+        currMarker.emit('click', {target: currMarker})
+        // this.oldCurrIndex = index
+      },
+
+      /**
+       * 将目标点标识提升至顶部
+       * @param  {Number} index 目标标识索引
+       */
+      pullUp (index) {
+        this.currHover = index
+        var classes = ['map-marker']
+        if (index === this.currIndex) {
+          classes.push('map-marker-active')
+        }
+        classes.push('map-marker-hover')
+        this.markers[index].setContent(`<span class="${classes.join(' ')}">${index + 1}</span>`)
+        this.markers[index].setzIndex(10000)
+      },
+
+      /**
+       * 取消目标点标识提升至顶部
+       * @param  {Number} index 目标标识索引
+       */
+      pushDown (index) {
+        this.currHover = -1
+        var classes = ['map-marker']
+        if (index === this.currIndex) {
+          classes.push('map-marker-active')
+        }
+        this.markers[index].setContent(`<span class="${classes.join(' ')}">${index + 1}</span>`)
+        this.markers[index].setzIndex(index === this.currIndex ? 1000 : 100)
       },
 
       /**
@@ -361,23 +412,53 @@
        */
       onMarkerClick (e) {
         var markerData = e.target.extData
-        console.log(e.target.extData)
+        var oldCurrMarker = this.markers[this.oldCurrIndex]
+        var currMarker = this.markers[markerData.index]
         this.currIndex = markerData.index
 
+        oldCurrMarker.setContent(`<span class="map-marker">${this.oldCurrIndex + 1}</span>`)
+        oldCurrMarker.setzIndex(100)
+        currMarker.setContent(`<span class="map-marker map-marker-active">${this.currIndex + 1}</span>`)
+        currMarker.setzIndex(1000)
+
+        this.showPopup(markerData)
+        this.infoWindow.open(this.map, e.target.getPosition())
+        this.oldCurrIndex = this.currIndex
+      },
+
+      /**
+       * 显示设备信息弹窗
+       * @param  {Object} data 设备数据信息
+       */
+      showPopup (data) {
         var content = ['<div class="map-popup">']
         content.push('<div class="map-popup-header">')
         content.push(`<h3>${this.currProduct.name}信息</h3>`)
         content.push('</div>')
         content.push('<div class="map-popup-body">')
-        content.push(`<div class="info-row"><span class="label">设备ID: </span>${markerData.device.id}</div>`)
-        content.push(`<div class="info-row"><span class="label">设备MAC: </span>${markerData.device.mac}</div>`)
-        content.push(`<div class="info-row"><span class="label">在线状态: </span>${markerData.device.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>'}</div>`)
-        content.push(`<div class="info-row tar"><a class="hl-red" href="/#!/products/${this.currProduct.id}/devices/${markerData.device_id}">查看详情</a></div>`)
+        content.push(`<div class="info-row"><span class="label">设备ID: </span>${data.device.id}</div>`)
+        content.push(`<div class="info-row"><span class="label">设备MAC: </span>${data.device.mac}</div>`)
+        content.push(`<div class="info-row"><span class="label">在线状态: </span>${data.device.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>'}</div>`)
+        content.push(`<div class="info-row tar"><a class="hl-red" href="/#!/products/${this.currProduct.id}/devices/${data.device_id}">查看详情</a></div>`)
         content.push('</div>')
         content.push('</div>')
         this.infoWindow.setContent(content.join(''))
-        // this.map.setCenter([e.target.extData.lon, e.target.extData.lat])
-        this.infoWindow.open(this.map, e.target.getPosition())
+      },
+
+      /**
+       * 处理点标识鼠标悬停
+       * @param  {Event} e 事件
+       */
+      onMarkerMouseOver (e) {
+        this.currHover = e.target.extData.index
+      },
+
+      /**
+       * 处理点标识鼠标划出
+       * @param  {Event} e 事件
+       */
+      onMarkerMouseOut (e) {
+        this.currHover = -1
       },
 
       // 搜索
@@ -489,7 +570,11 @@
 
       &:hover
       &.map-marker-active
+      &.map-marker-hover
         background-position 0 -45px
+
+      &:hover
+      &.map-marker-hover
         z-index 10000
 
   .amap-info-content
