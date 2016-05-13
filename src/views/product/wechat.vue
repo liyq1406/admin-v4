@@ -50,7 +50,7 @@
             </tbody>
           </table>
         </div>
-        <!-- <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
+        <pager v-if="!loadingData && devices.length > pageCount" :total="devices.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
     <!-- 授权设置浮层-->
