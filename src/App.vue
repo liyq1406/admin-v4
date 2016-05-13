@@ -39,44 +39,46 @@
         <a v-link="{ path: '/' }" class="logo"></a>
         <div class="nav-aside">
           <div class="nav-aside-wrap">
-            <div class="nav-aside-item">
-              <a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a>
-            </div>
-            <!-- Start: 产品管理 -->
-            <div class="nav-aside-group">
-              <h3>{{ $t("nav_aside.products") }}</h3>
-              <div v-for="product in products" class="nav-aside-item">
-                <a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a>
+            <div class="nav-aside-content">
+              <div class="nav-aside-item">
+                <a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a>
               </div>
-              <div class="nav-aside-actions">
-                <a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a>
+              <!-- Start: 产品管理 -->
+              <div class="nav-aside-group">
+                <h3>{{ $t("nav_aside.products") }}</h3>
+                <div v-for="product in products" class="nav-aside-item">
+                  <a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a>
+                </div>
+                <div class="nav-aside-actions">
+                  <a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a>
+                </div>
               </div>
-            </div>
-            <!-- End: 产品管理 -->
-            <!-- Start: 插件管理 -->
-            <div class="nav-aside-group">
-              <h3>{{ $t("nav_aside.plugins") }}</h3>
-              <template v-for="plugin in plugins" track-by="$index">
-                <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===3"><a v-link="{ path: '/plugins/web/' + plugin.id + '/settings'}"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && (plugin.plugin!=='warranty')"><a v-link="{ path: '/plugins/' + plugin.plugin }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && plugin.plugin==='warranty'"><a v-link="{ path: '/plugins/'+ plugin.plugin + '/' +plugin.id }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-              </template>
-              <div class="nav-aside-actions">
-                <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_plugin") }}</a>
+              <!-- End: 产品管理 -->
+              <!-- Start: 插件管理 -->
+              <div class="nav-aside-group">
+                <h3>{{ $t("nav_aside.plugins") }}</h3>
+                <template v-for="plugin in plugins" track-by="$index">
+                  <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===3"><a v-link="{ path: '/plugins/web/' + plugin.id + '/settings'}"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && (plugin.plugin!=='warranty')"><a v-link="{ path: '/plugins/' + plugin.plugin }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && plugin.plugin==='warranty'"><a v-link="{ path: '/plugins/'+ plugin.plugin + '/' +plugin.id }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                </template>
+                <div class="nav-aside-actions">
+                  <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_plugin") }}</a>
+                </div>
               </div>
+              <!-- End: 插件管理 -->
+              <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/linkage' }"><i class="fa fa-clone"></i>{{ $t("nav_aside.link") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/device-map' }"><i class="fa fa-map"></i>{{ $t("nav_aside.device_map") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-rocket"></i>{{ $t("nav_aside.firmwares") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
             </div>
-            <!-- End: 插件管理 -->
-            <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/linkage' }"><i class="fa fa-clone"></i>{{ $t("nav_aside.link") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/device-map' }"><i class="fa fa-map"></i>{{ $t("nav_aside.device_map") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-rocket"></i>{{ $t("nav_aside.firmwares") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
-            <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
           </div>
         </div>
       </section>
@@ -328,10 +330,14 @@
     padding-top 67px
     height 100%
     box-sizing border-box
+    overflow hidden
 
   .nav-aside-wrap
-    height 100%
+    size 200px 100%
     overflow-y auto
+
+  .nav-aside-content
+    width 170px
 
   .nav-aside-item
     a
