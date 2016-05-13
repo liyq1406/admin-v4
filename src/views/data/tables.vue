@@ -404,7 +404,7 @@
       </div>
     </modal>
     <!-- 提示 -->
-    <!-- start 添加列 -->
+    <!-- start 编辑用户自定义字段的值 -->
     <modal :show.sync="userEditColumnModal.show" class="visible">
       <h3 slot="header">编辑内容</h3>
       <div slot="body" class="form">
@@ -416,19 +416,13 @@
             <!-- 字符串 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'string'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(字符串)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" v-form-ctrl name="string" required type="text" class="input-text"/>
-              </div>
-              <div v-if="userEditColumnModalValidation.string.$dirty" class="form-tips form-tips-error">
-                <span v-if="userEditColumnModalValidation.string.$error.required">请输入{{userEditColumnModal.columnName}}</span>
+                <input v-model="userEditColumnModal.value" type="text" class="input-text"/>
               </div>
             </div>
             <!-- 整形数字 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'int'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(整型数字)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" v-form-ctrl name="int" required custom-validator="checkNumber" type="text" class="input-text"/>
-              </div>
-              <div v-show="userEditColumnModalValidation.int.$dirty" class="form-tips form-tips-error">
-                <span v-show="userEditColumnModalValidation.int.$error.required">请输入{{userEditColumnModal.columnName}}</span>
+                <input v-model="userEditColumnModal.value" v-form-ctrl name="int" custom-validator="checkNumber" type="text" class="input-text"/>
               </div>
               <div v-show="userEditColumnModalValidation.int.$dirty" class="form-tips form-tips-error">
                 <span v-show="userEditColumnModalValidation.int.$error.customValidator">{{userEditColumnModal.columnName}}必须是数字</span>
@@ -437,10 +431,7 @@
             <!-- 浮点数字 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'float'">
               <div v-placeholder="'请输入' + userEditColumnModal.columnName + '(浮点型数字)'" class="input-text-wrap">
-                <input v-model="userEditColumnModal.value" v-form-ctrl name="float" required custom-validator="checkNumber" type="text" class="input-text"/>
-              </div>
-              <div v-show="userEditColumnModalValidation.float.$dirty" class="form-tips form-tips-error">
-                <span v-show="userEditColumnModalValidation.float.$error.required">请输入{{userEditColumnModal.columnName}}</span>
+                <input v-model="userEditColumnModal.value" v-form-ctrl name="float" custom-validator="checkNumber" type="text" class="input-text"/>
               </div>
               <div v-show="userEditColumnModalValidation.float.$dirty" class="form-tips form-tips-error">
                 <span v-show="userEditColumnModalValidation.float.$error.customValidator">{{userEditColumnModal.columnName}}必须是数字</span>
@@ -467,12 +458,12 @@
           </div>
           <div class="form-actions">
             <button @click.prevent.stop="userEditColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button type="submit" :disabled="editing || !userEditColumnModal.value" :class="{'disabled':(editing || !userEditColumnModal.value)}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
         </form>
       </div>
     </modal>
-    <!-- 添加列 -->
+    <!-- 编辑用户自定义字段的值 -->
   </div>
 </template>
 
@@ -893,8 +884,6 @@
         this.userEditColumnModal.fieldType = column.type
         this.userEditColumnModal.value = line[column.key]
         this.userEditColumnModal.objectId = line.objectId
-        console.log(this.userEditColumnModal.fieldType)
-        console.log(line[column.key])
         if (this.userEditColumnModal.fieldType === 'date') {
           if (line[column.key]) {
             this.datePicker.date = line[column.key].split(' ')[0]
@@ -908,6 +897,7 @@
             day = day > 9 ? day : ('0' + day)
             this.datePicker.date = year + '-' + month + '-' + day
             this.datePicker.time = '00:00:00'
+            this.userEditColumnModal.value = this.datePicker.date + ' ' + this.datePicker.time
           }
         }
         this.userEditColumnModal.show = true
@@ -920,25 +910,31 @@
       userEditColumnModalConfirm () {
         var params = {}
         var value = this.userEditColumnModal.value
-
-        if (this.userEditColumnModal.fieldType === 'date') {
-          // 如果是日期类型 拼接秤日期类型的字符串
-          value = this.datePicker.date + 'T' + this.datePicker.time + '.000Z'
-        } else if (this.userEditColumnModal.fieldType === 'string') {
-          // 如果是字符串 转成字符串
-          value = value + ''
-        } else if (this.userEditColumnModal.fieldType === 'int') {
-          // 如果是整型
-          value = parseInt(value)
-        }
-        params[this.userEditColumnModal.columnName] = value
-        // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
-        if (this.userEditColumnModal.objectId) {
-          // 修改数据
-          this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params)
+        if (value) {
+          if (this.userEditColumnModal.fieldType === 'date') {
+            // 如果是日期类型 拼接秤日期类型的字符串
+            value = this.datePicker.date + 'T' + this.datePicker.time + '.000Z'
+          } else if (this.userEditColumnModal.fieldType === 'string') {
+            // 如果是字符串 转成字符串
+            value = value + ''
+          } else if (this.userEditColumnModal.fieldType === 'int') {
+            // 如果是整型
+            value = parseInt(value)
+          }
+          params[this.userEditColumnModal.columnName] = value
+          // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
+          if (this.userEditColumnModal.objectId) {
+            // 修改数据
+            this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params)
+          } else {
+            // 新增数据
+            this.createTableData(this.selectedFirstClass.name, params)
+          }
         } else {
-          // 新增数据
-          this.createTableData(this.selectedFirstClass.name, params)
+          this.showNotice({
+            type: 'error',
+            content: '内容不能为空'
+          })
         }
       },
 

@@ -60,12 +60,16 @@ button.btn
     background darken(blue, 10%)
 
 .btn-default
-.btn-primary
 .btn-success
 .btn-info
   &.disabled
     background #CCC
     cursor not-allowed
+
+.btn-primary.disabled
+  background lighten(red, 60%)
+  cursor not-allowed
+
 
 // 链接按钮
 .btn-link
