@@ -1,6 +1,16 @@
 <template>
   <section class="main-wrap">
-    <div class="main snapshot-details">
+    <div class="main snapshot-details" v-if="!deviceDatas.length && !loadingData">
+      <div class="panel">
+        <v-alert :cols="7">
+          <p>该产品暂无设备</p>
+        </v-alert>
+      </div>
+    </div>
+    <div class="main snapshot-details with-loading" v-else>
+      <div class="icon-loading" v-show="loadingData">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
       <div class="breadcrumb"><a v-link="{path: '/data/snapshot' }"><i class="fa fa-arrow-circle-left"></i>数据快照</a></div>
       <div class="row">
         <div class="col-24">
@@ -175,6 +185,7 @@
   import Modal from '../../components/Modal'
   import IntelligentTable from '../../components/IntelligentTable'
   import { globalMixins } from '../../mixins'
+  import Alert from '../../components/Alert'
 
   export default {
     name: 'TableDetails',
@@ -184,6 +195,7 @@
     mixins: [globalMixins],
 
     components: {
+      'v-alert': Alert,
       'modal': Modal,
       'radio-group': RadioGroup,
       'line-chart': LineChart,
@@ -239,6 +251,7 @@
         ],
         snapshots: [],
         allSnapshots: [],
+        loadingData: true,
         // snapshotHeader: [
         //   {
         //     key: 'snapshot_date', // 与tables的key对应
@@ -335,8 +348,6 @@
             key: item.index,
             title: `${item.index} (${item.description})`
           }
-          // console.log(222)
-          // console.log(item)
           result.push(obj)
         })
         return result
@@ -376,8 +387,6 @@
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
           var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) - 1
-          // console.log(item.snapshot_date)
-          // console.log(a)
           if (index) {
             if (a !== i) {
               // 当商改变说明此数据为下一个小时的数据
@@ -459,8 +468,6 @@
               li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
             })
             // this.snapshotTable = res.data.list
-            // console.log(11)
-            // console.log(this.snapshotTable)
             this.snapshots = res.data.list.sort((a, b) => {
               return new Date(b.snapshot_date) - new Date(a.snapshot_date)
             })
@@ -519,20 +526,11 @@
           this.getDevices()
         }
       },
-      // currentPageCount () {
-      //   if (this.dataPoints.length > 0) {
-      //     var index = this.dataPoints.length - (this.currentPage - 1) * this.pageCount
-      //     return index >= 10 ? 10 : index
-      //   }
-      // },
       // 获取当前产品快照规则
       getRule () {
         api.snapshot.getRule(this.$route.params.product_id).then((res) => {
-          // this.products = res.data
           // 匹配数据端点信息
           api.product.getDatapoints(this.$route.params.product_id).then((r) => {
-            // console.log(res.data.list[0].datapoint)
-            // console.log(r.data)
             if (r.status === 200) {
               var dps = []
               res.data.list[0].datapoint.map((item, index) => {
@@ -592,10 +590,10 @@
           } else {
             this.deviceDatas = []
           }
-          // this.loadingData = false
+          this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
-          // this.loadingData = false
+          this.loadingData = false
         })
       },
       // 获取当前产品信息
