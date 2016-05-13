@@ -8,8 +8,7 @@ module.exports = {
   ],
   globals: {
     'io': true,
-    'alert': true,
-    'AMap': true
+    'alert': true
   },
   // add your custom rules here
   'rules': {

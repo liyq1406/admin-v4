@@ -15,6 +15,9 @@ module.exports = {
       'src': path.resolve(__dirname, '../src')
     }
   },
+  externals: {
+    'AMap': 'window.AMap'
+  },
   resolveLoader: {
     root: path.join(__dirname, 'node_modules')
   },

@@ -56,6 +56,7 @@
 <script>
   import { globalMixins } from '../../mixins'
   import api from '../../api'
+  import AMap from 'AMap'
   import Select from '../../components/Select'
   import SearchBox from '../../components/SearchBox'
   import Alert from '../../components/Alert'
