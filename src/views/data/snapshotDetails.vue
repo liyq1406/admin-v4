@@ -50,7 +50,7 @@
               <div class="device-details-box">
                 <div class="device-msg-box">
                   <div class="header-box row">
-                    <div class="device-base-msg-box col-12 row">
+                    <div class="device-base-msg-box col-15 row">
                       <div class="device-picture col-6">
                         <img>
                       </div>
@@ -70,7 +70,7 @@
                         </p>
                       </div>
                     </div>
-                    <div class="operation-box col-12">
+                    <div class="operation-box col-9">
 
                       <div class="check-device">
                         <button class="btn btn-primary" v-link="{path: '/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
@@ -112,8 +112,8 @@
                         </tr>
                       </tbody>
                     </table> -->
-                    <intelligent-table :headers.sync="snapshotHeader" :tables="snapshotTable | limitBy pageCount (currentPage2-1)*pageCount"></intelligent-table>
-                    <pager v-if="snapshotTable.length > pageCount" :total="snapshotTable.length" :current.sync="currentPage2" :page-count="pageCount"></pager>
+                    <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy pageCount2 (currentPage2-1)*pageCount2"></intelligent-table>
+                    <pager v-if="snapshots.length > pageCount2" :total="snapshots.length" :current.sync="currentPage2" :page-count="pageCount2"></pager>
                   </div>
                 </div>
               </div>
@@ -138,11 +138,11 @@
                  </tr>
                </thead>
                <tbody>
-                 <tr v-for="dataPoint in dataPoints">
-                   <td>{{dataPoint.index}}</td>
-                   <td>{{dataPoint.id}}</td>
-                   <td>{{dataPoint.description}}</td>
-                   <td><input v-model="dataPoint.selected" type="checkbox"/></td>
+                 <tr v-for="datapoint in datapoints">
+                   <td>{{datapoint.index}}</td>
+                   <td>{{datapoint.id}}</td>
+                   <td>{{datapoint.description}}</td>
+                   <td><input v-model="datapoint.selected" type="checkbox"/></td>
                  </tr>
                </tbody>
              </table>
@@ -200,7 +200,6 @@
         periods: locales[Vue.config.lang].shortperiods,
         period: 1,
         /* ******图表 按钮 end*************/
-        selectedDatapoints: [],
         query: '',
         searching: false,
         queryTypeOptions: [
@@ -212,10 +211,11 @@
           value: 'mac'
         },
         showEditModal: false,
-        total: 100,
+        total: 0,
         currentPage: 1,
         currentPage2: 1,
-        pageCount: 10,
+        pageCount: 20,
+        pageCount2: 10,
         product: {},
         deviceDatas: [
           // {
@@ -229,7 +229,7 @@
           //   selected: false
           // }
         ],
-        dataPoints: [],
+        datapoints: [],
         snapshotSeries: [
           {
             name: '温度',
@@ -239,36 +239,36 @@
         ],
         snapshots: [],
         allSnapshots: [],
-        snapshotHeader: [
-          {
-            key: 'snapshot_date', // 与tables的key对应
-            title: '时间' // 标题内容
-          // },
-          // {
-          //   key: 'creatTime',
-          //   title: 'ID'
-          // },
-          // {
-          //   key: 'updateTime',
-          //   title: '更新时间'
-          }
-        ],
-        snapshotTable: [
-          {
-            snapshot_date: ''
-            // creatTime: '123',
-            // updateTime: '更新时间',
-            // creater: '创建者',
-            // operation: '操作'
-          // },
-          // {
-          //   create_time: 'idididid',
-          //   creatTime: '创建时间',
-          //   updateTime: '更新时间',
-          //   creater: '创建者',
-          //   operation: '操作'
-          }
-        ],
+        // snapshotHeader: [
+        //   {
+        //     key: 'snapshot_date', // 与tables的key对应
+        //     title: '时间' // 标题内容
+        //   // },
+        //   // {
+        //   //   key: 'creatTime',
+        //   //   title: 'ID'
+        //   // },
+        //   // {
+        //   //   key: 'updateTime',
+        //   //   title: '更新时间'
+        //   }
+        // ],
+        // snapshotTable: [
+        //   {
+        //     snapshot_date: ''
+        //     // creatTime: '123',
+        //     // updateTime: '更新时间',
+        //     // creater: '创建者',
+        //     // operation: '操作'
+        //   // },
+        //   // {
+        //   //   create_time: 'idididid',
+        //   //   creatTime: '创建时间',
+        //   //   updateTime: '更新时间',
+        //   //   creater: '创建者',
+        //   //   operation: '操作'
+        //   }
+        // ],
         allDatapoints: []
       }
     },
@@ -316,6 +316,38 @@
         }
         return result
       },
+
+      selectedDatapoints () {
+        return this.datapoints.filter((item) => {
+          return item.selected
+        })
+      },
+
+      snapshotHeader () {
+        var result = [
+          {
+            key: 'snapshot_date', // 与tables的key对应
+            title: '时间'
+          }
+        ]
+        this.selectedDatapoints.map((item) => {
+          var obj = {
+            key: item.index,
+            title: `${item.index} (${item.description})`
+          }
+          // console.log(222)
+          // console.log(item)
+          result.push(obj)
+        })
+        return result
+      },
+
+      // snapshotTable () {
+      //   return this.snapshots.map((item) => {
+      //     this.snapshotTable.push(item)
+      //   })
+      // },
+
       // 趋势图表数据
       snapshotSeries () {
         var result = []
@@ -343,15 +375,15 @@
           // 去掉经过后台处理的时间的T和Z字符
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
-          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) + 1
+          var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) - 1
           // console.log(item.snapshot_date)
           // console.log(a)
           if (index) {
             if (a !== i) {
               // 当商改变说明此数据为下一个小时的数据
               // 将每个小时最后的数据附近图表数据数组\
-              console.log(13231312313)
-              console.log(itemToAdd)
+              // console.log(13231312313)
+              // console.log(itemToAdd)
               result.forEach((r, n) => {
                 r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
               })
@@ -362,20 +394,35 @@
           } else {
             // 数组内第一个元素处理
             // 将第一个元素存进暂存对象内
-            console.log(121221)
             itemToAdd = item
             // 初始经过0个小时
             i = 0
-            //
-            if (this.snapshots.length === 1) {
-              result.forEach((r, n) => {
-                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
-              })
-            }
+          }
+
+          // 处理最后一个记录
+          if (index === this.snapshots.length - 1) {
+            result.forEach((r, n) => {
+              r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
+            })
           }
         })
 
         return result
+      },
+
+      querySnapshotCondition () {
+        var endtime = Date.parse(new Date())
+        // 取当前开始到period天前的时间
+        var begintime = endtime - this.period * 24 * 60 * 60 * 1000
+        var condition = {
+          offset: 0,
+          limit: 2500,
+          date: {
+            begin: begintime,
+            end: endtime
+          }
+        }
+        return condition
       }
     },
 
@@ -397,22 +444,8 @@
       /**
        * 获取快照数据
        */
-      getSnapshot (offset, limit, begintime, endtime) {
-        offset = offset || 0
-        limit = limit || 1000
-        endtime = Date.parse(new Date())
-        // 取当前开始到period天前的时间
-        begintime = endtime - this.period * 24 * 60 * 60 * 1000
-        // console.log(this.begintime)
-        var params = {
-          offset: offset,
-          limit: limit,
-          date: {
-            begin: begintime,
-            end: endtime
-          }
-        }
-        api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, params).then((res) => {
+      getSnapshot () {
+        api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, this.querySnapshotCondition).then((res) => {
           if (res.status === 200) {
             // 获取全部数组数据
             this.allSnapshots = res.data.list
@@ -429,7 +462,7 @@
             // console.log(11)
             // console.log(this.snapshotTable)
             this.snapshots = res.data.list.sort((a, b) => {
-              return new Date(a.snapshot_date) - new Date(b.snapshot_date)
+              return new Date(b.snapshot_date) - new Date(a.snapshot_date)
             })
             // this.buildTable()
           }
@@ -438,48 +471,48 @@
         })
       },
       // 获取数据端点列表
-      getDatapoints () {
-        this.loadingData = true
-        api.product.getDatapoints(this.$route.params.id).then((res) => {
-          if (res.status === 200) {
-            this.datapoints = res.data
-            this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
-      },
+      // getDatapoints () {
+      //   this.loadingData = true
+      //   api.product.getDatapoints(this.$route.params.id).then((res) => {
+      //     if (res.status === 200) {
+      //       this.datapoints = res.data
+      //       this.loadingData = false
+      //     }
+      //   }).catch((res) => {
+      //     this.handleError(res)
+      //     this.loadingData = false
+      //   })
+      // },
       // 生成表格
-      buildTable () {
-        this.snapshotHeader = [
-          {
-            key: 'snapshot_date', // 与tables的key对应
-            title: '时间'
-          }
-        ]
-        this.selectedDatapoints.map((item) => {
-          var obj = {
-            key: item.index,
-            title: item.index + '-' + item.description
-          }
-          // console.log(222)
-          // console.log(item)
-          this.snapshotHeader.push(obj)
-        })
-        // this.tdnames.map((key) => {
-        //   var table = {
-        //     create_time: '',
-        //     '78789' : '',
-        //     ....
-        //   }
-        //   abc[key] =
-        // })
-        this.snapshots.map((dptd) => {
-          this.snapshotTable.push(dptd)
-        })
-        // this.snapshotTable = this.snapshots
-      },
+      // buildTable () {
+      //   this.snapshotHeader = [
+      //     {
+      //       key: 'snapshot_date', // 与tables的key对应
+      //       title: '时间'
+      //     }
+      //   ]
+      //   this.selectedDatapoints.map((item) => {
+      //     var obj = {
+      //       key: item.index,
+      //       title: item.index + '-' + item.description
+      //     }
+      //     // console.log(222)
+      //     // console.log(item)
+      //     this.snapshotHeader.push(obj)
+      //   })
+      //   // this.tdnames.map((key) => {
+      //   //   var table = {
+      //   //     create_time: '',
+      //   //     '78789' : '',
+      //   //     ....
+      //   //   }
+      //   //   abc[key] =
+      //   // })
+      //   this.snapshots.map((dptd) => {
+      //     this.snapshotTable.push(dptd)
+      //   })
+      //   // this.snapshotTable = this.snapshots
+      // },
       // 搜索
       handleSearch () {
         if (this.query.length === 0) {
@@ -498,70 +531,49 @@
           // this.products = res.data
           // 匹配数据端点信息
           api.product.getDatapoints(this.$route.params.product_id).then((r) => {
-            console.log(res.data.list[0].datapoint)
-            console.log(r.data)
+            // console.log(res.data.list[0].datapoint)
+            // console.log(r.data)
             if (r.status === 200) {
-              res.data.list[0].datapoint.map((item) => {
-                r.data.map((l) => {
-                  if (l.index === item) {
-                    var dp = {
+              var dps = []
+              res.data.list[0].datapoint.map((item, index) => {
+                r.data.map((dp) => {
+                  if (dp.index === item) {
+                    console.log(1231312331)
+                    var obj = {
                       index: item,
-                      selected: false,
-                      description: l.description,
-                      id: l.id
+                      selected: index < 3 || false,
+                      description: dp.description,
+                      id: dp.id
                     }
-                    this.dataPoints.push(dp)
-                    return
+                    dps.push(obj)
                   }
                 })
               })
-              if (this.dataPoints.length < 3) {
-                this.dataPoints.map((item) => {
-                  item.selected = true
-                })
-              } else {
-                for (let i = 0; i < 3; i++) {
-                  this.dataPoints[i].selected = true
-                }
-              }
-              this.getlist()
+              this.datapoints = dps
             }
           }).catch((res) => {
             this.handleError(res)
           })
-          // if (res.data.list[0].datapoint.length !== 0) {
-          //   res.data.list[0].datapoint.map((item) => {
-          //     var dp = {
-          //       index: item,
-          //       selected: false
-          //     }
-          //     this.dataPoints.push(dp)
-          //   })
-          // } else {
-          //   this.dataPoints = []
-          // }
-
-          // console.log(this.selectedDatapoints)
         }, (err) => {
           this.handleError(err)
         })
       },
       // 获取selected为true的列表
-      getlist () {
-        this.selectedDatapoints = []
-        this.dataPoints.map((item) => {
-          if (item.selected) {
-            this.selectedDatapoints.push(item)
-          }
-          // console.log(2222)
-          // this.buildTable()
-          // console.log(this.snapshotHeader)
-          setTimeout(() => {
-            this.getSnapshot()
-          }, 500)
-          this.buildTable()
-        })
-      },
+      // getlist () {
+      //   this.selectedDatapoints = []
+      //   this.dataPoints.map((item) => {
+      //     if (item.selected) {
+      //       this.selectedDatapoints.push(item)
+      //     }
+      //     // console.log(2222)
+      //     // this.buildTable()
+      //     // console.log(this.snapshotHeader)
+      //     setTimeout(() => {
+      //       this.getSnapshot()
+      //     }, 500)
+      //     this.buildTable()
+      //   })
+      // },
       // 获取设备列表
       getDevices (querying) {
         if (typeof querying !== 'undefined') {
@@ -617,7 +629,7 @@
         this.getSnapshot()
       },
       saveDataPoints () {
-        this.getlist()
+        // this.getlist()
         // console.log(this.selectedDatapoints)
         this.showEditModal = false
       }
