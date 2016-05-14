@@ -8,13 +8,6 @@ import errors from './errors'
 import * as data from './data'
 import ui from './ui'
 
-console.log({
-  common,
-  errors,
-  data,
-  ui
-})
-
 export default {
   common,
   errors,

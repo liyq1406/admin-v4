@@ -100,7 +100,6 @@
                 <tr>
                   <th>选择</th>
                   <th>索引</th>
-                  <th>端点ID</th>
                   <th>数据类型</th>
                   <th>单位符号</th>
                   <th>描述</th>
@@ -110,8 +109,7 @@
                 <tr v-for="dp in dataPoints | limitBy pageCount (currentPage-1)*pageCount">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
-                  <td>{{dp.id}}</td>
-                  <td>{{dp.type}}</td>
+                  <td>{{datapointTypes[dp.type - 1]}}</td>
                   <td>{{dp.symbol}}</td>
                   <td>{{dp.description}}</td>
                 </tr>
@@ -210,12 +208,12 @@
 </template>
 
 <script>
-  // import Vue from 'vue'
+  import Vue from 'vue'
   // import api from '../../api'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
-  // import locales from '../../consts/locales/index'
+  import locales from '../../consts/locales/index'
   // import _ from 'lodash'
   import { globalMixins } from '../../mixins'
   import api from '../../api'
@@ -239,6 +237,7 @@
         showEditModal: false,
         showEditPointModal: false,
         delRuleChecked: false,
+        datapointTypes: locales[Vue.config.lang].data.DATAPOINT_TYPES,
         productType: {
           label: '请选择产品类型',
           value: 0,

@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>饮食管理</h2>
+          <h2>云菜谱</h2>
         </div>
         <div class="panel-bd">
           <tab :nav="secondaryNav"></tab>
@@ -19,7 +19,7 @@
   import { globalMixins } from '../../../mixins'
 
   export default {
-    name: 'Diet',
+    name: 'Recipe',
 
     layout: 'admin',
 

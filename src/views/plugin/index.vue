@@ -66,28 +66,28 @@
         plugins: [{
           id: '',
           name: '消息群发',
-          description: '让app具备消息广播，运营通知的特性',
+          description: '让app具备消息广播，运营通知的特性，支持多维度的推送规则管理。',
           alias: 'broadcast',
           enable: false,
           type: 10
         }, {
           id: '',
-          name: 'helpdesk',
-          description: '管理经销商，配置商家信息和销售资源',
+          name: 'HelpDesk',
+          description: '建立在用户与企业之间的反馈渠道，包括使用、售后、故障、远程运维等业务服务。',
           alias: 'helpdesk',
           enable: false,
           type: 10
         }, {
           id: '',
           name: '在线维保',
-          description: '让app具备消息广播，运营通知的特性',
+          description: '提供与企业产品相关的售后支持、产品维护、保修记录的查询与管理服务。',
           alias: 'warranty',
           enable: false,
           type: 10
         }, {
           id: '',
           name: '经销商管理',
-          description: '管理经销商，配置商家信息和销售资源',
+          description: '管理企业各经销商，配置商家信息和销售资源数据。',
           alias: 'dealer',
           enable: false,
           type: 10

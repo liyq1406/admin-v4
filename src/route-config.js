@@ -362,6 +362,14 @@ let configRouter = (router) => {
         }
       }
     },
+    // 禁止访问
+    '/plugins/broadcast/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/broadcast/forbidden'))
+        }, 'admin')
+      }
+    },
     // 推送详情
     '/plugins/broadcast/history/:id': {
       component (resolve) {
@@ -378,7 +386,8 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
-    // 帮助中心
+
+    // HelpDesk
     '/plugins/helpdesk': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -386,6 +395,15 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
+    // 禁止访问
+    '/plugins/helpdesk/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/helpdesk/forbidden'))
+        }, 'admin')
+      }
+    },
+
     // 经销商管理
     '/plugins/dealer': {
       component (resolve) {
@@ -394,6 +412,15 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
+    // 禁止访问
+    '/plugins/dealer/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/dealer/forbidden'))
+        }, 'admin')
+      }
+    },
+
     // 支付网关
     '/plugins/xpay': {
       component (resolve) {
@@ -402,6 +429,15 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
+    // 禁止访问
+    '/plugins/xpay/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/xpay/forbidden'))
+        }, 'admin')
+      }
+    },
+
     // 告警服务
     '/alerts': {
       component (resolve) {
@@ -684,6 +720,14 @@ let configRouter = (router) => {
         }
       }
     },
+    // 禁止访问
+    '/plugins/recipe/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/recipe/forbidden'))
+        }, 'admin')
+      }
+    },
     '/plugins/recipe/ingredient/add': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -745,6 +789,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         }
+      }
+    },
+    // 禁止访问
+    '/plugins/warranty/:app_id/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/warranty/forbidden'))
+        }, 'admin')
       }
     },
     // 维保系统-延保工单详情
@@ -832,12 +884,18 @@ let configRouter = (router) => {
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
     '/users': '/users/list',
-    '/plugins/recipe': '/plugins/recipe/list',
-    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
-    '/plugins/broadcast': '/plugins/broadcast/add',
+    '/plugins/recipe': '/plugins/recipe/forbidden',
+    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
+    '/plugins/broadcast': '/plugins/broadcast/forbidden',
+    '/plugins/xpay': '/plugins/xpay/forbidden',
+    '/plugins/helpdesk': '/plugins/helpdesk/forbidden',
+    '/plugins/dealer': '/plugins/dealer/forbidden',
+    // '/plugins/recipe': '/plugins/recipe/list',
+    // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
+    // '/plugins/broadcast': '/plugins/broadcast/add',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',

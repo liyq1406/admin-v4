@@ -250,30 +250,6 @@
         this.getDatapointValues()
         this.getDeviceInfo()
         this.getDatapoints()
-
-        /*
-        //百度地图API功能
-      	function loadJScript () {
-          var script = document.createElement("script")
-
-      		script.type = "text/javascript"
-      		script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init"
-      		document.body.appendChild(script)
-      	}
-      	window.init = () => {
-      		var map = new BMap.Map("diviceMap")            // 创建Map实例
-      		var point = new BMap.Point(116.404, 39.915) // 创建点坐标
-      		map.centerAndZoom(point,15)
-      		map.enableScrollWheelZoom()                 //启用滚轮放大缩小
-      	}
-      	// document.getElementById('diviceMap').addEventListener('load', loadJScript)  //异步加载地图
-
-        // document.addEventListener('load', loadJScript)
-        document.addEventListener('load', (e) => {
-          // body...
-        })
-        // window.onload=loadJScript
-        */
       },
 
       activate () {
@@ -291,28 +267,6 @@
     },
 
     ready () {
-      /*
-      //百度地图API功能
-      function loadJScript () {
-        var script = document.createElement("script")
-        script.type = "text/javascript"
-        script.src = "http://api.map.baidu.com/api?v=2.0&ak=iqGzDSunIlUeEK1H8rkRfptH&callback=init"
-        document.body.appendChild(script)
-      }
-      window.init = () => {
-        var map = new BMap.Map("diviceMap")            // 创建Map实例
-        var point = new BMap.Point(116.404, 39.915) // 创建点坐标
-        map.centerAndZoom(point,15)
-        map.enableScrollWheelZoom()                 //启用滚轮放大缩小
-      }
-      // document.getElementById('diviceMap').addEventListener('load', loadJScript)  //异步加载地图
-
-      // document.addEventListener('load', loadJScript)
-      // document.addEventListener('load', (e) => {
-        // body...
-      // })
-      window.onload=loadJScript
-      */
     },
 
     methods: {
@@ -331,17 +285,6 @@
       getDatapoints () {
         api.product.getDatapoints(this.$route.params.product_id).then((res) => {
           if (res.status === 200) {
-            console.log(res.data)
-            // 数据端点type https://github.com/xlink-corp/xlink-sdk/blob/master/%E7%89%A9%E8%81%94%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E4%BA%A7%E5%93%81%E4%B8%8E%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3.md
-            // 1	布尔类型
-            // 2	单字节
-            // 3	16位短整型
-            // 4	32位整型
-            // 3	浮点
-            // 4	字符串
-            // res.data.map((item) => {
-            //   item.value = '--'
-            // })
             this.datapoints = res.data
           }
         }).catch((res) => {

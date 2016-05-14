@@ -6,9 +6,7 @@
           <h2>支付网关</h2>
         </div>
         <div class="panel-bd">
-          <v-alert :cols="7">
-            <p>你未获得使用该插件的权限</p>
-          </v-alert>
+          <!-- <tab :nav="secondaryNav"></tab> -->
         </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>

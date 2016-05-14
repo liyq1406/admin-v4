@@ -18,10 +18,15 @@
               <label class="form-control col-6">应用URL</label>
               <div class="controls col-18">
                 <div v-placeholder="urlPlaceholder" class="input-text-wrap">
-                  <input v-model="model.config.url" type="text" v-form-ctrl name="url" minlength="2" maxlength="32" required lazy class="input-text"/>
+                  <input v-model="model.config.url" type="text" v-form-ctrl name="url" minlength="2" required lazy class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.url.$pristine" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
-                <div v-if="validation.url.$dirty" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.url.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.url.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
+                <div v-if="validation.$submitted && validation.url.$pristine" class="form-tips form-tips-error">
+                  <span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                </div>
+                <div v-if="validation.url.$dirty" class="form-tips form-tips-error">
+                  <span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                  <span v-if="validation.url.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
+                </div>
               </div>
             </div>
             <div class="form-actions row">
