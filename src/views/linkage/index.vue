@@ -39,15 +39,15 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.link.devices_link'),
+            label: this.$t('ui.sub_nav.link.devices_link'),
             link: { path: '/linkage/devices' }
           },
           {
-            label: this.$t('sub_nav.link.nest_link'),
+            label: this.$t('ui.sub_nav.link.nest_link'),
             link: { path: '/linkage/nest' }
           },
           {
-            label: this.$t('sub_nav.link.echo'),
+            label: this.$t('ui.sub_nav.link.echo'),
             link: { path: '/linkage/echo' }
           }]
         }

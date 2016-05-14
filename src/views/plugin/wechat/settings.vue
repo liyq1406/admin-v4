@@ -5,7 +5,7 @@
         <div class="form form-edit-apk">
           <form v-form name="validation" @submit.prevent="onEditSubmit(model)">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" placeholder="请输入应用名称" v-model="model.name" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
@@ -13,7 +13,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.wechat_id") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.wechat_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" placeholder="请输入微信公众号ID" v-model="model.config.wechat.id" name="wechat_id" lazy class="input-text"/>
@@ -21,7 +21,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.wechat_app_id") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.wechat_app_id") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" v-model="model.config.wechat.app_id" placeholder="请输入微信公众号APPID" name="wechat_app_id" lazy class="input-text"/>
@@ -29,7 +29,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.wechat_app_secret") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.wechat_app_secret") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="text" v-model="model.config.wechat.app_secret" placeholder="请输入微信公众号APPSecret" name="wechat_app_secret" lazy class="input-text"/>
@@ -37,7 +37,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.wechat_encrypt") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.wechat_encrypt") }}:</label>
               <div class="controls col-18">
                 <div class="radio-group radio-group-v">
                   <template v-for="type in encryptTypes">
@@ -50,7 +50,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.wechat_key") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.wechat_key") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea type="text" v-model="model.config.wechat.encoding_aes_key" placeholder="请输入43位微信密匙" name="wechat_key" lazy class="input-text"></textarea>
@@ -58,13 +58,13 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.app_url") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.app_url") }}:</label>
               <div class="controls col-18 control-text">{{ model.config.url }}</div>
             </div>
             <div class="form-actions row">
               <div class="col-6">
                 <label class="del-check">
-                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.app.del_app") }}
                 </label>
               </div>
               <div class="col-18">
@@ -104,7 +104,7 @@
 
     data () {
       return {
-        encryptTypes: locales[Vue.config.lang].app.encrypt_types,
+        encryptTypes: locales[Vue.config.lang].data.APP_ENCRYPT_TYPES,
         model: {
           name: '',
           enable: false,

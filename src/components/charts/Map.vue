@@ -7,8 +7,8 @@
   import 'echarts/chart/line'
   import 'echarts/chart/map'
   import ecConfig from 'echarts/config'
-  import worldNames from '../../consts/world-names'
-  import chinaNames from '../../consts/china-names'
+  import worldNames from '../../consts/mapping/world-names'
+  import chinaNames from '../../consts/mapping/china-names'
 
   export default {
     name: 'MapChart',
@@ -85,7 +85,7 @@
           // legend: {
           //   orient: 'vertical',
           //   x: 'right',
-          //   data: [this.$t('statistic.products.active')]
+          //   data: [this.$t('ui.statistic.products.active')]
           // },
           dataRange: {
             min: 0,
@@ -111,7 +111,7 @@
           })
         } else {
           result.series.push({
-            // name: this.$t('statistic.products.active'),
+            // name: this.$t('ui.statistic.products.active'),
             type: 'map',
             mapType: this.type,
             selectedMode: 'single',

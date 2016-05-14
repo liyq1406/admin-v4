@@ -10,17 +10,17 @@
           <div class="form">
             <form v-form name="validation" @submit.prevent="onRecipeSubmit">
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("recipe.fields.name") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.recipe.fields.name") }}:</label>
                 <div class="controls col-20">
                   <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
                     <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="250" required lazy class="input-text"/>
                   </div>
-                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span></div>
-                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}</span></div>
+                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span></div>
+                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.ingredient.fields.name')}) }}</span></div>
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.images") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
                 <div class="controls col-20 controls-image">
                   <div class="image-uploader">
                     <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
@@ -43,7 +43,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.classification") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.classification") }}:</label>
                 <div class="controls col-20">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
@@ -59,9 +59,9 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("recipe.fields.instructions") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.recipe.fields.instructions") }}:</label>
                 <div class="controls col-20">
-                  <div v-placeholder="$t('recipe.placeholders.instructions')" class="input-text-wrap">
+                  <div v-placeholder="$t('ui.recipe.placeholders.instructions')" class="input-text-wrap">
                     <textarea v-model="model.instructions" type="text" name="instructions" lazy class="input-text textarea-lg"></textarea>
                   </div>
                 </div>
@@ -132,9 +132,9 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t('recipe.fields.tips') }}:</label>
+                <label class="form-control col-4">{{ $t('ui.recipe.fields.tips') }}:</label>
                 <div class="controls col-20">
-                  <div v-placeholder="$t('recipe.placeholders.tips')" class="input-text-wrap">
+                  <div v-placeholder="$t('ui.recipe.placeholders.tips')" class="input-text-wrap">
                     <textarea v-model="model.tips" type="text" name="tips" lazy class="input-text textarea-lg"></textarea>
                   </div>
                 </div>
@@ -156,7 +156,7 @@
                     <option v-for="option in ingredientCategoryOptions" :value="option">{{ option.label }}</option>
                   </select>
                 </v-select>
-                <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
+                <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ui.ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
                   <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
                 </search-box>
               </div>
@@ -209,7 +209,7 @@
       </div>
       <div class="panel">
         <div class="panel-bd">
-          <button @click.prevent="deleteRecipe" class="btn btn-primary btn-lg mt10 mb10">{{ $t('recipe.del') }}</button>
+          <button @click.prevent="deleteRecipe" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ui.recipe.del') }}</button>
         </div>
       </div>
     </div>

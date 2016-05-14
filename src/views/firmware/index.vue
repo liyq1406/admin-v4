@@ -39,15 +39,15 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.firmware.overview'),
+            label: this.$t('ui.sub_nav.firmware.overview'),
             link: { path: '/firmware/overview' }
           },
           {
-            label: this.$t('sub_nav.firmware.management'),
+            label: this.$t('ui.sub_nav.firmware.management'),
             link: { path: '/firmware/management' }
           },
           {
-            label: this.$t('sub_nav.firmware.upgrade'),
+            label: this.$t('ui.sub_nav.firmware.upgrade'),
             link: { path: '/firmware/upgrade' }
           }]
         }

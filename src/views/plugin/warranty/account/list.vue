@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box :key.sync="key" :active="searching" :placeholder="$t('account_manage.search_condi')" style="float:right">
+        <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.account_manage.search_condi')" style="float:right">
           <button slot="search-button" @click="getBranchList" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">

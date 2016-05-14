@@ -1,43 +1,43 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/users'}" class="fa fa-arrow-circle-left">{{ $t('user.list') }}</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/users'}" class="fa fa-arrow-circle-left">{{ $t('ui.user.list') }}</a></div>
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t('user.details') }}</h2>
+          <h2>{{ $t('ui.user.details') }}</h2>
         </div>
         <div class="panel-bd">
           <ul class="info-details">
             <li>
-              <div class="label">{{ $t('user.fields.id') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.id') }}:</div>
               <div class="info">{{ user.id }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.account') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.account') }}:</div>
               <div class="info">{{ user.account }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.nick_name') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.nick_name') }}:</div>
               <div class="info">{{ user.nickname }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.phone') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.phone') }}:</div>
               <div class="info">{{ user.phone }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.create_date') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.create_date') }}:</div>
               <div class="info">{{ user.create_date | formatDate }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.active_date') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.active_date') }}:</div>
               <div class="info">{{ user.active_date | formatDate }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.is_vaild') }}:</div>
-              <div class="info">{{ user.is_vaild ? $t('user.status.activate') :  $t('user.status.deactivate') }}</div>
+              <div class="label">{{ $t('ui.user.fields.is_vaild') }}:</div>
+              <div class="info">{{ user.is_vaild ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</div>
             </li>
             <li>
-              <div class="label">{{ $t('user.fields.region_id') }}:</div>
+              <div class="label">{{ $t('ui.user.fields.region_id') }}:</div>
               <div class="info">{{ user.region_id }}</div>
             </li>
           </ul>
@@ -45,16 +45,16 @@
       </div>
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t('user.devices_bound') }}</h2>
+          <h2>{{ $t('ui.user.devices_bound') }}</h2>
         </div>
         <div class="panel-bd">
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t('user.product_name') }}</th>
-                <th>{{ $t('user.device_mac') }}</th>
-                <th>{{ $t('user.device_status') }}</th>
-                <th>{{ $t('user.device_authorize_code') }}</th>
+                <th>{{ $t('ui.user.product_name') }}</th>
+                <th>{{ $t('ui.user.device_mac') }}</th>
+                <th>{{ $t('ui.user.device_status') }}</th>
+                <th>{{ $t('ui.user.device_authorize_code') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -67,7 +67,7 @@
               </tr>
               <tr v-if="subDevices.length === 0">
                 <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                  <div v-else class="tips-null">{{ $t('user.no_devices_bound') }}</div>
+                  <div v-else class="tips-null">{{ $t('ui.user.no_devices_bound') }}</div>
                 </td>
               </tr>
             </tbody>

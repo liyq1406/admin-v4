@@ -21,25 +21,25 @@
                 <div class="item">
                   <div class="cont">
                     <div class="num">{{ alertSummary.device }}</div>
-                    <div class="label">{{ $t("alert.statistic.device") }}</div>
+                    <div class="label">{{ $t("ui.alert.statistic.device") }}</div>
                   </div>
                 </div>
                 <div class="item">
                   <div class="cont">
                     <div class="num">{{ alertSummary.message }}</div>
-                    <div class="label">{{ $t("alert.statistic.message") }}</div>
+                    <div class="label">{{ $t("ui.alert.statistic.message") }}</div>
                   </div>
                 </div>
                 <div class="item no-border">
                   <div class="cont">
                     <div class="num">{{ alertSummary.unread }}</div>
-                    <div class="label">{{ $t("alert.statistic.unread") }}</div>
+                    <div class="label">{{ $t("ui.alert.statistic.unread") }}</div>
                   </div>
                 </div>
                 <div class="item no-border">
                   <div class="cont">
                     <div class="num">{{ alertSummary.add_today }}</div>
-                    <div class="label">{{ $t("alert.statistic.add_today") }}</div>
+                    <div class="label">{{ $t("ui.alert.statistic.add_today") }}</div>
                   </div>
                 </div>
               </div>
@@ -49,7 +49,7 @@
       </div>
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t("alert.info") }}</h2>
+          <h2>{{ $t("ui.alert.info") }}</h2>
         </div>
         <div class="panel-bd">
           <div class="data-table with-loading">
@@ -59,10 +59,10 @@
             <table class="table table-stripe table-bordered">
               <thead>
                 <tr>
-                  <th>{{ $t("alert.info_list.product_name") }}</th>
-                  <th>{{ $t("alert.info_list.content") }}</th>
-                  <th>{{ $t("alert.info_list.create_date") }}</th>
-                  <th>{{ $t("alert.info_list.is_read") }}</th>
+                  <th>{{ $t("ui.alert.info_list.product_name") }}</th>
+                  <th>{{ $t("ui.alert.info_list.content") }}</th>
+                  <th>{{ $t("ui.alert.info_list.create_date") }}</th>
+                  <th>{{ $t("ui.alert.info_list.is_read") }}</th>
                   <th class="tac">{{ $t("common.action") }}</th>
                 </tr>
               </thead>
@@ -94,49 +94,49 @@
     </div>
     <!-- 查看告警信息浮层-->
     <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("alert.info") }}</h3>
+      <h3 slot="header">{{ $t("ui.alert.info") }}</h3>
       <table slot="body" class="table table-stripe table-bordered">
         <tbody>
           <tr>
-            <td>{{ $t("alert.info_list.product_name") }}</td>
+            <td>{{ $t("ui.alert.info_list.product_name") }}</td>
             <td>{{ model.product_name }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.alert_name") }}</td>
+            <td>{{ $t("ui.alert.info_list.alert_name") }}</td>
             <td>{{ model.alert_name }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.content") }}</td>
+            <td>{{ $t("ui.alert.info_list.content") }}</td>
             <td>{{ model.content }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.tags") }}</td>
+            <td>{{ $t("ui.alert.info_list.tags") }}</td>
             <td>
               <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
             </td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.type") }}</td>
-            <td><span>{{ infoTypes[model.type - 1] }}</span></td>
+            <td>{{ $t("ui.alert.info_list.type") }}</td>
+            <td><span>{{ informTypes[model.type - 1] }}</span></td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.notify_type") }}</td>
+            <td>{{ $t("ui.alert.info_list.notify_type") }}</td>
             <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.alert_value") }}</td>
+            <td>{{ $t("ui.alert.info_list.alert_value") }}</td>
             <td>{{ model.alert_value }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.from") }}</td>
+            <td>{{ $t("ui.alert.info_list.from") }}</td>
             <td>{{ model.from }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.to") }}</td>
+            <td>{{ $t("ui.alert.info_list.to") }}</td>
             <td>{{ model.to }}</td>
           </tr>
           <tr>
-            <td>{{ $t("alert.info_list.create_date") }}</td>
+            <td>{{ $t("ui.alert.info_list.create_date") }}</td>
             <td>{{ model.create_date | formatDate }}</td>
           </tr>
         </tbody>
@@ -196,10 +196,10 @@
           tags: ''
         },
         period: 7,
-        periods: locales[Vue.config.lang].periods,
+        periods: locales[Vue.config.lang].data.PERIODS,
         product_id: '',
-        alertTypes: locales[Vue.config.lang].alertTypes,
-        infoTypes: locales[Vue.config.lang].infoTypes,
+        alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
+        informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
         alertSummary: {
           unread: 0,
           add_today: 0,
@@ -228,7 +228,7 @@
       // 告警图表数据
       alertSeries () {
         var result = [{
-          name: this.$t('alert.counts'),
+          name: this.$t('ui.alert.counts'),
           type: 'line',
           data: []
         }]

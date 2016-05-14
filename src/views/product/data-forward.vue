@@ -14,9 +14,9 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("dataforward.fields.id") }}</th>
-                <th>{{ $t("dataforward.fields.destination.url") }}</th>
-                <th>{{ $t("dataforward.fields.destination.type") }}</th>
+                <th>{{ $t("ui.dataforward.fields.id") }}</th>
+                <th>{{ $t("ui.dataforward.fields.destination.url") }}</th>
+                <th>{{ $t("ui.dataforward.fields.destination.type") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
@@ -51,7 +51,7 @@
             <label class="form-control col-7">{{ '数据的类型' }}:</label>
             <div class="controls col-17">
               <div class="checkbox-group">
-                <label v-for="type in dataTypes" class="checkbox">
+                <label v-for="type in dataForwardType" class="checkbox">
                   <input type="checkbox" v-model="addModel.data_type" :value="$index+1"/>{{ type }}
                 </label>
               </div>
@@ -61,9 +61,9 @@
             <label class="form-control col-7">{{ '分发类型' }}:</label>
             <div class="controls col-17">
               <div class="select">
-                <v-select :label="destinationTypes[addModel.destination.type-1]">
+                <v-select :label="dataDestination[addModel.destination.type-1]">
                   <select v-model="addModel.destination.type" name="type" number>
-                    <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
               </div>
@@ -101,7 +101,7 @@
             <label class="form-control col-7">{{ '数据的类型' }}:</label>
             <div class="controls col-17">
               <div class="checkbox-group">
-                <label v-for="type in dataTypes" class="checkbox">
+                <label v-for="type in dataForwardType" class="checkbox">
                   <input type="checkbox" v-model="editModel.data_type" :value="$index+1"/>{{ type }}
                 </label>
               </div>
@@ -111,9 +111,9 @@
             <label class="form-control col-7">{{ '分发类型' }}:</label>
             <div class="controls col-17">
               <div class="select">
-                <v-select :label="destinationTypes[editModel.destination.type-1]">
+                <v-select :label="dataDestination[editModel.destination.type-1]">
                   <select v-model="editModel.destination.type" name="type" number>
-                    <option v-for="type in destinationTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
               </div>
@@ -175,9 +175,8 @@
       return {
         rules: [],            // 规则列表
         datapoints: [],
-        dataforwardTypes: locales[Vue.config.lang].dataforward.types,
-        dataTypes: locales[Vue.config.lang].dataforward.datatype_forwards,
-        destinationTypes: locales[Vue.config.lang].dataforward.destination_types,
+        dataForwardType: locales[Vue.config.lang].data.DATA_FORWARD_TYPES,
+        dataDestination: locales[Vue.config.lang].data.DATA_DESTINATIONS,
         data_type: [],
         notify_type: [],
         pageCount: 10,

@@ -2,7 +2,7 @@
   <div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t("statistic.trends") }}</h2>
+        <h2>{{ $t("ui.statistic.trends") }}</h2>
         <div class="leftbox">
           <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
         </div>
@@ -20,25 +20,25 @@
               <div class="item">
                 <div class="cont">
                   <div class="num">{{ total }}</div>
-                  <div class="label">{{ $t("statistic.users.total") }}</div>
+                  <div class="label">{{ $t("ui.statistic.users.total") }}</div>
                 </div>
               </div>
               <div class="item">
                 <div class="cont">
                   <div class="num">{{ add }}</div>
-                  <div class="label">{{ $t("statistic.users.newbie_period", {period:period}) }}</div>
+                  <div class="label">{{ $t("ui.statistic.users.newbie_period", {period:period}) }}</div>
                 </div>
               </div>
               <div class="item no-border">
                 <div class="cont">
                   <div class="num">{{ active }}</div>
-                  <div class="label">{{ $t("statistic.users.active") }}</div>
+                  <div class="label">{{ $t("ui.statistic.users.active") }}</div>
                 </div>
               </div>
               <div class="item no-border">
                 <div class="cont">
                   <div class="num">{{ online }}</div>
-                  <div class="label">{{ $t("statistic.users.online") }}</div>
+                  <div class="label">{{ $t("ui.statistic.users.online") }}</div>
                 </div>
               </div>
             </div>
@@ -48,7 +48,7 @@
     </div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t("statistic.regions") }}</h2>
+        <h2>{{ $t("ui.statistic.regions") }}</h2>
         <div class="leftbox">
           <radio-group :items="regions" :value.sync="region" @select="getUserRegion"></radio-group>
         </div>
@@ -56,7 +56,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-24 with-loading">
-            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('statistic.users.registered')"></map-chart>
+            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('ui.statistic.users.registered')"></map-chart>
             <div class="icon-loading" v-show="loadingUserRegions">
               <i class="fa fa-refresh fa-spin"></i>
             </div>
@@ -64,9 +64,9 @@
           <table class="table table-bordered table-stripe">
             <thead>
               <tr>
-                <th>{{ $t("statistic.district") }}</th>
-                <th>{{ $t("statistic.users.registered") }}</th>
-                <th>{{ $t("statistic.percentage") }}</th>
+                <th>{{ $t("ui.statistic.district") }}</th>
+                <th>{{ $t("ui.statistic.users.registered") }}</th>
+                <th>{{ $t("ui.statistic.percentage") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -115,9 +115,9 @@
         active: 0,
         productRegion: {},
         period: 7,
-        periods: locales[Vue.config.lang].periods,
+        periods: locales[Vue.config.lang].data.PERIODS,
         region: 'world',
-        regions: locales[Vue.config.lang].regions,
+        regions: locales[Vue.config.lang].data.REGIONS,
         userTrends: [],
         regionsData: [],
         loadingUserTrends: false,
@@ -134,11 +134,11 @@
       // 用户趋势图表数据
       userTrendSeries () {
         var result = [{
-          name: this.$t('statistic.users.active'),
+          name: this.$t('ui.statistic.users.active'),
           type: 'line',
           data: []
         }, {
-          name: this.$t('statistic.users.newbie'),
+          name: this.$t('ui.statistic.users.newbie'),
           type: 'line',
           data: []
         }]

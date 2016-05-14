@@ -34,7 +34,7 @@
                   <td>{{ accessKey.name }}</td>
                   <td>{{ accessKey.create_time }}</td>
                   <td class="tac">
-                    <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('task.stop') : $t('task.start') }}</button>
+                    <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': toggling}" :disabled="toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button>
                   </td>
                 </tr>
               </template>
@@ -55,11 +55,11 @@
             <div class="form-row row">
               <label class="form-control col-6">授权名称:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
                   <input v-model="addModel.name" v-form-ctrl type="text" name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
-                <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-                <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+                <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+                <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
               </div>
             </div>
             <div class="form-actions">

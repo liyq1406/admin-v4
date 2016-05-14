@@ -13,7 +13,7 @@
                 <option v-for="option in productOptions" :value="option">{{ option.name }}</option>
               </select>
             </v-select>
-            <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
               <v-select width="90px" :label="queryType.label">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -43,14 +43,14 @@
               <thead>
                 <tr>
                   <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-                  <th>{{ $t('device.id') }}</th>
+                  <th>{{ $t('ui.device.id') }}</th>
                   <th>{{ '运行模式' }}</th>
                   <th>{{ '水箱温度' }}</th>
                   <th>{{ '环境温度' }}</th>
                   <th>{{ '运行时间' }}</th>
-                  <th>{{ $t('device.is_active') }}</th>
-                  <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-                  <th>{{ $t('device.is_online') }}</th>
+                  <th>{{ $t('ui.device.is_active') }}</th>
+                  <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('ui.device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+                  <th>{{ $t('ui.device.is_online') }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -62,9 +62,9 @@
                     <td>{{ device.tankTemperature }}</td>
                     <td>{{ device.ambientTemperature }}</td>
                     <td>{{ device.runningTime }}</td>
-                    <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
+                    <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
                     <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-                    <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+                    <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td>
                   </tr>
                 </template>
                 <tr v-if="devices.length === 0 && !loadingData">
@@ -129,7 +129,7 @@
           label: '全部',
           value: 'all'
         },
-        visibilityOptions: locales[Vue.config.lang].visibilityOptions,
+        visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
         product: {},
         productOptions: [],
         devices: [],

@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ingredient.placeholders.search')" @cancel="getRecipes" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRecipes">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search')" @cancel="getRecipes" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRecipes">
             <button slot="search-button" @click="getRecipes" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
           <div class="action-group"><a v-link="{path: '/plugins/recipe/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加菜谱</a>

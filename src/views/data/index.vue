@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t("nav_aside.data") }}</h2>
+          <h2>{{ $t("ui.nav_aside.data") }}</h2>
         </div>
         <div class="panel-bd">
           <tab :nav="secondaryNav"></tab>
@@ -40,7 +40,7 @@
         return {
           secondaryNav: [
             {
-              label: this.$t('sub_nav.data.tables'),
+              label: this.$t('ui.sub_nav.data.tables'),
               link: { path: '/data/tables' }
             },
             {

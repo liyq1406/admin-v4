@@ -33,7 +33,7 @@
         if (file && file.size > config.maxImageFileSize * 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.file_size_msg', {max: config.maxImageFileSize})
+            content: this.$t('ui.upload.file_size_msg', {max: config.maxImageFileSize})
           })
           return
         }
@@ -43,7 +43,7 @@
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('upload.read_err')
+              content: this.$t('ui.upload.read_err')
             })
           }
           // 读取完成
@@ -68,7 +68,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
         }
       },

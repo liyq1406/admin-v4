@@ -3,9 +3,9 @@
     <div class="panel">
       <div class="panel-hd">
         <div class="actions">
-          <button @click="showAddModal = true" class="btn btn-success"  :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t('firmware.add_firmware') }}</button>
+          <button @click="showAddModal = true" class="btn btn-success"  :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t('ui.firmware.add_firmware') }}</button>
         </div>
-        <h2>{{ $t('firmware.firmware_list') }}</h2>
+        <h2>{{ $t('ui.firmware.firmware_list') }}</h2>
         <div style="position:absolute; top:5px; left:120px">
           <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
@@ -23,9 +23,9 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th class="w50">{{ $t('firmware.fields.version') }}</th>
-                <th>{{ $t('firmware.fields.description') }}</th>
-                <th>{{ $t('firmware.fields.create_date') }}</th>
+                <th class="w50">{{ $t('ui.firmware.fields.version') }}</th>
+                <th>{{ $t('ui.firmware.fields.description') }}</th>
+                <th>{{ $t('ui.firmware.fields.create_date') }}</th>
                 <th class="tac">{{ $t('common.action') }}</th>
               </tr>
             </thead>
@@ -52,36 +52,36 @@
     </div>
     <!-- 添加固件版本浮层-->
     <modal :show.sync="showAddModal" @close="onAddCancel">
-      <h3 slot="header">{{ $t('firmware.add_firmware') }}</h3>
+      <h3 slot="header">{{ $t('ui.firmware.add_firmware') }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFirmwareHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.mod") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.mod") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="addModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span></div>
-              <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
+              <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.version") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.version") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="addModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span></div>
-              <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
+              <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('ui.validation.numberic') }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.file") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.file") }}:</label>
             <div class="controls col-18">
               <div class="row">
                 <div class="col-10">
                   <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                    <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+                    <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                   </label>
                 </div>
                 <div class="col-14">
@@ -91,20 +91,20 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.description") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.description") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span></div>
-              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
+              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
             <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_release" v-model="addModel.is_release"/>{{ $t("firmware.fields.is_release") }}
+                  <input type="checkbox" name="is_release" v-model="addModel.is_release"/>{{ $t("ui.firmware.fields.is_release") }}
                 </label>
               </div>
             </div>
@@ -118,36 +118,36 @@
     </modal>
     <!-- 编辑固件版本浮层-->
     <modal :show.sync="showEditModal" @close="onEditCancel">
-      <h3 slot="header">{{ $t('firmware.edit_firmware') }}</h3>
+      <h3 slot="header">{{ $t('ui.firmware.edit_firmware') }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFirmwareHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.mod") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.mod") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.mod')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="editModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span></div>
-              <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.mod'), 20]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
+              <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.version") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.version") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.version')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="editModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span></div>
-              <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('validation.numberic') }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
+              <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('ui.validation.numberic') }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.file") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.file") }}:</label>
             <div class="controls col-18">
               <div class="row">
                 <div class="col-10">
                   <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                    <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('firmware.uploading') : $t('firmware.upload') }}
+                    <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                   </label>
                 </div>
                 <div class="col-14">
@@ -157,27 +157,27 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("firmware.fields.description") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.firmware.fields.description") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('firmware.placeholders.description')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('firmware.fields.version'), 250]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
             <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("firmware.fields.is_release") }}
+                  <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.firmware.fields.is_release") }}
                 </label>
               </div>
             </div>
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("firmware.del_firmware") }}
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.firmware.del_firmware") }}
             </label>
             <button type="reset" @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -408,7 +408,7 @@
         if (file && file.size > config.maxFirmwareFileSize * 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.file_size_msg', {max: config.maxFirmwareFileSize})
+            content: this.$t('ui.upload.file_size_msg', {max: config.maxFirmwareFileSize})
           })
           return
         }
@@ -418,7 +418,7 @@
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('upload.read_err')
+              content: this.$t('ui.upload.read_err')
             })
           }
           // 读取完成
@@ -445,7 +445,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
         }
       }

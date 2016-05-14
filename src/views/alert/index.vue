@@ -39,11 +39,11 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.alert.overview'),
+            label: this.$t('ui.sub_nav.alert.overview'),
             link: { path: '/alerts/overview' }
           },
           {
-            label: this.$t('sub_nav.alert.setting'),
+            label: this.$t('ui.sub_nav.alert.setting'),
             link: { path: '/alerts/setting' }
           }]
         }

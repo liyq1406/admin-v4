@@ -6,7 +6,7 @@
           <div class="col-4 data-table-border first-class-box">
             <div class="action-bar">
               <div class="action-group">
-                <button @click="addModal.show=true" class="btn btn-success btn-block"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
+                <button @click="addModal.show=true" class="btn btn-success btn-block"><i class="fa fa-plus"></i>{{ $t("ui.table.create_table") }}</button>
               </div>
             </div>
             <div class="data-table-box" v-show="dataFirClassList.length">
@@ -74,7 +74,7 @@
         </div>
         <!-- <div class="action-bar">
           <div class="action-group">
-            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("table.create_table") }}</button>
+            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.table.create_table") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -84,8 +84,8 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("table.fields.name") }}</th>
-                <th>{{ $t("table.fields.type") }}</th>
+                <th>{{ $t("ui.table.fields.name") }}</th>
+                <th>{{ $t("ui.table.fields.type") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
@@ -113,30 +113,30 @@
 
     <!-- Start: 添加数据表浮层 -->
     <modal :show.sync="addModal.show" @close="onAddCancel">
-      <h3 slot="header">{{ $t("table.create_table") }}</h3>
+      <h3 slot="header">{{ $t("ui.table.create_table") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.name") }}:</span>
+              <span>{{ $t("ui.table.fields.name") }}:</span>
             </label>
             <div class="controls col-18">
-              <div v-placeholder="$t('table.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.table.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="64" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('table.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('table.fields.name')}) }}</span>
-                <span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('table.fields.name'), 2]) }}</span>
-                <span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('table.fields.name'), 64]) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.table.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.table.fields.name'), 2]) }}</span>
+                <span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.table.fields.name'), 64]) }}</span>
               </div>
             </div>
           </div>
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.type") }}:</span>
+              <span>{{ $t("ui.table.fields.type") }}:</span>
             </label>
             <div class="controls col-18">
               <div class="select">
@@ -150,7 +150,7 @@
           </div>
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.permission") }}:</span>
+              <span>{{ $t("ui.table.fields.permission") }}:</span>
             </label>
             <div class="controls col-18">
               <div class="checkbox-group">
@@ -162,7 +162,7 @@
           </div>
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.field") }}:</span>
+              <span>{{ $t("ui.table.fields.field") }}:</span>
             </label>
             <div class="controls col-18">
               <div v-for="field in addModal.fields" class="field-row row">
@@ -184,7 +184,7 @@
                   <span @click="removeField(field, addModal.fields)" class="fa fa-times"></span>
                 </div>
               </div>
-              <button @click.prevent.stop="createField(addModal.fields, $event)" :disabled="!canCreateAddFields" class="btn btn-success" :class="{'disabled':!canCreateAddFields}">{{ $t("table.add_field") }}</button>
+              <button @click.prevent.stop="createField(addModal.fields, $event)" :disabled="!canCreateAddFields" class="btn btn-success" :class="{'disabled':!canCreateAddFields}">{{ $t("ui.table.add_field") }}</button>
             </div>
           </div>
           <div class="form-actions">
@@ -198,12 +198,12 @@
 
     <!-- Start: 修改数据表浮层 -->
     <modal :show.sync="editModal.show" @close="onEditCancel">
-      <h3 slot="header">{{ $t("table.edit_table") }}</h3>
+      <h3 slot="header">{{ $t("ui.table.edit_table") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.name") }}:</span>
+              <span>{{ $t("ui.table.fields.name") }}:</span>
             </label>
             <div class="controls col-18">
               <span class="control-text">{{ editModal.model.name }}</span>
@@ -211,7 +211,7 @@
           </div>
           <div class="form-row row">
             <label class="form-control col-6">
-              <span>{{ $t("table.fields.type") }}:</span>
+              <span>{{ $t("ui.table.fields.type") }}:</span>
             </label>
             <div class="controls col-18">
               <div class="select">
@@ -224,7 +224,7 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.permission") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.table.fields.permission") }}:</label>
             <div class="controls col-18">
               <div class="checkbox-group">
                 <label v-for="type in permissionTypes" class="checkbox">
@@ -234,7 +234,7 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("table.fields.field") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.table.fields.field") }}:</label>
             <div class="controls col-18">
               <div v-for="field in editModal.fields" class="field-row row">
                 <div class="col-11">
@@ -255,12 +255,12 @@
                   <span @click="removeField(field, editModal.fields)" class="fa fa-times"></span>
                 </div>
               </div>
-              <button @click.prevent.stop="createField(editModal.fields, $event)" :disabled="!canCreateEditFields" class="btn btn-success" :class="{'disabled':!canCreateEditFields}">{{ $t("table.add_field") }}</button>
+              <button @click.prevent.stop="createField(editModal.fields, $event)" :disabled="!canCreateEditFields" class="btn btn-success" :class="{'disabled':!canCreateEditFields}">{{ $t("ui.table.add_field") }}</button>
             </div>
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("table.del_table") }}
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.table.del_table") }}
             </label>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -628,11 +628,11 @@
         // 后端返回的数据全部放在table里面
         tables: [],
         // 限权种类
-        permissionTypes: locales[Vue.config.lang].table.permission_types,
+        permissionTypes: locales[Vue.config.lang].data.TABLE_PERMISSION_TYPES,
         // 表格种类
-        tableTypes: locales[Vue.config.lang].table.types,
+        tableTypes: locales[Vue.config.lang].data.TABLE_TYPES,
         // 列种类
-        fieldTypes: locales[Vue.config.lang].table.field_types,
+        fieldTypes: locales[Vue.config.lang].data.TABLE_FIELD_TYPES,
         // 数据表详情基本表头
         // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
         currentPage: 1,

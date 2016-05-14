@@ -55,25 +55,25 @@
 
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.product.overview'),
+            label: this.$t('ui.sub_nav.product.overview'),
             link: { path: '/products/' + this.$route.params.id + '/overview' }
           }, {
-            label: this.$t('sub_nav.product.devices'),
+            label: this.$t('ui.sub_nav.product.devices'),
             link: { path: '/products/' + this.$route.params.id + '/devices' }
           }, {
-            label: this.$t('sub_nav.product.datapoints'),
+            label: this.$t('ui.sub_nav.product.datapoints'),
             link: { path: '/products/' + this.$route.params.id + '/data-point' }
           }, {
-            label: this.$t('sub_nav.product.alerts'),
+            label: this.$t('ui.sub_nav.product.alerts'),
             link: { path: '/products/' + this.$route.params.id + '/alert' }
           }, {
-            label: this.$t('sub_nav.product.upgrade'),
+            label: this.$t('ui.sub_nav.product.upgrade'),
             link: { path: '/products/' + this.$route.params.id + '/upgrade' }
           }, {
-            label: this.$t('sub_nav.product.dataforward'),
+            label: this.$t('ui.sub_nav.product.dataforward'),
             link: { path: '/products/' + this.$route.params.id + '/data-forward' }
           }, {
-            label: this.$t('sub_nav.product.wechat'),
+            label: this.$t('ui.sub_nav.product.wechat'),
             link: { path: '/products/' + this.$route.params.id + '/wechat' }
           }]
         }

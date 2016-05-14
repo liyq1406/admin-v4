@@ -7,15 +7,15 @@
             <div class="form-row row">
               <label class="form-control col-7">{{ '应用名称' }}:</label>
               <div class="controls col-17">
-                <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
                   <input v-model="model.name" type="text" name="name" minlength="2" maxlength="32" v-form-ctrl required lazy class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-7">{{ $t("app.inform") }}:</label>
+              <label class="form-control col-7">{{ $t("ui.app.inform") }}:</label>
               <div class="controls col-17">
                 <div class="checkbox-group">
                   <label class="checkbox">
@@ -27,7 +27,7 @@
             <div v-show="model.config.gcm.enable" class="form-row row">
               <label class="form-control col-7">Server API Key:</label>
               <div class="controls col-17">
-                <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.apn_license_pwd')" class="input-text-wrap">
                   <input v-model="model.config.gcm.api_key" type="text" v-form-ctrl name="api_key" class="input-text"/>
                 </div>
               </div>
@@ -35,7 +35,7 @@
             <div class="form-actions row">
               <div class="col-7">
                 <label class="del-check">
-                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.app.del_app") }}
                 </label>
               </div>
               <div class="col-17">

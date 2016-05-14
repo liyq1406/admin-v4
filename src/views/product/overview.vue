@@ -9,13 +9,13 @@
             <div class="info">
               <div class="col-11 summary">
                 <h3>{{ product.name }}<a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h3>
-                <p><em>{{ $t("overview.desc") }}:</em><span>{{ product.description }}</span></p>
-                <p><em>{{ $t("overview.pid") }}:</em><span>{{ product.id }}</span></p>
-                <p><em>{{ $t("overview.key") }}:</em><span><a href="#" @click.prevent="showProductKey" class="hl-red">{{ $t("overview.show_key") }}</a></span></p>
+                <p><em>{{ $t("ui.overview.desc") }}:</em><span>{{ product.description }}</span></p>
+                <p><em>{{ $t("ui.overview.pid") }}:</em><span>{{ product.id }}</span></p>
+                <p><em>{{ $t("ui.overview.key") }}:</em><span><a href="#" @click.prevent="showProductKey" class="hl-red">{{ $t("ui.overview.show_key") }}</a></span></p>
                 <div class="actions">
-                  <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("overview.add_device") }}</button>
+                  <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
                   <label :class="{'disabled':importing}" class="btn btn-primary btn-upload">
-                    <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("overview.import_devices") }}
+                    <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
                   </label>
                 </div>
               </div>
@@ -24,19 +24,19 @@
                   <div class="col-7">
                     <div class="status-item">
                       <em>{{ productSummary.online }}</em>
-                      <span>{{ $t("overview.statistic.online") }}</span>
+                      <span>{{ $t("ui.overview.statistic.online") }}</span>
                     </div>
                   </div>
                   <div class="col-8">
                     <div class="status-item">
                       <em>{{ productSummary.activated }}</em>
-                      <span>{{ $t("overview.statistic.activated") }}</span>
+                      <span>{{ $t("ui.overview.statistic.activated") }}</span>
                     </div>
                   </div>
                   <div class="col-9">
                     <div class="status-item">
                       <em>{{ productSummary.total }}</em>
-                      <span>{{ $t("overview.statistic.total") }}</span>
+                      <span>{{ $t("ui.overview.statistic.total") }}</span>
                     </div>
                   </div>
                 </div>
@@ -53,7 +53,7 @@
         <div class="panel">
           <div class="panel-hd">
             <radio-group :items="periods" :value.sync="period" @select="getProductTrends"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
-            <h2>{{ $t("overview.trends") }}</h2>
+            <h2>{{ $t("ui.overview.trends") }}</h2>
           </div>
           <div class="panel-bd with-loading">
             <line-chart :series="productTrendSeries" :x-axis-data="productXAxisData" v-ref:trend-chart></line-chart>
@@ -69,7 +69,7 @@
         <div class="panel">
           <div class="panel-hd">
             <radio-group :items="regions" :value.sync="region" @select="getProductRegion"></radio-group>
-            <h2>{{ $t("overview.regions") }}</h2>
+            <h2>{{ $t("ui.overview.regions") }}</h2>
           </div>
           <div class="panel-bd with-loading">
             <map-chart :type="region" v-ref:region-chart :series-data="regionsData"></map-chart>
@@ -83,31 +83,31 @@
     </div>
     <!-- 编辑产品浮层-->
     <modal :show.sync="showEditModal">
-      <h3 slot="header">{{ $t("overview.editForm.header") }}</h3>
+      <h3 slot="header">{{ $t("ui.overview.editForm.header") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("product.fields.name") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('product.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('validation.format', {field: $t('product.fields.name')}) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.product.fields.name')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("product.fields.desc") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('product.placeholders.desc')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('product.fields.desc'), 250]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.desc'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("product.fields.link_type") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="deviceTypes[editModel.link_type-1]">
@@ -122,7 +122,7 @@
             <div class="controls col-18 col-offset-6">
               <div class="checkbox-group">
                 <label class="checkbox">
-                  <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("product.fields.is_registerable") }}
+                  <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
                 </label>
               </div>
             </div>
@@ -156,10 +156,10 @@
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("overview.editForm.del") }}
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
             </label>
             <label class="del-check">
-              <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("product.fields.is_release") }}
+              <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.product.fields.is_release") }}
             </label>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -169,17 +169,17 @@
     </modal>
     <!-- 添加设备浮层-->
     <modal :show.sync="showAddModal">
-      <h3 slot="header">{{ $t("overview.add_device") }}</h3>
+      <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')}) }}</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')}) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
             </div>
           </div>
           <div class="form-actions">
@@ -190,7 +190,7 @@
       </div>
     </modal>
     <modal :show.sync="showKeyModal">
-      <h3 slot="header">{{ $t("overview.key") }}</h3>
+      <h3 slot="header">{{ $t("ui.overview.key") }}</h3>
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
   </div>
@@ -238,7 +238,7 @@
 
     data () {
       return {
-        deviceTypes: locales[Vue.config.lang].deviceTypes,
+        deviceTypes: locales[Vue.config.lang].data.DEVICE_TYPES,
         product: {},
         // trends: [],
         productSummary: {
@@ -247,9 +247,9 @@
           total: 0
         },
         period: 7,
-        periods: locales[Vue.config.lang].periods,
+        periods: locales[Vue.config.lang].data.PERIODS,
         region: 'world',
-        regions: locales[Vue.config.lang].regions,
+        regions: locales[Vue.config.lang].data.REGIONS,
         productTrends: [],
         regionsData: [],
         loadingProductTrends: false,
@@ -294,11 +294,11 @@
       // 产品趋势图表数据
       productTrendSeries () {
         var result = [{
-          name: this.$t('statistic.products.active'),
+          name: this.$t('ui.statistic.products.active'),
           type: 'line',
           data: []
         }, {
-          name: this.$t('statistic.products.activated'),
+          name: this.$t('ui.statistic.products.activated'),
           type: 'line',
           data: []
         }]
@@ -677,14 +677,14 @@
           if (!/text\/\w+/.test(file.type)) {
             this.showNotice({
               type: 'error',
-              content: file.name + this.$t('upload.type_tips')
+              content: file.name + this.$t('ui.upload.type_tips')
             })
             return false
           }
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('upload.read_err')
+              content: this.$t('ui.upload.read_err')
             })
           }
           this.importing = true
@@ -703,7 +703,7 @@
                 if (res.status === 200) {
                   this.showNotice({
                     type: 'success',
-                    content: this.$t('upload.success_msg')
+                    content: this.$t('ui.upload.success_msg')
                   })
                 }
                 this.getSummary().then((res) => {
@@ -722,7 +722,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
         }
       }

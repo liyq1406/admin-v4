@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <h2> {{ $t("user.setting") }}</h2>
+      <h2> {{ $t("ui.user.setting") }}</h2>
     </div>
     <div class="pane1-bd">
       <div class="form pdb60set">

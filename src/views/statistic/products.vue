@@ -2,7 +2,7 @@
   <div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t("statistic.trends") }}</h2>
+        <h2>{{ $t("ui.statistic.trends") }}</h2>
         <div class="leftbox">
           <v-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
             <select v-model="product" @change="getProductData">
@@ -25,27 +25,27 @@
               <div class="item">
                 <div class="cont">
                   <div class="num">{{ productSummary.total }}</div>
-                  <div class="label">{{ $t("statistic.products.total") }}</div>
+                  <div class="label">{{ $t("ui.statistic.products.total") }}</div>
                 </div>
               </div>
               <div class="item">
                 <div class="cont">
                   <div class="num">{{ productSummary.activated }}</div>
-                  <div class="label">{{ $t("statistic.products.activated") }}</div>
+                  <div class="label">{{ $t("ui.statistic.products.activated") }}</div>
                 </div>
               </div>
               <div class="item no-border">
                 <div class="cont">
                   <div class="num">{{ productSummary.online }}</div>
-                  <div class="label">{{ $t("statistic.products.online") }}</div>
+                  <div class="label">{{ $t("ui.statistic.products.online") }}</div>
                 </div>
               </div>
               <div class="item no-border">
                 <div class="cont">
                   <div class="num">0</div>
-                  <div class="label"><span>{{ $t("statistic.products.active") }}</span>
+                  <div class="label"><span>{{ $t("ui.statistic.products.active") }}</span>
                     <div class="tips"><i @mouseover="showTooltip = true" @mouseout="showTooltip = false" class="fa fa-question-circle"></i>
-                      <div v-show="showTooltip" class="tooltip">{{ $t("statistic.products.active_tips") }}</div>
+                      <div v-show="showTooltip" class="tooltip">{{ $t("ui.statistic.products.active_tips") }}</div>
                     </div>
                   </div>
                 </div>
@@ -57,7 +57,7 @@
     </div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t("statistic.regions") }}</h2>
+        <h2>{{ $t("ui.statistic.regions") }}</h2>
         <div class="leftbox">
           <radio-group :items="regions" :value.sync="region" @select="getProductRegion"></radio-group>
         </div>
@@ -65,7 +65,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-24 with-loading">
-            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('statistic.products.active')"></map-chart>
+            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('ui.statistic.products.active')"></map-chart>
             <div class="icon-loading" v-show="loadingProductRegions">
               <i class="fa fa-refresh fa-spin"></i>
             </div>
@@ -73,9 +73,9 @@
           <table class="table table-bordered table-stripe">
             <thead>
               <tr>
-                <th>{{ $t("statistic.district") }}</th>
-                <th>{{ $t("statistic.products.activated") }}</th>
-                <th>{{ $t("statistic.percentage") }}</th>
+                <th>{{ $t("ui.statistic.district") }}</th>
+                <th>{{ $t("ui.statistic.products.activated") }}</th>
+                <th>{{ $t("ui.statistic.percentage") }}</th>
               </tr>
             </thead>
             <tbody>
@@ -130,9 +130,9 @@
         product: {},
         productsOptions: [],
         period: 7,
-        periods: locales[Vue.config.lang].periods,
+        periods: locales[Vue.config.lang].data.PERIODS,
         region: 'world',
-        regions: locales[Vue.config.lang].regions,
+        regions: locales[Vue.config.lang].data.REGIONS,
         productTrends: [],
         regionsData: [],
         loadingProductTrends: false,
@@ -150,11 +150,11 @@
       // 产品趋势图表数据
       productTrendSeries () {
         var result = [{
-          name: this.$t('statistic.products.active'),
+          name: this.$t('ui.statistic.products.active'),
           type: 'line',
           data: []
         }, {
-          name: this.$t('statistic.products.activated'),
+          name: this.$t('ui.statistic.products.activated'),
           type: 'line',
           data: []
         }]

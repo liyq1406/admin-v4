@@ -5,32 +5,32 @@
         <div class="form">
           <form v-form name="validation" @submit.prevent="onEditSubmit">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
                   <input v-model="model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.inform") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.inform") }}:</label>
               <div class="controls col-18">
                 <div class="checkbox-group">
                   <label class="checkbox">
-                    <input type="checkbox" name="apn_enable" v-model="model.config.apn.enable"/>{{ $t("app.fields.apn_enable") }}
+                    <input type="checkbox" name="apn_enable" v-model="model.config.apn.enable"/>{{ $t("ui.app.fields.apn_enable") }}
                   </label>
                 </div>
               </div>
             </div>
             <div v-show="model.config.apn.enable" class="form-row row">
-              <label class="form-control col-6">{{ $t("app.apn_file") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.apn_file") }}:</label>
               <div class="controls col-18">
                 <div class="row">
                   <div class="col-8">
                     <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                      <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('app.uploading') : $t('app.upload') }}
+                      <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.app.uploading') : $t('ui.app.upload') }}
                     </label>
                   </div>
                   <div class="col-16">
@@ -40,9 +40,9 @@
               </div>
             </div>
             <div v-show="model.config.apn.enable" class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.apn_license_pwd") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.apn_license_pwd") }}:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('app.placeholders.apn_license_pwd')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.apn_license_pwd')" class="input-text-wrap">
                   <input v-model="model.config.apn.license_pwd" type="text" v-form-ctrl name="apn_license_pwd" class="input-text"/>
                 </div>
               </div>
@@ -51,7 +51,7 @@
               <div class="controls col-18 col-offset-6">
                 <div class="checkbox-group">
                   <label class="checkbox">
-                    <input type="checkbox" name="apn_license_production" v-model="model.config.apn.license_production"/>{{ $t("app.is_release") }}
+                    <input type="checkbox" name="apn_license_production" v-model="model.config.apn.license_production"/>{{ $t("ui.app.is_release") }}
                   </label>
                 </div>
               </div>
@@ -59,7 +59,7 @@
             <div class="form-actions row">
               <div class="col-6">
                 <label class="del-check">
-                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.app.del_app") }}
                 </label>
               </div>
               <div class="col-18">
@@ -180,7 +180,7 @@
         if (file && file.size > 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
           return
         }
@@ -190,7 +190,7 @@
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('upload.read_err')
+              content: this.$t('ui.upload.read_err')
             })
           }
           // 读取完成
@@ -215,7 +215,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
         }
       }

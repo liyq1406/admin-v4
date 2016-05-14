@@ -5,8 +5,8 @@
       <div class="form-cont reset-password-success">
         <div class="alert alert-success">
           <div class="fa fa-check-circle-o"></div>
-          <h2>{{ $t("auth.activate_success") }}</h2>
-          <p>{{ $t("auth.activate_success_msg") }}</p>
+          <h2>{{ $t("ui.auth.activate_success") }}</h2>
+          <p>{{ $t("ui.auth.activate_success_msg") }}</p>
         </div>
         <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
       </div>
@@ -16,8 +16,8 @@
       <div class="form-cont reset-password-success">
         <div class="alert alert-success">
           <div class="fa fa-times-circle-o"></div>
-          <h2>{{ $t("auth.activate_fail") }}</h2>
-          <p>{{ $t("auth.activate_fail_msg") }}</p>
+          <h2>{{ $t("ui.auth.activate_fail") }}</h2>
+          <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
         </div>
         <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
       </div>

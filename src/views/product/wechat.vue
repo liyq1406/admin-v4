@@ -74,7 +74,7 @@
               <div class="input-text-wrap">
                 <input v-model="setModel.product_id" type="text" name="product_id" placeholder="请输入微信产品ID" v-form-ctrl required class="input-text"/>
               </div>
-              <div v-if="setValidation.$submitted" class="form-tips form-tips-error"><span v-if="setValidation.product_id.$error.required">{{ $t('validation.required', {field: $t('wechat.product_id')}) }}</span></div>
+              <div v-if="setValidation.$submitted" class="form-tips form-tips-error"><span v-if="setValidation.product_id.$error.required">{{ $t('ui.validation.required', {field: $t('ui.wechat.product_id')}) }}</span></div>
             </div>
           </div>
           <p class="hl-red">已经授权过的设备不支持更改产品ID</p>
@@ -169,9 +169,9 @@
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent.stop="createWechat" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" name="mac" required lazy class="input-text"/>
               </div>
             </div>

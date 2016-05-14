@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("app.create_app") }}</button>
+            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -14,11 +14,11 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("app.fields.id") }}</th>
-                <th>{{ $t("app.fields.name") }}</th>
+                <th>{{ $t("ui.app.fields.id") }}</th>
+                <th>{{ $t("ui.app.fields.name") }}</th>
                 <th class="tac">Access Key Secret</th>
-                <th>{{ $t("app.fields.type") }}</th>
-                <th>{{ $t("app.fields.create_time") }}</th>
+                <th>{{ $t("ui.app.fields.type") }}</th>
+                <th>{{ $t("ui.app.fields.create_time") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
@@ -63,27 +63,27 @@
 
     <!-- Start: 新增添加应用浮层-->
     <modal :show.sync="showAddModal" @close="onAddCancel">
-      <h3 slot="header">{{ $t("app.create_app") }}</h3>
+      <h3 slot="header">{{ $t("ui.app.create_app") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addAppHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span>
-                <span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span>
-                <span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
+                <span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span>
               </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("app.fields.type") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.app.fields.type") }}:</label>
             <div class="controls col-18">
               <div class="radio-group radio-group-v">
                 <!-- 功能完成后改成下面的代码 -->
@@ -153,8 +153,8 @@
       return {
         key: {},
         apps: [],
-        appTypes: locales[Vue.config.lang].app.types,
-        encryptTypes: locales[Vue.config.lang].app.encrypt_types,
+        appTypes: locales[Vue.config.lang].data.APP_TYPES,
+        encryptTypes: locales[Vue.config.lang].data.APP_ENCRYPT_TYPES,
         showAddModal: false,
         addModel: {
           name: '',

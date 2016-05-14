@@ -3,59 +3,59 @@
     <div class="form-logo"><a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a></div>
     <form v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
-        <h2>{{ $t("auth.fetch") }}</h2>
-        <p>{{ $t("auth.by_phone_tips") }}</p>
+        <h2>{{ $t("ui.auth.fetch") }}</h2>
+        <p>{{ $t("ui.auth.by_phone_tips") }}</p>
       </div>
       <div class="form-body">
         <div class="form-row row">
-          <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
             <input type="text" v-model="model.phone" v-form-ctrl required pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" name="phone" lazy class="input-text"/>
           </div>
           <div v-if="validation.$submitted && validation.phone.$pristine" class="form-tips form-tips-error">
-            <span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span>
+            <span v-if="validation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
           </div>
           <div v-if="validation.phone.$dirty" class="form-tips form-tips-error">
-            <span v-if="validation.phone.$error.required">{{ $t('validation.required', {field: $t('auth.fields.phone')}) }}</span>
-            <span v-if="validation.phone.$error.pattern">{{ $t('validation.format', {field: $t('auth.fields.phone')}) }}</span>
+            <span v-if="validation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
+            <span v-if="validation.phone.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
           </div>
         </div>
         <div class="form-row row captcha-row">
-          <div v-placeholder="$t('auth.insert_code')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.insert_code')" class="input-text-wrap">
             <input type="text" v-model="captcha" lazy class="input-text"/>
           </div>
           <captcha :width="120" :height="32" :value.sync="captchaValue" v-ref:captcha></captcha>
         </div>
         <div class="form-row row verify-code">
-          <div v-placeholder="$t('auth.verifycode')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.verifycode')" class="input-text-wrap">
             <input type="text" v-model="model.verifycode" v-form-ctrl required name="verifycode" lazy class="input-text"/>
           </div>
-          <button @click.stop.prevent="fetchVerifyCode" :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-text="counting ? $t('auth.wating', {seconds: seconds}) : $t('auth.get_code')" class="btn btn-primary"></button>
-          <div v-if="validation.$submitted && validation.verifycode.$pristine" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
-          <div v-if="validation.verifycode.$dirty" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('validation.required', {field: $t('auth.verifycode')}) }}</span></div>
+          <button @click.stop.prevent="fetchVerifyCode" :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-bind="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" v-text="counting ? $t('ui.auth.wating', {seconds: seconds}) : $t('ui.auth.get_code')" class="btn btn-primary"></button>
+          <div v-if="validation.$submitted && validation.verifycode.$pristine" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.verifycode')}) }}</span></div>
+          <div v-if="validation.verifycode.$dirty" class="form-tips form-tips-error"><span v-if="validation.verifycode.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.verifycode')}) }}</span></div>
         </div>
         <div class="form-row row">
-          <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
           </div>
           <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error">
-            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+            <span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
           </div>
           <div v-if="validation.password.$dirty" class="form-tips form-tips-error">
-            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
-            <span v-if="validation.password.$error.minlength">{{ $t('validation.minlength', [ $t('auth.fields.password'), 6]) }}</span>
-            <span v-if="validation.password.$error.maxlength">{{ $t('validation.maxlength', [ $t('auth.fields.password'), 16]) }}</span>
+            <span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+            <span v-if="validation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 6]) }}</span>
+            <span v-if="validation.password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span>
           </div>
         </div>
         <div class="form-row row">
-          <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
             <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
           </div>
           <div v-if="validation.$submitted && validation.confirmPassword.$pristine" class="form-tips form-tips-error">
-            <span v-if="validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span>
+            <span v-if="validation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span>
           </div>
           <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error">
-            <span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("auth.confirm_password") }}</span>
-            <span v-if="validation.confirmPassword.$error.customValidator">{{ $t("auth.confirm_password_tips") }}</span>
+            <span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span>
+            <span v-if="validation.confirmPassword.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span>
           </div>
         </div>
         <div class="form-actions">
@@ -67,8 +67,8 @@
     <div v-show="resetsuccess" class="form-cont reset-password-success">
       <div class="alert alert-success">
         <div class="icon icon-success"></div>
-        <h2>{{ $t("auth.by_phone_success") }}</h2>
-        <p>{{ $t("auth.by_phone_success_msg") }}</p>
+        <h2>{{ $t("ui.auth.by_phone_success") }}</h2>
+        <p>{{ $t("ui.auth.by_phone_success_msg") }}</p>
       </div>
       <div class="form-actions">
         <a v-link="{ path: '/login'}" class="btn btn-primary btn-block">{{ $t("common.ok") }}</a>
@@ -140,7 +140,7 @@
         if (this.validation.phone.$invalid) {
           this.showNotice({
             type: 'error',
-            content: this.$t('auth.phone_msg')
+            content: this.$t('ui.auth.phone_msg')
           })
           return
         }

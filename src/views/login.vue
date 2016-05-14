@@ -3,39 +3,39 @@
     <div class="form-logo"></div>
     <form v-form name="validation" @submit.prevent="onSubmit" hook="loginFormHook" class="form-cont">
       <div class="form-header">
-        <span>{{ $t("auth.login") }}</span>
-        <a v-link="{ path: '/register' }">{{ $t("auth.register") }}</a>
+        <span>{{ $t("ui.auth.login") }}</span>
+        <a v-link="{ path: '/register' }">{{ $t("ui.auth.register") }}</a>
       </div>
       <div class="form-body">
         <div class="form-row row">
-          <div v-placeholder="$t('auth.email_phone')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.email_phone')" class="input-text-wrap">
             <input type="text" v-model="model.account" v-form-ctrl name="account" required lazy class="input-text"/>
           </div>
           <div v-if="validation.$submitted && validation.account.$pristine" class="form-tips form-tips-error">
-            <span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span>
+            <span v-if="validation.account.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.account')}) }}</span>
           </div>
           <div v-if="validation.account.$dirty" class="form-tips form-tips-error">
-            <span v-if="validation.account.$error.required">{{ $t('validation.required', {field: $t('auth.fields.account')}) }}</span>
+            <span v-if="validation.account.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.account')}) }}</span>
           </div>
         </div>
         <div class="form-row row">
-          <div v-placeholder="$t('auth.password')" class="input-text-wrap">
+          <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl name="password" required lazy class="input-text focus-input"/>
           </div>
           <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error">
-            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+            <span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
           </div>
           <div v-if="validation.password.$dirty" class="form-tips form-tips-error">
-            <span v-if="validation.password.$error.required">{{ $t('validation.required', {field: $t('auth.fields.password')}) }}</span>
+            <span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
           </div>
         </div>
-        <div class="operations"><a v-link="{ path: '/fetch-password-bymail' }" class="fetch-password">{{ $t("auth.forget") }}</a>
+        <div class="operations"><a v-link="{ path: '/fetch-password-bymail' }" class="fetch-password">{{ $t("ui.auth.forget") }}</a>
           <label class="remember-password">
-            <input type="checkbox" v-model="rememberPwd"/><span>{{ $t("auth.remember") }}</span>
+            <input type="checkbox" v-model="rememberPwd"/><span>{{ $t("ui.auth.remember") }}</span>
           </label>
         </div>
         <div class="form-actions">
-          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('auth.login_submiting') : $t('auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("auth.login_submit") }}</button>
+          <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('ui.auth.login_submiting') : $t('ui.auth.login_submit')" class="btn btn-primary btn-block focus-input">{{ $t("ui.auth.login_submit") }}</button>
         </div>
       </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>

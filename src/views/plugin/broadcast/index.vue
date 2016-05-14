@@ -39,11 +39,11 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.broadcast.add'),
+            label: this.$t('ui.sub_nav.broadcast.add'),
             link: { path: '/plugins/broadcast/add' }
           },
           {
-            label: this.$t('sub_nav.broadcast.history'),
+            label: this.$t('ui.sub_nav.broadcast.history'),
             link: { path: '/plugins/broadcast/history' }
           }]
         }

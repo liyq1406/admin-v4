@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("rule.add_rule") }}</button>
+            <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("ui.rule.add_rule") }}</button>
             <div class="fr">
               <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
               <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
@@ -23,9 +23,9 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("rule.fields.name") }}</th>
-                <th>{{ $t("rule.fields.type") }}</th>
-                <th>{{ $t("rule.fields.content") }}</th>
+                <th>{{ $t("ui.rule.fields.name") }}</th>
+                <th>{{ $t("ui.rule.fields.type") }}</th>
+                <th>{{ $t("ui.rule.fields.content") }}</th>
                 <th>{{ $t("common.status") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
@@ -57,7 +57,7 @@
 
     <!-- Start: 添加规则浮层 -->
     <modal :show.sync="addModal.show" width="670px" :flag="addModal.editingTag" @close="onAddCancel">
-      <h3 slot="header">{{ $t("rule.add_rule") }}</h3>
+      <h3 slot="header">{{ $t("ui.rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
@@ -71,17 +71,17 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.name") }}:</label>
             <div class="controls col-19">
-              <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
-              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('validation.minlength', [$t('rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.condition") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.condition") }}:</label>
             <div class="controls col-19">
               <div class="row">
                 <div class="col-5">
@@ -135,17 +135,17 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.content") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.content") }}:</label>
             <div class="controls col-19">
-              <div v-placeholder="$t('rule.placeholders.content')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
                 <textarea v-model="addModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
-              <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+              <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.inform_type") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.inform_type") }}:</label>
             <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[addModal.model.notify_type-1]">
@@ -157,13 +157,13 @@
             </div>
           </div>
           <div class="form-row row tag-row">
-            <label class="form-control col-5">{{ $t("rule.fields.tags") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.tags") }}:</label>
             <div class="controls col-19">
               <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.notify_type") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.notify_type") }}:</label>
             <div class="controls col-19">
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
@@ -209,7 +209,7 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.scope") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.scope") }}:</label>
             <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
@@ -242,7 +242,7 @@
 
     <!-- Start: 编辑规则浮层 -->
     <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
-      <h3 slot="header">{{ $t("rule.edit_rule") }}</h3>
+      <h3 slot="header">{{ $t("ui.rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
@@ -252,17 +252,17 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.name") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.name") }}:</label>
             <div class="controls col-19">
-              <div v-placeholder="$t('rule.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('validation.minlength', [ $t('rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.condition") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.condition") }}:</label>
             <div class="controls col-19">
               <div class="row">
                 <div class="col-5">
@@ -313,17 +313,17 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.content") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.content") }}:</label>
             <div class="controls col-19">
               <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
                 <textarea v-model="editModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span></div>
-              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('validation.required', {field: $t('rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('validation.maxlength', [ $t('rule.fields.content'), 250]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.inform_type") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.inform_type") }}:</label>
             <div class="controls col-19">
               <div class="select">
                 <v-select :label="informTypes[editModal.model.notify_type-1]">
@@ -335,13 +335,13 @@
             </div>
           </div>
           <div class="form-row row tag-row">
-            <label class="form-control col-5">{{ $t("rule.fields.tags") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.tags") }}:</label>
             <div class="controls col-19">
               <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.notify_type") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.notify_type") }}:</label>
             <div class="controls col-19">
               <div class="checkbox-group">
                 <template v-for="type in notifyTypes">
@@ -387,7 +387,7 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-5">{{ $t("rule.fields.scope") }}:</label>
+            <label class="form-control col-5">{{ $t("ui.rule.fields.scope") }}:</label>
             <div class="controls col-19">
               <div class="radio-group">
                 <label v-for="type in scopeTypes" class="radio">
@@ -411,7 +411,7 @@
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("rule.del_rule") }}
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.rule.del_rule") }}
             </label>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -455,17 +455,17 @@
         products: [],
         rules: [],            // 规则列表
         apps: [],              // app 列表
-        ruleTypes: locales[Vue.config.lang].rule.types,
-        compareTypes: locales[Vue.config.lang].rule.compare_types,
-        informTypes: locales[Vue.config.lang].rule.inform_types,
-        notifyTypes: locales[Vue.config.lang].rule.notify_types,
-        scopeTypes: locales[Vue.config.lang].rule.scope_types,
+        ruleTypes: locales[Vue.config.lang].data.RULE_TYPES,
+        compareTypes: locales[Vue.config.lang].data.RULE_COMPARE_TYPES,
+        informTypes: locales[Vue.config.lang].data.RULE_INFORM_TYPES,
+        notifyTypes: locales[Vue.config.lang].data.RULE_NOTIFY_TYPES,
+        scopeTypes: locales[Vue.config.lang].data.RULE_SCOPE_TYPES,
         datapoints: [],       // 数据端点
         currentPage: 1,       // 当前页
         pageCount: 10,        // 每页记录数
         // addModal.show: false,  // 是否显示添加浮层
         // editModal.show: false, // 是否显示编辑浮层
-        candidateTags: locales[Vue.config.lang].rule.candidate_tags,      // 候选标签
+        candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,      // 候选标签
         addModal: {
           show: false,
           form: {},

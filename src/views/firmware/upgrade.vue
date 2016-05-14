@@ -3,9 +3,9 @@
     <div class="panel">
       <div class="panel-hd">
         <div class="actions">
-          <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('task.create_task') }}</button>
+          <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('ui.task.create_task') }}</button>
         </div>
-        <h2>{{ $t('task.task_list') }}</h2>
+        <h2>{{ $t('ui.task.task_list') }}</h2>
         <div style="position:absolute; top:5px; left:120px">
           <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
@@ -23,11 +23,11 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t('task.fields.order') }}</th>
-                <th>{{ $t('task.fields.description') }}</th>
-                <th>{{ $t('task.fields.from_version') }}</th>
-                <th>{{ $t('task.fields.target_version') }}</th>
-                <th>{{ $t('task.fields.upgrade_count') }}</th>
+                <th>{{ $t('ui.task.fields.order') }}</th>
+                <th>{{ $t('ui.task.fields.description') }}</th>
+                <th>{{ $t('ui.task.fields.from_version') }}</th>
+                <th>{{ $t('ui.task.fields.target_version') }}</th>
+                <th>{{ $t('ui.task.fields.upgrade_count') }}</th>
                 <th class="tac">{{ $t('common.action') }}</th>
               </tr>
             </thead>
@@ -40,7 +40,7 @@
                   <td>{{ task.target_version }}</td>
                   <td>{{ task.upgrade_count }}</td>
                   <td class="tac">
-                    <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-mini mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('task.stop') : $t('task.start') }}</button>
+                    <button :class="{'btn-primary': task.status, 'btn-success': !task.status, 'disabled': toggling}" :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-primary btn-mini mr20"><i :class="{'fa-stop': task.status, 'fa-play': !task.status}" class="fa"></i>{{ task.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button>
                     <button @click="removeTask(task)" class="btn btn-primary btn-mini">删除</button>
                   </td>
                 </tr>
@@ -57,53 +57,53 @@
     </div>
     <!-- 添加固件升级任务浮层-->
     <modal :show.sync="showAddTaskModal" @close="onAddTaskCancel">
-      <h3 slot="header">{{ $t("task.create_task") }}</h3>
+      <h3 slot="header">{{ $t("ui.task.create_task") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("task.fields.name") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.task.fields.name") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('task.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.task.placeholders.name')" class="input-text-wrap">
                 <input v-model="addTaskModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
-              <div v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('validation.required', {field: $t('task.fields.name')}) }}</span></div>
-              <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('validation.required', {field: $t('task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.name'), 32]) }}</span></div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.name')}) }}</span></div>
+              <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.task.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("task.fields.description") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.task.fields.description") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('task.placeholders.description')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.task.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addTaskModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('validation.required', {field: $t('task.fields.description')}) }}</span></div>
-              <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('validation.required', {field: $t('task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('task.fields.description'), 250]) }}</span></div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.description')}) }}</span></div>
+              <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.task.fields.description'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("task.fields.from_version") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.task.fields.from_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('task.select_from_version')" :label="addTaskModel.from_version.toString()">
+                <v-select :placeholder="$t('ui.task.select_from_version')" :label="addTaskModel.from_version.toString()">
                   <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
                     <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>
-              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("task.select_from_version") }}</span></div>
+              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("ui.task.select_from_version") }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("task.fields.target_version") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.task.fields.target_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('task.select_target_version')" :label="addTaskModel.target_version.toString()">
+                <v-select :placeholder="$t('ui.task.select_target_version')" :label="addTaskModel.target_version.toString()">
                   <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
                     <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
                 </v-select>
               </div>
-              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("task.select_target_version") }}</span></div>
+              <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("ui.task.select_target_version") }}</span></div>
             </div>
           </div>
           <div class="form-actions">

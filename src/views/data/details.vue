@@ -1,21 +1,21 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/data/tables' }"><i class="fa fa-arrow-circle-left"></i>{{ $t("nav_aside.data") }}</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/data/tables' }"><i class="fa fa-arrow-circle-left"></i>{{ $t("ui.nav_aside.data") }}</a></div>
       <div class="row">
         <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
-              <h2>{{ $t("table.details") }}</h2>
+              <h2>{{ $t("ui.table.details") }}</h2>
             </div>
             <div class="panel-bd">
               <table class="table table-stripe table-bordered">
                 <thead>
                   <tr>
                     <th>ID</th>
-                    <th>{{ $t("table_record.fields.create") }}</th>
-                    <th>{{ $t("table_record.fields.update") }}</th>
-                    <th>{{ $t("table_record.fields.creator") }}</th>
+                    <th>{{ $t("ui.table_record.fields.create") }}</th>
+                    <th>{{ $t("ui.table_record.fields.update") }}</th>
+                    <th>{{ $t("ui.table_record.fields.creator") }}</th>
                     <th class="tac">{{ $t("common.action") }}</th>
                   </tr>
                 </thead>
@@ -44,7 +44,7 @@
     </div>
     <!-- 查看数据浮层-->
     <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("table_record.details") }}</h3>
+      <h3 slot="header">{{ $t("ui.table_record.details") }}</h3>
       <table slot="body" class="table table-stripe table-bordered">
         <tbody>
           <tr>
@@ -52,19 +52,19 @@
             <td>{{ model.objectId }}</td>
           </tr>
           <tr>
-            <td>{{ $t("table_record.fields.create") }}</td>
+            <td>{{ $t("ui.table_record.fields.create") }}</td>
             <td>{{ model.createAt | formatDate }}</td>
           </tr>
           <tr>
-            <td>{{ $t("table_record.fields.update") }}</td>
+            <td>{{ $t("ui.table_record.fields.update") }}</td>
             <td>{{ model.updateAt | formatDate }}</td>
           </tr>
           <tr>
-            <td>{{ $t("table_record.fields.creator") }}</td>
+            <td>{{ $t("ui.table_record.fields.creator") }}</td>
             <td>{{ model.creator }}</td>
           </tr>
           <tr>
-            <td colspan="2"><strong>{{ $t("table_record.value") }}</strong></td>
+            <td colspan="2"><strong>{{ $t("ui.table_record.value") }}</strong></td>
           </tr>
           <tr v-for="(key, val) in tableInfo.field">
             <td>{{ key }}</td>

@@ -10,17 +10,17 @@
           <div class="form">
             <form v-form name="validation" @submit.prevent="onSubmit">
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.name") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.name") }}:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ingredient.placeholders.name')" class="input-text-wrap">
+                  <div v-placeholder="$t('ui.ingredient.placeholders.name')" class="input-text-wrap">
                     <input v-model="model.name" type="text" v-form-ctrl name="name" maxlength="250" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
                   </div>
-                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span></div>
-                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('validation.format', {field: $t('ingredient.fields.name')}) }}</span></div>
+                  <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span></div>
+                  <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.ingredient.fields.name'), 250]) }}</span><span v-if="validation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.ingredient.fields.name')}) }}</span></div>
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.images") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
                 <div class="controls col-18 controls-image">
                   <div class="image-uploader">
                     <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
@@ -29,7 +29,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.classification") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.classification") }}:</label>
                 <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
@@ -45,7 +45,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.push_rules") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.push_rules") }}:</label>
                 <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="rule in model.properties.push_rules" class="select">
@@ -61,12 +61,12 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-4">{{ $t("ingredient.fields.instructions") }}:</label>
+                <label class="form-control col-4">{{ $t("ui.ingredient.fields.instructions") }}:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ingredient.placeholders.instructions')" class="input-text-wrap">
+                  <div v-placeholder="$t('ui.ingredient.placeholders.instructions')" class="input-text-wrap">
                     <textarea v-model="model.instructions" type="text" v-form-ctrl name="instructions" maxlength="250" lazy class="input-text textarea-lg"></textarea>
                   </div>
-                  <div v-if="validation.instructions.$dirty" class="form-tips form-tips-error"><span v-if="validation.instructions.$error.maxlength"> {{ $t('validation.maxlength', [ $t('ingredient.fields.instructions'), 250]) }}</span></div>
+                  <div v-if="validation.instructions.$dirty" class="form-tips form-tips-error"><span v-if="validation.instructions.$error.maxlength"> {{ $t('ui.validation.maxlength', [ $t('ui.ingredient.fields.instructions'), 250]) }}</span></div>
                 </div>
               </div>
               <div class="form-actions row">
@@ -80,7 +80,7 @@
       </div>
       <div class="panel">
         <div class="panel-bd">
-          <button @click.prevent="deleteIngredient" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ingredient.del') }}</button>
+          <button @click.prevent="deleteIngredient" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ui.ingredient.del') }}</button>
         </div>
       </div>
     </div>

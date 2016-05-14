@@ -60,7 +60,7 @@
 
       // 需要线上隐藏的入口列表
       // 例子：
-      // <tab :nav="secondaryNav" :ban="[$t('sub_nav.product.wechat'), $t('sub_nav.product.dataforward')]"></tab>
+      // <tab :nav="secondaryNav" :ban="[$t('ui.sub_nav.product.wechat'), $t('ui.sub_nav.product.dataforward')]"></tab>
       ban: {
         type: Array,
         default () {

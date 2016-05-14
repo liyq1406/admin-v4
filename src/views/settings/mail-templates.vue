@@ -2,19 +2,19 @@
   <div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t("mail_templates.general") }}</h2>
+        <h2>{{ $t("ui.mail_templates.general") }}</h2>
       </div>
       <div class="panel-bd">
         <div class="form">
           <form v-form name="validation" @submit.prevent="onSenderSubmit">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.sender") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.sender") }}:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('mail_templates.placeholders.sender')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.mail_templates.placeholders.sender')" class="input-text-wrap">
                   <input v-model="sender" type="text" v-form-ctrl name="sender" required lazy custom-validator="noSpaces" class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.sender.$pristine" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}</span></div>
-                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">{{ $t('validation.format', {field: $t('mail_templates.fields.sender')}) }}</span></div>
+                <div v-if="validation.$submitted && validation.sender.$pristine" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
+                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -28,9 +28,9 @@
     </div>
     <div class="panel panel-mail-template">
       <div class="panel-hd">
-        <div v-show="!loading && activateLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus === 0">{{ $t('mail_templates.check_pending') }}</span><span v-if="activateStatus === -1" class="hl-red">{{ $t('mail_templates.check_reject') }}</span><span v-if="activateStatus === 1 || activateStatus === -2" class="hl-green">{{ $t('mail_templates.check_pass') }}</span></div>
-        <div v-show="!loading && activateLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus2 === 0">{{ $t('mail_templates.check_pending') }}</span><span v-if="activateStatus2 === -1" class="hl-red">{{ $t('mail_templates.check_reject') }}</span><span v-if="activateStatus2 === 1 || activateStatus2 === -2" class="hl-green">{{ $t('mail_templates.check_pass') }}</span></div>
-        <h2>{{ $t('mail_templates.activate_template') }}</h2>
+        <div v-show="!loading && activateLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus === 1 || activateStatus === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
+        <div v-show="!loading && activateLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus2 === 1 || activateStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
+        <h2>{{ $t('ui.mail_templates.activate_template') }}</h2>
         <div class="leftbox">
           <radio-group :items="languages" :value.sync="activateLang"></radio-group>
         </div>
@@ -39,23 +39,23 @@
         <div v-show="activateLang === 'zh-cn'" class="form template-form">
           <form v-form name="activateValidation" @submit.prevent="onActivateSubmit">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="activateModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="activateValidation.$submitted && activateValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="activateValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation.$submitted && activateValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.content") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="activateValidation.$submitted && activateValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
-                <div v-if="activateValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation.$submitted && activateValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -68,23 +68,23 @@
         <div v-show="activateLang === 'en-us'" class="form template-form">
           <form v-form name="activateValidation2" @submit.prevent="onActivateSubmit2">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="activateModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="activateValidation2.$submitted && activateValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="activateValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation2.$submitted && activateValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="activateValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.content") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="activateModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="activateValidation2.$submitted && activateValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
-                <div v-if="activateValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation2.$submitted && activateValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="activateValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="activateValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -98,9 +98,9 @@
     </div>
     <div class="panel panel-mail-template">
       <div class="panel-hd">
-        <div v-show="!loading && resetLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus === 0">{{ $t('mail_templates.check_pending') }}</span><span v-if="resetStatus === -1" class="hl-red">{{ $t('mail_templates.check_reject') }}</span><span v-if="resetStatus === 1 || resetStatus === -2" class="hl-green">{{ $t('mail_templates.check_pass') }}</span></div>
-        <div v-show="!loading && resetLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus2 === 0">{{ $t('mail_templates.check_pending') }}</span><span v-if="resetStatus2 === -1" class="hl-red">{{ $t('mail_templates.check_reject') }}</span><span v-if="resetStatus2 === 1 || resetStatus2 === -2" class="hl-green">{{ $t('mail_templates.check_pass') }}</span></div>
-        <h2>{{ $t('mail_templates.reset_template') }}</h2>
+        <div v-show="!loading && resetLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus === 1 || resetStatus === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
+        <div v-show="!loading && resetLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus2 === 1 || resetStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
+        <h2>{{ $t('ui.mail_templates.reset_template') }}</h2>
         <div class="leftbox">
           <radio-group :items="languages" :value.sync="resetLang"></radio-group>
         </div>
@@ -109,23 +109,23 @@
         <div v-show="resetLang === 'zh-cn'" class="form template-form">
           <form v-form name="resetValidation" @submit.prevent="onResetSubmit">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="resetModel.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="resetValidation.$submitted && resetValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="resetValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation.$submitted && resetValidation.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.content") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="resetValidation.$submitted && resetValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
-                <div v-if="resetValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation.$submitted && resetValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -138,23 +138,23 @@
         <div v-show="resetLang === 'en-us'" class="form template-form">
           <form v-form name="resetValidation2" @submit.prevent="onResetSubmit2">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.subject") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input v-model="resetModel2.subject" type="text" v-form-ctrl name="subject" required lazy class="input-text"/>
                 </div>
-                <div v-if="resetValidation2.$submitted && resetValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
-                <div v-if="resetValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation2.$submitted && resetValidation2.subject.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
+                <div v-if="resetValidation2.subject.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.subject.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.subject')}) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("mail_templates.fields.content") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.mail_templates.fields.content") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <textarea v-model="resetModel2.content" type="text" v-form-ctrl name="content" required lazy class="input-text"></textarea>
                 </div>
-                <div v-if="resetValidation2.$submitted && resetValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
-                <div v-if="resetValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('validation.required', {field: $t('mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation2.$submitted && resetValidation2.content.$pristine" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
+                <div v-if="resetValidation2.content.$dirty" class="form-tips form-tips-error"><span v-if="resetValidation2.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.content')}) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
@@ -177,7 +177,7 @@
             <div class="form-row row">
               <label class="form-control col-6">邮件发送域名:</label>
               <div class="controls col-18">
-                <!-- <div v-placeholder="$t('mail_templates.placeholders.address')" class="input-text-wrap"> -->
+                <!-- <div v-placeholder="$t('ui.mail_templates.placeholders.address')" class="input-text-wrap"> -->
                 <div class="input-text-wrap">
                   <span v-if="ifxlink" style="line-height:35px">{{validation2.domain}}</span>
                   <input v-else v-model="validation2.domain" type="text" name="address" lazy custom-validator="noSpaces" class="input-text"/>
@@ -290,7 +290,7 @@
 
     data () {
       return {
-        languages: locales[Vue.config.lang].mail_templates.languages,
+        languages: locales[Vue.config.lang].data.MAIL_TEMPLATE_LANGUAGES,
         validation: {},
         validation2: {
           info: {
@@ -474,7 +474,7 @@
         if (!this.validation.$valid) {
           this.showNotice({
             type: 'error',
-            content: this.$t('mail_templates.messages.illegal_sender')
+            content: this.$t('ui.mail_templates.messages.illegal_sender')
           })
           return
         }
@@ -490,7 +490,7 @@
               this.savingActivate = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.creation_fail')
+                content: this.$t('ui.mail_templates.messages.creation_fail')
               })
             })
           } else { // 修改
@@ -503,7 +503,7 @@
               this.savingActivate = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.update_fail')
+                content: this.$t('ui.mail_templates.messages.update_fail')
               })
             })
           }
@@ -517,7 +517,7 @@
         if (!this.validation.$valid) {
           this.showNotice({
             type: 'error',
-            content: this.$t('mail_templates.messages.illegal_sender')
+            content: this.$t('ui.mail_templates.messages.illegal_sender')
           })
           return
         }
@@ -533,7 +533,7 @@
               this.savingActivate = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.creation_fail')
+                content: this.$t('ui.mail_templates.messages.creation_fail')
               })
             })
           } else { // 修改
@@ -546,7 +546,7 @@
               this.savingActivate = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.update_fail')
+                content: this.$t('ui.mail_templates.messages.update_fail')
               })
             })
           }
@@ -560,7 +560,7 @@
         if (!this.validation.$valid) {
           this.showNotice({
             type: 'error',
-            content: this.$t('mail_templates.messages.illegal_sender')
+            content: this.$t('ui.mail_templates.messages.illegal_sender')
           })
           return
         }
@@ -576,7 +576,7 @@
               this.savingReset = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.creation_fail')
+                content: this.$t('ui.mail_templates.messages.creation_fail')
               })
             })
           } else { // 修改
@@ -589,7 +589,7 @@
               this.savingReset = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.update_fail')
+                content: this.$t('ui.mail_templates.messages.update_fail')
               })
             })
           }
@@ -603,7 +603,7 @@
         if (!this.validation.$valid) {
           this.showNotice({
             type: 'error',
-            content: this.$t('mail_templates.messages.illegal_sender')
+            content: this.$t('ui.mail_templates.messages.illegal_sender')
           })
           return
         }
@@ -619,7 +619,7 @@
               this.savingReset = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.creation_fail')
+                content: this.$t('ui.mail_templates.messages.creation_fail')
               })
             })
           } else { // 修改
@@ -632,7 +632,7 @@
               this.savingReset = false
               this.showNotice({
                 type: 'error',
-                content: this.$t('mail_templates.messages.update_fail')
+                content: this.$t('ui.mail_templates.messages.update_fail')
               })
             })
           }

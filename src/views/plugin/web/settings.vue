@@ -5,13 +5,13 @@
         <div class="form">
           <form v-form name="validation" @submit.prevent="onEditSubmit">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("app.fields.name") }}:</label>
+              <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('app.placeholders.name')" class="input-text-wrap">
+                <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
                   <input v-model="model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
               </div>
             </div>
             <div class="form-row row">
@@ -20,14 +20,14 @@
                 <div v-placeholder="urlPlaceholder" class="input-text-wrap">
                   <input v-model="model.config.url" type="text" v-form-ctrl name="url" minlength="2" maxlength="32" required lazy class="input-text"/>
                 </div>
-                <div v-if="validation.$submitted && validation.url.$pristine" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span></div>
-                <div v-if="validation.url.$dirty" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('validation.required', {field: $t('app.fields.name')}) }}</span><span v-if="validation.url.$error.minlength">{{ $t('validation.minlength', [ $t('app.fields.name'), 2]) }}</span><span v-if="validation.url.$error.maxlength">{{ $t('validation.maxlength', [ $t('app.fields.name'), 32]) }}</span></div>
+                <div v-if="validation.$submitted && validation.url.$pristine" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+                <div v-if="validation.url.$dirty" class="form-tips form-tips-error"><span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.url.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.url.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
               </div>
             </div>
             <div class="form-actions row">
               <div class="col-6">
                 <label class="del-check">
-                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("app.del_app") }}
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.app.del_app") }}
                 </label>
               </div>
               <div class="col-18">

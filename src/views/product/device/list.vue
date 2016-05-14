@@ -2,7 +2,7 @@
   <div class="panel">
     <div class="panel-bd">
       <div class="action-bar">
-        <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+        <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
           <v-select width="100px" :label="queryType.label">
             <select v-model="queryType">
               <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -11,9 +11,9 @@
           <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
         </search-box>
         <div class="action-group">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("overview.add_device") }}</button>
+          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
           <label :class="{'disabled':importing}" class="btn btn-success btn-upload">
-            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("overview.import_devices") }}
+            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
           </label>
         </div>
       </div>
@@ -35,10 +35,10 @@
           <thead>
             <tr>
               <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-              <th>{{ $t('device.id') }}</th>
-              <th>{{ $t('device.is_active') }}</th>
-              <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-              <th>{{ $t('device.is_online') }}</th>
+              <th>{{ $t('ui.device.id') }}</th>
+              <th>{{ $t('ui.device.is_active') }}</th>
+              <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('ui.device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+              <th>{{ $t('ui.device.is_online') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -46,9 +46,9 @@
               <tr v-for="device in devices">
                 <td><a v-link="'/products/' + $route.params.id + '/devices/' + device.id" class="hl-red">{{ device.mac }}</a></td>
                 <td>{{ device.id }}</td>
-                <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
+                <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
                 <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-                <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td>
+                <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td>
               </tr>
             </template>
             <tr v-if="devices.length === 0 && !loadingData">
@@ -66,17 +66,17 @@
     </div>
     <!-- 添加设备浮层-->
     <modal :show.sync="showAddModal">
-      <h3 slot="header">{{ $t("overview.add_device") }}</h3>
+      <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("overview.addForm.mac") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('overview.addForm.mac_placeholder')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')})</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('validation.required', {field: $t('overview.addForm.mac')})</span></div>
+              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')})</span></div>
+              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')})</span></div>
             </div>
           </div>
           <div class="form-actions">
@@ -136,7 +136,7 @@
           label: '全部',
           value: 'all'
         },
-        visibilityOptions: locales[Vue.config.lang].visibilityOptions,
+        visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
         devices: [],
         total: 0,
         currentPage: 1,
@@ -290,14 +290,14 @@
           if (!/text\/\w+/.test(file.type)) {
             this.showNotice({
               type: 'error',
-              content: file.name + this.$t('upload.type_tips')
+              content: file.name + this.$t('ui.upload.type_tips')
             })
             return false
           }
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('upload.read_err')
+              content: this.$t('ui.upload.read_err')
             })
           }
           this.importing = true
@@ -316,7 +316,7 @@
                 if (res.status === 200) {
                   this.showNotice({
                     type: 'success',
-                    content: this.$t('upload.success_msg')
+                    content: this.$t('ui.upload.success_msg')
                   })
                   this.getDevices()
                 }
@@ -331,7 +331,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('upload.compatiblity')
+            content: this.$t('ui.upload.compatiblity')
           })
         }
       }

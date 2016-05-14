@@ -1,12 +1,12 @@
 <template>
   <section class="main-wrap">
     <div class="main device-details">
-      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('device.management') }}</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('ui.device.management') }}</a></div>
       <div class="row">
         <div class="col-24">
           <div class="panel">
             <div class="panel-hd">
-              <h2>{{ $t('device.details') }}</h2>
+              <h2>{{ $t('ui.device.details') }}</h2>
             </div>
             <div class="panel-bd">
               <ul class="device-details">
@@ -23,19 +23,19 @@
                   <div class="info">{{ device.mac }}</div>
                 </li>
                 <li>
-                  <div class="label">{{ $t('device.is_active') }}:</div>
-                  <div class="info">{{ device.is_active ? $t('device.active') : $t('device.not_active') }}</div>
+                  <div class="label">{{ $t('ui.device.is_active') }}:</div>
+                  <div class="info">{{ device.is_active ? $t('ui.device.active') : $t('ui.device.not_active') }}</div>
                 </li>
                 <li>
-                  <div class="label">{{ $t('device.active_date') }}:</div>
+                  <div class="label">{{ $t('ui.device.active_date') }}:</div>
                   <div class="info">{{ device.active_date | formatDate }}</div>
                 </li>
                 <li>
-                  <div class="label">{{ $t('device.is_online') }}:</div>
+                  <div class="label">{{ $t('ui.device.is_online') }}:</div>
                   <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else class="hl-red">{{ $t('common.offline') }}</span></div>
                 </li>
                 <li>
-                  <div class="label">{{ $t('device.firmware_version') }}:</div>
+                  <div class="label">{{ $t('ui.device.firmware_version') }}:</div>
                   <div class="info"><span>{{ device.firmware_version }}</span></div>
                 </li>
               </ul>
@@ -51,16 +51,16 @@
               <div class="actions">
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-success">{{ $t('common.refresh') }}<i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
-              <h2>{{ $t('device.datapoint') }}</h2>
+              <h2>{{ $t('ui.device.datapoint') }}</h2>
             </div>
             <div class="panel-bd">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>{{ $t('datapoint.fields.index') }}</th>
-                    <th>{{ $t('datapoint.fields.name') }}</th>
-                    <th>{{ $t('datapoint.fields.description') }}</th>
-                    <th>{{ $t('device.current_value') }}</th>
+                    <th>{{ $t('ui.datapoint.fields.index') }}</th>
+                    <th>{{ $t('ui.datapoint.fields.name') }}</th>
+                    <th>{{ $t('ui.datapoint.fields.description') }}</th>
+                    <th>{{ $t('ui.device.current_value') }}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -76,7 +76,7 @@
                   </tr>
                   <tr v-if="datapoints.length === 0">
                     <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                      <div v-else class="tips-null">{{ $t('device.no_datapoint') }}</div>
+                      <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
                     </td>
                   </tr>
                 </tbody>
@@ -92,7 +92,7 @@
               <div class="actions">
                 <switch :value.sync="showLog" @switch-toggle="toggleLog"></switch>
               </div>
-              <h2>{{ $t('device.log') }}</h2>
+              <h2>{{ $t('ui.device.log') }}</h2>
             </div>
             <div class="panel-bd">
               <code class="output-log">

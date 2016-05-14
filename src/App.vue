@@ -6,12 +6,12 @@
         <!-- Start: 顶部导航 -->
         <nav class="nav-header">
           <ul>
-            <li><a href="http://www.xlink.cn/" target="_blank">{{ $t("nav_head.home") }}</a></li>
-            <li><a href="http://www.xlink.cn/platform.html" target="_blank">{{ $t("nav_head.platform") }}</a></li>
-            <li><a href="http://www.xlink.cn/solutions/smart-home.html" target="_blank">{{ $t("nav_head.solutions") }}</a></li>
-            <li><a href="http://www.xlink.cn/developer.html" target="_blank">{{ $t("nav_head.developer") }}</a></li>
-            <li><a href="http://www.xlink.cn/case.html" target="_blank">{{ $t("nav_head.cases") }}</a></li>
-            <li><a href="http://support.xlink.cn/" target="_blank">{{ $t("nav_head.documents") }}</a></li>
+            <li><a href="http://www.xlink.cn/" target="_blank">{{ $t("ui.nav_head.home") }}</a></li>
+            <li><a href="http://www.xlink.cn/platform.html" target="_blank">{{ $t("ui.nav_head.platform") }}</a></li>
+            <li><a href="http://www.xlink.cn/solutions/smart-home.html" target="_blank">{{ $t("ui.nav_head.solutions") }}</a></li>
+            <li><a href="http://www.xlink.cn/developer.html" target="_blank">{{ $t("ui.nav_head.developer") }}</a></li>
+            <li><a href="http://www.xlink.cn/case.html" target="_blank">{{ $t("ui.nav_head.cases") }}</a></li>
+            <li><a href="http://support.xlink.cn/" target="_blank">{{ $t("ui.nav_head.documents") }}</a></li>
           </ul>
         </nav>
         <!-- End: 顶部导航 -->
@@ -23,10 +23,10 @@
           <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sed-navigation">
             <ul>
               <li class="sed-navigation-li">
-                <a v-link="{path: '/settings/account'}">{{ $t("user_menu.account") }}</a>
+                <a v-link="{path: '/settings/account'}">{{ $t("ui.user_menu.account") }}</a>
               </li>
               <li class="sed-navigation-li">
-                <a href="#" @click.prevent="quit">{{ $t("user_menu.quit") }}</a>
+                <a href="#" @click.prevent="quit">{{ $t("ui.user_menu.quit") }}</a>
               </li>
             </ul>
           </div>
@@ -41,22 +41,22 @@
           <div class="nav-aside-wrap">
             <div class="nav-aside-content">
               <div class="nav-aside-item">
-                <a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("nav_aside.dashboard") }}</a>
+                <a v-link="{ path: '/dashboard' }"><i class="fa fa-home"></i>{{ $t("ui.nav_aside.dashboard") }}</a>
               </div>
               <!-- Start: 产品管理 -->
               <div class="nav-aside-group">
-                <h3>{{ $t("nav_aside.products") }}</h3>
+                <h3>{{ $t("ui.nav_aside.products") }}</h3>
                 <div v-for="product in products" class="nav-aside-item">
                   <a v-link="{ name: 'products', params: { id: product.id} }" title="{{ product.name }}"><i class="fa fa-link"></i>{{ product.name }}</a>
                 </div>
                 <div class="nav-aside-actions">
-                  <a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_product") }}</a>
+                  <a v-link="{ path: '/product/create' }"><i class="fa fa-plus"></i>{{ $t("ui.nav_aside.add_product") }}</a>
                 </div>
               </div>
               <!-- End: 产品管理 -->
               <!-- Start: 插件管理 -->
               <div class="nav-aside-group">
-                <h3>{{ $t("nav_aside.plugins") }}</h3>
+                <h3>{{ $t("ui.nav_aside.plugins") }}</h3>
                 <template v-for="plugin in plugins" track-by="$index">
                   <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                   <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
@@ -66,18 +66,18 @@
                   <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && plugin.plugin==='warranty'"><a v-link="{ path: '/plugins/'+ plugin.plugin + '/' +plugin.id }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                 </template>
                 <div class="nav-aside-actions">
-                  <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("nav_aside.add_plugin") }}</a>
+                  <a v-link="{ path: '/plugins' }"><i class="fa fa-plus"></i>{{ $t("ui.nav_aside.add_plugin") }}</a>
                 </div>
               </div>
               <!-- End: 插件管理 -->
-              <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("nav_aside.alerts") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/linkage' }"><i class="fa fa-clone"></i>{{ $t("nav_aside.link") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("nav_aside.data") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("nav_aside.users") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/device-map' }"><i class="fa fa-map"></i>{{ $t("nav_aside.device_map") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-rocket"></i>{{ $t("nav_aside.firmwares") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("nav_aside.statistic") }}</a></div>
-              <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("nav_aside.settings") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/alerts' }"><i class="fa fa-bell"></i>{{ $t("ui.nav_aside.alerts") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/linkage' }"><i class="fa fa-clone"></i>{{ $t("ui.nav_aside.link") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/data' }"><i class="fa fa-database"></i>{{ $t("ui.nav_aside.data") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/users' }"><i class="fa fa-users"></i>{{ $t("ui.nav_aside.users") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/device-map' }"><i class="fa fa-map"></i>{{ $t("ui.nav_aside.device_map") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/firmware' }"><i class="fa fa-rocket"></i>{{ $t("ui.nav_aside.firmwares") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/statistic' }"><i class="fa fa-bar-chart"></i>{{ $t("ui.nav_aside.statistic") }}</a></div>
+              <div class="nav-aside-item"><a v-link="{ path: '/settings' }"><i class="fa fa-cog"></i>{{ $t("ui.nav_aside.settings") }}</a></div>
             </div>
           </div>
         </div>

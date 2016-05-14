@@ -1,7 +1,7 @@
 <template>
   <div class="panel device-map-page">
     <div class="panel-hd">
-      <h2>{{ $t("nav_aside.device_map") }}</h2>
+      <h2>{{ $t("ui.nav_aside.device_map") }}</h2>
       <div class="leftbox">
         <v-select width="160px" :label="currProduct.name" size="small">
           <span slot="label">选择产品：</span>
@@ -17,7 +17,7 @@
           <i class="fa fa-refresh fa-spin"></i>
         </div>
         <div class="action-bar">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="handleSearch" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="handleSearch" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
             <v-select width="100px" :label="queryType.label">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>

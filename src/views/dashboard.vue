@@ -7,29 +7,29 @@
           <div class="panel">
             <div class="panel-hd">
               <div v-text="new Date() | formatDate" class="date"></div>
-              <h2>{{ $t("dashboard.platform") }}</h2>
+              <h2>{{ $t("ui.dashboard.platform") }}</h2>
             </div>
             <div class="panel-bd">
               <div class="statistic">
                 <div class="statistic-item device-count">
                   <div class="fa fa-link"></div>
                   <div class="num">{{ totalSummary.total }}</div>
-                  <div class="label">{{ $t("dashboard.statistic.total") }}</div>
+                  <div class="label">{{ $t("ui.dashboard.statistic.total") }}</div>
                 </div>
                 <div class="statistic-item active-count">
                   <div class="fa fa-magic"></div>
                   <div class="num">{{ totalSummary.activated }}</div>
-                  <div class="label">{{ $t("dashboard.statistic.activated") }}</div>
+                  <div class="label">{{ $t("ui.dashboard.statistic.activated") }}</div>
                 </div>
                 <div class="statistic-item online-count">
                   <div class="fa fa-wifi"></div>
                   <div class="num">{{ totalSummary.online }}</div>
-                  <div class="label">{{ $t("dashboard.statistic.online") }}</div>
+                  <div class="label">{{ $t("ui.dashboard.statistic.online") }}</div>
                 </div>
                 <div class="statistic-item user-count">
                   <div class="fa fa-users"></div>
                   <div class="num">{{ userSummary.user }}</div>
-                  <div class="label">{{ $t("dashboard.statistic.user") }}</div>
+                  <div class="label">{{ $t("ui.dashboard.statistic.user") }}</div>
                 </div>
               </div>
             </div>
@@ -99,7 +99,7 @@
           <!-- Start: 文档-->
           <div class="panel">
             <div class="panel-hd">
-              <h2>{{ $t("dashboard.documents") }}</h2>
+              <h2>{{ $t("ui.dashboard.documents") }}</h2>
             </div>
             <div class="panel-bd">
               <div class="doc-list">
@@ -129,7 +129,7 @@
           <!-- Start: 快速指南-->
           <div class="panel">
             <div class="panel-hd">
-              <h2>{{ $t("dashboard.guide") }}</h2>
+              <h2>{{ $t("ui.dashboard.guide") }}</h2>
             </div>
             <div class="panel-bd">
               <div class="post-list">
@@ -193,7 +193,7 @@
         productPeriod: 7,
         userPeriod: 7,
         alertPeriod: 7,
-        periods: locales[Vue.config.lang].periods,
+        periods: locales[Vue.config.lang].data.PERIODS,
         productTrends: [],
         userTrends: [],
         alertTrends: [],
@@ -212,11 +212,11 @@
       // 产品趋势图表数据
       productSeries () {
         var result = [{
-          name: this.$t('statistic.products.active'),
+          name: this.$t('ui.statistic.products.active'),
           type: 'line',
           data: []
         }, {
-          name: this.$t('statistic.products.activated'),
+          name: this.$t('ui.statistic.products.activated'),
           type: 'line',
           data: []
         }]
@@ -240,11 +240,11 @@
       // 用户趋势图表数据
       userSeries () {
         var result = [{
-          name: this.$t('statistic.users.active'),
+          name: this.$t('ui.statistic.users.active'),
           type: 'line',
           data: []
         }, {
-          name: this.$t('statistic.users.newbie'),
+          name: this.$t('ui.statistic.users.newbie'),
           type: 'line',
           data: []
         }]
@@ -268,7 +268,7 @@
       // 告警趋势图表数据
       alertSeries () {
         var result = [{
-          name: this.$t('alert.counts'),
+          name: this.$t('ui.alert.counts'),
           type: 'line',
           data: []
         }]

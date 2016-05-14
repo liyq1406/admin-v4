@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t("nav_aside.plugins") }}</h2>
+          <h2>{{ $t("ui.nav_aside.plugins") }}</h2>
         </div>
         <div class="panel-bd">
           <div class="plugin-grid row">
@@ -100,11 +100,11 @@
         this.getPlugins()
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.plugins.extensions'),
+            label: this.$t('ui.sub_nav.plugins.extensions'),
             link: { path: '/plugins/extensions' }
           },
           {
-            label: this.$t('sub_nav.plugins.customize'),
+            label: this.$t('ui.sub_nav.plugins.customize'),
             link: { path: '/plugins/customize' }
           }]
         }

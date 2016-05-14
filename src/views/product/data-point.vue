@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("datapoint.add_datapoint") }}</button>
+            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.datapoint.add_datapoint") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -14,11 +14,11 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("datapoint.fields.index") }}</th>
-                <th>{{ $t("datapoint.fields.name") }}</th>
-                <th>{{ $t("datapoint.fields.type") }}</th>
-                <th>{{ $t("datapoint.fields.symbol") }}</th>
-                <th>{{ $t("datapoint.fields.description") }}</th>
+                <th>{{ $t("ui.datapoint.fields.index") }}</th>
+                <th>{{ $t("ui.datapoint.fields.name") }}</th>
+                <th>{{ $t("ui.datapoint.fields.type") }}</th>
+                <th>{{ $t("ui.datapoint.fields.symbol") }}</th>
+                <th>{{ $t("ui.datapoint.fields.description") }}</th>
                 <th class="tac">{{ $t("common.action") }}</th>
               </tr>
             </thead>
@@ -51,31 +51,31 @@
     </div>
     <!-- 添加数据端点浮层-->
     <modal :show.sync="showAddModal" @close="onAddCancel">
-      <h3 slot="header">{{ $t("datapoint.add_datapoint") }}</h3>
+      <h3 slot="header">{{ $t("ui.datapoint.add_datapoint") }}</h3>
       <div slot="body" class="form">
         <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.index") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.index')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.index')" class="input-text-wrap">
                 <input v-model="addModel.index" type="text" v-form-ctrl name="index" required custom-validator="numberic" lazy class="input-text" />
               </div>
-              <div v-if="addValidation.$submitted && addValidation.index.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span></div>
-              <div v-if="addValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span><span v-if="addValidation.index.$error.customValidator">{{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.index.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span></div>
+              <div v-if="addValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span><span v-if="addValidation.index.$error.customValidator">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.index'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.name") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.name") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span></div>
-              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span></div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.type") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="datapointTypes[addModel.type-1]">
@@ -87,23 +87,23 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.symbol") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.symbol") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.symbol')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.symbol')" class="input-text-wrap">
                 <textarea v-model="addModel.symbol" type="text" v-form-ctrl name="symbol" maxlength="10" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.symbol.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span></div>
-              <div v-if="addValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span><span v-if="addValidation.symbol.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])</span></div>
+              <div v-if="addValidation.$submitted && addValidation.symbol.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.symbol.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.symbol')}) }}</span></div>
+              <div v-if="addValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.symbol.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.symbol')}) }}</span><span v-if="addValidation.symbol.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.symbol'), 10])</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.description") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.description") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.description')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted&& addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}</span></div>
-              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.description'), 250])</span></div>
+              <div v-if="addValidation.$submitted&& addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.description')}) }}</span></div>
+              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.description'), 250])</span></div>
             </div>
           </div>
           <div class="form-actions">
@@ -115,31 +115,31 @@
     </modal>
     <!-- 编辑数据端点浮层-->
     <modal :show.sync="showEditModal">
-      <h3 slot="header">{{ $t("datapoint.edit_datapoint") }}</h3>
+      <h3 slot="header">{{ $t("ui.datapoint.edit_datapoint") }}</h3>
       <div slot="body" class="form">
         <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.index") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.index')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.index')" class="input-text-wrap">
                 <input v-model="editModel.index" type="text" v-form-ctrl name="index" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.index.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span></div>
-              <div v-if="editValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.index')}) }}</span><span v-if="editValidation.index.$error.customValidator">{{ $t('validation.maxlength', [ $t('datapoint.fields.index'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.index.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span></div>
+              <div v-if="editValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span><span v-if="editValidation.index.$error.customValidator">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.index'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.name") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.name") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.name')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.type") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
             <div class="controls col-18">
               <div class="select">
                 <v-select :label="datapointTypes[editModel.type-1]">
@@ -151,28 +151,28 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.symbol") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.symbol") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.symbol')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.symbol')" class="input-text-wrap">
                 <textarea v-model="editModel.symbol" type="text" v-form-ctrl name="symbol" maxlength="10" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.symbol.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span></div>
-              <div v-if="editValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.symbol.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.symbol')}) }}</span><span v-if="editValidation.symbol.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.symbol'), 10])</span></div>
+              <div v-if="editValidation.$submitted && editValidation.symbol.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.symbol.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.symbol')}) }}</span></div>
+              <div v-if="editValidation.symbol.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.symbol.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.symbol')}) }}</span><span v-if="editValidation.symbol.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.symbol'), 10])</span></div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-6">{{ $t("datapoint.fields.description") }}:</label>
+            <label class="form-control col-6">{{ $t("ui.datapoint.fields.description") }}:</label>
             <div class="controls col-18">
-              <div v-placeholder="$t('datapoint.placeholders.description')" class="input-text-wrap">
+              <div v-placeholder="$t('ui.datapoint.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted&& editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('validation.required', {field: $t('datapoint.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('validation.maxlength', [ $t('datapoint.fields.description'), 250])</span></div>
+              <div v-if="editValidation.$submitted&& editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.description')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.description'), 250])</span></div>
             </div>
           </div>
           <div class="form-actions">
             <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t('datapoint.del_datapoint') }}
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t('ui.datapoint.del_datapoint') }}
             </label>
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -218,7 +218,7 @@
     data () {
       return {
         datapoints: [],
-        datapointTypes: locales[Vue.config.lang].datapoint.types,
+        datapointTypes: locales[Vue.config.lang].data.DATAPOINT_TYPES,
         pageCount: 10,
         currentPage: 1,
         showAddModal: false,

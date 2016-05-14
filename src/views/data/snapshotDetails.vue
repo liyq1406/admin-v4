@@ -21,7 +21,7 @@
             <div class="panel-bd layout-left">
               <div class="device-list-box">
                 <div class="action-bar">
-                  <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                  <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
                     <v-select width="100px" :label="queryType.label">
                       <select v-model="queryType">
                         <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -209,7 +209,7 @@
       return {
         /** ***图表 按钮 start*********/
         loadingProductTrends: false,
-        periods: locales[Vue.config.lang].shortperiods,
+        periods: locales[Vue.config.lang].data.SHORT_PERIODS,
         period: 1,
         /* ******图表 按钮 end*************/
         query: '',

@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>{{ $t("nav_aside.settings") }}</h2>
+          <h2>{{ $t("ui.nav_aside.settings") }}</h2>
         </div>
         <div class="panel-bd">
           <tab :nav="secondaryNav"></tab>
@@ -39,16 +39,16 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('sub_nav.settings.auth'),
+            label: this.$t('ui.sub_nav.settings.auth'),
             link: { path: '/settings/auth' }
           }, {
-            label: this.$t('sub_nav.settings.members'),
+            label: this.$t('ui.sub_nav.settings.members'),
             link: { path: '/settings/members' }
           }, {
-            label: this.$t('sub_nav.settings.account'),
+            label: this.$t('ui.sub_nav.settings.account'),
             link: { path: '/settings/account' }
           }, {
-            label: this.$t('sub_nav.settings.mail_templates'),
+            label: this.$t('ui.sub_nav.settings.mail_templates'),
             link: { path: '/settings/mail-templates' }
           }]
         }

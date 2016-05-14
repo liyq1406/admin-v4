@@ -1,11 +1,11 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
+      <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
         <button slot="search-button" @click="getUsers" class="btn btn-primary">{{ $t('common.search') }}</button>
-        <label>{{ $t('user.search_user') }}</label>
+        <label>{{ $t('ui.user.search_user') }}</label>
       </search-box>
-      <h2>{{ $t('user.list') }}</h2>
+      <h2>{{ $t('ui.user.list') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="data-table with-loading">
@@ -16,10 +16,10 @@
           <thead>
             <tr>
               <th>ID</th>
-              <th>{{ $t('user.fields.nick_name') }}</th>
-              <th>{{ $t('user.fields.account') }}</th>
-              <th>{{ $t('user.fields.create_date') }}</th>
-              <th>{{ $t('user.fields.source') }}</th>
+              <th>{{ $t('ui.user.fields.nick_name') }}</th>
+              <th>{{ $t('ui.user.fields.account') }}</th>
+              <th>{{ $t('ui.user.fields.create_date') }}</th>
+              <th>{{ $t('ui.user.fields.source') }}</th>
               <th>{{ $t('common.status') }}</th>
             </tr>
           </thead>
@@ -31,7 +31,7 @@
                 <td>{{ user.account }}</td>
                 <td>{{ user.create_date | formatDate }}</td>
                 <td><span v-if="user.source===1">Web</span><span v-if="user.source===2">Android</span><span v-if="user.source===3">iOS</span><span v-if="user.source===4">{{ $('common.wechat') }}</span></td>
-                <td><span>{{ user.phone_valid || user.email_valid ? $t('user.status.activate') :  $t('user.status.deactivate') }}</span></td>
+                <td><span>{{ user.phone_valid || user.email_valid ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</span></td>
               </tr>
             </template>
             <tr v-if="total === 0 && !loadingData">

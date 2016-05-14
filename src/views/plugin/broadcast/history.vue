@@ -2,7 +2,7 @@
   <section>
     <div class="panel">
       <div class="panel-hd">
-        <search-box :key.sync="query" :active="searching" :placeholder="$t('overview.addForm.search_condi')" @cancel="getHistory(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistory(true)">
+        <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getHistory(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistory(true)">
           <v-select width="100px" :label="queryType.label">
             <select v-model="queryType">
               <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -44,9 +44,9 @@
                   <td>{{ history.broadcast_time }}</td>
                   <!-- <td><a v-link="'/products/' + $route.params.id + '/devices/' + device.id" class="hl-red">{{ device.mac }}</a></td>
                   <td>{{ device.id }}</td>
-                  <td v-text="device.is_active ? $t('device_list.active') : $t('device_list.not_active')"></td>
+                  <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
                   <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-                  <td><span v-if="device.is_online" class="hl-green">{{ $t('device_list.online') }}</span><span v-else class="hl-gray">{{ $t('device_list.offline') }}</span></td> -->
+                  <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td> -->
                 </tr>
               </template>
               <tr v-if="histories.length === 0 && !loadingData">
