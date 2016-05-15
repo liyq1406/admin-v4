@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col" :class="containerClass">
       <div :class="classes">
-        <div class="fa fa-info-circle"></div>
+        <div :class="'fa fa-' + icon + '-circle'"></div>
         <h2>{{ title }}</h2>
         <div class="v-alert-cont">
           <slot></slot>
@@ -59,6 +59,15 @@
         return result.join(' ')
       },
 
+      // 图标
+      icon () {
+        return ({
+          'success': 'check',
+          'info': 'info',
+          'error': 'times'
+        })[this.type] || ''
+      },
+
       // 容器样式
       containerClass () {
         return `col-${this.cols} col-offset-${Math.round((24 - this.cols) / 2)}`
@@ -73,7 +82,7 @@
   .v-alert
     position relative
     padding-left 64px
-    margin 100px 0
+    margin 80px 0
 
     .fa
       absolute left top

@@ -3,22 +3,18 @@
     <div v-show="activateSuccess" class="form form-auth form-member-activate">
       <div class="form-logo"></div>
       <div class="form-cont reset-password-success">
-        <div class="alert alert-success">
-          <div class="fa fa-check-circle-o"></div>
-          <h2>{{ $t("ui.auth.activate_success") }}</h2>
-          <p>{{ $t("ui.auth.activate_success_msg") }}</p>
-        </div>
+        <v-alert :cols="16" :title="successTitle" type="error">
+          <p>{{ successMsg }}</p>
+        </v-alert>
         <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
       </div>
     </div>
     <div v-show="activateFail" class="form form-auth form-member-activate">
       <div class="form-logo"></div>
       <div class="form-cont reset-password-success">
-        <div class="alert alert-success">
-          <div class="fa fa-times-circle-o"></div>
-          <h2>{{ $t("ui.auth.activate_fail") }}</h2>
-          <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
-        </div>
+        <v-alert :cols="16" :title="failTitle" type="error">
+          <p>{{ failMsg }}</p>
+        </v-alert>
         <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
       </div>
     </div>
@@ -29,6 +25,7 @@
   import api from '../api'
   import base64 from '../helpers/base64'
   import { globalMixins } from '../mixins'
+  import Alert from '../components/Alert'
 
   export default {
     name: 'EmailActivateForm',
@@ -37,10 +34,18 @@
 
     mixins: [globalMixins],
 
+    components: {
+      'v-alert': Alert
+    },
+
     data () {
       return {
         activateSuccess: false,
-        activateFail: false
+        activateFail: false,
+        successTitle: this.$t('ui.auth.activate_success'),
+        successMsg: this.$t('ui.auth.activate_success_msg'),
+        failTitle: this.$t('ui.auth.activate_fail'),
+        failMsg: this.$t('ui.auth.activate_fail_msg')
       }
     },
 
@@ -56,8 +61,18 @@
           this.activateSuccess = true
         }
       }).catch((res) => {
-        if (res.error.code === 4001028) {
-          this.activateFail = true
+        switch (res.data.error.code) {
+          case 4041004:
+            this.activateFail = true
+            this.failMsg = '用于激活成员的邮箱不存在'
+            break
+          case 4001062:
+            this.activateSuccess = true
+            this.successTitle = '温馨提示'
+            this.successMsg = '该成员邮箱已经激活'
+            break
+          default:
+            this.activateFail = true
         }
       })
     }
