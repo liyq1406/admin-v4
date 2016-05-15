@@ -143,3 +143,11 @@ export const MAIL_TEMPLATE_LANGUAGES = [
   { label: '中文(简体)', value: 'zh-cn' },
   { label: '英语(美国)', value: 'en-us' }
 ]
+
+// 产品快照存储时间间隔
+export const SNAPSHOT_INTERVAL = [
+  { label: '10分钟', value: 0 },
+  { label: '20分钟', value: 1 },
+  { label: '30分钟', value: 2 },
+  { label: '1小时', value: 3 }
+]

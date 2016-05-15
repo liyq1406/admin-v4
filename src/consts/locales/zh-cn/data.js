@@ -137,3 +137,11 @@ export const DATA_FORWARD_TYPES = ['设备上线', '设备下线', '设备激活
 
 // 数据目的地
 export const DATA_DESTINATIONS = ['转发到外部url', '转发到内部插件处理单元']
+
+// 产品快照存储时间间隔
+export const SNAPSHOT_INTERVAL = [
+  { label: '10分钟', value: 0 },
+  { label: '20分钟', value: 1 },
+  { label: '30分钟', value: 2 },
+  { label: '1小时', value: 3 }
+]

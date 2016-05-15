@@ -60,7 +60,7 @@
                 <template v-for="plugin in plugins" track-by="$index">
                   <div class="nav-aside-item" v-if="plugin.type===1"><a v-link="{ path: '/plugins/ios/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                   <div class="nav-aside-item" v-if="plugin.type===2"><a v-link="{ path: '/plugins/android/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
-                  <div class="nav-aside-item" v-if="plugin.type===3"><a v-link="{ path: '/plugins/web/' + plugin.id + '/settings'}"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
+                  <div class="nav-aside-item" v-if="plugin.type===3"><a :href="plugin.config.url"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                   <div class="nav-aside-item" v-if="plugin.type===4"><a v-link="{ path: '/plugins/wechat/' + plugin.id + '/settings' }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                   <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && (plugin.plugin!=='warranty')"><a v-link="{ path: '/plugins/' + plugin.plugin }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>
                   <div class="nav-aside-item" v-if="plugin.type===10 && plugin.enable===true && plugin.plugin==='warranty'"><a v-link="{ path: '/plugins/'+ plugin.plugin + '/' +plugin.id }"><i class="fa fa-puzzle-piece"></i>{{ plugin.name }}</a></div>

@@ -16,9 +16,9 @@
           <div class="form-row row">
             <label class="form-control col-6">快照规则:</label>
             <div class="controls col-9">
-              <v-select :label="timeIntervals[timeInterval.value].label" width="200px">
+              <v-select :label="snapshotInterval[timeInterval.value].label" width="200px">
                 <select v-model="timeInterval">
-                  <option v-for="time in timeIntervals" :value="time">{{ time.label }}</option>
+                  <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -136,9 +136,9 @@
           <div class="form-row row">
             <label class="form-control col-6">快照规则:</label>
             <div class="controls col-9">
-              <v-select :label="timeIntervals[timeIntervalEdit.value].label" width="200px">
+              <v-select :label="snapshotInterval[timeIntervalEdit.value].label" width="200px">
                 <select v-model="timeIntervalEdit">
-                  <option v-for="time in timeIntervals" :value="time">{{ time.label }}</option>
+                  <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -239,7 +239,7 @@
         delRuleChecked: false,
         datapointTypes: locales[Vue.config.lang].data.DATAPOINT_TYPES,
         productType: {
-          label: '请选择产品类型',
+          label: '请选择产品',
           value: 0,
           id: ''
         },
@@ -248,22 +248,7 @@
           value: 0,
           id: ''
         },
-        timeIntervals: [{
-          label: '10分钟',
-          value: 0
-        },
-        {
-          label: '20分钟',
-          value: 1
-        },
-        {
-          label: '30分钟',
-          value: 2
-        },
-        {
-          label: '1小时',
-          value: 3
-        }],
+        snapshotInterval: locales[Vue.config.lang].data.SNAPSHOT_INTERVAL,
         timeInterval: {
           label: '10分钟',
           value: 0
@@ -296,7 +281,7 @@
     computed: {
       productTypes () {
         var types = [{
-          label: '请选择产品类型',
+          label: '请选择产品',
           value: 0,
           id: ''
         }]
