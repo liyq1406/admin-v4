@@ -224,8 +224,13 @@
         var self = this
         var argvs = arguments
         var fn = self.getCategories
+        var condition = {
+          query: {
+            key: 'recipe_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'recipe_classification').then((res) => {
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (typeof res.data.value !== 'undefined') {
               this.categories = res.data.value
             } else {
@@ -257,13 +262,26 @@
        */
       onCateSubmit () {
         this.editing = true
-        api.diet.updateCategory('recipe_classification', this.categories).then((res) => {
-          if (res.status === 200) {
+        var self = this
+        var argvs = arguments
+        var fn = self.onCateSubmit
+        var categories = this.categories[0] ? this.categories[0] : {}
+        categories.key = 'recipe_classification'
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, categories).then((res) => {
+            if (res.status === 200) {
+              this.onCateCancel()
+            }
+          }).catch((err) => {
             this.onCateCancel()
-          }
-        }).catch((res) => {
-          this.onCateCancel()
-          this.handleError(res)
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 

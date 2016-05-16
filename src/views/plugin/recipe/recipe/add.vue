@@ -380,8 +380,13 @@
         var argvs = arguments
         var fn = self.getCategories
         this.loadingData = true
+        var condition = {
+          query: {
+            key: 'recipe_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'recipe_classification').then((res) => {
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (typeof res.data.value !== 'undefined') {
               this.categories = res.data.value
             } else {
@@ -406,8 +411,13 @@
         var self = this
         var argvs = arguments
         var fn = self.getIngredientCategories
+        var condition = {
+          query: {
+            key: 'ingredient_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (typeof res.data.value !== 'undefined') {
               this.ingredientCategories = res.data.value
             } else {
@@ -580,7 +590,7 @@
                   type: 'success',
                   content: '菜谱添加成功！'
                 })
-                this.$route.router.go({path: '/plugins/recipe'})
+                this.$route.router.go({path: '/plugins/recipe/' + this.$router.params.app_id})
               }
             }).catch((err) => {
               var env = {

@@ -366,15 +366,17 @@
 
     route: {
       data () {
-        api.diet.getRecipe(this.$route.params.id).then((res) => {
-          if (res.status === 200) {
-            var images = ['', '', '']
-            res.data.images.forEach((item, index) => {
-              images[index] = item
-            })
-            res.data.images = images
-            this.model = res.data
-          }
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.getRecipe(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              var images = ['', '', '']
+              res.data.images.forEach((item, index) => {
+                images[index] = item
+              })
+              res.data.images = images
+              this.model = res.data
+            }
+          })
         })
         // 获取所有菜谱分类
         this.getCategories()
@@ -391,14 +393,25 @@
        */
       getCategories () {
         // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
-        api.diet.listCategory('recipe_classification').then((res) => {
-          if (typeof res.data.value !== 'undefined') {
-            this.categories = res.data.value
-          } else {
-            this.categories = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getCategories
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'recipe_classification').then((res) => {
+            if (typeof res.data.value !== 'undefined') {
+              this.categories = res.data.value
+            } else {
+              this.categories = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -406,14 +419,25 @@
        * 获取食材分类
        */
       getIngredientCategories () {
-        api.diet.listCategory('ingredient_classification').then((res) => {
-          if (typeof res.data.value !== 'undefined') {
-            this.ingredientCategories = res.data.value
-          } else {
-            this.ingredientCategories = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getIngredientCategories
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
+            if (typeof res.data.value !== 'undefined') {
+              this.ingredientCategories = res.data.value
+            } else {
+              this.ingredientCategories = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -421,20 +445,31 @@
        * 获取食材列表
        */
       getIngredients () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getIngredients
         this.ingredientSelectModal.loadingData = true
-        api.diet.listIngredient(this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            // 食材列表
-            this.ingredientSelectModal.ingredientList = res.data.list.map((item) => {
-              item.selected = false
-              return item
-            })
-            this.ingredientSelectModal.total = res.data.total
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listIngredient(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            if (res.status === 200) {
+              // 食材列表
+              this.ingredientSelectModal.ingredientList = res.data.list.map((item) => {
+                item.selected = false
+                return item
+              })
+              this.ingredientSelectModal.total = res.data.total
+              this.ingredientSelectModal.loadingData = false
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
             this.ingredientSelectModal.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.ingredientSelectModal.loadingData = false
+          })
         })
       },
 
@@ -550,21 +585,32 @@
        * 菜谱表单提交
        */
       onRecipeSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onRecipeSubmit
         if (this.validation.$valid && !this.editing) {
           this.editing = true
           this.model.images = _.compact(this.model.images)
-          api.diet.updateRecipe(this.$route.params.id, this.model).then((res) => {
-            if (res.status === 200) {
-              this.showNotice({
-                type: 'success',
-                content: '菜谱修改成功！'
-              })
-              this.$route.router.go({path: '/plugins/recipe'})
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.ingredientSelectModal.loadingData = false
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+            api.diet.updateRecipe(this.$route.params.app_id, token, this.$route.params.id, this.model).then((res) => {
+              if (res.status === 200) {
+                this.showNotice({
+                  type: 'success',
+                  content: '菜谱修改成功！'
+                })
+                this.$route.router.go({path: '/plugins/recipe'})
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'recipe'
+              }
+              self.handlePluginError(err, env)
+              this.ingredientSelectModal.loadingData = false
+              this.editing = false
+            })
           })
         }
       },
@@ -573,15 +619,26 @@
        * 删除菜谱
        */
       deleteRecipe () {
+        var self = this
+        var argvs = arguments
+        var fn = self.deleteRecipe
         if (window.confirm('确定要删除该菜谱吗？')) {
           this.editing = true
-          api.diet.deleteRecipe(this.$route.params.id).then((res) => {
-            if (res.status === 200) {
-              this.$route.router.go({path: '/plugins/recipe'})
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+            api.diet.deleteRecipe(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
+              if (res.status === 200) {
+                this.$route.router.go({path: '/plugins/recipe'})
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'recipe'
+              }
+              self.handlePluginError(err, env)
+              this.editing = false
+            })
           })
         }
       },

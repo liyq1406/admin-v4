@@ -228,8 +228,13 @@
         var self = this
         var argvs = arguments
         var fn = self.getCategories
+        var condition = {
+          query: {
+            key: 'ingredient_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (typeof res.data.value !== 'undefined') {
               this.categories = res.data.value
             } else {
@@ -264,8 +269,10 @@
         var argvs = arguments
         var fn = self.onCateSubmit
         this.editing = true
+        this.categories.key = 'ingredient_classification'
+        console.log('onCateSubmit')
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.updateCategory(this.$route.params.app_id, token, 'ingredient_classification', this.categories).then((res) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, this.categories).then((res) => {
             if (res.status === 200) {
               this.onCateCancel()
             }
@@ -325,6 +332,7 @@
         var argvs = arguments
         var fn = self.onPushSubmit
         this.editing = true
+        console.log('onPushSubmit')
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
           api.diet.updateCategory(this.$route.params.app_id, token, 'push_rules', this.rules).then((res) => {
             if (res.status === 200) {

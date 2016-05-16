@@ -7,14 +7,9 @@ export default {
    * @param {Object} key 区分食材类别/菜谱类别的标识
    * @param {Object} params 食材参数
    */
-  updateCategory (app_id, token, key, params) {
-    var args = {}
-
-    args.key = key
-    args.value = params
-
+  updateCategory (app_id, token, params) {
     return http.post(
-      `${apiServer.recipe}/recipe_props/save`, args, {
+      `${apiServer.recipe}/${app_id}/api/recipeProps/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -27,9 +22,9 @@ export default {
    * 食材类别查询
    * @param {Object} key 食材类别标识
    */
-  listCategory (app_id, token, key) {
-    return http.get(
-      `${apiServer.recipe}/recipe_props/get/${key}`, {}, {
+  listCategory (app_id, token, param) {
+    return http.post(
+      `${apiServer.recipe}/${app_id}/api/recipeProps/list`, param, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -44,7 +39,7 @@ export default {
    */
   addIngredient (app_id, token, params) {
     return http.post(
-      `${apiServer.recipe}/ingredient/save`, params, {
+      `${apiServer.recipe}/${app_id}/api/ingredient/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -60,7 +55,7 @@ export default {
    */
   updateIngredient (app_id, token, id, params) {
     return http.put(
-      `${apiServer.recipe}/ingredient/update/${id}`, params, {
+      `${apiServer.recipe}/${app_id}/api/ingredient/update/${id}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -75,7 +70,7 @@ export default {
    */
   getIngredient (app_id, token, id) {
     return http.get(
-      `${apiServer.recipe}/ingredient/get/${id}`, {}, {
+      `${apiServer.recipe}/${app_id}/api/ingredient/get/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -90,7 +85,7 @@ export default {
    */
   listIngredient (app_id, token, params) {
     return http.post(
-      `${apiServer.recipe}/ingredient/list`, params, {
+      `${apiServer.recipe}/${app_id}/api/ingredient/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -105,7 +100,7 @@ export default {
    */
   deleteIngredient (app_id, token, id) {
     return http.del(
-      `${apiServer.recipe}/ingredient/delete/${id}`, {}, {
+      `${apiServer.recipe}/${app_id}/api/ingredient/delete/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -120,7 +115,7 @@ export default {
    */
   addRecipe (app_id, token, params) {
     return http.post(
-      `${apiServer.recipe}/recipe/save`, params, {
+      `${apiServer.recipe}/${app_id}/api/recipes/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -136,7 +131,7 @@ export default {
    */
   updateRecipe (app_id, token, id, params) {
     return http.put(
-      `${apiServer.recipe}/recipe/update/${id}`, params, {
+      `${apiServer.recipe}/${app_id}/api/recipe/update/${id}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -151,7 +146,7 @@ export default {
    */
   getRecipe (app_id, token, id) {
     return http.get(
-      `${apiServer.recipe}/recipe/get/${id}`, {}, {
+      `${apiServer.recipe}/${app_id}/api/recipe/get/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -181,7 +176,7 @@ export default {
    */
   deleteRecipe (app_id, token, id) {
     return http.post(
-      `${apiServer.recipe}/recipe/delete/${id}`, {}, {
+      `${apiServer.recipe}/${app_id}/api/recipe/delete/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
