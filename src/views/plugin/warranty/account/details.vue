@@ -560,7 +560,7 @@
           this.editing = true
           // console.log(this.$route.params.id)
           this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-            api.warranty.deleteBranch(this.$route.params.id).then((res) => {
+            api.warranty.deleteBranch(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
               this.editing = false
               this.showEditModal = false
               this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
@@ -577,14 +577,22 @@
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
-          api.warranty.UpdateBranch(this.editModal, this.$route.params.id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.getBranchList()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.UpdateBranch(this.$route.params.app_id, token, this.editModal, this.$route.params.id).then((res) => {
+              if (res.status === 200) {
+                this.resetEdit()
+                this.getBranchList()
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.editing = false
+            })
           })
         }
       }

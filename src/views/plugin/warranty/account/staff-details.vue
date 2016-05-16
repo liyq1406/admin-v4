@@ -124,6 +124,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
   import Modal from '../../../../components/Modal'
   import Select from '../../../../components/Select'
   import api from '../../../../api'
@@ -134,7 +135,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     data () {
       return {
@@ -178,9 +179,9 @@
     methods: {
       // 获取维修点员工信息
       getBranchStaffsList () {
-        // if (typeof querying !== 'undefined') {
-        //   this.currentPage = 1
-        // }
+        var self = this
+        var argvs = arguments
+        var fn = self.getBranchStaffsList
         var condition = {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
@@ -189,15 +190,26 @@
             _id: this.$route.params.id
           }
         }
-        api.warranty.getBranchStaffsList(condition).then((res) => {
-          this.detail = res.data.list[0] || {}
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchStaffsList(this.$route.params.app_id, token, condition).then((res) => {
+            this.detail = res.data.list[0] || {}
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
         })
       },
 
       editAccount () {
+        var self = this
+        var argvs = arguments
+        var fn = self.editAccount
         var condition = {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
@@ -206,11 +218,19 @@
             _id: this.$route.params.id
           }
         }
-        api.warranty.getBranchStaffsList(condition).then((res) => {
-          this.editModal = res.data.list[0] || {}
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchStaffsList(this.$route.params.app_id, token, condition).then((res) => {
+            this.editModal = res.data.list[0] || {}
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
         })
         this.showEditModal = true
       },
@@ -234,27 +254,45 @@
       },
       // 提交编辑表单
       onEditSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onEditSubmit
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
-          console.log(this.$route.params.id)
-          api.warranty.deleteStaff(this.$route.params.id).then((res) => {
-            this.editing = false
-            this.showEditModal = false
-            this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.deleteStaff(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
+              this.editing = false
+              this.showEditModal = false
+              this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.editing = false
+            })
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
-          api.warranty.UpdateBranchStaffs(this.$route.params.id, this.editModal).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.getBranchStaffsList()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.UpdateBranchStaffs(this.$route.params.app_id, token, this.$route.params.id, this.editModal).then((res) => {
+              if (res.status === 200) {
+                this.resetEdit()
+                this.getBranchStaffsList()
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.editing = false
+            })
           })
         }
       }
