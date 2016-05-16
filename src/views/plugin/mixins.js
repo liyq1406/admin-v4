@@ -2,7 +2,7 @@ import api from '../../api'
 import _ from 'lodash'
 const INVALID = 'invalid'
 
-export const pluginMixins = {
+export const pluginFactoryMixin = {
   methods: {
     /**
      * 获取插件列表
@@ -91,8 +91,12 @@ export const pluginMixins = {
           this.loading = false
         })
       }
-    },
+    }
+  }
+}
 
+export const pluginMixins = {
+  methods: {
     getAppToKen (appID, plugin) {
       var self = this
       return new Promise((resolve, reject) => {
@@ -140,6 +144,9 @@ export const pluginMixins = {
         case 'warranty':
           window.localStorage.warrantyAccessToken = value
           break
+        case 'recipe':
+          window.localStorage.recipeAccessToken = value
+          break
         default:
           break
       }
@@ -150,6 +157,9 @@ export const pluginMixins = {
       switch (plugin) {
         case 'warranty':
           token = window.localStorage.warrantyAccessToken
+          break
+        case 'recipe':
+          token = window.localStorage.recipeAccessToken
           break
         default:
           break

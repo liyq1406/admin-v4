@@ -37,14 +37,14 @@
   import { globalMixins } from '../../mixins'
   import Switch from '../../components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
-  import { pluginMixins } from './mixins'
+  import { pluginFactoryMixin } from './mixins'
 
   export default {
     name: 'Data',
 
     layout: 'admin',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {
       actions: {

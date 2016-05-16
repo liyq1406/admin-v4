@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe/ingredient'}"><i class="fa fa-arrow-circle-left"></i>食材管理</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/ingredient'}"><i class="fa fa-arrow-circle-left"></i>食材管理</a></div>
       <div class="panel">
         <div class="panel-hd">
           <h2>添加食材</h2>
@@ -87,13 +87,14 @@
   import Select from '../../../../components/Select'
   import _ from 'lodash/array'
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
 
   export default {
     name: 'AddIngredientForm',
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'image-uploader': ImageUploader,
@@ -144,14 +145,25 @@
        */
       getCategories () {
         // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
-        api.diet.listCategory('ingredient_classification').then((res) => {
-          if (res.data.value !== undefined) {
-            this.categories = res.data.value
-          } else {
-            this.categories = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getCategories
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
+            if (res.data.value !== undefined) {
+              this.categories = res.data.value
+            } else {
+              this.categories = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -159,14 +171,25 @@
        * 获取规则
        */
       getRules () {
-        api.diet.listCategory('push_rules').then((res) => {
-          if (res.data.value !== undefined) {
-            this.rules = res.data.value
-          } else {
-            this.rules = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getRules
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'push_rules').then((res) => {
+            if (res.data.value !== undefined) {
+              this.rules = res.data.value
+            } else {
+              this.rules = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -199,19 +222,30 @@
        * 添加食材表单提交
        */
       onSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onSubmit
         if (this.validation.$valid && !this.adding) {
           this.adding = true
-          api.diet.addIngredient(this.model).then((res) => {
-            if (res.status === 200) {
-              this.showNotice({
-                type: 'success',
-                content: '食材添加成功！'
-              })
-              this.$route.router.go({path: '/plugins/recipe/ingredient'})
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
+          this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+            api.diet.addIngredient(this.$route.params.app_id, token, this.model).then((res) => {
+              if (res.status === 200) {
+                this.showNotice({
+                  type: 'success',
+                  content: '食材添加成功！'
+                })
+                this.$route.router.go({path: '/plugins/recipe/ingredient'})
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'recipe'
+              }
+              self.handlePluginError(err, env)
+              this.adding = false
+            })
           })
         }
       }

@@ -695,7 +695,7 @@ let configRouter = (router) => {
     },
 
     // 饮食管理
-    '/plugins/recipe': {
+    '/plugins/recipe/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/index'))
@@ -728,28 +728,28 @@ let configRouter = (router) => {
         }, 'admin')
       }
     },
-    '/plugins/recipe/ingredient/add': {
+    '/plugins/recipe/:app_id/ingredient/add': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/ingredient/add'))
         }, 'admin')
       }
     },
-    '/plugins/recipe/ingredient/:id/edit': {
+    '/plugins/recipe/:app_id/ingredient/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/ingredient/edit'))
         }, 'admin')
       }
     },
-    '/plugins/recipe/add': {
+    '/plugins/recipe/:app_id/add': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/recipe/add'))
         }, 'admin')
       }
     },
-    '/plugins/recipe/:id/edit': {
+    '/plugins/recipe/:app_id/:id/edit': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/recipe/edit'))
@@ -887,13 +887,13 @@ let configRouter = (router) => {
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
-    '/plugins/recipe': '/plugins/recipe/forbidden',
+    // '/plugins/recipe': '/plugins/recipe/forbidden',
     // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
     '/plugins/broadcast': '/plugins/broadcast/forbidden',
     '/plugins/xpay': '/plugins/xpay/forbidden',
     '/plugins/helpdesk': '/plugins/helpdesk/forbidden',
     '/plugins/dealer': '/plugins/dealer/forbidden',
-    // '/plugins/recipe': '/plugins/recipe/list',
+    '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
     '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
     // '/plugins/broadcast': '/plugins/broadcast/add',
     '/plugins': '/plugins/extensions',

@@ -25,14 +25,14 @@
   import Switch from '../../components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
   import { globalMixins } from '../../mixins'
-  import { pluginMixins } from './mixins'
+  import { pluginFactoryMixin } from './mixins'
 
   export default {
     name: 'Applications',
 
     layout: 'admin',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {
       actions: {

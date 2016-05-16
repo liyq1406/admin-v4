@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap diet">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe'}"><i class="fa fa-arrow-circle-left"></i>菜谱管理</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id}"><i class="fa fa-arrow-circle-left"></i>菜谱管理</a></div>
       <div class="panel">
         <div class="panel-hd">
           <h2>编辑菜谱</h2>
@@ -225,13 +225,14 @@
   import ImageUploader from '../../../../components/ImageUploader'
   import _ from 'lodash'
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
 
   export default {
     name: 'EditForm',
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -327,7 +328,7 @@
           offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.pageCount,
           query: {},
           order: {
-            created_at: 'desc'
+            created_at: -1
           }
         }
 

@@ -6,7 +6,7 @@
           <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search')" @cancel="getRecipes" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRecipes">
             <button slot="search-button" @click="getRecipes" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
-          <div class="action-group"><a v-link="{path: '/plugins/recipe/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加菜谱</a>
+          <div class="action-group"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加菜谱</a>
             <button @click="showCategoryModal=true" class="btn btn-success"><i class="fa fa-list-ul"></i>类别管理</button>
           </div>
         </div>
@@ -44,7 +44,7 @@
                   <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
                   <td>{{ recipe.created_by }}</td>
                   <td>{{ recipe.created_at | formatDate }}</td>
-                  <td class="tac"><a v-link="{path: '/plugins/recipe/'+recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                  <td class="tac"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/' +recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
               <tr v-if="recipes.length === 0 && !loadingData">
@@ -86,13 +86,14 @@
   import Modal from '../../../../components/Modal'
   import SearchBox from '../../../../components/SearchBox'
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
 
   export default {
     name: 'IngredientList',
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -151,7 +152,7 @@
           offset: (this.currentPage - 1) * this.pageCount,
           query: {},
           order: {
-            created_at: 'desc'
+            created_at: -1
           }
         }
 
@@ -189,18 +190,29 @@
        * 获取菜谱列表
        */
       getRecipes () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getRecipes
         this.loadingData = true
-        api.diet.listRecipe(this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            // 菜谱列表
-            this.recipes = res.data.list
-            // 记录数
-            this.total = res.data.count
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listRecipe(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            if (res.status === 200) {
+              // 菜谱列表
+              this.recipes = res.data.list
+              // 记录数
+              this.total = res.data.count
+              this.loadingData = false
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+          })
         })
       },
 
@@ -209,14 +221,25 @@
        */
       getCategories () {
         // this.categories = [{main: '粤菜', sub: ['客家菜', '顺德菜']}, {main: '东北菜', sub: []}]
-        api.diet.listCategory('recipe_classification').then((res) => {
-          if (typeof res.data.value !== 'undefined') {
-            this.categories = res.data.value
-          } else {
-            this.categories = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getCategories
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'recipe_classification').then((res) => {
+            if (typeof res.data.value !== 'undefined') {
+              this.categories = res.data.value
+            } else {
+              this.categories = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 

@@ -6,7 +6,7 @@
           <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
             <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
-          <div class="action-group"><a v-link="{path: '/plugins/recipe/ingredient/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加食材</a>
+          <div class="action-group"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/ingredient/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加食材</a>
             <button @click="showCategoryModal=true" class="btn btn-success"><i class="fa fa-list-ul"></i>类别管理</button>
             <button @click="showPushModal=true" class="btn btn-success"><i class="fa fa-share"></i>推送管理</button>
           </div>
@@ -39,7 +39,7 @@
                   <td>{{ ingredient.name }}</td>
                   <td>{{ ingredient.created_by }}</td>
                   <td>{{ ingredient.created_at | formatDate }}</td>
-                  <td class="tac"><a v-link="{path: '/plugins/recipe/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                  <td class="tac"><a v-link="{path: '/plugins/recipe/ingredient/' + $route.params.app_id + '/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
               <tr v-if="ingredients.length === 0 && !loadingData">
@@ -99,13 +99,14 @@
   import Modal from '../../../../components/Modal'
   import SearchBox from '../../../../components/SearchBox'
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
 
   export default {
     name: 'IngredientList',
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -159,7 +160,7 @@
           offset: (this.currentPage - 1) * this.pageCount,
           query: {},
           order: {
-            created_at: 'desc'
+            created_at: -1
           }
         }
 
@@ -193,18 +194,29 @@
        * 获取食材列表
        */
       getIngredients () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getIngredients
         this.loadingData = true
-        api.diet.listIngredient(this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            // 食材列表
-            this.ingredients = res.data.list
-            // 记录数
-            this.total = res.data.total
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listIngredient(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            if (res.status === 200) {
+              // 食材列表
+              this.ingredients = res.data.list
+              // 记录数
+              this.total = res.data.total
+              this.loadingData = false
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+          })
         })
       },
 
@@ -213,14 +225,25 @@
        */
       getCategories () {
         // this.categories = [{main: '蔬菜', sub: ['叶菜', '块茎']}, {main: '水果', sub: []}]
-        api.diet.listCategory('ingredient_classification').then((res) => {
-          if (typeof res.data.value !== 'undefined') {
-            this.categories = res.data.value
-          } else {
-            this.categories = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getCategories
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
+            if (typeof res.data.value !== 'undefined') {
+              this.categories = res.data.value
+            } else {
+              this.categories = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -237,14 +260,25 @@
        * 提交类别编辑
        */
       onCateSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onCateSubmit
         this.editing = true
-        api.diet.updateCategory('ingredient_classification', this.categories).then((res) => {
-          if (res.status === 200) {
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, 'ingredient_classification', this.categories).then((res) => {
+            if (res.status === 200) {
+              this.onCateCancel()
+            }
+          }).catch((err) => {
             this.onCateCancel()
-          }
-        }).catch((res) => {
-          this.onCateCancel()
-          this.handleError(res)
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -252,14 +286,25 @@
        * 获取规则
        */
       getRules () {
-        api.diet.listCategory('push_rules').then((res) => {
-          if (typeof res.data.value !== 'undefined') {
-            this.rules = res.data.value
-          } else {
-            this.rules = []
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        var self = this
+        var argvs = arguments
+        var fn = self.getRules
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.listCategory(this.$route.params.app_id, token, 'push_rules').then((res) => {
+            if (typeof res.data.value !== 'undefined') {
+              this.rules = res.data.value
+            } else {
+              this.rules = []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 
@@ -276,14 +321,25 @@
        * 提交推送编辑
        */
       onPushSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onPushSubmit
         this.editing = true
-        api.diet.updateCategory('push_rules', this.rules).then((res) => {
-          if (res.status === 200) {
+        this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, 'push_rules', this.rules).then((res) => {
+            if (res.status === 200) {
+              this.onPushCancel()
+            }
+          }).catch((err) => {
             this.onPushCancel()
-          }
-        }).catch((res) => {
-          this.onPushCancel()
-          this.handleError(res)
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'recipe'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
 

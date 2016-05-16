@@ -40,10 +40,10 @@
         return {
           secondaryNav: [{
             label: '菜谱管理',
-            link: { path: '/plugins/recipe/list' }
+            link: { path: '/plugins/recipe/' + this.$route.params.app_id + '/list' }
           }, {
             label: '食材管理',
-            link: { path: '/plugins/recipe/ingredient' }
+            link: { path: '/plugins/recipe/' + this.$route.params.app_id + '/ingredient' }
           }]
         }
       }

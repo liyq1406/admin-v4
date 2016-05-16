@@ -79,7 +79,7 @@
   import PicTxt from '../../components/PicTxt'
   import LinkageItem from './components/LinkageItem'
   import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
-  import { pluginMixins } from '../plugin/mixins'
+  import { pluginFactoryMixin } from '../plugin/mixins'
   // import _ from 'lodash'
   import api from '../../api'
 
@@ -94,7 +94,7 @@
       'linkage-item': LinkageItem
     },
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {
       actions: {
