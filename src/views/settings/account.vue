@@ -79,7 +79,7 @@
               </li>
               <li>
                 <div class="label">{{ $t("ui.corp.fields.type") }}:</div>
-                <div class="info">{{ corp.type ? accountTypes[corp.type - 1].label : '' }}</div>
+                <div class="info">{{ accountTypeLabel }}</div>
               </li>
               <li>
                 <div class="label">{{ $t("ui.corp.fields.name") }}:</div>
@@ -217,6 +217,15 @@
         editing: false,
         loadingAccount: false,
         loadingCorp: false
+      }
+    },
+
+    computed: {
+      accountTypeLabel () {
+        var index = _.findIndex(this.accountTypes, (item) => {
+          return item.value === this.corp.type
+        })
+        return this.corp.type ? this.accountTypes[index].label : ''
       }
     },
 

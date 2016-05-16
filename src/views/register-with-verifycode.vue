@@ -67,7 +67,7 @@
           </div>
           <div class="form-row row">
             <div class="select">
-              <v-select :placeholder="$t('ui.auth.type_tips')" :label="model.type ? accountTypes[model.type-1].label : ''">
+              <v-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
                 <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
                   <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
                 </select>
@@ -93,6 +93,7 @@
   import Select from '../components/Select'
   import Captcha from '../components/Captcha'
   import { globalMixins } from '../mixins'
+  import _ from 'lodash'
 
   export default {
     name: 'RegisterForm',
@@ -118,6 +119,15 @@
         btnDisabled: false,
         accountTypes: locales[Vue.config.lang].data.ACCOUNT_TYPES,
         seconds: config.verifycode.duration
+      }
+    },
+
+    computed: {
+      accountTypeLabel () {
+        var index = _.findIndex(this.accountTypes, (item) => {
+          return item.value === this.model.type
+        })
+        return this.model.type ? this.accountTypes[index].label : ''
       }
     },
 
