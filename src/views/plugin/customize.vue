@@ -51,7 +51,6 @@
       </div>
     </div>
 
-
     <!-- Start: 查看密钥浮层-->
     <modal :show.sync="showKeyModal">
       <h3 slot="header">Access Key Secret</h3>
@@ -70,7 +69,7 @@
             <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
             <div class="controls col-18">
               <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
-                <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
+                <input v-model="addModel.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" custom-validator="noSpacesPrefixAndSuffix" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
                 <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
@@ -79,6 +78,7 @@
                 <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
                 <span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
                 <span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span>
+                <span v-if="addValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.app.fields.name')}) }}</span>
               </div>
             </div>
           </div>

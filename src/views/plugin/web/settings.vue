@@ -17,15 +17,8 @@
             <div class="form-row row">
               <label class="form-control col-6">应用URL</label>
               <div class="controls col-18">
-                <div v-placeholder="urlPlaceholder" class="input-text-wrap">
-                  <input v-model="model.config.url" type="text" v-form-ctrl name="url" minlength="2" required lazy class="input-text"/>
-                </div>
-                <div v-if="validation.$submitted && validation.url.$pristine" class="form-tips form-tips-error">
-                  <span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
-                </div>
-                <div v-if="validation.url.$dirty" class="form-tips form-tips-error">
-                  <span v-if="validation.url.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
-                  <span v-if="validation.url.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span>
+                <div v-placeholder="'请输入应用URL'" class="input-text-wrap">
+                  <input v-model="model.config.url" type="text" name="url" lazy class="input-text"/>
                 </div>
               </div>
             </div>
@@ -69,6 +62,7 @@
 
     data () {
       return {
+        currApp: {},
         model: {
           name: '',
           enable: false,
@@ -80,8 +74,7 @@
         validation: {},
         editing: false,
         uploading: false,
-        delChecked: false,
-        urlPlaceholder: '请输入应用URL'
+        delChecked: false
       }
     },
 
@@ -94,8 +87,9 @@
       getAppInfo () {
         api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.model.name = res.data.name
-            this.model.config.url = res.data.config.url
+            this.currApp = res.data
+            this.model.name = this.currApp.name
+            this.model.config.url = this.currApp.config.url
           }
         })
       },
@@ -114,7 +108,7 @@
           if (result === true) {
             api.plugin.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.removePlugin(this.model)
+                this.removePlugin(this.currApp)
                 this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {
