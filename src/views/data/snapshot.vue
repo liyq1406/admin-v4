@@ -165,7 +165,7 @@
     <!-- 结束 编辑快照浮层-->
 
     <!-- 添加 编辑快照数据项浮层-->
-    <modal :show.sync="showEditPointModal" width="600px">
+    <modal :show.sync="showEditPointModal" width="680px">
       <h3 slot="header">修改快照数据项</h3>
       <div slot="body" class="form">
         <div class="table-wrap">
@@ -175,7 +175,6 @@
                 <tr>
                   <th>选择</th>
                   <th>索引</th>
-                  <th>端点ID</th>
                   <th>数据类型</th>
                   <th>单位符号</th>
                   <th>描述</th>
@@ -185,10 +184,9 @@
                 <tr v-for="dp in editDataPoints | limitBy pageCount (currentEditPage-1)*pageCount">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
-                  <td>{{dp.id}}</td>
-                  <td>{{dp.type}}</td>
+                  <td>{{datapointTypes[dp.type - 1]}}</td>
                   <td>{{dp.symbol}}</td>
-                  <td>{{dp.description}}</td>
+                  <td class="no-wrap">{{dp.description}}</td>
                 </tr>
               </tbody>
             </table>
@@ -624,6 +622,9 @@
 
 <style lang="stylus">
   @import '../../assets/stylus/common'
+  .data-points-footer
+    .pager
+      margin 10px 0 0
   .edit-snapshot
     line-height 32px
   .data-tag
@@ -637,7 +638,8 @@
   .table-wrap
     height 100%
     width 100%
-    overflow-x scroll
+    overflow-y hidden
+    overflow-x auto
   .rule-type
     float right
     margin-top 10px

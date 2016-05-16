@@ -98,7 +98,7 @@ export default {
 
   .modal-body
     padding 30px
-    max-height 500px
+    max-height 540px
     overflow-y auto
     box-sizing border-box
 
