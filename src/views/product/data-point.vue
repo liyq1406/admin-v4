@@ -24,9 +24,9 @@
             </thead>
             <tbody>
               <template v-if="datapoints.length > 0">
-                <!-- 如果需要分页，改成下面这个 -->
-                <!-- <tr v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount"> -->
-                <tr v-for="datapoint in datapoints">
+                <tr v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount">
+                <!-- 如果不需要分页，改成下面这个 -->
+                <!-- <tr v-for="datapoint in datapoints"> -->
                   <td>{{* datapoint.index }}</td>
                   <td>{{* datapoint.name }}</td>
                   <td>{{* datapoint.type | typeLabel }}</td>
@@ -45,8 +45,7 @@
             </tbody>
           </table>
         </div>
-        <!-- 如果需要分页，改成下面这个 -->
-        <!-- <pager v-if="datapoints.length > pageCount" :total="datapoints.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
+        <pager v-if="datapoints.length > pageCount" :total="datapoints.length" :current.sync="currentPage" :page-count="pageCount"></pager>
       </div>
     </div>
     <!-- 添加数据端点浮层-->
