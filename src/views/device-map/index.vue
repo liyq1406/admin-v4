@@ -1,56 +1,72 @@
 <template>
-  <div class="panel device-map-page">
-    <div class="panel-hd">
-      <h2>{{ $t("ui.nav_aside.device_map") }}</h2>
-      <div class="leftbox">
-        <v-select width="160px" :label="currProduct.name" size="small">
-          <span slot="label">选择产品：</span>
-          <select v-model="currProduct" @change="getGeographies">
-            <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
-          </select>
-        </v-select>
+  <section>
+    <!-- 无产品时显示添加提示 -->
+    <section class="main-wrap">
+      <div class="main">
+        <div class="panel" v-if="!productOptions.length && !loadingProducts">
+          <div class="panel-bd">
+            <v-alert :cols="7">
+              <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
+            </v-alert>
+          </div>
+        </div>
       </div>
-    </div>
-    <div class="panel-bd">
-      <div class="device-list-wrap with-loading">
-        <div class="icon-loading" v-show="loadingDevices">
-          <i class="fa fa-refresh fa-spin"></i>
+    </section>
+
+    <!-- 设备地图 -->
+    <div class="panel device-map-page" v-show="productOptions.length && !loadingProducts">
+      <div class="panel-hd">
+        <h2>{{ $t("ui.nav_aside.device_map") }}</h2>
+        <div class="leftbox">
+          <v-select width="160px" :label="currProduct.name" size="small">
+            <span slot="label">选择产品：</span>
+            <select v-model="currProduct" @change="getGeographies">
+              <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
+            </select>
+          </v-select>
         </div>
-        <div class="action-bar">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="handleSearch" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
-            <v-select width="100px" :label="queryType.label">
-              <select v-model="queryType">
-                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-            <button slot="search-button" @click="handleSearch" class="btn btn-primary">{{ $t('common.search') }}</button>
-          </search-box>
-        </div>
-        <div v-show="devices.length" class="device-list mb20">
-          <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
-            <div class="list-item-cont">
-              <div class="icon-num">{{ $index+1 }}</div>
-              <div class="device-id">设备ID: {{ device.id }}</div>
-              <div class="status">
-                <span v-if="device.is_online" class="hl-green">在线</span>
-                <span v-else class="hl-gray">离线</span>
+      </div>
+      <div class="panel-bd">
+        <div class="device-list-wrap with-loading">
+          <div class="icon-loading" v-show="loadingDevices">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="action-bar">
+            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="handleSearch" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+              <v-select width="100px" :label="queryType.label">
+                <select v-model="queryType">
+                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
+              <button slot="search-button" @click="handleSearch" class="btn btn-primary">{{ $t('common.search') }}</button>
+            </search-box>
+          </div>
+          <div v-show="devices.length" class="device-list mb20">
+            <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
+              <div class="list-item-cont">
+                <div class="icon-num">{{ $index+1 }}</div>
+                <div class="device-id">设备ID: {{ device.id }}</div>
+                <div class="status">
+                  <span v-if="device.is_online" class="hl-green">在线</span>
+                  <span v-else class="hl-gray">离线</span>
+                </div>
               </div>
             </div>
           </div>
+          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getGeographies" :simple="true"></pager>
+          <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
+            <p>当前区域未找到设备</p>
+          </v-alert>
         </div>
-        <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getGeographies" :simple="true"></pager>
-        <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
-          <p>当前区域未找到设备</p>
-        </v-alert>
+      </div>
+      <div class="device-map with-loading">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div id="device-map" style="height: 100%"></div>
       </div>
     </div>
-    <div class="device-map with-loading">
-      <div class="icon-loading" v-show="loadingData">
-        <i class="fa fa-refresh fa-spin"></i>
-      </div>
-      <div id="device-map" style="height: 100%"></div>
-    </div>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -128,8 +144,10 @@
     },
 
     ready () {
+      this.loadingProducts = true
       api.product.all().then((res) => {
         if (res.status === 200) {
+          this.loadingProducts = false
           if (res.data.length) {
             this.productOptions = res.data
             this.currProduct = this.productOptions[0]

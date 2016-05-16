@@ -1,13 +1,22 @@
 <template>
-  <div>
-    <div class="panel">
+  <section>
+    <!-- 无产品时显示添加提示 -->
+    <div class="panel" v-if="!products.length && !loadingProducts">
+      <div class="panel-bd">
+        <v-alert :cols="7">
+          <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
+        </v-alert>
+      </div>
+    </div>
+
+    <!-- Start: 固件版本列表 -->
+    <div class="panel" v-if="products.length && !loadingProducts">
       <div class="panel-hd">
         <div class="actions">
-          <button @click="showAddModal = true" class="btn btn-success"  :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t('ui.firmware.add_firmware') }}</button>
+          <button @click="showAddModal = true" class="btn btn-success"  :disabled="!products.length" :class="{'disabled': !products.length}"><i class="fa fa-plus"></i>{{ $t('ui.firmware.add_firmware') }}</button>
         </div>
         <h2>{{ $t('ui.firmware.firmware_list') }}</h2>
         <div style="position:absolute; top:5px; left:120px">
-          <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
@@ -173,7 +182,7 @@
         </form>
       </div>
     </modal>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -182,6 +191,7 @@
   import api from '../../api'
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
+  import Alert from '../../components/Alert'
   import store from '../../store/index'
   import config from '../../consts/config'
   import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
@@ -210,7 +220,8 @@
 
     components: {
       'modal': Modal,
-      'v-select': Select
+      'v-select': Select,
+      'v-alert': Alert
     },
 
     data () {
@@ -229,31 +240,8 @@
           is_release: false
         },
         originAddModel: {},
-        addTaskModel: {
-          name: '',
-          description: '',
-          product_id: this.$route.params.id,
-          from_version: '',
-          from_version_url: '',
-          from_version_md5: '',
-          from_version_size: 0,
-          target_version: '',
-          target_version_url: '',
-          target_version_md5: '',
-          target_version_size: 0
-        },
-        originAddTaskModel: {},
-        tasks: [
-          // {
-          //   'name': '123',
-          //   'from_version': '1',
-          //   'target_version': '2',
-          //   'upgrade_count': '3'
-          // }
-        ],
         editModel: {},
         addValidation: {},
-        addTaskValidation: {},
         editValidation: {},
         originEditModel: {},
         delChecked: false,
@@ -261,9 +249,8 @@
         adding: false,
         editing: false,
         toogling: false,
-        loadingFirmwares: false,
-        loadingTasks: false,
-        tips: false
+        loadingProducts: true,
+        loadingFirmwares: true
       }
     },
 
@@ -273,26 +260,28 @@
         this.getProducts()
       }
     },
-    filters: {
-
-    },
 
     methods: {
       // 获取产品列表
       getProducts () {
+        this.loadingProducts = true
         api.product.all().then((res) => {
+          this.loadingProducts = false
           this.products = res.data
-          this.currProduct = this.products[0]
-          console.log(this.products)
           if (this.products.length === 0) {
-            this.tips = true
             return
           }
+          this.currProduct = this.products[0]
           this.getFirmwares()
         }).catch((res) => {
           this.handleError(res)
+          this.loadingProducts = false
         })
       },
+
+      /**
+       * 获取固件列表
+       */
       getFirmwares () {
         this.loadingFirmwares = true
         api.product.getFirmwares(this.currProduct.id).then((res) => {

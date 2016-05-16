@@ -1,13 +1,22 @@
 <template>
-  <div>
-    <div class="panel">
+  <section>
+    <!-- 无产品时显示添加提示 -->
+    <div class="panel" v-if="!products.length && !loadingProducts">
+      <div class="panel-bd">
+        <v-alert :cols="7">
+          <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
+        </v-alert>
+      </div>
+    </div>
+
+    <!-- Start: 固件升级列表 -->
+    <div class="panel" v-if="products.length && !loadingProducts">
       <div class="panel-hd">
         <div class="actions">
           <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('ui.task.create_task') }}</button>
         </div>
         <h2>{{ $t('ui.task.task_list') }}</h2>
         <div style="position:absolute; top:5px; left:120px">
-          <a style="position:absolute;width:220px;top:15px" v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
@@ -113,7 +122,7 @@
         </form>
       </div>
     </modal>
-  </div>
+  </section>
 </template>
 
 <script>
@@ -123,6 +132,7 @@
   import Modal from '../../components/Modal'
   import _ from 'lodash'
   import Select from '../../components/Select'
+  import Alert from '../../components/Alert'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -134,7 +144,8 @@
 
     components: {
       'modal': Modal,
-      'v-select': Select
+      'v-select': Select,
+      'v-alert': Alert
     },
 
     data () {
@@ -230,17 +241,19 @@
     methods: {
       // 获取产品列表
       getProducts () {
+        this.loadingProducts = true
         api.product.all().then((res) => {
+          this.loadingProducts = false
           this.products = res.data
-          this.currProduct = this.products[0]
           if (this.products.length === 0) {
-            this.tips = true
             return
           }
+          this.currProduct = this.products[0]
           this.getFirmwares()
           this.getTasks()
         }).catch((res) => {
           this.handleError(res)
+          this.loadingProducts = false
         })
       },
       getFirmwares () {
