@@ -735,26 +735,51 @@
        * @param  {[type]} params     过滤参数
        * @return {[type]}            [description]
        */
-      getTableData (table_name, params) {
+      getTableData (table_name, params, type) {
         this.loadingData = true
-        api.dataTable.queryData(table_name, params).then((res) => {
-          this.initTableHeader() // 根据当前已选择的大类初始化表格头部
-          let jsonTables = JSON.stringify(res.data.list)
-          // 将返回的数据里面的日期格式的内容转化为普通的日期格式
-          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
-          this.vTables = JSON.parse(result)
-          this.loadingData = true
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
-        })
+        if (type === 3) {
+          // console.log('数据表逻辑')
+          api.dataTable.queryAppData(table_name, params).then((res) => {
+            this.initTableHeader(type) // 根据当前已选择的大类初始化表格头部
+            let jsonTables = JSON.stringify(res.data.list)
+            // 将返回的数据里面的日期格式的内容转化为普通的日期格式
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            result = result.replace(/_id/g, 'objectId')
+            this.vTables = JSON.parse(result)
+            this.loadingData = true
+          }).catch((res) => {
+            this.handleError(res)
+            this.loadingData = false
+          })
+        } else {
+          api.dataTable.queryData(table_name, params).then((res) => {
+            this.initTableHeader() // 根据当前已选择的大类初始化表格头部
+            let jsonTables = JSON.stringify(res.data.list)
+            // 将返回的数据里面的日期格式的内容转化为普通的日期格式
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            this.vTables = JSON.parse(result)
+            this.loadingData = true
+          }).catch((res) => {
+            this.handleError(res)
+            this.loadingData = false
+          })
+        }
       },
       /**
        * 根据已选择数据表更新数据表头部
        * @return {[type]} [description]
        */
-      initTableHeader () {
+      initTableHeader (type) {
         var vHeaders = _.clone(this.baseVHeaders)
+        if (type === 3) {
+          vHeaders = [
+            {
+              key: 'objectId',
+              title: 'ID',
+              class: 'nowrap'
+            }
+          ]
+        }
         for (let key in this.selectedFirstClass.field) {
           var vHeader = {
             key: key,
@@ -830,7 +855,7 @@
               content: '该列明不可用'
             })
           } else {
-            console.log('向服务器发送数据 编辑当前数据表')
+            // console.log('向服务器发送数据 编辑当前数据表')
             let table = {}
             let field = _.clone(this.selectedFirstClass.field)
             field[key] = type
@@ -925,10 +950,10 @@
           // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
           if (this.userEditColumnModal.objectId) {
             // 修改数据
-            this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params)
+            this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params, this.selectedFirstClass.type)
           } else {
             // 新增数据
-            this.createTableData(this.selectedFirstClass.name, params)
+            this.createTableData(this.selectedFirstClass.name, params, this.selectedFirstClass.type)
           }
         } else {
           this.showNotice({
@@ -945,18 +970,33 @@
        * @param  {[type]} params     参数
        * @return {[type]}            [description]
        */
-      updateTableData (table_name, object_id, params) {
+      updateTableData (table_name, object_id, params, type) {
         this.editing = true
-        api.dataTable.updateData(table_name, object_id, params).then((res) => {
-          var jsonTables = JSON.stringify(res.data)
-          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
-          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-          this.userEditColumnModal.show = false
-          this.editing = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
+        if (type === 3) {
+          // console.log('应用级的修改数据')
+          api.dataTable.updateAppData(table_name, object_id, params).then((res) => {
+            var jsonTables = JSON.stringify(res.data)
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            result = result.replace(/_id/g, 'objectId')
+            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+            this.userEditColumnModal.show = false
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else {
+          api.dataTable.updateData(table_name, object_id, params).then((res) => {
+            var jsonTables = JSON.stringify(res.data)
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+            this.userEditColumnModal.show = false
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
       },
 
       /**
@@ -965,25 +1005,40 @@
        * @param  {[type]} params     参数
        * @return {[type]}            [description]
        */
-      createTableData (table_name, params) {
+      createTableData (table_name, params, type) {
         this.editing = true
-        api.dataTable.createData(table_name, params).then((res) => {
-          var jsonTables = JSON.stringify(res.data)
-          let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
-          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-          this.userEditColumnModal.show = false
-          this.editing = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
+        if (type === 3) {
+          // console.log('应用级的创建数据')
+          api.dataTable.createAppData(table_name, params).then((res) => {
+            var jsonTables = JSON.stringify(res.data)
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            result = result.replace(/_id/g, 'objectId')
+            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+            this.userEditColumnModal.show = false
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else {
+          api.dataTable.createData(table_name, params).then((res) => {
+            var jsonTables = JSON.stringify(res.data)
+            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+            this.userEditColumnModal.show = false
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
       },
       /**
        * 删除数据表
        * @return {[type]} [description]
        */
       deleteDataTable () {
-        console.log(this.selectedFirstClass.name)
+        // console.log(this.selectedFirstClass.name)
         this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
           this.editing = true
           api.dataTable.deleteTable(this.selectedFirstClass.name).then(() => {
@@ -1052,7 +1107,7 @@
           item.selected = false
         })
         var params = {}
-        this.getTableData(selectedFirstClass.name, params)
+        this.getTableData(selectedFirstClass.name, params, selectedFirstClass.type)
         selectedFirstClass.selected = true
       },
       /**
@@ -1087,18 +1142,33 @@
           // this.confirm('确定删除已选中行？', () => {
           //
           // })
-          this.selectedLine.map((line) => {
-            if (line.objectId) {
-              api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+          if (this.selectedFirstClass.type === 3) {
+            this.selectedLine.map((line) => {
+              if (line.objectId) {
+                api.dataTable.deleteAppData(this.selectedFirstClass.name, line.objectId).then(() => {
+                  this.vTables.$remove(line)
+                }).catch((res) => {
+                  this.handleError(res)
+                  this.loadingData = false
+                })
+              } else {
                 this.vTables.$remove(line)
-              }).catch((res) => {
-                this.handleError(res)
-                this.loadingData = false
-              })
-            } else {
-              this.vTables.$remove(line)
-            }
-          })
+              }
+            })
+          } else {
+            this.selectedLine.map((line) => {
+              if (line.objectId) {
+                api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+                  this.vTables.$remove(line)
+                }).catch((res) => {
+                  this.handleError(res)
+                  this.loadingData = false
+                })
+              } else {
+                this.vTables.$remove(line)
+              }
+            })
+          }
         }
       },
 
@@ -1108,8 +1178,8 @@
        */
       deleteAllData () {
         this.confirm('确定要删除所有数据表？', () => {
-          console.log('发请求删除所有数据 然后重新渲染列表')
-          console.error('删除所有数据表功能还没实现  没有批量删除接口 现在是模拟删除功能')
+          // console.log('发请求删除所有数据 然后重新渲染列表')
+          // console.error('删除所有数据表功能还没实现  没有批量删除接口 现在是模拟删除功能')
           this.tables = []
           this.initTable()
         })
@@ -1127,7 +1197,7 @@
        * @return {[type]} [description]
        */
       filterModalConfirm () {
-        console.log('筛选条件浮层确定按钮')
+        // console.log('筛选条件浮层确定按钮')
         this.filterModal.show = false
       },
 
@@ -1463,7 +1533,7 @@
        * @return {[type]}       [description]
        */
       checkNumber (value) {
-        console.log(value)
+        // console.log(value)
         return value - 0 === value - 0
       }
     }

@@ -67,6 +67,16 @@ export default {
   },
 
   /**
+   * 创建应用级数据
+   * @param  {Object} params 数据参数
+   */
+  createAppData (table_name, params) {
+    return http.post(
+      `${apiServer.default}/v2/app_data/${table_name}`, params
+    )
+  },
+
+  /**
    * 获取单条数据
    * @param  {String} table_name 表名
    * @param  {String} object_id 数据 id
@@ -89,6 +99,17 @@ export default {
   },
 
   /**
+   * 查询应用级数据
+   * @param  {String} table_name 表名
+   * @param  {Object} params 数据参数
+   */
+  queryAppData (table_name, params) {
+    return http.post(
+      `${apiServer.default}/v2/app_datas/${table_name}`, params
+    )
+  },
+
+  /**
    * 修改数据
    * @param  {String} table_name 表名
    * @param  {String} object_id 数据 id
@@ -101,6 +122,18 @@ export default {
   },
 
   /**
+   * 修改应用级数据
+   * @param  {String} table_name 表名
+   * @param  {String} object_id 数据 id
+   * @param  {Object} params 数据参数
+   */
+  updateAppData (table_name, _id, params) {
+    return http.put(
+      `${apiServer.default}/v2/app_data/${table_name}/${_id}`, params
+    )
+  },
+
+  /**
    * 删除数据
    * @param  {String} table_name 表名
    * @param  {String} object_id 数据 id
@@ -108,6 +141,17 @@ export default {
   deleteData (table_name, object_id) {
     return http.del(
       `${apiServer.default}/v2/data/${table_name}/${object_id}`
+    )
+  },
+
+  /**
+   * 删除应用级数据
+   * @param  {String} table_name 表名
+   * @param  {String} object_id 数据 id
+   */
+  deleteAppData (table_name, _id) {
+    return http.del(
+      `${apiServer.default}/v2/app_data/${table_name}/${_id}`
     )
   }
 }
