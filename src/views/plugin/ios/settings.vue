@@ -27,16 +27,10 @@
             <div v-show="model.config.apn.enable" class="form-row row">
               <label class="form-control col-6">{{ $t("ui.app.apn_file") }}:</label>
               <div class="controls col-18">
-                <div class="row">
-                  <div class="col-8">
-                    <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
-                      <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.app.uploading') : $t('ui.app.upload') }}
-                    </label>
-                  </div>
-                  <div class="col-16">
-                    <div v-if="model.config.apn.license_url" class="file-url">url: {{ model.config.apn.license_url }}</div>
-                  </div>
-                </div>
+                <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+                  <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.app.uploading') : $t('ui.app.upload') }}
+                </label>
+                <div v-if="model.config.apn.license_url" class="file-url">url: {{ model.config.apn.license_url }}</div>
               </div>
             </div>
             <div v-show="model.config.apn.enable" class="form-row row">
@@ -96,6 +90,7 @@
 
     data () {
       return {
+        currApp: {},
         model: {
           name: '',
           enable: false,
@@ -125,11 +120,12 @@
       getAppInfo () {
         api.plugin.get(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.model.name = res.data.name
-            this.model.config.apn.enable = res.data.config.apn.enable
-            this.model.config.apn.license_url = res.data.config.apn.license_url
-            this.model.config.apn.license_pwd = res.data.config.apn.license_pwd
-            this.model.config.apn.license_production = res.data.config.apn.license_production
+            this.currApp = res.data
+            this.model.name = this.currApp.name
+            this.model.config.apn.enable = this.currApp.config.apn.enable
+            this.model.config.apn.license_url = this.currApp.config.apn.license_url
+            this.model.config.apn.license_pwd = this.currApp.config.apn.license_pwd
+            this.model.config.apn.license_production = this.currApp.config.apn.license_production
           }
         })
       },
@@ -148,7 +144,7 @@
           if (result === true) {
             api.plugin.remove(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.removePlugin(this.model)
+                this.removePlugin(this.currApp)
                 this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {
