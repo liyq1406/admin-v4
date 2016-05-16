@@ -53,8 +53,8 @@
 
     computed: {
       // 图例
-      legends () {
-        return this.series.length > 0 ? _.map(this.series, 'name') : []
+      legendData () {
+        return this.series.length > 0 ? _.map(this.series[0].data, 'name') : []
       },
 
       // 图表配置
@@ -63,7 +63,7 @@
           legend: {
             orient: 'vertical',
             x: 'left',
-            data: ['种类1', '种类2', '种类3', '种类4', '种类5']
+            data: this.legendData
           },
           calculable: true,
           series: this.series

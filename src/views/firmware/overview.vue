@@ -14,14 +14,14 @@
               <div class="statistics-info">
                 <div class="item no-border">
                   <div class="cont">
-                    <div class="num">1</div>
-                    <div class="label">设备总量</div>
+                    <div class="num">{{ totalSummary.total }}</div>
+                    <div class="label">{{ $t("ui.dashboard.statistic.total") }}</div>
                   </div>
                 </div>
                 <div class="item no-border">
                   <div class="cont">
-                    <div class="num">2</div>
-                    <div class="label">激活量</div>
+                    <div class="num">{{ totalSummary.activated }}</div>
+                    <div class="label">{{ $t("ui.dashboard.statistic.activated") }}</div>
                   </div>
                 </div>
               </div>
@@ -36,7 +36,7 @@
 <script>
   // import Vue from 'vue'
   // import locales from '../../consts/locales/index'
-  // import api from '../../api'
+  import api from '../../api'
   import Modal from '../../components/Modal'
   import store from '../../store/index'
   import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
@@ -71,6 +71,11 @@
 
     data () {
       return {
+        // 设备统计
+        totalSummary: {
+          total: 0,
+          activated: 0
+        },
         loadingData: false
       }
     },
@@ -83,11 +88,7 @@
           radius: '80%',
           center: ['50%', '50%'],
           data: [
-            {value: 1, name: '种类1'},
-            {value: 4, name: '种类2'},
-            {value: 2, name: '种类3'},
-            {value: 7, name: '种类4'},
-            {value: 5, name: '种类5'}
+            {value: 1, name: 'V1'}
           ]
         }]
 
@@ -113,7 +114,13 @@
 
     route: {
       data () {
-
+        api.statistics.getSummary().then((res) => {
+          if (res.status === 200) {
+            this.totalSummary = res.data.total
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     },
 
