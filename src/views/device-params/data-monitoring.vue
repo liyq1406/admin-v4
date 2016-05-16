@@ -140,7 +140,7 @@
        * 获取快照数据
        */
       getSnapshot (offset, limit, begintime, endtime) {
-        offset = offset || 0
+        offset = 0
         limit = limit || 1000
         endtime = Date.parse(new Date())
         // 取当前开始到3天前的时间

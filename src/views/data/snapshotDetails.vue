@@ -422,7 +422,7 @@
       querySnapshotCondition () {
         var endtime = Date.parse(new Date())
         // 取当前开始到period天前的时间
-        var begintime = endtime - this.period * 24 * 60 * 60 * 1000
+        var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
         var condition = {
           offset: 0,
           limit: 2500,
@@ -591,6 +591,7 @@
             this.deviceDatas = []
           }
           this.loadingData = false
+          this.getSnapshot()
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
