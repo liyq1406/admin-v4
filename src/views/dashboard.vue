@@ -115,9 +115,9 @@
                     <p>提供Android开发文档说明</p>
                   </div>
                 </div>
-                <div class="doc-list-item"><a href="#" target="_blank" class="fa fa-th-large"></a>
+                <div class="doc-list-item"><a href="https://github.com/xlink-corp/xlink-sdk" target="_blank" class="fa fa-th-large"></a>
                   <div class="info">
-                    <h3><a href="#" target="_blank">APP 开发示例</a></h3>
+                    <h3><a href="#" target="_blank">平台开发文档</a></h3>
                     <p>云智易平台提供了丰富的接口</p>
                   </div>
                 </div>
