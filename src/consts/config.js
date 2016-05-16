@@ -15,17 +15,17 @@ const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
 
 // 插件服务器地址
-const PLUGIN_SERVER = 'http://plugin.xlink.cn'
+const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
 
 export var apiServer = {
   // 默认
   default: process.env.API_SERVER || DEFAULT_API_SERVER,
 
   // 菜谱
-  recipe: `${PLUGIN_SERVER}/39352b6f8d224064832bcec9b96958d1`,
+  recipe: `${DEFAULT_PLUGIN_SERVER}/module/recipe`,
 
   // 延保
-  warranty: 'http://test.plugin.xlink.cn:3000/module/warranty'
+  warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`
 }
 
 export default {
