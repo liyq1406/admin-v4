@@ -70,11 +70,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  AddBranch (appID, params) {
+  AddBranch (appID, token, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/branch/save`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -85,11 +86,12 @@ export default {
     * @param  Object 查询参数
     * @return status
     */
-  UpdateBranch (appID, params, branchId) {
+  UpdateBranch (appID, token, params, branchId) {
     return http.put(
       `${apiServer.warranty}/${appID}/api/branch/update/${branchId}`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -101,11 +103,12 @@ export default {
    * @param  String 网点ID
    * @return status
    */
-  deleteBranch (appID, branchId) {
+  deleteBranch (appID, token, branchId) {
     return http.del(
       `${apiServer.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -116,11 +119,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchStaffsList (appID, params) {
+  getBranchStaffsList (appID, token, params) {
     return http.post(
      `${apiServer.warranty}/${appID}/api/outlet_staffs/list`, params, {
        headers: {
-         'Content-Type': 'application/x-www-form-urlencoded'
+         'Content-Type': 'application/x-www-form-urlencoded',
+         'Access-Token': token
        }
      }
    )
@@ -131,11 +135,12 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  AddBranchStaffs (appID, params) {
+  AddBranchStaffs (appID, token, params) {
     return http.post(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/save`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -146,11 +151,12 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  UpdateBranchStaffs (appID, staffId, params) {
+  UpdateBranchStaffs (appID, token, staffId, params) {
     return http.put(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )
@@ -161,11 +167,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  deleteStaff (appID, staffId) {
+  deleteStaff (appID, token, staffId) {
     return http.del(
       `${apiServer.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
         }
       }
     )

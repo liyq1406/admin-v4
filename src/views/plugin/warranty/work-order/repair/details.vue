@@ -2,7 +2,7 @@
   <section class="main-wrap">
     <div class="main">
       <!-- Start: 面包屑 -->
-      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div>
       <!-- End: 面包屑 -->
 
       <!-- Start: 工单详情 -->
@@ -233,8 +233,14 @@
             condition.query._id = this.repairOrder.branch_id
             api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
               this.branch = res.data.list[0] || {}
-            }).catch((res) => {
-              this.handleError(res)
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
             })
 
             // 查询维修详情信息
@@ -242,8 +248,14 @@
             condition.query._id = this.repairOrder.repair_id
             api.warranty.getRepairDetailList(this.$route.params.app_id, token, condition).then((res) => {
               this.repairDetails = res.data.list[0] || {}
-            }).catch((res) => {
-              this.handleError(res)
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
             })
           }).catch((err) => {
             var env = {

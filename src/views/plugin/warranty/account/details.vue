@@ -1,7 +1,7 @@
 <template>
   <section class="main-wrap">
     <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + 'accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
+      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
       <div class="panel">
         <!-- Start: 网点详情 -->
         <div class="panel-hd">
@@ -272,6 +272,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
   import Select from '../../../../components/Select'
   import SearchBox from '../../../../components/SearchBox'
   import Pager from '../../../../components/Pager'
@@ -284,7 +285,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     data () {
       return {
@@ -402,6 +403,9 @@
     methods: {
       // 获取网点信息
       getBranchList () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getBranchList
         var condition = {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
@@ -410,26 +414,39 @@
             _id: this.$route.params.id
           }
         }
-        api.warranty.getBranchList(condition).then((res) => {
-          this.info = res.data.list[0] || {}
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+            this.info = res.data.list[0] || {}
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
       // 获取维修点员工列表
       getBranchStaffsList () {
-        // if (typeof querying !== 'undefined') {
-        //   this.currentPage = 1
-        // }
-        this.loadingData = true
-        api.warranty.getBranchStaffsList(this.queryCondition).then((res) => {
-          this.staffs = res.data.list
-          this.total = res.data.count
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        var self = this
+        var argvs = arguments
+        var fn = self.getBranchStaffsList
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchStaffsList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.staffs = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       },
       // 添加网点表单钩子
@@ -478,24 +495,37 @@
       },
       // 添加操作
       onAddSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onAddSubmit
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
           this.addModel.status = this.addModel.status - 0
           this.addModel.branch_id = this.$route.params.id
           this.addModel.username = this.addModel.email
-          api.warranty.AddBranchStaffs(this.addModel).then((res) => {
-            this.adding = false
-            this.showAddModal = false
-            this.getBranchStaffsList()
-            this.resetAdd()
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.AddBranchStaffs(this.$route.params.app_id, token, this.addModel).then((res) => {
+              this.adding = false
+              this.showAddModal = false
+              this.getBranchStaffsList()
+              this.resetAdd()
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.adding = false
+            })
           })
-          console.log('ready to send post')
         }
       },
       editAccount () {
+        var self = this
+        var argvs = arguments
+        var fn = self.editAccount
         var condition = {
           limit: this.pageCount,
           offset: (this.currentPage - 1) * this.pageCount,
@@ -504,27 +534,46 @@
             _id: this.$route.params.id
           }
         }
-        api.warranty.getBranchList(condition).then((res) => {
-          this.editModal = res.data.list[0] || {}
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+            this.editModal = res.data.list[0] || {}
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
         })
         this.showEditModal = true
       },
 
       // 提交编辑表单
       onEditSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onEditSubmit
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
           // console.log(this.$route.params.id)
-          api.warranty.deleteBranch(this.$route.params.id).then((res) => {
-            this.editing = false
-            this.showEditModal = false
-            this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.deleteBranch(this.$route.params.id).then((res) => {
+              this.editing = false
+              this.showEditModal = false
+              this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.editing = false
+            })
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true

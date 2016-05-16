@@ -126,6 +126,7 @@
 
 <script>
   import { globalMixins } from '../../../../mixins'
+  import { pluginMixins } from '../../mixins'
   import SearchBox from '../../../../components/SearchBox'
   import Pager from '../../../../components/Pager'
   import Select from '../../../../components/Select'
@@ -139,7 +140,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-select': Select,
@@ -233,14 +234,25 @@
         // if (typeof querying !== 'undefined') {
         //   this.currentPage = 1
         // }
+        var self = this
+        var argvs = arguments
+        var fn = self.getBranchList
         this.loadingData = true
-        api.warranty.getBranchList(this.queryCondition).then((res) => {
-          this.accounts = res.data.list
-          this.total = res.data.count
-          this.loadingData = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.getBranchList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            this.accounts = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
         })
       },
 
@@ -266,6 +278,9 @@
       },
       // 添加操作
       onAddSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.onAddSubmit
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
           // var theModel = this.addModel
@@ -277,16 +292,23 @@
           this.addModel.province = this.selectedProvince.name
           this.addModel.city = this.selectedCity.name
           this.addModel.district = this.selectedDistrict.name
-          api.warranty.AddBranch(this.addModel).then((res) => {
-            this.adding = false
-            this.showAddModal = false
-            this.getBranchList()
-            this.resetAdd()
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
+          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+            api.warranty.AddBranch(this.$route.params.app_id, token, this.addModel).then((res) => {
+              this.adding = false
+              this.showAddModal = false
+              this.getBranchList()
+              this.resetAdd()
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'warranty'
+              }
+              self.handlePluginError(err, env)
+              this.adding = false
+            })
           })
-          console.log('ready to send post')
         }
       }
     }

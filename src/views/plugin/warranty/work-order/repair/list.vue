@@ -269,8 +269,14 @@
               self.handlePluginError(err, env)
               this.loadingData = false
             })
-          }).catch((res) => {
-            this.handleError(res)
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
             this.loadingData = false
           })
         })

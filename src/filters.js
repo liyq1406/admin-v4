@@ -18,7 +18,7 @@ export function formatDate (date) {
  * @return {String}
  */
 export function uniformDate (date) {
-  if (typeof date !== 'undefined' && date.length > 0) {
+  if (date && date.length > 0) {
     var formatDate = new Date(date)
     var year = formatDate.getFullYear().toString()
     var month = formatDate.getMonth() + 1 > 9 ? (formatDate.getMonth() + 1).toString : '0' + (formatDate.getMonth() + 1).toString()
