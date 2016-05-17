@@ -373,7 +373,7 @@
         // 当前未满一小时默认取满一小时
         now = (Math.floor(now / 3600) + 1) * 3600
         const SECONDS_PER_HOUR = 3600
-        var itemToAdd = {}
+        // var itemToAdd = {}
         var i = 0
 
         for (let k = this.period * 24 - 1; k >= 0; k--) {
@@ -387,35 +387,13 @@
           var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
           var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) - 1
-          if (index) {
-            if (a !== i) {
-              // 当商改变说明此数据为下一个小时的数据
-              // 将每个小时最后的数据附近图表数据数组\
-              // console.log(13231312313)
-              // console.log(itemToAdd)
-              result.forEach((r, n) => {
-                r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
-              })
-              itemToAdd = item
-              // 将1重置为当前数据的时间
-              i = a
-            }
-          } else {
-            // 数组内第一个元素处理
-            // 将第一个元素存进暂存对象内
-            itemToAdd = item
-            // 初始经过0个小时
-            i = 0
-          }
-
-          // 处理最后一个记录
-          if (index === this.snapshots.length - 1) {
+          if (a !== i) {
             result.forEach((r, n) => {
-              r.data[this.period * 24 - 1 - a] = Number(itemToAdd[`${r.name}`]) || 0
+              r.data[this.period * 24 - 2 - a] = Number(item[`${r.name}`]) || 0
             })
+            i = a
           }
         })
-
         return result
       },
 
@@ -536,7 +514,6 @@
               res.data.list[0].datapoint.map((item, index) => {
                 r.data.map((dp) => {
                   if (dp.index === item) {
-                    console.log(1231312331)
                     var obj = {
                       index: item,
                       selected: index < 3 || false,
