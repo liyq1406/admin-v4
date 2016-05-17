@@ -160,7 +160,6 @@
   import Pager from '../../components/Pager'
   import locales from '../../consts/locales/index'
   import { globalMixins } from '../../mixins'
-  import { getCurrentMember } from '../../store/actions/system'
 
   export default {
     name: 'MemberSettings',
@@ -181,9 +180,6 @@
     vuex: {
       getters: {
         currentMember: ({ system }) => system.currentMember
-      },
-      actions: {
-        getCurrentMember
       }
     },
 
@@ -228,9 +224,6 @@
         this.originEditPwdModel = _.clone(this.editPwdModel)
         this.getMembers()
       }
-    },
-    ready () {
-      this.getCurrentMember(window.localStorage.getItem('memberId'), this)
     },
 
     computed: {

@@ -115,7 +115,7 @@
 <script>
   import store from './store/index'
   import { globalMixins } from './mixins'
-  import { removeError, hideError, getCurrentMember } from './store/actions/system'
+  import { removeError, hideError, setCurrentMember } from './store/actions/system'
   import { getAllProducts } from './store/actions/products'
   import { createPlugin, getAllPlugin } from './store/actions/plugins'
   import Vue from 'vue'
@@ -150,7 +150,7 @@
       actions: {
         hideError,
         removeError,
-        getCurrentMember,
+        setCurrentMember,
         getAllProducts,
         createPlugin,
         getAllPlugin
@@ -167,7 +167,7 @@
     watch: {
       layout () {
         if (this.layout === 'admin') {
-          this.getCurrentMember(window.localStorage.getItem('memberId'), this)
+          this.getMember()
           this.getProducts()
           this.getPlugins()
         }
@@ -183,6 +183,14 @@
     },
 
     methods: {
+      getMember () {
+        api.corp.getMember(window.localStorage.getItem('memberId')).then((res) => {
+          this.setCurrentMember(res.data)
+        }).catch((res) => {
+          this.$route.router.go('/login')
+        })
+      },
+
       getProducts () {
         api.product.all().then((res) => {
           this.getAllProducts(res.data)

@@ -180,6 +180,7 @@
   import api from '../../api'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
+  import { setCurrentMember } from '../../store/actions/system'
 
   export default {
     name: 'AccountSettings',
@@ -190,6 +191,12 @@
 
     components: {
       'modal': Modal
+    },
+
+    vuex: {
+      actions: {
+        setCurrentMember
+      }
     },
 
     data () {
@@ -263,6 +270,7 @@
         this.loadingAccount = true
         api.corp.getMember(memberId).then((res) => {
           this.member = res.data
+          this.setCurrentMember(res.data)
           this.loadingAccount = false
         }).catch((res) => {
           this.handleError(res)
@@ -329,10 +337,10 @@
 
       // 提交编辑用户信息
       onSubmitAccount () {
-        var member_id = window.localStorage.getItem('member_id')
+        var memberId = window.localStorage.getItem('memberId')
         if (this.accountValidation.$valid && !this.editing) {
           this.editing = true
-          api.corp.updateMember(member_id, this.editModel).then((res) => {
+          api.corp.updateMember(memberId, this.editModel).then((res) => {
             this.resetEditAccount()
             if (res.status === 200) {
               this.getMemberInfo()
