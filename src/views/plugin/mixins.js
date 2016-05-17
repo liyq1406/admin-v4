@@ -114,8 +114,14 @@ export const pluginMixins = {
               resolve(res.data.access_token)
             }
           }, (err) => {
-            if (reject) {
-              reject(err)
+            if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
+              switch (err.data.error.code) {
+                case 4031003:
+                  this.$route.router.go('/login')
+                  break
+                default:
+                  this.showError(err.data.error)
+              }
             } else {
               console.log(err)
             }
@@ -126,7 +132,7 @@ export const pluginMixins = {
 
     handlePluginError (err, env) {
       var self = this
-      if (err.status === 403 && err.data.code === 4031003) {
+      if (err.status === 403 && err.data.error.code === 4031003) {
         // 重新请求
         // 引用自身，会造成死循环, 加一个限制，最多执行重复请求3次
         self.setPluginToken(env.plugin, INVALID)

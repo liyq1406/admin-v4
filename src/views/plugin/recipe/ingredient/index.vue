@@ -39,7 +39,7 @@
                   <td>{{ ingredient.name }}</td>
                   <td>{{ ingredient.created_by }}</td>
                   <td>{{ ingredient.created_at | formatDate }}</td>
-                  <td class="tac"><a v-link="{path: '/plugins/recipe/ingredient/' + $route.params.app_id + '/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
+                  <td class="tac"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
               <tr v-if="ingredients.length === 0 && !loadingData">
@@ -165,7 +165,7 @@
         }
 
         if (this.query.length > 0) {
-          condition.query['name'] = { $like: this.query }
+          condition.query['name'] = {$regex: this.query, $options: 'i'}
         }
 
         if (this.category.value === 'all') {
@@ -204,7 +204,7 @@
               // 食材列表
               this.ingredients = res.data.list
               // 记录数
-              this.total = res.data.total
+              this.total = res.data.count
               this.loadingData = false
             }
           }).catch((err) => {
@@ -235,8 +235,8 @@
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
           api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.categories = res.data.value
+            if (res.data.list.length > 0) {
+              this.categories = res.data.list[0].value
             } else {
               this.categories = []
             }
@@ -269,10 +269,12 @@
         var argvs = arguments
         var fn = self.onCateSubmit
         this.editing = true
-        this.categories.key = 'ingredient_classification'
-        console.log('onCateSubmit')
+        var condition = {
+          key: 'ingredient_classification',
+          value: this.categories
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.updateCategory(this.$route.params.app_id, token, this.categories).then((res) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (res.status === 200) {
               this.onCateCancel()
             }
@@ -296,10 +298,15 @@
         var self = this
         var argvs = arguments
         var fn = self.getRules
+        var condition = {
+          query: {
+            key: 'push_rules'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'push_rules').then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.rules = res.data.value
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.list.length > 0) {
+              this.rules = res.data.list[0].value
             } else {
               this.rules = []
             }
@@ -332,9 +339,12 @@
         var argvs = arguments
         var fn = self.onPushSubmit
         this.editing = true
-        console.log('onPushSubmit')
+        var condition = {
+          key: 'push_rules',
+          value: this.rules
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.updateCategory(this.$route.params.app_id, token, 'push_rules', this.rules).then((res) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (res.status === 200) {
               this.onPushCancel()
             }

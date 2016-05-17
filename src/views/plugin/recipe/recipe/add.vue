@@ -387,8 +387,8 @@
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
           api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.categories = res.data.value
+            if (res.data.list.length > 0) {
+              this.categories = res.data.list[0].value
             } else {
               this.categories = []
             }
@@ -590,7 +590,7 @@
                   type: 'success',
                   content: '菜谱添加成功！'
                 })
-                this.$route.router.go({path: '/plugins/recipe/' + this.$router.params.app_id})
+                this.$route.router.go({path: '/plugins/recipe/' + this.$route.params.app_id + '/list'})
               }
             }).catch((err) => {
               var env = {

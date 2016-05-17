@@ -366,15 +366,24 @@
 
     route: {
       data () {
+        var condition = {
+          filter: [],
+          limit: 1,
+          offset: 0,
+          query: {
+            _id: this.$route.params.id
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.getRecipe(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
+          api.diet.listRecipe(this.$route.params.app_id, token, condition).then((res) => {
             if (res.status === 200) {
+              var data = res.data.list[0] ? res.data.list[0] : null
               var images = ['', '', '']
-              res.data.images.forEach((item, index) => {
+              data.images.forEach((item, index) => {
                 images[index] = item
               })
-              res.data.images = images
-              this.model = res.data
+              // res.data.images = images
+              this.model = data
             }
           })
         })
@@ -396,10 +405,15 @@
         var self = this
         var argvs = arguments
         var fn = self.getCategories
+        var condition = {
+          query: {
+            key: 'recipe_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'recipe_classification').then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.categories = res.data.value
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.list.length > 0) {
+              this.categories = res.data.list[0].value
             } else {
               this.categories = []
             }
@@ -422,10 +436,15 @@
         var self = this
         var argvs = arguments
         var fn = self.getIngredientCategories
+        var condition = {
+          query: {
+            key: 'ingredient_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.ingredientCategories = res.data.value
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.list.length > 0) {
+              this.ingredientCategories = res.data.list[0].value
             } else {
               this.ingredientCategories = []
             }
@@ -598,7 +617,7 @@
                   type: 'success',
                   content: '菜谱修改成功！'
                 })
-                this.$route.router.go({path: '/plugins/recipe'})
+                this.$route.router.go({path: '/plugins/recipe/' + this.$route.params.app_id})
               }
             }).catch((err) => {
               var env = {
@@ -627,7 +646,7 @@
           this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
             api.diet.deleteRecipe(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.$route.router.go({path: '/plugins/recipe'})
+                this.$route.router.go({path: '/plugins/recipe/' + this.$route.params.app_id})
               }
             }).catch((err) => {
               var env = {

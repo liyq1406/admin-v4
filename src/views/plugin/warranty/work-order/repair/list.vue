@@ -255,7 +255,7 @@
         this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
           api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
             this.branchs = res.data.list
-            api.warranty.getOrderWorkList(this.queryCondition).then((res) => {
+            api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
               this.total = res.data.count
               this.workOrders = res.data.list
               this.loadingData = false

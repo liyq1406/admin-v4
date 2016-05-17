@@ -132,13 +132,15 @@
        */
       categoryOptions () {
         var arr = [{label: '全部', value: 'all'}]
-        this.categories.map((item) => {
-          let obj = {}
-          obj.label = item.main
-          obj.value = item.main
-          arr.push(obj)
-        })
-        return arr
+        if (this.categories && this.categories.length > 0) {
+          this.categories.map((item) => {
+            let obj = {}
+            obj.label = item.main
+            obj.value = item.main
+            arr.push(obj)
+          })
+          return arr
+        }
       },
 
       /**
@@ -231,8 +233,10 @@
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
           api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.categories = res.data.value
+            if (res.data.list.length > 0) {
+              if (res.data.list[0].value) {
+                this.categories = res.data.list[0].value
+              }
             } else {
               this.categories = []
             }
@@ -265,10 +269,12 @@
         var self = this
         var argvs = arguments
         var fn = self.onCateSubmit
-        var categories = this.categories[0] ? this.categories[0] : {}
-        categories.key = 'recipe_classification'
+        var condition = {
+          key: 'recipe_classification',
+          value: this.categories
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.updateCategory(this.$route.params.app_id, token, categories).then((res) => {
+          api.diet.updateCategory(this.$route.params.app_id, token, condition).then((res) => {
             if (res.status === 200) {
               this.onCateCancel()
             }

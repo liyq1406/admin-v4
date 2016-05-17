@@ -131,7 +131,7 @@ export default {
    */
   updateRecipe (app_id, token, id, params) {
     return http.put(
-      `${apiServer.recipe}/${app_id}/api/recipe/update/${id}`, params, {
+      `${apiServer.recipe}/${app_id}/api/recipes/update/${id}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -175,8 +175,8 @@ export default {
    * @param {Object} id 菜谱ID
    */
   deleteRecipe (app_id, token, id) {
-    return http.post(
-      `${apiServer.recipe}/${app_id}/api/recipe/delete/${id}`, {}, {
+    return http.del(
+      `${apiServer.recipe}/${app_id}/api/recipes/delete/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token

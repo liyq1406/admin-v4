@@ -106,6 +106,8 @@
 
     label
       cursor pointer
+      position relative
+      overflow hidden
 
     input[type="file"]
       absolute top -50px

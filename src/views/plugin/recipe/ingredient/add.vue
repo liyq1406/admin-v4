@@ -148,10 +148,15 @@
         var self = this
         var argvs = arguments
         var fn = self.getCategories
+        var condition = {
+          query: {
+            key: 'ingredient_classification'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'ingredient_classification').then((res) => {
-            if (res.data.value !== undefined) {
-              this.categories = res.data.value
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.list.length > 0) {
+              this.categories = res.data.list[0].value
             } else {
               this.categories = []
             }
@@ -174,10 +179,15 @@
         var self = this
         var argvs = arguments
         var fn = self.getRules
+        var condition = {
+          query: {
+            key: 'push_rules'
+          }
+        }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
-          api.diet.listCategory(this.$route.params.app_id, token, 'push_rules').then((res) => {
-            if (res.data.value !== undefined) {
-              this.rules = res.data.value
+          api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.list.length > 0) {
+              this.rules = res.data.list[0].value
             } else {
               this.rules = []
             }
@@ -234,7 +244,7 @@
                   type: 'success',
                   content: '食材添加成功！'
                 })
-                this.$route.router.go({path: '/plugins/recipe/ingredient'})
+                this.$route.router.go({path: '/plugins/recipe/' + this.$route.params.app_id + '/ingredient'})
               }
             }).catch((err) => {
               var env = {
