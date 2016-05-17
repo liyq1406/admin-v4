@@ -7,6 +7,13 @@ let isAccessAuthPage = (path) => {
   return ['/login', '/register', '/register-with-verifycode', '/fetch-password', '/fetch-password-bymail'].indexOf(path) >= 0 || path.indexOf('/member-activate') >= 0 || path.indexOf('/email-activate') >= 0 || path.indexOf('/password-reset') >= 0 || path.indexOf('/user-email-activate') >= 0 || path.indexOf('/user-password-reset') >= 0
 }
 
+// function throttle (method) {
+//   clearTimeout(method.tId)
+//   method.tId = setTimeout(() => {
+//     method.next()
+//   }, 200)
+// }
+
 let configRouter = (router) => {
   /**
    * 路由地址映射
@@ -721,7 +728,7 @@ let configRouter = (router) => {
       }
     },
     // 禁止访问
-    '/plugins/recipe/forbidden': {
+    '/plugins/recipe/:app_id/forbidden': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/recipe/forbidden'))
@@ -887,14 +894,14 @@ let configRouter = (router) => {
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
-    // '/plugins/recipe': '/plugins/recipe/forbidden',
-    // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
+    '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/forbidden',
+    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
     '/plugins/broadcast': '/plugins/broadcast/forbidden',
     '/plugins/xpay': '/plugins/xpay/forbidden',
     '/plugins/helpdesk': '/plugins/helpdesk/forbidden',
     '/plugins/dealer': '/plugins/dealer/forbidden',
-    '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
-    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
+    // '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
+    // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
     // '/plugins/broadcast': '/plugins/broadcast/add',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
@@ -909,6 +916,7 @@ let configRouter = (router) => {
         router.replace('/login')
       }
     }
+    // throttle(transition)
     transition.next()
   })
 }
