@@ -196,6 +196,7 @@
     .pager-more
       position relative
       font-size 12px
+      background #FFF
       transition background .3s, color .3s, border-color .3s
 
       span
