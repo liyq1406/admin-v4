@@ -123,8 +123,13 @@
               <div v-placeholder="$t('ui.datapoint.placeholders.index')" class="input-text-wrap">
                 <input v-model="editModel.index" type="text" v-form-ctrl name="index" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.index.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span></div>
-              <div v-if="editValidation.index.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span><span v-if="editValidation.index.$error.customValidator">{{ $t('ui.validation.maxlength', [ $t('ui.datapoint.fields.index'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.index.$pristine" class="form-tips form-tips-error">
+                <span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
+              </div>
+              <div v-if="editValidation.index.$dirty" class="form-tips form-tips-error">
+                <span v-if="editValidation.index.$error.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
+                <span v-if="editValidation.index.$error.customValidator">{{ $t('ui.validation.numberic') }}</span>
+              </div>
             </div>
           </div>
           <div class="form-row row">
@@ -324,8 +329,11 @@
       // 初始化编辑表单
       editDataPoint (datapoint) {
         this.showEditModal = true
+        var i = datapoint.index + ''
         this.editModel = _.clone(datapoint)
         this.originEditModel = _.clone(datapoint)
+        this.editModel.index = i
+        this.originEditModel.index = i
       },
 
       // 取消编辑
