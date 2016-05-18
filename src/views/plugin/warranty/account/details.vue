@@ -98,7 +98,7 @@
                 </td>
                 <td>{{ staff.phone }}</td>
                 <td>{{ staff.email }}</td>
-                <td>{{ staff.create_time | uniformDate }}</td>
+                <td>{{ staff.online_date | uniformDate }}</td>
                 <td v-if="staff.status-0 === 0">
                   <span class="hl-gray">已停用</span>
                 </td>
