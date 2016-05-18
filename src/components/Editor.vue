@@ -1,10 +1,12 @@
 <template>
   <div class="html-editor">
-    <textarea v-model="value" name="openContent" class="input-text"></textarea>
+    <textarea class="editor" v-model="value" name="openContent" class="input-text"></textarea>
   </div>
 </template>
 
 <script>
+  // TinyMCE 官网地址：https://www.tinymce.com/
+
   import Vue from 'vue'
   import tinymce from 'tinymce/tinymce'
   import 'tinymce/themes/modern/theme'
@@ -29,7 +31,7 @@
 
     ready () {
       var editorConfig = {
-        selector: 'textarea', // 选择器
+        selector: '.editor', // 选择器
         menubar: false, // 是否显示菜单栏
         theme: 'modern', // 主题样式
         // skin: 'lightgray',

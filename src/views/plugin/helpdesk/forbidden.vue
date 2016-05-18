@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>HelpDesk</h2>
+          <h2>用户反馈</h2>
         </div>
         <div class="panel-bd">
           <v-alert :cols="7">

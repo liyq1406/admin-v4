@@ -72,7 +72,7 @@
             <h2>{{ $t("ui.overview.regions") }}</h2>
           </div>
           <div class="panel-bd with-loading">
-            <map-chart :type="region" v-ref:region-chart :series-data="regionsData"></map-chart>
+            <map-chart :type="region" v-ref:region-chart :series-data="regionsData" :tooltip-label="$t('ui.statistic.products.active')"></map-chart>
             <div class="icon-loading" v-show="loadingProductRegions">
               <i class="fa fa-refresh fa-spin"></i>
             </div>
@@ -248,7 +248,7 @@
         },
         period: 7,
         periods: locales[Vue.config.lang].data.PERIODS,
-        region: 'world',
+        region: 'china',
         regions: locales[Vue.config.lang].data.REGIONS,
         productTrends: [],
         regionsData: [],

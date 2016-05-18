@@ -30,12 +30,15 @@
             <tbody>
               <template v-if="histories.length > 0">
                 <tr v-for="history in histories">
-                  <td><a v-link="{path: '/plugins/broadcast/history/' + ($index + 1)}">{{ history.content }}</a></td>
+                  <!-- <td><a v-link="{path: '/plugins/broadcast/history/' + ($index + 1)}">{{ history.content }}</a></td> -->
+                  <td>{{ history.content }}</td>
                   <td>{{ history.channel }}</td>
                   <td>{{ history.type }}</td>
                   <td>
                     <span v-if="history.status===1" class="hl-green">已发送</span>
-                    <span v-if="history.status===0" class="hl-gray">待发送<a v-link="{path: '/plugins/broadcast/history/' + ($index + 1) + '/update'}" class="fa fa-edit"></a></span>
+                    <span v-if="history.status===0" class="hl-gray">待发送
+                      <!-- <a v-link="{path: '/plugins/broadcast/history/' + ($index + 1) + '/update'}" class="fa fa-edit"></a> -->
+                    </span>
                     <div class="broadcast-details" v-if="history.status===1">
                       <p>发送：38492</p>
                       <p>接收：122232</p>

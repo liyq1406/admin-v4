@@ -79,13 +79,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in regionsData">
+              <tr v-for="item in regionsData | limitBy pageCount (currentPage-1)*pageCount">
                 <td>{{ item.name }}</td>
                 <td>{{ item.value }}</td>
                 <td>{{ (item.value * 100 / productSummary.total).toFixed(2) }}%</td>
               </tr>
             </tbody>
           </table>
+          <pager v-if="regionsData.length > pageCount" :total="regionsData.length" :current.sync="currentPage" :page-count="pageCount"></pager>
         </div>
       </div>
     </div>
@@ -98,6 +99,7 @@
   import Select from '../../components/Select'
   import LineChart from '../../components/charts/Line'
   import MapChart from '../../components/charts/Map'
+  import Pager from '../../components/Pager'
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import dateFormat from 'date-format'
@@ -115,7 +117,8 @@
       'radio-group': RadioGroup,
       'v-select': Select,
       'line-chart': LineChart,
-      'map-chart': MapChart
+      'map-chart': MapChart,
+      'pager': Pager
     },
 
     data () {
@@ -127,11 +130,13 @@
           active: 0,
           online: 0
         },
+        currentPage: 1,
+        pageCount: 10,
         product: {},
         productsOptions: [],
         period: 7,
         periods: locales[Vue.config.lang].data.PERIODS,
-        region: 'world',
+        region: 'china',
         regions: locales[Vue.config.lang].data.REGIONS,
         productTrends: [],
         regionsData: [],

@@ -65,15 +65,15 @@
         loading: false,
         plugins: [{
           id: '',
-          name: '消息群发',
+          name: '消息推送',
           description: '让app具备消息广播，运营通知的特性，支持多维度的推送规则管理。',
           alias: 'broadcast',
           enable: false,
           type: 10
         }, {
           id: '',
-          name: 'HelpDesk',
-          description: '建立在用户与企业之间的反馈渠道，包括使用、售后、故障、远程运维等业务服务。',
+          name: '用户反馈',
+          description: '建立在用户与企业之间的反馈渠道，包括使用、售后、故障等业务服务。',
           alias: 'helpdesk',
           enable: false,
           type: 10

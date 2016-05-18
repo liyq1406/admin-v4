@@ -108,7 +108,7 @@
             <template v-if="empowers.length > 0">
               <tr v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount">
                 <td>{{ empower.name }}</td>
-                <td>{{ empower.id }}</td>
+                <td>{{ empower.access_id }}</td>
                 <td class="tac"><span v-if="empower.status-0===1" class="hl-green">{{ $t("common.enable") }}</span><span v-if="empower.status-0===2" class="hl-gray">{{ $t("common.disabled") }}</span></td>
               </tr>
             </template>

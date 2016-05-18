@@ -394,7 +394,7 @@ let configRouter = (router) => {
       }
     },
 
-    // HelpDesk
+    // 用户反馈
     '/plugins/helpdesk': {
       component (resolve) {
         require.ensure([], (require) => {

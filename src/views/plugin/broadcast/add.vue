@@ -21,9 +21,12 @@
                   <input type="radio" v-model="model.type" name="type" :value="$index+1" number/>{{ type }}
                 </label>
               </div>
+              <div v-show="model.type===3" class="input-text-wrap mt5">
+                <textarea v-model="model.userList" name="userList" class="input-text"></textarea>
+              </div>
             </div>
           </div>
-          <div class="form-row row" v-show="model.type>1">
+          <div class="form-row row" v-show="model.type===2">
             <label class="form-control col-5">推送范围:</label>
             <div class="controls col-19">
               <div class="row mb10">
@@ -100,7 +103,7 @@
           <div class="form-row row">
             <label class="form-control col-5">推送描述:</label>
             <div class="controls col-19">
-              <div v-placeholder="'不可超过30个字符'" class="input-text-wrap">
+              <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
                 <input v-model="model.desc" type="text" v-form-ctrl name="desc" maxlength="30" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
               </div>
             </div>
@@ -172,7 +175,7 @@
           label: 'APP1',
           value: 'APP1'
         },
-        types: ['广播', '组播', '单播'],
+        types: ['所有用户', '按分组', '指定用户'],
         tags: ['大客户', '金牌客户', '银牌客户'],
         startTypes: ['现在', '自定义'],
         startDate: '2016-05-13',
@@ -217,29 +220,6 @@
         openType: 1 // 打开消息类型
       }
     },
-
-    ready () {
-      // alert(11111)
-      // window.setTimeout(() => {
-      //   window.tinymce.init({
-      //     selector: '#abc',
-      //     plugins: [
-      //       'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
-      //       'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-      //       'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
-      //     ],
-      //     toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-      //     toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
-      //     menubar: false,
-      //     toolbar_items_size: 'small',
-      //     language: 'zh_CN'
-      //   })
-      // }, 2000)
-    },
-
-    // destroyed () {
-    //   window.tinymce.init({})
-    // },
 
     methods: {
       onSubmit () {

@@ -3,7 +3,7 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>消息群发</h2>
+          <h2>消息推送</h2>
         </div>
         <div class="panel-bd">
           <v-alert :cols="7">

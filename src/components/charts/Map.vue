@@ -71,6 +71,7 @@
 
       options () {
         var self = this
+        console.log(self.tooltipLabel)
         var result = {
           tooltip: {
             trigger: 'item',
