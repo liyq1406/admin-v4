@@ -35,7 +35,7 @@
         // skin: 'lightgray',
         skin_url: '/static/vendor/tinymce/skins/lightgray', // 皮肤
         toolbar_items_size: 'small', // 工具栏图标大小
-        plugins: ['paste', 'link', 'autoresize', 'fullscreen', 'image', 'code', 'preview', 'searchreplace'], // 插件
+        plugins: ['link', 'autoresize', 'fullscreen', 'image', 'code', 'preview', 'searchreplace'], // 插件
         toolbar1: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify', // 工具栏1
         toolbar2: 'searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image code | preview fullscreen' // 工具栏2
       }
