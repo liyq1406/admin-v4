@@ -148,9 +148,9 @@
                  </tr>
                </thead>
                <tbody>
-                 <tr v-for="datapoint in datapoints">
+                 <tr v-for="datapoint in datapoints | limitBy pageCount3 (currentPage3-1)*pageCount3">
                    <td>{{datapoint.index}}</td>
-                   <td>{{datapoint.id}}</td>
+                   <td>{{datapoint.name}}</td>
                    <td>{{datapoint.description}}</td>
                    <td><input v-model="datapoint.selected" type="checkbox"/></td>
                  </tr>
@@ -158,7 +158,7 @@
              </table>
            </div>
            <div class="data-points-footer">
-             <!-- <pager v-if="dataPoints.length > pageCount" :total="dataPoints.length" :current.sync="currentPage" :page-count="pageCount" @page-update=""></pager> -->
+             <pager v-if="datapoints.length > pageCount3" :total="datapoints.length" :current.sync="currentPage3" :page-count="pageCount3" @page-update=""></pager>
            </div>
          </div>
          <div class="form-actions snapshot-select">
@@ -226,8 +226,10 @@
         total: 0,
         currentPage: 1,
         currentPage2: 1,
+        currentPage3: 1,
         pageCount: 20,
         pageCount2: 10,
+        pageCount3: 10,
         product: {},
         deviceDatas: [
           // {
@@ -384,7 +386,8 @@
 
         this.snapshots.forEach((item, index) => {
           // 去掉经过后台处理的时间的T和Z字符
-          var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+          var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '').replace(/-/ig, '/').split('.')[0]
+          // console.log(new Date(snapshotDate))
           // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
           var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) - 1
           if (a !== i) {
@@ -436,14 +439,13 @@
           if (res.status === 200) {
             // 获取全部数组数据
             this.allSnapshots = res.data.list
-            console.log(res.data.list)
             // res.data.list.map((li) => {
             //   li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
             //   this.snapshotTableli.push(li)
             // })
             this.snapshotTable = res.data.list
             this.snapshotTable.map((li) => {
-              li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
+              li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '').replace(/-/ig, '/').split('.')[0]
             })
             // this.snapshotTable = res.data.list
             this.snapshots = res.data.list.sort((a, b) => {
@@ -518,7 +520,7 @@
                       index: item,
                       selected: index < 3 || false,
                       description: dp.description,
-                      id: dp.id
+                      name: dp.name
                     }
                     dps.push(obj)
                   }

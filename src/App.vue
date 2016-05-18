@@ -226,6 +226,8 @@
 </script>
 
 <style lang="stylus">
+  /*@import '../node_modules/tinymce/skins/lightgray/content.min.css'*/
+  /*@import '../node_modules/tinymce/skins/lightgray/skin.min.css'*/
   // 配置
   @import 'assets/stylus/base'
 

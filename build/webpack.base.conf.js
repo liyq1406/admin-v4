@@ -99,6 +99,19 @@ module.exports = {
           limit: 5120,
           name: 'images/[name].[ext]?[hash:7]'
         }
+      },
+      {
+        test: require.resolve('tinymce/tinymce'),
+        loaders: [
+          'imports?this=>window',
+          'exports?window.tinymce'
+        ]
+      },
+      {
+        test: /tinymce\/(themes|plugins)\//,
+        loaders: [
+          'imports?this=>window'
+        ]
       }
     ]
   },

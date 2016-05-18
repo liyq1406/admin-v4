@@ -32,7 +32,7 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="action-bar">
-            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="handleSearch" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
               <v-select width="100px" :label="queryType.label">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -55,7 +55,7 @@
           </div>
           <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getGeographies" :simple="true"></pager>
           <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
-            <p>当前区域未找到设备</p>
+            <p>{{ infoMsg }}</p>
           </v-alert>
         </div>
       </div>
@@ -111,7 +111,7 @@
         },
         currentPage: 1,
         total: 0,
-        pageCount: 8,
+        pageCount: 10,
         oldCurrIndex: 0,
         currIndex: 0,
         currHover: -1,
@@ -126,13 +126,16 @@
         zoom: 10,
         loadingData: true,
         loadingProducts: true,
-        loadingDevices: true
+        loadingDevices: true,
+        infoMsg: ''
       }
     },
 
     computed: {
       queryCondition () {
         var condition = {
+          offset: this.pageCount * (this.currentPage - 1),
+          limit: this.pageCount,
           spherical: true,
           coord: this.mapCenter,
           max_dist: this.map.getResolution() * this.map.getSize().height / 2,
@@ -164,6 +167,7 @@
     watch: {
       zoom () {
         if (this.queryType.value !== 'id' || !this.query) {
+          this.currentPage = 1
           this.getGeographies()
         }
       },
@@ -264,7 +268,7 @@
         return api.device.getList(this.currProduct.id, {
           filter: ['id', 'mac', 'is_online', 'last_login'],
           limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          // offset: (this.currentPage - 1) * this.pageCount,
           query: {
             'id': {
               $in: this.ids
@@ -279,6 +283,9 @@
        */
       getGeography (deviceId) {
         this.loadingData = true
+        api.device.getInfo(this.currProduct.id, deviceId).then((res) => {
+          console.log(res.data)
+        })
         api.device.getGeography(this.currProduct.id, deviceId).then((res) => {
           if (res.status === 200) {
             this.currIndex = 0
@@ -300,8 +307,12 @@
           this.ids = []
           this.devices = []
           this.map.clearMap()
-          this.handleError(res)
           this.loadingData = false
+          this.infoMsg = '暂无该设备的定位数据'
+          // this.showNotice({
+          //   type: 'error',
+          //   content: '暂无该设备的定位数据'
+          // })
         })
       },
 
@@ -315,6 +326,7 @@
             this.ids = _.map(res.data.devices, 'device_id')
           } else {
             this.ids = []
+            this.infoMsg = '当前区域未找到设备'
           }
           this.currIndex = 0
           this.oldCurrIndex = 0
@@ -328,7 +340,7 @@
             this.setMarkers()
           })
         }).catch((res) => {
-          this.handleError(res)
+          // this.handleError(res)
           this.loadingData = false
         })
       },
@@ -489,8 +501,11 @@
             this.placeSearch.search(this.query)
           }
         } else {
-          if (this.queryType.value === 'id') {
-            this.getGeographies()
+          if (this.queryType.value === 'id' && !this.searching) {
+            this.showNotice({
+              type: 'error',
+              content: '请输入设备ID'
+            })
           } else {
             this.citySearch.getLocalCity()
           }

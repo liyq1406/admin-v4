@@ -35,7 +35,7 @@
     </template>
     <div v-else class="pager-container">
       <div class="pager-more">
-        <span @click="toggleInput($event)">{{ current }}/{{ total }}页</span>
+        <span @click="toggleInput($event)">{{ current }}/{{ pages }}页</span>
         <div v-show="showInput" class="pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>

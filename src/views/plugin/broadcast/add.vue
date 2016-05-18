@@ -120,7 +120,7 @@
                 <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
               </div>
               <div v-show="openType===3" class="input-text-wrap">
-                <textarea id="abc" v-model="model.openContent" name="openContent" class="input-text"></textarea>
+                <editor :value="model.openContent"></editor>
               </div>
             </div>
           </div>
@@ -141,6 +141,7 @@
   import DatePicker from '../../../components/DatePicker'
   import TimePicker from '../../../components/TimePicker'
   import AreaSelect from '../../../components/AreaSelect'
+  import Editor from '../../../components/Editor'
 
   export default {
     name: 'AddBroadcast',
@@ -150,6 +151,7 @@
     mixins: [globalMixins],
 
     components: {
+      'editor': Editor,
       'v-select': Select,
       'date-picker': DatePicker,
       'time-picker': TimePicker,
@@ -218,26 +220,26 @@
 
     ready () {
       // alert(11111)
-      window.setTimeout(() => {
-        window.tinymce.init({
-          selector: '#abc',
-          plugins: [
-            'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
-            'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
-            'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
-          ],
-          toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
-          toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
-          menubar: false,
-          toolbar_items_size: 'small',
-          language: 'zh_CN'
-        })
-      }, 2000)
+      // window.setTimeout(() => {
+      //   window.tinymce.init({
+      //     selector: '#abc',
+      //     plugins: [
+      //       'advlist autolink autosave link image lists charmap print preview hr anchor pagebreak spellchecker',
+      //       'searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking',
+      //       'table contextmenu directionality emoticons template textcolor paste fullpage textcolor'
+      //     ],
+      //     toolbar1: 'undo redo | cut copy paste | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify',
+      //     toolbar2: ' searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image media code | inserttime preview fullscreen',
+      //     menubar: false,
+      //     toolbar_items_size: 'small',
+      //     language: 'zh_CN'
+      //   })
+      // }, 2000)
     },
 
-    destroyed () {
-      window.tinymce.init({})
-    },
+    // destroyed () {
+    //   window.tinymce.init({})
+    // },
 
     methods: {
       onSubmit () {
