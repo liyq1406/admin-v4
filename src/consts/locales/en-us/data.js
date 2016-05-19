@@ -140,8 +140,8 @@ export const DATA_DESTINATIONS = ['转发到外部url', '转发到内部插件�
 
 // 邮件模板语言
 export const MAIL_TEMPLATE_LANGUAGES = [
-  { label: '中文(简体)', value: 'zh-cn' },
-  { label: '英语(美国)', value: 'en-us' }
+  { label: 'zh(CN)', value: 'zh-cn' },
+  { label: 'en(US)', value: 'en-us' }
 ]
 
 // 产品快照存储时间间隔

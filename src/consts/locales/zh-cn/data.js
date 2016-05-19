@@ -138,6 +138,12 @@ export const DATA_FORWARD_TYPES = ['设备上线', '设备下线', '设备激活
 // 数据目的地
 export const DATA_DESTINATIONS = ['转发到外部url', '转发到内部插件处理单元']
 
+// 邮件模板语言
+export const MAIL_TEMPLATE_LANGUAGES = [
+  { label: '中文(简体)', value: 'zh-cn' },
+  { label: '英语(美国)', value: 'en-us' }
+]
+
 // 产品快照存储时间间隔
 export const SNAPSHOT_INTERVAL = [
   { label: '10分钟', value: 0 },
