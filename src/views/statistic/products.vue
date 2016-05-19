@@ -44,9 +44,10 @@
                 <div class="cont">
                   <div class="num">0</div>
                   <div class="label"><span>{{ $t("ui.statistic.products.active") }}</span>
-                    <div class="tips"><i @mouseover="showTooltip = true" @mouseout="showTooltip = false" class="fa fa-question-circle"></i>
-                      <div v-show="showTooltip" class="tooltip">{{ $t("ui.statistic.products.active_tips") }}</div>
-                    </div>
+                    <v-tooltip>
+                      <span>{{ $t('ui.statistic.products.active_tips') }}</span>
+                      <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+                    </v-tooltip>
                   </div>
                 </div>
               </div>
@@ -100,6 +101,7 @@
   import LineChart from '../../components/charts/Line'
   import MapChart from '../../components/charts/Map'
   import Pager from '../../components/Pager'
+  import Tooltip from '../../components/Tooltip'
   import locales from '../../consts/locales/index'
   import api from '../../api'
   import dateFormat from 'date-format'
@@ -118,7 +120,8 @@
       'v-select': Select,
       'line-chart': LineChart,
       'map-chart': MapChart,
-      'pager': Pager
+      'pager': Pager,
+      'v-tooltip': Tooltip
     },
 
     data () {
@@ -141,8 +144,7 @@
         productTrends: [],
         regionsData: [],
         loadingProductTrends: false,
-        loadingProductRegions: false,
-        showTooltip: false
+        loadingProductRegions: false
       }
     },
 

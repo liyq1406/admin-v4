@@ -44,11 +44,15 @@
     .vf-pristine.vf-invalid
       border-color red
 
-  // 单选
+  // 单选/多选按钮
   label.radio
   label.checkbox
     display inline-block
     line-height 30px
+
+  .radio input[type="radio"]
+  .checkbox input[type="checkbox"]
+    margin-right 4px
 
   // 单选/多选按钮组
   .radio-group
@@ -59,9 +63,6 @@
       white-space normal
       margin-right 20px
 
-      input[type="radio"]
-        margin-right 4px
-
   .checkbox-group
     clearfix()
 
@@ -69,9 +70,6 @@
       float left
       white-space normal
       margin-right 20px
-
-      input[type="checkbox"]
-        margin-right 4px
 
   .radio-group-v
     p

@@ -59,18 +59,18 @@
       <h3 slot="header">授权设置页面</h3>
       <div slot="body" class="form form-rules">
         <form v-form name="setValidation" @submit.prevent="onSetSubmit" hook="setFormHook">
-          <div v-show="showTips1" class="datatip datatip_product_id">设备的产品编号（由微信硬件平台分配）。可在公众号设备功能管理页面查询。<br />  当 op_type 为‘0’，product_id 为‘1’时，不要填写 product_id 字段（会引起不必要错误）；<br/>  当 op_typy 为‘0’，product_id 不为‘1’时，必须填写 product_id 字段；<br/>  当 op_type 为 1 时，不要填写 product_id 字段。</div>
-          <div v-show="showTips2" class="datatip datatip_auth_key">auth及通信的加密key，第三方需要将key烧制在设备上（128bit），格式采用16进制串的方式（长度为32字节），不需要0X前缀，如:1234567890ABCDEF1234567890ABCDEF</div>
-          <div v-show="showTips3" class="datatip datatip_close_strategy">断开策略，目前支持：<br/>  1：退出公众号页面时即断开连接 <br/>  2：退出公众号之后保持连接不断开</div>
-          <div v-show="showTips4" class="datatip datatip_conn_strategy">连接策略，32位整型，按bit位置位，目前仅第1bit和第3bit位有效（bit置0为无效，1为有效；第2bit已被废弃），且bit位可以按或置位（如1|4=5），各bit置位含义说明如下：<br/>  1：（第1bit置位）在公众号对话页面，不停的尝试连接设备<br/>  4：（第3bit置位）处于非公众号页面（如主界面等），微信自动连接。当用户切换微信到前台时，可能尝试去连接设备，连上后一定时间会断开</div>
-          <div v-show="showTips5" class="datatip datatip_crypt_method">auth加密方法，目前支持两种取值：<br/>  0：不加密<br/>  1：AES加密（CBC模式，PKCS7填充方式）</div>
-          <div v-show="showTips6" class="datatip datatip_auth_ver">auth version，设备和微信进行auth时，会根据该版本号来确认auth buf和auth key的格式（各version对应的auth buf及key的具体格式可以参看“客户端蓝牙外设协议”），该字段目前支持取值：<br/>  0：不加密的version<br/>  1：version 1</div>
-          <div v-show="showTips7" class="datatip datatip_manu_mac_pos">表示mac地址在厂商广播manufature data里含有mac地址的偏移，取值如下：<br/>  -1：在尾部<br/>  -2：表示不包含mac地址<br/>  其他：非法偏移</div>
-          <div v-show="showTips8" class="datatip datatip_ser_mac_pos">表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：<br/>  -1：表示在尾部 <br/>  -2：表示不包含mac地址 <br/>  其他：非法偏移</div>
-          <div v-show="showTips9" class="datatip datatip_connect_protocol">支持以下四种连接协议： <br/>android classic bluetooth – 1<br/>ios classic bluetooth – 2<br/>ble – 3<br/>wifi -- 4<br/>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：<br/>1：表示设备仅支持andiod classic bluetooth <br/>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接<br/>（注：安卓平台不同时支持BLE和classic类型）</div>
           <p style="display:inline-block;margin-top:0;"><span class="hl-red">具体参数说明: </span><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="_blank">http://iot.weixin.qq.com/wiki/index.html</a></p>
           <div class="form-row row">
-            <label class="form-control col-7">product_id:<i @mouseover="showTips1 = true" @mouseout="showTips1 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              product_id:
+              <v-tooltip placement="right" width="300px">
+                <p>设备的产品编号（由微信硬件平台分配）。可在公众号设备功能管理页面查询。</p>
+                <p>当 op_type 为‘0’，product_id 为‘1’时，不要填写 product_id 字段（会引起不必要错误）；</p>
+                <p>当 op_typy 为‘0’，product_id 不为‘1’时，必须填写 product_id 字段；</p>
+                <p>当 op_type 为 1 时，不要填写 product_id 字段。</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="input-text-wrap">
                 <input v-model="setModel.product_id" type="text" name="product_id" placeholder="请输入微信产品ID" v-form-ctrl required class="input-text"/>
@@ -80,7 +80,13 @@
           </div>
           <p class="hl-red">已经授权过的设备不支持更改产品ID</p>
           <div class="form-row row">
-            <label class="form-control col-7">auth_key:<i @mouseover="showTips2 = true" @mouseout="showTips2 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              auth_key:
+              <v-tooltip placement="right" width="300px">
+                <p>auth及通信的加密key，第三方需要将key烧制在设备上（128bit），格式采用16进制串的方式（长度为32字节），不需要0X前缀，如:1234567890ABCDEF1234567890ABCDEF</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="input-text-wrap">
                 <input v-model="setModel.auth_key" type="text" name="auth_key" placeholder="请输入32位加密key" minlength="2" maxlength="32" required class="input-text"/>
@@ -88,7 +94,15 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">close_strategy:<i @mouseover="showTips3 = true" @mouseout="showTips3 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              close_strategy:
+              <v-tooltip placement="right" width="300px">
+                <p>断开策略，目前支持：</p>
+                <p>1：退出公众号页面时即断开连接</p>
+                <p>2：退出公众号之后保持连接不断开</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['1', '2']" class="radio">
@@ -98,7 +112,15 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">conn_strategy:<i @mouseover="showTips4 = true" @mouseout="showTips4 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              conn_strategy:
+              <v-tooltip placement="right" width="300px">
+                <p>连接策略，32位整型，按bit位置位，目前仅第1bit和第3bit位有效（bit置0为无效，1为有效；第2bit已被废弃），且bit位可以按或置位（如1|4=5），各bit置位含义说明如下：</p>
+                <p>1：（第1bit置位）在公众号对话页面，不停的尝试连接设备</p>
+                <p>4：（第3bit置位）处于非公众号页面（如主界面等），微信自动连接。当用户切换微信到前台时，可能尝试去连接设备，连上后一定时间会断开</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['1', '4']" class="radio">
@@ -108,7 +130,15 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">crypt_method:<i @mouseover="showTips5 = true" @mouseout="showTips5 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              crypt_method:
+              <v-tooltip placement="right" width="300px">
+                <p>auth加密方法，目前支持两种取值：</p>
+                <p>0：不加密</p>
+                <p>1：AES加密（CBC模式，PKCS7填充方式）</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['0', '1']" class="radio">
@@ -118,7 +148,15 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">auth_ver:<i @mouseover="showTips6 = true" @mouseout="showTips6 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              auth_ver:
+              <v-tooltip placement="right" width="300px">
+                <p>auth version，设备和微信进行auth时，会根据该版本号来确认auth buf和auth key的格式（各version对应的auth buf及key的具体格式可以参看“客户端蓝牙外设协议”），该字段目前支持取值：</p>
+                <p>0：不加密的version</p>
+                <p>1：version 1</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['0', '1']" class="radio">
@@ -128,7 +166,16 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">manu_mac_pos:<i @mouseover="showTips7 = true" @mouseout="showTips7 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              manu_mac_pos:
+              <v-tooltip placement="right" width="300px">
+                <p>表示mac地址在厂商广播manufature data里含有mac地址的偏移，取值如下：</p>
+                <p>-1：在尾部</p>
+                <p>-2：表示不包含mac地址</p>
+                <p>其他：非法偏</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
                 <label v-for="type in ['-1', '-2']" class="radio">
@@ -138,21 +185,44 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">ser_mac_pos:<i @mouseover="showTips8 = true" @mouseout="showTips8 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              connect_protocol:
+              <v-tooltip placement="right" width="380px">
+                <p>支持以下四种连接协议： </p>
+                <p>android classic bluetooth – 1</p>
+                <p>ios classic bluetooth – 2</p>
+                <p>ble – 3</p>
+                <p>wifi - 4</p>
+                <p>一个设备可以支持多种连接类型，用符号"|"做分割，客户端优先选择靠前的连接方式（优先级按|关系的排序依次降低），举例：</p>
+                <p>1：表示设备仅支持andiod classic bluetooth </p>
+                <p>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接</p>
+                <p>（注：安卓平台不同时支持BLE和classic类型）</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
-                <label v-for="type in ['-1', '-2']" class="radio">
-                  <input type="radio" v-model="setModel.ser_mac_pos" name="ser_mac_pos" :value="type" number required/>{{ type }}
+                <label v-for="type in ['1', '2', '3', '4']" class="radio">
+                  <input type="radio" v-model="setModel.connect_protocol" name="connect_protocol" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-7">connect_protocol:<i @mouseover="showTips9 = true" @mouseout="showTips9 = false" class="fa fa-question-circle"></i></label>
+            <label class="form-control col-7">
+              ser_mac_pos:
+              <v-tooltip placement="right" width="300px">
+                <p>表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：</p>
+                <p>-1：表示在尾部 </p>
+                <p>-2：表示不包含mac地址 </p>
+                <p>其他：非法偏移</p>
+                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
+              </v-tooltip>
+            </label>
             <div class="controls col-17">
               <div class="radio-group">
-                <label v-for="type in ['1', '2', '3', '4']" class="radio">
-                  <input type="radio" v-model="setModel.connect_protocol" name="connect_protocol" :value="type" number required/>{{ type }}
+                <label v-for="type in ['-1', '-2']" class="radio">
+                  <input type="radio" v-model="setModel.ser_mac_pos" name="ser_mac_pos" :value="type" number required/>{{ type }}
                 </label>
               </div>
             </div>
@@ -206,6 +276,7 @@
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
+  import Tooltip from '../../components/Tooltip'
   // import locales from '../../consts/locales/index'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
@@ -220,7 +291,8 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select
+      'v-select': Select,
+      'v-tooltip': Tooltip
     },
 
     data () {
@@ -282,15 +354,6 @@
         pageCount: 10,
         total: 0,
         loadingData: false,
-        showTips1: false,
-        showTips2: false,
-        showTips3: false,
-        showTips4: false,
-        showTips5: false,
-        showTips6: false,
-        showTips7: false,
-        showTips8: false,
-        showTips9: false,
         deviceEmpowering: false,
         wetips: false
       }
