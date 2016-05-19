@@ -72,7 +72,7 @@
 <script>
   import { globalMixins } from '../../mixins'
   import api from '../../api'
-  import AMap from 'AMap'
+  // import AMap from 'AMap'
   import Select from '../../components/Select'
   import SearchBox from '../../components/SearchBox'
   import Alert from '../../components/Alert'
@@ -147,6 +147,8 @@
     },
 
     ready () {
+      // 将回调绑定在全局供高德地图加载后调用
+      window.init = this.initMap
       this.loadingProducts = true
       api.product.all().then((res) => {
         if (res.status === 200) {
@@ -154,7 +156,9 @@
           if (res.data.length) {
             this.productOptions = res.data
             this.currProduct = this.productOptions[0]
-            this.initMap()
+            var mapApi = document.createElement('script')
+            mapApi.src = 'http://webapi.amap.com/maps?v=1.3&key=5f21a013829b628d05551513d352f3f7&callback=init'
+            document.getElementsByTagName('body')[0].appendChild(mapApi)
           }
           this.loadingProducts = false
         }
