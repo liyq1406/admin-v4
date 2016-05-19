@@ -272,7 +272,6 @@
       getProductRegion () {
         this.loadingProductRegions = true
         api.statistics.getProductRegion(this.product.id).then((res) => {
-          // console.log(res.data)
           var regionsData = []
           if (this.region === 'world') {
             for (var country in res.data) {
