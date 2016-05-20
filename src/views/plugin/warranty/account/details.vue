@@ -10,8 +10,8 @@
         <div class="panel-bd">
           <ul class="info-details">
             <li class="row">
-              <div class="label">创建日期:</div>
-              <div class="info">{{ info.create_time | uniformDate }}</div>
+              <div class="col-3 label">创建日期:</div>
+              <div class="clo-21 info">{{ info.create_time | uniformDate }}</div>
             </li>
           </ul>
         </div>
@@ -27,25 +27,25 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">网点名称:</div>
-              <div class="info">{{ info.name }}</div>
+            <li class="row">
+              <div class="col-3 label">网点名称:</div>
+              <div class="clo-21 info">{{ info.name }}</div>
             </li>
-            <li>
-              <div class="label">负责人:</div>
-              <div class="info">{{ info.director }}</div>
+            <li class="row">
+              <div class="col-3 label">负责人:</div>
+              <div class="clo-21 info">{{ info.director }}</div>
             </li>
-            <li>
-              <div class="label">联系电话:</div>
-              <div class="info">{{ info.phone }}</div>
+            <li class="row">
+              <div class="col-3 label">联系电话:</div>
+              <div class="clo-21 info">{{ info.phone }}</div>
             </li>
-            <li>
-              <div class="label">所在地区:</div>
-              <div class="info">{{ info.province + info.city + info.district }}</div>
+            <li class="row">
+              <div class="col-3 label">所在地区:</div>
+              <div class="clo-21 info">{{ info.province + info.city + info.district }}</div>
             </li>
-            <li>
-              <div class="label">详细地址:</div>
-              <div class="info">{{ info.address }}</div>
+            <li class="row">
+              <div class="col-3 label">详细地址:</div>
+              <div class="clo-21 info">{{ info.address }}</div>
             </li>
           </ul>
           <!-- End: 网点信息 -->
@@ -599,7 +599,3 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  @import '../../../../assets/stylus/common'
-</style>

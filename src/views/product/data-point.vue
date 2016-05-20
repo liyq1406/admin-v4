@@ -33,7 +33,7 @@
                   <td>{{* datapoint.symbol }}</td>
                   <td>{{* datapoint.description }}</td>
                   <td class="tac">
-                    <button @click="editDataPoint(datapoint)" class="btn-link">{{ $t("common.edit") }}</button>
+                    <button @click="editDataPoint(datapoint)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                   </td>
                 </tr>
               </template>

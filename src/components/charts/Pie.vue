@@ -11,6 +11,12 @@
     name: 'PieChart',
 
     props: {
+      // 主题
+      theme: {
+        type: String,
+        default: 'infographic'
+      },
+
       // 宽度
       width: {
         type: String,
@@ -25,12 +31,6 @@
 
       // 数据集
       series: {
-        type: Array,
-        default () {
-          return []
-        }
-      },
-      data: {
         type: Array,
         default () {
           return []
@@ -80,7 +80,7 @@
     },
 
     ready () {
-      this.chart = echarts.init(this.$el)
+      this.chart = echarts.init(this.$el, this.theme)
       this.chart.setOption(this.options, true)
     }
   }

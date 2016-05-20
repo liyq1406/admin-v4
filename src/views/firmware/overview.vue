@@ -1,29 +1,25 @@
 <template>
-  <div>
-    <div class="panel">
-      <div style="padding: 30px 40px">
-        <div class="panel-bd">
-          <div class="row">
-            <div class="col-15 with-loading">
-              <pie-chart :series="firmwareSeries" :option="firmwareOption" v-ref:firmware-chart></pie-chart>
-              <div class="icon-loading" v-show="loadingData">
-                <i class="fa fa-refresh fa-spin"></i>
+  <div class="panel">
+    <div class="panel-bd">
+      <div class="row mt40 mb40">
+        <div class="col-15 with-loading">
+          <pie-chart :series="firmwareSeries" v-ref:firmware-chart></pie-chart>
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+        </div>
+        <div class="col-9">
+          <div class="statistics-info">
+            <div class="item no-border">
+              <div class="cont">
+                <div class="num">{{ totalSummary.total }}</div>
+                <div class="label">{{ $t("ui.dashboard.statistic.total") }}</div>
               </div>
             </div>
-            <div class="col-9">
-              <div class="statistics-info">
-                <div class="item no-border">
-                  <div class="cont">
-                    <div class="num">{{ totalSummary.total }}</div>
-                    <div class="label">{{ $t("ui.dashboard.statistic.total") }}</div>
-                  </div>
-                </div>
-                <div class="item no-border">
-                  <div class="cont">
-                    <div class="num">{{ totalSummary.activated }}</div>
-                    <div class="label">{{ $t("ui.dashboard.statistic.activated") }}</div>
-                  </div>
-                </div>
+            <div class="item no-border">
+              <div class="cont">
+                <div class="num">{{ totalSummary.activated }}</div>
+                <div class="label">{{ $t("ui.dashboard.statistic.activated") }}</div>
               </div>
             </div>
           </div>
@@ -38,8 +34,6 @@
   // import locales from '../../consts/locales/index'
   import api from '../../api'
   import Modal from '../../components/Modal'
-  import store from '../../store/index'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
   // import _ from 'lodash'
   import { globalMixins } from '../../mixins'
   import PieChart from '../../components/charts/Pie'
@@ -50,19 +44,6 @@
     layout: 'admin',
 
     mixins: [globalMixins],
-
-    store,
-
-    vuex: {
-      getters: {
-        plugins: ({ plugins }) => plugins.all
-      },
-      actions: {
-        createPlugin,
-        updatePlugin,
-        removePlugin
-      }
-    },
 
     components: {
       'modal': Modal,
@@ -90,23 +71,6 @@
           data: [
             {value: 1, name: 'V1'}
           ]
-        }]
-
-        // for (var i = 0; i < this.period; i++) {
-        //   var index = _.findIndex(this.alertTrends, (item) => {
-        //     return item.day === this.alertXAxisData[i]
-        //   })
-        //   result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
-        // }
-        return result
-      },
-      firmwareOption () {
-        var result = [{
-          legend: {
-            data: [
-
-            ]
-          }
         }]
         return result
       }
@@ -139,6 +103,7 @@
 
 <style lang="stylus" scoped>
   @import '../../assets/stylus/common'
+
   .statistics-info
-    margin-top 80px
+    margin-top 100px
 </style>

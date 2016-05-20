@@ -5,7 +5,7 @@
         <label>{{ $t('ui.member.search_label') }}</label>
       </search-box>
       <h2>{{ $t('ui.member.member_list') }}</h2>
-      <button  v-if ="this.currentMember.role === 1" @click.prevent="addMember" class="btn btn-success ml20 mt10"><i class="fa fa-plus"></i>{{ $t('ui.member.add_member') }}</button>
+      <button  v-if ="this.currentMember.role === 1" @click.prevent="addMember" class="btn btn-success btn-sm ml20 mt15"><i class="fa fa-plus"></i>{{ $t('ui.member.add_member') }}</button>
     </div>
     <div class="panel-bd">
       <div class="data-table with-loading">

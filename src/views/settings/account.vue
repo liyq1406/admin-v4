@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="row">
-      <div class="col-14">
+      <div class="col-12">
         <!-- Start: 个人信息-->
         <div class="panel">
           <div class="panel-hd">
@@ -10,53 +10,53 @@
           <div class="panel-bd">
             <div v-if="loadingAccount" class="tips-null"><i class="fa fa-refresh fa-spin"></i><span>{{ $t("common.data_loading") }}</span></div>
             <ul v-else class="info-details">
-              <li>
-                <div class="label">{{ $t("ui.member.fields.name") }}:</div>
-                <div class="info">{{ member.name }}<a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.name") }}:</div>
+                <div class="col-18 info">{{ member.name }}<a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.password") }}:</div>
-                <div class="info"><a href="#" @click.prevent="editPwd" class="hl-red">修改密码</a></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.password") }}:</div>
+                <div class="col-18 info"><a href="#" @click.prevent="editPwd" class="hl-red">修改密码</a></div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.email") }}:</div>
-                <div class="info">{{ member.email }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.email") }}:</div>
+                <div class="col-18 info">{{ member.email }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.phone") }}:</div>
-                <div class="info">{{ member.phone }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.phone") }}:</div>
+                <div class="col-18 info">{{ member.phone }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.create_time") }}:</div>
-                <div class="info">{{ member.create_time | formatDate }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.create_time") }}:</div>
+                <div class="col-18 info">{{ member.create_time | formatDate }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.last_auth_time") }}:</div>
-                <div class="info">{{ member.last_auth_time | formatDate }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.last_auth_time") }}:</div>
+                <div class="col-18 info">{{ member.last_auth_time | formatDate }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.role") }}:</div>
-                <div class="info"><span>{{ memberTypes[member.role-1] }}</span></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.role") }}:</div>
+                <div class="col-18 info"><span>{{ memberTypes[member.role-1] }}</span></div>
                 <!--.info {{ member.role }}-->
               </li>
-              <li>
-                <div class="label">{{ $t("common.status") }}:</div>
-                <div class="info"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ memberStatusTypes[member.status] }}</span></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("common.status") }}:</div>
+                <div class="col-18 info"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ memberStatusTypes[member.status] }}</span></div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.is_notice") }}:</div>
-                <div class="info"><span v-if="member.is_notice" class="hl-green">{{ $t("common.yes") }}</span><span v-else class="hl-red">{{ $t("common.no") }}</span></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.is_notice") }}:</div>
+                <div class="col-18 info"><span v-if="member.is_notice" class="hl-green">{{ $t("common.yes") }}</span><span v-else class="hl-red">{{ $t("common.no") }}</span></div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.member.fields.is_alert") }}:</div>
-                <div class="info"><span v-if="member.is_alert" class="hl-green">{{ $t("common.yes") }}</span><span v-else class="hl-red">{{ $t("common.no") }}</span></div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.member.fields.is_alert") }}:</div>
+                <div class="col-18 info"><span v-if="member.is_alert" class="hl-green">{{ $t("common.yes") }}</span><span v-else class="hl-red">{{ $t("common.no") }}</span></div>
               </li>
             </ul>
           </div>
         </div>
         <!-- End: 个人信息-->
       </div>
-      <div class="col-10">
+      <div class="col-12">
         <!-- Start: 企业信息-->
         <div class="panel">
           <div class="panel-hd">
@@ -69,33 +69,33 @@
               .label logo:
               .info samxlu
               -->
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.company") }}:</div>
-                <div class="info">{{ corp.company }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.company") }}:</div>
+                <div class="col-18 info">{{ corp.company }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.id") }}:</div>
-                <div class="info">{{ corp.id }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.id") }}:</div>
+                <div class="col-18 info">{{ corp.id }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.type") }}:</div>
-                <div class="info">{{ accountTypeLabel }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.type") }}:</div>
+                <div class="col-18 info">{{ accountTypeLabel }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.name") }}:</div>
-                <div class="info">{{ corp_member.name }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.name") }}:</div>
+                <div class="col-18 info">{{ corp_member.name }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.email") }}:</div>
-                <div class="info">{{ corp_member.email }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.email") }}:</div>
+                <div class="col-18 info">{{ corp_member.email }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.phone") }}:</div>
-                <div class="info">{{ corp_member.phone }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.phone") }}:</div>
+                <div class="col-18 info">{{ corp_member.phone }}</div>
               </li>
-              <li>
-                <div class="label">{{ $t("ui.corp.fields.create_time") }}:</div>
-                <div class="info">{{ corp.create_time | formatDate }}</div>
+              <li class="row">
+                <div class="col-6 label">{{ $t("ui.corp.fields.create_time") }}:</div>
+                <div class="col-18 info">{{ corp.create_time | formatDate }}</div>
               </li>
               <!--button.btn.btn-success.btn-lg.mt10.mb10(@click.prevent="showEditPwdModal = true") 编辑-->
             </ul>

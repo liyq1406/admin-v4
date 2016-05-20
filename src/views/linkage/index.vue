@@ -40,15 +40,15 @@
         return {
           secondaryNav: [{
             label: this.$t('ui.sub_nav.link.devices_link'),
-            link: { path: '/linkage/devices' }
+            link: { path: `/linkage/${this.$route.params.app_id}/devices` }
           },
           {
             label: this.$t('ui.sub_nav.link.nest_link'),
-            link: { path: '/linkage/nest' }
+            link: { path: `/linkage/${this.$route.params.app_id}/nest` }
           },
           {
             label: this.$t('ui.sub_nav.link.echo'),
-            link: { path: '/linkage/echo' }
+            link: { path: `/linkage/${this.$route.params.app_id}/echo` }
           }]
         }
       }

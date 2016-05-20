@@ -12,9 +12,9 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">创建日期:</div>
-              <div class="info">{{ detail.create_time | uniformDate }}</div>
+            <li class="row">
+              <div class="col-3 label">创建日期:</div>
+              <div class="col-21 info">{{ detail.create_time | uniformDate }}</div>
             </li>
           </ul>
         </div>
@@ -28,26 +28,26 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">姓名:</div>
-              <div class="info">{{ detail.name }}</div>
+            <li class="row">
+              <div class="col-3 label">姓名:</div>
+              <div class="col-21 info">{{ detail.name }}</div>
             </li>
-            <li>
-              <div class="label">邮箱地址:</div>
-              <div class="info">{{ detail.email }}</div>
+            <li class="row">
+              <div class="col-3 label">邮箱地址:</div>
+              <div class="col-21 info">{{ detail.email }}</div>
             </li>
-            <li>
-              <div class="label">联系电话:</div>
-              <div class="info">{{ detail.phone }}</div>
+            <li class="row">
+              <div class="col-3 label">联系电话:</div>
+              <div class="col-21 info">{{ detail.phone }}</div>
             </li>
-            <li>
-              <div class="label">登陆密码:</div>
-              <div class="info">{{ detail.password }}</div>
+            <li class="row">
+              <div class="col-3 label">登陆密码:</div>
+              <div class="col-21 info">{{ detail.password }}</div>
             </li>
-            <li>
-              <div class="label">状态:</div>
-              <div class="info" v-if = "detail.status=== 1 ">启用</div>
-              <div class="info" v-else>停用</div>
+            <li class="row">
+              <div class="col-3 label">状态:</div>
+              <div class="col-21 info" v-if = "detail.status=== 1 ">启用</div>
+              <div class="col-21 info" v-else>停用</div>
             </li>
           </ul>
         </div>

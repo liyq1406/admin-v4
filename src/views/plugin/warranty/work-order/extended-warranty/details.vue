@@ -12,13 +12,13 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">工单编号:</div>
-              <div class="info">{{workOrders._id}}</div>
+            <li class="row">
+              <div class="col-3 label">工单编号:</div>
+              <div class="col-21 info">{{workOrders._id}}</div>
             </li>
-            <li>
-              <div class="label">创建日期:</div>
-              <div class="info">{{workOrders.expired_date | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">创建日期:</div>
+              <div class="col-21 info">{{workOrders.expired_date | uniformDate}}</div>
             </li>
           </ul>
         </div>
@@ -32,25 +32,25 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">姓名:</div>
-              <div class="info">{{workOrders.name}}</div>
+            <li class="row">
+              <div class="col-3 label">姓名:</div>
+              <div class="col-21 info">{{workOrders.name}}</div>
             </li>
-            <li>
-              <div class="label">联系号码:</div>
-              <div class="info">{{workOrders.phone}}</div>
+            <li class="row">
+              <div class="col-3 label">联系号码:</div>
+              <div class="col-21 info">{{workOrders.phone}}</div>
             </li>
-            <li>
-              <div class="label">所在地区:</div>
-              <div class="info">{{workOrders.province ? workOrders.province + workOrders.city + workOrders.district : ''}}</div>
+            <li class="row">
+              <div class="col-3 label">所在地区:</div>
+              <div class="col-21 info">{{workOrders.province ? workOrders.province + workOrders.city + workOrders.district : ''}}</div>
             </li>
-            <li>
-              <div class="label">详细地址:</div>
-              <div class="info">{{workOrders.address}}</div>
+            <li class="row">
+              <div class="col-3 label">详细地址:</div>
+              <div class="col-21 info">{{workOrders.address}}</div>
             </li>
-            <li>
-              <div class="label">备注内容:</div>
-              <div class="info">{{workOrders.remark}}</div>
+            <li class="row">
+              <div class="col-3 label">备注内容:</div>
+              <div class="col-21 info">{{workOrders.remark}}</div>
             </li>
           </ul>
         </div>
@@ -64,25 +64,25 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">产品名称:</div>
-              <div class="info">{{workOrders.product_name}}</div>
+            <li class="row">
+              <div class="col-3 label">产品名称:</div>
+              <div class="col-21 info">{{workOrders.product_name}}</div>
             </li>
-            <li>
-              <div class="label">产品序列号:</div>
-              <div class="info">{{workOrders.product_sn}}</div>
+            <li class="row">
+              <div class="col-3 label">产品序列号:</div>
+              <div class="col-21 info">{{workOrders.product_sn}}</div>
             </li>
-            <li>
-              <div class="label">产品型号:</div>
-              <div class="info">{{workOrders.product_type}}</div>
+            <li class="row">
+              <div class="col-3 label">产品型号:</div>
+              <div class="col-21 info">{{workOrders.product_type}}</div>
             </li>
-            <li>
-              <div class="label">购买日期:</div>
-              <div class="info">{{workOrders.purchase_date | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">购买日期:</div>
+              <div class="col-21 info">{{workOrders.purchase_date | uniformDate}}</div>
             </li>
-            <li>
-              <div class="label">延保期限:</div>
-              <div class="info">{{workOrders.expired_date | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">延保期限:</div>
+              <div class="col-21 info">{{workOrders.expired_date | uniformDate}}</div>
             </li>
           </ul>
         </div>

@@ -151,3 +151,9 @@ export const SNAPSHOT_INTERVAL = [
   { label: '30分钟', value: 2 },
   { label: '1小时', value: 3 }
 ]
+
+// 问题类型
+export const ISSUE_TYPES = [
+  { label: '新增问题', value: 0 },
+  { label: '待处理问题', value: 1 }
+]

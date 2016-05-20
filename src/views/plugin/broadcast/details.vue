@@ -8,37 +8,37 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">推送渠道:</div>
-              <div class="info">APP1</div>
+            <li class="row">
+              <div class="col-3 label">推送渠道:</div>
+              <div class="col-21 info">APP1</div>
             </li>
-            <li>
-              <div class="label">推送类型:</div>
-              <div class="info">广播</div>
+            <li class="row">
+              <div class="col-3 label">推送类型:</div>
+              <div class="col-21 info">广播</div>
             </li>
-            <li>
-              <div class="label">推送范围:</div>
-              <div class="info">全部人</div>
+            <li class="row">
+              <div class="col-3 label">推送范围:</div>
+              <div class="col-21 info">全部人</div>
             </li>
-            <li>
-              <div class="label">推送时间:</div>
-              <div class="info">2013-03-04 12:30</div>
+            <li class="row">
+              <div class="col-3 label">推送时间:</div>
+              <div class="col-21 info">2013-03-04 12:30</div>
             </li>
-            <li>
-              <div class="label">过期时间:</div>
-              <div class="info">2013-03-04 12:30</div>
+            <li class="row">
+              <div class="col-3 label">过期时间:</div>
+              <div class="col-21 info">2013-03-04 12:30</div>
             </li>
-            <li>
-              <div class="label">推送标题:</div>
-              <div class="info">推送标题</div>
+            <li class="row">
+              <div class="col-3 label">推送标题:</div>
+              <div class="col-21 info">推送标题</div>
             </li>
-            <li>
-              <div class="label">推送描述:</div>
-              <div class="info">一不小心抽中88888欧洲十日游！妥妥的~</div>
+            <li class="row">
+              <div class="col-3 label">推送描述:</div>
+              <div class="col-21 info">一不小心抽中88888欧洲十日游！妥妥的~</div>
             </li>
-            <li>
-              <div class="label">打开消息:</div>
-              <div class="info">打开指定网页  www.google.com</div>
+            <li class="row">
+              <div class="col-3 label">打开消息:</div>
+              <div class="col-21 info">打开指定网页  www.google.com</div>
             </li>
           </ul>
         </div>

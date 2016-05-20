@@ -3,10 +3,10 @@
     <div class="main">
       <div class="panel">
         <div class="panel-hd">
-          <h2>帮助中心</h2>
+          <h2>用户反馈</h2>
         </div>
         <div class="panel-bd">
-          <!-- <tab :nav="secondaryNav"></tab> -->
+          <tab :nav="secondaryNav"></tab>
         </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -20,7 +20,7 @@
   import Alert from '../../../components/Alert'
 
   export default {
-    name: 'Link',
+    name: 'Helpdesk',
 
     layout: 'admin',
 
@@ -41,12 +41,14 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('ui.sub_nav.broadcast.add'),
-            link: { path: '/plugins/broadcast/add' }
-          },
-          {
-            label: this.$t('ui.sub_nav.broadcast.history'),
-            link: { path: '/plugins/broadcast/history' }
+            label: this.$t('ui.sub_nav.helpdesk.overview'),
+            link: { path: `/plugins/helpdesk/${this.$route.params.app_id}/overview` }
+          }, {
+            label: this.$t('ui.sub_nav.helpdesk.issues'),
+            link: { path: `/plugins/helpdesk/${this.$route.params.app_id}/issues` }
+          }, {
+            label: this.$t('ui.sub_nav.helpdesk.tags'),
+            link: { path: `/plugins/helpdesk/${this.$route.params.app_id}/tags` }
           }]
         }
       }

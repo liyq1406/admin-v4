@@ -47,15 +47,13 @@
         <h2>快照配置列表</h2>
       </div>
       <div class="panel-bd">
-        <div class="rule-type">
-          <div class="rule-select">
-            <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px">
-              <span slot="label">选择产品</span>
-              <select v-model="ruleProductType" @change="getProductRules(true)">
-                <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
-              </select>
-            </v-select>
-          </div>
+        <div class="status-bar mt20">
+          <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px" size="small">
+            <span slot="label">选择产品</span>
+            <select v-model="ruleProductType" @change="getProductRules(true)">
+              <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
+            </select>
+          </v-select>
         </div>
         <div class="data-table">
           <table class="table table-stripe table-bordered">
@@ -640,8 +638,4 @@
     width 100%
     overflow-y hidden
     overflow-x auto
-  .rule-type
-    float right
-    margin-top 10px
-    margin-bottom 10px
 </style>

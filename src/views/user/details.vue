@@ -8,37 +8,37 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">{{ $t('ui.user.fields.id') }}:</div>
-              <div class="info">{{ user.id }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.id') }}:</div>
+              <div class="col-21 info">{{ user.id }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.account') }}:</div>
-              <div class="info">{{ user.account }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.account') }}:</div>
+              <div class="col-21 info">{{ user.account }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.nick_name') }}:</div>
-              <div class="info">{{ user.nickname }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.nick_name') }}:</div>
+              <div class="col-21 info">{{ user.nickname }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.phone') }}:</div>
-              <div class="info">{{ user.phone }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.phone') }}:</div>
+              <div class="col-21 info">{{ user.phone }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.create_date') }}:</div>
-              <div class="info">{{ user.create_date | formatDate }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.create_date') }}:</div>
+              <div class="col-21 info">{{ user.create_date | formatDate }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.active_date') }}:</div>
-              <div class="info">{{ user.active_date | formatDate }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.active_date') }}:</div>
+              <div class="col-21 info">{{ user.active_date | formatDate }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.is_vaild') }}:</div>
-              <div class="info">{{ user.is_vaild ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.is_vaild') }}:</div>
+              <div class="col-21 info">{{ user.is_vaild ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</div>
             </li>
-            <li>
-              <div class="label">{{ $t('ui.user.fields.region_id') }}:</div>
-              <div class="info">{{ user.region_id }}</div>
+            <li class="row">
+              <div class="col-3 label">{{ $t('ui.user.fields.region_id') }}:</div>
+              <div class="col-21 info">{{ user.region_id }}</div>
             </li>
           </ul>
         </div>

@@ -12,13 +12,13 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">工单编号:</div>
-              <div class="info">{{repairOrder._id}}</div>
+            <li class="row">
+              <div class="col-3 label">工单编号:</div>
+              <div class="col-21 info">{{repairOrder._id}}</div>
             </li>
-            <li>
-              <div class="label">创建日期:</div>
-              <div class="info">{{repairOrder.create_time | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">创建日期:</div>
+              <div class="col-21 info">{{repairOrder.create_time | uniformDate}}</div>
             </li>
           </ul>
         </div>
@@ -32,29 +32,29 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">网点名称:</div>
-              <div class="info">{{branch.name}}</div>
+            <li class="row">
+              <div class="col-3 label">网点名称:</div>
+              <div class="col-21 info">{{branch.name}}</div>
             </li>
-            <li>
-              <div class="label">负责人:</div>
-              <div class="info">{{branch.director}}</div>
+            <li class="row">
+              <div class="col-3 label">负责人:</div>
+              <div class="col-21 info">{{branch.director}}</div>
             </li>
-            <li>
-              <div class="label">联系电话:</div>
-              <div class="info">{{branch.phone}}</div>
+            <li class="row">
+              <div class="col-3 label">联系电话:</div>
+              <div class="col-21 info">{{branch.phone}}</div>
             </li>
-            <li>
-              <div class="label">所在地区:</div>
-              <div class="info">{{branchArea}}</div>
+            <li class="row">
+              <div class="col-3 label">所在地区:</div>
+              <div class="col-21 info">{{branchArea}}</div>
             </li>
-            <li>
-              <div class="label">详细地址:</div>
-              <div class="info">{{branch.address}}</div>
+            <li class="row">
+              <div class="col-3 label">详细地址:</div>
+              <div class="col-21 info">{{branch.address}}</div>
             </li>
-            <li>
-              <div class="label">处理客服:</div>
-              <div class="info">{{repairOrder.linkman}}</div>
+            <li class="row">
+              <div class="col-3 label">处理客服:</div>
+              <div class="col-21 info">{{repairOrder.linkman}}</div>
             </li>
           </ul>
         </div>
@@ -68,21 +68,21 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">客户姓名:</div>
-              <div class="info">{{repairOrder.linkman}}</div>
+            <li class="row">
+              <div class="col-3 label">客户姓名:</div>
+              <div class="col-21 info">{{repairOrder.linkman}}</div>
             </li>
-            <li>
-              <div class="label">联系电话:</div>
-              <div class="info">{{repairOrder.phone}}</div>
+            <li class="row">
+              <div class="col-3 label">联系电话:</div>
+              <div class="col-21 info">{{repairOrder.phone}}</div>
             </li>
-            <li>
-              <div class="label">所在地区:</div>
-              <div class="info">{{clientArea}}</div>
+            <li class="row">
+              <div class="col-3 label">所在地区:</div>
+              <div class="col-21 info">{{clientArea}}</div>
             </li>
-            <li>
-              <div class="label">详细地址:</div>
-              <div class="info">{{repairOrder.address}}</div>
+            <li class="row">
+              <div class="col-3 label">详细地址:</div>
+              <div class="col-21 info">{{repairOrder.address}}</div>
             </li>
           </ul>
         </div>
@@ -96,25 +96,25 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">产品名称:</div>
-              <div class="info">{{repairOrder.product_name}}</div>
+            <li class="row">
+              <div class="col-3 label">产品名称:</div>
+              <div class="col-21 info">{{repairOrder.product_name}}</div>
             </li>
-            <li>
-              <div class="label">产品序列号:</div>
-              <div class="info">{{repairOrder.product_sn}}</div>
+            <li class="row">
+              <div class="col-3 label">产品序列号:</div>
+              <div class="col-21 info">{{repairOrder.product_sn}}</div>
             </li>
-            <li>
-              <div class="label">产品型号:</div>
-              <div class="info">{{repairOrder.product_type}}</div>
+            <li class="row">
+              <div class="col-3 label">产品型号:</div>
+              <div class="col-21 info">{{repairOrder.product_type}}</div>
             </li>
-            <li>
-              <div class="label">购买日期:</div>
-              <div class="info">{{repairOrder.purchase_date | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">购买日期:</div>
+              <div class="col-21 info">{{repairOrder.purchase_date | uniformDate}}</div>
             </li>
-            <li>
-              <div class="label">延保期限:</div>
-              <div class="info">{{repairOrder.expired_date | uniformDate}}</div>
+            <li class="row">
+              <div class="col-3 label">延保期限:</div>
+              <div class="col-21 info">{{repairOrder.expired_date | uniformDate}}</div>
             </li>
           </ul>
         </div>
@@ -128,21 +128,21 @@
         </div>
         <div class="panel-bd">
           <ul class="info-details">
-            <li>
-              <div class="label">故障描述:</div>
-              <div class="info">{{repairDetails.fault}}</div>
+            <li class="row">
+              <div class="col-3 label">故障描述:</div>
+              <div class="col-21 info">{{repairDetails.fault}}</div>
             </li>
-            <li>
-              <div class="label">更换配件:</div>
-              <div class="info">{{repairDetails.accessories}}</div>
+            <li class="row">
+              <div class="col-3 label">更换配件:</div>
+              <div class="col-21 info">{{repairDetails.accessories}}</div>
             </li>
-            <li>
-              <div class="label">处理结果:</div>
-              <div class="info">{{repairDetails.solutions}}</div>
+            <li class="row">
+              <div class="col-3 label">处理结果:</div>
+              <div class="col-21 info">{{repairDetails.solutions}}</div>
             </li>
-            <li>
-              <div class="label">维护费用:</div>
-              <div class="info">{{repairDetails.fees}}</div>
+            <li class="row">
+              <div class="col-3 label">维护费用:</div>
+              <div class="col-21 info">{{repairDetails.fees}}</div>
             </li>
           </ul>
         </div>

@@ -344,7 +344,7 @@ let configRouter = (router) => {
     },
 
     // 消息推送
-    '/plugins/broadcast': {
+    '/plugins/broadcast/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/broadcast/index'))
@@ -370,7 +370,7 @@ let configRouter = (router) => {
       }
     },
     // 禁止访问
-    '/plugins/broadcast/forbidden': {
+    '/plugins/broadcast/:app_id/forbidden': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/broadcast/forbidden'))
@@ -378,7 +378,7 @@ let configRouter = (router) => {
       }
     },
     // 推送详情
-    '/plugins/broadcast/history/:id': {
+    '/plugins/broadcast/:app_id/history/:id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/broadcast/details'))
@@ -386,7 +386,7 @@ let configRouter = (router) => {
       }
     },
     // 编辑推送
-    '/plugins/broadcast/history/:id/update': {
+    '/plugins/broadcast/:app_id/history/:id/update': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/broadcast/update'))
@@ -395,15 +395,48 @@ let configRouter = (router) => {
     },
 
     // 用户反馈
-    '/plugins/helpdesk': {
+    '/plugins/helpdesk/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/helpdesk/index'))
         }, 'admin')
+      },
+      subRoutes: {
+        // 概览
+        'overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/helpdesk/overview'))
+            }, 'admin')
+          }
+        },
+        // 反馈列表
+        'issues': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/helpdesk/issues'))
+            }, 'admin')
+          }
+        },
+        // 标签管理
+        'tags': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/helpdesk/tags'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+    '/plugins/helpdesk/:app_id/issues/:id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/helpdesk/issue-details'))
+        }, 'admin')
       }
     },
     // 禁止访问
-    '/plugins/helpdesk/forbidden': {
+    '/plugins/helpdesk/:app_id/forbidden': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/helpdesk/forbidden'))
@@ -412,7 +445,7 @@ let configRouter = (router) => {
     },
 
     // 经销商管理
-    '/plugins/dealer': {
+    '/plugins/dealer/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/dealer/index'))
@@ -420,7 +453,7 @@ let configRouter = (router) => {
       }
     },
     // 禁止访问
-    '/plugins/dealer/forbidden': {
+    '/plugins/dealer/:app_id/forbidden': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/dealer/forbidden'))
@@ -429,7 +462,7 @@ let configRouter = (router) => {
     },
 
     // 支付网关
-    '/plugins/xpay': {
+    '/plugins/xpay/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/xpay/index'))
@@ -437,7 +470,7 @@ let configRouter = (router) => {
       }
     },
     // 禁止访问
-    '/plugins/xpay/forbidden': {
+    '/plugins/xpay/:app_id/forbidden': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/xpay/forbidden'))
@@ -472,7 +505,7 @@ let configRouter = (router) => {
       }
     },
     // 设备互联
-    '/linkage': {
+    '/linkage/:app_id': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/linkage/index'))
@@ -897,17 +930,18 @@ let configRouter = (router) => {
     // '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/forbidden',
     // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
     // '/plugins/broadcast': '/plugins/broadcast/forbidden',
-    '/plugins/xpay': '/plugins/xpay/forbidden',
-    '/plugins/helpdesk': '/plugins/helpdesk/forbidden',
-    '/plugins/dealer': '/plugins/dealer/forbidden',
+    '/plugins/helpdesk/:app_id': '/plugins/helpdesk/:app_id/forbidden',
+    '/plugins/xpay/:app_id': '/plugins/xpay/:app_id/forbidden',
+    // '/plugins/helpdesk/:app_id': '/plugins/helpdesk/:app_id/overview',
+    '/plugins/dealer/:app_id': '/plugins/dealer/:app_id/forbidden',
     '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
     '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
-    '/plugins/broadcast': '/plugins/broadcast/add',
+    '/plugins/broadcast/:app_id': '/plugins/broadcast/:app_id/add',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
     '/linkage': '/linkage/devices',
-    '/plugins/nest': '/linkage/nest'
+    '/plugins/nest/:app_id': '/linkage/:app_id/nest/'
   })
 
   router.beforeEach((transition) => {

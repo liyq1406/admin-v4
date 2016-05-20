@@ -68,6 +68,11 @@ export default {
       add: '新建推送',
       history: '推送历史'
     },
+    helpdesk: {
+      overview: '概览',
+      issues: '反馈列表',
+      tags: '标签管理'
+    },
     link: {
       devices_link: '设备联动',
       nest_link: 'nest联动',
@@ -633,5 +638,20 @@ export default {
   // 天际账号管理
   account_manage: {
     search_condi: '网点名称'
+  },
+
+  // 用户反馈
+  helpdesk: {
+    statistic: {
+      new: '新增问题',
+      waiting_process: '等待处理'
+    }
+  },
+
+  // 标签管理
+  tags: {
+    fields: {
+      name: '名称'
+    }
   }
 }

@@ -75,8 +75,8 @@
               <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
                 <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')})</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')})</span></div>
+              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
             </div>
           </div>
           <div class="form-actions">
