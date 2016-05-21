@@ -4,7 +4,7 @@ import { apiServer } from '../consts/config'
 export default {
   /**
    * [create description]
-   * @param  {[type]} product_id [description]
+   * @param  {[type]} productId [description]
    * @param  {[type]} params     [description]
    * @return {Promise}
     {//IOS
@@ -60,7 +60,7 @@ export default {
     } else if (app.type === 4) { // 微信应用
       params.wechat = {}
       params.wechat.id = app.wechat.id // 微信公众号中的微信号
-      params.wechat.app_id = app.wechat.app_id // 微信公众号中的 appID
+      params.wechat.appId = app.wechat.appId // 微信公众号中的 appID
       params.wechat.app_secret = app.wechat.app_secret // 微信公众号的 appsecrect
       params.wechat.encrypt = app.wechat.encrypt // 消息加解密方式
       params.wechat.key = app.wechat.key // 43位 AESKey
@@ -76,9 +76,9 @@ export default {
    * 获取APP详细信息
    * @return {Promise}
    */
-  getinfo (app_id) {
+  getinfo (appId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${app_id}`
+      `${apiServer.default}/v2/developer/app/${appId}`
     )
   },
 
@@ -115,7 +115,7 @@ export default {
         "connect_protocol":"",
         "manu_mac_pos":"",
         "ser_mac_pos":"",
-        "product_id":""
+        "productId":""
    * }
    * @return {Promise}
    * {
@@ -127,12 +127,12 @@ export default {
         "connect_protocol":"",
         "manu_mac_pos":"",
         "ser_mac_pos":"",
-        "product_id":""
+        "productId":""
    * }
    */
-  empowerWechat (app_id, product_id, params) {
+  empowerWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/config`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`, params
     )
   },
 
@@ -144,9 +144,9 @@ export default {
       }
    * @return {Promise}
    */
-  createWechat (app_id, product_id, params) {
+  createWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/device`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device`, params
     )
   },
 
@@ -159,9 +159,9 @@ export default {
    * @return {Promise}
    * ["mac1","mac2", "mac3"]
    */
-  createMultiWechat (app_id, product_id, params) {
+  createMultiWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/device_batch`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_batch`, params
     )
   },
 
@@ -191,8 +191,8 @@ export default {
       "list": [
           {
               "device_id": "设备ID",
-              "app_id": "应用ID",
-              "product_id": "产品ID",
+              "appId": "应用ID",
+              "productId": "产品ID",
               "mac": "MAC地址",
               "w_device_id": "微信设备ID",
               "w_device_type": "微信设备类型",
@@ -201,9 +201,9 @@ export default {
       ]
     }
    */
-  searchWechatList (app_id, product_id, params) {
+  searchWechatList (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/devices`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/devices`, params
     )
   },
 
@@ -217,18 +217,18 @@ export default {
     ]
    * @return {Promise}
    */
-  reEmpowerWechat (app_id, product_id, params) {
+  reEmpowerWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/device_auth`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_auth`, params
     )
   },
 
   /**
    * 产品授权
    */
-  productEmpower (app_id, product_id, params) {
+  productEmpower (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}`, params
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}`, params
     )
   },
 
@@ -239,9 +239,9 @@ export default {
       "status": 授权状态
     }
    */
-  productEmpowerStatus (app_id, product_id) {
+  productEmpowerStatus (appId, productId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/status`
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/status`
     )
   },
 
@@ -250,8 +250,8 @@ export default {
    * @param  {Object}
    * @return {Promise}
    * {
-      "app_id": "应用ID",
-      "product_id": "产品ID",
+      "appId": "应用ID",
+      "productId": "产品ID",
       "auth_config": {
           "auth_key": "",
           "close_strategy": "1",
@@ -261,13 +261,13 @@ export default {
           "connect_protocol": "1",
           "manu_mac_pos": "-1",
           "ser_mac_pos": "-1",
-          "product_id": "1"
+          "productId": "1"
       }
   }
    */
-  getWechat (app_id, product_id) {
+  getWechat (appId, productId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${app_id}/wechat_auth/product/${product_id}/config`
+      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`
     )
   }
 }

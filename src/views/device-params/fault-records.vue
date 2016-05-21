@@ -63,15 +63,15 @@
 
     methods: {
       // 获取快照数据
-      getFault (offset, limit, device_id) {
+      getFault (offset, limit, deviceId) {
         offset = offset || 0
         limit = limit || 10
-        device_id = this.$route.params.device_id
+        deviceId = this.$route.params.device_id
         var params = {
           offset: offset,
           limit: limit,
           query: {
-            'from': Number(device_id)
+            'from': Number(deviceId)
           }
         }
         this.loadingData = true

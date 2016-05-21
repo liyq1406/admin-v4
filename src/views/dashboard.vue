@@ -371,11 +371,11 @@
       getProductTrend () {
         var today = new Date()
         var past = today.getTime() - this.productPeriod * 24 * 3600 * 1000
-        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
-        var end_day = dateFormat('yyyy-MM-dd', today)
+        var startDay = dateFormat('yyyy-MM-dd', new Date(past))
+        var endDay = dateFormat('yyyy-MM-dd', today)
 
         this.loadingProductTrends = true
-        api.statistics.getProductTrend(this.product.id, start_day, end_day).then((res) => {
+        api.statistics.getProductTrend(this.product.id, startDay, endDay).then((res) => {
           if (res.status === 200) {
             this.productTrends = res.data.map((item) => {
               item.day = dateFormat('MM-dd', new Date(item.day))
@@ -395,11 +395,11 @@
       getUserTrend () {
         var today = new Date()
         var past = today.getTime() - this.userPeriod * 24 * 3600 * 1000
-        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
-        var end_day = dateFormat('yyyy-MM-dd', today)
+        var startDay = dateFormat('yyyy-MM-dd', new Date(past))
+        var endDay = dateFormat('yyyy-MM-dd', today)
 
         this.loadingUserTrends = true
-        api.statistics.getUserTrend(start_day, end_day).then((res) => {
+        api.statistics.getUserTrend(startDay, endDay).then((res) => {
           if (res.status === 200) {
             this.userTrends = res.data.map((item) => {
               item.day = dateFormat('MM-dd', new Date(item.day))
@@ -419,11 +419,11 @@
       getAlertTrend () {
         var today = new Date()
         var past = today.getTime() - this.alertPeriod * 24 * 3600 * 1000
-        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
-        var end_day = dateFormat('yyyy-MM-dd', today)
+        var startDay = dateFormat('yyyy-MM-dd', new Date(past))
+        var endDay = dateFormat('yyyy-MM-dd', today)
 
         this.loadingAlertTrends = true
-        api.statistics.getAlertTrend(start_day, end_day).then((res) => {
+        api.statistics.getAlertTrend(startDay, endDay).then((res) => {
           if (res.status === 200) {
             this.alertTrends = res.data.map((item) => {
               item.day = dateFormat('MM-dd', new Date(item.day))

@@ -4,7 +4,7 @@ import { apiServer } from '../consts/config'
 export default {
   /**
    * 产品固件上传
-   * @param  {String} product_id  产品 ID
+   * @param  {String} productId  产品 ID
    * @param  {File} file        文件流数据
    * @return {Promise}
     {
@@ -13,9 +13,9 @@ export default {
       "size":"文件大小"
     }
    */
-  firmware (product_id, file) {
+  firmware (productId, file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/product/${product_id}/firmware`, file
+      `${apiServer.default}/v2/upload/product/${productId}/firmware`, file
     )
   },
 

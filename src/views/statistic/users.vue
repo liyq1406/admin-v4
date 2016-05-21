@@ -205,11 +205,11 @@
       getUserTrend () {
         var today = new Date()
         var past = today.getTime() - this.period * 24 * 3600 * 1000
-        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
-        var end_day = dateFormat('yyyy-MM-dd', today)
+        var startDay = dateFormat('yyyy-MM-dd', new Date(past))
+        var endDay = dateFormat('yyyy-MM-dd', today)
 
         this.loadingUserTrends = true
-        api.statistics.getUserTrend(start_day, end_day).then((res) => {
+        api.statistics.getUserTrend(startDay, endDay).then((res) => {
           if (res.status === 200) {
             this.userTrends = res.data.map((item) => {
               item.day = dateFormat('MM-dd', new Date(item.day))

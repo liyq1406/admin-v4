@@ -5,13 +5,13 @@ export default {
   /**
    * 添加设备
    * 调用本接口在某个产品下添加一个设备。
-   * @param   product_id
+   * @param   productId
    * @param  {"mac":"MAC地址"}
    * @return status
    */
-  add (product_id, params) {
+  add (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/device`, params
+      `${apiServer.default}/v2/product/${productId}/device`, params
     )
   },
 
@@ -19,20 +19,20 @@ export default {
    * 导入设备
    * 用于批量导入设备，如果导入的设备已经存在，则忽略。
    * @param  {Object} params  ["MAC地址1","MAC地址2"]
-   * @param           product_id
+   * @param           productId
    * @return status
    */
-  batchImport (product_id, params) {
+  batchImport (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/device_batch`, params
+      `${apiServer.default}/v2/product/${productId}/device_batch`, params
     )
   },
 
   /**
    * 获取设备信息
    * 获取单个设备详细信息。
-   * @param  {product_id}
-   * @param  {device_id}
+   * @param  {productId}
+   * @param  {deviceId}
    * @return {Promise}
     {
       "id":"设备ID",
@@ -48,19 +48,19 @@ export default {
       "firmware_mod":"固件型号",
       "firmware_version":"固件版本号",
       "corp_id":"企业ID",
-      "product_id":"产品ID",
+      "productId":"产品ID",
       "region_id":"所在区域ID"
     }
    */
-  getInfo (product_id, device_id) {
+  getInfo (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/device/${device_id}`
+      `${apiServer.default}/v2/product/${productId}/device/${deviceId}`
     )
   },
 
   /**
    * 查询设备列表
-   * @param  {product_id}
+   * @param  {productId}
    * @param  {Object} params
       {
         "offset":"请求列表的偏移量",
@@ -95,20 +95,20 @@ export default {
             "mcu_version":"MCU版本号",
             "firmware_mod":"固件型号",
             "firmware":"固件版本号",
-            "product_id":"产品ID",
+            "productId":"产品ID",
             "region_id":"所在区域ID"
           }
         ]
       }
    */
-  getList (product_id, params) {
+  getList (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/devices`, params
+      `${apiServer.default}/v2/product/${productId}/devices`, params
     )
   },
   /**
    * 批量获取虚拟设备数据
-   * @param  {product_id}
+   * @param  {productId}
    * @param  {array} deviceIds
     }
    * @return {Promise}
@@ -117,7 +117,7 @@ export default {
           {
             "0": "数据端点值",
             "1": "数据端点值",
-            "device_id": "设备ID",
+            "deviceId": "设备ID",
             "cm_id": "登录CM服务器ID",
             "ip": "登录IP",
             "online": "是否在线",
@@ -128,9 +128,9 @@ export default {
         ]
       }
    */
-  getDeviceDataPoint (product_id, deviceId) {
+  getDeviceDataPoint (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/v_device/${deviceId}`
+      `${apiServer.default}/v2/product/${productId}/v_device/${deviceId}`
     )
   },
 
@@ -156,21 +156,21 @@ export default {
 
   /**
    * 获取设备地理信息
-   * @param  {String} product_id 产品 ID
+   * @param  {String} productId 产品 ID
    * @param  {String} deviceId   设备 ID
    */
-  getGeography (product_id, deviceId) {
+  getGeography (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/device/${deviceId}/geography`
+      `${apiServer.default}/v2/product/${productId}/device/${deviceId}/geography`
     )
   },
 
   /**
    * 通过地理信息查询设备
-   * @param  {String} product_id 产品 ID
+   * @param  {String} productId 产品 ID
    * @param  {String} params     查询参数
    */
-  getGeographies (product_id, params) {
+  getGeographies (productId, params) {
     // return new Promise((resolve, reject) => {
     //   resolve({
     //     data: {
@@ -189,7 +189,7 @@ export default {
     //   })
     // })
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/devices/geography`, params
+      `${apiServer.default}/v2/product/${productId}/devices/geography`, params
     )
   }
 }

@@ -15,12 +15,12 @@ export default {
 
   /**
    * 删除产品
-   * @param  {Object} product_id 产品Id
+   * @param  {Object} productId 产品Id
    * @return {Promise}
    */
-  deleteProduct (product_id) {
+  deleteProduct (productId) {
     return http.del(
-      `${apiServer.default}/v2/product/${product_id}`
+      `${apiServer.default}/v2/product/${productId}`
     )
   },
 
@@ -57,26 +57,26 @@ export default {
 
   /**
    * 获取产品详细信息
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @return {Promise}
    */
-  getProduct (product_id) {
+  getProduct (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}`
+      `${apiServer.default}/v2/product/${productId}`
     )
   },
 
   /**
    * 获取产品密钥
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @return {Promise}
    *  {
         "key": "产品密钥"
       }
    */
-  getProductKey (product_id) {
+  getProductKey (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/key`
+      `${apiServer.default}/v2/product/${productId}/key`
     )
   },
 
@@ -85,9 +85,9 @@ export default {
    * @param  {Object} params 产品信息
    * @return {Promise}
    */
-  addFirmware (product_id, params) {
+  addFirmware (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/firmware`, params
+      `${apiServer.default}/v2/product/${productId}/firmware`, params
     )
   },
 
@@ -96,7 +96,7 @@ export default {
    * @param  {Object} params 产品信息
    * @return {Promise}
    */
-  updateFirmware (product_id, firmware) {
+  updateFirmware (productId, firmware) {
     var params = {}
 
     params.mod = firmware.mod
@@ -109,19 +109,19 @@ export default {
     params.is_release = firmware.is_release
 
     return http.put(
-      `${apiServer.default}/v2/product/${product_id}/firmware/${firmware.id}`, params
+      `${apiServer.default}/v2/product/${productId}/firmware/${firmware.id}`, params
     )
   },
 
   /**
    * 删除固件版本
-   * @param  {Object} product_id 产品Id
-   * @param  {Object} firmware_id 固件Id
+   * @param  {Object} productId 产品Id
+   * @param  {Object} firmwareId 固件Id
    * @return {Promise}
    */
-  deleteFirmware (product_id, firmware_id) {
+  deleteFirmware (productId, firmwareId) {
     return http.del(
-      `${apiServer.default}/v2/product/${product_id}/firmware/${firmware_id}`
+      `${apiServer.default}/v2/product/${productId}/firmware/${firmwareId}`
     )
   },
 
@@ -129,31 +129,31 @@ export default {
    * 获取固件版本列表
    * @return {Promise}
    */
-  getFirmwares (product_id) {
+  getFirmwares (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/firmwares`
+      `${apiServer.default}/v2/product/${productId}/firmwares`
     )
   },
 
   /**
    * 添加数据端点
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @param  {Object} params 参数
    * @return {Promise}
    */
-  addDataPoint (product_id, params) {
+  addDataPoint (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/datapoint`, params
+      `${apiServer.default}/v2/product/${productId}/datapoint`, params
     )
   },
 
   /**
    * 更新数据端点
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @param  {Object} datapoint 数据端点
    * @return {Promise}
    */
-  updateDataPoint (product_id, datapoint) {
+  updateDataPoint (productId, datapoint) {
     var params = {}
 
     params.name = datapoint.name
@@ -163,48 +163,48 @@ export default {
     params.symbol = datapoint.symbol
 
     return http.put(
-      `${apiServer.default}/v2/product/${product_id}/datapoint/${datapoint.id}`, params
+      `${apiServer.default}/v2/product/${productId}/datapoint/${datapoint.id}`, params
     )
   },
 
   /**
    * 删除数据端点
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @param  {Object} datapoint 数据端点
    * @return {Promise}
    */
-  deleteDataPoint (product_id, datapoint_id) {
+  deleteDataPoint (productId, datapointId) {
     return http.del(
-      `${apiServer.default}/v2/product/${product_id}/datapoint/${datapoint_id}`
+      `${apiServer.default}/v2/product/${productId}/datapoint/${datapointId}`
     )
   },
 
   /**
    * 获取数据端点
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @param  {Object} datapoint 数据端点
    * @return {Promise}
    */
-  getDataPoint (product_id, datapoint_id) {
+  getDataPoint (productId, datapointId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/datapoint/${datapoint_id}`
+      `${apiServer.default}/v2/product/${productId}/datapoint/${datapointId}`
     )
   },
 
   /**
    * 获取数据端点列表
-   * @param  {String} product_id 产品Id
+   * @param  {String} productId 产品Id
    * @return {Promise}
    */
-  getDatapoints (product_id) {
+  getDatapoints (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/datapoints`
+      `${apiServer.default}/v2/product/${productId}/datapoints`
     )
   },
 
   /**
    * 产品固件上传
-   * @param  {String} product_id  产品 ID
+   * @param  {String} productId  产品 ID
    * @param  {File} file        文件流数据
    * @return {Promise}
     {
@@ -213,9 +213,9 @@ export default {
       "size":"文件大小"
     }
    */
-  uploadFirmware (product_id, file) {
+  uploadFirmware (productId, file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/product/${product_id}/firmware`, file
+      `${apiServer.default}/v2/upload/product/${productId}/firmware`, file
     )
   }
 }

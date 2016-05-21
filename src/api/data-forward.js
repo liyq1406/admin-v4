@@ -7,9 +7,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  addRule (product_id, params) {
+  addRule (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/dds`, params
+      `${apiServer.default}/v2/product/${productId}/dds`, params
     )
   },
 
@@ -18,9 +18,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  deleteRule (product_id, dispatch_id) {
+  deleteRule (productId, dispatchId) {
     return http.del(
-      `${apiServer.default}/v2/product/${product_id}/dds/${dispatch_id}`
+      `${apiServer.default}/v2/product/${productId}/dds/${dispatchId}`
     )
   },
 
@@ -29,9 +29,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  updateRule (product_id, dispatch_id, params) {
+  updateRule (productId, dispatchId, params) {
     return http.put(
-      `${apiServer.default}/v2/product/${product_id}/dds/${dispatch_id}`, params
+      `${apiServer.default}/v2/product/${productId}/dds/${dispatchId}`, params
     )
   },
 
@@ -40,9 +40,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  getRule (product_id) {
+  getRule (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/dds_list`
+      `${apiServer.default}/v2/product/${productId}/dds_list`
     )
   }
 }

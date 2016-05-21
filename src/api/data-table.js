@@ -31,9 +31,9 @@ export default {
   /**
    * 获取单个数据表
    */
-  getTable (table_name) {
+  getTable (tableName) {
     return http.get(
-      `${apiServer.default}/v2/table/${table_name}`
+      `${apiServer.default}/v2/table/${tableName}`
     )
   },
 
@@ -48,11 +48,11 @@ export default {
 
   /**
    * 删除数据表
-   * @param  {String} table_name 表名
+   * @param  {String} tableName 表名
    */
-  deleteTable (table_name) {
+  deleteTable (tableName) {
     return http.del(
-      `${apiServer.default}/v2/table/${table_name}`
+      `${apiServer.default}/v2/table/${tableName}`
     )
   },
 
@@ -60,9 +60,9 @@ export default {
    * 创建数据
    * @param  {Object} params 数据参数
    */
-  createData (table_name, params) {
+  createData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/data/${table_name}`, params
+      `${apiServer.default}/v2/data/${tableName}`, params
     )
   },
 
@@ -70,88 +70,88 @@ export default {
    * 创建应用级数据
    * @param  {Object} params 数据参数
    */
-  createAppData (table_name, params) {
+  createAppData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/app_data/${table_name}`, params
+      `${apiServer.default}/v2/app_data/${tableName}`, params
     )
   },
 
   /**
    * 获取单条数据
-   * @param  {String} table_name 表名
-   * @param  {String} object_id 数据 id
+   * @param  {String} tableName 表名
+   * @param  {String} objectId 数据 id
    */
-  getData (table_name, object_id) {
+  getData (tableName, objectId) {
     return http.get(
-      `${apiServer.default}/v2/data/${table_name}/${object_id}`
+      `${apiServer.default}/v2/data/${tableName}/${objectId}`
     )
   },
 
   /**
    * 查询数据
-   * @param  {String} table_name 表名
+   * @param  {String} tableName 表名
    * @param  {Object} params 数据参数
    */
-  queryData (table_name, params) {
+  queryData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/datas/${table_name}`, params
+      `${apiServer.default}/v2/datas/${tableName}`, params
     )
   },
 
   /**
    * 查询应用级数据
-   * @param  {String} table_name 表名
+   * @param  {String} tableName 表名
    * @param  {Object} params 数据参数
    */
-  queryAppData (table_name, params) {
+  queryAppData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/app_datas/${table_name}`, params
+      `${apiServer.default}/v2/app_datas/${tableName}`, params
     )
   },
 
   /**
    * 修改数据
-   * @param  {String} table_name 表名
-   * @param  {String} object_id 数据 id
+   * @param  {String} tableName 表名
+   * @param  {String} objectId 数据 id
    * @param  {Object} params 数据参数
    */
-  updateData (table_name, object_id, params) {
+  updateData (tableName, objectId, params) {
     return http.put(
-      `${apiServer.default}/v2/data/${table_name}/${object_id}`, params
+      `${apiServer.default}/v2/data/${tableName}/${objectId}`, params
     )
   },
 
   /**
    * 修改应用级数据
-   * @param  {String} table_name 表名
-   * @param  {String} object_id 数据 id
+   * @param  {String} tableName 表名
+   * @param  {String} objectId 数据 id
    * @param  {Object} params 数据参数
    */
-  updateAppData (table_name, _id, params) {
+  updateAppData (tableName, _id, params) {
     return http.put(
-      `${apiServer.default}/v2/app_data/${table_name}/${_id}`, params
+      `${apiServer.default}/v2/app_data/${tableName}/${_id}`, params
     )
   },
 
   /**
    * 删除数据
-   * @param  {String} table_name 表名
-   * @param  {String} object_id 数据 id
+   * @param  {String} tableName 表名
+   * @param  {String} objectId 数据 id
    */
-  deleteData (table_name, object_id) {
+  deleteData (tableName, objectId) {
     return http.del(
-      `${apiServer.default}/v2/data/${table_name}/${object_id}`
+      `${apiServer.default}/v2/data/${tableName}/${objectId}`
     )
   },
 
   /**
    * 删除应用级数据
-   * @param  {String} table_name 表名
-   * @param  {String} object_id 数据 id
+   * @param  {String} tableName 表名
+   * @param  {String} objectId 数据 id
    */
-  deleteAppData (table_name, _id) {
+  deleteAppData (tableName, _id) {
     return http.del(
-      `${apiServer.default}/v2/app_data/${table_name}/${_id}`
+      `${apiServer.default}/v2/app_data/${tableName}/${_id}`
     )
   }
 }

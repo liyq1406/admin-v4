@@ -7,7 +7,7 @@ export default {
    * 创建一个固件升级任务，让满足该升级任务的设备进行自动升级。
    * @param  params
      {
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "name":"升级任务名称",
         "description":"描述",
         "from_version":"起始版本号",
@@ -18,7 +18,7 @@ export default {
    * @return {Promise}
       {
         "id":"自动升级任务ID",
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "name":"升级任务名称",
         "description":"描述",
         "from_version":"起始版本号",
@@ -37,12 +37,12 @@ export default {
 
   /**
    * 获取升级任务列表
-   * @param  product_id
+   * @param  productId
    * @return {Promise}
     [
       {
         "id":"自动升级任务ID",
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "name":"升级任务名称",
         "description":"描述",
         "from_version":"起始版本号",
@@ -54,9 +54,9 @@ export default {
       }
     ]
    */
-  taskList (product_id) {
+  taskList (productId) {
     return http.get(
-      `${apiServer.default}/v2/upgrade/firmware/tasks?product_id=${product_id}`
+      `${apiServer.default}/v2/upgrade/firmware/tasks?product_id=${productId}`
     )
   },
 
@@ -65,7 +65,7 @@ export default {
    * 开启一个升级任务。
    * @param  {Object} params
       {
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "upgrade_task_id":"升级任务ID",
         "status":"任务状态"
       }
@@ -82,7 +82,7 @@ export default {
    * 查看设备当前的固件最新版本。
    * @param  {Object} params 注册信息
       {
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "device_id":"设备ID"
       }
    * @return {Promise}
@@ -115,7 +115,7 @@ export default {
    * 通过本接口升级设备固件。
    * @param  {Object} params 注册信息
       {
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "device_id":"设备ID"
       }
    * @return status

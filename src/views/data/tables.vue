@@ -731,19 +731,19 @@
     methods: {
       /**
        * 获取数据表数据以及更新数据表
-       * @param  {[type]} table_name 表名
+       * @param  {[type]} tableName 表名
        * @param  {[type]} params     过滤参数
        * @return {[type]}            [description]
        */
-      getTableData (table_name, params, type) {
+      getTableData (tableName, params, type) {
         this.loadingData = true
         if (type === 3) {
           // console.log('数据表逻辑')
-          api.dataTable.queryAppData(table_name, params).then((res) => {
+          api.dataTable.queryAppData(tableName, params).then((res) => {
             this.initTableHeader(type) // 根据当前已选择的大类初始化表格头部
             let jsonTables = JSON.stringify(res.data.list)
             // 将返回的数据里面的日期格式的内容转化为普通的日期格式
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             result = result.replace(/_id/g, 'objectId')
             this.vTables = JSON.parse(result)
             this.loadingData = true
@@ -752,11 +752,11 @@
             this.loadingData = false
           })
         } else {
-          api.dataTable.queryData(table_name, params).then((res) => {
+          api.dataTable.queryData(tableName, params).then((res) => {
             this.initTableHeader() // 根据当前已选择的大类初始化表格头部
             let jsonTables = JSON.stringify(res.data.list)
             // 将返回的数据里面的日期格式的内容转化为普通的日期格式
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             this.vTables = JSON.parse(result)
             this.loadingData = true
           }).catch((res) => {
@@ -965,18 +965,18 @@
 
       /**
        * 修改数据表
-       * @param  {[type]} table_name 表名
-       * @param  {[type]} object_id  列表id
+       * @param  {[type]} tableName 表名
+       * @param  {[type]} objectId  列表id
        * @param  {[type]} params     参数
        * @return {[type]}            [description]
        */
-      updateTableData (table_name, object_id, params, type) {
+      updateTableData (tableName, objectId, params, type) {
         this.editing = true
         if (type === 3) {
           // console.log('应用级的修改数据')
-          api.dataTable.updateAppData(table_name, object_id, params).then((res) => {
+          api.dataTable.updateAppData(tableName, objectId, params).then((res) => {
             var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             result = result.replace(/_id/g, 'objectId')
             this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
             this.userEditColumnModal.show = false
@@ -986,9 +986,9 @@
             this.editing = false
           })
         } else {
-          api.dataTable.updateData(table_name, object_id, params).then((res) => {
+          api.dataTable.updateData(tableName, objectId, params).then((res) => {
             var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
             this.userEditColumnModal.show = false
             this.editing = false
@@ -1001,17 +1001,17 @@
 
       /**
        * 创建数据表并且更新
-       * @param  {[type]} table_name 表名
+       * @param  {[type]} tableName 表名
        * @param  {[type]} params     参数
        * @return {[type]}            [description]
        */
-      createTableData (table_name, params, type) {
+      createTableData (tableName, params, type) {
         this.editing = true
         if (type === 3) {
           // console.log('应用级的创建数据')
-          api.dataTable.createAppData(table_name, params).then((res) => {
+          api.dataTable.createAppData(tableName, params).then((res) => {
             var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             result = result.replace(/_id/g, 'objectId')
             this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
             this.userEditColumnModal.show = false
@@ -1021,9 +1021,9 @@
             this.editing = false
           })
         } else {
-          api.dataTable.createData(table_name, params).then((res) => {
+          api.dataTable.createData(tableName, params).then((res) => {
             var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+\-\d+\-\d+)T(\d+\:\d+\:\d+).\d+Z/g, '$1 $2')
+            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
             this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
             this.userEditColumnModal.show = false
             this.editing = false

@@ -16,7 +16,7 @@
           <button @click="showAddModal = true" class="btn btn-success"  :disabled="!products.length" :class="{'disabled': !products.length}"><i class="fa fa-plus"></i>{{ $t('ui.firmware.add_firmware') }}</button>
         </div>
         <h2>{{ $t('ui.firmware.firmware_list') }}</h2>
-        <div style="position:absolute; top:5px; left:120px">
+        <div class="leftbox">
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>

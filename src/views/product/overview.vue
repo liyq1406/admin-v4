@@ -377,11 +377,11 @@
       getProductTrends () {
         var today = new Date()
         var past = today.getTime() - this.period * 24 * 3600 * 1000
-        var start_day = dateFormat('yyyy-MM-dd', new Date(past))
-        var end_day = dateFormat('yyyy-MM-dd', today)
+        var startDay = dateFormat('yyyy-MM-dd', new Date(past))
+        var endDay = dateFormat('yyyy-MM-dd', today)
 
         this.loadingProductTrends = true
-        api.statistics.getProductTrend(this.$route.params.id, start_day, end_day).then((res) => {
+        api.statistics.getProductTrend(this.$route.params.id, startDay, endDay).then((res) => {
           if (res.status === 200) {
             this.productTrends = res.data.map((item) => {
               item.day = dateFormat('MM-dd', new Date(item.day))

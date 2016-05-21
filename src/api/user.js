@@ -44,7 +44,7 @@ export default {
 
   /**
    * 获取用户详细信息
-   * @param  user_id
+   * @param  userId
    * @return {Promise}
     {
       "id" : "用户ID",
@@ -57,9 +57,9 @@ export default {
       "region_id":"所在区域ID"
     }
    */
-  profile (user_id) {
+  profile (userId) {
     return http.get(
-      `${apiServer.default}/v2/user/${user_id}`
+      `${apiServer.default}/v2/user/${userId}`
     )
   },
 
@@ -85,9 +85,9 @@ export default {
         }
       ]
    */
-  subDeviceList (user_id) {
+  subDeviceList (userId) {
     return http.get(
-      `${apiServer.default}/v2/user/${user_id}/subscribe/devices`
+      `${apiServer.default}/v2/user/${userId}/subscribe/devices`
     )
   },
 
@@ -95,12 +95,12 @@ export default {
    * 停用用户
    * 成员编辑本成员的基本信息。
    * @param  {Object} params  {"name":"成员姓名"}
-   * @param  {member_id}
+   * @param  {memberId}
    * @return  stauts
    */
-  banMember (user_id) {
+  banMember (userId) {
     return http.put(
-      `${apiServer.default}/v2/user/${user_id}/status`
+      `${apiServer.default}/v2/user/${userId}/status`
     )
   },
 
@@ -108,7 +108,7 @@ export default {
    * 添加成员
    * 成员编辑本成员的基本信息。
    * @param  {Object} params  {"name":"成员姓名"}
-   * @param  {member_id}
+   * @param  {memberId}
    * @return  stauts
    */
   addMember (params) {
@@ -120,12 +120,12 @@ export default {
    * 修改成员密码
    * 成员编辑本成员的基本信息。
    * @param  {Object} params  {"name":"成员姓名"}
-   * @param  {member_id}
+   * @param  {memberId}
    * @return  stauts
    */
-  editMember (member_id, params) {
+  editMember (memberId, params) {
     return http.put(
-      `${apiServer.default}/v2/corp/member/${member_id}/password`, params
+      `${apiServer.default}/v2/corp/member/${memberId}/password`, params
     )
   },
 
@@ -133,12 +133,12 @@ export default {
    * 新版停用启用用户
    * 成员编辑本成员的基本信息。
    * @param  {Object} params  {"name":"成员姓名"}
-   * @param  {member_id}
+   * @param  {memberId}
    * @return  stauts
    */
-  toggleMember (user_id, status) {
+  toggleMember (userId, status) {
     return http.put(
-      `${apiServer.default}/v2/user/${user_id}/status/${status}`
+      `${apiServer.default}/v2/user/${userId}/status/${status}`
     )
   }
 }

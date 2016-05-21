@@ -24,34 +24,34 @@ export default {
 
   /**
    * 启动授权
-    @param  {String} empower_id
+    @param  {String} empowerId
     @return {Promise}
   */
-  startEmpower (empower_id) {
+  startEmpower (empowerId) {
     return http.post(
-      `${apiServer.default}/v2/empower/${empower_id}/enable`
+      `${apiServer.default}/v2/empower/${empowerId}/enable`
     )
   },
 
   /**
    * 禁用授权
-    @param  {String} empower_id
+    @param  {String} empowerId
     @return {Promise}
   */
-  disableEmpower (empower_id) {
+  disableEmpower (empowerId) {
     return http.post(
-      `${apiServer.default}/v2/empower/${empower_id}/disable`
+      `${apiServer.default}/v2/empower/${empowerId}/disable`
     )
   },
 
   /**
    * 删除授权
-    @param  {String} empower_id
+    @param  {String} empowerId
     @return {Promise}
   */
-  deleteEmpower (empower_id) {
+  deleteEmpower (empowerId) {
     return http.del(
-      `${apiServer.default}/v2/empower/${empower_id}`
+      `${apiServer.default}/v2/empower/${empowerId}`
     )
   },
 
@@ -98,9 +98,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  toggleKeys (accesskey_id, status) {
+  toggleKeys (accesskeyId, status) {
     return http.put(
-      `${apiServer.default}/v2/accesskey/${accesskey_id}/status/${status}`
+      `${apiServer.default}/v2/accesskey/${accesskeyId}/status/${status}`
     )
   },
 
@@ -109,9 +109,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  deleteKeys (accesskey_id) {
+  deleteKeys (accesskeyId) {
     return http.del(
-      `${apiServer.default}/v2/accesskey/${accesskey_id}`
+      `${apiServer.default}/v2/accesskey/${accesskeyId}`
     )
   },
 

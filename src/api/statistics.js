@@ -37,9 +37,9 @@ export default {
         "recv_bytes":"接收指令总字节数"
       }
    */
-  getProductSummary (product_id) {
+  getProductSummary (productId) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${product_id}/summary`
+      `${apiServer.default}/v2/statistics/product/${productId}/summary`
     )
   },
 
@@ -58,9 +58,9 @@ export default {
         }
       ]
    */
-  getProductTrend (product_id, start_day, end_day) {
+  getProductTrend (productId, startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${product_id}/trend?start_day=${start_day}&end_day=${end_day}`
+      `${apiServer.default}/v2/statistics/product/${productId}/trend?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
@@ -97,15 +97,15 @@ export default {
         }
       ]
    */
-  getUserTrend (start_day, end_day) {
+  getUserTrend (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/user/trend?start_day=${start_day}&end_day=${end_day}`
+      `${apiServer.default}/v2/statistics/user/trend?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
   /**
    * 获取产品区域分布
-   * @param {String} product_id 产品id
+   * @param {String} productId 产品id
    * @return {Object} 返回产品区域分布
    *  {
        "China":
@@ -122,9 +122,9 @@ export default {
         }
       }
    */
-  getProductRegion (product_id) {
+  getProductRegion (productId) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${product_id}/region`
+      `${apiServer.default}/v2/statistics/product/${productId}/region`
     )
   },
 
@@ -154,25 +154,25 @@ export default {
 
   /**
    * 消息统计概览
-   * @param  {String} start_day 开始日期
-   * @param  {String} end_day   结束日期
+   * @param  {String} startDay 开始日期
+   * @param  {String} endDay   结束日期
    * @return {Promise}
    */
-  getAlertSummary (start_day, end_day) {
+  getAlertSummary (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/message/summary?start_day=${start_day}&end_day=${end_day}`
+      `${apiServer.default}/v2/statistics/message/summary?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
   /**
    * 消息日趋势
-   * @param  {String} start_day 开始日期
-   * @param  {String} end_day   结束日期
+   * @param  {String} startDay 开始日期
+   * @param  {String} endDay   结束日期
    * @return {Promise}
    */
-  getAlertTrend (start_day, end_day) {
+  getAlertTrend (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/message/trend?start_day=${start_day}&end_day=${end_day}`
+      `${apiServer.default}/v2/statistics/message/trend?start_day=${startDay}&end_day=${endDay}`
     )
   }
 }

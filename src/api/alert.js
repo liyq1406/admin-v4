@@ -8,7 +8,7 @@ export default {
    * @return {Promise}
       {
         "id":"规则ID",
-        "product_id":"产品ID",
+        "productId":"产品ID",
         "name":"规则名称",
         "content":"告警内容",
         "type":"告警规则类型",
@@ -33,9 +33,9 @@ export default {
    * @param  {Object} 告警规则参数
    * @return {Promise}
    */
-  updateRule (rule, product_id) {
+  updateRule (rule, productId) {
     var params = {
-      product_id: product_id,
+      product_id: productId,
       name: rule.name,
       content: rule.content,
       type: rule.type,
@@ -60,9 +60,9 @@ export default {
    * @param  {String} 告警规则id
    * @return {Promise}
    */
-  deleteRule (rule_id) {
+  deleteRule (ruleId) {
     return http.del(
-      `${apiServer.default}/v2/alert/rule/${rule_id}`
+      `${apiServer.default}/v2/alert/rule/${ruleId}`
     )
   },
 
@@ -74,7 +74,7 @@ export default {
         {
           "id":"规则ID",
           "name":"规则名称",
-          "product_id":"产品ID",
+          "productId":"产品ID",
           "content":"告警内容",
           "type":"告警规则类型",
           "notify_type":"通知类型",
@@ -87,9 +87,9 @@ export default {
         }
       ]
    */
-  getRules (product_id) {
+  getRules (productId) {
     return http.get(
-      `${apiServer.default}/v2/alert/rules?product_id=${product_id}`
+      `${apiServer.default}/v2/alert/rules?product_id=${productId}`
     )
   },
 

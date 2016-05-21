@@ -7,9 +7,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  getSnapshot (product_id, device_id, params) {
+  getSnapshot (productId, deviceId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/device/${device_id}/snapshot`, params
+      `${apiServer.default}/v2/product/${productId}/device/${deviceId}/snapshot`, params
     )
   },
   /**
@@ -27,9 +27,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  createRule (product_id, params) {
+  createRule (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${product_id}/snapshot`, params
+      `${apiServer.default}/v2/product/${productId}/snapshot`, params
     )
   },
   /**
@@ -37,9 +37,9 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  getRule (product_id) {
+  getRule (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${product_id}/snapshots`
+      `${apiServer.default}/v2/product/${productId}/snapshots`
     )
   },
   /**
@@ -47,20 +47,20 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  updateRule (product_id, params) {
+  updateRule (productId, params) {
     return http.put(
-      `${apiServer.default}/v2/product/${product_id}/snapshot`, params
+      `${apiServer.default}/v2/product/${productId}/snapshot`, params
     )
   },
 
   /**
    * 删除产品快照规则
-   * @param  product_id 产品id， rule_id 规则id
+   * @param  productId 产品id， ruleId 规则id
    * @return {Promise}
    */
-  deleteRule (product_id, rule_id) {
+  deleteRule (productId, ruleId) {
     return http.del(
-      `${apiServer.default}/v2/product/${product_id}/snapshot/${rule_id}`
+      `${apiServer.default}/v2/product/${productId}/snapshot/${ruleId}`
     )
   }
 }

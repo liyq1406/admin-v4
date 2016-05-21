@@ -224,13 +224,8 @@
 </script>
 
 <style lang="stylus">
-  /*@import '../node_modules/tinymce/skins/lightgray/content.min.css'*/
-  /*@import '../node_modules/tinymce/skins/lightgray/skin.min.css'*/
   // 配置
   @import 'assets/stylus/base'
-
-  // 加载 Font-awesome 图标字体包
-  @import '../node_modules/font-awesome/css/font-awesome.css'
 
   .page-container
     size 100%

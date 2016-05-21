@@ -45,12 +45,12 @@
     },
 
     ready () {
-      var corp_id = base64.decode(this.$route.params.corp_id)
+      var corpId = base64.decode(this.$route.params.corp_id)
       var email = base64.decode(this.$route.params.email)
       var verifycode = base64.decode(this.$route.params.verifycode)
 
       api.corp.userEmailActivate({
-        corp_id: corp_id,
+        corp_id: corpId,
         email: email,
         verifycode: verifycode
       }).then((res) => {

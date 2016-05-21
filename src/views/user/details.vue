@@ -135,8 +135,7 @@
 
       deleteUser () {
         if (window.confirm('确定要停用当前用户吗？')) {
-          var user_id = this.user.id
-          api.user.banMember(user_id).then((res) => {
+          api.user.banMember(this.user.id).then((res) => {
             if (res.status === 200) {
               console.log('已停用用户')
             }

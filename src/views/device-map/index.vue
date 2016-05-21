@@ -156,9 +156,13 @@
           if (res.data.length) {
             this.productOptions = res.data
             this.currProduct = this.productOptions[0]
-            var mapApi = document.createElement('script')
-            mapApi.src = 'http://webapi.amap.com/maps?v=1.3&key=5f21a013829b628d05551513d352f3f7&callback=init'
-            document.getElementsByTagName('body')[0].appendChild(mapApi)
+            if (typeof window.AMap === 'undefined') {
+              var mapApi = document.createElement('script')
+              mapApi.src = 'http://webapi.amap.com/maps?v=1.3&key=5f21a013829b628d05551513d352f3f7&callback=init'
+              document.getElementsByTagName('body')[0].appendChild(mapApi)
+            } else {
+              this.initMap()
+            }
           }
           this.loadingProducts = false
         }

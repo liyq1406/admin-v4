@@ -16,7 +16,7 @@
           <button :disabled="firmwares.length < 2" :class="{'disabled':firmwares.length < 2}" @click="showAddTaskModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t('ui.task.create_task') }}</button>
         </div>
         <h2>{{ $t('ui.task.task_list') }}</h2>
-        <div style="position:absolute; top:5px; left:120px">
+        <div class="leftbox">
           <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>

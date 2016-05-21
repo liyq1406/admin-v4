@@ -505,7 +505,7 @@ let configRouter = (router) => {
       }
     },
     // 设备互联
-    '/linkage/:app_id': {
+    '/linkage': {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/linkage/index'))
@@ -941,7 +941,7 @@ let configRouter = (router) => {
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
     '/linkage': '/linkage/devices',
-    '/plugins/nest/:app_id': '/linkage/:app_id/nest/'
+    '/plugins/nest/:app_id': '/linkage/nest/'
   })
 
   router.beforeEach((transition) => {
