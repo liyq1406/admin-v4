@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.datapoint.add_datapoint") }}</button>
+            <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.datapoint.add_datapoint") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -256,6 +256,24 @@
       }
     },
 
+    computed: {
+      maxIndex () {
+        var result = -1
+        if (this.datapoints.length > 0) {
+          result = this.datapoints.concat().sort((a, b) => {
+            if (a.index > b.index) {
+              return -1
+            }
+            if (a.index < b.index) {
+              return 1
+            }
+            return 0
+          })[0].index
+        }
+        return result
+      }
+    },
+
     filters: {
       typeLabel (value) {
         return this.datapointTypes[value - 1]
@@ -308,6 +326,14 @@
       // 取消添加
       onAddCancel () {
         this.resetAdd()
+      },
+
+      /**
+       * 添加数据端点
+       */
+      addDataPoint () {
+        this.addModel.index = this.maxIndex + 1
+        this.showAddModal = true
       },
 
       // 添加操作
