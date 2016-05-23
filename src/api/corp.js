@@ -104,9 +104,11 @@ export default {
    * @param  {Object} params query参数
    * @return {Promise}
    */
-  getMembers () {
+  getMembers (condition) {
+    var offset = condition.offset || 0
+    var limit = condition.limit || 10
     return http.get(
-      `${apiServer.default}/v2/corp/members`
+      `${apiServer.default}/v2/corp/members?offset=${offset}&limit=${limit}`
     )
   },
 

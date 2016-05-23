@@ -229,7 +229,19 @@
     computed: {
       filteredMembers () {
         var filter = Vue.filter('filterBy')
+        if (this.query.length) {
+          this.currentPage = 1
+        }
         return filter(this.members, this.query, 'name')
+      },
+
+      queryCondition () {
+        var condition = {
+          offset: this.pageCount * (this.currentPage - 1),
+          limit: 1000
+        }
+
+        return condition
       }
     },
 
@@ -239,7 +251,7 @@
        */
       getMembers () {
         this.loadingData = true
-        api.corp.getMembers().then((res) => {
+        api.corp.getMembers(this.queryCondition).then((res) => {
           this.members = res.data.list
           this.loadingData = false
         }).catch((res) => {
