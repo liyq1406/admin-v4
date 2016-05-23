@@ -13,6 +13,15 @@ module.exports = {
   dev: {
     env: require('./dev.env'),
     port: 9000,
-    proxyTable: {}
+    // http://vuejs-templates.github.io/webpack/proxy.html
+    proxyTable: {
+      '/v2': {
+        target: 'http://api-test.xlink.cn:8887/v2',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/v2': ''
+        }
+      }
+    }
   }
 }

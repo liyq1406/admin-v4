@@ -5,6 +5,7 @@
 
 // 测试服务器地址
 const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
+// const DEFAULT_API_SERVER = ''
 // 测试图表
 // const DEFAULT_API_SERVER = 'http://120.26.244.72:8887'
 // 海曼
