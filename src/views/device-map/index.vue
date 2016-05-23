@@ -72,6 +72,7 @@
 <script>
   import { globalMixins } from '../../mixins'
   import api from '../../api'
+  import config from '../../consts/config'
   // import AMap from 'AMap'
   import Select from '../../components/Select'
   import SearchBox from '../../components/SearchBox'
@@ -158,7 +159,7 @@
             this.currProduct = this.productOptions[0]
             if (typeof window.AMap === 'undefined') {
               var mapApi = document.createElement('script')
-              mapApi.src = 'http://webapi.amap.com/maps?v=1.3&key=5f21a013829b628d05551513d352f3f7&callback=init'
+              mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.amapKey}&callback=init`
               document.getElementsByTagName('body')[0].appendChild(mapApi)
             } else {
               this.initMap()
@@ -594,9 +595,10 @@
         .icon-num
           background-position 0 -284px
 
-  .device-map
-    absolute left 348px top 69px right 20px bottom 20px
+    .device-map
+      absolute left 348px top 69px right 20px bottom 20px
 
+  .device-map
     .map-marker
       absolute left top
       display inline-block

@@ -48,5 +48,8 @@ export default {
   maxFirmwareFileSize: 8,
 
   // 允许上传的最大图片文件大小（单位：Mb）
-  maxImageFileSize: 2
+  maxImageFileSize: 2,
+
+  // 高德地图 key
+  amapKey: '5f21a013829b628d05551513d352f3f7'
 }
