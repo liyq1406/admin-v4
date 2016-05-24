@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -15,7 +15,7 @@ export default {
    */
   firmware (productId, file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/product/${productId}/firmware`, file
+      `${API_SERVER.default}/v2/upload/product/${productId}/firmware`, file
     )
   },
 
@@ -29,7 +29,7 @@ export default {
    */
   apn (file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/app/apn_license`, file
+      `${API_SERVER.default}/v2/upload/app/apn_license`, file
     )
   },
 
@@ -43,7 +43,7 @@ export default {
    */
   image (file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/image`, file
+      `${API_SERVER.default}/v2/upload/image`, file
     )
   }
 }

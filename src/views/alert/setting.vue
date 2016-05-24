@@ -51,7 +51,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <!-- <pager v-if="rules.length > pageCount" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
+        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
       </div>
     </div>
 
@@ -426,6 +426,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import locales from '../../consts/locales/index'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
@@ -462,7 +463,7 @@
         scopeTypes: locales[Vue.config.lang].data.RULE_SCOPE_TYPES,
         datapoints: [],       // 数据端点
         currentPage: 1,       // 当前页
-        pageCount: 10,        // 每页记录数
+        countPerPage: config.COUNT_PER_PAGE,        // 每页记录数
         // addModal.show: false,  // 是否显示添加浮层
         // editModal.show: false, // 是否显示编辑浮层
         candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,      // 候选标签

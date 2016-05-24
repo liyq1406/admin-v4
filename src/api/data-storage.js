@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -21,7 +21,7 @@ export default {
    */
   create (params, objectTable) {
     return http.post(
-      `${apiServer.default}/v2/data/create/${objectTable}`, params
+      `${API_SERVER.default}/v2/data/create/${objectTable}`, params
     )
   },
 
@@ -44,7 +44,7 @@ export default {
    */
   addData (params, objectTable) {
     return http.post(
-      `${apiServer.default}/v2/data/${objectTable}`, params
+      `${API_SERVER.default}/v2/data/${objectTable}`, params
     )
   },
 
@@ -63,7 +63,7 @@ export default {
    */
   getData (objectTable, objectId) {
     return http.get(
-      `${apiServer.default}/v2/data/${objectTable}/${objectId}`
+      `${API_SERVER.default}/v2/data/${objectTable}/${objectId}`
     )
   },
 
@@ -103,7 +103,7 @@ export default {
    */
   dataList (params, objectTable) {
     return http.post(
-      `${apiServer.default}/v2/data/${objectTable}/list`, params
+      `${API_SERVER.default}/v2/data/${objectTable}/list`, params
     )
   },
 
@@ -126,7 +126,7 @@ export default {
    */
   alertData (params, objectTable, objectId) {
     return http.put(
-      `${apiServer.default}/v2/data/${objectTable}/${objectId}`, params
+      `${API_SERVER.default}/v2/data/${objectTable}/${objectId}`, params
     )
   },
 
@@ -137,7 +137,7 @@ export default {
    */
   delAllData (objectTable, objectId) {
     return http.del(
-      `${apiServer.default}/v2/data/${objectTable}/${objectId}`
+      `${API_SERVER.default}/v2/data/${objectTable}/${objectId}`
     )
   }
 }

@@ -280,7 +280,7 @@
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
   import _ from 'lodash'
-  import config from '../../consts/config'
+  import * as config from '../../consts/config'
   import { globalMixins } from '../../mixins'
 
   export default {
@@ -619,10 +619,10 @@
         var file = this.$els[firmwareFile].files[0]
         var input = event.target
 
-        if (file && file.size > config.maxFirmwareFileSize * 1024 * 1024) {
+        if (file && file.size > config.MAX_FIRMWARE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.file_size_msg', {max: config.maxFirmwareFileSize})
+            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
           })
           return
         }

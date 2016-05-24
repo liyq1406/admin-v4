@@ -50,7 +50,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getIngredients"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getIngredients"></pager>
       </div>
     </div>
     <!-- 类别管理浮层-->
@@ -94,6 +94,7 @@
 
 <script>
   import api from '../../../../api'
+  import * as config from '../../../../consts/config'
   import Select from '../../../../components/Select'
   import Pager from '../../../../components/Pager'
   import Modal from '../../../../components/Modal'
@@ -127,7 +128,7 @@
         categories: [],
         rules: [],
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
         editing: false
       }
@@ -156,8 +157,8 @@
       queryCondition () {
         var condition = {
           filter: ['_id', 'name', 'classification', 'created_by', 'created_at'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           query: {},
           order: {
             created_at: -1

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -9,7 +9,7 @@ export default {
    */
   createProduct (params) {
     return http.post(
-      `${apiServer.default}/v2/product`, params
+      `${API_SERVER.default}/v2/product`, params
     )
   },
 
@@ -20,7 +20,7 @@ export default {
    */
   deleteProduct (productId) {
     return http.del(
-      `${apiServer.default}/v2/product/${productId}`
+      `${API_SERVER.default}/v2/product/${productId}`
     )
   },
 
@@ -41,7 +41,7 @@ export default {
     params.is_allow_multi_admin = product.is_allow_multi_admin
 
     return http.put(
-      `${apiServer.default}/v2/product/${product.id}`, params
+      `${API_SERVER.default}/v2/product/${product.id}`, params
     )
   },
 
@@ -51,7 +51,7 @@ export default {
    */
   all () {
     return http.get(
-      `${apiServer.default}/v2/products`
+      `${API_SERVER.default}/v2/products`
     )
   },
 
@@ -62,7 +62,7 @@ export default {
    */
   getProduct (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}`
+      `${API_SERVER.default}/v2/product/${productId}`
     )
   },
 
@@ -76,7 +76,7 @@ export default {
    */
   getProductKey (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/key`
+      `${API_SERVER.default}/v2/product/${productId}/key`
     )
   },
 
@@ -87,7 +87,7 @@ export default {
    */
   addFirmware (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/firmware`, params
+      `${API_SERVER.default}/v2/product/${productId}/firmware`, params
     )
   },
 
@@ -109,7 +109,7 @@ export default {
     params.is_release = firmware.is_release
 
     return http.put(
-      `${apiServer.default}/v2/product/${productId}/firmware/${firmware.id}`, params
+      `${API_SERVER.default}/v2/product/${productId}/firmware/${firmware.id}`, params
     )
   },
 
@@ -121,7 +121,7 @@ export default {
    */
   deleteFirmware (productId, firmwareId) {
     return http.del(
-      `${apiServer.default}/v2/product/${productId}/firmware/${firmwareId}`
+      `${API_SERVER.default}/v2/product/${productId}/firmware/${firmwareId}`
     )
   },
 
@@ -131,7 +131,7 @@ export default {
    */
   getFirmwares (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/firmwares`
+      `${API_SERVER.default}/v2/product/${productId}/firmwares`
     )
   },
 
@@ -143,7 +143,7 @@ export default {
    */
   addDataPoint (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/datapoint`, params
+      `${API_SERVER.default}/v2/product/${productId}/datapoint`, params
     )
   },
 
@@ -163,7 +163,7 @@ export default {
     params.symbol = datapoint.symbol
 
     return http.put(
-      `${apiServer.default}/v2/product/${productId}/datapoint/${datapoint.id}`, params
+      `${API_SERVER.default}/v2/product/${productId}/datapoint/${datapoint.id}`, params
     )
   },
 
@@ -175,7 +175,7 @@ export default {
    */
   deleteDataPoint (productId, datapointId) {
     return http.del(
-      `${apiServer.default}/v2/product/${productId}/datapoint/${datapointId}`
+      `${API_SERVER.default}/v2/product/${productId}/datapoint/${datapointId}`
     )
   },
 
@@ -187,7 +187,7 @@ export default {
    */
   getDataPoint (productId, datapointId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/datapoint/${datapointId}`
+      `${API_SERVER.default}/v2/product/${productId}/datapoint/${datapointId}`
     )
   },
 
@@ -198,7 +198,7 @@ export default {
    */
   getDatapoints (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/datapoints`
+      `${API_SERVER.default}/v2/product/${productId}/datapoints`
     )
   },
 
@@ -215,7 +215,7 @@ export default {
    */
   uploadFirmware (productId, file) {
     return http.upload(
-      `${apiServer.default}/v2/upload/product/${productId}/firmware`, file
+      `${API_SERVER.default}/v2/upload/product/${productId}/firmware`, file
     )
   }
 }

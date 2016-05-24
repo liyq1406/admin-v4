@@ -80,7 +80,7 @@
 
 <script>
   import api from '../api'
-  import config from '../consts/config'
+  import * as config from '../consts/config'
   import Captcha from '../components/Captcha'
   import { globalMixins } from '../mixins'
 
@@ -105,7 +105,7 @@
         verifycodeValid: false,
         counting: false,
         btnDisabled: false,
-        seconds: config.verifycode.duration,
+        seconds: config.VERIFYCODE_DURATION,
         resetsuccess: false
       }
     },
@@ -128,7 +128,7 @@
           if (this.seconds) {
             this.seconds--
           } else {
-            this.seconds = config.verifycode.duration
+            this.seconds = config.VERIFYCODE_DURATION
             this.counting = false
             this.btnDisabled = false
             window.clearInterval(itvl)

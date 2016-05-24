@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getGeographies" :simple="true"></pager>
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getGeographies" :simple="true"></pager>
           <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
             <p>{{ infoMsg }}</p>
           </v-alert>
@@ -72,7 +72,7 @@
 <script>
   import { globalMixins } from '../../mixins'
   import api from '../../api'
-  import config from '../../consts/config'
+  import * as config from '../../consts/config'
   // import AMap from 'AMap'
   import Select from '../../components/Select'
   import SearchBox from '../../components/SearchBox'
@@ -112,7 +112,7 @@
         },
         currentPage: 1,
         total: 0,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         oldCurrIndex: 0,
         currIndex: 0,
         currHover: -1,
@@ -135,8 +135,8 @@
     computed: {
       queryCondition () {
         var condition = {
-          offset: this.pageCount * (this.currentPage - 1),
-          limit: this.pageCount,
+          offset: this.countPerPage * (this.currentPage - 1),
+          limit: this.countPerPage,
           spherical: true,
           coord: this.mapCenter,
           max_dist: this.map.getResolution() * this.map.getSize().height / 2,
@@ -159,7 +159,7 @@
             this.currProduct = this.productOptions[0]
             if (typeof window.AMap === 'undefined') {
               var mapApi = document.createElement('script')
-              mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.amapKey}&callback=init`
+              mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
               document.getElementsByTagName('body')[0].appendChild(mapApi)
             } else {
               this.initMap()
@@ -276,8 +276,8 @@
         this.loadingDevices = true
         return api.device.getList(this.currProduct.id, {
           filter: ['id', 'mac', 'is_online', 'last_login'],
-          limit: this.pageCount,
-          // offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          // offset: (this.currentPage - 1) * this.countPerPage,
           query: {
             'id': {
               $in: this.ids

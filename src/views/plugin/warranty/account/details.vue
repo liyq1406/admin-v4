@@ -120,7 +120,7 @@
 
           <!-- Start: 分页信息 -->
           <!-- <pager :total="51" :current.sync="0" :page-count="10"></pager> -->
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchStaffsList"></pager>
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getBranchStaffsList"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>
@@ -278,6 +278,7 @@
   import Pager from '../../../../components/Pager'
   import Modal from '../../../../components/Modal'
   import api from '../../../../api'
+  import * as config from '../../../../consts/config'
   import _ from 'lodash'
 
   export default {
@@ -340,7 +341,7 @@
         },
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         delChecked: false,
         query: {},
         loadingData: false,
@@ -375,8 +376,8 @@
     computed: {
       queryCondition () {
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             branch_id: this.$route.params.id
@@ -407,8 +408,8 @@
         var argvs = arguments
         var fn = self.getBranchList
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             _id: this.$route.params.id
@@ -527,8 +528,8 @@
         var argvs = arguments
         var fn = self.editAccount
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             _id: this.$route.params.id

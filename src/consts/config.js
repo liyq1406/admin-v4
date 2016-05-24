@@ -18,7 +18,7 @@ const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 插件服务器地址
 const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
 
-export var apiServer = {
+export const API_SERVER = {
   // 默认
   default: process.env.API_SERVER || DEFAULT_API_SERVER,
 
@@ -29,27 +29,20 @@ export var apiServer = {
   warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`
 }
 
-export default {
-  // 表格每页记录数
-  pageCount: 10,
+// 默认每页记录数
+export const COUNT_PER_PAGE = 10
 
-  // 验证码
-  verifycode: {
-    // 刷新等待间隔(单位:秒)
-    duration: 90
-  },
+// 高德地图 key
+export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'
 
-  notice: {
-    // 通知存活时长，默认(2000毫秒)
-    duration: 2000
-  },
+// 允许上传的最大固件文件大小（单位：Mb）
+export const MAX_FIRMWARE_FILE_SIZE = 8
 
-  // 允许上传的最大固件文件大小（单位：Mb）
-  maxFirmwareFileSize: 8,
+// 允许上传的最大图片文件大小（单位：Mb）
+export const MAX_IMAGE_FILE_SIZE = 8
 
-  // 允许上传的最大图片文件大小（单位：Mb）
-  maxImageFileSize: 2,
+// 验证码刷新等待间隔(单位:秒)
+export const VERIFYCODE_DURATION = 90
 
-  // 高德地图 key
-  amapKey: '5f21a013829b628d05551513d352f3f7'
-}
+// 通知存活时长，默认(2000毫秒)
+export const NOTICE_DURATION = 2000

@@ -36,7 +36,7 @@
                   </tr>
                 </tbody>
               </table>
-              <pager v-if="records.length > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount"></pager>
+              <pager v-if="records.length > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage"></pager>
             </div>
           </div>
         </div>
@@ -81,6 +81,7 @@
 
 <script>
   import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import { globalMixins } from '../../mixins'
@@ -103,7 +104,7 @@
         tableInfo: {},
         records: [],
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         showModal: false,
         model: {
           objectId: '',
@@ -126,8 +127,8 @@
     computed: {
       queryCondition () {
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage
         }
         return condition
       }

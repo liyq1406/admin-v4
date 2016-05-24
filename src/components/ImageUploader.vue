@@ -8,7 +8,7 @@
 
 <script>
   import api from '../api'
-  import config from '../consts/config'
+  import * as config from '../consts/config'
 
   export default {
     props: {
@@ -30,10 +30,10 @@
         var file = this.$els['imageFile'].files[0]
         var input = event.target
 
-        if (file && file.size > config.maxImageFileSize * 1024 * 1024) {
+        if (file && file.size > config.MAX_IMAGE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.file_size_msg', {max: config.maxImageFileSize})
+            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_IMAGE_FILE_SIZE})
           })
           return
         }

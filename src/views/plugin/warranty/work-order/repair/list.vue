@@ -69,7 +69,7 @@
       <div class="row">
         <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
-          <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getOrderWorkList"></pager>
+          <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getOrderWorkList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->
@@ -85,6 +85,7 @@
   import Pager from '../../../../../components/Pager'
   import DateRangePicker from '../../../../../components/DateRangePicker'
   import api from '../../../../../api'
+  import * as config from '../../../../../consts/config'
 
   export default {
     name: 'OrderList',
@@ -133,7 +134,7 @@
         workOrders: [],
         loadingData: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         total: 0,
         queryTypeOptions: [
           { label: '工单编号', value: '_id' },
@@ -158,8 +159,8 @@
       queryCondition () {
         var condition = {
           filter: [],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {}
         }

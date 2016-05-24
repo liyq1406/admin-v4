@@ -42,7 +42,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getUsers"></pager>
     </div>
   </div>
 </template>
@@ -51,6 +51,7 @@
   import SearchBox from '../../components/SearchBox'
   import Modal from '../../components/Modal'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import { globalMixins } from '../../mixins'
 
@@ -75,7 +76,7 @@
         users: [],
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         loadingData: false
       }
     },
@@ -90,8 +91,8 @@
       queryCondition () {
         var condition = {
           filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {'create_date': 'desc'},
           query: {}
         }

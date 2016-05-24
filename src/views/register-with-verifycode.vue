@@ -88,7 +88,7 @@
 <script>
   import api from '../api'
   import Vue from 'vue'
-  import config from '../consts/config'
+  import * as config from '../consts/config'
   import locales from '../consts/locales/index'
   import Select from '../components/Select'
   import Captcha from '../components/Captcha'
@@ -118,7 +118,7 @@
         counting: false,
         btnDisabled: false,
         accountTypes: locales[Vue.config.lang].data.ACCOUNT_TYPES,
-        seconds: config.verifycode.duration
+        seconds: config.VERIFYCODE_DURATION
       }
     },
 
@@ -149,7 +149,7 @@
           if (this.seconds) {
             this.seconds--
           } else {
-            this.seconds = config.verifycode.duration
+            this.seconds = config.VERIFYCODE_DURATION
             this.counting = false
             this.btnDisabled = false
             window.clearInterval(itvl)

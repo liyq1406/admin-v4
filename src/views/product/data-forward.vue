@@ -22,7 +22,7 @@
             </thead>
             <tbody>
               <template v-if="rules.length > 0">
-                <tr v-for="rule in rules | limitBy pageCount (currentPage-1)*pageCount">
+                <tr v-for="rule in rules | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td>{{* rule.id }}</td>
                   <td>{{* rule.destination.url }}</td>
                   <td><span v-if="rule.destination.type===1">转发到外部url</span><span v-if="rule.destination.type===2">转发到内部插件处理单元</span></td>
@@ -39,7 +39,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > pageCount" :total="rules.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+        <pager v-if="total > countPerPage" :total="rules.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
       </div>
     </div>
     <!-- 添加转发规则-->
@@ -151,6 +151,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import locales from '../../consts/locales/index'
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
@@ -179,7 +180,7 @@
         dataDestination: locales[Vue.config.lang].data.DATA_DESTINATIONS,
         data_type: [],
         notify_type: [],
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         currentPage: 1,
         total: 0,
         showAddModal: false,

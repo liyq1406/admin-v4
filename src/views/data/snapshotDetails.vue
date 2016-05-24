@@ -53,7 +53,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" :simple="true" @page-update="getDevices"></pager>
+                <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" :simple="true" @page-update="getDevices"></pager>
               </div>
             </div>
             <div class="panel-bd layout-right">
@@ -122,8 +122,8 @@
                         </tr>
                       </tbody>
                     </table> -->
-                    <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy pageCount2 (currentPage2-1)*pageCount2"></intelligent-table>
-                    <pager v-if="snapshots.length > pageCount2" :total="snapshots.length" :current.sync="currentPage2" :page-count="pageCount2"></pager>
+                    <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
+                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :page-count="countPerPage2"></pager>
                   </div>
                 </div>
               </div>
@@ -148,7 +148,7 @@
                  </tr>
                </thead>
                <tbody>
-                 <tr v-for="datapoint in datapoints | limitBy pageCount3 (currentPage3-1)*pageCount3">
+                 <tr v-for="datapoint in datapoints | limitBy countPerPage3 (currentPage3-1)*countPerPage3">
                    <td>{{datapoint.index}}</td>
                    <td>{{datapoint.name}}</td>
                    <td>{{datapoint.description}}</td>
@@ -158,7 +158,7 @@
              </table>
            </div>
            <div class="data-points-footer">
-             <pager v-if="datapoints.length > pageCount3" :total="datapoints.length" :current.sync="currentPage3" :page-count="pageCount3" @page-update=""></pager>
+             <pager v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :page-count="countPerPage3" @page-update=""></pager>
            </div>
          </div>
          <div class="form-actions snapshot-select">
@@ -227,9 +227,9 @@
         currentPage: 1,
         currentPage2: 1,
         currentPage3: 1,
-        pageCount: 20,
-        pageCount2: 10,
-        pageCount3: 10,
+        countPerPage: 20,
+        countPerPage2: 10,
+        countPerPage3: 10,
         product: {},
         deviceDatas: [
           // {
@@ -308,8 +308,8 @@
       queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           query: {}
         }
         if (this.query.length > 0) {

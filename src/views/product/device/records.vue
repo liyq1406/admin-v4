@@ -74,7 +74,7 @@
           <div class="row">
             <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
             <div class="col-16">
-              <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getRecords"></pager>
+              <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getRecords"></pager>
             </div>
           </div>
           <!-- End: 分页信息 -->
@@ -85,6 +85,7 @@
 </template>
 
 <script>
+  import * as config from '../../../consts/config'
   import { globalMixins } from '../../../mixins'
   import Select from '../../../components/Select'
   import AreaSelect from '../../../components/AreaSelect'
@@ -119,7 +120,7 @@
         records: [],
         loadingData: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         total: 0,
         searching: false,
         queryTypeOptions: [
@@ -150,8 +151,8 @@
       queryCondition () {
         var condition = {
           filter: [],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             product_id: this.$route.params.product_id

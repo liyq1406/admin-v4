@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -18,7 +18,7 @@ export default {
   */
   createEmpower (params) {
     return http.post(
-      `${apiServer.default}/v2/empower` + params
+      `${API_SERVER.default}/v2/empower` + params
     )
   },
 
@@ -29,7 +29,7 @@ export default {
   */
   startEmpower (empowerId) {
     return http.post(
-      `${apiServer.default}/v2/empower/${empowerId}/enable`
+      `${API_SERVER.default}/v2/empower/${empowerId}/enable`
     )
   },
 
@@ -40,7 +40,7 @@ export default {
   */
   disableEmpower (empowerId) {
     return http.post(
-      `${apiServer.default}/v2/empower/${empowerId}/disable`
+      `${API_SERVER.default}/v2/empower/${empowerId}/disable`
     )
   },
 
@@ -51,7 +51,7 @@ export default {
   */
   deleteEmpower (empowerId) {
     return http.del(
-      `${apiServer.default}/v2/empower/${empowerId}`
+      `${API_SERVER.default}/v2/empower/${empowerId}`
     )
   },
 
@@ -69,7 +69,7 @@ export default {
   */
   getEmpowers () {
     return http.get(
-      `${apiServer.default}/v2/empowers`
+      `${API_SERVER.default}/v2/empowers`
     )
   },
 
@@ -78,7 +78,7 @@ export default {
   //  */
   getAccessKeys () {
     return http.get(
-      `${apiServer.default}/v1/accesskeys`
+      `${API_SERVER.default}/v1/accesskeys`
     )
   },
 
@@ -89,7 +89,7 @@ export default {
    */
   addKeys (params) {
     return http.post(
-      `${apiServer.default}/v2/accesskey`, params
+      `${API_SERVER.default}/v2/accesskey`, params
     )
   },
 
@@ -100,7 +100,7 @@ export default {
    */
   toggleKeys (accesskeyId, status) {
     return http.put(
-      `${apiServer.default}/v2/accesskey/${accesskeyId}/status/${status}`
+      `${API_SERVER.default}/v2/accesskey/${accesskeyId}/status/${status}`
     )
   },
 
@@ -111,7 +111,7 @@ export default {
    */
   deleteKeys (accesskeyId) {
     return http.del(
-      `${apiServer.default}/v2/accesskey/${accesskeyId}`
+      `${API_SERVER.default}/v2/accesskey/${accesskeyId}`
     )
   },
 
@@ -122,7 +122,7 @@ export default {
    */
   getKeys () {
     return http.get(
-      `${apiServer.default}/v2/accesskeys`
+      `${API_SERVER.default}/v2/accesskeys`
     )
   }
 }

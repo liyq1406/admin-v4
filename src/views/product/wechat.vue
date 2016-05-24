@@ -33,7 +33,7 @@
             </thead>
             <tbody>
               <template v-if="devices.length > 0">
-                <!-- <tr v-for="device in devices | limitBy pageCount (currentPage-1)*pageCount"> -->
+                <!-- <tr v-for="device in devices | limitBy countPerPage (currentPage-1)*countPerPage"> -->
                 <tr v-for="device in devices">
                   <td>{{ device.device_id }}</td>
                   <td>{{ device.mac }}</td>
@@ -51,7 +51,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="!loadingData && total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="searchWechatList"></pager>
+        <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="searchWechatList"></pager>
       </div>
     </div>
     <!-- 授权设置浮层-->
@@ -273,6 +273,7 @@
 <script>
   // import Vue from 'vue'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
@@ -351,7 +352,7 @@
           // }
         ],
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         total: 0,
         loadingData: false,
         deviceEmpowering: false,
@@ -427,8 +428,8 @@
       searchWechatList () {
         this.loadingData = true
         api.app.searchWechatList(this.currProduct.id, this.$route.params.id, {
-          offset: this.pageCount * (this.currentPage - 1),
-          limit: this.pageCount
+          offset: this.countPerPage * (this.currentPage - 1),
+          limit: this.countPerPage
         }).then((res) => {
           if (res.status === 200) {
             this.devices = res.data.list

@@ -188,7 +188,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <pager v-if="ingredientSelectModal.total > ingredientSelectModal.pageCount" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.pageCount" @page-update="getIngredients"></pager>
+                  <pager v-if="ingredientSelectModal.total > ingredientSelectModal.countPerPage" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.countPerPage" @page-update="getIngredients"></pager>
                 </div>
                 <div class="selected-list">
                   <h3>已选择</h3>
@@ -213,6 +213,7 @@
 
 <script>
   import api from '../../../../api'
+  import * as config from '../../../../consts/config'
   import Modal from '../../../../components/Modal'
   import Pager from '../../../../components/Pager'
   import Select from '../../../../components/Select'
@@ -274,7 +275,7 @@
             label: '全部',
             value: 'all'
           },
-          pageCount: 10,
+          countPerPage: config.COUNT_PER_PAGE,
           currentPage: 1,
           total: 0,
           loadingData: false,
@@ -319,8 +320,8 @@
       queryCondition () {
         var condition = {
           filter: ['_id', 'name', 'classification'],
-          limit: this.ingredientSelectModal.pageCount,
-          offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.pageCount,
+          limit: this.ingredientSelectModal.countPerPage,
+          offset: (this.ingredientSelectModal.currentPage - 1) * this.ingredientSelectModal.countPerPage,
           query: {},
           order: {
             created_at: -1

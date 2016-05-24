@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -27,7 +27,7 @@ export default {
    */
   create (params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app`, params
+      `${API_SERVER.default}/v2/developer/app`, params
     )
   },
 
@@ -68,7 +68,7 @@ export default {
     }
 
     return http.put(
-      `${apiServer.default}/v2/developer/app/${app.id}`, params
+      `${API_SERVER.default}/v2/developer/app/${app.id}`, params
     )
   },
 
@@ -78,7 +78,7 @@ export default {
    */
   getinfo (appId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${appId}`
+      `${API_SERVER.default}/v2/developer/app/${appId}`
     )
   },
 
@@ -88,7 +88,7 @@ export default {
    */
   list () {
     return http.get(
-      `${apiServer.default}/v2/developer/apps`
+      `${API_SERVER.default}/v2/developer/apps`
     )
   },
 
@@ -99,7 +99,7 @@ export default {
    */
   remove (id) {
     return http.del(
-      `${apiServer.default}/v2/developer/app/${id}`
+      `${API_SERVER.default}/v2/developer/app/${id}`
     )
   },
 
@@ -132,7 +132,7 @@ export default {
    */
   empowerWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`, params
     )
   },
 
@@ -146,7 +146,7 @@ export default {
    */
   createWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device`, params
     )
   },
 
@@ -161,7 +161,7 @@ export default {
    */
   createMultiWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_batch`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_batch`, params
     )
   },
 
@@ -203,7 +203,7 @@ export default {
    */
   searchWechatList (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/devices`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/devices`, params
     )
   },
 
@@ -219,7 +219,7 @@ export default {
    */
   reEmpowerWechat (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_auth`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/device_auth`, params
     )
   },
 
@@ -228,7 +228,7 @@ export default {
    */
   productEmpower (appId, productId, params) {
     return http.post(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}`, params
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}`, params
     )
   },
 
@@ -241,7 +241,7 @@ export default {
    */
   productEmpowerStatus (appId, productId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/status`
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/status`
     )
   },
 
@@ -267,7 +267,7 @@ export default {
    */
   getWechat (appId, productId) {
     return http.get(
-      `${apiServer.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/config`
     )
   }
 }

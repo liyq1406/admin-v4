@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import locales from '../../consts/locales/index'
-import config from '../../consts/config'
+import * as config from '../../consts/config'
 import * as types from '../mutation-types'
 
 // 设置当前布局
@@ -41,5 +41,5 @@ export const showNotice = ({ dispatch }, notice) => {
   dispatch(types.ADD_NOTICE, notice)
   window.setTimeout(() => {
     dispatch(types.REMOVE_NOTICES)
-  }, config.notice.duration)
+  }, config.NOTICE_DURATION)
 }

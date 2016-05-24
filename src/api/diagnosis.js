@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -8,7 +8,7 @@ export default {
    */
   getDeviceToken (deviceId, params) {
     return http.post(
-      `${apiServer.default}/v2/diagnosis/device/token/${deviceId}`, params
+      `${API_SERVER.default}/v2/diagnosis/device/token/${deviceId}`, params
     )
   },
 
@@ -18,7 +18,7 @@ export default {
    */
   setDeviceAttribute (deviceId, params) {
     return http.post(
-      `${apiServer.default}/v2/diagnosis/device/set/${deviceId}`, params
+      `${API_SERVER.default}/v2/diagnosis/device/set/${deviceId}`, params
     )
   }
 }

@@ -91,7 +91,7 @@
             </thead>
             <tbody>
               <template v-if="tables.length > 0">
-                <tr v-for="table in tables | limitBy pageCount (currentPage-1)*pageCount">
+                <tr v-for="table in tables | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
                   <td><span>{{ tableTypes[table.type-1] }}</span></td>
                   <td class="tac">
@@ -107,7 +107,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="tables.length > pageCount" :total="tables.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
+        <pager v-if="tables.length > countPerPage" :total="tables.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
       </div>
     </div>
 
@@ -470,6 +470,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import IntelligentTable from '../../components/IntelligentTable'
@@ -636,7 +637,7 @@
         // 数据表详情基本表头
         // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         addModal: {
           show: false,
           model: {

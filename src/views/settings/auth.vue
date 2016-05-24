@@ -69,7 +69,7 @@
           </form>
         </div>
       </modal>
-      <pager v-if="!loadingData && accessKeys.length > pageCount" :total="accessKeys.length" :current.sync="currentPage" :page-count="pageCount">
+      <pager v-if="!loadingData && accessKeys.length > countPerPage" :total="accessKeys.length" :current.sync="currentPage" :page-count="countPerPage">
       </pager>
       <modal :show.sync="showKeyModal">
         <h3 slot="header">Access Key Secret</h3>
@@ -106,7 +106,7 @@
           </thead>
           <tbody>
             <template v-if="empowers.length > 0">
-              <tr v-for="empower in empowers | limitBy pageCount (currentPage-1)*pageCount">
+              <tr v-for="empower in empowers | limitBy countPerPage (currentPage-1)*countPerPage">
                 <td>{{ empower.name }}</td>
                 <td>{{ empower.access_id }}</td>
                 <td class="tac"><span v-if="empower.status-0===1" class="hl-green">{{ $t("common.enable") }}</span><span v-if="empower.status-0===2" class="hl-gray">{{ $t("common.disabled") }}</span></td>
@@ -120,7 +120,7 @@
           </tbody>
         </table>
       </div>
-      <!-- <pager v-if="!loadingData && empowers.length > pageCount" :total="empowers.length" :current.sync="currentPage" :page-count="pageCount"></pager> -->
+      <!-- <pager v-if="!loadingData && empowers.length > countPerPage" :total="empowers.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
     </div>
   </div>
 </template>
@@ -141,6 +141,7 @@
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import _ from 'lodash'
   import { globalMixins } from '../../mixins'
 
@@ -189,7 +190,7 @@
         addValidation: {},
         adding: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
         showKeyModal: false,
         key: {},

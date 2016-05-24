@@ -24,7 +24,7 @@
             </thead>
             <tbody>
               <template v-if="datapoints.length > 0">
-                <tr v-for="datapoint in datapoints | limitBy pageCount (currentPage-1)*pageCount">
+                <tr v-for="datapoint in datapoints | limitBy countPerPage (currentPage-1)*countPerPage">
                 <!-- 如果不需要分页，改成下面这个 -->
                 <!-- <tr v-for="datapoint in datapoints"> -->
                   <td>{{* datapoint.index }}</td>
@@ -45,7 +45,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="datapoints.length > pageCount" :total="datapoints.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+        <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
       </div>
     </div>
     <!-- 添加数据端点浮层-->
@@ -190,6 +190,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import locales from '../../consts/locales/index'
   import Modal from '../../components/Modal'
   import Pager from '../../components/Pager'
@@ -223,7 +224,7 @@
       return {
         datapoints: [],
         datapointTypes: locales[Vue.config.lang].data.DATAPOINT_TYPES,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         currentPage: 1,
         showAddModal: false,
         showEditModal: false,

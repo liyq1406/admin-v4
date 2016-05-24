@@ -103,7 +103,7 @@
           </tr>
         </tbody>
       </table>
-      <!-- <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getUsers"></pager> -->
+      <!-- <pager v-if="!loadingData" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getUsers"></pager> -->
     </div>
     <!-- 输入时间范围浮层 -->
     <modal :show.sync="editModal1.show" @close="modalCancel">

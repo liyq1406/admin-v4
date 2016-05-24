@@ -27,7 +27,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount"  @page-update="pageUpdate"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage"  @page-update="pageUpdate"></pager>
     </div>
   </div>
 </template>
@@ -36,6 +36,7 @@
   import { globalMixins } from '../../mixins'
   import Pager from '../../components/Pager'
   import api from '../../api'
+  import * as config from '../../consts/config'
 
   export default {
     name: 'BasicInfo',
@@ -53,7 +54,7 @@
         records: [],
         loadingData: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         total: 0
       }
     },
@@ -90,7 +91,7 @@
         })
       },
       pageUpdate (offset) {
-        this.getSnapshot((offset - 1) * 10, this.pageCount)
+        this.getSnapshot((offset - 1) * 10, this.countPerPage)
       }
     }
   }

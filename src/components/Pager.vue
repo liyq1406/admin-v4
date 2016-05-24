@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import config from '../consts/config'
+  import * as config from '../consts/config'
   import { globalMixins } from '../mixins'
 
   export default {
@@ -56,9 +56,9 @@
 
     props: {
       // 每页数量
-      pageCount: {
+      countPerPage: {
         type: Number,
-        default: config.pageCount
+        default: config.countPerPage
       },
 
       // 总数
@@ -96,7 +96,7 @@
 
     computed: {
       pages () {
-        return Math.ceil(this.total / this.pageCount)
+        return Math.ceil(this.total / this.countPerPage)
       }
     },
 

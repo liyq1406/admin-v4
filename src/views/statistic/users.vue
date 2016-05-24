@@ -70,14 +70,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in regionsData | limitBy pageCount (currentPage-1)*pageCount">
+              <tr v-for="item in regionsData | limitBy countPerPage (currentPage-1)*countPerPage">
                 <td>{{ wroldNames[item.name] || chinaNames[item.name] || item.name }}</td>
                 <td>{{ item.value }}</td>
                 <td>{{ (item.value * 100 / total).toFixed(2) }}%</td>
               </tr>
             </tbody>
           </table>
-          <pager v-if="regionsData.length > pageCount" :total="regionsData.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+          <pager v-if="regionsData.length > countPerPage" :total="regionsData.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
         </div>
       </div>
     </div>
@@ -88,6 +88,7 @@
   import Vue from 'vue'
   import RadioGroup from '../../components/RadioGroup'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import locales from '../../consts/locales/index'
   import dateFormat from 'date-format'
   import LineChart from '../../components/charts/Line'
@@ -122,7 +123,7 @@
         userTrends: [],
         regionsData: [],
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         loadingUserTrends: false,
         loadingUserRegions: false
       }

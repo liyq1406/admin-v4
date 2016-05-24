@@ -69,7 +69,7 @@
 
 <script>
   import api from '../api'
-  import config from '../consts/config'
+  import * as config from '../consts/config'
   import Captcha from '../components/Captcha'
   import base64 from '../helpers/base64'
   import { globalMixins } from '../mixins'
@@ -95,7 +95,7 @@
         verifycodeValid: false,
         counting: false,
         btnDisabled: false,
-        seconds: config.verifycode.duration,
+        seconds: config.VERIFYCODE_DURATION,
         activateSuccess: false
       }
     },
@@ -122,7 +122,7 @@
           if (this.seconds) {
             this.seconds--
           } else {
-            this.seconds = config.verifycode.duration
+            this.seconds = config.VERIFYCODE_DURATION
             this.counting = false
             this.btnDisabled = false
             window.clearInterval(itvl)

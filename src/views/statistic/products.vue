@@ -80,14 +80,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in regionsData | limitBy pageCount (currentPage-1)*pageCount">
+              <tr v-for="item in regionsData | limitBy countPerPage (currentPage-1)*countPerPage">
                 <td>{{ item.name }}</td>
                 <td>{{ item.value }}</td>
                 <td>{{ (item.value * 100 / productSummary.total).toFixed(2) }}%</td>
               </tr>
             </tbody>
           </table>
-          <pager v-if="regionsData.length > pageCount" :total="regionsData.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+          <pager v-if="regionsData.length > countPerPage" :total="regionsData.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
         </div>
       </div>
     </div>
@@ -104,6 +104,7 @@
   import Tooltip from '../../components/Tooltip'
   import locales from '../../consts/locales/index'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import dateFormat from 'date-format'
   import { globalMixins } from '../../mixins'
   import _ from 'lodash'
@@ -134,7 +135,7 @@
           online: 0
         },
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         product: {},
         productsOptions: [],
         period: 7,

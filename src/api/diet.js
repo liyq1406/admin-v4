@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -9,7 +9,7 @@ export default {
    */
   updateCategory (appId, token, params) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/recipeProps/save`, params, {
+      `${API_SERVER.recipe}/${appId}/api/recipeProps/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -24,7 +24,7 @@ export default {
    */
   listCategory (appId, token, param) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/recipeProps/list`, param, {
+      `${API_SERVER.recipe}/${appId}/api/recipeProps/list`, param, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -39,7 +39,7 @@ export default {
    */
   addIngredient (appId, token, params) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/ingredient/save`, params, {
+      `${API_SERVER.recipe}/${appId}/api/ingredient/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -55,7 +55,7 @@ export default {
    */
   updateIngredient (appId, token, id, params) {
     return http.put(
-      `${apiServer.recipe}/${appId}/api/ingredient/update/${id}`, params, {
+      `${API_SERVER.recipe}/${appId}/api/ingredient/update/${id}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -70,7 +70,7 @@ export default {
    */
   getIngredient (appId, token, id) {
     return http.get(
-      `${apiServer.recipe}/${appId}/api/ingredient/get/${id}`, {}, {
+      `${API_SERVER.recipe}/${appId}/api/ingredient/get/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -85,7 +85,7 @@ export default {
    */
   listIngredient (appId, token, params) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/ingredient/list`, params, {
+      `${API_SERVER.recipe}/${appId}/api/ingredient/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -100,7 +100,7 @@ export default {
    */
   deleteIngredient (appId, token, id) {
     return http.del(
-      `${apiServer.recipe}/${appId}/api/ingredient/delete/${id}`, {}, {
+      `${API_SERVER.recipe}/${appId}/api/ingredient/delete/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -115,7 +115,7 @@ export default {
    */
   addRecipe (appId, token, params) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/recipes/save`, params, {
+      `${API_SERVER.recipe}/${appId}/api/recipes/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -131,7 +131,7 @@ export default {
    */
   updateRecipe (appId, token, id, params) {
     return http.put(
-      `${apiServer.recipe}/${appId}/api/recipes/update/${id}`, params, {
+      `${API_SERVER.recipe}/${appId}/api/recipes/update/${id}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -146,7 +146,7 @@ export default {
    */
   getRecipe (appId, token, id) {
     return http.get(
-      `${apiServer.recipe}/${appId}/api/recipe/get/${id}`, {}, {
+      `${API_SERVER.recipe}/${appId}/api/recipe/get/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -161,7 +161,7 @@ export default {
    */
   listRecipe (appId, token, params) {
     return http.post(
-      `${apiServer.recipe}/${appId}/api/recipes/list`, params, {
+      `${API_SERVER.recipe}/${appId}/api/recipes/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -176,7 +176,7 @@ export default {
    */
   deleteRecipe (appId, token, id) {
     return http.del(
-      `${apiServer.recipe}/${appId}/api/recipes/delete/${id}`, {}, {
+      `${API_SERVER.recipe}/${appId}/api/recipes/delete/${id}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token

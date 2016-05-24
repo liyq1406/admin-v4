@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -13,7 +13,7 @@ export default {
    */
   create (params) {
     return http.post(
-      `${apiServer.default}/v2/plugin/app`, params
+      `${API_SERVER.default}/v2/plugin/app`, params
     )
   },
 
@@ -23,7 +23,7 @@ export default {
    */
   get (id) {
     return http.get(
-      `${apiServer.default}/v2/plugin/app/${id}`
+      `${API_SERVER.default}/v2/plugin/app/${id}`
     )
   },
 
@@ -32,7 +32,7 @@ export default {
    */
   all () {
     return http.get(
-      `${apiServer.default}/v2/plugin/apps`
+      `${API_SERVER.default}/v2/plugin/apps`
     )
   },
 
@@ -50,7 +50,7 @@ export default {
    */
   update (id, params) {
     return http.put(
-      `${apiServer.default}/v2/plugin/app/${id}`, params
+      `${API_SERVER.default}/v2/plugin/app/${id}`, params
     )
   },
 
@@ -60,7 +60,7 @@ export default {
    */
   remove (id) {
     return http.del(
-      `${apiServer.default}/v2/plugin/app/${id}`
+      `${API_SERVER.default}/v2/plugin/app/${id}`
     )
   },
 
@@ -70,7 +70,7 @@ export default {
    */
   getAppToKen (params) {
     return http.post(
-      `${apiServer.default}/v2/plugin/apply_token`, params
+      `${API_SERVER.default}/v2/plugin/apply_token`, params
     )
   }
 }

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -10,7 +10,7 @@ export default {
    */
   getVerifycode (params) {
     return http.post(
-      `${apiServer.default}/v2/sms/verifycode`, params, {
+      `${API_SERVER.default}/v2/sms/verifycode`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }

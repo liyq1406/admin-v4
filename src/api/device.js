@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -11,7 +11,7 @@ export default {
    */
   add (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/device`, params
+      `${API_SERVER.default}/v2/product/${productId}/device`, params
     )
   },
 
@@ -24,7 +24,7 @@ export default {
    */
   batchImport (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/device_batch`, params
+      `${API_SERVER.default}/v2/product/${productId}/device_batch`, params
     )
   },
 
@@ -54,7 +54,7 @@ export default {
    */
   getInfo (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/device/${deviceId}`
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}`
     )
   },
 
@@ -103,7 +103,7 @@ export default {
    */
   getList (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/devices`, params
+      `${API_SERVER.default}/v2/product/${productId}/devices`, params
     )
   },
   /**
@@ -130,7 +130,7 @@ export default {
    */
   getDeviceDataPoint (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/v_device/${deviceId}`
+      `${API_SERVER.default}/v2/product/${productId}/v_device/${deviceId}`
     )
   },
 
@@ -140,7 +140,7 @@ export default {
    */
   getRecords (params) {
     return http.post(
-      `${apiServer.default}/v2/device_session_log`, params
+      `${API_SERVER.default}/v2/device_session_log`, params
     )
   },
 
@@ -150,7 +150,7 @@ export default {
    */
   getDatapointValues (deviceId) {
     return http.get(
-      `${apiServer.default}/v2/diagnosis/device/probe/${deviceId}`
+      `${API_SERVER.default}/v2/diagnosis/device/probe/${deviceId}`
     )
   },
 
@@ -161,7 +161,7 @@ export default {
    */
   getGeography (productId, deviceId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/device/${deviceId}/geography`
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/geography`
     )
   },
 
@@ -189,7 +189,7 @@ export default {
     //   })
     // })
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/devices/geography`, params
+      `${API_SERVER.default}/v2/product/${productId}/devices/geography`, params
     )
   }
 }

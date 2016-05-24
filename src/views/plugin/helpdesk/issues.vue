@@ -75,14 +75,14 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getIssues"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getIssues"></pager>
     </div>
   </div>
 </template>
 
 <script>
   import Vue from 'vue'
-  // import api from '../../../api'
+  import * as config from '../../../consts/config'
   import Select from '../../../components/Select'
   import Pager from '../../../components/Pager'
   import SearchBox from '../../../components/SearchBox'
@@ -116,7 +116,7 @@
         issues: [],
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         addValidation: {},
         originAddModel: {},
         // querying: false,
@@ -166,8 +166,8 @@
       queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           query: {}
         }
         const SECONDS_PER_HOUR = 3600

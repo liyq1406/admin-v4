@@ -50,7 +50,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getBranchList"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getBranchList"></pager>
 
       <!-- 添加增加网点浮层-->
       <modal :show.sync="showAddModal" width="600px">
@@ -133,6 +133,7 @@
   import Modal from '../../../../components/Modal'
   import AreaSelect from '../../../../components/AreaSelect'
   import api from '../../../../api'
+  import * as config from '../../../../consts/config'
   import _ from 'lodash'
 
   export default {
@@ -154,7 +155,7 @@
       return {
         loadingAccount: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         accounts: [
           // {
           //   num: 1,
@@ -198,8 +199,8 @@
     computed: {
       queryCondition () {
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {}
         }

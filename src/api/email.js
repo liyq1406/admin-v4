@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -13,7 +13,7 @@ export default {
    */
   getVerifycode (params) {
     return http.post(
-      `${apiServer.default}/v2/email/verifycode`, params
+      `${API_SERVER.default}/v2/email/verifycode`, params
     )
   },
 
@@ -23,7 +23,7 @@ export default {
    */
   createTemplate (params) {
     return http.post(
-      `${apiServer.default}/v2/email/template`, params
+      `${API_SERVER.default}/v2/email/template`, params
     )
   },
 
@@ -33,7 +33,7 @@ export default {
    */
   updateTemplate (id, params) {
     return http.put(
-      `${apiServer.default}/v2/email/template/${id}`, params
+      `${API_SERVER.default}/v2/email/template/${id}`, params
     )
   },
 
@@ -43,7 +43,7 @@ export default {
    */
   getTemplateList () {
     return http.get(
-      `${apiServer.default}/v2/email/template_list`
+      `${API_SERVER.default}/v2/email/template_list`
     )
   },
 
@@ -53,7 +53,7 @@ export default {
    */
   getAddress () {
     return http.get(
-      `${apiServer.default}/v2/corp/email_domain`
+      `${API_SERVER.default}/v2/corp/email_domain`
     )
   },
 
@@ -63,7 +63,7 @@ export default {
    */
   setAddress (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/email_domain`, params
+      `${API_SERVER.default}/v2/corp/email_domain`, params
     )
   }
 }

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -9,7 +9,7 @@ export default {
    */
   register (params) {
     return http.post(
-      `${apiServer.default}/v2/corp_register`, params, {
+      `${API_SERVER.default}/v2/corp_register`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -36,7 +36,7 @@ export default {
    */
   auth (params) {
     return http.post(
-      `${apiServer.default}/v2/corp_auth`, params, {
+      `${API_SERVER.default}/v2/corp_auth`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -51,7 +51,7 @@ export default {
    */
   resetPassword (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/password/forgot`, params, {
+      `${API_SERVER.default}/v2/corp/password/forgot`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -67,7 +67,7 @@ export default {
    */
   memberInvite (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/member_invite`, params
+      `${API_SERVER.default}/v2/corp/member_invite`, params
     )
   },
 
@@ -79,7 +79,7 @@ export default {
    */
   memberActivate (params) {
     return http.put(
-      `${apiServer.default}/v2/corp/member_activate`, params, {
+      `${API_SERVER.default}/v2/corp/member_activate`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -95,7 +95,7 @@ export default {
    */
   getMember (id) {
     return http.get(
-      `${apiServer.default}/v2/corp/member/${id}`
+      `${API_SERVER.default}/v2/corp/member/${id}`
     )
   },
 
@@ -108,7 +108,7 @@ export default {
     var offset = condition.offset || 0
     var limit = condition.limit || 10
     return http.get(
-      `${apiServer.default}/v2/corp/members?offset=${offset}&limit=${limit}`
+      `${API_SERVER.default}/v2/corp/members?offset=${offset}&limit=${limit}`
     )
   },
 
@@ -120,7 +120,7 @@ export default {
    */
   delMember (id) {
     return http.del(
-      `${apiServer.default}/v2/corp/member/${id}`
+      `${API_SERVER.default}/v2/corp/member/${id}`
     )
   },
 
@@ -133,7 +133,7 @@ export default {
    */
   updateMember (id, params) {
     return http.put(
-      `${apiServer.default}/v2/corp/member/${id}`, params
+      `${API_SERVER.default}/v2/corp/member/${id}`, params
     )
   },
 
@@ -145,7 +145,7 @@ export default {
    */
   memberResetPwd (params) {
     return http.put(
-      `${apiServer.default}/v2/corp/member/password/reset`, params
+      `${API_SERVER.default}/v2/corp/member/password/reset`, params
     )
   },
 
@@ -156,7 +156,7 @@ export default {
    */
   emailRegister (params) {
     return http.post(
-      `${apiServer.default}/v2/corp_register_email`, params, {
+      `${API_SERVER.default}/v2/corp_register_email`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -171,7 +171,7 @@ export default {
    */
   emailActivate (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/email_activate`, params, {
+      `${API_SERVER.default}/v2/corp/email_activate`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -186,7 +186,7 @@ export default {
    */
   userEmailActivate (params) {
     return http.post(
-      `${apiServer.default}/v2/user_email_activate`, params, {
+      `${API_SERVER.default}/v2/user_email_activate`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -200,7 +200,7 @@ export default {
    */
   fetchPasswordByMail (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/password/forgot/email`, params, {
+      `${API_SERVER.default}/v2/corp/password/forgot/email`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -214,7 +214,7 @@ export default {
    */
   resetPasswordByMail (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/password/reset/email`, params, {
+      `${API_SERVER.default}/v2/corp/password/reset/email`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -228,7 +228,7 @@ export default {
    */
   resetUserPasswordByMail (params) {
     return http.post(
-      `${apiServer.default}/v2/user/password/foundback`, params, {
+      `${API_SERVER.default}/v2/user/password/foundback`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -242,7 +242,7 @@ export default {
    */
   validVerifycode (params) {
     return http.post(
-      `${apiServer.default}/v2/user/password/valid_verifycode`, params, {
+      `${API_SERVER.default}/v2/user/password/valid_verifycode`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded'
         }
@@ -257,7 +257,7 @@ export default {
    */
   getUserSetting () {
     return http.get(
-      `${apiServer.default}/v2/corp_setting`
+      `${API_SERVER.default}/v2/corp_setting`
     )
   },
 
@@ -268,7 +268,7 @@ export default {
    */
   updateUserSetting (params) {
     return http.post(
-      `${apiServer.default}/v2/corp_setting`, params
+      `${API_SERVER.default}/v2/corp_setting`, params
     )
   },
 
@@ -279,7 +279,7 @@ export default {
    */
   getCorpInfo () {
     return http.get(
-      `${apiServer.default}/v2/corp`
+      `${API_SERVER.default}/v2/corp`
     )
   }
 }

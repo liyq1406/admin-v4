@@ -62,7 +62,7 @@
       <div class="action-group mb40">
         <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost"><i class="fa fa-list"></i>查看上下线历史记录</button>
       </div>
-      <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getDevices"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getDevices"></pager>
     </div>
     <!-- 添加设备浮层-->
     <modal :show.sync="showAddModal">
@@ -92,6 +92,7 @@
 <script>
   import Vue from 'vue'
   import api from '../../../api'
+  import * as config from '../../../consts/config'
   import Select from '../../../components/Select'
   import Pager from '../../../components/Pager'
   import Modal from '../../../components/Modal'
@@ -140,7 +141,7 @@
         devices: [],
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         showAddModal: false,
         addModel: {
           mac: ''
@@ -167,8 +168,8 @@
       queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: this.sortOrders,
           query: {}
         }

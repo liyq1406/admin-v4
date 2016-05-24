@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -38,7 +38,7 @@ export default {
    */
   list (params) {
     return http.post(
-      `${apiServer.default}/v2/users`, params
+      `${API_SERVER.default}/v2/users`, params
     )
   },
 
@@ -59,7 +59,7 @@ export default {
    */
   profile (userId) {
     return http.get(
-      `${apiServer.default}/v2/user/${userId}`
+      `${API_SERVER.default}/v2/user/${userId}`
     )
   },
 
@@ -87,7 +87,7 @@ export default {
    */
   subDeviceList (userId) {
     return http.get(
-      `${apiServer.default}/v2/user/${userId}/subscribe/devices`
+      `${API_SERVER.default}/v2/user/${userId}/subscribe/devices`
     )
   },
 
@@ -100,7 +100,7 @@ export default {
    */
   banMember (userId) {
     return http.put(
-      `${apiServer.default}/v2/user/${userId}/status`
+      `${API_SERVER.default}/v2/user/${userId}/status`
     )
   },
 
@@ -113,7 +113,7 @@ export default {
    */
   addMember (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/member_add`, params
+      `${API_SERVER.default}/v2/corp/member_add`, params
     )
   },
   /**
@@ -125,7 +125,7 @@ export default {
    */
   editMember (memberId, params) {
     return http.put(
-      `${apiServer.default}/v2/corp/member/${memberId}/password`, params
+      `${API_SERVER.default}/v2/corp/member/${memberId}/password`, params
     )
   },
 
@@ -138,7 +138,7 @@ export default {
    */
   toggleMember (userId, status) {
     return http.put(
-      `${apiServer.default}/v2/user/${userId}/status/${status}`
+      `${API_SERVER.default}/v2/user/${userId}/status/${status}`
     )
   }
 }

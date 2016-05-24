@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 export default {
   /**
    * 查询所有已登记的延保纪录列表
@@ -8,7 +8,7 @@ export default {
    */
   getWarrantyList (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/warranty/list`, params, {
+      `${API_SERVER.warranty}/${appID}/api/warranty/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -24,7 +24,7 @@ export default {
    */
   getOrderWorkList (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/work_orders/list`, params, {
+      `${API_SERVER.warranty}/${appID}/api/work_orders/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -40,7 +40,7 @@ export default {
    */
   getRepairDetailList (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/repair_details/list`, params, {
+      `${API_SERVER.warranty}/${appID}/api/repair_details/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -56,7 +56,7 @@ export default {
    */
   getBranchList (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/branch/list`, params, {
+      `${API_SERVER.warranty}/${appID}/api/branch/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -72,7 +72,7 @@ export default {
    */
   AddBranch (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/branch/save`, params, {
+      `${API_SERVER.warranty}/${appID}/api/branch/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -88,7 +88,7 @@ export default {
     */
   UpdateBranch (appID, token, params, branchId) {
     return http.put(
-      `${apiServer.warranty}/${appID}/api/branch/update/${branchId}`, params, {
+      `${API_SERVER.warranty}/${appID}/api/branch/update/${branchId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -105,7 +105,7 @@ export default {
    */
   deleteBranch (appID, token, branchId) {
     return http.del(
-      `${apiServer.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
+      `${API_SERVER.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -121,7 +121,7 @@ export default {
    */
   getBranchStaffsList (appID, token, params) {
     return http.post(
-     `${apiServer.warranty}/${appID}/api/outlet_staffs/list`, params, {
+     `${API_SERVER.warranty}/${appID}/api/outlet_staffs/list`, params, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded',
          'Access-Token': token
@@ -137,7 +137,7 @@ export default {
   */
   AddBranchStaffs (appID, token, params) {
     return http.post(
-      `${apiServer.warranty}/${appID}/api/outlet_staffs/save`, params, {
+      `${API_SERVER.warranty}/${appID}/api/outlet_staffs/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -153,7 +153,7 @@ export default {
   */
   UpdateBranchStaffs (appID, token, staffId, params) {
     return http.put(
-      `${apiServer.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
+      `${API_SERVER.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -169,7 +169,7 @@ export default {
    */
   deleteStaff (appID, token, staffId) {
     return http.del(
-      `${apiServer.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
+      `${API_SERVER.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -9,7 +9,7 @@ export default {
    */
   addRule (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/dds`, params
+      `${API_SERVER.default}/v2/product/${productId}/dds`, params
     )
   },
 
@@ -20,7 +20,7 @@ export default {
    */
   deleteRule (productId, dispatchId) {
     return http.del(
-      `${apiServer.default}/v2/product/${productId}/dds/${dispatchId}`
+      `${API_SERVER.default}/v2/product/${productId}/dds/${dispatchId}`
     )
   },
 
@@ -31,7 +31,7 @@ export default {
    */
   updateRule (productId, dispatchId, params) {
     return http.put(
-      `${apiServer.default}/v2/product/${productId}/dds/${dispatchId}`, params
+      `${API_SERVER.default}/v2/product/${productId}/dds/${dispatchId}`, params
     )
   },
 
@@ -42,7 +42,7 @@ export default {
    */
   getRule (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/dds_list`
+      `${API_SERVER.default}/v2/product/${productId}/dds_list`
     )
   }
 }

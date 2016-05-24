@@ -67,7 +67,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="dp in productsRules | limitBy pageCount (currentRulesPage-1)*pageCount">
+              <tr v-for="dp in productsRules | limitBy countPerPage (currentRulesPage-1)*countPerPage">
                 <td>
                   <a class="hl">{{dp.productName}}</a>
                 </td>
@@ -83,7 +83,7 @@
           </table>
         </div>
         <div class="data-points-footer">
-          <pager v-if="productsRules.length > pageCount" :total="productsRules.length" :current.sync="currentRulesPage" :page-count="pageCount" @page-update=""></pager>
+          <pager v-if="productsRules.length > countPerPage" :total="productsRules.length" :current.sync="currentRulesPage" :page-count="countPerPage" @page-update=""></pager>
         </div>
       </div>
     </div>
@@ -104,7 +104,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="dp in dataPoints | limitBy pageCount (currentPage-1)*pageCount">
+                <tr v-for="dp in dataPoints | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
                   <td>{{datapointTypes[dp.type - 1]}}</td>
@@ -115,7 +115,7 @@
             </table>
           </div>
           <div class="data-points-footer">
-            <pager v-if="dataPoints.length > pageCount" :total="dataPoints.length" :current.sync="currentPage" :page-count="pageCount" @page-update=""></pager>
+            <pager v-if="dataPoints.length > countPerPage" :total="dataPoints.length" :current.sync="currentPage" :page-count="countPerPage" @page-update=""></pager>
           </div>
         </div>
         <div class="form-actions snapshot-select">
@@ -179,7 +179,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="dp in editDataPoints | limitBy pageCount (currentEditPage-1)*pageCount">
+                <tr v-for="dp in editDataPoints | limitBy countPerPage (currentEditPage-1)*countPerPage">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
                   <td>{{datapointTypes[dp.type - 1]}}</td>
@@ -190,7 +190,7 @@
             </table>
           </div>
           <div class="data-points-footer">
-            <pager v-if="editDataPoints.length > pageCount" :total="editDataPoints.length" :current.sync="currentEditPage" :page-count="pageCount" @page-update=""></pager>
+            <pager v-if="editDataPoints.length > countPerPage" :total="editDataPoints.length" :current.sync="currentEditPage" :page-count="countPerPage" @page-update=""></pager>
           </div>
         </div>
         <div class="form-actions snapshot-select">
@@ -206,6 +206,7 @@
 <script>
   import Vue from 'vue'
   // import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
@@ -258,7 +259,7 @@
         }],
         dataPoints: [],
         editDataPoints: [],
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         currentPage: 1,
         currentRulesPage: 1,
         currentEditPage: 1,

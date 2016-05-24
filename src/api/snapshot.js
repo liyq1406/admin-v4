@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -9,7 +9,7 @@ export default {
    */
   getSnapshot (productId, deviceId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/device/${deviceId}/snapshot`, params
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/snapshot`, params
     )
   },
   /**
@@ -19,7 +19,7 @@ export default {
    */
   getFault (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/messages`, params
+      `${API_SERVER.default}/v2/corp/messages`, params
     )
   },
   /**
@@ -29,7 +29,7 @@ export default {
    */
   createRule (productId, params) {
     return http.post(
-      `${apiServer.default}/v2/product/${productId}/snapshot`, params
+      `${API_SERVER.default}/v2/product/${productId}/snapshot`, params
     )
   },
   /**
@@ -39,7 +39,7 @@ export default {
    */
   getRule (productId) {
     return http.get(
-      `${apiServer.default}/v2/product/${productId}/snapshots`
+      `${API_SERVER.default}/v2/product/${productId}/snapshots`
     )
   },
   /**
@@ -49,7 +49,7 @@ export default {
    */
   updateRule (productId, params) {
     return http.put(
-      `${apiServer.default}/v2/product/${productId}/snapshot`, params
+      `${API_SERVER.default}/v2/product/${productId}/snapshot`, params
     )
   },
 
@@ -60,7 +60,7 @@ export default {
    */
   deleteRule (productId, ruleId) {
     return http.del(
-      `${apiServer.default}/v2/product/${productId}/snapshot/${ruleId}`
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${ruleId}`
     )
   }
 }

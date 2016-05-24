@@ -63,7 +63,7 @@
       <div class="row">
         <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getWarrantyList"></pager>
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getWarrantyList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->
@@ -72,6 +72,7 @@
 
 <script>
   // import api from '../../../../../api'
+  import * as config from '../../../../../consts/config'
   import { globalMixins } from '../../../../../mixins'
   import Select from '../../../../../components/Select'
   import AreaSelect from '../../../../../components/AreaSelect'
@@ -118,7 +119,7 @@
 
         loadingData: false,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         total: 0
       }
     },
@@ -133,8 +134,8 @@
       queryCondition () {
         var condition = {
           filter: ['_id', 'name', 'product_name', 'product_type', 'extended_days', 'status'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {}
         }

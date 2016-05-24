@@ -88,7 +88,7 @@
               </tbody>
             </table>
           </div>
-          <pager v-if="total > pageCount" :total="total" :current.sync="currentPage" :page-count="pageCount" @page-update="getAlerts"></pager>
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getAlerts"></pager>
         </div>
       </div>
     </div>
@@ -152,6 +152,7 @@
   import Vue from 'vue'
   import _ from 'lodash'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import locales from '../../consts/locales/index'
   import Pager from '../../components/Pager'
   import Modal from '../../components/Modal'
@@ -178,7 +179,7 @@
       return {
         alerts: [],
         total: 0,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         currentPage: 1,
         showModal: false,
         model: {
@@ -215,8 +216,8 @@
     computed: {
       queryCondition () {
         return {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage
         }
       },
 

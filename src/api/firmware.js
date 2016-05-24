@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -31,7 +31,7 @@ export default {
    */
   task (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/firmware/task`, params
+      `${API_SERVER.default}/v2/upgrade/firmware/task`, params
     )
   },
 
@@ -56,7 +56,7 @@ export default {
    */
   taskList (productId) {
     return http.get(
-      `${apiServer.default}/v2/upgrade/firmware/tasks?product_id=${productId}`
+      `${API_SERVER.default}/v2/upgrade/firmware/tasks?product_id=${productId}`
     )
   },
 
@@ -73,7 +73,7 @@ export default {
    */
   toggleTaskStatus (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/firmware/task/status`, params
+      `${API_SERVER.default}/v2/upgrade/firmware/task/status`, params
     )
   },
 
@@ -94,7 +94,7 @@ export default {
     */
   newestVersion (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/device/newest_version`, params
+      `${API_SERVER.default}/v2/upgrade/device/newest_version`, params
     )
   },
 
@@ -106,7 +106,7 @@ export default {
     */
   removeTask (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/firmware/task/delete`, params
+      `${API_SERVER.default}/v2/upgrade/firmware/task/delete`, params
     )
   },
 
@@ -122,7 +122,7 @@ export default {
    */
   upgrade (params) {
     return http.post(
-      `${apiServer.default}/v2/upgrade/device`, params
+      `${API_SERVER.default}/v2/upgrade/device`, params
     )
   }
 }

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -23,7 +23,7 @@ export default {
    */
   addRule (params) {
     return http.post(
-      `${apiServer.default}/v2/alert/rule`, params
+      `${API_SERVER.default}/v2/alert/rule`, params
     )
   },
 
@@ -51,7 +51,7 @@ export default {
     }
 
     return http.put(
-      `${apiServer.default}/v2/alert/rule/${rule.id}`, params
+      `${API_SERVER.default}/v2/alert/rule/${rule.id}`, params
     )
   },
 
@@ -62,7 +62,7 @@ export default {
    */
   deleteRule (ruleId) {
     return http.del(
-      `${apiServer.default}/v2/alert/rule/${ruleId}`
+      `${API_SERVER.default}/v2/alert/rule/${ruleId}`
     )
   },
 
@@ -89,7 +89,7 @@ export default {
    */
   getRules (productId) {
     return http.get(
-      `${apiServer.default}/v2/alert/rules?product_id=${productId}`
+      `${API_SERVER.default}/v2/alert/rules?product_id=${productId}`
     )
   },
 
@@ -120,7 +120,7 @@ export default {
    */
   getAlerts (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/messages`, params
+      `${API_SERVER.default}/v2/corp/messages`, params
     )
   },
 
@@ -130,7 +130,7 @@ export default {
    */
   setAlertRead (params) {
     return http.post(
-      `${apiServer.default}/v2/corp/message_read`, params
+      `${API_SERVER.default}/v2/corp/message_read`, params
     )
   }
 }

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -20,7 +20,7 @@ export default {
    */
   getSummary () {
     return http.get(
-      `${apiServer.default}/v2/statistics/summary`
+      `${API_SERVER.default}/v2/statistics/summary`
     )
   },
 
@@ -39,7 +39,7 @@ export default {
    */
   getProductSummary (productId) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${productId}/summary`
+      `${API_SERVER.default}/v2/statistics/product/${productId}/summary`
     )
   },
 
@@ -60,7 +60,7 @@ export default {
    */
   getProductTrend (productId, startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${productId}/trend?start_day=${startDay}&end_day=${endDay}`
+      `${API_SERVER.default}/v2/statistics/product/${productId}/trend?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
@@ -78,7 +78,7 @@ export default {
    */
   getUserSummary () {
     return http.get(
-      `${apiServer.default}/v2/statistics/user/summary`
+      `${API_SERVER.default}/v2/statistics/user/summary`
     )
   },
 
@@ -99,7 +99,7 @@ export default {
    */
   getUserTrend (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/user/trend?start_day=${startDay}&end_day=${endDay}`
+      `${API_SERVER.default}/v2/statistics/user/trend?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
@@ -124,7 +124,7 @@ export default {
    */
   getProductRegion (productId) {
     return http.get(
-      `${apiServer.default}/v2/statistics/product/${productId}/region`
+      `${API_SERVER.default}/v2/statistics/product/${productId}/region`
     )
   },
 
@@ -148,7 +148,7 @@ export default {
    */
   getUserRegion () {
     return http.get(
-      `${apiServer.default}/v2/statistics/user/region`
+      `${API_SERVER.default}/v2/statistics/user/region`
     )
   },
 
@@ -160,7 +160,7 @@ export default {
    */
   getAlertSummary (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/message/summary?start_day=${startDay}&end_day=${endDay}`
+      `${API_SERVER.default}/v2/statistics/message/summary?start_day=${startDay}&end_day=${endDay}`
     )
   },
 
@@ -172,7 +172,7 @@ export default {
    */
   getAlertTrend (startDay, endDay) {
     return http.get(
-      `${apiServer.default}/v2/statistics/message/trend?start_day=${startDay}&end_day=${endDay}`
+      `${API_SERVER.default}/v2/statistics/message/trend?start_day=${startDay}&end_day=${endDay}`
     )
   }
 }

@@ -1,5 +1,5 @@
 import * as http from '../http'
-import { apiServer } from '../consts/config'
+import { API_SERVER } from '../consts/config'
 
 export default {
   /**
@@ -8,7 +8,7 @@ export default {
    */
   createTable (params) {
     return http.post(
-      `${apiServer.default}/v2/table`, params
+      `${API_SERVER.default}/v2/table`, params
     )
   },
 
@@ -24,7 +24,7 @@ export default {
     params.field = table.field
 
     return http.put(
-      `${apiServer.default}/v2/table/${table.name}`, params
+      `${API_SERVER.default}/v2/table/${table.name}`, params
     )
   },
 
@@ -33,7 +33,7 @@ export default {
    */
   getTable (tableName) {
     return http.get(
-      `${apiServer.default}/v2/table/${tableName}`
+      `${API_SERVER.default}/v2/table/${tableName}`
     )
   },
 
@@ -42,7 +42,7 @@ export default {
    */
   getTables () {
     return http.get(
-      `${apiServer.default}/v2/tables`
+      `${API_SERVER.default}/v2/tables`
     )
   },
 
@@ -52,7 +52,7 @@ export default {
    */
   deleteTable (tableName) {
     return http.del(
-      `${apiServer.default}/v2/table/${tableName}`
+      `${API_SERVER.default}/v2/table/${tableName}`
     )
   },
 
@@ -62,7 +62,7 @@ export default {
    */
   createData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/data/${tableName}`, params
+      `${API_SERVER.default}/v2/data/${tableName}`, params
     )
   },
 
@@ -72,7 +72,7 @@ export default {
    */
   createAppData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/app_data/${tableName}`, params
+      `${API_SERVER.default}/v2/app_data/${tableName}`, params
     )
   },
 
@@ -83,7 +83,7 @@ export default {
    */
   getData (tableName, objectId) {
     return http.get(
-      `${apiServer.default}/v2/data/${tableName}/${objectId}`
+      `${API_SERVER.default}/v2/data/${tableName}/${objectId}`
     )
   },
 
@@ -94,7 +94,7 @@ export default {
    */
   queryData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/datas/${tableName}`, params
+      `${API_SERVER.default}/v2/datas/${tableName}`, params
     )
   },
 
@@ -105,7 +105,7 @@ export default {
    */
   queryAppData (tableName, params) {
     return http.post(
-      `${apiServer.default}/v2/app_datas/${tableName}`, params
+      `${API_SERVER.default}/v2/app_datas/${tableName}`, params
     )
   },
 
@@ -117,7 +117,7 @@ export default {
    */
   updateData (tableName, objectId, params) {
     return http.put(
-      `${apiServer.default}/v2/data/${tableName}/${objectId}`, params
+      `${API_SERVER.default}/v2/data/${tableName}/${objectId}`, params
     )
   },
 
@@ -129,7 +129,7 @@ export default {
    */
   updateAppData (tableName, _id, params) {
     return http.put(
-      `${apiServer.default}/v2/app_data/${tableName}/${_id}`, params
+      `${API_SERVER.default}/v2/app_data/${tableName}/${_id}`, params
     )
   },
 
@@ -140,7 +140,7 @@ export default {
    */
   deleteData (tableName, objectId) {
     return http.del(
-      `${apiServer.default}/v2/data/${tableName}/${objectId}`
+      `${API_SERVER.default}/v2/data/${tableName}/${objectId}`
     )
   },
 
@@ -151,7 +151,7 @@ export default {
    */
   deleteAppData (tableName, _id) {
     return http.del(
-      `${apiServer.default}/v2/app_data/${tableName}/${_id}`
+      `${API_SERVER.default}/v2/app_data/${tableName}/${_id}`
     )
   }
 }

@@ -66,6 +66,7 @@
 </template>
 
 <script>
+  import * as config from '../../../consts/config'
   import Select from '../../../components/Select'
   import SearchBox from '../../../components/SearchBox'
   import { globalMixins } from '../../../mixins'
@@ -89,7 +90,7 @@
         searching: false,
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         query: '',
         queryTypeOptions: [
           { label: '推送内容', value: 'content' },
@@ -106,8 +107,8 @@
       queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           query: {}
         }
 

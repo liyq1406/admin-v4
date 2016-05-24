@@ -26,7 +26,7 @@
           </thead>
           <tbody>
             <template v-if="filteredMembers.length > 0">
-              <tr v-for="member in filteredMembers | limitBy pageCount (currentPage-1)*pageCount">
+              <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
                 <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                 <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                 <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
@@ -47,7 +47,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="filteredMembers.length > pageCount" :total="filteredMembers.length" :current.sync="currentPage" :page-count="pageCount"></pager>
+      <pager v-if="filteredMembers.length > countPerPage" :total="filteredMembers.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
     </div>
 
     <!-- 新版添加成员 -->
@@ -157,6 +157,7 @@
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
   import api from '../../api'
+  import * as config from '../../consts/config'
   import Pager from '../../components/Pager'
   import locales from '../../consts/locales/index'
   import { globalMixins } from '../../mixins'
@@ -202,7 +203,7 @@
         },
         originAddModel: {},
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         centervalue: {},
         pwdValidation: {},
         confirmPassword: '',
@@ -237,7 +238,7 @@
 
       queryCondition () {
         var condition = {
-          offset: this.pageCount * (this.currentPage - 1),
+          offset: this.countPerPage * (this.currentPage - 1),
           limit: 1000
         }
 

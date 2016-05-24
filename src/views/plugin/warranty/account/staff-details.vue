@@ -128,6 +128,7 @@
   import Modal from '../../../../components/Modal'
   import Select from '../../../../components/Select'
   import api from '../../../../api'
+  import * as config from '../../../../consts/config'
   // import _ from 'lodash'
 
   export default {
@@ -162,7 +163,7 @@
         delChecked: false,
         total: 0,
         currentPage: 1,
-        pageCount: 10,
+        countPerPage: config.COUNT_PER_PAGE,
         detail: {},
         editing: false
       }
@@ -183,8 +184,8 @@
         var argvs = arguments
         var fn = self.getBranchStaffsList
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             _id: this.$route.params.id
@@ -211,8 +212,8 @@
         var argvs = arguments
         var fn = self.editAccount
         var condition = {
-          limit: this.pageCount,
-          offset: (this.currentPage - 1) * this.pageCount,
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
           query: {
             _id: this.$route.params.id
