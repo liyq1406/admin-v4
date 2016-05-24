@@ -196,7 +196,7 @@
 
       branchArea () {
         var area = this.branch.province + this.branch.city + this.branch.district
-        if (area instanceof String) {
+        if (typeof area === 'string') {
           return area
         } else {
           return ''
@@ -205,7 +205,7 @@
 
       clientArea () {
         var area = this.repairOrder.province + this.repairOrder.city + this.repairOrder.district
-        if (area instanceof String) {
+        if (typeof area === 'string') {
           return area
         } else {
           return ''
@@ -245,7 +245,7 @@
 
             // 查询维修详情信息
             condition.query = {}
-            condition.query._id = this.repairOrder.repair_id
+            condition.query.order_id = this.repairOrder._id
             api.warranty.getRepairDetailList(this.$route.params.app_id, token, condition).then((res) => {
               this.repairDetails = res.data.list[0] || {}
             }).catch((err) => {

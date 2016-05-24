@@ -293,6 +293,7 @@
           this.addModel.province = this.selectedProvince.name
           this.addModel.city = this.selectedCity.name
           this.addModel.district = this.selectedDistrict.name
+          this.addModel.create_time = new Date()
           this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
             api.warranty.AddBranch(this.$route.params.app_id, token, this.addModel).then((res) => {
               this.adding = false
