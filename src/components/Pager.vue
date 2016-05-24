@@ -202,7 +202,7 @@
       span
         display inline-block
         padding 0 8px
-        border 1px solid #E5E5E5
+        border 1px solid light-border-color
         height 24px
         line-height 24px
 
@@ -226,7 +226,7 @@
       input
         width 44px
         text-align center
-        border 1px solid #E5E5E5
+        border 1px solid light-border-color
         padding 0
         font-size 12px
         height 26px

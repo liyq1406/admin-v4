@@ -536,7 +536,7 @@
       .fa
         float left
         size 36px
-        border 1px solid #E9E9E9
+        border 1px solid light-border-color
         text-align center
         line-height 36px
         font-size 24px

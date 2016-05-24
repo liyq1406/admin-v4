@@ -213,7 +213,7 @@
   .candidate
     absolute left top
     width 100%
-    border 1px solid #D3D3D3
+    border 1px solid default-border-color
     padding 3px 10px 0
     box-sizing border-box
     background #FFF

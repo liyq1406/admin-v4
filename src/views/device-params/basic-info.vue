@@ -1425,7 +1425,7 @@
             height 32px
             line-height 32px
             background none
-            border 1px solid #d9d9d9
+            border 1px solid default-border-color
             box-sizing border-box
             font-size 14px
             text-align center
@@ -1454,7 +1454,7 @@
             height 32px
             line-height 32px
             background none
-            border 1px solid #d9d9d9
+            border 1px solid default-border-color
             box-sizing border-box
             font-size 14px
             padding 0 15px
@@ -1476,7 +1476,7 @@
             height 32px
             line-height 32px
             background none
-            border 1px solid #d9d9d9
+            border 1px solid default-border-color
             box-sizing border-box
             font-size 12px
             padding 0 15px
@@ -1493,7 +1493,7 @@
             height 32px
             line-height 32px
             background none
-            border 1px solid #d9d9d9
+            border 1px solid default-border-color
             box-sizing border-box
             font-size 14px
             text-align center

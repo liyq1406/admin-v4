@@ -1,11 +1,13 @@
 import Vue from 'vue'
 import { setLayout, showError, showNotice } from './store/actions/system'
 import locales from './consts/locales/index'
+import * as patterns from './consts/patterns'
 
 export var globalMixins = {
   data () {
     return {
-      debug: process.env.NODE_ENV !== 'production'
+      debug: process.env.NODE_ENV !== 'production',
+      patterns: patterns
     }
   },
 

@@ -68,7 +68,7 @@
             <label class="form-control col-6">手机号码:</label>
             <div class="controls col-18">
               <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
-                <input type="text" v-model="addModel.phone" v-form-ctrl required pattern="^(13[0-9]|15[012356789]|17[678]|18[0-9]|14[57])[0-9]{8}$" name="phone" lazy class="input-text"/>
+                <input type="text" v-model="addModel.phone" v-form-ctrl required :pattern="patterns.PHONE" name="phone" lazy class="input-text"/>
               </div>
               <div v-if="validation.phone.$dirty" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span><span v-if="validation.phone.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span></div>
             </div>

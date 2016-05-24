@@ -17,15 +17,15 @@
         <!-- End: 顶部导航 -->
 
         <!-- Start: 用户导航 -->
-        <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" class="user-navigation">
+        <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" class="user-nav">
           <span class="user-name">{{ currentMember.name }}</span>
           <i class="arrow-down"></i>
-          <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sed-navigation">
+          <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
             <ul>
-              <li class="sed-navigation-li">
+              <li class="sec-nav-item">
                 <a v-link="{path: '/settings/account'}">{{ $t("ui.user_menu.account") }}</a>
               </li>
-              <li class="sed-navigation-li">
+              <li class="sec-nav-item">
                 <a href="#" @click.prevent="quit">{{ $t("ui.user_menu.quit") }}</a>
               </li>
             </ul>
@@ -271,7 +271,7 @@
         color red
 
   // 用户导航
-  .user-navigation
+  .user-nav
     absolute right top
     size auto 61px
     line-height 61px
@@ -292,40 +292,42 @@
       triangle #777 8px down
       absolute right 10px top 28px
 
-    .sed-navigation
+    .sec-nav
       absolute top 54px right
-      size 100px 0
+      size 70px 0
       text-align right
       background #FFF
       // overflow hidden
       opacity 0
-      border 1px solid #ddd
+      border 1px solid default-border-color
       padding 0 10px
 
-      .sed-navigation-li
+      .sec-nav-item
         margin-right 0
         line-height 36px
         display block
-        padding 0 20px
+        /*padding 0 20px*/
         min-width 50px
         border-bottom 1px solid #DDD
+        font-size 13px
+        text-align center
 
         &:last-child
           border none
 
       &:before
-        absolute right 20px top -11px
+        absolute right 30px top -11px
         content ""
         triangle #D3D3D3 10px up
 
       &:after
-        absolute right 20px top -10px
+        absolute right 30px top -10px
         content ""
         triangle #FFF 10px up
 
 
     &:hover
-      .sed-navigation
+      .sec-nav
         height auto
         opacity 1
   // 侧栏

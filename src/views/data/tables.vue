@@ -1551,12 +1551,12 @@
       padding-right 20px
       box-sizing border-box
       .data-table-box
-        border 1px solid #e0e0e0
+        border 1px solid light-border-color
         border-bottom 0
         box-sizing border-box
         .data-table-li
           padding-left 10px
-          border-bottom 1px solid #e0e0e0
+          border-bottom 1px solid light-border-color
           height 32px
           line-height 32px
           &:hover
@@ -1597,7 +1597,7 @@
           height 32px
           display inline-block
           padding 0 10px
-          border 1px solid #e0e0e0
+          border 1px solid light-border-color
           border-right 0
           box-sizing border-box
           cursor pointer
@@ -1619,14 +1619,14 @@
             z-index 10
             background #fff
             line-height 32px
-            border 1px solid #e0e0e0
+            border 1px solid light-border-color
             transition all ease 0.3s
             transform translate(0, 10px)
             li
               height 30px
               line-height 30px
               padding 0 10px
-              border-bottom 1px solid #e0e0e0
+              border-bottom 1px solid light-border-color
               transition all ease 0.3s
               &:hover
                 color red
@@ -1638,11 +1638,11 @@
               transform translate(0, 0)
         .filter
           margin-left 20px
-          border-right 1px solid #e0e0e0
+          border-right 1px solid light-border-color
       .tips-box
         box-sizing border-box
         padding 10px
-        border 1px solid #e0e0e0
+        border 1px solid light-border-color
         padding-left 20px
         .problem
           font-size 18px

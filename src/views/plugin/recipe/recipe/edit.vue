@@ -687,13 +687,6 @@
       .panel-bd
         .form-row
           max-height 5000px
-          .prompt-box
-            width 100%
-            height auto
-            margin 0 auto 10px
-            border 1px solid #ccc
-            box-sizing border-box
-            padding 10px
           .step-box
             margin-top 20px
             width 100%
@@ -746,7 +739,7 @@
               position relative
             .input-text-wrap
               input.input-text-time
-                border 1px solid #d9d9d9
+                border 1px solid default-border-color
                 display inline-block
                 width 120px
                 box-sizing border-box
@@ -802,7 +795,7 @@
       .selected-list
         width 33%
         float right
-        border 1px solid #e4e4e4
+        border 1px solid light-border-color
         box-sizing border-box
         background #FFF
 

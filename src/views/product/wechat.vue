@@ -584,7 +584,7 @@
     width 350px
     left 60px
     /*margin-left: -43px;*/
-    border 1px solid #ddd
+    border 1px solid default-border-color
     /*white-space: nowrap;*/
     background #fff
     padding 5px 10px

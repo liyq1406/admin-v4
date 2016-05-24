@@ -809,7 +809,7 @@
 
       .apn-list
         background #FFF
-        border 1px solid #DDD
+        border 1px solid default-border-color
         padding 0 10px
         margin-bottom 3px
 </style>

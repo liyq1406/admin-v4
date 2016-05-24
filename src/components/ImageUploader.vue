@@ -90,7 +90,7 @@
     position relative
     float left
     size 160px 120px
-    border 1px solid #DEDEDE
+    border 1px solid default-border-color
     color gray-light
     cursor pointer
     margin 0 10px 10px 0

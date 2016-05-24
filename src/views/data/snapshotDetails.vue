@@ -650,7 +650,7 @@
     .device-details-box
       margin 20px 0 20px 0
       .device-msg-box
-        border 1px solid #e0e0e0
+        border 1px solid light-border-color
       .header-box
         padding 15px 20px
         box-sizing border-box
