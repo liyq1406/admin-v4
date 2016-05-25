@@ -1,6 +1,7 @@
 import api from '../../api'
 import _ from 'lodash'
 const INVALID = 'invalid'
+var count = new Map()
 
 export const pluginFactoryMixin = {
   methods: {
@@ -133,13 +134,24 @@ export const pluginMixins = {
     handlePluginError (err, env) {
       var self = this
       if (err.status === 403 && err.data.error.code === 4031003) {
-        // 重新请求
-        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求3次
         self.setPluginToken(env.plugin, INVALID)
 
-        setTimeout(() => {
-          self.reRequest(env)
-        }, 100)
+        // 重新请求
+        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求3次
+        if (count.has(env.fn) && count.get(env.fn) > 3) {
+          count.set(env.fn, 0)
+        } else if (count.has(env.fn) && count.get(env.fn) <= 3) {
+          var i = count.get(env.fn) + 1
+          count.set(env.fn, i)
+          setTimeout(() => {
+            self.reRequest(env)
+          }, 100)
+        } else if (!count.has(env.fn)) {
+          count.set(env.fn, 1)
+          setTimeout(() => {
+            self.reRequest(env)
+          }, 100)
+        }
       } else {
         env.context.handleError(err)
       }
