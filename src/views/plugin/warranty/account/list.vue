@@ -50,7 +50,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getBranchList"></pager>
+      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchList"></pager>
 
       <!-- 添加增加网点浮层-->
       <modal :show.sync="showAddModal" width="600px">

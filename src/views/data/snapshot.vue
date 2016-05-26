@@ -83,7 +83,7 @@
           </table>
         </div>
         <div class="data-points-footer">
-          <pager v-if="productsRules.length > countPerPage" :total="productsRules.length" :current.sync="currentRulesPage" :page-count="countPerPage" @page-update=""></pager>
+          <pager v-if="productsRules.length > countPerPage" :total="productsRules.length" :current.sync="currentRulesPage" :count-per-page="countPerPage" @page-update=""></pager>
         </div>
       </div>
     </div>
@@ -115,7 +115,7 @@
             </table>
           </div>
           <div class="data-points-footer">
-            <pager v-if="dataPoints.length > countPerPage" :total="dataPoints.length" :current.sync="currentPage" :page-count="countPerPage" @page-update=""></pager>
+            <pager v-if="dataPoints.length > countPerPage" :total="dataPoints.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update=""></pager>
           </div>
         </div>
         <div class="form-actions snapshot-select">
@@ -190,7 +190,7 @@
             </table>
           </div>
           <div class="data-points-footer">
-            <pager v-if="editDataPoints.length > countPerPage" :total="editDataPoints.length" :current.sync="currentEditPage" :page-count="countPerPage" @page-update=""></pager>
+            <pager v-if="editDataPoints.length > countPerPage" :total="editDataPoints.length" :current.sync="currentEditPage" :count-per-page="countPerPage" @page-update=""></pager>
           </div>
         </div>
         <div class="form-actions snapshot-select">

@@ -43,9 +43,9 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getAlerts"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
         <!-- 分页-->
-        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
+        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
       </div>
     </div>
 

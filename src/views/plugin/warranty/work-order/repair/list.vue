@@ -69,7 +69,7 @@
       <div class="row">
         <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
         <div class="col-16">
-          <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getOrderWorkList"></pager>
+          <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOrderWorkList"></pager>
         </div>
       </div>
       <!-- End: 分页信息 -->

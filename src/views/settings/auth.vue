@@ -69,7 +69,7 @@
           </form>
         </div>
       </modal>
-      <pager v-if="!loadingData && accessKeys.length > countPerPage" :total="accessKeys.length" :current.sync="currentPage" :page-count="countPerPage">
+      <pager v-if="!loadingData && accessKeys.length > countPerPage" :total="accessKeys.length" :current.sync="currentPage" :count-per-page="countPerPage">
       </pager>
       <modal :show.sync="showKeyModal">
         <h3 slot="header">Access Key Secret</h3>
@@ -120,7 +120,7 @@
           </tbody>
         </table>
       </div>
-      <!-- <pager v-if="!loadingData && empowers.length > countPerPage" :total="empowers.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
+      <!-- <pager v-if="!loadingData && empowers.length > countPerPage" :total="empowers.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
     </div>
   </div>
 </template>

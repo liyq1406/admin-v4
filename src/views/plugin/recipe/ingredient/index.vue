@@ -50,7 +50,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getIngredients"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIngredients"></pager>
       </div>
     </div>
     <!-- 类别管理浮层-->

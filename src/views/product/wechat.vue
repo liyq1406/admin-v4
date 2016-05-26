@@ -51,7 +51,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="searchWechatList"></pager>
+        <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="searchWechatList"></pager>
       </div>
     </div>
     <!-- 授权设置浮层-->

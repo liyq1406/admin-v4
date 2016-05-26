@@ -188,7 +188,7 @@
                       </tbody>
                     </table>
                   </div>
-                  <pager v-if="ingredientSelectModal.total > ingredientSelectModal.countPerPage" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :page-count="ingredientSelectModal.countPerPage" @page-update="getIngredients"></pager>
+                  <pager v-if="ingredientSelectModal.total > ingredientSelectModal.countPerPage" :total="ingredientSelectModal.total" :current.sync="ingredientSelectModal.currentPage" :count-per-page="ingredientSelectModal.countPerPage" @page-update="getIngredients"></pager>
                 </div>
                 <div class="selected-list">
                   <h3>已选择</h3>

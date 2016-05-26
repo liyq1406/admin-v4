@@ -87,7 +87,7 @@
               </tr>
             </tbody>
           </table>
-          <pager v-if="regionsData.length > countPerPage" :total="regionsData.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
+          <pager v-if="regionsData.length > countPerPage" :total="regionsData.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
         </div>
       </div>
     </div>

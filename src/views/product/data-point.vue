@@ -45,7 +45,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
+        <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
       </div>
     </div>
     <!-- 添加数据端点浮层-->

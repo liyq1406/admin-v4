@@ -107,7 +107,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="tables.length > countPerPage" :total="tables.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
+        <pager v-if="tables.length > countPerPage" :total="tables.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
       </div>
     </div>
 

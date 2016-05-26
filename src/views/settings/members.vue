@@ -47,7 +47,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="filteredMembers.length > countPerPage" :total="filteredMembers.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
+      <pager v-if="filteredMembers.length > countPerPage" :total="filteredMembers.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
     </div>
 
     <!-- 新版添加成员 -->

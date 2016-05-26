@@ -39,7 +39,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="rules.length" :current.sync="currentPage" :page-count="countPerPage"></pager>
+        <pager v-if="total > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
       </div>
     </div>
     <!-- 添加转发规则-->

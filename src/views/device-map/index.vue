@@ -53,7 +53,7 @@
               </div>
             </div>
           </div>
-          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getGeographies" :simple="true"></pager>
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pager>
           <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
             <p>{{ infoMsg }}</p>
           </v-alert>

@@ -53,7 +53,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" :simple="true" @page-update="getDevices"></pager>
+                <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="getDevices"></pager>
               </div>
             </div>
             <div class="panel-bd layout-right">
@@ -123,7 +123,7 @@
                       </tbody>
                     </table> -->
                     <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
-                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :page-count="countPerPage2"></pager>
+                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2"></pager>
                   </div>
                 </div>
               </div>
@@ -158,7 +158,7 @@
              </table>
            </div>
            <div class="data-points-footer">
-             <pager v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :page-count="countPerPage3" @page-update=""></pager>
+             <pager v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :count-per-page="countPerPage3" @page-update=""></pager>
            </div>
          </div>
          <div class="form-actions snapshot-select">

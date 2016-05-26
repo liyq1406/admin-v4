@@ -36,7 +36,7 @@
                   </tr>
                 </tbody>
               </table>
-              <pager v-if="records.length > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage"></pager>
+              <pager v-if="records.length > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
             </div>
           </div>
         </div>

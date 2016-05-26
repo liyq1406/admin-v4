@@ -51,7 +51,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :page-count="countPerPage"></pager> -->
+        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
       </div>
     </div>
 

@@ -119,8 +119,8 @@
           <!-- End: 客服人员列表 -->
 
           <!-- Start: 分页信息 -->
-          <!-- <pager :total="51" :current.sync="0" :page-count="10"></pager> -->
-          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :page-count="countPerPage" @page-update="getBranchStaffsList"></pager>
+          <!-- <pager :total="51" :current.sync="0" :count-per-page="10"></pager> -->
+          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pager>
           <!-- End: 分页信息 -->
         </div>
       </div>
