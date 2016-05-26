@@ -26,7 +26,10 @@ export const API_SERVER = {
   recipe: `${DEFAULT_PLUGIN_SERVER}/module/recipe`,
 
   // 延保
-  warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`
+  warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`,
+
+  // 用户反馈
+  feedback: `${DEFAULT_PLUGIN_SERVER}/module/feedback`
 }
 
 // 默认每页记录数

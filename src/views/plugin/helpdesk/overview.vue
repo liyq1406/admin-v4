@@ -41,7 +41,7 @@
 <script>
   import Vue from 'vue'
   import locales from '../../../consts/locales/index'
-  // import api from '../../../api'
+  import api from '../../../api'
   import Modal from '../../../components/Modal'
   import Select from '../../../components/Select'
   import RadioGroup from '../../../components/RadioGroup'
@@ -109,6 +109,7 @@
 
     route: {
       data () {
+        this.getFeedbackList()
       }
     },
 
@@ -120,7 +121,27 @@
     },
 
     methods: {
-
+      getFeedbackList () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getOrderWorkList
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.getFeedbackGroup(this.$route.params.app_id, token).then((res) => {
+            this.total = res.data.count
+            this.workOrders = res.data.list
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
+        })
+      }
     }
   }
 </script>

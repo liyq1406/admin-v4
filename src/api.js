@@ -34,6 +34,7 @@ import diet from './api/diet'
 import dataForward from './api/data-forward'
 import snapshot from './api/snapshot'
 import warranty from './api/warranty'
+import helpdesk from './api/helpdesk'
 import diagnosis from './api/diagnosis'
 
 export default {
@@ -56,5 +57,6 @@ export default {
   dataForward,
   snapshot,
   warranty,
+  helpdesk,
   diagnosis
 }

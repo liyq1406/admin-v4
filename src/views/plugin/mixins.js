@@ -165,6 +165,9 @@ export const pluginMixins = {
         case 'recipe':
           window.localStorage.recipeAccessToken = value
           break
+        case 'helpdesk':
+          window.localStorage.helpdeskAccessToken = value
+          break
         default:
           break
       }
@@ -178,6 +181,9 @@ export const pluginMixins = {
           break
         case 'recipe':
           token = window.localStorage.recipeAccessToken
+          break
+        case 'helpdesk':
+          token = window.localStorage.helpdeskAccessToken
           break
         default:
           break
