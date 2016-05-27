@@ -40,7 +40,7 @@ export default {
    */
   getFeedbackLabel (appID, token, params) {
     return http.post(
-      `${API_SERVER.feedback}/${appID}/api/label/list`, params, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -56,7 +56,7 @@ export default {
    */
   saveFeedbackLabel (appID, token, params) {
     return http.post(
-      `${API_SERVER.feedback}/${appID}/api/label/save`, params, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -72,7 +72,7 @@ export default {
    */
   putFeedbackLabel (appID, token, labelID, params) {
     return http.put(
-      `${API_SERVER.feedback}/${appID}/api/label/update/${labelID}`, params, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/update/${labelID}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
@@ -88,7 +88,7 @@ export default {
    */
   delFeedbackLabel (appID, token, labelID) {
     return http.del(
-      `${API_SERVER.feedback}/${appID}/api/label/delete/${labelID}`, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/delete/${labelID}`, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token

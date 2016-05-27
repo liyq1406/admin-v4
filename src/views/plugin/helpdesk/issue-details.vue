@@ -12,44 +12,44 @@
           <ul class="info-details">
             <li class="row">
               <div class="col-3 label">反馈日期:</div>
-              <div class="col-21 info">2016-01-15 10:43</div>
+              <div class="col-21 info">{{issue.create_time}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">反馈类型:</div>
-              <div class="col-21 info">使用咨询</div>
+              <div class="col-21 info">{{issue.label}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">产品名称:</div>
-              <div class="col-21 info">电炖锅</div>
+              <div class="col-21 info">{{issue.product_name}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">固件版本:</div>
-              <div class="col-21 info">1.0</div>
+              <div class="col-21 info">{{issue.firmware_version}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">系统信息:</div>
-              <div class="col-21 info">iPhone, OS8.2</div>
+              <div class="col-21 info">{{issue.system_info}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">软件版本:</div>
-              <div class="col-21 info">1.6</div>
+              <div class="col-21 info">{{issue.software_version}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">系统语言:</div>
-              <div class="col-21 info">简体中文</div>
+              <div class="col-21 info">{{issue.system_language}}</div>
             </li>
             <li class="split-line"></li>
             <li class="row">
               <div class="col-3 label">客户姓名:</div>
-              <div class="col-21 info">张先生</div>
+              <div class="col-21 info">{{issue.user_name}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">联系方式:</div>
-              <div class="col-21 info">13800138000</div>
+              <div class="col-21 info">{{issue.phone}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">反馈信息:</div>
-              <div class="col-21 info">这口锅买回来之后煮米一直煮不熟，到底要放多少水呢？我没找到使用指南</div>
+              <div class="col-21 info">{{issue.content}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">图片信息:</div>
@@ -91,7 +91,7 @@
   import { globalMixins } from '../../../mixins'
   import { pluginMixins } from '../mixins'
   import Gallery from '../../../components/Gallery'
-  // import api from '../../../api'
+  import api from '../../../api'
   // import _ from 'lodash'
 
   export default {
@@ -104,11 +104,10 @@
     data () {
       return {
         pics: [
-          'https://ss2.bdstatic.com/kfoZeXSm1A5BphGlnYG/skin/729.jpg?2',
-          'https://ss1.bdstatic.com/kvoZeXSm1A5BphGlnYG/skin/732.jpg?2'
         ],
         currPicIndex: 0,
-        isShowGallery: false
+        isShowGallery: false,
+        issue: {}
       }
     },
 
@@ -121,10 +120,38 @@
 
     route: {
       data () {
+        this.getIssue()
       }
     },
 
     methods: {
+      getIssue () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getIssues
+        var condition = {
+          query: {
+            _id: this.$route.params.id
+          }
+        }
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.getFeedbackList(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.data.status === 200 && res.data.list.length === 1) {
+              this.total = res.data.count
+              this.issue = res.data.list[0]
+              this.pics = res.data.list[0].image && []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'helpdesk'
+            }
+            self.handlePluginError(err, env)
+          })
+        })
+      },
       /**
        * 处理图片点击
        * @params {Number} index 图片索引

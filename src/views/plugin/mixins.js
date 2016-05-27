@@ -102,7 +102,6 @@ export const pluginMixins = {
       var self = this
       return new Promise((resolve, reject) => {
         var token = self.getPluginToken(plugin)
-
         if (token && token !== INVALID) {
           resolve(token)
         } else {

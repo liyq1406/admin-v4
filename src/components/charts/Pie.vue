@@ -60,6 +60,17 @@
       // 图表配置
       options () {
         return {
+          noDataLoadingOption: {
+            text: this.$t('common.no_data'),
+            effect: '',
+            effectOption: {
+              backgroundColor: '#FFF'
+            },
+            textStyle: {
+              fontSize: 14,
+              color: '#999'
+            }
+          },
           legend: {
             orient: 'vertical',
             x: 'left',
@@ -81,7 +92,6 @@
 
     ready () {
       this.chart = echarts.init(this.$el, this.theme)
-      this.chart.setOption(this.options, true)
     }
   }
 </script>

@@ -4,11 +4,11 @@
       <div class="action-bar">
         <v-select width="140px" :label="issueType.label" size="small">
           <span slot="label">查看</span>
-          <select v-model="issueType">
+          <select v-model="issueType" @change="getFeedbackGroupList">
             <option v-for="opt in issueTypeOptions" :value="opt">{{ opt.label }}</option>
           </select>
         </v-select>
-        <radio-group :items="periods" :value.sync="period" class="fr"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+        <radio-group :items="periods" :value.sync="period" class="fr" @select="getFeedbackGroupList"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
       </div>
       <div class="row mt40 mb40">
         <div class="col-15 with-loading">
@@ -84,7 +84,8 @@
           waitingProcess: 0
         },
         // 数据是否加载中
-        loadingData: false
+        loadingData: false,
+        labelGroup: []
       }
     },
     computed: {
@@ -95,21 +96,42 @@
           type: 'pie',
           radius: '80%',
           center: ['50%', '50%'],
-          data: [
-            {value: 10, name: '产品咨询'},
-            {value: 7, name: '投诉建议'},
-            {value: 4, name: '产品故障'},
-            {value: 2, name: '退换服务'},
-            {value: 5, name: ' 使用帮助'}
-          ]
+          data: []
         }]
+        this.labelGroup.forEach((item) => {
+          result[0].data.push({
+            value: item.count,
+            name: item.label
+          })
+        })
+        return result
+      },
+
+      queryCondition () {
+        var result = {
+          query: {}
+        }
+        if (this.issueType.value === 1) {
+          result.query.status = 0
+        }
+
+        var curTime = (new Date()).getTime()
+        var searchTime = null
+        if (this.period === 7) {
+          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 7)
+        } else if (this.period === 30) {
+          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 30)
+        } else if (this.period === 90) {
+          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 90)
+        }
+        result.query.create_time = {'$gte': {'@date': searchTime}}
         return result
       }
     },
 
     route: {
       data () {
-        this.getFeedbackList()
+        this.getFeedbackGroupList()
       }
     },
 
@@ -121,24 +143,27 @@
     },
 
     methods: {
-      getFeedbackList () {
+      getFeedbackGroupList () {
         var self = this
         var argvs = arguments
-        var fn = self.getOrderWorkList
+        var fn = self.getFeedbackGroupList
         this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-          api.helpdesk.getFeedbackGroup(this.$route.params.app_id, token).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
+          api.helpdesk.getFeedbackGroup(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            if (res.status === 200 && res.data.labelGroup.length > 0) {
+              this.labelGroup = res.data.labelGroup
+              this.statistic.new = res.data.count
+              this.statistic.waitingProcess = res.data.untreat_count
+            } else {
+              this.labelGroup = []
+            }
           }).catch((err) => {
             var env = {
               'fn': fn,
               'argvs': argvs,
               'context': self,
-              'plugin': 'warranty'
+              'plugin': 'helpdesk'
             }
             self.handlePluginError(err, env)
-            this.loadingData = false
           })
         })
       }

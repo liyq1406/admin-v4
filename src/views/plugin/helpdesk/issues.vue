@@ -63,7 +63,7 @@
                   <span class="hl-gray" v-if="issue.status === 1">已处理</span>
                 </td>
                 <td class="tac">
-                  <a class="hl-red" v-link="'/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue.id">查看</a>
+                  <a class="hl-red" v-link="'/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id">查看</a>
                 </td>
               </tr>
             </template>
@@ -90,6 +90,7 @@
   // import _ from 'lodash'
   import { globalMixins } from '../../../mixins'
   import { pluginMixins } from '../mixins'
+  import api from '../../../api'
 
   export default {
     name: 'Issues',
@@ -122,11 +123,7 @@
         // querying: false,
         loadingData: false,
         issueTypeOptions: [
-          { label: '全部', value: 'all' },
-          { label: '使用疑问', value: 1 },
-          { label: '产品咨询', value: 2 },
-          { label: '产品故障', value: 3 },
-          { label: '投诉建议', value: 4 }
+          { label: '全部', value: 'all' }
         ],
         issueType: {
           label: '全部',
@@ -208,67 +205,57 @@
     route: {
       data () {
         this.getIssues()
+        this.getLabels()
       }
     },
 
     methods: {
       // 获取问题列表
       getIssues (querying) {
+        this.loadingData = true
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
+        var self = this
+        var argvs = arguments
+        var fn = self.getIssues
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.getFeedbackList(this.$route.params.app_id, token).then((res) => {
+            this.total = res.data.count
+            this.issues = res.data.list
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'helpdesk'
+            }
+            self.handlePluginError(err, env)
+            this.loadingData = false
+          })
+        })
+      },
 
-        this.total = 2
-        this.issues = [{
-          id: 'asd23eadwed23ads',
-          create_time: '2016-01-15 10:43',
-          creator: '李先生',
-          contact: '13800138000',
-          product_name: '电炖锅',
-          type: 1,
-          status: 0
-        }, {
-          id: 'asd23eadwed23ads',
-          create_time: '2016-01-15 10:43',
-          creator: '李先生',
-          contact: '13800138000',
-          product_name: '电炖锅',
-          type: 2,
-          status: 1
-        }, {
-          id: 'asd23eadwed23ads',
-          create_time: '2016-01-15 10:43',
-          creator: '李先生',
-          contact: '13800138000',
-          product_name: '电炖锅',
-          type: 2,
-          status: 1
-        }, {
-          id: 'asd23eadwed23ads',
-          create_time: '2016-01-15 10:43',
-          creator: '李先生',
-          contact: '13800138000',
-          product_name: '电炖锅',
-          type: 2,
-          status: 1
-        }, {
-          id: 'asd23eadwed23ads',
-          create_time: '2016-01-15 10:43',
-          creator: '李先生',
-          contact: '13800138000',
-          product_name: '电炖锅',
-          type: 2,
-          status: 1
-        }]
-        // this.loadingData = true
-        // api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
-        //   this.issues = res.data.list
-        //   this.total = res.data.count
-        //   this.loadingData = false
-        // }).catch((res) => {
-        //   this.handleError(res)
-        //   this.loadingData = false
-        // })
+      getLabels () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getLabels
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.getFeedbackLabel(this.$route.params.app_id, token).then((res) => {
+            if (res.status === 200 && res.data.list.length > 0) {
+              this.issueTypeOptions = this.issueTypeOptions.concat(res.data.list)
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'helpdesk'
+            }
+            self.handlePluginError(err, env)
+          })
+        })
       },
 
       // 搜索
