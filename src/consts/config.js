@@ -23,7 +23,7 @@ export const API_SERVER = {
   default: process.env.API_SERVER || DEFAULT_API_SERVER,
 
   // 菜谱
-  recipe: `${DEFAULT_PLUGIN_SERVER}/module/recipe`,
+  recipe: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
 
   // 延保
   warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`,
