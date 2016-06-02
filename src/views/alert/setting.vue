@@ -494,7 +494,8 @@
           form: {},
           editingTag: false,
           model: {           // 添加数据模型
-            tag: ''
+            tag: '',
+            param: ''
           },
           value1: '0',
           value2: 'online'
@@ -607,12 +608,15 @@
        */
       datapointName (model) {
         var result
-
         if (this.datapoints.length > 0 && typeof model.param !== 'undefined' && model.param.length > 0) {
           var datapoint = _.find(this.datapoints, (item) => {
             return item.id === model.param
           })
-          result = datapoint.name
+          if (datapoint !== undefined) {
+            result = datapoint.name
+          } else {
+            result = ''
+          }
         } else {
           result = ''
         }
