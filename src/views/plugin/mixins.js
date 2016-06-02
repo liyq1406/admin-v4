@@ -2,6 +2,7 @@ import api from '../../api'
 import _ from 'lodash'
 const INVALID = 'invalid'
 var count = new Map()
+var LIMIT = 0
 
 export const pluginFactoryMixin = {
   methods: {
@@ -136,10 +137,10 @@ export const pluginMixins = {
         self.setPluginToken(env.plugin, INVALID)
 
         // 重新请求
-        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求3次
-        if (count.has(env.fn) && count.get(env.fn) > 3) {
+        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求LIMIT次
+        if (count.has(env.fn) && count.get(env.fn) > LIMIT) {
           count.set(env.fn, 0)
-        } else if (count.has(env.fn) && count.get(env.fn) <= 3) {
+        } else if (count.has(env.fn) && count.get(env.fn) <= LIMIT) {
           var i = count.get(env.fn) + 1
           count.set(env.fn, i)
           setTimeout(() => {

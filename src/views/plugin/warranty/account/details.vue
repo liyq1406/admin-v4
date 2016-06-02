@@ -504,6 +504,7 @@
           this.addModel.status = this.addModel.status - 0
           this.addModel.branch_id = this.$route.params.id
           this.addModel.username = this.addModel.email
+          this.addModel.create_time = new Date()
           this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
             api.warranty.AddBranchStaffs(this.$route.params.app_id, token, this.addModel).then((res) => {
               this.adding = false
