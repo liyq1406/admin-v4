@@ -92,6 +92,9 @@
 
     ready () {
       this.chart = echarts.init(this.$el, this.theme)
+      if (this.series.length) {
+        this.chart.setOption(this.options, true)
+      }
     }
   }
 </script>

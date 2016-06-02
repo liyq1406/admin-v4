@@ -394,6 +394,15 @@ let configRouter = (router) => {
       }
     },
 
+    // Google nest
+    '/plugins/nest/:app_id/forbidden': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/nest/forbidden'))
+        }, 'admin')
+      }
+    },
+
     // 用户反馈
     '/plugins/helpdesk/:app_id': {
       component (resolve) {
@@ -927,21 +936,22 @@ let configRouter = (router) => {
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',
-    // '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/forbidden',
-    // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
-    // '/plugins/broadcast': '/plugins/broadcast/forbidden',
+    '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/forbidden',
+    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/forbidden',
+    '/plugins/broadcast/:app_id': '/plugins/broadcast/:app_id/forbidden',
     '/plugins/helpdesk/:app_id': '/plugins/helpdesk/:app_id/forbidden',
     '/plugins/xpay/:app_id': '/plugins/xpay/:app_id/forbidden',
+    '/plugins/nest/:app_id': '/linkage/nest/',
     // '/plugins/helpdesk/:app_id': '/plugins/helpdesk/:app_id/overview',
     '/plugins/dealer/:app_id': '/plugins/dealer/:app_id/forbidden',
-    '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
-    '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
-    '/plugins/broadcast/:app_id': '/plugins/broadcast/:app_id/add',
+    // '/plugins/recipe/:app_id': '/plugins/recipe/:app_id/list',
+    // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
+    // '/plugins/broadcast/:app_id': '/plugins/broadcast/:app_id/add',
+    // '/plugins/nest/:app_id': '/plugins/nest/:app_id/forbidden',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
-    '/linkage': '/linkage/devices',
-    '/plugins/nest/:app_id': '/linkage/nest/'
+    '/linkage': '/linkage/devices'
   })
 
   router.beforeEach((transition) => {
