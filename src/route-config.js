@@ -459,6 +459,32 @@ let configRouter = (router) => {
         require.ensure([], (require) => {
           resolve(require('./views/plugin/dealer/index'))
         }, 'admin')
+      },
+      subRoutes: {
+        // 经销商列表
+        'list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/dealer/list'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+    // 经销商详情
+    '/plugins/dealer/:app_id/list/:dealer_id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/dealer/dealer-detail'))
+        }, 'admin')
+      }
+    },
+    // 销售详情
+    '/plugins/dealer/:app_id/list/:dealer_id/detail/:sale_id': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/plugin/dealer/detail'))
+        }, 'admin')
       }
     },
     // 禁止访问
@@ -948,6 +974,7 @@ let configRouter = (router) => {
     // '/plugins/warranty/:app_id': '/plugins/warranty/:app_id/work-orders/extended-warranties',
     // '/plugins/broadcast/:app_id': '/plugins/broadcast/:app_id/add',
     // '/plugins/nest/:app_id': '/plugins/nest/:app_id/forbidden',
+    // '/plugins/dealer/:app_id': '/plugins/dealer/:app_id/list',
     '/plugins': '/plugins/extensions',
     '/firmware': '/firmware/overview',
     '/alerts': '/alerts/overview',
