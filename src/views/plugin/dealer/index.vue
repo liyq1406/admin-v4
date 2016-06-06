@@ -6,7 +6,7 @@
           <h2>经销商管理</h2>
         </div>
         <div class="panel-bd">
-          <!-- <tab :nav="secondaryNav"></tab> -->
+          <tab :nav="secondaryNav"></tab>
         </div>
       </div>
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -41,12 +41,8 @@
       data () {
         return {
           secondaryNav: [{
-            label: this.$t('ui.sub_nav.broadcast.add'),
-            link: { path: '/plugins/broadcast/add' }
-          },
-          {
-            label: this.$t('ui.sub_nav.broadcast.history'),
-            link: { path: '/plugins/broadcast/history' }
+            label: this.$t('ui.sub_nav.dealer.list'),
+            link: { path: `/plugins/dealer/${this.$route.params.app_id}/list` }
           }]
         }
       }

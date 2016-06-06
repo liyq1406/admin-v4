@@ -68,6 +68,9 @@ export default {
       add: '新建推送',
       history: '推送历史'
     },
+    dealer: {
+      list: '经销商列表'
+    },
     helpdesk: {
       overview: '概览',
       issues: '反馈列表',
@@ -516,6 +519,33 @@ export default {
     fields: {
       old_password: '旧密码',
       new_password: '新密码'
+    }
+  },
+  // 经销商列表
+  dealer: {
+    placeholders: {
+      code: '可输入经销商代码',
+      password: '请输入6-16位字符密码',
+      name: '请输入经销商名称',
+      contact: '请输入联系人名称',
+      phone: '请输入手机号码',
+      address: '请输入联系地址',
+      area: '如：华南地区',
+      target: '请输入年销售目标'
+    },
+    fields: {
+      username: '账号',
+      password: '密码',
+      name: '经销商名称',
+      linkman: '联系人',
+      phone: '手机号码',
+      address: '地址',
+      area: '负责区域',
+      belong_to: '从属于',
+      sale_target: '销售目标',
+      reach_target: '销售是否达标',
+      status: '状态',
+      create_time: '创建时间'
     }
   },
 

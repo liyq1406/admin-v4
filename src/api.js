@@ -36,6 +36,7 @@ import snapshot from './api/snapshot'
 import warranty from './api/warranty'
 import helpdesk from './api/helpdesk'
 import diagnosis from './api/diagnosis'
+import dealer from './api/dealer'
 
 export default {
   sms,
@@ -58,5 +59,6 @@ export default {
   snapshot,
   warranty,
   helpdesk,
-  diagnosis
+  diagnosis,
+  dealer
 }
