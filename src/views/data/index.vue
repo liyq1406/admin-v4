@@ -44,7 +44,7 @@
               link: { path: '/data/tables' }
             },
             {
-              label: '数据快照',
+              label: '设备快照',
               link: { path: '/data/snapshot' }
             }
           ]
