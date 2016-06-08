@@ -78,7 +78,7 @@
                     <td>{{ datapoint.description }}</td>
                     <td>
                       <a @click="showEditDataPointModal(datapoint)">
-                        {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index].value : '--' }}
+                        {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }}
                       </a>
                     </td>
                   </tr>
@@ -246,7 +246,7 @@
         datapoints: [],
         showLog: true,
         deviceToken: '',
-        datapointValues: [],
+        datapointValues: {},
         logs: [
           // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'connected' },
           // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'disconnected' },
@@ -351,7 +351,11 @@
           if (res.status === 202) {
             console.log('设备离线！')
           } else {
-            this.datapointValues = res.data.datapoint
+            var datapointsObj = {}
+            res.data.datapoint.map(function (item) {
+              datapointsObj[item.index] = item.value
+            })
+            this.datapointValues = datapointsObj
           }
         }).catch((res) => {
           this.refreshing = false
