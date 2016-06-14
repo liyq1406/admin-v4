@@ -154,16 +154,8 @@ export default {
    * @return {Promise}
    */
   updateDataPoint (productId, datapoint) {
-    var params = {}
-
-    params.name = datapoint.name
-    params.type = datapoint.type
-    params.index = datapoint.index
-    params.description = datapoint.description
-    params.symbol = datapoint.symbol
-
     return http.put(
-      `${API_SERVER.default}/v2/product/${productId}/datapoint/${datapoint.id}`, params
+      `${API_SERVER.default}/v2/product/${productId}/datapoint/${datapoint.id}`, datapoint
     )
   },
 

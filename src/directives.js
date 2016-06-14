@@ -15,7 +15,7 @@ var placeholder = {
     this.el.appendChild(this.placeholder)
 
     this.input = this.el.getElementsByClassName('input-text')[0]
-    vModel = this.input.getAttribute('v-model')
+    vModel = this.input.getAttribute('v-model') || this.input.getAttribute('name')
 
     if (vModel) {
       this.vm.$watch(vModel, (value, oldValue) => {

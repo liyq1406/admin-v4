@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueForm from 'vue-form'
+import VueVlidator from 'vue-validator'
 import i18n from 'vue-i18n'
 import browser from './helpers/browser'
 
@@ -12,6 +13,9 @@ import * as directives from './directives'
 
 // 过滤器
 import * as filters from './filters'
+
+// 表单验证器
+import * as validators from './validators'
 
 // 路由设置
 import configRouter from './route-config'
@@ -30,6 +34,7 @@ Vue.use(VueRouter)
 // 加载表单验证插件
 // 详见：https://github.com/fergaldoyle/vue-form
 Vue.use(VueForm)
+Vue.use(VueVlidator)
 
 // 加载多语言插件
 // 手动切换语言设置 `Vue.config.lang = 'en-us'`
@@ -51,6 +56,12 @@ Object.keys(directives).forEach((key) => {
 // ------------------------------
 Object.keys(filters).forEach((key) => {
   Vue.filter(key, filters[key])
+})
+
+// 注册全局验证器
+// ------------------------------
+Object.keys(validators).forEach((key) => {
+  Vue.validator(key, validators[key])
 })
 
 /**

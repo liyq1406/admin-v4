@@ -98,6 +98,8 @@ export default {
     required: '{field} is required',
     format: '{field} format error',
     numberic: 'Please insert a number',
+    max: '{0} cannot be more than {1}',
+    min: '{0} cannot be less than {1}',
     maxlength: '{0} cannot be more than {1} characters',
     minlength: '{0} cannot be less than {1} characters'
   },
@@ -287,6 +289,8 @@ export default {
     placeholders: {
       index: '数据端点索引不能重复',
       name: '英文、数字或下划线',
+      min: '最小值',
+      max: '最大值',
       symbol: '例如：℃',
       description: '请填写数据端点描述'
     },
@@ -294,6 +298,9 @@ export default {
       index: '索引',
       name: '端点ID',
       type: '数据类型',
+      range: '取值范围',
+      min: '最小值',
+      max: '最大值',
       symbol: '单位符号',
       description: '描述'
     }

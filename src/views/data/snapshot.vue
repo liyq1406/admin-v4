@@ -107,7 +107,7 @@
                 <tr v-for="dp in dataPoints | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
-                  <td>{{datapointTypes[dp.type - 1]}}</td>
+                  <td>{{getTypeByValue(dp.type).label}}</td>
                   <td>{{dp.symbol}}</td>
                   <td>{{dp.description}}</td>
                 </tr>
@@ -182,7 +182,7 @@
                 <tr v-for="dp in editDataPoints | limitBy countPerPage (currentEditPage-1)*countPerPage">
                   <td><input v-model="dp.selected" type="checkbox"/></td>
                   <td>{{dp.index}}</td>
-                  <td>{{datapointTypes[dp.type - 1]}}</td>
+                  <td>{{getTypeByValue(dp.type).label}}</td>
                   <td>{{dp.symbol}}</td>
                   <td class="no-wrap">{{dp.description}}</td>
                 </tr>
@@ -211,7 +211,7 @@
   import Modal from '../../components/Modal'
   import Select from '../../components/Select'
   import locales from '../../consts/locales/index'
-  // import _ from 'lodash'
+  import _ from 'lodash'
   import { globalMixins } from '../../mixins'
   import api from '../../api'
 
@@ -234,7 +234,6 @@
         showEditModal: false,
         showEditPointModal: false,
         delRuleChecked: false,
-        datapointTypes: locales[Vue.config.lang].data.DATAPOINT_TYPES,
         productType: {
           label: '请选择产品',
           value: 0,
@@ -276,6 +275,15 @@
     },
 
     computed: {
+      // 数据端点类型
+      datapointTypes () {
+        var result = locales[Vue.config.lang].data.DATAPOINT_TYPES
+        _.remove(result, (o) => {
+          return o.value === 5
+        })
+        return result
+      },
+
       productTypes () {
         var types = [{
           label: '请选择产品',
@@ -413,6 +421,16 @@
     },
 
     methods: {
+      /**
+       * 通过值查找类型
+       * @param  {Number} type 值
+       */
+      getTypeByValue (value) {
+        return _.find(this.datapointTypes, (o) => {
+          return o.value === value
+        })
+      },
+
       addSnapshotRule () {
         this.checkSnapshotExsit()
       },

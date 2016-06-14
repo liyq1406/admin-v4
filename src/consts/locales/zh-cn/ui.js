@@ -98,6 +98,8 @@ export default {
     required: '{field}为必填项',
     format: '{field}格式有误',
     numberic: '请填写数字格式',
+    max: '{0}不能大于{1}',
+    min: '{0}不能小于{1}',
     maxlength: '{0}不能多于{1}位',
     minlength: '{0}不能少于{1}位',
     length: '必须是{field}位'
@@ -289,6 +291,8 @@ export default {
     placeholders: {
       index: '数据端点索引不能重复',
       name: '英文、数字或下划线',
+      min: '最小值',
+      max: '最大值',
       symbol: '例如：℃',
       description: '请填写数据端点描述'
     },
@@ -296,6 +300,9 @@ export default {
       index: '索引',
       name: '端点ID',
       type: '数据类型',
+      min: '最小值',
+      max: '最大值',
+      range: '取值范围',
       symbol: '单位符号',
       description: '描述'
     }
