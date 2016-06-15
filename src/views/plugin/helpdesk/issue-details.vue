@@ -12,7 +12,7 @@
           <ul class="info-details">
             <li class="row">
               <div class="col-3 label">反馈日期:</div>
-              <div class="col-21 info">{{issue.create_time}}</div>
+              <div class="col-21 info">{{issue.create_time | uniformDate}}</div>
             </li>
             <li class="row">
               <div class="col-3 label">反馈类型:</div>
@@ -136,10 +136,10 @@
         }
         this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
           api.helpdesk.getFeedbackList(this.$route.params.app_id, token, condition).then((res) => {
-            if (res.data.status === 200 && res.data.list.length === 1) {
+            if (res.status === 200 && res.data.list.length === 1) {
               this.total = res.data.count
               this.issue = res.data.list[0]
-              this.pics = res.data.list[0].image && []
+              this.pics = res.data.list[0].image || []
             }
           }).catch((err) => {
             var env = {
