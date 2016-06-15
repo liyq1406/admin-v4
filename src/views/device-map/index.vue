@@ -41,23 +41,23 @@
               <button slot="search-button" @click="handleSearch" class="btn btn-primary">{{ $t('common.search') }}</button>
             </search-box>
           </div>
-          <div v-show="devices.length" class="device-list mb20">
-            <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
-              <div class="list-item-cont">
-                <div class="icon-num">{{ $index+1 }}</div>
-                <div class="device-id">设备ID: {{ device.id }}</div>
-                <div class="status">
-                  <span v-if="device.is_online" class="hl-green">在线</span>
-                  <span v-else class="hl-gray">离线</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pager>
           <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
             <p>{{ infoMsg }}</p>
           </v-alert>
         </div>
+      </div>
+      <div v-show="devices.length" class="device-list mb20">
+        <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
+          <div class="list-item-cont">
+            <div class="icon-num">{{ $index+1 }}</div>
+            <div class="device-id">设备ID: {{ device.id }}</div>
+            <div class="status">
+              <span v-if="device.is_online" class="hl-green">在线</span>
+              <span v-else class="hl-gray">离线</span>
+            </div>
+          </div>
+        </div>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pager>
       </div>
       <div class="device-map with-loading">
         <div class="icon-loading" v-show="loadingData">
@@ -559,6 +559,15 @@
 
           input
             width 144px
+
+    .device-list
+      absolute left 20px top 121px bottom
+      width 308px
+      overflow auto
+
+      .pager
+        margin-bottom 0
+        margin-top 20px
 
     .device-list-item
       border-bottom 1px dotted default-border-color
