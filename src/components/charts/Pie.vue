@@ -86,15 +86,23 @@
       series () {
         if (Object.keys(this.chart).length) {
           this.chart.setOption(this.options, true)
+        } else {
+          window.setTimeout(() => {
+            this.chart = echarts.init(this.$el, this.theme)
+            this.chart.clear()
+            this.chart.setOption(this.options, true)
+          }, 500)
         }
       }
     },
+    //
+    // destroyed () {
+    //   this.chart.clear()
+    // },
 
     ready () {
-      this.chart = echarts.init(this.$el, this.theme)
-      if (this.series.length) {
-        this.chart.setOption(this.options, true)
-      }
+      // console.log('ready')
+      // this.chart = echarts.init(this.$el, this.theme)
     }
   }
 </script>

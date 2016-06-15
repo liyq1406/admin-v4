@@ -53,11 +53,11 @@
           <tbody>
             <template v-if="issues.length > 0">
               <tr v-for="issue in issues">
-                <td>{{ issue.create_time }}</td>
-                <td>{{ issue.creator }}</td>
-                <td>{{ issue.contact }}</td>
+                <td>{{ issue.create_time | uniformDate}}</td>
+                <td>{{ issue.user_name }}</td>
+                <td>{{ issue.phone }}</td>
                 <td>{{ issue.product_name }}</td>
-                <td>{{ issue.type }}</td>
+                <td>{{ issue.label }}</td>
                 <td>
                   <span class="hl-red" v-if="issue.status === 0">未处理</span>
                   <span class="hl-gray" v-if="issue.status === 1">已处理</span>
@@ -149,12 +149,12 @@
           value: 'any'
         },
         queryTypeOptions: [
-          { label: '联系方式', value: 'contact' },
-          { label: '姓名', value: 'name' }
+          { label: '联系方式', value: 'phone' },
+          { label: '姓名', value: 'user_name' }
         ],
         queryType: {
           label: '联系方式',
-          value: 'contact'
+          value: 'phone'
         }
       }
     },
@@ -162,7 +162,6 @@
     computed: {
       queryCondition () {
         var condition = {
-          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {}
@@ -171,7 +170,7 @@
 
         // 添加问题类型查询条件
         if (this.issueType.value !== 'all') {
-          condition.query['type'] = { $in: [this.issueType.value] }
+          condition.query['label'] = { $in: [this.issueType.label] }
         }
 
         // 添加开始和结束时间的查询条件
@@ -195,7 +194,7 @@
 
         // 添加查询字段内容
         if (this.query.length > 0) {
-          condition.query[this.queryType.value] = { $like: this.query }
+          condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
         }
 
         return condition
@@ -220,9 +219,14 @@
         var argvs = arguments
         var fn = self.getIssues
         this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-          api.helpdesk.getFeedbackList(this.$route.params.app_id, token).then((res) => {
-            this.total = res.data.count
-            this.issues = res.data.list
+          api.helpdesk.getFeedbackList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+            if (res.status === 200 && res.data.list.length > 0) {
+              this.total = res.data.count
+              this.issues = res.data.list
+            } else {
+              this.issues = []
+              this.total = 0
+            }
             this.loadingData = false
           }).catch((err) => {
             var env = {
@@ -242,7 +246,10 @@
         var argvs = arguments
         var fn = self.getLabels
         this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-          api.helpdesk.getFeedbackLabel(this.$route.params.app_id, token).then((res) => {
+          var params = {
+            limit: 20
+          }
+          api.helpdesk.getFeedbackLabel(this.$route.params.app_id, token, params).then((res) => {
             if (res.status === 200 && res.data.list.length > 0) {
               this.issueTypeOptions = this.issueTypeOptions.concat(res.data.list)
             }

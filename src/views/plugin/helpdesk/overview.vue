@@ -151,8 +151,10 @@
           api.helpdesk.getFeedbackGroup(this.$route.params.app_id, token, this.queryCondition).then((res) => {
             if (res.status === 200 && res.data.labelGroup.length > 0) {
               this.labelGroup = res.data.labelGroup
-              this.statistic.new = res.data.count
-              this.statistic.waitingProcess = res.data.untreat_count
+              if (this.queryCondition.query.status !== 0) {
+                this.statistic.new = res.data.count
+                this.statistic.waitingProcess = res.data.untreat_count || 0
+              }
             } else {
               this.labelGroup = []
             }

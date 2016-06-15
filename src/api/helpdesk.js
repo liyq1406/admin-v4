@@ -88,7 +88,7 @@ export default {
    */
   delFeedbackLabel (appID, token, labelID) {
     return http.del(
-      `${API_SERVER.feedback}/${appID}/api/feedback_label/delete/${labelID}`, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/delete/${labelID}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token
