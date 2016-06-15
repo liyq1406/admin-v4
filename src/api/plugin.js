@@ -72,5 +72,23 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/plugin/apply_token`, params
     )
+  },
+  /**
+   * 设置Android APP版本信息
+   * @param  {String} id App标识ID
+   */
+  setAndVersion (id, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/plugin/app_android_apk/${id}`, params
+    )
+  },
+  /**
+   * 获取Android APK最新版本
+   * @param  {String} id App标识ID
+   */
+  getAndVersion (id, corpId) {
+    return http.get(
+      `${API_SERVER.default}/v2/plugin/app_android_apk/${id}/latest?corp_id=${corpId}`
+    )
   }
 }

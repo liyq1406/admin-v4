@@ -24,7 +24,7 @@ export function format (val, type) {
 
     // URL
     case 'url':
-      result = /^(http:\/\/|https:\/\/)(.{4,})$/.test(val)
+      result = val ? /^(http:\/\/|https:\/\/)(.{4,})$/.test(val) : true
       break
 
     default:
