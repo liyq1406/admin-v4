@@ -76,7 +76,14 @@ export const MEMBER_TYPES = ['管理员', '普通会员']
 export const MEMBER_STATUS_TYPES = ['待激活', '正常', '已停用']
 
 // 数据端点类型
-export const DATAPOINT_TYPES = ['布尔类型', '单字节', '16位短整型', '32位整型', '浮点', '字符串']
+export const DATAPOINT_TYPES = [
+  { value: 1, label: '布尔类型' },
+  { value: 2, label: '单字节' },
+  { value: 3, label: '16位短整型' },
+  { value: 4, label: '32位整型' },
+  { value: 5, label: '浮点' },
+  { value: 6, label: '字符串' }
+]
 
 // 数据端点规则
 export const RULE_TYPES = ['数据端点', '设备状态']
