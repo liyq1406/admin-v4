@@ -15,7 +15,7 @@
             </div>
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
-                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text focus-input"/>
+                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
@@ -28,7 +28,7 @@
               </label>
             </div>
             <div class="form-actions">
-              <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('ui.auth.login_submiting') : $t('ui.auth.login_submit')" class="btn btn-primary btn-xlg btn-pill">{{ $t("ui.auth.login_submit") }}</button>
+              <button @keyup.enter="onSubmit" :disabled="logining" :class="{'disabled':logining}" v-text="logining ? $t('ui.auth.login_submiting') : $t('ui.auth.login_submit')" class="btn btn-primary btn-xlg btn-pill focus-input">{{ $t("ui.auth.login_submit") }}</button>
             </div>
             <div class="form-operations"><a v-link="{ path: '/register' }">{{ $t("ui.auth.register") }}</a></div>
           </form>
