@@ -179,7 +179,6 @@
         this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
           api.helpdesk.getFeedbackLabel(this.$route.params.app_id, token, this.queryCondition).then((res) => {
             if (res.status === 200 && res.data.list.length > 0) {
-              console.log(res)
               this.tags = res.data.list
               this.total = res.data.count
             } else {
@@ -289,7 +288,6 @@
         var self = this
         var argvs = arguments
         var fn = self.onEditSubmit
-        console.log('291')
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
           this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
@@ -311,13 +309,11 @@
             })
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
-          console.log('312')
           this.editing = true
           this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
             var params = {
               label: this.editModel.label
             }
-            console.log('317')
             api.helpdesk.putFeedbackLabel(this.$route.params.app_id, token, this.editModel._id, params).then((res) => {
               if (res.status === 200) {
                 this.resetEdit()
