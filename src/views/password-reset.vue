@@ -1,5 +1,45 @@
 <template>
-  <div class="form form-auth form-fetch-password">
+  <div class="auth-form fetch-form">
+    <div class="inner" v-show="!resetsuccess">
+      <a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a>
+      <div class="form-legend">{{ $t("ui.auth.reset") }}</div>
+      <div class="form">
+        <validator name="authValidation">
+          <form novalidate @submit.prevent="onSubmit">
+            <div class="form-row">
+              <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+                <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xlg btn-pill">{{ $t("common.ok") }}</button>
+            </div>
+          </form>
+        </validator>
+      </div>
+    </div>
+    <div class="auth-msg-box" v-else>
+      <v-alert :cols="16" type="success" :title="$t('ui.auth.reset_success')">
+        <p>{{ $t("ui.auth.reset_success_msg") }}</p>
+        <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
+      </v-alert>
+    </div>
+  </div>
+  <!-- <div class="form form-auth form-fetch-password">
     <div class="form-logo"></div>
     <form v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
@@ -35,13 +75,14 @@
       <div class="form-actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-block">{{ $t("common.ok") }}</a></div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-  import api from '../api'
-  import base64 from '../helpers/base64'
-  import { globalMixins } from '../mixins'
+  import api from 'api'
+  import base64 from 'helpers/base64'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
 
   export default {
     name: 'PwdResetForm',
@@ -49,6 +90,10 @@
     layout: 'auth',
 
     mixins: [globalMixins],
+
+    components: {
+      'v-alert': Alert
+    },
 
     data () {
       return {
@@ -70,14 +115,10 @@
     },
 
     methods: {
-      checkEqualToPassword (value) {
-        return value === this.model.password
-      },
-
       onSubmit () {
         var params = {email: this.email, verifycode: this.verifycode, password: this.model.password}
 
-        if (this.validation.$valid && !this.sending) {
+        if (this.$authValidation.valid && !this.sending) {
           this.sending = true
           api.corp.resetPasswordByMail(params).then((res) => {
             if (res.status === 200) {

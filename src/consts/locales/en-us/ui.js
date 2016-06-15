@@ -133,8 +133,8 @@ export default {
     register_success: 'Register Succeed',
     register_success_msg: 'An activation email had sent to you, please check your email.',
     // 找回密码
-    by_phone: 'Via Mobile Phone',
-    by_mail: 'Via Email',
+    by_phone: 'Reset Password via Mobile Phone',
+    by_mail: 'Reset Password via Email',
     by_mail_tips: 'Please enter your Email Address, we will send password reset URL via Email.',
     by_mail_success_msg: 'Succeed, please check your email to continue the process.',
     fetch: 'Reset Password',

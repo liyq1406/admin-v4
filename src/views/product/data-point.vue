@@ -58,11 +58,11 @@
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="addModel.index" type="text" name="index" v-validate:index="{required: true, numberic: true}" class="input-text" lazy/>
+                  <input v-model="addModel.index" type="text" name="index" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$addValidation.index.touched && $addValidation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
-                  <span v-if="$addValidation.index.modified && $addValidation.index.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$addValidation.index.modified && $addValidation.index.format">{{ $t('ui.validation.numberic') }}</span>
                 </div>
               </div>
             </div>
@@ -96,21 +96,21 @@
                 <div class="row">
                   <div class="col-11">
                     <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                      <input v-model="addModel.min" type="text" name="addModel.min" class="input-text" lazy v-validate:min="{numberic: true, min: addModelType.value === 2 || addModelType.value === 3 ? 0 : -9223372036854775808, max: addMax}" class="input-text" lazy/>
+                      <input v-model="addModel.min" type="text" name="addModel.min" class="input-text" lazy v-validate:min="{format: 'numberic', min: addModelType.value === 2 || addModelType.value === 3 ? 0 : -9223372036854775808, max: addMax}" class="input-text" lazy/>
                     </div>
                   </div>
                   <div class="col-2 tac control-text">-</div>
                   <div class="col-11">
                     <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                      <input v-model="addModel.max" type="text" name="addModel.max" class="input-text" lazy v-validate:max="{numberic: true, min: addMin, max: addModelType.value === 2 ? 255 : addModelType.value === 3 ? 65535 : 9223372036854775807}"/>
+                      <input v-model="addModel.max" type="text" name="addModel.max" class="input-text" lazy v-validate:max="{format: 'numberic', min: addMin, max: addModelType.value === 2 ? 255 : addModelType.value === 3 ? 65535 : 9223372036854775807}"/>
                     </div>
                   </div>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$addValidation.min.modified && $addValidation.min.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$addValidation.min.modified && $addValidation.min.format">{{ $t('ui.validation.numberic') }}</span>
                   <span v-if="$addValidation.min.modified && $addValidation.min.min">{{ $t('ui.validation.min', [$t('ui.datapoint.fields.min'), addModelType.value === 2 || addModelType.value === 3 ? 0 : -9223372036854775808]) }}</span>
                   <span v-if="($addValidation.min.modified && $addValidation.min.max) || ($addValidation.max.modified && $addValidation.max.min)">最大值必须大于最小值</span>
-                  <span v-if="$addValidation.max.modified && $addValidation.max.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$addValidation.max.modified && $addValidation.max.format">{{ $t('ui.validation.numberic') }}</span>
                   <span v-if="$addValidation.max.modified && $addValidation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), addModelType.value === 2 ? 255 : addModelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
                 </div>
               </div>
@@ -156,11 +156,11 @@
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input v-model="editModel.index" type="text" name="index" v-validate:index="{required: true, numberic: true}" class="input-text" lazy/>
+                  <input v-model="editModel.index" type="text" name="index" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$editValidation.index.touched && $editValidation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
-                  <span v-if="$editValidation.index.modified && $editValidation.index.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$editValidation.index.modified && $editValidation.index.format">{{ $t('ui.validation.numberic') }}</span>
                 </div>
               </div>
             </div>
@@ -194,21 +194,21 @@
                 <div class="row">
                   <div class="col-11">
                     <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                      <input v-model="editModel.min" type="text" name="editModel.min" class="input-text" lazy v-validate:min="{required: false, numberic: true, min: editModelType.value === 2 || editModelType.value === 3 ? 0 : -9223372036854775808, max: editMax}" initial="false" number/>
+                      <input v-model="editModel.min" type="text" name="editModel.min" class="input-text" lazy v-validate:min="{required: false, format: 'numberic', min: editModelType.value === 2 || editModelType.value === 3 ? 0 : -9223372036854775808, max: editMax}" initial="false" number/>
                     </div>
                   </div>
                   <div class="col-2 tac control-text">-</div>
                   <div class="col-11">
                     <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                      <input v-model="editModel.max" type="text" name="editModel.max" class="input-text" lazy v-validate:max="{required: false, numberic: true, min: editMin, max: editModelType.value === 2 ? 255 : editModelType.value === 3 ? 65535 : 9223372036854775807}" initial="false" number/>
+                      <input v-model="editModel.max" type="text" name="editModel.max" class="input-text" lazy v-validate:max="{required: false, format: 'numberic', min: editMin, max: editModelType.value === 2 ? 255 : editModelType.value === 3 ? 65535 : 9223372036854775807}" initial="false" number/>
                     </div>
                   </div>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$editValidation.min.modified && $editValidation.min.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$editValidation.min.modified && $editValidation.min.format">{{ $t('ui.validation.numberic') }}</span>
                   <span v-if="$editValidation.min.modified && $editValidation.min.min">{{ $t('ui.validation.min', [$t('ui.datapoint.fields.min'), editModelType.value === 2 || editModelType.value === 3 ? 0 : -9223372036854775808]) }}</span>
                   <span v-if="($editValidation.min.modified && $editValidation.min.max) || ($editValidation.max.modified && $editValidation.max.min)">最大值必须大于最小值</span>
-                  <span v-if="$editValidation.max.modified && $editValidation.max.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  <span v-if="$editValidation.max.modified && $editValidation.max.format">{{ $t('ui.validation.numberic') }}</span>
                   <span v-if="$editValidation.max.modified && $editValidation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), editModelType.value === 2 ? 255 : editModelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
                 </div>
               </div>

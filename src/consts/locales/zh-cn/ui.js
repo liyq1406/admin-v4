@@ -135,8 +135,8 @@ export default {
     register_success: '注册成功',
     register_success_msg: '系统已经发了一封激活邮件到您的邮箱，请查阅。',
     // 找回密码
-    by_phone: '手机找回',
-    by_mail: '邮箱找回',
+    by_phone: '手机找回密码',
+    by_mail: '邮箱找回密码',
     by_mail_tips: '请输入您的注册邮箱，我们会将重设密码的链接发到您的邮箱中。',
     by_mail_success_msg: '一封找回密码的邮件已发送到您的邮箱，请查收',
     fetch: '找回密码',
@@ -165,7 +165,7 @@ export default {
     fields: {
       account: '登录帐号',
       password: '密码',
-      confirm_password: '再次输入密码',
+      confirm_password: '确认密码',
       email: '电子邮箱',
       name: '姓名',
       phone: '手机号码',

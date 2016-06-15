@@ -1,5 +1,87 @@
 <template>
-  <div class="form form-auth form-fetch-password">
+  <div class="auth-form fetch-form">
+    <div class="inner" v-show="!resetsuccess">
+      <a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a>
+      <div class="form-legend">{{ $t("ui.auth.by_phone") }}</div>
+      <div class="form">
+        <validator name="authValidation">
+          <form novalidate @submit.prevent="onSubmit">
+            <div class="form-hints">{{ $t("ui.auth.by_phone_tips") }}</div>
+            <div class="form-row">
+              <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
+                <input type="text" v-model="model.phone" name="model.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$authValidation.phone.touched && $authValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
+                <span v-if="$authValidation.phone.modified && $authValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="col-15">
+                <div class="mr10">
+                  <div v-placeholder="$t('ui.auth.insert_code')" class="input-text-wrap">
+                    <input type="text" v-model="captcha" name="captcha" lazy class="input-text"/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="ml10">
+                  <captcha :width="120" :height="44" :value.sync="captchaValue" v-ref:captcha></captcha>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="col-15">
+                <div class="mr10">
+                  <div v-placeholder="$t('ui.auth.verifycode')" class="input-text-wrap">
+                    <input type="text" v-model="model.verifycode" name="model.verifycode" v-validate:verifycode="{required: true}" lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$authValidation.verifycode.touched && $authValidation.verifycode.required">{{ $t('ui.validation.required', {field: $t('ui.auth.verifycode')}) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <div class="ml10">
+                  <button @click.stop.prevent="fetchVerifyCode" :class="{'disabled': btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()}" :disabled="btnDisabled || captcha.toLowerCase() !== captchaValue.toLowerCase()" v-text="counting ? $t('ui.auth.wating', {seconds: seconds}) : $t('ui.auth.get_code')" class="btn btn-primary"></button>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+                <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+              </div>
+            </div>
+            <div class="form-row">
+              <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+                <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @keyup.enter="onSubmit" :disabled="sending" :class="{'disabled':sending}" v-text="sending ? $t('common.handling') : $t('common.ok')" class="btn btn-primary btn-xlg btn-pill">{{ $t("common.ok") }}</button>
+            </div>
+            <div class="form-operations"><a v-link="{ path: '/fetch-password-bymail' }">{{ $t("ui.auth.by_mail") }}</a></div>
+          </form>
+        </validator>
+      </div>
+    </div>
+    <div class="auth-msg-box" v-else>
+      <v-alert :cols="16" type="success" :title="$t('ui.auth.by_phone_success')">
+        <p>{{ $t("ui.auth.by_phone_success_msg") }}</p>
+        <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
+      </v-alert>
+    </div>
+  </div>
+  <!-- <div class="form form-auth form-fetch-password">
     <div class="form-logo"><a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a></div>
     <form v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
@@ -75,14 +157,15 @@
       </div>
       <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
-  import api from '../api'
-  import * as config from '../consts/config'
-  import Captcha from '../components/Captcha'
-  import { globalMixins } from '../mixins'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Captcha from 'components/Captcha'
+  import Alert from 'components/Alert'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'FetchPwdForm',
@@ -92,7 +175,8 @@
     mixins: [globalMixins],
 
     components: {
-      'captcha': Captcha
+      'captcha': Captcha,
+      'v-alert': Alert
     },
 
     data () {
@@ -106,7 +190,8 @@
         counting: false,
         btnDisabled: false,
         seconds: config.VERIFYCODE_DURATION,
-        resetsuccess: false
+        resetsuccess: false,
+        sending: false
       }
     },
 
@@ -137,7 +222,7 @@
       },
 
       fetchVerifyCode () {
-        if (this.validation.phone.$invalid) {
+        if (this.$authValidation.phone.invalid) {
           this.showNotice({
             type: 'error',
             content: this.$t('ui.auth.phone_msg')
@@ -163,13 +248,18 @@
       onSubmit () {
         var content = {'phone': this.model.phone, 'verifycode': this.model.verifycode, 'password': this.model.password}
 
-        api.corp.resetPassword(content).then((res) => {
-          if (res.data === 200) {
-            this.resetsuccess = true
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+        if (this.$authValidation.valid && !this.sending) {
+          this.sending = true
+          api.corp.resetPassword(content).then((res) => {
+            if (res.data === 200) {
+              this.resetsuccess = true
+              this.sending = false
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.sending = false
+          })
+        }
       }
     }
   }

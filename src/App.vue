@@ -1,5 +1,13 @@
 <template>
   <div :class="{'auth-page':layout==='auth', 'loading-resource':loading}" class="page-container">
+    <template v-if="layout==='auth'">
+      <header class="auth-header" transition="header" transition-mode="out-in">
+        <div class="logo-auth">
+          <a href="http://www.xlink.cn/"></a>
+        </div>
+      </header>
+    </template>
+
     <template v-if="layout==='admin'">
       <!-- Start: 页头 -->
       <header class="header the-header" transition="header" transition-mode="out-in">
@@ -231,8 +239,20 @@
     size 100%
 
   .auth-page
-    background #383838
+    background url('assets/images/main_bg.jpg') no-repeat center top
     overflow-y auto
+
+  .auth-header
+    position relative
+    text-align center
+
+    // Logo
+    .logo-auth
+      a
+        display inline-block
+        size 200px 100px
+        background red url('assets/images/logo_auth.png') no-repeat
+        background-size 200px 100px
 
   .loading-resource
     cursor wait
@@ -442,6 +462,7 @@
 
   // 头部淡入淡出
   .header
+  .auth-header
     transition transform .2s ease-in-out .2s, opacity .2s ease-in-out .2s
 
   .header-enter

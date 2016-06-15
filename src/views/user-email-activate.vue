@@ -1,22 +1,14 @@
 <template>
-  <div>
-    <div v-show="activateSuccess" class="form form-auth form-member-activate">
-      <div class="form-cont reset-password-success">
-        <div class="alert alert-success">
-          <div class="fa fa-check-circle-o"></div>
-          <h2>{{ $t("ui.auth.activate_success") }}</h2>
-          <p>{{ $t("ui.auth.activate_success_msg") }}</p>
-        </div>
-      </div>
+  <div class="auth-form">
+    <div class="auth-msg-box" v-show="activateSuccess">
+      <v-alert :cols="16" type="success" :title="$t('ui.auth.activate_success')">
+        <p>{{ $t("ui.auth.activate_success_msg") }}</p>
+      </v-alert>
     </div>
-    <div v-show="activateFail" class="form form-auth form-member-activate">
-      <div class="form-cont reset-password-success">
-        <div class="alert alert-success">
-          <div class="fa fa-times-circle-o"></div>
-          <h2>{{ $t("ui.auth.activate_fail") }}</h2>
-          <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
-        </div>
-      </div>
+    <div class="auth-msg-box" v-show="activateFail">
+      <v-alert :cols="16" type="error" :title="$t('ui.auth.activate_fail')">
+        <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
+      </v-alert>
     </div>
   </div>
 </template>
@@ -26,9 +18,10 @@
 </style>
 
 <script>
-  import api from '../api'
-  import base64 from '../helpers/base64'
-  import { globalMixins } from '../mixins'
+  import api from 'api'
+  import base64 from 'helpers/base64'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
 
   export default {
     name: 'EmailActivateForm',
@@ -36,6 +29,10 @@
     layout: 'auth',
 
     mixins: [globalMixins],
+
+    components: {
+      'v-alert': Alert
+    },
 
     data () {
       return {

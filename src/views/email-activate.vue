@@ -1,31 +1,23 @@
 <template>
-  <div>
-    <div v-show="activateSuccess" class="form form-auth form-member-activate">
-      <div class="form-logo"></div>
-      <div class="form-cont reset-password-success">
-        <v-alert :cols="16" :title="successTitle" type="error">
-          <p>{{ successMsg }}</p>
-        </v-alert>
-        <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
-      </div>
+  <div class="auth-form">
+    <div class="auth-msg-box" v-show="activateSuccess">
+      <v-alert :cols="16" type="success" :title="successTitle">
+        <p>{{ successMsg }}</p>
+      </v-alert>
     </div>
-    <div v-show="activateFail" class="form form-auth form-member-activate">
-      <div class="form-logo"></div>
-      <div class="form-cont reset-password-success">
-        <v-alert :cols="16" :title="failTitle" type="error">
-          <p>{{ failMsg }}</p>
-        </v-alert>
-        <div class="form-footer">2015 &copy; {{ $t("common.company") }}.</div>
-      </div>
+    <div class="auth-msg-box" v-show="activateFail">
+      <v-alert :cols="16" type="error" :title="failTitle">
+        <p>{{ failMsg }}</p>
+      </v-alert>
     </div>
   </div>
 </template>
 
 <script>
-  import api from '../api'
-  import base64 from '../helpers/base64'
-  import { globalMixins } from '../mixins'
-  import Alert from '../components/Alert'
+  import api from 'api'
+  import base64 from 'helpers/base64'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
 
   export default {
     name: 'EmailActivateForm',

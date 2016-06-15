@@ -139,6 +139,7 @@
   .form-tips
     font-size 12px
     word-wrap break-word
+    line-height 24px
 
     i
       margin-right 5px
@@ -175,7 +176,7 @@
 
     .btn
       margin-right 10px
-
+/*
 .form-auth
   max-width 550px
   margin 0 auto
@@ -249,6 +250,108 @@
     font-size 12px
     text-align center
     padding 20px 0
+*/
+.auth-form
+  margin-top 60px
+
+  .inner
+    clearfix()
+    position relative
+    background #FFF
+    width 580px
+    margin 0 auto
+    overflow hidden
+    border-radius 10px
+    box-shadow 0 3px 6px rgba(0, 0, 0, .15)
+    padding-bottom 40px
+
+    .link-return
+      absolute left 8px top 8px
+      font-size 20px
+      color gray-light
+
+      &:hover
+        color red
+
+  .form-legend
+    font-size 26px
+    text-align center
+    margin 45px 0 40px
+
+  // 输入框
+  .input-text-wrap
+    position relative
+
+    .input-text
+      font-size 16px
+      height 44px
+      line-height 42px
+      padding 0 15px
+      border-radius 4px
+
+    .placeholder
+      absolute left 16px top 0
+      height 44px
+      line-height 44px
+      color #A9A9A9
+
+  .v-select
+    .v-select-trigger
+      height 44px
+      line-height 44px
+      padding 0 25px 0 15px
+      border-radius 4px
+
+      span
+        height 42px
+
+      .caret
+        absolute right 20px top 20px
+        triangle #E1E1E1 14px down
+
+  .form
+    max-width none
+    box-sizing border-box
+    padding 0 110px
+    // font-size 16px
+
+    .form-row
+      margin-bottom 30px
+
+    .row-check
+      font-size 14px
+      color #969595
+
+      a
+        line-height 30px
+        color red
+
+    .form-actions
+      text-align center
+
+      .btn
+        width 260px
+        text-align center
+        margin 0
+
+    .form-operations
+      margin-top 25px
+      text-align center
+
+      a
+        text-decoration underline
+        color #A5A4A4
+
+.auth-msg-box
+  width 600px
+  margin 0 auto
+  padding-left 80px
+  background #FFF
+  border-radius 10px
+  box-shadow 0 3px 6px rgba(0, 0, 0, .15)
+
+  .v-alert
+    margin 120px 0
 
 // 浮层里的表单
 .modal
