@@ -47,9 +47,9 @@
 </template>
 
 <script>
-  import api from '../../api'
-  import { globalMixins } from '../../mixins'
-  import Tooltip from '../../components/Tooltip'
+  import api from 'api'
+  import { globalMixins } from 'src/mixins'
+  import Tooltip from 'components/Tooltip'
 
   export default {
     name: 'UserSetting',

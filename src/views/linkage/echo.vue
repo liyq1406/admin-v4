@@ -22,8 +22,8 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import PicTxt from '../../components/PicTxt'
+  import { globalMixins } from 'src/mixins'
+  import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
 
   export default {

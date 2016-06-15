@@ -1,6 +1,6 @@
 import Vue from 'vue'
-import locales from '../../consts/locales/index'
-import * as config from '../../consts/config'
+import locales from 'consts/locales/index'
+import * as config from 'consts/config'
 import * as types from '../mutation-types'
 
 // 设置当前布局

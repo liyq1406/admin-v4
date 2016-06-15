@@ -15,9 +15,9 @@
 </template>
 
 <script>
-  import Tab from '../../../components/Tab'
-  import { globalMixins } from '../../../mixins'
-  import Alert from '../../../components/Alert'
+  import Tab from 'components/Tab'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
 
   export default {
     name: 'Helpdesk',

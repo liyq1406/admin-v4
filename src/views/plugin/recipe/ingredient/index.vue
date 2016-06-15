@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.recipe.placeholders.search_condi')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
             <button slot="search-button" @click="getIngredients" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
           <div class="action-group"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/ingredient/add'}" class="btn btn-success"><i class="fa fa-plus"></i>添加食材</a>
@@ -93,13 +93,13 @@
 </template>
 
 <script>
-  import api from '../../../../api'
-  import * as config from '../../../../consts/config'
-  import Select from '../../../../components/Select'
-  import Pager from '../../../../components/Pager'
-  import Modal from '../../../../components/Modal'
-  import SearchBox from '../../../../components/SearchBox'
-  import { globalMixins } from '../../../../mixins'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Select from 'components/Select'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import SearchBox from 'components/SearchBox'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
 
   export default {

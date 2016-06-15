@@ -40,16 +40,16 @@
 
 <script>
   import Vue from 'vue'
-  import locales from '../../../consts/locales/index'
-  import api from '../../../api'
-  import Modal from '../../../components/Modal'
-  import Select from '../../../components/Select'
-  import RadioGroup from '../../../components/RadioGroup'
+  import locales from 'consts/locales/index'
+  import api from 'api'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import RadioGroup from 'components/RadioGroup'
   // import _ from 'lodash'
-  import { globalMixins } from '../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
 
-  import PieChart from '../../../components/charts/Pie'
+  import PieChart from 'components/charts/Pie'
 
   export default {
     name: 'Overview',

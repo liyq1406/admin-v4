@@ -152,15 +152,15 @@
 <script>
   import _ from 'lodash'
   import Vue from 'vue'
-  import store from '../../store/index'
-  import SearchBox from '../../components/SearchBox'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import locales from '../../consts/locales/index'
-  import { globalMixins } from '../../mixins'
+  import store from 'store/index'
+  import SearchBox from 'components/SearchBox'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import locales from 'consts/locales/index'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'MemberSettings',

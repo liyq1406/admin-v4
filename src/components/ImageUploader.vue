@@ -8,7 +8,7 @@
 
 <script>
   import api from '../api'
-  import * as config from '../consts/config'
+  import * as config from 'consts/config'
 
   export default {
     props: {

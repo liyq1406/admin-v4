@@ -86,15 +86,15 @@
 
 <script>
   import Vue from 'vue'
-  import RadioGroup from '../../components/RadioGroup'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import locales from '../../consts/locales/index'
+  import RadioGroup from 'components/RadioGroup'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import locales from 'consts/locales/index'
   import dateFormat from 'date-format'
-  import LineChart from '../../components/charts/Line'
-  import MapChart from '../../components/charts/Map'
+  import LineChart from 'components/charts/Line'
+  import MapChart from 'components/charts/Map'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'UsersStatistic',

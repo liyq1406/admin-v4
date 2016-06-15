@@ -192,15 +192,15 @@
 <script>
   import Vue from 'vue'
   // import v-form from 'vue'
-  import api from '../../../api'
-  import * as config from '../../../consts/config'
-  import Switch from '../../../components/Switch'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Switch from 'components/Switch'
   import io from 'socket.io-client'
   import dateFormat from 'date-format'
-  import { globalMixins } from '../../../mixins'
-  import locales from '../../../consts/locales/index'
-  import Modal from '../../../components/Modal'
-  import Select from '../../../components/Select'
+  import { globalMixins } from 'src/mixins'
+  import locales from 'consts/locales/index'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
 
   var socket = null
 

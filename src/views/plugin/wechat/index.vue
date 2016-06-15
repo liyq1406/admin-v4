@@ -15,11 +15,11 @@
   </section>
 </template>
 <script>
-  import Tab from '../../../components/Tab'
-  import { globalMixins } from '../../../mixins'
-  import { setCurrPlugin } from '../../../store/actions/plugins'
-  import store from '../../../store/index'
-  import api from '../../../api'
+  import Tab from 'components/Tab'
+  import { globalMixins } from 'src/mixins'
+  import { setCurrPlugin } from 'store/actions/plugins'
+  import store from 'store/index'
+  import api from 'api'
 
   export default {
     name: 'Statistic',

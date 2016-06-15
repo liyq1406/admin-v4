@@ -425,15 +425,15 @@
 
 <script>
   import Vue from 'vue'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import locales from '../../consts/locales/index'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
-  import TagInput from '../../components/TagInput'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import locales from 'consts/locales/index'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import TagInput from 'components/TagInput'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Alert',

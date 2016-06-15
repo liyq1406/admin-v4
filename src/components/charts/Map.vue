@@ -7,8 +7,8 @@
   import 'echarts/chart/line'
   import 'echarts/chart/map'
   import ecConfig from 'echarts/config'
-  import worldNames from '../../consts/mapping/world-names'
-  import chinaNames from '../../consts/mapping/china-names'
+  import worldNames from 'consts/mapping/world-names'
+  import chinaNames from 'consts/mapping/china-names'
 
   export default {
     name: 'MapChart',

@@ -85,14 +85,14 @@
 </template>
 
 <script>
-  import * as config from '../../../consts/config'
-  import { globalMixins } from '../../../mixins'
-  import Select from '../../../components/Select'
-  import AreaSelect from '../../../components/AreaSelect'
-  import SearchBox from '../../../components/SearchBox'
-  import Pager from '../../../components/Pager'
-  import DateTimeRangePicker from '../../../components/DateTimeRangePicker'
-  import api from '../../../api'
+  import * as config from 'consts/config'
+  import { globalMixins } from 'src/mixins'
+  import Select from 'components/Select'
+  import AreaSelect from 'components/AreaSelect'
+  import SearchBox from 'components/SearchBox'
+  import Pager from 'components/Pager'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
+  import api from 'api'
 
   export default {
     name: 'OrderList',

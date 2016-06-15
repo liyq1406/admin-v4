@@ -16,8 +16,8 @@
 </template>
 
 <script>
-  import Alert from '../../../components/Alert'
-  import { globalMixins } from '../../../mixins'
+  import Alert from 'components/Alert'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Forbidden',

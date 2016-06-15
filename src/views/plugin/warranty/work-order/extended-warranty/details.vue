@@ -94,9 +94,9 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../../mixins'
-  import api from '../../../../../api'
+  import api from 'api'
 
   export default {
     name: 'OrderDetails',

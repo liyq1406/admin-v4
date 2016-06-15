@@ -196,16 +196,16 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../mixins'
-  import api from '../../../api'
-  import Select from '../../../components/Select'
-  import DatePicker from '../../../components/DatePicker'
-  import TimePicker from '../../../components/TimePicker'
-  import AreaSelect from '../../../components/AreaSelect'
-  import Editor from '../../../components/Editor'
-  import Pager from '../../../components/Pager'
-  import Modal from '../../../components/Modal'
-  import SearchBox from '../../../components/SearchBox'
+  import { globalMixins } from 'src/mixins'
+  import api from 'api'
+  import Select from 'components/Select'
+  import DatePicker from 'components/DatePicker'
+  import TimePicker from 'components/TimePicker'
+  import AreaSelect from 'components/AreaSelect'
+  import Editor from 'components/Editor'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import SearchBox from 'components/SearchBox'
   import _ from 'lodash'
 
   export default {

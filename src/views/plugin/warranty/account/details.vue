@@ -271,14 +271,14 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
-  import Select from '../../../../components/Select'
-  import SearchBox from '../../../../components/SearchBox'
-  import Pager from '../../../../components/Pager'
-  import Modal from '../../../../components/Modal'
-  import api from '../../../../api'
-  import * as config from '../../../../consts/config'
+  import Select from 'components/Select'
+  import SearchBox from 'components/SearchBox'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import api from 'api'
+  import * as config from 'consts/config'
   import _ from 'lodash'
 
   export default {

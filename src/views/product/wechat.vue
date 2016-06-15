@@ -272,15 +272,15 @@
 
 <script>
   // import Vue from 'vue'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
-  import Tooltip from '../../components/Tooltip'
-  // import locales from '../../consts/locales/index'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import Tooltip from 'components/Tooltip'
+  // import locales from 'consts/locales/index'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'DataTables',

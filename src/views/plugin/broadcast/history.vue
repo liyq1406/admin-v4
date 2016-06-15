@@ -66,10 +66,10 @@
 </template>
 
 <script>
-  import * as config from '../../../consts/config'
-  import Select from '../../../components/Select'
-  import SearchBox from '../../../components/SearchBox'
-  import { globalMixins } from '../../../mixins'
+  import * as config from 'consts/config'
+  import Select from 'components/Select'
+  import SearchBox from 'components/SearchBox'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'BroadcastHistory',

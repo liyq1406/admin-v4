@@ -88,10 +88,10 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
-  import Gallery from '../../../components/Gallery'
-  import api from '../../../api'
+  import Gallery from 'components/Gallery'
+  import api from 'api'
   // import _ from 'lodash'
 
   export default {

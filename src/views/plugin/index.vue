@@ -33,10 +33,10 @@
 </template>
 
 <script>
-  import Tab from '../../components/Tab'
-  import { globalMixins } from '../../mixins'
-  import Switch from '../../components/Switch'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
+  import Tab from 'components/Tab'
+  import { globalMixins } from 'src/mixins'
+  import Switch from 'components/Switch'
+  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
 
   export default {

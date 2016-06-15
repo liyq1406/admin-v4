@@ -39,10 +39,10 @@
 </template>
 
 <script>
-  import api from '../api'
-  import { globalMixins } from '../mixins'
-  import { setLoadingStatus } from '../store/actions/system'
-  import store from '../store/index'
+  import api from 'api'
+  import { globalMixins } from 'src/mixins'
+  import { setLoadingStatus } from 'store/actions/system'
+  import store from 'store/index'
 
   export default {
     name: 'LoginForm',

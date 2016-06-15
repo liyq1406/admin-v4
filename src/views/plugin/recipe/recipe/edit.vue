@@ -87,6 +87,7 @@
               <div class="form-row row">
                 <label class="form-control col-4">烹饪设备:</label>
                 <div class="controls col-20">
+                  <pre>{{model.devices|json}}</pre>
                   <div v-for="cookingDevice in model.devices" class="select-group">
                     <div class="select inline">
                       <v-select  width="180px" placeholder="请选择烹饪设备" :label="cookingDevice.name">
@@ -217,15 +218,15 @@
 </template>
 
 <script>
-  import api from '../../../../api'
-  import * as config from '../../../../consts/config'
-  import Modal from '../../../../components/Modal'
-  import Pager from '../../../../components/Pager'
-  import Select from '../../../../components/Select'
-  import SearchBox from '../../../../components/SearchBox'
-  import ImageUploader from '../../../../components/ImageUploader'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Modal from 'components/Modal'
+  import Pager from 'components/Pager'
+  import Select from 'components/Select'
+  import SearchBox from 'components/SearchBox'
+  import ImageUploader from 'components/ImageUploader'
   import _ from 'lodash'
-  import { globalMixins } from '../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
 
   export default {
@@ -384,7 +385,20 @@
                 images[index] = item
               })
               // res.data.images = images
+              // for (var key in this.model) {
+              //   if (this.model.hasOwnProperty(key)) {
+              //     this.model[key] = data[key]
+              //   }
+              // }
+              // this.model = _.cloneDeep(data)
+              // console.log(this.model)
               this.model = data
+              var arr = []
+              data.devices.forEach((item, index) => {
+                console.log(item)
+                arr.push(item)
+              })
+              this.model.devices = arr
             }
           })
         })

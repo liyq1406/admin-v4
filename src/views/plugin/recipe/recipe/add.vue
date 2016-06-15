@@ -212,15 +212,15 @@
 </template>
 
 <script>
-  import api from '../../../../api'
-  import * as config from '../../../../consts/config'
-  import Modal from '../../../../components/Modal'
-  import Pager from '../../../../components/Pager'
-  import Select from '../../../../components/Select'
-  import SearchBox from '../../../../components/SearchBox'
-  import ImageUploader from '../../../../components/ImageUploader'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Modal from 'components/Modal'
+  import Pager from 'components/Pager'
+  import Select from 'components/Select'
+  import SearchBox from 'components/SearchBox'
+  import ImageUploader from 'components/ImageUploader'
   import _ from 'lodash'
-  import { globalMixins } from '../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
 
   export default {

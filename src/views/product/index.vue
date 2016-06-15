@@ -15,11 +15,11 @@
 </template>
 
 <script>
-  import Tab from '../../components/Tab'
-  import api from '../../api'
-  import store from '../../store/index'
-  import { setCurrProduct } from '../../store/actions/products'
-  import { globalMixins } from '../../mixins'
+  import Tab from 'components/Tab'
+  import api from 'api'
+  import store from 'store/index'
+  import { setCurrProduct } from 'store/actions/products'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Products',

@@ -169,11 +169,11 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../mixins'
-  import Select from '../../../components/Select'
-  import DatePicker from '../../../components/DatePicker'
-  import TimePicker from '../../../components/TimePicker'
-  import AreaSelect from '../../../components/AreaSelect'
+  import { globalMixins } from 'src/mixins'
+  import Select from 'components/Select'
+  import DatePicker from 'components/DatePicker'
+  import TimePicker from 'components/TimePicker'
+  import AreaSelect from 'components/AreaSelect'
 
   export default {
     name: 'AddBroadcast',

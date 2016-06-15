@@ -74,14 +74,14 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import Switch from '../../components/Switch'
-  import PicTxt from '../../components/PicTxt'
+  import { globalMixins } from 'src/mixins'
+  import Switch from 'components/Switch'
+  import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
+  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from '../plugin/mixins'
   // import _ from 'lodash'
-  import api from '../../api'
+  import api from 'api'
 
   export default {
     name: 'Nest',

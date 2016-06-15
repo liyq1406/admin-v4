@@ -67,11 +67,11 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import Alert from '../../components/Alert'
-  import Select from '../../components/Select'
-  import Switch from '../../components/Switch'
-  import api from '../../api'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
+  import Select from 'components/Select'
+  import Switch from 'components/Switch'
+  import api from 'api'
 
   export default {
     name: 'Devices_link',

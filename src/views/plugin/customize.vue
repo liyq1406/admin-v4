@@ -117,13 +117,13 @@
 
 <script>
   import Vue from 'vue'
-  import locales from '../../consts/locales/index'
-  import api from '../../api'
-  import Modal from '../../components/Modal'
-  import store from '../../store/index'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
+  import locales from 'consts/locales/index'
+  import api from 'api'
+  import Modal from 'components/Modal'
+  import store from 'store/index'
+  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Applications',

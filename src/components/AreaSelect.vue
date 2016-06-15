@@ -23,9 +23,9 @@
 </template>
 
 <script>
-  import provinces from '../consts/areas/provinces'
-  import cities from '../consts/areas/cities'
-  import districts from '../consts/areas/districts'
+  import provinces from 'consts/areas/provinces'
+  import cities from 'consts/areas/cities'
+  import districts from 'consts/areas/districts'
   import Select from '../components/Select'
   import _ from 'lodash'
 

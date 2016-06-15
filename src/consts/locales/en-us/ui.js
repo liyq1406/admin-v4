@@ -652,7 +652,8 @@ export default {
     del: '删除该食材',
     placeholders: {
       name: '请填写食材标题',
-      instructions: '请填写食材描述'
+      instructions: '请填写食材描述',
+      search_condi: '请填写查询条件'
     },
     fields: {
       name: '标题',
@@ -668,7 +669,8 @@ export default {
     placeholders: {
       name: '请填写菜谱标题',
       instructions: '请填写菜谱描述',
-      tips: '请填写菜谱备注'
+      tips: '请填写菜谱备注',
+      search_condi: '请填写查询条件'
     },
     fields: {
       name: '标题',

@@ -82,11 +82,11 @@
 </template>
 
 <script>
-  import api from '../../../../api'
-  import ImageUploader from '../../../../components/ImageUploader'
-  import Select from '../../../../components/Select'
+  import api from 'api'
+  import ImageUploader from 'components/ImageUploader'
+  import Select from 'components/Select'
   import _ from 'lodash/array'
-  import { globalMixins } from '../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
 
   export default {

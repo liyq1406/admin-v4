@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import { globalMixins } from '../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Not-found',

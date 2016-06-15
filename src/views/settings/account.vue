@@ -175,12 +175,12 @@
 
 <script>
   import Vue from 'vue'
-  import Modal from '../../components/Modal'
-  import locales from '../../consts/locales/index'
-  import api from '../../api'
+  import Modal from 'components/Modal'
+  import locales from 'consts/locales/index'
+  import api from 'api'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
-  import { setCurrentMember } from '../../store/actions/system'
+  import { globalMixins } from 'src/mixins'
+  import { setCurrentMember } from 'store/actions/system'
 
   export default {
     name: 'AccountSettings',

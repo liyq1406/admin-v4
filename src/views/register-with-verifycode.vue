@@ -86,13 +86,13 @@
 </template>
 
 <script>
-  import api from '../api'
+  import api from 'api'
   import Vue from 'vue'
-  import * as config from '../consts/config'
-  import locales from '../consts/locales/index'
-  import Select from '../components/Select'
-  import Captcha from '../components/Captcha'
-  import { globalMixins } from '../mixins'
+  import * as config from 'consts/config'
+  import locales from 'consts/locales/index'
+  import Select from 'components/Select'
+  import Captcha from 'components/Captcha'
+  import { globalMixins } from 'src/mixins'
   import _ from 'lodash'
 
   export default {

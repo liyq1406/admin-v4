@@ -96,17 +96,17 @@
 
 <script>
   import Vue from 'vue'
-  import RadioGroup from '../../components/RadioGroup'
-  import Select from '../../components/Select'
-  import LineChart from '../../components/charts/Line'
-  import MapChart from '../../components/charts/Map'
-  import Pager from '../../components/Pager'
-  import Tooltip from '../../components/Tooltip'
-  import locales from '../../consts/locales/index'
-  import api from '../../api'
-  import * as config from '../../consts/config'
+  import RadioGroup from 'components/RadioGroup'
+  import Select from 'components/Select'
+  import LineChart from 'components/charts/Line'
+  import MapChart from 'components/charts/Map'
+  import Pager from 'components/Pager'
+  import Tooltip from 'components/Tooltip'
+  import locales from 'consts/locales/index'
+  import api from 'api'
+  import * as config from 'consts/config'
   import dateFormat from 'date-format'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
   import _ from 'lodash'
 
   export default {

@@ -80,11 +80,11 @@
 </template>
 
 <script>
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import { globalMixins } from '../../mixins'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'TableDetails',

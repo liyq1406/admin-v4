@@ -55,11 +55,11 @@
 
 <script>
   import Vue from 'vue'
-  import api from '../../api'
-  import { createProduct } from '../../store/actions/products'
-  import locales from '../../consts/locales/index'
-  import { globalMixins } from '../../mixins'
-  import Select from '../../components/Select'
+  import api from 'api'
+  import { createProduct } from 'store/actions/products'
+  import locales from 'consts/locales/index'
+  import { globalMixins } from 'src/mixins'
+  import Select from 'components/Select'
 
   export default {
     name: 'CreateProductForm',

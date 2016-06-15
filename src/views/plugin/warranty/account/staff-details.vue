@@ -123,12 +123,12 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../../../mixins'
+  import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
-  import Modal from '../../../../components/Modal'
-  import Select from '../../../../components/Select'
-  import api from '../../../../api'
-  import * as config from '../../../../consts/config'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import api from 'api'
+  import * as config from 'consts/config'
   // import _ from 'lodash'
 
   export default {

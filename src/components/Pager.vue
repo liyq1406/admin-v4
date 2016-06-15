@@ -46,7 +46,7 @@
 </template>
 
 <script>
-  import * as config from '../consts/config'
+  import * as config from 'consts/config'
   import { globalMixins } from '../mixins'
 
   export default {

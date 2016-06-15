@@ -70,14 +70,14 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import api from '../../api'
-  import * as config from '../../consts/config'
+  import { globalMixins } from 'src/mixins'
+  import api from 'api'
+  import * as config from 'consts/config'
   // import AMap from 'AMap'
-  import Select from '../../components/Select'
-  import SearchBox from '../../components/SearchBox'
-  import Alert from '../../components/Alert'
-  import Pager from '../../components/Pager'
+  import Select from 'components/Select'
+  import SearchBox from 'components/SearchBox'
+  import Alert from 'components/Alert'
+  import Pager from 'components/Pager'
   import _ from 'lodash'
 
   export default {

@@ -276,12 +276,12 @@
 </template>
 
 <script>
-  import api from '../../api'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
+  import api from 'api'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
   import _ from 'lodash'
-  import * as config from '../../consts/config'
-  import { globalMixins } from '../../mixins'
+  import * as config from 'consts/config'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Upgrade',

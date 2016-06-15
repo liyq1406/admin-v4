@@ -469,17 +469,17 @@
 
 <script>
   import Vue from 'vue'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import IntelligentTable from '../../components/IntelligentTable'
-  import DatePicker from '../../components/DatePicker'
-  import TimePicker from '../../components/TimePicker2'
-  import Select from '../../components/Select'
-  import locales from '../../consts/locales/index'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import IntelligentTable from 'components/IntelligentTable'
+  import DatePicker from 'components/DatePicker'
+  import TimePicker from 'components/TimePicker2'
+  import Select from 'components/Select'
+  import locales from 'consts/locales/index'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'DataTables',

@@ -1,5 +1,5 @@
-import * as http from '../http'
-import { API_SERVER } from '../consts/config'
+import * as http from 'src/http'
+import { API_SERVER } from 'consts/config'
 
 export default {
   /**

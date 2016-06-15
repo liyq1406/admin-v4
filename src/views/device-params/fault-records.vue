@@ -33,10 +33,10 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import Pager from '../../components/Pager'
-  import api from '../../api'
-  import * as config from '../../consts/config'
+  import { globalMixins } from 'src/mixins'
+  import Pager from 'components/Pager'
+  import api from 'api'
+  import * as config from 'consts/config'
 
   export default {
     name: 'BasicInfo',

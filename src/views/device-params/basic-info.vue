@@ -258,12 +258,12 @@
 
 <script>
   // import Vue from 'vue'
-  import api from '../../api'
-  import { globalMixins } from '../../mixins'
-  import Modal from '../../components/Modal'
-  // import locales from '../../../../consts/locales/index'
+  import api from 'api'
+  import { globalMixins } from 'src/mixins'
+  import Modal from 'components/Modal'
+  // import locales from 'consts/locales/index'
   // import io from 'socket.io-client'
-  import XJSObject from '../../helpers/jssdk'
+  import XJSObject from 'helpers/jssdk'
   // import decodeData from './datatools/decode'
   // locales = 123
   // var socket

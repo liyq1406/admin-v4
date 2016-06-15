@@ -31,12 +31,12 @@
 
 <script>
   // import Vue from 'vue'
-  // import locales from '../../consts/locales/index'
-  import api from '../../api'
-  import Modal from '../../components/Modal'
+  // import locales from 'consts/locales/index'
+  import api from 'api'
+  import Modal from 'components/Modal'
   // import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
-  import PieChart from '../../components/charts/Pie'
+  import { globalMixins } from 'src/mixins'
+  import PieChart from 'components/charts/Pie'
 
   export default {
     name: 'Applications',

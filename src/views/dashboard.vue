@@ -153,15 +153,15 @@
 </template>
 
 <script>
-  import api from '../api'
+  import api from 'api'
   import Vue from 'vue'
-  import RadioGroup from '../components/RadioGroup'
-  import Select from '../components/Select'
-  import LineChart from '../components/charts/Line'
-  import locales from '../consts/locales/index'
+  import RadioGroup from 'components/RadioGroup'
+  import Select from 'components/Select'
+  import LineChart from 'components/charts/Line'
+  import locales from 'consts/locales/index'
   import dateFormat from 'date-format'
   import _ from 'lodash'
-  import { globalMixins } from '../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Dashboard',

@@ -198,18 +198,18 @@
 
 <script>
   import Vue from 'vue'
-  import RadioGroup from '../../components/RadioGroup'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
-  import api from '../../api'
+  import RadioGroup from 'components/RadioGroup'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import api from 'api'
   import _ from 'lodash'
   import dateFormat from 'date-format'
-  import LineChart from '../../components/charts/Line'
-  import MapChart from '../../components/charts/Map'
-  import locales from '../../consts/locales/index'
-  import store from '../../store/index'
-  import { removeProduct, updateProduct, setCurrProduct } from '../../store/actions/products'
-  import { globalMixins } from '../../mixins'
+  import LineChart from 'components/charts/Line'
+  import MapChart from 'components/charts/Map'
+  import locales from 'consts/locales/index'
+  import store from 'store/index'
+  import { removeProduct, updateProduct, setCurrProduct } from 'store/actions/products'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Overview',

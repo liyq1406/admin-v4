@@ -21,10 +21,10 @@
 </template>
 
 <script>
-  import Modal from '../../components/Modal'
-  import Switch from '../../components/Switch'
-  import { createPlugin, updatePlugin, removePlugin } from '../../store/actions/plugins'
-  import { globalMixins } from '../../mixins'
+  import Modal from 'components/Modal'
+  import Switch from 'components/Switch'
+  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
+  import { globalMixins } from 'src/mixins'
   import { pluginFactoryMixin } from './mixins'
 
   export default {

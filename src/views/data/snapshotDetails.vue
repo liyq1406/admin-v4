@@ -174,18 +174,18 @@
 
 <script>
   import Vue from 'vue'
-  import locales from '../../consts/locales/index'
-  import api from '../../api'
-  import RadioGroup from '../../components/RadioGroup'
+  import locales from 'consts/locales/index'
+  import api from 'api'
+  import RadioGroup from 'components/RadioGroup'
   // import dateFormat from 'date-format'
-  import LineChart from '../../components/charts/Line'
-  import Pager from '../../components/Pager'
-  import SearchBox from '../../components/SearchBox'
-  import Select from '../../components/Select'
-  import Modal from '../../components/Modal'
-  import IntelligentTable from '../../components/IntelligentTable'
-  import { globalMixins } from '../../mixins'
-  import Alert from '../../components/Alert'
+  import LineChart from 'components/charts/Line'
+  import Pager from 'components/Pager'
+  import SearchBox from 'components/SearchBox'
+  import Select from 'components/Select'
+  import Modal from 'components/Modal'
+  import IntelligentTable from 'components/IntelligentTable'
+  import { globalMixins } from 'src/mixins'
+  import Alert from 'components/Alert'
 
   export default {
     name: 'TableDetails',

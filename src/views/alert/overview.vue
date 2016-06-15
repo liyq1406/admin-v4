@@ -151,15 +151,15 @@
 <script>
   import Vue from 'vue'
   import _ from 'lodash'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import locales from '../../consts/locales/index'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import RadioGroup from '../../components/RadioGroup'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import locales from 'consts/locales/index'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import RadioGroup from 'components/RadioGroup'
   import dateFormat from 'date-format'
-  import LineChart from '../../components/charts/Line'
-  import { globalMixins } from '../../mixins'
+  import LineChart from 'components/charts/Line'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Alerts',

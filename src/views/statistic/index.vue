@@ -15,8 +15,8 @@
 </template>
 
 <script>
-  import Tab from '../../components/Tab'
-  import { globalMixins } from '../../mixins'
+  import Tab from 'components/Tab'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'Statistic',

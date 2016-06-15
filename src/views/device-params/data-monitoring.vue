@@ -15,9 +15,9 @@
 </template>
 
 <script>
-  import { globalMixins } from '../../mixins'
-  import api from '../../api'
-  import LineChart from '../../components/charts/Line'
+  import { globalMixins } from 'src/mixins'
+  import api from 'api'
+  import LineChart from 'components/charts/Line'
 
   export default {
     name: 'BasicInfo',

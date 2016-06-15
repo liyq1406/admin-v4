@@ -138,12 +138,12 @@
    *
    */
 
-  import Modal from '../../components/Modal'
-  import Pager from '../../components/Pager'
-  import api from '../../api'
-  import * as config from '../../consts/config'
+  import Modal from 'components/Modal'
+  import Pager from 'components/Pager'
+  import api from 'api'
+  import * as config from 'consts/config'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'AuthSettings',

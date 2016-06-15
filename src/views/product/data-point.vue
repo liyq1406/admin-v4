@@ -248,14 +248,14 @@
 
 <script>
   import Vue from 'vue'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import locales from '../../consts/locales/index'
-  import Modal from '../../components/Modal'
-  import Pager from '../../components/Pager'
-  import Select from '../../components/Select'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import locales from 'consts/locales/index'
+  import Modal from 'components/Modal'
+  import Pager from 'components/Pager'
+  import Select from 'components/Select'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'DataPoint',

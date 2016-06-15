@@ -205,15 +205,15 @@
 
 <script>
   import Vue from 'vue'
-  // import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import Modal from '../../components/Modal'
-  import Select from '../../components/Select'
-  import locales from '../../consts/locales/index'
+  // import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import Modal from 'components/Modal'
+  import Select from 'components/Select'
+  import locales from 'consts/locales/index'
   import _ from 'lodash'
-  import { globalMixins } from '../../mixins'
-  import api from '../../api'
+  import { globalMixins } from 'src/mixins'
+  import api from 'api'
 
   export default {
     name: 'DataTables',

@@ -272,10 +272,10 @@
 
 <script>
   import Vue from 'vue'
-  import api from '../../api'
-  import RadioGroup from '../../components/RadioGroup'
-  import locales from '../../consts/locales/index'
-  import { globalMixins } from '../../mixins'
+  import api from 'api'
+  import RadioGroup from 'components/RadioGroup'
+  import locales from 'consts/locales/index'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'MailTemplates',

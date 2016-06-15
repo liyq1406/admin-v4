@@ -48,12 +48,12 @@
 </template>
 
 <script>
-  import SearchBox from '../../components/SearchBox'
-  import Modal from '../../components/Modal'
-  import api from '../../api'
-  import * as config from '../../consts/config'
-  import Pager from '../../components/Pager'
-  import { globalMixins } from '../../mixins'
+  import SearchBox from 'components/SearchBox'
+  import Modal from 'components/Modal'
+  import api from 'api'
+  import * as config from 'consts/config'
+  import Pager from 'components/Pager'
+  import { globalMixins } from 'src/mixins'
 
   export default {
     name: 'UserList',
