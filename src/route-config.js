@@ -302,6 +302,14 @@ let configRouter = (router) => {
               resolve(require('./views/plugin/android/settings'))
             }, 'admin')
           }
+        },
+        // 版本
+        'version': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/plugin/android/version'))
+            }, 'admin')
+          }
         }
       }
     },

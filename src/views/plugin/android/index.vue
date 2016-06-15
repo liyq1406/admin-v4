@@ -58,6 +58,10 @@
           secondaryNav: [{
             label: '应用配置',
             link: { path: '/plugins/android/' + appId + '/settings' }
+          },
+          {
+            label: '版本信息',
+            link: { path: '/plugins/android/' + appId + '/version' }
           }]
         }
       }
