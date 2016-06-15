@@ -305,6 +305,15 @@ export default {
       description: '描述'
     }
   },
+  // 安卓版本信息配置
+  version: {
+    placeholders: {
+      url: '请填写安卓APK文件的下载路径',
+      version: '请填写最新APK的版本号(整数)',
+      illustration: 'APK的说明信息',
+      md5: '文件md5校验值'
+    }
+  },
   // 数据转发
   dataforward: {
     add_dataforward: '添加设备规则',

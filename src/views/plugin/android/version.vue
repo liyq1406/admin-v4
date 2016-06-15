@@ -3,47 +3,61 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="form">
-          <form v-form name="validation" @submit.prevent="onEditSubmit">
-            <div class="form-row row">
-              <label class="form-control col-7">{{ '应用名称' }}:</label>
-              <div class="controls col-17">
-                <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
-                  <input v-model="model.name" type="text" name="name" minlength="2" maxlength="32" v-form-ctrl required lazy class="input-text"/>
-                </div>
-                <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-7">{{ $t("ui.app.inform") }}:</label>
-              <div class="controls col-17">
-                <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="gcm_enable" v-model="model.config.gcm.enable"/>{{ '启用GooglePlay服务' }}
-                  </label>
+          <validator name="editValidation">
+            <form novalidate @submit.prevent="onEditSubmit">
+              <!-- <pre>{{$editValidation|json}}</pre> -->
+              <div class="form-row row">
+                <label class="form-control col-6">下载路径:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.version.placeholders.url')" class="input-text-wrap">
+                    <input v-model="editModel.url" type="text" name="url" v-validate:url="{required: true, format: 'url'}" class="input-text" lazy/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$editValidation.url.touched && $editValidation.url.required">{{ $t('ui.validation.required', {field: $t('ui.version.url')}) }}</span>
+                    <span v-if="$editValidation.url.modified && $editValidation.url.format">{{ $t('ui.validation.url') }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div v-show="model.config.gcm.enable" class="form-row row">
-              <label class="form-control col-7">Server API Key:</label>
-              <div class="controls col-17">
-                <div v-placeholder="$t('ui.app.placeholders.apn_license_pwd')" class="input-text-wrap">
-                  <input v-model="model.config.gcm.api_key" type="text" v-form-ctrl name="api_key" class="input-text"/>
+              <div class="form-row row">
+                <label class="form-control col-6">版本号:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.version.placeholders.version')" class="input-text-wrap">
+                    <input v-model="editModel.version" type="text" name="version" v-validate:version="{required: true, numberic: true}" class="input-text" lazy/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$editValidation.version.touched && $editValidation.version.required">{{ $t('ui.validation.required', {field: $t('ui.version.version')}) }}</span>
+                    <span v-if="$editValidation.version.modified && $editValidation.version.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-actions row">
-              <div class="col-7">
-                <label class="del-check">
-                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.app.del_app") }}
-                </label>
+              <div class="form-row row">
+                <label class="form-control col-6">说明信息:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.version.placeholders.illustration')" class="input-text-wrap">
+                    <textarea v-model="editModel.illustration" type="text" name="illustration" v-validate:illustration="{maxlength: 250}" class="input-text" lazy></textarea>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$editValidation.illustration.modified && $editValidation.illustration.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.version.illustration'), 250]) }}</span>
+                  </div>
+                </div>
               </div>
-              <div class="col-17">
-                <a v-link="{path: '/plugins/customize'}" class="btn btn-default">{{ $t("common.cancel") }}</a>
+              <div class="form-row row">
+                <label class="form-control col-6">md5校验值:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.version.placeholders.md5')" class="input-text-wrap">
+                    <input v-model="editModel.md5" type="text" name="md5" v-validate:md5="{required: true, numberic: true}" class="input-text" lazy/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$editValidation.md5.touched && $editValidation.md5.required">{{ $t('ui.validation.required', {field: $t('ui.version.md5')}) }}</span>
+                    <span v-if="$editValidation.md5.modified && $editValidation.md5.numberic">{{ $t('ui.validation.numberic') }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
                 <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               </div>
-            </div>
-          </form>
+            </form>
+          </validator>
         </div>
       </div>
     </div>
@@ -72,15 +86,7 @@
 
     data () {
       return {
-        model: {
-          type: 2,
-          config: {
-            gcm: {
-              api_key: '',
-              enable: false
-            }
-          }
-        },
+        editModel: {},
         originModel: {},
         validation: {},
         editing: false,
