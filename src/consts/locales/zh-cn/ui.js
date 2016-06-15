@@ -102,7 +102,8 @@ export default {
     min: '{0}不能小于{1}',
     maxlength: '{0}不能多于{1}位',
     minlength: '{0}不能少于{1}位',
-    length: '必须是{field}位'
+    length: '必须是{field}位',
+    equal: '{0}必须与{1}一致'
   },
 
   upload: {

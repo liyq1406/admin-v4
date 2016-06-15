@@ -101,7 +101,8 @@ export default {
     max: '{0} cannot be more than {1}',
     min: '{0} cannot be less than {1}',
     maxlength: '{0} cannot be more than {1} characters',
-    minlength: '{0} cannot be less than {1} characters'
+    minlength: '{0} cannot be less than {1} characters',
+    equal: '{0} must be equal to {1}'
   },
 
   upload: {
