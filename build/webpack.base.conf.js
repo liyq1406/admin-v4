@@ -17,8 +17,12 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
       'src': path.resolve(__dirname, '../src'),
+      'api': path.resolve(__dirname, '../src/api'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
+      'components': path.resolve(__dirname, '../src/components'),
+      'consts': path.resolve(__dirname, '../src/consts'),
+      'helpers': path.resolve(__dirname, '../src/helpers'),
+      'store': path.resolve(__dirname, '../src/store')
     }
   },
   resolveLoader: {
