@@ -97,9 +97,29 @@ export default {
     )
   },
 
+  /**
+   * 查询处理记录
+   * @param  {string} appID, {string} token {object} params
+   * @return promise
+   */
   getFeedbackRecordList (appID, token, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback_record/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
+    )
+  },
+   /**
+    * 增加处理记录
+    * @param  {string} appID, {string} token {object} params
+    * @return promise
+    */
+  saveFeedbackRecord (appID, token, params) {
+    return http.post(
+      `${API_SERVER.feedback}/${appID}/api/feedback_record/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': token

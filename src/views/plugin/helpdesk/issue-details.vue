@@ -65,20 +65,44 @@
             </li>
           </ul>
           <div class="panel-sub-hd">处理记录</div>
-          <div class="form">
-            <div class="form-row row">
-              <div class="col-3 label">客服回复</div>
-              <div class="col-16">
-                <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
-                  <textarea class="input-text"></textarea>
-                </div>
-              </div>
-            </div>
-            <div class="form-actions row">
-              <div class="col-offset-3">
-                <button class="btn btn-primary">{{ $t('common.ok') }}</button>
-              </div>
-            </div>
+          <div class="panel-bd">
+            <ul v-for='record in recordList' class="issue-record-list info-details">
+              <template v-if="record.type===0">
+                <li class="row">
+                  <div class="col-3 label">客服信息:</div>
+                  <div class="col-21 info">{{record.name}}</div>
+                </li>
+                <li class="row">
+                  <div class="col-3 label">客服回复:</div>
+                  <div class="col-21 info">{{record.content}}</div>
+                </li>
+                <li class="row">
+                  <div class="col-3 label">处理时间:</div>
+                  <div class="col-21 info">{{record.create_time | uniformDate}}</div>
+                </li>
+              </template>
+              <template v-if="record.type===1">
+                <li class="row">
+                  <div class="col-3 label">用户回复:</div>
+                  <div class="col-21 info">{{record.content}}</div>
+                </li>
+                <li class="row">
+                  <div class="col-3 label">回复时间:</div>
+                  <div class="col-21 info">{{record.create_time | uniformDate}}</div>
+                </li>
+              </template>
+            </ul>
+          </div>
+          <div class="panel-sub-hd staff-response-head">客服回复</div>
+          <div class="issue-detail-wrap input-text-wrap" v-placeholder="'请填写回复内容'">
+            <textarea class="input-text" v-model="dealRecord"></textarea>
+          </div>
+          <div class="text-area-limit-error">
+            <span v-if="outOfLimit">最多输入200个字符</span>
+            <span v-if="isRecordEmpty">回复不能为空</span>
+          </div>
+          <div class="issue-detail-wrap">
+            <button class="btn btn-primary" @click="submitRecord">提交</button>
           </div>
         </div>
         <!-- End: 反馈详情 -->
@@ -101,13 +125,23 @@
 
     mixins: [globalMixins, pluginMixins],
 
+    vuex: {
+      getters: {
+        currentMember: ({ system }) => system.currentMember
+      }
+    },
+
     data () {
       return {
         pics: [
         ],
         currPicIndex: 0,
         isShowGallery: false,
-        issue: {}
+        issue: {},
+        dealRecord: '',
+        recordList: [],
+        outOfLimit: false,
+        isRecordEmpty: false
       }
     },
 
@@ -121,6 +155,7 @@
     route: {
       data () {
         this.getIssue()
+        this.getFeedbackRecord()
       }
     },
 
@@ -140,6 +175,35 @@
               this.total = res.data.count
               this.issue = res.data.list[0]
               this.pics = res.data.list[0].image || []
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'helpdesk'
+            }
+            self.handlePluginError(err, env)
+          })
+        })
+      },
+
+      getFeedbackRecord () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getFeedbackRecord
+        var condition = {
+          limit: 100,
+          query: {
+            feedback_id: this.$route.params.id
+          }
+        }
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, token, condition).then((res) => {
+            if (res.status === 200 && res.data.list.length > 0) {
+              this.recordList = res.data.list
+            } else {
+              this.recordList = []
             }
           }).catch((err) => {
             var env = {
@@ -175,6 +239,47 @@
        */
       handlePicSwitch (index) {
         this.currPicIndex = index
+      },
+
+      resetSumit () {
+        this.dealRecord = ''
+      },
+
+      submitRecord () {
+        if (this.dealRecord.length > 200) {
+          this.outOfLimit = true
+        } else if (this.dealRecord.length === 0) {
+          this.isRecordEmpty = true
+        } else {
+          this.isRecordEmpty = false
+          this.outOfLimit = false
+          var self = this
+          var argvs = arguments
+          var fn = self.getIssues
+          var params = {
+            feedback_id: this.$route.params.id,
+            name: this.currentMember.name,
+            content: this.dealRecord,
+            create_time: new Date(),
+            type: 0
+          }
+          this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+            api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, token, params).then((res) => {
+              if (res.status === 200) {
+                this.resetSumit()
+                this.getFeedbackRecord()
+              }
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'helpdesk'
+              }
+              self.handlePluginError(err, env)
+            })
+          })
+        }
       }
     }
   }
@@ -203,4 +308,12 @@
       img
         display block
         size 100%
+  .issue-detail-wrap
+    margin-top 20px
+  .text-area-limit-error
+    color red
+  .issue-record-list
+    border-bottom 1px solid default-border-color
+  .staff-response-head
+    margin-top 20px
 </style>
