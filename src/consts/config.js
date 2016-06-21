@@ -5,7 +5,8 @@
 
 // 测试服务器地址
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
-// const DEFAULT_API_SERVER = 'https://dev-man.360tj.com:8016'
+// 天际
+const DEFAULT_API_SERVER = 'https://dev-man.360tj.com:8016'
 // 测试图表
 // const DEFAULT_API_SERVER = 'http://120.26.244.72:8887'
 // 海曼
@@ -13,12 +14,12 @@
 // 开发者本地
 // const DEFAULT_API_SERVER: 'http://localhost:8887',
 // 正式地址
-const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
+// const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
 
 // 插件服务器地址
-const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
+// const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
 // 天际
-// const DEFAULT_PLUGIN_SERVER = 'https://dev-man.360tj.com:8016'
+const DEFAULT_PLUGIN_SERVER = 'https://dev-man.360tj.com:8016'
 
 export const API_SERVER = {
   // 默认
