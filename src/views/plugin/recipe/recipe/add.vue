@@ -88,22 +88,6 @@
                 <div class="form-row row">
                   <label class="form-control col-4">烹饪设备:</label>
                   <div class="controls col-20">
-                    <!-- <div v-for="cookingDevice in devices" class="select-group">
-                      <div class="select inline">
-                        <v-select  width="180px" placeholder="请选择烹饪设备" :label="cookingDevice.name">
-                          <select v-model="cookingDevice">
-                            <option v-for="opt in allDevices | dropSlected devices cookingDevice 'name'" :value="opt" :selected="opt.name===cookingDevice.name">{{ opt.name }}</option>
-                          </select>
-                        </v-select>
-                      </div>
-                      <div class="input-text-wrap inline">
-                        <input type="text" v-model="cookingDevice.time" placeholder="请填写时长" class="input-text-time"/><span class="text-time">分钟</span>
-                      </div>
-                      <div class="delete-input inline"><span @click="removeObj(cookingDevice, devices)" class="fa fa-times pointer"></span></div>
-                      <div class="input-text-wrap block mb20">
-                        <textarea placeholder="请输入设备烹饪指令" v-model="cookingDevice.autoexec" type="text" class="input-text textarea-lg"></textarea>
-                      </div>
-                    </div> -->
                     <div class="device-list">
                       <div class="device-list-item" v-for="(deviceIndex, device) in devices">
                         <pre>{{autoexecs[deviceIndex]|json}}</pre>
@@ -340,26 +324,6 @@
         isShowDeviceSelectModal: false,
         selectedDevice: {},
         deviceTips: [],
-        // model: {
-        //   name: '',
-        //   classification: [],
-        //   major_ingredients: [],
-        //   minor_ingredients: [],
-        //   cooking_steps: [{
-        //     description: '',
-        //     time: '',
-        //     images: ['']
-        //   }],
-        //   properties: {
-        //     difficulty: '不限'
-        //   },
-        //   devices: [],
-        //   tags: [],
-        //   tips: '',
-        //   difficulties: [],
-        //   images: ['', '', ''],
-        //   instructions: ''
-        // },
         difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
         allDevices: DEVICES,
         ingredientSelectModal: {

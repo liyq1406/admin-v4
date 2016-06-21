@@ -1,3 +1,33 @@
+/**
+ * 设备列表
+ * 说明：用于云菜谱可视化指令的添加与编辑
+ * 属性说明：
+ *   id: 设备ID,
+ *   name: 设备名称,
+ *   time: 烹饪时长,
+ *   max: 可选最大步骤数,
+ *   count: 步骤数,
+ *   steps: 步骤数据列表,
+ *   template: 步骤数据模板
+ *     tips: 步骤备注,
+ *     bytes: 16进制位
+ *       label: 显示名称
+ *       value: 值
+ *       min: 该位可选最小值
+ *       max: 该位可选最大值
+ *       unit: 单位
+ *       refs: 与该位取值相关的其他位
+ *         index: 相关位的索引值
+ *         condition: 条件
+ *         value: 符合条件时相关位的取值
+ *         min: 符合条件是相关位的可选最小值
+ *         max: 符合条件是相关位的可选最大值
+ *         unit: 单位
+ *         origin: 用于暂存原先的值
+ *
+ * @type {Array}
+ */
+
 export const DEVICES = [{
   id: 0,
   name: '电饭煲',
@@ -55,7 +85,7 @@ export const DEVICES = [{
       unit: '℃'
     }, {
       label: '顶部烹饪温度',
-      value: 50,
+      value: 0,
       min: 0,
       max: 75,
       unit: '℃'
@@ -64,8 +94,17 @@ export const DEVICES = [{
       name: 'hour',
       value: 0,
       min: 0,
-      max: 23,
-      unit: '小时'
+      max: 24,
+      unit: '小时',
+      refs: [{
+        index: 7,
+        condition: 24,
+        value: 0,
+        min: 0,
+        max: 0,
+        unit: '分钟',
+        origin: {}
+      }]
     }, {
       label: '烹饪时间(分钟)',
       value: 0,
@@ -110,8 +149,17 @@ export const DEVICES = [{
       name: 'hour',
       value: 0,
       min: 0,
-      max: 23,
-      unit: '小时'
+      max: 24,
+      unit: '小时',
+      refs: [{
+        index: 4,
+        condition: 24,
+        value: 0,
+        min: 0,
+        max: 0,
+        unit: '分钟',
+        origin: {}
+      }]
     }, {
       label: '烹饪时间(分钟)',
       name: 'minute',
@@ -152,8 +200,17 @@ export const DEVICES = [{
       name: 'hour',
       value: 0,
       min: 0,
-      max: 23,
-      unit: '小时'
+      max: 24,
+      unit: '小时',
+      refs: [{
+        index: 4,
+        condition: 24,
+        value: 0,
+        min: 0,
+        max: 0,
+        unit: '分钟',
+        origin: {}
+      }]
     }, {
       label: '烹饪时间(分钟)',
       name: 'minute',
@@ -223,8 +280,17 @@ export const DEVICES = [{
       name: 'hour',
       value: 0,
       min: 0,
-      max: 23,
-      unit: '小时'
+      max: 24,
+      unit: '小时',
+      refs: [{
+        index: 6,
+        condition: 24,
+        value: 0,
+        min: 0,
+        max: 0,
+        unit: '分钟',
+        origin: {}
+      }]
     }, {
       label: '烹饪时间(分钟)',
       name: 'minute',
