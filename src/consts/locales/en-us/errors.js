@@ -78,6 +78,7 @@ export default {
   '4001077': '微信配置相关参数类型不明确',
   '4001078': '授权设置不正确',
   '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
+  '4001083': '服务维护中...',
   '4001091': '产品已发布',
   '4031001': '禁止访问',
   '4031002': '禁止访问，需要Access-Token',

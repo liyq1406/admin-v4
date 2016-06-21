@@ -22,6 +22,11 @@
         default: ''
       },
 
+      disabled: {
+        type: Boolean,
+        default: false
+      },
+
       // 当前值标签
       label: {
         type: String,
@@ -71,6 +76,10 @@
 
         if (this.label) {
           result.push(`${this.classPrefix}-active`)
+        }
+
+        if (this.disabled) {
+          result.push(`${this.classPrefix}-disabled`)
         }
 
         return result.join(' ')
@@ -152,4 +161,12 @@
     .v-select-trigger
       span
         color gray-darker
+
+  .v-select-disabled
+    .v-select-trigger
+      span
+        color gray-lighter
+
+      .caret
+        border-color gray-lighter transparent transparent
 </style>

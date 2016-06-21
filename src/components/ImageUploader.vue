@@ -1,8 +1,14 @@
 <template>
-  <div class="image-uploader-item">
-    <label><img v-if="image.length" :src="image"/>
-      <input type="file" v-el:image-file="v-el:image-file" name="imageFile" @change.prevent="upload($event)"/><i v-if="!image.length" class="fa fa-plus"></i><span v-if="!image.length" class="txt">添加图片</span>
-    </label><i v-if="image.length" @click.stop.prevent="removeImage" class="fa fa-times"></i>
+  <div class="image-uploader">
+    <div class="image-uploader-item" v-for="image in images" track-by="$index">
+      <label>
+        <img v-if="image.length" :src="image"/>
+        <input type="file" @change.prevent="upload($event, $index)"/>
+        <i v-if="!image.length" class="fa fa-plus"></i>
+        <span v-if="!image.length" class="txt">添加图片</span>
+      </label>
+      <i v-if="image.length" @click.stop.prevent="removeImage($index)" class="fa fa-times"></i>
+    </div>
   </div>
 </template>
 
@@ -12,9 +18,11 @@
 
   export default {
     props: {
-      image: {
-        type: String,
-        default: ''
+      images: {
+        type: Array,
+        default () {
+          return []
+        }
       }
     },
 
@@ -25,10 +33,14 @@
     },
 
     methods: {
-      // 上传图片文件
-      upload (event) {
-        var file = this.$els['imageFile'].files[0]
+      /**
+       * 上传图片
+       * @param  {HTMLDOMEvent} event 事件
+       * @param  {Number}       index 索引
+       */
+      upload (event, index) {
         var input = event.target
+        var file = input.files[0]
 
         if (file && file.size > config.MAX_IMAGE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
@@ -53,7 +65,7 @@
                 this.uploading = true
                 api.upload.image(evt.target.result).then((res) => {
                   if (res.status === 200) {
-                    this.image = res.data.url
+                    this.setImage(index, res.data.url)
                     input.value = ''
                     this.uploading = false
                   }
@@ -73,8 +85,22 @@
         }
       },
 
-      removeImage () {
-        this.image = ''
+      /**
+       * 移除图片
+       * @param {Number} index 图片索引
+       */
+      removeImage (index) {
+        this.setImage(index, '')
+      },
+
+      /**
+       * 设置图片
+       * @param {Number} index 图片索引
+       * @param {String} image 图片路径
+       */
+      setImage (index, image) {
+        this.images.$set(index, image)
+        this.$emit('modified', this.images)
       }
     }
   }

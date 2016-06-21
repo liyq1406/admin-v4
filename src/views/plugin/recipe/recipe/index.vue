@@ -42,8 +42,8 @@
               <template v-if="recipes.length > 0">
                 <tr v-for="recipe in recipes">
                   <td>{{ recipe.name }}<i v-if="hasCloudRecipe(recipe.devices)" style="color: #35AA47;" class="fa fa-cloud ml5"></i></td>
-                  <td>{{ recipe.created_by }}</td>
-                  <td>{{ recipe.created_at | formatDate }}</td>
+                  <td>{{ recipe.creator }}</td>
+                  <td>{{ recipe.create_time | formatDate }}</td>
                   <td class="tac"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/' +recipe._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
@@ -118,7 +118,7 @@
           {label: '隔水炖', value: '隔水炖'},
           {label: '云炖锅', value: '云炖锅'},
           {label: '电饭煲', value: '电饭煲'},
-          {label: '电水壶', value: '电水壶'}
+          {label: '云水壶', value: '云水壶'}
         ],
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
@@ -150,7 +150,7 @@
        */
       queryCondition () {
         var condition = {
-          filter: ['_id', 'name', 'classification', 'devices', 'created_by', 'created_at'],
+          filter: ['_id', 'name', 'classification', 'devices', 'creator', 'create_time'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {},

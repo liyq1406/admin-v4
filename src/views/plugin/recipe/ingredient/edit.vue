@@ -22,9 +22,10 @@
               <div class="form-row row">
                 <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
                 <div class="controls col-18 controls-image">
-                  <div class="image-uploader">
+                  <image-uploader :images="model.images" @modified="onModifiedImages"></image-uploader>
+                  <!-- <div class="image-uploader">
                     <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
-                  </div>
+                  </div> -->
                   <div class="form-tips">建议上传640像素*480像素成品图</div>
                 </div>
               </div>
@@ -150,6 +151,14 @@
 
     methods: {
       /**
+       * 处理图片上传
+       * @param  {Array} images 图片路径数组
+       */
+      onModifiedImages (images) {
+        this.images = images
+      },
+
+      /**
        * 获取分类
        */
       getCategories () {
@@ -159,7 +168,7 @@
         var fn = self.getCategories
         var condition = {
           query: {
-            key: 'ingredient_classification'
+            key: 'ingredients_classification'
           }
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
@@ -234,6 +243,7 @@
                 this.model.instructions = res.data.list[0].instructions
                 this.model.images = res.data.list[0].images
                 this.model.classification = res.data.list[0].classification
+                this.model.creator = res.data.list[0].creator
                 this.model.properties.push_rules = res.data.list[0].properties.push_rules
               }
             }

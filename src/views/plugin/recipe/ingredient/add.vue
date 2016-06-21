@@ -22,9 +22,10 @@
               <div class="form-row row">
                 <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
                 <div class="controls col-18 controls-image">
-                  <div class="image-uploader">
+                  <image-uploader :images="model.images" @modified="onModifiedImages"></image-uploader>
+                  <!-- <div class="image-uploader">
                     <image-uploader v-for="n in model.images.length" :image.sync="model.images[n]"></image-uploader>
-                  </div>
+                  </div> -->
                   <div class="form-tips">建议上传640像素*480像素成品图</div>
                 </div>
               </div>
@@ -88,6 +89,7 @@
   import _ from 'lodash/array'
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../../mixins'
+  import store from 'src/store'
 
   export default {
     name: 'AddIngredientForm',
@@ -99,6 +101,14 @@
     components: {
       'image-uploader': ImageUploader,
       'v-select': Select
+    },
+
+    store,
+
+    vuex: {
+      getters: {
+        currentMember: ({ system }) => system.currentMember
+      }
     },
 
     data () {
@@ -141,6 +151,14 @@
 
     methods: {
       /**
+       * 处理图片上传
+       * @param  {Array} images 图片路径数组
+       */
+      onModifiedImages (images) {
+        this.images = images
+      },
+
+      /**
        * 获取分类
        */
       getCategories () {
@@ -150,7 +168,7 @@
         var fn = self.getCategories
         var condition = {
           query: {
-            key: 'ingredient_classification'
+            key: 'ingredients_classification'
           }
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
@@ -237,6 +255,7 @@
         var fn = self.onSubmit
         if (this.validation.$valid && !this.adding) {
           this.adding = true
+          this.model.creator = this.currentMember.email
           this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
             api.diet.addIngredient(this.$route.params.app_id, token, this.model).then((res) => {
               if (res.status === 200) {

@@ -37,8 +37,8 @@
               <template v-if="ingredients.length > 0">
                 <tr v-for="ingredient in ingredients">
                   <td>{{ ingredient.name }}</td>
-                  <td>{{ ingredient.created_by }}</td>
-                  <td>{{ ingredient.created_at | formatDate }}</td>
+                  <td>{{ ingredient.creator }}</td>
+                  <td>{{ ingredient.create_time | formatDate }}</td>
                   <td class="tac"><a v-link="{path: '/plugins/recipe/' + $route.params.app_id + '/ingredient/'+ingredient._id+'/edit'}" class="btn-link btn-mini">编辑</a></td>
                 </tr>
               </template>
@@ -156,7 +156,7 @@
        */
       queryCondition () {
         var condition = {
-          filter: ['_id', 'name', 'classification', 'created_by', 'created_at'],
+          filter: ['_id', 'name', 'classification', 'creator', 'create_time'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {},
@@ -231,7 +231,7 @@
         var fn = self.getCategories
         var condition = {
           query: {
-            key: 'ingredient_classification'
+            key: 'ingredients_classification'
           }
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
@@ -271,7 +271,7 @@
         var fn = self.onCateSubmit
         this.editing = true
         var condition = {
-          key: 'ingredient_classification',
+          key: 'ingredients_classification',
           value: this.categories
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
