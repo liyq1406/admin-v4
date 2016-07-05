@@ -24,7 +24,7 @@ export const pluginFactoryMixin = {
           this.loading = false
         }
       }).catch((res) => {
-        // this.handleError(res)
+        this.handleError(res)
         this.loading = false
       })
     },
@@ -168,6 +168,9 @@ export const pluginMixins = {
         case 'helpdesk':
           window.localStorage.helpdeskAccessToken = value
           break
+        case 'dealer':
+          window.localStorage.dealerAccessToken = value
+          break
         default:
           break
       }
@@ -184,6 +187,9 @@ export const pluginMixins = {
           break
         case 'helpdesk':
           token = window.localStorage.helpdeskAccessToken
+          break
+        case 'dealer':
+          token = window.localStorage.dealerAccessToken
           break
         default:
           break

@@ -567,6 +567,17 @@ export default {
       reach_target: '销售是否达标',
       status: '状态',
       create_time: '创建时间'
+    },
+    sale: {
+      name: '客户名称',
+      phone: '手机号码',
+      type: '客户类型',
+      address: '详细地址',
+      floor_num: '场所层数',
+      floor_area: '每层面积',
+      place_area: '场所总面积',
+      lay_floor: '机器放置层数',
+      permanent_population: '常驻人数'
     }
   },
 

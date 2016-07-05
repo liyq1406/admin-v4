@@ -12,7 +12,7 @@
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
               </select>
             </v-select>
-            <button slot="search-button" @click="" class="btn btn-primary">{{ $t('common.search') }}</button>
+            <button slot="search-button" @click.prevent="getDealer" class="btn btn-primary">{{ $t('common.search') }}</button>
           </search-box>
         </div>
         <div class="data-table with-loading">
@@ -45,7 +45,7 @@
                   <td>{{* dealer.area }}</td>
                   <td>{{* dealer.belong_to }}</td>
                   <td>{{* dealer.sale_target }}</td>
-                  <td>{{* dealer.sole }}</td>
+                  <td>{{* dealer.sale_count || 0 }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
                   <!-- <td class="tac">
                     <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
@@ -197,6 +197,7 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
+  import { pluginMixins } from '../mixins'
   import api from 'api'
   import Select from 'components/Select'
   import DatePicker from 'components/DatePicker'
@@ -213,7 +214,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'editor': Editor,
@@ -272,7 +273,8 @@
         total: 0,
         countPerPage: 10,
         currentPage: 1,
-        query: ''
+        query: '',
+        adding: false
       }
     },
 
@@ -285,8 +287,12 @@
           // order: this.sortOrders,
           query: {}
         }
-        if (this.query.length > 0) {
-          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        // if (this.query.length > 0) {
+        //   // condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        //   condition.query[this.queryType.value] = { $in: this.query }
+        // }
+        if (this.key !== '') {
+          condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
         }
         return condition
       }
@@ -298,19 +304,44 @@
     methods: {
       // 获取经销商列表
       getDealer () {
-        var foo = [{a: 1}, {a: 2}, {a: 1}]
-        console.log(_.uniq(_.map(foo, 'a')))
+        // var foo = [{a: 1}, {a: 2}, {a: 1}]
+        // console.log(_.uniq(_.map(foo, 'a')))
+        var self = this
+        var argvs = arguments
+        var fn = self.getDealer
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
         this.loadingData = true
-        api.dealer.getDealer(this.$route.params.app_id, this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            this.dealers = res.list
-            this.total = res.count
+        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+          console.log(token)
+          api.dealer.getDealer(this.$route.params.app_id, this.queryCondition, token).then((res) => {
+            // console.log(res)
+            this.dealers = res.data.list
+            this.total = res.data.count
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'dealer'
+            }
+            self.handlePluginError(err, env)
+            // this.handleError(res)
+            this.loadingData = false
+          })
         })
+        // api.dealer.getDealer(this.$route.params.app_id, this.queryCondition).then((res) => {
+        //   if (res.status === 200) {
+        //     this.dealers = res.list
+        //     this.total = res.count
+        //     this.loadingData = false
+        //   }
+        // }).catch((res) => {
+        //   this.handleError(res)
+        //   this.loadingData = false
+        // })
       },
 
       // 取消添加
@@ -374,7 +405,39 @@
         }
       },
       onEditSubmit () {},
-      onAddSubmit () {}
+      onAddSubmit () {
+        if (this.addValidation.$valid && !this.adding) {
+          var self = this
+          var argvs = arguments
+          var fn = self.onAddSubmit
+          if (typeof querying !== 'undefined') {
+            this.currentPage = 1
+          }
+          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+            // console.log(token)
+            this.adding = true
+            api.dealer.addDealer(this.$route.params.app_id, this.addModal.model, token).then((res) => {
+              if (res.status === 200) {
+                this.getDealer()
+                this.resetAdd()
+              }
+            }).catch((res) => {
+              this.handleError(res)
+              this.adding = false
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'dealer'
+              }
+              self.handlePluginError(err, env)
+              // this.handleError(res)
+              this.adding = false
+            })
+          })
+        }
+      }
     }
   }
 </script>

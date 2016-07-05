@@ -7,9 +7,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  getDealer (appId, params) {
+  getDealer (appId, params, token) {
     return http.post(
-      `${API_SERVER.default}/module/distributer/${appId}/api/distributer/list`, params
+      `${API_SERVER.dealer}/${appId}/api/distributer/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -18,9 +23,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  addDealer (appId, params) {
+  addDealer (appId, params, token) {
     return http.post(
-      `${API_SERVER.default}/module/distributer/${appId}/api/distributer/save`, params
+      `${API_SERVER.dealer}/${appId}/api/distributer/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -29,9 +39,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  updateDealer (appId, distributerId, params) {
+  updateDealer (appId, distributerId, params, token) {
     return http.put(
-      `${API_SERVER.default}/module/distributer/${appId}/api/distributer/update/${distributerId}`, params
+      `${API_SERVER.dealer}/${appId}/api/distributer/update/${distributerId}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -40,9 +55,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  delDealer (appId, distributerId) {
-    return http.delete(
-      `${API_SERVER.default}/module/distributer/${appId}/api/distributer/delete/${distributerId}`
+  delDealer (appId, distributerId, token) {
+    return http.del(
+      `${API_SERVER.dealer}/${appId}/api/distributer/delete/${distributerId}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -51,9 +71,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  getSales (appId, params) {
+  getSales (appId, params, token) {
     return http.post(
-      `${API_SERVER.default}/module/distributer/${appId}/api/sale_details/list`, params
+      `${API_SERVER.dealer}/${appId}/api/sale_details/list`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -62,9 +87,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  addSales (appId, params) {
+  addSales (appId, params, token) {
     return http.post(
-      `${API_SERVER.default}/module/distributer/${appId}/api/sale_details/save`, params
+      `${API_SERVER.dealer}/${appId}/api/sale_details/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -73,9 +103,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  updateSales (appId, saleDetailsId, params) {
+  updateSales (appId, saleDetailsId, params, token) {
     return http.put(
-      `${API_SERVER.default}/module/distributer/${appId}/api/sale_details/update/${saleDetailsId}`, params
+      `${API_SERVER.dealer}/${appId}/api/sale_details/update/${saleDetailsId}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   },
 
@@ -84,9 +119,14 @@ export default {
    * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  delSales (appId, saleDetailsId) {
-    return http.put(
-      `${API_SERVER.default}/module/distributer/${appId}/api/sale_details/delete/${saleDetailsId}`
+  delSales (appId, saleDetailsId, token) {
+    return http.del(
+      `${API_SERVER.dealer}/${appId}/api/sale_details/delete/${saleDetailsId}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': token
+        }
+      }
     )
   }
 }

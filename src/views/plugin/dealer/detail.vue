@@ -46,11 +46,11 @@
                   <ul class="info-details">
                     <li class="row">
                       <div class="col-6 label">销售日期:</div>
-                      <div class="clo-18 info">{{ sale.create_time }}</div>
+                      <div class="clo-18 info">{{ sale.create_time | uniformDate}}</div>
                     </li>
                     <li class="row">
                       <div class="col-6 label">场所层数:</div>
-                      <div class="clo-18 info">{{ sale.place_floor_count }}㎡</div>
+                      <div class="clo-18 info">{{ sale.place_floor_num }}</div>
                     </li>
                     <li class="row">
                       <div class="col-6 label">每层面积:</div>
@@ -62,7 +62,7 @@
                     </li>
                     <li class="row">
                       <div class="col-6 label">机器放置层数:</div>
-                      <div class="clo-18 info">{{ sale.lay_floor_count }}</div>
+                      <div class="clo-18 info">{{ sale.lay_floor }}</div>
                     </li>
                     <li class="row">
                       <div class="col-6 label">常驻人数:</div>
@@ -95,8 +95,8 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -105,8 +105,8 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.phone" type="text" v-form-ctrl name="phone" number required minlength="2" maxlength="11" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span></div>
+              <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.phone'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -129,18 +129,21 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.address" type="text" v-form-ctrl name="address" required minlength="2" maxlength="11" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.address.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.address.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.address.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span></div>
+              <div v-if="editValidation.address.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.address.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.address')}) }}</span>
+                <!-- <span v-if="editValidation.address.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.sale.address'), 2]) }}</span>
+                <span v-if="editValidation.address.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.sale.address'), 32]) }}</span> -->
+              </div>
             </div>
           </div>
           <div class="form-row row">
             <label class="form-control col-5">场所层数:</label>
             <div class="controls col-19">
               <div class="input-text-wrap">
-                <input v-model="editModal.model.place_floor_count" type="text" v-form-ctrl name="place_floor_count" number required  lazy class="input-text"/>
+                <input v-model="editModal.model.place_floor_num" type="text" v-form-ctrl name="place_floor_count" number required  lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.place_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.place_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.place_floor_count.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.place_floor_count.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.place_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
+              <div v-if="editValidation.place_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_num')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -149,8 +152,8 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.floor_area" type="text" v-form-ctrl name="floor_area" number required  lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.floor_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.floor_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.floor_area.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.floor_area.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.floor_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
+              <div v-if="editValidation.floor_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.floor_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.floor_area')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -159,18 +162,18 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.place_area" type="text" v-form-ctrl name="place_area" number required  lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.place_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.place_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.place_area.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.place_area.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.place_area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
+              <div v-if="editValidation.place_area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.place_area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.place_area')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
             <label class="form-control col-5">机器放置层数:</label>
             <div class="controls col-19">
               <div class="input-text-wrap">
-                <input v-model="editModal.model.lay_floor_count" type="text" v-form-ctrl name="lay_floor_count" number required  lazy class="input-text"/>
+                <input v-model="editModal.model.lay_floor" type="text" v-form-ctrl name="lay_floor_count" number required  lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.lay_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.lay_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.lay_floor_count.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.lay_floor_count.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.lay_floor_count.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
+              <div v-if="editValidation.lay_floor_count.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.lay_floor_count.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.lay_floor')}) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -179,8 +182,8 @@
               <div class="input-text-wrap">
                 <input v-model="editModal.model.permanent_population" type="text" v-form-ctrl name="permanent_population" number required  lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.permanent_population.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-              <div v-if="editValidation.permanent_population.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.permanent_population.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.permanent_population.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.permanent_population.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
+              <div v-if="editValidation.permanent_population.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.permanent_population.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.sale.permanent_population')}) }}</span></div>
             </div>
           </div>
           <div class="form-actions">
@@ -213,6 +216,7 @@
   import AreaSelect from 'components/AreaSelect'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
+  import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
 
   export default {
@@ -220,7 +224,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-alert': Alert,
@@ -297,6 +301,9 @@
     methods: {
       getSale () {
         this.loadingData = true
+        var self = this
+        var argvs = arguments
+        var fn = self.getSale
         var params = {
           offset: 0,
           limit: 10,
@@ -304,15 +311,34 @@
             '_id': this.$route.params.sale_id
           }
         }
-        api.dealer.getSales(this.$route.params.app_id, params).then((res) => {
-          if (res.status === 200) {
-            this.sale = res.list[0]
+        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+          // console.log(token)
+          api.dealer.getSales(this.$route.params.app_id, params, token).then((res) => {
+            // console.log(res)
+            this.sale = res.data.list[0]
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+            this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'dealer'
+            }
+            self.handlePluginError(err, env)
+            // this.handleError(res)
+            this.loadingData = false
+          })
         })
+        // api.dealer.getSales(this.$route.params.app_id, params).then((res) => {
+        //   if (res.status === 200) {
+        //     this.sale = res.list[0]
+        //     this.loadingData = false
+        //   }
+        // }).catch((res) => {
+        //   this.handleError(res)
+        //   this.loadingData = false
+        // })
       },
       editProduct () {
         this.showEditModal = true
@@ -330,27 +356,64 @@
       },
       // 提交编辑表单
       onEditSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getSale
         if (this.delChecked && !this.editing) { // 删除
+          // this.editing = true
+          // api.dealer.delSales(this.$route.params.app_id, this.sale._id).then((res) => {
+          //   if (res.status === 200) {
+          //     this.resetEdit()
+          //     this.getSale()
+          //   }
+          // }).catch((res) => {
+          //   this.handleError(res)
+          //   this.editing = false
+          // })
           this.editing = true
-          api.dealer.delSales(this.$route.params.app_id, this.sale._id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.getSale()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+            api.dealer.delSales(this.$route.params.app_id, this.sale._id, token).then((res) => {
+              this.$route.router.go({path: '/plugins/dealer/' + this.$route.params.app_id + '/list/' + this.$route.params.dealer_id})
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'dealer'
+              }
+              self.handlePluginError(err, env)
+              // this.handleError(res)
+              this.editing = false
+            })
           })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
+          // this.editing = true
+          // api.dealer.updateSales(this.$route.params.app_id, this.sale._id, this.editModal.model).then((res) => {
+          //   if (res.status === 200) {
+          //     this.resetEdit()
+          //     this.getSale()
+          //   }
+          // }).catch((res) => {
+          //   this.handleError(res)
+          //   this.editing = false
+          // })
           this.editing = true
-          api.dealer.updateSales(this.$route.params.app_id, this.sale._id, this.editModal.model).then((res) => {
-            if (res.status === 200) {
+          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+            console.log(token)
+            api.dealer.updateSales(this.$route.params.app_id, this.sale._id, this.editModal.model, token).then((res) => {
               this.resetEdit()
               this.getSale()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'dealer'
+              }
+              self.handlePluginError(err, env)
+              // this.handleError(res)
+              this.editing = false
+            })
           })
         }
       },
@@ -367,13 +430,13 @@
       // 切换搜索
       toggleSearching () {
         this.searching = !this.searching
-      },
-      // 搜索
-      handleSearch () {
-        if (this.query.length === 0) {
-
-        }
       }
+      // 搜索
+      // handleSearch () {
+      //   if (this.query.length === 0) {
+      //
+      //   }
+      // }
     }
   }
 </script>

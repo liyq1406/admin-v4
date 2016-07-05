@@ -52,7 +52,7 @@
                     </div>
                     <div class="col-12">
                       <div class="status-item">
-                        <em>13k</em>
+                        <em>{{ dealer.sale_count|| 0 }}</em>
                         <span>已销售数量</span>
                       </div>
                     </div>
@@ -71,7 +71,7 @@
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" @click="" class="btn btn-primary">{{ $t('common.search') }}</button>
+                  <button slot="search-button" @click="getSales" class="btn btn-primary">{{ $t('common.search') }}</button>
                 </search-box>
               </div>
               <div class="data-table with-loading">
@@ -93,7 +93,7 @@
                     <template v-if="sales.length > 0">
                       <tr v-for="sale in sales">
                         <!-- <td>{{* dealer.name }}</td> -->
-                        <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/detail/' + sale._id" class="hl-red">{{* sale.time }}</a></td>
+                        <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/detail/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
                         <td>{{* sale.version }}</td>
                         <td>{{* sale.code }}</td>
                         <td>{{* sale.name }}</td>
@@ -129,7 +129,9 @@
                  <input v-model="editModal.model.username" type="text" v-form-ctrl name="username" required minlength="2" maxlength="32" lazy class="input-text"/>
                </div>
                <div v-if="editValidation.$submitted && editValidation.username.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-               <div v-if="editValidation.username.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span><span v-if="editValidation.username.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span></div>
+               <div v-if="editValidation.username.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                 <!-- <span v-if="editValidation.username.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span> -->
+               </div>
              </div>
            </div>
            <div class="form-row row">
@@ -149,7 +151,7 @@
                  <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
                </div>
                <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
-               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.name'), 32]) }}</span></div>
+               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
              </div>
            </div>
            <div class="form-row row">
@@ -159,7 +161,7 @@
                  <input v-model="editModal.model.linkman" type="text" v-form-ctrl name="linkman" required minlength="2" maxlength="32" lazy class="input-text"/>
                </div>
                <div v-if="editValidation.$submitted && editValidation.linkman.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
-               <div v-if="editValidation.linkman.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span><span v-if="editValidation.linkman.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.linkman'), 2]) }}</span><span v-if="editValidation.linkman.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.linkman'), 32]) }}</span></div>
+               <div v-if="editValidation.linkman.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
              </div>
            </div>
            <div class="form-row row">
@@ -179,7 +181,7 @@
                  <input v-model="editModal.model.area" type="text" v-form-ctrl name="area" required minlength="2" maxlength="32" lazy class="input-text"/>
                </div>
                <div v-if="editValidation.$submitted && editValidation.area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
-               <div v-if="editValidation.area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span><span v-if="editValidation.area.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.area'), 2]) }}</span><span v-if="editValidation.area.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.area'), 32]) }}</span></div>
+               <div v-if="editValidation.area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
              </div>
            </div>
            <div class="form-row row">
@@ -219,6 +221,7 @@
   import Modal from 'components/Modal'
   import IntelligentTable from 'components/IntelligentTable'
   import { globalMixins } from 'src/mixins'
+  import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
 
   export default {
@@ -226,7 +229,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, pluginMixins],
 
     components: {
       'v-alert': Alert,
@@ -242,14 +245,14 @@
     data () {
       return {
         dealer: {
-          _id: '123',
-          username: '12345',
-          password: '1115465',
-          name: '广州分部',
-          linkman: '小明',
-          phone: '13800138000',
-          area: '广州总部',
-          belong_to: '海珠'
+          // _id: '123',
+          // username: '12345',
+          // password: '1115465',
+          // name: '广州分部',
+          // linkman: '小明',
+          // phone: '13800138000',
+          // area: '广州总部',
+          // belong_to: '海珠'
         },
         sales: [{
           _id: 2222,
@@ -293,11 +296,14 @@
           offset: (this.currentPage - 1) * this.countPerPage,
           // order: this.sortOrders,
           query: {
-            '_id': this.$route.params.dealer_id
+            'distributer_id': this.$route.params.dealer_id
           }
         }
-        if (this.query.length > 0) {
-          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        // if (this.query.length > 0) {
+        //   condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        // }
+        if (this.key !== '') {
+          condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
         }
         return condition
       }
@@ -310,12 +316,16 @@
 
     ready () {
       this.getDealer()
-      // this.getSales()
+      this.getSales()
     },
     methods: {
       // 获取经销商信息
       getDealer () {
-        this.loadingData = true
+        // var foo = [{a: 1}, {a: 2}, {a: 1}]
+        // console.log(_.uniq(_.map(foo, 'a')))
+        var self = this
+        var argvs = arguments
+        var fn = self.getDealer
         var params = {
           offset: 0,
           limit: 10,
@@ -323,29 +333,57 @@
             '_id': this.$route.params.dealer_id
           }
         }
-        api.dealer.getDealer(this.$route.params.app_id, params).then((res) => {
-          if (res.status === 200) {
-            this.dealer = res.list[0]
-            this.getSales()
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
+        this.loadingData = true
+        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+          console.log(token)
+          api.dealer.getDealer(this.$route.params.app_id, params, token).then((res) => {
+            // console.log(res)
+            this.dealer = res.data.list[0]
+            // this.total = res.data.count
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'dealer'
+            }
+            self.handlePluginError(err, env)
+            // this.handleError(res)
+            this.loadingData = false
+          })
         })
       },
       // 获取经销商对应销售信息列表
       getSales () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getDealer
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
         this.loadingData = true
-        api.dealer.getSales(this.$route.params.app_id, this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            this.sales = res.list
-            this.total = res.count
+        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+          console.log(token)
+          api.dealer.getSales(this.$route.params.app_id, this.queryCondition, token).then((res) => {
+            // console.log(res)
+            this.sales = res.data.list
+            this.total = res.data.count
             this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.loadingData = false
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'dealer'
+            }
+            self.handlePluginError(err, env)
+            // this.handleError(res)
+            this.loadingData = false
+          })
         })
       },
       // 初始化编辑表单
@@ -374,28 +412,67 @@
       },
       // 提交编辑表单
       onEditSubmit () {
+        var self = this
+        var argvs = arguments
+        var fn = self.getDealer
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
-          api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.getSales()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+            api.dealer.delDealer(this.$route.params.app_id, this.dealer._id, token).then((res) => {
+              this.$route.router.go({path: '/plugins/dealer/' + this.$route.params.app_id + '/list'})
+              // this.resetEdit()
+              // this.getSales()
+              this.editing = false
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'dealer'
+              }
+              self.handlePluginError(err, env)
+              // this.handleError(res)
+              this.editing = false
+            })
           })
+          // api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
+          //   if (res.status === 200) {
+          //     this.resetEdit()
+          //     this.getSales()
+          //   }
+          // }).catch((res) => {
+          //   this.handleError(res)
+          //   this.editing = false
+          // })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
-          api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
-            if (res.status === 200) {
+          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+            console.log(token)
+            api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model, token).then((res) => {
               this.resetEdit()
+              this.getDealer()
               this.getSales()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
+            }).catch((err) => {
+              var env = {
+                'fn': fn,
+                'argvs': argvs,
+                'context': self,
+                'plugin': 'dealer'
+              }
+              self.handlePluginError(err, env)
+              // this.handleError(res)
+              this.editing = false
+            })
           })
+          // api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
+          //   if (res.status === 200) {
+          //     this.resetEdit()
+          //     this.getSales()
+          //   }
+          // }).catch((res) => {
+          //   this.handleError(res)
+          //   this.editing = false
+          // })
         }
       },
       // 编辑表单钩子
