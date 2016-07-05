@@ -76,14 +76,14 @@
               <tr>
                 <th>{{ $t("ui.statistic.district") }}</th>
                 <th>{{ $t("ui.statistic.products.activated") }}</th>
-                <th>{{ $t("ui.statistic.percentage") }}</th>
+                <th>{{ $t("ui.statistic.percentage") }}({{ region==='china' ? '国内' : '全球' }})</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in regionsData | limitBy countPerPage (currentPage-1)*countPerPage">
                 <td>{{ item.name }}</td>
                 <td>{{ item.value }}</td>
-                <td>{{ (item.value * 100 / productSummary.total).toFixed(2) }}%</td>
+                <td>{{ productTotal > 0 ? (item.value * 100 / productTotal).toFixed(2) : 0 }}%</td>
               </tr>
             </tbody>
           </table>
@@ -134,6 +134,7 @@
           active: 0,
           online: 0
         },
+        productTotal: 0,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
         product: {},
@@ -276,31 +277,48 @@
         this.loadingProductRegions = true
         api.statistics.getProductRegion(this.product.id).then((res) => {
           var regionsData = []
+          var sum = 0
           if (this.region === 'world') {
-            for (var country in res.data) {
-              regionsData.push({
-                name: country,
-                value: res.data[country].activated
-              })
+            var chinaData = {
+              name: 'China',
+              value: 0
             }
+            for (let country in res.data) {
+              sum += res.data[country].activated
+              if (/[\u4e00-\u9fa5]+/.test(country.slice(0, 1)) || country === 'China') {
+                chinaData.value += res.data[country].activated
+              } else {
+                regionsData.push({
+                  name: country,
+                  value: res.data[country].activated
+                })
+              }
+            }
+            regionsData.push(chinaData)
+            this.productTotal = sum
           } else if (this.region === 'china') {
-            for (var province in res.data['China']) {
+            var chinaRegions = res.data['中国'] || res.data['China'] || {}
+
+            for (var province in chinaRegions) {
               if (province !== 'activated' && province !== 'online') {
+                sum += chinaRegions[province].activated
                 regionsData.push({
                   name: province,
-                  value: res.data['China'][province].activated
+                  value: chinaRegions[province].activated
                 })
 
-                for (var city in res.data['China'][province]) {
+                for (var city in chinaRegions[province]) {
                   if (city !== 'activated' && city !== 'online') {
+                    sum += chinaRegions[province][city].activated
                     regionsData.push({
                       name: city,
-                      value: res.data['China'][province][city].activated
+                      value: chinaRegions[province][city].activated
                     })
                   }
                 }
               }
             }
+            this.productTotal = sum
           }
           this.regionsData = regionsData
           this.loadingProductRegions = false

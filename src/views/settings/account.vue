@@ -151,10 +151,10 @@
           </div>
           <div class="form-row row">
             <div v-placeholder="$t('ui.account.placeholders.new_password')" class="input-text-wrap">
-              <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="6" name="newpassword" lazy class="input-text"/>
+              <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="8" name="newpassword" lazy class="input-text"/>
             </div>
             <div v-if="pwdValidation.$submitted && pwdValidation.newpassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span></div>
-            <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.account.fields.new_password'), 6]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.account.fields.new_password'), 16]) }}</span></div>
+            <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.account.fields.new_password'), 8]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.account.fields.new_password'), 16]) }}</span></div>
           </div>
           <div class="form-row row">
             <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">

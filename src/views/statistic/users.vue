@@ -66,14 +66,14 @@
               <tr>
                 <th>{{ $t("ui.statistic.district") }}</th>
                 <th>{{ $t("ui.statistic.users.registered") }}</th>
-                <th>{{ $t("ui.statistic.percentage") }}</th>
+                <th>{{ $t("ui.statistic.percentage") }}({{ region==='china' ? '国内' : '全球' }})</th>
               </tr>
             </thead>
             <tbody>
               <tr v-for="item in regionsData | limitBy countPerPage (currentPage-1)*countPerPage">
-                <td>{{ wroldNames[item.name] || chinaNames[item.name] || item.name }}</td>
+                <td>{{ item.name }}</td>
                 <td>{{ item.value }}</td>
-                <td>{{ (item.value * 100 / total).toFixed(2) }}%</td>
+                <td>{{ userTotal > 0 ? (item.value * 100 / userTotal).toFixed(2) : 0 }}%</td>
               </tr>
             </tbody>
           </table>
@@ -93,6 +93,7 @@
   import dateFormat from 'date-format'
   import LineChart from 'components/charts/Line'
   import MapChart from 'components/charts/Map'
+  import Pager from 'components/Pager'
   import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
 
@@ -104,18 +105,19 @@
     mixins: [globalMixins],
 
     components: {
-      'radio-group': RadioGroup,
-      'line-chart': LineChart,
-      'map-chart': MapChart
+      RadioGroup,
+      LineChart,
+      MapChart,
+      Pager
     },
 
     data () {
       return {
         total: 0,
         online: 0,
-        add: 0,
         active: 0,
         productRegion: {},
+        userTotal: 0,
         period: 7,
         periods: locales[Vue.config.lang].data.PERIODS,
         region: 'china',
@@ -155,6 +157,16 @@
           result[1].data[i] = index >= 0 ? this.userTrends[index].add : 0
         }
 
+        return result
+      },
+
+      add () {
+        var result = 0
+        for (var i = 0; i < this.period; i++) {
+          if (this.userTrends[i]) {
+            result += this.userTrends[i].add
+          }
+        }
         return result
       }
     },
@@ -230,33 +242,49 @@
       getUserRegion () {
         this.loadingUserRegions = true
         api.statistics.getUserRegion().then((res) => {
-          // console.log(res.data)
           var regionsData = []
+          var sum = 0
           if (this.region === 'world') {
-            for (let country in res.data) {
-              regionsData.push({
-                name: country,
-                value: res.data[country].active
-              })
+            var chinaData = {
+              name: 'China',
+              value: 0
             }
+            for (let country in res.data) {
+              sum += res.data[country].register
+              if (/[\u4e00-\u9fa5]+/.test(country.slice(0, 1)) || country === 'China') {
+                chinaData.value += res.data[country].register
+              } else {
+                regionsData.push({
+                  name: country,
+                  value: res.data[country].register
+                })
+              }
+            }
+            regionsData.push(chinaData)
+            this.userTotal = sum
           } else if (this.region === 'china') {
-            for (let province in res.data['China']) {
+            var chinaRegions = res.data['中国'] || res.data['China'] || {}
+
+            for (let province in chinaRegions) {
               if (province !== 'register') {
+                sum += chinaRegions[province].register
                 regionsData.push({
                   name: province,
-                  value: res.data['China'][province].register
+                  value: chinaRegions[province].register
                 })
 
-                for (let city in res.data['China'][province]) {
+                for (let city in chinaRegions[province]) {
                   if (city !== 'register') {
+                    sum += chinaRegions[province][city].register
                     regionsData.push({
                       name: city,
-                      value: res.data['China'][province][city].register
+                      value: chinaRegions[province][city].register
                     })
                   }
                 }
               }
             }
+            this.userTotal = sum
           }
           this.regionsData = regionsData
           this.loadingUserRegions = false

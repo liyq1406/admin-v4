@@ -78,7 +78,8 @@
                     <td>{{ datapoint.description }}</td>
                     <td>
                       <a @click="showEditDataPointModal(datapoint)">
-                        {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }}
+                        {{ dpVal(datapoint) }}
+                        <!-- {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }} -->
                       </a>
                     </td>
                   </tr>
@@ -302,6 +303,23 @@
     },
 
     methods: {
+      dpVal (dp) {
+        var result
+        switch (dp.type) {
+          case 1:
+            result = this.datapointValues[dp.index] ? 'true' : 'false'
+            break
+          case 2:
+          case 3:
+          case 4:
+            result = this.datapointValues[dp.index]
+            break
+          default:
+            result = this.datapointValues[dp.index] || '--'
+        }
+        return result
+      },
+
       /**
        * 地图初始化
        */

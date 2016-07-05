@@ -80,6 +80,7 @@ export default {
   '4001081': 'sendcloud network abnormal or domain exists or domain can not be changed',
   '4001083': '服务维护中...',
   '4001091': '产品已发布',
+  '4001102': '密码长度8~16位，包含数字和大小写字母。',
   '4031001': '禁止访问',
   '4031002': '禁止访问，需要Access-Token',
   '4031003': 'Access token失效，请重新登录',

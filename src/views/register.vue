@@ -39,11 +39,11 @@
               <div class="col-12">
                 <div class="mr10">
                   <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
-                    <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
+                    <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
+                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
                     <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
                   </div>
                 </div>

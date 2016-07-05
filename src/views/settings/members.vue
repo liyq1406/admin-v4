@@ -98,9 +98,9 @@
             <label class="form-control col-6">密码:</label>
             <div class="controls col-18">
               <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
-                <input type="password" v-model="addModel.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
+                <input type="password" v-model="addModel.password" v-form-ctrl required maxlength="16" minlength="8" name="password" lazy class="input-text"/>
               </div>
-              <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span></div>
+              <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 8]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -114,7 +114,8 @@
           </div>
           <div class="form-actions">
             <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t('common.cancel') }}</button>
-            <button type="submit" @click.prevent.stop="onAddSubmit" class="btn btn-primary">{{ $t('common.add') }}</button>
+            <!-- <button type="submit" @click.prevent.stop="onAddSubmit" class="btn btn-primary">{{ $t('common.add') }}</button> -->
+            <button type="submit"  @click.prevent.stop="onAddSubmit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.add')" class="btn btn-primary"></button>
           </div>
         </form>
       </div>
@@ -127,17 +128,17 @@
         <form v-form name="pwdValidation" @submit.prevent="onSubmitPwd" hook="editPwdHook">
           <div class="form-row row">
             <div v-placeholder="$t('ui.account.placeholders.new_password')" class="input-text-wrap">
-              <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="6" name="newpassword" lazy class="input-text"/>
+              <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="8" name="newpassword" lazy class="input-text"/>
             </div>
             <div v-if="pwdValidation.$submitted && pwdValidation.newpassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span></div>
-            <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.account.fields.new_password'), 6]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.account.fields.new_password'), 16]) }}</span></div>
+            <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.account.fields.new_password'), 8]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.account.fields.new_password'), 16]) }}</span></div>
           </div>
           <div class="form-row row">
             <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
-              <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword2" name="confirmPassword" lazy class="input-text"/>
+              <input type="password" v-model="confirmPassword2" v-form-ctrl required custom-validator="checkEqualToPassword2" name="confirmPassword2" lazy class="input-text"/>
             </div>
-            <div v-if="pwdValidation.$submitted && pwdValidation.confirmPassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span></div>
-            <div v-if="pwdValidation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="editPwdModel.newpassword && pwdValidation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="pwdValidation.confirmPassword.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
+            <div v-if="pwdValidation.$submitted && pwdValidation.confirmPassword2.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.confirmPassword2.$error.required">{{ $t("ui.auth.confirm_password") }}</span></div>
+            <div v-if="pwdValidation.confirmPassword2.$dirty" class="form-tips form-tips-error"><span v-if="editPwdModel.newpassword && pwdValidation.confirmPassword2.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="pwdValidation.confirmPassword2.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
           </div>
           <div class="form-actions">
             <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -207,7 +208,9 @@
         centervalue: {},
         pwdValidation: {},
         confirmPassword: '',
+        confirmPassword2: '',
         editing: false,
+        adding: false,
         editPwdModel: {
           newpassword: ''
         },
@@ -309,7 +312,7 @@
         this.editing = false
         this.showEditPwdModal = false
         this.editPwdModel = _.clone(this.originEditPwdModel)
-        this.confirmPassword = ''
+        this.confirmPassword2 = ''
         this.$nextTick(() => {
           this.editPwdForm.setPristine()
         })
@@ -362,6 +365,10 @@
 
       addMember () {
         this.originAddModel = _.clone(this.addModel)
+        this.confirmPassword = ''
+        this.$nextTick(() => {
+          this.addForm.setPristine()
+        })
         this.showModal = true
       },
 
@@ -370,15 +377,16 @@
        */
       onAddSubmit () {
         if (this.validation.$valid) {
+          this.adding = true
           api.user.addMember(this.addModel).then((res) => {
+            this.adding = false
             if (res.status === 200) {
               this.getMembers()
               this.resetAdd()
             }
-            this.showModal = false
           }).catch((res) => {
-            this.resetAdd()
             this.handleError(res)
+            this.adding = false
           })
         }
       },
