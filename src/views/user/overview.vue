@@ -354,10 +354,10 @@ export default {
       tooltip: false,
       position: 'date*count'
     }
-    var tplStatInfo = {
-      'change|-200-2000': 2000,
-      'total|100000-1000000': 100000
-    }
+    // var tplStatInfo = {
+    //   'change|-200-2000': 2000,
+    //   'total|1000-3000': 100000
+    // }
     var tplStatData = {
       'list|20': [{
         'date|+1': genDates(20),
@@ -365,26 +365,41 @@ export default {
       }]
     }
     this.statistic.users.total = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 32,
+        total: 3172
+      },
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.users.registered = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 32,
+        total: 32
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['green']})
     }
     this.statistic.users.registeredPercentage = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 32,
+        total: 32
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
     this.statistic.users.online = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 32,
+        total: 32
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
     this.statistic.users.onlinePercentage = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 32,
+        total: 32
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
@@ -415,23 +430,23 @@ export default {
     this.userTypes.data = Mock.mock({
       'list|3': [{
         'type|+1': ['普通用户', '活跃用户', '忠诚用户'],
-        'count|+1': [300, 200, 100]
+        'count|+1': [1505, 997, 498]
       }]
     }).list
     this.userTypes.options = userTypesOptions
 
     // 用户区域分布 -----------------------------------------------------
 
-    var regionData = []
-    var features = mapData.features
-    for (let i = 0; i < features.length; i++) {
-      let name = features[i].properties.name
-      regionData.push({
-        'name': name,
-        'value': Math.round(Math.random() * 1000)
-      })
-    }
-    this.regions.users.data = regionData
+    // var regionData = []
+    // var features = mapData.features
+    // for (let i = 0; i < features.length; i++) {
+    //   let name = features[i].properties.name
+    //   regionData.push({
+    //     'name': name,
+    //     'value': Math.round(Math.random() * 250)
+    //   })
+    // }
+    // this.regions.users.data = regionData
     this.regions.users.options = {
       props: {
         width: 420,
@@ -439,11 +454,114 @@ export default {
       }
     }
 
+    var regionData = []
+    var features = mapData.features
+    var mapDataArr = [{
+      name: '广东',
+      value: 457
+    }, {
+      name: '上海',
+      value: 340
+    }, {
+      name: '北京',
+      value: 287
+    }, {
+      name: '浙江',
+      value: 240
+    }, {
+      name: '江苏',
+      value: 221
+    }, {
+      name: '广西',
+      value: 180
+    }, {
+      name: '福建',
+      value: 180
+    }, {
+      name: '重庆',
+      value: 177
+    }, {
+      name: '山东',
+      value: 165
+    }, {
+      name: '四川',
+      value: 154
+    }, {
+      name: '湖南',
+      value: 154
+    }, {
+      name: '安徽',
+      value: 112
+    }, {
+      name: '黑龙江',
+      value: 112
+    }, {
+      name: '河北',
+      value: 112
+    }, {
+      name: '云南',
+      value: 87
+    }, {
+      name: '江西',
+      value: 87
+    }, {
+      name: '辽宁',
+      value: 65
+    }, {
+      name: '湖北',
+      value: 33
+    }, {
+      name: '山西',
+      value: 22
+    }, {
+      name: '青海',
+      value: 8
+    }]
+    for (var i = 0; i < features.length; i++) {
+      var name = features[i].properties.name
+      regionData.push({
+        'name': name,
+        // 'value': Math.round(Math.random() * 1000)
+        'value': 0
+      })
+    }
+    this.regions.users.data = _.unionBy(mapDataArr, regionData, 'name')
     // Top10
-    var regionsUsersTopOptions = {
+    // var regionsUsersTopOptions = {
+    //   props: {
+    //     plotCfg: {
+    //       margin: [0, 0, 0, 60]
+    //     }
+    //   },
+    //   defs: {
+    //     'name': {
+    //       type: 'cat',
+    //       alias: '省份'
+    //     },
+    //     'value': {
+    //       alias: '数量',
+    //       min: 0
+    //     }
+    //   },
+    //   position: 'name*value'
+    // }
+    // var regionUserTopData = _.slice(_.orderBy(regionData, ['value'], ['asc']), regionData.length - 11, regionData.length - 1)
+    // this.regions.users.top = {
+    //   data: regionUserTopData,
+    //   options: _.merge({}, regionsUsersTopOptions, {
+    //     props: {
+    //       height: 300
+    //     },
+    //     color: 'name',
+    //     horizontal: true,
+    //     // axis: false,
+    //     legend: false
+    //   })
+    // }
+    var regionsProductTopOptions = {
       props: {
         plotCfg: {
-          margin: [0, 0, 0, 60]
+          margin: [0, 0, 0, 80]
         }
       },
       defs: {
@@ -458,10 +576,10 @@ export default {
       },
       position: 'name*value'
     }
-    var regionUserTopData = _.slice(_.orderBy(regionData, ['value'], ['asc']), regionData.length - 11, regionData.length - 1)
+    var regionUserTopData = _.slice(_.orderBy(this.regions.users.data, ['value'], ['asc']), this.regions.users.data.length - 10, this.regions.users.data.length)
     this.regions.users.top = {
       data: regionUserTopData,
-      options: _.merge({}, regionsUsersTopOptions, {
+      options: _.merge({}, regionsProductTopOptions, {
         props: {
           height: 300
         },
@@ -501,23 +619,29 @@ export default {
     this.trends.users.data = Mock.mock({
       'list|7': [{
         'date|+1': genDates(7),
-        'count|100-200': 10,
+        'count|+1': [26, 38, 19, 33, 29, 33, 29],
         'type': '新增用户'
       }]
     }).list
     this.trends.users.options = userTrendsOptions
 
-    var tplUserTrends = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplUserTrends = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.trends.users.today = {
-      info: Mock.mock(tplUserTrends)
+      info: {
+        change: 3,
+        total: 32
+      }
     }
     // 平均
     this.trends.users.avg = {
-      info: Mock.mock(tplUserTrends)
+      info: {
+        change: 2.4,
+        total: 32.7
+      }
     }
 
     // 用户活跃时间点 -----------------------------------------------------
@@ -543,7 +667,7 @@ export default {
     this.timePoint.data = Mock.mock({
       'list|24': [{
         'date|+1': 0,
-        'count|100-200': 10
+        'count|+1': [7, 1, 1, 3, 2, 1, 11, 10, 17, 22, 29, 33, 29, 33, 29, 38, 19, 33, 29, 33, 29, 38, 19, 11]
       }]
     }).list
     this.timePoint.options = timePointOptions
@@ -577,7 +701,7 @@ export default {
       durationData = durationData.concat(Mock.mock({
         'list|6': [{
           'duration|+1': DURATION_TYPES,
-          'count|100-200': 10,
+          'count|+1': [0, 0, 1, 0, 1, 167],
           'date': item
         }]
       }).list)
@@ -614,7 +738,7 @@ export default {
       timesData = timesData.concat(Mock.mock({
         'list|6': [{
           'times|+1': TIMES_TYPES,
-          'count|100-200': 10,
+          'count|+1': [0, 0, 1, 0, 33, 144],
           'date': item
         }]
       }).list)
@@ -648,7 +772,7 @@ export default {
     this.sex.data = Mock.mock({
       'list|2': [{
         'sex|+1': ['女性', '男性'],
-        'count|100-2000': 10
+        'count|1600-2200': 10
       }]
     }).list
     this.sex.options = sexOptions
@@ -676,7 +800,7 @@ export default {
     this.age.data = Mock.mock({
       'list|5': [{
         'age|+1': AGE_TYPES,
-        'count|100-2000': 10
+        'count|+1': [120, 703, 635, 88, 7]
       }]
     }).list
     this.age.options = ageOptions
@@ -712,7 +836,7 @@ export default {
       osData = osData.concat(Mock.mock({
         'list|1': [{
           'date|+1': ['06-03(昨日)'],
-          'count|100-2000': 10,
+          'count|100-200': 10,
           'os': item
         }]
       }).list)
@@ -722,7 +846,7 @@ export default {
 
     // 终端分布-机型 -----------------------------------------------------
     var phonesData = []
-    let PHONE_TYPES = ['机型1', '机型2', '机型3', '机型4', '机型5', '机型6', '机型7', '机型8', '机型9', '机型10', '机型11', '机型12', '机型13', '机型14', '机型15', '机型16', '机型17', '机型18', '机型19', '机型20']
+    let PHONE_TYPES = ['iphone6', 'iphone6s', 'iphone6sp', 'iphone6sp', 'iphone5s', '三星S6', '三星S5', 'OPPO_R9', '魅族3S', '三星GalaxyA9', '三星GalaxyC7000', '小米4s', '小米4']
     for (let i = 0; i < PHONE_TYPES.length; i++) {
       let name = PHONE_TYPES[i]
       phonesData.push({
@@ -745,7 +869,7 @@ export default {
     var phonesTopOptions = {
       props: {
         plotCfg: {
-          margin: [0, 0, 0, 60]
+          margin: [0, 0, 0, 160]
         }
       },
       defs: {
