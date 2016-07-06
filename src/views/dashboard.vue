@@ -301,34 +301,66 @@ export default {
       tooltip: false,
       position: 'date*count'
     }
-    var tplStatInfo = {
-      'change|-200-2000': 2000,
-      'total|100000-1000000': 100000
-    }
-    var tplStatData = {
-      'list|20': [{
-        'date|+1': genDates(20),
-        'count|10-200': 10
-      }]
-    }
+    // var tplStatInfo = {
+    //   'change|-200-2000': 2000,
+    //   'total|100000-1000000': 100000
+    // }
+    // var tplStatData = {
+    //   'list|20': [{
+    //     'date|+1': genDates(20),
+    //     'count|10-200': 10
+    //   }]
+    // }
     this.statistic.users = {
-      info: Mock.mock(tplStatInfo),
-      data: Mock.mock(tplStatData).list,
+      info: {
+        change: 32,
+        total: 3172
+      },
+      data: Mock.mock({
+        'list|20': [{
+          'date|+1': genDates(20),
+          'count|+1': [127, 106, 157, 64, 124, 157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
+        }]
+      }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.devices.total = {
-      info: Mock.mock(tplStatInfo),
-      data: Mock.mock(tplStatData).list,
+      info: {
+        change: 127,
+        total: 58425
+      },
+      data: Mock.mock({
+        'list|20': [{
+          'date|+1': genDates(20),
+          'count|+1': [127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 127, 106, 157, 64, 124, 157, 64, 124, 58]
+        }]
+      }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['green']})
     }
     this.statistic.devices.activated = {
-      info: Mock.mock(tplStatInfo),
-      data: Mock.mock(tplStatData).list,
+      info: Mock.mock({
+        change: 67,
+        total: 29887
+      }),
+      data: Mock.mock({
+        'list|20': [{
+          'date|+1': genDates(20),
+          'count|+1': [58, 74, 88, 127, 106, 157, 64, 124, 157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124]
+        }]
+      }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
     this.statistic.devices.online = {
-      info: Mock.mock(tplStatInfo),
-      data: Mock.mock(tplStatData).list,
+      info: Mock.mock({
+        change: -5,
+        total: 4205
+      }),
+      data: Mock.mock({
+        'list|20': [{
+          'date|+1': genDates(20),
+          'count|+1': [157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 127, 106, 157, 64, 124]
+        }]
+      }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
 
@@ -358,29 +390,49 @@ export default {
       color: 'product'
     }
     var proTrendsData = []
-    PRODUCTS.forEach((item) => {
-      proTrendsData = proTrendsData.concat(Mock.mock({
-        'list|7': [{
-          'date|+1': genDates(7),
-          'count|100-200': 10,
-          'product': item
-        }]
-      }).list)
-    })
+    // PRODUCTS.forEach((item) => {
+    //   proTrendsData = proTrendsData.concat(Mock.mock({
+    //     'list|7': [{
+    //       'date|+1': genDates(7),
+    //       'count|100-200': 10,
+    //       'product': item
+    //     }]
+    //   }).list)
+    // })
+    proTrendsData = proTrendsData.concat(Mock.mock({
+      'list|7': [{
+        'date|+1': genDates(7),
+        'count|+1': [24, 14, 25, 34, 17, 29, 33],
+        'product': PRODUCTS[0]
+      }]
+    }).list)
+    proTrendsData = proTrendsData.concat(Mock.mock({
+      'list|7': [{
+        'date|+1': genDates(7),
+        'count|+1': [204, 156, 275, 236, 154, 198, 185],
+        'product': PRODUCTS[1]
+      }]
+    }).list)
     this.trends.products.data = proTrendsData
     this.trends.products.options = productTrendsOptions
 
-    var tplPoductTrends = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplPoductTrends = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.trends.products.today = {
-      info: Mock.mock(tplPoductTrends)
+      info: {
+        change: 5,
+        total: 127
+      }
     }
     // 平均
     this.trends.products.avg = {
-      info: Mock.mock(tplPoductTrends)
+      info: {
+        change: 7,
+        total: 104
+      }
     }
 
     // Top3
@@ -402,14 +454,19 @@ export default {
       },
       position: 'product*count'
     }
-    var tplProductTrendsTopData = {
-      'list|3': [{
-        'count|10-200': 10,
-        'product|+1': PRODUCTS
-      }]
-    }
+    // var tplProductTrendsTopData = {
+    //   'list|2': [{
+    //     'count|10-20': 10,
+    //     'product|+1': PRODUCTS
+    //   }]
+    // }
     this.trends.products.topAdded = {
-      data: Mock.mock(tplProductTrendsTopData).list,
+      data: Mock.mock({
+        'list|2': [{
+          'count|+1': [24, 115],
+          'product|+1': PRODUCTS
+        }]
+      }).list,
       options: _.merge({}, productTrendsTopOptions, {
         props: {
           height: 90
@@ -421,7 +478,12 @@ export default {
       })
     }
     this.trends.products.topOnline = {
-      data: Mock.mock(tplProductTrendsTopData).list,
+      data: Mock.mock({
+        'list|2': [{
+          'count|+1': [807, 4709],
+          'product|+1': PRODUCTS
+        }]
+      }).list,
       options: _.merge({}, productTrendsTopOptions, {
         props: {
           height: 80
@@ -435,16 +497,89 @@ export default {
 
     // 产品区域分布 -----------------------------------------------------
 
+    // var regionData = []
+    // var features = mapData.features
+    // var dataArr = [4576, 3405, 2876, 2406, 2217, 1807, 1777, 1654, 1540, 1440, 1120, 879, 654, 332, 224, 87, 32]
+    // for (var i = 0; i < features.length; i++) {
+    //   var name = features[i].properties.name
+    //   regionData.push({
+    //     'name': name,
+    //     // 'value': Math.round(Math.random() * 1000)
+    //     'value': dataArr[i] || 0
+    //   })
+    // }
     var regionData = []
     var features = mapData.features
+    var mapDataArr = [{
+      name: '广东',
+      value: 4576
+    }, {
+      name: '上海',
+      value: 3405
+    }, {
+      name: '北京',
+      value: 2876
+    }, {
+      name: '浙江',
+      value: 2406
+    }, {
+      name: '江苏',
+      value: 2217
+    }, {
+      name: '广西',
+      value: 1807
+    }, {
+      name: '福建',
+      value: 1807
+    }, {
+      name: '重庆',
+      value: 1777
+    }, {
+      name: '山东',
+      value: 1654
+    }, {
+      name: '四川',
+      value: 1540
+    }, {
+      name: '湖南',
+      value: 1540
+    }, {
+      name: '安徽',
+      value: 1120
+    }, {
+      name: '黑龙江',
+      value: 1120
+    }, {
+      name: '河北',
+      value: 1120
+    }, {
+      name: '云南',
+      value: 879
+    }, {
+      name: '江西',
+      value: 879
+    }, {
+      name: '辽宁',
+      value: 654
+    }, {
+      name: '湖北',
+      value: 332
+    }, {
+      name: '山西',
+      value: 224
+    }, {
+      name: '青海',
+      value: 87
+    }]
     for (var i = 0; i < features.length; i++) {
       var name = features[i].properties.name
       regionData.push({
         'name': name,
-        'value': Math.round(Math.random() * 1000)
+        // 'value': Math.round(Math.random() * 1000)
+        'value': 0
       })
     }
-    this.regions.products.data = regionData
+    this.regions.products.data = _.unionBy(mapDataArr, regionData, 'name')
 
     // Top10
     var regionsProductTopOptions = {
@@ -465,7 +600,7 @@ export default {
       },
       position: 'name*value'
     }
-    var regionProductTopData = _.slice(_.orderBy(regionData, ['value'], ['asc']), regionData.length - 11, regionData.length - 1)
+    var regionProductTopData = _.slice(_.orderBy(this.regions.products.data, ['value'], ['asc']), this.regions.products.data.length - 10, this.regions.products.data.length)
     this.regions.products.top = {
       data: regionProductTopData,
       options: _.merge({}, regionsProductTopOptions, {
@@ -482,14 +617,14 @@ export default {
     // 产品信息占比 -----------------------------------------------------
     this.proportion.devices.activated = {
       data: [
-        {name: '已激活设备数', value: 9811},
-        {name: '未激活设备数', value: 12313}
+        {name: '已激活设备数', value: 29887},
+        {name: '未激活设备数', value: 28538}
       ]
     }
     this.proportion.devices.online = {
       data: [
-        {name: '当前离线', value: 9811},
-        {name: '当前在线', value: 12313}
+        {name: '当前离线', value: 25682},
+        {name: '当前在线', value: 4205}
       ]
     }
 
@@ -522,23 +657,29 @@ export default {
     this.trends.users.data = Mock.mock({
       'list|7': [{
         'date|+1': genDates(7),
-        'count|100-200': 10,
+        'count|+1': [20, 22, 15, 25, 18, 24, 32],
         'type': '新增用户'
       }]
     }).list
     this.trends.users.options = userTrendsOptions
 
-    var tplUserTrends = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplUserTrends = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.trends.users.today = {
-      info: Mock.mock(tplUserTrends)
+      info: {
+        change: 8,
+        total: 32
+      }
     }
     // 平均
     this.trends.users.avg = {
-      info: Mock.mock(tplUserTrends)
+      info: {
+        change: 12,
+        total: 43
+      }
     }
   },
 
