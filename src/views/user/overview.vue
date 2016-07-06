@@ -137,7 +137,7 @@
 
 <script>
 // import api from 'api'
-import G2 from 'g2'
+// import G2 from 'g2'
 import Mock from 'mockjs'
 import Panel from 'components/Panel'
 import ButtonGroup from 'components/ButtonGroup'
@@ -795,7 +795,7 @@ export default {
           min: 0
         }
       },
-      position: G2.Stat.summary.percent('age*count')
+      position: window.G2.Stat.summary.percent('age*count')
     }
     this.age.data = Mock.mock({
       'list|5': [{

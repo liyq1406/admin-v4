@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import G2 from 'g2'
+// import G2 from 'g2'
 import _ from 'lodash'
 
 export default {
@@ -45,7 +45,7 @@ export default {
       var legendDefaults = {
         position: 'bottom'
       }
-      var chart = new G2.Chart(_.merge({}, defaults, this.options.props))
+      var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
       chart.source(this.data)
       chart.coord('theta', {
         radius: 0.7 // 设置饼图的大小
@@ -58,7 +58,7 @@ export default {
       }
 
       chart.intervalStack()
-        .position(G2.Stat.summary.percent('value'))
+        .position(window.G2.Stat.summary.percent('value'))
         .color('name')
         .label('name*..percent', (name, percent) => {
           percent = (percent * 100).toFixed(2) + '%'

@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import G2 from 'g2'
+// import G2 from 'g2'
 import _ from 'lodash'
 
 export default {
@@ -53,7 +53,7 @@ export default {
       }
       var tooltipDefaults = {}
 
-      var chart = new G2.Chart(_.merge({}, defaults, this.options.props))
+      var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
       var defs = this.options.defs
 
       for (let key in defs) {
@@ -93,7 +93,7 @@ export default {
 
       if (this.options.stack) {
         interval = chart.intervalStack()
-        pos = G2.Stat.summary.mean(pos)
+        pos = window.G2.Stat.summary.mean(pos)
       } else {
         interval = chart.interval()
       }
