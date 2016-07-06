@@ -281,6 +281,7 @@
           this.mapCenter = [res.data.lon, res.data.lat]
           if (typeof window.AMap === 'undefined') {
             var mapApi = document.createElement('script')
+            alert(`http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`)
             mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
             document.getElementsByTagName('body')[0].appendChild(mapApi)
           } else {
