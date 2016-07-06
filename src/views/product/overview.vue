@@ -257,7 +257,7 @@ export default {
     // 反馈类型
     const FEEDBACK_TYPES = ['维保', '故障', '个人意见']
     // 产品
-    const PRODUCTS = ['产品1', '产品2', '产品3']
+    const PRODUCTS = ['空气净化器', 'WI-FI智能灯']
 
     /**
      * 生成日期数组，用于模拟横轴日期数据
