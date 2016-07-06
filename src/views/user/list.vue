@@ -83,7 +83,8 @@
 
     route: {
       data () {
-        this.getUsers()
+        // this.getUsers()
+        this.getUsers1()
       }
     },
 
@@ -106,6 +107,96 @@
     },
 
     methods: {
+      /**
+       * 获取假用户数据
+       * @return {[type]} [description]
+       */
+      getUsers1 () {
+        var users = [
+          {
+            id: '2786121657641',
+            nickname: '盛志',
+            account: '13585634347',
+            create_date: '2014-06-24 16:22:37',
+            source: 2,
+            phone_valid: true
+          },
+          {
+            id: '7861231657894',
+            nickname: '黄工',
+            account: '13085347634',
+            create_date: '2015-12-11 16:22:12',
+            source: 1,
+            phone_valid: true
+          },
+          {
+            id: '1657894786123',
+            nickname: '黄妲',
+            account: '13634085347',
+            create_date: '2016-08-24 12:02:57',
+            source: 3,
+            phone_valid: true
+          },
+          {
+            id: '6578978681434',
+            nickname: '豆腐',
+            account: '13534077642',
+            create_date: '2015-02-24 12:32:37',
+            source: 3,
+            phone_valid: false
+          },
+          {
+            id: '7861231657894',
+            nickname: '黄工',
+            account: '13085347634',
+            create_date: '2015-12-11 16:22:12',
+            source: 1,
+            phone_valid: true
+          },
+          {
+            id: '1657894786123',
+            nickname: '小龙',
+            account: '13634085347',
+            create_date: '2016-08-24 12:02:57',
+            source: 3,
+            phone_valid: true
+          },
+          {
+            id: '6578937861434',
+            nickname: 'dms',
+            account: '13534077648',
+            create_date: '2015-02-24 12:32:37',
+            source: 3,
+            phone_valid: false
+          },
+          {
+            id: '7861231657894',
+            nickname: '美博',
+            account: '13085347635',
+            create_date: '2015-12-11 16:22:12',
+            source: 1,
+            phone_valid: true
+          },
+          {
+            id: '1657894786123',
+            nickname: 'exlink',
+            account: '13634085347',
+            create_date: '2016-08-24 12:02:57',
+            source: 3,
+            phone_valid: true
+          },
+          {
+            id: '6578978614347',
+            nickname: 'javelin',
+            account: '13534077645',
+            create_date: '2015-02-24 12:32:37',
+            source: 3,
+            phone_valid: true
+          }
+        ]
+        this.users = users
+        this.total = 3000
+      },
       // 获取用户
       getUsers () {
         this.loadingData = true

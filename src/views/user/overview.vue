@@ -373,7 +373,7 @@ export default {
     }
     this.statistic.users.registered = {
       info: {
-        change: 32,
+        change: 1,
         total: 32
       },
       data: Mock.mock(tplStatData).list,
@@ -381,24 +381,24 @@ export default {
     }
     this.statistic.users.registeredPercentage = {
       info: {
-        change: 32,
-        total: 32
+        change: 1,
+        total: 0.775
       },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
     this.statistic.users.online = {
       info: {
-        change: 32,
-        total: 32
+        change: 33,
+        total: 1387
       },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
     this.statistic.users.onlinePercentage = {
       info: {
-        change: 32,
-        total: 32
+        change: 88,
+        total: 0.43
       },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
