@@ -14,7 +14,7 @@ export function format (val, type) {
 
     // 邮箱格式
     case 'email':
-      result = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(val)
+      result = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(val)
       break
 
     // 邮箱格式
