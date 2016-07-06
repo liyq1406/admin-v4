@@ -6,6 +6,7 @@ import * as patterns from './consts/patterns'
 export var globalMixins = {
   data () {
     return {
+      locales: locales[Vue.config.lang],
       debug: process.env.NODE_ENV !== 'production',
       patterns: patterns
     }

@@ -1,38 +1,72 @@
-.panel
+<template>
+  <div class="x-panel">
+    <div class="x-panel-hd">
+      <slot name="right-actions"></slot>
+      <h2 v-if="title">{{ title }}</h2>
+      <slot name="left-actions"></slot>
+    </div>
+    <div class="x-panel-bd">
+      <slot></slot>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'Panel',
+
+  props: {
+    title: {
+      type: String,
+      default: ''
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+// 配置
+@import '../assets/stylus/common'
+
+.x-panel
   border 1px solid light-border-color
   background #FFF
-  padding 0 22px
+  padding 0 20px
   box-sizing border-box
   margin 0 5px 10px
 
-.panel-hd
-  border-bottom 1px solid light-border-color
+.x-panel-hd
+  /*border-bottom 1px solid light-border-color*/
   position relative
   clearfix()
 
   h2
+    display inline-block
     margin 0
     font-size 18px
     font-weight normal
-    height 36px
-    line-height 36px
-    padding-top 12px
+    height 20px
+    line-height 20px
+    margin-top 20px
+    padding-left 8px
+    border-left 4px solid red
 
     .fa
       margin-right 5px
 
-  .leftbox
-    position absolute
-    top 4px
-    left 100px
+  .left-actions
+    display inline-block
 
     .v-select
-      float right
+      display inline-block
       margin 12px 0 0 20px
 
-  .btn-group
+    .x-btn-group
+      display inline-block
+      margin-left 20px
+
+  .right-actions
     float right
-    margin-top 12px
 
   .date
     float right
@@ -68,12 +102,12 @@
     h2
       float left
 
-.panel-sub-hd
+.x-panel-sub-hd
   background #F7F7F7
   font-size 16px
   padding 6px 10px
 
-.panel-bd
+.x-panel-bd
   position relative
   box-sizing border-box
 
@@ -111,3 +145,4 @@
   .modal
     .form
       padding 0
+</style>

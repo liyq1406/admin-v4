@@ -69,6 +69,33 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '未激活', value: 'inactive' }
 ]
 
+// 产品活跃时间段
+export const ACTIVE_PERIODS = [
+  { label: '1天', value: 1 },
+  { label: '7天', value: 7 },
+  { label: '30天', value: 30 }
+]
+
+// 平均时间段
+export const AVG_PERIODS = [
+  { label: '近7天', value: 7 },
+  { label: '近30天', value: 30 }
+]
+
+// 产品过滤器
+export const PRODUCT_FILTERS = [
+  { label: '新增设备', value: 'added' },
+  { label: '在线设备', value: 'online' },
+  { label: '累计设备', value: 'all' }
+]
+
+// 用户过滤器
+export const USER_FILTERS = [
+  { label: '新增用户', value: 'added' },
+  { label: '活跃用户', value: 'active' },
+  { label: '累计用户', value: 'all' }
+]
+
 // 成员类型
 export const MEMBER_TYPES = ['管理员', '普通会员']
 

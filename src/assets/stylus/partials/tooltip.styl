@@ -1,0 +1,93 @@
+.x-tooltip
+  position absolute
+  /*white-space nowrap*/
+  background rgba(0, 0, 0, .8)
+  color #FFF
+  padding 6px 10px
+  font-size 12px
+  border-radius 4px
+  z-index 1000
+  // transition all .2s ease-in-out
+
+  &:before
+    position absolute
+    content ""
+
+  p
+    margin 0
+    line-height 20px
+
+.x-tooltip-top
+  &:before
+    left 50%
+    top 100%
+    margin-left -5px
+    triangle rgba(0, 0, 0, .8) 10px down
+
+.x-tooltip-bottom
+  left 50%
+  top 100%
+  margin-top 6px
+
+  &:before
+    left 50%
+    bottom 100%
+    margin-left -5px
+    triangle rgba(0, 0, 0, .8) 10px up
+
+.x-tooltip-right
+  left 100%
+  top 50%
+  margin-left 10px
+
+  &:before
+    top 50%
+    right 100%
+    margin-top -5px
+    triangle rgba(0, 0, 0, .8) 10px left
+
+.x-tooltip-left
+  right 100%
+  top 50%
+  margin-right 10px
+
+  &:before
+    top 50%
+    left 100%
+    margin-top -5px
+    triangle rgba(0, 0, 0, .8) 10px right
+//
+// .popup-top-transition
+//   transform translate(-50%, 0)
+//
+// .popup-top-enter
+// .popup-top-leave
+//   transform translate(-50%, -5px)
+//   opacity 0
+//
+// .popup-bottom-transition
+//   transition all .2s ease-in-out
+//   transform translate(-50%, 0)
+//
+// .popup-bottom-enter
+// .popup-bottom-leave
+//   transform translate(-50%, 5px)
+//   opacity 0
+//
+// .popup-right-transition
+//   transition all .2s ease-in-out
+//   transform translate(0, -50%)
+//
+// .popup-right-enter
+// .popup-right-leave
+//   transform translate(5px, -50%)
+//   opacity 0
+//
+// .popup-left-transition
+//   transition all .2s ease-in-out
+//   transform translate(0, -50%)
+//
+// .popup-left-enter
+// .popup-left-leave
+//   transform translate(-5px, -50%)
+//   opacity 0

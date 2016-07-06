@@ -39,7 +39,7 @@
       data () {
         return {
           secondaryNav: [{
-            label: '用户列表',
+            label: '概览',
             link: { path: '/users/list' }
           }, {
             label: '用户设置',

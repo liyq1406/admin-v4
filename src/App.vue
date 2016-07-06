@@ -438,7 +438,7 @@
     overflow auto
 
     .main
-      padding 20px 10px 0
+      padding 10px 5px 0
 
   // 视图淡入淡出
   .view
