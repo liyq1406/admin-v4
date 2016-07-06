@@ -635,6 +635,14 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
+        // 概览
+        'overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/user/overview'))
+            }, 'admin')
+          }
+        },
         // 用户列表
         'list': {
           component (resolve) {
@@ -966,7 +974,7 @@ let configRouter = (router) => {
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
     '/settings': '/settings/auth',
-    '/users': '/users/list',
+    '/users': '/users/overview',
     '/plugins/ios/:id': '/plugins/ios/:id/settings',
     '/plugins/android/:id': '/plugins/android/:id/settings',
     '/plugins/wechat/:id': '/plugins/wechat/:id/settings',

@@ -40,6 +40,9 @@
         return {
           secondaryNav: [{
             label: '概览',
+            link: { path: '/users/overview' }
+          }, {
+            label: '用户列表',
             link: { path: '/users/list' }
           }, {
             label: '用户设置',
