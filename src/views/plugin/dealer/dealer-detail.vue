@@ -1,120 +1,116 @@
 <template>
   <section class="main-wrap">
-    <div class="mainwith-loading">
+    <div class="main with-loading">
       <div class="breadcrumb"><a v-link="{path: '/plugins/dealer/' + $route.params.app_id + '/list' }"><i class="fa fa-arrow-circle-left"></i>经销商管理</a></div>
-      <div class="row">
-        <div class="col-24">
-          <div class="panel row">
-            <div class="panel-hd">
-              <h2>经销商信息<a href="#" @click.prevent="editDealer(dealer)" class="fa fa-edit"></a></h2>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>经销商信息<a href="#" @click.prevent="editDealer(dealer)" class="fa fa-edit"></a></h2>
+        </div>
+        <div class="panel-bd">
+          <div class="row">
+            <div class="col-14">
+              <ul class="info-details">
+                <li class="row">
+                  <div class="col-5 label">账号:</div>
+                  <div class="clo-19 info">{{ dealer.username }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">登录密码:</div>
+                  <div class="clo-19 info">{{ dealer.password }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">经销商名称:</div>
+                  <div class="clo-19 info">{{ dealer.name }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">联系人:</div>
+                  <div class="clo-19 info">{{ dealer.linkman }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">手机号:</div>
+                  <div class="clo-19 info">{{ dealer.phone }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">负责区域:</div>
+                  <div class="clo-19 info">{{ dealer.area }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-5 label">从属于:</div>
+                  <div class="clo-19 info">{{ dealer.belong_to }}</div>
+                </li>
+              </ul>
             </div>
-            <div class="panel-bd">
-              <div class="row">
-                <div class="col-14">
-                  <ul class="info-details">
-                    <li class="row">
-                      <div class="col-5 label">账号:</div>
-                      <div class="clo-19 info">{{ dealer.username }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">登录密码:</div>
-                      <div class="clo-19 info">{{ dealer.password }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">经销商名称:</div>
-                      <div class="clo-19 info">{{ dealer.name }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">联系人:</div>
-                      <div class="clo-19 info">{{ dealer.linkman }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">手机号:</div>
-                      <div class="clo-19 info">{{ dealer.phone }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">负责区域:</div>
-                      <div class="clo-19 info">{{ dealer.area }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-5 label">从属于:</div>
-                      <div class="clo-19 info">{{ dealer.belong_to }}</div>
-                    </li>
-                  </ul>
+            <div class="col-10">
+              <div class="row status">
+                <div class="col-12">
+                  <div class="status-item">
+                    <em>{{ dealer.sale_target || 0 }}</em>
+                    <span>年销售目标</span>
+                  </div>
                 </div>
-                <div class="col-10">
-                  <div class="row status">
-                    <div class="col-12">
-                      <div class="status-item">
-                        <em>{{ dealer.sale_target }}</em>
-                        <span>年销售目标</span>
-                      </div>
-                    </div>
-                    <div class="col-12">
-                      <div class="status-item">
-                        <em>{{ dealer.sale_count|| 0 }}</em>
-                        <span>已销售数量</span>
-                      </div>
-                    </div>
+                <div class="col-12">
+                  <div class="status-item">
+                    <em>{{ dealer.sale_count || 0 }}</em>
+                    <span>已销售数量</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="panel-hd">
-              <h2>销售信息</h2>
-            </div>
-            <div class="panel-bd">
-              <div class="action-bar">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
-                  <v-select width="100px" :label="queryType.label">
-                    <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                    </select>
-                  </v-select>
-                  <button slot="search-button" @click="getSales" class="btn btn-primary">{{ $t('common.search') }}</button>
-                </search-box>
-              </div>
-              <div class="data-table with-loading">
-                <div class="icon-loading" v-show="loadingData">
-                  <i class="fa fa-refresh fa-spin"></i>
-                </div>
-                <table class="table table-stripe table-bordered">
-                  <thead>
-                    <tr>
-                      <th>销售时间</th>
-                      <th>产品型号</th>
-                      <th>序列号</th>
-                      <th>客户名称</th>
-                      <th>手机号</th>
-                      <!-- <th class="tac">{{ $t("common.action") }}</th> -->
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <template v-if="sales.length > 0">
-                      <tr v-for="sale in sales">
-                        <!-- <td>{{* dealer.name }}</td> -->
-                        <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/detail/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
-                        <td>{{* sale.version }}</td>
-                        <td>{{* sale.code }}</td>
-                        <td>{{* sale.name }}</td>
-                        <td>{{* sale.phone }}</td>
-                        <!-- <td class="tac">
-                          <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                        </td> -->
-                      </tr>
-                    </template>
-                    <tr v-if="sales.length === 0 && !loadingData">
-                      <td colspan="5" class="tac">
-                        <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- 分页-->
-              <pager v-if="sales.length > countPerPage" :total="sales.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
-            </div>
           </div>
+        </div>
+        <div class="panel-hd">
+          <h2>销售信息</h2>
+        </div>
+        <div class="panel-bd">
+          <div class="action-bar">
+            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
+              <v-select width="100px" :label="queryType.label">
+                <select v-model="queryType">
+                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
+              <button slot="search-button" @click="getSales" class="btn btn-primary">{{ $t('common.search') }}</button>
+            </search-box>
+          </div>
+          <div class="data-table with-loading">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th>销售时间</th>
+                  <th>产品型号</th>
+                  <th>序列号</th>
+                  <th>客户名称</th>
+                  <th>手机号</th>
+                  <!-- <th class="tac">{{ $t("common.action") }}</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <template v-if="sales.length > 0">
+                  <tr v-for="sale in sales">
+                    <!-- <td>{{* dealer.name }}</td> -->
+                    <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/detail/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
+                    <td>{{* sale.version }}</td>
+                    <td>{{* sale.code }}</td>
+                    <td>{{* sale.name }}</td>
+                    <td>{{* sale.phone }}</td>
+                    <!-- <td class="tac">
+                      <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                    </td> -->
+                  </tr>
+                </template>
+                <tr v-if="sales.length === 0 && !loadingData">
+                  <td colspan="5" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <!-- 分页-->
+          <pager v-if="sales.length > countPerPage" :total="sales.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
         </div>
       </div>
       <!--修改经销商信息浮层-->

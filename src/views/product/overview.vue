@@ -4,8 +4,8 @@
       <div class="product-card">
         <div class="thumb"><img src="../../assets/images/device_thumb.png"/></div>
         <div class="info">
-          <h2>Coffee MakerNB92-02</h2>
-          <div class="desc">We've reviewed the latest and best coffeemakers of 2016 at the Good Housekeeping Institute</div>
+          <h2>{{ currentProduct.name }}</h2>
+          <div class="desc">{{ currentProduct.description }}</div>
           <div class="row statistic">
             <div class="col-6">
               <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
@@ -116,6 +116,7 @@
 <script>
 // import api from 'api'
 import Mock from 'mockjs'
+import store from 'store/index'
 import Panel from 'components/Panel'
 import ButtonGroup from 'components/ButtonGroup'
 import Statistic from 'components/Statistic'
@@ -129,11 +130,19 @@ import moment from 'moment'
 import _ from 'lodash'
 
 export default {
-  name: 'Dashboard',
+  name: 'Overview',
 
   layout: 'admin',
 
   mixins: [globalMixins],
+
+  store,
+
+  vuex: {
+    getters: {
+      currentProduct: ({ products }) => products.curr
+    }
+  },
 
   components: {
     Panel,
@@ -246,7 +255,14 @@ export default {
     }
   },
 
+  computed: {
+    isProduct1 () {
+      return this.currentProduct.id === '1607d2ae72fd4a001607d2ae72fd4a01'
+    }
+  },
+
   ready () {
+    // alert(this.isProduct1)
     // 配色
     const COLORS = {
       'gray': '#383838',
@@ -297,10 +313,10 @@ export default {
       tooltip: false,
       position: 'date*count'
     }
-    var tplStatInfo = {
-      'change|-200-2000': 2000,
-      'total|100000-1000000': 100000
-    }
+    // var tplStatInfo = {
+    //   'change|-200-2000': 2000,
+    //   'total|100000-1000000': 100000
+    // }
     var tplStatData = {
       'list|20': [{
         'date|+1': genDates(20),
@@ -308,43 +324,66 @@ export default {
       }]
     }
     this.statistic.users = {
-      info: Mock.mock(tplStatInfo),
-      data: Mock.mock(tplStatData).list,
+      info: {
+        change: 34,
+        total: 2682
+      },
+      data: Mock.mock({
+        'list|20': [{
+          'date|+1': genDates(20),
+          'count|+1': [127, 106, 157, 64, 124, 157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
+        }]
+      }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.devices.total = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 139,
+        total: 25836
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['green']})
     }
     this.statistic.devices.activated = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 53,
+        total: 10334
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
     this.statistic.devices.online = {
-      info: Mock.mock(tplStatInfo),
+      info: {
+        change: 8,
+        total: 1689
+      },
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
 
     // 告警信息占比 -----------------------------------------------------
     this.proportion.alerts.data = [
-      {name: '轻度告警', value: 9811},
-      {name: '中度告警', value: 12313},
-      {name: '重度告警', value: 12313}
+      {name: '轻度告警', value: 5679},
+      {name: '中度告警', value: 2887},
+      {name: '重度告警', value: 1047}
     ]
-    var tplAlert = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplAlert = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.proportion.alerts.today = {
-      info: Mock.mock(tplAlert)
+      info: {
+        change: 9,
+        total: 57
+      }
     }
     // 未读
     this.proportion.alerts.unread = {
-      info: Mock.mock(tplAlert)
+      info: {
+        change: 23,
+        total: 104
+      }
     }
 
     // 用户反馈 -----------------------------------------------------
@@ -372,29 +411,47 @@ export default {
       color: 'type'
     }
     var feedbackData = []
-    FEEDBACK_TYPES.forEach((item) => {
-      feedbackData = feedbackData.concat(Mock.mock({
-        'list|7': [{
-          'date|+1': genDates(7),
-          'count|100-200': 10,
-          'type': item
-        }]
-      }).list)
-    })
+    feedbackData = feedbackData.concat(Mock.mock({
+      'list|7': [{
+        'date|+1': genDates(7),
+        'count|+1': [12, 18, 9, 15, 16, 18, 11],
+        'type': FEEDBACK_TYPES[0]
+      }]
+    }).list)
+    feedbackData = feedbackData.concat(Mock.mock({
+      'list|7': [{
+        'date|+1': genDates(7),
+        'count|+1': [23, 47, 32, 18, 27, 45, 33],
+        'type': FEEDBACK_TYPES[1]
+      }]
+    }).list)
+    feedbackData = feedbackData.concat(Mock.mock({
+      'list|7': [{
+        'date|+1': genDates(7),
+        'count|+1': [2, 4, 5, 3, 7, 9, 4],
+        'type': FEEDBACK_TYPES[2]
+      }]
+    }).list)
     this.feedback.data = feedbackData
     this.feedback.options = feedbackOptions
 
-    var tplFeedback = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplFeedback = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.feedback.today = {
-      info: Mock.mock(tplFeedback)
+      info: {
+        change: 2,
+        total: 23
+      }
     }
     // 未读
     this.feedback.unread = {
-      info: Mock.mock(tplFeedback)
+      info: {
+        change: 7,
+        total: 44
+      }
     }
 
     // 产品趋势分析 -----------------------------------------------------
@@ -425,23 +482,29 @@ export default {
     this.trends.products.data = Mock.mock({
       'list|7': [{
         'date|+1': genDates(7),
-        'count|100-200': 10,
-        'product': '产品1'
+        'count|+1': [24, 14, 25, 34, 17, 29, 33],
+        'product': PRODUCTS[0]
       }]
     }).list
     this.trends.products.options = productTrendsOptions
 
-    var tplPoductTrends = {
-      'change|-200-200': 0,
-      'total|10-1000': 1000
-    }
+    // var tplPoductTrends = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
     // 今日
     this.trends.products.today = {
-      info: Mock.mock(tplPoductTrends)
+      info: {
+        change: 2,
+        total: 24
+      }
     }
     // 平均
     this.trends.products.avg = {
-      info: Mock.mock(tplPoductTrends)
+      info: {
+        change: 6,
+        total: 28
+      }
     }
 
     // 产品活跃时间点 -----------------------------------------------------
@@ -468,15 +531,29 @@ export default {
       color: 'product'
     }
     var timePointData = []
-    PRODUCTS.forEach((item) => {
-      timePointData = timePointData.concat(Mock.mock({
-        'list|24': [{
-          'date|+1': 0,
-          'count|100-200': 10,
-          'product': item
-        }]
-      }).list)
-    })
+    timePointData = timePointData.concat(Mock.mock({
+      'list|24': [{
+        'date|+1': 0,
+        'count|+1': [234, 245, 232, 239, 227, 234, 248, 262, 254, 268, 308, 345, 446, 487, 436, 460, 435, 355, 368, 327, 293, 276, 244, 245],
+        'product': PRODUCTS[0]
+      }]
+    }).list)
+    // timePointData = timePointData.concat(Mock.mock({
+    //   'list|24': [{
+    //     'date|+1': 0,
+    //     'count|+1': [1362, 854, 427, 320, 197, 184, 187, 176, 167, 188, 197, 204, 248, 262, 254, 288, 308, 654, 867, 1590, 1901, 2104, 1887, 1603],
+    //     'product': PRODUCTS[1]
+    //   }]
+    // }).list)
+    // PRODUCTS.forEach((item) => {
+    //   timePointData = timePointData.concat(Mock.mock({
+    //     'list|24': [{
+    //       'date|+1': 0,
+    //       'count|+1': 10,
+    //       'product': item
+    //     }]
+    //   }).list)
+    // })
     this.timePoint.data = timePointData
     this.timePoint.options = timePointOptions
 
@@ -506,15 +583,29 @@ export default {
       color: 'product'
     }
     var durationData = []
-    PRODUCTS.forEach((item) => {
-      durationData = durationData.concat(Mock.mock({
-        'list|6': [{
-          'duration|+1': ['8小时以上', '6-7小时', '4-5小时', '3-4小时', '2-3小时', '1小时内'],
-          'count|100-200': 10,
-          'product': item
-        }]
-      }).list)
-    })
+    durationData = durationData.concat(Mock.mock({
+      'list|6': [{
+        'duration|+1': ['8小时以上', '6-7小时', '4-5小时', '3-4小时', '2-3小时', '1小时内'],
+        'count|+1': [109, 223, 324, 678, 867, 1457],
+        'product': PRODUCTS[0]
+      }]
+    }).list)
+    durationData = durationData.concat(Mock.mock({
+      'list|6': [{
+        'duration|+1': ['8小时以上', '6-7小时', '4-5小时', '3-4小时', '2-3小时', '1小时内'],
+        'count|+1': [245, 432, 867, 1762, 2345, 5752],
+        'product': PRODUCTS[1]
+      }]
+    }).list)
+    // PRODUCTS.forEach((item) => {
+    //   durationData = durationData.concat(Mock.mock({
+    //     'list|6': [{
+    //       'duration|+1': ['8小时以上', '6-7小时', '4-5小时', '3-4小时', '2-3小时', '1小时内'],
+    //       'count|100-200': 10,
+    //       'product': item
+    //     }]
+    //   }).list)
+    // })
     this.duration.data = durationData
     this.duration.options = durationOptions
 
@@ -543,15 +634,29 @@ export default {
       color: 'product'
     }
     var timesData = []
-    PRODUCTS.forEach((item) => {
-      timesData = timesData.concat(Mock.mock({
-        'list|6': [{
-          'times|+1': ['1', '2-10', '10-15', '16-20', '20-25', '25以上'],
-          'count|100-200': 10,
-          'product': item
-        }]
-      }).list)
-    })
+    timesData = timesData.concat(Mock.mock({
+      'list|6': [{
+        'times|+1': ['1', '2-10', '10-15', '16-20', '20-25', '25以上'],
+        'count|+1': [1457, 867, 678, 324, 223, 109],
+        'product': PRODUCTS[0]
+      }]
+    }).list)
+    timesData = timesData.concat(Mock.mock({
+      'list|6': [{
+        'times|+1': ['1', '2-10', '10-15', '16-20', '20-25', '25以上'],
+        'count|+1': [5752, 2345, 1762, 867, 432, 245],
+        'product': PRODUCTS[1]
+      }]
+    }).list)
+    // PRODUCTS.forEach((item) => {
+    //   timesData = timesData.concat(Mock.mock({
+    //     'list|6': [{
+    //       'times|+1': ['1', '2-10', '10-15', '16-20', '20-25', '25以上'],
+    //       'count|100-200': 10,
+    //       'product': item
+    //     }]
+    //   }).list)
+    // })
     this.times.data = timesData
     this.times.options = timesOptions
   },

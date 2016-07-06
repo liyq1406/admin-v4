@@ -84,7 +84,7 @@ export default {
       }
 
       chart.source(this.data, defs)
-      var line = chart.line().position(this.options.position).size(this.options.size || 2)
+      var line = chart.line().position(this.options.position).shape('smooth').size(this.options.size || 2)
       if (this.options.color) {
         line.color(this.options.color)
       }

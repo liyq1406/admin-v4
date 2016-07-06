@@ -1,193 +1,187 @@
 <template>
-  <section class="main-wrap">
-    <div class="main device-details">
-      <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('ui.device.management') }}</a></div>
-      <div class="row">
-        <div class="col-24">
-          <div class="panel">
-            <div class="panel-hd">
-              <h2>{{ $t('ui.device.details') }}</h2>
+  <div>
+    <div class="row">
+      <div class="col-24">
+        <div class="panel">
+          <div class="panel-bd row">
+            <div class="col-18">
+              <ul class="device-details">
+                <li v-if="device.name">
+                  <div class="label">设备名称:</div>
+                  <div class="info">{{ device.name }}</div>
+                </li>
+                <li>
+                  <div class="label">ID:</div>
+                  <div class="info">{{ device.id }}</div>
+                </li>
+                <li>
+                  <div class="label">MAC:</div>
+                  <div class="info">{{ device.mac }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('ui.device.is_active') }}:</div>
+                  <div class="info">{{ device.is_active ? $t('ui.device.active') : $t('ui.device.not_active') }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('ui.device.active_date') }}:</div>
+                  <div class="info">{{ device.active_date | formatDate }}</div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('ui.device.is_online') }}:</div>
+                  <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else class="hl-red">{{ $t('common.offline') }}</span></div>
+                </li>
+                <li>
+                  <div class="label">{{ $t('ui.device.firmware_version') }}:</div>
+                  <div class="info"><span>{{ device.firmware_version }}</span></div>
+                </li>
+              </ul>
             </div>
-            <div class="panel-bd row">
-              <div class="col-18">
-                <ul class="device-details">
-                  <li v-if="device.name">
-                    <div class="label">设备名称:</div>
-                    <div class="info">{{ device.name }}</div>
-                  </li>
-                  <li>
-                    <div class="label">ID:</div>
-                    <div class="info">{{ device.id }}</div>
-                  </li>
-                  <li>
-                    <div class="label">MAC:</div>
-                    <div class="info">{{ device.mac }}</div>
-                  </li>
-                  <li>
-                    <div class="label">{{ $t('ui.device.is_active') }}:</div>
-                    <div class="info">{{ device.is_active ? $t('ui.device.active') : $t('ui.device.not_active') }}</div>
-                  </li>
-                  <li>
-                    <div class="label">{{ $t('ui.device.active_date') }}:</div>
-                    <div class="info">{{ device.active_date | formatDate }}</div>
-                  </li>
-                  <li>
-                    <div class="label">{{ $t('ui.device.is_online') }}:</div>
-                    <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else class="hl-red">{{ $t('common.offline') }}</span></div>
-                  </li>
-                  <li>
-                    <div class="label">{{ $t('ui.device.firmware_version') }}:</div>
-                    <div class="info"><span>{{ device.firmware_version }}</span></div>
-                  </li>
-                </ul>
+            <div class="col-6 device-map with-loading">
+              <div class="icon-loading" v-show="loadingData">
+                <i class="fa fa-refresh fa-spin"></i>
               </div>
-              <div class="col-6 device-map with-loading">
-                <div class="icon-loading" v-show="loadingData">
-                  <i class="fa fa-refresh fa-spin"></i>
-                </div>
-                <div id="device-map" class="mt20" style="height: 192px"></div>
-              </div>
+              <div id="device-map" class="mt20" style="height: 192px"></div>
             </div>
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-16">
-          <!-- Start: 数据端点-->
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="actions">
-                <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-success">{{ $t('common.refresh') }}<i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
-              </div>
-              <h2>{{ $t('ui.device.datapoint') }}</h2>
-            </div>
-            <div class="panel-bd">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>{{ $t('ui.datapoint.fields.index') }}</th>
-                    <th>{{ $t('ui.datapoint.fields.name') }}</th>
-                    <th>{{ $t('ui.datapoint.fields.description') }}</th>
-                    <th>{{ $t('ui.device.current_value') }}</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="datapoint in datapoints | orderBy 'index'">
-                    <td>{{ datapoint.index }}</td>
-                    <td>{{ datapoint.name }}</td>
-                    <td>{{ datapoint.description }}</td>
-                    <td>
-                      <a @click="showEditDataPointModal(datapoint)">
-                        {{ dpVal(datapoint) }}
-                        <!-- {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }} -->
-                      </a>
-                    </td>
-                  </tr>
-                  <tr v-if="datapoints.length === 0">
-                    <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                      <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-          <!-- End: 数据端点-->
-        </div>
-        <div class="col-8">
-          <!-- Start: 设备日志-->
-          <div class="panel">
-            <div class="panel-hd">
-              <div class="actions">
-                <switch :value.sync="showLog" @switch-toggle="toggleLog"></switch>
-              </div>
-              <h2>{{ $t('ui.device.log') }}</h2>
-            </div>
-            <div class="panel-bd">
-              <code class="output-log">
-                <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
-                  <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
-                  <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
-                  <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
-                  <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
-                </div>
-              </code>
-            </div>
-          </div>
-          <!-- End: 设备日志-->
-        </div>
-      </div>
-      <!-- 布尔值浮层 -->
-      <modal :show.sync="editModal1.show" @close="editModal1.show = false" width="360px">
-        <h3 slot="header">设置参数</h3>
-        <div slot="body" class="form editModal editModal1">
-          <form @submit.prevent="setDataEvent(editModal1)">
-            <div class="content-box">
-              <div class="content-value form-row row">
-                <label class="form-control col-6">{{editModal1.name}}：</label>
-                <div class="controls col-18">
-                  <v-select :label="editModal1.value? 'true' : 'false'" placeholder="请选择" :size="'normal'">
-                    <select name="deviceParams" v-model="editModal1.value" class="deviceParams">
-                      <option :value="true">true</option>
-                      <option :value="false">false</option>
-                    </select>
-                  </v-select>
-                </div>
-                <!-- <span class="name">{{editModal1.name}}：</span> -->
-              </div>
-            </div>
-            <div class="form-actions">
-              <button @click.prevent.stop="editModal1.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            </div>
-          </form>
-        </div>
-      </modal>
-      <!-- 数字类型浮层 -->
-      <modal :show.sync="editModal2.show" @close="editModal2.show = false" width="360px">
-        <h3 slot="header">设置参数</h3>
-        <div slot="body" class="form editModal editModal2">
-          <form v-form name="validation2" @submit.prevent="setDataEvent(editModal2)">
-            <div class="content-box">
-              <div class="content-value form-row row">
-                <label class="form-control col-6">{{editModal2.name}}：</label>
-                <div class="controls col-18">
-                  <input type="text" v-form-ctrl name="paramsValue" number custom-validator="isNumber" class="paramsValue" v-model="editModal2.value">
-                </div>
-              </div>
-              <div v-show="validation2.paramsValue.$dirty" class="form-tips form-tips-error">
-                <span v-show="validation2.paramsValue.$error.customValidator">{{editModal2.name}}必须是数字</span>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button @click.prevent.stop="editModal2.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            </div>
-          </form>
-        </div>
-      </modal>
-      <!-- 字符串 -->
-      <modal :show.sync="editModal3.show" @close="editModal3.show = false" width="360px">
-        <h3 slot="header">设置参数</h3>
-        <div slot="body" class="form editModal editModal3">
-          <form @submit.prevent="setDataEvent(editModal3)">
-            <div class="content-box">
-              <div class="content-value form-row row">
-                <label class="form-control col-6">{{editModal3.name}}：</label>
-                <div class="controls col-18">
-                  <input type="text" number class="paramsValue" v-model="editModal3.value">
-                </div>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button @click.prevent.stop="editModal3.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            </div>
-          </form>
-        </div>
-      </modal>
     </div>
-  </section>
+    <div class="row">
+      <div class="col-16">
+        <!-- Start: 数据端点-->
+        <div class="panel">
+          <div class="panel-hd">
+            <div class="actions">
+              <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-success">{{ $t('common.refresh') }}<i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
+            </div>
+            <h2>{{ $t('ui.device.datapoint') }}</h2>
+          </div>
+          <div class="panel-bd">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>{{ $t('ui.datapoint.fields.index') }}</th>
+                  <th>{{ $t('ui.datapoint.fields.name') }}</th>
+                  <th>{{ $t('ui.datapoint.fields.description') }}</th>
+                  <th>{{ $t('ui.device.current_value') }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="datapoint in datapoints | orderBy 'index'">
+                  <td>{{ datapoint.index }}</td>
+                  <td>{{ datapoint.name }}</td>
+                  <td>{{ datapoint.description }}</td>
+                  <td>
+                    <a @click="showEditDataPointModal(datapoint)">
+                      {{ dpVal(datapoint) }}
+                      <!-- {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }} -->
+                    </a>
+                  </td>
+                </tr>
+                <tr v-if="datapoints.length === 0">
+                  <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                    <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <!-- End: 数据端点-->
+      </div>
+      <div class="col-8">
+        <!-- Start: 设备日志-->
+        <div class="panel">
+          <div class="panel-hd">
+            <div class="actions">
+              <switch :value.sync="showLog" @switch-toggle="toggleLog"></switch>
+            </div>
+            <h2>{{ $t('ui.device.log') }}</h2>
+          </div>
+          <div class="panel-bd">
+            <code class="output-log">
+              <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
+                <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
+                <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
+              </div>
+            </code>
+          </div>
+        </div>
+        <!-- End: 设备日志-->
+      </div>
+    </div>
+    <!-- 布尔值浮层 -->
+    <modal :show.sync="editModal1.show" @close="editModal1.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal1">
+        <form @submit.prevent="setDataEvent(editModal1)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal1.name}}：</label>
+              <div class="controls col-18">
+                <v-select :label="editModal1.value? 'true' : 'false'" placeholder="请选择" :size="'normal'">
+                  <select name="deviceParams" v-model="editModal1.value" class="deviceParams">
+                    <option :value="true">true</option>
+                    <option :value="false">false</option>
+                  </select>
+                </v-select>
+              </div>
+              <!-- <span class="name">{{editModal1.name}}：</span> -->
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal1.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 数字类型浮层 -->
+    <modal :show.sync="editModal2.show" @close="editModal2.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal2">
+        <form v-form name="validation2" @submit.prevent="setDataEvent(editModal2)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal2.name}}：</label>
+              <div class="controls col-18">
+                <input type="text" v-form-ctrl name="paramsValue" number custom-validator="isNumber" class="paramsValue" v-model="editModal2.value">
+              </div>
+            </div>
+            <div v-show="validation2.paramsValue.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation2.paramsValue.$error.customValidator">{{editModal2.name}}必须是数字</span>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal2.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 字符串 -->
+    <modal :show.sync="editModal3.show" @close="editModal3.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal3">
+        <form @submit.prevent="setDataEvent(editModal3)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal3.name}}：</label>
+              <div class="controls col-18">
+                <input type="text" number class="paramsValue" v-model="editModal3.value">
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal3.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+  </div>
 </template>
 
 <script>

@@ -319,20 +319,20 @@ export default {
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
-          'count|+1': [127, 106, 157, 64, 124, 157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
+          'count|+1': [139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
         }]
       }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.devices.total = {
       info: {
-        change: 127,
+        change: 139,
         total: 58425
       },
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
-          'count|+1': [127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 127, 106, 157, 64, 124, 157, 64, 124, 58]
+          'count|+1': [139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58]
         }]
       }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['green']})
@@ -345,7 +345,7 @@ export default {
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
-          'count|+1': [58, 74, 88, 127, 106, 157, 64, 124, 157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124]
+          'count|+1': [58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124]
         }]
       }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
@@ -358,7 +358,7 @@ export default {
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
-          'count|+1': [157, 64, 124, 58, 127, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 127, 106, 157, 64, 124]
+          'count|+1': [157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124]
         }]
       }).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
@@ -424,7 +424,7 @@ export default {
     this.trends.products.today = {
       info: {
         change: 5,
-        total: 127
+        total: 139
       }
     }
     // 平均

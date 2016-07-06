@@ -238,8 +238,50 @@ let configRouter = (router) => {
     '/products/:product_id/devices/:device_id': {
       component (resolve) {
         require.ensure([], (require) => {
-          resolve(require('./views/product/device/details'))
+          resolve(require('./views/product/device/index'))
         }, 'admin')
+      },
+      subRoutes: {
+        // 设备信息
+        'info': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/info'))
+            }, 'admin')
+          }
+        },
+        // 历史数据
+        'history': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/history'))
+            }, 'admin')
+          }
+        },
+        // 告警信息
+        'alerts': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/alerts'))
+            }, 'admin')
+          }
+        },
+        // 用户信息
+        'users': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/users'))
+            }, 'admin')
+          }
+        },
+        // 维保记录
+        'warranty': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/product/device/warranty'))
+            }, 'admin')
+          }
+        }
       }
     },
 
@@ -970,6 +1012,7 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/login',
     '/products/:id': '/products/:id/overview',
+    '/products/:product_id/devices/:device_id': '/products/:product_id/devices/:device_id/info',
     '/device-params/:product_id/:device_id/:mac': '/device-params/:product_id/:device_id/:mac/basic-info',
     '/data': '/data/tables',
     '/statistic': '/statistic/products',
