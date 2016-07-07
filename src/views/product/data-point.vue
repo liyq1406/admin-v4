@@ -235,9 +235,18 @@
                 </div>
               </div>
             </div>
-            <div class="form-actions">
-              <button type="reset" @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <div class="row">
+              <div class="col-6">
+                <label class="del-check">
+                  <input type="checkbox" name="del" v-model="delChecked"/> {{ $t("ui.datapoint.del_datapoint") }}
+                </label>
+              </div>
+              <div class="col-18">
+                <div class="form-actions">
+                  <button type="reset" @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                  <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+                </div>
+              </div>
             </div>
           </form>
         </validator>

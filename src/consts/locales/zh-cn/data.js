@@ -78,11 +78,14 @@ export const MEMBER_STATUS_TYPES = ['待激活', '正常', '已停用']
 // 数据端点类型
 export const DATAPOINT_TYPES = [
   { value: 1, label: '布尔类型' },
-  { value: 2, label: '单字节' },
-  { value: 3, label: '16位短整型' },
-  { value: 4, label: '32位整型' },
+  { value: 2, label: '单字节(无符号)' },
+  { value: 3, label: '16位短整型(有符号)' },
+  { value: 4, label: '32位整型(有符号)' },
   { value: 5, label: '浮点' },
-  { value: 6, label: '字符串' }
+  { value: 6, label: '字符串' },
+  { value: 7, label: '字节数组' },
+  { value: 8, label: '16位短整型(无符号)' },
+  { value: 9, label: '32位整型(无符号)' }
 ]
 
 // 数据端点规则
