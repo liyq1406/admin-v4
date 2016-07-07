@@ -716,5 +716,15 @@ export default {
     fields: {
       name: '名称'
     }
+  },
+
+  warranty: {
+    fields: {
+      name: '网点',
+      director: '负责人',
+      phone: '联系号码',
+      email: '邮箱地址',
+      address: '详细地址'
+    }
   }
 }
