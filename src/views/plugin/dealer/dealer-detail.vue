@@ -183,9 +183,14 @@
            <div class="form-row row">
              <label class="form-control col-5">从属于:</label>
              <div class="controls col-19">
-               <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
+               <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                  <input v-model="editModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
-               </div>
+               </div> -->
+               <v-select width="100px" :label="belongType.label">
+                 <select v-model="editModal.model.belong_to">
+                   <option v-for="option in belongs" :value="option.value">{{ option.label }}</option>
+                 </select>
+               </v-select>
              </div>
            </div>
            <div class="form-actions">
@@ -252,7 +257,7 @@
         },
         sales: [{
           _id: 2222,
-          time: '2016-5-31 16:18',
+          create_time: '2016-5-31 16:18',
           version: '3.0',
           code: '123456789',
           name: '张小明',
@@ -277,6 +282,13 @@
         queryType: {
           label: '客户名称',
           value: 'name'
+        },
+        belongs: [
+          { label: '广州分部', value: '广州分部' }
+        ],
+        belongType: {
+          label: '广州分部',
+          value: '广州分部'
         },
         countPerPage: 10,
         currentPage: 1,

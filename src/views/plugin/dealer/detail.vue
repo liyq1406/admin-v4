@@ -2,86 +2,87 @@
   <section class="main-wrap">
     <div class="mainwith-loading">
       <div class="breadcrumb"><a v-link="{path: '/plugins/dealer/' + $route.params.app_id + '/list/' + $route.params.dealer_id}"><i class="fa fa-arrow-circle-left"></i>经销商信息</a></div>
-      <div class="row">
-        <div class="col-24">
-          <div class="panel row">
-            <div class="panel-hd">
-              <h2>销售详细信息<a href="#" @click.prevent="editSale(sale)" class="fa fa-edit"></a></h2>
+      <div class="panel">
+        <div class="panel-hd">
+          <h2>销售详细信息<a href="#" @click.prevent="editSale(sale)" class="fa fa-edit"></a></h2>
+        </div>
+        <div class="panel-bd">
+          <div class="row">
+            <div class="col-12">
+              <ul class="info-details">
+                <li class="row">
+                  <div class="col-6 label">客户名称:</div>
+                  <div class="clo-18 info">{{ sale.name }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">手机号码:</div>
+                  <div class="clo-18 info">{{ sale.phone }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">客户类型:</div>
+                  <div class="clo-18 info">{{ sale.user_type }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">省份:</div>
+                  <div class="clo-18 info">{{ sale.province }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">城市:</div>
+                  <div class="clo-18 info">{{ sale.city }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">区域:</div>
+                  <div class="clo-18 info">{{ sale.district }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">详细地址:</div>
+                  <div class="clo-18 info">{{ sale.address }}</div>
+                </li>
+              </ul>
             </div>
-            <div class="panel-bd">
-              <div class="row">
-                <div class="col-12">
-                  <ul class="info-details">
-                    <li class="row">
-                      <div class="col-6 label">客户名称:</div>
-                      <div class="clo-18 info">{{ sale.name }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">手机号码:</div>
-                      <div class="clo-18 info">{{ sale.phone }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">客户类型:</div>
-                      <div class="clo-18 info">{{ sale.user_type }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">省份:</div>
-                      <div class="clo-18 info">{{ sale.province }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">城市:</div>
-                      <div class="clo-18 info">{{ sale.city }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">区域:</div>
-                      <div class="clo-18 info">{{ sale.district }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">详细地址:</div>
-                      <div class="clo-18 info">{{ sale.address }}</div>
-                    </li>
-                  </ul>
-                </div>
-                <div class="col-12">
-                  <ul class="info-details">
-                    <li class="row">
-                      <div class="col-6 label">销售日期:</div>
-                      <div class="clo-18 info">{{ sale.create_time | uniformDate}}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">场所层数:</div>
-                      <div class="clo-18 info">{{ sale.place_floor_num }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">每层面积:</div>
-                      <div class="clo-18 info">{{ sale.floor_area }}㎡</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">场所总面积:</div>
-                      <div class="clo-18 info">{{ sale.place_area }}㎡</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">机器放置层数:</div>
-                      <div class="clo-18 info">{{ sale.lay_floor }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">常驻人数:</div>
-                      <div class="clo-18 info">{{ sale.permanent_population }}</div>
-                    </li>
-                    <li class="row">
-                      <div class="col-6 label">有无新风:</div>
-                      <div class="clo-18 info"><span v-if="sale.machine_isexists === 0">无</span><span v-else>有</span></div>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div class="panel-hd">
-              <h2>销售照片</h2>
-            </div>
-            <div class="panel-bd">
+            <div class="col-12">
+              <ul class="info-details">
+                <li class="row">
+                  <div class="col-6 label">销售日期:</div>
+                  <div class="clo-18 info">{{ sale.create_time | uniformDate}}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">场所层数:</div>
+                  <div class="clo-18 info">{{ sale.place_floor_num }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">每层面积:</div>
+                  <div class="clo-18 info">{{ sale.floor_area }}㎡</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">场所总面积:</div>
+                  <div class="clo-18 info">{{ sale.place_area }}㎡</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">机器放置层数:</div>
+                  <div class="clo-18 info">{{ sale.lay_floor }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">常驻人数:</div>
+                  <div class="clo-18 info">{{ sale.permanent_population }}</div>
+                </li>
+                <li class="row">
+                  <div class="col-6 label">有无新风:</div>
+                  <div class="clo-18 info"><span v-if="sale.machine_isexists === 0">无</span><span v-else>有</span></div>
+                </li>
+              </ul>
             </div>
           </div>
+        </div>
+        <div class="panel-hd">
+          <h2>销售照片</h2>
+          <div class="panel-bd">
+            <v-alert :cols="7">
+              <p>暂时无照片</p>
+            </v-alert>
+          </div>
+        </div>
+        <div class="panel-bd">
         </div>
       </div>
       <!--修改销售信息浮层-->
