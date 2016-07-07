@@ -256,7 +256,7 @@
         },
         sales: [{
           _id: 2222,
-          time: '2016-5-31 16:18',
+          create_time: '2016-5-31 16:18',
           version: '3.0',
           code: '123456789',
           name: '张小明',
@@ -316,7 +316,7 @@
 
     ready () {
       this.getDealer()
-      this.getSales()
+      // this.getSales()
     },
     methods: {
       // 获取经销商信息

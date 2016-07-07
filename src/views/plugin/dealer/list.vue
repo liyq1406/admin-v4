@@ -43,7 +43,7 @@
                   <td>{{* dealer.linkman }}</td>
                   <td>{{* dealer.phone }}</td>
                   <td>{{* dealer.area }}</td>
-                  <td>{{* dealer.belong_to }}</td>
+                  <td>{{* dealer.belong_to || '无' }}</td>
                   <td>{{* dealer.sale_target }}</td>
                   <td>{{* dealer.sale_count || 0 }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
@@ -143,9 +143,14 @@
           <div class="form-row row">
             <label class="form-control col-5">从属于:</label>
             <div class="controls col-19">
-              <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
+              <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
-              </div>
+              </div> -->
+              <v-select width="100px" :label="belongType.label">
+                <select v-model="addModal.model.belong_to">
+                  <option v-for="option in belongs" :value="option.value">{{ option.label }}</option>
+                </select>
+              </v-select>
             </div>
           </div>
           <div class="form-row row">
@@ -229,26 +234,28 @@
 
     data () {
       return {
-        dealers: [{
-          _id: 111,
-          username: 12345,
-          name: '广州分部',
-          code: '10000',
-          linkman: '小明',
-          phone: '13800138000',
-          area: '华南地区',
-          belong_to: '广州分部',
-          sale_target: '11000',
-          sole: '1213',
-          status: 0
-        }],
+        // dealers: [{
+        //   _id: 111,
+        //   username: 12345,
+        //   name: '广州分部',
+        //   code: '10000',
+        //   linkman: '小明',
+        //   phone: '13800138000',
+        //   area: '华南地区',
+        //   belong_to: '广州分部',
+        //   sale_target: '11000',
+        //   sole: '1213',
+        //   status: 0
+        // }],
+        dealers: [],
         loadingData: false,
         addModal: {
           show: false,
           form: {},
           editingTag: false,
           model: {
-            status: true
+            status: true,
+            belong_to: '广州分部'
           }
         },
         editModal: {
@@ -266,6 +273,15 @@
           { label: '账号', value: 'code' },
           { label: '联系人', value: 'contact' }
         ],
+        belongs: [
+          { label: '广州分部', value: '广州分部' },
+          { label: '增城分部', value: '增城分部' },
+          { label: '清远分部', value: '清远分部' }
+        ],
+        belongType: {
+          label: '广州分部',
+          value: '广州分部'
+        },
         queryType: {
           label: '名称',
           value: 'name'
