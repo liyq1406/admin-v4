@@ -274,9 +274,7 @@
           { label: '联系人', value: 'contact' }
         ],
         belongs: [
-          { label: '广州分部', value: '广州分部' },
-          { label: '增城分部', value: '增城分部' },
-          { label: '清远分部', value: '清远分部' }
+          { label: '广州分部', value: '广州分部' }
         ],
         belongType: {
           label: '广州分部',
