@@ -81,7 +81,6 @@
                       </div>
                     </div>
                     <div class="operation-box col-9">
-
                       <div class="check-device">
                         <button class="btn btn-primary" v-link="{path: '/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
@@ -105,23 +104,6 @@
                     <span>设备数据明细 : </span>
                   </div>
                   <div class="table-box">
-                    <!-- <table class="table table-stripe table-bordered">
-                      <thead>
-                        <tr>
-                          <th>时间</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="allSnapshot in allSnapshots">
-                          <td>{{ allSnapshot.last_update }}</td>
-                        </tr>
-                        <tr v-if="false">
-                          <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                            <div v-else class="tips-null">暂无数据</div>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table> -->
                     <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
                     <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2"></pager>
                   </div>

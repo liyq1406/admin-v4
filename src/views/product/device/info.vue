@@ -34,6 +34,10 @@
                   <div class="label">{{ $t('ui.device.firmware_version') }}:</div>
                   <div class="info"><span>{{ device.firmware_version }}</span></div>
                 </li>
+                <li>
+                  <div class="label">所属经销商</div>
+                  <div class="info"><span>华南-广州总部</span></div>
+                </li>
               </ul>
             </div>
             <div class="col-6 device-map with-loading">
