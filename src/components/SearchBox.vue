@@ -2,7 +2,7 @@
   <div :class="{'auto-search': auto, 'active': active && key.length}" class="search-box">
     <slot></slot>
     <div class="search-box-input">
-      <input :placeholder="placeholder" v-model="key" @focus="handleFocus(key)" @blur="handleBlur(key)" @input="handleInput" @keyup.enter="$dispatch('press-enter')"/>
+      <input :placeholder="placeholder" v-model="key" @focus="handleFocus(key)" @blur="handleBlur(key)" @keyup.enter="$dispatch('press-enter')"/>
       <div @mousedown="handleCancelClick" class="fa fa-times-circle"></div>
     </div>
     <slot name="search-button"></slot>
@@ -91,15 +91,23 @@
       }
     },
 
+    watch: {
+      key () {
+        this.$dispatch('search')
+      }
+    },
+
     methods: {
       handleCancelClick () {
         this.key = ''
         this.$dispatch('cancel')
       },
 
-      handleInput () {
-        this.$dispatch('search')
-      },
+      // handleInput () {
+      //   console.log(this.key)
+      //   if (this.key) {
+      //   }
+      // },
 
       handleFocus (key) {
         this.$dispatch('search-activate', key)

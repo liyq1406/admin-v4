@@ -403,7 +403,8 @@
         }
 
         if (this.ingredientSelectModal.query.length > 0) {
-          condition.query['name'] = { $like: this.ingredientSelectModal.query }
+          // condition.query['name'] = { $like: this.ingredientSelectModal.query }
+          condition.query['name'] = { $regex: this.ingredientSelectModal.query, $options: 'i' }
         }
 
         if (this.ingredientSelectModal.category.value === 'all') {
@@ -579,8 +580,9 @@
         }
         this.getAppToKen(this.$route.params.app_id, 'recipe').then((token) => {
           api.diet.listCategory(this.$route.params.app_id, token, condition).then((res) => {
-            if (typeof res.data.value !== 'undefined') {
-              this.ingredientCategories = res.data.value
+            console.log(res)
+            if (res.data.count > 0) {
+              this.ingredientCategories = res.data.list[0].value
             } else {
               this.ingredientCategories = []
             }
