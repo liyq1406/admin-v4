@@ -135,7 +135,7 @@ import _ from 'lodash'
 export default {
   name: 'Dashboard',
 
-  layout: 'admin',
+  layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
 

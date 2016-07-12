@@ -35,7 +35,7 @@
   export default {
     name: 'FetchPwdByMailForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

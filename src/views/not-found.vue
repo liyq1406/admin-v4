@@ -2,7 +2,7 @@
   <div class="not-found">
     <div style="text-align:center">
       <i class="fa fa-exclamation-circle "></i>
-      <p style="font-size:16px;">抱歉，您访问的URL有误</p>
+      <p>抱歉，您访问的URL有误</p>
     </div>
   </div>
 </template>
@@ -13,7 +13,7 @@
   export default {
     name: 'Not-found',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins]
   }
@@ -25,10 +25,15 @@
   .not-found
     background-color #fff
     max-width 500px
-    margin 200px auto 0
+    margin 120px auto 0
     padding 50px 0
+    border-radius 8px
 
     .fa
-      font-size 120px
+      font-size 90px
       color red
+      margin 20px
+
+    p
+      font-size 14px
 </style>

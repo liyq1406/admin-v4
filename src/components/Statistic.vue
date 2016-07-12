@@ -2,7 +2,7 @@
   <div :class="classes">
     <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="info" v-animated-number="info.total"></div>
-    <div class="change" v-if="info.change !== 0" :class="{'decrease': info.change < 0}">
+    <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
     </div>

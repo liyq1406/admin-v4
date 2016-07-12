@@ -6,18 +6,21 @@ table
 .table
   width 100%
   max-width 100%
-  margin 20px 0
+  margin-bottom 15px
 
   th
   td
-    border 1px solid light-border-color
+    border-right 1px solid #CCC
     background #FFF
 
   th
-    padding 7px 20px
+    padding 10px
     text-align left
     cursor default
     white-space nowrap
+    background #E9E9E9
+    border-bottom 1px solid #CCC
+    font-size 12px
 
     .fa
       margin-left 10px
@@ -29,8 +32,9 @@ table
       color red
 
   td
-    padding 6px 20px
+    padding 6px 10px
     font-size 12px
+    border-bottom 1px solid #E5E5E5
 
     .text-label
       margin-right 6px
@@ -41,9 +45,19 @@ table
       td
         background #F9F9F9
 
-    tr:hover
-      td
-        background #FDF6F6
-
 .table-bordered
-  border 1px solid light-border-color
+  border 1px solid #CCC
+
+// 数据表格
+.data-table
+  .filter-bar
+    clearfix()
+    background #F5F5F5
+    border 1px solid #E5E5E5
+    border-width 1px 1px 0
+    margin-top 15px
+    padding 5px 10px
+    // margin-bottom 20px
+
+    .v-select
+      display inline-block

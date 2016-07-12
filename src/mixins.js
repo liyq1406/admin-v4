@@ -1,11 +1,12 @@
 import Vue from 'vue'
-import { setLayout, showError, showNotice } from './store/actions/system'
+import { setLayouts, showError, showNotice } from './store/actions/system'
 import locales from './consts/locales/index'
 import * as patterns from './consts/patterns'
 
 export var globalMixins = {
   data () {
     return {
+      lang: Vue.config.lang,
       locales: locales[Vue.config.lang],
       debug: process.env.NODE_ENV !== 'production',
       patterns: patterns
@@ -14,7 +15,7 @@ export var globalMixins = {
 
   vuex: {
     actions: {
-      setLayout,
+      setLayouts,
       showError,
       showNotice
     }
@@ -22,9 +23,9 @@ export var globalMixins = {
 
   created () {
     // 切换布局
-    var layout = this.$options.layout
-    if (layout) {
-      this.setLayout(layout)
+    var layouts = this.$options.layouts
+    if (layouts) {
+      this.setLayouts(layouts)
     }
   },
 

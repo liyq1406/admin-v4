@@ -55,3 +55,105 @@ export const VERIFYCODE_DURATION = 90
 
 // 通知存活时长，默认(2000毫秒)
 export const NOTICE_DURATION = 2000
+
+export const MAIN_NAV = {
+  dashboard: {
+    alias: 'dashboard',
+    url: '/dashboard'
+  },
+  dev: {
+    alias: 'dev',
+    url: '/dev'
+  },
+  operation: {
+    alias: 'operation',
+    url: '/operation',
+    subs: [{
+      alias: 'alerts', // 告警服务
+      icon: 'bell',
+      subs: [{
+        alias: 'overview',
+        url: '/alerts/overview'
+      }, {
+        alias: 'settings',
+        url: '/alerts/settings'
+      }]
+    }, {
+      alias: 'linkage', // 设备互联
+      icon: 'clone',
+      subs: [{
+        alias: 'devices',
+        url: '/linkage/devices'
+      }, {
+        alias: 'nest',
+        url: '/linkage/nest'
+      }, {
+        alias: 'echo',
+        url: '/linkage/echo'
+      }]
+    }, {
+      alias: 'data', // 数据管理
+      icon: 'database',
+      subs: [{
+        alias: 'tables',
+        url: '/data/tables'
+      }, {
+        alias: 'snapshot',
+        url: '/data/snapshot'
+      }]
+    }, {
+      alias: 'users', // 用户管理
+      icon: 'users',
+      subs: [{
+        alias: 'list',
+        url: '/users/list'
+      }, {
+        alias: 'settings',
+        url: '/users/settings'
+      }]
+    }, {
+      alias: 'device_map', // 设备地图
+      icon: 'map',
+      url: 'device-map'
+    }, {
+      alias: 'firmwares', // 固件管理
+      icon: 'rocket',
+      subs: [{
+        alias: 'overview',
+        url: '/firmwares/overview'
+      }, {
+        alias: 'versions',
+        url: '/firmwares/versions'
+      }, {
+        alias: 'upgrade',
+        url: '/firmwares/upgrade'
+      }]
+    }, {
+      alias: 'statistic', // 统计分析
+      icon: 'bar-chart',
+      subs: [{
+        alias: 'products',
+        url: '/statistic/products'
+      }, {
+        alias: 'users',
+        url: '/statistic/users'
+      }]
+    }, {
+      alias: 'settings', // 系统设置
+      icon: 'cog',
+      subs: [{
+        alias: 'auth',
+        url: '/settings/auth'
+      }, {
+        alias: 'members',
+        url: '/settings/members'
+      }, {
+        alias: 'account',
+        url: '/settings/account'
+      }, {
+        alias: 'mail_templates',
+        url: '/settings/mail-templates'
+      }]
+    }]
+  }
+}

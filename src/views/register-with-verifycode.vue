@@ -98,7 +98,7 @@
   export default {
     name: 'RegisterForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

@@ -32,7 +32,7 @@
 
     data () {
       var sortOrders = {}
-      this.columns.forEach(function (column){
+      this.columns.forEach((column) => {
         sortOrders[column.key] = 1
       })
 

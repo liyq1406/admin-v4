@@ -10,62 +10,83 @@
 </template>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+@import '../assets/stylus/common'
 
-  // 搜索框
-  .search-box
-    display inline-block
+// 搜索框
+.search-box
+  display inline-block
+  font-size 0
 
-    label
-      margin-right 10px
-
-    .v-select
-      display inline-block
-
-    .btn-primary
-      vertical-align middle
-
-  .search-box-input
-    display inline-block
-    position relative
-    background #F1F1F1
-    size 190px 32px
+  & > label
+    margin-right 10px
+    line-height 26px
     vertical-align middle
+    font-size 12px
 
-    input
-      background transparent
-      border none
-      appearance none
-      size 160px 32px
-      line-height 32px
-      padding 0 6px 0 10px
-      font-size 12px
-      box-sizing border-box
+  .v-select
+    display inline-block
+    font-size 12px
 
-    .btn
-      cursor pointer
+  .btn
+    cursor pointer
+    height 26px
+    line-height 24px
+    vertical-align middle
+    background-image linear-gradient(top, #fafafa, #dadada)
+    padding 0 8px
+    color gray-light
+    border 1px solid default-border-color
+    border-left 0
+    box-sizing border-box
+    font-size 12px
 
     .fa
-      position absolute
-      top 6px !important
-      right 6px !important
-      display none
-      width 20px !important
-      height 20px !important
-      font-size 18px
-      cursor pointer
-      color #B0B0B1
-      transition color .3s
-      line-height 20px !important
-      text-align center
+      /*display inline-block*/
+      margin 0
 
-      &:hover
-        color red
+    &:hover
+      color gray-dark
 
-  &.active
-    .search-box-input
-      .fa
-        display inline
+.search-box-input
+  display inline-block
+  position relative
+  background #FFF
+  size 190px 24px
+  vertical-align middle
+  border 1px solid default-border-color
+  box-shadow inset 1px 1px 1px rgba(0, 0, 0, .05)
+
+  input
+    background transparent
+    border none
+    appearance none
+    size 160px 24px
+    line-height 24px
+    padding 0 6px 0 10px
+    font-size 12px
+    box-sizing border-box
+
+  .fa
+    position absolute
+    top 3px !important
+    right 3px !important
+    display none
+    width 20px !important
+    height 20px !important
+    font-size 18px
+    cursor pointer
+    color #B0B0B1
+    transition color .3s
+    line-height 20px !important
+    text-align center
+
+    &:hover
+      color red
+
+&.active
+  .search-box-input
+    .fa
+      display inline
 
 </style>
 

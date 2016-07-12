@@ -4,8 +4,8 @@ import * as config from 'consts/config'
 import * as types from '../mutation-types'
 
 // 设置当前布局
-export const setLayout = ({ dispatch }, layout) => {
-  dispatch(types.SWITCH_LAYOUT, layout)
+export const setLayouts = ({ dispatch }, layouts) => {
+  dispatch(types.SWITCH_LAYOUTS, layouts)
 }
 
 // 获取当前帐户成员

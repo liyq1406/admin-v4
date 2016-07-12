@@ -9,7 +9,7 @@
 export const RECEIVE_MEMBER = 'RECEIVE_MEMBER'
 
 // 切换布局
-export const SWITCH_LAYOUT = 'SWITCH_LAYOUT'
+export const SWITCH_LAYOUTS = 'SWITCH_LAYOUTS'
 
 // 设置资源加载状态
 export const SET_LOADING_STATUS = 'SET_LOADING_STATUS'

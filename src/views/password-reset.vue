@@ -87,7 +87,7 @@
   export default {
     name: 'PwdResetForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

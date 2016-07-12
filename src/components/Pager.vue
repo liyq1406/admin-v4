@@ -1,53 +1,54 @@
 <template>
-  <div v-if="total > 0" class="pager tar">
-    <button :class="{'disabled': current === 1}" :disabled="current === 1" @click="current = current - 1" class="pager-btn pager-prev"><i class="fa fa-chevron-left"></i></button>
+  <div v-show="total > countPerPage" class="v-pager tar">
+    <button :class="{'disabled': current === 1}" :disabled="current === 1" @click="current = current - 1" class="v-pager-btn v-pager-prev"><i class="fa fa-chevron-left"></i></button>
     <template v-if="!simple">
-      <div v-if="pages < 10" class="pager-container">
-        <div v-for="page in pages" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
+      <div v-if="pages < 10" class="v-pager-container">
+        <div v-for="page in pages" :class="{'current': current === page + 1}" @click="current = page + 1" class="v-pager-item"><span>{{ page + 1 }}</span></div>
       </div>
-      <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="pager-container">
-        <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="pager-item"><span>{{ page + 1 }}</span></div>
-        <div class="pager-more">
+      <div v-if="pages >= 10 && ( current <= 3 || current >= pages - 2)" class="v-pager-container">
+        <div v-for="page in 3" :class="{'current': current === page + 1}" @click="current = page + 1" class="v-pager-item"><span>{{ page + 1 }}</span></div>
+        <div class="v-pager-more">
           <span @click="toggleInput($event)">...</span>
-          <div v-show="showInput" class="pager-input">
+          <div v-show="showInput" class="v-pager-input">
             <input type="number" max="{{ pages }}" @change="onInput"/>
           </div>
         </div>
-        <div v-for="offset in 3" :class="{'current': current === pages - 2 + offset}" @click="current = pages - 2 + offset" class="pager-item"><span>{{ pages - 2 + offset }}</span></div>
+        <div v-for="offset in 3" :class="{'current': current === pages - 2 + offset}" @click="current = pages - 2 + offset" class="v-pager-item"><span>{{ pages - 2 + offset }}</span></div>
       </div>
-      <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="pager-container">
-        <div :class="{'current': current === 1}" @click="current = 1" class="pager-item"><span>1</span></div>
-        <div class="pager-more">
+      <div v-if="pages >= 10 && current > 3 && current < pages - 2" class="v-pager-container">
+        <div :class="{'current': current === 1}" @click="current = 1" class="v-pager-item"><span>1</span></div>
+        <div class="v-pager-more">
           <span @click="toggleInput1($event)">...</span>
-          <div v-show="showInput1" class="pager-input">
+          <div v-show="showInput1" class="v-pager-input">
             <input type="number" max="{{ pages }}" @change="onInput"/>
           </div>
         </div>
-        <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="pager-item"><span>{{ current - 1 + offset }}</span></div>
-        <div class="pager-more">
+        <div v-for="offset in 3" :class="{'current': current === current - 1 + offset}" @click="current = current - 1 + offset" class="v-pager-item"><span>{{ current - 1 + offset }}</span></div>
+        <div class="v-pager-more">
           <span @click="toggleInput2($event)">...</span>
-          <div v-show="showInput2" class="pager-input">
+          <div v-show="showInput2" class="v-pager-input">
             <input type="number" max="{{ pages }}" @change="onInput"/>
           </div>
         </div>
-        <div :class="{'current': current === pages}" @click="current = pages" class="pager-item"><span>{{ pages }}</span></div>
+        <div :class="{'current': current === pages}" @click="current = pages" class="v-pager-item"><span>{{ pages }}</span></div>
       </div>
     </template>
-    <div v-else class="pager-container">
-      <div class="pager-more">
+    <div v-else class="v-pager-container">
+      <div class="v-pager-more">
         <span @click="toggleInput($event)">{{ current }}/{{ pages }}页</span>
-        <div v-show="showInput" class="pager-input">
+        <div v-show="showInput" class="v-pager-input">
           <input type="number" max="{{ pages }}" @change="onInput"/>
         </div>
       </div>
     </div>
-    <button :class="{'disabled': current === pages}" :disabled="current === pages" @click="current = current + 1" class="pager-btn pager-next"><i class="fa fa-chevron-right"></i></button>
+    <button :class="{'disabled': current === pages}" :disabled="current === pages" @click="current = current + 1" class="v-pager-btn v-pager-next"><i class="fa fa-chevron-right"></i></button>
   </div>
 </template>
 
 <script>
-  import * as config from 'consts/config'
+  import { COUNT_PER_PAGE } from 'consts/config'
   import { globalMixins } from '../mixins'
+  import EventListener from './utils/EventListener'
 
   export default {
     name: 'Pager',
@@ -58,7 +59,7 @@
       // 每页数量
       countPerPage: {
         type: Number,
-        default: config.countPerPage
+        default: COUNT_PER_PAGE
       },
 
       // 总数
@@ -69,7 +70,6 @@
       // 当前页
       current: {
         type: Number,
-        twoWay: true,
         default: 1
       },
 
@@ -90,7 +90,7 @@
 
     watch: {
       current () {
-        this.$dispatch('page-update')
+        this.$emit('page-update', this.current)
       }
     },
 
@@ -100,7 +100,29 @@
       }
     },
 
+    beforeDestroy () {
+      if (this._closeEvent) {
+        this._closeEvent.remove()
+      }
+    },
+
+    ready () {
+      this.$emit('pager-created', this)
+      this._closeEvent = EventListener.listen(window, 'click', (e) => {
+        // console.log(e)
+        if (!this.$el.contains(e.target)) {
+          this.hideInputs()
+        }
+      })
+    },
+
     methods: {
+      hideInputs () {
+        this.showInput = false
+        this.showInput1 = false
+        this.showInput2 = false
+      },
+
       toggleInput (evt) {
         this.showInput = !this.showInput
         this.$nextTick(() => {
@@ -135,14 +157,13 @@
 
         if (typeof page === 'number' && page >= 1 && page <= this.pages) {
           page = Math.floor(page)
-          this.showInput = false
-          this.showInput1 = false
-          this.showInput2 = false
+          this.hideInputs()
           this.current = page
           evt.target.value = ''
         } else {
+          evt.target.value = ''
           this.showNotice({
-            type: 'error',
+            type: 'danger',
             content: '请输入合法数字'
           })
         }
@@ -155,45 +176,44 @@
   @import '../assets/stylus/common'
 
   // 分页
-  .pager
+  .v-pager
     font-size 0
-    margin-bottom 40px
+    margin-bottom 15px
 
-    .pager-btn
-    .pager-item
-    .pager-more
+    .v-pager-btn
+    .v-pager-item
+    .v-pager-more
       display inline-block
       vertical-align middle
       box-sizing border-box
 
-    .pager-btn
-      background #E5E5E5
-      border none
+    .v-pager-btn
+      background #FFF
+      border 1px solid light-border-color
       font-size 8px
-      color #A8A8A8
-      padding 0 10px
-      height 26px
-      line-height 28px
-      transition background .3s, color .3s
+      padding 0 8px
+      height 24px
+      line-height 24px
+      transition border-color .3s, color .3s
       outline none
       cursor pointer
 
       &:hover
-        background red
-        color #FFF
+        border-color #CCC
+        color #666
 
       &.disabled
       &.disabled:hover
-        background #F3F3F3
+        border-color light-border-color
         color #C3C3C3
         cursor not-allowed
 
-    .pager-container
+    .v-pager-container
       display inline-block
       vertical-align middle
 
-    .pager-item
-    .pager-more
+    .v-pager-item
+    .v-pager-more
       position relative
       font-size 12px
       background #FFF
@@ -201,25 +221,27 @@
 
       span
         display inline-block
-        padding 0 8px
+        padding 0 7px
         border 1px solid light-border-color
-        height 24px
-        line-height 24px
+        height 22px
+        line-height 22px
 
         &:hover
-          border-color red
-          background red
-          color #FFF
+          border-color #CCC
+          /*background #666*/
+          color #666
           cursor pointer
 
-    .pager-item
+    .v-pager-item
       &.current
         span
-          border-color red
-          background #FFF
-          color red
+          border-color #E9E9E9
+          background #E9E9E9
+          color #000
+          font-weight bold
+          /*color #FFF*/
 
-    .pager-input
+    .v-pager-input
       absolute left 50% top -40px
       margin-left -22px
 
@@ -230,7 +252,7 @@
         padding 0
         font-size 12px
         height 26px
-        line-height 26px
+        line-height 24px
 
       &:before
         absolute left 50% bottom -10px
@@ -245,16 +267,16 @@
         triangle #FFF 10px down
 
     &.tal
-      .pager-btn
-      .pager-item
-      .pager-more
+      .v-pager-btn
+      .v-pager-item
+      .v-pager-more
         margin-right 5px
 
     &.tar
     &.tac
-      .pager-btn
-      .pager-item
-      .pager-more
+      .v-pager-btn
+      .v-pager-item
+      .v-pager-more
         margin-left 5px
 
 </style>

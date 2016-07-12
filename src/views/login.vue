@@ -47,7 +47,7 @@
   export default {
     name: 'LoginForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

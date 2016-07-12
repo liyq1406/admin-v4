@@ -4,32 +4,82 @@
  */
 
 export default {
-  // 侧栏导航
-  nav_aside: {
-    dashboard: '概览',
-    products: '产品管理',
-    plugins: '插件管理',
-    alerts: '告警服务',
-    data: '数据管理',
-    firmwares: '固件管理',
-    users: '用户管理',
-    device_map: '设备地图',
-    statistic: '统计分析',
-    settings: '系统设置',
-    diet: '饮食管理',
-    add_product: '添加产品',
-    add_plugin: '添加插件',
-    link: '设备互联'
-  },
-
-  // 头部导航
-  nav_head: {
-    home: '首页',
-    platform: '平台介绍',
-    solutions: '解决方案',
-    developer: '开发者',
-    cases: '客户案例',
-    documents: '开发文档'
+  // 主导航
+  main_nav: {
+    dashboard: {
+      label: '首页'
+    },
+    dev: {
+      label: '开发平台'
+    },
+    operation: {
+      label: '运营平台',
+      // 侧栏导航
+      subs: {
+        dashboard: '概览',
+        products: '产品管理',
+        plugins: '插件管理',
+        alerts: {
+          label: '告警服务',
+          subs: {
+            overview: '概览',
+            settings: '规则设置'
+          }
+        },
+        linkage: {
+          label: '设备互联',
+          subs: {
+            devices: '设备联动',
+            nest: 'nest联动',
+            echo: 'echo'
+          }
+        },
+        data: {
+          label: '数据管理',
+          subs: {
+            tables: '数据表',
+            snapshot: '设备快照'
+          }
+        },
+        users: {
+          label: '用户管理',
+          subs: {
+            list: '用户列表',
+            settings: '用户设置'
+          }
+        },
+        device_map: {
+          label: '设备地图'
+        },
+        firmwares: {
+          label: '固件管理',
+          subs: {
+            overview: '概览',
+            versions: '版本管理',
+            upgrade: '固件升级'
+          }
+        },
+        statistic: {
+          label: '统计分析',
+          subs: {
+            products: '产品统计',
+            users: '用户统计'
+          }
+        },
+        settings: {
+          label: '系统设置',
+          subs: {
+            auth: '授权管理',
+            members: '成员管理',
+            account: '账号信息',
+            mail_templates: '邮件模板'
+          }
+        },
+        diet: '饮食管理',
+        add_product: '添加产品',
+        add_plugin: '添加插件'
+      }
+    }
   },
 
   // 用户菜单
@@ -39,59 +89,59 @@ export default {
   },
 
   // 二级导航
-  sub_nav: {
-    product: {
-      overview: '概览',
-      devices: '设备管理',
-      datapoints: '数据端点',
-      alerts: '通知与告警',
-      upgrade: '固件升级',
-      wechat: '微信授权',
-      dataforward: '数据转发',
-      basic_info: '基本信息',
-      data_monitoring: '数据监控',
-      fault_records: '故障记录'
-    },
-    data: {
-      tables: '数据表'
-    },
-    firmware: {
-      overview: '概览',
-      management: '版本管理',
-      upgrade: '固件升级'
-    },
-    alert: {
-      overview: '概览',
-      setting: '规则设置'
-    },
-    broadcast: {
-      add: '新建推送',
-      history: '推送历史'
-    },
-    dealer: {
-      list: '经销商列表'
-    },
-    helpdesk: {
-      overview: '概览',
-      issues: '反馈列表',
-      tags: '标签管理'
-    },
-    link: {
-      devices_link: '设备联动',
-      nest_link: 'nest联动',
-      echo: 'echo'
-    },
-    settings: {
-      auth: '授权管理',
-      members: '成员管理',
-      account: '帐号信息',
-      mail_templates: '邮件模板'
-    },
-    plugins: {
-      extensions: '扩展插件',
-      customize: '自定义插件'
-    }
-  },
+  // subs: {
+  //   product: {
+  //     overview: '概览',
+  //     devices: '设备管理',
+  //     datapoints: '数据端点',
+  //     alerts: '通知与告警',
+  //     upgrade: '固件升级',
+  //     wechat: '微信授权',
+  //     dataforward: '数据转发',
+  //     basic_info: '基本信息',
+  //     data_monitoring: '数据监控',
+  //     fault_records: '故障记录'
+  //   },
+  //   data: {
+  //     tables: '数据表'
+  //   },
+  //   firmware: {
+  //     overview: '概览',
+  //     management: '版本管理',
+  //     upgrade: '固件升级'
+  //   },
+  //   alert: {
+  //     overview: '概览',
+  //     setting: '规则设置'
+  //   },
+  //   broadcast: {
+  //     add: '新建推送',
+  //     history: '推送历史'
+  //   },
+  //   dealer: {
+  //     list: '经销商列表'
+  //   },
+  //   helpdesk: {
+  //     overview: '概览',
+  //     issues: '反馈列表',
+  //     tags: '标签管理'
+  //   },
+  //   link: {
+  //     devices_link: '设备联动',
+  //     nest_link: 'nest联动',
+  //     echo: 'echo'
+  //   },
+  //   settings: {
+  //     auth: '授权管理',
+  //     members: '成员管理',
+  //     account: '帐号信息',
+  //     mail_templates: '邮件模板'
+  //   },
+  //   plugins: {
+  //     extensions: '扩展插件',
+  //     customize: '自定义插件'
+  //   }
+  // },
 
   // 表单验证
   validation: {

@@ -26,7 +26,7 @@
   export default {
     name: 'EmailActivateForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

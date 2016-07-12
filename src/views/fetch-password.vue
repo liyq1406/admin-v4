@@ -170,7 +170,7 @@
   export default {
     name: 'FetchPwdForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

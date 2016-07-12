@@ -29,11 +29,10 @@ export default {
 @import '../assets/stylus/common'
 
 .x-panel
-  border 1px solid light-border-color
+  border-bottom 1px solid light-border-color
   background #FFF
-  padding 0 20px
+  padding 0 15px
   box-sizing border-box
-  margin 0 5px 10px
 
 .x-panel-hd
   /*border-bottom 1px solid light-border-color*/
@@ -43,7 +42,7 @@ export default {
   h2
     display inline-block
     margin 0
-    font-size 18px
+    font-size 15px
     font-weight normal
     height 20px
     line-height 20px

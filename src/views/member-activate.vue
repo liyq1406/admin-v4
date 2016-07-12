@@ -77,7 +77,7 @@
   export default {
     name: 'MemberActivateForm',
 
-    layout: 'auth',
+    layouts: ['auth'],
 
     mixins: [globalMixins],
 

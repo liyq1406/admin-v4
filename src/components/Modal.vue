@@ -75,7 +75,7 @@ export default {
     transition all .3s ease
 
     .fa-times-circle
-      absolute right top 3px
+      absolute right top
       size 40px
       line-height 40px
       text-align center
@@ -88,8 +88,9 @@ export default {
         color red
 
   .modal-header
-    padding 10px 20px
+    padding 8px 15px
     border-bottom 1px solid #DDD
+    background #F3F3F3
 
     h3
       font-weight normal
@@ -97,7 +98,7 @@ export default {
       margin 0
 
   .modal-body
-    padding 30px
+    padding 15px
     max-height 540px
     overflow-y auto
     box-sizing border-box
