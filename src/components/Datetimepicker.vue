@@ -199,198 +199,185 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
-// .chooseDate {
-//   width: 100%;
-//   height: 32px;
-//   margin-top: 5px;
-//   color: black;
-//   font-size: 14px;
-//   line-height: 32px;
-//   background: #F6F6F6;
-//   border-radius: 3px;
-//   border: 1px solid #fff;
-//   transition: all 200ms ease;
+<style lang="stylus" scoped>
+.dateSelector {
+  position: relative;
+  top: 8px;
+  left: 50%;
+  margin-left: -150px;
+  width: 300px;
+  background: #FFF;
+  border: 1px solid #ddd;
+  box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
+  border-radius: 3px;
+  z-index: 999;
 
-  .dateSelector {
-      position: relative;
-      top: 8px;
-      left: 50%;
-      margin-left: -150px;
-      width: 300px;
-      background: #FFF;
-      border: 1px solid #ddd;
-      box-shadow: 0 3px 3px rgba(0, 0, 0, .1);
-      border-radius: 3px;
-      z-index: 999;
+  .wrap {
+    width: 100%;
+    height: 100%;
+    padding: 0 14px;
+    box-sizing: border-box;
 
-      .wrap {
-          width: 100%;
-          height: 100%;
-          padding: 0 14px;
-          box-sizing: border-box;
+    ul {
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+      li {
+        float: left;
+        width: 90px;
+        margin-top: 2px;
+        list-style: none;
+        text-align: center;
+        cursor: pointer;
+        display: block;
+        border-radius: 2px;
 
-          ul {
-              padding: 0;
-              margin: 0;
-              box-sizing: border-box;
-              li {
-                  float: left;
-                  width: 90px;
-                  margin-top: 2px;
-                  list-style: none;
-                  text-align: center;
-                  cursor: pointer;
-                  display: block;
-                  border-radius: 2px;
+        &:hover {
+          background: rgba(0, 0, 0, .05)
+        }
 
-                  &:hover {
-                      background: rgba(0, 0, 0, .05)
-                  }
-
-                  &:active {
-                      background: rgba(0, 0, 0, .1)
-                  }
-              }
-
-              .btn {
-                  width: 100%;
-                  color: #727272;
-                  font-size: 15px;
-                  padding: 0
-              }
-
-              .day {
-                  cursor: default;
-
-                  &:hover {
-                      background: none
-                  }
-
-                  &:active {
-                      background: none
-                  }
-              }
-
-
-              .active {
-                  color: #FFF;
-                  background: #F45757;
-
-                  &:hover {
-                      background: #F45757;
-                  }
-
-                  &:active {
-                      background: #d44343;
-                  }
-              }
-          }
+        &:active {
+          background: rgba(0, 0, 0, .1)
+        }
       }
 
-      .date {
-          padding: 0 9px;
-
-          ul {
-              li {
-                  width: 40px;
-              }
-
-              .other {
-                  color: #bbb;
-                  cursor: default;
-
-                  &:hover {
-                      background: none;
-                  }
-
-                  &:active {
-                      background: none;
-                  }
-              }
-          }
+      .btn {
+        width: 100%;
+        color: #727272;
+        font-size: 15px;
+        padding: 0
       }
 
-      .time {
-          color: #F45757;
-          font-size: 16px;
-          text-align: center;
+      .day {
+        cursor: default;
 
-          input {
-              width: 60px;
-              height: 40px;
-              font-size: 24px;
-              color: #F45757;
-              text-align: center;
-              border-left: 1px solid #fff;
-              border-right: 1px solid #fff;
-              border-top: 1px solid #fff;
-              border-bottom: 2px solid #ddd;
+        &:hover {
+          background: none
+        }
 
-              &:focus {
-                  border-bottom: 2px solid #F45757;
-              }
-
-              &::-webkit-input-placeholder {
-                  color: #ddd;
-              }
-          }
-
-          .button {
-              width: 100px;
-              height: 32px;
-              margin: 0 auto;
-              margin-top: 10px;
-              color: #aaa;
-              font-size: 14px;
-              line-height: 32px;
-              background: #F6F6F6;
-              border-radius: 3px;
-              transition: all 200ms ease;
-              text-align: center;
-          }
-
-          .able {
-              color: #FFF;
-              background: #F45757;
-              cursor: pointer;
-
-              &:active {
-                  background: #d44343;
-              }
-          }
+        &:active {
+          background: none
+        }
       }
 
-      &:before {
-          position: relative;
-          top: -6px;
-          left: 50%;
-          margin-left: -5px;
-          content: "";
-          width: 10px;
-          height: 10px;
-          border: 1px solid #ddd;
-          border-right: none;
-          border-bottom: none;
-          background: #FFF;
-          display: block;
-          transform: rotate(45deg);
+
+      .active {
+        color: #FFF;
+        background: #F45757;
+
+        &:hover {
+          background: #F45757;
+        }
+
+        &:active {
+          background: #d44343;
+        }
       }
+    }
   }
-// }
+
+  .date {
+    padding: 0 9px;
+
+    ul {
+      li {
+        width: 40px;
+      }
+
+      .other {
+        color: #bbb;
+        cursor: default;
+
+        &:hover {
+            background: none;
+        }
+
+        &:active {
+            background: none;
+        }
+      }
+    }
+  }
+
+  .time {
+    color: #F45757;
+    font-size: 16px;
+    text-align: center;
+
+    input {
+      width: 60px;
+      height: 40px;
+      font-size: 24px;
+      color: #F45757;
+      text-align: center;
+      border-left: 1px solid #fff;
+      border-right: 1px solid #fff;
+      border-top: 1px solid #fff;
+      border-bottom: 2px solid #ddd;
+
+      &:focus {
+        border-bottom: 2px solid #F45757;
+      }
+
+      &::-webkit-input-placeholder {
+        color: #ddd;
+      }
+    }
+
+    .button {
+      width: 100px;
+      height: 32px;
+      margin: 0 auto;
+      margin-top: 10px;
+      color: #aaa;
+      font-size: 14px;
+      line-height: 32px;
+      background: #F6F6F6;
+      border-radius: 3px;
+      transition: all 200ms ease;
+      text-align: center;
+    }
+
+    .able {
+      color: #FFF;
+      background: #F45757;
+      cursor: pointer;
+
+      &:active {
+        background: #d44343;
+      }
+    }
+  }
+
+  &:before {
+    position: relative;
+    top: -6px;
+    left: 50%;
+    margin-left: -5px;
+    content: "";
+    width: 10px;
+    height: 10px;
+    border: 1px solid #ddd;
+    border-right: none;
+    border-bottom: none;
+    background: #FFF;
+    display: block;
+    transform: rotate(45deg);
+  }
+}
 
 /* 必需 */
 .fade-transition {
-    transition: all 400ms ease;
-    transform-origin: 0 0;
-    transform: translateY(0);
-    opacity: 1;
+  transition: all 400ms ease;
+  transform-origin: 0 0;
+  transform: translateY(0);
+  opacity: 1;
 }
 
 /* .fade-enter 定义进入的开始状态 */
 /* .fade-leave 定义离开的结束状态 */
 .fade-enter, .fade-leave {
-    transform: translateY(-20px);
-    opacity: 0;
+  transform: translateY(-20px);
+  opacity: 0;
 }
 </style>
