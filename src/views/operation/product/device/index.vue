@@ -15,6 +15,7 @@
 
 <script>
   import Tab from 'components/Tab'
+  // import CrumbNav from 'components/CrumbNav'
   // import api from 'api'
   import { globalMixins } from 'src/mixins'
 
@@ -29,7 +30,8 @@
 
     data () {
       return {
-        secondaryNav: []
+        secondaryNav: [],
+        Cnav: []
       }
     },
 
@@ -64,3 +66,13 @@
     }
   }
 </script>
+
+<style lang="stylus">
+  .tab li a.v-link-active
+    height 44px
+    background-color #fff
+    border 1px solid #e5e5e5
+    border-bottom none!important
+    position relative
+    bottom -1px
+</style>
