@@ -92,7 +92,7 @@ export default {
 
   computed: {
     pages () {
-      return Math.ceil(this.total / this.countPerPage)
+      return Math.ceil(this.total / this.countPerPage) || 1
     }
   },
 

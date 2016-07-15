@@ -34,33 +34,37 @@
             </td>
           </tr>
         </template>
-        <tr v-if="tables.length === 0 && !loading">
+        <tr v-if="tables.length === 0">
           <td :colspan="headers.length + 1" class="tac">
             <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
           </td>
         </tr>
       </tbody>
     </table>
+    <pager :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
   </div>
 </template>
 
 <script>
+  import Pager from 'components/Pager'
   export default {
     /** *************传入参数格式********************************/
+      // page: {
+      //   total: 20, // 数据总数
+      //   currentPage: 1, // 当前页
+      //   countPerPage: 10 // 每页数量
+      // },
       // headers：[
       //   {
-      //     key: 'id', // 与tables的key对应
-      //     title: 'ID', // 标题的内容
-      //     class: 'tac', // 传入className 自动加入整一列中 多个类名用空格隔开
-      //     sortType: -1, // 排序 传入1为升序 0为不排序  其他为降序
-      //     tooltip: '提示' // 提示浮层显示内容
+      //     key: 'id', // 与tables的key对应 （必须）
+      //     title: 'ID', // 标题的内容 （必须）
+      //     class: 'tac', // 传入className 自动加入整一列中 多个类名用空格隔开 （非必须）
+      //     sortType: -1, // 排序 传入1为升序 0为不排序  其他为降序 （非必须）
+      //     tooltip: '提示' // 提示浮层显示内容 （非必须）
       //   },
       //   {
-      //     key: 'creatTime',
-      //     title: '创建时间',
-      //     class: 'tac'，
-      //     sortType: -1,
-      //     tooltip: '提示'
+      //     key: 'creatTime', // 与tables的key对应 （必须）
+      //     title: '创建时间' // 标题的内容 （必须）
       //   }
       // ],
       // tables: [
@@ -101,6 +105,12 @@
       // 名字： filter-container
     /** **************************************/
     props: {
+      page: {
+        type: Object,
+        default () {
+          return {}
+        }
+      },
       // 是否正在加载
       loading: {
         type: Boolean,
@@ -127,18 +137,65 @@
         twoWay: false
       }
     },
+
+    components: {
+      'pager': Pager
+    },
+
+    computed: {
+      /**
+       * 总数据数
+       * @return {[type]} [description]
+       */
+      total () {
+        return this.page.total || 0
+      },
+      /**
+       * 每页条数
+       * @return {[type]} [description]
+       */
+      countPerPage () {
+        return this.page.countPerPage || 10
+      },
+      /**
+       * 当前页码
+       * @return {[type]} [description]
+       */
+      currentPage () {
+        return this.page.currentPage || 1
+      }
+    },
     data () {
       return {
+        // 已选择的数据
         selectedTables: [],
+        // 是否全选
         selectedAll: false
       }
     },
+
     watch: {
       tables () {
         this.initSelected() // 修正选择状态
       }
     },
+
     methods: {
+      /**
+       * 每页显示数据条数改变
+       * @param  {[type]} count [description]
+       * @return {[type]}       [description]
+       */
+      pageCountUpdate (count) {
+        this.$emit('page-count-update', count)
+      },
+      /**
+       * 当前页改变
+       * @return {[type]} [description]
+       */
+      pageCurrentChange (current) {
+        this.$emit('current-page-change', current)
+      },
       /**
        * 初始化选择状态
        * @return {[type]} [description]
@@ -157,7 +214,7 @@
             this.selectedTables = []
             this.selectedAll = false
           }
-          this.$dispatch('selected-change', this.selectedTables)
+          this.$emit('selected-change', this.selectedTables)
         } else {
           this.selectedTables = []
           this.selectedAll = false
@@ -177,7 +234,7 @@
           } else {
             this.selectedTables = []
           }
-          this.$dispatch('selected-change', this.selectedTables)
+          this.$emit('selected-change', this.selectedTables)
           // alert('全选')
         }
       },
@@ -190,7 +247,7 @@
       theaderClick (theader, index) {
         var key = theader.key
         key = key.replace(/([A-Z])/g, '-$1').toLowerCase()
-        this.$dispatch('theader-' + key, theader, index)
+        this.$emit('theader-' + key, theader, index)
       },
 
       /**
@@ -202,7 +259,7 @@
       tbodyClick (theader, table, lineIndex) {
         var key = theader.key
         key = key.replace(/([A-Z])/g, '-$1').toLowerCase()
-        this.$dispatch('tbody-' + key, theader, table, lineIndex)
+        this.$emit('tbody-' + key, theader, table, lineIndex)
       },
 
       /**
@@ -244,7 +301,7 @@
         top 0
         width 30px
         height 18px
-        text-align center
+        text-align right
         .fa
           display block
           width 30px

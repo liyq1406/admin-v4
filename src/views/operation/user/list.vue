@@ -48,9 +48,9 @@
           </table>
         </div>
         <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
-        <c-table :headers="table.headers" :tables="table.tables" @theader-update-time="test" @tbody-update-time="test" :loading="false">
+        <c-table :headers="table.headers" :tables="table.tables" @theader-update-time="test" @tbody-update-time="test" :loading="true">
           <div class="filter-container" slot="filter-container">
-            头部
+            头部内容
           </div>
         </c-table>
       </div>
@@ -94,14 +94,13 @@
             {
               key: 'id', // 与tables的key对应
               title: 'ID', // 标题的内容
-              class: 'tac', // 传入className 自动加入整一列中
-              sortType: -1
+              class: 'tac' // 传入className 自动加入整一列中
             },
             {
               key: 'creatTime',
               title: '创建时间',
               class: 'tac',
-              tooltip: '提示'
+              sortType: -1
             },
             {
               key: 'updateTime',
@@ -115,20 +114,20 @@
             }
           ],
           tables: [
-            // {
-            //   id: '<a href="">idididid</a>',
-            //   creatTime: '123',
-            //   updateTime: '更新时间',
-            //   creater: '创建者1',
-            //   operation: '操作'
-            // },
-            // {
-            //   id: 'idididid',
-            //   creatTime: '创建时间',
-            //   updateTime: '更新时间',
-            //   creater: '创建者2',
-            //   operation: '操作'
-            // }
+            {
+              id: '<a href="">idididid</a>',
+              creatTime: '123',
+              updateTime: '更新时间',
+              creater: '创建者1',
+              operation: '操作'
+            },
+            {
+              id: 'idididid',
+              creatTime: '创建时间',
+              updateTime: '更新时间',
+              creater: '创建者2',
+              operation: '操作'
+            }
           ]
         }
       }
