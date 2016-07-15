@@ -1,12 +1,20 @@
 <template>
-  <div>
-    <div class="panel">
-      <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
-            <button v-link="{ path: '/alerts/setting' }"class="btn btn-success">规则设置</button>
-          </div>
+  <div class="main">
+    <div class="main-title">
+      <h3>告警信息</h3>
+    </div>
+    <div class="tool-bar">
+      <div class="tool-list">
+        <div class="tool-list-item">
+          <a class="trigger" v-link="{ path: '/operation/alerts/settings' }"><i class="fa fa-cog"></i><span class="trigger-text">规则设置</span></a>
         </div>
+      </div>
+    </div>
+    <div class="panel mt15">
+      <!-- <div class="panel-hd">
+        <h2>告警信息列表</h2>
+      </div> -->
+      <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
@@ -35,7 +43,7 @@
                   </td>
                 </tr>
               </template>
-              <tr v-if="alerts.length === 0 && !loadingData">
+              <tr v-if="alerts.length === 0">
                 <td colspan="4" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>

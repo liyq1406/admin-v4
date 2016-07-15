@@ -1,55 +1,56 @@
 <template>
-  <div data-toggle="buttons" class="x-radio-btn-group">
-    <slot name="label"></slot>
-    <label v-for="item in items" :class="{'active': item.value === value}" class="btn btn-default">
-      <input type="radio" autocomplete="off" checked="{{ checked }}" @click="onSelect(item.value)"/>{{ item.label }}
-    </label>
+  <div class="x-btn-group">
+    <slot></slot>
   </div>
 </template>
 
 <script>
-  export default {
-    name: 'RadioRadioButtonGroup',
-
-    props: {
-      value: {
-        twoWay: true
-      },
-      items: {
-        type: Array,
-        default () {
-          return []
-        }
-      }
-    },
-
-    methods: {
-      onSelect (value) {
-        this.value = value
-        this.$dispatch('select', value)
-      }
-    }
-  }
+export default {
+  name: 'ButtonGroup'
+}
 </script>
 
 <style lang="stylus">
-  @import '../assets/stylus/common'
+@import '../assets/stylus/common'
 
-  .x-radio-btn-group
-    .btn
-      position relative
-      height 25px
-      line-height 25px
-      padding 0 10px
-      margin-left 1px
-      cursor pointer
+.x-btn-group
+  font-size 0
+  display inline-block
+  vertical-align middle
 
-      input[type="radio"]
-        absolute left top
-        appearance none
-        opacity 0
 
-    .label
-      display inline-block
-      margin-right 5px
+  .btn
+    position relative
+    display inline-block
+    box-sizing border-box
+    border 1px solid #BBB
+    background linear-gradient(top, #fafafa, #dadada)
+    font-size 8px
+    padding 0 8px
+    height 24px
+    line-height 24px
+    transition border-color .3s, color .3s
+    outline none
+    cursor pointer
+    color #666
+    box-shadow inset 1px 0 0 0 rgba(255, 255, 255, .5)
+    margin-left -1px
+    z-index 1
+
+    /*&:first-child
+      border-radius 2px 0 0 2px
+
+    &:last-child
+      border-radius 0 2px 2px 0*/
+
+    &:hover
+      border-color #888
+      color #666
+      z-index 10
+
+    &.disabled
+    &.disabled:hover
+      border-color #BBB
+      color #C3C3C3
+      cursor not-allowed
 </style>

@@ -6,7 +6,7 @@
           <th v-show="selecting" class="tac">
             <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
           </th>
-          <th v-for="tHeader in headers" :class="tHeader.class">{{tHeader.title}}</th>
+          <th v-for="tHeader in headers" :class="tHeader.class">{{{tHeader.title}}}</th>
         </tr>
       </thead>
       <tbody>
@@ -35,14 +35,18 @@
       //   {
       //     key: 'id', // 与tables的key对应
       //     title: 'ID', // 标题的内容
-      //     functionName: 'test',  // 调用函数的名字  函数需要定义在父组件的methods中 会返回当前选中的表格的headers和table对象
-      //     class: 'tac' // 传入className 自动加入整一列中
+      //     functionName: 'test',  // 调用函数的名字  函数需要定义在父组件的methods中 会返回当前选中的表格的headers和table和lineIndex
+      //     class: 'tac', // 传入className 自动加入整一列中
+      //     sortable: false,
+      //     tooltip: '提示'
       //   },
       //   {
-      //     key: 'id',
-      //     title: 'ID',
+      //     key: 'creatTime',
+      //     title: '创建时间',
       //     functionName: 'test',
-      //     class: 'tac'
+      //     class: 'tac'，
+      //     sortable: false,
+      //     tooltip: '提示'
       //   }
       // ],
       // tables: [

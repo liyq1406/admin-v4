@@ -1,91 +1,102 @@
 <template>
-  <div class="panel">
-    <div class="panel-bd">
-      <div class="action-bar">
-        <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-          <v-select width="100px" :label="queryType.label">
-            <select v-model="queryType">
-              <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-            </select>
-          </v-select>
-          <button slot="search-button" @click="getDevices(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
-        </search-box>
-        <div class="action-group">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
-          <label :class="{'disabled':importing}" class="btn btn-success btn-upload">
-            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
-          </label>
-        </div>
-      </div>
-      <div class="status-bar">
-        <div class="status">{{{ $t('common.total_results', {count:total}) }}}
-        </div>
-        <v-select width="90px" size="small" :label="visibility.label">
-          <span slot="label">{{ $t('common.display') }}：</span>
-          <select v-model="visibility" @change="getDevices(true)">
-            <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
-          </select>
-        </v-select>
-      </div>
-      <div class="data-table with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-              <th>{{ $t('ui.device.id') }}</th>
-              <th>{{ $t('ui.device.is_active') }}</th>
-              <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('ui.device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
-              <th>{{ $t('ui.device.is_online') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="devices.length > 0">
-              <tr v-for="device in devices">
-                <td><a v-link="$route.path + '/' + device.id" class="hl-red">{{ device.mac }}</a></td>
-                <td>{{ device.id }}</td>
-                <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
-                <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
-                <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td>
-              </tr>
-            </template>
-            <tr v-if="devices.length === 0 && !loadingData">
-              <td colspan="5" class="tac">
-                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="action-group mb40">
-        <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost"><i class="fa fa-list"></i>查看上下线历史记录</button>
-      </div>
-      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDevices"></pager>
+  <div class="main">
+    <div class="main-title">
+      <h3>设备管理</h3>
     </div>
-    <!-- 添加设备浮层-->
-    <modal :show.sync="showAddModal">
-      <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
-      <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
-                <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
-              </div>
-              <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+    <div class="panel">
+      <div class="panel-bd">
+        <div class="action-bar">
+          <div class="action-group">
+            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
+            <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+              <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
+            </label>
+          </div>
+        </div>
+        <div class="data-table with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group fr">
+              <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                <v-select width="90px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </v-select>
+                <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
+            <div class="filter-group">
+              <v-select width="90px" size="small" :label="visibility.label">
+                <span slot="label">{{ $t('common.display') }}：</span>
+                <select v-model="visibility" @change="getDevices(true)">
+                  <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
             </div>
           </div>
-          <div class="form-actions">
-            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+                <th>{{ $t('ui.device.id') }}</th>
+                <th>{{ $t('ui.device.is_active') }}</th>
+                <th @click="sortBy('active_date')" :class="{active: sortKey === 'active_date'}">{{ $t('ui.device.active_date') }}<i :class="sortOrders['active_date'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
+                <th>{{ $t('ui.device.is_online') }}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="devices.length > 0">
+                <tr v-for="device in devices">
+                  <td><a v-link="$route.path + '/' + device.id" class="hl-red">{{ device.mac }}</a></td>
+                  <td>{{ device.id }}</td>
+                  <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
+                  <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
+                  <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td>
+                </tr>
+              </template>
+              <tr v-if="devices.length === 0 && !loadingData">
+                <td colspan="5" class="tac">
+                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="row mb15">
+          <div class="col-6">
+            <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost btn-sm"><i class="fa fa-list"></i>查看上下线历史记录</button>
           </div>
-        </form>
+          <div class="col-18">
+            <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDevices"></pager>
+          </div>
+        </div>
       </div>
-    </modal>
+      <!-- 添加设备浮层-->
+      <modal :show.sync="showAddModal">
+        <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
+        <div slot="body" class="form">
+          <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
+                  <input v-model="addModel.mac" type="text" v-form-ctrl name="mac" required lazy class="input-text"/>
+                </div>
+                <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+                <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </div>
+      </modal>
+    </div>
   </div>
 </template>
 

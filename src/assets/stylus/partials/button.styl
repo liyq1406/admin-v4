@@ -84,20 +84,22 @@ button.btn-link
     color darken(red, 10%)
 
 // 幽灵按钮
+label.btn-ghost
 a.btn-ghost
 button.btn-ghost
-  background #FFF
-  border 1px solid default-border-color
+  border 1px solid #BBB
   line-height 30px
   color gray
   transition color .3s, border-color .3s
+  box-sizing border-box
+  background-image linear-gradient(top, #fafafa, #E6E6E6)
 
   &:visited
     color gray
 
   &:hover
-    color red
-    border-color red
+    color gray-dark
+    border-color #999
 
 // 按钮尺寸
 .btn-xlg
@@ -123,6 +125,7 @@ button.btn-ghost
   line-height 20px
   padding 0 8px
 
+label.btn-ghost
 a.btn-ghost
 button.btn-ghost
   &.btn-lg

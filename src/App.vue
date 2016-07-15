@@ -219,6 +219,7 @@ export default {
         padding 5px 10px 4px
         cursor pointer
         border-radius 4px
+        color gray
 
         .trigger-text
           font-size 12px
@@ -229,6 +230,7 @@ export default {
 
         &:hover
         &.active
+          text-decoration none
           background-image linear-gradient(top, #fafafa, #e9e9e9)
           box-shadow inset 0 1px 5px rgba(0, 0, 0, .2)
 
