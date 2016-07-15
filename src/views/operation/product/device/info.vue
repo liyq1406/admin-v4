@@ -48,7 +48,7 @@
         <div class="panel">
           <div class="panel-hd">
             <div class="actions">
-              <switch :value.sync="showLog" @switch-toggle="toggleLog"></switch>
+              <switch :value.sync="showLog" @switch-toggle="toggleLog" size="small"></switch>
             </div>
             <h2>{{ $t('ui.device.log') }}</h2>
           </div>

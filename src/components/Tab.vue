@@ -59,7 +59,8 @@ export default {
 
 // 选项卡
 .tab
-  margin-top 20px
+  margin-top 15px
+  padding 0 15px
   border-bottom 1px solid default-border-color
 
   ul
@@ -72,17 +73,20 @@ export default {
 
     a
       display block
-      padding 2px 20px
-      line-height 24px
+      padding 0 20px
+      line-height 28px
+      color gray
 
       &:hover
         text-decoration none
+        color gray-darker
 
       &.v-link-active
-        height 24px
+        height 28px
         background-color #fff
         border 1px solid #e5e5e5
         border-bottom none!important
         position relative
         bottom -1px
+        font-weight bold
 </style>

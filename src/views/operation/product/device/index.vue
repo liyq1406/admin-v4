@@ -1,14 +1,13 @@
 <template>
   <div class="main device-details">
-    <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('ui.device.management') }}</a></div>
+    <!-- <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('ui.device.management') }}</a></div> -->
+    <div class="main-title">
+      <h3>设备详情</h3>
+    </div>
+    <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel">
-      <div class="panel-hd">
-        <h2>设备详情</h2>
-      </div>
       <div class="panel-bd">
-        <div class="row">
           <div class="col-24">
-            <div class="panel">
               <div class="panel-bd row">
                 <div class="col-18">
                   <ul class="device-details">
@@ -65,7 +64,7 @@
 
 <script>
   import Tab from 'components/Tab'
-  // import CrumbNav from 'components/CrumbNav'
+  import Breadcrumb from 'components/Breadcrumb'
   // import api from 'api'
   import { globalMixins } from 'src/mixins'
 
@@ -75,13 +74,19 @@
     mixins: [globalMixins],
 
     components: {
-      'tab': Tab
+      Tab,
+      Breadcrumb
     },
 
     data () {
       return {
         secondaryNav: [],
-        Cnav: []
+        breadcrumbNav: [{
+          label: '全部',
+          link: `/operation/products/${this.$route.params.product_id}/devices`
+        }, {
+          label: '设备详情'
+        }]
       }
     },
 

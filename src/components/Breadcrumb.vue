@@ -1,14 +1,11 @@
 <template>
   <div class="x-breadcrumb">
     <a @click="LastLink" class="return"><i class="fa fa-arrow-circle-left"></i></a>
-    <ul>
-      <li v-for="item in nav">
-        <template v-if="$index < nav.length - 1">
-          <a v-link="item.link" class="pagelink">{{ item.label }}</a><i class="arrow">&gt;</i>
-        </template>
-        <span v-else>{{ item.label }}</span>
-      </li>
-    </ul>
+    <template v-for="item in nav">
+      <a v-if="$index < nav.length - 1" v-link="item.link" class="pagelink">{{ item.label }}</a>
+      <span v-else>{{ item.label }}</span>
+      <i class="arrow" v-if="$index < nav.length - 1">&gt;</i>
+    </template>
   </div>
 </template>
 
@@ -45,19 +42,29 @@ export default {
 <style lang="stylus">
 @import '../assets/stylus/common'
 .x-breadcrumb
+  border-bottom 1px solid default-border-color
+  padding 5px 15px
+  line-height 20px
   clearfix()
-  .return
-    float left
-    margin-right 5px
-  ul
-    float left
+
+  a
+  span
+  i
     display inline-block
-    clearfix()
-  li
-    float left
-    .pagelink
-      color red
-      margin-right 5px
-    .arrow
-      margin-right 5px
+
+  .return
+    color gray-light
+    margin-right 5px
+    font-size 16px
+
+    &:hover
+      color gray
+
+  .pagelink
+    color red
+    margin-right 5px
+
+  .arrow
+    color gray-light
+    margin-right 5px
 </style>
