@@ -27,6 +27,9 @@
     display inline-block
     font-size 12px
 
+    .v-select-trigger
+      border-color #BBB
+
   .btn
     cursor pointer
     height 26px
@@ -35,7 +38,7 @@
     background-image linear-gradient(top, #fafafa, #dadada)
     padding 0 8px
     color gray
-    border 1px solid default-border-color
+    border 1px solid #BBB
     border-left 0
     box-sizing border-box
     font-size 12px
@@ -45,6 +48,7 @@
       margin 0
 
     &:hover
+      border-color #999
       color gray-dark
 
 .search-box-input
@@ -53,8 +57,9 @@
   background #FFF
   size 190px 24px
   vertical-align middle
-  border 1px solid default-border-color
+  border 1px solid #BBB
   box-shadow inset 1px 1px 1px rgba(0, 0, 0, .05)
+  margin-left -1px
 
   input
     background transparent

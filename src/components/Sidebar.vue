@@ -163,7 +163,7 @@ export default {
 
     & > .v-link-active
       font-weight bold
-      /*color red*/
+      color red
 
 .nav-aside-group
   margin-top 20px
