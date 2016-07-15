@@ -276,8 +276,6 @@
   export default {
     name: 'AddForm',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

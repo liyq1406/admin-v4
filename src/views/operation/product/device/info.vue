@@ -206,8 +206,6 @@
   export default {
     name: 'DeviceDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

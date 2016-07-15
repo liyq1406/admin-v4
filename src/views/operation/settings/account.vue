@@ -9,7 +9,7 @@
           <div class="trigger" @click.prevent="editAccount"><i class="fa fa-pencil"></i><span class="trigger-text">编辑用户信息</span></div>
         </div>
         <div class="tool-list-item">
-          <div class="trigger" @click.prevent="addMember"><i class="fa fa-lock"></i><span class="trigger-text">修改密码</span></div>
+          <div class="trigger" @click.prevent="editPwd"><i class="fa fa-lock"></i><span class="trigger-text">修改密码</span></div>
         </div>
       </div>
     </div>
@@ -193,8 +193,6 @@
 
   export default {
     name: 'AccountSettings',
-
-    layout: 'admin',
 
     mixins: [globalMixins],
 

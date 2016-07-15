@@ -5,8 +5,8 @@
     <div class="nav-aside">
       <div class="nav-aside-wrap">
         <div class="nav-aside-content">
-          <div class="nav-aside-item" v-for="item in nav.subs">
-            <a class="nav-aside-item-title" v-link="{path: nav.url + '/' + (item.url || item.alias)}" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
+          <div class="nav-aside-item" v-for="item in subs">
+            <a class="nav-aside-item-title" v-link="{path: nav.url + '/' + (item.url || item.alias) + (item.id?'/' + item.id:'')}" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
             <ul class="sub-nav" v-show="item.subs && item.subs.length && item.unfold">
               <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + link.alias) }}</span></a></li>
             </ul>
@@ -28,6 +28,8 @@
 </template>
 
 <script>
+import _ from 'lodash'
+
 export default {
   name: 'Sidebar',
 
@@ -39,6 +41,40 @@ export default {
       }
     }
   },
+
+  data () {
+    return {
+      subs: []
+    }
+  },
+
+  watch: {
+    nav () {
+      var result = this.nav.subs
+      result.forEach((item, index) => {
+        var reg
+        if (item.alias === 'products') {
+          console.log(item.id)
+          reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')
+        } else {
+          reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
+        }
+        result.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
+      })
+      this.subs = result
+    }
+  },
+
+  // computed: {
+  //   subs () {
+  //     var result = this.nav.subs
+  //     result.forEach((item, index) => {
+  //       var reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
+  //       result.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
+  //     })
+  //     return result
+  //   }
+  // },
 
   methods: {
     toggle (nav, e) {

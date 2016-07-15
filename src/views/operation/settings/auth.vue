@@ -156,8 +156,6 @@
   export default {
     name: 'AuthSettings',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

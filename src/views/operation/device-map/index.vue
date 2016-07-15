@@ -79,8 +79,6 @@
   export default {
     name: 'Settings',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

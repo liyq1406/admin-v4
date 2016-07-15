@@ -148,8 +148,6 @@
   export default {
     // name: 'AccountList',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

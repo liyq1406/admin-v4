@@ -76,8 +76,6 @@ import { globalMixins } from 'src/mixins'
 export default {
   name: 'Alerts',
 
-  layout: 'admin',
-
   mixins: [globalMixins],
 
   components: {

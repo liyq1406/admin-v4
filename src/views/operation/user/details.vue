@@ -88,8 +88,6 @@
   export default {
     name: 'UserDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

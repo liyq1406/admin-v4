@@ -100,8 +100,6 @@
   export default {
     name: 'UsersStatistic',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

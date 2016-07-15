@@ -283,8 +283,6 @@
   export default {
     name: 'MailTemplates',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

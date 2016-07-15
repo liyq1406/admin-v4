@@ -286,8 +286,6 @@
   export default {
     name: 'Upgrade',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

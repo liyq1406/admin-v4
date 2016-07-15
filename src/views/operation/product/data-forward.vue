@@ -162,8 +162,6 @@
   export default {
     name: 'DataForward',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

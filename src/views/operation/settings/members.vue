@@ -181,8 +181,6 @@
   export default {
     name: 'MemberSettings',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

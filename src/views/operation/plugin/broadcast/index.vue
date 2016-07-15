@@ -21,8 +21,6 @@
   export default {
     name: 'Link',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

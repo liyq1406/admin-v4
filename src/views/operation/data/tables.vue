@@ -494,8 +494,6 @@
   export default {
     name: 'DataTables',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

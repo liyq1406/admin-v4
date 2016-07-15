@@ -95,8 +95,6 @@
   export default {
     name: 'Issues',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

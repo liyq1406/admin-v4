@@ -81,8 +81,6 @@
   export default {
     name: 'Devices_link',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

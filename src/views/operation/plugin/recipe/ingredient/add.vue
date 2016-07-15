@@ -94,8 +94,6 @@
   export default {
     name: 'AddIngredientForm',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

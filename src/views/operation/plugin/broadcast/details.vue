@@ -53,8 +53,6 @@
   export default {
     name: 'BroadcastDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     data () {

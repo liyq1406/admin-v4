@@ -64,8 +64,6 @@
   export default {
     name: 'UserList',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

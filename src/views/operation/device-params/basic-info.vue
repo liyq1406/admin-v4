@@ -271,8 +271,6 @@
   export default {
     name: 'BasicInfo',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

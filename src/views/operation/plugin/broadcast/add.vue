@@ -149,8 +149,6 @@
   export default {
     name: 'AddBroadcast',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

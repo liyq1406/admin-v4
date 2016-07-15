@@ -269,8 +269,6 @@
   export default {
     name: 'DataPoint',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

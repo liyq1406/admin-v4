@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="main">
     <panel>
       <div class="product-card">
         <div class="thumb"><img src="../../../assets/images/device_thumb.png"/></div>
@@ -224,7 +224,7 @@ import _ from 'lodash'
 export default {
   name: 'Overview',
 
-  layout: 'admin',
+  layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
 

@@ -32,8 +32,6 @@
   export default {
     name: 'Echo',
 
-    layout: 'admin',
-
     components: {
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem

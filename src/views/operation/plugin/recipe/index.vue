@@ -21,8 +21,6 @@
   export default {
     name: 'Recipe',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

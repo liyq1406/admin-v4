@@ -22,8 +22,6 @@
   export default {
     name: 'AddRecipe',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

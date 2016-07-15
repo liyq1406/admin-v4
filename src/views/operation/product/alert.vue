@@ -465,8 +465,6 @@
   export default {
     name: 'Alert',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

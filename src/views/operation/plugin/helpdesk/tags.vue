@@ -113,8 +113,6 @@
   export default {
     name: 'Tags',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

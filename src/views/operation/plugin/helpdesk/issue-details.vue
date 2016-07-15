@@ -121,8 +121,6 @@
   export default {
     name: 'IssueDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     vuex: {

@@ -284,8 +284,6 @@
   export default {
     name: 'AccountDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     data () {

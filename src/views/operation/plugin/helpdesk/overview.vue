@@ -54,8 +54,6 @@
   export default {
     name: 'Overview',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

@@ -42,8 +42,6 @@
   export default {
     name: 'Data',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {

@@ -24,8 +24,6 @@
   export default {
     name: 'Products',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     store,

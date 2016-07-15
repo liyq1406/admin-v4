@@ -64,8 +64,6 @@
   export default {
     name: 'CreateProductForm',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     vuex: {

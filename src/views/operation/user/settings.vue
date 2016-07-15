@@ -4,7 +4,7 @@
       <h3>{{ $t('ui.user.setting') }}</h3>
     </div>
     <div class="panel">
-      <div class="pane1-bd">
+      <div class="panel-bd">
         <div class="form mb40 mt30">
           <form v-form name="validation" @submit.prevent="onSubmit">
             <div class="form-row row">
@@ -55,8 +55,6 @@
 
   export default {
     name: 'UserSetting',
-
-    layout: 'admin',
 
     mixins: [globalMixins],
 

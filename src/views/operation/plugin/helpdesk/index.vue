@@ -22,8 +22,6 @@
   export default {
     name: 'Helpdesk',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

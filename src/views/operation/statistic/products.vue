@@ -115,8 +115,6 @@
   export default {
     name: 'ProductStatistic',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

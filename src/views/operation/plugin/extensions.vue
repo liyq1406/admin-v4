@@ -30,8 +30,6 @@
   export default {
     name: 'Applications',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {

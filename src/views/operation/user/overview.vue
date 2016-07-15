@@ -156,8 +156,6 @@ import _ from 'lodash'
 export default {
   name: 'Dashboard',
 
-  layout: 'admin',
-
   mixins: [globalMixins],
 
   components: {

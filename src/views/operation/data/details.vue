@@ -87,8 +87,6 @@
   export default {
     name: 'TableDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

@@ -22,8 +22,6 @@
   export default {
     name: 'Forbidden',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

@@ -46,8 +46,6 @@
   export default {
     name: 'Applications',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

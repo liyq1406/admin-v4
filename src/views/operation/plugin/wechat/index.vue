@@ -24,8 +24,6 @@
   export default {
     name: 'Statistic',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

@@ -44,7 +44,7 @@
           <tbody>
             <template v-if="devices.length > 0">
               <tr v-for="device in devices">
-                <td><a v-link="'/products/' + $route.params.id + '/devices/' + device.id" class="hl-red">{{ device.mac }}</a></td>
+                <td><a v-link="$route.path + '/' + device.id" class="hl-red">{{ device.mac }}</a></td>
                 <td>{{ device.id }}</td>
                 <td v-text="device.is_active ? $t('ui.device_list.active') : $t('ui.device_list.not_active')"></td>
                 <td><span v-if="device.active_date">{{ device.active_date | formatDate }}</span></td>
@@ -103,8 +103,6 @@
 
   export default {
     name: 'DeviceList',
-
-    layout: 'admin',
 
     mixins: [globalMixins],
 

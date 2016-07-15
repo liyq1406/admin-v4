@@ -30,10 +30,13 @@
 
 <script>
 import store from 'store/index'
+import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 
 export default {
   name: 'Topbar',
+
+  mixins: [globalMixins],
 
   // 状态管理
   store,

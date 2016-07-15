@@ -223,8 +223,6 @@
   export default {
     name: 'TableDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

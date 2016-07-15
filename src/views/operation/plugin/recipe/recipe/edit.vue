@@ -28,8 +28,6 @@
   export default {
     name: 'EditRecipe',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

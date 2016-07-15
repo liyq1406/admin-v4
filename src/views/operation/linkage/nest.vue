@@ -89,8 +89,6 @@
   export default {
     name: 'Nest',
 
-    layout: 'admin',
-
     components: {
       'v-switch': Switch,
       'pic-txt': PicTxt,

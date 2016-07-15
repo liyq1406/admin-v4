@@ -134,8 +134,6 @@
   export default {
     name: 'OrderDetails',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     data () {

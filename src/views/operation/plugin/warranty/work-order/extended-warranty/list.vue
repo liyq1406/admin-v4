@@ -84,8 +84,6 @@
   export default {
     name: 'OrderList',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

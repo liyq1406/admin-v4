@@ -34,7 +34,7 @@
     vertical-align middle
     background-image linear-gradient(top, #fafafa, #dadada)
     padding 0 8px
-    color gray-light
+    color gray
     border 1px solid default-border-color
     border-left 0
     box-sizing border-box

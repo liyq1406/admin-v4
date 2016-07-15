@@ -21,8 +21,6 @@
   export default {
     name: 'Params',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

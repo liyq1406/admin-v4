@@ -74,8 +74,6 @@
   export default {
     name: 'BroadcastHistory',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

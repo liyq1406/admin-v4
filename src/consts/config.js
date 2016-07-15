@@ -69,6 +69,10 @@ export const MAIN_NAV = {
     alias: 'operation',
     url: '/operation',
     subs: [{
+      alias: 'overview',
+      icon: 'home',
+      url: 'overview'
+    }, {
       alias: 'alerts', // 告警服务
       icon: 'bell',
       subs: [{
@@ -105,11 +109,20 @@ export const MAIN_NAV = {
       alias: 'users', // 用户管理
       icon: 'users',
       subs: [{
+        alias: 'overview',
+        url: '/users/overview'
+      }, {
         alias: 'list',
         url: '/users/list'
       }, {
         alias: 'settings',
         url: '/users/settings'
+      }, {
+        alias: 'portrait',
+        url: '/users/portrait'
+      }, {
+        alias: 'analysis',
+        url: '/users/analysis'
       }]
     }, {
       alias: 'device_map', // 设备地图

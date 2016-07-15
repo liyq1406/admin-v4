@@ -16,8 +16,19 @@ export default {
       label: '运营平台',
       // 侧栏导航
       subs: {
-        dashboard: '概览',
-        products: '产品管理',
+        overview: {
+          label: '概览'
+        },
+        products: {
+          subs: {
+            overview: '概览',
+            devices: '设备管理',
+            alerts: '告警信息',
+            device_map: '设备地图',
+            distributing: '热力分布',
+            addon: '扩展'
+          }
+        },
         plugins: '插件管理',
         alerts: {
           label: '告警服务',
@@ -44,8 +55,11 @@ export default {
         users: {
           label: '用户管理',
           subs: {
+            overview: '概览',
             list: '用户列表',
-            settings: '用户设置'
+            settings: '用户设置',
+            portrait: '人群画像',
+            analysis: '用户行为分析'
           }
         },
         device_map: {

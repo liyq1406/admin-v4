@@ -92,8 +92,6 @@
   export default {
     name: 'IngredientList',
 
-    layout: 'admin',
-
     mixins: [globalMixins, pluginMixins],
 
     components: {

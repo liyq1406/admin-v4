@@ -32,8 +32,6 @@ import api from 'src/api'
 export default {
   name: 'History',
 
-  layout: 'admin',
-
   mixins: [globalMixins],
 
   components: {

@@ -97,8 +97,6 @@
   export default {
     name: 'DeviceList',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     components: {

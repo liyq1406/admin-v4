@@ -212,8 +212,6 @@
   export default {
     name: 'Management',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     store,

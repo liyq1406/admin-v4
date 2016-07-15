@@ -91,8 +91,6 @@
   export default {
     name: 'updateForm',
 
-    layout: 'admin',
-
     mixins: [globalMixins],
 
     vuex: {
