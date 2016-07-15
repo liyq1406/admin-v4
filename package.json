@@ -17,6 +17,7 @@
     "font-awesome": "^4.5.0",
     "g2": "^1.2.5",
     "lodash": "^4.9.0",
+    "mockjs": "^1.0.1-beta2",
     "moment": "^2.14.1",
     "promise": "^7.1.1",
     "socket.io-client": "^1.4.5",
