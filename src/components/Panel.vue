@@ -60,7 +60,7 @@ export default {
       display inline-block
       margin 12px 0 0 20px
 
-    .x-btn-group
+    .x-radio-btn-group
       display inline-block
       margin-left 20px
 

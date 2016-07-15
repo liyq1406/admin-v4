@@ -65,8 +65,8 @@
       <div class="col-24">
         <panel title="产品趋势分析">
           <div class="left-actions" slot="left-actions">
-            <button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
-            <button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></button-group>
+            <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
           </div>
           <div class="stats row">
             <div class="col-11 tac">
@@ -85,7 +85,7 @@
       <div class="col-24">
         <panel title="产品活跃时间点">
           <div class="left-actions" slot="left-actions">
-            <button-group :items="locales.data.ACTIVE_PERIODS" :value.sync="timePoint.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
+            <radio-button-group :items="locales.data.ACTIVE_PERIODS" :value.sync="timePoint.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
           </div>
           <line :data="timePoint.data" :options="timePoint.options"></line>
         </panel>
@@ -96,7 +96,7 @@
       <div class="col-12">
         <panel title="产品使用时长">
           <div class="left-actions" slot="left-actions">
-            <button-group :items="locales.data.AVG_PERIODS" :value.sync="duration.period"><span slot="label" class="label">平均</span></button-group>
+            <radio-button-group :items="locales.data.AVG_PERIODS" :value.sync="duration.period"><span slot="label" class="label">平均</span></radio-button-group>
           </div>
           <interval :data="duration.data" :options="duration.options"></interval>
         </panel>
@@ -104,7 +104,7 @@
       <div class="col-12">
         <panel title="产品使用次数">
           <div class="left-actions" slot="left-actions">
-            <button-group :items="locales.data.AVG_PERIODS" :value.sync="times.period"><span slot="label" class="label">平均</span></button-group>
+            <radio-button-group :items="locales.data.AVG_PERIODS" :value.sync="times.period"><span slot="label" class="label">平均</span></radio-button-group>
           </div>
           <interval :data="times.data" :options="times.options"></interval>
         </panel>
@@ -210,7 +210,7 @@ import { removeProduct, updateProduct, setCurrProduct } from 'store/actions/prod
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import Panel from 'components/Panel'
-import ButtonGroup from 'components/ButtonGroup'
+import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
 import Line from 'components/g2-charts/Line'
@@ -244,7 +244,7 @@ export default {
   components: {
     Modal,
     Panel,
-    ButtonGroup,
+    RadioButtonGroup,
     Statistic,
     Tooltip,
     Line,

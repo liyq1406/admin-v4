@@ -58,8 +58,8 @@
 
     <panel title="用户趋势分析">
       <div class="left-actions" slot="left-actions">
-        <button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
-        <button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></button-group>
+        <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
       </div>
       <div class="row">
         <div class="col-18">
@@ -78,7 +78,7 @@
 
     <panel title="用户活跃时间点分析">
       <div class="left-actions" slot="left-actions">
-        <button-group :items="locales.data.ACTIVE_PERIODS" :value.sync="timePoint.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
+        <radio-button-group :items="locales.data.ACTIVE_PERIODS" :value.sync="timePoint.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
       </div>
       <line :data="timePoint.data" :options="timePoint.options"></line>
     </panel>
@@ -140,7 +140,7 @@
 // import G2 from 'g2'
 import Mock from 'mockjs'
 import Panel from 'components/Panel'
-import ButtonGroup from 'components/ButtonGroup'
+import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
 import Line from 'components/g2-charts/Line'
@@ -160,7 +160,7 @@ export default {
 
   components: {
     Panel,
-    ButtonGroup,
+    RadioButtonGroup,
     Statistic,
     Tooltip,
     Line,

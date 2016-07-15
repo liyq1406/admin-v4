@@ -9,7 +9,7 @@
 
 <script>
   export default {
-    name: 'RadioRadioButtonGroup',
+    name: 'RadioButtonGroup',
 
     props: {
       value: {

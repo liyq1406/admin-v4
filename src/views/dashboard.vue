@@ -35,8 +35,8 @@
         <div class="col-24">
           <panel title="产品趋势分析">
             <div class="left-actions" slot="left-actions">
-              <button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
-              <button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></button-group>
+              <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+              <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
             </div>
             <div class="row">
               <div class="col-14">
@@ -76,7 +76,7 @@
 
           <panel title="产品区域分布">
             <div class="left-actions" slot="left-actions">
-              <button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
+              <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
             </div>
             <div class="row">
               <div class="col-16 tac">
@@ -93,8 +93,8 @@
 
           <panel title="用户趋势分析">
             <div class="left-actions" slot="left-actions">
-              <button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></button-group>
-              <button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></button-group>
+              <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+              <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
             </div>
             <div class="row">
               <div class="col-18">
@@ -120,7 +120,7 @@
 // import api from 'api'
 import Mock from 'mockjs'
 import Panel from 'components/Panel'
-import ButtonGroup from 'components/ButtonGroup'
+import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
 import Line from 'components/g2-charts/Line'
@@ -141,7 +141,7 @@ export default {
 
   components: {
     Panel,
-    ButtonGroup,
+    RadioButtonGroup,
     Statistic,
     Tooltip,
     Line,
