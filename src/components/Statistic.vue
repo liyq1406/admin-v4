@@ -1,11 +1,11 @@
 <template lang="html">
   <div :class="classes">
-    <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="info" v-animated-number="info.total"></div>
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
     </div>
+    <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="chart" v-if="hasChart">
       <slot></slot>
     </div>
@@ -32,6 +32,11 @@ export default {
       default () {
         return {}
       }
+    },
+
+    align: {
+      type: String,
+      default: 'center'
     },
 
     color: {
@@ -67,6 +72,10 @@ export default {
 
       if (this.inline) {
         result.push(`${this.classPrefix}-inline`)
+      }
+
+      if (this.align) {
+        result.push(`${this.classPrefix}-${this.align}`)
       }
 
       return result.join(' ')
@@ -141,11 +150,24 @@ export default {
   max-width 200px
   margin 0 auto
 
-  .tit
+  /*.tit
     absolute right 15px bottom 25px
-    font-size 12px
-
-  .info
+    font-size 12px*/
+  .tit
+    text-align center
+.x-statistic-left
+  text-align left
+  & > .info
     margin 0
-    font-size 36px
+    font-size 42px
+    font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial
+    font-weight 100
+    margin 10px 0
+  & > .change
+    position relative
+    top -18px
+    left 5px
+  & > .info
+  & > .change
+    display inline-block
 </style>

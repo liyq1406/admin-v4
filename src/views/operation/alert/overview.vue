@@ -39,16 +39,16 @@
         </div>
         <div class="row">
           <div class="col-6">
-            <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')"></statistic>
+            <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')" align="left"></statistic>
           </div>
           <div class="col-6">
-            <statistic :info="alertSummary.message" :title="$t('ui.alert.statistic.message')"></statistic>
+            <statistic :info="alertSummary.message" :title="$t('ui.alert.statistic.message')" align="left"></statistic>
           </div>
           <div class="col-6">
-            <statistic :info="alertSummary.unread" :title="$t('ui.alert.statistic.unread')"></statistic>
+            <statistic :info="alertSummary.unread" :title="$t('ui.alert.statistic.unread')" align="left"></statistic>
           </div>
           <div class="col-6">
-            <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')"></statistic>
+            <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
           </div>
         </div>
       </div>
