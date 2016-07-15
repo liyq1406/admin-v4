@@ -5,7 +5,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="data-table with-loading">
+        <!-- <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
@@ -47,7 +47,12 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
+        <c-table :headers="table.headers" :tables="table.tables" @theader-update-time="test" @tbody-update-time="test" :loading="false">
+          <div class="filter-container" slot="filter-container">
+            头部
+          </div>
+        </c-table>
       </div>
     </div>
   </div>
@@ -56,6 +61,7 @@
 <script>
   import SearchBox from 'components/SearchBox'
   import Modal from 'components/Modal'
+  import Table from 'components/Table'
   import api from 'api'
   import * as config from 'consts/config'
   import Pager from 'components/Pager'
@@ -68,6 +74,7 @@
 
     components: {
       'search-box': SearchBox,
+      'c-table': Table,
       'modal': Modal,
       'api': api,
       'pager': Pager
@@ -81,7 +88,49 @@
         total: 0,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
-        loadingData: false
+        loadingData: false,
+        table: {
+          headers: [
+            {
+              key: 'id', // 与tables的key对应
+              title: 'ID', // 标题的内容
+              class: 'tac', // 传入className 自动加入整一列中
+              sortType: -1
+            },
+            {
+              key: 'creatTime',
+              title: '创建时间',
+              class: 'tac',
+              tooltip: '提示'
+            },
+            {
+              key: 'updateTime',
+              title: '更新时间',
+              sortType: 0,
+              tooltip: '提示'
+            },
+            {
+              key: 'creater',
+              title: '创建者'
+            }
+          ],
+          tables: [
+            // {
+            //   id: '<a href="">idididid</a>',
+            //   creatTime: '123',
+            //   updateTime: '更新时间',
+            //   creater: '创建者1',
+            //   operation: '操作'
+            // },
+            // {
+            //   id: 'idididid',
+            //   creatTime: '创建时间',
+            //   updateTime: '更新时间',
+            //   creater: '创建者2',
+            //   operation: '操作'
+            // }
+          ]
+        }
       }
     },
 
@@ -111,6 +160,10 @@
     },
 
     methods: {
+      test (a, b) {
+        console.log(a)
+        console.log(b)
+      },
       /**
        * 获取假用户数据
        * @return {[type]} [description]
