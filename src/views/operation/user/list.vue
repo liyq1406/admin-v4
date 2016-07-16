@@ -135,8 +135,8 @@
 
     route: {
       data () {
-        // this.getUsers()
-        this.getUsers1()
+        this.getUsers()
+        // this.getUsers1()
       }
     },
 
