@@ -146,17 +146,23 @@ export var tooltip = {
 export var stretch = {
   bind () {
     var self = this
-    var bindListener = function (a, wrapDiv) {
+    var bindListener = function (a) {
       a.addEventListener('click', function (event) {
         if (!a.status) {
-          wrapDiv.style.height = 'auto'
+          self.$wrapDiv.style.height = 'auto'
           a.className = 'fa fa-caret-up'
           a.status = 1
         } else {
-          wrapDiv.style.height = self.$minHeight.toString() + 'px'
+          self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
           a.className = 'fa fa-caret-down'
           a.status = 0
         }
+      })
+      a.addEventListener('mouseover', function (event) {
+        this.parentNode.style.backgroundColor = '#E9E9E9'
+      })
+      a.addEventListener('mouseout', function (event) {
+        this.parentNode.style.backgroundColor = '#F2F2F2'
       })
     }
     var domInit = function (el) {
@@ -171,18 +177,23 @@ export var stretch = {
         node = temp
       }
       el.appendChild(wrapDiv)
+      self.$wrapDiv = wrapDiv // 绑定wrap div 元素到指令对象上
+
       var div = document.createElement('div')
       div.style.width = '100%'
       div.style.height = '11px'
       div.style.backgroundColor = '#F2F2F2'
       div.style.textAlign = 'center'
+
       var a = document.createElement('a')
       a.className = 'fa fa-caret-down'
       a.style.verticalAlign = 'top'
       a.style.fontSize = '16px'
       a.style.lineHeight = '11px'
+      a.style.width = '100%'
       a.style.opacity = '0.6'
-      bindListener(a, wrapDiv)
+
+      bindListener(a)
       div.appendChild(a)
       el.appendChild(div)
     }
@@ -191,6 +202,7 @@ export var stretch = {
 
   update (value) {
     this.$minHeight = parseInt(value)
+    this.$wrapDiv.style.height = this.$minHeight.toString() + 'px'
   },
 
   unbind () {}
