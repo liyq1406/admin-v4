@@ -1,5 +1,5 @@
 <template>
-  <div class="dateSelector" v-if="open" transition="fade">
+  <div class="dateSelector" v-if="open">
     <div class="wrap year" v-if="yearShow">
       <ul>
         <li class="btn" @click="yearPre"><i class="fa fa-angle-up"></i></li>
@@ -56,6 +56,10 @@ export default {
       default () {
         return new Date()
       }
+    },
+    showTime: {
+      type: Boolean,
+      default: true
     }
   },
   data () {
@@ -78,7 +82,6 @@ export default {
   methods: {
     checkNow () {
       if (!this.isAble) return
-      // this.value = [this.year, '0' + this.month, this.format(this.date)].join('.') + ' ' + [this.format(this.hour), this.format(this.min), '00'].join(':')
       this.toggle()
       this.timeShow = false
       this.yearShow = true
@@ -121,7 +124,11 @@ export default {
       if (!thismonth) return
       this.date = date
       this.dateShow = false
-      this.timeShow = true
+      if (this.showTime) {
+        this.timeShow = true
+      } else {
+        this.checkNow()
+      }
     },
     updateDate () {
       let thisyear = this.year
@@ -364,20 +371,5 @@ export default {
     display: block;
     transform: rotate(45deg);
   }
-}
-
-/* 必需 */
-.fade-transition {
-  transition: all 400ms ease;
-  transform-origin: 0 0;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* .fade-enter 定义进入的开始状态 */
-/* .fade-leave 定义离开的结束状态 */
-.fade-enter, .fade-leave {
-  transform: translateY(-20px);
-  opacity: 0;
 }
 </style>

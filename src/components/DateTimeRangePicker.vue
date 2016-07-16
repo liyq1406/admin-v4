@@ -1,118 +1,134 @@
 <template>
-  <div :class="classes">
-    <slot name="label"></slot>
-    <date-picker :size="inputSize" :width="inputWidth" :value.sync="from"></date-picker>
-    <v-select width="40px" size="small" class="mr0" :label="fromTime" v-show="from">
-      <select v-model="fromTime" @change="selectTime">
-        <option :value="timeValue(n)" v-for="n in 24">{{ timeValue(n) }}</option>
-      </select>
-    </v-select>
-    <span>至</span>
-    <date-picker :size="inputSize" :width="inputWidth" :value.sync="to"></date-picker>
-    <v-select width="40px" size="small" class="mr0" :label="toTime" v-show="to">
-      <select v-model="toTime" @change="selectTime">
-        <option :value="timeValue(n)" v-for="n in 24">{{ timeValue(n) }}</option>
-      </select>
-    </v-select>
+  <div class="time-range-picker-wrap">
+    <button @click='showChoosePanel=!showChoosePanel' class="time-range-show" readonly="readonly">{{timeShowPanel}}
+      <span class="fa fa-sort-down ml10"></span>
+    </button>
+    <div v-show='showChoosePanel' class="time-range-picker-panel">
+      <div class="start-time">
+        <span>开始时间:</span>
+        <span class="time">{{startTime | uniformDate}}</span>
+        <a @click='selectStartTime' class="fa fa-calendar"></a>
+      </div>
+      <div class="end-time">
+        <span>结束时间:</span>
+        <span class="time">{{endTime | uniformDate}}</span>
+        <a @click='selectEndTime' class="fa fa-calendar"></a>
+      </div>
+      <div class="choose-submit">
+        <button @click='dispatchTime'>确定</button>
+      </div>
+    </div>
+    <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='false'></date-time-picker>
   </div>
 </template>
 
 <script>
-  import DatePicker from './DatePicker'
-  import Select from './Select'
+import DateTimePicker from './DateTimePicker'
+import {uniformDate} from '../filters'
 
-  export default {
-    name: 'DateRangePicker',
-
-    components: {
-      'date-picker': DatePicker,
-      'v-select': Select
+export default {
+  name: 'timerangepicker',
+  components: {
+    'date-time-picker': DateTimePicker
+  },
+  props: {
+    label: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      showChoosePanel: false,
+      showTimePicker: false,
+      startTime: '',
+      endTime: '',
+      picker: 0, // 表示starttime在取值， 1表示endtime在取值,
+      defaultTime: new Date()
+    }
+  },
+  computed: {
+    timeShowPanel () {
+      return uniformDate(this.startTime) + ' ~ ' + uniformDate(this.endTime) + ' '
+    }
+  },
+  ready () {
+    var curTime = new Date()
+    this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000)
+    this.endTime = curTime
+  },
+  methods: {
+    selectStartTime () {
+      this.picker = 0
+      this.defaultTime = this.startTime
+      this.showTimePicker = true
     },
-
-    props: {
-      // 起始日期
-      from: {
-        type: String,
-        default: '',
-        twoWay: true
-      },
-
-      // 起始日期
-      fromTime: {
-        type: String,
-        default: '00:00',
-        twoWay: true
-      },
-
-      // 结束日期
-      to: {
-        type: String,
-        default: '',
-        twoWay: true
-      },
-
-      // 结束日期
-      toTime: {
-        type: String,
-        default: '23:00',
-        twoWay: true
-      },
-
-      // 宽度
-      inputWidth: {
-        type: String,
-        default: '110px'
-      },
-
-      // 尺寸
-      inputSize: {
-        type: String,
-        default: 'normal'
-      },
-
-      // 类前缀
-      classPrefix: {
-        type: String,
-        default: 'date-range-picker'
+    selectEndTime () {
+      this.picker = 1
+      this.defaultTime = this.endTime
+      this.showTimePicker = true
+    },
+    timeChange (microtime) {
+      var date = new Date(microtime)
+      if (this.picker === 0) {
+        this.startTime = date
+      } else {
+        this.endTime = date
       }
     },
-
-    computed: {
-      // 类
-      classes () {
-        var result = [this.classPrefix]
-        var sizeCls = ({
-          'small': 'sm'
-        })[this.inputSize] || ''
-
-        if (sizeCls) {
-          result.push(`${this.classPrefix}-${sizeCls}`)
-        }
-
-        return result.join(' ')
-      }
-    },
-
-    methods: {
-      selectTime () {
-        this.$dispatch('select-time')
-      },
-
-      timeValue (n) {
-        return n < 10 ? `0${n}:00` : `${n}:00`
-      }
+    dispatchTime () {
+      this.showChoosePanel = false
+      this.$dispatch('timechange', this.startTime, this.endTime)
     }
   }
+}
 </script>
 
-<style lang="stylus">
-  @import '../assets/stylus/common'
-
-  .date-range-picker
-    display inline-block
-
-  .date-range-picker-sm
+<style lang="stylus" scoped>
+.time-range-picker-wrap
+  height 26px
+  float right
+  position relative
+  .time-range-show
+    padding 0px 10px
+    line-height 24px
+    text-align center
+    font-size 12px
+    background-color #F8F8F8
+    border 1px solid #E4E4E4
+    outline none
     span
-      font-size 12px
-
+      line-height 18px
+      vertical-align top
+  .time-range-picker-panel
+    background-color white
+    clear both
+    z-index 99
+    border 1px solid #DEDEDE
+    position absolute
+    margin 10px -5px
+    width 200px
+    .start-time, .end-time
+      margin 10px 10px 8px 10px
+      text-align center
+      .time
+        margin-left 5px
+        padding 0 10px
+        display inline-block
+        font-size 10px
+        border 1px solid #EEEEEE
+        background-color #F7F7F7
+      a
+        margin-left 10px
+      span
+        cursor text
+    .choose-submit
+      button
+        float right
+        margin 0 10px 6px
+        font-size 10px
+        border none
+        background-color #F7F7F7
+        border 1px solid #EEEEEE
+        outline none
 </style>
