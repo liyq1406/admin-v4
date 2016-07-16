@@ -107,7 +107,6 @@ export default {
     font-size 42px
     font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial
     font-weight 100
-    margin 10px 0
 
   & > .change
     absolute right 15px top 15px
@@ -157,12 +156,9 @@ export default {
     text-align center
 .x-statistic-left
   text-align left
-  & > .info
-    margin 0
-    font-size 42px
-    font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial
-    font-weight 100
-    margin 10px 0
+  padding 5px 15px 15px 40px
+  & > .tit
+    color gray-light
   & > .change
     position relative
     top -18px
@@ -170,4 +166,15 @@ export default {
   & > .info
   & > .change
     display inline-block
+
+.statistic-group
+  border-bottom 1px solid default-border-color
+
+.col-6 + .col-6
+  .x-statistic
+    &:after
+      absolute left top 15%
+      size 1px 70%
+      content ''
+      background #E5E5E5
 </style>

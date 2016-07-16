@@ -1,61 +1,21 @@
 <template>
   <div class="main device-details">
-    <!-- <div class="breadcrumb"><a v-link="{path: '/products/' + $route.params.product_id + '/devices' }"><i class="fa fa-arrow-circle-left"></i>{{ $t('ui.device.management') }}</a></div> -->
     <div class="main-title">
       <h3>设备详情</h3>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="row">
-      <div class="col-18">
-        <div class="device-status">
-          <div class="thumb"><img src="../../../../assets/images/device_thumb.png"/></div>
-          <div class="info">
-            <h2>加湿器</h2>
-            <div class="desc">
-              <span class="hl-green"></span>
-            </div>
+    <div class="panel mt15 mb20 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <info-card :info="deviceSummary"></info-card>
+          <info-list :info="deviceInfo"></info-list>
+        </div>
+        <div class="col-8 device-map with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
           </div>
+          <div id="device-map" class="mt10" style="height: 220px"></div>
         </div>
-        <ul class="device-details">
-          <li v-if="device.name">
-            <div class="label">设备名称:</div>
-            <div class="info">{{ device.name }}</div>
-          </li>
-          <li>
-            <div class="label">ID:</div>
-            <div class="info">{{ device.id }}</div>
-          </li>
-          <li>
-            <div class="label">MAC:</div>
-            <div class="info">{{ device.mac }}</div>
-          </li>
-          <li>
-            <div class="label">{{ $t('ui.device.is_active') }}:</div>
-            <div class="info">{{ device.is_active ? $t('ui.device.active') : $t('ui.device.not_active') }}</div>
-          </li>
-          <li>
-            <div class="label">{{ $t('ui.device.active_date') }}:</div>
-            <div class="info">{{ device.active_date | formatDate }}</div>
-          </li>
-          <li>
-            <div class="label">{{ $t('ui.device.is_online') }}:</div>
-            <div class="info"><span v-if="device.is_online" class="hl-green">{{ $t('common.online') }}</span><span v-else class="hl-red">{{ $t('common.offline') }}</span></div>
-          </li>
-          <li>
-            <div class="label">{{ $t('ui.device.firmware_version') }}:</div>
-            <div class="info"><span>{{ device.firmware_version }}</span></div>
-          </li>
-          <li>
-            <div class="label">所属经销商</div>
-            <div class="info"><span>华南-广州总部</span></div>
-          </li>
-        </ul>
-      </div>
-      <div class="col-6 device-map with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-        <div id="device-map" class="mt20" style="height: 192px"></div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
@@ -67,7 +27,8 @@
 import api from 'api'
 import * as config from 'consts/config'
 import Tab from 'components/Tab'
-import PicTxt from 'components/PicTxt'
+import InfoCard from 'components/InfoCard'
+import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import { globalMixins } from 'src/mixins'
 
@@ -79,12 +40,21 @@ export default {
   components: {
     Tab,
     Breadcrumb,
-    PicTxt
+    InfoCard,
+    InfoList
   },
 
   data () {
     return {
-      device: {},
+      deviceSummary: {},
+      deviceInfo: {
+        mac: {},
+        onlineLong: {},
+        isActive: {},
+        model: {},
+        sn: {},
+        id: {}
+      },
       secondaryNav: [],
       breadcrumbNav: [{
         label: '全部',
@@ -98,6 +68,8 @@ export default {
   route: {
     data (transition) {
       var deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
+      this.getDeviceInfo()
+
       return {
         secondaryNav: [{
           label: '设备状态',
@@ -173,7 +145,48 @@ export default {
     getDeviceInfo () {
       api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
         if (res.status === 200) {
-          this.device = res.data
+          // this.device = res.data
+          // console.log(res.data)
+
+          this.deviceInfo.mac = {
+            label: 'MAC',
+            value: res.data.mac
+          }
+          // TODO 接口字段缺失
+          this.deviceInfo.onlineLong = {
+            label: '累计在线时长',
+            value: '100小时'
+          }
+          this.deviceInfo.isActive = {
+            label: '激活状态',
+            value: res.data.is_active ? `已激活 ${res.data.active_date}` : '未激活'
+          }
+          // TODO 接口字段缺失
+          this.deviceInfo.model = {
+            label: '型号',
+            value: '暂无信息'
+          }
+          // TODO 接口字段缺失
+          this.deviceInfo.sn = {
+            label: '序列号',
+            value: '暂无信息'
+          }
+          this.deviceInfo.id = {
+            label: '设备ID',
+            value: res.data.id
+          }
+
+          api.product.getProduct(res.data.product_id).then((r) => {
+            if (r.status === 200) {
+              this.deviceSummary = {
+                title: res.data.name || r.data.name,
+                online: res.is_online,
+                time: res.last_login
+              }
+            }
+          }).catch((r) => {
+            this.handleError(r)
+          })
         }
       }).catch((res) => {
         this.handleError(res)

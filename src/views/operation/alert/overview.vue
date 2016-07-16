@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>告警概览</h3>
+      <h3>告警记录</h3>
     </div>
     <!-- <div class="tool-bar">
       <div class="tool-list fr">
@@ -24,33 +24,32 @@
       </div>
     </div> -->
     <div class="panel">
-      <div class="panel-hd">
-        <h2>趋势</h2>
-        <div class="leftbox">
-          <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
-        </div>
-      </div>
       <div class="panel-bd">
+        <div class="filter-bar">
+          <div class="filter-group fr">
+            <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+          </div>
+        </div>
         <div class="with-loading">
           <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
         </div>
-        <div class="row">
-          <div class="col-6">
-            <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')" align="left"></statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="alertSummary.message" :title="$t('ui.alert.statistic.message')" align="left"></statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="alertSummary.unread" :title="$t('ui.alert.statistic.unread')" align="left"></statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.message" :title="$t('ui.alert.statistic.message')" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.unread" :title="$t('ui.alert.statistic.unread')" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
       </div>
     </div>
     <div class="panel">
@@ -364,15 +363,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-@import '../../../assets/stylus/common'
-
-.col-6 + .col-6
-  .x-statistic
-    &:after
-      absolute left top 25%
-      size 1px 50%
-      content ''
-      background #E5E5E5
-</style>

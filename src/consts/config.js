@@ -39,7 +39,7 @@ export const API_SERVER = {
 }
 
 // 默认每页记录数
-export const COUNT_PER_PAGE = 5
+export const COUNT_PER_PAGE = 10
 
 // 高德地图 key
 export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'

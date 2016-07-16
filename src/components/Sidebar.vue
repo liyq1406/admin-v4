@@ -54,7 +54,6 @@ export default {
       result.forEach((item, index) => {
         var reg
         if (item.alias === 'products') {
-          console.log(item.id)
           reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')
         } else {
           reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
@@ -164,6 +163,9 @@ export default {
     & > .v-link-active
       font-weight bold
       color red
+
+      &:hover
+        color red
 
 .nav-aside-group
   margin-top 20px

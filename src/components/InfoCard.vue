@@ -1,0 +1,99 @@
+<template>
+  <div class="x-info-card">
+    <div class="thumb"><img :src="pic"/></div>
+    <div class="info">
+      <h3>{{ info.title }}</h3>
+      <div class="desc">
+        <span :class="{'on-line':info.online, 'off-line':!info.online}" v-text="info.online?'在线':'下线'"></span><span>{{ info.time }}</span>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import deviceThumb from '../assets/images/device_thumb.png'
+
+export default {
+  name: 'InfoCard',
+
+  props: {
+    // 图片
+    pic: {
+      type: String,
+      default: deviceThumb
+    },
+
+    // 信息
+    info: {
+      type: Object,
+      default () {
+        return {
+          title: '',
+          online: false,
+          time: ''
+        }
+      }
+    }
+  },
+
+  data () {
+    return {
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+@import '../assets/stylus/common'
+
+.x-info-card
+  clearfix()
+
+  .thumb
+    float left
+    size 60px
+
+    img
+      display block
+      size 100%
+
+  .info
+    margin-left 80px
+    padding-top 5px
+
+    h3
+      height 30px
+      font-weight normal
+      font-size 20px
+      margin 0
+
+    .desc
+      color gray-light
+      font-size 12px
+
+      span
+        line-height 20px
+        display inline-block
+        margin-right 15px
+
+      .on-line
+      .off-line
+        position relative
+        padding-left 12px
+
+        &:before
+          absolute left top 6px
+          content ''
+          size 8px
+          border-radius 10px
+          background-color #C3C3C3
+
+      .off-line
+        &:before
+          background-color #C3C3C3
+
+      .on-line
+        color green
+        &:before
+          background-color green
+</style>

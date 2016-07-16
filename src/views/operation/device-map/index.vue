@@ -473,7 +473,7 @@
         content.push(`<div class="info-row"><span class="label">设备ID: </span>${data.device.id}</div>`)
         content.push(`<div class="info-row"><span class="label">设备MAC: </span>${data.device.mac}</div>`)
         content.push(`<div class="info-row"><span class="label">在线状态: </span>${data.device.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>'}</div>`)
-        content.push(`<div class="info-row tar"><a class="hl-red" href="/#!/products/${this.currProduct.id}/devices/${data.device_id}">查看详情</a></div>`)
+        content.push(`<div class="info-row tar"><a class="hl-red" href="/#!/operation/products/${this.currProduct.id}/devices/${data.device_id}">查看详情</a></div>`)
         content.push('</div>')
         content.push('</div>')
         this.infoWindow.setContent(content.join(''))

@@ -132,7 +132,7 @@ export default {
 // 分页
 .v-pager
   font-size 0
-  margin-bottom 15px
+  margin-top 10px
   clearfix()
 
   .v-pager-control

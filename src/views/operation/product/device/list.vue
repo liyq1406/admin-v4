@@ -57,7 +57,7 @@
                   <td><span v-if="device.is_online" class="hl-green">{{ $t('ui.device_list.online') }}</span><span v-else class="hl-gray">{{ $t('ui.device_list.offline') }}</span></td>
                 </tr>
               </template>
-              <tr v-if="devices.length === 0 && !loadingData">
+              <tr v-if="devices.length === 0">
                 <td colspan="5" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
@@ -65,8 +65,8 @@
             </tbody>
           </table>
         </div>
-        <div class="row mb15">
-          <div class="col-6">
+        <div class="row">
+          <div class="col-6 mt10">
             <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost btn-sm"><i class="fa fa-list"></i>查看上下线历史记录</button>
           </div>
           <div class="col-18">
