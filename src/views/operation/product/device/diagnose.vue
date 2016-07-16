@@ -32,7 +32,9 @@
                 </td>
               </tr>
               <tr v-if="datapoints.length === 0">
-                <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+                <td colspan="4" class="tac">
+                  <range></range>
+                  <i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
                   <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
                 </td>
               </tr>
@@ -147,6 +149,7 @@
   import { globalMixins } from 'src/mixins'
   import locales from 'consts/locales/index'
   import Modal from 'components/Modal'
+  import Range from 'components/Range'
   import Select from 'components/Select'
 
   var socket = null
@@ -159,6 +162,7 @@
     components: {
       'switch': Switch,
       'v-select': Select,
+      'range': Range,
       'modal': Modal
     },
 
