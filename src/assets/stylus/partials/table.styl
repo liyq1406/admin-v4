@@ -38,6 +38,10 @@ table
     .text-label
       margin-right 6px
 
+  tr:last-child
+    td
+      border-bottom-color #CCC
+
 .table-stripe
   tbody
     tr:nth-child(2n+1)
@@ -50,14 +54,13 @@ table
 // 数据表格
 .data-table
   .filter-bar
-    clearfix()
     background #F5F5F5
     border 1px solid #E5E5E5
     border-width 1px 1px 0
     margin-top 15px
-    padding 5px 10px
-    // margin-bottom 20px
 
-    .v-select
-      display inline-block
-      vertical-align middle
+    h2
+      margin 0
+      font-size 12px
+      line-height 26px
+      font-weight normal
