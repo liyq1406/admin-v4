@@ -71,12 +71,11 @@ export default {
       year: 2016,
       month: 4,
       date: 3,
-      hour: '',
-      min: '',
+      hour: 0,
+      min: 0,
       years: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
       months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      dates: [],
-      isAble: false
+      dates: []
     }
   },
   methods: {
@@ -183,8 +182,8 @@ export default {
       if (date instanceof Date) {
         this.year = date.getFullYear()
         this.month = date.getMonth() + 1
-        this.hour = date.getHours().toString()
-        this.min = date.getMinutes().toString()
+        this.hour = date.getHours()
+        this.min = date.getMinutes()
         let thisyear = this.year
         this.years = this.years.map((val, index) => {
           return thisyear - 4 + index
@@ -200,7 +199,7 @@ export default {
   },
   computed: {
     isAble () {
-      return (this.year && this.month && this.date && this.hour.length <= 2 && this.min.length <= 2 && !isNaN(parseInt(this.hour)) && this.hour < 24 && this.hour >= 0 && this.min < 60 && this.min >= 0 && !isNaN(parseInt(this.min)))
+      return (this.year && this.month && this.date && !isNaN(this.hour) && this.hour < 24 && this.hour >= 0 && this.min < 60 && this.min >= 0 && !isNaN(this.min))
     }
   }
 }
