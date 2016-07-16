@@ -1,28 +1,30 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <div class="action-bar">
-        <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
-          <button slot="search-button" class="btn btn-primary" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
-          <label></label>
-        </search-box>
-      </div>
-
-      <div class="status-bar">
-        <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
-          <span slot="label">工单状态</span>
-          <select v-model="status" @change="getWarrantyList(true)">
-            <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
-            <p> {{status}}</p>
-          </select>
-        </v-select>
-
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
-      </div>
-
       <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-group fr">
+            <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
+              <button slot="search-button" class="btn btn-primary" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
+            </search-box>
+          </div>
+          <div class="filter-group">
+            <div class="filter-group-item">
+              <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
+                <span slot="label">工单状态</span>
+                <select v-model="status" @change="getWarrantyList(true)">
+                  <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
+                  <p> {{status}}</p>
+                </select>
+              </v-select>
+            </div>
+            <div class="filter-group-item">
+              <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
+            </div>
+          </div>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
@@ -126,69 +128,3 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  @import '../../../../assets/stylus/common'
-
-  ul.device-details
-    margin 20px 0
-
-    li
-      list-style none
-      line-height 32px
-
-      .label
-        display inline-block
-        width 103px
-
-      .info
-        display inline-block
-
-  .output-log
-    display block
-    height 360px
-    overflow auto
-    font-size 12px
-
-    .log
-      margin 10px 0
-
-    .time
-      margin-right 10px
-      color #999
-
-    .user
-      color orange
-
-    .msg
-      color #333
-
-    .msg-error
-      color red
-
-    .msg-success
-      color green
-  .device-details
-    .editModal1
-      .content-box
-        padding-bottom 30px
-        .content-value
-          padding-bottom 10px
-          .deviceParams
-            height 30px
-            font-size 14px
-    .editModal2
-    .editModal3
-      .content-box
-        .content-value
-          padding-bottom 10px
-          .paramsValue
-            height 32px
-            width 100%
-            line-height 32px
-            background none
-            border 1px solid default-border-color
-            box-sizing border-box
-            font-size 14px
-            padding 0 15px
-</style>

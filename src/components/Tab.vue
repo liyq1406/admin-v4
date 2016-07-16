@@ -59,7 +59,7 @@ export default {
 
 // 选项卡
 .tab
-  margin-top 15px
+  margin 15px 0
   padding 0 15px
   border-bottom 1px solid default-border-color
 

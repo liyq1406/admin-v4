@@ -8,13 +8,15 @@
       <div class="panel-bd row">
         <div class="col-16">
           <info-card :info="deviceSummary"></info-card>
-          <info-list :info="deviceInfo"></info-list>
+          <div v-stretch="182">
+            <info-list :info="deviceInfo"></info-list>
+          </div>
         </div>
         <div class="col-8 device-map with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
-          <div id="device-map" class="mt10" style="height: 220px"></div>
+          <div id="device-map" class="mt10 ml30" style="height: 220px"></div>
         </div>
       </div>
     </div>
@@ -105,7 +107,7 @@ export default {
         this.mapCenter = [res.data.lon, res.data.lat]
         if (typeof window.AMap === 'undefined') {
           var mapApi = document.createElement('script')
-          alert(`http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`)
+          // alert(`http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`)
           mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
           document.getElementsByTagName('body')[0].appendChild(mapApi)
         } else {
