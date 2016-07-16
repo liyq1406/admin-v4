@@ -5,7 +5,7 @@
       <div class="panel-hd">
         <h2>{{ $t('ui.user.details') }}</h2>
       </div>
-      <div class="panel-bd">
+      <!-- <div class="panel-bd">
         <ul class="info-details">
           <li class="row">
             <div class="col-3 label">{{ $t('ui.user.fields.id') }}:</div>
@@ -40,6 +40,20 @@
             <div class="col-21 info">{{ user.region_id }}</div>
           </li>
         </ul>
+      </div> -->
+      <div class="panel mt15 mb20 no-split-line">
+        <div class="panel-bd row">
+          <div class="col-16">
+            <info-card :info="userSummary"></info-card>
+            <info-list :info="userInfo"></info-list>
+          </div>
+          <div class="col-8 device-map with-loading">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <div id="user-map" class="mt10" style="height: 220px"></div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="panel">
@@ -84,6 +98,9 @@
 <script>
   import api from 'api'
   import { globalMixins } from 'src/mixins'
+  import Breadcrumb from 'components/Breadcrumb'
+  import InfoCard from 'components/InfoCard'
+  import InfoList from 'components/InfoList'
 
   export default {
     name: 'UserDetails',
@@ -91,13 +108,28 @@
     mixins: [globalMixins],
 
     components: {
-      'api': api
+      'api': api,
+      Breadcrumb,
+      InfoCard,
+      InfoList
     },
 
     data () {
       return {
         user: {}, // 用户信息
-        subDevices: [] // 用户绑定设备列表
+        subDevices: [], // 用户绑定设备列表
+        userSummary: {},
+        userInfo: {
+          status: {},
+          create_time: {},
+          email: {},
+          phone: {},
+          age: {},
+          sex: {},
+          area: {},
+          address: {},
+          Id: {}
+        }
       }
     },
 
@@ -112,11 +144,69 @@
       getUserInfo () {
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.user = res.data
+            // this.user = res.data
+            this.userInfo.status = {
+              label: '账号状态',
+              value: res.data.status - 1 ? '停用' : '启用'
+            }
+            this.userInfo.create_time = {
+              label: '创建时间',
+              value: this.formatDate(res.data.create_date)
+            }
+            // TODO 接口字段缺失
+            this.userInfo.email = {
+              label: '邮箱',
+              value: '12345@qq.com'
+            }
+            // TODO 接口字段缺失
+            this.userInfo.phone = {
+              label: '手机',
+              value: '13800138000'
+            }
+            // TODO 接口字段缺失
+            this.userInfo.age = {
+              label: '年龄',
+              value: '20'
+            }
+            // TODO 接口字段缺失
+            this.userInfo.sex = {
+              label: '性别',
+              value: '男'
+            }
+            // TODO 接口字段缺失
+            this.userInfo.area = {
+              label: '所在区域',
+              value: '广东省广州市天河区'
+            }
+            // TODO 接口字段缺失
+            this.userInfo.address = {
+              label: '详细地址',
+              value: '海珠区聚德路龙腾18园'
+            }
+            this.userInfo.Id = {
+              label: 'ID',
+              value: res.data.id
+            }
+            // TODO 接口字段缺失
+            this.userSummary = {
+              title: '用户昵称',
+              online: res.data.status - 1 ? '停用' : '启用',
+              time: this.formatDate(res.data.create_date)
+            }
           }
         }).catch((res) => {
           this.handleError(res)
         })
+      },
+
+      // 时间过滤器
+      formatDate (date) {
+        if (typeof date !== 'undefined' && date.length > 0) {
+          date = date.replace(/T/, ' ').replace(/Z/, '')
+          return date.replace(/\.\d+$/, '')
+        } else {
+          return date
+        }
       },
 
       getSubDevices () {

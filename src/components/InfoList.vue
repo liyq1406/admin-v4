@@ -1,9 +1,11 @@
 <template>
-  <div class="x-info-list">
-    <div class="x-info-list-item" v-for="(index, item) in info">
-      <div class="x-info-list-item-in">
-        <div class="x-label">{{ item.label }}</div>
-        <div class="x-val">{{ item.value }}</div>
+  <div class="x-info-list-wrap">
+    <div class="x-info-list">
+      <div class="x-info-list-item" v-for="(index, item) in info">
+        <div class="x-info-list-item-in">
+          <div class="x-label">{{ item.label }}</div>
+          <div class="x-val">{{ item.value }}</div>
+        </div>
       </div>
     </div>
   </div>
@@ -33,8 +35,12 @@ export default {
 <style lang="stylus">
 @import '../assets/stylus/common'
 
+.x-info-list-wrap
+  position relative
+  overflow hidden
+
 .x-info-list
-  margin-top 10px
+  margin-top -1px
   clearfix()
 
   .x-info-list-item
@@ -44,9 +50,8 @@ export default {
     box-sizing border-box
 
     .x-info-list-item-in
-      padding 8px 0
-      border-bottom 1px solid default-border-color
-      margin-right 30px
+      padding 8px 0 8px 8px
+      border-top 1px solid default-border-color
 
     .x-val
     .x-label
@@ -55,11 +60,11 @@ export default {
     .x-label
       color gray-light
 
-    /*&:nth-child(2n-1)
+    &:nth-child(2n-1)
       .x-info-list-item-in
         margin-right 15px
 
     &:nth-child(2n)
       .x-info-list-item-in
-        margin-left 15px*/
+        margin-left 15px
 </style>

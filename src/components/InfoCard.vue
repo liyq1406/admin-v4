@@ -47,6 +47,7 @@ export default {
 @import '../assets/stylus/common'
 
 .x-info-card
+  margin-bottom 10px
   clearfix()
 
   .thumb
