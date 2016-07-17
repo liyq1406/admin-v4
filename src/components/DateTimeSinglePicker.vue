@@ -8,13 +8,15 @@
 </template>
 
 <script>
-import DateTimePicker from './DateTimePicker'
+import DateTimePicker from 'components/DateTimePicker'
+import Dropdown from 'components/Dropdown'
 import {uniformDate} from '../filters'
 
 export default {
   name: 'timerangepicker',
   components: {
-    'date-time-picker': DateTimePicker
+    DateTimePicker,
+    Dropdown
   },
   props: {
     label: {

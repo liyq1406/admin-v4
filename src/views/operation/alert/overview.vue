@@ -3,31 +3,16 @@
     <div class="main-title">
       <h3>告警记录</h3>
     </div>
-    <!-- <div class="tool-bar">
-      <div class="tool-list fr">
-        <div class="tool-list-item">
-          <div class="trigger"><i class="fa fa-cog"></i><span class="trigger-text">设置</span></div>
-        </div>
-      </div>
-      <div class="tool-list">
-        <div class="tool-list-item">
-          <div class="trigger"><i class="fa fa-plus"></i><span class="trigger-text">添加规则</span></div>
-        </div>
-        <div class="tool-list-item">
-          <div class="trigger active"><span class="trigger-text">导出</span><i class="fa fa-caret-down"></i></div>
-          <div class="dropdown">
-            <ul class="action-list">
-              <li><a href="#">激活设备列表</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="panel">
       <div class="panel-bd">
         <div class="filter-bar">
           <div class="filter-group fr">
-            <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+            <div class="filter-group-item">
+              <date-time-range-picker></date-time-range-picker>
+            </div>
+            <div class="filter-group-item mr20">
+              <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+            </div>
           </div>
         </div>
         <div class="with-loading">
@@ -162,6 +147,8 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import Statistic from 'components/Statistic'
 import RadioGroup from 'components/RadioGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import dateFormat from 'date-format'
 import LineChart from 'components/charts/Line'
 import { globalMixins } from 'src/mixins'
@@ -176,7 +163,9 @@ export default {
     Modal,
     RadioGroup,
     LineChart,
-    Statistic
+    Statistic,
+    DateTimeRangePicker,
+    DateTimeSinglePicker
   },
 
   data () {
@@ -207,16 +196,20 @@ export default {
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: {
-          total: 0
+          total: 0,
+          change: 1
         },
         add_today: {
-          total: 0
+          total: 0,
+          change: -9
         },
         device: {
-          totoal: 0
+          totoal: 0,
+          change: 2
         },
         message: {
-          total: 0
+          total: 0,
+          change: 22
         }
       },
       alertTrends: [],

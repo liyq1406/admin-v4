@@ -1,6 +1,6 @@
 <template>
   <div class="time-range-picker-wrap">
-    <button @click='showChoosePanel=!showChoosePanel' class="time-range-show" readonly="readonly">{{timeShowPanel}}
+    <button @click='toggle' class="time-range-show" readonly="readonly">{{timeShowPanel}}
       <span class="fa fa-sort-down ml10"></span>
     </button>
     <div v-show='showChoosePanel' class="time-range-picker-panel">
@@ -44,7 +44,8 @@ export default {
       startTime: '',
       endTime: '',
       picker: 0, // 表示starttime在取值， 1表示endtime在取值,
-      defaultTime: new Date()
+      defaultTime: new Date(),
+      rect: {}
     }
   },
   computed: {
@@ -58,6 +59,9 @@ export default {
     this.endTime = curTime
   },
   methods: {
+    toggle () {
+      this.showChoosePanel = !this.showChoosePanel
+    },
     selectStartTime () {
       this.picker = 0
       this.defaultTime = this.startTime
@@ -79,6 +83,15 @@ export default {
     dispatchTime () {
       this.showChoosePanel = false
       this.$dispatch('timechange', this.startTime, this.endTime)
+    }
+  },
+  watch: {
+    showTimePicker () {
+      if (this.showTimePicker) {
+        this.showChoosePanel = false
+      } else {
+        this.showChoosePanel = true
+      }
     }
   }
 }
@@ -106,8 +119,9 @@ export default {
     z-index 99
     border 1px solid #DEDEDE
     position absolute
-    margin 10px -5px
+    margin 8px 0 0 -100px
     width 200px
+    left 50%
     .start-time, .end-time
       margin 10px 10px 8px 10px
       text-align center

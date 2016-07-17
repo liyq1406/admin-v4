@@ -1,5 +1,5 @@
 <template>
-  <div class="dateSelector" v-if="open">
+  <div class="x-date-time-selector" v-if="open">
     <div class="wrap year" v-if="yearShow">
       <ul>
         <li class="btn" @click="yearPre"><i class="fa fa-angle-up"></i></li>
@@ -31,7 +31,7 @@
       <ul>
         <li class="btn" @click="toggleToDate">{{ year + '年 ' + month + '月' + date + '日' }}</li>
       </ul>
-      <input type="tel" placeholder="00" v-model="hour"> : <input type="tel" placeholder="00" v-model="min">
+      <input type="tel" placeholder="00" v-model="hour" maxlength="2"> : <input type="tel" placeholder="00" v-model="min" maxlength="2">
       <div class="button" :class="{ able: isAble }" @click="checkNow">确定</div>
     </div>
     <div style="clear:both;margin-bottom:10px"></div>
@@ -75,7 +75,8 @@ export default {
       min: 0,
       years: [2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
       months: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
-      dates: []
+      dates: [],
+      rect: {}
     }
   },
   methods: {
@@ -162,6 +163,14 @@ export default {
       this.years = this.years.map((val, index) => {
         return this.years[0] + 3 + index
       })
+    },
+    resize () {
+      var el = document.querySelector('.x-date-time-selector')
+      this.rect.x = el.getBoundingClientRect().left + document.documentElement.scrollLeft
+      if (this.rect.x + 300 > document.body.clientWidth) {
+        el.style.left = 'auto'
+        el.style.right = '0'
+      }
     }
   },
   ready () {
@@ -195,6 +204,11 @@ export default {
     },
     'month': function () {
       this.updateDate()
+    },
+    'open': function () {
+      if (this.open) {
+        this.resize()
+      }
     }
   },
   computed: {
@@ -206,11 +220,10 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-.dateSelector {
-  position: relative;
-  top: 8px;
+.x-date-time-selector {
+  position: absolute;
   left: 50%;
-  margin-left: -150px;
+  margin: 8px 0 0 -150px;
   width: 300px;
   background: #FFF;
   border: 1px solid #ddd;
@@ -355,7 +368,7 @@ export default {
     }
   }
 
-  &:before {
+  /*&:before {
     position: relative;
     top: -6px;
     left: 50%;
@@ -369,6 +382,6 @@ export default {
     background: #FFF;
     display: block;
     transform: rotate(45deg);
-  }
+  }*/
 }
 </style>
