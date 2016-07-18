@@ -32,17 +32,10 @@
                 <td>{{ datapoint.name }}</td>
                 <td>{{ datapoint.description }}</td>
                 <td>
-                  <div class="control-box">
-                    <div class="radio-box" v-if="dataPointType(datapoint.type) === 'radio'">
-                      布尔值选择
-                    </div>
-                    <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
-                      数组输入框
-                    </div>
-                    <div class="range-box" v-if="dataPointType(datapoint.type) === 'range'">
-                      <range></range>
-                    </div>
-                  </div>
+                  <a @click="showEditDataPointModal(datapoint)">
+                    {{ dpVal(datapoint) }}
+                    <!-- {{ datapointValues[datapoint.index] ? datapointValues[datapoint.index] : '--' }} -->
+                  </a>
                 </td>
               </tr>
               <tr v-if="datapoints.length === 0">
@@ -80,6 +73,75 @@
         <!-- End: 设备日志-->
       </div>
     </div>
+    <!-- 布尔值浮层 -->
+    <modal :show.sync="editModal1.show" @close="editModal1.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal1">
+        <form @submit.prevent="setDataEvent(editModal1)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal1.name}}：</label>
+              <div class="controls col-18">
+                <v-select :label="editModal1.value? 'true' : 'false'" placeholder="请选择" :size="'normal'">
+                  <select name="deviceParams" v-model="editModal1.value" class="deviceParams">
+                    <option :value="true">true</option>
+                    <option :value="false">false</option>
+                  </select>
+                </v-select>
+              </div>
+              <!-- <span class="name">{{editModal1.name}}：</span> -->
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal1.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 数字类型浮层 -->
+    <modal :show.sync="editModal2.show" @close="editModal2.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal2">
+        <form v-form name="validation2" @submit.prevent="setDataEvent(editModal2)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal2.name}}：</label>
+              <div class="controls col-18">
+                <input type="text" v-form-ctrl name="paramsValue" number custom-validator="isNumber" class="paramsValue" v-model="editModal2.value">
+              </div>
+            </div>
+            <div v-show="validation2.paramsValue.$dirty" class="form-tips form-tips-error">
+              <span v-show="validation2.paramsValue.$error.customValidator">{{editModal2.name}}必须是数字</span>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal2.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 字符串 -->
+    <modal :show.sync="editModal3.show" @close="editModal3.show = false" width="360px">
+      <h3 slot="header">设置参数</h3>
+      <div slot="body" class="form editModal editModal3">
+        <form @submit.prevent="setDataEvent(editModal3)">
+          <div class="content-box">
+            <div class="content-value form-row row">
+              <label class="form-control col-6">{{editModal3.name}}：</label>
+              <div class="controls col-18">
+                <input type="text" number class="paramsValue" v-model="editModal3.value">
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="editModal3.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="settingData" :class="{'disabled':settingData}" v-text="settingData ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -92,6 +154,7 @@ import io from 'socket.io-client'
 import dateFormat from 'date-format'
 import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
+import Modal from 'components/Modal'
 import Range from 'components/Range'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
@@ -107,6 +170,7 @@ export default {
     'v-select': Select,
     Switch,
     Range,
+    Modal,
     SearchBox
   },
 
@@ -114,6 +178,25 @@ export default {
     return {
       query: '',
       searching: false,
+      editModal1: {
+        show: false,
+        name: '布尔',
+        value: false,
+        type: 1
+      },
+      editModal2: {
+        show: false,
+        name: '数字',
+        value: 0,
+        type: 2
+      },
+      validation2: {},
+      editModal3: {
+        show: false,
+        name: '字符串',
+        value: '0',
+        type: 6
+      },
       settingData: false,
       device: {},
       datapoints: [],
@@ -292,6 +375,46 @@ export default {
     },
 
     /**
+     * 编辑数据端点
+     * @param  {[type]} dataPoint [description]
+     * @return {[type]}           [description]
+     */
+    showEditDataPointModal (dataPoint) {
+      var self = this
+      switch (dataPoint.type) {
+        // 布尔
+        case 1:
+          self.editModal1.name = dataPoint.name
+          self.editModal1.value = Boolean(self.datapointValues[dataPoint.index] && self.datapointValues[dataPoint.index].value)
+          self.editModal1.type = dataPoint.type
+          self.editModal1.index = dataPoint.index
+          self.editModal1.show = true
+          break
+        // 数字
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+          self.editModal2.name = dataPoint.name
+          self.editModal2.value = Number(self.datapointValues[dataPoint.index] && self.datapointValues[dataPoint.index].value) || null
+          self.editModal2.type = dataPoint.type
+          self.editModal2.index = dataPoint.index
+          self.editModal2.show = true
+          break
+        // 字符串
+        case 6:
+          self.editModal3.name = dataPoint.name
+          self.editModal3.value = self.datapointValues[dataPoint.index] && self.datapointValues[dataPoint.index].value || ''
+          self.editModal3.type = dataPoint.type
+          self.editModal3.index = dataPoint.index
+          self.editModal3.show = true
+          break
+        default:
+          console.log('出错')
+      }
+    },
+
+    /**
      * 验证是否为数字
      * @param  {[type]}  value [description]
      * @return {Boolean}       [description]
@@ -305,42 +428,44 @@ export default {
     },
 
     /**
-     * 计算当前类型
-     * @param  {[type]} type [description]
-     * @return {[type]}      [description]
+     * 关闭编辑浮层
+     * @return {[type]} [description]
      */
-    dataPointType (type) {
-      return 'range'
-    }
+    closeEditModal () {
+      this.editModal1.show = false
+      this.editModal2.show = false
+      this.editModal3.show = false
+      this.settingData = false
+    },
     /**
      * 数据端点编辑 提交表单
      */
-    // setDataEvent (editModal) {
-    //   if (this.editModal2.show === false || this.validation2.$valid) {
-    //     var params = {
-    //       datapoint: [
-    //         {
-    //           index: editModal.index,
-    //           value: editModal.value
-    //         }
-    //       ]
-    //     }
-    //     if (this.editModal3.show === true) {
-    //       params.datapoint[0].value = String(params.datapoint[0].value)
-    //     }
-    //     this.settingData = true
-    //     api.diagnosis.setDeviceAttribute(this.$route.params.device_id, params).then((res) => {
-    //       this.closeEditModal()
-    //       if (res.status === 200) {
-    //         this.getDatapointValues()
-    //         this.getDatapoints()
-    //       }
-    //     }).catch((res) => {
-    //       this.closeEditModal()
-    //       this.handleError(res)
-    //     })
-    //   }
-    // }
+    setDataEvent (editModal) {
+      if (this.editModal2.show === false || this.validation2.$valid) {
+        var params = {
+          datapoint: [
+            {
+              index: editModal.index,
+              value: editModal.value
+            }
+          ]
+        }
+        if (this.editModal3.show === true) {
+          params.datapoint[0].value = String(params.datapoint[0].value)
+        }
+        this.settingData = true
+        api.diagnosis.setDeviceAttribute(this.$route.params.device_id, params).then((res) => {
+          this.closeEditModal()
+          if (res.status === 200) {
+            this.getDatapointValues()
+            this.getDatapoints()
+          }
+        }).catch((res) => {
+          this.closeEditModal()
+          this.handleError(res)
+        })
+      }
+    }
   }
 }
 </script>
