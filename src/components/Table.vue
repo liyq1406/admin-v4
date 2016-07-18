@@ -3,8 +3,6 @@
     <div class="icon-loading" v-show="loading">
       <i class="fa fa-refresh fa-spin"></i>
     </div>
-    <slot name="filter-container">
-    </slot>
     <table class="table table-stripe table-bordered">
       <thead>
         <tr>
@@ -13,12 +11,14 @@
           </th>
           <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType || tHeader.pointer}" @click="theaderClick(tHeader, $index)">
             <div class="theader-box">
-              {{{tHeader.title}}}
-              <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
-              <div class="sort-box" v-if="tHeader.sortType">
-                <i class="fa fa-caret-up" :class="{'gray': tHeader.sortType!==1}"></i>
-                <i class="fa fa-caret-down" :class="{'gray': tHeader.sortType===1}"></i>
-              </div>
+              <slot :name="'theader-' + hump2line(tHeader.key)">
+                {{{tHeader.title}}}
+                <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
+                <div class="sort-box" v-if="tHeader.sortType">
+                  <i class="fa fa-caret-up" :class="{'gray': tHeader.sortType!==1}"></i>
+                  <i class="fa fa-caret-down" :class="{'gray': tHeader.sortType===1}"></i>
+                </div>
+              </slot>
             </div>
           </th>
         </tr>
@@ -102,8 +102,8 @@
       // 参数是当前的已经选择的header对象和table对象 以及当前表格table在列表中的索引index
     /** **************************************/
     /** *************组件对外暴露slot*************************/
-      // 表格上方
-      // 名字： filter-container
+      // 表格头部内容
+      // 名字： theader-{{key}}
     /** **************************************/
     props: {
       page: {
@@ -246,8 +246,7 @@
        * @return {[type]}         [description]
        */
       theaderClick (theader, index) {
-        var key = theader.key
-        key = key.replace(/([A-Z])/g, '-$1').toLowerCase()
+        var key = this.hump2line(theader.key)
         this.$emit('theader-' + key, theader, index)
       },
 
@@ -258,9 +257,16 @@
        * @return {[type]}         [description]
        */
       tbodyClick (theader, table, lineIndex) {
-        var key = theader.key
-        key = key.replace(/([A-Z])/g, '-$1').toLowerCase()
+        var key = this.hump2line(theader.key)
         this.$emit('tbody-' + key, theader, table, lineIndex)
+      },
+      /**
+       * 驼峰字符串转普通中划线字符串
+       * @param  {[type]} humpName [description]
+       * @return {[type]}          [description]
+       */
+      hump2line (humpName) {
+        return humpName.replace(/([A-Z])/g, '-$1').toLowerCase()
       },
 
       /**
