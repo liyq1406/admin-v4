@@ -618,11 +618,54 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        'alerts/record/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/alert/record/index'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 告警历史
+            'history': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/alert/record/history'))
+                }, 'admin')
+              }
+            },
+            // 维保记录
+            'warranty': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/alert/record/warranty'))
+                }, 'admin')
+              }
+            }
+          }
+        },
         // 规则设置
         'alerts/settings': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/alert/settings'))
+            }, 'admin')
+          }
+        },
+
+        // 告警分析
+        'alerts/analysis': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/alert/analysis'))
+            }, 'admin')
+          }
+        },
+
+        // 热力分布
+        'alerts/heat': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/alert/heat-distribution'))
             }, 'admin')
           }
         },

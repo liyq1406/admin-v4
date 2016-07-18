@@ -146,6 +146,24 @@ export var tooltip = {
 export var stretch = {
   bind () {
     var self = this
+
+    var getComputedStyle = function (obj, attr) {
+      if (obj.currentStyle) {
+        return obj.currentStyle[attr]
+      } else {
+        return window.getComputedStyle(obj, false)[attr]
+      }
+    }
+
+    window.onload = function () {
+      self.$maxHeight = parseInt(getComputedStyle(self.$wrapDiv, 'height'))
+
+      if (self.$maxHeight > self.$minHeight) {
+        self.el.appendChild(self.$bottomBar)
+        self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
+      }
+    }
+
     var bindListener = function (a) {
       a.addEventListener('click', function (event) {
         if (!a.status) {
@@ -176,6 +194,7 @@ export var stretch = {
         wrapDiv.appendChild(node)
         node = temp
       }
+
       el.appendChild(wrapDiv)
       self.$wrapDiv = wrapDiv // 绑定wrap div 元素到指令对象上
 
@@ -195,15 +214,17 @@ export var stretch = {
 
       bindListener(a)
       div.appendChild(a)
-      el.appendChild(div)
+      self.$bottomBar = div
+      // el.appendChild(div)
     }
     domInit(this.el)
   },
 
   update (value) {
     this.$minHeight = parseInt(value)
-    this.$wrapDiv.style.height = this.$minHeight.toString() + 'px'
   },
 
-  unbind () {}
+  unbind () {
+    window.onload = null
+  }
 }

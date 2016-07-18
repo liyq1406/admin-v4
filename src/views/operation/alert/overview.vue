@@ -3,18 +3,30 @@
     <div class="main-title">
       <h3>告警记录</h3>
     </div>
-    <div class="panel">
-      <div class="panel-bd">
-        <div class="filter-bar">
-          <div class="filter-group fr">
-            <div class="filter-group-item">
-              <date-time-range-picker></date-time-range-picker>
-            </div>
-            <div class="filter-group-item mr20">
-              <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
-            </div>
+    <div class="filter-bar alert-overview-filter-bar-head">
+      <div class="filter-group fl">
+        <div class="filter-group-item ml20">
+          <v-select label="空气净化器" width='110px'>
+            <span slot="label">产品</span>
+          </v-select>
+        </div>
+      </div>
+      <div class="filter-group fr">
+        <div class="filter-group-item mt5">
+          <div class="alert-overview-share-btn mr20 fr">
+            <a class="fa fa- fa-share-square-o"></a>
           </div>
         </div>
+        <div class="filter-group-item mt5 mr15">
+          <date-time-range-picker></date-time-range-picker>
+        </div>
+        <div class="filter-group-item mr20 mt5">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-bd">
         <div class="with-loading">
           <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
           <div class="icon-loading" v-show="loadingData">
@@ -38,10 +50,24 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
-        <h2>{{ $t("ui.alert.info") }}</h2>
-      </div>
       <div class="panel-bd">
+        <div class="filter-bar alert-overview-filter-bar">
+          <div class="filter-group fl">
+            <div class="filter-group-item mr20 mt5">
+              <span style="font-size: 12px; font-weight:700; color:#666666">明细</span>
+            </div>
+          </div>
+          <div class="filter-group fr">
+            <div class="filter-group-item mr20 mt5">
+              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
+                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+              <div class="alert-overview-share-btn ml20">
+                <a class="fa fa- fa-share-square-o"></a>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
@@ -146,7 +172,9 @@ import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import Statistic from 'components/Statistic'
-import RadioGroup from 'components/RadioGroup'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import Select from 'components/Select'
+import SearchBox from 'components/SearchBox'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import dateFormat from 'date-format'
@@ -161,15 +189,18 @@ export default {
   components: {
     Pager,
     Modal,
-    RadioGroup,
+    RadioButtonGroup,
     LineChart,
     Statistic,
     DateTimeRangePicker,
-    DateTimeSinglePicker
+    DateTimeSinglePicker,
+    'v-select': Select,
+    SearchBox
   },
 
   data () {
     return {
+      key: '',
       alerts: [],
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
@@ -190,26 +221,39 @@ export default {
         tags: ''
       },
       period: 7,
-      periods: locales[Vue.config.lang].data.PERIODS,
+      periods: [
+        {
+          value: 1,
+          label: '24h'
+        },
+        {
+          value: 7,
+          label: '7天'
+        },
+        {
+          value: 30,
+          label: '30天'
+        }
+      ],
       product_id: '',
       alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: {
           total: 0,
-          change: 1
+          change: 0
         },
         add_today: {
           total: 0,
-          change: -9
+          change: 0
         },
         device: {
           totoal: 0,
-          change: 2
+          change: 0
         },
         message: {
           total: 0,
-          change: 22
+          change: 0
         }
       },
       alertTrends: [],
@@ -356,3 +400,25 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+.alert-overview-filter-bar-head
+  border-top solid 1px #CCCCCC
+  border-bottom solid 1px #CCCCCC
+  background-color #F2F2F2
+.alert-overview-filter-bar
+  background-color #F2F2F2
+  border-top solid 1px #CCCCCC
+  border-left solid 1px #CCCCCC
+  border-right solid 1px #CCCCCC
+  height 45px
+  margin-top 15px
+.alert-overview-share-btn
+  width 24px
+  display inline-block
+  line-height 24px
+  border solid 1px #BCBCBC
+  vertical-align middle
+  font-size 18px
+  text-align center
+</style>

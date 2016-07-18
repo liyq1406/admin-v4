@@ -1,11 +1,13 @@
 <template>
   <div class="x-info-card">
     <div class="thumb"><img :src="pic"/></div>
-    <div class="info">
-      <h3>{{ info.title }}</h3>
-      <div class="desc">
-        <span :class="{'on-line':info.online, 'off-line':!info.online}" v-text="info.online?'在线':'下线'"></span><span>{{ info.time }}</span>
-      </div>
+    <div class="info">  
+      <slot>
+        <h3>{{ info.title }}</h3>
+        <div class="desc">
+          <span :class="{'on-line':info.online, 'off-line':!info.online}" v-text="info.online?'在线':'下线'"></span><span>{{ info.time }}</span>
+        </div>
+      </slot>
     </div>
   </div>
 </template>
