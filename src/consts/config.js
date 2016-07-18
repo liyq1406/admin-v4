@@ -76,11 +76,8 @@ export const MAIN_NAV = {
       alias: 'alerts', // 告警服务
       icon: 'bell',
       subs: [{
-        alias: 'overview',
-        url: '/alerts/overview'
-      }, {
-        alias: 'settings',
-        url: '/alerts/settings'
+        alias: 'record',
+        url: '/alerts/record'
       }]
     }, {
       alias: 'linkage', // 设备互联

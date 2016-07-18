@@ -33,8 +33,7 @@ export default {
         alerts: {
           label: '告警服务',
           subs: {
-            overview: '概览',
-            settings: '规则设置'
+            record: '告警记录'
           }
         },
         linkage: {

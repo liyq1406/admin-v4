@@ -610,18 +610,18 @@ let configRouter = (router) => {
         },
 
         // -------------------------告警服务-------------------------
-        // 概览
-        'alerts/overview': {
+        // 告警记录
+        'alerts/record': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/alert/overview'))
+              resolve(require('./views/operation/alert/record'))
             }, 'admin')
           }
         },
-        'alerts/record/:id': {
+        'alerts/detail': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/alert/record/index'))
+              resolve(require('./views/operation/alert/detail/index'))
             }, 'admin')
           },
           subRoutes: {
@@ -629,7 +629,7 @@ let configRouter = (router) => {
             'history': {
               component (resolve) {
                 require.ensure([], (require) => {
-                  resolve(require('./views/operation/alert/record/history'))
+                  resolve(require('./views/operation/alert/detail/history'))
                 }, 'admin')
               }
             },
@@ -637,7 +637,7 @@ let configRouter = (router) => {
             'warranty': {
               component (resolve) {
                 require.ensure([], (require) => {
-                  resolve(require('./views/operation/alert/record/warranty'))
+                  resolve(require('./views/operation/alert/detail/warranty'))
                 }, 'admin')
               }
             }
@@ -1079,7 +1079,8 @@ let configRouter = (router) => {
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
-    '/operation/alerts': '/operation/alerts/overview',
+    '/operation/alerts': '/operation/alerts/record',
+    '/operation/alerts/detail': '/operation/alerts/detail/history',
     '/operation/linkage': '/operation/linkage/devices'
   })
 
