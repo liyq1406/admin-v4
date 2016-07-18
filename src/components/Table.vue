@@ -11,7 +11,7 @@
           <th v-show="selecting" class="tac">
             <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
           </th>
-          <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType}" @click="theaderClick(tHeader, $index)">
+          <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType || tHeader.pointer}" @click="theaderClick(tHeader, $index)">
             <div class="theader-box">
               {{{tHeader.title}}}
               <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
@@ -60,7 +60,8 @@
       //     title: 'ID', // 标题的内容 （必须）
       //     class: 'tac', // 传入className 自动加入整一列中 多个类名用空格隔开 （非必须）
       //     sortType: -1, // 排序 传入1为升序 0为不排序  其他为降序 （非必须）
-      //     tooltip: '提示' // 提示浮层显示内容 （非必须）
+      //     tooltip: '提示', // 提示浮层显示内容 （非必须）
+      //     pointer: true, // 是否显示可点 （非必须）
       //   },
       //   {
       //     key: 'creatTime', // 与tables的key对应 （必须）

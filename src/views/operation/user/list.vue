@@ -48,9 +48,9 @@
           </table>
         </div>
         <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
-        <c-table :headers="table.headers" :tables="table.tables" @theader-update-time="test" @tbody-update-time="test" :loading="true">
+        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-update-time="test" @tbody-nickname="goDetails" :loading="true">
           <div class="filter-container" slot="filter-container">
-            头部内容
+            筛选框预留位置
           </div>
         </c-table>
       </div>
@@ -89,58 +89,69 @@
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
-        table: {
-          headers: [
-            {
-              key: 'id', // 与tables的key对应
-              title: 'ID', // 标题的内容
-              class: 'tac' // 传入className 自动加入整一列中
-            },
-            {
-              key: 'creatTime',
-              title: '创建时间',
-              class: 'tac',
-              sortType: -1
-            },
-            {
-              key: 'updateTime',
-              title: '更新时间',
-              sortType: 0,
-              tooltip: '提示'
-            },
-            {
-              key: 'creater',
-              title: '创建者'
-            }
-          ],
-          tables: [
-            {
-              id: '<a href="">idididid</a>',
-              creatTime: '123',
-              updateTime: '更新时间',
-              creater: '创建者1',
-              operation: '操作'
-            },
-            {
-              id: 'idididid',
-              creatTime: '创建时间',
-              updateTime: '更新时间',
-              creater: '创建者2',
-              operation: '操作'
-            }
-          ]
-        }
-      }
-    },
-
-    route: {
-      data () {
-        this.getUsers()
-        // this.getUsers1()
+        headers: [
+          {
+            key: 'nickname', // 与tables的key对应
+            title: '昵称' // 标题的内容
+          },
+          {
+            key: 'account',
+            title: '帐号'
+          },
+          {
+            key: 'create_date',
+            title: '创建时间',
+            tooltip: '提示内容'
+          },
+          {
+            key: 'from',
+            class: 'tac',
+            title: '来源'
+          },
+          {
+            key: 'state',
+            title: '状态',
+            class: 'tac',
+            sortType: '-1'
+          },
+          {
+            key: 'expand',
+            title: '拓展',
+            class: 'tac',
+            pointer: true
+          }
+        ]
       }
     },
 
     computed: {
+      /**
+       * 传入智能表格的分页对象
+       * @return {[type]} [description]
+       */
+      page () {
+        var result = {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
+        return result
+      },
+      // 传入智能表格的数据对象
+      tables () {
+        var result = []
+        this.users.map((user) => {
+          var table = {}
+          for (let key in user) {
+            if (user.hasOwnProperty(key)) {
+              table[key] = user[key]
+            }
+          }
+          table.nickname = '<a style="color: #c0252e">' + user.nickname + '</a>'
+          result.push(table)
+        })
+        return result
+      },
       queryCondition () {
         var condition = {
           filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
@@ -158,10 +169,20 @@
       }
     },
 
+    route: {
+      data () {
+        // this.getUsers()
+        this.getUsers1()
+      }
+    },
+
     methods: {
       test (a, b) {
         console.log(a)
         console.log(b)
+      },
+      goDetails (header, table, index) {
+        this.$route.router.go('/operation/users/' + table.id)
       },
       /**
        * 获取假用户数据
@@ -170,84 +191,22 @@
       getUsers1 () {
         var users = [
           {
-            id: '2786121657641',
-            nickname: '盛志',
-            account: '13585634347',
-            create_date: '2014-06-24 16:22:37',
-            source: 2,
-            phone_valid: true
+            id: 'asdjlkahf',
+            nickname: 'idididid',
+            account: '1155028391',
+            create_date: '2016-1-1 19:21:32',
+            from: 'iOS',
+            state: '下线',
+            expand: '暂未定义'
           },
           {
-            id: '7861231657894',
-            nickname: '黄工',
-            account: '13085347634',
-            create_date: '2015-12-11 16:22:12',
-            source: 1,
-            phone_valid: true
-          },
-          {
-            id: '1657894786123',
-            nickname: '黄妲',
-            account: '13634085347',
-            create_date: '2016-08-24 12:02:57',
-            source: 3,
-            phone_valid: true
-          },
-          {
-            id: '6578978681434',
-            nickname: '豆腐',
-            account: '13534077642',
-            create_date: '2015-02-24 12:32:37',
-            source: 3,
-            phone_valid: false
-          },
-          {
-            id: '7861231657894',
-            nickname: '黄工',
-            account: '13085347634',
-            create_date: '2015-12-11 16:22:12',
-            source: 1,
-            phone_valid: true
-          },
-          {
-            id: '1657894786123',
-            nickname: '小龙',
-            account: '13634085347',
-            create_date: '2016-08-24 12:02:57',
-            source: 3,
-            phone_valid: true
-          },
-          {
-            id: '6578937861434',
-            nickname: 'dms',
-            account: '13534077648',
-            create_date: '2015-02-24 12:32:37',
-            source: 3,
-            phone_valid: false
-          },
-          {
-            id: '7861231657894',
-            nickname: '美博',
-            account: '13085347635',
-            create_date: '2015-12-11 16:22:12',
-            source: 1,
-            phone_valid: true
-          },
-          {
-            id: '1657894786123',
-            nickname: 'exlink',
-            account: '13634085347',
-            create_date: '2016-08-24 12:02:57',
-            source: 3,
-            phone_valid: true
-          },
-          {
-            id: '6578978614347',
-            nickname: 'javelin',
-            account: '13534077645',
-            create_date: '2015-02-24 12:32:37',
-            source: 3,
-            phone_valid: true
+            id: '1634a56sd45',
+            nickname: '<a style="color: #c0252e">idididid</a>',
+            account: '1155028391',
+            create_date: '2016-1-1 19:21:32',
+            from: 'iOS',
+            state: '下线',
+            expand: '暂未定义'
           }
         ]
         this.users = users
