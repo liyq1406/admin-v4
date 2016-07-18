@@ -119,12 +119,14 @@ export default {
     z-index 99
     border 1px solid #DEDEDE
     position absolute
-    margin 8px 0 0 -100px
+    margin 1px 0 0 -101px
     width 200px
+    box-sizing border-box
     left 50%
     .start-time, .end-time
       margin 10px 10px 8px 10px
       text-align center
+      font-size 12px
       .time
         margin-left 5px
         padding 0 10px
@@ -140,7 +142,7 @@ export default {
       button
         float right
         margin 0 10px 6px
-        font-size 10px
+        font-size 12px
         border none
         background-color #F7F7F7
         border 1px solid #EEEEEE

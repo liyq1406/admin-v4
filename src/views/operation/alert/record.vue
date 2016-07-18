@@ -5,22 +5,22 @@
     </div>
     <div class="filter-bar alert-overview-filter-bar-head">
       <div class="filter-group fl">
-        <div class="filter-group-item ml20">
-          <v-select label="空气净化器" width='110px'>
+        <div class="filter-group-item">
+          <v-select label="空气净化器" width="110px" size="small">
             <span slot="label">产品</span>
           </v-select>
         </div>
       </div>
       <div class="filter-group fr">
-        <div class="filter-group-item mt5">
-          <div class="alert-overview-share-btn mr20 fr">
+        <div class="filter-group-item">
+          <div class="alert-overview-share-btn fr">
             <a class="fa fa- fa-share-square-o"></a>
           </div>
         </div>
-        <div class="filter-group-item mt5 mr15">
+        <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
         </div>
-        <div class="filter-group-item mr20 mt5">
+        <div class="filter-group-item">
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
@@ -49,28 +49,31 @@
         <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt15">
       <div class="panel-bd">
-        <div class="filter-bar alert-overview-filter-bar">
-          <div class="filter-group fl">
-            <div class="filter-group-item mr20 mt5">
-              <span style="font-size: 12px; font-weight:700; color:#666666">明细</span>
-            </div>
-          </div>
-          <div class="filter-group fr">
-            <div class="filter-group-item mr20 mt5">
-              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
-                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-              </search-box>
-              <div class="alert-overview-share-btn ml20">
-                <a class="fa fa- fa-share-square-o"></a>
-              </div>
-            </div>
-          </div>
-        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <!-- <div class="filter-group fl">
+              <div class="filter-group-item">
+                <span style="font-size: 12px; font-weight:700; color:#666666">明细</span>
+              </div>
+            </div> -->
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <div class="alert-overview-share-btn">
+                  <a class="fa fa- fa-share-square-o"></a>
+                </div>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
+                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+            <h2>明细</h2>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -406,13 +409,6 @@ export default {
   border-top solid 1px #CCCCCC
   border-bottom solid 1px #CCCCCC
   background-color #F2F2F2
-.alert-overview-filter-bar
-  background-color #F2F2F2
-  border-top solid 1px #CCCCCC
-  border-left solid 1px #CCCCCC
-  border-right solid 1px #CCCCCC
-  height 45px
-  margin-top 15px
 .alert-overview-share-btn
   width 24px
   display inline-block

@@ -67,7 +67,7 @@
         </div>
         <div class="row">
           <div class="col-6 mt10">
-            <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost btn-sm"><i class="fa fa-list"></i>查看上下线历史记录</button>
+            <button v-link="{path: '/products/' + this.$route.params.id + '/records'}" class="btn btn-ghost btn-sm"><i class="fa fa-list"></i><span class="btn-txt">查看上下线历史记录</span></button>
           </div>
           <div class="col-18">
             <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDevices"></pager>

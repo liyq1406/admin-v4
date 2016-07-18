@@ -532,8 +532,8 @@
   @import '../../../assets/stylus/common'
 
   .device-map-page
-    absolute left 10px right 10px top 10px bottom 10px
-    padding 0 20px
+    absolute left right top bottom
+    padding 0 15px
     margin 0
 
     .panel-hd
@@ -543,6 +543,11 @@
     .device-list-wrap
       width 308px
       min-height 200px
+
+      .action-bar
+        border 1px solid #DDD
+        padding 10px
+        background-color #F8F8F8
 
       .search-box
         float left
@@ -555,7 +560,7 @@
             width 144px
 
     .device-list
-      absolute left 20px top 121px bottom
+      absolute left 15px top 121px bottom
       width 308px
       overflow auto
 
@@ -599,7 +604,7 @@
           background-position 0 -284px
 
     .device-map
-      absolute left 348px top 69px right 20px bottom 20px
+      absolute left 338px top 64px right 15px bottom 15px
 
   .device-map
     .map-marker

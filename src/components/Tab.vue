@@ -84,7 +84,7 @@ export default {
       &.v-link-active
         height 28px
         background-color #fff
-        border 1px solid #e5e5e5
+        border 1px solid default-border-color
         border-bottom none!important
         position relative
         bottom -1px

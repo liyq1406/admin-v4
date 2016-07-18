@@ -223,7 +223,7 @@ export default {
 .x-date-time-selector {
   position: absolute;
   left: 50%;
-  margin: 8px 0 0 -150px;
+  margin: 1px 0 0 -150px;
   width: 300px;
   background: #FFF;
   border: 1px solid #ddd;

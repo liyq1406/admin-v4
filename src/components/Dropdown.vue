@@ -70,7 +70,6 @@ export default {
   },
 
   ready () {
-    console.log(this.dropdownWidth)
     this.$dispatch('dropdown-created', this)
     this._closeEvent = EventListener.listen(window, 'click', (e) => {
       if (!this.$el.contains(e.target)) {
@@ -83,9 +82,6 @@ export default {
       this.rect.x = this.$el.getBoundingClientRect().left + document.documentElement.scrollLeft
       this.rect.y = this.$el.getBoundingClientRect().top + document.documentElement.scrollTop
 
-      console.log(this.rect.x + this.dropdownWidth)
-      console.log(this.dropdownWidth)
-      console.log(document.body.clientWidth)
       if (this.rect.x + this.dropdownWidth > document.body.clientWidth) {
         this.pos = 'align-bottom-right'
       }

@@ -4,8 +4,8 @@
       <div class="product-card">
         <div class="thumb"><img src="../../../assets/images/device_thumb.png"/></div>
         <div class="info">
-          <h2>{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h2>
-          <div class="desc">{{ currentProduct.description }}</div>
+          <h2>{{ product.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h2>
+          <div class="desc">{{ product.description }}</div>
           <div class="row statistic">
             <div class="col-6">
               <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
@@ -206,7 +206,7 @@ import locales from 'consts/locales/index'
 import api from 'api'
 import Mock from 'mockjs'
 import store from 'store/index'
-import { removeProduct, updateProduct, setCurrProduct } from 'store/actions/products'
+import { removeProduct, updateProduct } from 'store/actions/products'
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import Panel from 'components/Panel'
@@ -231,13 +231,10 @@ export default {
   store,
 
   vuex: {
-    getters: {
-      currentProduct: ({ products }) => products.curr
-    },
     actions: {
       removeProduct,
-      updateProduct,
-      setCurrProduct
+      updateProduct
+      // setCurrProduct
     }
   },
 
@@ -371,11 +368,11 @@ export default {
     }
   },
 
-  computed: {
-    isProduct1 () {
-      return this.currentProduct.id === '1607d2ae72fd4a001607d2ae72fd4a01'
-    }
-  },
+  // computed: {
+  //   isProduct1 () {
+  //     return this.currentProduct.id === '1607d2ae72fd4a001607d2ae72fd4a01'
+  //   }
+  // },
 
   route: {
     data () {
@@ -872,7 +869,7 @@ export default {
                 this.product = res.data
                 this.resetEdit()
                 this.updateProduct(this.product)
-                this.setCurrProduct(this.product)
+                // this.setCurrProduct(this.product)
               }
             })
           }).catch((res) => {
