@@ -34,6 +34,9 @@
     </div>
 
     <div class="panel">
+      <div class="panel-hd">
+        <h3 style="font-weight: normal">级别分布</h3>
+      </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">

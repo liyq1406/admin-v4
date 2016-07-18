@@ -33,7 +33,9 @@ export default {
         alerts: {
           label: '告警服务',
           subs: {
-            record: '告警记录'
+            record: '告警记录',
+            analysis: '告警分析',
+            heat: '热力分布'
           }
         },
         linkage: {
