@@ -78,6 +78,12 @@ export const MAIN_NAV = {
       subs: [{
         alias: 'record',
         url: '/alerts/record'
+      }, {
+        alias: 'analysis',
+        url: '/alerts/analysis'
+      }, {
+        alias: 'heat',
+        url: '/alerts/heat'
       }]
     }, {
       alias: 'linkage', // 设备互联

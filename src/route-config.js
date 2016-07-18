@@ -618,7 +618,7 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        'alerts/detail': {
+        'alerts/detail/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/alert/detail/index'))
@@ -1080,7 +1080,6 @@ let configRouter = (router) => {
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
-    '/operation/alerts/detail': '/operation/alerts/detail/history',
     '/operation/linkage': '/operation/linkage/devices'
   })
 

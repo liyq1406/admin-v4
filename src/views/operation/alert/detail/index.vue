@@ -111,7 +111,7 @@ export default {
 
   route: {
     data (transition) {
-      var deviceDetailRoot = '/operation/alerts/detail'
+      var deviceDetailRoot = `/operation/alerts/detail/${this.$route.params.id}`
 
       return {
         secondaryNav: [{
