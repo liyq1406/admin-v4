@@ -129,6 +129,12 @@ export default {
             break
           case 'broadcast': // 消息推送
             sub.subs = [{
+              alias: 'add',
+              url: `/plugins/broadcast/${item.id}/add`
+            }, {
+              alias: 'list',
+              url: `/plugins/broadcast/${item.id}/list`
+            }, {
               alias: 'overview',
               url: `/plugins/broadcast/${item.id}/overview`
             }]

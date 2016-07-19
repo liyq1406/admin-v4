@@ -397,14 +397,6 @@ let configRouter = (router) => {
           }
         },
 
-        // 消息推送
-        'plugins/broadcast/:app_id/overview': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/overview'))
-            }, 'admin')
-          }
-        },
         'plugins/broadcast/:app_id/add': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -416,6 +408,14 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/broadcast/list'))
+            }, 'admin')
+          }
+        },
+        // 消息推送
+        'plugins/broadcast/:app_id/overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/overview'))
             }, 'admin')
           }
         },
@@ -1053,7 +1053,7 @@ let configRouter = (router) => {
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
     '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/list',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/extended-warranties',
-    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/overview',
+    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
