@@ -1,51 +1,17 @@
 <template>
   <div class="main">
-    <div class="breadcrumb"><a v-link="{path: '/users'}" class="fa fa-arrow-circle-left">{{ $t('ui.user.list') }}</a></div>
+    <div class="main-title">
+      <h2>用户基本信息</h2>
+    </div>
+    <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel">
-      <div class="panel-hd">
-        <h2>{{ $t('ui.user.details') }}</h2>
-      </div>
-      <!-- <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.id') }}:</div>
-            <div class="col-21 info">{{ user.id }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.account') }}:</div>
-            <div class="col-21 info">{{ user.account }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.nick_name') }}:</div>
-            <div class="col-21 info">{{ user.nickname }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.phone') }}:</div>
-            <div class="col-21 info">{{ user.phone }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.create_date') }}:</div>
-            <div class="col-21 info">{{ user.create_date | formatDate }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.active_date') }}:</div>
-            <div class="col-21 info">{{ user.active_date | formatDate }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.is_vaild') }}:</div>
-            <div class="col-21 info">{{ user.is_vaild ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">{{ $t('ui.user.fields.region_id') }}:</div>
-            <div class="col-21 info">{{ user.region_id }}</div>
-          </li>
-        </ul>
-      </div> -->
       <div class="panel mt15 mb20 no-split-line">
         <div class="panel-bd row">
           <div class="col-16">
             <info-card :info="userSummary"></info-card>
-            <info-list :info="userInfo"></info-list>
+            <div v-stretch="183">
+              <info-list :info="userInfo"></info-list>
+            </div>
           </div>
           <div class="col-8 device-map with-loading">
             <div class="icon-loading" v-show="loadingData">
@@ -56,38 +22,12 @@
         </div>
       </div>
     </div>
+    <tab :nav="secondaryNav"></tab>
+    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <div class="panel">
       <div class="panel-hd">
-        <h2>{{ $t('ui.user.devices_bound') }}</h2>
+        <h2>账号状态</h2>
       </div>
-      <div class="panel-bd">
-        <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t('ui.user.product_name') }}</th>
-              <th>{{ $t('ui.user.device_mac') }}</th>
-              <th>{{ $t('ui.user.device_status') }}</th>
-              <th>{{ $t('ui.user.device_authorize_code') }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="subDevice in subDevices">
-              <td>{{ subDevice.product_id }}</td>
-              <!--这里使用产品id 不是产品名称 debug-->
-              <td>{{ subDevice.mac }}</td>
-              <td><span v-if="subDevice.is_online==true">{{ $t('common.online') }}</span><span v-else>{{ $t('common.offline') }}</span></td>
-              <td>{{ subDevice.authorize_code }}</td>
-            </tr>
-            <tr v-if="subDevices.length === 0">
-              <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                <div v-else class="tips-null">{{ $t('ui.user.no_devices_bound') }}</div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-    <div class="panel">
       <div class="panel-bd">
         <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn sxten"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
       </div>
@@ -101,6 +41,7 @@
   import Breadcrumb from 'components/Breadcrumb'
   import InfoCard from 'components/InfoCard'
   import InfoList from 'components/InfoList'
+  import Tab from 'components/Tab'
 
   export default {
     name: 'UserDetails',
@@ -111,14 +52,14 @@
       'api': api,
       Breadcrumb,
       InfoCard,
-      InfoList
+      InfoList,
+      Tab
     },
 
     data () {
       return {
         user: {}, // 用户信息
         subDevices: [], // 用户绑定设备列表
-        userSummary: {},
         userInfo: {
           status: {},
           create_time: {},
@@ -129,7 +70,14 @@
           area: {},
           address: {},
           Id: {}
-        }
+        },
+        breadcrumbNav: [{
+          label: '全部',
+          link: '/operation/users/list'
+        }, {
+          label: '用户信息'
+        }],
+        userSummary: {}
       }
     },
 
@@ -137,6 +85,20 @@
       data () {
         this.getUserInfo()
         this.getSubDevices()
+
+        var deviceDetailRoot = `/operation/users/${this.$route.params.id}`
+        return {
+          secondaryNav: [{
+            label: '设备列表',
+            link: { path: `${deviceDetailRoot}/device` }
+          }, {
+            label: '维保信息',
+            link: { path: `${deviceDetailRoot}/warranty` }
+          }, {
+            label: '反馈记录',
+            link: { path: `${deviceDetailRoot}/feedback` }
+          }]
+        }
       }
     },
 

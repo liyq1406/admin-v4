@@ -13,7 +13,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <div class="alert-overview-share-btn fr">
+          <div class="fr">
             <a class="fa fa- fa-share-square-o"></a>
           </div>
         </div>

@@ -5,16 +5,30 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <!-- <div class="data-table with-loading">
+        <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
             <div class="filter-group fr">
-              <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
-                <button slot="search-button" @click="getUsers" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                <label>{{ $t('ui.user.search_user') }}</label>
-              </search-box>
+              <div class="filter-group-item">
+                <div class="fr">
+                  <a class="fa fa- fa-share-square-o"></a>
+                </div>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
+                  <button slot="search-button" @click="getUsers" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <label>{{ $t('ui.user.search_user') }}</label>
+                </search-box>
+              </div>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -31,7 +45,7 @@
             <tbody>
               <template v-if="users.length > 0">
                 <tr v-for="user in users">
-                  <td><a v-link="{path: '/operation/user/'+user.id}" class="hl-red">{{ user.id }}</a></td>
+                  <td><a v-link="{path: '/operation/users/'+user.id + '/device'}" class="hl-red">{{ user.id }}</a></td>
                   <td>{{ user.nickname }}</td>
                   <td>{{ user.account }}</td>
                   <td>{{ user.create_date | formatDate }}</td>
@@ -47,12 +61,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
-        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-update-time="test" @tbody-nickname="goDetails" :loading="true">
-          <div class="filter-container" slot="filter-container">
-            筛选框预留位置
-          </div>
-        </c-table>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager>
       </div>
     </div>
   </div>
@@ -61,7 +70,7 @@
 <script>
   import SearchBox from 'components/SearchBox'
   import Modal from 'components/Modal'
-  import Table from 'components/Table'
+  import Select from 'components/Select'
   import api from 'api'
   import * as config from 'consts/config'
   import Pager from 'components/Pager'
@@ -74,10 +83,10 @@
 
     components: {
       'search-box': SearchBox,
-      'c-table': Table,
       'modal': Modal,
       'api': api,
-      'pager': Pager
+      'pager': Pager,
+      'v-select': Select
     },
 
     data () {

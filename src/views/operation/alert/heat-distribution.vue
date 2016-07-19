@@ -3,7 +3,7 @@
     <div class="main-title">
       <h2>热力分布</h2>
     </div>
-    <div class="filter-bar alert-overview-filter-bar-head">
+    <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <v-select label="空气净化器" width='110px' size="small">
@@ -13,7 +13,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <div class="alert-overview-share-btn fr">
+          <div class="fr">
             <a class="fa fa- fa-share-square-o"></a>
           </div>
         </div>
@@ -39,26 +39,21 @@
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
           <div class="filter-bar">
-            <!-- <div class="filter-group fl">
-              <div class="filter-group-item">
-                <span style="font-size: 12px; font-weight:700; color:#666666">明细</span>
-              </div>
-            </div> -->
             <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
+              </div>
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
-                <div class="alert-overview-share-btn">
-                  <a class="fa fa- fa-share-square-o"></a>
-                </div>
               </div>
             </div>
             <h3>明细</h3>
-          </div>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>

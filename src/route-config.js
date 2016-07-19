@@ -726,11 +726,37 @@ let configRouter = (router) => {
           }
         },
         // 用户详情
-        'user/:id': {
+        'users/:id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/user/details'))
+              resolve(require('./views/operation/user/detail/index'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 设备列表
+            'device': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/detail/device-list'))
+                }, 'admin')
+              }
+            },
+            // 维保信息
+            'warranty': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/detail/warranty'))
+                }, 'admin')
+              }
+            },
+            // 反馈记录
+            'feedback': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/detail/feedback'))
+                }, 'admin')
+              }
+            }
           }
         },
 
