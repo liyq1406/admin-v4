@@ -9,7 +9,7 @@
               <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
             </search-box>
           </div>
-          <h2>设备状态数据</h2>
+          <h3>设备状态数据</h3>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
