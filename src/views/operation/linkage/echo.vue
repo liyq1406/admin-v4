@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>echo</h3>
+      <h2>echo</h2>
     </div>
     <div class="panel">
       <div class="row mt20 mb20">

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>{{ $t('ui.user.list') }}</h3>
+      <h2>{{ $t('ui.user.list') }}</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">

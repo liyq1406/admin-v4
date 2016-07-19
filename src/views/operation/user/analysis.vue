@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>用户行为分析</h3>
+      <h2>用户行为分析</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">

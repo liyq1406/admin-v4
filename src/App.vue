@@ -192,7 +192,7 @@ export default {
     margin-bottom 5px
     clearfix()
 
-    h3
+    h2
       float left
       margin 0
       font-size 18px

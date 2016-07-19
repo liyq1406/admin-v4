@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>告警信息</h3>
+      <h2>告警信息</h2>
     </div>
     <div class="tool-bar">
       <div class="tool-list">

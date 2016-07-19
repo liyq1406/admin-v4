@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>告警规则设置</h3>
+      <h2>告警规则设置</h2>
     </div>
     <div class="tool-bar">
       <div class="tool-list">

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>告警记录</h3>
+      <h2>告警记录</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">

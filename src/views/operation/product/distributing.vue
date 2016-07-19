@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>热力分布</h3>
+      <h2>热力分布</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">

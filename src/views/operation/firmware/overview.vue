@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>固件信息概览</h3>
+      <h2>固件信息概览</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">

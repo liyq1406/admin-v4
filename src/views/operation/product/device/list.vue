@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>设备管理</h3>
+      <h2>设备管理</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">

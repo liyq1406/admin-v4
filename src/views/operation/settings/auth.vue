@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>授权管理</h3>
+      <h2>授权管理</h2>
     </div>
     <div class="tool-bar">
       <div class="tool-list fr">

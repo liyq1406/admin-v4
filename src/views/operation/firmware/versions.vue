@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>固件版本管理</h3>
+      <h2>固件版本管理</h2>
     </div>
     <div class="tool-bar">
       <div class="tool-list">

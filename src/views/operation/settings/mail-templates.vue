@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h3>邮件模板</h3>
+      <h2>邮件模板</h2>
     </div>
     <div class="panel">
       <div class="panel-hd">

@@ -1,7 +1,7 @@
 <template>
   <div class="main data-tables">
     <div class="main-title">
-      <h3>数据表</h3>
+      <h2>数据表</h2>
     </div>
     <div class="tool-bar">
       <div class="tool-list">

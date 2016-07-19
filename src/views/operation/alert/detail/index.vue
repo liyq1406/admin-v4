@@ -1,7 +1,7 @@
 <template>
   <div class="main device-details">
     <div class="main-title">
-      <h3>告警详情</h3>
+      <h2>告警详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
