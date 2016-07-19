@@ -1,14 +1,15 @@
 <template>
   <div class="c-range-box">
-    <div class="label-box" :style="'min-height:' + circleD">
-      <slot name="label"></slot>
-    </div>
-    <div class="range-box" :style="'min-height:' + circleD + ';width:' + lineWidth">
+    <div class="range-box" :class="{'focus': focus}" :style="'min-height:' + circleD + ';width:' + lineWidth" @click="focusEvent">
       <div class="line" :style="'width:' + lineWidth + ';height:' + lineHeight + ';background:' + lineBackground" @mouseDown="select" @mouseUp="resetPosition">
         <div class="selected-background" :style="'background:' + selectedGroundColor + ';width:' + left + 'px'"></div>
       </div>
       <div class="circle" :style="'width:' + circleD + ';height:' + circleD + ';left:' + left + 'px;' + transitionStyle"></div>
       <div class="no-control-mask" v-show="disabled"></div>
+      <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
+    </div>
+    <div class="current-value" :style="'left: ' + lineWidth">
+      <span>{{currentValue}}</span>
     </div>
   </div>
 </template>
@@ -23,12 +24,7 @@
      */
      // this.$emit('change', value, params) // 实时上报
      // this.$emit('changed', value, params) // 非实时上报
-
-    /**
-     * 暴露的slot
-     * @type label
-     */
-    // <div name="label">标签：</div>
+     //
     props: {
       // 步长
       'step': {
@@ -85,11 +81,16 @@
     },
     data () {
       return {
+        focus: false,
         left: 0, // 用于存放当前小球的偏移量
         transition: false // 用于标志当前是否使用css3的transition
       }
     },
     computed: {
+      currentValue () {
+        var result = (parseInt((this.value - 0) * 100) / 100).toString()
+        return result
+      },
       transitionStyle () {
         var result = ''
         var prefixs = ['-webkit-', '-moz-', '-ms-', '-o-', '']
@@ -116,6 +117,66 @@
       }
     },
     methods: {
+      stepChange (type) {
+        var self = this
+        var parentDom = this.$el.getElementsByClassName('range-box')[0]
+        var circledom = parentDom.children[1]
+        var parentWidth = parentDom.clientWidth
+        var maxLeft = parentWidth - circledom.clientWidth
+        var stepWidth = maxLeft / ((self.max - self.min) / self.step)
+        var target = 0
+        if (type === 'add') {
+          target = self.left + stepWidth
+          if (target < maxLeft) {
+            self.left = target
+          } else {
+            self.left = maxLeft
+          }
+        } else if (type === 'dec') {
+          target = self.left - stepWidth
+          if (target > 0) {
+            self.left = target
+          } else {
+            self.left = 0
+          }
+        }
+        this.transition = true
+        setTimeout(() => {
+          this.transition = false
+        }, 0)
+        self.computedValue(maxLeft)
+        self.emit('changed')
+      },
+      /**
+       * 监听按钮事件
+       * @param  {[type]} ev [description]
+       * @return {[type]}    [description]
+       */
+      keydown (ev) {
+        if (ev.keyCode === 37 || ev.keyCode === 40) {
+          this.stepChange('dec')
+        } else if (ev.keyCode === 38 || ev.keyCode === 39) {
+          this.stepChange('add')
+        } else {
+          ev.preventDefault()
+        }
+      },
+      /**
+       * 获得焦点
+       * @return {[type]} [description]
+       */
+      focusEvent () {
+        this.focus = true
+        var hideInput = this.$el.getElementsByClassName('hide-input')[0]
+        hideInput.focus()
+      },
+      /**
+       * 失去焦点回调
+       * @return {[type]} [description]
+       */
+      blurEvent () {
+        this.focus = false
+      },
       /**
        * 检查用户传入的数据是否合法
        * @return {[type]} [description]
@@ -137,7 +198,7 @@
         return result
       },
       /**
-       * 根据补长重置位置
+       * 根据步长重置位置
        */
       resetPosition () {
         var self = this
@@ -187,6 +248,7 @@
         }, 0)
         // console.log(_circle.style.WebkitTransition)
         self.left = left
+        self.focusEvent()
       },
       /**
        * 组件初始化
@@ -201,8 +263,15 @@
         var maxLeft = parentWidth - circledom.clientWidth
         var _circleR = circledom.offsetWidth / 2
         var linePosition = this.getPosition(linedom)
-        self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
         var dx
+        setTimeout(() => {
+          this.transition = true
+          setTimeout(() => {
+            this.transition = false
+          }, 50)
+          self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
+          self.resetPosition()
+        }, 1000)
         self.down = false
         circledom.addEventListener('mousedown', function (ev) {
           var rangeEventBox = document.createElement('div')
@@ -211,6 +280,7 @@
           self.down = true
           dx = self.left
           ev.preventDefault()
+          self.focusEvent()
           rangeEventBox.addEventListener('mousemove', function (ev) {
             if (self.down) {
               var offsetLeft = ev.x - linePosition.left - _circleR / 2
@@ -258,7 +328,9 @@
        * @return {[type]}         [description]
        */
       computedValue (maxLeft) {
-        this.value = this.min + this.left / maxLeft * (this.max - this.min)
+        var value = this.min + this.left / maxLeft * (this.max - this.min)
+        value = this.step * Math.round(value / this.step)
+        this.value = value
       },
       emit (name) {
         var precent = (this.value - this.min) / (this.max - this.min)
@@ -284,16 +356,28 @@
     left 0
     z-index 500
   .c-range-box
-    width 100%
+    width auto
+    position relative
     clearfix()
-    .label-box
-      float left
-      padding 1px 0
+
+    .current-value
+      position absolute
+      padding-left 10px
+    .hide-input
+      position absolute
+      left 0
+      top 0
+      z-index -10
+      width 100%
+      height 100%
+      opacity 1
     .range-box
       width 100%
       float left
       position relative
       padding 1px 0
+      &.focus
+        box-shadow 1px 1px 1px rgba(0,0,0,0.2)
       .line
         height 4px
         width 100%
