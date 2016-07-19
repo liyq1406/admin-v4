@@ -1,10 +1,10 @@
 <template>
   <div class="c-range-box">
-    <div class="range-box" :class="{'focus': focus}" :style="'min-height:' + circleD + ';width:' + lineWidth" @click="focusEvent">
+    <div class="range-box" :style="'min-height:' + circleD + ';width:' + lineWidth" @click="focusEvent">
       <div class="line" :style="'width:' + lineWidth + ';height:' + lineHeight + ';background:' + lineBackground" @mouseDown="select" @mouseUp="resetPosition">
         <div class="selected-background" :style="'background:' + selectedGroundColor + ';width:' + left + 'px'"></div>
       </div>
-      <div class="circle" :style="'width:' + circleD + ';height:' + circleD + ';left:' + left + 'px;' + transitionStyle"></div>
+      <div class="circle" :style="'width:' + circleD + ';height:' + circleD + ';left:' + left + 'px;' + 'border-color:' + (focus?selectedGroundColor:lineBackground) + ';' + transitionStyle"></div>
       <div class="no-control-mask" v-show="disabled"></div>
       <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
     </div>
