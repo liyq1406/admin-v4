@@ -3,7 +3,7 @@
     <div class="main-title">
       <h3>告警分析</h3>
     </div>
-    <div class="filter-bar alert-overview-filter-bar-head">
+    <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <v-select label="空气净化器" width='110px' size="small">

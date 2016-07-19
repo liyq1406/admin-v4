@@ -3,7 +3,7 @@
     <div class="main-title">
       <h3>告警记录</h3>
     </div>
-    <div class="filter-bar alert-overview-filter-bar-head">
+    <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <v-select label="空气净化器" width="110px" size="small">
@@ -13,9 +13,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <div class="alert-overview-share-btn fr">
-            <a class="fa fa- fa-share-square-o"></a>
-          </div>
+          <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
         </div>
         <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
@@ -63,9 +61,7 @@
             </div> -->
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <div class="alert-overview-share-btn">
-                  <a class="fa fa- fa-share-square-o"></a>
-                </div>
+                <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">

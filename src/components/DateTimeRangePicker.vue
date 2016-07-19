@@ -98,6 +98,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../assets/stylus/common'
+
 .time-range-picker-wrap
   height 26px
   float right
@@ -107,8 +109,8 @@ export default {
     line-height 24px
     text-align center
     font-size 12px
-    background-color #F8F8F8
-    border 1px solid #E4E4E4
+    background-color #FFF
+    border 1px solid default-border-color
     outline none
     span
       line-height 18px
