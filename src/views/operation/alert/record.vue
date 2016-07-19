@@ -78,29 +78,29 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t("ui.alert.info_list.product_name") }}</th>
-                <th>{{ $t("ui.alert.info_list.content") }}</th>
-                <th>{{ $t("ui.alert.info_list.create_date") }}</th>
-                <th>{{ $t("ui.alert.info_list.is_read") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
+                <th>告警设备</th>
+                <th>时间</th>
+                <th>持续时长</th>
+                <th>告警内容</th>
+                <th>地点</th>
+                <th>告警等级</th>
+                <th>状态</th>
               </tr>
             </thead>
             <tbody>
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
-                  <td>{{ alert.product_name }}</td>
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                  </td>
+                  <td>{{ alert.device_mac }}</td>
                   <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                  <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                  </td>
+                  <td>{{ alert.duration }}</td>
+                  <td>{{ alert.content }}</td>
+                  <td>{{ alert.area}}</td>
+                  <td>{{ alert.level}}</td>
+                  <td>{{ alert.alert_value}}</td>
                 </tr>
               </template>
               <tr v-if="alerts.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
+                <td colspan="7" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>

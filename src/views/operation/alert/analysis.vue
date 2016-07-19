@@ -5,19 +5,19 @@
     </div>
     <div class="filter-bar alert-overview-filter-bar-head">
       <div class="filter-group fl">
-        <div class="filter-group-item ml20">
-          <v-select label="空气净化器" width='110px'>
+        <div class="filter-group-item">
+          <v-select label="空气净化器" width='110px' size="small">
             <span slot="label">产品</span>
           </v-select>
         </div>
       </div>
       <div class="filter-group fr">
-        <div class="filter-group-item mt5">
-          <div class="alert-overview-share-btn mr20 fr">
+        <div class="filter-group-item">
+          <div class="alert-overview-share-btn fr">
             <a class="fa fa- fa-share-square-o"></a>
           </div>
         </div>
-        <div class="filter-group-item mr20 mt5">
+        <div class="filter-group-item">
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
