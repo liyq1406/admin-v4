@@ -1,7 +1,7 @@
 <template>
   <div class="c-range-box">
     <div class="range-box" :style="'min-height:' + circleD + ';width:' + lineWidth" @click="focusEvent">
-      <div class="line" :style="'width:' + lineWidth + ';height:' + lineHeight + ';background:' + lineBackground" @mouseDown="select" @mouseUp="resetPosition">
+      <div class="line" :style="'width:' + lineWidth + ';height:' + lineHeight + ';background:' + lineBackground" @mouseDown="select">
         <div class="selected-background" :style="'background:' + selectedGroundColor + ';width:' + left + 'px'"></div>
       </div>
       <div class="circle" :style="circleStyle"></div>
@@ -256,7 +256,22 @@
         }, 0)
         // console.log(_circle.style.WebkitTransition)
         self.left = left
-        self.focusEvent()
+        self.createTouchMask()
+      },
+      /**
+       * 创建接收事件的蒙层
+       * @return {[type]} [description]
+       */
+      createTouchMask () {
+        var self = this
+        var rangeEventBox = document.createElement('div')
+        rangeEventBox.className = 'range-event-box'
+        document.body.appendChild(rangeEventBox)
+        rangeEventBox.addEventListener('mouseup', function (ev) {
+          document.body.removeChild(rangeEventBox)
+          self.resetPosition()
+          self.focusEvent()
+        }, false)
       },
       /**
        * 组件初始化
@@ -363,6 +378,7 @@
     top 0
     left 0
     z-index 500
+    /*background rgba(0,0,0,0.5)*/
   .c-range-box
     width auto
     position relative
