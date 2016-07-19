@@ -4,7 +4,7 @@
       <div class="line" :style="'width:' + lineWidth + ';height:' + lineHeight + ';background:' + lineBackground" @mouseDown="select" @mouseUp="resetPosition">
         <div class="selected-background" :style="'background:' + selectedGroundColor + ';width:' + left + 'px'"></div>
       </div>
-      <div class="circle" :style="'width:' + circleD + ';height:' + circleD + ';left:' + left + 'px;' + 'border-color:' + (focus?selectedGroundColor:lineBackground) + ';' + transitionStyle"></div>
+      <div class="circle" :style="circleStyle"></div>
       <div class="no-control-mask" v-show="disabled"></div>
       <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
     </div>
@@ -104,6 +104,11 @@
           })
         }
         return result
+      },
+      circleStyle () {
+        var result = ''
+        result = 'width:' + this.circleD + ';height:' + this.circleD + ';left:' + this.left + 'px;' + 'border-color:' + (this.focus ? this.selectedGroundColor : this.lineBackground) + ';' + this.transitionStyle
+        return result
       }
     },
     watch: {
@@ -202,6 +207,9 @@
        */
       resetPosition () {
         var self = this
+        if (!this.$el) {
+          return
+        }
         var parentDom = this.$el.getElementsByClassName('range-box')[0]
         var circledom = parentDom.children[1]
         var parentWidth = parentDom.clientWidth
@@ -271,7 +279,7 @@
           }, 50)
           self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
           self.resetPosition()
-        }, 1000)
+        }, 200)
         self.down = false
         circledom.addEventListener('mousedown', function (ev) {
           var rangeEventBox = document.createElement('div')

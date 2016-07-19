@@ -40,14 +40,13 @@
                       数组输入框
                     </div>
                     <div class="range-box" v-if="dataPointType(datapoint.type) === 'range'">
-                      <range></range>
+                      <range :step="50" :value="50"></range>
                     </div>
                   </div>
                 </td>
               </tr>
               <tr v-if="datapoints.length === 0">
                 <td colspan="4" class="tac">
-                  <range></range>
                   <i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
                   <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
                 </td>
