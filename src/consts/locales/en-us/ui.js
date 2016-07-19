@@ -29,7 +29,33 @@ export default {
             addon: '扩展'
           }
         },
-        plugins: '插件管理',
+        ios: {
+          subs: {
+            settings: '应用配置'
+          }
+        },
+        android: {
+          subs: {
+            overview: '概览',
+            settings: '应用配置'
+          }
+        },
+        web: {
+          subs: {
+            settings: '应用配置'
+          }
+        },
+        wechat: {
+          subs: {
+            settings: '应用配置'
+          }
+        },
+        broadcast: {
+          subs: {
+            overview: '概览',
+            list: '消息列表'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {

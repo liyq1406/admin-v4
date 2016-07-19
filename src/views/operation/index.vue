@@ -36,7 +36,8 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      products: ({ products }) => products.all,
+      plugins: ({ plugins }) => plugins.all
     }
   },
 
@@ -58,6 +59,7 @@ export default {
       this.products.forEach((item) => {
         result.subs.push({
           name: item.name,
+          type: 'product',
           alias: 'products',
           icon: 'link',
           id: item.id,
@@ -81,6 +83,76 @@ export default {
             url: `/products/${item.id}/addon`
           }]
         })
+      })
+      this.plugins.forEach((item) => {
+        var sub = {
+          name: item.name,
+          type: 'plugin',
+          alias: item.plugin,
+          icon: 'puzzle-piece',
+          id: item.id,
+          url: `plugins/${item.plugin}`
+        }
+        switch (item.plugin) {
+          case 'ios': // iOS
+            sub.subs = [{
+              alias: 'settings',
+              url: `/plugins/ios/${item.id}/settings`
+            }]
+            break
+          case 'android': // Android
+            sub.subs = [{
+              alias: 'settings',
+              url: `/plugins/android/${item.id}/settings`
+            }, {
+              alias: 'android.version',
+              url: `/plugins/android/${item.id}/version`
+            }]
+            break
+          case 'web': // Web
+            sub.subs = [{
+              alias: 'settings',
+              url: `/plugins/web/${item.id}/settings`
+            }]
+            break
+          case 'wechat': // Wechat
+            sub.subs = [{
+              alias: 'settings',
+              url: `/plugins/wechat/${item.id}/settings`
+            }]
+            break
+          case 'recipe': // 云菜谱
+
+            break
+          case 'warranty': // 在线维保
+
+            break
+          case 'broadcast': // 消息推送
+            sub.subs = [{
+              alias: 'overview',
+              url: `/plugins/broadcast/${item.id}/overview`
+            }]
+            break
+          case 'helpdesk': // 帮助中心
+
+            break
+          case 'dealer': // 经销商管理
+
+            break
+          case 'nest': // Google Nest网关
+
+            break
+          case 'xpay': // 支付网关
+
+            break
+          case 'content': // 内容管理
+
+            break
+          default:
+        }
+        if (Object.keys(sub).length) {
+          result.subs.push(sub)
+        }
       })
       result.subs = result.subs.concat(subs.slice(1, subs.length))
       // console.log(subs.slice(1, subs.length))

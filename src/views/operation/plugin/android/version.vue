@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div class="main">
+    <div class="main-title">
+      <h2>版本信息</h2>
+    </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="form">

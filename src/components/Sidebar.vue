@@ -53,8 +53,10 @@ export default {
       var result = this.nav.subs
       result.forEach((item, index) => {
         var reg
-        if (item.alias === 'products') {
+        if (item.type === 'product') {
           reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')
+        } else if (item.type === 'plugin') {
+          reg = new RegExp(`${this.nav.url}/plugins/${item.alias}/${item.id}`, 'i')
         } else {
           reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
         }

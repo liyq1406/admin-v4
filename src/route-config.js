@@ -358,123 +358,69 @@ let configRouter = (router) => {
           }
         },
         // iOS应用
-        'plugins/ios/:id': {
+        'plugins/ios/:id/settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/ios/index'))
+              resolve(require('./views/operation/plugin/ios/settings'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 配置
-            'settings': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/ios/settings'))
-                }, 'admin')
-              }
-            }
           }
         },
         // 安卓应用
-        'plugins/android/:id': {
+        'plugins/android/:id/settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/android/index'))
+              resolve(require('./views/operation/plugin/android/settings'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 配置
-            'settings': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/android/settings'))
-                }, 'admin')
-              }
-            },
-            // 版本
-            'version': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/android/version'))
-                }, 'admin')
-              }
-            }
+          }
+        },
+        'plugins/android/:id/version': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/android/version'))
+            }, 'admin')
           }
         },
         // 微信应用
-        'plugins/wechat/:id': {
+        'plugins/wechat/:id/settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/wechat/index'))
+              resolve(require('./views/operation/plugin/wechat/settings'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 配置
-            'settings': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/wechat/settings'))
-                }, 'admin')
-              }
-            }
           }
         },
-
         // web应用
-        'plugins/web/:id': {
+        'plugins/web/:id/settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/web/index'))
+              resolve(require('./views/operation/plugin/web/settings'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 配置
-            'settings': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/web/settings'))
-                }, 'admin')
-              }
-            }
           }
         },
 
         // 消息推送
-        'plugins/broadcast/:app_id': {
+        'plugins/broadcast/:app_id/overview': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/index'))
+              resolve(require('./views/operation/plugin/broadcast/overview'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 新建推送
-            'add': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/broadcast/add'))
-                }, 'admin')
-              }
-            },
-            // 推送历史
-            'history': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/broadcast/history'))
-                }, 'admin')
-              }
-            }
           }
         },
-        // 禁止访问
-        'plugins/broadcast/:app_id/forbidden': {
+        'plugins/broadcast/:app_id/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/forbidden'))
+              resolve(require('./views/operation/plugin/broadcast/add'))
+            }, 'admin')
+          }
+        },
+        'plugins/broadcast/:app_id/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/list'))
             }, 'admin')
           }
         },
         // 推送详情
-        'plugins/broadcast/:app_id/history/:id': {
+        'plugins/broadcast/:app_id/list/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/broadcast/details'))
@@ -482,10 +428,18 @@ let configRouter = (router) => {
           }
         },
         // 编辑推送
-        'plugins/broadcast/:app_id/history/:id/update': {
+        'plugins/broadcast/:app_id/list/:id/update': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/broadcast/update'))
+            }, 'admin')
+          }
+        },
+        // 禁止访问
+        'plugins/broadcast/:app_id/forbidden': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/broadcast/forbidden'))
             }, 'admin')
           }
         },
@@ -1061,21 +1015,19 @@ let configRouter = (router) => {
     '/operation/statistic': '/operation/statistic/products',
     '/operation/settings': '/operation/settings/auth',
     '/operation/users': '/operation/users/overview',
-    '/operation/plugins/ios/:id': '/operation/plugins/ios/:id/settings',
     '/operation/plugins/android/:id': '/operation/plugins/android/:id/settings',
-    '/operation/plugins/wechat/:id': '/operation/plugins/wechat/:id/settings',
-    '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/forbidden',
+    // '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/forbidden',
     // '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/forbidden',
-    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/forbidden',
-    '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/forbidden',
-    '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
+    // '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/forbidden',
+    // '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/forbidden',
+    // '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/nest/:app_id': '/operation/linkage/nest/',
-    // '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
-    // '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/list',
+    '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
+    '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/list',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/extended-warranties',
-    // '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
+    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/overview',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
