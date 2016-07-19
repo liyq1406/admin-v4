@@ -23,7 +23,7 @@
                 <th>{{ $t('ui.datapoint.fields.index') }}</th>
                 <th>{{ $t('ui.datapoint.fields.name') }}</th>
                 <th>{{ $t('ui.datapoint.fields.description') }}</th>
-                <th>{{ $t('ui.device.current_value') }}</th>
+                <th class="w200">{{ $t('ui.device.current_value') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -33,14 +33,23 @@
                 <td>{{ datapoint.description }}</td>
                 <td>
                   <div class="control-box">
-                    <div class="radio-box" v-if="dataPointType(datapoint.type) === 'radio'">
-                      布尔值选择
+                    <div class="radio-box" v-if="dataPointType(datapoint.type) === 'boolean'">
+                      <label>
+                        <input type="radio" :name="'datapoint' + $index" value="true" v-model="datapoint.value">
+                        <span>true</span>
+                      </label>
+                      <label>
+                        <input type="radio" :name="'datapoint' + $index" value="false" v-model="datapoint.value">
+                        <span>false</span>
+                      </label>
                     </div>
-                    <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
-                      数组输入框
-                    </div>
-                    <div class="range-box" v-if="dataPointType(datapoint.type) === 'range'">
+                    <div class="range-box" v-if="dataPointType(datapoint.type) === 'number'">
                       <range :step="50" :value="50"></range>
+                    </div>
+                    <div class="string-box w160" v-if="dataPointType(datapoint.type) === 'string'">
+                      <div class="input-text-wrap">
+                        <input type="text" class="input-text input-text-sm">
+                      </div>
                     </div>
                   </div>
                 </td>
@@ -309,7 +318,20 @@ export default {
      * @return {[type]}      [description]
      */
     dataPointType (type) {
-      return 'range'
+      var result = ''
+      switch (type) {
+        case 1:
+          result = 'boolean'
+          break
+        case 2:
+        case 3:
+        case 4:
+          result = 'string'
+          break
+        default:
+          result = 'number'
+      }
+      return result
     }
     /**
      * 数据端点编辑 提交表单
@@ -415,4 +437,16 @@ export default {
           box-sizing border-box
           font-size 14px
           padding 0 15px
+  .control-box
+    .radio-box
+      height 26px
+      overflow hidden
+      label
+        display inline-block
+        line-height 26px
+        margin-right 10px
+        input[type="radio"]
+          position relative
+          top 2px
+
 </style>
