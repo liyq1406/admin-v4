@@ -24,10 +24,25 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: null
+    }
+  },
+
+  ready () {
+    this.render()
+  },
+
   watch: {
     // 监听数据变化，渲染图表
     data () {
-      this.render()
+      console.log('watch change')
+      if (this.chart) {
+        this.chart.changeData(this.data)
+      } else {
+        this.render()
+      }
     }
   },
 
@@ -39,13 +54,14 @@ export default {
         forceFit: true, // 强制宽度自适应
         height: 400, // 高度
         plotCfg: {
-          margin: [20, 90, 80, 80] // 边距
+          margin: 0 // 边距
         }
       }
       var legendDefaults = {
         position: 'bottom'
       }
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
+      this.chart = chart
       chart.source(this.data)
       chart.coord('theta', {
         radius: 0.7 // 设置饼图的大小
@@ -67,10 +83,14 @@ export default {
 
       chart.render()
 
-      // 设置默认选中
-      // var geom = chart.getGeoms()[0] // 获取所有的图形
-      // var items = geom.getData() // 获取图形对应的数据
-      // geom.setSelected(items[1]) // 设置选中
+      chart.on('itemselected', (e) => {
+        console.log(e.data._origin)
+        this.$emit('itemselected', e.data._origin)
+      })
+
+      var geom = chart.getGeoms()[0] // 获取所有的图形
+      var items = geom.getData() // 获取图形对应的数据
+      geom.setSelected(items[0]) // 设置选中
 
       // var defs = this.options.defs
       // var defaultLegendOptions = {

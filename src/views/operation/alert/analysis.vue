@@ -38,6 +38,23 @@
         <h3 style="font-weight: normal">级别分布</h3>
       </div>
       <div class="panel-bd">
+        <div class="row">
+          <div class="col-10">
+            <pie :data="warningLevel" @itemselected='pieSelected'></pie>
+          </div>
+          <div class="col-14">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>{{curLevel}}告警</th>
+                  <th>占比</th>
+                </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+          </div>
+        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
@@ -86,6 +103,7 @@ import _ from 'lodash'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
+import Pie from 'components/g2-charts/Pie'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import dateFormat from 'date-format'
@@ -102,12 +120,14 @@ export default {
     RadioButtonGroup,
     LineChart,
     'v-select': Select,
-    SearchBox
+    SearchBox,
+    Pie
   },
 
   data () {
     return {
       key: '',
+      curLevel: '',
       statistics: [],
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
@@ -128,6 +148,20 @@ export default {
         {
           value: 30,
           label: '30天'
+        }
+      ],
+      warningLevel: [
+        {
+          name: '重度',
+          value: 50
+        },
+        {
+          name: '中度',
+          value: 30
+        },
+        {
+          name: '轻度',
+          value: 20
         }
       ]
     }
@@ -195,6 +229,9 @@ export default {
   },
 
   methods: {
+    pieSelected (data) {
+      this.curLevel = data.name
+    }
   }
 }
 </script>
