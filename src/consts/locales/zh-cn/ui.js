@@ -52,8 +52,9 @@ export default {
         },
         broadcast: {
           subs: {
-            overview: '概览',
-            list: '消息列表'
+            add: '新建推送',
+            list: '推送历史',
+            overview: '推送分析'
           }
         },
         alerts: {
