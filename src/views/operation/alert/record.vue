@@ -54,11 +54,6 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="filter-bar">
-            <!-- <div class="filter-group fl">
-              <div class="filter-group-item">
-                <span style="font-size: 12px; font-weight:700; color:#666666">明细</span>
-              </div>
-            </div> -->
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
@@ -69,7 +64,7 @@
                 </search-box>
               </div>
             </div>
-            <h2>明细</h2>
+            <h3>明细</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -399,18 +394,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-.alert-overview-filter-bar-head
-  border-top solid 1px #CCCCCC
-  border-bottom solid 1px #CCCCCC
-  background-color #F2F2F2
-.alert-overview-share-btn
-  width 24px
-  display inline-block
-  line-height 24px
-  border solid 1px #BCBCBC
-  vertical-align middle
-  font-size 18px
-  text-align center
-</style>

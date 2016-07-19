@@ -15,7 +15,7 @@
                 </search-box>
               </div>
             </div>
-            <h2>{{ $t('ui.device.datapoint') }}</h2>
+            <h3>{{ $t('ui.device.datapoint') }}</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>

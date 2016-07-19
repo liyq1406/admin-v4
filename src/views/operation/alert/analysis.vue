@@ -198,25 +198,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus">
-.alert-overview-filter-bar-head
-  border-top solid 1px #CCCCCC
-  border-bottom solid 1px #CCCCCC
-  background-color #F2F2F2
-.alert-overview-filter-bar
-  background-color #F2F2F2
-  border-top solid 1px #CCCCCC
-  border-left solid 1px #CCCCCC
-  border-right solid 1px #CCCCCC
-  height 45px
-  margin-top 15px
-.alert-overview-share-btn
-  width 24px
-  display inline-block
-  line-height 24px
-  border solid 1px #BCBCBC
-  vertical-align middle
-  font-size 18px
-  text-align center
-</style>
