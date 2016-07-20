@@ -56,7 +56,7 @@ export default {
         forceFit: true, // 强制宽度自适应
         height: 400, // 高度
         plotCfg: {
-          margin: 100 // 边距
+          margin: 80 // 边距
         }
       }
 

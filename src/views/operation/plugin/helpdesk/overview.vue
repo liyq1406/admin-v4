@@ -28,13 +28,7 @@
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
-        <div class="with-loading">
-          <line :data="trends.data" :options="trends.options"></line>
-          <!-- <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart> -->
-          <!-- <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div> -->
-        </div>
+        <time-line :data="trends.data" :type="'smooth'"></time-line>
       </div>
     </div>
     <div class="row statistic-group">
@@ -52,8 +46,61 @@
       </div>
     </div>
     <div class="panel">
+      <div class="panel-hd panel-hd-full">
+        <h2>分布</h2>
+      </div>
       <div class="panel-bd">
-
+        <div class="row">
+          <div class="col-7">
+            <pie :data="feedbacks" :height="400"></pie>
+          </div>
+          <div class="col-16 col-offset-1 data-table-wrap" style="min-height: 400px">
+            <div class="data-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>标题</th>
+                    <th>未处理</th>
+                    <th>已处理</th>
+                    <th>全部</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>使用帮助</td>
+                    <td>128 (25%)</td>
+                    <td>9283 (75%)</td>
+                    <td>12800</td>
+                  </tr>
+                  <tr>
+                    <td>产品咨询</td>
+                    <td>128 (25%)</td>
+                    <td>9283 (75%)</td>
+                    <td>12800</td>
+                  </tr>
+                  <tr>
+                    <td>投诉建议</td>
+                    <td>128 (25%)</td>
+                    <td>9283 (75%)</td>
+                    <td>12800</td>
+                  </tr>
+                  <tr>
+                    <td>产品故障</td>
+                    <td>128 (25%)</td>
+                    <td>9283 (75%)</td>
+                    <td>12800</td>
+                  </tr>
+                  <tr>
+                    <td>退货申请</td>
+                    <td>128 (25%)</td>
+                    <td>9283 (75%)</td>
+                    <td>12800</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -68,12 +115,13 @@ import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Statistic from 'components/Statistic'
-import Line from 'components/g2-charts/Line'
+import TimeLine from 'components/g2-charts/TimeLine'
+import Pie from 'components/g2-charts/Pie'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 
-import Pie from 'components/g2-charts/Pie'
+import Mock from 'mockjs'
 
 export default {
   name: 'Overview',
@@ -87,11 +135,29 @@ export default {
     RadioButtonGroup,
     DateTimeRangePicker,
     Statistic,
-    Line
+    TimeLine
   },
 
   data () {
     return {
+      feedbacks: [
+        {
+          name: '使用帮助',
+          value: 50
+        },
+        {
+          name: '产品咨询',
+          value: 30
+        },
+        {
+          name: '投诉建议',
+          value: 20
+        },
+        {
+          name: '产品故障',
+          value: 10
+        }
+      ],
       summary: {
         pending: {
           total: 23,
@@ -128,56 +194,30 @@ export default {
   },
 
   ready () {
-    // 趋势图表配置
-    // var productTrendsOptions = {
-    //   props: {
-    //     plotCfg: {
-    //       margin: [60, 0, 50, 60]
-    //     }
-    //   },
-    //   defs: {
-    //     'date': {
-    //       type: 'cat',
-    //       alias: '日期'
-    //     },
-    //     'count': {
-    //       alias: '数量',
-    //       min: 0
-    //     },
-    //     'product': {
-    //       alias: '产品'
-    //     }
-    //   },
-    //   position: 'date*count',
-    //   color: 'product'
-    // }
-    // var trendsData = []
-    // PRODUCTS.forEach((item) => {
-    //   proTrendsData = proTrendsData.concat(Mock.mock({
-    //     'list|7': [{
-    //       'date|+1': genDates(7),
-    //       'count|100-200': 10,
-    //       'product': item
-    //     }]
-    //   }).list)
-    // })
-
-    // proTrendsData = proTrendsData.concat(Mock.mock({
-    //   'list|7': [{
-    //     'date|+1': genDates(7),
-    //     'count|+1': [24, 14, 25, 34, 17, 29, 33],
-    //     'product': PRODUCTS[0]
-    //   }]
-    // }).list)
-    // proTrendsData = proTrendsData.concat(Mock.mock({
-    //   'list|7': [{
-    //     'date|+1': genDates(7),
-    //     'count|+1': [204, 156, 275, 236, 154, 198, 185],
-    //     'product': PRODUCTS[1]
-    //   }]
-    // }).list)
-    // this.trends.products.data = proTrendsData
-    // this.trends.products.options = productTrendsOptions
+    this.trends.data = Mock.mock({
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 10, 12],
+        '产品|+1': ['产品咨询', '产品咨询', '产品咨询', '产品咨询', '故障反馈', '故障反馈', '故障反馈', '故障反馈', '使用建议', '使用建议', '使用建议', '使用建议', '使用指南', '使用指南', '使用指南', '使用指南']
+      }]
+    }).list
   },
 
   methods: {

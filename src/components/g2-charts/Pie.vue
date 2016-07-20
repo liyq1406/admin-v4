@@ -21,6 +21,10 @@ export default {
       default () {
         return []
       }
+    },
+    height: {
+      type: Number,
+      default: 500
     }
   },
 
@@ -56,10 +60,10 @@ export default {
       var defaults = {
         container: this.$el, // 容器
         forceFit: true, // 强制宽度自适应
-        height: 400, // 高度
-        plotCfg: {
-          margin: 0 // 边距
-        }
+        height: this.height // 高度
+        // plotCfg: {
+        //   margin:  // 边距
+        // }
       }
       var legendDefaults = {
         position: 'bottom'
