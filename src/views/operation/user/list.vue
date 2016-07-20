@@ -19,9 +19,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <div class="fr">
-                  <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
-                </div>
+                <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">

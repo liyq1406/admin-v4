@@ -13,9 +13,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <div class="fr">
-            <a class="fa fa- fa-share-square-o"></a>
-          </div>
+          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
         </div>
         <div class="filter-group-item">
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
@@ -45,7 +43,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">

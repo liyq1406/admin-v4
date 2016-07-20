@@ -12,29 +12,29 @@
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
-      <span>趋势</span>
+      <h3 style="margin:0">趋势</h3>
     </div>
-    <div>
+    <div class="panel">
       <time-line :data="alertChartData"></time-line>
+    </div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="alertSummary.unhandle" :title="alertSummary.unhandle.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.message" :title="alertSummary.message.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.sevenday" :title="alertSummary.sevenday.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
+      </div>
     </div>
     <div class="panel mt15">
       <!-- <div class="panel-hd">
         <h2>告警信息列表</h2>
       </div> -->
-      <div class="row statistic-group">
-        <div class="col-6">
-          <statistic :info="alertSummary.unhandle" :title="alertSummary.unhandle.title" align="left"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="alertSummary.message" :title="alertSummary.message.title" align="left"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="alertSummary.sevenday" :title="alertSummary.sevenday.title" align="left"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
-        </div>
-      </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
