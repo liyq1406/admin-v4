@@ -29,28 +29,23 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>工单编号</th>
-              <th>客户姓名</th>
-              <th>产品名称</th>
-              <th>产品型号</th>
-              <th>创建日期</th>
-              <th>工单状态</th>
-              <th>操作</th>
+              <th>经销商名称</th>
+              <th>销售时间</th>
+              <th>联系人</th>
+              <th>手机号</th>
+              <th>负责区域</th>
+              <th>从属于</th>
             </tr>
           </thead>
           <tbody>
             <template v-if="workOrders.length > 0">
               <tr v-for="order in workOrders">
-                <td>{{order._id}}</td>
-                <td>{{order.name}}</td>
-                <td>{{order.product_name}}</td>
-                <td>{{order.product_type}}</td>
-                <td>{{order.extended_days | uniformDate}}</td>
-                <td>
-                  <div v-if="order.status === 0">已过期</div>
-                  <div v-else class='hl-green'>未过期</div>
-                </td>
-                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
+                <td>广州海珠代理</td>
+                <td>2016-1-1 19:21:32</td>
+                <td>阿怡</td>
+                <td>13800138000</td>
+                <td>华南地区</td>
+                <td>广州分部-运营商</td>
               </tr>
             </template>
             <tr v-if="workOrders.length === 0 && !loadingData">
