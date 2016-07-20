@@ -88,13 +88,13 @@ export default {
       return {
         secondaryNav: [{
           label: '设备列表',
-          link: { path: `${majorRoot}` }
+          link: { path: `${majorRoot}/devices` }
         }, {
           label: '维保信息',
-          link: { path: `${majorRoot}` }
+          link: { path: `${majorRoot}/warranty` }
         }, {
           label: '反馈记录',
-          link: { path: `${majorRoot}` }
+          link: { path: `${majorRoot}/issues` }
         }]
       }
     }

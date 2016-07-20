@@ -83,7 +83,7 @@
       data () {
         this.getUserInfo()
 
-        var deviceDetailRoot = `/operation/users/${this.$route.params.id}/details`
+        var deviceDetailRoot = `/operation/users/details/${this.$route.params.id}`
         return {
           secondaryNav: [{
             label: '设备列表',

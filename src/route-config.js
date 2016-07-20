@@ -696,8 +696,34 @@ let configRouter = (router) => {
         'users/major-clients/:id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/user/major-client-details'))
+              resolve(require('./views/operation/user/major-details/index'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 设备列表
+            'devices': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/major-details/device-list'))
+                }, 'admin')
+              }
+            },
+            // 维保信息
+            'warranty': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/major-details/warranty'))
+                }, 'admin')
+              }
+            },
+            // 反馈记录
+            'issues': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/major-details/issues'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 用户设置
@@ -1057,6 +1083,7 @@ let configRouter = (router) => {
     '/operation/settings': '/operation/settings/auth',
     '/operation/users': '/operation/users/overview',
     '/operation/users/details/:id': '/operation/users/details/:id/devices',
+    '/operation/users/major-clients/:id': '/operation/users/major-clients/:id/devices',
     '/operation/plugins/android/:id': '/operation/plugins/android/:id/settings',
     // '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/forbidden',
     // '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/forbidden',
