@@ -1,6 +1,7 @@
 <template lang="html">
   <div :class="classes">
     <div class="info" v-animated-number="info.total"></div>
+    <div class="unit" v-if="info.unit">{{info.unit}}</div>
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
@@ -34,7 +35,9 @@ export default {
     info: {
       type: Object,
       default () {
-        return {}
+        return {
+          unit: ''
+        }
       }
     },
 
@@ -113,6 +116,7 @@ export default {
 
   & > .tit
   & > .info
+  & > .unit
     color gray-dark
 
   & > .tit
@@ -122,6 +126,7 @@ export default {
       margin-left 4px
 
   & > .info
+  & > .unit
     /*font-size 42px
     font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial*/
     font-size 36px
@@ -151,11 +156,13 @@ export default {
 .x-statistic-green
   & > .tit
   & > .info
+  & > .unit
     color green
 
 .x-statistic-blue
   & > .tit
   & > .info
+  & > .unit
     color blue
 
 .x-statistic-orange
@@ -183,6 +190,7 @@ export default {
     top -18px
     left 5px
   & > .info
+  & > .unit
   & > .change
     display inline-block
 
