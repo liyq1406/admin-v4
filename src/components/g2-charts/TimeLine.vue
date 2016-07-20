@@ -14,11 +14,11 @@ export default {
         return []
       }
     },
-    options: {
-      type: Object,
-      default () {
-        return {}
-      }
+    // line 折线图
+    // smooth 曲线图
+    type: {
+      type: String,
+      default: 'line'
     }
   },
 
@@ -59,11 +59,13 @@ export default {
           margin: 100 // 边距
         }
       }
-      // var legendDefaults = {
-      //   position: 'bottom'
-      // }
+
       var chart = new window.G2.Chart(defaults)
       this.chart = chart
+
+      chart.legend({
+        position: 'top'
+      })
 
       var fields = []
       var defs = {}
@@ -79,8 +81,24 @@ export default {
       }
 
       var position = fields[0] + '*' + fields[1]
+      var color = fields[2] || null
       chart.source(this.data, defs)
-      chart.line().position(position).size(2)
+
+      var line = chart.line().position(position).size(2)
+      if (color) {
+        line.color(color)
+      }
+
+      switch (this.type) {
+        case 'line':
+          break
+        case 'smooth':
+          line.shape('smooth')
+          break
+        default:
+          break
+      }
+
       chart.render()
     }
   }

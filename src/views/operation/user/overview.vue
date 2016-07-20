@@ -43,7 +43,7 @@
         <h2>用户趋势</h2>
       </div>
       <div class="panel-bd">
-        <div class="filter-bar">
+        <div class="filter-bar filter-bar-head">
           <div class="filter-group fr">
             <div class="filter-group-item">
               <date-time-range-picker></date-time-range-picker>
@@ -53,7 +53,7 @@
             </div>
           </div>
         </div>
-        <line :data="trends.users.data" :options="trends.users.options"></line>
+        <time-line :data="trends.users.data" :type="'smooth'"></time-line>
       </div>
     </div>
 
@@ -102,7 +102,7 @@ import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
-import Line from 'components/g2-charts/Line'
+import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
 import ChinaMap from 'components/g2-charts/ChinaMap'
 import mapData from 'components/g2-charts/map-data.json'
@@ -121,7 +121,7 @@ export default {
     RadioButtonGroup,
     Statistic,
     Tooltip,
-    Line,
+    TimeLine,
     Interval,
     ChinaMap,
     DateTimeRangePicker
@@ -506,10 +506,25 @@ export default {
       color: 'type'
     }
     this.trends.users.data = Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [26, 38, 19, 33, 29, 33, 29],
-        'type': '新增用户'
+      'list|14': [{
+        'date|+1': [
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29],
+        '产品|+1': ['电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2']
       }]
     }).list
     this.trends.users.options = userTrendsOptions
