@@ -50,12 +50,30 @@ export default {
     return {
       deviceSummary: {},
       deviceInfo: {
-        mac: {},
-        onlineLong: {},
-        isActive: {},
-        model: {},
-        sn: {},
-        id: {}
+        mac: {
+          label: 'MAC',
+          value: ''
+        },
+        onlineLong: {
+          label: '累计在线时长',
+          value: ''
+        },
+        isActive: {
+          label: '激活状态',
+          value: ''
+        },
+        model: {
+          label: '型号',
+          value: ''
+        },
+        sn: {
+          label: '序列号',
+          value: ''
+        },
+        id: {
+          label: '设备ID',
+          value: ''
+        }
       },
       secondaryNav: [],
       breadcrumbNav: [{
@@ -150,33 +168,15 @@ export default {
           // this.device = res.data
           // console.log(res.data)
 
-          this.deviceInfo.mac = {
-            label: 'MAC',
-            value: res.data.mac
-          }
+          this.deviceInfo.mac.value = res.data.mac
           // TODO 接口字段缺失
-          this.deviceInfo.onlineLong = {
-            label: '累计在线时长',
-            value: '100小时'
-          }
-          this.deviceInfo.isActive = {
-            label: '激活状态',
-            value: res.data.is_active ? `已激活 ${res.data.active_date}` : '未激活'
-          }
+          this.deviceInfo.mac.value = '100小时'
+          this.deviceInfo.isActive.value = res.data.is_active ? `已激活 ${res.data.active_date}` : '未激活'
           // TODO 接口字段缺失
-          this.deviceInfo.model = {
-            label: '型号',
-            value: '暂无信息'
-          }
+          this.deviceInfo.model.value = '暂无信息'
           // TODO 接口字段缺失
-          this.deviceInfo.sn = {
-            label: '序列号',
-            value: '暂无信息'
-          }
-          this.deviceInfo.id = {
-            label: '设备ID',
-            value: res.data.id
-          }
+          this.deviceInfo.sn.value = '暂无信息'
+          this.deviceInfo.id.value = res.data.id
 
           api.product.getProduct(res.data.product_id).then((r) => {
             if (r.status === 200) {
@@ -187,11 +187,11 @@ export default {
               }
             }
           }).catch((r) => {
-            this.handleError(r)
+            // this.handleError(r)
           })
         }
       }).catch((res) => {
-        this.handleError(res)
+        // this.handleError(res)
       })
     }
   }

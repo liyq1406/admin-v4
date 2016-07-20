@@ -34,7 +34,7 @@ export default {
     // 触发器宽度
     triggerWidth: {
       type: Number,
-      default: 120
+      default: 30
     },
 
     // 对齐位置

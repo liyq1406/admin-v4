@@ -193,7 +193,7 @@
         console.log(b)
       },
       goDetails (table) {
-        this.$route.router.go('/operation/users/' + table.id)
+        this.$route.router.go('/operation/users/details/' + table.id)
       },
       /**
        * 获取假用户数据
