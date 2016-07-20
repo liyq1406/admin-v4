@@ -31,7 +31,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-nickname="goDetails"></x-table>
           <!-- <table class="table table-stripe table-bordered">
             <thead>
               <tr>
@@ -160,6 +160,7 @@
             }
           }
           table.nickname = '<a style="color: #c0252e">' + user.nickname + '</a>'
+          table.prototype = user
           result.push(table)
         })
         return result
@@ -193,7 +194,7 @@
         console.log(a)
         console.log(b)
       },
-      goDetails (header, table, index) {
+      goDetails (table) {
         this.$route.router.go('/operation/users/' + table.id)
       },
       /**
