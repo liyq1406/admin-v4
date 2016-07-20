@@ -91,6 +91,7 @@ export default {
           subs: {
             overview: '概览',
             list: '用户列表',
+            major_clients: '大客户管理',
             settings: '用户设置',
             portrait: '人群画像',
             analysis: '用户行为分析'
