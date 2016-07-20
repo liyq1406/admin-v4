@@ -13,7 +13,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
+          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
         </div>
         <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
@@ -56,7 +56,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
