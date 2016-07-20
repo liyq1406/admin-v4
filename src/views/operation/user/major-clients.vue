@@ -4,25 +4,24 @@
       <h2>大客户管理</h2>
     </div>
     <div class="panel">
-      <div class="panel-bd">
-        <div class="row statistic-group">
-          <div class="col-6">
-            <statistic :info="majorSummary.monthIncrease" :title="majorSummary.monthIncrease.title" :has-target="true" align="left">
-              <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
-            </statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="majorSummary.number" :title="majorSummary.number.title" :has-target="true" align="left">
-              <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
-            </statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="majorSummary.completion" :title="majorSummary.completion.title" align="left"></statistic>
-          </div>
-          <div class="col-6">
-            <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left"></statistic>
-          </div>
-        </div>
+      <div class="panel-bd"></div>
+    </div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="majorSummary.monthIncrease" :title="majorSummary.monthIncrease.title" :has-target="true" align="left">
+          <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
+        </statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="majorSummary.number" :title="majorSummary.number.title" :has-target="true" align="left">
+          <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
+        </statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="majorSummary.completion" :title="majorSummary.completion.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left"></statistic>
       </div>
     </div>
   </div>
