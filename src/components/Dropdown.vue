@@ -1,6 +1,6 @@
 <template>
   <div class="x-dropdown-wrap" :class="classes">
-    <div class="trigger" @click="show=!show">
+    <div class="trigger" @click="show=!show" :style="triggerStyle">
       <slot name="trigger">
         <i class="fa fa-bars"></i>
       </slot>
@@ -21,11 +21,18 @@ export default {
     // 是否显示下拉框
     show: {
       type: Boolean,
-      default: false
+      default: false,
+      twoway: true
     },
 
     // 下拉框宽度
     dropdownWidth: {
+      type: Number,
+      default: 120
+    },
+
+    // 触发器宽度
+    triggerWidth: {
       type: Number,
       default: 120
     },
@@ -48,6 +55,9 @@ export default {
       rect: {},
       dropdownStyle: {
         width: `${this.dropdownWidth}px`
+      },
+      triggerStyle: {
+        width: `${this.triggerWidth}px`
       }
     }
   },
@@ -106,7 +116,7 @@ export default {
 
   .trigger
     height 26px
-    width 30px
+    width 100%
     display inline-block
     vertical-align middle
     text-align center
