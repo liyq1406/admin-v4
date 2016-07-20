@@ -3,12 +3,19 @@
     <div class="main-title">
       <h2>告警信息</h2>
     </div>
-    <div class="tool-bar">
-      <div class="tool-list">
-        <div class="tool-list-item">
-          <a class="trigger" v-link="{ path: '/operation/alerts/settings' }"><i class="fa fa-cog"></i><span class="trigger-text">规则设置</span></a>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <date-time-range-picker></date-time-range-picker>
+        </div>
+        <div class="filter-group-item">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
+      <span>趋势</span>
+    </div>
+    <div>
+      <time-line :data="alertChartData"></time-line>
     </div>
     <div class="panel mt15">
       <!-- <div class="panel-hd">
@@ -295,180 +302,6 @@
         <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
       </div>
     </modal>
-    <!-- Start: 编辑规则浮层 -->
-    <!-- <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
-      <h3 slot="header">{{ $t("ui.rule.edit_rule") }}</h3>
-      <div slot="body" class="form form-rules">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.name") }}:</label>
-            <div class="controls col-19">
-              <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
-                <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.condition") }}:</label>
-            <div class="controls col-19">
-              <div class="row">
-                <div class="col-5">
-                  <v-select :label="ruleTypes[editModal.model.type-1]">
-                    <select v-model="editModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
-                      <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                    </select>
-                  </v-select>
-                </div>
-                <div class="col-8">
-                  <div v-show="editModal.model.type === 1" class="ml10">
-                    <div class="select">
-                      <v-select :label="datapointName(editModal.model)">
-                        <select v-model="editModal.model.param" v-form-ctrl name="param">
-                          <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
-                        </select>
-                      </v-select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-6">
-                  <div v-show="editModal.model.type === 1" class="ml10">
-                    <div class="select">
-                      <v-select :label="compareTypes[editModal.model.compare-1]">
-                        <select v-model="editModal.model.compare" v-form-ctrl name="compare" number>
-                          <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                        </select>
-                      </v-select>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-5">
-                  <div class="ml10">
-                    <div class="input-text-wrap" v-show="editModal.model.type === 1">
-                      <input v-model="editModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
-                    </div>
-                    <div class="select" v-show="editModal.model.type === 2">
-                      <v-select :label="$t('common.'+editModal.value2)">
-                        <select v-model="editModal.value2" v-form-ctrl name="value">
-                          <option value="online">{{ $t("common.online") }}</option>
-                          <option value="offline">{{ $t("common.offline") }}</option>
-                        </select>
-                      </v-select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.content") }}:</label>
-            <div class="controls col-19">
-              <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
-                <textarea v-model="editModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
-              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.inform_type") }}:</label>
-            <div class="controls col-19">
-              <div class="select">
-                <v-select :label="informTypes[editModal.model.notify_type-1]">
-                  <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number>
-                    <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                  </select>
-                </v-select>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row tag-row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.tags") }}:</label>
-            <div class="controls col-19">
-              <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.notify_type") }}:</label>
-            <div class="controls col-19">
-              <div class="checkbox-group">
-                <template v-for="type in notifyTypes">
-                  <label v-if="$index < 3" class="checkbox">
-                    <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
-                  </label>
-                </template>
-              </div>
-              <template v-for="type in notifyTypes">
-                <div class="row" v-if="$index === 3">
-                  <div class="checkbox-group col-6">
-                    <label class="checkbox">
-                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
-                    </label>
-                  </div>
-                  <div class="col-18">
-                    <div v-show="isShowApn(editModal.model)" class="apn-list">
-                      <div class="checkbox-group">
-                        <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="row" v-if="$index === 4">
-                  <div class="checkbox-group col-6">
-                    <label class="checkbox">
-                      <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
-                    </label>
-                  </div>
-                  <div class="col-18">
-                    <div v-show="isShowGoogle(editModal.model)" class="apn-list">
-                      <div class="checkbox-group">
-                        <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                          <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </template>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("ui.rule.fields.scope") }}:</label>
-            <div class="controls col-19">
-              <div class="radio-group">
-                <label v-for="type in scopeTypes" class="radio">
-                  <input type="radio" v-model="editModal.model.scope" name="scope" :value="$index+1" number/>{{ type }}
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-5">{{ $t("common.status") }}:</label>
-            <div class="controls col-19">
-              <div class="radio-group">
-                <label class="radio">
-                  <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
-                </label>
-                <label class="radio">
-                  <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.rule.del_rule") }}
-            </label>
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
-      </div>
-    </modal> -->
-    <!-- End: 编辑规则浮层 -->
   </div>
 </template>
 
@@ -484,6 +317,9 @@
   import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
+  import TimeLine from 'components/g2-charts/TimeLine'
 
   export default {
     name: 'Alert',
@@ -495,11 +331,37 @@
       'pager': Pager,
       'v-select': Select,
       'tag-input': TagInput,
-      Statistic
+      Statistic,
+      RadioButtonGroup,
+      DateTimeRangePicker,
+      TimeLine
     },
 
     data () {
       return {
+        // TODO
+        alertChartData: [
+          {
+            createTime: new Date(2016, 7, 15, 0, 0, 0),
+            value: 30
+          },
+          {
+            createTime: new Date(2016, 7, 16, 0, 0, 0),
+            value: 45
+          },
+          {
+            createTime: new Date(2016, 7, 17, 0, 0, 0),
+            value: 60
+          },
+          {
+            createTime: new Date(2016, 7, 18, 0, 0, 0),
+            value: 0
+          },
+          {
+            createTime: new Date(2016, 7, 19, 0, 0, 0),
+            value: 24
+          }
+        ],
         alerts: [],
         rules: [],            // 规则列表
         apps: [],              // app 列表
@@ -561,28 +423,8 @@
           value1: '0',
           value2: 'online'
         },
-        // addModel: {           // 添加数据模型
-        //   product_id: this.$route.params.id,
-        //   name: '',
-        //   tag: '',
-        //   type: 1,
-        //   notify_target: [],
-        //   notify_apps: [],
-        //   notify_type: 1,
-        //   compare: 1,
-        //   value: '0',
-        //   scope: 1,
-        //   is_enable: true,
-        //   content: '',
-        //   param: ''
-        // },
         addValidation: {},    // 添加验证
         editValidation: {},   // 修改验证
-        // addModelEditingTag: false, // 是否正在编辑添加浮层的标签
-        // editModal.modelEditingTag: false, // 是否正在编辑编辑浮层的标签
-        // editModal.model: {
-        //   tag: ''
-        // },
         delChecked: false,    // 是否删除
         adding: false,
         editing: false,
@@ -615,7 +457,22 @@
             change: 90,
             title: '7天告警数'
           }
-        }
+        },
+        period: 7,
+        periods: [
+          {
+            value: 1,
+            label: '24h'
+          },
+          {
+            value: 7,
+            label: '7天'
+          },
+          {
+            value: 30,
+            label: '30天'
+          }
+        ]
       }
     },
 

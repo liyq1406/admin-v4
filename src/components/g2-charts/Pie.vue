@@ -31,13 +31,14 @@ export default {
   },
 
   ready () {
-    this.render()
+    if (!this.chart) {
+      this.render()
+    }
   },
 
   watch: {
     // 监听数据变化，渲染图表
     data () {
-      console.log('watch change')
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
@@ -48,6 +49,9 @@ export default {
 
   methods: {
     render () {
+      if (this.data.length <= 0) {
+        return
+      }
       // 默认配置
       var defaults = {
         container: this.$el, // 容器
@@ -84,7 +88,6 @@ export default {
       chart.render()
 
       chart.on('itemselected', (e) => {
-        console.log(e.data._origin)
         this.$emit('itemselected', e.data._origin)
       })
 
