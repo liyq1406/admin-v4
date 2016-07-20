@@ -8,6 +8,9 @@
       <span class="ml10">{{ percentage }}</span>
     </div>
     <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
+    <div class="target" v-if="hasTarget">
+      <slot></slot>
+    </div>
     <div class="chart" v-if="hasChart">
       <slot></slot>
     </div>
@@ -67,6 +70,12 @@ export default {
 
     // 是否带图表
     hasChart: {
+      type: Boolean,
+      default: false
+    },
+
+    // 是否带目标
+    hasTarget: {
       type: Boolean,
       default: false
     },
@@ -204,4 +213,11 @@ export default {
       size 1px 70%
       content ''
       background #E5E5E5
+.target
+  font-size 10px!important
+  color #307fc1
+  .change-reduse
+    color red
+  .change-increase
+    color green  
 </style>
