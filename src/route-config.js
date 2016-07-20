@@ -725,7 +725,7 @@ let configRouter = (router) => {
           }
         },
         // 用户详情
-        'users/:id': {
+        'users/details/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/user/detail/index'))
@@ -1040,7 +1040,7 @@ let configRouter = (router) => {
     '/operation/statistic': '/operation/statistic/products',
     '/operation/settings': '/operation/settings/auth',
     '/operation/users': '/operation/users/overview',
-    '/operation/users/:id': '/operation/users/:id/devices',
+    '/operation/users/details/:id': '/operation/users/details/:id/devices',
     '/operation/plugins/android/:id': '/operation/plugins/android/:id/settings',
     // '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/forbidden',
     // '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/forbidden',
