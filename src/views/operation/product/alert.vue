@@ -36,14 +36,14 @@
         <h2>告警信息列表</h2>
       </div> -->
       <div class="panel-bd">
-        <div class="data-table with-loading">
+        <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+        <!-- <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <!-- <th>{{ $t("ui.alert.info_list.product_name") }}</th> -->
                 <th>{{ $t("ui.alert.info_list.content") }}</th>
                 <th>{{ $t("ui.alert.info_list.create_date") }}</th>
                 <th>{{ $t("ui.alert.info_list.is_read") }}</th>
@@ -53,7 +53,6 @@
             <tbody>
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
-                  <!-- <td>{{ alert.product_name }}</td> -->
                   <td>
                     <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
                   </td>
@@ -72,9 +71,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
-        <!-- 分页-->
-        <!-- <pager v-if="rules.length > countPerPage" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager> -->
       </div>
     </div>
 
@@ -310,7 +307,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
-  import Pager from 'components/Pager'
+  import Table from 'components/Table'
   import Modal from 'components/Modal'
   import Select from 'components/Select'
   import TagInput from 'components/TagInput'
@@ -328,7 +325,7 @@
 
     components: {
       'modal': Modal,
-      'pager': Pager,
+      'c-table': Table,
       'v-select': Select,
       'tag-input': TagInput,
       Statistic,
@@ -362,7 +359,9 @@
             value: 24
           }
         ],
-        alerts: [],
+        alerts: [
+          {}
+        ],
         rules: [],            // 规则列表
         apps: [],              // app 列表
         ruleTypes: locales[Vue.config.lang].data.RULE_TYPES,
@@ -472,6 +471,33 @@
             value: 30,
             label: '30天'
           }
+        ],
+        headers: [
+          {
+            key: 'content',
+            title: '告警内容'
+          },
+          {
+            key: 'time',
+            title: '时间',
+            sortType: -1
+          },
+          {
+            key: 'duration',
+            title: '时长'
+          },
+          {
+            key: 'addr',
+            title: '地点'
+          },
+          {
+            key: 'level',
+            title: '告警等级'
+          },
+          {
+            key: 'state',
+            title: '状态'
+          }
         ]
       }
     },
@@ -497,6 +523,29 @@
     },
 
     computed: {
+      page () {
+        return {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
+      },
+      tables () {
+        var result = []
+        this.alerts.map((item) => {
+          var alert = {
+            content: '设备下线',
+            time: '2016-01-01 16:21:13',
+            duration: '1.2h',
+            addr: '湖北, 武汉',
+            level: '<div class="level level1">中等</div>',
+            state: '待处理',
+            prototype: item
+          }
+          result.push(alert)
+        })
+        return result
+      },
       /**
        * 数据端点名称
        */
@@ -565,7 +614,7 @@
         this.loadingData = true
         api.alert.getAlerts(this.queryCondition).then((res) => {
           if (res.status === 200) {
-            this.alerts = res.data.list
+            // this.alerts = res.data.list
             this.total = res.data.count
             this.loadingData = false
           }
