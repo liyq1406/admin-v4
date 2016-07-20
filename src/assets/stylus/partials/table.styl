@@ -9,7 +9,6 @@ table
 
   th
   td
-    border-right 1px solid default-border-color
     background #FFF
 
   th
@@ -17,8 +16,8 @@ table
     text-align left
     cursor default
     white-space nowrap
-    background #EEE
-    border-bottom 1px solid default-border-color
+    background #FFF
+    border-bottom 2px solid #BBB
     font-size 12px
 
     .fa
@@ -51,6 +50,14 @@ table
 .table-bordered
   border 1px solid default-border-color
 
+  th
+  td
+    border-right 1px solid default-border-color
+
+  th
+    background #EEE
+    border-bottom 1px solid light-border-color
+
 // 数据表格
 .data-table
   .filter-bar
@@ -67,7 +74,7 @@ table
 // 数据表格垂直居中
 .data-table-wrap
   display table
-  min-height 400px
+  min-height 500px
 
   .data-table
     display table-cell
