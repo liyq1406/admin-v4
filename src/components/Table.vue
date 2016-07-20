@@ -1,46 +1,48 @@
 <template>
   <div class="intelligent-table-box data-table with-loading">
-    <div class="icon-loading" v-show="loading">
-      <i class="fa fa-refresh fa-spin"></i>
-    </div>
-    <table class="table table-stripe table-bordered">
-      <thead>
-        <tr>
-          <th v-show="selecting" class="tac">
-            <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
-          </th>
-          <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType || tHeader.pointer}" @click="theaderClick(tHeader, $index)">
-            <div class="theader-box">
-              <slot :name="'theader-' + hump2line(tHeader.key)">
-                {{{tHeader.title}}}
-                <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
-                <div class="sort-box" v-if="tHeader.sortType">
-                  <i class="fa fa-caret-up" :class="{'gray': tHeader.sortType!==1}"></i>
-                  <i class="fa fa-caret-down" :class="{'gray': tHeader.sortType===1}"></i>
-                </div>
-              </slot>
-            </div>
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <template v-if="tables.length > 0">
-          <tr v-for="(tableIndex, table) in tables" track-by="$index">
+    <div class="table-content data-table with-loading">
+      <div class="icon-loading" v-show="loading">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
+      <table class="table table-stripe table-bordered">
+        <thead>
+          <tr>
             <th v-show="selecting" class="tac">
-              <input type="checkbox" :checked="tableIndex>-1" @change="selectedTablesChange(table)">
+              <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
             </th>
-            <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex)">
-              {{{table[tHeader.key]}}}
+            <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType || tHeader.pointer}" @click="theaderClick(tHeader, $index)">
+              <div class="theader-box">
+                <slot :name="'theader-' + hump2line(tHeader.key)">
+                  {{{tHeader.title}}}
+                  <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
+                  <div class="sort-box" v-if="tHeader.sortType">
+                    <i class="fa fa-caret-up" :class="{'gray': tHeader.sortType!==1}"></i>
+                    <i class="fa fa-caret-down" :class="{'gray': tHeader.sortType===1}"></i>
+                  </div>
+                </slot>
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <template v-if="tables.length > 0">
+            <tr v-for="(tableIndex, table) in tables" track-by="$index">
+              <th v-show="selecting" class="tac">
+                <input type="checkbox" :checked="tableIndex>-1" @change="selectedTablesChange(table)">
+              </th>
+              <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex)">
+                {{{table[tHeader.key]}}}
+              </td>
+            </tr>
+          </template>
+          <tr v-if="tables.length === 0">
+            <td :colspan="headers.length + 1" class="tac">
+              <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
             </td>
           </tr>
-        </template>
-        <tr v-if="tables.length === 0">
-          <td :colspan="headers.length + 1" class="tac">
-            <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </tbody>
+      </table>
+    </div>
     <pager :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
   </div>
 </template>
@@ -306,9 +308,9 @@
   .intelligent-table-box
     width 100%
     height auto
-    overflow-y hidden
-    overflow-x auto
     box-sizing border-box
+    .table-content
+      overflow auto
     .pointer
       cursor pointer
     .theader-box
