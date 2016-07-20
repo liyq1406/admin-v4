@@ -11,16 +11,21 @@
               <p>aaa</p>
             </dropdown>
           </div>
-          <!-- <div class="filter-group">
-            <v-select width="90px" size="small" :label="visibility.label">
-              <span slot="label">{{ $t('common.display') }}：</span>
-              <select v-model="visibility" @change="getDevices(true)">
-                <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-          </div> -->
+          <div class="filter-group">
+            <div class="filter-group-item">
+              <v-select :label="'全部'" width="100px" class="work-orders-select" size="small">
+                <span slot="label">显示</span>
+                <select v-model="status" @change="">
+                  <option :value="0">0</option>
+                  <option :value="1">1</option>
+                  <p> {{'status'}}</p>
+                </select>
+              </v-select>
+            </div>
+          </div>
         </div>
-        <table class="table table-stripe table-bordered">
+        <c-table :headers="headers" :tables="tables" :page="page" @tbody-nickname="linkToDetails" @page-update=""></c-table>
+        <!-- <table class="table table-stripe table-bordered">
           <thead>
             <tr>
               <th>{{ $t('ui.user.fields.nick_name') }}</th>
@@ -46,9 +51,8 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
-      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager>
     </div>
   </div>
 </template>
@@ -60,6 +64,7 @@ import { globalMixins } from 'src/mixins'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Dropdown from 'components/Dropdown'
+import Table from 'components/Table'
 
 export default {
   name: 'Users',
@@ -67,6 +72,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
+    'c-table': Table,
     'v-select': Select,
     SearchBox,
     Dropdown
@@ -74,19 +80,60 @@ export default {
 
   data () {
     return {
-      users: []
-    }
-  },
-
-  route: {
-    data () {
-      // this.getDatapointValues()
-      // this.getDeviceInfo()
-      // this.getDatapoints()
+      query: '',
+      total: 0,
+      currentPage: 1,
+      countPerPage: 10,
+      users: [],
+      headers: [
+        {
+          key: 'nickname',
+          title: '昵称'
+        },
+        {
+          key: 'email',
+          title: '邮箱'
+        },
+        {
+          key: 'phone',
+          title: '电话'
+        },
+        {
+          key: 'id',
+          title: '用户ID'
+        },
+        {
+          key: 'valid',
+          title: '设备限权'
+        }
+      ]
     }
   },
 
   computed: {
+    tables () {
+      var result = []
+      this.users.map((item) => {
+        var user = {
+          id: item.id,
+          nickname: '<a class="hl-red"><i class="fa fa-user"></i> ' + item.nickname + '</a>',
+          email: item.email,
+          phone: item.phone,
+          valid: item.valid,
+          prototype: item
+        }
+        result.push(user)
+      })
+      return result
+    },
+    page () {
+      var result = {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+      return result
+    },
     queryCondition () {
       var condition = {
         filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
@@ -104,13 +151,43 @@ export default {
     }
   },
 
+  route: {
+    data () {
+      // this.getDatapointValues()
+      // this.getDeviceInfo()
+      // this.getDatapoints()
+      this.getUsers()
+    }
+  },
+
   methods: {
+    linkToDetails (table) {
+      this.$route.router.go('/operation/user/' + table.prototype.id)
+    },
     // 获取用户
     getUsers () {
       this.loadingData = true
+      if (this.debug) {
+        this.users = [
+          {
+            id: 123,
+            nickname: '昵称1',
+            email: '123@132.com',
+            phone: '13800138000',
+            valid: -1
+          },
+          {
+            id: 123,
+            nickname: '昵称2',
+            email: '123@132.com',
+            phone: '13800138000',
+            valid: -1
+          }
+        ]
+      }
       api.user.list(this.queryCondition).then((res) => {
         if (res.status === 200) {
-          this.users = res.data.list
+          // this.users = res.data.list
           this.total = res.data.count
           this.loadingData = false
         }
