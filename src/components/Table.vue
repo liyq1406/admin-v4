@@ -269,7 +269,7 @@
       tbodyClick (theader, table, lineIndex) {
         var key = this.hump2line(theader.key)
         key = key.replace('_', '-')
-        this.$emit('tbody-' + key, theader, table, lineIndex)
+        this.$emit('tbody-' + key, table, theader, lineIndex)
       },
       /**
        * 驼峰字符串转普通中划线字符串
