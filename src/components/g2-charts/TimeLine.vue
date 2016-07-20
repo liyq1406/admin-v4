@@ -47,9 +47,13 @@ export default {
 
   methods: {
     render () {
+      if (!this.data) {
+        return
+      }
       if (this.data.length <= 0) {
         return
       }
+      console.log(this.data)
       // 默认配置
       var defaults = {
         container: this.$el, // 容器

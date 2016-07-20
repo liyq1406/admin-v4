@@ -4,7 +4,25 @@
       <h2>大客户管理</h2>
     </div>
     <div class="panel">
-      <div class="panel-bd"></div>
+      <div class="panel-hd">
+        <h2>用户趋势</h2>
+      </div>
+      <div class="panel-bd">
+        <div class="filter-bar filter-bar-head">
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+            </div>
+            <div class="filter-group-item">
+              <date-time-range-picker></date-time-range-picker>
+            </div>
+            <div class="filter-group-item">
+              <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            </div>
+          </div>
+        </div>
+        <time-line :data="trends" :type="'smooth'"></time-line>
+      </div>
     </div>
     <div class="row statistic-group">
       <div class="col-6">
@@ -30,6 +48,10 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import TimeLine from 'components/g2-charts/TimeLine'
+import Mock from 'mockjs'
 
 export default {
   name: 'MajorClients',
@@ -37,7 +59,10 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Statistic
+    Statistic,
+    RadioButtonGroup,
+    DateTimeRangePicker,
+    TimeLine
   },
 
   data () {
@@ -69,8 +94,25 @@ export default {
           change: 24,
           title: '大客户占比'
         }
-      }
+      },
+      trends: null
     }
+  },
+  ready () {
+    this.trends = Mock.mock({
+      'list|14': [{
+        'date|+1': [
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9]
+      }]
+    }).list
   }
 }
 </script>
