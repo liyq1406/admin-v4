@@ -15,7 +15,7 @@ import Dropdown from 'components/Dropdown'
 import {uniformDate, uniformMinuteTime} from '../filters'
 
 export default {
-  name: 'timerangepicker',
+  name: 'timesinglerangepicker',
   components: {
     DateTimePicker,
     Dropdown
