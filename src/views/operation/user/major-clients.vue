@@ -42,10 +42,40 @@
         <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left"></statistic>
       </div>
     </div>
+    <div class="panel">
+      <div class="panel-bd">
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="$t('ui.user.fields.account')" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <label>{{ $t('ui.user.search_user') }}</label>
+                </search-box>
+              </div>
+            </div>
+          </div>
+          <c-table :headers="headers" :tables="tables" :page="page" ></c-table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import SearchBox from 'components/SearchBox'
+import Select from 'components/Select'
+import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import RadioButtonGroup from 'components/RadioButtonGroup'
@@ -59,6 +89,9 @@ export default {
   mixins: [globalMixins],
 
   components: {
+    'search-box': SearchBox,
+    'v-select': Select,
+    'c-table': Table,
     Statistic,
     RadioButtonGroup,
     DateTimeRangePicker,
@@ -67,6 +100,12 @@ export default {
 
   data () {
     return {
+      query: '',
+      searching: false,
+      total: 0,
+      currentPage: 1,
+      countPerPage: 10,
+      loadingData: false,
       majorSummary: {
         monthIncrease: {
           total: 38,
@@ -95,7 +134,89 @@ export default {
           title: '大客户占比'
         }
       },
-      trends: null
+      trends: null,
+      majorClients: [
+        {
+          name: 'Google',
+          create_date: '2016-1-1 19:21:32',
+          place: '美国洛杉矶',
+          profession: '互联网',
+          contact: 'jon',
+          contact_information: '158023234',
+          expand: '暂未定义'
+        },
+        {
+          name: 'Google',
+          create_date: '2016-1-1 19:21:32',
+          place: '美国洛杉矶',
+          profession: '互联网',
+          contact: 'jon',
+          contact_information: '158023234',
+          expand: '暂未定义'
+        }
+      ],
+      headers: [
+        {
+          key: 'name',
+          title: '名称'
+        },
+        {
+          key: 'create_date',
+          title: '创建时间'
+        },
+        {
+          key: 'place',
+          title: '地点',
+          class: 'tac'
+        },
+        {
+          key: 'profession',
+          title: '行业',
+          class: 'tac'
+        },
+        {
+          key: 'contact',
+          title: '联系人',
+          class: 'tac'
+        },
+        {
+          key: 'contact_information',
+          title: '联系方式',
+          class: 'tac'
+        },
+        {
+          key: 'expand',
+          title: '拓展',
+          class: 'tac'
+        }
+      ]
+    }
+  },
+  computed: {
+    page () {
+      var result = {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+      return result
+    },
+    tables () {
+      var result = []
+      this.majorClients.map((item) => {
+        var majorClient = {
+          name: item.name,
+          create_date: item.create_date,
+          place: item.place,
+          profession: item.profession,
+          contact: item.contact,
+          contact_information: item.contact_information,
+          expand: item.expand,
+          prototype: item
+        }
+        result.push(majorClient)
+      })
+      return result
     }
   },
   ready () {
