@@ -4,32 +4,30 @@
       <h2>用户基本信息</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-      <div class="panel mt15 mb20 no-split-line">
-        <div class="panel-bd row">
-          <div class="col-16">
-            <info-card :info="userSummary"></info-card>
-            <div v-stretch="183">
-              <info-list :info="userInfo"></info-list>
-            </div>
+    <div class="panel mt15 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <info-card :info="userSummary"></info-card>
+          <div v-stretch="182">
+            <info-list :info="userInfo"></info-list>
           </div>
-          <div class="col-8 device-map with-loading">
-            <div class="icon-loading" v-show="loadingData">
-              <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <div id="user-map" class="mt10" style="height: 220px"></div>
+        </div>
+        <div class="col-8 device-map with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
           </div>
+          <div id="user-map" class="mt10" style="height: 220px"></div>
         </div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <div class="panel">
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full">
         <h2>账号状态</h2>
       </div>
       <div class="panel-bd">
-        <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn sxten"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
+        <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn btn-sm"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
       </div>
     </div>
   </div>
@@ -59,7 +57,6 @@
     data () {
       return {
         user: {}, // 用户信息
-        subDevices: [], // 用户绑定设备列表
         userInfo: {
           status: {},
           create_time: {},
@@ -77,26 +74,26 @@
         }, {
           label: '用户信息'
         }],
-        userSummary: {}
+        userSummary: {},
+        secondaryNav: []
       }
     },
 
     route: {
       data () {
         this.getUserInfo()
-        this.getSubDevices()
 
         var deviceDetailRoot = `/operation/users/${this.$route.params.id}`
         return {
           secondaryNav: [{
             label: '设备列表',
-            link: { path: `${deviceDetailRoot}/device` }
+            link: { path: `${deviceDetailRoot}/devices` }
           }, {
             label: '维保信息',
             link: { path: `${deviceDetailRoot}/warranty` }
           }, {
             label: '反馈记录',
-            link: { path: `${deviceDetailRoot}/feedback` }
+            link: { path: `${deviceDetailRoot}/issues` }
           }]
         }
       }
@@ -212,26 +209,6 @@
         }
       },
 
-      // 时间过滤器
-      formatDate (date) {
-        if (typeof date !== 'undefined' && date.length > 0) {
-          date = date.replace(/T/, ' ').replace(/Z/, '')
-          return date.replace(/\.\d+$/, '')
-        } else {
-          return date
-        }
-      },
-
-      getSubDevices () {
-        api.user.subDeviceList(this.$route.params.id).then((res) => {
-          if (res.status === 200) {
-            this.subDevices = res.data
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      },
-
       deleteUser () {
         if (window.confirm('确定要停用当前用户吗？')) {
           api.user.banMember(this.user.id).then((res) => {
@@ -263,9 +240,3 @@
     }
   }
 </script>
-
-<style lang="stylus" scoped>
-.sxten
-  margin-top 10px
-  margin-bottom 10px
-</style>

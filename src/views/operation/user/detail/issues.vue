@@ -8,24 +8,24 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>工单编号</th>
-              <th>提交日期</th>
-              <th>最后处理</th>
-              <th>维保类型</th>
-              <th>处理状态</th>
+              <th>反馈信息</th>
+              <th class="w150">提交日期</th>
+              <th class="w150">最后处理</th>
+              <th class="w60">问题类型</th>
+              <th class="w60">处理状态</th>
             </tr>
           </thead>
           <tbody>
-            <template v-if="workOrders.length > 0">
-              <tr v-for="order in workOrders">
-                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + order._id}" class="hl-red">{{order._id}}</a></td>
-                <td>{{order.create_time}}</td>
-                <td>{{order.handle_time}}</td>
-                <td>{{typeText(order.type)}}</td>
-                <td>{{statusText(order.status)}}</td>
+            <template v-if="issues.length > 0">
+              <tr v-for="issue in issues">
+                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + issue._id}" class="hl-red">{{issue.content}}</a></td>
+                <td>{{issue.create_time}}</td>
+                <td>{{issue.handle_time}}</td>
+                <td>{{typeText(issue.type)}}</td>
+                <td>{{statusText(issue.status)}}</td>
               </tr>
             </template>
-            <tr v-if="workOrders.length === 0 && !loadingData">
+            <tr v-if="issues.length === 0 && !loadingData">
               <td colspan="7" class="tac">
                 <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
               </td>
@@ -68,16 +68,18 @@
             value: 2}
         ],
         loadingData: false,
-        workOrders: [
+        issues: [
           {
-            _id: '45a6dsa5sd46a',
+            _id: '123fafdfew',
+            content: '鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买',
             create_time: '2016-1-1 19:21:32',
             handle_time: '2016-1-1 19:21:32',
             type: 0,
             status: 0
           },
           {
-            _id: '45a6dsa5sd46a',
+            _id: '123fafdfew',
+            content: '鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买',
             create_time: '2016-1-1 19:21:32',
             handle_time: '2016-1-1 19:21:32',
             type: 0,
