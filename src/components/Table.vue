@@ -294,7 +294,9 @@
 
   .intelligent-table-box
     width 100%
-    overflow auto
+    height auto
+    overflow-y hidden
+    overflow-x auto
     box-sizing border-box
     .pointer
       cursor pointer
