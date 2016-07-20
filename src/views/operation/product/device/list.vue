@@ -264,7 +264,7 @@
     },
 
     methods: {
-      linkToDetails (header, table, index) {
+      linkToDetails (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.mac)
       },
       // 获取设备列表
