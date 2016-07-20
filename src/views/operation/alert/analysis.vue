@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel no-split-line">
       <div class="panel-bd">
         <div class="with-loading">
           <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
@@ -32,25 +32,51 @@
     </div>
 
     <div class="panel">
-      <div class="panel-hd">
-        <h3 style="font-weight: normal">级别分布</h3>
+      <div class="panel-hd panel-hd-full">
+        <h2>级别分布</h2>
       </div>
       <div class="panel-bd">
         <div class="row">
           <div class="col-10">
             <pie :data="warningLevel" @itemselected='pieSelected'></pie>
           </div>
-          <div class="col-14">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>{{curLevel}}告警</th>
-                  <th>占比</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+          <div class="col-13 col-offset-1 data-table-wrap">
+            <div class="data-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>{{curLevel}}告警</th>
+                    <th>占比</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>滤芯异常</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>PM2.5超过指标</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>CO2超过指标</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>CO1超过指标</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>温度超过指标</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>湿度超高</td>
+                    <td>14%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
         <div class="data-table with-loading">
