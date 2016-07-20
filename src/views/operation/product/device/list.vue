@@ -14,9 +14,6 @@
           </div>
         </div>
         <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
           <div class="filter-bar">
             <div class="filter-group fr">
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
@@ -37,7 +34,8 @@
               </v-select>
             </div>
           </div>
-          <table class="table table-stripe table-bordered">
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-update="getDevices"></c-table>
+          <!-- <table class="table table-stripe table-bordered">
             <thead>
               <tr>
                 <th @click="sortBy('mac')" :class="{active: sortKey === 'mac'}">MAC<i :class="sortOrders['mac'] ==='asc' ? 'fa-caret-up' : 'fa-caret-down'" class="fa"></i></th>
@@ -72,7 +70,7 @@
           <div class="col-18">
             <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDevices"></pager>
           </div>
-        </div>
+        </div> -->
       </div>
       <!-- 添加设备浮层-->
       <modal :show.sync="showAddModal">
@@ -108,8 +106,10 @@
   import Pager from 'components/Pager'
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
+  import Table from 'components/Table'
   import locales from 'consts/locales/index'
   import _ from 'lodash'
+  import { formatDate } from 'src/filters'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -119,6 +119,7 @@
 
     components: {
       'v-select': Select,
+      'c-table': Table,
       'modal': Modal,
       'search-box': SearchBox,
       'pager': Pager
@@ -169,11 +170,59 @@
         queryType: {
           label: 'MAC',
           value: 'mac'
-        }
+        },
+        headers: [
+          {
+            key: 'mac',
+            title: 'MAC'
+          },
+          {
+            key: 'id',
+            title: '设备ID'
+          },
+          {
+            key: 'is_active',
+            title: '是否激活',
+            tooltip: '提示'
+          },
+          {
+            key: 'active_date',
+            title: '激活时间',
+            sortType: -1
+          },
+          {
+            key: 'is_online',
+            title: '在线状态',
+            sortType: -1
+          }
+        ]
       }
     },
 
     computed: {
+      page () {
+        var result = {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
+        return result
+      },
+      tables () {
+        var result = []
+        this.devices.map((item) => {
+          var device = {
+            id: item.id,
+            mac: '<a class="hl-red">' + item.mac + '</a>',
+            is_active: item.is_active ? '是' : '否',
+            active_date: formatDate(item.active_date),
+            is_online: item.is_online ? '是' : '否',
+            prototype: item
+          }
+          result.push(device)
+        })
+        return result
+      },
       queryCondition () {
         var condition = {
           filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
@@ -215,6 +264,9 @@
     },
 
     methods: {
+      linkToDetails (header, table, index) {
+        this.$route.router.go(this.$route.path + '/' + table.prototype.mac)
+      },
       // 获取设备列表
       getDevices (querying) {
         if (typeof querying !== 'undefined') {
@@ -241,6 +293,9 @@
 
       // 排序
       sortBy (key) {
+        if (typeof key === 'object') {
+          key = key.key
+        }
         this.sortKey = key
         this.sortOrders[key] = this.sortOrders[key] === 'asc' ? 'desc' : 'asc'
         this.getDevices()
