@@ -4,6 +4,7 @@
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
+      <span class="ml10">{{ percentage }}</span>
     </div>
     <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="chart" v-if="hasChart">
@@ -17,16 +18,19 @@ export default {
   name: 'Statistic',
 
   props: {
+    // 标题
     title: {
       type: String,
       default: '总数'
     },
 
+    // 标题提示说明
     tooltip: {
       type: String,
       default: ''
     },
 
+    // 数据
     info: {
       type: Object,
       default () {
@@ -34,11 +38,13 @@ export default {
       }
     },
 
+    // 对齐方式
     align: {
       type: String,
       default: 'center'
     },
 
+    // 配色
     color: {
       type: String,
       default: ''
@@ -50,14 +56,22 @@ export default {
       default: 'x-statistic'
     },
 
+    // 行内显示
     inline: {
       type: Boolean,
       default: false
     },
 
+    // 是否带图表
     hasChart: {
       type: Boolean,
       default: false
+    },
+
+    // 保留小数点后多少位
+    digits: {
+      type: Number,
+      default: 2
     }
   },
 
@@ -79,6 +93,10 @@ export default {
       }
 
       return result.join(' ')
+    },
+
+    percentage () {
+      return Math.abs(this.info.change / (this.info.total || 1) * 100).toFixed(this.digits) + '%'
     }
   }
 }
@@ -104,8 +122,9 @@ export default {
       margin-left 4px
 
   & > .info
-    font-size 42px
-    font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial
+    /*font-size 42px
+    font-family 'PingFangSC-Ultralight', 'PingFang SC Ultralight', 'PingFang SC', arial*/
+    font-size 36px
     font-weight 100
 
   & > .change

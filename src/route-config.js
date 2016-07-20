@@ -454,37 +454,18 @@ let configRouter = (router) => {
         },
 
         // 用户反馈
-        'plugins/helpdesk/:app_id': {
+        'plugins/helpdesk/:app_id/overview': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/helpdesk/index'))
+              resolve(require('./views/operation/plugin/helpdesk/overview'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 概览
-            'overview': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/helpdesk/overview'))
-                }, 'admin')
-              }
-            },
-            // 反馈列表
-            'issues': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/helpdesk/issues'))
-                }, 'admin')
-              }
-            },
-            // 标签管理
-            'tags': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/helpdesk/tags'))
-                }, 'admin')
-              }
-            }
+          }
+        },
+        'plugins/helpdesk/:app_id/issues': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/helpdesk/issues'))
+            }, 'admin')
           }
         },
         'plugins/helpdesk/:app_id/issues/:id': {

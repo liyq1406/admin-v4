@@ -139,8 +139,14 @@ export default {
               url: `/plugins/broadcast/${item.id}/overview`
             }]
             break
-          case 'helpdesk': // 帮助中心
-
+          case 'helpdesk': // 用户反馈
+            sub.subs = [{
+              alias: 'overview',
+              url: `/plugins/helpdesk/${item.id}/overview`
+            }, {
+              alias: 'issues',
+              url: `/plugins/helpdesk/${item.id}/issues`
+            }]
             break
           case 'dealer': // 经销商管理
 

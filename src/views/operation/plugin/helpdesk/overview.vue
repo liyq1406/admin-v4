@@ -1,178 +1,185 @@
 <template>
-  <div class="panel">
-    <div class="panel-bd">
-      <div class="action-bar">
-        <v-select width="140px" :label="issueType.label" size="small">
-          <span slot="label">查看</span>
-          <select v-model="issueType" @change="getFeedbackGroupList">
-            <option v-for="opt in issueTypeOptions" :value="opt">{{ opt.label }}</option>
-          </select>
-        </v-select>
-        <radio-group :items="periods" :value.sync="period" class="fr" @select="getFeedbackGroupList"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+  <div class="main">
+    <div class="main-title">
+      <h2>用户反馈</h2>
+    </div>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fl">
+        <div class="filter-group-item">
+          <v-select label="空气净化器" width="110px" size="small">
+            <span slot="label">产品</span>
+          </v-select>
+        </div>
       </div>
-      <div class="row mt40 mb40">
-        <div class="col-15 with-loading">
-          <pie-chart :series="issueSeries" v-ref:issue-chart></pie-chart>
-          <div class="icon-loading" v-show="loadingData">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <button class="btn btn-ghost btn-sm"><a class="fa fa- fa-share-square-o"></a></button>
+        </div>
+        <div class="filter-group-item">
+          <date-time-range-picker></date-time-range-picker>
+        </div>
+        <div class="filter-group-item">
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd panel-hd-full">
+        <h2>趋势</h2>
+      </div>
+      <div class="panel-bd">
+        <div class="with-loading">
+          <line :data="trends.data" :options="trends.options"></line>
+          <!-- <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart> -->
+          <!-- <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
-          </div>
+          </div> -->
         </div>
-        <div class="col-9">
-          <div class="statistics-info">
-            <div class="item no-border">
-              <div class="cont">
-                <div class="num">{{ statistic.new }}</div>
-                <div class="label">{{ $t("ui.helpdesk.statistic.new") }}</div>
-              </div>
-            </div>
-            <div class="item no-border">
-              <div class="cont">
-                <div class="num">{{ statistic.waitingProcess }}</div>
-                <div class="label">{{ $t("ui.helpdesk.statistic.waiting_process") }}</div>
-              </div>
-            </div>
-          </div>
-        </div>
+      </div>
+    </div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="summary.pending" :title="$t('ui.helpdesk.statistic.pending')" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="summary.avg" :title="$t('ui.helpdesk.statistic.avg')" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="summary.weekAdded" :title="$t('ui.helpdesk.statistic.add', {period: 7})" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="summary.monthAdded" :title="$t('ui.helpdesk.statistic.add', {period: 30})" align="left"></statistic>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-bd">
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-  import Vue from 'vue'
-  import locales from 'consts/locales/index'
-  import api from 'api'
-  import Modal from 'components/Modal'
-  import Select from 'components/Select'
-  import RadioGroup from 'components/RadioGroup'
-  // import _ from 'lodash'
-  import { globalMixins } from 'src/mixins'
-  import { pluginMixins } from '../mixins'
+// import Vue from 'vue'
+// import locales from 'consts/locales/index'
+// import api from 'api'
+import Modal from 'components/Modal'
+import Select from 'components/Select'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import Statistic from 'components/Statistic'
+import Line from 'components/g2-charts/Line'
+// import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
+import { pluginMixins } from '../mixins'
 
-  import PieChart from 'components/charts/Pie'
+import Pie from 'components/g2-charts/Pie'
 
-  export default {
-    name: 'Overview',
+export default {
+  name: 'Overview',
 
-    mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins],
 
-    components: {
-      'modal': Modal,
-      'pie-chart': PieChart,
-      'v-select': Select,
-      'radio-group': RadioGroup
-    },
+  components: {
+    Modal,
+    Pie,
+    'v-select': Select,
+    RadioButtonGroup,
+    DateTimeRangePicker,
+    Statistic,
+    Line
+  },
 
-    data () {
-      return {
-        // 待选问题类型
-        issueTypeOptions: locales[Vue.config.lang].data.ISSUE_TYPES,
-        // 问题类型
-        issueType: {
-          label: '新增问题',
-          value: 0
+  data () {
+    return {
+      summary: {
+        pending: {
+          total: 12345
         },
-        // 时间间隔
-        period: 7,
-        // 待选时间间隔
-        periods: locales[Vue.config.lang].data.PERIODS,
-        // 统计
-        statistic: {
-          new: 0,
-          waitingProcess: 0
+        avg: {
+          total: 14
         },
-        // 数据是否加载中
-        loadingData: false,
-        labelGroup: []
-      }
-    },
-    computed: {
-      // 问题图表数据
-      issueSeries () {
-        var result = [{
-          name: '概览',
-          type: 'pie',
-          radius: '80%',
-          center: ['50%', '50%'],
-          data: []
-        }]
-        this.labelGroup.forEach((item) => {
-          result[0].data.push({
-            value: item.count,
-            name: item.label
-          })
-        })
-        return result
+        weekAdded: {
+          total: 145,
+          change: -14
+        },
+        monthAdded: {
+          total: 345,
+          change: 40
+        }
       },
-
-      queryCondition () {
-        var result = {
-          query: {}
-        }
-        if (this.issueType.value === 1) {
-          result.query.status = 0
-        }
-
-        var curTime = (new Date()).getTime()
-        var searchTime = null
-        if (this.period === 7) {
-          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 7)
-        } else if (this.period === 30) {
-          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 30)
-        } else if (this.period === 90) {
-          searchTime = new Date(curTime - 1000 * 60 * 60 * 24 * 90)
-        }
-        result.query.create_time = {'$gte': {'@date': searchTime}}
-        return result
-      }
-    },
-
-    route: {
-      data () {
-        this.getFeedbackGroupList()
-      }
-    },
-
-    ready () {
-      // 监听窗口尺寸变化
-      window.onresize = () => {
-        this.$refs.issueChart.chart.resize()
-      }
-    },
-
-    methods: {
-      getFeedbackGroupList () {
-        var self = this
-        var argvs = arguments
-        var fn = self.getFeedbackGroupList
-        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-          api.helpdesk.getFeedbackGroup(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-            if (res.status === 200 && res.data.labelGroup.length > 0) {
-              this.labelGroup = res.data.labelGroup
-              if (this.queryCondition.query.status !== 0) {
-                this.statistic.new = res.data.count
-                this.statistic.waitingProcess = res.data.untreat_count || 0
-              }
-            } else {
-              this.labelGroup = []
-            }
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'helpdesk'
-            }
-            self.handlePluginError(err, env)
-          })
-        })
-      }
+      // 趋势
+      trends: {
+        data: [],
+        options: {}
+      },
+      // 时间间隔
+      period: 7,
+      // 待选时间间隔
+      // periods: locales.data.PERIODS,
+      // 数据是否加载中
+      loadingData: false
     }
+  },
+
+  ready () {
+    // 趋势图表配置
+    // var productTrendsOptions = {
+    //   props: {
+    //     plotCfg: {
+    //       margin: [60, 0, 50, 60]
+    //     }
+    //   },
+    //   defs: {
+    //     'date': {
+    //       type: 'cat',
+    //       alias: '日期'
+    //     },
+    //     'count': {
+    //       alias: '数量',
+    //       min: 0
+    //     },
+    //     'product': {
+    //       alias: '产品'
+    //     }
+    //   },
+    //   position: 'date*count',
+    //   color: 'product'
+    // }
+    // var trendsData = []
+    // PRODUCTS.forEach((item) => {
+    //   proTrendsData = proTrendsData.concat(Mock.mock({
+    //     'list|7': [{
+    //       'date|+1': genDates(7),
+    //       'count|100-200': 10,
+    //       'product': item
+    //     }]
+    //   }).list)
+    // })
+
+    // proTrendsData = proTrendsData.concat(Mock.mock({
+    //   'list|7': [{
+    //     'date|+1': genDates(7),
+    //     'count|+1': [24, 14, 25, 34, 17, 29, 33],
+    //     'product': PRODUCTS[0]
+    //   }]
+    // }).list)
+    // proTrendsData = proTrendsData.concat(Mock.mock({
+    //   'list|7': [{
+    //     'date|+1': genDates(7),
+    //     'count|+1': [204, 156, 275, 236, 154, 198, 185],
+    //     'product': PRODUCTS[1]
+    //   }]
+    // }).list)
+    // this.trends.products.data = proTrendsData
+    // this.trends.products.options = productTrendsOptions
+  },
+
+  methods: {
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../../assets/stylus/common'
-  .statistics-info
-    margin-top 80px
+@import '../../../../assets/stylus/common'
 </style>

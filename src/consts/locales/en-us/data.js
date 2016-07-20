@@ -46,7 +46,8 @@ export const INFORM_TYPES = ['通知与预警']
 // 默认时间段
 export const PERIODS = [
   { label: '7天', value: 7 },
-  { label: '30天', value: 30 }
+  { label: '30天', value: 30 },
+  { label: '90天', value: 90 }
 ]
 
 // 短时间段

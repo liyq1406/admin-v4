@@ -57,6 +57,12 @@ export default {
             overview: '推送分析'
           }
         },
+        helpdesk: {
+          subs: {
+            overview: '概览',
+            issues: '消息列表'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {
