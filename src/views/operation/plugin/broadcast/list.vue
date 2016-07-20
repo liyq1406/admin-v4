@@ -3,7 +3,22 @@
     <div class="main-title">
       <h2>消息列表</h2>
     </div>
-    <div class="panel">
+    <div class="panel"></div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="messageSummary.avg" :title="messageSummary.avg.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="messageSummary.percent" :title="messageSummary.percent.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="messageSummary.click" :title="messageSummary.click.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="messageSummary.unsend" :title="messageSummary.unsend.title" align="left"></statistic>
+      </div>
+    </div>
+    <div class="panel mt10">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
@@ -96,6 +111,7 @@
   import Table from 'components/Table'
   import SearchBox from 'components/SearchBox'
   import { globalMixins } from 'src/mixins'
+  import Statistic from 'components/Statistic'
 
   export default {
     name: 'BroadcastHistory',
@@ -105,7 +121,8 @@
     components: {
       'v-select': Select,
       'c-table': Table,
-      'search-box': SearchBox
+      'search-box': SearchBox,
+      Statistic
     },
 
     data () {
@@ -124,6 +141,30 @@
         queryType: {
           label: '推送内容',
           value: 'content'
+        },
+        messageSummary: {
+          avg: {
+            total: 1345,
+            change: 1224,
+            title: '月平均有效推送量'
+          },
+          percent: {
+            total: 87,
+            unit: '%',
+            change: 12,
+            title: '月平均抵达量'
+          },
+          click: {
+            total: 54,
+            unit: '%',
+            change: 23,
+            title: '月平均点击率'
+          },
+          unsend: {
+            total: 2,
+            change: 0,
+            title: '待推送数'
+          }
         },
         headers: [
           {
