@@ -42,9 +42,9 @@
         <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left"></statistic>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt10">
       <div class="panel-bd">
-        <div class="data-table with-loading">
+        <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
@@ -65,9 +65,8 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" ></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" @tbody-name="goDetails"></c-table>
         </div>
-      </div>
     </div>
   </div>
 </template>
@@ -137,6 +136,7 @@ export default {
       trends: null,
       majorClients: [
         {
+          id: 111,
           name: 'Google',
           create_date: '2016-1-1 19:21:32',
           place: '美国洛杉矶',
@@ -146,6 +146,7 @@ export default {
           expand: '暂未定义'
         },
         {
+          id: 222,
           name: 'Google',
           create_date: '2016-1-1 19:21:32',
           place: '美国洛杉矶',
@@ -205,7 +206,7 @@ export default {
       var result = []
       this.majorClients.map((item) => {
         var majorClient = {
-          name: item.name,
+          name: '<a class="hl-red">' + item.name + '</a>',
           create_date: item.create_date,
           place: item.place,
           profession: item.profession,
@@ -234,6 +235,11 @@ export default {
         'count|+1': [6, 8, 9, 3, 9, 3, 9]
       }]
     }).list
+  },
+  methods: {
+    goDetails (table) {
+      this.$route.router.go('/operation/users/major-clients/' + table.prototype.id)
+    }
   }
 }
 </script>
