@@ -48,7 +48,7 @@
 <script>
   import Pager from 'components/Pager'
   export default {
-    /** *************传入参数格式********************************/
+    /** *************必传传入参数格式********************************/
       // page: {
       //   total: 20, // 数据总数
       //   currentPage: 1, // 当前页
@@ -92,12 +92,12 @@
       // 参数是当前的已经选择的table数组
       //
       // 事件名称：header点击事件 key是当前header的key值
-      // @on-theader-{{key}}
+      // @theader-{{key}}
       // 参数有两个
       // 参数是当前的已经选择的header对象和索引index
       //
       // 事件名称：表格点击事件 key是当前header的key值
-      // @on-tbody-{{key}}
+      // @tbody-{{key}}
       // 参数有三个：
       // 参数是当前的已经选择的header对象和table对象 以及当前表格table在列表中的索引index
     /** **************************************/
@@ -180,7 +180,6 @@
         this.initSelected() // 修正选择状态
       }
     },
-
     methods: {
       /**
        * 每页显示数据条数改变
@@ -247,6 +246,7 @@
        */
       theaderClick (theader, index) {
         var key = this.hump2line(theader.key)
+        key = key.replace('_', '-')
         this.$emit('theader-' + key, theader, index)
       },
 
@@ -258,6 +258,7 @@
        */
       tbodyClick (theader, table, lineIndex) {
         var key = this.hump2line(theader.key)
+        key = key.replace('_', '-')
         this.$emit('tbody-' + key, theader, table, lineIndex)
       },
       /**
