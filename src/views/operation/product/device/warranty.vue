@@ -26,7 +26,8 @@
             </div>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
+        <c-table :headers="headers" :tables="tables"></c-table>
+        <!-- <table class="table table-stripe table-bordered">
           <thead>
             <tr>
               <th>工单编号</th>
@@ -59,7 +60,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
       </div>
     </div>
   </div>
@@ -69,10 +70,13 @@
   import SearchBox from 'components/SearchBox'
   import AreaSelect from 'components/AreaSelect'
   import Select from 'components/Select'
+  import Table from 'components/Table'
+  import { formatDate } from 'src/filters'
 
   export default {
     components: {
       'v-select': Select,
+      'c-table': Table,
       'area-select': AreaSelect,
       'search-box': SearchBox
     },
@@ -98,7 +102,7 @@
         loadingData: false,
         workOrders: [
           {
-            _id: '45a6dsa5sd46a',
+            id: '45a6dsa5sd46a',
             name: '王工',
             product_name: '空调',
             product_type: 'd41a231a45s6',
@@ -106,14 +110,54 @@
             status: 0
           },
           {
-            _id: 'sd4f654s5fs23',
+            id: 'sd4f654s5fs23',
             name: '张盛志',
             product_name: '空气净化器',
             product_type: 'a45s6d41a231',
             extended_days: '2016-03-03',
             status: 0
           }
+        ],
+        headers: [
+          {
+            key: 'id',
+            title: '工单编号'
+          },
+          {
+            key: 'extended_days',
+            title: '提交日期'
+          },
+          {
+            key: 'last_update',
+            title: '最后处理'
+          },
+          {
+            key: 'type',
+            title: '维保类型'
+          },
+          {
+            key: 'state',
+            title: '处理状态'
+          }
         ]
+      }
+    },
+
+    computed: {
+      tables () {
+        var result = []
+        this.workOrders.map((item) => {
+          var device = {
+            id: '<a class="hl-red">' + item.id + '</a>',
+            extended_days: formatDate(item.extended_days),
+            last_update: formatDate(item.last_update),
+            type: item.is_online,
+            state: item.is_online,
+            prototype: item
+          }
+          result.push(device)
+        })
+        return result
       }
     },
     ready () {
