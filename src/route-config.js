@@ -712,8 +712,24 @@ let configRouter = (router) => {
         'users/portrait': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/user/portrait'))
+              resolve(require('./views/operation/user/portrait/index'))
             }, 'admin')
+          },
+          subRoutes: {
+            'os': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/portrait/os'))
+                }, 'admin')
+              }
+            },
+            'model': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/user/portrait/model'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 用户行为分析
@@ -1058,7 +1074,8 @@ let configRouter = (router) => {
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
-    '/operation/linkage': '/operation/linkage/devices'
+    '/operation/linkage': '/operation/linkage/devices',
+    '/operation/users/portrait': '/operation/users/portrait/os'
   })
 
   router.beforeEach((transition) => {
