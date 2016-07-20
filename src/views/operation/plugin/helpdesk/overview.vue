@@ -39,16 +39,16 @@
     </div>
     <div class="row statistic-group">
       <div class="col-6">
-        <statistic :info="summary.pending" :title="$t('ui.helpdesk.statistic.pending')" align="left"></statistic>
+        <statistic :info="summary.pending" :title="summary.pending.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.avg" :title="$t('ui.helpdesk.statistic.avg')" align="left"></statistic>
+        <statistic :info="summary.avg" :title="summary.avg.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.weekAdded" :title="$t('ui.helpdesk.statistic.add', {period: 7})" align="left"></statistic>
+        <statistic :info="summary.weekAdded" :title="summary.weekAdded.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.monthAdded" :title="$t('ui.helpdesk.statistic.add', {period: 30})" align="left"></statistic>
+        <statistic :info="summary.monthAdded" :title="summary.monthAdded.title" align="left"></statistic>
       </div>
     </div>
     <div class="panel">
@@ -94,18 +94,23 @@ export default {
     return {
       summary: {
         pending: {
-          total: 12345
+          total: 23,
+          title: '待处理'
         },
         avg: {
-          total: 14
+          total: 14,
+          unit: '%',
+          title: '平均处理时间率'
         },
         weekAdded: {
           total: 145,
-          change: -14
+          change: -14,
+          title: '7天新增'
         },
         monthAdded: {
           total: 345,
-          change: 40
+          change: 40,
+          title: '30天新增'
         }
       },
       // 趋势

@@ -20,7 +20,7 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <div class="fr">
-                  <a class="fa fa- fa-share-square-o"></a>
+                  <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
                 </div>
               </div>
               <div class="filter-group-item">
@@ -31,7 +31,8 @@
               </div>
             </div>
           </div>
-          <table class="table table-stripe table-bordered">
+          <x-table :headers="headers" :tables="tables" :page="page"></x-table>
+          <!-- <table class="table table-stripe table-bordered">
             <thead>
               <tr>
                 <th>ID</th>
@@ -59,9 +60,9 @@
                 </td>
               </tr>
             </tbody>
-          </table>
+          </table> -->
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager>
+        <!-- <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
       </div>
     </div>
   </div>
@@ -74,6 +75,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Pager from 'components/Pager'
+  import Table from 'components/Table'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -86,7 +88,8 @@
       'modal': Modal,
       'api': api,
       'pager': Pager,
-      'v-select': Select
+      'v-select': Select,
+      'x-table': Table
     },
 
     data () {
