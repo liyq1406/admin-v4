@@ -1,7 +1,7 @@
 <template>
   <div class="x-info-card">
     <div class="thumb"><img :src="pic"/></div>
-    <div class="info">  
+    <div class="info">
       <slot>
         <h3>{{ info.title }}</h3>
         <div class="desc">

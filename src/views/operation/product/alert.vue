@@ -14,6 +14,20 @@
       <!-- <div class="panel-hd">
         <h2>告警信息列表</h2>
       </div> -->
+      <div class="row statistic-group">
+        <div class="col-6">
+          <statistic :info="alertSummary.unhandle" :title="alertSummary.unhandle.title" align="left"></statistic>
+        </div>
+        <div class="col-6">
+          <statistic :info="alertSummary.message" :title="alertSummary.message.title" align="left"></statistic>
+        </div>
+        <div class="col-6">
+          <statistic :info="alertSummary.sevenday" :title="alertSummary.sevenday.title" align="left"></statistic>
+        </div>
+        <div class="col-6">
+          <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
+        </div>
+      </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
@@ -469,6 +483,7 @@
   import TagInput from 'components/TagInput'
   import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
+  import Statistic from 'components/Statistic'
 
   export default {
     name: 'Alert',
@@ -479,7 +494,8 @@
       'modal': Modal,
       'pager': Pager,
       'v-select': Select,
-      'tag-input': TagInput
+      'tag-input': TagInput,
+      Statistic
     },
 
     data () {
@@ -577,7 +593,29 @@
         loadingData: false,
         productName: '',
         query: {},
-        showModal: false
+        showModal: false,
+        alertSummary: {
+          unhandle: {
+            total: 123,
+            change: 34,
+            title: '待处理告警'
+          },
+          message: {
+            total: 3466,
+            change: 50,
+            title: '今日告警'
+          },
+          thirtyday: {
+            total: 2450,
+            change: 870,
+            title: '30天告警数'
+          },
+          sevenday: {
+            total: 890,
+            change: 90,
+            title: '7天告警数'
+          }
+        }
       }
     },
 
