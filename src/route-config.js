@@ -466,13 +466,15 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/helpdesk/issues'))
             }, 'admin')
-          }
-        },
-        'plugins/helpdesk/:app_id/issues/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/helpdesk/issue-details'))
-            }, 'admin')
+          },
+          subRoutes: {
+            ':id': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/helpdesk/issue-details'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 禁止访问
@@ -679,6 +681,22 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/user/list'))
+            }, 'admin')
+          }
+        },
+        // 大客户管理
+        'users/major-clients': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/user/major-clients'))
+            }, 'admin')
+          }
+        },
+        // 大客户详情
+        'users/major-clients/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/user/major-client-details'))
             }, 'admin')
           }
         },

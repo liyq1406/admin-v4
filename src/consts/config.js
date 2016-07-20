@@ -118,6 +118,9 @@ export const MAIN_NAV = {
         alias: 'list',
         url: '/users/list'
       }, {
+        alias: 'major_clients',
+        url: '/users/major-clients'
+      }, {
         alias: 'settings',
         url: '/users/settings'
       }, {
