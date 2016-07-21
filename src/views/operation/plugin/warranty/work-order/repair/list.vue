@@ -3,6 +3,21 @@
     <div class="main-title">
       <h2>维修工单</h2>
     </div>
+    <div class="panel"></div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="repairSummary.unrepair" :title="repairSummary.unrepair.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="repairSummary.repairing" :title="repairSummary.repairing.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="repairSummary.today" :title="repairSummary.today.title" align="left"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="repairSummary.week" :title="repairSummary.week.title" align="left"></statistic>
+      </div>
+    </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
@@ -91,6 +106,7 @@
   import DateRangePicker from 'components/DateRangePicker'
   import api from 'api'
   import * as config from 'consts/config'
+  import Statistic from 'components/Statistic'
 
   export default {
     name: 'OrderList',
@@ -102,7 +118,8 @@
       'area-select': AreaSelect,
       'search-box': SearchBox,
       'pager': Pager,
-      'date-range-picker': DateRangePicker
+      'date-range-picker': DateRangePicker,
+      Statistic
     },
 
     data () {
@@ -148,7 +165,27 @@
           label: '工单编号',
           value: '_id'
         },
-        branchs: []
+        branchs: [],
+        repairSummary: {
+          unrepair: {
+            total: 23,
+            title: '待维修数'
+          },
+          repairing: {
+            total: 135,
+            title: '正在维修中'
+          },
+          today: {
+            total: 232,
+            change: 124,
+            title: '今日维修数'
+          },
+          week: {
+            total: 2800,
+            change: 124,
+            title: '7日维修数'
+          }
+        }
       }
     },
 
