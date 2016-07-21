@@ -943,7 +943,23 @@ let configRouter = (router) => {
           }
         },
 
-        // -------------------------在线维保-------------------------
+        // -------------------------智能维保-------------------------
+        // 概览
+        'plugins/warranty/:app_id/overview': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/overview'))
+            }, 'admin')
+          }
+        },
+        // 延保工单列表
+        'plugins/warranty/:app_id/heat': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/heat-distribution'))
+            }, 'admin')
+          }
+        },
         // 延保工单列表
         'plugins/warranty/:app_id/work-orders/extended-warranties': {
           component (resolve) {

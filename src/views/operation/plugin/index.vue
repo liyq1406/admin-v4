@@ -77,7 +77,7 @@
           type: 10
         }, {
           id: '',
-          name: '在线维保',
+          name: '智能维保',
           description: '提供与企业产品相关的售后支持、产品维护、保修记录的查询与管理服务。',
           alias: 'warranty',
           enable: false,

@@ -126,6 +126,9 @@ export default {
             break
           case 'warranty': // 在线维保
             sub.subs = [{
+              alias: 'overview',
+              url: `/plugins/warranty/${item.id}/overview`
+            }, {
               alias: 'extended_warranties',
               url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
             }, {
@@ -134,6 +137,9 @@ export default {
             }, {
               alias: 'accounts',
               url: `/plugins/warranty/${item.id}/accounts`
+            }, {
+              alias: 'heat',
+              url: `/plugins/warranty/${item.id}/heat`
             }]
             break
           case 'broadcast': // 消息推送
