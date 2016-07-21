@@ -5,7 +5,89 @@
     </div>
     <div class="panel">
       <div class="panel-hd">
-          <h2>热力分布</h2>
+        <!-- TODO -->
+        <a style="color: red">全部</a>
+        <i class="arrow">&gt;</i>
+        <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
+        <i class="arrow">&gt;</i>
+        <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
+      </div>
+      <div class="panel-bd">
+        <div class="row">
+          <div class="col-10">
+            <china-heat-map></china-heat-map>
+          </div>
+          <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+            <div class="data-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>地域</th>
+                    <th>设备数量</th>
+                    <th>占比</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖南</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖北</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>江西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>江苏</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖南</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="panel-bd">
         <div class="data-table">
@@ -33,6 +115,7 @@
 <script>
 // import api from 'api'
 import SearchBox from 'components/SearchBox'
+import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 
@@ -43,7 +126,8 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    'c-table': Table
+    'c-table': Table,
+    ChinaHeatMap
   },
 
   data () {
