@@ -35,8 +35,8 @@
     height 26px
     line-height 24px
     vertical-align middle
-    background-image linear-gradient(top, #fafafa, #dadada)
-    padding 0 8px
+    background-image linear-gradient(top, #FDFDFD, #F5F5F5)
+    padding 0 10px
     color gray
     border 1px solid #BBB
     border-left 0

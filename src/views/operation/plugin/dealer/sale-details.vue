@@ -457,9 +457,6 @@ export default {
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
 
-.tool-bar
-  margin-top -1px
-
 .fa
   margin-left 5px
 .status

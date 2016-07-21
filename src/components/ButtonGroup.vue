@@ -24,7 +24,7 @@ export default {
     display inline-block
     box-sizing border-box
     border 1px solid #BBB
-    background linear-gradient(top, #fafafa, #dadada)
+    background-image linear-gradient(top, #FDFDFD, #F5F5F5)
     font-size 8px
     padding 0 8px
     height 24px
