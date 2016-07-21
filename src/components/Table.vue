@@ -1,5 +1,5 @@
 <template>
-  <div class="intelligent-table-box data-table with-loading">
+  <div class="intelligent-table-box">
     <div class="table-content data-table with-loading">
       <div class="icon-loading" v-show="loading">
         <i class="fa fa-refresh fa-spin"></i>
