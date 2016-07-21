@@ -1,154 +1,128 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>维修工单详情</h2>
+      <h2>维修详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <!-- Start: 面包屑 -->
-    <!-- <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/repair' }"><i class="fa fa-arrow-circle-left"></i>维修工单列表</a></div> -->
-    <!-- End: 面包屑 -->
+    <div class="panel mt15 mb20 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <info-card>
+            <div class="alert-record-summary">
 
-    <!-- Start: 工单详情 -->
-    <div class="panel">
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">工单编号:</div>
-            <div class="col-21 info">{{repairOrder._id}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">创建日期:</div>
-            <div class="col-21 info">{{repairOrder.create_time | uniformDate}}</div>
-          </li>
-        </ul>
+              <div class="up">
+                <h3>滤网失效</h3>
+                <span class="text-label-warning">二级</span>
+              </div>
+              <div class="down row">
+                <div class="col-12">
+                  <span>2016-12-03</span>
+                  <span class="ml15">16:12:03</span>
+                </div>
+                <div class="col-12">
+                  <button>
+                    <i class="fa fa-check"></i>
+                    已处理
+                  </button>
+                  <button>
+                    <!-- <i class="fa fa-commenting"></i> -->
+                    查看维修进度
+                  </button>
+                </div>
+              </div>
+            </div>
+          </info-card>
+          <div v-stretch="185">
+            <div class="x-info-list-wrap">
+              <div class="x-info-list">
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">维修设备</div>
+                    <div class="x-val">电饭煲A1</div>
+                  </div>
+                </div>
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">持续时长</div>
+                    <div class="x-val">2.1h</div>
+                  </div>
+                </div>
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">维修人员</div>
+                    <div class="x-val">
+                      <select name="" id="">
+                        <option value="">小明</option>
+                        <option value="">小张</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">处理时间</div>
+                    <div class="x-val">2016-07-18 18:00:00</div>
+                  </div>
+                </div>
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">维修费用</div>
+                    <div class="x-val">210元</div>
+                  </div>
+                </div>
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">用户账号</div>
+                    <div class="x-val">13800138000</div>
+                  </div>
+                </div>
+                <div class="x-info-list-item oneDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">用户评价</div>
+                    <div class="x-val">好评</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-8 device-map with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div id="device-map" class="mt10 ml30" style="height: 220px"></div>
+        </div>
       </div>
     </div>
-    <!-- End: 工单详情 -->
-
-    <!-- Start: 网点信息 -->
-    <div class="panel">
+    <div class="panel mt10">
       <div class="panel-hd">
-        <h2>网点信息</h2>
+        <h3>维修历史</h3>
       </div>
       <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">网点名称:</div>
-            <div class="col-21 info">{{branch.name}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">负责人:</div>
-            <div class="col-21 info">{{branch.director}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">联系电话:</div>
-            <div class="col-21 info">{{branch.phone}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">所在地区:</div>
-            <div class="col-21 info">{{branchArea}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">详细地址:</div>
-            <div class="col-21 info">{{branch.address}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">处理客服:</div>
-            <div class="col-21 info">{{repairOrder.linkman}}</div>
-          </li>
-        </ul>
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+          </div>
+          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+        </div>
       </div>
     </div>
-    <!-- End: 网点信息 -->
-
-    <!-- Start: 客户信息 -->
-    <div class="panel">
-      <div class="panel-hd">
-        <h2>客户信息</h2>
-      </div>
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">客户姓名:</div>
-            <div class="col-21 info">{{repairOrder.linkman}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">联系电话:</div>
-            <div class="col-21 info">{{repairOrder.phone}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">所在地区:</div>
-            <div class="col-21 info">{{clientArea}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">详细地址:</div>
-            <div class="col-21 info">{{repairOrder.address}}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- End: 客户信息 -->
-
-    <!-- Start: 产品信息 -->
-    <div class="panel">
-      <div class="panel-hd">
-        <h2>产品信息</h2>
-      </div>
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">产品名称:</div>
-            <div class="col-21 info">{{repairOrder.product_name}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">产品序列号:</div>
-            <div class="col-21 info">{{repairOrder.product_sn}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">产品型号:</div>
-            <div class="col-21 info">{{repairOrder.product_type}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">购买日期:</div>
-            <div class="col-21 info">{{repairOrder.purchase_date | uniformDate}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">延保期限:</div>
-            <div class="col-21 info">{{repairOrder.expired_date | uniformDate}}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- End: 产品信息 -->
-
-    <!-- Start: 维修信息 -->
-    <div class="panel">
-      <div class="panel-hd">
-        <h2>维修信息</h2>
-      </div>
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">故障描述:</div>
-            <div class="col-21 info">{{repairDetails.fault}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">更换配件:</div>
-            <div class="col-21 info">{{repairDetails.accessories}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">处理结果:</div>
-            <div class="col-21 info">{{repairDetails.solutions}}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">维护费用:</div>
-            <div class="col-21 info">{{repairDetails.fees}}</div>
-          </li>
-        </ul>
-      </div>
-    </div>
-    <!-- End: 维修信息 -->
-
   </div>
 </template>
 
@@ -157,6 +131,11 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import Breadcrumb from 'components/Breadcrumb'
 import api from 'api'
+import InfoCard from 'components/InfoCard'
+import SearchBox from 'components/SearchBox'
+import Table from 'components/Table'
+import Select from 'components/Select'
+import InfoList from 'components/InfoList'
 
 export default {
   name: 'OrderDetails',
@@ -164,7 +143,12 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Breadcrumb
+    Breadcrumb,
+    InfoCard,
+    InfoList,
+    'c-table': Table,
+    'v-select': Select,
+    SearchBox
   },
 
   data () {
@@ -177,17 +161,74 @@ export default {
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
       }, {
         label: '工单详情'
-      }]
-    }
-  },
-
-  route: {
-    data () {
-      this.getRepairOrder()
+      }],
+      historys: [],
+      headers: [
+        {
+          key: 'id',
+          title: '工单编号'
+        },
+        {
+          key: 'mac',
+          title: '维修设备(mac)'
+        },
+        {
+          key: 'create_date',
+          title: '创建时间'
+        },
+        {
+          key: 'person',
+          title: '维修人员'
+        },
+        {
+          key: 'content',
+          title: '维修内容',
+          class: 'tac w200'
+        },
+        {
+          key: 'addr',
+          title: '地点'
+        },
+        {
+          key: 'level',
+          title: '维修等级',
+          class: 'tac'
+        },
+        {
+          key: 'state',
+          title: '状态',
+          class: 'tac'
+        }
+      ]
     }
   },
 
   computed: {
+    page () {
+      return {
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage,
+        total: this.total
+      }
+    },
+    tables () {
+      var result = []
+      this.historys.map((item) => {
+        var history = {
+          id: '<a class="hl-red">' + item.id + '</a>',
+          mac: item.mac,
+          create_date: item.create_date,
+          person: item.person,
+          content: item.content,
+          addr: item.addr,
+          level: item.level,
+          state: item.state,
+          prototype: item
+        }
+        result.push(history)
+      })
+      return result
+    },
     queryCondition () {
       var condition = {
         filter: [],
@@ -221,7 +262,42 @@ export default {
     }
   },
 
+  route: {
+    data () {
+      this.getData()
+      this.getRepairOrder()
+    }
+  },
+
   methods: {
+    goDetails (table) {
+      this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+    },
+    getData () {
+      this.total = 50
+      this.historys = [
+        {
+          id: '11111',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21 18:00:00',
+          person: '你哥哥',
+          content: '维修内容',
+          addr: '龙腾18',
+          level: '1',
+          state: '1'
+        },
+        {
+          id: '222222',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21 18:00:00',
+          person: '你妹妹',
+          content: '维修内容',
+          addr: '龙腾18',
+          level: '1',
+          state: '1'
+        }
+      ]
+    },
     getRepairOrder () {
       var self = this
       var argvs = arguments
@@ -280,6 +356,65 @@ export default {
 }
 </script>
 
-<style lang="stylus">
-  @import '../../../../../../assets/stylus/common'
+<style lang='stylus'>
+@import '../../../../../../assets/stylus/common'
+.x-info-list-wrap
+  /*position relative*/
+  overflow hidden
+
+.x-info-list
+  margin-top -1px
+  clearfix()
+
+  .x-info-list-item
+    float left
+    line-height 22px
+    box-sizing border-box
+
+    .x-info-list-item-in
+      padding 8px 0 8px 8px
+      border-top 1px solid default-border-color
+
+    .x-val
+    .x-label
+      height 22px
+
+    .x-label
+    .x-val
+      color gray-light
+
+    /*&:nth-child(2n-1)
+      .x-info-list-item-in
+        margin-right 15px
+
+    &:nth-child(2n)
+      .x-info-list-item-in
+        margin-left 15px*/
+.alert-record-summary
+.up
+  h3
+    height 30px
+    font-weight normal
+    font-size 20px
+    margin 0
+    display inline-block
+    vertical-align middle
+  span
+    width 55px
+    vertical-align middle
+    margin-left 15px
+
+.down
+  color gray-light
+  font-size 12px
+  button
+    border 1px solid #BCBCBC
+    outline none
+    background-color #FAFAFA
+    color #323232
+    height 24px
+    float right
+    margin-right 20px
+    i
+      font-size 15px
 </style>

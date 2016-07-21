@@ -1,119 +1,121 @@
 <template>
-  <section class="main-wrap">
-    <div class="main">
-      <div class="row statistic">
-        <div class="col-6">
-          <panel>
-            <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true">
-              <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
-            </statistic>
-          </panel>
+  <div class="page-in">
+    <section class="main-wrap">
+      <div class="main">
+        <div class="row statistic">
+          <div class="col-6">
+            <panel>
+              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true">
+                <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
+              </statistic>
+            </panel>
+          </div>
+          <div class="col-6">
+            <panel>
+              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
+                <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
+              </statistic>
+            </panel>
+          </div>
+          <div class="col-6">
+            <panel>
+              <statistic :info="statistic.devices.activated.info" title="激活设备总数" tooltip="激活设备总数说明" color="blue" :has-chart="true">
+                <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
+              </statistic>
+            </panel>
+          </div>
+          <div class="col-6">
+            <panel>
+              <statistic :info="statistic.devices.online.info" title="在线设备总数" tooltip="在线设备总数说明" color="orange" :has-chart="true">
+                <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
+              </statistic>
+            </panel>
+          </div>
         </div>
-        <div class="col-6">
-          <panel>
-            <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
-              <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
-            </statistic>
-          </panel>
-        </div>
-        <div class="col-6">
-          <panel>
-            <statistic :info="statistic.devices.activated.info" title="激活设备总数" tooltip="激活设备总数说明" color="blue" :has-chart="true">
-              <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
-            </statistic>
-          </panel>
-        </div>
-        <div class="col-6">
-          <panel>
-            <statistic :info="statistic.devices.online.info" title="在线设备总数" tooltip="在线设备总数说明" color="orange" :has-chart="true">
-              <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
-            </statistic>
-          </panel>
+        <div class="row">
+          <div class="col-24">
+            <panel title="产品趋势分析">
+              <div class="left-actions" slot="left-actions">
+                <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+                <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
+              </div>
+              <div class="row">
+                <div class="col-14">
+                  <line :data="trends.products.data" :options="trends.products.options"></line>
+                </div>
+                <div class="col-10">
+                  <div class="row">
+                    <div class="col-10 col-offset-2 tac">
+                      <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+                    </div>
+                    <div class="col-11 col-offset-1 tac">
+                      <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+                    </div>
+                  </div>
+                  <div class="top">
+                    <h3>今日新增TOP3</h3>
+                    <interval :data="trends.products.topAdded.data" :options="trends.products.topAdded.options"></interval>
+                  </div>
+                  <div class="top">
+                    <h3>今日在线TOP3</h3>
+                    <interval :data="trends.products.topOnline.data" :options="trends.products.topOnline.options"></interval>
+                  </div>
+                </div>
+              </div>
+            </panel>
+
+            <panel title="产品信息占比">
+              <div class="row">
+                <div class="col-14">
+                  <pie :data="proportion.devices.activated.data"></pie>
+                </div>
+                <div class="col-10">
+                  <pie :data="proportion.devices.online.data"></pie>
+                </div>
+              </div>
+            </panel>
+
+            <panel title="产品区域分布">
+              <div class="left-actions" slot="left-actions">
+                <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+              </div>
+              <div class="row">
+                <div class="col-16 tac">
+                  <china-map :data="regions.products.data"></china-map>
+                </div>
+                <div class="col-8">
+                  <div class="top">
+                    <h3>产品占比TOP10</h3>
+                    <interval :data="regions.products.top.data" :options="regions.products.top.options"></interval>
+                  </div>
+                </div>
+              </div>
+            </panel>
+
+            <panel title="用户趋势分析">
+              <div class="left-actions" slot="left-actions">
+                <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+                <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
+              </div>
+              <div class="row">
+                <div class="col-18">
+                  <line :data="trends.users.data" :options="trends.users.options"></line>
+                </div>
+                <div class="col-6 mt40">
+                  <div class="tac">
+                    <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+                  </div>
+                  <div class="tac">
+                    <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+                  </div>
+                </div>
+              </div>
+            </panel>
+          </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-24">
-          <panel title="产品趋势分析">
-            <div class="left-actions" slot="left-actions">
-              <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-              <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
-            </div>
-            <div class="row">
-              <div class="col-14">
-                <line :data="trends.products.data" :options="trends.products.options"></line>
-              </div>
-              <div class="col-10">
-                <div class="row">
-                  <div class="col-10 col-offset-2 tac">
-                    <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                  </div>
-                  <div class="col-11 col-offset-1 tac">
-                    <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
-                  </div>
-                </div>
-                <div class="top">
-                  <h3>今日新增TOP3</h3>
-                  <interval :data="trends.products.topAdded.data" :options="trends.products.topAdded.options"></interval>
-                </div>
-                <div class="top">
-                  <h3>今日在线TOP3</h3>
-                  <interval :data="trends.products.topOnline.data" :options="trends.products.topOnline.options"></interval>
-                </div>
-              </div>
-            </div>
-          </panel>
-
-          <panel title="产品信息占比">
-            <div class="row">
-              <div class="col-14">
-                <pie :data="proportion.devices.activated.data"></pie>
-              </div>
-              <div class="col-10">
-                <pie :data="proportion.devices.online.data"></pie>
-              </div>
-            </div>
-          </panel>
-
-          <panel title="产品区域分布">
-            <div class="left-actions" slot="left-actions">
-              <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            </div>
-            <div class="row">
-              <div class="col-16 tac">
-                <china-map :data="regions.products.data"></china-map>
-              </div>
-              <div class="col-8">
-                <div class="top">
-                  <h3>产品占比TOP10</h3>
-                  <interval :data="regions.products.top.data" :options="regions.products.top.options"></interval>
-                </div>
-              </div>
-            </div>
-          </panel>
-
-          <panel title="用户趋势分析">
-            <div class="left-actions" slot="left-actions">
-              <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-              <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
-            </div>
-            <div class="row">
-              <div class="col-18">
-                <line :data="trends.users.data" :options="trends.users.options"></line>
-              </div>
-              <div class="col-6 mt40">
-                <div class="tac">
-                  <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                </div>
-                <div class="tac">
-                  <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
-                </div>
-              </div>
-            </div>
-          </panel>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
+  </div>
 </template>
 
 <script>

@@ -30,7 +30,33 @@
         </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt10">
+      <div class="panel-bd">
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+          </div>
+          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
           <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
@@ -90,16 +116,14 @@
             </tbody>
           </table>
         </div>
-        <!-- Start: 分页信息 -->
         <div class="row">
           <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
           <div class="col-16">
             <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getWarrantyList"></pager>
           </div>
         </div>
-        <!-- End: 分页信息 -->
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -110,7 +134,8 @@
   import Select from 'components/Select'
   import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
-  import Pager from 'components/Pager'
+  import Table from 'components/Table'
+  // import Pager from 'components/Pager'
   import api from 'api'
   import { pluginMixins } from '../../../mixins'
   import Mock from 'mockjs'
@@ -126,7 +151,8 @@
       'v-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
-      'pager': Pager,
+      'c-table': Table,
+      // 'pager': Pager,
       TimeLine,
       RadioButtonGroup
     },
@@ -172,35 +198,63 @@
             value: 30,
             label: '30天'
           }
+        ],
+        headers: [
+          {
+            key: 'id',
+            title: '工单编号'
+          },
+          {
+            key: 'mac',
+            title: '维修设备(mac)'
+          },
+          {
+            key: 'invalid_time',
+            title: '到期时间',
+            sortType: -1
+          },
+          {
+            key: 'time',
+            title: '延保时间',
+            sortType: -1
+          },
+          {
+            key: 'addr',
+            title: '地点'
+          },
+          {
+            key: 'state',
+            title: '状态',
+            class: 'tac'
+          }
         ]
       }
     },
 
-    route: {
-      data () {
-        this.getWarrantyList()
-      }
-    },
-
-    ready () {
-      // TODO
-      this.trends = Mock.mock({
-        'list|14': [{
-          'date|+1': [
-            new Date(2016, 7, 15),
-            new Date(2016, 7, 16),
-            new Date(2016, 7, 17),
-            new Date(2016, 7, 18),
-            new Date(2016, 7, 19),
-            new Date(2016, 7, 20),
-            new Date(2016, 7, 21)
-          ],
-          'count|+1': [6, 8, 9, 3, 9, 3, 9]
-        }]
-      }).list
-    },
-
     computed: {
+      page () {
+        return {
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage,
+          total: this.total
+        }
+      },
+      tables () {
+        var result = []
+        this.workOrders.map((item) => {
+          var workOrder = {
+            id: '<a class="hl-red">' + item.id + '</a>',
+            mac: item.mac,
+            invalid_time: item.invalid_time,
+            time: item.time,
+            addr: item.addr,
+            state: item.state,
+            prototype: item
+          }
+          result.push(workOrder)
+        })
+        return result
+      },
       queryCondition () {
         var condition = {
           filter: ['_id', 'name', 'product_name', 'product_type', 'extended_days', 'status'],
@@ -234,7 +288,55 @@
       }
     },
 
+    route: {
+      data () {
+        this.getWarrantyList1()
+      }
+    },
+
+    ready () {
+      // TODO
+      this.trends = Mock.mock({
+        'list|14': [{
+          'date|+1': [
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21)
+          ],
+          'count|+1': [6, 8, 9, 3, 9, 3, 9]
+        }]
+      }).list
+    },
+
     methods: {
+      goDetails (table) {
+        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+      },
+      getWarrantyList1 () {
+        this.total = 20
+        this.workOrders = [
+          {
+            id: '111111111',
+            mac: 'macmacmac',
+            invalid_time: '2016-07-32 18:00:00',
+            time: '2016-07-32 18:00:00',
+            addr: '龙腾18',
+            state: 1
+          },
+          {
+            id: '222222222',
+            mac: 'macmacmac',
+            invalid_time: '2016-07-32 18:00:00',
+            time: '2016-07-32 18:00:00',
+            addr: '龙腾18',
+            state: 1
+          }
+        ]
+      },
       getWarrantyList (querying) {
         var self = this
         var argvs = arguments
