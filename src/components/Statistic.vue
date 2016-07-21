@@ -1,5 +1,6 @@
-<template lang="html">
+<template>
   <div :class="classes">
+    <div class="tit" v-if="align==='center'">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="info" v-animated-number="info.total"></div>
     <div class="unit" v-if="info.unit">{{info.unit}}</div>
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
@@ -7,7 +8,7 @@
       <span v-animated-number="info.change"></span>
       <span class="ml10">{{ percentage }}</span>
     </div>
-    <div class="tit">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
+    <div class="tit" v-if="align!=='center'">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="target" v-if="hasTarget">
       <slot></slot>
     </div>
@@ -184,11 +185,10 @@ export default {
   max-width 200px
   margin 0 auto
 
-  /*.tit
-    absolute right 15px bottom 25px
-    font-size 12px*/
   .tit
-    text-align center
+    absolute right 15px bottom 25px
+    font-size 12px
+
 .x-statistic-left
   text-align left
   padding 5px 15px 15px 40px
@@ -219,5 +219,5 @@ export default {
   .change-reduse
     color red
   .change-increase
-    color green  
+    color green
 </style>
