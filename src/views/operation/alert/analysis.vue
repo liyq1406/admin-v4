@@ -23,7 +23,7 @@
     <div class="panel no-split-line">
       <div class="panel-bd">
         <div class="with-loading">
-          <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
+          <time-line :data="alertTrends" :type="'smooth'"></time-line>
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
@@ -122,7 +122,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 // import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
@@ -131,8 +131,9 @@ import Pie from 'components/g2-charts/Pie'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import dateFormat from 'date-format'
-import LineChart from 'components/charts/Line'
+import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
+import Mock from 'mockjs'
 
 export default {
   name: 'Alerts',
@@ -142,10 +143,10 @@ export default {
   components: {
     Pager,
     RadioButtonGroup,
-    LineChart,
     'v-select': Select,
     SearchBox,
-    Pie
+    Pie,
+    TimeLine
   },
 
   data () {
@@ -202,35 +203,6 @@ export default {
     past () {
       var past = new Date().getTime() - this.period * 24 * 3600 * 1000
       return dateFormat('yyyy-MM-dd', new Date(past))
-    },
-
-    // 告警图表数据
-    alertSeries () {
-      var result = [{
-        name: this.$t('ui.alert.counts'),
-        type: 'line',
-        data: []
-      }]
-
-      for (var i = 0; i < this.period; i++) {
-        var index = _.findIndex(this.alertTrends, (item) => {
-          return item.day === this.alertXAxisData[i]
-        })
-        result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
-      }
-
-      return result
-    },
-
-    // 告警图表横轴数据
-    alertXAxisData () {
-      var today = new Date()
-      var result = []
-
-      for (var i = this.period - 1; i >= 0; i--) {
-        result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-      }
-      return result
     }
   },
 
@@ -241,10 +213,21 @@ export default {
   },
 
   ready () {
-    // 监听窗口尺寸变化
-    window.onresize = () => {
-      this.$refs.alertChart.chart.resize()
-    }
+    // TODO
+    this.alertTrends = Mock.mock({
+      'list|14': [{
+        'date|+1': [
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9]
+      }]
+    }).list
   },
 
   route: {
