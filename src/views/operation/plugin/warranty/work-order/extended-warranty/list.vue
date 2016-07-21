@@ -3,6 +3,33 @@
     <div class="main-title">
       <h2>延保工单</h2>
     </div>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fl">
+        <div class="filter-group-item">
+          <v-select label="空气净化器" width='110px' size="small">
+            <span slot="label">产品</span>
+          </v-select>
+        </div>
+      </div>
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+        </div>
+        <div class="filter-group-item">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
+      </div>
+    </div>
+    <div class="panel no-split-line">
+      <div class="panel-bd">
+        <div class="with-loading">
+          <time-line :data="trends" :type="'smooth'"></time-line>
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
@@ -86,6 +113,9 @@
   import Pager from 'components/Pager'
   import api from 'api'
   import { pluginMixins } from '../../../mixins'
+  import Mock from 'mockjs'
+  import TimeLine from 'components/g2-charts/TimeLine'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
 
   export default {
     name: 'OrderList',
@@ -96,7 +126,9 @@
       'v-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
-      'pager': Pager
+      'pager': Pager,
+      TimeLine,
+      RadioButtonGroup
     },
 
     data () {
@@ -124,7 +156,23 @@
         loadingData: false,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
-        total: 0
+        total: 0,
+        trends: null,
+        period: 7,
+        periods: [
+          {
+            value: 1,
+            label: '24h'
+          },
+          {
+            value: 7,
+            label: '7天'
+          },
+          {
+            value: 30,
+            label: '30天'
+          }
+        ]
       }
     },
 
@@ -132,6 +180,24 @@
       data () {
         this.getWarrantyList()
       }
+    },
+
+    ready () {
+      // TODO
+      this.trends = Mock.mock({
+        'list|14': [{
+          'date|+1': [
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21)
+          ],
+          'count|+1': [6, 8, 9, 3, 9, 3, 9]
+        }]
+      }).list
     },
 
     computed: {
