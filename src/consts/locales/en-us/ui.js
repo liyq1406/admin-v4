@@ -71,6 +71,11 @@ export default {
             issues: '消息列表'
           }
         },
+        dealer: {
+          subs: {
+            list: '经销商列表'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {

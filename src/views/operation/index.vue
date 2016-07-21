@@ -169,6 +169,10 @@ export default {
             break
           case 'dealer': // 经销商管理
             sub.icon = 'sitemap'
+            sub.subs = [{
+              alias: 'list',
+              url: `/plugins/dealer/${item.id}/list`
+            }]
             break
           case 'nest': // Google Nest网关
             sub.icon = 'google'

@@ -1,23 +1,33 @@
 <template>
-  <div>
+  <div class="main">
+    <div class="main-title">
+      <h2>经销商管理</h2>
+    </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group" style="display:inline-block">
             <button @click="addDealer(dealer)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
           </div>
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDealer" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer">
-            <v-select width="100px" :label="queryType.label">
-              <select v-model="queryType">
-                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-            <button slot="search-button" @click.prevent="getDealer" class="btn btn-primary"><i class="fa fa-search"></i></button>
-          </search-box>
         </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDealer" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer">
+                  <v-select width="100px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </v-select>
+                  <button slot="search-button" @click.prevent="getDealer" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+            <h3>经销商列表</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>

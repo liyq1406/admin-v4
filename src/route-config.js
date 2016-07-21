@@ -479,36 +479,26 @@ let configRouter = (router) => {
         },
 
         // 经销商管理
-        'plugins/dealer/:app_id': {
+        'plugins/dealer/:app_id/list': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/index'))
+              resolve(require('./views/operation/plugin/dealer/list'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 经销商列表
-            'list': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/dealer/list'))
-                }, 'admin')
-              }
-            }
           }
         },
         // 经销商详情
         'plugins/dealer/:app_id/list/:dealer_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/dealer-detail'))
+              resolve(require('./views/operation/plugin/dealer/details'))
             }, 'admin')
           }
         },
         // 销售详情
-        'plugins/dealer/:app_id/list/:dealer_id/detail/:sale_id': {
+        'plugins/dealer/:app_id/list/:dealer_id/sales/:sale_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/detail'))
+              resolve(require('./views/operation/plugin/dealer/sale-details'))
             }, 'admin')
           }
         },
