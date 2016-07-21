@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="panel no-split-line">
+    <!-- <div class="panel no-split-line">
       <div class="panel-bd">
         <div class="with-loading">
           <time-line :data="alertTrends" :type="'smooth'"></time-line>
@@ -29,49 +29,38 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="panel">
-      <div class="panel-hd panel-hd-full">
+      <!-- <div class="panel-hd panel-hd-full">
         <h2>级别分布</h2>
-      </div>
+      </div> -->
       <div class="panel-bd">
+        <nav class="tab">
+          <ul>
+            <li v-for="item in tabItems">
+              <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
+            </li>
+          </ul>
+        </nav>
         <div class="row">
           <div class="col-10">
-            <pie :data="warningLevel" @itemselected='pieSelected'></pie>
+            <pie :data="warningLevel"></pie>
           </div>
           <div class="col-13 col-offset-1 data-table-wrap">
             <div class="data-table">
               <table class="table">
                 <thead>
                   <tr>
-                    <th>{{curLevel}}告警</th>
+                    <th>{{levelTitle}}</th>
+                    <th>数量</th>
                     <th>占比</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>滤芯异常</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>PM2.5超过指标</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>CO2超过指标</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>CO1超过指标</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>温度超过指标</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>湿度超高</td>
+                  <tr v-for="item in warningLevel">
+                    <td>{{item.name}}</td>
+                    <td>{{item.value}}</td>
                     <td>14%</td>
                   </tr>
                 </tbody>
@@ -79,43 +68,6 @@
             </div>
           </div>
         </div>
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>告警信息</th>
-                <th>上报数据</th>
-                <th>上报时间</th>
-                <th>设备信息</th>
-                <th>所在地</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="statistics.length > 0">
-                <tr v-for="alert in statistics">
-                  <td>{{ alert.product_name }}</td>
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                  </td>
-                  <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                  <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="statistics.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
       </div>
     </div>
   </div>
@@ -151,8 +103,10 @@ export default {
 
   data () {
     return {
+      tabItems: ['全部', '轻度', '中度', '重度'],
+      currIndex: 0,
+      levelTitle: '告警',
       key: '',
-      curLevel: '',
       statistics: [],
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
@@ -236,9 +190,118 @@ export default {
   },
 
   methods: {
-    pieSelected (data) {
-      this.curLevel = data.name
+    selectLevel (index) {
+      this.currIndex = index
+      switch (index) {
+        case 0:
+          this.warningLevel = [
+            {
+              name: '重度',
+              value: 50
+            },
+            {
+              name: '中度',
+              value: 30
+            },
+            {
+              name: '轻度',
+              value: 20
+            }
+          ]
+          this.levelTitle = '告警'
+          break
+        case 1:
+          this.warningLevel = [
+            {
+              name: '异常下线',
+              value: 10
+            },
+            {
+              name: '温度过高',
+              value: 30
+            },
+            {
+              name: '风机异常',
+              value: 20
+            }
+          ]
+          this.levelTitle = '轻度告警'
+          break
+        case 2:
+          this.warningLevel = [
+            {
+              name: '湿度超高',
+              value: 10
+            },
+            {
+              name: '风机异常',
+              value: 20
+            }
+          ]
+          this.levelTitle = '轻度告警'
+          break
+        case 3:
+          this.warningLevel = [
+            {
+              name: '滤芯异常',
+              value: 10
+            },
+            {
+              name: 'PM2.5超过指标',
+              value: 30
+            },
+            {
+              name: 'CO2超过指标',
+              value: 20
+            },
+            {
+              name: '电源异常',
+              value: 20
+            }
+          ]
+          this.levelTitle = '重度告警'
+          break
+        default:
+
+      }
     }
   }
 }
 </script>
+
+<style lang='stylus' scoped>
+@import '../../../assets/stylus/common'
+// tab
+// 选项卡
+.tab
+  margin 15px 0
+  padding 0 15px
+  border-bottom 1px solid default-border-color
+
+  ul
+    reset-list()
+    font-size 0
+
+  li
+    display inline-block
+    font-size 13px
+
+    a
+      display block
+      padding 0 20px
+      line-height 28px
+      color gray
+
+      &:hover
+        text-decoration none
+        color gray-darker
+
+      &.active
+        height 28px
+        background-color #fff
+        border 1px solid default-border-color
+        border-bottom none!important
+        position relative
+        bottom -1px
+        font-weight bold
+</style>
