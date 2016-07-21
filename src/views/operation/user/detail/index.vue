@@ -27,6 +27,7 @@
         <h2>账号状态</h2>
       </div>
       <div class="panel-bd">
+        <span>{{ user.status-0===1 ? '已启用' : '已停用' }}</span>
         <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn btn-sm"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
       </div>
     </div>

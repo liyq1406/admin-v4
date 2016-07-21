@@ -13,13 +13,22 @@
             </div>
           </div>
           <div v-stretch="230">
-            <info-list :info="deviceInfo"></info-list>
+            <info-list :info="clientsInfo"></info-list>
           </div>
         </div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+    <div class="panel">
+      <div class="panel-hd panel-hd-full">
+        <h2>账号状态</h2>
+      </div>
+      <div class="panel-bd">
+        <span>{{ clientsInfo.status-0===1 ? '已启用' : '已停用' }}</span>
+        <button :class="{'btn-primary': clientsInfo.status-0===1, 'btn-success': clientsInfo.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(clientsInfo)" class="btn btn-sm"><i :class="{'fa-stop': clientsInfo.status, 'fa-play': !clientsInfo.status}" class="fa"></i>{{ clientsInfo.status-0===1 ? '停用' : '启用' }}</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,7 +54,7 @@ export default {
   data () {
     return {
       alertSummary: {},
-      deviceInfo: {
+      clientsInfo: {
         link: {
           label: '联系人',
           value: '马化腾'
