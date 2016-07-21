@@ -67,7 +67,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
         </div>
       </div>
     </div>
@@ -401,6 +401,9 @@
     },
 
     methods: {
+      goDetails (table) {
+        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+      },
       getOrderWorkList1 () {
         this.total = 50
         this.workOrders = [
