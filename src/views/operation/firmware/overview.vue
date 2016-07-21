@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <div class="row mt40 mb40">
           <div class="col-15 with-loading">
-            <pie-chart :series="firmwareSeries" v-ref:firmware-chart></pie-chart>
+            <pie :data="firmwareSeries"></pie>
             <div class="icon-loading" v-show="loadingData">
               <i class="fa fa-refresh fa-spin"></i>
             </div>
@@ -41,7 +41,7 @@
   import Modal from 'components/Modal'
   // import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
-  import PieChart from 'components/charts/Pie'
+  import Pie from 'components/g2-charts/Pie'
 
   export default {
     name: 'Applications',
@@ -49,8 +49,8 @@
     mixins: [globalMixins],
 
     components: {
-      'modal': Modal,
-      'pie-chart': PieChart
+      Modal,
+      Pie
     },
 
     data () {
@@ -60,23 +60,20 @@
           total: 0,
           activated: 0
         },
+        firmwareSeries: [
+          {
+            name: '未激活数',
+            value: 50
+          },
+          {
+            name: '激活数',
+            value: 30
+          }
+        ],
         loadingData: false
       }
     },
     computed: {
-      // 告警图表数据
-      firmwareSeries () {
-        var result = [{
-          name: '概览',
-          type: 'pie',
-          radius: '80%',
-          center: ['50%', '50%'],
-          data: [
-            {value: 1, name: 'V1'}
-          ]
-        }]
-        return result
-      }
     },
 
     route: {
@@ -92,10 +89,6 @@
     },
 
     ready () {
-      // 监听窗口尺寸变化
-      window.onresize = () => {
-        this.$refs.firmwareChart.chart.resize()
-      }
     },
 
     methods: {
