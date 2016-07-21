@@ -27,19 +27,20 @@
     <div class="row statistic-group">
       <div class="col-6">
         <statistic :info="majorSummary.monthIncrease" :title="majorSummary.monthIncrease.title" :has-target="true" align="left">
-          <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
+          <div slot="targetArea">{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
         </statistic>
       </div>
       <div class="col-6">
         <statistic :info="majorSummary.number" :title="majorSummary.number.title" :has-target="true" align="left">
-          <div>{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
+          <div slot="targetArea">{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
         </statistic>
       </div>
       <div class="col-6">
         <statistic :info="majorSummary.completion" :title="majorSummary.completion.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left"></statistic>
+        <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left" :has-action="true"></div>
+        </statistic>
       </div>
     </div>
     <div class="panel mt10">

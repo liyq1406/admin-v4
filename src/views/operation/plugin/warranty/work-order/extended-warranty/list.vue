@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="panel no-split-line">
+    <div class="panel">
       <div class="panel-bd">
         <div class="with-loading">
           <time-line :data="trends" :type="'smooth'"></time-line>
@@ -28,6 +28,29 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
         </div>
+      </div>
+    </div>
+    <div class="row statistic-group">
+      <div class="col-6">
+        <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left">
+          <i class="tips" slot="tips">(小于10天)</i>
+          <div slot="action">
+            <button>
+            一键延保通知
+            </button>
+        </div>
+        </statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="extendedSummary.unfinished" :title="extendedSummary.unfinished.title" :has-target="true" align="left">
+        </statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="extendedSummary.today" :title="extendedSummary.today.title" align="left" :showchange="true"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="extendedSummary.week" :title="extendedSummary.week.title" align="left" :has-action="true" :showchange="true">
+        </statistic>
       </div>
     </div>
     <div class="panel mt10">
@@ -141,6 +164,7 @@
   import Mock from 'mockjs'
   import TimeLine from 'components/g2-charts/TimeLine'
   import RadioButtonGroup from 'components/RadioButtonGroup'
+  import Statistic from 'components/Statistic'
 
   export default {
     name: 'OrderList',
@@ -154,6 +178,7 @@
       'c-table': Table,
       // 'pager': Pager,
       TimeLine,
+      Statistic,
       RadioButtonGroup
     },
 
@@ -227,7 +252,28 @@
             title: '状态',
             class: 'tac'
           }
-        ]
+        ],
+        extendedSummary: {
+          rest: {
+            total: 235,
+            change: 0,
+            title: '即将到期'
+          },
+          unfinished: {
+            total: 135,
+            title: '待处理数'
+          },
+          today: {
+            total: 232,
+            change: -124,
+            title: '今日延保数'
+          },
+          week: {
+            total: 2802,
+            change: 124,
+            title: '一周维修数'
+          }
+        }
       }
     },
 
@@ -371,4 +417,7 @@
 
 <style lang="stylus">
   @import '../../../../../../assets/stylus/common'
+  .tips
+    font-size 5px!important
+    color red
 </style>
