@@ -1,86 +1,82 @@
 <template>
-  <section class="main-wrap">
-    <div class="main">
-      <div class="breadcrumb"><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/accounts/'}"><i class="fa fa-arrow-circle-left"></i>网点列表</a></div>
-      <div class="panel">
-        <!-- Start: 网点详情 -->
-        <div class="panel-hd">
-          <h2>网点详情</h2>
-        </div>
-        <div class="panel-bd">
-          <ul class="info-details">
-            <li class="row">
-              <div class="col-3 label">创建日期:</div>
-              <div class="clo-21 info">{{ info.create_time | uniformDate }}</div>
-            </li>
-          </ul>
-        </div>
-        <!-- End: 网点详情 -->
+  <div class="main">
+    <div class="main-title">
+      <h2>网点详情</h2>
+    </div>
+    <breadcrumb :nav="breadcrumbNav"></breadcrumb>
+    <div class="panel">
+      <!-- Start: 网点详情 -->
+      <div class="panel-bd">
+        <ul class="info-details">
+          <li class="row">
+            <div class="col-3 label">创建日期:</div>
+            <div class="clo-21 info">{{ info.create_time | uniformDate }}</div>
+          </li>
+        </ul>
+      </div>
+      <!-- End: 网点详情 -->
 
-        <!-- Start: 网点信息 -->
-        <div class="panel-hd">
-          <div class="actions">
-            <button @click="editAccount" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
-          </div>
-          <h2>网点信息</h2>
+      <!-- Start: 网点信息 -->
+      <div class="panel-hd">
+        <div class="actions">
+          <button @click="editAccount" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
+          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
         </div>
-        <div class="panel-bd">
-          <ul class="info-details">
-            <li class="row">
-              <div class="col-3 label">网点名称:</div>
-              <div class="clo-21 info">{{ info.name }}</div>
-            </li>
-            <li class="row">
-              <div class="col-3 label">负责人:</div>
-              <div class="clo-21 info">{{ info.director }}</div>
-            </li>
-            <li class="row">
-              <div class="col-3 label">联系电话:</div>
-              <div class="clo-21 info">{{ info.phone }}</div>
-            </li>
-            <li class="row">
-              <div class="col-3 label">所在地区:</div>
-              <div class="clo-21 info">{{ info.province + info.city + info.district }}</div>
-            </li>
-            <li class="row">
-              <div class="col-3 label">详细地址:</div>
-              <div class="clo-21 info">{{ info.address }}</div>
-            </li>
-          </ul>
-          <!-- End: 网点信息 -->
+        <h2>网点信息</h2>
+      </div>
+      <div class="panel-bd">
+        <ul class="info-details">
+          <li class="row">
+            <div class="col-3 label">网点名称:</div>
+            <div class="clo-21 info">{{ info.name }}</div>
+          </li>
+          <li class="row">
+            <div class="col-3 label">负责人:</div>
+            <div class="clo-21 info">{{ info.director }}</div>
+          </li>
+          <li class="row">
+            <div class="col-3 label">联系电话:</div>
+            <div class="clo-21 info">{{ info.phone }}</div>
+          </li>
+          <li class="row">
+            <div class="col-3 label">所在地区:</div>
+            <div class="clo-21 info">{{ info.province + info.city + info.district }}</div>
+          </li>
+          <li class="row">
+            <div class="col-3 label">详细地址:</div>
+            <div class="clo-21 info">{{ info.address }}</div>
+          </li>
+        </ul>
+        <!-- End: 网点信息 -->
 
-          <!-- Start: 操作栏 -->
-          <div class="action-bar">
-            <!-- <search-box :key.sync="key" :active="searching" :placeholder="'请输入用户名'">
-              <label>查找客服</label>
-              <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
-            </search-box> -->
-            <search-box :key.sync="key" :active="searching" :placeholder="'请输入关键字'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
-              <v-select width="90px" :label="queryType.label">
-                <select v-model="queryType">
-                  <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
-                </select>
-              </v-select>
-              <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
-            </search-box>
-          </div>
-          <!-- End: 操作栏 -->
-
+        <!-- Start: 客服人员列表 -->
+        <div class="data-table">
           <!-- Start: 过滤器 -->
-          <div class="status-bar">
-            <div class="status">{{{ $t('common.total_results', {count:total}) }}}
+          <div class="filter-bar">
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :active="searching" :placeholder="'请输入关键字'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
+                  <v-select width="90px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
+                    </select>
+                  </v-select>
+                  <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
             </div>
-            <v-select width="120px" size="small" :label="statusOptions[status.value].label">
-              <label slot="label">状态</label>
-              <select v-model="status" :status.sync="" @change="getBranchStaffsList(true)">
-                <option v-for="option in statusOptions" :value="option" :selected="option.value===2">{{option.label}}</option>
-              </select>
-            </v-select>
+            <div class="filter-group">
+              <div class="filter-group-item">
+                <v-select width="120px" size="small" :label="statusOptions[status.value].label">
+                  <label slot="label">状态</label>
+                  <select v-model="status" :status.sync="" @change="getBranchStaffsList(true)">
+                    <option v-for="option in statusOptions" :value="option" :selected="option.value===2">{{option.label}}</option>
+                  </select>
+                </v-select>
+              </div>
+            </div>
           </div>
           <!-- End: 过滤器 -->
-
-          <!-- Start: 客服人员列表 -->
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
@@ -116,16 +112,15 @@
               </tr>
             </tbody>
           </table>
-          <!-- End: 客服人员列表 -->
-
-          <!-- Start: 分页信息 -->
-          <!-- <pager :total="51" :current.sync="0" :count-per-page="10"></pager> -->
-          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pager>
-          <!-- End: 分页信息 -->
         </div>
+        <!-- End: 客服人员列表 -->
+
+        <!-- Start: 分页信息 -->
+        <!-- <pager :total="51" :current.sync="0" :count-per-page="10"></pager> -->
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchStaffsList"></pager>
+        <!-- End: 分页信息 -->
       </div>
     </div>
-
     <!-- start: 添加客服 -->
     <modal :show.sync="showAddModal" width="600px">
       <h3 slot="header">添加客服</h3>
@@ -266,156 +261,256 @@
       </div>
     </modal>
     <!-- end  -->
-
-  </section>
+  </div>
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-  import { pluginMixins } from '../../mixins'
-  import Select from 'components/Select'
-  import SearchBox from 'components/SearchBox'
-  import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
-  import api from 'api'
-  import * as config from 'consts/config'
-  import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
+import { pluginMixins } from '../../mixins'
+import Select from 'components/Select'
+import SearchBox from 'components/SearchBox'
+import Breadcrumb from 'components/Breadcrumb'
+import Pager from 'components/Pager'
+import Modal from 'components/Modal'
+import api from 'api'
+import * as config from 'consts/config'
+import _ from 'lodash'
 
-  export default {
-    name: 'AccountDetails',
+export default {
+  name: 'AccountDetails',
 
-    mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins],
 
+  data () {
+    return {
+      info: {},
+      key: '',
+      staffs: [],
+      showAddModal: false,
+      showEditModal: false,
+      editModal: {
+        // name: '',
+        // charge: '',
+        // tel: '',
+        // email: '',
+        // area: {},
+        // addr: ''
+      },
+      status: {
+        label: '全部',
+        value: 0
+      },
+      statusOptions: [{
+        label: '停用',
+        value: 0
+      }, {
+        label: '启用',
+        value: 1
+      }, {
+        label: '全部',
+        value: 2}
+      ],
+      addCustomOptions: [{
+        label: '启用',
+        value: 0
+      }, {
+        label: '停用',
+        value: 1}
+      ],
+      adding: false,
+      editing: false,
+      addValidation: {},
+      editValidation: {},
+      addModel: {
+        name: '',
+        username: '',
+        branch_id: '',
+        creator: '',
+        password: '',
+        phone: '',
+        email: '',
+        create_time: '',
+        status: 1
+      },
+      total: 0,
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      delChecked: false,
+      query: {},
+      loadingData: false,
+      loadingStaffs: false,
+      originAddModel: {},
+      originEditModel: {},
+      queryTypeOptions: [
+        { label: '姓名', value: 'name' },
+        { label: '邮箱', value: 'email' },
+        { label: '手机', value: 'phone' }
+      ],
+      queryType: {
+        label: '姓名',
+        value: 'name'
+      },
+      searching: false,
+      breadcrumbNav: [{
+        label: '全部',
+        link: `/operation/plugins/warranty/${this.$route.params.app_id}/accounts`
+      }, {
+        label: '网点详情'
+      }]
+    }
+  },
+
+  components: {
+    'v-select': Select,
+    SearchBox,
+    Pager,
+    Modal,
+    Breadcrumb
+  },
+
+  ready () {
+    this.getBranchList()
+    this.getBranchStaffsList()
+  },
+
+  computed: {
+    queryCondition () {
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          branch_id: this.$route.params.id
+        }
+      }
+      if (this.key.length > 0) {
+        condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
+        // condition.query[this.queryType.value] = { $like: this.key }
+      }
+      if (this.status.value !== 2) {
+        condition.query.status = this.status.value
+      }
+      // if (this.key !== '') {
+      //   condition.query.name = this.key
+      // }
+      return condition
+    }
+  },
+  route: {
     data () {
-      return {
-        info: {},
-        key: '',
-        staffs: [],
-        showAddModal: false,
-        showEditModal: false,
-        editModal: {
-          // name: '',
-          // charge: '',
-          // tel: '',
-          // email: '',
-          // area: {},
-          // addr: ''
-        },
-        status: {
-          label: '全部',
-          value: 0
-        },
-        statusOptions: [{
-          label: '停用',
-          value: 0
-        }, {
-          label: '启用',
-          value: 1
-        }, {
-          label: '全部',
-          value: 2}
-        ],
-        addCustomOptions: [{
-          label: '启用',
-          value: 0
-        }, {
-          label: '停用',
-          value: 1}
-        ],
-        adding: false,
-        editing: false,
-        addValidation: {},
-        editValidation: {},
-        addModel: {
-          name: '',
-          username: '',
-          branch_id: '',
-          creator: '',
-          password: '',
-          phone: '',
-          email: '',
-          create_time: '',
-          status: 1
-        },
-        total: 0,
-        currentPage: 1,
-        countPerPage: config.COUNT_PER_PAGE,
-        delChecked: false,
-        query: {},
-        loadingData: false,
-        loadingStaffs: false,
-        originAddModel: {},
-        originEditModel: {},
-        queryTypeOptions: [
-          { label: '姓名', value: 'name' },
-          { label: '邮箱', value: 'email' },
-          { label: '手机', value: 'phone' }
-        ],
-        queryType: {
-          label: '姓名',
-          value: 'name'
-        },
-        searching: false
+      this.originAddModel = _.clone(this.addModel)
+    }
+  },
+  methods: {
+    // 获取网点信息
+    getBranchList () {
+      var self = this
+      var argvs = arguments
+      var fn = self.getBranchList
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          _id: this.$route.params.id
+        }
       }
-    },
-
-    components: {
-      'v-select': Select,
-      'search-box': SearchBox,
-      'pager': Pager,
-      'modal': Modal
-    },
-
-    ready () {
-      this.getBranchList()
-      this.getBranchStaffsList()
-    },
-
-    computed: {
-      queryCondition () {
-        var condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            branch_id: this.$route.params.id
+      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+        api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+          this.info = res.data.list[0] || {}
+        }).catch((err) => {
+          var env = {
+            'fn': fn,
+            'argvs': argvs,
+            'context': self,
+            'plugin': 'warranty'
           }
-        }
-        if (this.key.length > 0) {
-          condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
-          // condition.query[this.queryType.value] = { $like: this.key }
-        }
-        if (this.status.value !== 2) {
-          condition.query.status = this.status.value
-        }
-        // if (this.key !== '') {
-        //   condition.query.name = this.key
-        // }
-        return condition
-      }
+          self.handlePluginError(err, env)
+        })
+      })
     },
-    route: {
-      data () {
-        this.originAddModel = _.clone(this.addModel)
-      }
-    },
-    methods: {
-      // 获取网点信息
-      getBranchList () {
-        var self = this
-        var argvs = arguments
-        var fn = self.getBranchList
-        var condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            _id: this.$route.params.id
+    // 获取维修点员工列表
+    getBranchStaffsList () {
+      var self = this
+      var argvs = arguments
+      var fn = self.getBranchStaffsList
+      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+        api.warranty.getBranchStaffsList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
+          this.staffs = res.data.list
+          this.total = res.data.count
+          this.loadingData = false
+        }).catch((err) => {
+          var env = {
+            'fn': fn,
+            'argvs': argvs,
+            'context': self,
+            'plugin': 'warranty'
           }
-        }
+          self.handlePluginError(err, env)
+        })
+      })
+    },
+    // 添加网点表单钩子
+    addStaffHook (form) {
+      this.addForm = form
+    },
+    // 编辑网点表单钩子
+    editStaffHook (form) {
+      this.editForm = form
+    },
+    resetAdd () {
+      this.adding = false
+      this.showAddModal = false
+      this.addModel = _.clone(this.originAddModel)
+      this.$nextTick(() => {
+        this.addForm.setPristine()
+      })
+    },
+    // 关闭编辑浮层并净化编辑表单
+    resetEdit () {
+      this.editing = false
+      this.showEditModal = false
+      this.delChecked = false
+      setTimeout(() => {
+        this.editModel = this.originEditModel
+      }, 1000)
+    },
+    // 取消添加
+    onAddCancel () {
+      this.resetAdd()
+    },
+    // 取消编辑
+    onEditCancel () {
+      this.resetEdit()
+      // this.product = this.originEditModel
+    },
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+    // 搜索
+    handleSearch () {
+      if (this.query.length === 0) {
+        this.getBranchStaffsList()
+      }
+    },
+    // 添加操作
+    onAddSubmit () {
+      var self = this
+      var argvs = arguments
+      var fn = self.onAddSubmit
+      if (this.addValidation.$valid && !this.adding) {
+        this.adding = true
+        this.addModel.status = this.addModel.status - 0
+        this.addModel.branch_id = this.$route.params.id
+        this.addModel.username = this.addModel.email
+        this.addModel.create_time = new Date()
         this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
-            this.info = res.data.list[0] || {}
+          api.warranty.AddBranchStaffs(this.$route.params.app_id, token, this.addModel).then((res) => {
+            this.adding = false
+            this.showAddModal = false
+            this.getBranchStaffsList()
+            this.resetAdd()
           }).catch((err) => {
             var env = {
               'fn': fn,
@@ -424,119 +519,53 @@
               'plugin': 'warranty'
             }
             self.handlePluginError(err, env)
+            this.adding = false
           })
         })
-      },
-      // 获取维修点员工列表
-      getBranchStaffsList () {
-        var self = this
-        var argvs = arguments
-        var fn = self.getBranchStaffsList
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getBranchStaffsList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-            this.staffs = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-          })
-        })
-      },
-      // 添加网点表单钩子
-      addStaffHook (form) {
-        this.addForm = form
-      },
-      // 编辑网点表单钩子
-      editStaffHook (form) {
-        this.editForm = form
-      },
-      resetAdd () {
-        this.adding = false
-        this.showAddModal = false
-        this.addModel = _.clone(this.originAddModel)
-        this.$nextTick(() => {
-          this.addForm.setPristine()
-        })
-      },
-      // 关闭编辑浮层并净化编辑表单
-      resetEdit () {
-        this.editing = false
-        this.showEditModal = false
-        this.delChecked = false
-        setTimeout(() => {
-          this.editModel = this.originEditModel
-        }, 1000)
-      },
-      // 取消添加
-      onAddCancel () {
-        this.resetAdd()
-      },
-      // 取消编辑
-      onEditCancel () {
-        this.resetEdit()
-        // this.product = this.originEditModel
-      },
-      // 切换搜索
-      toggleSearching () {
-        this.searching = !this.searching
-      },
-      // 搜索
-      handleSearch () {
-        if (this.query.length === 0) {
-          this.getBranchStaffsList()
+      }
+    },
+    editAccount () {
+      var self = this
+      var argvs = arguments
+      var fn = self.editAccount
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          _id: this.$route.params.id
         }
-      },
-      // 添加操作
-      onAddSubmit () {
-        var self = this
-        var argvs = arguments
-        var fn = self.onAddSubmit
-        if (this.addValidation.$valid && !this.adding) {
-          this.adding = true
-          this.addModel.status = this.addModel.status - 0
-          this.addModel.branch_id = this.$route.params.id
-          this.addModel.username = this.addModel.email
-          this.addModel.create_time = new Date()
-          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-            api.warranty.AddBranchStaffs(this.$route.params.app_id, token, this.addModel).then((res) => {
-              this.adding = false
-              this.showAddModal = false
-              this.getBranchStaffsList()
-              this.resetAdd()
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'warranty'
-              }
-              self.handlePluginError(err, env)
-              this.adding = false
-            })
-          })
-        }
-      },
-      editAccount () {
-        var self = this
-        var argvs = arguments
-        var fn = self.editAccount
-        var condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            _id: this.$route.params.id
+      }
+      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+        api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
+          this.editModal = res.data.list[0] || {}
+        }).catch((err) => {
+          var env = {
+            'fn': fn,
+            'argvs': argvs,
+            'context': self,
+            'plugin': 'warranty'
           }
-        }
+          self.handlePluginError(err, env)
+          this.loadingData = false
+        })
+      })
+      this.showEditModal = true
+    },
+
+    // 提交编辑表单
+    onEditSubmit () {
+      var self = this
+      var argvs = arguments
+      var fn = self.onEditSubmit
+      if (this.delChecked && !this.editing) { // 删除
+        this.editing = true
+        // console.log(this.$route.params.id)
         this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
-            this.editModal = res.data.list[0] || {}
+          api.warranty.deleteBranch(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
+            this.editing = false
+            this.showEditModal = false
+            this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
           }).catch((err) => {
             var env = {
               'fn': fn,
@@ -545,57 +574,30 @@
               'plugin': 'warranty'
             }
             self.handlePluginError(err, env)
-            this.loadingData = false
+            this.editing = false
           })
         })
-        this.showEditModal = true
-      },
-
-      // 提交编辑表单
-      onEditSubmit () {
-        var self = this
-        var argvs = arguments
-        var fn = self.onEditSubmit
-        if (this.delChecked && !this.editing) { // 删除
-          this.editing = true
-          // console.log(this.$route.params.id)
-          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-            api.warranty.deleteBranch(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
-              this.editing = false
-              this.showEditModal = false
-              this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'warranty'
-              }
-              self.handlePluginError(err, env)
-              this.editing = false
-            })
+      } else if (this.editValidation.$valid && !this.editing) { // 更新
+        this.editing = true
+        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
+          api.warranty.UpdateBranch(this.$route.params.app_id, token, this.editModal, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getBranchList()
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'warranty'
+            }
+            self.handlePluginError(err, env)
+            this.editing = false
           })
-        } else if (this.editValidation.$valid && !this.editing) { // 更新
-          this.editing = true
-          this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-            api.warranty.UpdateBranch(this.$route.params.app_id, token, this.editModal, this.$route.params.id).then((res) => {
-              if (res.status === 200) {
-                this.resetEdit()
-                this.getBranchList()
-              }
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'warranty'
-              }
-              self.handlePluginError(err, env)
-              this.editing = false
-            })
-          })
-        }
+        })
       }
     }
   }
+}
 </script>

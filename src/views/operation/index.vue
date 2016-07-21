@@ -125,7 +125,16 @@ export default {
 
             break
           case 'warranty': // 在线维保
-
+            sub.subs = [{
+              alias: 'extended_warranties',
+              url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
+            }, {
+              alias: 'repair',
+              url: `/plugins/warranty/${item.id}/work-orders/repair`
+            }, {
+              alias: 'accounts',
+              url: `/plugins/warranty/${item.id}/accounts`
+            }]
             break
           case 'broadcast': // 消息推送
             sub.subs = [{
@@ -134,9 +143,6 @@ export default {
             }, {
               alias: 'list',
               url: `/plugins/broadcast/${item.id}/list`
-            }, {
-              alias: 'overview',
-              url: `/plugins/broadcast/${item.id}/overview`
             }]
             break
           case 'helpdesk': // 用户反馈

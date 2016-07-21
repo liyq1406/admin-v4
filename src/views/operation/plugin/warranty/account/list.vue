@@ -1,134 +1,145 @@
 <template>
-  <div class="panel">
-    <div class="panel-bd">
-      <div class="action-bar">
-        <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.account_manage.search_condi')" style="float:right">
-          <button slot="search-button" @click="getBranchList" class="btn btn-primary"><i class="fa fa-search"></i></button>
-        </search-box>
-        <div class="action-group">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加网点</button>
+  <div class="main">
+    <div class="main-title">
+      <h2>网点管理</h2>
+    </div>
+    <div class="panel">
+      <div class="panel-bd">
+        <div class="action-bar">
+          <div class="action-group">
+            <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加网点</button>
+          </div>
         </div>
-      </div>
-      <div class="status-bar">
-        <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-        <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
-      </div>
-
-      <div class="data-table with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-        <table class="table table-stripe table-bordered wrongcodetable">
-          <thead>
-            <tr>
-              <th>序号</th>
-              <th>网点名称</th>
-              <th>负责人</th>
-              <th>联系方式</th>
-              <th>创建日期</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="accounts.length > 0">
-              <tr v-for="account in accounts">
-                <td>{{ $index + 1 }}</td>
-                <td>{{ account.name }}</td>
-                <td>{{ account.director }}</td>
-                <td>{{ account.phone }}</td>
-                <td>{{ account.create_time | uniformDate}}</td>
-                <td>
-                  <a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/accounts/'+account._id}" class="hl-red">查看详情</a>
+        <div class="data-table with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.account_manage.search_condi')" style="float:right">
+                  <button slot="search-button" @click="getBranchList" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+            <div class="filter-group">
+              <div class="filter-group-item">
+                <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" @province-change="getBranchList" @city-change="getBranchList" @district-change="getBranchList" label="所在地区：" select-size="small"></area-select>
+              </div>
+            </div>
+          </div>
+          <table class="table table-stripe table-bordered wrongcodetable">
+            <thead>
+              <tr>
+                <th>序号</th>
+                <th>网点名称</th>
+                <th>负责人</th>
+                <th>联系方式</th>
+                <th>创建日期</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="accounts.length > 0">
+                <tr v-for="account in accounts">
+                  <td>{{ $index + 1 }}</td>
+                  <td>{{ account.name }}</td>
+                  <td>{{ account.director }}</td>
+                  <td>{{ account.phone }}</td>
+                  <td>{{ account.create_time | uniformDate}}</td>
+                  <td>
+                    <a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/accounts/'+account._id}" class="hl-red">查看详情</a>
+                  </td>
+                </tr>
+              </template>
+              <tr v-if="accounts.length === 0 && !loadingData">
+                <td colspan="6" class="tac">
+                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
-            </template>
-            <tr v-if="accounts.length === 0 && !loadingData">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchList"></pager>
-
-      <!-- 添加增加网点浮层-->
-      <modal :show.sync="showAddModal" width="600px">
-        <h3 slot="header">添加网点</h3>
-        <div slot="body" class="form">
-          <validator name="addValidation">
-            <form novalidate @submit.prevent="onAddSubmit">
-              <div class="form-row row">
-                <label class="form-control col-6">网点:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap">
-                    <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{required: true}" lazy class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.name')}) }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row">
-                <label class="form-control col-6">负责人:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap">
-                    <input v-model="addModel.director" type="text" name="addModel.director" v-validate:director="{required: true}" lazy class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.director')}) }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row">
-                <label class="form-control col-6">联系号码:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap">
-                    <input v-model="addModel.phone" type="text" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
-                    <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row">
-                <label class="form-control col-6">邮箱地址:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap">
-                    <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
-                    <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row">
-                <label class="form-control col-6">所在地区:</label>
-                <div class="controls col-18">
-                  <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
-                </div>
-              </div>
-              <div class="form-row row">
-                <label class="form-control col-6">详细地址:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap">
-                    <input v-model="addModel.address" type="text" name="addModel.address" v-validate:address="{required: true}" lazy class="input-text"/>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.address')}) }}</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-actions">
-                <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              </div>
-            </form>
-          </validator>
+            </tbody>
+          </table>
         </div>
-      </modal>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getBranchList"></pager>
+
+        <!-- 添加增加网点浮层-->
+        <modal :show.sync="showAddModal" width="600px">
+          <h3 slot="header">添加网点</h3>
+          <div slot="body" class="form">
+            <validator name="addValidation">
+              <form novalidate @submit.prevent="onAddSubmit">
+                <div class="form-row row">
+                  <label class="form-control col-6">网点:</label>
+                  <div class="controls col-18">
+                    <div class="input-text-wrap">
+                      <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.name')}) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-6">负责人:</label>
+                  <div class="controls col-18">
+                    <div class="input-text-wrap">
+                      <input v-model="addModel.director" type="text" name="addModel.director" v-validate:director="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.director')}) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-6">联系号码:</label>
+                  <div class="controls col-18">
+                    <div class="input-text-wrap">
+                      <input v-model="addModel.phone" type="text" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
+                      <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-6">邮箱地址:</label>
+                  <div class="controls col-18">
+                    <div class="input-text-wrap">
+                      <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
+                      <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-6">所在地区:</label>
+                  <div class="controls col-18">
+                    <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-6">详细地址:</label>
+                  <div class="controls col-18">
+                    <div class="input-text-wrap">
+                      <input v-model="addModel.address" type="text" name="addModel.address" v-validate:address="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.address')}) }}</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-actions">
+                  <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                  <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+                </div>
+              </form>
+            </validator>
+          </div>
+        </modal>
+      </div>
     </div>
   </div>
 </template>

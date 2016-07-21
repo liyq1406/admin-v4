@@ -53,8 +53,14 @@ export default {
         broadcast: {
           subs: {
             add: '新建推送',
-            list: '推送历史',
-            overview: '推送分析'
+            list: '推送历史'
+          }
+        },
+        warranty: {
+          subs: {
+            extended_warranties: '延保工单',
+            repair: '维修工单',
+            accounts: '网点管理'
           }
         },
         helpdesk: {

@@ -411,14 +411,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 消息推送
-        'plugins/broadcast/:app_id/overview': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/overview'))
-            }, 'admin')
-          }
-        },
         // 推送详情
         'plugins/broadcast/:app_id/list/:id': {
           component (resolve) {
