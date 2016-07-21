@@ -18,7 +18,33 @@
         <statistic :info="repairSummary.week" :title="repairSummary.week.title" align="left"></statistic>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt10">
+      <div class="panel-bd">
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="getOrderWorkList">
+                  <button slot="search-button" @click="getOrderWorkList" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+          </div>
+          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
           <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入'+ queryType.label" @press-enter="getOrderWorkList(true)">
@@ -83,16 +109,14 @@
             </tbody>
           </table>
         </div>
-
-        <!-- Start: 分页信息 -->
         <div class="row">
           <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
           <div class="col-16">
             <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOrderWorkList"></pager>
           </div>
         </div>
-        <!-- End: 分页信息 -->
-    </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
@@ -102,7 +126,7 @@
   import Select from 'components/Select'
   import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
-  import Pager from 'components/Pager'
+  import Table from 'components/Table'
   import DateRangePicker from 'components/DateRangePicker'
   import api from 'api'
   import * as config from 'consts/config'
@@ -117,7 +141,7 @@
       'v-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
-      'pager': Pager,
+      'c-table': Table,
       'date-range-picker': DateRangePicker,
       Statistic
     },
@@ -185,17 +209,73 @@
             change: 124,
             title: '7日维修数'
           }
-        }
-      }
-    },
-
-    route: {
-      data () {
-        this.getOrderWorkList()
+        },
+        headers: [
+          {
+            key: 'id',
+            title: '工单编号'
+          },
+          {
+            key: 'mac',
+            title: '维修设备(mac)'
+          },
+          {
+            key: 'create_date',
+            title: '创建时间'
+          },
+          {
+            key: 'person',
+            title: '维修人员'
+          },
+          {
+            key: 'content',
+            title: '维修内容',
+            class: 'tac w200'
+          },
+          {
+            key: 'addr',
+            title: '地点'
+          },
+          {
+            key: 'level',
+            title: '维修等级',
+            class: 'tac'
+          },
+          {
+            key: 'state',
+            title: '状态',
+            class: 'tac'
+          }
+        ]
       }
     },
 
     computed: {
+      page () {
+        return {
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage,
+          total: this.total
+        }
+      },
+      tables () {
+        var result = []
+        this.workOrders.map((item) => {
+          var workOrder = {
+            id: '<a class="hl-red">' + item.id + '</a>',
+            mac: item.mac,
+            create_date: item.create_date,
+            person: item.person,
+            content: item.content,
+            addr: item.addr,
+            level: item.level,
+            state: item.state,
+            prototype: item
+          }
+          result.push(workOrder)
+        })
+        return result
+      },
       queryCondition () {
         var condition = {
           filter: [],
@@ -248,7 +328,38 @@
       }
     },
 
+    route: {
+      data () {
+        this.getOrderWorkList1()
+      }
+    },
+
     methods: {
+      getOrderWorkList1 () {
+        this.total = 50
+        this.workOrders = [
+          {
+            id: '11111',
+            mac: 'a1ds54asd',
+            create_date: '2016-07-21 18:00:00',
+            person: '你哥哥',
+            content: '维修内容',
+            addr: '龙腾18',
+            level: '1',
+            state: '1'
+          },
+          {
+            id: '222222',
+            mac: 'a1ds54asd',
+            create_date: '2016-07-21 18:00:00',
+            person: '你妹妹',
+            content: '维修内容',
+            addr: '龙腾18',
+            level: '1',
+            state: '1'
+          }
+        ]
+      },
       getOrderWorkList (querying) {
         var self = this
         var argvs = arguments
