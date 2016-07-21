@@ -1,16 +1,20 @@
 <template>
   <div :class="classes">
+    <!-- 按钮区域 -->
+    <div class="action" v-if="hasAction">
+      <slot name="action"></slot>
+    </div>
     <div class="tit" v-if="align==='center'">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="info" v-animated-number="info.total"></div>
     <div class="unit" v-if="info.unit">{{info.unit}}</div>
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
-      <span class="ml10">{{ percentage }}</span>
+      <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
-    <div class="tit" v-if="align!=='center'">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
+    <div class="tit" v-if="align!=='center'">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="target" v-if="hasTarget">
-      <slot></slot>
+      <slot name="targetArea"></slot>
     </div>
     <div class="chart" v-if="hasChart">
       <slot></slot>
@@ -75,8 +79,20 @@ export default {
       default: false
     },
 
+    // 是否带事件
+    hasAction: {
+      type: Boolean,
+      default: false
+    },
+
     // 是否带目标
     hasTarget: {
+      type: Boolean,
+      default: false
+    },
+
+    // 是否显示变化百分比
+    showchange: {
       type: Boolean,
       default: false
     },
@@ -220,4 +236,8 @@ export default {
     color red
   .change-increase
     color green
+.action
+  position absolute
+  right 10px
+  top 10px
 </style>
