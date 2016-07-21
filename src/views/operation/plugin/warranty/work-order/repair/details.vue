@@ -94,6 +94,35 @@
         </div>
       </div>
     </div>
+    <div class="panel mt10">
+      <div class="panel-hd">
+        <h3>维修历史</h3>
+      </div>
+      <div class="panel-bd">
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部" width='110px' size="small">
+                  <span slot="label">显示</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+              </div>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+          </div>
+          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -103,6 +132,9 @@ import { pluginMixins } from '../../../mixins'
 import Breadcrumb from 'components/Breadcrumb'
 import api from 'api'
 import InfoCard from 'components/InfoCard'
+import SearchBox from 'components/SearchBox'
+import Table from 'components/Table'
+import Select from 'components/Select'
 import InfoList from 'components/InfoList'
 
 export default {
@@ -113,7 +145,10 @@ export default {
   components: {
     Breadcrumb,
     InfoCard,
-    InfoList
+    InfoList,
+    'c-table': Table,
+    'v-select': Select,
+    SearchBox
   },
 
   data () {
@@ -126,17 +161,74 @@ export default {
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
       }, {
         label: '工单详情'
-      }]
-    }
-  },
-
-  route: {
-    data () {
-      this.getRepairOrder()
+      }],
+      historys: [],
+      headers: [
+        {
+          key: 'id',
+          title: '工单编号'
+        },
+        {
+          key: 'mac',
+          title: '维修设备(mac)'
+        },
+        {
+          key: 'create_date',
+          title: '创建时间'
+        },
+        {
+          key: 'person',
+          title: '维修人员'
+        },
+        {
+          key: 'content',
+          title: '维修内容',
+          class: 'tac w200'
+        },
+        {
+          key: 'addr',
+          title: '地点'
+        },
+        {
+          key: 'level',
+          title: '维修等级',
+          class: 'tac'
+        },
+        {
+          key: 'state',
+          title: '状态',
+          class: 'tac'
+        }
+      ]
     }
   },
 
   computed: {
+    page () {
+      return {
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage,
+        total: this.total
+      }
+    },
+    tables () {
+      var result = []
+      this.historys.map((item) => {
+        var history = {
+          id: '<a class="hl-red">' + item.id + '</a>',
+          mac: item.mac,
+          create_date: item.create_date,
+          person: item.person,
+          content: item.content,
+          addr: item.addr,
+          level: item.level,
+          state: item.state,
+          prototype: item
+        }
+        result.push(history)
+      })
+      return result
+    },
     queryCondition () {
       var condition = {
         filter: [],
@@ -170,7 +262,42 @@ export default {
     }
   },
 
+  route: {
+    data () {
+      this.getData()
+      this.getRepairOrder()
+    }
+  },
+
   methods: {
+    goDetails (table) {
+      this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+    },
+    getData () {
+      this.total = 50
+      this.historys = [
+        {
+          id: '11111',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21 18:00:00',
+          person: '你哥哥',
+          content: '维修内容',
+          addr: '龙腾18',
+          level: '1',
+          state: '1'
+        },
+        {
+          id: '222222',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21 18:00:00',
+          person: '你妹妹',
+          content: '维修内容',
+          addr: '龙腾18',
+          level: '1',
+          state: '1'
+        }
+      ]
+    },
     getRepairOrder () {
       var self = this
       var argvs = arguments
