@@ -85,6 +85,7 @@ export default {
 
       var position = fields[0] + '*' + fields[1]
       var color = fields[2] || null
+
       chart.source(this.data, defs)
 
       var line = chart.line().position(position).size(2)

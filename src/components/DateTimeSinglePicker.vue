@@ -1,7 +1,7 @@
 <template>
   <div class="date-time-single-picker">
     <div class="wrap">
-      <button @click='showTimePicker=!showTimePicker' class="time-range-show" readonly="readonly">{{timeShowPanel}}
+      <button @click='showTimePicker=!showTimePicker' class="time-range-show" readonly="readonly">{{label === '' ? timeShowPanel: label}}
         <span class="fa fa-sort-down ml10"></span>
       </button>
       <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='showTime'></date-time-picker>
