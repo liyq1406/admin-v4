@@ -81,7 +81,7 @@
             <tbody>
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
-                  <td>{{ alert.device_mac }}</td>
+                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.device_mac || 123 }}</a></td>
                   <td>{{ alert.create_date | formatDate }}</td>
                   <td>{{ alert.duration }}</td>
                   <td>{{ alert.content }}</td>
