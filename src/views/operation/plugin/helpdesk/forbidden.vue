@@ -1,18 +1,16 @@
 <template>
-  <section class="main-wrap">
-    <div class="main">
-      <div class="panel">
-        <div class="panel-hd">
-          <h2>用户反馈</h2>
-        </div>
-        <div class="panel-bd">
-          <v-alert :cols="7">
-            <p>未获得使用该插件的权限</p>
-          </v-alert>
-        </div>
+  <div class="main">
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>用户反馈</h2>
+      </div>
+      <div class="panel-bd">
+        <v-alert :cols="7">
+          <p>未获得使用该插件的权限</p>
+        </v-alert>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>

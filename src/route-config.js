@@ -1090,7 +1090,7 @@ let configRouter = (router) => {
     // '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/forbidden',
     // '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/forbidden',
     // '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/forbidden',
-    // '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
+    '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/nest/:app_id': '/operation/linkage/nest/',

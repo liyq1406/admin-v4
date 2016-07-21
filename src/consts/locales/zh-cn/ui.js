@@ -36,7 +36,7 @@ export default {
         },
         android: {
           subs: {
-            overview: '概览',
+            version: '版本信息',
             settings: '应用配置'
           }
         },

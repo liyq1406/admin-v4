@@ -105,7 +105,7 @@ export default {
               alias: 'settings',
               url: `/plugins/android/${item.id}/settings`
             }, {
-              alias: 'android.version',
+              alias: 'version',
               url: `/plugins/android/${item.id}/version`
             }]
             break
