@@ -3,6 +3,14 @@
     <div class="main-title">
       <h2>热力分布</h2>
     </div>
+    <!-- TODO -->
+    <div class="mb10 ml15">
+      <a style="color: red">全部</a>
+      <i class="arrow">&gt;</i>
+      <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
+      <i class="arrow">&gt;</i>
+      <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
+    </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
@@ -22,10 +30,79 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="with-loading">
-          <!-- <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart> -->
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
+        <div class="row">
+          <div class="col-10">
+            <china-heat-map></china-heat-map>
+          </div>
+          <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+            <div class="data-table">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>地域</th>
+                    <th>设备数量</th>
+                    <th>占比</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖南</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖北</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>江西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>江苏</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>广东</td>
+                    <td>289</td>
+                    <td>14%</td>
+                  </tr>
+                  <tr>
+                    <td>广西</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                  <tr>
+                    <td>湖南</td>
+                    <td>1769</td>
+                    <td>86%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -97,6 +174,7 @@
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
+import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import dateFormat from 'date-format'
@@ -113,7 +191,8 @@ export default {
     RadioButtonGroup,
     LineChart,
     'v-select': Select,
-    SearchBox
+    SearchBox,
+    ChinaHeatMap
   },
 
   data () {

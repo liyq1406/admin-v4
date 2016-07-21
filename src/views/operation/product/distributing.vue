@@ -3,15 +3,25 @@
     <div class="main-title">
       <h2>热力分布</h2>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
-        <!-- TODO -->
-        <a style="color: red">全部</a>
-        <i class="arrow">&gt;</i>
-        <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
-        <i class="arrow">&gt;</i>
-        <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
+    <!-- TODO -->
+    <div class="mb10 ml15">
+      <a style="color: red">全部</a>
+      <i class="arrow">&gt;</i>
+      <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
+      <i class="arrow">&gt;</i>
+      <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
+    </div>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+        </div>
+        <div class="filter-group-item">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
       </div>
+    </div>
+    <div class="panel">
       <div class="panel-bd">
         <div class="row">
           <div class="col-10">
@@ -118,6 +128,7 @@ import SearchBox from 'components/SearchBox'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
+import RadioButtonGroup from 'components/RadioButtonGroup'
 
 export default {
   name: 'Distributing',
@@ -127,7 +138,8 @@ export default {
   components: {
     'search-box': SearchBox,
     'c-table': Table,
-    ChinaHeatMap
+    ChinaHeatMap,
+    RadioButtonGroup
   },
 
   data () {
@@ -176,6 +188,21 @@ export default {
           key: 'activated',
           title: '激活设备',
           class: 'tac'
+        }
+      ],
+      period: 7,
+      periods: [
+        {
+          value: 1,
+          label: '24h'
+        },
+        {
+          value: 7,
+          label: '7天'
+        },
+        {
+          value: 30,
+          label: '30天'
         }
       ]
     }
