@@ -951,38 +951,29 @@ let configRouter = (router) => {
           }
         },
 
-        // 维保系统-工单管理
-        'plugins/warranty/:app_id': {
+        // -------------------------在线维保-------------------------
+        // 延保工单列表
+        'plugins/warranty/:app_id/work-orders/extended-warranties': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/index'))
+              resolve(require('./views/operation/plugin/warranty/work-order/extended-warranty/list'))
             }, 'admin')
-          },
-          subRoutes: {
-            // 延保工单列表
-            'work-orders/extended-warranties': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/warranty/work-order/extended-warranty/list'))
-                }, 'admin')
-              }
-            },
-            // 维修工单列表
-            'work-orders/repair': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/warranty/work-order/repair/list'))
-                }, 'admin')
-              }
-            },
-            // 网点管理
-            'accounts': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/warranty/account/list'))
-                }, 'admin')
-              }
-            }
+          }
+        },
+        // 维修工单列表
+        'plugins/warranty/:app_id/work-orders/repair': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/work-order/repair/list'))
+            }, 'admin')
+          }
+        },
+        // 网点管理
+        'plugins/warranty/:app_id/accounts': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/account/list'))
+            }, 'admin')
           }
         },
         // 禁止访问
@@ -1025,7 +1016,9 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+
         // 设备参数
+        // TODO 废弃？
         'device-params': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -1101,6 +1094,7 @@ let configRouter = (router) => {
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
+    '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
     '/operation/linkage': '/operation/linkage/devices',
     '/operation/users/portrait': '/operation/users/portrait/os'
   })
