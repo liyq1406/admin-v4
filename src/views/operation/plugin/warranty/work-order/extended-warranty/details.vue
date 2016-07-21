@@ -11,22 +11,20 @@
             <div class="alert-record-summary">
 
               <div class="up">
-                <h3>滤网失效</h3>
-                <span class="text-label-warning">二级</span>
+                <h3 style="color:red">保修已到期</h3>
+                <span class="">二年</span>
               </div>
               <div class="down row">
                 <div class="col-12">
                   <span>2016-12-03</span>
                   <span class="ml15">16:12:03</span>
+                  <span>至</span>
+                  <span>2018-12-03</span>
+                  <span class="ml15">16:12:03</span>
                 </div>
                 <div class="col-12">
                   <button>
-                    <i class="fa fa-check"></i>
-                    已处理
-                  </button>
-                  <button>
-                    <!-- <i class="fa fa-commenting"></i> -->
-                    查看维修进度
+                    设置延保时间
                   </button>
                 </div>
               </div>
@@ -37,37 +35,32 @@
               <div class="x-info-list">
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修设备</div>
+                    <div class="x-label">设备</div>
                     <div class="x-val">电饭煲A1</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">持续时长</div>
-                    <div class="x-val">2.1h</div>
+                    <div class="x-label">状态</div>
+                    <div class="x-val">待处理</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修人员</div>
-                    <div class="x-val">
-                      <select name="" id="">
-                        <option value="">小明</option>
-                        <option value="">小张</option>
-                      </select>
-                    </div>
+                    <div class="x-label">保修期</div>
+                    <div class="x-val">两年</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">处理时间</div>
+                    <div class="x-label">到期时间</div>
                     <div class="x-val">2016-07-18 18:00:00</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
-                    <div class="x-label">维修费用</div>
-                    <div class="x-val">210元</div>
+                    <div class="x-label">设备地区</div>
+                    <div class="x-val">广东 广州</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
