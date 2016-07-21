@@ -89,18 +89,20 @@ export default {
           name: item.name,
           type: 'plugin',
           alias: item.plugin,
-          icon: 'puzzle-piece',
           id: item.id,
+          icon: 'puzzle-piece',
           url: `plugins/${item.plugin}`
         }
         switch (item.plugin) {
           case 'ios': // iOS
+            sub.icon = 'apple'
             sub.subs = [{
               alias: 'settings',
               url: `/plugins/ios/${item.id}/settings`
             }]
             break
           case 'android': // Android
+            sub.icon = 'android'
             sub.subs = [{
               alias: 'settings',
               url: `/plugins/android/${item.id}/settings`
@@ -110,21 +112,24 @@ export default {
             }]
             break
           case 'web': // Web
+            sub.icon = 'internet-explorer'
             sub.subs = [{
               alias: 'settings',
               url: `/plugins/web/${item.id}/settings`
             }]
             break
           case 'wechat': // Wechat
+            sub.icon = 'wechat'
             sub.subs = [{
               alias: 'settings',
               url: `/plugins/wechat/${item.id}/settings`
             }]
             break
           case 'recipe': // 云菜谱
-
+            sub.icon = 'cutlery'
             break
           case 'warranty': // 在线维保
+            sub.icon = 'support'
             sub.subs = [{
               alias: 'overview',
               url: `/plugins/warranty/${item.id}/overview`
@@ -143,6 +148,7 @@ export default {
             }]
             break
           case 'broadcast': // 消息推送
+            sub.icon = 'envelope'
             sub.subs = [{
               alias: 'add',
               url: `/plugins/broadcast/${item.id}/add`
@@ -152,6 +158,7 @@ export default {
             }]
             break
           case 'helpdesk': // 用户反馈
+            sub.icon = 'inbox'
             sub.subs = [{
               alias: 'overview',
               url: `/plugins/helpdesk/${item.id}/overview`
@@ -161,13 +168,13 @@ export default {
             }]
             break
           case 'dealer': // 经销商管理
-
+            sub.icon = 'sitemap'
             break
           case 'nest': // Google Nest网关
-
+            sub.icon = 'google'
             break
           case 'xpay': // 支付网关
-
+            sub.icon = 'credit-card'
             break
           case 'content': // 内容管理
 
