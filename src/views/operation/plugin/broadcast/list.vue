@@ -3,7 +3,24 @@
     <div class="main-title">
       <h2>消息列表</h2>
     </div>
-    <div class="panel"></div>
+    <div class="panel">
+      <div class="panel-bd">
+        <div class="filter-bar filter-bar-head">
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+            </div>
+            <div class="filter-group-item">
+              <date-time-range-picker></date-time-range-picker>
+            </div>
+            <div class="filter-group-item">
+              <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            </div>
+          </div>
+        </div>
+        <time-line :data="trends" :type="'smooth'"></time-line>
+      </div>
+    </div>
     <div class="row statistic-group">
       <div class="col-6">
         <statistic :info="messageSummary.avg" :title="messageSummary.avg.title" align="left"></statistic>
@@ -112,6 +129,10 @@
   import SearchBox from 'components/SearchBox'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
+  import TimeLine from 'components/g2-charts/TimeLine'
+  import Mock from 'mockjs'
 
   export default {
     name: 'BroadcastHistory',
@@ -122,7 +143,10 @@
       'v-select': Select,
       'c-table': Table,
       'search-box': SearchBox,
-      Statistic
+      Statistic,
+      RadioButtonGroup,
+      DateTimeRangePicker,
+      TimeLine
     },
 
     data () {
@@ -166,6 +190,7 @@
             title: '待推送数'
           }
         },
+        trends: null,
         headers: [
           {
             key: 'title',
@@ -249,6 +274,20 @@
 
     ready () {
       this.getHistories()
+      this.trends = Mock.mock({
+        'list|14': [{
+          'date|+1': [
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21)
+          ],
+          'count|+1': [6, 8, 9, 3, 9, 3, 9]
+        }]
+      }).list
     },
 
     methods: {
