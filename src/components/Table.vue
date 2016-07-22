@@ -310,7 +310,8 @@
     height auto
     box-sizing border-box
     .table-content
-      overflow auto
+      overflow-x auto
+      overflow-y hidden
     .pointer
       cursor pointer
     .theader-box
