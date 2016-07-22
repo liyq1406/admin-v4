@@ -418,6 +418,6 @@
 <style lang="stylus">
   @import '../../../../../../assets/stylus/common'
   .tips
-    font-size 5px!important
+    font-size 10px!important
     color red
 </style>
