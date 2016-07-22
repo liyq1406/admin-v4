@@ -62,42 +62,45 @@
               <table class="table">
                 <thead>
                   <tr>
-                    <th>标题</th>
-                    <th>未处理</th>
-                    <th>已处理</th>
-                    <th>全部</th>
+                    <th>维修等级</th>
+                    <th>维修原因</th>
+                    <th>数量</th>
+                    <th>占比</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>使用帮助</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                    <td rowspan="2">一级(33%)</td>
+                    <td>电源故障</td>
+                    <td>182</td>
+                    <td>58.30%</td>
                   </tr>
                   <tr>
-                    <td>产品咨询</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                    <td>风机故障</td>
+                    <td>96</td>
+                    <td>24.87%</td>
                   </tr>
                   <tr>
-                    <td>投诉建议</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                    <td rowspan="2">二级(29%)</td>
+                    <td>其他问题</td>
+                    <td>23</td>
+                    <td>10.74%</td>
                   </tr>
                   <tr>
-                    <td>产品故障</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                    <td>噪音问题</td>
+                    <td>17</td>
+                    <td>4.94%</td>
                   </tr>
                   <tr>
-                    <td>退货申请</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                    <td rowspan="2">三级(48%)</td>
+                    <td>屏幕故障</td>
+                    <td>8</td>
+                    <td>0.94%</td>
+                  </tr>
+                  <tr>
+                    <td>通讯故障</td>
+                    <td>3</td>
+                    <td>0.21%</td>
                   </tr>
                 </tbody>
               </table>
@@ -145,16 +148,28 @@ export default {
     return {
       feedbacks: [
         {
-          name: '新增维修',
-          value: 50
+          name: '电源故障',
+          value: 58.30
         },
         {
-          name: '新增延保',
-          value: 30
+          name: '风机故障',
+          value: 24.87
         },
         {
-          name: '新增保养',
-          value: 20
+          name: '其他问题',
+          value: 10.74
+        },
+        {
+          name: '噪音问题',
+          value: 4.94
+        },
+        {
+          name: '屏幕故障',
+          value: 0.94
+        },
+        {
+          name: '通讯故障',
+          value: 0.21
         }
       ],
       summary: {
