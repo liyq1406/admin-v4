@@ -51,7 +51,9 @@ export default {
 
     .x-info-list-item-in
       padding 8px 0 8px 8px
-      border-top 1px solid default-border-color
+      /*border-top 1px solid default-border-color*/
+      border-top none
+      border-bottom 1px solid default-border-color
 
     .x-val
     .x-label
