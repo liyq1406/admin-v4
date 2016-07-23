@@ -309,6 +309,7 @@
     width 100%
     height auto
     box-sizing border-box
+    overflow hidden
     .table-content
       overflow-x auto
       overflow-y hidden
