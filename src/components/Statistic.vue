@@ -223,6 +223,7 @@ export default {
   border-bottom 1px solid default-border-color
 
 .col-6 + .col-6
+.col-8 + .col-8
   .x-statistic
     &:after
       absolute left top 15%

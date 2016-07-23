@@ -3,19 +3,35 @@
     <div class="main-title">
       <h2>设备管理</h2>
     </div>
+    <div class="panel"></div>
+    <div class="row statistic-group">
+      <div class="col-8">
+        <statistic :info="Summary.all" :title="Summary.all.title" align="left"></statistic>
+      </div>
+      <div class="col-8">
+        <statistic :info="Summary.online" :title="Summary.online.title" :has-target="true" align="left"></statistic>
+      </div>
+      <div class="col-8">
+        <statistic :info="Summary.active" :title="Summary.active.title" align="left" :showchange="false"></statistic>
+      </div>
+    </div>
     <div class="panel">
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
-            <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+            <span style="line-height:32px;height:32px;font-size:14px">设备列表</span>
+            <label style="float:right" :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
               <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
             </label>
+            <button style="float:right" @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
+              </div>
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
                 <v-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
@@ -111,6 +127,7 @@
   import _ from 'lodash'
   import { formatDate } from 'src/filters'
   import { globalMixins } from 'src/mixins'
+  import Statistic from 'components/Statistic'
 
   export default {
     name: 'DeviceList',
@@ -122,7 +139,8 @@
       'c-table': Table,
       'modal': Modal,
       'search-box': SearchBox,
-      'pager': Pager
+      'pager': Pager,
+      Statistic
     },
 
     data () {
@@ -195,7 +213,22 @@
             title: '在线状态',
             sortType: -1
           }
-        ]
+        ],
+        Summary: {
+          all: {
+            total: 23080,
+            title: '总设备量'
+          },
+          online: {
+            total: 13159,
+            title: '当前在线'
+          },
+          active: {
+            total: 21701,
+            change: 87,
+            title: '已激活设备'
+          }
+        }
       }
     },
 
