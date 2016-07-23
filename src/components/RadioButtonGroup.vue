@@ -1,5 +1,5 @@
 <template>
-  <div data-toggle="buttons" class="x-radio-btn-group">
+  <div data-toggle="buttons" :class="{'redline': hasline}" class="x-radio-btn-group">
     <slot name="label"></slot>
     <label v-for="item in items" :class="{'active': item.value === value}" class="btn btn-default">
       <input type="radio" autocomplete="off" checked="{{ checked }}" @click="onSelect(item.value)"/>{{ item.label }}
@@ -20,6 +20,10 @@
         default () {
           return []
         }
+      },
+      hasline: {
+        type: Boolean,
+        default: false
       }
     },
 
@@ -52,4 +56,11 @@
     .label
       display inline-block
       margin-right 5px
+  .redline
+    label
+      background none!important
+      color #666666
+    label.active
+      border-bottom 3px solid #DA4E37
+      color #DA4E37
 </style>
