@@ -5,28 +5,28 @@
         <div class="row statistic">
           <div class="col-6">
             <panel>
-              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true">
+              <statistic :info="statistic.users.info" title="设备总数" tooltip="设备总数说明" :has-chart="true">
                 <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
               </statistic>
             </panel>
           </div>
           <div class="col-6">
             <panel>
-              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
+              <statistic :info="statistic.devices.total.info" title="激活数" tooltip="激活数说明" color="green" :has-chart="true">
                 <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
               </statistic>
             </panel>
           </div>
           <div class="col-6">
             <panel>
-              <statistic :info="statistic.devices.activated.info" title="激活设备总数" tooltip="激活设备总数说明" color="blue" :has-chart="true">
+              <statistic :info="statistic.devices.activated.info" title="在线量" tooltip="在线量说明" color="blue" :has-chart="true">
                 <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
               </statistic>
             </panel>
           </div>
           <div class="col-6">
             <panel>
-              <statistic :info="statistic.devices.online.info" title="在线设备总数" tooltip="在线设备总数说明" color="orange" :has-chart="true">
+              <statistic :info="statistic.devices.online.info" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true">
                 <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
               </statistic>
             </panel>

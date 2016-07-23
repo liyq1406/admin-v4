@@ -91,7 +91,7 @@ export const AVG_PERIODS = [
 // 产品过滤器
 export const PRODUCT_FILTERS = [
   { label: '新增设备', value: 'added' },
-  { label: '在线设备', value: 'online' },
+  // { label: '在线设备', value: 'online' },
   { label: '累计设备', value: 'all' }
 ]
 
