@@ -33,9 +33,9 @@
     <div class="row">
       <div class="col-24">
         <panel title="产品趋势分析">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
+          <div class="left-actions blockdiv" slot="left-actions">
+            <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label"></span></radio-button-group>
+            <radio-button-group :hasline="true" :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
           </div>
           <div class="row">
             <div class="col-14">
@@ -43,9 +43,9 @@
             </div>
             <div class="col-10">
               <div class="row">
-                <div class="col-10 col-offset-2 tac">
+                <!-- <div class="col-10 col-offset-2 tac">
                   <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                </div>
+                </div> -->
                 <div class="col-11 col-offset-1 tac">
                   <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
                 </div>
@@ -91,9 +91,9 @@
         </panel>
 
         <panel title="用户趋势分析">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
+          <div class="left-actions blockdiv" slot="left-actions">
+            <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label"></span></radio-button-group>
+            <radio-button-group :hasline="true" :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
           </div>
           <div class="row">
             <div class="col-18">
@@ -699,4 +699,8 @@ export default {
     text-indent 180px
     margin 20px 0 5px
     color gray
+.blockdiv
+  display block!important
+  margin-top 10px
+  border-bottom 1px solid #e5e5e5
 </style>
