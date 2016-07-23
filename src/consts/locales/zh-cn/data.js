@@ -57,6 +57,12 @@ export const SHORT_PERIODS = [
   { label: '15天', value: 15 }
 ]
 
+// 一天到三十天时间段
+export const BIG_PERIODS = [
+  { label: '24h', value: 1 },
+  { label: '7天', value: 7 },
+  { label: '30天', value: 30 }
+]
 // 设备类型
 export const DEVICE_TYPES = ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备']
 

@@ -1,23 +1,47 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <div class="chart-box mt20">
+      <!-- <div class="chart-box mt20">
         <div class="with-loading">
           <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart>
           <div class="icon-loading" v-show="loadingProductTrends">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
         </div>
+      </div> -->
+      <div class="filter-bar filter-bar-head">
+        <div class="filter-group fl">
+          <div class="filter-group-item">
+            <v-select label="Power" width="110px" size="small">
+              <span slot="label">显示</span>
+            </v-select>
+          </div>
+        </div>
+        <div class="filter-group fr">
+          <div class="filter-group-item">
+            <!-- <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button> -->
+          </div>
+          <!-- <div class="filter-group-item">
+            <date-time-range-picker></date-time-range-picker>
+          </div> -->
+          <div class="filter-group-item">
+            <radio-button-group :items="locales.data.BIG_PERIODS" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          </div>
+        </div>
       </div>
       <div class="device-data-table-box">
         <div class="title">
-          <span>设备数据明细 : </span>
+          <!-- <span>设备数据明细 : </span> -->
         </div>
-        <div class="table-box">
+        <!-- <div class="table-box">
           <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage (currentPage-1)*countPerPage"></intelligent-table>
           <pager v-if="snapshots.length > countPerPage" :total="snapshots.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+        </div> -->
+        <div class="panel-bd">
+          <time-line :data="trends.data"></time-line>
         </div>
       </div>
+      <c-table :headers="headers" :tables="tables"></c-table>
     </div>
   </div>
 </template>
@@ -28,6 +52,12 @@ import LineChart from 'components/charts/Line'
 import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
+import Select from 'components/Select'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import TimeLine from 'components/g2-charts/TimeLine'
+import Table from 'components/Table'
+
+import Mock from 'mockjs'
 
 export default {
   name: 'History',
@@ -37,7 +67,11 @@ export default {
   components: {
     LineChart,
     'pager': Pager,
-    'intelligent-table': IntelligentTable
+    'c-table': Table,
+    'intelligent-table': IntelligentTable,
+    'v-select': Select,
+    RadioButtonGroup,
+    TimeLine
   },
 
   data () {
@@ -58,10 +92,32 @@ export default {
         description: 'PM2.5',
         selected: true
       }],
-      period: 1
+      period: 7,
+      // 趋势
+      trends: {
+        data: [],
+        options: {}
+      },
+      headers: [
+        {
+          key: '_id',
+          title: '端点ID',
+          class: 'tac'
+        },
+        {
+          key: 'data',
+          title: '数据值',
+          class: 'tac'
+        },
+        {
+          key: 'uploda_time',
+          title: '上报时间',
+          sortType: -1,
+          class: 'tac'
+        }
+      ]
     }
   },
-
   computed: {
     // 图表横轴数据
     snapshotXAxisData () {
@@ -117,11 +173,23 @@ export default {
   },
 
   ready () {
-    this.getSnapshot()
+    // this.getSnapshot()
     // 监听窗口尺寸变化
-    window.onresize = () => {
-      this.$refs.trendChart.chart.resize()
-    }
+    // window.onresize = () => {
+    //   this.$refs.trendChart.chart.resize()
+    // }
+    this.trends.data = Mock.mock({
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20)
+        ],
+        'count|+1': [6, 8, 9, 8],
+        '产品|+1': ['Power', 'Power', 'Power', 'Power']
+      }]
+    }).list
   },
 
   methods: {
