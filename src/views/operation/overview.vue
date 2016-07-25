@@ -64,8 +64,8 @@
           </div>
         </panel>
 
-        <panel title="产品信息占比">
-          <div class="row">
+        <panel title="产品活跃度">
+          <div class="row border-top-style">
             <div class="col-14">
               <time-line :data="trends.products.data" type="smooth"></time-line>
             </div>
@@ -76,10 +76,7 @@
         </panel>
 
         <panel title="产品分布">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-          </div>
-          <div class="row">
+          <div class="row border-top-style">
             <div class="col-10 tac">
               <china-map :data="regions.products.data"></china-map>
             </div>
@@ -747,4 +744,7 @@ export default {
   display block!important
   margin-top 10px
   /*border-bottom 1px solid #e5e5e5*/
+.border-top-style
+  border-top 1px solid #e5e5e5
+  margin-top 10px
 </style>

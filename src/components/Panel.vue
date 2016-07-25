@@ -29,7 +29,6 @@ export default {
 @import '../assets/stylus/common'
 
 .x-panel
-  border-bottom 1px solid light-border-color
   background #FFF
   padding 0 15px
   box-sizing border-box
@@ -48,7 +47,6 @@ export default {
     line-height 20px
     margin-top 20px
     padding-left 8px
-    border-left 4px solid red
 
     .fa
       margin-right 5px
