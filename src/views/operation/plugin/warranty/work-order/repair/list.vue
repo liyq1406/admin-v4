@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="panel"></div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="repairSummary.unrepair" :title="repairSummary.unrepair.title" align="left"></statistic>
       </div>

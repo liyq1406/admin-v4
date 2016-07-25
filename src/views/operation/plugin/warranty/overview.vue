@@ -23,15 +23,15 @@
         </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-hd panel-hd-full">
+    <div class="panel mt20">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
         <time-line :data="trends.data" :type="'smooth'"></time-line>
       </div>
     </div>
-    <div class="statistic-group">
+    <div class="statistic-group mb30">
       <div style="display:inline-block;width:19.5%;border-right: 1px solid #d9d9d9">
         <statistic :info="summary.repairPercent" :title="summary.repairPercent.title" :showchange="true" align="left"></statistic>
       </div>
@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd panel-hd-full">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>维修等级与原因</h2>
       </div>
       <div class="panel-bd">

@@ -30,7 +30,7 @@
         </div>
       </div>
     </div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left">
           <i class="tips" slot="tips">(小于10天)</i>

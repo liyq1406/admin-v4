@@ -23,15 +23,15 @@
         </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-hd panel-hd-full">
+    <div class="panel mt20">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
         <time-line :data="trends.data" :type="'smooth'"></time-line>
       </div>
     </div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="summary.pending" :title="summary.pending.title" align="left"></statistic>
       </div>
@@ -46,7 +46,7 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd panel-hd-full">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>分布</h2>
       </div>
       <div class="panel-bd">

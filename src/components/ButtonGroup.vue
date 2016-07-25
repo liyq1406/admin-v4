@@ -27,7 +27,7 @@ export default {
     background-image linear-gradient(top, #FDFDFD, #F5F5F5)
     font-size 10px
     padding 0 9px
-    height 26px
+    height 28px
     line-height 26px
     transition border-color .3s, color .3s
     outline none
