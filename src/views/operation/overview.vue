@@ -167,7 +167,9 @@ export default {
         // 用户总数
         users: {
           options: {},
-          info: {},
+          info: {
+            changeunit: '%'
+          },
           data: []
         },
         // 设备
@@ -362,8 +364,9 @@ export default {
     }
     this.statistic.devices.online = {
       info: Mock.mock({
-        change: -5,
-        total: 4205
+        change: 5,
+        total: 4205,
+        changeunit: '%'
       }),
       data: Mock.mock({
         'list|20': [{

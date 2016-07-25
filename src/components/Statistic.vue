@@ -10,6 +10,7 @@
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
       <span v-animated-number="info.change"></span>
+      <span v-if="info.changeunit">{{info.changeunit}}</span>
       <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
     <div class="tit" v-if="align!=='center'">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
@@ -44,7 +45,8 @@ export default {
       type: Object,
       default () {
         return {
-          unit: ''
+          unit: '',
+          changeunit: ''
         }
       }
     },
