@@ -25,14 +25,78 @@
     </panel>
 
     <panel title="用户区域分布">
-      <div class="row">
-        <div class="col-18 tac">
-          <china-map :data="regions.users.data" :options="regions.users.options"></china-map>
+      <div class="row border-top-style">
+        <div class="col-10 tac">
+          <china-map :data="regions.users.data"></china-map>
         </div>
-        <div class="col-6">
-          <div class="top-regions">
-            <h3>用户区域分布TOP10</h3>
-            <interval :data="regions.users.top.data" :options="regions.users.top.options"></interval>
+        <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+          <div class="data-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>地域</th>
+                  <th>设备数量</th>
+                  <th>占比</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>广东</td>
+                  <td>289</td>
+                  <td>14%</td>
+                </tr>
+                <tr>
+                  <td>广西</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>广东</td>
+                  <td>289</td>
+                  <td>14%</td>
+                </tr>
+                <tr>
+                  <td>广西</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>湖南</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>湖北</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>江西</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>江苏</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>广东</td>
+                  <td>289</td>
+                  <td>14%</td>
+                </tr>
+                <tr>
+                  <td>广西</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+                <tr>
+                  <td>湖南</td>
+                  <td>1769</td>
+                  <td>86%</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
@@ -567,4 +631,7 @@ export default {
     color gray
 .panel
   padding-top 20px
+.border-top-style
+  border-top 1px solid #e5e5e5
+  margin-top 10px
 </style>
