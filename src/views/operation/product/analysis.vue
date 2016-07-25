@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main-title row" style="border-bottom: solid 1px #D9D9D9">
+    <div class="main-title bordered row">
       <div class="col-4">
         <h2>使用分析</h2>
       </div>
@@ -17,16 +17,16 @@
         </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="panel no-split-line mt20">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>产品使用时长</h2>
       </div>
       <div class="panel-bd">
         <interval :data="duration.data" :options="duration.options"></interval>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="panel no-split-line">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>产品使用次数</h2>
       </div>
       <div class="panel-bd">
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>产品使用时段分布</h2>
       </div>
       <div class="panel-bd">

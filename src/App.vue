@@ -200,6 +200,13 @@ export default {
       line-height 36px
       font-weight normal
 
+    .filter-bar
+      padding-left 0
+      padding-right 0
+
+    &.bordered
+      border-bottom 1px solid default-border-color
+
 // 视图淡入淡出
 .view
 .header
