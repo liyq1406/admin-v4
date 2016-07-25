@@ -4,7 +4,7 @@
     <div class="action" v-if="hasAction">
       <slot name="action"></slot>
     </div>
-    <div class="tit" v-if="align==='center'">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
+    <div class="tit" v-if="titletop">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="info" v-animated-number="info.total"></div>
     <div class="unit" v-if="info.unit">{{info.unit}}</div>
     <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
@@ -13,7 +13,7 @@
       <span v-if="info.changeunit">{{info.changeunit}}</span>
       <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
-    <div class="tit" v-if="align!=='center'">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
+    <div class="tit" v-if="!titletop">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
     <div class="target" v-if="hasTarget">
       <slot name="targetArea"></slot>
     </div>
@@ -54,7 +54,7 @@ export default {
     // 对齐方式
     align: {
       type: String,
-      default: 'center'
+      default: 'left'
     },
 
     // 配色
@@ -71,6 +71,12 @@ export default {
 
     // 行内显示
     inline: {
+      type: Boolean,
+      default: false
+    },
+
+    // 标题显示在上或者下
+    titletop: {
       type: Boolean,
       default: false
     },

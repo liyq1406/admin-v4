@@ -8,22 +8,22 @@
           <div class="desc">{{ product.description }}</div>
           <div class="row statistic">
             <div class="col-6">
-              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true">
+              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true" align="left" :titletop="true">
                 <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.devices.activated.info" title="激活设备数" tooltip="激活设备总数说明" color="blue" :has-chart="true">
+              <statistic :info="statistic.devices.activated.info" title="激活设备数" tooltip="激活设备总数说明" color="blue" :has-chart="true" align="left" :titletop="true">
                 <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.devices.online.info" title="在线设备数" tooltip="在线设备总数说明" color="orange" :has-chart="true">
+              <statistic :info="statistic.devices.online.info" title="在线设备数" tooltip="在线设备总数说明" color="orange" :has-chart="true" :titletop="true">
                 <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true">
+              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true" :titletop="true">
                 <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
               </statistic>
             </div>
@@ -37,10 +37,10 @@
         <panel title="告警信息">
           <div class="stats row">
             <div class="col-11 tac">
-              <statistic :info="proportion.alerts.today.info" title="今日告警" color="gray" :inline="true"></statistic>
+              <statistic :info="proportion.alerts.today.info" title="今日告警" color="gray" :inline="true" align="center"></statistic>
             </div>
             <div class="col-11 col-offset-2 tac">
-              <statistic :info="proportion.alerts.unread.info" title="未读告警" color="orange" :inline="true"></statistic>
+              <statistic :info="proportion.alerts.unread.info" title="未读告警" color="orange" :inline="true" align="center"></statistic>
             </div>
           </div>
           <pie :data="proportion.alerts.data"></pie>
@@ -50,10 +50,10 @@
         <panel title="用户反馈">
           <div class="stats row">
             <div class="col-10 tac">
-              <statistic :info="feedback.today.info" title="今日反馈" color="gray" :inline="true"></statistic>
+              <statistic :info="feedback.today.info" title="今日反馈" color="gray" :inline="true" align="center"></statistic>
             </div>
             <div class="col-12 col-offset-2 tac">
-              <statistic :info="feedback.unread.info" title="未读反馈" color="orange" :inline="true"></statistic>
+              <statistic :info="feedback.unread.info" title="未读反馈" color="orange" :inline="true" align="center"></statistic>
             </div>
           </div>
           <interval :data="feedback.data" :options="feedback.options"></interval>
@@ -70,10 +70,10 @@
           </div>
           <div class="stats row">
             <div class="col-11 tac">
-              <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+              <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true" align="center"></statistic>
             </div>
             <div class="col-11 col-offset-2 tac">
-              <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+              <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true" align="center"></statistic>
             </div>
           </div>
           <line :data="trends.products.data" :options="trends.products.options"></line>
