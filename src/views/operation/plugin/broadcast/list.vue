@@ -58,7 +58,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables">
+          <c-table :headers="headers" :tables="tables" @tbody-title="goDetail">
             <div slot="theader-channel">
               <select name="" id="">
                 <option value="">选择应用</option>
@@ -261,7 +261,8 @@
             title: '<a class="hl-red">' + item.content + '</a>',
             channel: item.channel,
             broadcast_time: item.broadcast_time,
-            status: item.status
+            status: item.status,
+            prototype: item
           }
           result.push(history)
         })
@@ -302,12 +303,16 @@
     },
 
     methods: {
+      goDetail (table) {
+        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+      },
       getHistories (querying) {
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
 
         this.histories = [{
+          id: '111',
           content: '五一家电狂欢盛典，全场狂嗨5天5夜',
           channel: 'APP1',
           type: '组播',
@@ -315,6 +320,7 @@
           broadcast_time: '2013-03-04 12:30',
           user_type: '7天未活跃用户'
         }, {
+          id: '222',
           content: '五一家电狂欢盛典，全场狂嗨5天5夜',
           channel: 'APP1',
           type: '广播',
@@ -322,6 +328,7 @@
           broadcast_time: '2013-03-04 12:30',
           user_type: '7天未活跃用户'
         }, {
+          id: '333',
           content: '五一家电狂欢盛典，全场狂嗨5天5夜',
           channel: 'APP1',
           type: '组播',
@@ -329,6 +336,7 @@
           broadcast_time: '2013-03-04 12:30',
           user_type: '7天未活跃用户'
         }, {
+          id: '444',
           content: '五一家电狂欢盛典，全场狂嗨5天5夜',
           channel: 'APP1',
           type: '广播',
