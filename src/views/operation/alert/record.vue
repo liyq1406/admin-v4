@@ -33,7 +33,7 @@
         </div>
       </div>
     </div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')" align="left"></statistic>
       </div>
@@ -47,7 +47,7 @@
         <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
       </div>
     </div>
-    <div class="panel mt15">
+    <div class="panel">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">

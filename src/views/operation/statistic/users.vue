@@ -1,10 +1,13 @@
 <template>
   <div class="main">
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="main-title">
+      <h2>用户统计</h2>
+    </div>
+    <div class="panel mt20 no-split-line">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.statistic.trends") }}</h2>
         <div class="leftbox">
-          <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -47,10 +50,10 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.statistic.regions") }}</h2>
         <div class="leftbox">
-          <radio-group :items="regions" :value.sync="region" @select="getUserRegion"></radio-group>
+          <radio-button-group :items="regions" :value.sync="region" @select="getUserRegion"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -86,7 +89,7 @@
 
 <script>
   import Vue from 'vue'
-  import RadioGroup from 'components/RadioGroup'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
   import api from 'api'
   import * as config from 'consts/config'
   import locales from 'consts/locales/index'
@@ -103,7 +106,7 @@
     mixins: [globalMixins],
 
     components: {
-      RadioGroup,
+      RadioButtonGroup,
       LineChart,
       MapChart,
       Pager

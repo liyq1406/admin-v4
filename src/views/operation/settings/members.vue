@@ -10,7 +10,7 @@
         </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt20">
       <div class="panel-hd with-actions">
         <h2>{{ $t('ui.member.member_list') }}</h2>
       </div>

@@ -3,8 +3,8 @@
     <div class="main-title">
       <h2>邮件模板</h2>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="panel no-split-line mt20">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.mail_templates.general") }}</h2>
       </div>
       <div class="panel-bd">
@@ -29,8 +29,8 @@
         </div>
       </div>
     </div>
-    <div class="panel panel-mail-template">
-      <div class="panel-hd">
+    <div class="panel panel-mail-template no-split-line">
+      <div class="panel-hd panel-hd-full bordered">
         <div v-show="!loading && activateLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus === 1 || activateStatus === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <div v-show="!loading && activateLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus2 === 1 || activateStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.activate_template') }}</h2>
@@ -99,8 +99,8 @@
         </div>
       </div>
     </div>
-    <div class="panel panel-mail-template">
-      <div class="panel-hd">
+    <div class="panel panel-mail-template no-split-line">
+      <div class="panel-hd panel-hd-full bordered">
         <div v-show="!loading && resetLang === 'zh-cn'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus === 1 || resetStatus === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <div v-show="!loading && resetLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus2 === 1 || resetStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.reset_template') }}</h2>
@@ -170,7 +170,7 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <div class="status">{{ $t('common.status') }}:<span v-if="validation2.state === 1" class="hl-red">未验证</span><span v-if="validation2.state === 2">可使用</span><span v-if="validation2.state === 3" class="hl-green">已验证</span></div>
         <h2>高级设置</h2>
       </div>

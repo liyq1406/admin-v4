@@ -3,16 +3,16 @@
     <div class="main-title">
       <h2>产品统计</h2>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="panel no-split-line mt20">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.statistic.trends") }}</h2>
         <div class="leftbox">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
           <v-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
             <select v-model="product" @change="getProductData">
               <option v-for="option in productsOptions" :value="option">{{ option.name }}</option>
             </select>
           </v-select>
-          <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -60,10 +60,10 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.statistic.regions") }}</h2>
         <div class="leftbox">
-          <radio-group :items="regions" :value.sync="region" @select="getProductRegion"></radio-group>
+          <radio-button-group :items="regions" :value.sync="region" @select="getProductRegion"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -99,7 +99,7 @@
 
 <script>
   import Vue from 'vue'
-  import RadioGroup from 'components/RadioGroup'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
   import Select from 'components/Select'
   import LineChart from 'components/charts/Line'
   import MapChart from 'components/charts/Map'
@@ -118,11 +118,11 @@
     mixins: [globalMixins],
 
     components: {
-      'radio-group': RadioGroup,
+      RadioButtonGroup,
       'v-select': Select,
-      'line-chart': LineChart,
-      'map-chart': MapChart,
-      'pager': Pager,
+      LineChart,
+      MapChart,
+      Pager,
       'v-tooltip': Tooltip
     },
 

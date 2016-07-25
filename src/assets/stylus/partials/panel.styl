@@ -10,7 +10,6 @@
 
 .panel-hd
   margin-bottom 10px
-  padding-bottom 5px
   position relative
   clearfix()
 
@@ -26,16 +25,18 @@
 
   .leftbox
     position absolute
-    top 4px
+    top 0
     left 100px
+    min-width 400px
 
     .v-select
-      float right
-      margin 12px 0 0 20px
+    .x-radio-btn-group
+      display inline-block
+      vertical-align middle
+      margin-right 20px
 
   .btn-group
     float right
-    margin-top 12px
 
   // .date
   //   float right
@@ -43,7 +44,8 @@
 
   .status
     float right
-    margin-top 20px
+    margin-top 10px
+    margin-right 15px
     font-size 12px
 
   .search-box
@@ -58,11 +60,11 @@
     float right
     font-size 0
 
-    .btn
+    & > .btn
       vertical-align middle
       margin-left 10px
 
-    .btn-ghost
+    & > .btn-ghost
       line-height 26px
 
   &.with-actions
@@ -71,6 +73,7 @@
 
   &.bordered
     border-bottom 1px solid light-border-color
+    padding-bottom 5px
 
 .panel-hd-full
   margin-left -15px

@@ -13,10 +13,10 @@
         </div>
       </div>
     </div>
-    <div class="panel row">
+    <div class="panel row mt20">
       <div class="col-12">
         <!-- Start: 个人信息-->
-        <div class="panel-hd">
+        <div class="panel-hd bordered">
           <h2>{{ $t('ui.account.personal') }}</h2>
         </div>
         <div class="panel-bd">
@@ -69,7 +69,7 @@
       </div>
       <div class="col-11 col-offset-1">
         <!-- Start: 企业信息-->
-        <div class="panel-hd">
+        <div class="panel-hd bordered">
           <h2>{{ $t('ui.account.corp') }}</h2>
         </div>
         <div class="panel-bd">

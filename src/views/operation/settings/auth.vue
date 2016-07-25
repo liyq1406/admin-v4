@@ -15,7 +15,7 @@
         </div>
       </div>
     </div>
-    <div v-if="newList" class="panel">
+    <div v-if="newList" class="panel mt20">
       <div class="panel-hd">
         <h2>授权列表</h2>
       </div>

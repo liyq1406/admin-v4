@@ -21,7 +21,7 @@
     </div>
 
     <!-- Start: 固件版本列表 -->
-    <div class="panel" v-if="products.length && !loadingProducts">
+    <div class="panel mt20" v-if="products.length && !loadingProducts">
       <div class="panel-hd">
         <h2>{{ $t('ui.firmware.firmware_list') }}</h2>
       </div>
