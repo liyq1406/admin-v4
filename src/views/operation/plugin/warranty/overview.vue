@@ -31,7 +31,25 @@
         <time-line :data="trends.data" :type="'smooth'"></time-line>
       </div>
     </div>
-    <div class="statistic-group mb30">
+    <div class="row statistic-group mb30">
+      <div class="col-6 device5">
+        <statistic :info="summary.repairPercent" :title="summary.repairPercent.title" align="left"></statistic>
+      </div>
+      <div class="col-6 device5">
+        <statistic :info="summary.time" :title="summary.time.title" align="left"></statistic>
+      </div>
+      <div class="col-6 device5">
+        <statistic :info="summary.maintain" :title="summary.maintain.title" align="left"></statistic>
+      </div>
+      <div class="col-6 device5">
+        <statistic :info="summary.avgYear" :title="summary.avgYear.title" align="left"></statistic>
+      </div>
+      <div class="col-6 device5">
+        <statistic :info="summary.percent" :title="summary.percent.title" align="left"></statistic>
+      </div>
+    </div>
+
+    <!-- <div class="statistic-group mb30">
       <div style="display:inline-block;width:19.5%;border-right: 1px solid #d9d9d9">
         <statistic :info="summary.repairPercent" :title="summary.repairPercent.title" :showchange="true" align="left"></statistic>
       </div>
@@ -47,7 +65,7 @@
       <div style="display:inline-block;width:19.5%">
         <statistic :info="summary.percent" :title="summary.percent.title" :showchange="true" align="left"></statistic>
       </div>
-    </div>
+    </div> -->
     <div class="panel">
       <div class="panel-hd panel-hd-full bordered">
         <h2>维修等级与原因</h2>
@@ -246,4 +264,9 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+.device5
+  width 20%
+.info
+.unit
+  display inline-block!important
 </style>
