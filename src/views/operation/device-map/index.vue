@@ -29,7 +29,7 @@
           </div>
           <div class="action-bar">
             <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
-              <v-select width="110px" :label="queryType.label" size="small">
+              <v-select width="106px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>

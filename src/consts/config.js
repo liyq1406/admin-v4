@@ -130,10 +130,10 @@ export const MAIN_NAV = {
         alias: 'analysis',
         url: '/users/analysis'
       }]
-    }, {
-      alias: 'device_map', // 设备地图
-      icon: 'map',
-      url: 'device-map'
+    // }, {
+    //   alias: 'device_map', // 设备地图
+    //   icon: 'map',
+    //   url: 'device-map'
     }, {
       alias: 'firmwares', // 固件管理
       icon: 'rocket',

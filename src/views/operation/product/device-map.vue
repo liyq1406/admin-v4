@@ -1,47 +1,36 @@
 <template>
-  <div class="main">
-    <!-- 无产品时显示添加提示 -->
-    <div class="panel" v-if="!productOptions.length && !loadingProducts">
-      <div class="panel-bd">
-        <v-alert :cols="7">
-          <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
-        </v-alert>
+  <div class="main device-map-page">
+    <div class="main-title">
+      <h2>{{ $t("ui.main_nav.operation.subs.device_map.label") }}</h2>
+    </div>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+            <v-select width="106px" :label="queryType.label" size="small">
+              <select v-model="queryType">
+                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+              </select>
+            </v-select>
+            <button slot="search-button" @click="handleSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
+          </search-box>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-item">
+          <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getGeographies" @city-change="getGeographies" @district-change="getGeographies"></area-select>
+        </div>
       </div>
     </div>
 
     <!-- 设备地图 -->
-    <div class="panel device-map-page" v-show="productOptions.length && !loadingProducts">
-      <div class="panel-hd">
-        <h2>{{ $t("ui.main_nav.operation.subs.device_map.label") }}</h2>
-        <div class="leftbox">
-          <v-select width="160px" :label="currProduct.name" size="small">
-            <span slot="label">选择产品：</span>
-            <select v-model="currProduct" @change="getGeographies">
-              <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
-            </select>
-          </v-select>
-        </div>
+    <div class="device-list-wrap with-loading">
+      <div class="icon-loading" v-show="loadingDevices">
+        <i class="fa fa-refresh fa-spin"></i>
       </div>
-      <div class="panel-bd">
-        <div class="device-list-wrap with-loading">
-          <div class="icon-loading" v-show="loadingDevices">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <div class="action-bar">
-            <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
-              <v-select width="110px" :label="queryType.label" size="small">
-                <select v-model="queryType">
-                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                </select>
-              </v-select>
-              <button slot="search-button" @click="handleSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
-            </search-box>
-          </div>
-          <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
-            <p>{{ infoMsg }}</p>
-          </v-alert>
-        </div>
-      </div>
+      <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
+        <p>{{ infoMsg }}</p>
+      </v-alert>
       <div v-show="devices.length" class="device-list mb20">
         <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
           <div class="list-item-cont">
@@ -55,12 +44,12 @@
         </div>
         <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getGeographies" :simple="true"></pager>
       </div>
-      <div class="device-map with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-        <div id="device-map" style="height: 100%"></div>
+    </div>
+    <div class="device-map with-loading">
+      <div class="icon-loading" v-show="loadingData">
+        <i class="fa fa-refresh fa-spin"></i>
       </div>
+      <div id="device-map" style="height: 100%"></div>
     </div>
   </div>
 </template>
@@ -71,6 +60,7 @@
   import * as config from 'consts/config'
   // import AMap from 'AMap'
   import Select from 'components/Select'
+  import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
   import Alert from 'components/Alert'
   import Pager from 'components/Pager'
@@ -85,7 +75,8 @@
       'v-select': Select,
       'search-box': SearchBox,
       'v-alert': Alert,
-      'pager': Pager
+      'pager': Pager,
+      AreaSelect
     },
 
     data () {
@@ -93,16 +84,18 @@
         ids: [],
         devices: [],
         currProduct: {},
-        productOptions: [],
         query: '',
+        curProvince: {},
+        curCity: {},
+        curDistrict: {},
         searching: false,
         queryTypeOptions: [
           { label: '设备ID', value: 'id' },
           { label: '所在区域', value: 'area' }
         ],
         queryType: {
-          label: '所在区域',
-          value: 'area'
+          label: '设备ID',
+          value: 'id'
         },
         currentPage: 1,
         total: 0,
@@ -141,16 +134,14 @@
       }
     },
 
-    ready () {
-      // 将回调绑定在全局供高德地图加载后调用
-      window.init = this.initMap
-      this.loadingProducts = true
-      api.product.all().then((res) => {
-        if (res.status === 200) {
-          this.loadingProducts = false
-          if (res.data.length) {
-            this.productOptions = res.data
-            this.currProduct = this.productOptions[0]
+    route: {
+      data () {
+        window.init = this.initMap
+        this.loadingProducts = true
+        api.product.getProduct(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.loadingProducts = false
+            this.currProduct = res.data
             if (typeof window.AMap === 'undefined') {
               var mapApi = document.createElement('script')
               mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
@@ -159,13 +150,34 @@
               this.initMap()
             }
           }
+        }).catch((res) => {
+          this.handleError(res)
           this.loadingProducts = false
-        }
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingProducts = false
-      })
+        })
+      }
     },
+
+    // ready () {
+    //   // 将回调绑定在全局供高德地图加载后调用
+    //   window.init = this.initMap
+    //   this.loadingProducts = true
+    //   api.product.getProduct(this.$route.params.id).then((res) => {
+    //     if (res.status === 200) {
+    //       this.loadingProducts = false
+    //       this.currProduct = res.data
+    //       if (typeof window.AMap === 'undefined') {
+    //         var mapApi = document.createElement('script')
+    //         mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
+    //         document.getElementsByTagName('body')[0].appendChild(mapApi)
+    //       } else {
+    //         this.initMap()
+    //       }
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //     this.loadingProducts = false
+    //   })
+    // },
 
     watch: {
       zoom () {
@@ -533,7 +545,6 @@
 
   .device-map-page
     absolute left right top bottom
-    padding 0 15px
     margin 0
 
     .panel-hd
@@ -541,8 +552,10 @@
         left 120px
 
     .device-list-wrap
+      absolute right 10px top 103px bottom 10px
       width 308px
-      min-height 200px
+      overflow auto
+      /*min-height 200px*/
 
       .action-bar
         border 1px solid #DDD
@@ -560,9 +573,8 @@
             width 144px
 
     .device-list
-      absolute left 15px top 121px bottom
-      width 308px
-      overflow auto
+      /*absolute left top 10px bottom*/
+      width 100%
 
       .pager
         margin-bottom 0
@@ -604,7 +616,7 @@
           background-position 0 -284px
 
     .device-map
-      absolute left 338px top 64px right 15px bottom 15px
+      absolute left 10px top 103px right 328px bottom 10px
 
   .device-map
     .map-marker
