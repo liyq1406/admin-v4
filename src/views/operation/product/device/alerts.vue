@@ -1,60 +1,35 @@
 <template>
   <div>
-    <div class="panel">
-      <div class="action-bar mt20">
-        <radio-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-group>
-      </div>
-      <div class="panel-bd">
-        <div class="with-loading">
-          <line-chart :series="alertSeries" :x-axis-data="alertXAxisData" v-ref:alert-chart></line-chart>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
+    <div class="filter-bar">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <date-time-range-picker></date-time-range-picker>
+        </div>
+        <div class="filter-group-item">
+          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
     <div class="panel">
-      <div class="panel-hd">
-        <h2>{{ $t("ui.alert.info") }}</h2>
-      </div>
+      <time-line :data="alertChartData"></time-line>
+    </div>
+    <div class="panel mt10">
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部等级" width='110px' size="small">
+                  <span slot="label">告警历史</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <dropdown></dropdown>
+            </div>
           </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>{{ $t("ui.alert.info_list.product_name") }}</th>
-                <th>{{ $t("ui.alert.info_list.content") }}</th>
-                <th>{{ $t("ui.alert.info_list.create_date") }}</th>
-                <th>{{ $t("ui.alert.info_list.is_read") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="alerts.length > 0">
-                <tr v-for="alert in alerts">
-                  <td>{{ alert.product_name }}</td>
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                  </td>
-                  <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                  <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="alerts.length === 0 && !loadingData">
-                <td colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
       </div>
     </div>
   </div>
@@ -62,15 +37,19 @@
 
 <script>
 import Vue from 'vue'
-import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
-import RadioGroup from 'components/RadioGroup'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import TimeLine from 'components/g2-charts/TimeLine'
+import Table from 'components/Table'
+import Select from 'components/Select'
+import Mock from 'mockjs'
+import Dropdown from 'components/Dropdown'
 import dateFormat from 'date-format'
-import LineChart from 'components/charts/Line'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -81,8 +60,12 @@ export default {
   components: {
     'pager': Pager,
     'modal': Modal,
-    'radio-group': RadioGroup,
-    'line-chart': LineChart
+    'c-table': Table,
+    'v-select': Select,
+    RadioButtonGroup,
+    TimeLine,
+    Dropdown,
+    DateTimeRangePicker
   },
 
   data () {
@@ -119,7 +102,35 @@ export default {
       },
       alertTrends: [],
       today: dateFormat('yyyy-MM-dd', new Date()),
-      loadingData: false
+      loadingData: false,
+      alertChartData: [],
+      headers: [
+        {
+          key: 'content',
+          title: '告警内容'
+        },
+        {
+          key: 'time',
+          title: '时间',
+          sortType: -1
+        },
+        {
+          key: 'duration',
+          title: '时长'
+        },
+        {
+          key: 'addr',
+          title: '地点'
+        },
+        {
+          key: 'level',
+          title: '告警等级'
+        },
+        {
+          key: 'state',
+          title: '状态'
+        }
+      ]
     }
   },
 
@@ -136,37 +147,27 @@ export default {
       }
     },
 
-    past () {
-      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(past))
-    },
-
-    // 告警图表数据
-    alertSeries () {
-      var result = [{
-        name: this.$t('ui.alert.counts'),
-        type: 'line',
-        data: []
-      }]
-
-      for (var i = 0; i < this.period; i++) {
-        var index = _.findIndex(this.alertTrends, (item) => {
-          return item.day === this.alertXAxisData[i]
-        })
-        result[0].data[i] = index >= 0 ? this.alertTrends[index].message : 0
+    page () {
+      return {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
       }
-
-      return result
     },
-
-    // 告警图表横轴数据
-    alertXAxisData () {
-      var today = new Date()
+    tables () {
       var result = []
-
-      for (var i = this.period - 1; i >= 0; i--) {
-        result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-      }
+      this.alerts.map((item) => {
+        var alert = {
+          content: '设备下线',
+          time: '2016-01-01 16:21:13',
+          duration: '1.2h',
+          addr: '湖北, 武汉',
+          level: '<div class="level level1 text-label-warning" style="width: 55px">中等</div>',
+          state: '待处理',
+          prototype: item
+        }
+        result.push(alert)
+      })
       return result
     }
   },
@@ -178,10 +179,37 @@ export default {
   },
 
   ready () {
-    // 监听窗口尺寸变化
-    window.onresize = () => {
-      this.$refs.alertChart.chart.resize()
-    }
+    // TODO
+    this.alertChartData = Mock.mock({
+      'list|21': [{
+        'date|+1': [
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 16, 81, 91, 31, 19, 13, 19],
+        '产品|+1': ['轻度', '轻度', '轻度', '轻度', '轻度', '轻度', '轻度', '中度', '中度', '中度', '中度', '中度', '中度', '中度',
+        '重度', '重度', '重度', '重度', '重度', '重度', '重度']
+      }]
+    }).list
   },
 
   route: {

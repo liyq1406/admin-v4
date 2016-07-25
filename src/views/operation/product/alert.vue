@@ -12,7 +12,7 @@
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
-      <h3 style="margin:0">趋势</h3>
+      <h3 style="margin:0; font-size: 15px; font-weight: normal">趋势</h3>
     </div>
     <div class="panel">
       <time-line :data="alertChartData"></time-line>
@@ -31,47 +31,23 @@
         <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
       </div>
     </div>
-    <div class="panel mt15">
-      <!-- <div class="panel-hd">
-        <h2>告警信息列表</h2>
-      </div> -->
+    <div class="panel mt10">
       <div class="panel-bd">
-        <c-table :headers="headers" :tables="tables" :page="page"></c-table>
-        <!-- <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
+        <div class="data-table with-loading">
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <v-select label="全部等级" width='110px' size="small">
+                  <span slot="label">告警历史</span>
+                </v-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
+              <dropdown></dropdown>
+            </div>
           </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>{{ $t("ui.alert.info_list.content") }}</th>
-                <th>{{ $t("ui.alert.info_list.create_date") }}</th>
-                <th>{{ $t("ui.alert.info_list.is_read") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="alerts.length > 0">
-                <tr v-for="alert in alerts">
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>{{ alert.content }}
-                  </td>
-                  <td>{{ alert.create_date | formatDate }}</td>
-                  <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-                  <td class="tac">
-                    <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="alerts.length === 0">
-                <td colspan="4" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager> -->
       </div>
     </div>
 
@@ -317,6 +293,8 @@
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import TimeLine from 'components/g2-charts/TimeLine'
+  import Mock from 'mockjs'
+  import Dropdown from 'components/Dropdown'
 
   export default {
     name: 'Alert',
@@ -331,34 +309,14 @@
       Statistic,
       RadioButtonGroup,
       DateTimeRangePicker,
-      TimeLine
+      TimeLine,
+      Dropdown
     },
 
     data () {
       return {
         // TODO
-        alertChartData: [
-          {
-            createTime: new Date(2016, 7, 15, 0, 0, 0),
-            value: 30
-          },
-          {
-            createTime: new Date(2016, 7, 16, 0, 0, 0),
-            value: 45
-          },
-          {
-            createTime: new Date(2016, 7, 17, 0, 0, 0),
-            value: 60
-          },
-          {
-            createTime: new Date(2016, 7, 18, 0, 0, 0),
-            value: 0
-          },
-          {
-            createTime: new Date(2016, 7, 19, 0, 0, 0),
-            value: 24
-          }
-        ],
+        alertChartData: [],
         alerts: [
           {}
         ],
@@ -538,7 +496,7 @@
             time: '2016-01-01 16:21:13',
             duration: '1.2h',
             addr: '湖北, 武汉',
-            level: '<div class="level level1">中等</div>',
+            level: '<div class="level level1 text-label-warning" style="width: 55px">中等</div>',
             state: '待处理',
             prototype: item
           }
@@ -577,6 +535,38 @@
     },
     ready () {
       this.getProduct()
+
+      // TODO
+      this.alertChartData = Mock.mock({
+        'list|21': [{
+          'date|+1': [
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21),
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21),
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21)
+          ],
+          'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 16, 81, 91, 31, 19, 13, 19],
+          '产品|+1': ['轻度', '轻度', '轻度', '轻度', '轻度', '轻度', '轻度', '中度', '中度', '中度', '中度', '中度', '中度', '中度',
+          '重度', '重度', '重度', '重度', '重度', '重度', '重度']
+        }]
+      }).list
     },
 
     methods: {
