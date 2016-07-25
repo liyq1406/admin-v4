@@ -101,19 +101,19 @@ export default {
 @import '../assets/stylus/common'
 
 .time-range-picker-wrap
-  height 26px
+  height 28px
   float right
   position relative
   .time-range-show
     padding 0px 10px
-    line-height 24px
+    line-height 26px
     text-align center
     font-size 12px
     background-color #FFF
     border 1px solid default-border-color
     outline none
     span
-      line-height 18px
+      line-height 22px
       vertical-align top
   .time-range-picker-panel
     background-color white

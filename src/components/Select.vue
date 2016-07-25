@@ -141,21 +141,21 @@
       font-size 12px !important
 
     .v-select-trigger
-      height 24px
-      line-height 24px
+      height 26px
+      line-height 26px
       padding-left 8px
       cursor pointer
 
       span
         text-indent 8px
-        height 26px
+        height 28px
         font-size 12px
 
       select
         font-size 12px
 
       .caret
-        top 10px
+        top 11px
 
   .v-select-active
     .v-select-trigger

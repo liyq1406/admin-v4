@@ -115,7 +115,7 @@ export default {
   position relative
 
   .trigger
-    height 26px
+    height 28px
     width 100%
     display inline-block
     vertical-align middle
@@ -126,7 +126,7 @@ export default {
     box-sizing border-box
 
     i
-      line-height 24px
+      line-height 28px
 
   .x-dropdown
     position absolute
@@ -141,10 +141,10 @@ export default {
 .x-dropdown-abl
   .x-dropdown
     left 0
-    top 26px
+    top 28px
 
 .x-dropdown-abr
   .x-dropdown
     right 0
-    top 26px
+    top 28px
 </style>

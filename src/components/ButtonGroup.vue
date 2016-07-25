@@ -25,10 +25,10 @@ export default {
     box-sizing border-box
     border 1px solid #BBB
     background-image linear-gradient(top, #FDFDFD, #F5F5F5)
-    font-size 8px
-    padding 0 8px
-    height 24px
-    line-height 24px
+    font-size 10px
+    padding 0 9px
+    height 26px
+    line-height 26px
     transition border-color .3s, color .3s
     outline none
     cursor pointer

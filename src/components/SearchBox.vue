@@ -19,7 +19,7 @@
 
   & > label
     margin-right 10px
-    line-height 26px
+    line-height 28px
     vertical-align middle
     font-size 12px
 
@@ -32,8 +32,8 @@
 
   .btn
     cursor pointer
-    height 26px
-    line-height 24px
+    height 28px
+    line-height 26px
     vertical-align middle
     background-image linear-gradient(top, #FDFDFD, #F5F5F5)
     padding 0 10px
@@ -55,7 +55,7 @@
   display inline-block
   position relative
   background #FFF
-  size 190px 24px
+  size 190px 26px
   vertical-align middle
   border 1px solid #BBB
   box-shadow inset 1px 1px 1px rgba(0, 0, 0, .05)
@@ -65,15 +65,15 @@
     background transparent
     border none
     appearance none
-    size 160px 24px
-    line-height 24px
+    size 160px 26px
+    line-height 26px
     padding 0 6px 0 10px
     font-size 12px
     box-sizing border-box
 
   .fa
     position absolute
-    top 3px !important
+    top 4px !important
     right 3px !important
     display none
     width 20px !important

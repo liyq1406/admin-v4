@@ -42,8 +42,8 @@
   .x-radio-btn-group
     .btn
       position relative
-      height 25px
-      line-height 25px
+      height 28px
+      line-height 28px
       padding 0 10px
       margin-left 1px
       cursor pointer

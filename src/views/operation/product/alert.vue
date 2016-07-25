@@ -12,12 +12,12 @@
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
-      <h3 style="margin:0; font-size: 15px; font-weight: normal">趋势</h3>
+      <h3>趋势</h3>
     </div>
     <div class="panel">
       <time-line :data="alertChartData"></time-line>
     </div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="alertSummary.unhandle" :title="alertSummary.unhandle.title" align="left"></statistic>
       </div>
@@ -31,7 +31,7 @@
         <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
       </div>
     </div>
-    <div class="panel mt10">
+    <div class="panel">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">

@@ -3,8 +3,7 @@
     <div class="main-title">
       <h2>设备管理</h2>
     </div>
-    <div class="panel"></div>
-    <div class="row statistic-group">
+    <div class="row statistic-group mb30">
       <div class="col-8">
         <statistic :info="Summary.all" :title="Summary.all.title" align="left"></statistic>
       </div>
@@ -16,16 +15,16 @@
       </div>
     </div>
     <div class="panel">
-      <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
-            <span style="line-height:32px;height:32px;font-size:14px">设备列表</span>
-            <label style="float:right" :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-              <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
-            </label>
-            <button style="float:right" @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
-          </div>
+      <div class="panel-hd">
+        <div class="actions">
+          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.overview.add_device") }}</button>
+          <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+            <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
+          </label>
         </div>
+        <h2>设备列表</h2>
+      </div>
+      <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
@@ -437,7 +436,9 @@
   }
 </script>
 
-<style lang="stylus">
-  .query-type
-    height 30px
+<style lang="stylus" scoped>
+@import '../../../../assets/stylus/common'
+
+.statistic-group
+  border-top 1px solid default-border-color
 </style>
