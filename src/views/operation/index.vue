@@ -79,6 +79,9 @@ export default {
             alias: 'distributing',
             url: `/products/${item.id}/distributing`
           }, {
+            alias: 'analysis',
+            url: `/products/${item.id}/analysis`
+          }, {
             alias: 'addon',
             url: `/products/${item.id}/addon`
           }]

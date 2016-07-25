@@ -224,6 +224,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 使用分析
+        'products/:id/analysis': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/product/analysis'))
+            }, 'admin')
+          }
+        },
         // 扩展
         'products/:id/addon': {
           component (resolve) {
