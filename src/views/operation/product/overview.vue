@@ -32,171 +32,48 @@
       </div>
     </panel>
 
-    <div class="row">
-      <div class="col-12 with-stats">
-        <panel title="告警信息">
-          <div class="stats row">
-            <div class="col-11 tac">
-              <statistic :info="proportion.alerts.today.info" title="今日告警" color="gray" :inline="true" align="center"></statistic>
-            </div>
-            <div class="col-11 col-offset-2 tac">
-              <statistic :info="proportion.alerts.unread.info" title="未读告警" color="orange" :inline="true" align="center"></statistic>
-            </div>
-          </div>
-          <pie :data="proportion.alerts.data"></pie>
-        </panel>
+    <div class="panel mt20">
+      <div class="panel-hd bordered">
+        <h2 class="col-4">产品趋势</h2>
+        <div class="fr col-20 products-trends-head">
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
       </div>
-      <div class="col-12 with-stats">
-        <panel title="用户反馈">
-          <div class="stats row">
-            <div class="col-10 tac">
-              <statistic :info="feedback.today.info" title="今日反馈" color="gray" :inline="true" align="center"></statistic>
+      <div class="panel-bd">
+        <div class="row">
+          <div class="col-14">
+            <time-line :data="trends.users.data" type="smooth"></time-line>
+          </div>
+          <div class="col-10 mt40">
+            <div class="tac">
+              <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
             </div>
-            <div class="col-12 col-offset-2 tac">
-              <statistic :info="feedback.unread.info" title="未读反馈" color="orange" :inline="true" align="center"></statistic>
+            <div class="tac">
+              <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
             </div>
           </div>
-          <interval :data="feedback.data" :options="feedback.options"></interval>
-        </panel>
+        </div>
       </div>
     </div>
 
-    <div class="row with-stats product-trends">
-      <div class="col-24">
-        <panel title="产品趋势分析">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
+    <div class="panel mt20">
+      <div class="panel-hd bordered">
+        <h2 class="col-4">产品活跃度</h2>
+        <div class="fr col-20 products-trends-head">
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        </div>
+      </div>
+      <div class="panel-bd">
+        <div class="row">
+          <div class="col-14">
+            <time-line :data="trends.products.data" type="smooth"></time-line>
           </div>
-          <div class="stats row">
-            <div class="col-11 tac">
-              <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true" align="center"></statistic>
-            </div>
-            <div class="col-11 col-offset-2 tac">
-              <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true" align="center"></statistic>
-            </div>
+          <div class="col-10">
+            <pie :data="proportion.devices.activated.data"></pie>
           </div>
-          <line :data="trends.products.data" :options="trends.products.options"></line>
-        </panel>
+        </div>
       </div>
     </div>
-
-    <div class="row">
-      <div class="col-24">
-        <panel title="产品活跃时间点">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.ACTIVE_PERIODS" :value.sync="timePoint.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-          </div>
-          <line :data="timePoint.data" :options="timePoint.options"></line>
-        </panel>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-12">
-        <panel title="产品使用时长">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.AVG_PERIODS" :value.sync="duration.period"><span slot="label" class="label">平均</span></radio-button-group>
-          </div>
-          <interval :data="duration.data" :options="duration.options"></interval>
-        </panel>
-      </div>
-      <div class="col-12">
-        <panel title="产品使用次数">
-          <div class="left-actions" slot="left-actions">
-            <radio-button-group :items="locales.data.AVG_PERIODS" :value.sync="times.period"><span slot="label" class="label">平均</span></radio-button-group>
-          </div>
-          <interval :data="times.data" :options="times.options"></interval>
-        </panel>
-      </div>
-    </div>
-
-    <!-- 编辑产品浮层-->
-    <modal :show.sync="showEditModal">
-      <h3 slot="header">{{ $t("ui.overview.editForm.header") }}</h3>
-      <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
-                <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.product.fields.name')}) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
-                <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.desc'), 250]) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
-            <div class="controls col-18">
-              <div class="select">
-                <v-select :label="deviceTypes[editModel.link_type-1]">
-                  <select v-model="editModel.link_type" v-form-ctrl name="link_type">
-                    <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                  </select>
-                </v-select>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row" v-show="editModel.link_type===5">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>开启快照功能
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
-            </label>
-            <label class="del-check">
-              <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.product.fields.is_release") }}
-            </label>
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -213,7 +90,7 @@ import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
-import Line from 'components/g2-charts/Line'
+import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
 import Pie from 'components/g2-charts/Pie'
 import ChinaMap from 'components/g2-charts/ChinaMap'
@@ -244,7 +121,7 @@ export default {
     RadioButtonGroup,
     Statistic,
     Tooltip,
-    Line,
+    TimeLine,
     Interval,
     ChinaMap,
     Pie,
@@ -303,13 +180,12 @@ export default {
 
       // 占比
       proportion: {
-        alerts: {
-          data: [],
-          today: {
-            info: {}
+        devices: {
+          activated: {
+            data: []
           },
-          unread: {
-            info: {}
+          online: {
+            data: []
           }
         }
       },
@@ -333,6 +209,22 @@ export default {
           options: {},
           period: 7,
           filter: 'added',
+          data: [],
+          today: {
+            options: {},
+            info: {}
+          },
+          avg: {
+            options: {},
+            info: {}
+          }
+        },
+
+        // 用户
+        users: {
+          period: 7,
+          filter: 'added',
+          options: {},
           data: [],
           today: {
             options: {},
@@ -480,29 +372,18 @@ export default {
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
 
-    // 告警信息占比 -----------------------------------------------------
-    this.proportion.alerts.data = [
-      {name: '轻度告警', value: 5679},
-      {name: '中度告警', value: 2887},
-      {name: '重度告警', value: 1047}
-    ]
-    // var tplAlert = {
-    //   'change|-200-200': 0,
-    //   'total|10-1000': 1000
-    // }
-    // 今日
-    this.proportion.alerts.today = {
-      info: {
-        change: 9,
-        total: 57
-      }
+    // 产品信息占比 -----------------------------------------------------
+    this.proportion.devices.activated = {
+      data: [
+        {name: '已激活设备数', value: 29887},
+        {name: '未激活设备数', value: 28538}
+      ]
     }
-    // 未读
-    this.proportion.alerts.unread = {
-      info: {
-        change: 23,
-        total: 104
-      }
+    this.proportion.devices.online = {
+      data: [
+        {name: '当前离线', value: 25682},
+        {name: '当前在线', value: 4205}
+      ]
     }
 
     // 用户反馈 -----------------------------------------------------
@@ -778,6 +659,57 @@ export default {
     // })
     this.times.data = timesData
     this.times.options = timesOptions
+
+    this.trends.users.data = Mock.mock({
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 22),
+          new Date(2016, 7, 23),
+          new Date(2016, 7, 24)
+        ],
+        'count|+1': [38, 19, 33, 29, 33, 29, 10, 12]
+      }]
+    }).list
+
+    // var tplUserTrends = {
+    //   'change|-200-200': 0,
+    //   'total|10-1000': 1000
+    // }
+    // 今日
+    this.trends.users.today = {
+      info: {
+        change: 8,
+        total: 32
+      }
+    }
+    // 平均
+    this.trends.users.avg = {
+      info: {
+        change: 12,
+        total: 43
+      }
+    }
+
+    this.trends.products.data = Mock.mock({
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 22),
+          new Date(2016, 7, 23),
+          new Date(2016, 7, 24)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 6, 38]
+      }]
+    }).list
   },
 
   methods: {
@@ -1020,4 +952,9 @@ export default {
 .changetop
   .change
     top -55px!important
+
+.products-trends-head
+  line-height 28px
+  display inline-block
+  text-align right
 </style>
