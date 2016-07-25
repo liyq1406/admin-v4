@@ -236,7 +236,10 @@
                     <input type="radio" v-model="openType" name="openType" :value="3" number/>自定义内容
                   </label>
                   <div class="controls col-19">
-                    <editor :value="model.openContent"></editor>
+                    <div class="input-text-wrap">
+                      <textarea class="input-text textarea"></textarea>
+                    </div>
+                    <!-- <editor :value="model.openContent"></editor> -->
                   </div>
                 </div>
                 <div class="form-row row">
@@ -402,6 +405,8 @@
       .fa
         font-size 18px
         margin 0 5px
+    .textarea
+      height 150px
     .directional
     .single
       .form-row
