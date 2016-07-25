@@ -8,17 +8,37 @@
         <form v-form name="validation" @submit.prevent="onSubmit">
           <div class="panel">
             <div class="panel-hd">
-              <h3>1 推送人群</h3>
+              <h3><i class="number">1</i> 推送人群</h3>
             </div>
             <div class="panel-bd">
               <div class="form">
                 <div class="form-row row">
-                  <label class="form-control col-5">推送类型</label>
-                  <div class="controls col-19">
-                    <radio-button-group :items="types" :value.sync="model.type"></radio-button-group>
+                  <!-- <radio-button-group :items="types" :value.sync="model.type"></radio-button-group> -->
+                  <div class="check-group-box tab-s2">
+                    <ul>
+                      <li :class="{'active': model.type === 1}" @click="model.type = 1">
+                        <i class="fa fa-{{model.type === 1?'check-': ''}}circle-o"></i>
+                        所有用户
+                      </li>
+                      <li :class="{'active': model.type === 2}" @click="model.type = 2">
+                        <i class="fa fa-{{model.type === 2?'check-': ''}}circle-o"></i>
+                        定向推送
+                      </li>
+                      <li :class="{'active': model.type === 3}" @click="model.type = 3">
+                        <i class="fa fa-{{model.type === 3?'check-': ''}}circle-o"></i>
+                        单个用户
+                      </li>
+                    </ul>
                   </div>
                 </div>
-                <div v-show="model.type===2">
+                <div v-show="model.type===1">
+                  <div class="tips">
+                    <i class="fa fa-user"></i>
+                      向所有应用内的注册用户推送消息，目前总注册用户：
+                      <span>{{'8391'}}</span>
+                  </div>
+                </div>
+                <div class="directional" v-show="model.type===2">
                   <div class="form-row row">
                     <label class="form-control col-5">选择应用</label>
                     <div class="controls col-19">
@@ -92,48 +112,30 @@
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="form-row row">
-                    <label class="form-control col-5">推送范围:</label>
+                  <div class="form-row row">
+                    <label class="form-control col-5">不发送</label>
                     <div class="controls col-19">
-                      <div class="row mb10">
-                        <div class="col-4 control-text">用户类型</div>
-                        <div class="col-20 select-group">
-                          <v-select :label="userType.label" width="100px">
-                            <select v-model="userType" v-form-ctrl name="userType">
-                              <option v-for="opt in userTypeOptions" :value="opt">{{ opt.label }}</option>
-                            </select>
-                          </v-select>
-                          <v-select :label="userTypeRange.label" width="140px" class="ml5">
-                            <select v-model="userTypeRange" v-form-ctrl name="userTypeRange">
-                              <option v-for="opt in userTypeRangeOptions" :value="opt">{{ opt.label }}</option>
-                            </select>
-                          </v-select>
-                        </div>
+                      <tag-input :value.sync="tags.notSendTags" :candidate="tags.candidate" :editing.sync="tags.editing" @adding-tag=""></tag-input>
+                      <!-- <div class="radio-group w150 fl">
+                        <label class="radio">
+                          <input type="radio">不限
+                        </label>
+                        <label class="radio">
+                          <input type="radio">自定义
+                        </label>
                       </div>
-                      <div class="row mb10">
-                        <div class="col-4 control-text">地域</div>
-                        <div class="col-20">
-                          <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-4 control-text">标签</div>
-                        <div class="col-20">
-                          <div class="checkbox-group">
-                            <label v-for="type in tags" class="checkbox">
-                              <input type="checkbox" v-model="model.tags" name="tags" :value="$index+1" number/>{{ type }}
-                            </label>
-                          </div>
-                        </div>
-                      </div>
+                      <div class="select-group fl">
+                        <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :district.sync="selectedDistrict"></area-select>
+                      </div> -->
                     </div>
-                  </div> -->
+                  </div>
                 </div>
-                <div v-show="model.type===3">
-                  <template v-for="n in 2">
-                    <div class="col-offset-5 mt10 clearfix">
+                <div class="single" v-show="model.type===3">
+                  <div class="form-row" v-for="n in 2">
+                    <label class="form-control col-5">请输入用户ID</label>
+                    <div class="controls col-19 clearfix">
                       <div class="input-text-wrap w200 fl">
-                        <input type="text" class="input-text input-text-sm" placeholder="请输入用户ID">
+                        <input type="text" class="input-text input-text-sm">
                       </div>
                       <div class="fl btn-box">
                         <button class="btn btn-sm btn-ghost">
@@ -141,20 +143,20 @@
                         </button>
                       </div>
                     </div>
-                  </template>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
           <div class="panel">
             <div class="panel-hd">
-              <h3>2 推送内容</h3>
+              <h3><i class="number">2</i> 推送内容</h3>
             </div>
             <div class="panel-bd">
               <div class="form">
-                <div class="row mb10">
+                <!-- <div class="row mb10">
                   <div class="col-19 col-offset-5 hl-gray">iOS平台填写标题即可</div>
-                </div>
+                </div> -->
                 <div class="form-row row">
                   <label class="form-control col-5">推送标题:</label>
                   <div class="controls col-19">
@@ -176,20 +178,25 @@
           </div>
           <div class="panel">
             <div class="panel-hd">
-              <h3>3 推送时间</h3>
+              <h3><i class="number">3</i> 推送时间</h3>
             </div>
             <div class="panel-bd">
               <div class="form">
                 <div class="form-row row">
                   <label class="form-control col-5">推送时间:</label>
                   <div class="controls col-19 row">
-                    <div class="radio-group col-8">
-                      <label v-for="type in startTypes" class="radio">
-                        <input type="radio" v-model="model.startType" name="startType" :value="$index+1" number/>{{ type }}
+                    <div class="broadcast-time">
+                      <label class="radio">
+                        <input type="radio" v-model="model.startType" name="startType" :value="0" number/>现在
                       </label>
                     </div>
-                    <div class="row col-14" v-show="model.startType>1">
-                      <date-picker></date-picker>
+                    <div class="broadcast-time row">
+                      <label class="radio col-6">
+                        <input type="radio" v-model="model.startType" name="startType" :value="1" number/>自定义
+                      </label>
+                      <div class="row col-14">
+                        <date-picker></date-picker>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -198,28 +205,44 @@
           </div>
           <div class="panel">
             <div class="panel-hd">
-              <h3>4 打开方式</h3>
+              <h3><i class="number">4</i> 打开方式</h3>
             </div>
             <div class="panel-bd">
               <div class="form">
                 <div class="form-row row">
-                  <label class="form-control col-5">打开消息:</label>
+                  <!-- <label class="form-control col-5">打开消息:</label> -->
+                  <label class="form-control col-5 radio">
+                    <input type="radio" v-model="openType" name="openType" :value="1" number/>打开指定页面
+                  </label>
                   <div class="controls col-19">
-                    <div class="radio-group mb10">
-                      <label v-for="type in openTypes" class="radio">
-                        <input type="radio" v-model="openType" name="openType" :value="$index+1" number/>{{ type }}
-                      </label>
-                    </div>
-                    <div v-show="openType===1" class="input-text-wrap">
+                    <div class="input-text-wrap">
                       <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
-                    </div>
-                    <div v-show="openType===2" class="input-text-wrap">
-                      <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
-                    </div>
-                    <div v-show="openType===3" class="input-text-wrap">
-                      <editor :value="model.openContent"></editor>
                     </div>
                   </div>
+                </div>
+                <div class="form-row row">
+                  <!-- <label class="form-control col-5">打开消息:</label> -->
+                  <label class="form-control col-5 radio">
+                    <input type="radio" v-model="openType" name="openType" :value="2" number/>打开指定网页
+                  </label>
+                  <div class="controls col-19">
+                    <div class="input-text-wrap">
+                      <input v-model="model.openContent" type="text" name="openContent" class="input-text"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 radio">
+                    <input type="radio" v-model="openType" name="openType" :value="3" number/>自定义内容
+                  </label>
+                  <div class="controls col-19">
+                    <editor :value="model.openContent"></editor>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 radio">
+                    <input type="radio" v-model="openType" name="openType" :value="4" number/>直接打开APP
+                  </label>
                 </div>
                 <div class="form-actions row">
                   <div class="col-offset-5">
@@ -249,6 +272,7 @@
   import TimePicker from 'components/TimePicker'
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
+  import TagInput from 'components/TagInput'
   import Editor from 'components/Editor'
 
   export default {
@@ -262,12 +286,19 @@
       'date-picker': DatePicker,
       'time-picker': TimePicker,
       'area-select': AreaSelect,
+      'tag-input': TagInput,
       RadioButtonGroup
     },
 
     data () {
       return {
         validation: {},
+        notSendTags: '',
+        tags: {
+          notSendTags: '',
+          candidate: ['大客户', '金牌客户', '银牌客户'],
+          editing: false
+        },
         channelOptions: [{
           label: 'APP1',
           value: 'APP1'
@@ -293,7 +324,6 @@
             value: 3
           }
         ],
-        tags: ['大客户', '金牌客户', '银牌客户'],
         startTypes: ['现在', '自定义'],
         startDate: '2016-05-13',
         startTime: '00:00',
@@ -348,8 +378,46 @@
 <style lang="stylus" scoped>
   @import '../../../../assets/stylus/common'
 
+  .number
+    display inline-block
+    width 20px
+    height 20px
+    line-height 20px
+    border-radius 50%
+    text-align center
+    background #2389c5
+    color #fff
+    font-size 12px
+    position relative
+    bottom 2px
   .form
     max-width 640px
+    padding-left 30px
+    box-sizing border-box
+    .tips
+      height 50px
+      line-height 50px
+      border-bottom 1px dashed #ccc
+      color #666
+      .fa
+        font-size 18px
+        margin 0 5px
+    .directional
+    .single
+      .form-row
+        padding-top 5px
+        height 40px
+        /*line-height 40px*/
+        border-bottom 1px dashed #ccc
+
+    .check-group-box
+      .fa
+        /*color #999*/
+        font-size 18px
+        position relative
+        top 2px
+        &.fa-circle-o
+          color #999
   .panel
     border-bottom 0
   .select-group
