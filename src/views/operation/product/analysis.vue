@@ -1,80 +1,44 @@
 <template>
   <div class="main">
-    <div class="main-title">
-      <h2>使用分析</h2>
-    </div>
-    <div class="panel">
-      <div class="panel-hd">
-        <h2>用户活跃时间点分析</h2>
+    <div class="main-title row" style="border-bottom: solid 1px #D9D9D9">
+      <div class="col-4">
+        <h2>使用分析</h2>
       </div>
-      <div class="panel-bd">
+      <div class="col-20">
         <div class="filter-bar">
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <date-time-single-picker :show-time="false"></date-time-single-picker>
+              <date-time-range-picker></date-time-range-picker>
+            </div>
+            <div class="filter-group-item">
+              <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
             </div>
           </div>
-        </div>
-        <time-line :data="trends.active"></time-line>
-      </div>
-      <div class="panel-hd">
-        <h2>用户活跃时间明细</h2>
-      </div>
-      <div v-stretch='200' class="panel-bd">
-        <div class="data-table">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>时间段</th>
-                <th>用户活跃数</th>
-                <th>用户占比</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="i in 12">
-                <td>1-2</td>
-                <td>128</td>
-                <td>25%</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>
     <div class="panel">
       <div class="panel-hd">
-        <h2>用户参与度-日使用频率</h2>
+        <h2>产品使用时长</h2>
       </div>
       <div class="panel-bd">
-        <div class="filter-bar">
-          <div class="filter-group fr">
-            <div class="filter-group-item">
-              <date-time-single-picker :show-time="false" :label="'对比时间'"></date-time-single-picker>
-            </div>
-          </div>
-        </div>
-        <time-line :data="trends.frequency"></time-line>
+        <interval :data="duration.data" :options="duration.options"></interval>
       </div>
-
+    </div>
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>产品使用次数</h2>
+      </div>
       <div class="panel-bd">
-        <div class="data-table">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>使用频率</th>
-                <th>用户活跃数</th>
-                <th>用户占比</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="i in 12">
-                <td>1-2</td>
-                <td>128</td>
-                <td>25%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <interval :data="times.data" :options="times.options"></interval>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="panel-hd">
+        <h2>产品使用时段分布</h2>
+      </div>
+      <div class="panel-bd">
+        <interval :data="userperiod.data" :options="userperiod.options"></interval>
       </div>
     </div>
   </div>
@@ -83,8 +47,10 @@
 <script>
 // import api from 'api'
 import { globalMixins } from 'src/mixins'
-import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
+import Interval from 'components/g2-charts/Interval'
 import Mock from 'mockjs'
 
 export default {
@@ -94,49 +60,130 @@ export default {
 
   components: {
     TimeLine,
-    DateTimeSinglePicker
+    DateTimeRangePicker,
+    RadioButtonGroup,
+    Interval
   },
 
   data () {
     return {
-      trends: {
-        active: null,
-        frequency: null
-      }
+      duration: {
+        options: {},
+        data: []
+      },
+      times: {
+        options: {},
+        data: []
+      },
+      userperiod: {
+        options: {},
+        data: []
+      },
+      period: 7,
+      periods: [
+        {
+          value: 1,
+          label: '24h'
+        },
+        {
+          value: 7,
+          label: '7天'
+        },
+        {
+          value: 30,
+          label: '30天'
+        }
+      ]
     }
   },
 
   ready () {
-    this.trends.active = Mock.mock({
-      'list|14': [{
-        'date|+1': [
-          new Date(2016, 7, 15),
-          new Date(2016, 7, 16),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 21),
-          new Date(2016, 7, 15),
-          new Date(2016, 7, 16),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 21)
-        ],
-        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29],
-        '产品|+1': ['电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅1', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2', '电饭锅2']
+    var durationOptions = {
+      stack: true,
+      props: {
+        height: 300,
+        plotCfg: {
+          margin: [40, 20, 80, 60]
+        }
+      },
+      defs: {
+        'duration': {
+          type: 'cat',
+          alias: '时间'
+        },
+        'count': {
+          alias: '数量',
+          min: 0
+        }
+      },
+      position: 'duration*count',
+      color: 'duration'
+    }
+    this.duration.data = Mock.mock({
+      'list|9': [{
+        'duration|+1': ['1小时以内', '2-3小时', '3-4小时', '5-6小时', '7-8小时', '9-10小时', '10-11小时', '11-12小时', '12-13小时'],
+        'count|100-2200': 9
       }]
     }).list
+    this.duration.options = durationOptions
 
-    this.trends.frequency = Mock.mock({
-      'list|12': [{
-        'duration|+1': ['1-3', '4-10', '11-15', '16-20', '20-30', '30以上', '1-3', '4-10', '11-15', '16-20', '20-30', '30以上'],
-        'count|+1': [6, 8, 9, 3, 9, 3, 16, 18, 19, 31, 91, 13],
-        'date|+1': ['2016年7月21日', '2016年7月21日', '2016年7月21日', '2016年7月21日', '2016年7月21日', '2016年7月21日', '2016年7月22日', '2016年7月22日', '2016年7月22日', '2016年7月22日', '2016年7月22日', '2016年7月22日']
+    var timesOptions = {
+      stack: true,
+      props: {
+        height: 300,
+        plotCfg: {
+          margin: [40, 20, 80, 60]
+        }
+      },
+      defs: {
+        'times': {
+          type: 'cat',
+          alias: ''
+        },
+        'count': {
+          alias: '数量',
+          min: 0
+        }
+      },
+      position: 'times*count',
+      color: 'times'
+    }
+    this.times.data = Mock.mock({
+      'list|9': [{
+        'times|+1': ['1', '2-10', '10-20', '20-50', '50-70', '70-100', '100-150', '150-200', '200-300'],
+        'count|100-12200': 9
       }]
     }).list
+    this.times.options = timesOptions
+
+    var userperiodOptions = {
+      stack: true,
+      props: {
+        height: 300,
+        plotCfg: {
+          margin: [40, 20, 80, 60]
+        }
+      },
+      defs: {
+        'userperiod': {
+          type: 'cat',
+          alias: ''
+        },
+        'count': {
+          alias: '数量',
+          min: 0
+        }
+      },
+      position: 'userperiod*count',
+      color: 'userperiod'
+    }
+    this.userperiod.data = Mock.mock({
+      'list|9': [{
+        'userperiod|+1': ['0-1', '2-3', '4-5', '6-7', '8-9', '10-11', '12-13', '14-15', '16-17'],
+        'count|100-12200': 9
+      }]
+    }).list
+    this.userperiod.options = userperiodOptions
   },
 
   methods: {

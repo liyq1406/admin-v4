@@ -27,15 +27,34 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: null
+    }
+  },
+
+  ready () {
+    if (!this.chart) {
+      this.render()
+    }
+  },
+
   watch: {
     // 监听数据变化，渲染图表
     data () {
-      this.render()
+      if (this.chart) {
+        this.chart.changeData(this.data)
+      } else {
+        this.render()
+      }
     }
   },
 
   methods: {
     render () {
+      if (!this.data || this.data.length <= 0) {
+        return
+      }
       // 默认配置
       var defaults = {
         container: this.$el, // 容器
@@ -54,6 +73,7 @@ export default {
       var tooltipDefaults = {}
 
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
+      this.chart = chart
       var defs = this.options.defs
 
       for (let key in defs) {

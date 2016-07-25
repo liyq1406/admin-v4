@@ -47,10 +47,7 @@ export default {
 
   methods: {
     render () {
-      if (!this.data) {
-        return
-      }
-      if (this.data.length <= 0) {
+      if (!this.data || this.data.length <= 0) {
         return
       }
       // 默认配置
