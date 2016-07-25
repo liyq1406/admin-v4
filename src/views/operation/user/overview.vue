@@ -535,7 +535,7 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
 
 .user-card
@@ -565,4 +565,6 @@ export default {
     text-align center
     font-size 14px
     color gray
+.panel
+  padding-top 20px
 </style>
