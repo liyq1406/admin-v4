@@ -3,7 +3,7 @@
     <div class="main-title">
       <h2>用户行为分析</h2>
     </div>
-    <div class="panel">
+    <div class="panel mb20">
       <div class="panel-hd">
         <h2>用户活跃时间点分析</h2>
       </div>

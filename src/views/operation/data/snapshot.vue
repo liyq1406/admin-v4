@@ -3,7 +3,7 @@
     <div class="main-title">
       <h2>数据快照</h2>
     </div>
-    <div class="panel">
+    <div class="panel mb20">
       <div class="panel-bd">
         <div class="form">
           <div class="form-row row">
