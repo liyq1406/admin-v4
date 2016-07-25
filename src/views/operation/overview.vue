@@ -35,7 +35,12 @@
         <panel title="产品趋势分析">
           <div class="left-actions blockdiv" slot="left-actions">
             <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label"></span></radio-button-group>
-            <radio-button-group :hasline="true" :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
+            <!-- <radio-button-group :hasline="true" :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group> -->
+            <div class="tab-s2 mt20 mb5">
+              <ul>
+                <li v-for="item in locales.data.PRODUCT_FILTERS" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item.label }}</li>
+              </ul>
+            </div>
           </div>
           <div class="row">
             <div class="col-14">
@@ -93,7 +98,12 @@
         <panel title="用户趋势分析">
           <div class="left-actions blockdiv" slot="left-actions">
             <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label"></span></radio-button-group>
-            <radio-button-group :hasline="true" :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
+            <!-- <radio-button-group :hasline="true" :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group> -->
+            <div class="tab-s2 mt20 mb5">
+              <ul>
+                <li v-for="item in locales.data.USER_FILTERS" @click="currIndex2=$index" :class="{'active':currIndex2===$index}">{{ item.label }}</li>
+              </ul>
+            </div>
           </div>
           <div class="row">
             <div class="col-18">
@@ -150,6 +160,8 @@ export default {
 
   data () {
     return {
+      currIndex: 0,
+      currIndex2: 0,
       // 统计
       statistic: {
         // 用户总数
@@ -702,5 +714,5 @@ export default {
 .blockdiv
   display block!important
   margin-top 10px
-  border-bottom 1px solid #e5e5e5
+  /*border-bottom 1px solid #e5e5e5*/
 </style>
