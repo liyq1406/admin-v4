@@ -4,7 +4,7 @@
       <h2>消息列表</h2>
     </div>
     <div class="panel">
-      <div class="panel-bd">
+      <!-- <div class="panel-bd">
         <div class="filter-bar filter-bar-head">
           <div class="filter-group fr">
             <div class="filter-group-item">
@@ -19,17 +19,17 @@
           </div>
         </div>
         <time-line :data="trends" :type="'smooth'"></time-line>
-      </div>
+      </div> -->
     </div>
     <div class="row statistic-group">
       <div class="col-6">
-        <statistic :info="messageSummary.avg" :title="messageSummary.avg.title" align="left"></statistic>
+        <statistic :info="messageSummary.avg" :title="messageSummary.avg.title" align="left" :showchange="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="messageSummary.percent" :title="messageSummary.percent.title" align="left"></statistic>
+        <statistic :info="messageSummary.percent" :title="messageSummary.percent.title" align="left" :showchange="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="messageSummary.click" :title="messageSummary.click.title" align="left"></statistic>
+        <statistic :info="messageSummary.click" :title="messageSummary.click.title" align="left" :showchange="true"></statistic>
       </div>
       <div class="col-6">
         <statistic :info="messageSummary.unsend" :title="messageSummary.unsend.title" align="left"></statistic>
@@ -58,7 +58,18 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables"></c-table>
+          <c-table :headers="headers" :tables="tables">
+            <div slot="theader-channel">
+              <select name="" id="">
+                <option value="">选择应用</option>
+              </select>
+            </div>
+            <div slot="theader-status">
+              <select name="" id="">
+                <option value="">推送人群</option>
+              </select>
+            </div>
+          </c-table>
         </div>
       </div>
     </div>

@@ -1,10 +1,25 @@
 <template>
-  <div class="main">
+  <div class="main" style="overflow-x:hidden">
     <div class="main-title">
       <h2>消息详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel"></div>
+    <div class="panel">
+      <!-- <div class="filter-bar filter-bar-head">
+        <div class="filter-group fr">
+          <div class="filter-group-item">
+            <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+          </div>
+          <div class="filter-group-item">
+            <date-time-range-picker></date-time-range-picker>
+          </div>
+          <div class="filter-group-item">
+            <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          </div>
+        </div>
+      </div> -->
+      <time-line :data="trends" :type="'smooth'"></time-line>
+    </div>
     <div class="row statistic-group">
       <div class="fiveDepart">
         <statistic :info="messageSummary.send" :title="messageSummary.send.title" align="left"></statistic>
@@ -88,6 +103,10 @@
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic'
   import Breadcrumb from 'components/Breadcrumb'
+  import Mock from 'mockjs'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
+  import TimeLine from 'components/g2-charts/TimeLine'
 
   export default {
     name: 'BroadcastDetails',
@@ -96,7 +115,10 @@
 
     components: {
       Breadcrumb,
-      Statistic
+      Statistic,
+      RadioButtonGroup,
+      DateTimeRangePicker,
+      TimeLine
     },
 
     route: {
@@ -114,8 +136,26 @@
       }
     },
 
+    ready () {
+      this.trends = Mock.mock({
+        'list|14': [{
+          'date|+1': [
+            new Date(2016, 7, 15),
+            new Date(2016, 7, 16),
+            new Date(2016, 7, 17),
+            new Date(2016, 7, 18),
+            new Date(2016, 7, 19),
+            new Date(2016, 7, 20),
+            new Date(2016, 7, 21)
+          ],
+          'count|+1': [6, 8, 9, 3, 9, 3, 9]
+        }]
+      }).list
+    },
+
     data () {
       return {
+        trends: null,
         history: {},
         breadcrumbNav: [],
         messageSummary: {
