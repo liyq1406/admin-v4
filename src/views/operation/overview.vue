@@ -164,10 +164,10 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-18">
+            <div class="col-14">
               <time-line :data="trends.users.data" type="smooth"></time-line>
             </div>
-            <div class="col-6 mt40">
+            <div class="col-10 mt40">
               <div class="tac">
                 <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
               </div>
