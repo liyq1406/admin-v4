@@ -1019,5 +1019,5 @@ export default {
 
 .changetop
   .change
-    top -55px!important    
+    top -55px!important
 </style>

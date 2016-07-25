@@ -3,21 +3,21 @@
     <panel>
       <div class="row user-card">
         <div class="col-6 total-box">
-          <statistic :info="statistic.users.total.info" title="总用户数" color="gray" :has-chart="true">
+          <statistic :info="statistic.users.total.info" title="总用户数" color="gray" :has-chart="true" align="center" :titletop="true">
           </statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.users.registered.info" title="今日新增" color="green" :has-chart="true">
+          <statistic :info="statistic.users.registered.info" title="今日新增" color="green" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.users.registered.data" :options="statistic.users.registered.options"></interval>
           </statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.users.registeredPercentage.info" title="今日活跃用户" color="blue" :has-chart="true">
+          <statistic :info="statistic.users.registeredPercentage.info" title="今日活跃用户" color="blue" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.users.registeredPercentage.data" :options="statistic.users.registeredPercentage.options"></interval>
           </statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.users.online.info" title="过去7天活跃用户数" color="orange" :has-chart="true">
+          <statistic :info="statistic.users.online.info" title="过去7天活跃用户数" color="orange" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.users.online.data" :options="statistic.users.online.options"></interval>
           </statistic>
         </div>
