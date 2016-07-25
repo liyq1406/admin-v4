@@ -21,46 +21,12 @@
                 </select>
               </v-select>
             </div>
-            <div class="filter-group-item">
+            <!-- <div class="filter-group-item">
               <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
-            </div>
+            </div> -->
           </div>
         </div>
         <c-table :headers="headers" :tables="tables"></c-table>
-        <!-- <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>工单编号</th>
-              <th>客户姓名</th>
-              <th>产品名称</th>
-              <th>产品型号</th>
-              <th>创建日期</th>
-              <th>工单状态</th>
-              <th>操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="workOrders.length > 0">
-              <tr v-for="order in workOrders">
-                <td>{{order._id}}</td>
-                <td>{{order.name}}</td>
-                <td>{{order.product_name}}</td>
-                <td>{{order.product_type}}</td>
-                <td>{{order.extended_days | uniformDate}}</td>
-                <td>
-                  <div v-if="order.status === 0">已过期</div>
-                  <div v-else class='hl-green'>未过期</div>
-                </td>
-                <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
-              </tr>
-            </template>
-            <tr v-if="workOrders.length === 0 && !loadingData">
-              <td colspan="7" class="tac">
-                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
       </div>
     </div>
   </div>
@@ -137,7 +103,8 @@
           },
           {
             key: 'state',
-            title: '处理状态'
+            title: '处理状态',
+            class: 'tac'
           }
         ]
       }

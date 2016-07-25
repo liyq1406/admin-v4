@@ -102,7 +102,7 @@ export default {
         {
           key: '_id',
           title: '端点ID',
-          class: 'tac'
+          class: 'tac w250'
         },
         {
           key: 'data',
@@ -113,7 +113,7 @@ export default {
           key: 'uploda_time',
           title: '上报时间',
           sortType: -1,
-          class: 'tac'
+          class: 'tac w250'
         }
       ]
     }
