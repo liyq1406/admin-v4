@@ -44,13 +44,10 @@
           </div>
           <div class="row">
             <div class="col-14">
-              <line :data="trends.products.data" :options="trends.products.options"></line>
+              <time-line :data="trends.products.data" :type="'smooth'"></time-line>
             </div>
             <div class="col-10">
               <div class="row">
-                <!-- <div class="col-10 col-offset-2 tac">
-                  <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                </div> -->
                 <div class="col-24 col-offset-1 tac">
                   <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
                 </div>
@@ -70,7 +67,7 @@
         <panel title="产品信息占比">
           <div class="row">
             <div class="col-14">
-              <pie :data="proportion.devices.activated.data"></pie>
+              <time-line :data="trends.products.data" type="smooth"></time-line>
             </div>
             <div class="col-10">
               <pie :data="proportion.devices.online.data"></pie>
@@ -83,13 +80,77 @@
             <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
           </div>
           <div class="row">
-            <div class="col-16 tac">
+            <div class="col-10 tac">
               <china-map :data="regions.products.data"></china-map>
             </div>
-            <div class="col-8">
-              <div class="top">
-                <h3>产品占比TOP10</h3>
-                <interval :data="regions.products.top.data" :options="regions.products.top.options"></interval>
+            <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+              <div class="data-table">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>地域</th>
+                      <th>设备数量</th>
+                      <th>占比</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>广东</td>
+                      <td>289</td>
+                      <td>14%</td>
+                    </tr>
+                    <tr>
+                      <td>广西</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>广东</td>
+                      <td>289</td>
+                      <td>14%</td>
+                    </tr>
+                    <tr>
+                      <td>广西</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>湖南</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>湖北</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>江西</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>江苏</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>广东</td>
+                      <td>289</td>
+                      <td>14%</td>
+                    </tr>
+                    <tr>
+                      <td>广西</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                    <tr>
+                      <td>湖南</td>
+                      <td>1769</td>
+                      <td>86%</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
@@ -107,7 +168,7 @@
           </div>
           <div class="row">
             <div class="col-18">
-              <line :data="trends.users.data" :options="trends.users.options"></line>
+              <time-line :data="trends.users.data" type="smooth"></time-line>
             </div>
             <div class="col-6 mt40">
               <div class="tac">
@@ -131,7 +192,7 @@ import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
-import Line from 'components/g2-charts/Line'
+import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
 import Pie from 'components/g2-charts/Pie'
 import ChinaMap from 'components/g2-charts/ChinaMap'
@@ -152,7 +213,7 @@ export default {
     RadioButtonGroup,
     Statistic,
     Tooltip,
-    Line,
+    TimeLine,
     Interval,
     ChinaMap,
     Pie
@@ -378,30 +439,6 @@ export default {
     }
 
     // 产品趋势分析 -----------------------------------------------------
-
-    // 趋势图表配置
-    var productTrendsOptions = {
-      props: {
-        plotCfg: {
-          margin: [60, 0, 50, 60]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        },
-        'product': {
-          alias: '产品'
-        }
-      },
-      position: 'date*count',
-      color: 'product'
-    }
     var proTrendsData = []
     // PRODUCTS.forEach((item) => {
     //   proTrendsData = proTrendsData.concat(Mock.mock({
@@ -412,22 +449,31 @@ export default {
     //     }]
     //   }).list)
     // })
-    proTrendsData = proTrendsData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [24, 14, 25, 34, 17, 29, 33],
-        'product': PRODUCTS[0]
+    proTrendsData = Mock.mock({
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 22),
+          new Date(2016, 7, 23),
+          new Date(2016, 7, 24),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 22),
+          new Date(2016, 7, 23),
+          new Date(2016, 7, 24)
+        ],
+        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 10, 12],
+        '产品|+1': ['空气净化器', '空气净化器', '空气净化器', '空气净化器', '空气净化器', '空气净化器', '空气净化器', '空气净化器', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯', 'WIFI指示灯']
       }]
-    }).list)
-    proTrendsData = proTrendsData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [204, 156, 275, 236, 154, 198, 185],
-        'product': PRODUCTS[1]
-      }]
-    }).list)
+    }).list
     this.trends.products.data = proTrendsData
-    this.trends.products.options = productTrendsOptions
 
     // var tplPoductTrends = {
     //   'change|-200-200': 0,
@@ -643,38 +689,21 @@ export default {
 
     // 用户趋势分析 -----------------------------------------------------
 
-    // 趋势图表配置
-    var userTrendsOptions = {
-      props: {
-        height: 300,
-        plotCfg: {
-          margin: [60, 0, 50, 60]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        },
-        'type': {
-          alias: '新增用户'
-        }
-      },
-      position: 'date*count',
-      color: 'type'
-    }
     this.trends.users.data = Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [20, 22, 15, 25, 18, 24, 32],
-        'type': '新增用户'
+      'list|16': [{
+        'date|+1': [
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21),
+          new Date(2016, 7, 22),
+          new Date(2016, 7, 23),
+          new Date(2016, 7, 24)
+        ],
+        'count|+1': [38, 19, 33, 29, 33, 29, 10, 12]
       }]
     }).list
-    this.trends.users.options = userTrendsOptions
 
     // var tplUserTrends = {
     //   'change|-200-200': 0,

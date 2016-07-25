@@ -190,6 +190,7 @@ export default {
     background #FFF
     padding 10px 15px 0 15px
     margin-bottom 5px
+    box-sizing border-box
     clearfix()
 
     h2
