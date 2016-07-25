@@ -6,7 +6,7 @@
         <div class="info">
           <h2>{{ product.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h2>
           <div class="desc">{{ product.description }}</div>
-          <div class="row statistic">
+          <div class="row statistic changetop">
             <div class="col-6">
               <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true" align="left" :titletop="true">
                 <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
@@ -1016,4 +1016,8 @@ export default {
 .product-trends
   .stats
     width 400px
+
+.changetop
+  .change
+    top -55px!important    
 </style>
