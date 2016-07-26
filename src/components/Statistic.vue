@@ -17,8 +17,10 @@
     <div class="target" v-if="hasTarget">
       <slot name="targetArea"></slot>
     </div>
-    <div class="chart" v-if="hasChart">
-      <slot></slot>
+    <div :class="{'tac': align="center"}">
+      <div class="chart" v-if="hasChart">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -183,7 +185,7 @@ export default {
     &.decrease
       color red
 
-  & > .chart
+  .chart
     display inline-block
     size 150px 40px
 
@@ -218,10 +220,10 @@ export default {
   padding 5px 15px 15px 40px
   & > .tit
     color gray-light
-  & > .change
+  /*& > .change
     position relative
     top -18px
-    left 5px
+    left 5px*/
   & > .info
   & > .unit
   & > .change

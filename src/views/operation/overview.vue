@@ -48,7 +48,7 @@
             </div>
             <div class="col-10">
               <div class="row">
-                <div class="col-24 col-offset-1 tac">
+                <div class="col-24 col-offset-1 tac pd15">
                   <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
                 </div>
               </div>
@@ -747,4 +747,7 @@ export default {
 .border-top-style
   border-top 1px solid #e5e5e5
   margin-top 10px
+.pd15
+  .x-statistic-left
+    padding-left 15px!important
 </style>

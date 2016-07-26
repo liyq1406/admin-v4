@@ -949,12 +949,12 @@ export default {
   .stats
     width 400px
 
-.changetop
-  .change
-    top -55px!important
-
 .products-trends-head
   line-height 28px
   display inline-block
   text-align right
+
+/*.changetop
+  .change
+    top -55px!important  */
 </style>
