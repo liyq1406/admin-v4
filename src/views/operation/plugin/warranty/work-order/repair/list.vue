@@ -20,17 +20,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="panel no-split-line">
-      <div class="panel-bd">
-        <div class="with-loading">
-          <time-line :data="trends" :type="'smooth'"></time-line>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-      </div>
-    </div> -->
-    <div class="panel"></div>
     <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="repairSummary.unrepair" :title="repairSummary.unrepair.title" align="left"></statistic>
