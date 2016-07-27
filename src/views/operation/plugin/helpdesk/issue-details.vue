@@ -1,9 +1,9 @@
 <template>
   <div class="issue-details">
     <info-card>
-      <h3>xiaobai_123</h3>
+      <h3>sherlyYang</h3>
       <div class="desc">
-        <span>智能烤箱</span>
+        <span>智能烤箱_A1</span>
       </div>
       <div class="issue-metas">
         <span class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
@@ -26,9 +26,9 @@
     <div class="comment-list">
       <div class="comment-list-item">
         <div class="comment-metas">
-          <span>2016-02-12 16:09:11</span>
+          <span>2016-07-12 12:11:21</span>
         </div>
-        <div class="comment-desc">这口锅买回来之后煮米一直煮不熟，到底要放多少水呢？我没找到使用指南</div>
+        <div class="comment-desc">烘烤模式有时不管用，在连续烤3个小时后就不能正常加热了</div>
         <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
           <div class="pic-grid">
             <div class="pic" v-for="pic in pics" track-by="$index">
@@ -38,16 +38,29 @@
         </gallery>
         <div class="issue-reply">
           <div class="comment-metas">
-            <span>2016-02-12 16:09:11</span>
+            <span>客服_6120    2016-07-12 16:09:11</span>
           </div>
-          <div class="comment-desc">你放米的姿势不对</div>
+          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
         </div>
       </div>
       <div class="comment-list-item">
         <div class="comment-metas">
-          <span>2016-02-12 16:09:11</span>
+          <span>2016-07-12 18:21:09</span>
         </div>
-        <div class="comment-desc">这口锅买回来之后煮米一直煮不熟，到底要放多少水呢？我没找到使用指南</div>
+        <div class="comment-desc">烘烤模式还是不管用，是不是坏了</div>
+        <!-- <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
+          <div class="pic-grid">
+            <div class="pic" v-for="pic in pics" track-by="$index">
+              <img :src="pic" alt="" @click="handleImgClick($index)">
+            </div>
+          </div>
+        </gallery> -->
+        <!-- <div class="issue-reply">
+          <div class="comment-metas">
+            <span>客服_6120    2016-02-12 16:09:11</span>
+          </div>
+          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
+        </div> -->
       </div>
     </div>
     <div class="reply-form mt20">
@@ -94,11 +107,11 @@ export default {
         },
         create_time: {
           label: '提交时间',
-          value: '2016-02-12  16:09:11'
+          value: '2016-07-12  16:09:11'
         },
         email: {
           label: '邮箱',
-          value: 'sample@demo.cn'
+          value: 'sherly@163.com'
         },
         phone: {
           label: '手机',
@@ -143,7 +156,7 @@ export default {
       },
       tabItems: ['用户信息', '设备信息', 'APP信息'],
       currIndex: 0,
-      pics: ['http://www.xlink.cn/static/images/home_banner.fae23ff.jpg'],
+      pics: ['http://img54.foodjx.com/9/20130128/634949908155312500536.jpg'],
       currPicIndex: 0,
       isShowGallery: false,
       issue: {},
