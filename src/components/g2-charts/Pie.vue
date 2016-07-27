@@ -28,7 +28,7 @@ export default {
     },
     margin: {
       default () {
-        return [50, 0, 0, 0]
+        return [30, 0, 0, 0]
       }
     }
   },
@@ -89,11 +89,19 @@ export default {
 
       chart.intervalStack()
         .position(window.G2.Stat.summary.percent('value'))
-        .color('name')
-        .label('name*..percent', (name, percent) => {
-          percent = (percent * 100).toFixed(2) + '%'
-          return name + ' ' + percent
-        })
+        .color('name').label('name', {
+          custom: true, // 表示使用自定义文本
+          renderer: function formatter (text, item) {
+            // var point = item.point // 每个弧度对应的点
+            // var percent = point['..percent'] // ..proportion 字段由Stat.summary.proportion统计函数生成
+            return ''
+          },
+          labelLine: false,
+          offset: 0})
+        // .label('name*..percent', (name, percent) => {
+        //   percent = (percent * 100).toFixed(2) + '%'
+        //   return name + ' ' + percent
+        // })
 
       chart.render()
 

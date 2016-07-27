@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <pie :data="warningLevel"></pie>
+      <pie :data="warningLevel" :height="400"></pie>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap">
       <div class="data-table">

@@ -164,7 +164,7 @@ export default {
 
   data () {
     return {
-      customPieMargin: [100, 0, 0, 70],
+      customPieMargin: [30, 0, 0, 0],
       feedbacks: [
         {
           name: '电源故障',
