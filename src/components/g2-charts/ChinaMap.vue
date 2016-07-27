@@ -38,7 +38,6 @@ export default {
       var Stat = window.G2.Stat
       var userData = this.data
       var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
-      console.log(width)
       var height = width * (6 / 7)
       var mt = (width - height) / 2
       // 默认配置

@@ -35,10 +35,10 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="row">
-          <div class="col-10">
+          <div class="col-11">
             <china-heat-map></china-heat-map>
           </div>
-          <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+          <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
             <div class="data-table">
               <table class="table">
                 <thead>

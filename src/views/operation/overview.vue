@@ -77,10 +77,10 @@
 
         <panel title="产品分布">
           <div class="row border-top-style">
-            <div class="col-10 tac">
+            <div class="col-11 tac">
               <china-map :data="regions.products.data"></china-map>
             </div>
-            <div class="col-13 col-offset-1 data-table-wrap mt20">
+            <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
               <div class="data-table">
                 <table class="table">
                   <thead>
