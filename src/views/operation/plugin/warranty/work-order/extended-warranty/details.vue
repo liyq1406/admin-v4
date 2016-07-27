@@ -205,7 +205,7 @@ export default {
           invalid_time: item.invalid_time,
           time: item.time,
           addr: item.addr,
-          state: item.state,
+          state: item.state === 1 ? '已延保' : '待处理',
           prototype: item
         }
         result.push(history)
@@ -260,19 +260,43 @@ export default {
       this.total = 50
       this.historys = [
         {
-          id: '111111111',
-          mac: 'macmacmac',
-          invalid_time: '2016-07-32 18:00:00',
-          time: '2016-07-32 18:00:00',
-          addr: '龙腾18',
+          id: 'YWD212912341',
+          mac: '1108ea95',
+          invalid_time: '2016-1-1   19:21:32',
+          time: '2年',
+          addr: '湖北, 武汉',
           state: 1
         },
         {
-          id: '222222222',
-          mac: 'macmacmac',
-          invalid_time: '2016-07-32 18:00:00',
-          time: '2016-07-32 18:00:00',
-          addr: '龙腾18',
+          id: 'YWD212912342',
+          mac: '1108ea95',
+          invalid_time: '2016-1-1   19:21:32',
+          time: '待延保',
+          addr: '湖北, 武汉',
+          state: 1
+        },
+        {
+          id: 'YWD212912342',
+          mac: '1108ea95',
+          invalid_time: '2016-1-1   19:21:32',
+          time: '待延保',
+          addr: '湖北, 武汉',
+          state: 1
+        },
+        {
+          id: 'YWD212912342',
+          mac: '1108ea95',
+          invalid_time: '2016-1-1   19:21:32',
+          time: '待延保',
+          addr: '湖北, 武汉',
+          state: 1
+        },
+        {
+          id: 'YWD212912342',
+          mac: '1108ea95',
+          invalid_time: '2016-1-1   19:21:32',
+          time: '待延保',
+          addr: '湖北, 武汉',
           state: 1
         }
       ]

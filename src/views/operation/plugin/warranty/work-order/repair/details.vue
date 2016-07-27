@@ -168,10 +168,10 @@ export default {
           key: 'id',
           title: '工单编号'
         },
-        {
-          key: 'mac',
-          title: '维修设备(mac)'
-        },
+        // {
+        //   key: 'mac',
+        //   title: '维修设备(mac)'
+        // },
         {
           key: 'create_date',
           title: '创建时间'
@@ -185,10 +185,10 @@ export default {
           title: '维修内容',
           class: 'tac w200'
         },
-        {
-          key: 'addr',
-          title: '地点'
-        },
+        // {
+        //   key: 'addr',
+        //   title: '地点'
+        // },
         {
           key: 'level',
           title: '维修等级',
@@ -221,13 +221,45 @@ export default {
           person: item.person,
           content: item.content,
           addr: item.addr,
-          level: item.level,
-          state: item.state,
+          level: resetLevel(item.level),
+          state: resetState(item.state),
           prototype: item
         }
         result.push(history)
       })
       return result
+      function resetState (state) {
+        var result = [
+          {
+            text: '待处理',
+            color: '#6699CC'
+          },
+          {
+            text: '维修中',
+            color: '#CC6600'
+          }
+        ]
+        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+        return html
+      }
+      function resetLevel (state) {
+        var resutl = [
+          {
+            text: '一级',
+            backgroundColor: '#ff9966'
+          },
+          {
+            text: '二级',
+            backgroundColor: '#9cc'
+          },
+          {
+            text: '三级',
+            backgroundColor: '#cb4a52'
+          }
+        ]
+        var html = '<div class="level tac" style="background-color: ' + resutl[state - 1].backgroundColor + ';;width: 50px;display: inline-block">' + resutl[state - 1].text + '</div>'
+        return html
+      }
     },
     queryCondition () {
       var condition = {
@@ -277,24 +309,54 @@ export default {
       this.total = 50
       this.historys = [
         {
-          id: '11111',
+          id: 'YWD21291233',
           mac: 'a1ds54asd',
-          create_date: '2016-07-21 18:00:00',
-          person: '你哥哥',
-          content: '维修内容',
-          addr: '龙腾18',
+          create_date: '2016-07-22   19:21:32',
+          person: '张小琴',
+          content: '更换滤网',
+          addr: '广东，广州',
           level: '1',
+          state: '0'
+        },
+        {
+          id: 'YWD21291232',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21   12:33:12',
+          person: '王献强',
+          content: '更换滤网',
+          addr: '广东，广州',
+          level: '1',
+          state: '0'
+        },
+        {
+          id: 'YWD21291231',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21   11:21:39',
+          person: '张小琴',
+          content: '电源故障，电压不稳定',
+          addr: '广东，深圳',
+          level: '2',
+          state: '0'
+        },
+        {
+          id: 'YWD21291229',
+          mac: 'a1ds54asd',
+          create_date: '2016-07-21   11:18:09',
+          person: '张小琴',
+          content: '电机转速过高，异响',
+          addr: '广东，深圳',
+          level: '2',
           state: '1'
         },
         {
-          id: '222222',
+          id: 'YWD21291228',
           mac: 'a1ds54asd',
-          create_date: '2016-07-21 18:00:00',
-          person: '你妹妹',
-          content: '维修内容',
-          addr: '龙腾18',
-          level: '1',
-          state: '1'
+          create_date: '2016-07-21   9:17:32',
+          person: '王献强',
+          content: '更换滤网',
+          addr: '广东，佛山',
+          level: '3',
+          state: '0'
         }
       ]
     },
@@ -417,4 +479,8 @@ export default {
     margin-right 20px
     i
       font-size 15px
+  .table
+    .level
+      display inline-block
+      width 50px
 </style>

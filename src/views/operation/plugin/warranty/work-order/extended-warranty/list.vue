@@ -241,6 +241,7 @@
           {
             key: 'time',
             title: '延保时间',
+            class: 'tac',
             sortType: -1
           },
           {
@@ -294,12 +295,26 @@
             invalid_time: item.invalid_time,
             time: item.time,
             addr: item.addr,
-            state: item.state,
+            state: resetState(item.state),
             prototype: item
           }
           result.push(workOrder)
         })
         return result
+        function resetState (state) {
+          var result = [
+            {
+              text: '待处理',
+              color: '#6699CC'
+            },
+            {
+              text: '已延保',
+              color: '#006633'
+            }
+          ]
+          var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+          return html
+        }
       },
       queryCondition () {
         var condition = {
@@ -366,20 +381,84 @@
         this.total = 20
         this.workOrders = [
           {
-            id: '111111111',
-            mac: 'macmacmac',
-            invalid_time: '2016-07-32 18:00:00',
-            time: '2016-07-32 18:00:00',
-            addr: '龙腾18',
+            id: 'YWD212912341',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '2年',
+            addr: '湖北, 武汉',
             state: 1
           },
           {
-            id: '222222222',
-            mac: 'macmacmac',
-            invalid_time: '2016-07-32 18:00:00',
-            time: '2016-07-32 18:00:00',
-            addr: '龙腾18',
-            state: 1
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
+          },
+          {
+            id: 'YWD212912342',
+            mac: '1108ea95',
+            invalid_time: '2016-1-1   19:21:32',
+            time: '待延保',
+            addr: '湖北, 武汉',
+            state: 0
           }
         ]
       },
