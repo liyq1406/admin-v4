@@ -14,9 +14,9 @@
           </v-select>
         </div>
         <div class="filter-group-item" v-if="products.length">
-          <v-select label="使用指南" width="110px" size="small">
-            <select v-model="selectedProduct">
-              <option :value="opt" v-for="opt in products">{{ opt.label }}</option>
+          <v-select :label="issueType.label" width="110px" size="small">
+            <select v-model="issueType">
+              <option :value="opt" v-for="opt in issueTypeOptions">{{ opt.label }}</option>
             </select>
           </v-select>
         </div>
@@ -225,14 +225,16 @@ export default {
         title: '一般烤箱烤完东西多久才能拔掉电源，会不会影响散热？',
         type: '使用咨询',
         create_time: '2016-6-1 19:21:32'
-      }]
-      // issueTypeOptions: [
-      //   { label: '全部', value: 'all' }
-      // ],
-      // issueType: {
-      //   label: '全部',
-      //   value: 'all'
-      // },
+      }],
+      issueTypeOptions: [
+        { label: '全部问题', value: 'all' },
+        { label: '未处理', value: 'unhandled' },
+        { label: '已处理', value: 'handled' }
+      ],
+      issueType: {
+        label: '全部问题',
+        value: 'all'
+      }
       // periodOptions: [
       //   { label: '不限', value: 'any' },
       //   { label: '最近24小时', value: 24 },
@@ -437,7 +439,11 @@ export default {
         font-size 16px
 
       .metas
+        display block
         color gray-light
+
+        span
+          margin-right 5px
 
       &:hover
         text-decoration none

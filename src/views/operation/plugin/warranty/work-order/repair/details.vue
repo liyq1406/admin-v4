@@ -257,7 +257,7 @@ export default {
             backgroundColor: '#cb4a52'
           }
         ]
-        var html = '<div class="level tac" style="background-color: ' + resutl[state - 1].backgroundColor + ';;width: 50px;display: inline-block">' + resutl[state - 1].text + '</div>'
+        var html = '<div class="level tac" style="color:#FFF; background-color: ' + resutl[state - 1].backgroundColor + ';;width: 50px;display: inline-block">' + resutl[state - 1].text + '</div>'
         return html
       }
     },

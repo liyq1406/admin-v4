@@ -31,14 +31,16 @@
               <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
               </div>
-              <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-                <v-select width="90px" :label="queryType.label" size="small">
-                  <select v-model="queryType">
-                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                  </select>
-                </v-select>
-                <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
-              </search-box>
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                  <v-select width="90px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </v-select>
+                  <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
             </div>
             <div class="filter-group">
               <v-select width="90px" size="small" :label="visibility.label">

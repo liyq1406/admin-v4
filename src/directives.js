@@ -89,7 +89,7 @@ export var tooltip = {
     var inPopup = false
     this.popup = document.createElement('div')
     this.popup.classList.add('x-tooltip', 'x-tooltip-top', 'hidden')
-    document.getElementsByTagName('body')[0].appendChild(this.popup)
+    document.body.appendChild(this.popup)
 
     // 显示提示框
     var showPopup = () => {
@@ -140,6 +140,10 @@ export var tooltip = {
 
   update (val) {
     this.popup.innerHTML = val
+  },
+
+  unbind () {
+    document.body.removeChild(this.popup)
   }
 }
 

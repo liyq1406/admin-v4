@@ -324,7 +324,7 @@
           return html
         }
         function resetLevel (state) {
-          var resutl = [
+          var result = [
             {
               text: '一级',
               backgroundColor: '#ff9966'
@@ -338,7 +338,7 @@
               backgroundColor: '#cb4a52'
             }
           ]
-          var html = '<div class="level" style="background-color: ' + resutl[state - 1].backgroundColor + '">' + resutl[state - 1].text + '</div>'
+          var html = '<div class="level" style="color:#FFF; background-color: ' + result[state - 1].backgroundColor + '">' + result[state - 1].text + '</div>'
           return html
         }
       },

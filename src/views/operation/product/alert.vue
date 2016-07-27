@@ -317,9 +317,37 @@
       return {
         // TODO
         alertChartData: [],
-        alerts: [
-          {}
-        ],
+        alerts: [{
+          content: '设备下线',
+          level: 1
+        }, {
+          content: 'PM2.5超过指标',
+          level: 3
+        }, {
+          content: 'PM2.5超过指标',
+          level: 3
+        }, {
+          content: 'PM2.5超过指标',
+          level: 3
+        }, {
+          content: 'PM2.5超过指标',
+          level: 3
+        }, {
+          content: 'AQI过低',
+          level: 2
+        }, {
+          content: 'AQI过低',
+          level: 2
+        }, {
+          content: 'AQI过低',
+          level: 2
+        }, {
+          content: '滤网失效',
+          level: 3
+        }, {
+          content: '滤网失效',
+          level: 3
+        }],
         rules: [],            // 规则列表
         apps: [],              // app 列表
         ruleTypes: locales[Vue.config.lang].data.RULE_TYPES,
@@ -491,12 +519,18 @@
       tables () {
         var result = []
         this.alerts.map((item) => {
+          var levelCls = ''
+          if (item.level === 2) {
+            levelCls = 'text-label-warning'
+          } else if (item.level === 3) {
+            levelCls = 'text-label-danger'
+          }
           var alert = {
-            content: '设备下线',
+            content: item.content || '设备下线',
             time: '2016-01-01 16:21:13',
-            duration: '1.2h',
+            duration: '1.1h',
             addr: '湖北, 武汉',
-            level: '<div class="level level1 text-label-warning" style="width: 55px">中等</div>',
+            level: `<div class="level level1 text-label ${levelCls}">${item.level === 1 ? '轻微' : item.level === 2 ? '中等' : '严重'}</div>`,
             state: '待处理',
             prototype: item
           }

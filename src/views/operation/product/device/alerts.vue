@@ -70,7 +70,37 @@ export default {
 
   data () {
     return {
-      alerts: [],
+      alerts: [{
+        content: '设备下线',
+        level: 1
+      }, {
+        content: 'PM2.5超过指标',
+        level: 3
+      }, {
+        content: 'PM2.5超过指标',
+        level: 3
+      }, {
+        content: 'PM2.5超过指标',
+        level: 3
+      }, {
+        content: 'PM2.5超过指标',
+        level: 3
+      }, {
+        content: 'AQI过低',
+        level: 2
+      }, {
+        content: 'AQI过低',
+        level: 2
+      }, {
+        content: 'AQI过低',
+        level: 2
+      }, {
+        content: '滤网失效',
+        level: 3
+      }, {
+        content: '滤网失效',
+        level: 3
+      }],
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
@@ -157,12 +187,19 @@ export default {
     tables () {
       var result = []
       this.alerts.map((item) => {
+        var levelCls = ''
+        console.log(item.level)
+        if (item.level === 2) {
+          levelCls = 'text-label-warning'
+        } else if (item.level === 3) {
+          levelCls = 'text-label-danger'
+        }
         var alert = {
-          content: '设备下线',
+          content: item.content || '设备下线',
           time: '2016-01-01 16:21:13',
-          duration: '1.2h',
+          duration: '1.1h',
           addr: '湖北, 武汉',
-          level: '<div class="level level1 text-label-warning" style="width: 55px">中等</div>',
+          level: `<div class="level level1 text-label ${levelCls}">${item.level === 1 ? '轻微' : item.level === 2 ? '中等' : '严重'}</div>`,
           state: '待处理',
           prototype: item
         }
@@ -252,7 +289,8 @@ export default {
       this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
-          this.alerts = res.data.list
+          // TODO
+          // this.alerts = res.data.list
           this.total = res.data.count
           this.loadingData = false
         }

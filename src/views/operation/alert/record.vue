@@ -335,6 +335,7 @@ export default {
       this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
+          // TODO
           this.alerts = res.data.list
           this.total = res.data.count
           this.loadingData = false

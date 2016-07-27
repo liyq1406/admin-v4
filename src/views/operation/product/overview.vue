@@ -74,6 +74,93 @@
         </div>
       </div>
     </div>
+
+    <!-- 编辑产品浮层-->
+    <modal :show.sync="showEditModal">
+      <h3 slot="header">{{ $t("ui.overview.editForm.header") }}</h3>
+      <div slot="body" class="form">
+        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
+            <div class="controls col-18">
+              <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
+                <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.product.fields.name')}) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
+            <div class="controls col-18">
+              <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
+                <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
+              </div>
+              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.desc'), 250]) }}</span></div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
+            <div class="controls col-18">
+              <div class="select">
+                <v-select :label="deviceTypes[editModel.link_type-1]">
+                  <select v-model="editModel.link_type" v-form-ctrl name="link_type">
+                    <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                  </select>
+                </v-select>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row" v-show="editModel.link_type===5">
+            <div class="controls col-18 col-offset-6">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>开启快照功能
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <div class="controls col-18 col-offset-6">
+              <div class="checkbox-group">
+                <label class="checkbox">
+                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <label class="del-check">
+              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
+            </label>
+            <label class="del-check">
+              <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.product.fields.is_release") }}
+            </label>
+            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -825,7 +912,7 @@ export default {
                 this.product = res.data
                 this.resetEdit()
                 this.updateProduct(this.product)
-                this.setCurrProduct(this.product)
+                // this.setCurrProduct(this.product)
               }
             })
           }).catch((res) => {
@@ -869,7 +956,7 @@ export default {
                 datapoint: index
               }
               api.snapshot.updateRule(this.$route.params.id, newParams).then((res) => {
-                console.log(111)
+                console.log('Update rule')
               })
             }
           })
@@ -904,20 +991,34 @@ export default {
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
+
+.x-statistic-left
+  padding-left 10px
 
 .product-card
   clearfix()
   padding 35px 0 20px
 
   .x-statistic
+    padding 5px 0 15px 0
+    margin-right 30px
+
     & > .info
       font-size 36px
       margin 7px 0
 
-    & > .chart
+    & > .change
+      top 5px
+
+    .chart
       size 120px 30px
+
+  .col-6 + .col-6
+    .x-statistic
+      &:after
+        left -30px
 
   .thumb
     float left

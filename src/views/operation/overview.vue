@@ -77,10 +77,10 @@
 
         <panel title="产品分布">
           <div class="row border-top-style">
-            <div class="col-11 tac">
+            <div class="col-13 tac">
               <china-map :data="regions.products.data"></china-map>
             </div>
-            <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
+            <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
               <div class="data-table">
                 <table class="table">
                   <thead>
@@ -385,7 +385,7 @@ export default {
     this.statistic.users = {
       info: {
         change: 32,
-        total: 3172
+        total: 61720
       },
       data: Mock.mock({
         'list|20': [{
@@ -424,7 +424,7 @@ export default {
     this.statistic.devices.online = {
       info: Mock.mock({
         change: 5,
-        total: 4205,
+        total: 14205,
         changeunit: '%'
       }),
       data: Mock.mock({
