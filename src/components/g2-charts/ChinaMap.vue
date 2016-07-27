@@ -37,14 +37,18 @@ export default {
     render () {
       var Stat = window.G2.Stat
       var userData = this.data
+      var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
+      console.log(width)
+      var height = width * (6 / 7)
+      var mt = (width - height) / 2
       // 默认配置
       var defaults = {
         container: this.$el,
         // forceFit: true,
-        width: 600,
-        height: 500,
+        width: width,
+        height: height,
         plotCfg: {
-          margin: [30, 0]
+          margin: [mt, 0]
         }
       }
 

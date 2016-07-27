@@ -80,7 +80,7 @@
             <div class="col-10 tac">
               <china-map :data="regions.products.data"></china-map>
             </div>
-            <div class="col-13 col-offset-1 data-table-wrap" style="min-height: 500px">
+            <div class="col-13 col-offset-1 data-table-wrap mt20">
               <div class="data-table">
                 <table class="table">
                   <thead>
