@@ -164,8 +164,8 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-14">
-              <time-line :data="trends.users.data" type="smooth"></time-line>
+            <div class="col-14 mb20">
+              <time-line :data="trends.users.data" type="smooth" :margin="customMargin"></time-line>
             </div>
             <div class="col-10 mt40">
               <div class="tac">
@@ -218,6 +218,7 @@ export default {
 
   data () {
     return {
+      customMargin: [30, 10, 30, 30],
       currIndex: 0,
       currIndex2: 0,
       // 统计
@@ -738,7 +739,7 @@ export default {
   h3
     font-size 14px
     text-indent 180px
-    margin 20px 0 5px
+    margin 10px 0 5px
     color gray
 .blockdiv
   display block!important

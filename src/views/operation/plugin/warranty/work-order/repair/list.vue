@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="panel no-split-line">
+    <!-- <div class="panel no-split-line">
       <div class="panel-bd">
         <div class="with-loading">
           <time-line :data="trends" :type="'smooth'"></time-line>
@@ -29,7 +29,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="panel"></div>
     <div class="row statistic-group mb30">
       <div class="col-6">

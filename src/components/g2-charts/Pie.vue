@@ -24,7 +24,12 @@ export default {
     },
     height: {
       type: Number,
-      default: 500
+      default: 300
+    },
+    margin: {
+      default () {
+        return [50, 0, 0, 0]
+      }
     }
   },
 
@@ -60,13 +65,14 @@ export default {
       var defaults = {
         container: this.$el, // 容器
         forceFit: true, // 强制宽度自适应
-        height: this.height // 高度
-        // plotCfg: {
-        //   margin:  // 边距
-        // }
+        height: this.height, // 高度
+        plotCfg: {
+          margin: this.margin// 边距
+        }
       }
       var legendDefaults = {
-        position: 'bottom'
+        position: 'top',
+        itemWrap: true
       }
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
       this.chart = chart

@@ -19,6 +19,11 @@ export default {
     type: {
       type: String,
       default: 'line'
+    },
+    margin: {
+      default () {
+        return [50, 50, 30, 30]
+      }
     }
   },
 
@@ -50,13 +55,14 @@ export default {
       if (!this.data || this.data.length <= 0) {
         return
       }
+
       // 默认配置
       var defaults = {
         container: this.$el, // 容器
         forceFit: true, // 强制宽度自适应
-        height: 500, // 高度
+        height: 300, // 高度
         plotCfg: {
-          margin: 80 // 边距
+          margin: this.margin// 边距
         }
       }
 

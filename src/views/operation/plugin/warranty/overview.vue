@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="panel mt20">
-      <div class="panel-hd panel-hd-full bordered">
+      <div class="panel-hd panel-hd-full bordered mb0">
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
@@ -72,10 +72,10 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-7">
-            <pie :data="feedbacks" :height="400"></pie>
+          <div class="col-9">
+            <pie :data="feedbacks" :height="400" :margin="customPieMargin"></pie>
           </div>
-          <div class="col-16 col-offset-1 data-table-wrap" style="min-height: 400px">
+          <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 400px">
             <div class="data-table">
               <table class="table">
                 <thead>
@@ -164,6 +164,7 @@ export default {
 
   data () {
     return {
+      customPieMargin: [100, 0, 0, 70],
       feedbacks: [
         {
           name: '电源故障',

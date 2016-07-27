@@ -42,7 +42,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
-            <time-line :data="trends.users.data" type="smooth"></time-line>
+            <time-line :data="trends.users.data" type="smooth" :margin="customMargin"></time-line>
           </div>
           <div class="col-10 mt40">
             <div class="tac">
@@ -66,7 +66,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
-            <time-line :data="trends.products.data" type="smooth"></time-line>
+            <time-line :data="trends.products.data" type="smooth" :margin="customMargin"></time-line>
           </div>
           <div class="col-10">
             <pie :data="proportion.devices.activated.data"></pie>
@@ -130,6 +130,7 @@ export default {
 
   data () {
     return {
+      customMargin: [30, 10, 30, 30],
       deviceTypes: locales[Vue.config.lang].data.DEVICE_TYPES,
       delChecked: false,
       product: {},
