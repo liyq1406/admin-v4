@@ -40,11 +40,11 @@
               <span class="metas"><span>[使用咨询]</span><span>2016-1-1 19:21:32</span></span>
             </a>
           </li> -->
-          <li class="issue-list-item" v-for="n in 6">
-            <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + n}">
+          <li class="issue-list-item" v-for="summary in summaries">
+            <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + summary.id}">
               <i class="fa fa-check-square-o"></i>
-              <span class="info">鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买</span>
-              <span class="metas"><span>[使用咨询]</span><span>2016-1-1 19:21:32</span></span>
+              <span class="info">{{ summary.title }}</span>
+              <span class="metas"><span>[{{ summary.type }}]</span><span>{{ summary.create_time }}</span></span>
             </a>
           </li>
         </ul>
@@ -177,7 +177,19 @@ export default {
       addValidation: {},
       originAddModel: {},
       // querying: false,
-      loadingData: false
+      loadingData: false,
+      summaries: [{
+        id: 12345,
+        title: '鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买',
+        type: '使用咨询',
+        create_time: '2016-1-1 19:21:32'
+      },
+      {
+        id: 23456,
+        title: '鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买',
+        type: '使用咨询',
+        create_time: '2016-1-1 19:21:32'
+      }]
       // issueTypeOptions: [
       //   { label: '全部', value: 'all' }
       // ],
@@ -273,7 +285,7 @@ export default {
   },
 
   ready () {
-    this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/0')
+    this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/12345')
   },
 
   methods: {
