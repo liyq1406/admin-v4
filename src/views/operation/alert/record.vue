@@ -278,6 +278,21 @@ export default {
   },
 
   ready () {
+    // TODO
+    this.alertTrends = Mock.mock({
+      'list|14': [{
+        'date|+1': [
+          new Date(2016, 7, 15),
+          new Date(2016, 7, 16),
+          new Date(2016, 7, 17),
+          new Date(2016, 7, 18),
+          new Date(2016, 7, 19),
+          new Date(2016, 7, 20),
+          new Date(2016, 7, 21)
+        ],
+        'count|+1': [6, 8, 9, 5, 9, 12, 9]
+      }]
+    }).list
   },
 
   route: {
@@ -350,21 +365,6 @@ export default {
     getAlertTrends () {
       api.statistics.getAlertTrend(this.past, this.today).then((res) => {
         if (res.status === 200) {
-          // TODO
-          this.alertTrends = Mock.mock({
-            'list|14': [{
-              'date|+1': [
-                new Date(2016, 7, 15),
-                new Date(2016, 7, 16),
-                new Date(2016, 7, 17),
-                new Date(2016, 7, 18),
-                new Date(2016, 7, 19),
-                new Date(2016, 7, 20),
-                new Date(2016, 7, 21)
-              ],
-              'count|+1': [6, 8, 9, 3, 9, 3, 9]
-            }]
-          }).list
         }
       }).catch((res) => {
         this.handleError(res)
