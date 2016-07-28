@@ -3,29 +3,29 @@
     <div class="row statistic">
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.users.info" title="设备总数" tooltip="设备总数说明" :has-chart="true" align="center" :titletop="true">
-            <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
-          </statistic>
-        </panel>
-      </div>
-      <div class="col-6">
-        <panel>
-          <statistic :info="statistic.devices.total.info" title="激活数" tooltip="激活数说明" color="green" :has-chart="true" align="center" :titletop="true">
+          <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
           </statistic>
         </panel>
       </div>
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.devices.activated.info" title="在线量" tooltip="在线量说明" color="blue" :has-chart="true" align="center" :titletop="true">
+          <statistic :info="statistic.devices.activated.info" title="激活数" tooltip="激活数说明" color="green" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
           </statistic>
         </panel>
       </div>
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.devices.online.info" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true" align="center" :titletop="true">
+          <statistic :info="statistic.devices.online.info" title="在线量" tooltip="在线量说明" color="blue" :has-chart="true" align="center" :titletop="true">
             <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
+          </statistic>
+        </panel>
+      </div>
+      <div class="col-6">
+        <panel>
+          <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true" align="center" :titletop="true">
+            <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
           </statistic>
         </panel>
       </div>
@@ -199,7 +199,7 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 import Mock from 'mockjs'
 import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
@@ -242,8 +242,12 @@ export default {
         // 用户总数
         users: {
           options: {},
+          // info: {
+          //   changeunit: '%'
+          // },
           info: {
-            changeunit: '%'
+            total: '0',
+            change: ''
           },
           data: []
         },
@@ -252,19 +256,28 @@ export default {
           // 总数
           total: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           },
           // 激活设备
           activated: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           },
           // 在线设备
           online: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           }
         }
@@ -340,6 +353,7 @@ export default {
   },
 
   ready () {
+    this.getSummary()
     // 配色
     const COLORS = {
       'gray': '#383838',
@@ -399,57 +413,44 @@ export default {
     //   }]
     // }
     this.statistic.users = {
-      info: {
-        change: 32,
-        total: 61720
-      },
+      info: this.statistic.users.info,
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
           'count|+1': [139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
         }]
       }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['gray']})
+      options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
     this.statistic.devices.total = {
-      info: {
-        change: 139,
-        total: 58425
-      },
+      info: this.statistic.devices.total.info,
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
           'count|+1': [139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58]
         }]
       }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['green']})
+      options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.devices.activated = {
-      info: Mock.mock({
-        change: 67,
-        total: 29887
-      }),
+      info: this.statistic.devices.activated.info,
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
           'count|+1': [58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124]
         }]
       }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['blue']})
+      options: _.merge({}, statisticOptions, {color: COLORS['green']})
     }
     this.statistic.devices.online = {
-      info: Mock.mock({
-        change: 5,
-        total: 14205,
-        changeunit: '%'
-      }),
+      info: this.statistic.devices.online.info,
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
           'count|+1': [157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124]
         }]
       }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['orange']})
+      options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
 
     // 产品趋势分析 -----------------------------------------------------
@@ -740,6 +741,25 @@ export default {
   },
 
   methods: {
+    getSummary () {
+      this.loadingData = true
+      api.statistics.getSummary().then((res) => {
+        if (res.status === 200) {
+          this.statistic.devices.activated.info.total = res.data.total.activated
+          this.statistic.devices.total.info.total = res.data.total.total
+          this.statistic.devices.online.info.total = res.data.total.online
+          this.statistic.devices.total.info.change = res.data.total.today_add
+          this.statistic.devices.activated.info.change = res.data.total.today_activated || 0
+          this.statistic.users.info.total = res.data.user.total
+          this.statistic.users.info.change = res.data.user.today_add || 0
+
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    }
   }
 }
 </script>
