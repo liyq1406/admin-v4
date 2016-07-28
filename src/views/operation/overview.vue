@@ -32,7 +32,7 @@
     </div>
     <div class="row">
       <div class="col-24">
-        <panel title="产品趋势">
+        <panel title="产品趋势" class="mb20">
           <div class="left-actions blockdiv" slot="left-actions">
             <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label"></span></radio-button-group>
             <!-- <radio-button-group :hasline="true" :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group> -->
@@ -46,26 +46,32 @@
             <div class="col-14">
               <time-line :data="trends.products.data" :type="'smooth'"></time-line>
             </div>
-            <div class="col-10">
+            <div class="col-9">
               <div class="row">
                 <div class="col-24 col-offset-1 tac pd15">
                   <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
                 </div>
               </div>
               <div class="top">
-                <h3>今日新增TOP3</h3>
+                <h3>7天激活TOP5</h3>
                 <interval :data="trends.products.topAdded.data" :options="trends.products.topAdded.options"></interval>
               </div>
-              <div class="top">
+              <!-- <div class="top">
                 <h3>今日在线TOP3</h3>
                 <interval :data="trends.products.topOnline.data" :options="trends.products.topOnline.options"></interval>
-              </div>
+              </div> -->
             </div>
           </div>
         </panel>
 
-        <panel title="产品活跃度">
-          <div class="row border-top-style">
+        <panel>
+          <div class="panel-hd bordered">
+            <h2 class="col-4">产品活跃度</h2>
+            <div class="fr col-20 products-trends-head">
+              <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label"></span></radio-button-group>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-14">
               <time-line :data="trends.products.data" type="smooth"></time-line>
             </div>
@@ -164,17 +170,27 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-14 mb20">
+            <div class="col-offset-12 col-12 row">
+              <div class="col-12">
+                <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+              </div>
+              <div class="col-12">
+                <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-24 mb20">
               <time-line :data="trends.users.data" type="smooth" :margin="customMargin"></time-line>
             </div>
-            <div class="col-10 mt40">
+            <!-- <div class="col-10 mt40">
               <div class="tac">
                 <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
               </div>
               <div class="tac">
                 <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
               </div>
-            </div>
+            </div> -->
           </div>
         </panel>
       </div>

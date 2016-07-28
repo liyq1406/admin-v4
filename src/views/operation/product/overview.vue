@@ -41,17 +41,27 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-14">
+          <div class="col-offset-12 col-12 row">
+            <div class="col-12">
+              <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+            </div>
+            <div class="col-12">
+              <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-24">
             <time-line :data="trends.users.data" type="smooth" :margin="customMargin"></time-line>
           </div>
-          <div class="col-10 mt40">
+          <!-- <div class="col-10 mt40">
             <div class="tac">
               <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
             </div>
             <div class="tac">
               <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
