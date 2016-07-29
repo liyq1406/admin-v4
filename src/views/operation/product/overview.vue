@@ -250,7 +250,10 @@ export default {
         // 用户总数
         users: {
           options: {},
-          info: {},
+          info: {
+            total: '',
+            change: ''
+          },
           data: []
         },
         // 设备
@@ -258,19 +261,28 @@ export default {
           // 总数
           total: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           },
           // 激活设备
           activated: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           },
           // 在线设备
           online: {
             options: {},
-            info: {},
+            info: {
+              total: '',
+              change: ''
+            },
             data: []
           }
         }
@@ -371,6 +383,7 @@ export default {
   },
 
   ready () {
+    this.getProductSummary()
     // alert(this.isProduct1)
     // 配色
     const COLORS = {
@@ -433,10 +446,7 @@ export default {
       }]
     }
     this.statistic.users = {
-      info: {
-        change: 34,
-        total: 2682
-      },
+      info: this.statistic.users.info,
       data: Mock.mock({
         'list|20': [{
           'date|+1': genDates(20),
@@ -446,26 +456,17 @@ export default {
       options: _.merge({}, statisticOptions, {color: COLORS['gray']})
     }
     this.statistic.devices.total = {
-      info: {
-        change: 139,
-        total: 25836
-      },
+      info: this.statistic.devices.total.info,
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['green']})
     }
     this.statistic.devices.activated = {
-      info: {
-        change: 53,
-        total: 10334
-      },
+      info: this.statistic.devices.activated.info,
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['blue']})
     }
     this.statistic.devices.online = {
-      info: {
-        change: 8,
-        total: 1689
-      },
+      info: this.statistic.devices.online.info,
       data: Mock.mock(tplStatData).list,
       options: _.merge({}, statisticOptions, {color: COLORS['orange']})
     }
@@ -811,6 +812,26 @@ export default {
   },
 
   methods: {
+    // 全局分析
+    getProductSummary () {
+      this.loadingData = true
+      api.statistics.getProductSummary(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.statistic.devices.activated.info.total = res.data.activated
+          this.statistic.devices.total.info.total = res.data.total
+          this.statistic.devices.online.info.total = res.data.online
+          this.statistic.devices.total.info.change = res.data.today_add_device || 0
+          this.statistic.devices.activated.info.change = res.data.today_activated_device || 0
+          this.statistic.users.info.total = res.data.total_user
+          this.statistic.users.info.change = res.data.today_add_user || 0
+
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
     // 获取当前产品
     getProduct () {
       api.product.getProduct(this.$route.params.id).then((res) => {
