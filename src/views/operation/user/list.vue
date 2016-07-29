@@ -6,9 +6,6 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
@@ -29,38 +26,8 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" @tbody-nickname="goDetails"></x-table>
-          <!-- <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>{{ $t('ui.user.fields.nick_name') }}</th>
-                <th>{{ $t('ui.user.fields.account') }}</th>
-                <th>{{ $t('ui.user.fields.create_date') }}</th>
-                <th>{{ $t('ui.user.fields.source') }}</th>
-                <th>{{ $t('common.status') }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="users.length > 0">
-                <tr v-for="user in users">
-                  <td><a v-link="{path: '/operation/users/'+user.id + '/device'}" class="hl-red">{{ user.id }}</a></td>
-                  <td>{{ user.nickname }}</td>
-                  <td>{{ user.account }}</td>
-                  <td>{{ user.create_date | formatDate }}</td>
-                  <td><span v-if="user.source===1">Web</span><span v-if="user.source===2">Android</span><span v-if="user.source===3">iOS</span><span v-if="user.source===4">{{ $('common.wechat') }}</span></td>
-                  <td><span>{{ user.phone_valid || user.email_valid ? $t('ui.user.status.activate') :  $t('ui.user.status.deactivate') }}</span></td>
-                </tr>
-              </template>
-              <tr v-if="total === 0 && !loadingData">
-                <td colspan="6" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table> -->
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortStatus" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
-        <!-- <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getUsers"></pager> -->
       </div>
     </div>
   </div>
@@ -72,8 +39,8 @@
   import Select from 'components/Select'
   import api from 'api'
   import * as config from 'consts/config'
-  import Pager from 'components/Pager'
   import Table from 'components/Table'
+  import { formatDate } from 'src/filters'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -85,7 +52,6 @@
       'search-box': SearchBox,
       'modal': Modal,
       'api': api,
-      'pager': Pager,
       'v-select': Select,
       'x-table': Table
     },
@@ -94,11 +60,12 @@
       return {
         query: '',
         searching: false,
-        users: [],
         total: 0,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
+        sortByStatus: false,
+        users: [],
         headers: [
           {
             key: 'nickname', // 与tables的key对应
@@ -110,16 +77,16 @@
           },
           {
             key: 'create_date',
-            title: '创建时间',
-            tooltip: '提示内容'
+            title: '创建时间'
+            // tooltip: '提示内容'
           },
           {
-            key: 'from',
+            key: 'source',
             class: 'tac',
             title: '来源'
           },
           {
-            key: 'state',
+            key: 'status',
             title: '状态',
             class: 'tac',
             sortType: '-1'
@@ -127,8 +94,7 @@
           {
             key: 'expand',
             title: '拓展',
-            class: 'tac',
-            pointer: true
+            class: 'tac'
           }
         ]
       }
@@ -137,6 +103,7 @@
     computed: {
       /**
        * 传入智能表格的分页对象
+       * 国辉
        * @return {[type]} [description]
        */
       page () {
@@ -147,18 +114,23 @@
         }
         return result
       },
-      // 传入智能表格的数据对象
+      /**
+       * 传入智能表格的数据对象
+       * 国辉
+       * @return {[type]} [description]
+       */
       tables () {
         var result = []
         this.users.map((user) => {
-          var table = {}
-          for (let key in user) {
-            if (user.hasOwnProperty(key)) {
-              table[key] = user[key]
-            }
+          var table = {
+            nickname: '<a style="color: #c0252e">' + user.nickname + '</a>',
+            account: user.account,
+            create_date: formatDate(user.create_date),
+            source: this.computedSource(user.source),
+            status: this.computedStatus(user.status),
+            expand: '暂未定义',
+            prototype: user
           }
-          table.nickname = '<a style="color: #c0252e">' + user.nickname + '</a>'
-          table.prototype = user
           result.push(table)
         })
         return result
@@ -176,24 +148,95 @@
           condition.query['account'] = { $like: this.query }
         }
 
+        this.headers.map((item) => {
+          if (item.sortType) {
+            condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          }
+        })
+
         return condition
       }
     },
 
     route: {
       data () {
-        // this.getUsers()
-        this.getUsers1()
+        this.getUsers()
+        // this.getUsers1()
       }
     },
 
     methods: {
-      test (a, b) {
-        console.log(a)
-        console.log(b)
+      /**
+       * 当前页码改变
+       * 国辉
+       * @param  {[type]} number [description]
+       * @return {[type]}        [description]
+       */
+      currentPageChange (number) {
+        this.currentPage = number
+        this.getUsers()
       },
+      /**
+       * 每页显示的数量改变
+       * 国辉
+       * @param  {[type]} count 每页显示数量
+       * @return {[type]}       [description]
+       */
+      pageCountUpdate (count) {
+        this.countPerPage = count
+        this.getUsers()
+      },
+      /**
+       * 按照状态排序
+       * 国辉
+       * @param  {[type]} table [description]
+       * @return {[type]}       [description]
+       */
+      sortStatus (header, index) {
+        if (header.sortType === 1) {
+          header.sortType = -1
+        } else {
+          header.sortType = 1
+        }
+        this.headers.$set(index, header)
+        this.getUsers()
+      },
+      /**
+       * 解析当前的用户来源
+       * 国辉
+       * @param  {[type]} source [description]
+       * @return {[type]}        [description]
+       */
+      computedSource (source) {
+        var result = {
+          '1': 'Web',
+          '2': 'Android',
+          '3': 'IOS',
+          '4': '微信'
+        }
+        return result[source]
+      },
+      /**
+       * 解析用户状态
+       * 国辉
+       * @param  {[type]} status [description]
+       * @return {[type]}        [description]
+       */
+      computedStatus (status) {
+        var result = {
+          '1': '正常',
+          '2': '停用'
+        }
+        return result[status]
+      },
+      /**
+       * 进入详情页
+       * 国辉
+       * @param  {[type]} table [description]
+       * @return {[type]}       [description]
+       */
       goDetails (table) {
-        this.$route.router.go('/operation/users/details/' + table.id)
+        this.$route.router.go('/operation/users/details/' + table.prototype.id)
       },
       /**
        * 获取假用户数据
@@ -206,8 +249,8 @@
             nickname: 'idididid',
             account: '1155028391',
             create_date: '2016-1-1 19:21:32',
-            from: 'iOS',
-            state: '下线',
+            source: 'iOS',
+            status: '下线',
             expand: '暂未定义'
           },
           {
@@ -215,8 +258,8 @@
             nickname: '<a style="color: #c0252e">idididid</a>',
             account: '1155028391',
             create_date: '2016-1-1 19:21:32',
-            from: 'iOS',
-            state: '下线',
+            source: 'iOS',
+            status: '下线',
             expand: '暂未定义'
           }
         ]
