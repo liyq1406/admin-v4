@@ -1,5 +1,7 @@
 <template>
-  <div class="x-single-line"></div>
+  <div class="x-time-line">
+    <div v-if="!data || data.length===0" class="default">没有数据</div>
+  </div>
 </template>
 
 <script>
@@ -113,4 +115,11 @@ export default {
 </script>
 
 <style lang="stylus">
+.x-time-line
+  .default
+    height 300px
+    width 100%
+    line-height 300px
+    display inline-block
+    text-align center
 </style>

@@ -1,5 +1,7 @@
 <template>
-  <div class="x-pie"></div>
+  <div class="x-pie">
+    <div v-if="!data || data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+  </div>
 </template>
 
 <script>
@@ -36,6 +38,14 @@ export default {
   data () {
     return {
       chart: null
+    }
+  },
+
+  computed: {
+    noDataHeight () {
+      if (this.height) {
+        return this.height.toString() + 'px'
+      }
     }
   },
 
@@ -141,3 +151,13 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+.x-pie
+  .default
+    height 300px
+    width 100%
+    line-height 300px
+    display inline-block
+    text-align center
+</style>

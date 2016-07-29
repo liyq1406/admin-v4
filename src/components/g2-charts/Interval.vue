@@ -1,5 +1,7 @@
 <template>
-  <div class="x-interval"></div>
+  <div class="x-interval">
+    <div v-if="!data || data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+  </div>
 </template>
 
 <script>
@@ -30,6 +32,14 @@ export default {
   data () {
     return {
       chart: null
+    }
+  },
+
+  computed: {
+    noDataHeight () {
+      if (this.options.props) {
+        return this.options.props.height.toString() + 'px'
+      }
     }
   },
 
@@ -130,4 +140,9 @@ export default {
 </script>
 
 <style lang="stylus">
+.x-interval
+  .default
+    width 100%
+    text-align center
+    display inline-block
 </style>
