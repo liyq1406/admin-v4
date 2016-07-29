@@ -49,13 +49,17 @@ export default {
 
   computed: {
     secNav () {
-      var result = {
+      let result = {
         alias: 'operation',
         url: '/operation',
         subs: []
       }
-      var subs = MAIN_NAV.operation.subs
+      let subs = MAIN_NAV.operation.subs
+      // 概览
       result.subs.push(subs[0])
+
+      // 产品导航
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'distributing', 'analysis', 'addon']
       this.products.forEach((item) => {
         result.subs.push({
           name: item.name,
@@ -63,32 +67,18 @@ export default {
           alias: 'products',
           icon: 'link',
           id: item.id,
-          subs: [{
-            alias: 'overview',
-            url: `/products/${item.id}/overview`
-          }, {
-            alias: 'devices',
-            url: `/products/${item.id}/devices`
-          }, {
-            alias: 'alerts',
-            url: `/products/${item.id}/alerts`
-          }, {
-            alias: 'device_map',
-            url: `/products/${item.id}/device-map`
-          }, {
-            alias: 'distributing',
-            url: `/products/${item.id}/distributing`
-          }, {
-            alias: 'analysis',
-            url: `/products/${item.id}/analysis`
-          }, {
-            alias: 'addon',
-            url: `/products/${item.id}/addon`
-          }]
+          subs: PRO_SUBS.map((sub) => {
+            return {
+              alias: sub,
+              url: `/products/${item.id}/${sub}`
+            }
+          })
         })
       })
+
+      // 插件导航
       this.plugins.forEach((item) => {
-        var sub = {
+        let sub = {
           name: item.name,
           type: 'plugin',
           alias: item.plugin,
@@ -192,6 +182,8 @@ export default {
           result.subs.push(sub)
         }
       })
+
+      // 其他导航
       result.subs = result.subs.concat(subs.slice(1, subs.length))
       // console.log(subs.slice(1, subs.length))
       // this.nav.subs.forEach((item, index) => {

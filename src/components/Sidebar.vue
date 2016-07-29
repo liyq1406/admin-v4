@@ -8,7 +8,7 @@
           <div class="nav-aside-item" v-for="item in subs">
             <a class="nav-aside-item-title" v-link="{path: nav.url + '/' + (item.url || item.alias) + (item.id?'/' + item.id:'')}" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
             <ul class="sub-nav" v-show="item.subs && item.subs.length && item.unfold">
-              <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + link.alias) }}</span></a></li>
+              <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + strikeToLodash(link.alias)) }}</span></a></li>
             </ul>
           </div>
           <!-- End: 插件管理 -->
@@ -78,6 +78,15 @@ export default {
   // },
 
   methods: {
+    /**
+     * 中划线转下划线
+     * @param  {String} val  目标值
+     * @return {String}
+     */
+    strikeToLodash (val) {
+      return val.replace(/-/g, '_')
+    },
+
     toggle (nav, e) {
       if (nav.subs && nav.subs.length) {
         e.preventDefault()
