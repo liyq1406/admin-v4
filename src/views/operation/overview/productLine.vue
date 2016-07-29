@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import api from 'api'
 import Mock from 'mockjs'
 import Panel from 'components/Panel'
 import TimeLine from 'components/g2-charts/TimeLine'
@@ -68,12 +67,6 @@ export default {
   layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
-
-  vuex: {
-    getters: {
-      products: ({ products }) => products.all
-    }
-  },
 
   components: {
     Panel,
@@ -119,17 +112,6 @@ export default {
       // 产品信息占比
       activated: {
         data: []
-      }
-    }
-  },
-
-  watch: {
-    products () {
-      if (this.products.length > 0) {
-        this.products.forEach((item) => {
-          this.getProductTrend(item.id, '2016-7-22', '2016-7-29')
-        })
-        // this.getProductTrend()
       }
     }
   },
@@ -213,38 +195,6 @@ export default {
     // }
   },
   methods: {
-    getProductTrend (productIdid, startDay, endDay) {
-      this.createDurationTime()
-      api.statistics.getProductTrend(productIdid, startDay, endDay).then((res) => {
-        console.log(res)
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
-    createDurationTime (duration) {
-      var curTime = new Date()
-      var startTime = curTime
-      // var curStr = cur.getFullYear().toString() + '-' + (cur.getMonth() + 1).toString() + '-' + cur.getDate().toString()
-      switch (duration) {
-        case 7:
-          startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 7)
-          break
-        case 30:
-          startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 30)
-          break
-        case 90:
-          startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 90)
-          break
-        default:
-          startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 7)
-          break
-      }
-
-      var startDay = startTime.getFullYear().toString() + '-' + (startTime.getMonth() + 1).toString() + '-' + startTime.getDate().toString()
-      var endDay = curTime.getFullYear().toString() + '-' + (curTime.getMonth() + 1).toString() + '-' + curTime.getDate().toString()
-
-      return [startDay, endDay]
-    }
   }
 }
 </script>
@@ -262,7 +212,8 @@ export default {
 .top
   h3
     font-size 14px
-    text-indent 180px
+    text-indent 80px
+    text-align left
     margin 10px 0 5px
     color gray
 </style>
