@@ -588,6 +588,15 @@ let configRouter = (router) => {
           }
         },
 
+        // 告警分析详情
+        'alerts/analysis/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/alert/analysis-detail'))
+            }, 'admin')
+          }
+        },
+
         // 热力分布
         'alerts/heat': {
           component (resolve) {

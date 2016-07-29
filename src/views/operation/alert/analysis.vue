@@ -59,7 +59,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="item in warningLevel">
-                    <td>{{item.name}}</td>
+                    <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                     <td>{{item.value}}</td>
                     <td>14%</td>
                   </tr>
@@ -142,7 +142,8 @@ export default {
           name: '轻度',
           value: 20
         }
-      ]
+      ],
+      showlink: false
     }
   },
 
@@ -208,57 +209,70 @@ export default {
               value: 20
             }
           ]
+          this.showlink = false
           this.levelTitle = '告警'
           break
         case 1:
           this.warningLevel = [
             {
+              id: 123,
               name: '异常下线',
               value: 10
             },
             {
+              id: 123,
               name: '温度过高',
               value: 30
             },
             {
+              id: 123,
               name: '风机异常',
               value: 20
             }
           ]
+          this.showlink = true
           this.levelTitle = '轻度告警'
           break
         case 2:
           this.warningLevel = [
             {
+              id: 123,
               name: '湿度超高',
               value: 10
             },
             {
+              id: 123,
               name: '风机异常',
               value: 20
             }
           ]
+          this.showlink = true
           this.levelTitle = '轻度告警'
           break
         case 3:
           this.warningLevel = [
             {
+              id: 123,
               name: '滤芯异常',
               value: 10
             },
             {
+              id: 123,
               name: 'PM2.5超过指标',
               value: 30
             },
             {
+              id: 123,
               name: 'CO2超过指标',
               value: 20
             },
             {
+              id: 123,
               name: '电源异常',
               value: 20
             }
           ]
+          this.showlink = true
           this.levelTitle = '重度告警'
           break
         default:

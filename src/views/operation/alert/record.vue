@@ -13,9 +13,6 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div>
-        <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
         </div>
         <div class="filter-group-item">
@@ -35,16 +32,16 @@
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="alertSummary.device" :title="$t('ui.alert.statistic.device')" align="left"></statistic>
+        <statistic :info="alertSummary.unread" :title="alertSummary.unread.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.message" :title="$t('ui.alert.statistic.message')" align="left"></statistic>
+        <statistic :info="alertSummary.today" :title="alertSummary.today.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.unread" :title="$t('ui.alert.statistic.unread')" align="left"></statistic>
+        <statistic :info="alertSummary.week" :title="alertSummary.week.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="alertSummary.add_today" :title="$t('ui.alert.statistic.add_today')" align="left"></statistic>
+        <statistic :info="alertSummary.month" :title="alertSummary.month.title" align="left"></statistic>
       </div>
     </div>
     <div class="panel">
@@ -235,18 +232,22 @@ export default {
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: {
+          title: '待处理告警',
           total: 0,
           change: 0
         },
-        add_today: {
+        today: {
+          title: '今日告警',
           total: 0,
           change: 0
         },
-        device: {
+        week: {
+          title: '7天告警数',
           totoal: 0,
           change: 0
         },
-        message: {
+        month: {
+          title: '30天告警数',
           total: 0,
           change: 0
         }
