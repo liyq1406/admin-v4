@@ -82,30 +82,34 @@ export var animatedNumber = {
   }
 }
 
-// 提示
+/**
+ * 弹出提示
+ * 使用方法：
+ *   <div tooltip="要显示的文本">...</div>
+ */
 export var tooltip = {
   bind () {
-    var inTrigger = false
-    var inPopup = false
+    let inTrigger = false
+    let inPopup = false
     this.popup = document.createElement('div')
     this.popup.classList.add('x-tooltip', 'x-tooltip-top', 'hidden')
     document.body.appendChild(this.popup)
 
     // 显示提示框
-    var showPopup = () => {
+    let showPopup = () => {
       this.popup.classList.remove('hidden')
-      this.vm.$nextTick(() => {
+      window.setTimeout(() => {
         var x = this.el.getBoundingClientRect().left + document.documentElement.scrollLeft
         var y = this.el.getBoundingClientRect().top + document.documentElement.scrollTop
 
         // TODO 这里的12是硬编码，莫名其妙的差了12像数
         this.popup.style.left = `${x - (this.el.clientWidth + this.popup.clientWidth) / 2 + 12}px`
         this.popup.style.top = `${y - this.popup.clientHeight - 10}px`
-      })
+      }, 500)
     }
 
     // 隐藏提示框
-    var hidePopup = () => {
+    let hidePopup = () => {
       this.popup.classList.add('hidden')
     }
 

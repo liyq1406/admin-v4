@@ -2,44 +2,51 @@
   <div class="main">
     <panel>
       <div class="product-card">
-        <div class="thumb"><img src="../../../assets/images/device_thumb.png"/></div>
+        <div class="thumb"><img :src="deviceThumb"/></div>
         <div class="info">
-          <h2>{{ product.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h2>
-          <div class="desc">{{ product.description }}</div>
-          <div class="row statistic changetop">
+          <h2>{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></h2>
+          <div class="desc">{{ currentProduct.description }}</div>
+          <!-- Start: 产品信息统计 -->
+          <div class="row">
             <div class="col-6">
-              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="green" :has-chart="true" align="left" :titletop="true">
-                <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
+              <statistic :info="statistic.devices.total.info" title="设备总数" tooltip="设备总数说明" color="gray" :has-chart="true" align="left" :titletop="true">
+                <interval-icon color="gray" :height="22"></interval-icon>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.devices.activated.info" title="激活设备数" tooltip="激活设备总数说明" color="blue" :has-chart="true" align="left" :titletop="true">
-                <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
+              <statistic :info="statistic.devices.activated.info" title="激活设备数" tooltip="激活设备总数说明" color="green" :has-chart="true" align="left" :titletop="true">
+                <interval-icon color="green" :height="22"></interval-icon>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.devices.online.info" title="在线设备数" tooltip="在线设备总数说明" color="orange" :has-chart="true" :titletop="true">
-                <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
+              <statistic :info="statistic.devices.online.info" title="在线设备数" tooltip="在线设备总数说明" color="blue" :has-chart="true" :titletop="true">
+                <interval-icon color="blue" :height="22"></interval-icon>
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" :has-chart="true" :titletop="true">
-                <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
+              <statistic :info="statistic.users.info" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true" :titletop="true">
+                <interval-icon color="orange" :height="22"></interval-icon>
               </statistic>
             </div>
           </div>
+          <!-- End: 产品信息统计 -->
         </div>
       </div>
     </panel>
 
-    <div class="panel mt20">
-      <div class="panel-hd bordered">
+    <div class="panel mt20 no-split-line">
+      <div class="panel-hd">
         <h2 class="col-4">产品趋势</h2>
-        <div class="fr col-20 products-trends-head">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-        </div>
       </div>
       <div class="panel-bd">
+        <div class="tab-s2 tab-s2-full mb5">
+          <div class="actions">
+            <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          </div>
+          <ul>
+            <li v-for="label in trendTabs.labels" :class="{'active':trendTabs.curr===$index+1}" @click="getTrends($index)">{{ label }}</li>
+          </ul>
+        </div>
         <div class="row">
           <div class="col-offset-12 col-12 row">
             <div class="col-12">
@@ -180,7 +187,7 @@ import locales from 'consts/locales/index'
 import api from 'api'
 import Mock from 'mockjs'
 import store from 'store/index'
-import { removeProduct, updateProduct } from 'store/actions/products'
+import { removeProduct, updateProduct, getCurrProduct } from 'store/actions/products'
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import Panel from 'components/Panel'
@@ -189,8 +196,10 @@ import Statistic from 'components/Statistic'
 import Tooltip from 'components/Tooltip'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
+import IntervalIcon from 'components/g2-charts/IntervalIcon'
 import Pie from 'components/g2-charts/Pie'
 import ChinaMap from 'components/g2-charts/ChinaMap'
+import defaultDeviceThumb from 'assets/images/device_thumb.png'
 import { globalMixins } from 'src/mixins'
 import moment from 'moment'
 import _ from 'lodash'
@@ -205,10 +214,13 @@ export default {
   store,
 
   vuex: {
+    getters: {
+      currentProduct: ({ products }) => products.curr
+    },
     actions: {
       removeProduct,
-      updateProduct
-      // setCurrProduct
+      updateProduct,
+      getCurrProduct
     }
   },
 
@@ -220,6 +232,7 @@ export default {
     Tooltip,
     TimeLine,
     Interval,
+    IntervalIcon,
     ChinaMap,
     Pie,
     'v-select': Select
@@ -227,10 +240,15 @@ export default {
 
   data () {
     return {
+      deviceThumb: defaultDeviceThumb,
+      trendTabs: {
+        curr: 1,
+        labels: ['激活设备', '累计激活']
+      },
       customMargin: [30, 10, 30, 30],
       deviceTypes: locales[Vue.config.lang].data.DEVICE_TYPES,
       delChecked: false,
-      product: {},
+      // product: {},
       showEditModal: false,
       editModel: {
         is_allow_multi_admin: false,
@@ -378,12 +396,12 @@ export default {
 
   route: {
     data () {
-      this.getProduct()
+      this.getCurrProduct(this.$route.params.id)
+      this.getProductSummary()
     }
   },
 
   ready () {
-    this.getProductSummary()
     // alert(this.isProduct1)
     // 配色
     const COLORS = {
@@ -392,8 +410,6 @@ export default {
       'blue': '#307FC1',
       'orange': '#F69052'
     }
-    // 反馈类型
-    const FEEDBACK_TYPES = ['维保', '故障', '个人意见']
     // 产品
     const PRODUCTS = ['空气净化器', 'WI-FI智能灯']
 
@@ -483,74 +499,6 @@ export default {
         {name: '当前离线', value: 25682},
         {name: '当前在线', value: 4205}
       ]
-    }
-
-    // 用户反馈 -----------------------------------------------------
-    var feedbackOptions = {
-      stack: true,
-      props: {
-        plotCfg: {
-          margin: [60, 0, 80, 60]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        },
-        'type': {
-          alias: '反馈类型'
-        }
-      },
-      position: 'date*count',
-      color: 'type'
-    }
-    var feedbackData = []
-    feedbackData = feedbackData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [12, 18, 9, 15, 16, 18, 11],
-        'type': FEEDBACK_TYPES[0]
-      }]
-    }).list)
-    feedbackData = feedbackData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [23, 47, 32, 18, 27, 45, 33],
-        'type': FEEDBACK_TYPES[1]
-      }]
-    }).list)
-    feedbackData = feedbackData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [2, 4, 5, 3, 7, 9, 4],
-        'type': FEEDBACK_TYPES[2]
-      }]
-    }).list)
-    this.feedback.data = feedbackData
-    this.feedback.options = feedbackOptions
-
-    // var tplFeedback = {
-    //   'change|-200-200': 0,
-    //   'total|10-1000': 1000
-    // }
-    // 今日
-    this.feedback.today = {
-      info: {
-        change: 2,
-        total: 23
-      }
-    }
-    // 未读
-    this.feedback.unread = {
-      info: {
-        change: 7,
-        total: 44
-      }
     }
 
     // 产品趋势分析 -----------------------------------------------------
@@ -812,6 +760,14 @@ export default {
   },
 
   methods: {
+    /**
+     * 获取产品趋势
+     * @param  {Number} type 类型
+     */
+    getTrends (type) {
+      this.trendTabs.curr = type + 1
+    },
+
     // 全局分析
     getProductSummary () {
       this.loadingData = true
@@ -833,15 +789,15 @@ export default {
       })
     },
     // 获取当前产品
-    getProduct () {
-      api.product.getProduct(this.$route.params.id).then((res) => {
-        if (res.status === 200) {
-          this.product = res.data
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
+    // getProduct () {
+    //   api.product.getProduct(this.$route.params.id).then((res) => {
+    //     if (res.status === 200) {
+    //       this.product = res.data
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //   })
+    // },
 
     // 编辑表单钩子
     editFormHook (form) {
@@ -865,14 +821,14 @@ export default {
         this.showEditModal = true
         // this.editModel = _.clone(this.product)
         this.editModel.ifsnapshot = false
-        this.editModel.name = this.product.name
-        this.editModel.description = this.product.description
-        this.editModel.link_type = this.product.link_type
-        this.editModel.is_registerable = this.product.is_registerable
-        this.editModel.is_active_register = this.product.is_active_register
-        this.editModel.is_release = this.product.is_release
+        this.editModel.name = this.currentProduct.name
+        this.editModel.description = this.currentProduct.description
+        this.editModel.link_type = this.currentProduct.link_type
+        this.editModel.is_registerable = this.currentProduct.is_registerable
+        this.editModel.is_active_register = this.currentProduct.is_active_register
+        this.editModel.is_release = this.currentProduct.is_release
         this.editModel.id = this.$route.params.id
-        this.editModel.is_allow_multi_admin = this.product.is_allow_multi_admin
+        this.editModel.is_allow_multi_admin = this.currentProduct.is_allow_multi_admin
         this.originEditModel = _.clone(this.editModel)
         if (res.data.list.length) {
           if (res.data.list[0].rule === 0) {
@@ -901,7 +857,7 @@ export default {
           api.product.deleteProduct(this.$route.params.id).then((res) => {
             if (res.status === 200) {
               this.resetEdit()
-              this.removeProduct(this.product)
+              this.removeProduct(this.currentProduct)
               this.$route.router.go('/dashboard')
             }
           }).catch((res) => {
@@ -917,10 +873,9 @@ export default {
           api.product.updateProduct(this.editModel).then(() => {
             api.product.getProduct(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.product = res.data
+                // this.product = res.data
                 this.resetEdit()
-                this.updateProduct(this.product)
-                // this.setCurrProduct(this.product)
+                this.updateProduct(res.data)
               }
             })
           }).catch((res) => {
@@ -940,10 +895,9 @@ export default {
           api.product.updateProduct(model).then(() => {
             api.product.getProduct(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.product = res.data
+                // this.product = res.data
                 this.resetEdit()
-                this.updateProduct(this.product)
-                // this.setCurrProduct(this.product)
+                this.updateProduct(res.data)
               }
             })
           }).catch((res) => {
@@ -1022,18 +976,15 @@ export default {
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '../../../assets/stylus/common'
-
-.x-statistic-left
-  padding-left 10px
 
 .product-card
   clearfix()
-  padding 35px 0 20px
+  padding-top 15px
 
   .x-statistic
-    padding 5px 0 15px 0
+    padding 5px 0
     margin-right 30px
 
     & > .info
@@ -1044,7 +995,7 @@ export default {
       top 5px
 
     .chart
-      size 120px 30px
+      size 85px 20px
 
   .col-6 + .col-6
     .x-statistic
@@ -1060,22 +1011,21 @@ export default {
       display block
 
   .info
-    margin-left 220px
+    margin-left 240px
 
     h2
-      margin 0
-      font-size 24px
+      margin 10px 0 0
+      font-size 16px
       font-weight normal
 
-    .desc
-      margin-bottom 10px
-      color gray-light
+      .fa
+        margin-left 5px
 
-.with-stats
-  .stats
-    absolute right -10px top -40px
-    width 330px
-    z-index 10
+    .desc
+      min-height 20px
+      margin-bottom 15px
+      font-size 12px
+      color gray-light
 
 // 产品趋势
 .product-trends

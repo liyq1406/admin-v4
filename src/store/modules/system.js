@@ -12,7 +12,7 @@ import {
 // 状态初始化
 var state = {
   currentMember: {},  // 当前成员信息
-  layouts: [],     // 当前页面布局
+  layouts: [],        // 当前页面布局
   loading: false,     // 是否正在加载
   error: {},          // 错误信息
   isShowError: false, // 是否显示错误信息模态窗口

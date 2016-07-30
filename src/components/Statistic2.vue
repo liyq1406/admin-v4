@@ -200,7 +200,7 @@ export default {
   & > .change
     display inline-block
 
-.x-statistic-black
+.x-statistic-gray
   & > .tit
   & > .info
   & > .unit

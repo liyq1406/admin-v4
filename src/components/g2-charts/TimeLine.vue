@@ -62,7 +62,7 @@ export default {
       var defaults = {
         container: this.$el, // 容器
         forceFit: true, // 强制宽度自适应
-        height: 300, // 高度
+        height: 250, // 高度
         plotCfg: {
           margin: this.margin// 边距
         }

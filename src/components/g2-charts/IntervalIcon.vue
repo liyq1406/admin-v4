@@ -19,6 +19,11 @@ export default {
     color: {
       type: String,
       default: 'gray'
+    },
+
+    height: {
+      type: Number,
+      default: 40
     }
   },
 
@@ -26,9 +31,9 @@ export default {
     return {
       COLORS: {
         'gray': '#383838',
-        'green': '#4CBF5E',
-        'blue': '#307FC1',
-        'orange': '#F69052'
+        'green': '#090',
+        'blue': '#5393CB',
+        'orange': '#F60'
       },
       iconData: [],
       iconOptions: {}
@@ -39,7 +44,7 @@ export default {
     // 图表基本配置
     var statisticOptions = {
       props: {
-        height: 40,
+        height: this.height,
         plotCfg: {
           margin: [0, 0, 0, 0]
         }

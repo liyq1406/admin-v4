@@ -80,7 +80,7 @@ export default {
   },
 
   ready () {
-    this.$dispatch('dropdown-created', this)
+    this.$emit('dropdown-created', this)
     this._closeEvent = EventListener.listen(window, 'click', (e) => {
       if (!this.$el.contains(e.target)) {
         this.show = false

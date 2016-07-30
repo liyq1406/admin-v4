@@ -42,7 +42,7 @@ const mutations = {
     })
   },
 
-  [SET_CURRENT_PRODUCT]  (state, product) {
+  [SET_CURRENT_PRODUCT] (state, product) {
     state.curr = product
   }
 }
