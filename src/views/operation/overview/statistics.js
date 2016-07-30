@@ -19,23 +19,26 @@ export function getTrend (context/* vue 的this对象，用于handleError*/, pro
 }
 
 function beautify (data, duration) {
-  console.log(data.length)
+  // 将数据转成date格式
   for (var i = 0; i < data.length; i++) {
     var res = dateRe.exec(data[i].day)
-    data[i].day = new Date(res[1], res[2], res[3])
+    if (res) {
+      data[i].day = new Date(res[1], res[2], res[3])
+    }
   }
-  console.log(data)
+
+  // 按照date排序
 }
 
 // function compare(a, b) {
-//   if (a is less than b by some ordering criterion) {
-//     return -1;
+//   if (a.day.getTime() < b.day.getTime()) {
+//     return -1
 //   }
-//   if (a is greater than b by the ordering criterion) {
-//     return 1;
+//   if (a.day.getTime() < b.day.getTime()) {
+//     return 1
 //   }
 //   // a must be equal to b
-//   return 0;
+//   return 0
 // }
 
 function createDurationTime (duration) {
