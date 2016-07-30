@@ -74,7 +74,7 @@
           }
         }
         this.loadingData = true
-        api.snapshot.getFault(params).then((res) => {
+        api.alert.getAlerts(params).then((res) => {
           var records = res.data.list
           records.map(function (item) {
             item.create_date = item.create_date.replace(/t/i, ' ')

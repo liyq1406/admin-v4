@@ -13,16 +13,6 @@ export default {
     )
   },
   /**
-   * 获取故障消息列表
-   * @param  {Object} params 注册信息
-   * @return {Promise}
-   */
-  getFault (params) {
-    return http.post(
-      `${API_SERVER.default}/v2/corp/messages`, params
-    )
-  },
-  /**
    * 创建产品快照规则
    * @param  {Object} params 注册信息
    * @return {Promise}

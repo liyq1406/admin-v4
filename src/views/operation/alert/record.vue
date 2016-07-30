@@ -82,13 +82,13 @@
             <tbody>
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
-                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.device_mac || 123 }}</a></td>
+                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.from }}</a></td>
                   <td>{{ alert.create_date | formatDate }}</td>
-                  <td>{{ alert.duration }}</td>
-                  <td>{{ alert.content }}</td>
-                  <td>{{ alert.area}}</td>
-                  <td>{{ alert.level}}</td>
-                  <td>{{ alert.alert_value}}</td>
+                  <td>{{ alert.lasting }}</td>
+                  <td>{{ alert.alert_name }}</td>
+                  <td>{{ alert.location}}</td>
+                  <td>{{ alert.tags}}</td>
+                  <td>{{ alert.is_read}}</td>
                 </tr>
               </template>
               <tr v-if="alerts.length === 0 && !loadingData">
@@ -176,6 +176,7 @@ import dateFormat from 'date-format'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
 import Mock from 'mockjs'
+import { formatDate } from 'src/filters'
 
 export default {
   name: 'Alerts',
@@ -314,6 +315,7 @@ export default {
       // this.getAlertSummary()
       this.getFirstProduct()
       this.getSummary()
+      this.getList()
     }
   },
 
@@ -329,18 +331,18 @@ export default {
   },
 
   methods: {
-    // 获取第一个产品
+    // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
     },
 
-    // 获取数据
+    // 获取数据@author weijie
     getDate () {
       console.log(123)
       console.log(this.beginTime)
     },
 
-    // 获取告警概览
+    // 获取告警概览@author weijie
     getSummary () {
       var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
       todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
@@ -371,6 +373,35 @@ export default {
       api.statistics.getAlertSummary(monthBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.month.total = res.data.message
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 获取消息列表@author weijie
+    getList () {
+      api.alert.getAlerts().then((res) => {
+        if (res.status === 200) {
+          // console.log(res.data.list)
+          // this.alerts = res.data.list
+          this.alerts = res.data.list.map((item) => {
+            // 计算已读告警持续时间
+            if (item.is_read) {
+              let beginTime = new Date(formatDate(item.create_date))
+              let endTime = new Date(formatDate(item.read_time))
+              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+              // console.log(lasting.toFixed(1))
+              item.lasting = lasting.toFixed(1)
+            } else {
+              // 计算未读告警持续时间
+              let beginTime = new Date(formatDate(item.create_date))
+              let endTime = new Date()
+              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+              // console.log(lasting.toFixed(1))
+              item.lasting = lasting.toFixed(1)
+            }
+            return item
+          })
         }
       }).catch((res) => {
         this.handleError(res)
