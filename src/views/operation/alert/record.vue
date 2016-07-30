@@ -6,8 +6,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width="110px" size="small">
+          <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
+            <select v-model="currentProduct" @change="">
+              <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
+              <option v-for="product in products" :value="product">{{ product.name }}</option>
+            </select>
           </v-select>
         </div>
       </div>
@@ -16,7 +20,7 @@
           <date-time-range-picker></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getDate"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -190,8 +194,15 @@ export default {
     SearchBox
   },
 
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
+
   data () {
     return {
+      currentProduct: {},
       key: '',
       alerts: [],
       total: 0,
@@ -266,7 +277,7 @@ export default {
       }
     },
 
-    past () {
+    beginTime () {
       var past = new Date().getTime() - this.period * 24 * 3600 * 1000
       return dateFormat('yyyy-MM-dd', new Date(past))
     }
@@ -298,21 +309,73 @@ export default {
 
   route: {
     data () {
-      this.getAlerts()
-      this.getAlertTrends()
-      this.getAlertSummary()
+      // this.getAlerts()
+      // this.getAlertTrends()
+      // this.getAlertSummary()
+      this.getFirstProduct()
+      this.getSummary()
     }
   },
 
   // 监听属性变动
   watch: {
-    period () {
-      this.getAlertTrends()
-      this.getAlertSummary()
+    products () {
+      this.getFirstProduct()
     }
+    // period () {
+    //   this.getAlertTrends()
+    //   this.getAlertSummary()
+    // }
   },
 
   methods: {
+    // 获取第一个产品
+    getFirstProduct () {
+      this.currentProduct = this.products[0] || {}
+    },
+
+    // 获取数据
+    getDate () {
+      console.log(123)
+      console.log(this.beginTime)
+    },
+
+    // 获取告警概览
+    getSummary () {
+      var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
+      todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
+      var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
+      weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
+      var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
+      monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
+      var now = new Date().getTime()
+      now = dateFormat('yyyy-MM-dd', new Date(now))
+      // 获取当天数据
+      api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
+        if (res.status === 200) {
+          this.alertSummary.unread.total = res.data.unread
+          this.alertSummary.today.total = res.data.message
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+      // 获取7天数据
+      api.statistics.getAlertSummary(weekBeginTime, now).then((res) => {
+        if (res.status === 200) {
+          this.alertSummary.week.total = res.data.message
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+      // 获取30天数据
+      api.statistics.getAlertSummary(monthBeginTime, now).then((res) => {
+        if (res.status === 200) {
+          this.alertSummary.month.total = res.data.message
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 获取单条告警信息并弹出浮层显示
      * @param  {Object} alert 目标告警信息
@@ -327,51 +390,51 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
-    },
-
-    /**
-     * 获取告警信息列表
-     */
-    getAlerts () {
-      this.loadingData = true
-      api.alert.getAlerts(this.queryCondition).then((res) => {
-        if (res.status === 200) {
-          // TODO
-          this.alerts = res.data.list
-          this.total = res.data.count
-          this.loadingData = false
-        }
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingData = false
-      })
-    },
-
-    // 告警统计信息
-    getAlertSummary () {
-      api.statistics.getAlertSummary(this.past, this.today).then((res) => {
-        if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
-          this.alertSummary.add_today.total = res.data.add_today
-          this.alertSummary.device.total = res.data.device
-          this.alertSummary.message.total = res.data.message
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
-
-    /**
-     * 获取告警趋势
-     */
-    getAlertTrends () {
-      api.statistics.getAlertTrend(this.past, this.today).then((res) => {
-        if (res.status === 200) {
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
     }
+    //
+    // /**
+    //  * 获取告警信息列表
+    //  */
+    // getAlerts () {
+    //   this.loadingData = true
+    //   api.alert.getAlerts(this.queryCondition).then((res) => {
+    //     if (res.status === 200) {
+    //       // TODO
+    //       this.alerts = res.data.list
+    //       this.total = res.data.count
+    //       this.loadingData = false
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //     this.loadingData = false
+    //   })
+    // },
+    //
+    // // 告警统计信息
+    // getAlertSummary () {
+    //   api.statistics.getAlertSummary(this.past, this.today).then((res) => {
+    //     if (res.status === 200) {
+    //       this.alertSummary.unread.total = res.data.unread
+    //       this.alertSummary.add_today.total = res.data.add_today
+    //       this.alertSummary.device.total = res.data.device
+    //       this.alertSummary.message.total = res.data.message
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //   })
+    // },
+    //
+    // /**
+    //  * 获取告警趋势
+    //  */
+    // getAlertTrends () {
+    //   api.statistics.getAlertTrend(this.past, this.today).then((res) => {
+    //     if (res.status === 200) {
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //   })
+    // }
   }
 }
 </script>
