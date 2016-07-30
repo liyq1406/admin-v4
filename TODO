@@ -98,13 +98,15 @@
       告警详情:
         ☐ 详细信息 @weijie
         ☐ 告警历史 @weijie
+        ☐ 维保记录 @guohao
     告警分析:
       ☐ 总体分布 @weijie
       ☐ 各标签情况 @weijie
       告警指标详情:
         ☐ 消息列表 @weijie
     热力分布:
-      ☐ 分布 @weijie
+      ☐ 图表分布 @weijie
+      ☐ 表格详情 @weijie
 
   #用户管理:
     概览:
@@ -123,6 +125,8 @@
       ☐ 分布 @weijie
     反馈列表:
       ☐ 列表 @weijie
+      ☐ 详情 @weijie
+        ☐ 客服回复 @weijie
 
   #消息推送:
     新建消息:
