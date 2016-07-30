@@ -57,9 +57,6 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-              </div>
-              <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
@@ -87,8 +84,10 @@
                   <td>{{ alert.lasting }}</td>
                   <td>{{ alert.alert_name }}</td>
                   <td>{{ alert.location}}</td>
-                  <td>{{ alert.tags}}</td>
-                  <td>{{ alert.is_read}}</td>
+                  <td>
+                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
+                  </td>
+                  <td><span v-if="alert.is_read">已处理</span><span v-else>未处理</span></td>
                 </tr>
               </template>
               <tr v-if="alerts.length === 0 && !loadingData">
