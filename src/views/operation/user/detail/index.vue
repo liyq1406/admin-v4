@@ -13,7 +13,7 @@
           </div>
         </div>
         <div class="col-8 device-map with-loading">
-          <div class="icon-loading" v-show="loadingData">
+          <div class="icon-loading" v-show="true">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div id="user-map" class="mt10" style="height: 220px"></div>
@@ -78,9 +78,8 @@
       userSummary () {
         var result = {
           title: this.user.nickname,
-          online: this.user.status === 1 ? '正常' : '停用',
-          // time:
-          time: formatDate(this.user.create_date)
+          online: false,
+          time: '登录状态字段缺失 最后一次登录时间 字段缺失'
         }
         return result
       },
@@ -92,7 +91,7 @@
         var result = {
           status: {
             label: '账号状态',
-            value: this.computedStatus(this.user.status)
+            value: this.computedStatus(this.user.status) + ' 激活时间字段缺失'
           },
           create_date: {
             label: '创建时间',
