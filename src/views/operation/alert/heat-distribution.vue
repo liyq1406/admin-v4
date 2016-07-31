@@ -14,8 +14,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width='110px' size="small">
+          <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
+            <select v-model="currentProduct" @change="">
+              <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
+              <option v-for="product in products" :value="product">{{ product.name }}</option>
+            </select>
           </v-select>
         </div>
       </div>
@@ -195,8 +199,15 @@ export default {
     ChinaHeatMap
   },
 
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
+
   data () {
     return {
+      currentProduct: {},
       key: '',
       statistics: [],
       total: 0,
@@ -239,10 +250,26 @@ export default {
 
   route: {
     data () {
+      this.getFirstProduct()
     }
   },
 
+  // 监听属性变动
+  watch: {
+    products () {
+      this.getFirstProduct()
+    }
+    // period () {
+    //   this.getAlertTrends()
+    //   this.getAlertSummary()
+    // }
+  },
+
   methods: {
+    // 获取第一个产品@author weijie
+    getFirstProduct () {
+      this.currentProduct = this.products[0] || {}
+    }
   }
 }
 </script>
