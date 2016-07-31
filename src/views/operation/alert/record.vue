@@ -57,8 +57,8 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
-                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+                  <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
@@ -270,11 +270,25 @@ export default {
   },
 
   computed: {
+    // queryCondition () {
+    //   return {
+    //     limit: this.countPerPage,
+    //     offset: (this.currentPage - 1) * this.countPerPage
+    //   }
+    // },
+
     queryCondition () {
-      return {
+      var condition = {
         limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {}
       }
+      if (this.key !== '') {
+        condition.query.id = {$regex: this.key, $options: 'i'}
+      }
+
+      return condition
     },
 
     beginTime () {
@@ -379,7 +393,7 @@ export default {
     },
     // 获取消息列表@author weijie
     getList () {
-      api.alert.getAlerts().then((res) => {
+      api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
           // console.log(res.data.list)
           // this.alerts = res.data.list
