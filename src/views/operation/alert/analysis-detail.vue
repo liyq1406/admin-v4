@@ -3,6 +3,7 @@
     <div class="main-title">
       <h2>告警分析</h2>
     </div>
+    <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
@@ -43,6 +44,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
+import Breadcrumb from 'components/Breadcrumb'
 // import Pie from 'components/g2-charts/Pie'
 import Table from 'components/Table'
 import dateFormat from 'date-format'
@@ -65,6 +67,7 @@ export default {
     DateTimeRangePicker,
     'c-table': Table,
     Statistic,
+    Breadcrumb,
     TimeLine
   },
 
@@ -196,6 +199,12 @@ export default {
         duration: '1.1h',
         addr: '湖北, 武汉',
         state: '待处理'
+      }],
+      breadcrumbNav: [{
+        label: '告警分析',
+        link: '/operation/alerts/record'
+      }, {
+        label: '当前'
       }]
     }
   },

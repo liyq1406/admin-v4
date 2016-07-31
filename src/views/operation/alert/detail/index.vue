@@ -102,7 +102,7 @@ export default {
       secondaryNav: [],
       breadcrumbNav: [{
         label: '全部',
-        link: '/operation/alerts/record'
+        link: '/operation/alerts/analysis'
       }, {
         label: '告警信息'
       }]
