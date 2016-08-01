@@ -132,5 +132,14 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/corp/message_read`, params
     )
+  },
+  /**
+   * 设置消息为未读状态
+   * @param {Array} params 消息列表
+   */
+  setAlertUnread (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/corp/message_unread`, params
+    )
   }
 }

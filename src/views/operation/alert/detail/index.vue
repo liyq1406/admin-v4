@@ -24,7 +24,7 @@
                     <i class="fa fa-commenting"></i>
                     通知维保
                   </button>
-                  <button v-if="info.is_read" style="background-color:red;color:#fff">
+                  <button v-if="info.is_read" @click="changeStyleUnread"  style="background-color:red;color:#fff">
                     <!-- <i class="fa fa-check"></i> -->
                     重开任务
                   </button>
@@ -154,7 +154,7 @@ export default {
       var info = {
         device: {
           label: '告警设备',
-          value: this.info.product_name || '暂无'
+          value: this.info.product_name || 'N/A'
         },
         status: {
           label: '设备状态',
@@ -162,19 +162,19 @@ export default {
         },
         duration: {
           label: '持续时长',
-          value: this.info.lasting || '暂无'
+          value: this.info.lasting + 'h' || 'N/A'
         },
         createTime: {
           label: '处理时间',
-          value: this.info.read_time ? formatDate(this.info.read_time) : '暂无'
+          value: this.info.read_time ? formatDate(this.info.read_time) : 'N/A'
         },
         area: {
           label: '告警地区',
-          value: this.info.location || '暂无'
+          value: this.info.location || 'N/A'
         },
         userId: {
           label: '用户账号',
-          value: '暂无'
+          value: 'N/A'
         }
       }
       return info
@@ -212,10 +212,21 @@ export default {
         offset: {x: -11, y: -28}
       })
     },
-    // 修改告警状态@author weijie
+    // 修改告警状态为已读@author weijie
     changeStyle () {
       var params = [this.$route.params.id]
       api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getInfo()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 修改告警状态为未读@author weijie
+    changeStyleUnread () {
+      var params = [this.$route.params.id]
+      api.alert.setAlertUnread(params).then((res) => {
         if (res.status === 200) {
           this.getInfo()
         }

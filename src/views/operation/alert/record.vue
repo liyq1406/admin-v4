@@ -81,7 +81,7 @@
                 <tr v-for="alert in alerts">
                   <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.from }}</a></td>
                   <td>{{ alert.create_date | formatDate }}</td>
-                  <td>{{ alert.lasting }}</td>
+                  <td>{{ alert.lasting }}h</td>
                   <td>{{ alert.alert_name }}</td>
                   <td>{{ alert.location}}</td>
                   <td>
@@ -98,7 +98,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getList"></pager>
       </div>
     </div>
     <!-- 查看告警信息浮层-->
@@ -397,6 +397,7 @@ export default {
         if (res.status === 200) {
           // console.log(res.data.list)
           // this.alerts = res.data.list
+          this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
             // 计算已读告警持续时间
             if (item.is_read) {
