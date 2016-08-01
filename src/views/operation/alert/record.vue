@@ -85,7 +85,7 @@
                   <td>{{ alert.alert_name }}</td>
                   <td>{{ alert.location}}</td>
                   <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
+                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span></template>
                   </td>
                   <td><span v-if="alert.is_read">已处理</span><span v-else>未处理</span></td>
                 </tr>
