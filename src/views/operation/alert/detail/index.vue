@@ -79,6 +79,7 @@ export default {
   data () {
     return {
       alerts: [],
+      account: '',
       info: {
         id: '',
         type: '',
@@ -174,7 +175,7 @@ export default {
         },
         userId: {
           label: '用户账号',
-          value: 'N/A'
+          value: this.account || 'N/A'
         }
       }
       return info
@@ -266,6 +267,34 @@ export default {
             // console.log(lasting.toFixed(1))
             this.info.lasting = lasting.toFixed(1)
           }
+          // 获取当前设备订阅信息
+          this.getSubInfo(this.info)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 获取当前设备订阅信息@author weijie
+    getSubInfo (item) {
+      api.user.getSubInfo(item.product_id, item.from).then((res) => {
+        if (res.status === 200) {
+          res.data.list.forEach((user) => {
+            if (user.role === '1') {
+              this.profie(user)
+            }
+            return
+          })
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    // 获取当前管理员详细信息@author weijie
+    profie (item) {
+      api.user.profile(item.user_id).then((res) => {
+        if (res.status === 200) {
+          this.account = res.data.account
         }
       }).catch((res) => {
         this.handleError(res)
