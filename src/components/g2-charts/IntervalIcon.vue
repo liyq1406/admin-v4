@@ -7,6 +7,7 @@
 <script>
 import Interval from './Interval'
 import Mock from 'mockjs'
+import _ from 'lodash'
 
 export default {
   name: 'Interval',
@@ -72,27 +73,7 @@ export default {
 
   methods: {
     genData (color) {
-      var count1 = [139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
-      var count2 = [139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58]
-      var count3 = [58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124]
-      var count4 = [157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124]
-
-      var count = []
-      switch (color) {
-        case 'gray':
-          count = count1
-          break
-        case 'green':
-          count = count2
-          break
-        case 'blue':
-          count = count3
-          break
-        case 'orange':
-        default:
-          count = count4
-          break
-      }
+      let count = _.shuffle([139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88])
 
       return Mock.mock({
         'list|20': [{
