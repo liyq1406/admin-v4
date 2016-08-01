@@ -9,15 +9,16 @@ import _ from 'lodash'
  *   }
  */
 export const createDayRange = (n) => {
-  var curTime = new Date()
-  var startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * n)
+  let curDate = new Date()
+  let startDate = new Date(curDate.getTime() - 3600 * 1000 * 24 * n)
 
-  var startDay = startTime.getFullYear().toString() + '-' + (startTime.getMonth() + 1).toString() + '-' + startTime.getDate().toString()
-  var endDay = curTime.getFullYear().toString() + '-' + (curTime.getMonth() + 1).toString() + '-' + curTime.getDate().toString()
+  const getDateInfo = (date) => {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
+  }
 
   return {
-    start: startDay,
-    end: endDay
+    start: getDateInfo(startDate),
+    end: getDateInfo(curDate)
   }
 }
 
