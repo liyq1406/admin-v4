@@ -1,6 +1,6 @@
 import _ from 'lodash'
 
-// 每小时毫秒数
+// 每天毫秒数
 const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
 
 /**
