@@ -15,9 +15,9 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <div class="filter-group-item">
+              <!-- <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
-              </div>
+              </div> -->
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
                   <button slot="search-button" @click="getUsers" class="btn btn-primary"><i class="fa fa-search"></i></button>
@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortStatus" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBysomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
     </div>
@@ -187,12 +187,12 @@
         this.getUsers()
       },
       /**
-       * 按照状态排序
+       * 按某个属性排序
        * 国辉
        * @param  {[type]} table [description]
        * @return {[type]}       [description]
        */
-      sortStatus (header, index) {
+      sortBysomeKey (header, index) {
         if (header.sortType === 1) {
           header.sortType = -1
         } else {

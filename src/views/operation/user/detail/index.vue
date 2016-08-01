@@ -107,15 +107,15 @@
           },
           age: {
             label: '年龄',
-            value: this.user.age || '字段缺失'
+            value: this.user.age
           },
-          sex: {
+          gender: {
             label: '性别',
-            value: this.user.sex || '字段缺失'
+            value: this.computedGender(this.user.gender)
           },
           area: {
             label: '所在区域',
-            value: this.user.area || '字段缺失'
+            value: this.user.province + this.user.city || '字段缺失'
           },
           address: {
             label: '详细地址',
@@ -151,6 +151,20 @@
 
     methods: {
       /**
+       * 解析性别
+       * 国辉
+       * @param  {[type]} gender [description]
+       * @return {[type]}        [description]
+       */
+      computedGender (gender) {
+        var result = {
+          '-1': '未知',
+          '1': '男',
+          '2': '女'
+        }
+        return result[gender]
+      },
+      /**
        * 解析用户状态
        * 国辉
        * @param  {[type]} status [description]
@@ -167,7 +181,6 @@
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {
             this.user = res.data
-            console.log(res.data)
             // this.userInfo.status = {
             //   label: '账号状态',
             //   value: res.data.status - 1 ? '停用' : '启用'

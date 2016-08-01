@@ -43,7 +43,7 @@
         </tbody>
       </table>
     </div>
-    <pager :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
+    <pager v-if="page.total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
   </div>
 </template>
 

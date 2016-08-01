@@ -85,9 +85,9 @@ export default {
         }
       ]
    */
-  subDeviceList (userId) {
+  subDeviceList (userId, version) {
     return http.get(
-      `${API_SERVER.default}/v2/user/${userId}/subscribe/devices`
+      `${API_SERVER.default}/v2/user/${userId}/subscribe/devices?version=${version}`
     )
   },
 
