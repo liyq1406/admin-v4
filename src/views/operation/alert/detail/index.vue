@@ -24,9 +24,13 @@
                     <i class="fa fa-commenting"></i>
                     通知维保
                   </button>
-                  <button>
-                    <i class="fa fa-check"></i>
-                    已处理
+                  <button v-if="info.is_read" style="background-color:red;color:#fff">
+                    <!-- <i class="fa fa-check"></i> -->
+                    重开任务
+                  </button>
+                  <button v-else @click="changeStyle">
+                    <!-- <i class="fa fa-check"></i> -->
+                    标记为已处理
                   </button>
                 </div>
               </div>
@@ -162,7 +166,7 @@ export default {
         },
         createTime: {
           label: '处理时间',
-          value: this.info.read_time.length ? this.info.read_time : '暂无'
+          value: this.info.read_time ? formatDate(this.info.read_time) : '暂无'
         },
         area: {
           label: '告警地区',
@@ -170,7 +174,7 @@ export default {
         },
         userId: {
           label: '用户账号',
-          value: this.info.to || '暂无'
+          value: '暂无'
         }
       }
       return info
@@ -208,6 +212,17 @@ export default {
         offset: {x: -11, y: -28}
       })
     },
+    // 修改告警状态@author weijie
+    changeStyle () {
+      var params = [this.$route.params.id]
+      api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getInfo()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
 
     // 获取告警详情@author weijie
     getInfo () {
@@ -215,7 +230,10 @@ export default {
         offset: 0,
         limit: 30,
         query: {
-          id: this.$route.params.id
+          // _id: this.$route.params.id
+          id: {
+            $in: [this.$route.params.id]
+          }
         }
       }
       api.alert.getAlerts(params).then((res) => {
