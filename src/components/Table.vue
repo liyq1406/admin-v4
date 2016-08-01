@@ -30,7 +30,7 @@
               <th v-show="selecting" class="tac">
                 <input type="checkbox" :checked="tableIndex>-1" @change="selectedTablesChange(table)">
               </th>
-              <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex)">
+              <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex, $event)">
                 {{{table[tHeader.key]}}}
               </td>
             </tr>
@@ -268,10 +268,13 @@
        * @param  {[type]} table   [description]
        * @return {[type]}         [description]
        */
-      tbodyClick (theader, table, lineIndex) {
+      tbodyClick (theader, table, lineIndex, ev) {
         var key = this.hump2line(theader.key)
         key = key.replace('_', '-')
-        this.$emit('tbody-' + key, table, theader, lineIndex)
+        // TODO:待优化
+        if (ev.target.tagName.toLowerCase() === 'a' || ev.target.tagName.toLowerCase() === 'button') {
+          this.$emit('tbody-' + key, table, theader, lineIndex)
+        }
       },
       /**
        * 驼峰字符串转普通中划线字符串
