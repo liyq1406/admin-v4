@@ -140,5 +140,16 @@ export default {
     return http.put(
       `${API_SERVER.default}/v2/user/${userId}/status/${status}`
     )
+  },
+  /**
+   * 获取设备的订阅信息
+   * @param  {Object} params  {"name":"成员姓名"}
+   * @param  {memberId}
+   * @return  stauts
+   */
+  getSubInfo (productId, deviceId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/subscribes`
+    )
   }
 }
