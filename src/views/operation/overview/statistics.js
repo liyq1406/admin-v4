@@ -1,67 +1,68 @@
 import api from 'api'
+import {createDayRange, beautify} from 'helpers/utils'
 
-export var trend = []
-
-// 2016-07-23
-const dateRe = /(\d{4})(-)(\d{1,2})(-)(\d{1,2})/g
-
-// var originData = {}
-
-export function getTrend (context/* vue 的this对象，用于handleError*/, productId, duration) {
-  var range = createDurationTime(duration)
-  api.statistics.getProductTrend(productId, range[0], range[1]).then((res) => {
-    if (res.status === 200 && res.data.length > 0) {
-      beautify(res.data, duration)
-    }
-  }).catch((res) => {
-    context.handleError(res)
+function getTrend (productId, duration) {
+  var range = createDayRange(duration)
+  return new Promise((resolve, reject) => {
+    api.statistics.getProductTrend(productId, range.start, range.end).then((res) => {
+      if (res.status === 200 && res.data.length > 0) {
+        resolve(beautify(res.data, duration))
+      }
+    }).catch((res) => {
+      reject(res)
+    })
   })
 }
 
-function beautify (data, duration) {
-  // 将数据转成date格式
-  for (var i = 0; i < data.length; i++) {
-    var res = dateRe.exec(data[i].day)
-    if (res) {
-      data[i].day = new Date(res[1], res[2], res[3])
-    }
-  }
-
-  // 按照date排序
+// 获取激活设备数量
+export function getActivatedTrend (productId, duration) {
+  return new Promise((resolve, reject) => {
+    getTrend(productId, duration).then((res) => {
+      var acRet = []
+      var toRet = []
+      res.forEach((item) => {
+        let acTemp = {}
+        let toTemp = {}
+        acTemp.day = item.day
+        toTemp.day = item.day
+        acTemp.count = item.activated || 0
+        toTemp.count = item.total_activated || 0
+        acRet.push(acTemp)
+        toRet.push(toTemp)
+      })
+      resolve({
+        activated: acRet,
+        total: toRet
+      })
+    }).catch((res) => {
+      reject(res)
+    })
+  })
 }
 
-// function compare(a, b) {
-//   if (a.day.getTime() < b.day.getTime()) {
-//     return -1
-//   }
-//   if (a.day.getTime() < b.day.getTime()) {
-//     return 1
-//   }
-//   // a must be equal to b
-//   return 0
-// }
+// 获取活跃设备数量
+export function getActiveTrend (productId, duration) {
+  return new Promise((resolve, reject) => {
+    getTrend(productId, duration).then((res) => {
+      var acRet = []
+      var addRet = []
+      res.forEach((item) => {
+        let acTemp = {}
+        let addTemp = {}
+        acTemp.day = item.day
+        acTemp.count = item.active
+        addTemp.activated = item.activated
+        addTemp.add = item.add
 
-function createDurationTime (duration) {
-  var curTime = new Date()
-  var startTime = curTime
-  // var curStr = cur.getFullYear().toString() + '-' + (cur.getMonth() + 1).toString() + '-' + cur.getDate().toString()
-  switch (duration) {
-    case 7:
-      startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 7)
-      break
-    case 30:
-      startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 30)
-      break
-    case 90:
-      startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 90)
-      break
-    default:
-      startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * 7)
-      break
-  }
-
-  var startDay = startTime.getFullYear().toString() + '-' + (startTime.getMonth() + 1).toString() + '-' + startTime.getDate().toString()
-  var endDay = curTime.getFullYear().toString() + '-' + (curTime.getMonth() + 1).toString() + '-' + curTime.getDate().toString()
-
-  return [startDay, endDay]
+        acRet.push(acTemp)
+        addRet.push(addTemp)
+      })
+      resolve({
+        active: acRet,
+        add: addRet
+      })
+    }).catch((res) => {
+      reject(res)
+    })
+  })
 }

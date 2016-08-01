@@ -1,8 +1,5 @@
-import _ from 'lodash'
-
 // 每天毫秒数
 const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
-
 /**
  * 返回某天开始间隔 n 天开始与结束时间
  * @param  {Number} offset 起始点距离现在的偏移天数
@@ -43,7 +40,7 @@ export const beautify = (data, duration) => {
   for (var i = 0; i < data.length; i++) {
     var res = dateRe.exec(data[i].day)
     if (res) {
-      data[i].day = new Date(parseInt(res[1]), parseInt(res[3]), parseInt(res[5]))
+      data[i].day = new Date(parseInt(res[1]), parseInt(res[3]) - 1, parseInt(res[5]))
     }
 
     if (minDay > data[i].day.getTime()) {
@@ -52,17 +49,17 @@ export const beautify = (data, duration) => {
   }
 
   // 如果获取的数据长度小于duration, 获取最小时间用于补齐默认数据
-  if (duration > data.length) {
-    // 不够数量的数组自动补全
-    var length = data.length
-    for (var j = 0; j < duration - length; j++) {
-      var item = _.clone(data[0])
-      for (var m in item) {
-        item[m] = 0
-      }
-      item.day = new Date(minDay - 3600 * 1000 * 24 * (j + 1))
-      data.push(item)
-    }
-  }
+  // if (duration > data.length) {
+  //   // 不够数量的数组自动补全
+  //   var length = data.length
+  //   for (var j = 0; j < duration - length; j++) {
+  //     var item = _.clone(data[0])
+  //     for (var m in item) {
+  //       item[m] = 0
+  //     }
+  //     item.day = new Date(minDay - 3600 * 1000 * 24 * (j + 1))
+  //     data.push(item)
+  //   }
+  // }
   return data
 }

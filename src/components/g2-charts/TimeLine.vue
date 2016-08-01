@@ -72,7 +72,8 @@ export default {
       this.chart = chart
 
       chart.legend({
-        position: 'top'
+        position: 'top',
+        itemWrap: true
       })
 
       var fields = []
@@ -94,8 +95,11 @@ export default {
       chart.source(this.data, defs)
 
       var line = chart.line().position(position).size(2)
+
+      // var point = chart.point().position(position).shape(fields[0], ['circle', 'rect', 'diamond']).size(4)
       if (color) {
         line.color(color)
+        // point.color(color)
       }
 
       switch (this.type) {

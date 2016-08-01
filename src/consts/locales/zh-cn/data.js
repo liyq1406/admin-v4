@@ -90,9 +90,9 @@ export const AVG_PERIODS = [
 
 // 产品过滤器
 export const PRODUCT_FILTERS = [
-  { label: '新增设备', value: 'added' },
+  { label: '激活设备', value: 'added' },
   // { label: '在线设备', value: 'online' },
-  { label: '累计设备', value: 'all' }
+  { label: '累计激活', value: 'all' }
 ]
 
 // 用户过滤器

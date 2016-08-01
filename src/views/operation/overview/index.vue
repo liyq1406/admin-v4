@@ -165,7 +165,6 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import { globalMixins } from 'src/mixins'
 import mapData from 'components/g2-charts/map-data.json'
 import productLine from './productLine'
-import {getTrend} from './statistics'
 import _ from 'lodash'
 
 export default {
@@ -306,16 +305,6 @@ export default {
             data: []
           }
         }
-      }
-    }
-  },
-
-  watch: {
-    products () {
-      if (this.products.length > 0) {
-        this.products.forEach((item) => {
-          getTrend(this, item.id, 7)
-        })
       }
     }
   },
