@@ -1,16 +1,22 @@
 import _ from 'lodash'
+
+// 每小时毫秒数
+const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
+
 /**
- * 返回前 n 天开始与结束时间
- * @param  {Number} n 天数
+ * 返回某天开始间隔 n 天开始与结束时间
+ * @param  {Number} offset 起始点距离现在的偏移天数
+ * @param  {Number} n      间隔天数
  * @return {Object}
  *   {
  *     start: '2015-12-06',
  *     end: '2015-12-13'
  *   }
  */
-export const createDayRange = (n) => {
-  let curDate = new Date()
-  let startDate = new Date(curDate.getTime() - 3600 * 1000 * 24 * n)
+export const createDayRange = (offset, n) => {
+  let today = new Date()
+  let endDate = new Date(today.getTime() - MICRO_SECONDS_PER_DAY * offset)
+  let startDate = new Date(today.getTime() - MICRO_SECONDS_PER_DAY * (offset + n))
 
   const getDateInfo = (date) => {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`
@@ -18,7 +24,7 @@ export const createDayRange = (n) => {
 
   return {
     start: getDateInfo(startDate),
-    end: getDateInfo(curDate)
+    end: getDateInfo(endDate)
   }
 }
 
