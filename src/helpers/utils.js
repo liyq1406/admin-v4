@@ -8,5 +8,14 @@
  *   }
  */
 export const createDayRange = (n) => {
-  return {}
+  var curTime = new Date()
+  var startTime = new Date(curTime.getTime() - 3600 * 1000 * 24 * n)
+
+  var startDay = startTime.getFullYear().toString() + '-' + (startTime.getMonth() + 1).toString() + '-' + startTime.getDate().toString()
+  var endDay = curTime.getFullYear().toString() + '-' + (curTime.getMonth() + 1).toString() + '-' + curTime.getDate().toString()
+
+  return {
+    start: startDay,
+    end: endDay
+  }
 }
