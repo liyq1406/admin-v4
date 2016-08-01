@@ -161,21 +161,21 @@
        * @return {[type]} [description]
        */
       total () {
-        return this.page.total || 0
+        return this.page.total - 0 || 0
       },
       /**
        * 每页条数
        * @return {[type]} [description]
        */
       countPerPage () {
-        return this.page.countPerPage || 10
+        return this.page.countPerPage - 0 || 10
       },
       /**
        * 当前页码
        * @return {[type]} [description]
        */
       currentPage () {
-        return this.page.currentPage || 1
+        return this.page.currentPage - 0 || 1
       }
     },
     data () {

@@ -12,12 +12,12 @@
       <div class="v-pager-control">
         <span>共{{ pages }}页，转到</span>
         <div class="input-text-wrap">
-          <input type="number" class="input-text input-text-sm" v-model="destPage" number @keyup.enter="onPageChange(destPage)">
+          <input type="number" class="input-text input-text-sm" v-model="destPage" @keyup.enter="goToPage">
         </div>
         <span>页</span>
       </div>
       <div class="v-pager-control">
-        <span>第{{ countPerPage*(current-1)+1 }}-{{ countPerPage*current }}项，共{{ total }}项</span>
+        <span>第{{ countPerPage*(current-1)+1 }}-{{ rangeText }}项，共{{ total }}项</span>
       </div>
       <div class="v-pager-control">
         <button-group>
@@ -93,6 +93,10 @@ export default {
   computed: {
     pages () {
       return Math.ceil(this.total / this.countPerPage) || 1
+    },
+
+    rangeText () {
+      return this.total < this.countPerPage * this.current ? this.total : this.countPerPage * this.current
     }
   },
 
@@ -116,6 +120,11 @@ export default {
           content: '页码不合法'
         })
       }
+    },
+
+    goToPage (ev) {
+      this.onPageChange(this.destPage)
+      this.destPage = ''
     },
 
     // 处理
