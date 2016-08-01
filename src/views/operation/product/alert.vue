@@ -9,7 +9,7 @@
           <date-time-range-picker></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getDate"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
       <h3>趋势</h3>
@@ -295,6 +295,8 @@
   import TimeLine from 'components/g2-charts/TimeLine'
   import Mock from 'mockjs'
   import Dropdown from 'components/Dropdown'
+  import { formatDate } from 'src/filters'
+  import dateFormat from 'date-format'
 
   export default {
     name: 'Alert',
@@ -423,23 +425,23 @@
         showModal: false,
         alertSummary: {
           unhandle: {
-            total: 123,
-            change: 34,
+            total: '',
+            change: '',
             title: '待处理告警'
           },
           message: {
-            total: 3466,
-            change: 50,
+            total: '',
+            change: '',
             title: '今日告警'
           },
           thirtyday: {
-            total: 2450,
-            change: 870,
+            total: '',
+            change: '',
             title: '30天告警数'
           },
           sevenday: {
-            total: 890,
-            change: 90,
+            total: '',
+            change: '',
             title: '7天告警数'
           }
         },
@@ -557,19 +559,37 @@
       //
       //   return result
       // }
+      // queryCondition () {
+      //   return {
+      //     limit: this.countPerPage,
+      //     offset: (this.currentPage - 1) * this.countPerPage,
+      //     query: {
+      //       name: this.productName
+      //     }
+      //   }
+      // }
       queryCondition () {
-        return {
+        var condition = {
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
-          query: {
-            name: this.productName
-          }
+          order: {},
+          query: {}
         }
+        if (this.key !== '') {
+          condition.query.id = {$regex: this.key, $options: 'i'}
+        }
+
+        return condition
+      },
+
+      beginTime () {
+        var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+        return dateFormat('yyyy-MM-dd', new Date(past))
       }
     },
     ready () {
-      this.getProduct()
-
+      // this.getProduct()
+      this.getSummary()
       // TODO
       this.alertChartData = Mock.mock({
         'list|21': [{
@@ -604,6 +624,72 @@
     },
 
     methods: {
+      // 获取告警概览@author weijie
+      getSummary () {
+        var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
+        todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
+        var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
+        weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
+        var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
+        monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
+        var now = new Date().getTime()
+        now = dateFormat('yyyy-MM-dd', new Date(now))
+        // 获取当天数据
+        api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
+          if (res.status === 200) {
+            this.alertSummary.unhandle.total = res.data.unread
+            this.alertSummary.message.total = res.data.message
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+        // 获取7天数据
+        api.statistics.getAlertSummary(weekBeginTime, now).then((res) => {
+          if (res.status === 200) {
+            this.alertSummary.sevenday.total = res.data.message
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+        // 获取30天数据
+        api.statistics.getAlertSummary(monthBeginTime, now).then((res) => {
+          if (res.status === 200) {
+            this.alertSummary.thirtyday.total = res.data.message
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      // 获取消息列表@author weijie
+      getList () {
+        api.alert.getAlerts(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            // console.log(res.data.list)
+            // this.alerts = res.data.list
+            this.alerts = res.data.list.map((item) => {
+              // 计算已读告警持续时间
+              if (item.is_read) {
+                let beginTime = new Date(formatDate(item.create_date))
+                let endTime = new Date(formatDate(item.read_time))
+                let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+                // console.log(lasting.toFixed(1))
+                item.lasting = lasting.toFixed(1)
+              } else {
+                // 计算未读告警持续时间
+                let beginTime = new Date(formatDate(item.create_date))
+                let endTime = new Date()
+                let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+                // console.log(lasting.toFixed(1))
+                item.lasting = lasting.toFixed(1)
+              }
+              return item
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 数据端点名称
        */
