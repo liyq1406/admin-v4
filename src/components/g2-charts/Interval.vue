@@ -14,7 +14,6 @@ export default {
   props: {
     // 数据
     data: {
-      type: Array,
       default () {
         return []
       }
@@ -53,7 +52,13 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        this.chart.changeData(this.data)
+        if (this.options.sort) {
+          var frame = new window.G2.Frame(this.data)
+          frame = window.G2.Frame.sort(frame, this.options.sort)
+          this.chart.changeData(frame)
+        } else {
+          this.chart.changeData(this.data)
+        }
       } else {
         this.render()
       }
@@ -62,9 +67,14 @@ export default {
 
   methods: {
     render () {
-      if (!this.data || this.data.length <= 0) {
+      if (!this.data) {
         return
       }
+
+      if (_.isArray(this.data) && this.data.length <= 0) {
+        return
+      }
+
       // 默认配置
       var defaults = {
         container: this.$el, // 容器
@@ -113,7 +123,14 @@ export default {
         chart.tooltip(_.merge({}, tooltipDefaults, this.options.tooltip))
       }
 
-      chart.source(this.data, defs)
+      if (this.options.sort) {
+        var frame = new window.G2.Frame(this.data)
+        frame = window.G2.Frame.sort(frame, this.options.sort)
+        chart.source(frame, defs)
+      } else {
+        chart.source(this.data, defs)
+      }
+
       if (this.options.horizontal) {
         chart.coord('rect').transpose()
       }

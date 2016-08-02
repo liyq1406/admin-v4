@@ -1,8 +1,9 @@
 import api from 'api'
 import {createDayRange, beautify} from 'helpers/utils'
+import _ from 'lodash'
 
 function getTrend (productId, duration) {
-  var range = createDayRange(duration)
+  var range = createDayRange(0, duration)
   return new Promise((resolve, reject) => {
     api.statistics.getProductTrend(productId, range.start, range.end).then((res) => {
       if (res.status === 200 && res.data.length > 0) {
@@ -20,7 +21,7 @@ export function getActivatedTrend (productId, duration) {
     getTrend(productId, duration).then((res) => {
       var acRet = []
       var toRet = []
-      res.forEach((item) => {
+      res.forEach((item) => { // 过滤字段
         let acTemp = {}
         let toTemp = {}
         acTemp.day = item.day
@@ -46,7 +47,7 @@ export function getActiveTrend (productId, duration) {
     getTrend(productId, duration).then((res) => {
       var acRet = []
       var addRet = []
-      res.forEach((item) => {
+      res.forEach((item) => { // 过滤字段
         let acTemp = {}
         let addTemp = {}
         acTemp.day = item.day
@@ -64,5 +65,32 @@ export function getActiveTrend (productId, duration) {
     }).catch((res) => {
       reject(res)
     })
+  })
+}
+
+// 获取产品分布
+export function getProductRegion (pruductId) {
+  return new Promise((resolve, reject) => {
+    api.statistics.getProductRegion(pruductId).then((res) => {
+      if (res.status === 200) {
+        resolve(res.data['中国'])
+      }
+    }).catch((res) => {
+      reject(res)
+    })
+  })
+}
+
+// 计算数组某字段百分比
+export function numToPercent (arr, field) {
+  var total = 0
+  arr.forEach((item) => {
+    total += item[field]
+  })
+
+  return arr.map((item) => {
+    var temp = _.clone(item)
+    temp.percent = item[field] / total
+    return temp
   })
 }
