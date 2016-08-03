@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="currentProduct" @change="">
+            <select v-model="currentProduct" @change="getList()">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -17,14 +17,14 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
+          <date-time-range-picker @timechange = "getListSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getDate"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getList()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
-    <div class="panel">
+    <!-- <div class="panel">
       <div class="panel-bd">
         <div class="with-loading">
           <time-line :data="alertTrends" :type="'smooth'"></time-line>
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="alertSummary.unread" :title="alertSummary.unread.title" align="left"></statistic>
@@ -58,15 +58,28 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+                  <v-select width="90px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </v-select>
                   <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
-            <h3>明细</h3>
+            <div class="filter-group">
+              <v-select width="90px" size="small" :label="visibility.label">
+                <span slot="label">{{ $t('common.display') }}：</span>
+                <select v-model="visibility" @change="getList()">
+                  <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
+            </div>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
+                <!-- <th>勾选</th> -->
                 <th>告警设备</th>
                 <th>时间</th>
                 <th>持续时长</th>
@@ -79,13 +92,14 @@
             <tbody>
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
+                  <!-- <td><input type="checkbox"></td> -->
                   <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.from }}</a></td>
                   <td>{{ alert.create_date | formatDate }}</td>
                   <td>{{ alert.lasting }}h</td>
                   <td>{{ alert.alert_name }}</td>
                   <td>{{ alert.location}}</td>
                   <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span></template>
+                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tags==='严重', 'text-label-info':tags==='轻微'}" class="text-label">{{ alert.tags }}</span></template>
                   </td>
                   <td><span v-if="alert.is_read">已处理</span><span v-else>未处理</span></td>
                 </tr>
@@ -202,7 +216,9 @@ export default {
 
   data () {
     return {
-      currentProduct: {},
+      currentProduct: {
+        id: ''
+      },
       key: '',
       alerts: [],
       total: 0,
@@ -254,7 +270,7 @@ export default {
         },
         week: {
           title: '7天告警数',
-          totoal: 0,
+          total: 0,
           change: 0
         },
         month: {
@@ -265,7 +281,28 @@ export default {
       },
       alertTrends: [],
       today: dateFormat('yyyy-MM-dd', new Date()),
-      loadingData: false
+      loadingData: false,
+      startTimePick: '',
+      endTimePick: '',
+      queryTypeOptions: [
+        // { label: 'MAC', value: 'mac' },
+        { label: '设备ID', value: 'from' },
+        { label: '告警内容', value: 'alert_name' }
+      ],
+      queryType: {
+        label: '设备ID',
+        value: 'from'
+      },
+      visibility: {
+        label: '全部等级',
+        value: 'all'
+      },
+      visibilityOptions: [
+        { label: '全部等级', value: 'all' },
+        { label: '通知', value: '通知' },
+        { label: '轻微', value: '轻微' },
+        { label: '重度', value: '重度' }
+      ]
     }
   },
 
@@ -274,26 +311,116 @@ export default {
     //   return {
     //     limit: this.countPerPage,
     //     offset: (this.currentPage - 1) * this.countPerPage
+    //     if (this.key !== '') {
+    //       condition.query.id = {$regex: this.key, $options: 'i'}
+    //     }
     //   }
     // },
 
     queryCondition () {
-      var condition = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
-        query: {}
+      var condition = {}
+      if (this.period === '') {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            product_id: {
+              $in: [this.currentProduct.id]
+            },
+            create_date: {
+              $gte: this.startTimePick,
+              $lte: this.endTimePick
+            }
+          }
+        }
+      } else {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            product_id: {
+              $in: [this.currentProduct.id]
+            },
+            create_date: {
+              $lte: this.endTime + 'T23:59:59.000Z',
+              $gte: this.beginTime + 'T00:00:00.000Z'
+            }
+          }
+        }
       }
-      if (this.key !== '') {
-        condition.query.id = {$regex: this.key, $options: 'i'}
+      // var condition = {
+      //   limit: this.countPerPage,
+      //   offset: (this.currentPage - 1) * this.countPerPage,
+      //   order: {},
+      //   query: {
+      //     product_id: {
+      //       $in: [this.currentProduct.id]
+      //     },
+      //     create_date: {
+      //       $lte: this.endTime + 'T23:59:59.000Z',
+      //       $gte: this.beginTime + 'T00:00:00.000Z'
+      //     }
+      //   }
+      // }
+      // if (this.key !== '') {
+      //   condition.query.id = {$in: [this.key]}
+      // }
+      if (this.key.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
+      }
+
+      switch (this.visibility.value) {
+        case '通知':
+          condition.query['tags'] = { $in: ['通知'] }
+          break
+        case '轻微':
+          condition.query['tags'] = { $in: ['轻微'] }
+          break
+        case '重度':
+          condition.query['tags'] = { $in: ['重度'] }
+          break
+        default:
       }
 
       return condition
     },
 
+    TimePick () {
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          product_id: {
+            $in: [this.currentProduct.id]
+          },
+          create_date: {
+            $gte: this.startTimePick,
+            $lte: this.endTimePick
+          }
+        }
+      }
+      if (this.key !== '') {
+        condition.query.id = {$in: [this.key]}
+      }
+
+      return condition
+    },
+
+    selectedProduct () {
+      var product = this.currentProduct
+      return product
+    },
+
     beginTime () {
       var past = new Date().getTime() - this.period * 24 * 3600 * 1000
       return dateFormat('yyyy-MM-dd', new Date(past))
+    },
+    endTime () {
+      var end = new Date().getTime()
+      return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
 
@@ -328,7 +455,8 @@ export default {
       // this.getAlertSummary()
       this.getFirstProduct()
       this.getSummary()
-      this.getList()
+      // this.getList()
+      // this.getTagTrend()
     }
   },
 
@@ -336,6 +464,10 @@ export default {
   watch: {
     products () {
       this.getFirstProduct()
+      if (this.products.length > 0) {
+        // this.getTagTrend()
+        this.getList(this.queryCondition)
+      }
     }
     // period () {
     //   this.getAlertTrends()
@@ -344,15 +476,30 @@ export default {
   },
 
   methods: {
+    // 获取图表数据
+    // getTagTrend () {
+    //   api.alert.getTagTrend(this.selectedProduct.id, '通知', this.beginTime, this.endTime, '', '').then((res) => {
+    //     if (res.status === 200) {
+    //       console.log(res.data)
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //   })
+    // },
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
+      // setTimeout(() => {
+      //   this.getTagTrend()
+      // }, 3000)
     },
 
     // 获取数据@author weijie
     getDate () {
-      console.log(123)
+      // console.log(123)
       console.log(this.beginTime)
+      console.log(this.endTime)
+      // this.getTagTrend()
     },
 
     // 获取告警概览@author weijie
@@ -390,6 +537,13 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    getListSpecial (start, end) {
+      this.period = ''
+      this.startTimePick = start
+      this.endTimePick = end
+      console.log(start + end)
+      this.getList(this.TimePick)
     },
     // 获取消息列表@author weijie
     getList () {

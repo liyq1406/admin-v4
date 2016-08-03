@@ -37,7 +37,7 @@
                 <td>{{ record.alert_name }}</td>
                 <td>{{ record.location}}</td>
                 <td>
-                  <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span></template>
+                  <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tags==='严重', 'text-label-info':tags==='轻微'}" class="text-label">{{ record.tags }}</span></template>
                 </td>
                 <td><span v-if="record.is_read">已处理</span><span v-else>未处理</span></td>
               </tr>
@@ -82,6 +82,12 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1
+    }
+  },
+
+  filters: {
+    toTags (value) {
+      return value.length ? value.split(',') : []
     }
   },
 

@@ -12,7 +12,7 @@
 
               <div class="up">
                 <h3>{{ info.alert_name || '暂无'}}</h3>
-                <span v-for="tag in info.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ info.tags || '暂无'}} </span>
+                <span v-for="tag in info.tags | toTags" :class="{'text-label-danger':tags==='严重', 'text-label-info':tags==='轻微'}" class="text-label">{{ info.tags || '暂无'}} </span>
               </div>
               <div class="down row">
                 <div class="col-12">
