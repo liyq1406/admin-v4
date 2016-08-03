@@ -25,6 +25,7 @@
 <script>
 import DateTimePicker from './DateTimePicker'
 import {uniformDate} from '../filters'
+import EventListener from './utils/EventListener'
 
 export default {
   name: 'timerangepicker',
@@ -57,6 +58,17 @@ export default {
     var curTime = new Date()
     this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000)
     this.endTime = curTime
+    this._closeEvent = EventListener.listen(window, 'click', (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.showChoosePanel = false
+        this.showTimePicker = false
+      }
+    })
+  },
+  beforeDestroy () {
+    if (this._closeEvent) {
+      this._closeEvent.remove()
+    }
   },
   methods: {
     toggle () {

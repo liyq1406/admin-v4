@@ -27,28 +27,28 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="datapoint in datapoints | orderBy 'index'">
+              <tr v-for="datapoint in datapointList | orderBy 'index'">
                 <td>{{ datapoint.index }}</td>
                 <td>{{ datapoint.name }}</td>
                 <td>{{ datapoint.description }}</td>
                 <td>
                   <div class="control-box">
-                    <div class="radio-box" v-if="dataPointType(datapoint.type) === 'boolean'">
-                      <label>
-                        <input type="radio" :name="'datapoint' + $index" value="true" v-model="datapoint.value">
+                    <div class="radio-group" v-if="dataPointType(datapoint.type) === 'boolean'">
+                      <label class="radio">
+                        <input type="radio" :name="'datapoint' + $index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                         <span>true</span>
                       </label>
-                      <label>
-                        <input type="radio" :name="'datapoint' + $index" value="false" v-model="datapoint.value">
+                      <label class="radio ml15">
+                        <input type="radio" :name="'datapoint' + $index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                         <span>false</span>
                       </label>
                     </div>
                     <div class="range-box" v-if="dataPointType(datapoint.type) === 'number'">
-                      <range :step="50" :value="50"></range>
+                      <range :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :extra="datapoint" @changed="onRangeChanged"></range>
                     </div>
                     <div class="string-box w160" v-if="dataPointType(datapoint.type) === 'string'">
                       <div class="input-text-wrap">
-                        <input type="text" class="input-text input-text-sm">
+                        <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                       </div>
                     </div>
                   </div>
@@ -103,6 +103,7 @@ import locales from 'consts/locales/index'
 import Range from 'components/Range'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
+import _ from 'lodash'
 
 var socket = null
 
@@ -135,6 +136,20 @@ export default {
       ],
       token: '',
       refreshing: false
+    }
+  },
+
+  computed: {
+    datapointList () {
+      let result = []
+      this.datapoints.forEach((item) => {
+        let dp = _.cloneDeep(item)
+        if (this.datapointValues.hasOwnProperty(item.index)) {
+          dp.value = this.datapointValues[item.index]
+        }
+        result.push(dp)
+      })
+      return result
     }
   },
 
@@ -203,7 +218,9 @@ export default {
     getDatapointValues () {
       this.refreshing = true
       api.device.getDatapointValues(this.$route.params.device_id, { act: 'logs' }).then((res) => {
-        this.refreshing = false
+        window.setTimeout(() => {
+          this.refreshing = false
+        }, 500)
         if (res.status === 202) {
           console.log('设备离线！')
         } else {
@@ -332,36 +349,46 @@ export default {
           result = 'number'
       }
       return result
-    }
+    },
+
+    /**
+     * 处理 Range 改变
+     * @author shengzhi
+     * @param  {Number} val    值
+     * @param  {Object} params 参数
+     */
+    onRangeChanged (val, params) {
+      let dp = params.extra
+      dp.value = val
+      this.setDataEvent(dp)
+    },
+
     /**
      * 数据端点编辑 提交表单
      */
-    // setDataEvent (editModal) {
-    //   if (this.editModal2.show === false || this.validation2.$valid) {
-    //     var params = {
-    //       datapoint: [
-    //         {
-    //           index: editModal.index,
-    //           value: editModal.value
-    //         }
-    //       ]
-    //     }
-    //     if (this.editModal3.show === true) {
-    //       params.datapoint[0].value = String(params.datapoint[0].value)
-    //     }
-    //     this.settingData = true
-    //     api.diagnosis.setDeviceAttribute(this.$route.params.device_id, params).then((res) => {
-    //       this.closeEditModal()
-    //       if (res.status === 200) {
-    //         this.getDatapointValues()
-    //         this.getDatapoints()
-    //       }
-    //     }).catch((res) => {
-    //       this.closeEditModal()
-    //       this.handleError(res)
-    //     })
-    //   }
-    // }
+    setDataEvent (dp) {
+      if (this.refreshing) return
+      var params = {
+        datapoint: [
+          {
+            index: dp.index,
+            value: dp.value
+          }
+        ]
+      }
+      // if (this.editModal3.show === true) {
+      //   params.datapoint[0].value = String(params.datapoint[0].value)
+      // }
+      // this.settingData = true
+      api.diagnosis.setDeviceAttribute(this.$route.params.device_id, params).then((res) => {
+        if (res.status === 200) {
+          this.getDatapointValues()
+          // this.getDatapoints()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    }
   }
 }
 </script>
@@ -398,6 +425,7 @@ export default {
 
   .log
     margin 10px 0
+    padding 0 10px
 
   .time
     margin-right 10px
@@ -437,7 +465,7 @@ export default {
           box-sizing border-box
           font-size 14px
           padding 0 15px
-  .control-box
+  /*.control-box
     .radio-box
       height 26px
       overflow hidden
@@ -447,6 +475,6 @@ export default {
         margin-right 10px
         input[type="radio"]
           position relative
-          top 2px
+          top 2px*/
 
 </style>

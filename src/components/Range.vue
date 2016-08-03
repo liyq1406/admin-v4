@@ -26,6 +26,7 @@
      // this.$emit('changed', value, params) // 非实时上报
      //
     props: {
+      extra: null,
       // 步长
       'step': {
         type: Number,
@@ -356,12 +357,13 @@
         this.value = value
       },
       emit (name) {
-        var precent = (this.value - this.min) / (this.max - this.min)
+        var percent = (this.value - this.min) / (this.max - this.min)
         var params = {
           max: this.max,
           min: this.min,
           step: this.step,
-          precent: precent
+          percent: percent,
+          extra: this.extra
         }
         this.$emit(name, this.value, params)
       }

@@ -4,7 +4,7 @@
       <div class="icon-loading" v-show="loading">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
-      <table class="table table-stripe table-bordered">
+      <table class="table" :class="{'table-bordered':bordered}">
         <thead>
           <tr>
             <th v-show="selecting" class="tac">
@@ -140,14 +140,23 @@
 
       headers: {
         type: Array,
-        default: [],
+        default () {
+          return []
+        },
         twoWay: false
       },
 
       tables: {
         type: Array,
-        default: [],
+        default () {
+          return []
+        },
         twoWay: false
+      },
+
+      bordered: {
+        type: Boolean,
+        default: true
       }
     },
 
