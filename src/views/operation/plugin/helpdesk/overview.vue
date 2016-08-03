@@ -6,20 +6,23 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width="110px" size="small">
+          <v-select :label="product.name" width="110px" size="small">
             <span slot="label">产品</span>
+            <select v-model="product">
+              <option v-for="prod in products" :value="prod">{{prod.name}}</option>
+            </select>
           </v-select>
         </div>
       </div>
       <div class="filter-group fr">
-        <div class="filter-group-item">
+        <!-- <div class="filter-group-item">
           <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div>
+        </div> -->
         <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
         </div>
       </div>
     </div>
@@ -138,8 +141,17 @@ export default {
     TimeLine
   },
 
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
+
   data () {
     return {
+      product: {
+        name: ''
+      },
       customPieMargin: [20, 0, 0, 0],
       feedbacks: [
         {
@@ -219,6 +231,14 @@ export default {
         '产品|+1': ['产品咨询', '产品咨询', '产品咨询', '产品咨询', '故障反馈', '故障反馈', '故障反馈', '故障反馈', '使用建议', '使用建议', '使用建议', '使用建议', '使用指南', '使用指南', '使用指南', '使用指南']
       }]
     }).list
+  },
+
+  watch: {
+    products () {
+      if (this.products.length > 0) {
+        this.product = this.products[0]
+      }
+    }
   },
 
   methods: {
