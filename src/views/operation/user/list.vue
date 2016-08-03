@@ -35,7 +35,6 @@
 
 <script>
   import SearchBox from 'components/SearchBox'
-  import Modal from 'components/Modal'
   import Select from 'components/Select'
   import api from 'api'
   import * as config from 'consts/config'
@@ -50,7 +49,6 @@
 
     components: {
       'search-box': SearchBox,
-      'modal': Modal,
       'api': api,
       'v-select': Select,
       'x-table': Table
