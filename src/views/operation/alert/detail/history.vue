@@ -1,6 +1,21 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
+      <div class="filter-bar filter-bar-head">
+        <div class="filter-group fr">
+          <div class="filter-group-item">
+            <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
+          </div>
+          <div class="filter-group-item">
+            <radio-button-group :items="periods" :value.sync="period" @select="getTagTrend()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          </div>
+        </div>
+      </div>
+      <div class="">
+        <time-line :data="trendData" :type="'smooth'"></time-line>
+      </div>
+    </div>
+    <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
@@ -16,15 +31,21 @@
               </search-box>
             </div>
           </div>
-          <h3>告警历史</h3>
+          <div class="filter-group">
+            <v-select width="90px" size="small" :label="visibility.label">
+              <span slot="label">{{ $t('common.display') }}：</span>
+              <select v-model="visibility" @change="getList()">
+                <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+              </select>
+            </v-select>
+          </div>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
+              <th>告警内容</th>
               <th>时间</th>
               <th>持续时长</th>
-              <th>告警内容</th>
-              <th>地点</th>
               <th>告警等级</th>
               <th>状态</th>
             </tr>
@@ -32,10 +53,9 @@
           <tbody>
             <template v-if="records.length > 0">
               <tr v-for="record in records">
+                <td>{{ record.alert_name }}</td>
                 <td>{{ record.create_date | formatDate }}</td>
                 <td>{{ record.lasting }}h</td>
-                <td>{{ record.alert_name }}</td>
-                <td>{{ record.location}}</td>
                 <td>
                   <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tags==='严重', 'text-label-info':tags==='轻微'}" class="text-label">{{ record.tags }}</span></template>
                 </td>
@@ -61,7 +81,12 @@ import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'src/filters'
+import { formatDate, uniformDate } from 'src/filters'
+import Select from 'components/Select'
+import TimeLine from 'components/g2-charts/TimeLine'
+import RadioButtonGroup from 'components/RadioButtonGroup'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import dateFormat from 'date-format'
 
 export default {
   name: 'record-history',
@@ -70,7 +95,11 @@ export default {
 
   components: {
     Pager,
-    SearchBox
+    SearchBox,
+    TimeLine,
+    RadioButtonGroup,
+    DateTimeRangePicker,
+    'v-select': Select
   },
 
   data () {
@@ -78,10 +107,51 @@ export default {
       loadingData: false,
       records: [],
       deviceID: '',
+      productID: '',
       key: '',
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
-      currentPage: 1
+      currentPage: 1,
+      visibility: {
+        label: '全部等级',
+        value: 'all'
+      },
+      visibilityOptions: [
+        { label: '全部等级', value: 'all' },
+        { label: '通知', value: '通知' },
+        { label: '轻微', value: '轻微' },
+        { label: '重度', value: '重度' }
+      ],
+      startTimePick: '',
+      endTimePick: '',
+      trendData: [],
+      period: 7,
+      periods: [
+        {
+          value: 1,
+          label: '24h'
+        },
+        {
+          value: 7,
+          label: '7天'
+        },
+        {
+          value: 30,
+          label: '30天'
+        }
+      ],
+      serious: {
+        name: '严重',
+        data: []
+      },
+      normal: {
+        name: '通知',
+        data: []
+      },
+      light: {
+        name: '轻微',
+        data: []
+      }
     }
   },
 
@@ -93,6 +163,7 @@ export default {
 
   ready () {
     this.getList()
+    // this.getTagTrend()
   },
 
   computed: {
@@ -112,9 +183,47 @@ export default {
         condition.query.id = {$in: [this.key]}
       }
 
+      switch (this.visibility.value) {
+        case '通知':
+          condition.query['tags'] = { $in: ['通知'] }
+          break
+        case '轻微':
+          condition.query['tags'] = { $in: ['轻微'] }
+          break
+        case '重度':
+          condition.query['tags'] = { $in: ['重度'] }
+          break
+        default:
+      }
+
       return condition
+    },
+
+    beginTime () {
+      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+      return dateFormat('yyyy-MM-dd', new Date(past))
+    },
+    endTime () {
+      var end = new Date().getTime()
+      return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
+
+  // 监听属性变动
+  watch: {
+    productID () {
+      this.getTagTrend()
+      // if (this.products.length > 0) {
+      //   // this.getTagTrend()
+      //   this.getList(this.queryCondition)
+      // }
+    }
+    // period () {
+    //   this.getAlertTrends()
+    //   this.getAlertSummary()
+    // }
+  },
+
   methods: {
     // 获取告警历史@author weijie
     getList () {
@@ -133,6 +242,7 @@ export default {
         if (res.status === 200) {
           this.total = res.data.count
           this.deviceID = res.data.list[0].from
+          this.productID = res.data.list[0].product_id
           // 再获取当前设备的告警记录列表
           // var item = {
           //   offset: 0,
@@ -174,6 +284,67 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    getTagTrend () {
+      var begin
+      var end
+      if (this.period === '') {
+        var startTimePick = uniformDate(this.startTimePick)
+        var endTimePick = uniformDate(this.endTimePick)
+        begin = startTimePick
+        end = endTimePick
+      } else {
+        begin = this.beginTime
+        end = this.endTime
+      }
+      // 获取标签'轻微'的趋势
+      api.alert.getTagTrend(this.productID, '轻微', begin, end).then((res) => {
+        if (res.status === 200) {
+          this.pushArr(this.light)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+
+      // 获取标签'通知'的趋势
+      api.alert.getTagTrend(this.productID, '通知', begin, end).then((res) => {
+        if (res.status === 200) {
+          this.pushArr(this.normal)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+
+      // 获取标签'严重'的趋势
+      api.alert.getTagTrend(this.productID, '严重', begin, end).then((res) => {
+        if (res.status === 200) {
+          this.serious = res.data
+          this.pushArr(this.serious)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    // 处理标签数据
+    pushArr (arr) {
+      arr.data.forEach((item) => {
+        var dayTotal = 0
+        item.hours.forEach((message) => {
+          dayTotal = dayTotal + message
+        })
+        this.trendData.push({
+          day: item.day,
+          data: dayTotal,
+          product: item.name
+        })
+      })
+    },
+    getSpecial (start, end) {
+      this.period = ''
+      this.startTimePick = start
+      this.endTimePick = end
+      this.getTagTrend()
     }
   }
 }
