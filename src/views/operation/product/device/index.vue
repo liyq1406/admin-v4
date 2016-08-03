@@ -16,7 +16,11 @@
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
-          <div id="device-map" class="mt10 ml30" style="height: 220px"></div>
+          <!-- <div id="device-map" class="mt10 ml30" style="height: 220px"></div> -->
+          <div class="mt10 ml30">
+            <map :location="deviceLocation" height="220px"></map>
+            <div class="device-ip mt5">{{ currVirtualDevice.ip }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -27,12 +31,15 @@
 
 <script>
 import api from 'api'
-import * as config from 'consts/config'
 import Tab from 'components/Tab'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
+import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
+import store from 'store'
+import { getCurrProduct, setCurrVirtualDevice } from 'store/actions/products'
+import { formatDate } from 'src/filters'
 
 export default {
   name: 'Device',
@@ -43,38 +50,53 @@ export default {
     Tab,
     Breadcrumb,
     InfoCard,
-    InfoList
+    InfoList,
+    Map
+  },
+
+  store,
+
+  vuex: {
+    getters: {
+      currentProduct: ({ products }) => products.curr,
+      currVirtualDevice: ({ products }) => products.currVirtualDevice
+    },
+    actions: {
+      getCurrProduct,
+      setCurrVirtualDevice
+    }
   },
 
   data () {
     return {
-      deviceSummary: {},
-      deviceInfo: {
-        mac: {
-          label: 'MAC',
-          value: ''
-        },
-        onlineLong: {
-          label: '累计在线时长',
-          value: ''
-        },
-        isActive: {
-          label: '激活状态',
-          value: ''
-        },
-        model: {
-          label: '型号',
-          value: ''
-        },
-        sn: {
-          label: '序列号',
-          value: ''
-        },
-        id: {
-          label: '设备ID',
-          value: ''
-        }
-      },
+      device: {},
+      deviceLocation: [],
+      // deviceInfo: {
+      //   mac: {
+      //     label: 'MAC',
+      //     value: ''
+      //   },
+      //   onlineLong: {
+      //     label: '累计在线时长',
+      //     value: ''
+      //   },
+      //   isActive: {
+      //     label: '激活状态',
+      //     value: ''
+      //   },
+      //   model: {
+      //     label: '型号',
+      //     value: ''
+      //   },
+      //   sn: {
+      //     label: '序列号',
+      //     value: ''
+      //   },
+      //   id: {
+      //     label: '设备ID',
+      //     value: ''
+      //   }
+      // },
       secondaryNav: [],
       breadcrumbNav: [{
         label: '全部',
@@ -85,10 +107,63 @@ export default {
     }
   },
 
+  computed: {
+    // 设备简介
+    deviceSummary () {
+      return {
+        title: this.device.name || this.currentProduct.name,
+        online: this.device.is_online,
+        time: formatDate(this.device.last_login)
+      }
+    },
+
+    // 设备信息
+    deviceInfo () {
+      let activeInfo = this.device.is_active ? `已激活 ${formatDate(this.device.active_date)}` : '未激活'
+      let onlineLongInfo = this.currVirtualDevice.online_count
+
+      if (typeof onlineLongInfo !== 'undefined') {
+        onlineLongInfo = onlineLongInfo > 3600 ? `${(onlineLongInfo / 3600).toFixed(1)}小时` : `${onlineLongInfo}秒`
+      } else {
+        onlineLongInfo = '暂无信息'
+      }
+
+      return {
+        mac: {
+          label: 'MAC',
+          value: this.device.mac
+        },
+        onlineLong: {
+          label: '累计在线时长',
+          value: onlineLongInfo
+        },
+        isActive: {
+          label: '激活状态',
+          value: activeInfo
+        },
+        model: {
+          label: '型号',
+          value: this.device.firmware_mod
+        },
+        sn: {
+          label: '序列号',
+          value: this.device.sn || '暂无信息'
+        },
+        id: {
+          label: '设备ID',
+          value: this.device.id
+        }
+      }
+    }
+  },
+
   route: {
     data (transition) {
-      var deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
+      let deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
+      this.getCurrProduct(this.$route.params.product_id)
       this.getDeviceInfo()
+      this.getVDeviceInfo()
+      this.getDeviceGeography()
 
       return {
         secondaryNav: [{
@@ -119,81 +194,120 @@ export default {
 
   ready () {
     // 将回调绑定在全局供高德地图加载后调用
-    window.init = this.initMap
-    api.device.getGeography(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
-      if (res.status === 200) {
-        this.mapCenter = [res.data.lon, res.data.lat]
-        if (typeof window.AMap === 'undefined') {
-          var mapApi = document.createElement('script')
-          // alert(`http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`)
-          mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
-          document.getElementsByTagName('body')[0].appendChild(mapApi)
-        } else {
-          this.initMap()
-        }
-        // this.points = [res.data]
-      }
-    }).catch((res) => {
-      // this.showNotice({
-      //   type: 'error',
-      //   content: '暂无该设备的定位数据'
-      // })
-    })
+    // window.init = this.initMap
+    // api.device.getGeography(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+    //   if (res.status === 200) {
+    //     this.mapCenter = [res.data.lon, res.data.lat]
+    //     if (typeof window.AMap === 'undefined') {
+    //       var mapApi = document.createElement('script')
+    //       // alert(`http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`)
+    //       mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
+    //       document.getElementsByTagName('body')[0].appendChild(mapApi)
+    //     } else {
+    //       this.initMap()
+    //     }
+    //     // this.points = [res.data]
+    //   }
+    // }).catch((res) => {
+    //   // this.showNotice({
+    //   //   type: 'error',
+    //   //   content: '暂无该设备的定位数据'
+    //   // })
+    // })
   },
 
   methods: {
     /**
      * 地图初始化
      */
-    initMap () {
-      // 地图初始化
-      this.map = new AMap.Map('device-map', {
-        resizeEnable: true,
-        zoom: 15
-      })
-      this.map.setCenter(this.mapCenter)
+    // initMap () {
+    //   // 地图初始化
+    //   this.map = new AMap.Map('device-map', {
+    //     resizeEnable: true,
+    //     zoom: 15
+    //   })
+    //   this.map.setCenter(this.mapCenter)
+    //
+    //   this.marker = new AMap.Marker({
+    //     map: this.map,
+    //     position: this.mapCenter,
+    //     icon: 'static/images/marker.png',
+    //     offset: {x: -11, y: -28}
+    //   })
+    // },
 
-      this.marker = new AMap.Marker({
-        map: this.map,
-        position: this.mapCenter,
-        icon: 'static/images/marker.png',
-        offset: {x: -11, y: -28}
+    /**
+     * 获取虚拟设备数据
+     * @author shengzhi
+     */
+    getVDeviceInfo () {
+      api.product.getVDeviceInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+        if (res.status === 200) {
+          this.setCurrVirtualDevice(res.data)
+          // this.deviceInfo.onlineLong.value = '100小时'
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
 
-    // 获取设备信息
+    /**
+     * 获取设备信息
+     * @author shengzhi
+     */
     getDeviceInfo () {
       api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
         if (res.status === 200) {
-          // this.device = res.data
-          // console.log(res.data)
-
-          this.deviceInfo.mac.value = res.data.mac
-          // TODO 接口字段缺失
-          this.deviceInfo.mac.value = '100小时'
-          this.deviceInfo.isActive.value = res.data.is_active ? `已激活 ${res.data.active_date}` : '未激活'
-          // TODO 接口字段缺失
-          this.deviceInfo.model.value = '暂无信息'
-          // TODO 接口字段缺失
-          this.deviceInfo.sn.value = '暂无信息'
-          this.deviceInfo.id.value = res.data.id
-
-          api.product.getProduct(res.data.product_id).then((r) => {
-            if (r.status === 200) {
-              this.deviceSummary = {
-                title: res.data.name || r.data.name,
-                online: res.is_online,
-                time: res.last_login
-              }
-            }
-          }).catch((r) => {
-            // this.handleError(r)
-          })
+          this.device = res.data
         }
       }).catch((res) => {
-        // this.handleError(res)
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取设备的地理坐标
+     * @author shengzhi
+     */
+    getDeviceGeography () {
+      api.device.getGeography(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+        if (res.status === 200) {
+          this.deviceLocation = [res.data.lon, res.data.lat]
+        }
       })
     }
+
+    // // 获取设备信息
+    // getDeviceInfo () {
+    //   api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+    //     if (res.status === 200) {
+    //       // this.device = res.data
+    //       // console.log(res.data)
+    //
+    //       this.deviceInfo.mac.value = res.data.mac
+    //       this.deviceInfo.isActive.value = res.data.is_active ? `已激活 ${res.data.active_date}` : '未激活'
+    //       // TODO 接口字段缺失
+    //       this.deviceInfo.model.value = '暂无信息'
+    //       // TODO 接口字段缺失
+    //       this.deviceInfo.sn.value = '暂无信息'
+    //       this.deviceInfo.id.value = res.data.id
+    //
+    //       api.product.getProduct(res.data.product_id).then((r) => {
+    //         if (r.status === 200) {
+    //           this.deviceSummary = {
+    //             title: res.data.name || r.data.name,
+    //             online: res.is_online,
+    //             time: res.last_login
+    //           }
+    //         }
+    //       }).catch((r) => {
+    //         // this.handleError(r)
+    //       })
+    //     }
+    //   }).catch((res) => {
+    //     this.handleError(res)
+    //   })
+    // }
   }
 }
 </script>

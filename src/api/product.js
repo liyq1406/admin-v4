@@ -209,5 +209,17 @@ export default {
     return http.upload(
       `${API_SERVER.default}/v2/upload/product/${productId}/firmware`, file
     )
+  },
+
+  /**
+   * 获取虚拟设备数据
+   * @param  {String} productId 产品Id
+   * @param  {String} deviceId 虚拟设备 id
+   * @return {Promise}
+   */
+  getVDeviceInfo (productId, deviceId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/v_device/${deviceId}`
+    )
   }
 }

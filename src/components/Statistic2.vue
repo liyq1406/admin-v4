@@ -5,12 +5,12 @@
       <slot name="action"></slot>
     </div>
     <div class="tit" v-if="titletop">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
-    <div class="info" v-animated-number="info.total"></div>
-    <div class="unit" v-if="info.unit">{{info.unit}}</div>
-    <div class="change" v-if="info.change && info.change !== 0" :class="{'decrease': info.change < 0}">
-      <i class="fa" :class="{'fa-long-arrow-up': info.change > 0, 'fa-long-arrow-down': info.change < 0}"></i>
-      <span v-animated-number="info.change"></span>
-      <span v-if="info.changeunit">{{info.changeunit}}</span>
+    <div class="info" v-animated-number="total"></div>
+    <div class="unit" v-if="totalUnit">{{totalUnit}}</div>
+    <div class="change" v-if="change !== 0" :class="{'decrease': change < 0}">
+      <i class="fa" :class="{'fa-long-arrow-up': change > 0, 'fa-long-arrow-down': change < 0}"></i>
+      <span v-animated-number="change"></span>
+      <span v-if="changeUnit">{{changeUnit}}</span>
       <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
     <div class="tit" v-if="!titletop">{{ title }}<slot name="tips"></slot><i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
@@ -42,15 +42,28 @@ export default {
       default: ''
     },
 
-    // 数据
-    info: {
-      type: Object,
-      default () {
-        return {
-          unit: '',
-          changeunit: ''
-        }
-      }
+    // 总量
+    total: {
+      type: Number,
+      default: 0
+    },
+
+    // 总量单位
+    totalUnit: {
+      type: String,
+      default: ''
+    },
+
+    // 变化
+    change: {
+      type: Number,
+      default: 0
+    },
+
+    // 变化单位
+    changeUnit: {
+      type: String,
+      default: ''
     },
 
     // 对齐方式
@@ -135,7 +148,7 @@ export default {
     },
 
     percentage () {
-      return Math.abs(this.info.change / (this.info.total || 1) * 100).toFixed(this.digits) + '%'
+      return Math.abs(this.change / (this.total || 1) * 100).toFixed(this.digits) + '%'
     }
   }
 }

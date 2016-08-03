@@ -63,16 +63,20 @@ export var globalMixins = {
     handleError (err) {
       // console.log(err)
       if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
+        this.showNotice({
+          type: 'error',
+          content: locales[Vue.config.lang].errors[err.data.error.code]
+        })
         switch (err.data.error.code) {
           case 4031003:
-            this.showNotice({
-              type: 'error',
-              content: locales[Vue.config.lang].errors[err.data.error.code]
-            })
+            // this.showNotice({
+            //   type: 'error',
+            //   content: locales[Vue.config.lang].errors[err.data.error.code]
+            // })
             this.$route.router.go('/login')
             break
           default:
-            this.showError(err.data.error)
+            // this.showError(err.data.error)
         }
       }
     }
