@@ -1,32 +1,27 @@
 <template>
   <div class="main">
     <panel title="用户趋势">
-      <div class="left-actions blockdiv" slot="left-actions">
-        <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
-        <div class="tab-s2 mt20 mb5">
-          <ul>
-            <li v-for="item in locales.data.USER_FILTERS" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item.label }}</li>
-          </ul>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-offset-12 col-12 row">
-          <div class="col-12">
-            <statistic :info="today" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+      <div class="left-actions blockdiv filter-bar filter-bar-head" slot="left-actions">
+        <div class="filter-group">
+          <div class="filter-group-item">
+            <radio-button-group :items="userCatList" :value.sync="userCat" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
           </div>
-          <div class="col-12">
-            <statistic :info="avg" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+          <div class="filter-group-item fr">
+            <date-time-range-picker></date-time-range-picker>
+          </div>
+          <div class="filter-group-item fr">
+            <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
           </div>
         </div>
       </div>
       <div class="row bottom-line-height">
-        <div class="mb20" v-if="currIndex === 0">
+        <div class="mb20" v-if="userCat === 0">
           <time-line :data="addData" :type="'smooth'" :margin="customMargin"></time-line>
         </div>
-        <div class="mb20" v-if="currIndex === 1">
+        <div class="mb20" v-if="userCat === 1">
           <time-line :data="activeData" :type="'smooth'" :margin="customMargin"></time-line>
         </div>
-        <div class="mb20" v-if="currIndex === 2">
+        <div class="mb20" v-if="userCat === 2">
           <time-line :data="totalData" :type="'smooth'" :margin="customMargin"></time-line>
         </div>
       </div>
@@ -37,10 +32,10 @@
 <script>
 import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import {getTrend} from './api-user'
 import { globalMixins } from 'src/mixins'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import _ from 'lodash'
 
 export default {
@@ -53,26 +48,30 @@ export default {
   components: {
     Panel,
     RadioButtonGroup,
-    Statistic,
-    TimeLine
+    TimeLine,
+    DateTimeRangePicker
   },
 
   data () {
     return {
       customMargin: [30, 20, 30, 30],
-      currIndex: 0,
       period: 7,
-      avg: {
-        change: 0,
-        total: 0
-      },
-      today: {
-        change: 0,
-        total: 0
-      },
       addData: [],
       activeData: [],
-      totalData: []
+      totalData: [],
+      userCat: 0,
+      userCatList: [
+        {
+          label: '新增用户',
+          value: 0
+        }, {
+          label: '活跃用户',
+          value: 1
+        }, {
+          label: '累计用户',
+          value: 2
+        }
+      ]
     }
   },
 
@@ -141,7 +140,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 
 .statistic
   .x-panel

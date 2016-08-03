@@ -1,3 +1,4 @@
+import _ from 'lodash'
 // 每天毫秒数
 const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
 /**
@@ -62,4 +63,18 @@ export const beautify = (data, duration) => {
   //   }
   // }
   return data
+}
+
+// 计算数组某字段百分比
+export const numToPercent = (arr, field) => {
+  var total = 0
+  arr.forEach((item) => {
+    total += item[field]
+  })
+
+  return arr.map((item) => {
+    var temp = _.clone(item)
+    temp.percent = item[field] / total
+    return temp
+  })
 }

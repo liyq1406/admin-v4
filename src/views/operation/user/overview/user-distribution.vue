@@ -37,7 +37,7 @@ import mapData from 'components/g2-charts/map-data.json'
 import ChinaMap from 'components/g2-charts/ChinaMap'
 import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
-import {getProductRegion} from './api-product'
+import {getUserRegion} from './api-user'
 import {numToPercent} from 'helpers/utils'
 import _ from 'lodash'
 
@@ -53,12 +53,6 @@ export default {
     ChinaMap
   },
 
-  vuex: {
-    getters: {
-      products: ({ products }) => products.all
-    }
-  },
-
   data () {
     return {
       data: [],
@@ -66,43 +60,24 @@ export default {
     }
   },
 
-  watch: {
-    products () {
-      if (this.products.length > 0) {
-        this.getProductsDistribution(this.products)
-      }
-    }
-  },
-
   ready () {
+    this.getUserDistribution()
   },
   methods: {
-    getProductsDistribution (products) {
-      var prodRegions = []
-      products.forEach((item) => {
-        getProductRegion(item.id).then((res) => {
-          prodRegions.push(res)
-          if (prodRegions.length === products.length) {
-            this.combineData(prodRegions)
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+    getUserDistribution () {
+      getUserRegion().then((res) => {
+        this.combineData(res)
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
     combineData (data) {
       let regions = {}
-      data.forEach((item) => {
-        for (var i in item) {
-          if (i !== 'activated' && i !== 'online') {
-            if (_.isNumber(regions[i])) {
-              regions[i] += item[i].activated
-            } else {
-              regions[i] = 0
-            }
-          }
+      for (var i in data) {
+        if (i !== 'register') {
+          regions[i] = data[i].register
         }
-      })
+      }
       this.fillMapData(regions)
     },
     fillMapData (regions) {
@@ -130,7 +105,6 @@ export default {
       } else {
         this.dataPer = numToPercent(mapDataArr, 'value')
       }
-
       var regionData = []
       var features = mapData.features
 
@@ -141,6 +115,7 @@ export default {
           'value': 0
         })
       }
+
       this.data = _.unionBy(mapDataArr, regionData, 'name')
     }
   }
@@ -148,7 +123,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 .border-top-style
   border-top 1px solid #e5e5e5
   margin-top 10px

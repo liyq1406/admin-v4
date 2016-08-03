@@ -102,7 +102,7 @@ export default {
 
 .time-range-picker-wrap
   height 28px
-  float right
+  display inline-block
   position relative
   .time-range-show
     padding 0px 10px
