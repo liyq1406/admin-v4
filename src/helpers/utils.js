@@ -13,7 +13,7 @@ const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
 export const createDayRange = (offset, n) => {
   let today = new Date()
   let endDate = new Date(today.getTime() - MICRO_SECONDS_PER_DAY * offset)
-  let startDate = new Date(today.getTime() - MICRO_SECONDS_PER_DAY * (offset + n))
+  let startDate = new Date(today.getTime() - MICRO_SECONDS_PER_DAY * (offset + n - 1))
 
   const getDateInfo = (date) => {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`

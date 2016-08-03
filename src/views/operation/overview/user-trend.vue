@@ -41,6 +41,7 @@ import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import {getTrend} from './api-user'
 import { globalMixins } from 'src/mixins'
+import _ from 'lodash'
 
 export default {
   name: 'user-trend',
@@ -64,7 +65,7 @@ export default {
 
   data () {
     return {
-      customMargin: [30, 10, 30, 30],
+      customMargin: [30, 20, 30, 30],
       currIndex: 0,
       period: 7,
       avg: {
@@ -72,8 +73,8 @@ export default {
         total: 0
       },
       today: {
-        change: 8,
-        total: 32
+        change: 0,
+        total: 0
       },
       addData: [],
       activeData: [],
@@ -82,7 +83,7 @@ export default {
   },
 
   ready () {
-    this.getUserTrend(7)
+    this.getUserTrend()
   },
 
   methods: {
@@ -91,6 +92,52 @@ export default {
         this.addData = res.add
         this.totalData = res.total
         this.activeData = res.active
+        this.avg.total = this.countAvgAdd(this.addData, this.period)
+        this.countTodayAdd(this.addData, this.period)
+        this.getLastDurationData(this.period)
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    countTodayAdd (addData, period) {
+      var data = _.clone(addData)
+      // 只在初始化计算一次
+      if (data.length < 1) {
+        return
+      }
+      if (period === 7) { // 只在初始化时计算一次
+        // 计算最近2天的值
+        data.sort((a, b) => {
+          if (a.day.getTime() > b.day.getTime()) {
+            return -1
+          } else if (a.day.getTime() < b.day.getTime()) {
+            return 1
+          } else {
+            return 0
+          }
+        })
+
+        this.today.total = data[0].count
+        if (data.length < 2) {
+          this.today.change = this.today.total - data[1].count
+        }
+      }
+    },
+    // 计算平均增长
+    countAvgAdd (data, duration) {
+      if (!duration) {
+        throw new TypeError()
+      }
+      let total = 0
+      data.forEach((item) => {
+        total += item.count
+      })
+      return parseInt(total / duration)
+    },
+    // 获取上一个取值周期的所有数据，为了计算平均增长
+    getLastDurationData (duration) {
+      getTrend([duration, duration]).then((res) => {
+        this.avg.change = this.avg.total - this.countAvgAdd(res.add, duration)
       }).catch((res) => {
         this.handleError(res)
       })

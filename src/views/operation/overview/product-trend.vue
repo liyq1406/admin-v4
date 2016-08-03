@@ -19,11 +19,11 @@
         <div class="col-9">
           <div class="row">
             <div class="col-24 col-offset-1 tac pd15">
-              <statistic :info="avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+              <statistic :info="avg.info" :title="avgTitle" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
             </div>
           </div>
           <div class="top">
-            <h3>7天激活TOP5</h3>
+            <h3>{{period}}天激活TOP{{topAdded.data.length}}</h3>
             <interval :data="topAdded.data" :options="topAdded.options"></interval>
           </div>
         </div>
@@ -40,6 +40,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import {getActivatedTrend} from './api-product'
+import _ from 'lodash'
 
 export default {
   name: 'producttrend',
@@ -104,6 +105,15 @@ export default {
     }
   },
 
+  computed: {
+    avgTitle () {
+      return this.period + '天平均增长'
+    },
+    avgTooltip () {
+      return this.period + '天平均增长'
+    }
+  },
+
   watch: {
     products () {
       if (this.products.length > 0) {
@@ -159,7 +169,7 @@ export default {
         products = products.slice(products.length - 5)
       }
 
-      this.topAdded.data = products
+      return products
 
       // if (window.G2) {
       //   var prodFrame = new window.G2.Frame(products)
@@ -189,7 +199,11 @@ export default {
           if (recv.activated.length === prodLength) {
             this.activatedData = this.combineRecv(recv.activated)
             // 计算激活top5
-            this.countTopFive(recv.activated)
+            this.topAdded.data = this.countTopFive(recv.activated)
+            // 计算平均值
+            this.avg.info.total = this.countAvg(this.activatedData, duration)
+            // 计算上个取值周期的平均值
+            this.getLastDurationData(products, [duration, duration])
           }
           if (recv.total.length === prodLength) {
             this.totalData = this.combineRecv(recv.total)
@@ -201,6 +215,43 @@ export default {
     },
     activatedSelect () {
       this.getActivatedProductsTrend(this.products, this.period)
+    },
+    // 获取上一个取值周期的所有数据，为了计算平均增长
+    getLastDurationData (products, duration) {
+      if (products.length <= 0 || !Array.isArray(duration) || duration[0] === undefined || !duration[1] === undefined) {
+        return
+      }
+
+      var prodLength = products.length
+      var recv = {
+        activated: []
+      }
+      products.forEach((item) => {
+        getActivatedTrend(item.id, duration).then((res) => {
+          recv.activated.push({
+            product: item.name,
+            data: res.activated
+          })
+
+          if (recv.activated.length === prodLength) {
+            var activatedData = this.combineRecv(recv.activated)
+            // 计算平均值
+            if (!_.isNumber(this.avg.info.total)) {
+              this.avg.info.total = 0
+            }
+            this.avg.info.change = this.avg.info.total - this.countAvg(activatedData, duration[0])
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      })
+    },
+    countAvg (data, duration) {
+      var total = 0
+      data.forEach((item) => {
+        total += item['数量']
+      })
+      return parseInt(total / duration)
     }
   }
 }
@@ -219,7 +270,7 @@ export default {
 .top
   h3
     font-size 14px
-    text-indent 80px
+    text-indent 100px
     text-align left
     margin 10px 0 5px
     color gray

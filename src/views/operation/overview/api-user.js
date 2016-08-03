@@ -3,7 +3,12 @@ import {createDayRange, beautify} from 'helpers/utils'
 // import _ from 'lodash'
 
 export function getTrend (duration) {
-  var range = createDayRange(0, duration)
+  var range
+  if (Array.isArray(duration)) {
+    range = createDayRange(duration[0], duration[1])
+  } else {
+    range = createDayRange(0, duration)
+  }
   return new Promise((resolve, reject) => {
     api.statistics.getUserTrend(range.start, range.end).then((res) => {
       if (res.status === 200 && res.data.length > 0) {
