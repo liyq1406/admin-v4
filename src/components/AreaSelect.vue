@@ -1,24 +1,30 @@
 <template>
   <div class="area-select">
-    <v-select width="120px" :label="province.name" placeholder="请选择省" :size="selectSize">
-      <span slot="label" v-if="label.length">{{ label }}</span>
-      <select v-model="province" @change="handleProvinceChange">
-        <option :value="defaultOption">{{ defaultOption.name }}</option>
-        <option v-for="option in provinces" :value="option">{{ option.name }}</option>
-      </select>
-    </v-select>
-    <v-select v-show="cityOptions.length && province.name" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
-      <select v-model="city" @change="handleCityChange">
-        <option :value="defaultOption">{{ defaultOption.name }}</option>
-        <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
-      </select>
-    </v-select>
-    <v-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
-      <select v-model="district" @change="handleDistrictChange">
-        <option :value="defaultOption">{{ defaultOption.name }}</option>
-        <option v-for="option in districtOptions" :value="option">{{ option.name }}</option>
-      </select>
-    </v-select>
+    <div class="select-box">
+      <v-select width="120px" :label="province.name" placeholder="请选择省" :size="selectSize">
+        <span slot="label" v-if="label.length">{{ label }}</span>
+        <select v-model="province" @change="handleProvinceChange">
+          <option :value="defaultOption">{{ defaultOption.name }}</option>
+          <option v-for="option in provinces" :value="option">{{ option.name }}</option>
+        </select>
+      </v-select>
+    </div>
+    <div class="select-box">
+      <v-select v-show="cityOptions.length && province.name" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
+        <select v-model="city" @change="handleCityChange">
+          <option :value="defaultOption">{{ defaultOption.name }}</option>
+          <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
+        </select>
+      </v-select>
+    </div>
+    <div class="select-box">
+      <v-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
+        <select v-model="district" @change="handleDistrictChange">
+          <option :value="defaultOption">{{ defaultOption.name }}</option>
+          <option v-for="option in districtOptions" :value="option">{{ option.name }}</option>
+        </select>
+      </v-select>
+    </div>
   </div>
 </template>
 
@@ -142,6 +148,9 @@
   .area-select
     font-size 0 !important
 
+    .select-box
+      display inline-block
+      margin-bottom 5px
     .v-select
       margin-right 5px !important
       font-size 14px !important
