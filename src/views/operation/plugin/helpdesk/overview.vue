@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <v-select :label="product.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="product">
+            <select v-model="product" @change="getFeedbackList">
               <option v-for="prod in products" :value="prod">{{prod.name}}</option>
             </select>
           </v-select>
@@ -112,8 +112,7 @@
 <script>
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
-// import api from 'api'
-import Modal from 'components/Modal'
+import api from 'api'
 import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -124,17 +123,14 @@ import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 
-import Mock from 'mockjs'
-
 export default {
   name: 'Overview',
 
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Modal,
-    Pie,
     'v-select': Select,
+    Pie,
     RadioButtonGroup,
     DateTimeRangePicker,
     Statistic,
@@ -207,42 +203,40 @@ export default {
   },
 
   ready () {
-    this.trends.data = Mock.mock({
-      'list|16': [{
-        'date|+1': [
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20)
-        ],
-        'count|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 10, 12],
-        '产品|+1': ['产品咨询', '产品咨询', '产品咨询', '产品咨询', '故障反馈', '故障反馈', '故障反馈', '故障反馈', '使用建议', '使用建议', '使用建议', '使用建议', '使用指南', '使用指南', '使用指南', '使用指南']
-      }]
-    }).list
+    if (this.products.length > 0) {
+      this.product = this.products[0]
+      this.getFeedbackList()
+    }
   },
 
   watch: {
     products () {
       if (this.products.length > 0) {
         this.product = this.products[0]
+        this.getFeedbackList()
       }
     }
   },
 
   methods: {
-
+    getFeedbackList () {
+      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+        var params = {
+          query: {
+            product_id: this.product.id
+          }
+        }
+        api.helpdesk.getFeedbackList(this.$route.params.app_id, token, params).then((res) => {
+          if (res.status === 200) {
+            console.log(res.data)
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    }
   }
 }
 </script>
