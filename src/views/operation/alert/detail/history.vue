@@ -285,6 +285,8 @@ export default {
         this.handleError(res)
       })
     },
+
+    // 获取告警趋势图表数据
     getTagTrend () {
       var begin
       var end
@@ -300,6 +302,7 @@ export default {
       // 获取标签'轻微'的趋势
       api.alert.getTagTrend(this.productID, '轻微', begin, end).then((res) => {
         if (res.status === 200) {
+          this.light = res.data
           this.pushArr(this.light)
         }
       }).catch((res) => {
@@ -309,6 +312,7 @@ export default {
       // 获取标签'通知'的趋势
       api.alert.getTagTrend(this.productID, '通知', begin, end).then((res) => {
         if (res.status === 200) {
+          this.normal = res.data
           this.pushArr(this.normal)
         }
       }).catch((res) => {
@@ -331,7 +335,7 @@ export default {
       arr.data.forEach((item) => {
         var dayTotal = 0
         item.hours.forEach((message) => {
-          dayTotal = dayTotal + message
+          dayTotal = dayTotal + message.message
         })
         this.trendData.push({
           day: item.day,
