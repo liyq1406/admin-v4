@@ -38,7 +38,7 @@ import { globalMixins } from 'src/mixins'
 import UserTrend from './user-trend'
 import UserDistribution from './user-distribution'
 import IntervalIcon from 'components/g2-charts/IntervalIcon'
-import {gettTotalUser, getTrend} from './api-user'
+import {getTotalUser, getTrend} from './api-user'
 
 export default {
   name: 'Dashboard',
@@ -116,7 +116,7 @@ export default {
       })
     },
     getUserCount () {
-      gettTotalUser().then((res) => {
+      getTotalUser().then((res) => {
         this.statistic.total.total = res.total
         this.statistic.total.change = res.add
       }).catch((res) => {

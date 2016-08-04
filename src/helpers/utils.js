@@ -31,9 +31,9 @@ const dateRe = /(\d{4})(-)(\d{1,2})(-)(\d{1,2})/
 
 /**
  * [自动补全数据 将时间转成date格式]
- * @param  {[type]} data     [数组数据]
- * @param  {[type]} duration [取值长度]
- * @return {[type]}          [修改后的数据]
+ * @param  {Array} data     [数组数据]
+ * @param  {Number} duration [取值长度]
+ * @return {Array}          [修改后的数据]
  */
 export const beautify = (data, duration) => {
   // 将day字段数据转成date格式
@@ -77,4 +77,19 @@ export const numToPercent = (arr, field) => {
     temp.percent = item[field] / total
     return temp
   })
+}
+
+/**
+ * 返回一年前的时间
+ * @param  {Date} cur [时间]
+ * @return {Date} [去年今日时间]
+ */
+export const getLastYearDate = (cur) => {
+  let year = cur.getFullYear()
+  let month = cur.getMonth()
+  let date = cur.getDate()
+  let hours = cur.getHours()
+  let minutes = cur.getMinutes()
+  let seconds = cur.getSeconds()
+  return new Date(year - 1, month, date, hours, minutes, seconds)
 }

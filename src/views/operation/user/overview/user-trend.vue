@@ -7,7 +7,7 @@
             <radio-button-group :items="userCatList" :value.sync="userCat" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
           </div>
           <div class="filter-group-item fr">
-            <date-time-range-picker></date-time-range-picker>
+            <date-time-range-picker @timechange="timeFilter"></date-time-range-picker>
           </div>
           <div class="filter-group-item fr">
             <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
@@ -37,6 +37,8 @@ import {getTrend} from './api-user'
 import { globalMixins } from 'src/mixins'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import _ from 'lodash'
+import {getLastYearDate} from 'helpers/utils'
+// import {uniformDate} from 'src/filters'
 
 export default {
   name: 'user-trend',
@@ -80,8 +82,14 @@ export default {
   },
 
   methods: {
-    getUserTrend () {
-      getTrend(this.period).then((res) => {
+    getUserTrend (duration) {
+      let param = null
+      if (duration) {
+        param = duration
+      } else {
+        param = this.period
+      }
+      getTrend(param).then((res) => {
         this.addData = res.add
         this.totalData = res.total
         this.activeData = res.active
@@ -134,6 +142,32 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    // 时间选择限制：
+    // 1. 不能选取未来时间
+    // 2. 选取时间段不能超过12个月
+    timeFilter (start, end) {
+      var cur = new Date()
+      if (end.getTime() >= cur.getTime()) {
+        end = cur
+      }
+
+      if (start.getTime() > end.getTime()) {
+        return
+      }
+
+      let lastYear = getLastYearDate(end)
+
+      if (start.getTime() < lastYear.getTime()) {
+        start = lastYear
+      }
+
+      // 计算结束时间距现在多少天
+      let offset = parseInt((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
+      let duration = parseInt((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
+      this.getUserTrend([offset, duration + 1])
+
+      this.period = 0
     }
   }
 }

@@ -406,17 +406,32 @@ export default {
 
     // 处理标签数据
     pushArr (arr) {
+      var rearr = []
       arr.data.forEach((item) => {
-        var dayTotal = 0
-        item.hours.forEach((message) => {
-          dayTotal = dayTotal + message.message
-        })
-        this.trendData.push({
+        var i = 0
+        var sum = 0
+        while (i < item.hours.length) {
+          sum += item.hours[i].message
+          i++
+        }
+        rearr.push({
           day: item.day,
-          data: dayTotal,
+          data: sum,
           product: item.name
         })
       })
+      this.trendData = rearr
+      // arr.data.forEach((item) => {
+      //   var dayTotal = 0
+      //   item.hours.forEach((message) => {
+      //     dayTotal = dayTotal + message.message
+      //   })
+      //   this.trendData.push({
+      //     day: item.day,
+      //     data: dayTotal,
+      //     product: item.name
+      //   })
+      // })
     },
 
     getSpecial (start, end) {
