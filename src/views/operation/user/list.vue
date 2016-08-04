@@ -1,8 +1,18 @@
 <template>
   <div class="main">
+
     <div class="main-title">
-      <h2>{{ $t('ui.user.list') }}</h2>
+      <h2>用户管理</h2>
     </div>
+
+    <!-- Start: 产品信息统计 -->
+    <div class="row statistic-group mb30">
+      <div class="col-6" v-for="statistic in statisticArr">
+        <statistic :total="statistic.value" :title="statistic.title" align="left"></statistic>
+      </div>
+    </div>
+    <!-- End: 产品信息统计 -->
+
     <div class="panel">
       <div class="panel-bd">
         <div class="data-table with-loading">
@@ -15,9 +25,6 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <!-- <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
-              </div> -->
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
                   <button slot="search-button" @click="getUsers" class="btn btn-primary"><i class="fa fa-search"></i></button>
@@ -26,10 +33,11 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
         </div>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -41,6 +49,8 @@
   import Table from 'components/Table'
   import { formatDate } from 'src/filters'
   import { globalMixins } from 'src/mixins'
+  import Statistic from 'components/Statistic2'
+  import {createDayRange} from 'helpers/utils'
 
   export default {
     name: 'UserList',
@@ -51,7 +61,8 @@
       'search-box': SearchBox,
       'api': api,
       'v-select': Select,
-      'x-table': Table
+      'c-table': Table,
+      Statistic
     },
 
     data () {
@@ -62,8 +73,13 @@
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
-        sortByStatus: false,
         users: [],
+        // 今日新增
+        todayAddCount: 0,
+        // 当前在线
+        onlineCount: 0,
+        // 7日活跃数
+        serverDayActiveCount: 0,
         headers: [
           {
             key: 'nickname', // 与tables的key对应
@@ -100,6 +116,31 @@
 
     computed: {
       /**
+       * 状态
+       * @return {[type]} [description]
+       */
+      statisticArr () {
+        var result = [
+          {
+            title: '用户总数',
+            value: this.total
+          },
+          {
+            title: '今日新增',
+            value: this.todayAddCount
+          },
+          {
+            title: '当前在线',
+            value: this.onlineCount
+          },
+          {
+            title: '七日活跃用户',
+            value: this.serverDayActiveCount
+          }
+        ]
+        return result
+      },
+      /**
        * 传入智能表格的分页对象
        * 国辉
        * @return {[type]} [description]
@@ -133,6 +174,10 @@
         })
         return result
       },
+      /**
+       * 列表查询条件
+       * @return {[type]} [description]
+       */
       queryCondition () {
         var condition = {
           filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
@@ -158,12 +203,60 @@
 
     route: {
       data () {
+        // 获取用户列表
         this.getUsers()
-        // this.getUsers1()
+        // 获取今日新增用户数
+        this.getTodayAddCount()
+        // 获取当前在线数
+        this.getOnlineCount()
+        // // 获取7日新增数
+        this.getServerDayActiveCount()
+        // // this.getUsers1()
       }
     },
 
     methods: {
+      /**
+       * 获取今日新增用户数
+       * @return {[type]} [description]
+       */
+      getTodayAddCount () {
+        api.statistics.getSummary().then((res) => {
+          this.todayAddCount = res.data.user.today_add
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取用户在线量
+       * @return {[type]} [description]
+       */
+      getOnlineCount () {
+        api.statistics.getUserSummary().then((res) => {
+          this.onlineCount = res.data.online
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取七天用户活跃数
+       * @return {[type]} [description]
+       */
+      getServerDayActiveCount () {
+        var time = createDayRange(0, 7)
+        api.statistics.getUserTrend(time.start, time.end).then((res) => {
+          var count = 0
+          res.data.map((item) => {
+            count += item.active
+          })
+          this.serverDayActiveCount = count
+          // this.onlineCount = res.data.online
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 当前页码改变
        * 国辉
@@ -236,34 +329,6 @@
       goDetails (table) {
         this.$route.router.go('/operation/users/details/' + table.prototype.id)
       },
-      /**
-       * 获取假用户数据
-       * @return {[type]} [description]
-       */
-      getUsers1 () {
-        var users = [
-          {
-            id: 'asdjlkahf',
-            nickname: 'idididid',
-            account: '1155028391',
-            create_date: '2016-1-1 19:21:32',
-            source: 'iOS',
-            status: '下线',
-            expand: '暂未定义'
-          },
-          {
-            id: '1634a56sd45',
-            nickname: '<a style="color: #c0252e">idididid</a>',
-            account: '1155028391',
-            create_date: '2016-1-1 19:21:32',
-            source: 'iOS',
-            status: '下线',
-            expand: '暂未定义'
-          }
-        ]
-        this.users = users
-        this.total = 3000
-      },
       // 获取用户
       getUsers () {
         this.loadingData = true
@@ -296,3 +361,9 @@
     }
   }
 </script>
+
+<style lang="stylus" scoped>
+
+  .statistic-group
+    border-top 1px solid #d9d9d9
+</style>
