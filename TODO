@@ -145,20 +145,40 @@
       ✔ 用户分布图
       ☐ 用户趋势图 @guohao (未完成:时间选择筛选)
     用户管理:
+      ☐ 用户统计概览 @guohui
       ✔ 用户列表 @guohui  @done(2016-08-01 15:00) @project(功能 / #用户管理 / 用户管理)
+        ✔ 筛选 @guohui @done(2016-08-04 10:00) @project(功能 / #用户管理 / 用户管理)
+        ✔ 搜索 @guohui @done(2016-08-04 10:00) @project(功能 / #用户管理 / 用户管理)
+        ✔ 分页 @guohui @done(2016-08-04 10:00) @project(功能 / #用户管理 / 用户管理)
+        ✔ 排序 @guohui @done(2016-08-04 10:00) @project(功能 / #用户管理 / 用户管理)
       用户详情:
         ☐ 用户基本信息 @guohui 接口部分字段缺失
+          ☐ 停用帐号
+          ☐ 地图
         ✔ 设备列表 @guohui @done(2016-08-01 15:01) @project(功能 / #用户管理 / 用户管理 / 用户详情)
+          ✔ 搜索 @guohui @done(2016-08-04 09:54) @project(功能 / #用户管理 / 用户管理 / 用户详情)
+          ✔ 排序 @guohui @done(2016-08-04 09:54) @project(功能 / #用户管理 / 用户管理 / 用户详情)
         ☐ 维保信息 @guohui
         ☐ 反馈记录 @guohui
     大客户管理:
-      ☐ 趋势 列表 @guohui
+      ☐ 概览 @guohui
+      ☐ 趋势 @guohui
+      ☐ 列表 @guohui
+        ☐ 筛选 @guohui (暂时写死筛选条件)
+        ☐ 搜索 @guohui
+        ✔ 排序 @guohui @done(2016-08-04 10:00) @project(功能 / #用户管理 / 大客户管理)
+        ✔ 分页 @guohui @done(2016-08-04 10:01) @project(功能 / #用户管理 / 大客户管理)
       新增大客户:
-        ☐ 新增客户 @guohui
+        ✔ 新增客户 @guohui @done(2016-08-04 09:48) @project(功能 / #用户管理 / 大客户管理 / 新增大客户)
       大客户详情:
+        ☐ 大客户详情 @guohui
+          ✔ 基本信息 @done(2016-08-04 09:59) @project(功能 / #用户管理 / 大客户管理 / 大客户详情)
+          ☐ 地图
         ☐ 设备列表 @guohui
-        ☐ 维保信息 @guohui
-        ☐ 反馈记录 @guohui
+          ☐ 筛选 @guohui
+          ☐ 搜索 @guohui
+          ☐ 排序 @guohui
+        ☐ 经销商 @guohui
     人群画像:
       ☐ 人群画像 @guohui
     行为分析:
