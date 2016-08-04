@@ -39,6 +39,7 @@ import Tab from 'components/Tab'
 import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
+import { formatDate } from 'src/filters'
 
 export default {
   name: 'MajorClients',
@@ -87,7 +88,7 @@ export default {
         },
         create_time: {
           label: '创建时间',
-          value: this.majorClient.create_time
+          value: formatDate(this.majorClient.create_time)
         },
         area: {
           label: '所在地区',

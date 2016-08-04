@@ -45,6 +45,15 @@
       </div>
     </div>
     <div class="panel mt10">
+      <div class="panel-hd">
+        <div class="actions">
+          <button class="btn btn-primary" @click="onShowAddModal">
+            <i class="fa fa-plus"></i>
+            新增大客户
+          </button>
+        </div>
+        <h2>大客户列表</h2>
+      </div>
       <div class="panel-bd">
         <div class="data-table">
           <div class="filter-bar">
@@ -60,12 +69,9 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <div class="filter-group-item">
-                <button class="btn btn-primary" @click="onShowAddModal">
-                  <i class="fa fa-plus"></i>
-                  新增大客户
-                </button>
-              </div>
+              <search-box :key.sync="query" :active="searching" :placeholder="'搜索客户名称'" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+                <button slot="search-button" @click="getMajorClient(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
             </div>
           </div>
           <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
@@ -414,7 +420,15 @@ export default {
         order: {},
         query: {}
       }
-
+      /**
+       * 搜索框搜索
+       * @param  {[type]} this.query [description]
+       * @return {[type]}            [description]
+       */
+      if (this.query) {
+        condition.query['name'] = { $like: [this.query] }
+      }
+      // 下拉框筛选
       if (this.selectedFilterIndustry) {
         condition.query['industry'] = { $in: [this.selectedFilterIndustry] }
       }
