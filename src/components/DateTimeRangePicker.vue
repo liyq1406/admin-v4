@@ -3,16 +3,16 @@
     <button @click='toggle' class="time-range-show" readonly="readonly">{{timeShowPanel}}
       <span class="fa fa-sort-down ml10"></span>
     </button>
-    <div v-show='showChoosePanel' class="time-range-picker-panel">
+    <div v-show='showChoosePanel' class="time-range-picker-panel" :style="{opacity: opacity}">
       <div class="start-time">
         <span>开始时间:</span>
         <span class="time">{{startTime | uniformDate}}</span>
-        <a @click='selectStartTime' class="fa fa-calendar"></a>
+        <a @click.prevent.stop='selectStartTime' class="fa fa-calendar"></a>
       </div>
       <div class="end-time">
         <span>结束时间:</span>
         <span class="time">{{endTime | uniformDate}}</span>
-        <a @click='selectEndTime' class="fa fa-calendar"></a>
+        <a @click.prevent.stop='selectEndTime' class="fa fa-calendar"></a>
       </div>
       <div class="choose-submit">
         <button @click='dispatchTime'>确定</button>
@@ -46,7 +46,8 @@ export default {
       endTime: '',
       picker: 0, // 表示starttime在取值， 1表示endtime在取值,
       defaultTime: new Date(),
-      rect: {}
+      rect: {},
+      opacity: 1
     }
   },
   computed: {
@@ -58,12 +59,7 @@ export default {
     var curTime = new Date()
     this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000)
     this.endTime = curTime
-    this._closeEvent = EventListener.listen(window, 'click', (e) => {
-      if (!this.$el.contains(e.target)) {
-        this.showChoosePanel = false
-        this.showTimePicker = false
-      }
-    })
+    this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },
   beforeDestroy () {
     if (this._closeEvent) {
@@ -95,14 +91,23 @@ export default {
     dispatchTime () {
       this.showChoosePanel = false
       this.$dispatch('timechange', this.startTime, this.endTime)
+    },
+    handleClose (e) {
+      if (this.$el && !this.$el.contains(e.target)) {
+        this.showChoosePanel = false
+      }
     }
   },
   watch: {
     showTimePicker () {
       if (this.showTimePicker) {
-        this.showChoosePanel = false
+        this.opacity = 0
+        if (this._closeEvent) {
+          this._closeEvent.remove()
+        }
       } else {
-        this.showChoosePanel = true
+        this.opacity = 1
+        this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
       }
     }
   }

@@ -2,20 +2,20 @@
   <div class="x-date-time-selector" v-if="open">
     <div class="wrap year" v-if="yearShow">
       <ul>
-        <li class="btn" @click="yearPre"><i class="fa fa-angle-up"></i></li>
-        <li v-for="item in years" :class="{ active : (year === item) }" @click="chooseYear(item)">{{ item }}</li>
-        <li class="btn" @click="yearNext"><i class="fa fa-angle-down"></i></li>
+        <li class="btn" @click.stop="yearPre"><i class="fa fa-angle-up"></i></li>
+        <li v-for="item in years" :class="{ active : (year === item) }" @click.stop="chooseYear(item)">{{ item }}</li>
+        <li class="btn" @click.stop="yearNext"><i class="fa fa-angle-down"></i></li>
       </ul>
     </div>
     <div class="wrap month" v-if="monthShow">
       <ul>
-        <li class="btn" @click="toggleToYear">{{ year }}年</li>
-        <li v-for="item in months" :class="{ active: (month === $index + 1) }" @click="chooseMonth($index + 1)">{{ item }}</li>
+        <li class="btn" @click.stop="toggleToYear">{{ year }}年</li>
+        <li v-for="item in months" :class="{ active: (month === $index + 1) }" @click.stop="chooseMonth($index + 1)">{{ item }}</li>
       </ul>
     </div>
     <div class="wrap date" v-if="dateShow">
       <ul>
-        <li class="btn" @click="toggleToMonth">{{ year }}年 {{ months[month - 1] }}</li>
+        <li class="btn" @click.stop="toggleToMonth">{{ year }}年 {{ months[month - 1] }}</li>
         <li class="day">日</li>
         <li class="day">一</li>
         <li class="day">二</li>
@@ -24,21 +24,23 @@
         <li class="day">五</li>
         <li class="day">六</li>
 
-        <li v-for="item in dates" :class="{ other: !item.thismonth, active: (date === item.date) && item.thismonth }" @click="chooseDate(item.date, item.thismonth)">{{ item.date }}</li>
+        <li v-for="item in dates" :class="{ other: !item.thismonth, active: (date === item.date) && item.thismonth }" @click.stop="chooseDate(item.date, item.thismonth)">{{ item.date }}</li>
       </ul>
     </div>
     <div class="wrap time" v-if="timeShow">
       <ul>
-        <li class="btn" @click="toggleToDate">{{ year + '年 ' + month + '月' + date + '日' }}</li>
+        <li class="btn" @click.stop="toggleToDate">{{ year + '年 ' + month + '月' + date + '日' }}</li>
       </ul>
       <input type="tel" placeholder="00" v-model="hour" maxlength="2"> : <input type="tel" placeholder="00" v-model="min" maxlength="2">
-      <div class="button" :class="{ able: isAble }" @click="checkNow">确定</div>
+      <div class="button" :class="{ able: isAble }" @click.stop="checkNow">确定</div>
     </div>
     <div style="clear:both;margin-bottom:10px"></div>
   </div>
 </template>
 
 <script>
+import EventListener from './utils/EventListener'
+
 export default {
   name: 'timePicker',
   props: {
@@ -84,6 +86,8 @@ export default {
       if (!this.isAble) return
       this.toggle()
       this.timeShow = false
+      this.monthShow = false
+      this.dateShow = false
       this.yearShow = true
       this.value = this.timestamp()
       this.microtime = this.value.getTime()
@@ -184,6 +188,18 @@ export default {
       return thisyear - 4 + index
     })
     this.updateDate()
+    this._closeEvent = EventListener.listen(window, 'click', (e) => {
+      if (!this.$el.contains(e.target)) {
+        this.checkNow()
+        this.open = false
+      }
+      e.stopPropagation()
+    })
+  },
+  beforeDestroy () {
+    if (this._closeEvent) {
+      this._closeEvent.remove()
+    }
   },
   watch: {
     'value': function () {
