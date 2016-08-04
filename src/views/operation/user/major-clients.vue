@@ -69,7 +69,13 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <search-box :key.sync="query" :active="searching" :placeholder="'搜索客户名称'" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+              <search-box
+              :key.sync="query"
+              :active="searching"
+              :placeholder="'搜索客户名称'"
+              @cancel="getMajorClient" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch"
+              @press-enter="getMajorClient"
+              >
                 <button slot="search-button" @click="getMajorClient(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -279,7 +285,7 @@ export default {
         monthIncrease: {
           total: 38,
           change: 21,
-          title: '月新增数',
+          title: '大客户总数',
           target: {
             title: '年目标',
             value: 39292,
@@ -538,6 +544,16 @@ export default {
       }
       this.addModal = addModal
       this.showAddModal = true
+    },
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+    // 搜索
+    handleSearch () {
+      if (this.query.length === 0) {
+        this.getMajorClient()
+      }
     },
     /**
      * 进入详情页

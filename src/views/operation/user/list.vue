@@ -19,8 +19,12 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select label="全部" width='110px' size="small">
+                <v-select :label="selectedFilter.name" width='110px' size="small">
                   <span slot="label">显示</span>
+                  <select v-model="selectedFilter" @change="getUsers">
+                    <!-- <option :value="">全部</option> -->
+                    <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
+                  </select>
                 </v-select>
               </div>
             </div>
@@ -33,7 +37,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
         </div>
       </div>
     </div>
@@ -74,6 +78,28 @@
         countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
         users: [],
+        filters: [
+          {
+            name: '全部',
+            value: 0
+          },
+          {
+            name: '已激活',
+            value: 1
+          },
+          {
+            name: '未激活',
+            value: 2
+          }
+        ],
+        /**
+         * 当前筛选条件
+         * @type {Object}
+         */
+        selectedFilter: {
+          name: '全部',
+          value: 0
+        },
         // 今日新增
         todayAddCount: 0,
         // 当前在线
@@ -82,32 +108,40 @@
         serverDayActiveCount: 0,
         headers: [
           {
+            key: 'id', // 与tables的key对应
+            title: 'ID' // 标题的内容
+          },
+          {
             key: 'nickname', // 与tables的key对应
             title: '昵称' // 标题的内容
           },
           {
-            key: 'account',
-            title: '帐号'
+            key: 'email',
+            title: '邮箱'
+          },
+          {
+            key: 'phone',
+            title: '手机'
           },
           {
             key: 'create_date',
-            title: '创建时间'
+            title: '注册时间',
+            sortType: -1
             // tooltip: '提示内容'
           },
           {
             key: 'source',
-            class: 'tac',
-            title: '来源'
+            title: '来源',
+            class: 'tac'
           },
           {
-            key: 'status',
-            title: '状态',
-            class: 'tac',
-            sortType: '-1'
+            key: 'is_active',
+            title: '激活状态',
+            class: 'tac'
           },
           {
-            key: 'expand',
-            title: '拓展',
+            key: 'online',
+            title: '在线状态',
             class: 'tac'
           }
         ]
@@ -161,13 +195,17 @@
       tables () {
         var result = []
         this.users.map((user) => {
+          user.is_active = user.phone_valid || user.email_valid
           var table = {
-            nickname: '<a style="color: #c0252e">' + (user.nickname || '未定义') + '</a>',
-            account: user.account,
+            id: '<a style="color: #c0252e">' + user.id + '</a>',
+            nickname: user.nickname || '未定义',
+            email: user.email,
+            phone: user.phone,
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
+            is_active: user.is_active ? '已激活' : '未激活',
+            online: '另一个接口拿',
             status: this.computedStatus(user.status),
-            expand: '暂未定义',
             prototype: user
           }
           result.push(table)
@@ -180,7 +218,7 @@
        */
       queryCondition () {
         var condition = {
-          filter: ['id', 'account', 'nickname', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
+          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           order: {'create_date': 'desc'},
@@ -188,8 +226,16 @@
         }
 
         if (this.query.length > 0) {
-          condition.query['account'] = { $like: this.query }
+          condition.query['id'] = { $like: this.query }
         }
+
+        // if (this.selectedFilter.value) {
+        //   switch (this.selectedFilter.value) {
+        //     case 1:
+        //       condition.query['status'] = { $in: this.query }
+        //       break
+        //   }
+        // }
 
         this.headers.map((item) => {
           if (item.sortType) {

@@ -9,7 +9,7 @@
         <div class="col-16">
           <div class="alert-record-summary">
             <div class="up">
-              <h1>深圳市腾讯计算机系统有限公司</h1>
+              <h1>{{ majorClient.name }}</h1>
             </div>
           </div>
           <div v-stretch="230">
