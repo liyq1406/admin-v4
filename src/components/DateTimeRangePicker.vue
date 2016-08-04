@@ -147,7 +147,7 @@ export default {
       text-align center
       font-size 12px
       .time
-        margin-left 5px
+        /*margin-left 5px*/
         padding 0 10px
         display inline-block
         font-size 10px
