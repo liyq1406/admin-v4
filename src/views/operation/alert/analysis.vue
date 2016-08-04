@@ -146,6 +146,12 @@ export default {
 
   data () {
     return {
+      // 轻微告警规则列表
+      lightRules: [],
+      // 通知告警规则列表
+      normalRules: [],
+      // 严重告警规则列表
+      seriousRules: [],
       trendPieData: [],
       trendData: [],
       currentProduct: {},
@@ -276,6 +282,7 @@ export default {
       this.getSummary()
       if (this.products.length > 0) {
         this.getTagTrend()
+        this.getAlertList()
       }
     }
   },
@@ -285,6 +292,7 @@ export default {
       this.getFirstProduct()
       if (this.products.length > 0) {
         this.getTagTrend()
+        this.getAlertList()
       }
     }
   },
@@ -412,6 +420,42 @@ export default {
     // 处理单个标签下的饼图数据
     sortArr (arr) {
       arr.data.forEach((item) => {
+        api.alert.getRules(this.currentProduct.id).then((res) => {
+          if (res.status === 200) {
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      })
+    },
+
+    // 获取告警规则列表
+    getAlertList () {
+      api.alert.getRules(this.currentProduct.id).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data)
+          console.log(55555)
+          res.data.forEach((item) => {
+            if (item.tag === '轻微') {
+              this.lightRules.push({
+                name: item.name,
+                id: item.id
+              })
+            } else if (item.tag === '通知') {
+              this.normalRules.push({
+                name: item.name,
+                id: item.id
+              })
+            } else {
+              this.seriousRules.push({
+                name: item.name,
+                id: item.id
+              })
+            }
+          })
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
 
