@@ -87,7 +87,7 @@
                     <tr v-for="item in warningLevel">
                       <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
-                      <td>{{ item.value/pieTotal |toPercentDecimal2}}</td>
+                      <td>{{ item.value/pieTotal | toPercentDecimal2 }}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">
@@ -245,26 +245,11 @@ export default {
 
     pieTotal () {
       var all = 0
-      // if (this.currIndex === 0) {
-      //   this.trendPieData.forEach((item) => {
-      //     all = all + item.value
-      //   })
-      // } else if (this.currIndex === 1) {
-      //   this.lightRules.forEach((item) => {
-      //     all = all + item.value
-      //   })
-      // } else if (this.currIndex === 2) {
-      //   this.normalRules.forEach((item) => {
-      //     all = all + item.value
-      //   })
-      // } else if (this.currIndex === 3) {
-      //   this.seriousRules.forEach((item) => {
-      //     all = all + item.value
-      //   })
-      // }
-      this.warningLevel.forEach((item) => {
-        all = all + item.value
-      })
+      var i = 0
+      while (i < this.warningLevel.length) {
+        all = all + this.warningLevel[i].value
+        i++
+      }
       return all
     }
   },
@@ -319,6 +304,9 @@ export default {
     changProduct () {
       this.getTagTrend()
       this.trendPieData = []
+      this.lightRules = []
+      this.normalRules = []
+      this.seriousRules = []
       this.currIndex = 0
       this.getAlertList()
     },
@@ -487,17 +475,19 @@ export default {
         end = this.endTime
       }
       // 遍历处理每个标签数组里对应的告警规则数据
-      arr.data.forEach((item) => {
+      arr.forEach((item) => {
         // 每个告警规则调用接口获取趋势数据
         api.alert.getTagTrend(this.currentProduct.id, item.tag, begin, end).then((res) => {
           if (res.status === 200) {
-            var alertCount
+            var i = 0
+            var sum = 0
             res.data.forEach((alert) => {
-              alertCount = alertCount + alert.message
+              while (i < alert.hourslength) {
+                sum += alert.hours[i].message
+                i++
+              }
             })
-            item.push({
-              value: alertCount
-            })
+            item.value = sum
           }
         }).catch((res) => {
           this.handleError(res)
@@ -522,8 +512,6 @@ export default {
     getAlertList () {
       api.alert.getRules(this.currentProduct.id).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
-          console.log(55555)
           res.data.forEach((item) => {
             if (item.tag === '轻微') {
               this.lightRules.push({
@@ -547,7 +535,7 @@ export default {
           })
           this.sortArr(this.lightRules)
           this.sortArr(this.normalRules)
-          this.sortArr(this.normalRules)
+          this.sortArr(this.seriousRules)
         }
       }).catch((res) => {
         this.handleError(res)
