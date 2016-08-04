@@ -4,7 +4,7 @@
     <div class="main-title">
       <h2>用户管理</h2>
     </div>
-
+    <!-- <pre> {{ usersOnlineType | json}} </pre> -->
     <!-- Start: 产品信息统计 -->
     <div class="row statistic-group mb30">
       <div class="col-6" v-for="statistic in statisticArr">
@@ -37,7 +37,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
         </div>
       </div>
     </div>
@@ -71,6 +71,8 @@
 
     data () {
       return {
+        // 是否缓存用户在线状态
+        cacheOnlineType: false,
         query: '',
         searching: false,
         total: 0,
@@ -144,6 +146,13 @@
             title: '在线状态',
             class: 'tac'
           }
+        ],
+        // 存放各个用户的在线状态 key是用户id
+        usersOnlineType: [
+          {
+            id: '',
+            online: false
+          }
         ]
       }
     },
@@ -204,7 +213,7 @@
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
             is_active: user.is_active ? '已激活' : '未激活',
-            online: '另一个接口拿',
+            online: this.computedOnline(user.id),
             status: this.computedStatus(user.status),
             prototype: user
           }
@@ -221,21 +230,29 @@
           filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
-          order: {'create_date': 'desc'},
+          order: {},
           query: {}
         }
 
         if (this.query.length > 0) {
-          condition.query['id'] = { $like: this.query }
+          condition.query['phone'] = { $like: this.query }
+          condition.query['email'] = { $like: this.query }
         }
 
-        // if (this.selectedFilter.value) {
-        //   switch (this.selectedFilter.value) {
-        //     case 1:
-        //       condition.query['status'] = { $in: this.query }
-        //       break
-        //   }
-        // }
+        if (this.selectedFilter.value) {
+          switch (this.selectedFilter.value) {
+            case 1: // 已激活 查询手机不是未验证并且邮箱不是未验证
+              condition.query['phone_valid'] = { $nin: [false] }
+              condition.query['email_valid'] = { $nin: [false] }
+              break
+            case 2: // 未激活 查询手机未验证并且邮箱未验证
+              condition.query['phone_valid'] = { $in: [false] }
+              condition.query['email_valid'] = { $in: [false] }
+              break
+            default:
+              break
+          }
+        }
 
         this.headers.map((item) => {
           if (item.sortType) {
@@ -262,6 +279,23 @@
     },
 
     methods: {
+      /**
+       * 获取用户在线状态
+       * @param  {[type]} userId [description]
+       * @return {[type]}        [description]
+       */
+      getOnlineType (userId) {
+        api.user.getUserSession(userId).then((res) => {
+          var obj = {
+            id: userId,
+            online: Boolean(res.data.online),
+            text: res.data.online ? '在线' : '下线'
+          }
+          this.usersOnlineType.push(obj)
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 获取今日新增用户数
        * @return {[type]} [description]
@@ -339,6 +373,26 @@
         this.getUsers()
       },
       /**
+       * 解析当前在线状态
+       * @param  {[type]} userId [description]
+       * @return {[type]}        [description]
+       */
+      computedOnline (userId) {
+        var result = '查询中...'
+        this.usersOnlineType.map((item) => {
+          if (item.id === userId) {
+            result = item.text
+            return
+          }
+        })
+        // if (online === true) {
+        //   result = '在线'
+        // } else if (online === false) {
+        //   result = '下线'
+        // }
+        return result
+      },
+      /**
        * 解析当前的用户来源
        * 国辉
        * @param  {[type]} source [description]
@@ -381,6 +435,13 @@
         api.user.list(this.queryCondition).then((res) => {
           if (res.status === 200) {
             this.users = res.data.list
+            if (this.cacheOnlineType) {
+              this.usersOnlineType = []
+            }
+            // 如果不缓存设备在线状态可以把这行注释掉
+            this.users.map((item) => {
+              this.getOnlineType(item.id)
+            })
             this.total = res.data.count
             this.loadingData = false
           }

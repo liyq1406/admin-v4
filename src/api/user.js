@@ -151,5 +151,11 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/subscribes`
     )
+  },
+
+  getUserSession (userId) {
+    return http.get(
+      `${API_SERVER.default}/v2/user/${userId}/user_session`
+    )
   }
 }
