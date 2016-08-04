@@ -68,9 +68,6 @@ export default {
 
   computed: {
     clientsInfo () {
-      console.log(this.majorClient.country)
-      console.log(this.majorClient.province)
-      console.log(this.majorClient.city)
       var result = {
         name: {
           label: '联系人',
