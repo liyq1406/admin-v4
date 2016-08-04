@@ -26,7 +26,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBysomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-status="sortBySomeKey" @tbody-nickname="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
     </div>
@@ -190,7 +190,7 @@
        * @param  {[type]} table [description]
        * @return {[type]}       [description]
        */
-      sortBysomeKey (header, index) {
+      sortBySomeKey (header, index) {
         if (header.sortType === 1) {
           header.sortType = -1
         } else {

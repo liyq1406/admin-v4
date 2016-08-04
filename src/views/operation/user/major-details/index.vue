@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import api from 'api'
 import { globalMixins } from 'src/mixins'
 import Tab from 'components/Tab'
 import InfoCard from 'components/InfoCard'
@@ -53,33 +54,8 @@ export default {
 
   data () {
     return {
-      alertSummary: {},
-      clientsInfo: {
-        link: {
-          label: '联系人',
-          value: '马化腾'
-        },
-        phone: {
-          label: '联系方式',
-          value: 13800138000
-        },
-        work: {
-          label: '行业',
-          value: '互联网行业'
-        },
-        createTime: {
-          label: '创建时间',
-          value: '2016-09-17 09:16:09'
-        },
-        area: {
-          label: '所在地区',
-          value: '广东 深圳'
-        },
-        address: {
-          label: '详细地址',
-          value: '腾讯大楼'
-        }
-      },
+      // 当前大客户详情
+      majorClient: {},
       secondaryNav: [],
       breadcrumbNav: [{
         label: '大客户管理',
@@ -90,8 +66,48 @@ export default {
     }
   },
 
+  computed: {
+    clientsInfo () {
+      console.log(this.majorClient.country)
+      console.log(this.majorClient.province)
+      console.log(this.majorClient.city)
+      var result = {
+        name: {
+          label: '联系人',
+          value: this.majorClient.name
+        },
+        phone: {
+          label: '联系电话',
+          value: this.majorClient.phone
+        },
+        industry: {
+          label: '行业',
+          value: this.majorClient.industry
+        },
+        email: {
+          label: '邮箱',
+          value: this.majorClient.email
+        },
+        create_time: {
+          label: '创建时间',
+          value: this.majorClient.create_time
+        },
+        area: {
+          label: '所在地区',
+          value: this.majorClient.country + this.majorClient.province + this.majorClient.city
+        },
+        location: {
+          label: '详细地址',
+          value: this.majorClient.location
+        }
+      }
+      return result
+    }
+  },
+
   route: {
     data (transition) {
+      this.getMajorClient()
       var majorRoot = `/operation/users/major-clients/${this.$route.params.id}`
 
       return {
@@ -106,6 +122,40 @@ export default {
           link: { path: `${majorRoot}/issues` }
         }]
       }
+    }
+  },
+
+  methods: {
+    getMajorClient () {
+      console.log('获取大客户列表')
+      this.loadingData = true
+      var params = {
+        filter: [
+          'id',
+          'name',
+          'email',
+          'phone',
+          'industry',
+          'location',
+          'contacter',
+          'create_time',
+          'country',
+          'province',
+          'city'
+        ],
+        limit: 1,
+        query: {
+          'id': { $in: [this.$route.params.id] }
+        }
+      }
+      api.heavyBuyer.getHeavyBuyer(params).then((res) => {
+        this.loadingData = false
+        this.majorClient = res.data.list[0]
+        this.total = res.data.count
+      }).catch((err) => {
+        this.loadingData = false
+        this.handleError(err)
+      })
     }
   }
 }
