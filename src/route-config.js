@@ -707,22 +707,30 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
-            // 维保信息
-            'warranty': {
+            // 经销商
+            'dealers': {
               component (resolve) {
                 require.ensure([], (require) => {
-                  resolve(require('./views/operation/user/major-details/warranty'))
-                }, 'admin')
-              }
-            },
-            // 反馈记录
-            'issues': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/user/major-details/issues'))
+                  resolve(require('./views/operation/user/major-details/dealers'))
                 }, 'admin')
               }
             }
+            // // 维保信息
+            // 'warranty': {
+            //   component (resolve) {
+            //     require.ensure([], (require) => {
+            //       resolve(require('./views/operation/user/major-details/warranty'))
+            //     }, 'admin')
+            //   }
+            // },
+            // // 反馈记录
+            // 'issues': {
+            //   component (resolve) {
+            //     require.ensure([], (require) => {
+            //       resolve(require('./views/operation/user/major-details/issues'))
+            //     }, 'admin')
+            //   }
+            // }
           }
         },
         // 用户设置

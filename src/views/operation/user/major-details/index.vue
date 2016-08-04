@@ -20,7 +20,7 @@
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
-    <div class="panel">
+    <!-- <div class="panel">
       <div class="panel-hd panel-hd-full">
         <h2>账号状态</h2>
       </div>
@@ -28,7 +28,7 @@
         <span>{{ clientsInfo.status-0===1 ? '已启用' : '已停用' }}</span>
         <button :class="{'btn-primary': clientsInfo.status-0===1, 'btn-success': clientsInfo.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(clientsInfo)" class="btn btn-sm"><i :class="{'fa-stop': clientsInfo.status, 'fa-play': !clientsInfo.status}" class="fa"></i>{{ clientsInfo.status-0===1 ? '停用' : '启用' }}</button>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -115,11 +115,8 @@ export default {
           label: '设备列表',
           link: { path: `${majorRoot}/devices` }
         }, {
-          label: '维保信息',
-          link: { path: `${majorRoot}/warranty` }
-        }, {
-          label: '反馈记录',
-          link: { path: `${majorRoot}/issues` }
+          label: '经销商',
+          link: { path: `${majorRoot}/dealers` }
         }]
       }
     }
