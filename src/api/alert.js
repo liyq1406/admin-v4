@@ -152,5 +152,16 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/message/trend_hour_tag?product_id=${productId}&tag=${tag}&start_day=${startDay}&start_hour=${startHour}&end_day=${endDay}&end_hour=${endHour}`
     )
+  },
+  /**
+   * 告警消息产品下按标签下告警规则小时趋势
+   * @param {Array} params 消息列表
+   */
+  getTagRuleTrend (productId, tag, ruleId, startDay, endDay, startHour, endHour) {
+    startHour = startHour || '00'
+    endHour = endHour || '00'
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/message/trend_hour_tag_rule?product_id=${productId}&tag=${tag}&rule=${ruleId}&start_day=${startDay}&start_hour=${startHour}&end=${endDay}&end_hour=${endHour}`
+    )
   }
 }
