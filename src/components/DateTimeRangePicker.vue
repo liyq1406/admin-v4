@@ -57,7 +57,7 @@ export default {
   },
   ready () {
     var curTime = new Date()
-    this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000)
+    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 6000)
     this.endTime = curTime
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },

@@ -181,6 +181,7 @@ export default {
     let date = this.value
     this.year = date.getFullYear()
     this.month = date.getMonth() + 1
+    this.date = date.getDate()
     this.hour = date.getHours()
     this.min = date.getMinutes()
     let thisyear = this.year
@@ -207,6 +208,7 @@ export default {
       if (date instanceof Date) {
         this.year = date.getFullYear()
         this.month = date.getMonth() + 1
+        this.date = date.getDate()
         this.hour = date.getHours()
         this.min = date.getMinutes()
         let thisyear = this.year
