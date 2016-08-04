@@ -221,5 +221,11 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/product/${productId}/v_device/${deviceId}`
     )
+  },
+
+  getDevices (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/devices`, params
+    )
   }
 }
