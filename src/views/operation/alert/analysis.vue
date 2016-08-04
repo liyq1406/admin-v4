@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="currentProduct" @change="getTagTrend">
+            <select v-model="currentProduct" @change="changProduct">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -23,7 +23,7 @@
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @change="getTagTrend"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @change="changProduct"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -86,8 +86,8 @@
                   <template v-if="warningLevel.length > 0">
                     <tr v-for="item in warningLevel">
                       <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
-                      <td>{{item.value}}</td>
-                      <td>{{ item.value/pieTotal |toPercentDecimal2 }}</td>
+                      <td>{{item.value || 0}}</td>
+                      <td>{{ item.value/pieTotal |toPercentDecimal2}}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">
@@ -245,10 +245,27 @@ export default {
 
     pieTotal () {
       var all = 0
-      this.trendPieData.forEach((item) => {
+      // if (this.currIndex === 0) {
+      //   this.trendPieData.forEach((item) => {
+      //     all = all + item.value
+      //   })
+      // } else if (this.currIndex === 1) {
+      //   this.lightRules.forEach((item) => {
+      //     all = all + item.value
+      //   })
+      // } else if (this.currIndex === 2) {
+      //   this.normalRules.forEach((item) => {
+      //     all = all + item.value
+      //   })
+      // } else if (this.currIndex === 3) {
+      //   this.seriousRules.forEach((item) => {
+      //     all = all + item.value
+      //   })
+      // }
+      this.warningLevel.forEach((item) => {
         all = all + item.value
       })
-      return 100
+      return all
     }
   },
 
@@ -298,6 +315,13 @@ export default {
   },
 
   methods: {
+    // 切换产品时执行
+    changProduct () {
+      this.getTagTrend()
+      this.trendPieData = []
+      this.currIndex = 0
+      this.getAlertList()
+    },
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
@@ -386,47 +410,112 @@ export default {
 
     // 处理标签每日数据
     pushDayArr (arr) {
+      var rearr = []
       arr.data.forEach((item) => {
-        var dayTotal = 0
-        item.hours.forEach((message) => {
-          dayTotal = dayTotal + message.message
-        })
-        this.trendData.push({
+        var i = 0
+        var sum = 0
+        while (i < item.hours.length) {
+          sum += item.hours[i].message
+          i++
+        }
+        rearr.push({
           day: item.day,
-          data: dayTotal,
+          data: sum,
           product: item.name
         })
       })
+      this.trendData = rearr
+
+      // arr.data.forEach((item) => {
+      //   var dayTotal = 0
+      //   item.hours.forEach((obj) => {
+      //     dayTotal = dayTotal + obj.message
+      //   })
+      //   this.trendData.push({
+      //     day: item.day,
+      //     data: dayTotal,
+      //     product: item.name
+      //   })
+      // })
     },
 
     // 处理标签总饼图概览数据
     pushAllArr (arr) {
-      // this.trendPieData = []
       var total = 0
-      arr.data.forEach((item) => {
-        var dayTotal = 0
-        item.hours.forEach((message) => {
-          dayTotal = dayTotal + message.message
-        })
-        total = total + dayTotal
-      })
+      var j = 0
+      var i = 0
+      var sum = 0
+      while (j < arr.data.length) {
+        while (i < arr.data[j].hours.length) {
+          sum += arr.data[j].hours[i].message
+          i++
+        }
+        total += sum
+        j++
+      }
       this.trendPieData.push({
         name: arr.name,
         value: total
       })
       this.warningLevel = this.trendPieData
+      // var total = 0
+      // arr.data.forEach((item) => {
+      //   var dayTotal = 0
+      //   item.hours.forEach((message) => {
+      //     dayTotal = dayTotal + message.message
+      //   })
+      //   total = total + dayTotal
+      // })
+      // this.trendPieData.push({
+      //   name: arr.name,
+      //   value: total
+      // })
+      // this.warningLevel = this.trendPieData
     },
 
     // 处理单个标签下的饼图数据
     sortArr (arr) {
+      var begin
+      var end
+      if (this.period === '') {
+        var startTimePick = uniformDate(this.startTimePick)
+        var endTimePick = uniformDate(this.endTimePick)
+        begin = startTimePick
+        end = endTimePick
+      } else {
+        begin = this.beginTime
+        end = this.endTime
+      }
+      // 遍历处理每个标签数组里对应的告警规则数据
       arr.data.forEach((item) => {
-        api.alert.getRules(this.currentProduct.id).then((res) => {
+        // 每个告警规则调用接口获取趋势数据
+        api.alert.getTagTrend(this.currentProduct.id, item.tag, begin, end).then((res) => {
           if (res.status === 200) {
+            var alertCount
+            res.data.forEach((alert) => {
+              alertCount = alertCount + alert.message
+            })
+            item.push({
+              value: alertCount
+            })
           }
         }).catch((res) => {
           this.handleError(res)
         })
+        // 处理数组，去除不必要的属性，只留下name与value属性
+        this.handleArr(item)
       })
+    },
+    // 处理数组，去除不必要的属性，只留下name与value属性
+    handleArr (arr) {
+      var newarr = []
+      arr.forEach((item) => {
+        var newobj = {}
+        newobj.name = item.name
+        newobj.value = item.value
+        newarr.push(newobj)
+      })
+      arr = newarr
     },
 
     // 获取告警规则列表
@@ -439,20 +528,26 @@ export default {
             if (item.tag === '轻微') {
               this.lightRules.push({
                 name: item.name,
-                id: item.id
+                id: item.id,
+                tag: '轻微'
               })
             } else if (item.tag === '通知') {
               this.normalRules.push({
                 name: item.name,
-                id: item.id
+                id: item.id,
+                tag: '通知'
               })
             } else {
               this.seriousRules.push({
                 name: item.name,
-                id: item.id
+                id: item.id,
+                tag: '严重'
               })
             }
           })
+          this.sortArr(this.lightRules)
+          this.sortArr(this.normalRules)
+          this.sortArr(this.normalRules)
         }
       }).catch((res) => {
         this.handleError(res)
@@ -463,7 +558,7 @@ export default {
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end
-      this.getTagTrend()
+      this.changProduct()
     },
 
     selectLevel (index) {
@@ -475,65 +570,17 @@ export default {
           this.levelTitle = '告警'
           break
         case 1:
-          this.warningLevel = [
-            {
-              id: 123,
-              name: '异常下线',
-              value: 10
-            },
-            {
-              id: 123,
-              name: '温度过高',
-              value: 30
-            },
-            {
-              id: 123,
-              name: '风机异常',
-              value: 20
-            }
-          ]
+          this.warningLevel = this.lightRules
           this.showlink = true
           this.levelTitle = '轻微'
           break
         case 2:
-          this.warningLevel = [
-            {
-              id: 123,
-              name: '湿度超高',
-              value: 10
-            },
-            {
-              id: 123,
-              name: '风机异常',
-              value: 20
-            }
-          ]
+          this.warningLevel = this.normalRules
           this.showlink = true
           this.levelTitle = '通常'
           break
         case 3:
-          this.warningLevel = [
-            {
-              id: 123,
-              name: '滤芯异常',
-              value: 10
-            },
-            {
-              id: 123,
-              name: 'PM2.5超过指标',
-              value: 30
-            },
-            {
-              id: 123,
-              name: 'CO2超过指标',
-              value: 20
-            },
-            {
-              id: 123,
-              name: '电源异常',
-              value: 20
-            }
-          ]
+          this.warningLevel = this.seriousRules
           this.showlink = true
           this.levelTitle = '严重'
           break
