@@ -154,7 +154,7 @@ export default {
         border 1px solid #EEEEEE
         background-color #F7F7F7
       a
-        margin-left 10px
+        margin-left 5px
       span
         cursor text
     .choose-submit
