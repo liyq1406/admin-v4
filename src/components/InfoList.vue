@@ -58,6 +58,10 @@ export default {
     .x-val
     .x-label
       height 22px
+    .x-val
+      overflow hidden
+      white-space nowrap
+      text-overflow ellipsis
 
     .x-label
       color gray-light
