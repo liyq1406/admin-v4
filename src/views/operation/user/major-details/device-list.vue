@@ -2,28 +2,33 @@
   <div class="panel no-split-line">
     <div class="panel-bd">
       <div class="data-table with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
         <div class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
-              <v-select label="全部" width='110px' size="small">
+              <v-select :label="selectedProduct.name" width='110px' size="small">
                 <span slot="label">显示</span>
+                <select v-model="selectedProduct" @change="getDevices">
+                  <option v-for="product in products" :value="product">{{product.name}}</option>
+                </select>
               </v-select>
             </div>
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" @cancel="getSubDevices" placeholder="请输入搜索内容" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSubDevices">
-                <button slot="search-button" @click="getSubDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              <search-box :key.sync="query" :active="searching" @cancel="getDevices" placeholder="请输入搜索内容" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
+                <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 <!-- <label>{{ $t('ui.user.search_user') }}</label> -->
               </search-box>
             </div>
           </div>
         </div>
-        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey">
-        </c-table>
+        <c-table
+        :headers="headers"
+        :tables="tables"
+        :page="page"
+        :loading="loadingData"
+        @theader-is-active="sortBySomeKey"  @theader-active-date="sortBySomeKey"  @theader-is-online="sortBySomeKey"
+        ></c-table>
       </div>
     </div>
   </div>
@@ -36,11 +41,20 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import { formatDate } from 'src/filters'
 import Table from 'components/Table'
+import store from 'store'
 
 export default {
   name: 'device-list',
 
   mixins: [globalMixins],
+
+  store,
+
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
 
   components: {
     SearchBox,
@@ -57,28 +71,29 @@ export default {
       currentPage: 1,
       countPerPage: 10,
       loadingData: false,
-      subDevices: [ // 用户绑定设备列表
-        {
-          'id': '设备ID',
-          'mac': 'MAC地址',
-          'name': '设备名称',
-          'is_active': '是否激活',
-          'active_date': '激活时间',
-          'is_online': '是否在线',
-          'last_login': '最近登录时间',
-          'last_login_ip': '最近登录IP',
-          'mcu_mod': 'MCU型号',
-          'mcu_version': 'MCU版本号',
-          'firmware_mod': '固件型号',
-          'firmware': '固件版本号',
-          'product_id': '产品ID',
-          'region_id': '所在区域ID',
-          'sn': '设备序列号',
-          'create_time': '创建时间',
-          'creator_id': '创建者ID',
-          'creator_type': '创建者类型',
-          'heavy_buyer': '大客户Id'
-        }
+      selectedProduct: {},
+      devices: [ // 用户绑定设备列表
+        // {
+        //   'id': '设备ID',
+        //   'mac': 'MAC地址',
+        //   'name': '设备名称',
+        //   'is_active': false,
+        //   'active_date': '2014-10-09T08:15:40.843Z',
+        //   'is_online': false,
+        //   'last_login': '最近登录时间',
+        //   'last_login_ip': '最近登录IP',
+        //   'mcu_mod': 'MCU型号',
+        //   'mcu_version': 'MCU版本号',
+        //   'firmware_mod': '固件型号',
+        //   'firmware': '固件版本号',
+        //   'product_id': '产品ID',
+        //   'region_id': '所在区域ID',
+        //   'sn': '设备序列号',
+        //   'create_time': '创建时间',
+        //   'creator_id': '创建者ID',
+        //   'creator_type': '创建者类型',
+        //   'heavy_buyer': '大客户Id'
+        // }
       ],
       headers: [
         {
@@ -91,7 +106,7 @@ export default {
         },
         {
           key: 'sn',
-          title: '序号号（sn）'
+          title: '序列号（sn）'
           // tooltip: '提示内容'
         },
         {
@@ -111,8 +126,8 @@ export default {
           sortType: '-1'
         }
       ],
-      // 当前用于排序的字段
-      sortKey: ''
+      // 当前用于排序的字段 默认是激活时间
+      sortKey: 'active_date'
     }
   },
 
@@ -137,14 +152,14 @@ export default {
      */
     tables () {
       var result = []
-      this.subDevices.map((device) => {
+      this.devices.map((device) => {
         var table = {
           name: device.name,
           mac: device.mac,
           sn: device.sn,
-          is_active: this.computedStatus(device.is_active),
+          is_active: device.is_active ? '是' : '否',
           active_date: formatDate(device.active_date),
-          is_online: device.is_online,
+          is_online: device.is_online ? '上线' : '下线',
           prototype: device
         }
         result.push(table)
@@ -177,11 +192,15 @@ export default {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
-        query: {}
+        query: {
+          'heavy_buyer': { $in: [this.$route.params.id] }
+        }
       }
 
       if (this.query.length > 0) {
-        condition.query['account'] = { $like: this.query }
+        condition.query['name'] = { $like: this.query }
+        condition.query['mac'] = { $like: this.query }
+        condition.query['sn'] = { $like: this.query }
       }
 
       this.headers.map((item) => {
@@ -194,9 +213,15 @@ export default {
     }
   },
 
+  watch: {
+    products () {
+      this.init()
+    }
+  },
+
   route: {
     data () {
-      this.getSubDevices()
+      this.init()
     }
   },
 
@@ -204,20 +229,24 @@ export default {
     /**
      * 获取用户订阅设备
      */
-    getSubDevices () {
-      api.user.subDeviceList(this.$route.params.id).then((res) => {
+    getDevices () {
+      this.loadingData = true
+      api.product.getDevices(this.selectedProduct.id, this.queryCondition).then((res) => {
+        this.loadingData = false
         if (res.status === 200) {
-          this.subDevices = res.data
+          this.devices = res.data.list
+          this.total = res.data.count
         }
       }).catch((res) => {
-        // this.handleError(res)
+        this.loadingData = false
+        this.handleError(res)
       })
     },
 
     // 搜索
     handleSearch () {
       if (this.query.length === 0) {
-        this.getSubDevices()
+        this.getDevices()
       }
     },
 
@@ -228,7 +257,7 @@ export default {
 
     // 取消搜索
     cancelSearching () {
-      this.getSubDevices()
+      this.getDevices()
     },
     /**
      * 按某个属性排序
@@ -244,7 +273,17 @@ export default {
         header.sortType = 1
       }
       this.headers.$set(index, header)
-      this.getSubDevices()
+      this.getDevices()
+    },
+    /**
+     * 初始化产品 下拉列表
+     * @return {[type]} [description]
+     */
+    init () {
+      this.selectedProduct = this.products[0] || {}
+      if (this.selectedProduct.id) {
+        this.getDevices()
+      }
     }
   }
 }
