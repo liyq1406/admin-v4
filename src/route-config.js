@@ -589,7 +589,7 @@ let configRouter = (router) => {
         },
 
         // 告警分析详情
-        'alerts/analysis/:id': {
+        'alerts/analysis/:id/:product_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/alert/analysis-detail'))

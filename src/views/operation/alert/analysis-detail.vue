@@ -1,21 +1,20 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>告警分析</h2>
+      <h2>告警分析详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width="110px" size="small">
+          <!-- <v-select label="空气净化器" width="110px" size="small">
             <span slot="label">产品：空气净化器</span>
-          </v-select>
+          </v-select> -->
+          <div class="lh28">
+            <span v-for="tag in alert.tag | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span><span class="ml10">{{alert.name}}</span></div>
         </div>
       </div>
       <div class="filter-group fr">
-        <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div>
         <div class="filter-group-item">
           <date-time-range-picker></date-time-range-picker>
         </div>
@@ -25,6 +24,20 @@
       </div>
     </div>
     <div class="panel mt10">
+      <div class="filter-bar filter-bar-head">
+        <div class="filter-group fr">
+          <div class="filter-group-item">
+            <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+              <v-select width="90px" :label="queryType.label" size="small">
+                <select v-model="queryType">
+                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
+              <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </search-box>
+          </div>
+        </div>
+      </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
           <c-table :headers="headers" :tables="tables" :page="page"></c-table>
@@ -45,12 +58,14 @@ import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Breadcrumb from 'components/Breadcrumb'
+import SearchBox from 'components/SearchBox'
 // import Pie from 'components/g2-charts/Pie'
 import Table from 'components/Table'
 import dateFormat from 'date-format'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 // import { pluginMixins } from '../mixins'
+import { formatDate } from 'src/filters'
 
 // import Mock from 'mockjs'
 
@@ -68,11 +83,28 @@ export default {
     'c-table': Table,
     Statistic,
     Breadcrumb,
-    TimeLine
+    TimeLine,
+    SearchBox
   },
 
   data () {
     return {
+      singleAlert: {},
+      alert: {
+        tag: '',
+        name: ''
+      },
+      records: [],
+      key: '',
+      queryTypeOptions: [
+        // { label: 'MAC', value: 'mac' },
+        { label: '设备ID', value: 'from' },
+        { label: '告警内容', value: 'alert_name' }
+      ],
+      queryType: {
+        label: '设备ID',
+        value: 'from'
+      },
       alerts: [{
         content: '设备下线',
         level: 1
@@ -179,43 +211,209 @@ export default {
           title: '状态'
         }
       ],
-      tables: [{
-        mac: 123,
-        time: '2016-01-01 16:21:13',
-        duration: '1.1h',
-        addr: '湖北, 武汉',
-        state: '待处理'
-      },
-      {
-        mac: 123,
-        time: '2016-01-01 16:21:13',
-        duration: '1.1h',
-        addr: '湖北, 武汉',
-        state: '待处理'
-      },
-      {
-        mac: 123,
-        time: '2016-01-01 16:21:13',
-        duration: '1.1h',
-        addr: '湖北, 武汉',
-        state: '待处理'
-      }],
+      // tables: [{
+      //   mac: 123,
+      //   time: '2016-01-01 16:21:13',
+      //   duration: '1.1h',
+      //   addr: '湖北, 武汉',
+      //   state: '待处理'
+      // },
+      // {
+      //   mac: 123,
+      //   time: '2016-01-01 16:21:13',
+      //   duration: '1.1h',
+      //   addr: '湖北, 武汉',
+      //   state: '待处理'
+      // },
+      // {
+      //   mac: 123,
+      //   time: '2016-01-01 16:21:13',
+      //   duration: '1.1h',
+      //   addr: '湖北, 武汉',
+      //   state: '待处理'
+      // }],
       breadcrumbNav: [{
         label: '告警分析',
         link: '/operation/alerts/record'
       }, {
         label: '当前'
-      }]
+      }],
+      product: {}
+    }
+  },
+
+  filters: {
+    toTags (value) {
+      return value.length ? value.split(',') : []
     }
   },
 
   ready () {
+    this.getProduct()
+    this.getAlertList()
   },
 
   computed: {
+    // queryCondition () {
+    //   return {
+    //     limit: this.countPerPage,
+    //     offset: (this.currentPage - 1) * this.countPerPage
+    //     if (this.key !== '') {
+    //       condition.query.id = {$regex: this.key, $options: 'i'}
+    //     }
+    //   }
+    // },
+
+    queryCondition () {
+      var condition = {}
+      if (this.period === '') {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            id: {
+              $in: [this.$route.params.id]
+            },
+            create_date: {
+              $gte: this.startTimePick,
+              $lte: this.endTimePick
+            }
+          }
+        }
+      } else {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            id: {
+              $in: [this.$route.params.id]
+            },
+            create_date: {
+              $lte: this.endTime + 'T23:59:59.000Z',
+              $gte: this.beginTime + 'T00:00:00.000Z'
+            }
+          }
+        }
+      }
+      if (this.key.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
+      }
+      return condition
+    },
+
+    beginTime () {
+      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+      return dateFormat('yyyy-MM-dd', new Date(past))
+    },
+    endTime () {
+      var end = new Date().getTime()
+      return dateFormat('yyyy-MM-dd', new Date(end))
+    },
+    tables () {
+      // var result = []
+      // this.alerts.map((item) => {
+      //   var levelCls = ''
+      //   console.log(item.level)
+      //   if (item.level === 2) {
+      //     levelCls = 'text-label-warning'
+      //   } else if (item.level === 3) {
+      //     levelCls = 'text-label-danger'
+      //   }
+      //   var alert = {
+      //     content: item.content || '设备下线',
+      //     time: '2016-01-01 16:21:13',
+      //     duration: '1.1h',
+      //     addr: '湖北, 武汉',
+      //     level: `<div class="level level1 text-label ${levelCls}">${item.level === 1 ? '轻微' : item.level === 2 ? '中等' : '严重'}</div>`,
+      //     state: '待处理',
+      //     prototype: item
+      //   }
+      //   result.push(alert)
+      // })
+      // return result
+      var result = []
+      this.records.map((item) => {
+        var levelCls = ''
+        console.log(item.level)
+        if (item.tags === '通知') {
+          levelCls = 'text-label-warning'
+        } else if (item.tags === '严重') {
+          levelCls = 'text-label-danger'
+        }
+        var alert = {
+          content: item.type || '设备下线',
+          time: item.create_date,
+          duration: item.lasting + 'h',
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags === '轻微' ? '轻微' : item.tags === '中等' ? '中等' : '严重'}</div>`,
+          state: item.is_read ? '已处理' : '未处理',
+          prototype: item
+        }
+        result.push(alert)
+      })
+      return result
+    }
   },
 
   methods: {
+    // 获取选中产品信息
+    getProduct () {
+      api.product.getProduct(this.$route.params.product_id).then((res) => {
+        // console.log(res.data)
+        this.product = res.data
+        this.breadcrumbNav[1].label = this.product.name
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 获取告警规则列表
+    getAlertList () {
+      api.alert.getRules(this.$route.params.product_id).then((res) => {
+        if (res.status === 200) {
+          res.data.forEach((item) => {
+            if (this.$route.params.id === item.id) {
+              this.alert.name = item.name
+              this.alert.tag = item.tag
+            }
+          })
+          this.sortArr(this.lightRules)
+          this.sortArr(this.normalRules)
+          this.sortArr(this.seriousRules)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 获取告警历史@author weijie
+    getList () {
+      api.alert.getAlerts(this.queryCondition).then((res) => {
+        if (res.status === 200) {
+          // console.log(res.data.list)
+          // this.alerts = res.data.list
+          this.records = res.data.list.map((item) => {
+            // 计算已读告警持续时间
+            if (item.is_read) {
+              let beginTime = new Date(formatDate(item.create_date))
+              let endTime = new Date(formatDate(item.read_time))
+              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+              // console.log(lasting.toFixed(1))
+              item.lasting = lasting.toFixed(1)
+            } else {
+              // 计算未读告警持续时间
+              let beginTime = new Date(formatDate(item.create_date))
+              let endTime = new Date()
+              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
+              // console.log(lasting.toFixed(1))
+              item.lasting = lasting.toFixed(1)
+            }
+            return item
+          })
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 获取告警趋势
      */
@@ -237,4 +435,6 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
+.lh28
+  line-height 28px
 </style>

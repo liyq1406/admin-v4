@@ -85,7 +85,7 @@
                 <tbody>
                   <template v-if="warningLevel.length > 0">
                     <tr v-for="item in warningLevel">
-                      <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
+                      <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
                       <td>{{ item.value/pieTotal | toPercentDecimal2 }}</td>
                     </tr>
@@ -155,7 +155,7 @@ export default {
       trendPieData: [],
       trendData: [],
       currentProduct: {},
-      tabItems: ['全部', '轻度', '中度', '重度'],
+      tabItems: ['全部', '轻微', '通知', '严重'],
       currIndex: 0,
       levelTitle: '告警',
       key: '',
@@ -565,7 +565,7 @@ export default {
         case 2:
           this.warningLevel = this.normalRules
           this.showlink = true
-          this.levelTitle = '通常'
+          this.levelTitle = '通知'
           break
         case 3:
           this.warningLevel = this.seriousRules
