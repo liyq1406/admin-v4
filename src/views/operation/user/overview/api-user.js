@@ -54,7 +54,7 @@ export function getUserRegion () {
   })
 }
 
-export function gettTotalUser () {
+export function getTotalUser () {
   return new Promise((resolve, reject) => {
     api.statistics.getSummary().then((res) => {
       if (res.status === 200) {

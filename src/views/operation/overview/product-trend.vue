@@ -24,7 +24,9 @@
           </div>
           <div class="top">
             <h3>{{period}}天激活TOP{{topAdded.data.length}}</h3>
-            <interval :data="topAdded.data" :options="topAdded.options"></interval>
+            <template v-if="repaintTopFive">
+              <interval :data="topAdded.data" :options="topAdded.options"></interval>
+            </template>
           </div>
         </div>
       </div>
@@ -65,6 +67,7 @@ export default {
 
   data () {
     return {
+      repaintTopFive: true, // 添加该变量为了处理g2的bug： changeData时g2会将传入数组根据source时的数组结构重新排序。所以总过v-if重绘
       trendTabIndex: 0,
       period: 7,
       activatedData: [], // 激活设备数据
@@ -168,7 +171,7 @@ export default {
       if (products.length > 5) {
         products = products.slice(products.length - 5)
       }
-
+      this.repaintTopFive = true
       return products
 
       // if (window.G2) {
@@ -214,6 +217,7 @@ export default {
       })
     },
     activatedSelect () {
+      this.repaintTopFive = false
       this.getActivatedProductsTrend(this.products, this.period)
     },
     // 获取上一个取值周期的所有数据，为了计算平均增长

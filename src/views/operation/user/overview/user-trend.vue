@@ -152,6 +152,10 @@ export default {
         end = cur
       }
 
+      if (start.getTime() > end.getTime()) {
+        return
+      }
+
       let lastYear = getLastYearDate(end)
 
       if (start.getTime() < lastYear.getTime()) {
