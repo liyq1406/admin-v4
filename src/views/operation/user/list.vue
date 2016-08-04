@@ -162,7 +162,7 @@
         var result = []
         this.users.map((user) => {
           var table = {
-            nickname: '<a style="color: #c0252e">' + user.nickname + '</a>',
+            nickname: '<a style="color: #c0252e">' + (user.nickname || '未定义') + '</a>',
             account: user.account,
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
