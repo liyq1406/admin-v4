@@ -44,7 +44,10 @@
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>
-          <div id="device-map" class="mt10 ml30" style="height: 220px"></div>
+          <div class="mt10 ml30">
+            <map v-if="this.deviceLocation.length > 0" :location="deviceLocation" height="220px"></map>
+            <div class="center" v-else>暂无地图数据</div>
+          </div>
         </div>
       </div>
     </div>
@@ -62,6 +65,7 @@ import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import { globalMixins } from 'src/mixins'
 import { formatDate } from 'src/filters'
+import Map from 'components/Map'
 // import dateFormat from 'date-format'
 
 export default {
@@ -73,7 +77,8 @@ export default {
     Tab,
     Breadcrumb,
     InfoCard,
-    InfoList
+    InfoList,
+    Map
   },
 
   data () {
@@ -130,7 +135,8 @@ export default {
         link: '/operation/alerts/record'
       }, {
         label: '告警信息'
-      }]
+      }],
+      deviceLocation: []
     }
   },
 
@@ -181,6 +187,14 @@ export default {
       return info
     }
   },
+  // 监听属性变动
+  watch: {
+    info () {
+      if (this.info.product_id !== '' & this.info.from !== '') {
+        this.getDeviceGeography()
+      }
+    }
+  },
 
   filters: {
     toTags (value) {
@@ -195,6 +209,17 @@ export default {
   },
 
   methods: {
+    /**
+     * 获取设备的地理坐标
+     * @author shengzhi
+     */
+    getDeviceGeography () {
+      api.device.getGeography(this.info.product_id, this.info.from).then((res) => {
+        if (res.status === 200) {
+          this.deviceLocation = [res.data.lon, res.data.lat]
+        }
+      })
+    },
     /**
      * 地图初始化
      */
@@ -306,6 +331,10 @@ export default {
 
 <style lang='stylus'>
 @import '../../../../assets/stylus/common'
+.center
+  height 220px
+  line-height 220px
+  text-align center
 .alert-record-summary
   .up
     h3
