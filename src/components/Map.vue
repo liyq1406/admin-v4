@@ -129,6 +129,13 @@ export default {
       location = location || this.location
       if (!this.ready || !location.length) return
       this.map.setCenter(location)
+      this.marker = new AMap.Marker({
+        map: this.map,
+        position: location,
+        icon: 'static/images/marker.png',
+        offset: {x: -11, y: -28}
+      })
+      console.log(this.marker)
     },
     /**
      * 地图初始化

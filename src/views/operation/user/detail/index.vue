@@ -18,6 +18,7 @@
           </div> -->
           <div class="user-position mt10">
             <!-- <x-map :location="[116.39,39.9]"></x-map> -->
+            <!-- <x-map :addr="'汕头'" :zoom="10"></x-map> -->
             <x-map :addr="user.city" :zoom="10"></x-map>
           </div>
         </div>
