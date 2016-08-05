@@ -119,7 +119,7 @@ export default {
         })
 
         this.today.total = data[0].count
-        if (data.length < 2) {
+        if (data.length > 2) {
           this.today.change = this.today.total - data[1].count
         }
       }
