@@ -86,7 +86,7 @@
           ☐ 维保记录列表 @guohao
             ☐ 筛选
         经销商:
-          ☐ 经销商信息 @shengzhi
+          ✓ 经销商信息 @shengzhi @done(2016-08-05 11:04) @project(功能 / #产品管理 / 设备管理 / 设备详情 / 经销商)
     告警信息:
       ☐ 顶部4个信息统计 @shengzhi
       ☐ 趋势图表 @shengzhi

@@ -232,14 +232,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 扩展
-        'products/:id/addon': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/addon'))
-            }, 'admin')
-          }
-        },
+        // // 扩展
+        // 'products/:id/addon': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/product/addon'))
+        //     }, 'admin')
+        //   }
+        // },
         // 固件升级
         'products/:id/upgrade': {
           component (resolve) {

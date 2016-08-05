@@ -4,10 +4,7 @@
       <div class="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <date-time-range-picker></date-time-range-picker>
-          </div>
-          <div class="filter-group-item">
-            <radio-button-group :items="locales.data.BIG_PERIODS" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            <date-time-multiple-picker :periods="periods" @timechange="onTimeChange"></date-time-multiple-picker>
           </div>
         </div>
         <div class="filter-group">
@@ -22,13 +19,6 @@
         </div>
       </div>
       <div class="device-data-table-box">
-        <div class="title">
-          <!-- <span>设备数据明细 : </span> -->
-        </div>
-        <!-- <div class="table-box">
-          <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage (currentPage-1)*countPerPage"></intelligent-table>
-          <pager v-if="snapshots.length > countPerPage" :total="snapshots.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
-        </div> -->
         <div class="panel-bd">
           <time-line :data="trends.data"></time-line>
         </div>
@@ -36,11 +26,11 @@
       <div class="history-list">
         <div class="col-dates">
           <ul>
-            <li v-for="n in 10">2016-07-01  09:00:00</li>
+            <li v-for="snapshot in filteredSnapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.lastUpdate }}</li>
           </ul>
         </div>
         <div class="col-details">
-          <c-table :headers="headers" :tables="tables" :bordered="false"></c-table>
+          <c-table :headers="columns" :tables="currSnapshotInfo" :bordered="false"></c-table>
         </div>
       </div>
       <pager v-if="total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager>
@@ -56,10 +46,10 @@ import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
 import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
-
+import { formatDate } from 'src/filters'
 import Mock from 'mockjs'
 
 export default {
@@ -74,25 +64,21 @@ export default {
     'intelligent-table': IntelligentTable,
     'v-select': Select,
     RadioButtonGroup,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     TimeLine
   },
 
   data () {
     return {
-      loadingProductTrends: false,
-      snapshotSeries: [
-        {
-          name: 'PM2.5',
-          type: 'line',
-          data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-        }
-      ],
       period: 1,
+      periods: [1, 7, 30],
+      startTime: 0,
+      endTime: 0,
       total: 0,
       currentPage: 1,
       countPerPage: 10,
-      snapshots: [],
+      allSnapshots: [],
+      currSnapshot: {},
       datapoints: [],
       selectedDatapoint: {},
       // 趋势
@@ -100,7 +86,7 @@ export default {
         data: [],
         options: {}
       },
-      headers: [
+      columns: [
         {
           key: 'name',
           title: '数据端点'
@@ -117,37 +103,44 @@ export default {
     }
   },
   computed: {
-    tables () {
+    snapshots () {
       let result = []
 
       return result
     },
 
-    // 图表横轴数据
-    snapshotXAxisData () {
-      // var today = new Date()
-      var now = Date.parse(new Date())
-      var result = []
-      for (var i = this.period * 24 - 1; i >= 0; i--) {
-        // result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-        var date = new Date(now - i * 3600 * 1000)
-        var hour = date.getHours() + 1
-        result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
+    // 过滤后的的快照列表
+    filteredSnapshots () {
+      let offset = (this.currentPage - 1) * this.countPerPage
+      let result = this.allSnapshots.slice(offset, offset + this.countPerPage)
+      if (result.length) {
+        this.currSnapshot = result[0]
       }
+      return result
+    },
+
+    // 当前设备快照
+    currSnapshotInfo () {
+      var result = []
+      this.datapoints.forEach((datapoint) => {
+        result.push({
+          name: datapoint.name,
+          description: datapoint.description,
+          value: this.currSnapshot[datapoint.index]
+        })
+      })
       return result
     },
 
     // 查询条件
     queryCondition () {
-      var endtime = Date.parse(new Date())
       // 取当前开始到period天前的时间
-      var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
       var condition = {
         offset: 0,
         limit: 2500,
         date: {
-          begin: begintime,
-          end: endtime
+          begin: this.startTime,
+          end: this.endTime
         }
       }
       return condition
@@ -156,7 +149,6 @@ export default {
 
   route: {
     data () {
-      this.getSnapshot()
       this.getDatapoints()
       // 监听窗口尺寸变化
       // window.onresize = () => {
@@ -178,12 +170,26 @@ export default {
   },
 
   methods: {
-    // 获取设备端点列表
+    /**
+     * 处理时间选择
+     * @author shengzhi
+     */
+    onTimeChange (start, end) {
+      this.startTime = start.getTime()
+      this.endTime = end.getTime()
+    },
+
+    /**
+     * 获取设备端点列表
+     * @author shengzhi
+     */
     getDatapoints () {
       api.product.getDatapoints(this.$route.params.product_id).then((res) => {
         if (res.status === 200) {
           this.datapoints = res.data
           this.selectedDatapoint = res.data[0]
+          // 获取设备快照
+          this.getSnapshots()
         }
       }).catch((res) => {
         this.handleError(res)
@@ -197,7 +203,7 @@ export default {
      */
     onCurrPageChage (number) {
       this.currentPage = number
-      this.getSnapshot()
+      // this.getSnapshots()
     },
 
     /**
@@ -207,25 +213,51 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getSnapshot(true)
+      // this.getSnapshots(true)
     },
 
     /**
      * 获取快照数据
      */
-    getSnapshot () {
+    getSnapshots () {
       api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, this.queryCondition).then((res) => {
-        console.log(this.queryCondition)
         if (res.status === 200) {
+          // 模拟数据开始 ******************************
+          // this.total = 2
+          // this.allSnapshots = [{
+          //   _id: '123456',
+          //   deviceId: '1605922391',
+          //   cmId: '1605922391',
+          //   ip: '119.131.117.58',
+          //   online: 1,
+          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
+          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
+          //   lastUpdate: formatDate('2016-08-05T14:30:53Z'),
+          //   '0': true,
+          //   '1': 38,
+          //   '2': 47
+          // }, {
+          //   _id: '234567',
+          //   deviceId: '1605922391',
+          //   cmId: '1605922391',
+          //   ip: '119.131.117.58',
+          //   online: 1,
+          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
+          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
+          //   lastUpdate: formatDate('2016-08-05T14:40:47Z'),
+          //   '0': true,
+          //   '1': 42,
+          //   '2': 49
+          // }]
+          // 模拟数据结束 ******************************
+
           // 获取全部数组数据
           this.total = res.data.count
-          this.allSnapshots = res.data.list
-          this.snapshotTable = res.data.list
-          this.snapshotTable.map((li) => {
-            li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '').replace(/-/ig, '/').split('.')[0]
-          })
-          this.snapshots = res.data.list.sort((a, b) => {
-            return new Date(b.snapshot_date) - new Date(a.snapshot_date)
+          this.allSnapshots = res.data.list.map((item) => {
+            item.lastUpdate = formatDate(item.lastUpdate)
+            return item
+          }).sort((a, b) => {
+            return new Date(b.lastUpdate) - new Date(a.lastUpdate)
           })
         }
       }).catch((res) => {
@@ -255,14 +287,20 @@ export default {
       font-size 12px
       padding-left 15px
       border-bottom 1px solid light-border-color
+      cursor pointer
 
-      &:last-child
-        border none
+      &:hover
+        background #F8F8F8
+
+      &.active
+        position relative
+        background #FFF
+        margin-right -1px
 
   .col-details
     min-height 269px
     padding 30px
     background #FFF
-    margin-left 181px
+    margin-left 180px
     border-left 1px solid light-border-color
 </style>
