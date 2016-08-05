@@ -1,30 +1,31 @@
 <template>
   <div class="panel dealer">
     <div class="panel-bd">
-      <div class="info-box">
+      <div class="tips-null tac" v-if="!loadingData && !isDealerExists(dealer)"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
+      <div class="info-box" v-if="!loadingData && isDealerExists(dealer)">
         <div class="dealer-name-box">
           <span>{{dealer.name}}</span>
         </div>
         <div class="dealer-info-box">
           <div class="row">
-            <div class="label col-5">销售时间 :</div>
-            <div class="info col-5">{{dealer.time}}</div>
+            <div class="label col-5">销售时间:</div>
+            <div class="info col-5">暂无信息</div>
           </div>
           <div class="row">
-            <div class="label col-5">联系人 :</div>
-            <div class="info col-5">{{dealer.contacts}}</div>
+            <div class="label col-5">联系人:</div>
+            <div class="info col-5">{{dealer.name}}</div>
           </div>
           <div class="row">
-            <div class="label col-5">手机号 :</div>
+            <div class="label col-5">手机号:</div>
             <div class="info col-5">{{dealer.phone}}</div>
           </div>
-          <div class="row">
-            <div class="label col-5">从属于 :</div>
-            <div class="info col-5">{{dealer.from}}</div>
+          <div class="row" v-if="isDealerExists(superior)">
+            <div class="label col-5">从属于:</div>
+            <div class="info col-5">{{superior.name}}</div>
           </div>
           <div class="row">
-            <div class="label col-5">负责区域 :</div>
-            <div class="info col-5">{{dealer.area}}</div>
+            <div class="label col-5">负责区域:</div>
+            <div class="info col-5">暂无信息</div>
           </div>
         </div>
       </div>
@@ -36,9 +37,16 @@
 import SearchBox from 'components/SearchBox'
 import AreaSelect from 'components/AreaSelect'
 import Select from 'components/Select'
+import { globalMixins } from 'src/mixins'
+import store from 'store'
+import api from 'api'
+import { isEmpty } from 'helpers/utils'
+import { DEALER_SCOPE_SEPERATOR } from 'consts/config'
 
 export default {
   name: 'Dealers',
+
+  mixins: [globalMixins],
 
   components: {
     'v-select': Select,
@@ -46,21 +54,103 @@ export default {
     'search-box': SearchBox
   },
 
-  data () {
-    return {
-      dealer: {
-        name: '广州海珠总代理',
-        time: '2016-1-1 16:00:00',
-        contacts: '阿怡',
-        phone: '13800138000',
-        from: '华南总代理',
-        area: '华南地区'
-      }
+  store,
+
+  vuex: {
+    getters: {
+      currDevice: ({ products }) => products.currDevice
     }
   },
-  ready () {
+
+  data () {
+    return {
+      dealer: {},
+      superior: {},
+      loadingData: true
+    }
   },
+
+  route: {
+    data () {
+      this.getDealer()
+    }
+  },
+
+  watch: {
+    currDevice () {
+      this.getDealer()
+    }
+  },
+
   methods: {
+    /**
+     * 经销商是否存在
+     * @params {Object} 经销商
+     * @return {Boolean}
+     */
+    isDealerExists (dealer) {
+      return !isEmpty(dealer)
+    },
+
+    /**
+     * 获取经销商
+     * @author shengzhi
+     */
+    getDealer () {
+      // 模拟数据开始 ------------------------------
+      // this.dealer = {
+      //   id: 'afao22dda',
+      //   name: '广州区二级代理',
+      //   email: 'abcd@xlink.cn',
+      //   phone: '13800138000',
+      //   address: '广州市海珠区',
+      //   status: 1,
+      //   dealer_code: 'afao22dda',
+      //   upper_dealer_code: '1eafadsaad',
+      //   create_time: '2016-07-21T10:30:35Z'
+      // }
+      // this.superior = {
+      //   id: '1eafadsaad',
+      //   name: '广州区总代理',
+      //   email: 'abcd@xlink.cn',
+      //   phone: '13800138000',
+      //   address: '广州市海珠区',
+      //   status: 1,
+      //   dealer_code: '1eafadsaad',
+      //   upper_dealer_code: '',
+      //   create_time: '2016-07-21T10:30:35Z'
+      // }
+      // 模拟数据结束 ------------------------------
+
+      // this.currDevice是从 store 取的值，这里要等它值取回来了才作下一步操作
+      if (isEmpty(this.currDevice) || !this.currDevice.dealer_scope) {
+        this.loadingData = false
+        return
+      }
+
+      // 经销商 code
+      let codes = this.currDevice.dealer_scope.split(DEALER_SCOPE_SEPERATOR)
+
+      // 获取经销商
+      api.dealer.get(codes[codes.length - 1]).then((res) => {
+        this.loadingData = false
+        if (res.status === 200) {
+          this.dealer = res.data
+        }
+      }).catch((res) => {
+        this.loadingData = false
+        // this.handleError(res)
+      })
+
+      // 上级经销商
+      if (codes.length > 1) {
+        api.dealer.get(codes[codes.length - 2]).then((res) => {
+          if (res.status === 200) {
+            this.superior = res.data
+          }
+        })
+      }
+    }
   }
 }
 </script>
@@ -74,10 +164,11 @@ export default {
       clearfix()
       .dealer-name-box
         font-size 16px
-        text-align center
         float left
         color #333
         width 190px
+        padding 0 20px 0 10px
+        box-sizing border-box
       .dealer-info-box
         font-size 14px
         border-left 1px solid #ccc

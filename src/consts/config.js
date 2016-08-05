@@ -56,6 +56,9 @@ export const VERIFYCODE_DURATION = 90
 // 通知存活时长，默认(2000毫秒)
 export const NOTICE_DURATION = 2000
 
+// 经销商级别分隔符
+export const DEALER_SCOPE_SEPERATOR = '.'
+
 export const MAIN_NAV = {
   dashboard: {
     alias: 'dashboard',

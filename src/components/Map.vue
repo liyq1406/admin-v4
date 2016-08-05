@@ -47,10 +47,6 @@ export default {
     }
   },
 
-  destroyed () {
-    window.initMap = null
-  },
-
   methods: {
     /**
      * 地图初始化

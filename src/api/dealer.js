@@ -3,130 +3,92 @@ import { API_SERVER } from 'consts/config'
 
 export default {
   /**
-   * 查询经销商信息
-   * @param  {Object} params 注册信息
+   * 添加经销商
+   * @param  {Object} params 经销商信息
+   *  {
+        "name" : "经销商名称",
+        "email" : "邮箱地址",
+        "phone" : "手机",
+        "password":"登录密码"，
+        "address":"联系地址",
+        "upper_dealer_code":"上级经销商代码"
+      }
    * @return {Promise}
    */
-  getDealer (appId, params, token) {
+  create (params) {
     return http.post(
-      `${API_SERVER.dealer}/${appId}/api/distributer/list`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
+      `${API_SERVER.default}/v2/dealer`, params
     )
   },
 
   /**
-   * 新增经销商信息
-   * @param  {Object} params 注册信息
-   * @return {Promise}
-   */
-  addDealer (appId, params, token) {
-    return http.post(
-      `${API_SERVER.dealer}/${appId}/api/distributer/save`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
+   * 修改经销商
+   * @param  {String} id     经销商 id
+   * @param  {Object} params 经销商信息
+   *  {
+        "name" : "经销商名称",
+        "address":"联系地址"
       }
-    )
-  },
-
-  /**
-   * 更新经销商信息
-   * @param  {Object} params 注册信息
    * @return {Promise}
    */
-  updateDealer (appId, distributerId, params, token) {
+  update (id, params) {
     return http.put(
-      `${API_SERVER.dealer}/${appId}/api/distributer/update/${distributerId}`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
+      `${API_SERVER.default}/v2/dealer/${id}`, params
     )
   },
 
   /**
-   * 删除经销商信息
-   * @param  {Object} params 注册信息
+   * 禁用经销商
+   * @param  {String} id     经销商 id
    * @return {Promise}
    */
-  delDealer (appId, distributerId, token) {
-    return http.del(
-      `${API_SERVER.dealer}/${appId}/api/distributer/delete/${distributerId}`, {}, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
-    )
-  },
-
-  /**
-   * 查询销售记录
-   * @param  {Object} params 注册信息
-   * @return {Promise}
-   */
-  getSales (appId, params, token) {
-    return http.post(
-      `${API_SERVER.dealer}/${appId}/api/sale_details/list`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
-    )
-  },
-
-  /**
-   * 新增销售记录
-   * @param  {Object} params 注册信息
-   * @return {Promise}
-   */
-  addSales (appId, params, token) {
-    return http.post(
-      `${API_SERVER.dealer}/${appId}/api/sale_details/save`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
-    )
-  },
-
-  /**
-   * 更新销售记录
-   * @param  {Object} params 注册信息
-   * @return {Promise}
-   */
-  updateSales (appId, saleDetailsId, params, token) {
+  disable (id) {
     return http.put(
-      `${API_SERVER.dealer}/${appId}/api/sale_details/update/${saleDetailsId}`, params, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
+      `${API_SERVER.default}/v2/dealer/${id}`
     )
   },
 
   /**
-   * 删除销售记录
-   * @param  {Object} params 注册信息
+   * 删除经销商
+   * @param  {String} id     经销商 id
    * @return {Promise}
    */
-  delSales (appId, saleDetailsId, token) {
+  del (id) {
     return http.del(
-      `${API_SERVER.dealer}/${appId}/api/sale_details/delete/${saleDetailsId}`, {}, {
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
-        }
-      }
+      `${API_SERVER.default}/v2/dealer/${id}`
+    )
+  },
+
+  /**
+   * 获取经销商列表
+   * @param  {Object} params  查询条件
+   * @return {Promise}
+   */
+  list (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer_list`, params
+    )
+  },
+
+  /**
+   * 获取单个经销商
+   * @param  {Object} params  查询条件
+   * @return {Promise}
+   */
+  get (code) {
+    return http.get(
+      `${API_SERVER.default}/v2/dealer/${code}`
+    )
+  },
+
+  /**
+   * 经销商登陆认证
+   * @param  {Object} params 认证信息
+   * @return {Promise}
+   */
+  auth (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer_auth`, params
     )
   }
 }

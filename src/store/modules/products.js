@@ -4,6 +4,7 @@ import {
   REMOVE_PRODUCT,
   UPDATE_PRODUCT,
   SET_CURRENT_PRODUCT,
+  SET_CURRENT_DEVICE,
   SET_CURRENT_VIRTUAL_DEVICE
 } from '../mutation-types'
 import _ from 'lodash'
@@ -13,6 +14,7 @@ import _ from 'lodash'
 var state = {
   all: [],
   curr: {},
+  currDevice: {},
   currVirtualDevice: {}
 }
 
@@ -46,6 +48,10 @@ const mutations = {
 
   [SET_CURRENT_PRODUCT] (state, product) {
     state.curr = product
+  },
+
+  [SET_CURRENT_DEVICE] (state, device) {
+    state.currDevice = device
   },
 
   [SET_CURRENT_VIRTUAL_DEVICE] (state, device) {

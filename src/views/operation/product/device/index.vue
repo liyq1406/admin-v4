@@ -38,7 +38,7 @@ import Breadcrumb from 'components/Breadcrumb'
 import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
 import store from 'store'
-import { getCurrProduct, setCurrVirtualDevice } from 'store/actions/products'
+import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
 import { formatDate } from 'src/filters'
 
 export default {
@@ -59,17 +59,19 @@ export default {
   vuex: {
     getters: {
       currentProduct: ({ products }) => products.curr,
+      currDevice: ({ products }) => products.currDevice,
       currVirtualDevice: ({ products }) => products.currVirtualDevice
     },
     actions: {
       getCurrProduct,
+      setCurrDevice,
       setCurrVirtualDevice
     }
   },
 
   data () {
     return {
-      device: {},
+      // device: {},
       deviceLocation: [],
       // deviceInfo: {
       //   mac: {
@@ -111,15 +113,15 @@ export default {
     // 设备简介
     deviceSummary () {
       return {
-        title: this.device.name || this.currentProduct.name,
-        online: this.device.is_online,
-        time: formatDate(this.device.last_login)
+        title: this.currDevice.name || this.currentProduct.name,
+        online: this.currDevice.is_online,
+        time: formatDate(this.currDevice.last_login)
       }
     },
 
     // 设备信息
     deviceInfo () {
-      let activeInfo = this.device.is_active ? `已激活 ${formatDate(this.device.active_date)}` : '未激活'
+      let activeInfo = this.currDevice.is_active ? `已激活 ${formatDate(this.currDevice.active_date)}` : '未激活'
       let onlineLongInfo = this.currVirtualDevice.online_count
 
       if (typeof onlineLongInfo !== 'undefined') {
@@ -131,7 +133,7 @@ export default {
       return {
         mac: {
           label: 'MAC',
-          value: this.device.mac
+          value: this.currDevice.mac
         },
         onlineLong: {
           label: '累计在线时长',
@@ -143,27 +145,30 @@ export default {
         },
         model: {
           label: '型号',
-          value: this.device.firmware_mod
+          value: this.currDevice.firmware_mod
         },
         sn: {
           label: '序列号',
-          value: this.device.sn || '暂无信息'
+          value: this.currDevice.sn || '暂无信息'
         },
         id: {
           label: '设备ID',
-          value: this.device.id
+          value: this.currDevice.id
         }
       }
     }
   },
 
   route: {
-    data (transition) {
-      let deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
+    activate () {
       this.getCurrProduct(this.$route.params.product_id)
+      this.getDeviceGeography()
       this.getDeviceInfo()
       this.getVDeviceInfo()
-      this.getDeviceGeography()
+    },
+
+    data (transition) {
+      let deviceDetailRoot = `/operation/products/${this.$route.params.product_id}/devices/${this.$route.params.device_id}`
 
       return {
         secondaryNav: [{
@@ -258,7 +263,8 @@ export default {
     getDeviceInfo () {
       api.device.getInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
         if (res.status === 200) {
-          this.device = res.data
+          this.setCurrDevice(res.data)
+          // this.device = res.data
         }
       }).catch((res) => {
         this.handleError(res)

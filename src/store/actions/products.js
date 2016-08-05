@@ -40,6 +40,10 @@ export const getCurrProduct = ({ dispatch, state }, id) => {
   }
 }
 
+export const setCurrDevice = ({ dispatch }, device) => {
+  dispatch(types.SET_CURRENT_DEVICE, device)
+}
+
 export const setCurrVirtualDevice = ({ dispatch }, device) => {
   dispatch(types.SET_CURRENT_VIRTUAL_DEVICE, device)
 }

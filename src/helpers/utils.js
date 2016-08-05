@@ -93,3 +93,25 @@ export const getLastYearDate = (cur) => {
   let seconds = cur.getSeconds()
   return new Date(year - 1, month, date, hours, minutes, seconds)
 }
+
+/**
+ * 返回值是否为空(包括空格字符串)
+ * @author shengzhi
+ * @param  {Any} val 目标值
+ * @return {Boolean}
+ */
+export const isEmpty = (val) => {
+  if (val === undefined || val === null) return true
+  let type = Object.prototype.toString.call(val).slice(8, -1)
+
+  switch (type) {
+    case 'String':
+      return !val.trim()
+    case 'Array':
+      return !val.length
+    case 'Object':
+      return !Object.keys(val).length
+    default:
+      return false
+  }
+}

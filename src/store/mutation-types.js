@@ -47,6 +47,9 @@ export const UPDATE_PRODUCT = 'UPDATE_PRODUCT'
 // 设置当前浏览产品
 export const SET_CURRENT_PRODUCT = 'SET_CURRENT_PRODUCT'
 
+// 设置当前设备
+export const SET_CURRENT_DEVICE = 'SET_CURRENT_DEVICE'
+
 // 设置当前虚拟设备
 export const SET_CURRENT_VIRTUAL_DEVICE = 'SET_CURRENT_VIRTUAL_DEVICE'
 
