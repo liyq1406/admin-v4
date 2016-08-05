@@ -7,7 +7,7 @@
     <div class="panel mt15 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card :info="userSummary"></info-card>
+          <info-card :info="userSummary" :pic="user.avatar"></info-card>
           <div v-stretch="182">
             <info-list :info="userInfo"></info-list>
           </div>
@@ -58,14 +58,35 @@
 
     data () {
       return {
-        user: {}, // 用户信息
+        userSession: {
+          'online': 0, // 是否在线，1：在线，0：离线
+          'online_time': '' // 上线时间
+        },
+        user: {
+          'id': '',
+          'corp_id': '',
+          'phone': '',
+          'email': '',
+          'account': '',
+          'nickname': '',
+          'create_date': '',
+          'status': -1, // 用户状态
+          'source': -1, // 用户来源
+          'region_id': '', // 所在区域ID
+          'is_vaild': '', // 是否已认证
+          'avatar': '', // 头像URL
+          'country': '', // 国家
+          'province': '', // 省份
+          'city': '', // 城市
+          'gender': -1, // 性别，-1:未知，1：男，2：女
+          'age': 0 // 年龄
+        }, // 用户信息
         breadcrumbNav: [{
           label: '全部',
           link: '/operation/users/list'
         }, {
           label: '用户信息'
         }],
-        userSummary: {},
         secondaryNav: []
       }
     },
@@ -78,8 +99,8 @@
       userSummary () {
         var result = {
           title: this.user.nickname,
-          online: false,
-          time: '登录状态字段缺失 最后一次登录时间 字段缺失'
+          online: Boolean(this.userSession.online),
+          time: formatDate(this.userSession.online_time)
         }
         return result
       },
@@ -91,11 +112,11 @@
         var result = {
           status: {
             label: '账号状态',
-            value: this.computedStatus(this.user.status) + ' 激活时间字段缺失'
+            value: this.computedVaild(this.user.is_vaild)
           },
           create_date: {
             label: '创建时间',
-            value: formatDate(this.user.create_date)
+            value: formatDate(this.user.create_date) || '查询中..'
           },
           email: {
             label: '邮箱',
@@ -103,11 +124,11 @@
           },
           phone: {
             label: '手机',
-            value: this.user.phone || '字段缺失'
+            value: this.user.phone
           },
           age: {
             label: '年龄',
-            value: this.user.age
+            value: this.user.age || '未知'
           },
           gender: {
             label: '性别',
@@ -131,25 +152,46 @@
     },
     route: {
       data () {
+        // 定义路由
+        this.route()
+        // 获取用户信息
         this.getUserInfo()
-
-        var deviceDetailRoot = `/operation/users/details/${this.$route.params.id}`
-        return {
-          secondaryNav: [{
-            label: '设备列表',
-            link: { path: `${deviceDetailRoot}/devices` }
-          }, {
-            label: '维保信息',
-            link: { path: `${deviceDetailRoot}/warranty` }
-          }, {
-            label: '反馈记录',
-            link: { path: `${deviceDetailRoot}/issues` }
-          }]
-        }
+        // 获取用户会话状态
+        this.getOnlineType(this.$route.params.id)
       }
     },
 
     methods: {
+      /**
+       * 获取用户在线状态
+       * @param  {[type]} userId [description]
+       * @return {[type]}        [description]
+       */
+      getOnlineType (userId) {
+        console.log(userId)
+        api.user.getUserSession(userId).then((res) => {
+          this.userSession.online = res.data.online
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      /**
+       * 定义子路由
+       * @return {[type]} [description]
+       */
+      route () {
+        var deviceDetailRoot = `/operation/users/details/${this.$route.params.id}`
+        this.secondaryNav = [{
+          label: '设备列表',
+          link: { path: `${deviceDetailRoot}/devices` }
+        }, {
+          label: '维保信息',
+          link: { path: `${deviceDetailRoot}/warranty` }
+        }, {
+          label: '反馈记录',
+          link: { path: `${deviceDetailRoot}/issues` }
+        }]
+      },
       /**
        * 解析性别
        * 国辉
@@ -170,121 +212,28 @@
        * @param  {[type]} status [description]
        * @return {[type]}        [description]
        */
-      computedStatus (status) {
-        var result = {
-          '1': '正常',
-          '2': '停用'
+      computedVaild (status) {
+        var result = '未知'
+        if (status === true) {
+          result = '已激活'
+        } else if (status === false) {
+          result = '未激活'
         }
-        return result[status]
+        return result
       },
       getUserInfo () {
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            this.user = res.data
-            // this.userInfo.status = {
-            //   label: '账号状态',
-            //   value: res.data.status - 1 ? '停用' : '启用'
-            // }
-            // this.userInfo.create_time = {
-            //   label: '创建时间',
-            //   value: this.formatDate(res.data.create_date)
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.email = {
-            //   label: '邮箱',
-            //   value: '12345@qq.com'
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.phone = {
-            //   label: '手机',
-            //   value: '13800138000'
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.age = {
-            //   label: '年龄',
-            //   value: '20'
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.sex = {
-            //   label: '性别',
-            //   value: '男'
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.area = {
-            //   label: '所在区域',
-            //   value: '广东省广州市天河区'
-            // }
-            // // TODO 接口字段缺失
-            // this.userInfo.address = {
-            //   label: '详细地址',
-            //   value: '海珠区聚德路龙腾18园'
-            // }
-            // this.userInfo.Id = {
-            //   label: 'ID',
-            //   value: res.data.id
-            // }
-            // // TODO 接口字段缺失
-            // this.userSummary = {
-            //   title: '用户昵称',
-            //   online: res.data.status - 1 ? '停用' : '启用',
-            //   time: this.formatDate(res.data.create_date)
-            // }
+            for (var key in res.data) {
+              if (res.data.hasOwnProperty(key)) {
+                this.user[key] = res.data[key]
+              }
+            }
           }
         }).catch((res) => {
           this.handleError(res)
         })
       },
-      // getUserInfo () {
-      //   // this.user = res.data
-      //   this.userInfo.status = {
-      //     label: '账号状态',
-      //     value: '停用'
-      //   }
-      //   this.userInfo.create_time = {
-      //     label: '创建时间',
-      //     value: '2016-07-18 17:32:22'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.email = {
-      //     label: '邮箱',
-      //     value: '12345@qq.com'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.phone = {
-      //     label: '手机',
-      //     value: '13800138000'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.age = {
-      //     label: '年龄',
-      //     value: '20'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.sex = {
-      //     label: '性别',
-      //     value: '男'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.area = {
-      //     label: '所在区域',
-      //     value: '广东省广州市天河区'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userInfo.address = {
-      //     label: '详细地址',
-      //     value: '海珠区聚德路龙腾18园'
-      //   }
-      //   this.userInfo.Id = {
-      //     label: 'ID',
-      //     value: '1234'
-      //   }
-      //   // TODO 接口字段缺失
-      //   this.userSummary = {
-      //     title: 'xiaobai',
-      //     online: true,
-      //     time: '2016-07-18 17:32:01'
-      //   }
-      // },
 
       deleteUser () {
         if (window.confirm('确定要停用当前用户吗？')) {
