@@ -22,6 +22,12 @@ export default {
       type: String,
       default: 'line'
     },
+    // day 表示按天显示
+    // hour 表示按小时显示
+    scale: {
+      type: String,
+      default: 'day'
+    },
     margin: {
       default () {
         return [50, 50, 30, 30]
@@ -45,7 +51,23 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        this.chart.changeData(this.data)
+        let defs = {}
+        for (var i in this.data[0]) {
+          if (this.data[0][i] instanceof Date) {
+            defs[i] = {
+              alias: '日期',
+              type: 'time'
+            }
+            if (this.scale === 'hour') {
+              defs[i].mask = 'HH-MM'
+            } else {
+              defs[i].mask = 'mm-dd'
+            }
+          }
+        }
+        console.log(defs)
+        this.chart.source(this.data, defs)
+        this.chart.repaint()
       } else {
         this.render()
       }
@@ -82,12 +104,18 @@ export default {
         if (this.data[0][i] instanceof Date) {
           defs[i] = {
             alias: '日期',
-            type: 'time',
-            mask: 'mm-dd'
+            type: 'time'
+          }
+          if (this.scale === 'hour') {
+            defs[i].mask = 'HH-MM'
+          } else {
+            defs[i].mask = 'mm-dd'
           }
         }
         fields.push(i)
       }
+
+      console.log(defs)
 
       var position = fields[0] + '*' + fields[1]
       var color = fields[2] || null
