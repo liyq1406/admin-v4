@@ -69,31 +69,13 @@ export default {
       picker: 0, // 表示starttime在取值， 1表示endtime在取值,
       defaultTime: new Date(),
       rect: {},
-      opacity: 1
+      opacity: 1,
+      periodsInfo: []
     }
   },
   computed: {
     timeShowPanel () {
       return uniformDate(this.startTime) + ' ~ ' + uniformDate(this.endTime) + ' '
-    },
-    periodsInfo () {
-      if (this.periods.length > 0) {
-        var res = []
-        this.periods.forEach((item) => {
-          res.push({
-            label: this.locales.data.PERIODS_MAP[item],
-            value: item
-          })
-        })
-        if (res.length > 0 && !this.period) {
-          this.period = res[0].value
-          this.periodSelect()
-        }
-
-        return res
-      } else {
-        return []
-      }
     }
   },
   ready () {
@@ -104,6 +86,7 @@ export default {
     this.defaultTime = this.startTime
     this.endTime = curTime
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
+    this.initPeriods()
   },
   beforeDestroy () {
     if (this._closeEvent) {
@@ -111,6 +94,27 @@ export default {
     }
   },
   methods: {
+    initPeriods () {
+      if (this.periods.length > 0) {
+        var res = []
+        this.periods.forEach((item) => {
+          res.push({
+            label: this.locales.data.PERIODS_MAP[item],
+            value: item
+          })
+        })
+        if (res.length > 0 && !this.period) {
+          if (this.defaultPeriod) {
+            this.period = this.defaultPeriod
+          } else {
+            this.period = res[0].value
+          }
+          this.periodSelect()
+        }
+
+        this.periodsInfo = res
+      }
+    },
     toggle () {
       this.showChoosePanel = !this.showChoosePanel
     },
@@ -155,7 +159,6 @@ export default {
     },
     periodSelect () {
       this.adjustTime()
-      console.log(this.startTime)
       this.$dispatch('timechange', this.startTime, this.endTime)
     }
   },
@@ -169,12 +172,6 @@ export default {
       } else {
         this.opacity = 1
         this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
-      }
-    },
-    defaultPeriod () {
-      if (this.defaultPeriod) {
-        this.period = this.defaultPeriod
-        this.adjustTime()
       }
     }
   }

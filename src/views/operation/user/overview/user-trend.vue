@@ -7,7 +7,7 @@
             <radio-button-group :items="userCatList" :value.sync="userCat"><span slot="label" class="label"></span></radio-button-group>
           </div>
           <div class="filter-group-item fr">
-            <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
+            <date-time-multiple-picker @timechange="timeFilter" :periods="periods" :default-period="30"></date-time-multiple-picker>
           </div>
           <div class="filter-group-item fr">
           </div>
@@ -156,8 +156,8 @@ export default {
       }
 
       // 计算结束时间距现在多少天
-      let offset = parseInt((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
-      let duration = parseInt((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
+      let offset = Math.floor((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
+      let duration = Math.floor((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
       this.getUserTrend([offset, duration + 1])
 
       this.period = 0
