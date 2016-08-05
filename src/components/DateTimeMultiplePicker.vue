@@ -19,7 +19,7 @@
           <a @click.prevent.stop='selectEndTime' class="fa fa-calendar"></a>
         </div>
         <div class="choose-submit">
-          <button @click='dispatchTime'>确定</button>
+          <button @click='chooseTimeRange'>确定</button>
         </div>
       </div>
       <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='false'></date-time-picker>
@@ -53,6 +53,10 @@ export default {
       default () {
         return []
       }
+    },
+    defaultPeriod: {
+      type: Number,
+      defaults: 0
     }
   },
   data () {
@@ -60,8 +64,8 @@ export default {
       period: 0,
       showChoosePanel: false,
       showTimePicker: false,
-      startTime: '',
-      endTime: '',
+      startTime: new Date(),
+      endTime: new Date(),
       picker: 0, // 表示starttime在取值， 1表示endtime在取值,
       defaultTime: new Date(),
       rect: {},
@@ -81,17 +85,23 @@ export default {
             value: item
           })
         })
-        if (res.length > 0) {
+        if (res.length > 0 && !this.period) {
           this.period = res[0].value
+          this.periodSelect()
         }
 
         return res
+      } else {
+        return []
       }
     }
   },
   ready () {
     var curTime = new Date()
-    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 6000)
+    if (this.periodsInfo.length <= 0) {
+      this.startTime = new Date(curTime.getTime() - 3600 * 24 * 6000)
+    }
+    this.defaultTime = this.startTime
     this.endTime = curTime
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },
@@ -122,8 +132,11 @@ export default {
         this.endTime = date
       }
     },
-    dispatchTime () {
+    chooseTimeRange () {
       this.period = 0
+      this.dispatchTime()
+    },
+    dispatchTime () {
       this.showChoosePanel = false
       this.$dispatch('timechange', this.startTime, this.endTime)
     },
@@ -132,13 +145,17 @@ export default {
         this.showChoosePanel = false
       }
     },
-    periodSelect () {
+    adjustTime () {
       this.endTime = new Date()
       if (this.period === 1) { // 当取24小时时,将starttime设置为昨天此刻
         this.startTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24)
       } else { // 其他天数,将starttime设置为(n - 1)天前此刻
         this.startTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24 * (this.period - 1))
       }
+    },
+    periodSelect () {
+      this.adjustTime()
+      console.log(this.startTime)
       this.$dispatch('timechange', this.startTime, this.endTime)
     }
   },
@@ -152,6 +169,12 @@ export default {
       } else {
         this.opacity = 1
         this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
+      }
+    },
+    defaultPeriod () {
+      if (this.defaultPeriod) {
+        this.period = this.defaultPeriod
+        this.adjustTime()
       }
     }
   }

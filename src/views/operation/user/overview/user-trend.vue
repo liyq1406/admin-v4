@@ -77,7 +77,7 @@ export default {
   },
 
   ready () {
-    this.getUserTrend(7)
+    // this.getUserTrend(7)
   },
 
   methods: {
