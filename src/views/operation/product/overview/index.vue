@@ -36,8 +36,8 @@
     </panel>
 
     <product-trend></product-trend>
-
     <product-active></product-active>
+    <product-distribution></product-distribution>
 
     <!-- 编辑产品浮层-->
     <modal :show.sync="showEditModal">
@@ -152,6 +152,7 @@ import _ from 'lodash'
 import { createDayRange, beautify } from 'helpers/utils'
 import ProductTrend from './product-trend'
 import ProductActive from './product-active'
+import ProductDistribution from './product-distribution'
 
 export default {
   name: 'Overview',
@@ -186,6 +187,7 @@ export default {
     Pie,
     ProductTrend,
     ProductActive,
+    ProductDistribution,
     'v-select': Select
   },
 

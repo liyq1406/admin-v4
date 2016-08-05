@@ -26,15 +26,34 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: null
+    }
+  },
+
+  ready () {
+    if (!this.chart) {
+      this.render()
+    }
+  },
+
   watch: {
     // 监听数据变化，渲染图表
     data () {
-      this.render()
+      if (this.chart) {
+        this.chart.changeData(this.data)
+      } else {
+        this.render()
+      }
     }
   },
 
   methods: {
     render () {
+      if (!this.data || this.data.length <= 0) {
+        return
+      }
       var Stat = window.G2.Stat
       var userData = this.data
       var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
@@ -52,7 +71,7 @@ export default {
       }
 
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
-
+      this.chart = chart
       chart.source(userData)
       chart.axis(false)
       chart.polygon().position(Stat.map.region('name', mapData)).color('value')

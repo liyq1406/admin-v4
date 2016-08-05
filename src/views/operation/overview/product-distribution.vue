@@ -95,11 +95,10 @@ export default {
       data.forEach((item) => {
         for (var i in item) {
           if (i !== 'activated' && i !== 'online') {
-            if (_.isNumber(regions[i])) {
-              regions[i] += item[i].activated
-            } else {
+            if (!_.isNumber(regions[i])) {
               regions[i] = 0
             }
+            regions[i] += item[i].activated
           }
         }
       })

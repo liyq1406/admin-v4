@@ -55,7 +55,7 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      currentProduct: ({ products }) => products.curr
     }
   },
 
@@ -67,42 +67,37 @@ export default {
   },
 
   watch: {
-    products () {
-      if (this.products.length > 0) {
-        this.getProductsDistribution(this.products)
+    currentProduct () {
+      if (this.currentProduct.id) {
+        this.getProductsDistribution(this.currentProduct)
       }
     }
   },
 
   ready () {
+    if (this.currentProduct.id) {
+      this.getProductsDistribution(this.currentProduct)
+    }
   },
+
   methods: {
     getProductsDistribution (products) {
-      var prodRegions = []
-      products.forEach((item) => {
-        getProductRegion(item.id).then((res) => {
-          prodRegions.push(res)
-          if (prodRegions.length === products.length) {
-            this.combineData(prodRegions)
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      getProductRegion(products.id).then((res) => {
+        this.combineData(res)
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
     combineData (data) {
       let regions = {}
-      data.forEach((item) => {
-        for (var i in item) {
-          if (i !== 'activated' && i !== 'online') {
-            if (_.isNumber(regions[i])) {
-              regions[i] += item[i].activated
-            } else {
-              regions[i] = 0
-            }
+      for (var i in data) {
+        if (i !== 'activated' && i !== 'online') {
+          if (!_.isNumber(regions[i])) {
+            regions[i] = 0
           }
+          regions[i] += data[i].activated
         }
-      })
+      }
       this.fillMapData(regions)
     },
     fillMapData (regions) {
@@ -148,7 +143,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 .border-top-style
   border-top 1px solid #e5e5e5
   margin-top 10px
