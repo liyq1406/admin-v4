@@ -190,7 +190,7 @@ export default {
     })
     this.updateDate()
     this._closeEvent = EventListener.listen(window, 'click', (e) => {
-      if (!this.$el.contains(e.target)) {
+      if (this.open && !this.$el.contains(e.target)) {
         this.checkNow()
         this.open = false
       }

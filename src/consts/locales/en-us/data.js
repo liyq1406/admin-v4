@@ -64,6 +64,16 @@ export const BIG_PERIODS = [
   { label: '30天', value: 30 }
 ]
 
+// 一天到三十天时间段
+export const PERIODS_MAP = {
+  1: '24h',
+  7: '7天',
+  15: '15天',
+  30: '30天',
+  60: '60天',
+  90: '90天'
+}
+
 // 设备类型
 export const DEVICE_TYPES = ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备']
 

@@ -4,13 +4,12 @@
       <div class="left-actions blockdiv filter-bar filter-bar-head" slot="left-actions">
         <div class="filter-group">
           <div class="filter-group-item">
-            <radio-button-group :items="userCatList" :value.sync="userCat" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
+            <radio-button-group :items="userCatList" :value.sync="userCat"><span slot="label" class="label"></span></radio-button-group>
           </div>
           <div class="filter-group-item fr">
-            <date-time-range-picker @timechange="timeFilter"></date-time-range-picker>
+            <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
           </div>
           <div class="filter-group-item fr">
-            <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
           </div>
         </div>
       </div>
@@ -35,7 +34,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import {getTrend} from './api-user'
 import { globalMixins } from 'src/mixins'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import _ from 'lodash'
 import {getLastYearDate} from 'helpers/utils'
 // import {uniformDate} from 'src/filters'
@@ -51,13 +50,13 @@ export default {
     Panel,
     RadioButtonGroup,
     TimeLine,
-    DateTimeRangePicker
+    DateTimeMultiplePicker
   },
 
   data () {
     return {
       customMargin: [30, 20, 30, 30],
-      period: 7,
+      periods: [7, 30, 90],
       addData: [],
       activeData: [],
       totalData: [],
@@ -78,18 +77,12 @@ export default {
   },
 
   ready () {
-    this.getUserTrend()
+    this.getUserTrend(7)
   },
 
   methods: {
     getUserTrend (duration) {
-      let param = null
-      if (duration) {
-        param = duration
-      } else {
-        param = this.period
-      }
-      getTrend(param).then((res) => {
+      getTrend(duration).then((res) => {
         this.addData = res.add
         this.totalData = res.total
         this.activeData = res.active
