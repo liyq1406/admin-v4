@@ -6,7 +6,7 @@
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getTagTrend()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getData()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -22,7 +22,15 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
               </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search="getList()" @press-enter="getList()">
+                <!-- <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search="getList()" @press-enter="getList()">
+                  <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                </search-box> -->
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+                  <v-select width="90px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </v-select>
                   <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -36,7 +44,7 @@
               </v-select>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
         </div>
       </div>
     </div>
@@ -81,6 +89,7 @@ export default {
 
   data () {
     return {
+      key: '',
       deviceID: '',
       productID: '',
       records: [],
@@ -92,8 +101,17 @@ export default {
         { label: '全部等级', value: 'all' },
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
-        { label: '重度', value: '重度' }
+        { label: '严重', value: '严重' }
       ],
+      queryTypeOptions: [
+        { label: 'MAC', value: 'mac' },
+        { label: '设备ID', value: 'from' },
+        { label: '告警内容', value: 'alert_name' }
+      ],
+      queryType: {
+        label: 'MAC',
+        value: 'mac'
+      },
       serious: {
         name: '严重',
         data: []
@@ -182,7 +200,7 @@ export default {
         },
         {
           key: 'duration',
-          title: '时长'
+          title: '持续时长'
         },
         {
           key: 'level',
@@ -198,29 +216,87 @@ export default {
 
   computed: {
     // queryCondition () {
-    //   return {
+    //   var condition = {
     //     limit: this.countPerPage,
-    //     // query: {
-    //     //   'from': {
-    //     //     '$in': [this.$route.params.device_id]
-    //     //   }
-    //     // },
-    //     offset: (this.currentPage - 1) * this.countPerPage
+    //     offset: (this.currentPage - 1) * this.countPerPage,
+    //     order: {},
+    //     query: {
+    //       from: {
+    //         $in: [this.deviceID]
+    //       }
+    //     }
     //   }
+    //   if (this.key !== '') {
+    //     condition.query.id = {$in: [this.key]}
+    //   }
+    //
+    //   switch (this.visibility.value) {
+    //     case '通知':
+    //       condition.query['tags'] = { $in: ['通知'] }
+    //       break
+    //     case '轻微':
+    //       condition.query['tags'] = { $in: ['轻微'] }
+    //       break
+    //     case '重度':
+    //       condition.query['tags'] = { $in: ['重度'] }
+    //       break
+    //     default:
+    //   }
+    //
+    //   return condition
     // },
     queryCondition () {
-      var condition = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
-        query: {
-          from: {
-            $in: [this.deviceID]
+      var condition = {}
+      if (this.period === '') {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            product_id: {
+              $in: [this.$route.params.product_id]
+            },
+            create_date: {
+              $gte: this.startTimePick,
+              $lte: this.endTimePick
+            }
+          }
+        }
+      } else {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            product_id: {
+              $in: [this.$route.params.product_id]
+            },
+            create_date: {
+              $lte: this.endTime + 'T23:59:59.000Z',
+              $gte: this.beginTime + 'T00:00:00.000Z'
+            }
           }
         }
       }
-      if (this.key !== '') {
-        condition.query.id = {$in: [this.key]}
+      // var condition = {
+      //   limit: this.countPerPage,
+      //   offset: (this.currentPage - 1) * this.countPerPage,
+      //   order: {},
+      //   query: {
+      //     product_id: {
+      //       $in: [this.currentProduct.id]
+      //     },
+      //     create_date: {
+      //       $lte: this.endTime + 'T23:59:59.000Z',
+      //       $gte: this.beginTime + 'T00:00:00.000Z'
+      //     }
+      //   }
+      // }
+      // if (this.key !== '') {
+      //   condition.query.id = {$in: [this.key]}
+      // }
+      if (this.key.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
       }
 
       switch (this.visibility.value) {
@@ -230,8 +306,8 @@ export default {
         case '轻微':
           condition.query['tags'] = { $in: ['轻微'] }
           break
-        case '重度':
-          condition.query['tags'] = { $in: ['重度'] }
+        case '严重':
+          condition.query['tags'] = { $in: ['严重'] }
           break
         default:
       }
@@ -280,14 +356,13 @@ export default {
       var result = []
       this.records.map((item) => {
         var levelCls = ''
-        console.log(item.level)
         if (item.tags === '通知') {
           levelCls = 'text-label-warning'
         } else if (item.tags === '严重') {
           levelCls = 'text-label-danger'
         }
         var alert = {
-          content: item.type || '设备下线',
+          content: item.alert_name,
           time: item.create_date,
           duration: item.lasting + 'h',
           level: `<div class="level level1 text-label ${levelCls}">${item.tags === '轻微' ? '轻微' : item.tags === '中等' ? '中等' : '严重'}</div>`,
@@ -347,6 +422,7 @@ export default {
       // this.getAlertTrends()
       // this.getAlertSummary()
       this.getTagTrend()
+      this.getList()
     }
   },
 
@@ -356,10 +432,24 @@ export default {
       // this.getAlertTrends()
       // this.getAlertSummary()
       this.getTagTrend()
+      this.getList()
     }
   },
 
   methods: {
+    currentPageChange (number) {
+      this.currentPage = number
+      this.getList()
+    },
+    pageCountUpdate (count) {
+      this.countPerPage = count
+      this.getList()
+    },
+    // 获取趋势与列表
+    getData () {
+      this.getTagTrend()
+      this.getList()
+    },
     // 获取告警趋势图表数据
     getTagTrend () {
       var begin
@@ -439,39 +529,21 @@ export default {
       this.startTimePick = start
       this.endTimePick = end
       this.getTagTrend()
+      this.getList()
     },
 
     // 获取告警历史@author weijie
     getList () {
-      var params = {
-        offset: 0,
-        limit: 30,
-        query: {
-          // _id: this.$route.params.id
-          id: {
-            $in: [this.$route.params.product_id]
-          }
-        }
-      }
+      this.loadingData = true
       // 先获取当前告警详情设备ID
-      api.alert.getAlerts(params).then((res) => {
+      api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
-          this.total = res.data.count
-          this.deviceID = res.data.list[0].from
-          this.productID = res.data.list[0].product_id
-          // 再获取当前设备的告警记录列表
-          // var item = {
-          //   offset: 0,
-          //   limit: 30,
-          //   query: {
-          //     // _id: this.$route.params.id
-          //     from: {
-          //       $in: [this.deviceID]
-          //     }
-          //   }
-          // }
+          // this.total = res.data.count
+          // this.deviceID = res.data.list[0].from
+          // this.productID = res.data.list[0].product_id
           api.alert.getAlerts(this.queryCondition).then((res) => {
             if (res.status === 200) {
+              this.total = res.data.count
               // console.log(res.data.list)
               // this.alerts = res.data.list
               this.records = res.data.list.map((item) => {
@@ -492,12 +564,15 @@ export default {
                 }
                 return item
               })
+              this.loadingData = false
             }
           }).catch((res) => {
+            this.loadingData = false
             this.handleError(res)
           })
         }
       }).catch((res) => {
+        this.loadingData = false
         this.handleError(res)
       })
     },
