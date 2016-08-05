@@ -4,8 +4,8 @@
       <h2>告警分析详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="filter-bar filter-bar-head">
-      <div class="filter-group fl">
+    <div class="left-actions blockdiv clearfix mt10" slot="left-actions">
+      <div class="filter-group fl ml20">
         <div class="filter-group-item">
           <!-- <v-select label="空气净化器" width="110px" size="small">
             <span slot="label">产品：空气净化器</span>
@@ -14,17 +14,17 @@
             <span v-for="tag in alert.tag | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span><span class="ml10">{{alert.name}}</span></div>
         </div>
       </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
+      <div class="filter-group fr mr20">
+        <div class="filter-group-item inlinediv mr10">
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getList()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+        <div class="filter-group-item inlinediv">
+          <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
       </div>
     </div>
     <div class="panel mt10">
-      <div class="filter-bar filter-bar-head">
+      <div class="filter-bar filter-bar-head filter-bar-lr">
         <div class="filter-group fr">
           <div class="filter-group-item">
             <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
@@ -37,10 +37,11 @@
             </search-box>
           </div>
         </div>
+        <h3>告警列表</h3>
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
         </div>
       </div>
     </div>
@@ -50,6 +51,7 @@
 <script>
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
+import * as config from 'consts/config'
 import api from 'api'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
@@ -94,16 +96,18 @@ export default {
         tag: '',
         name: ''
       },
+      countPerPage: config.COUNT_PER_PAGE,
+      currentPage: 1,
       records: [],
       key: '',
       queryTypeOptions: [
-        // { label: 'MAC', value: 'mac' },
+        { label: 'MAC', value: 'mac' },
         { label: '设备ID', value: 'from' },
         { label: '告警内容', value: 'alert_name' }
       ],
       queryType: {
-        label: '设备ID',
-        value: 'from'
+        label: 'MAC',
+        value: 'mac'
       },
       alerts: [{
         content: '设备下线',
@@ -191,7 +195,7 @@ export default {
       headers: [
         {
           key: 'mac',
-          title: '告警设备 (MAC) '
+          title: '设备MAC'
         },
         {
           key: 'time',
@@ -234,11 +238,12 @@ export default {
       // }],
       breadcrumbNav: [{
         label: '告警分析',
-        link: '/operation/alerts/record'
+        link: '/operation/alerts/analysis'
       }, {
         label: '当前'
       }],
-      product: {}
+      product: {},
+      total: 0
     }
   },
 
@@ -343,7 +348,7 @@ export default {
           levelCls = 'text-label-danger'
         }
         var alert = {
-          content: item.type || '设备下线',
+          mac: item.mac,
           time: item.create_date,
           duration: item.lasting + 'h',
           level: `<div class="level level1 text-label ${levelCls}">${item.tags === '轻微' ? '轻微' : item.tags === '中等' ? '中等' : '严重'}</div>`,
@@ -357,6 +362,14 @@ export default {
   },
 
   methods: {
+    currentPageChange (number) {
+      this.currentPage = number
+      this.getList()
+    },
+    pageCountUpdate (count) {
+      this.countPerPage = count
+      this.getList()
+    },
     // 获取选中产品信息
     getProduct () {
       api.product.getProduct(this.$route.params.product_id).then((res) => {
@@ -366,6 +379,12 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    getSpecial (start, end) {
+      this.period = ''
+      this.startTimePick = start
+      this.endTimePick = end
+      this.getList()
     },
     // 获取告警规则列表
     getAlertList () {
@@ -377,9 +396,6 @@ export default {
               this.alert.tag = item.tag
             }
           })
-          this.sortArr(this.lightRules)
-          this.sortArr(this.normalRules)
-          this.sortArr(this.seriousRules)
         }
       }).catch((res) => {
         this.handleError(res)
@@ -387,8 +403,10 @@ export default {
     },
     // 获取告警历史@author weijie
     getList () {
+      this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
+          this.total = res.data.count
           // console.log(res.data.list)
           // this.alerts = res.data.list
           this.records = res.data.list.map((item) => {
@@ -409,8 +427,10 @@ export default {
             }
             return item
           })
+          this.loadingData = false
         }
       }).catch((res) => {
+        this.loadingData = false
         this.handleError(res)
       })
     },
@@ -435,6 +455,13 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
+.filter-bar-lr
+  border 1px solid #d9d9d9
+.inlinediv
+  display inline-block!important
 .lh28
   line-height 28px
+.nobgnobrt
+  background-color none
+  border-top none!important
 </style>

@@ -441,10 +441,12 @@ export default {
         total += sum
         j++
       }
-      this.trendPieData.push({
-        name: arr.name,
-        value: total
-      })
+      if (total !== 0) {
+        this.trendPieData.push({
+          name: arr.name,
+          value: total
+        })
+      }
       this.warningLevel = this.trendPieData
       // var total = 0
       // arr.data.forEach((item) => {
@@ -546,7 +548,8 @@ export default {
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end
-      this.changProduct()
+      this.getTagTrend()
+      this.getAlertList()
     },
 
     selectLevel (index) {
