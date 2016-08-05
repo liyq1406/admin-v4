@@ -174,5 +174,29 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/message/trend?start_day=${startDay}&end_day=${endDay}`
     )
+  },
+
+  /**
+   * 获取大客户统计概览
+   * @param  {[type]} startDay [description]
+   * @param  {[type]} endDay   [description]
+   * @return {[type]}          [description]
+   */
+  getHeavyBugerSummary () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/heavy_buger/summary`
+    )
+  },
+
+  /**
+   * 获取大客户统计日趋势
+   * @param  {[type]} startDay [description]
+   * @param  {[type]} endDay   [description]
+   * @return {[type]}          [description]
+   */
+  getHeavyBugerTrend (startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/heavy_buger/trend?start_day=${startDay}&end_day=${endDay}`
+    )
   }
 }
