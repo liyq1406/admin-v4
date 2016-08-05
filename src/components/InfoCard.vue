@@ -1,6 +1,6 @@
 <template>
   <div class="x-info-card">
-    <div class="thumb"><img :src="pic"/></div>
+    <div class="thumb"><img :src="picture"/></div>
     <div class="info">
       <slot>
         <h3>{{ info.title }}</h3>
@@ -38,6 +38,11 @@ export default {
     }
   },
 
+  computed: {
+    picture () {
+      return this.pic || deviceThumb
+    }
+  },
   data () {
     return {
     }
