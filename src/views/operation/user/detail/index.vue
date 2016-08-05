@@ -12,11 +12,14 @@
             <info-list :info="userInfo"></info-list>
           </div>
         </div>
-        <div class="col-8 device-map with-loading">
-          <div class="icon-loading" v-show="true">
+        <div class="col-8 with-loading">
+          <!-- <div class="icon-loading" v-show="true">
             <i class="fa fa-refresh fa-spin"></i>
+          </div> -->
+          <div class="user-position mt10">
+            <!-- <x-map :location="[116.39,39.9]"></x-map> -->
+            <x-map :addr="user.city" :zoom="10"></x-map>
           </div>
-          <div id="user-map" class="mt10" style="height: 220px"></div>
         </div>
       </div>
     </div>
@@ -42,6 +45,7 @@
   import InfoList from 'components/InfoList'
   import { formatDate } from 'src/filters'
   import Tab from 'components/Tab'
+  import Map from 'components/Map'
 
   export default {
     name: 'UserDetails',
@@ -49,11 +53,11 @@
     mixins: [globalMixins],
 
     components: {
-      'api': api,
       Breadcrumb,
       InfoCard,
       InfoList,
-      Tab
+      Tab,
+      'x-map': Map
     },
 
     data () {
@@ -266,3 +270,10 @@
     }
   }
 </script>
+<style lang="stylus" scoped>
+  .user-position
+    width 100%
+    height 300px
+    padding 10px
+    box-sizing border-box
+</style>

@@ -4,35 +4,26 @@
       <h2>大客户管理</h2>
     </div>
 
-    <div class="row statistic-group">
-      <div class="col-6">
-        <statistic :info="majorSummary.monthIncrease" :title="majorSummary.monthIncrease.title" :has-target="true" align="left">
-          <div slot="targetArea">{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
-        </statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="majorSummary.number" :title="majorSummary.number.title" :has-target="true" align="left">
-          <div slot="targetArea">{{majorSummary.monthIncrease.target.title}}:{{majorSummary.monthIncrease.target.value}} <i class="change-reduse">({{majorSummary.monthIncrease.target.change}})</i></div>
-        </statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="majorSummary.completion" :title="majorSummary.completion.title" align="left"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="majorSummary.percent" :title="majorSummary.percent.title" align="left" :has-action="true">
-        </statistic>
+    <!-- Start: 产品信息统计 -->
+    <div class="row statistic-group mb30">
+      <div class="col-6" v-for="statistic in statisticArr">
+        <statistic :total="statistic.value" :title="statistic.title" align="left"></statistic>
       </div>
     </div>
+    <!-- End: 产品信息统计 -->
+
     <div class="panel mt20">
       <!-- <div class="panel-hd">
         <h2>用户趋势</h2>
       </div> -->
-      <div class="panel-bd">
-        <div class="filter-bar filter-bar-head">
-          <div class="filter-group fr">
+      <div class="panel-hd">
+        <div class="filter-bar">
+          <div class="filter-group fl">
             <div class="filter-group-item">
-              <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+              <radio-button-group :items="trendOption" :value.sync="1"><span slot="label" class="label">趋势</span></radio-button-group>
             </div>
+          </div>
+          <div class="filter-group fr">
             <div class="filter-group-item">
               <date-time-range-picker></date-time-range-picker>
             </div>
@@ -80,7 +71,7 @@
               </search-box>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
             <!-- <div class="select-box" slot="theader-industry">
               <v-select label="行业" width='80px' size="small">
               </v-select>
@@ -217,7 +208,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
-import Statistic from 'components/Statistic'
+import Statistic from 'components/Statistic2'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
@@ -249,10 +240,29 @@ export default {
       total: 0,
       currentPage: 1,
       countPerPage: 10,
-      loadingData: false,
+      tableLoadingData: false,
       showAddModal: false,
+      // 本月新增大客户
+      addMajorClientsCount: 0,
+      // 大客户设备数
+      devicesCount: 0,
+      // 本月新增大客户设备
+      addDevicesCount: 0,
       // 已选的行业(过滤条件)
       selectedFilterIndustry: '',
+      trendOption: [
+        {
+          label: '新增客户',
+          value: 1
+        },
+        {
+          label: '新增设备',
+          value: 2
+        }
+      ],
+      chartCondition: {
+        type: 1 // 1是新增客户 2是新增设备
+      },
       industrys: [
         '互联网',
         '信息安全',
@@ -280,34 +290,6 @@ export default {
         city: '',
         // 地址
         location: ''
-      },
-      majorSummary: {
-        monthIncrease: {
-          total: 38,
-          change: 21,
-          title: '大客户总数',
-          target: {
-            title: '年目标',
-            value: 39292,
-            change: -245
-          }
-        },
-        number: {
-          total: 318,
-          title: '年大客户数'
-        },
-        completion: {
-          total: 54,
-          unit: '%',
-          change: 23,
-          title: '年大客户目标完成率'
-        },
-        percent: {
-          total: 38,
-          unit: '%',
-          change: 24,
-          title: '大客户占比'
-        }
       },
       trends: null,
       majorClients: [ // 下面的假数据不要删掉！！！！！！注释掉就行
@@ -370,6 +352,31 @@ export default {
     }
   },
   computed: {
+    /**
+     * 状态
+     * @return {[type]} [description]
+     */
+    statisticArr () {
+      var result = [
+        {
+          title: '大客户总数',
+          value: this.total
+        },
+        {
+          title: '本月新增大客户',
+          value: this.addMajorClientsCount
+        },
+        {
+          title: '大客户设备数',
+          value: this.devicesCount
+        },
+        {
+          title: '本月新增大客户设备',
+          value: this.addDevicesCount
+        }
+      ]
+      return result
+    },
     /**
      * 分页对象
      * @return {[type]} [description]
@@ -451,7 +458,10 @@ export default {
 
   route: {
     data () {
+      // 获取大客户
       this.getMajorClient()
+      // 获取统计信息
+      this.getSummary()
     }
   },
   ready () {
@@ -472,18 +482,55 @@ export default {
   },
   methods: {
     /**
+     * 获取统计信息
+     * @return {[type]} [description]
+     */
+    getSummary () {
+      /**
+       * 获取大客户总数和设备总数
+       * @return {[type]} [description]
+       */
+      api.statistics.getHeavyBugerSummary().then((res) => {
+        this.devicesCount = res.data.device
+      }).catch((res) => {
+        this.handleError(res)
+      })
+
+      /**
+       * 获取本月新增大客户数和新增设备数
+       * @return {[type]} [description]
+       */
+      var year = new Date().getFullYear()
+      var month = new Date().getMonth() + 1
+      var day = new Date().getDate()
+      var startDay = `${year}-${month}-01`
+      var endDay = `${year}-${month}-${day}`
+      api.statistics.getHeavyBugerTrend(startDay, endDay).then((res) => {
+        var addMajorClientsCount = 0
+        var addDevicesCount = 0
+        res.data.map((item) => {
+          addMajorClientsCount += item.add_heavy_buger
+          addDevicesCount += item.add_device
+        })
+        this.addMajorClientsCount = addMajorClientsCount
+        this.addDevicesCount = addDevicesCount
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
      * 获取大客户列表
      * @return {[type]} [description]
      */
     getMajorClient () {
       console.log('获取大客户列表')
-      this.loadingData = true
+      this.tableLoadingData = true
       api.heavyBuyer.getHeavyBuyer(this.queryCondition).then((res) => {
-        this.loadingData = false
+        this.tableLoadingData = false
         this.majorClients = res.data.list
         this.total = res.data.count
       }).catch((err) => {
-        this.loadingData = false
+        this.tableLoadingData = false
         this.handleError(err)
       })
     },

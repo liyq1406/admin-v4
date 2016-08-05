@@ -18,7 +18,7 @@
           </div>
           <!-- <div id="device-map" class="mt10 ml30" style="height: 220px"></div> -->
           <div class="mt10 ml30">
-            <map :location="deviceLocation" height="220px"></map>
+            <x-map :location="deviceLocation" height="220px"></x-map>
             <div class="device-ip mt5">ip: {{ currVirtualDevice.ip }}</div>
           </div>
         </div>
@@ -51,7 +51,7 @@ export default {
     Breadcrumb,
     InfoCard,
     InfoList,
-    Map
+    'x-map': Map
   },
 
   store,

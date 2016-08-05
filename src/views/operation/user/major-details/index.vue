@@ -92,7 +92,7 @@ export default {
         },
         area: {
           label: '所在地区',
-          value: this.majorClient.country + this.majorClient.province + this.majorClient.city
+          value: (this.majorClient.country + this.majorClient.province + this.majorClient.city) || ''
         },
         location: {
           label: '详细地址',
