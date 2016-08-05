@@ -16,6 +16,14 @@
             <info-list :info="clientsInfo"></info-list>
           </div>
         </div>
+        <div class="col-8 with-loading">
+          <div class="position-map">
+            <x-map :addr="majorClient.city + majorClient.location" :zoom="majorClient.location?15:10"></x-map>
+          </div>
+          <div class="position-msg">
+            <span v-show="majorClient.province"> {{ (majorClient.province + ' ' + (majorClient.city || '')) }} </span>
+          </div>
+        </div>
       </div>
     </div>
     <tab :nav="secondaryNav"></tab>
@@ -40,6 +48,7 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Breadcrumb from 'components/Breadcrumb'
 import { formatDate } from 'src/filters'
+import Map from 'components/Map'
 
 export default {
   name: 'MajorClients',
@@ -50,6 +59,7 @@ export default {
     Tab,
     Breadcrumb,
     InfoCard,
+    'x-map': Map,
     InfoList
   },
 
@@ -155,3 +165,13 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .position-map
+    width 100%
+    height 300px
+    padding 10px 10px 0
+    box-sizing border-box
+  .position-msg
+    padding-left 10px
+    padding-top 5px
+</style>

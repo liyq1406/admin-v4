@@ -16,10 +16,13 @@
           <!-- <div class="icon-loading" v-show="true">
             <i class="fa fa-refresh fa-spin"></i>
           </div> -->
-          <div class="user-position mt10">
+          <div class="position-map">
             <!-- <x-map :location="[116.39,39.9]"></x-map> -->
             <!-- <x-map :addr="'汕头'" :zoom="10"></x-map> -->
             <x-map :addr="user.city" :zoom="10"></x-map>
+          </div>
+          <div class="position-msg">
+            <span> {{ user.city }} </span>
           </div>
         </div>
       </div>
@@ -272,9 +275,12 @@
   }
 </script>
 <style lang="stylus" scoped>
-  .user-position
+  .position-map
     width 100%
     height 300px
-    padding 10px
+    padding 10px 10px 0
     box-sizing border-box
+  .position-msg
+    padding-left 10px
+    padding-top 5px
 </style>
