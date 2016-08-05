@@ -76,15 +76,16 @@
               </v-select>
             </div>
           </div>
-          <table class="table table-stripe table-bordered">
+          <table class="table table-stripe table-bordered" :loading="loadingData">
             <thead>
               <tr>
                 <!-- <th>勾选</th> -->
-                <th>告警设备</th>
+                <th>告警内容</th>
+                <th>设备MAC</th>
+                <th>设备ID</th>
                 <th>时间</th>
                 <th>持续时长</th>
-                <th>告警内容</th>
-                <th>地点</th>
+                <!-- <th>地点</th> -->
                 <th>告警等级</th>
                 <th>状态</th>
               </tr>
@@ -93,11 +94,12 @@
               <template v-if="alerts.length > 0">
                 <tr v-for="alert in alerts">
                   <!-- <td><input type="checkbox"></td> -->
-                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.from }}</a></td>
+                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.alert_name }}</a></td>
+                  <td>{{ alert.mac }}</td>
+                  <td>{{ alert.from }}</td>
                   <td>{{ alert.create_date | formatDate }}</td>
                   <td>{{ alert.lasting }}h</td>
-                  <td>{{ alert.alert_name }}</td>
-                  <td>{{ alert.location}}</td>
+                  <!-- <td>{{ alert.location}}</td> -->
                   <td>
                     <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':alert.tags==='严重', 'text-label-info':alert.tags==='轻微'}" class="text-label">{{ alert.tags }}</span></template>
                   </td>
@@ -285,13 +287,13 @@ export default {
       startTimePick: '',
       endTimePick: '',
       queryTypeOptions: [
-        // { label: 'MAC', value: 'mac' },
+        { label: 'MAC', value: 'mac' },
         { label: '设备ID', value: 'from' },
         { label: '告警内容', value: 'alert_name' }
       ],
       queryType: {
-        label: '设备ID',
-        value: 'from'
+        label: 'MAC',
+        value: 'mac'
       },
       visibility: {
         label: '全部等级',
@@ -547,6 +549,7 @@ export default {
     },
     // 获取消息列表@author weijie
     getList () {
+      this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
           // console.log(res.data.list)
@@ -570,9 +573,11 @@ export default {
             }
             return item
           })
+          this.loadingData = false
         }
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     /**

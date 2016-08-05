@@ -7,7 +7,7 @@
             <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
           </div>
           <div class="filter-group-item">
-            <radio-button-group :items="periods" :value.sync="period" @select="getTagTrend()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            <radio-button-group :items="periods" :value.sync="period" @select="getAll()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
           </div>
         </div>
       </div>
@@ -33,14 +33,14 @@
           </div>
           <div class="filter-group">
             <v-select width="90px" size="small" :label="visibility.label">
-              <span slot="label">{{ $t('common.display') }}：</span>
+              <span slot="label">明细：</span>
               <select v-model="visibility" @change="getList()">
                 <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
               </select>
             </v-select>
           </div>
         </div>
-        <table class="table table-stripe table-bordered">
+        <table class="table table-stripe table-bordered" :loading="loadingData">
           <thead>
             <tr>
               <th>告警内容</th>
@@ -57,7 +57,7 @@
                 <td>{{ record.create_date | formatDate }}</td>
                 <td>{{ record.lasting }}h</td>
                 <td>
-                  <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tags==='严重', 'text-label-info':tags==='轻微'}" class="text-label">{{ record.tags }}</span></template>
+                  <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ record.tags }}</span></template>
                 </td>
                 <td><span v-if="record.is_read">已处理</span><span v-else>未处理</span></td>
               </tr>
@@ -120,7 +120,7 @@ export default {
         { label: '全部等级', value: 'all' },
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
-        { label: '重度', value: '重度' }
+        { label: '严重', value: '严重' }
       ],
       startTimePick: '',
       endTimePick: '',
@@ -190,8 +190,8 @@ export default {
         case '轻微':
           condition.query['tags'] = { $in: ['轻微'] }
           break
-        case '重度':
-          condition.query['tags'] = { $in: ['重度'] }
+        case '严重':
+          condition.query['tags'] = { $in: ['严重'] }
           break
         default:
       }
@@ -227,6 +227,7 @@ export default {
   methods: {
     // 获取告警历史@author weijie
     getList () {
+      this.loadingData = true
       var params = {
         offset: 0,
         limit: 30,
@@ -240,7 +241,6 @@ export default {
       // 先获取当前告警详情设备ID
       api.alert.getAlerts(params).then((res) => {
         if (res.status === 200) {
-          this.total = res.data.count
           this.deviceID = res.data.list[0].from
           this.productID = res.data.list[0].product_id
           // 再获取当前设备的告警记录列表
@@ -256,6 +256,7 @@ export default {
           // }
           api.alert.getAlerts(this.queryCondition).then((res) => {
             if (res.status === 200) {
+              this.total = res.data.count
               // console.log(res.data.list)
               // this.alerts = res.data.list
               this.records = res.data.list.map((item) => {
@@ -277,12 +278,15 @@ export default {
                 return item
               })
             }
+            this.loadingData = false
           }).catch((res) => {
             this.handleError(res)
+            this.loadingData = false
           })
         }
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
 
@@ -364,6 +368,11 @@ export default {
       this.startTimePick = start
       this.endTimePick = end
       this.getTagTrend()
+      this.getList()
+    },
+    getAll () {
+      this.getTagTrend()
+      this.getList()
     }
   }
 }
