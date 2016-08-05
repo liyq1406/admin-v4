@@ -169,13 +169,35 @@ export default {
   computed: {
 
     queryCondition () {
-      var condition = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
-        query: {
-          from: {
-            $in: [this.deviceID]
+      var condition = {}
+      if (this.period === '') {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            id: {
+              $in: [this.$route.params.id]
+            },
+            create_date: {
+              $gte: this.startTimePick,
+              $lte: this.endTimePick
+            }
+          }
+        }
+      } else {
+        condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          order: {},
+          query: {
+            from: {
+              $in: [this.deviceID]
+            },
+            create_date: {
+              $lte: this.endTime + 'T00:00:00.000Z',
+              $gte: this.beginTime + 'T00:00:00.000Z'
+            }
           }
         }
       }

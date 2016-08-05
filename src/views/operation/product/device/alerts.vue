@@ -92,6 +92,8 @@ export default {
       key: '',
       deviceID: '',
       productID: '',
+      startTimePick: '',
+      endTimePick: '',
       records: [],
       visibility: {
         label: '全部等级',
@@ -272,7 +274,7 @@ export default {
               $in: [this.$route.params.product_id]
             },
             create_date: {
-              $lte: this.endTime + 'T23:59:59.000Z',
+              $lte: this.endTime + 'T00:00:00.000Z',
               $gte: this.beginTime + 'T00:00:00.000Z'
             }
           }
@@ -287,7 +289,7 @@ export default {
       //       $in: [this.currentProduct.id]
       //     },
       //     create_date: {
-      //       $lte: this.endTime + 'T23:59:59.000Z',
+      //       $lte: this.endTime + 'T00:00:00.000Z',
       //       $gte: this.beginTime + 'T00:00:00.000Z'
       //     }
       //   }
@@ -363,7 +365,7 @@ export default {
         }
         var alert = {
           content: item.alert_name,
-          time: item.create_date,
+          time: formatDate(item.create_date),
           duration: item.lasting + 'h',
           level: `<div class="level level1 text-label ${levelCls}">${item.tags === '轻微' ? '轻微' : item.tags === '中等' ? '中等' : '严重'}</div>`,
           state: item.is_read ? '已处理' : '未处理',

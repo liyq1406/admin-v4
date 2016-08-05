@@ -96,6 +96,8 @@ export default {
         tag: '',
         name: ''
       },
+      startTimePick: '',
+      endTimePick: '',
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
       records: [],
@@ -296,7 +298,7 @@ export default {
               $in: [this.$route.params.id]
             },
             create_date: {
-              $lte: this.endTime + 'T23:59:59.000Z',
+              $lte: this.endTime + 'T00:00:00.000Z',
               $gte: this.beginTime + 'T00:00:00.000Z'
             }
           }

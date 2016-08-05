@@ -346,7 +346,7 @@ export default {
               $in: [this.currentProduct.id]
             },
             create_date: {
-              $lte: this.endTime + 'T23:59:59.000Z',
+              $lte: this.endTime + 'T00:00:00.000Z',
               $gte: this.beginTime + 'T00:00:00.000Z'
             }
           }
@@ -361,7 +361,7 @@ export default {
       //       $in: [this.currentProduct.id]
       //     },
       //     create_date: {
-      //       $lte: this.endTime + 'T23:59:59.000Z',
+      //       $lte: this.endTime + 'T00:00:00.000Z',
       //       $gte: this.beginTime + 'T00:00:00.000Z'
       //     }
       //   }

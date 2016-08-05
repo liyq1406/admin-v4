@@ -16,7 +16,7 @@
               </div>
               <div class="down row">
                 <div class="col-12">
-                  <span>{{ info.create_date }}</span>
+                  <span>{{ info.create_date | formatDate }}</span>
                   <!-- <span class="ml15">16:12:03</span> -->
                 </div>
                 <div class="col-12">
