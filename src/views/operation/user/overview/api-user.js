@@ -20,11 +20,11 @@ export function getTrend (duration) {
           let acTemp = {}
           let toTemp = {}
           let addTemp = {}
-          addTemp.day = toTemp.day = acTemp.day = item.day
+          addTemp.date = toTemp.date = acTemp.date = item.day
 
-          acTemp.count = item.active || 0
-          toTemp.count = item.total || 0
-          addTemp.count = item.add || 0
+          acTemp.val = item.active || 0
+          toTemp.val = item.total || 0
+          addTemp.val = item.add || 0
           acRet.push(acTemp)
           toRet.push(toTemp)
           addRet.push(addTemp)

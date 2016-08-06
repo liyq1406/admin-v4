@@ -111,9 +111,9 @@ export default {
           }
         })
 
-        this.today.total = data[0].count
+        this.today.total = data[0].val
         if (data.length > 2) {
-          this.today.change = this.today.total - data[1].count
+          this.today.change = this.today.total - data[1].val
         }
       }
     },
@@ -124,7 +124,7 @@ export default {
       }
       let total = 0
       data.forEach((item) => {
-        total += item.count
+        total += item.val
       })
       return parseInt(total / duration)
     },

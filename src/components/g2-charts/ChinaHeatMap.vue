@@ -54,17 +54,16 @@ export default {
       this.data.forEach((item) => {
         var coordinates = {}
         if (item.city) {
-          console.log(Parser(item.city))
+          coordinates = Parser(item.city)
         } else {
           coordinates = Parser(item.province)
         }
-        console.log(coordinates)
         item.latitude = coordinates.latitude
         item.longitude = coordinates.longitude
       })
-      console.log(this.data)
+
       /* eslint-disable */
-      var userData = [{"province":"北京市","city":"延庆","latitude":40,"longitude":115.95,"out-temperature":23.9},{"province":"北京市","city":"密云","latitude":40,"longitude":116.83,"out-temperature":26.2}]
+      // var userData = [{"province":"北京市","city":"延庆","latitude":40,"longitude":115.95,"out-temperature":23.9},{"province":"北京市","city":"密云","latitude":40,"longitude":116.83,"out-temperature":26.2}]
       /* eslint-enable */
 
       var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
@@ -83,7 +82,7 @@ export default {
 
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
 
-      chart.source(userData)
+      chart.source(this.data)
 
       // 绘制地图的背景
       new window.G2.Plugin.GMap({
@@ -97,11 +96,11 @@ export default {
 
       chart.tooltip({
         map: {
-          'title': 'city',
-          value: 'out-temperature'
+          title: 'city',
+          value: 'coordinates'
         }
       })
-      chart.heatmap().position(Stat.map.location('longitude*latitude')).color('temperature')
+      chart.heatmap().position(Stat.map.location('longitude*latitude')).color('value')
         .size(15) // 调整热力图一个点可以影响的范围
         .label('city', {label: {opacity: 0}}) // 设置文本但是不显示，使得tooltip可以显示对应的字段
       chart.render()

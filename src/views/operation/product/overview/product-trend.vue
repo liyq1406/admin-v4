@@ -24,10 +24,10 @@
       </div>
       <div class="row">
         <div class="col-24" v-if="trendTabIndex === 0">
-          <time-line :data="activatedData" :margin="customMargin"></time-line>
+          <time-line :data="activatedData" type="smooth" :margin="customMargin"></time-line>
         </div>
         <div class="col-24" v-else>
-          <time-line :data="totalData" :margin="customMargin"></time-line>
+          <time-line :data="totalData" type="smooth" :margin="customMargin"></time-line>
         </div>
       </div>
     </div>
@@ -108,8 +108,8 @@ export default {
       let res = []
       recv.forEach((item) => {
         let temp = {}
-        temp.day = item.day
-        temp['数量'] = item.count
+        temp.date = item.day
+        temp.val = item.count
         res.push(temp)
       })
       return res
@@ -136,18 +136,18 @@ export default {
       if (period === 7) { // 只在初始化时计算一次
         // 计算最近2天的值
         data.sort((a, b) => {
-          if (a.day.getTime() > b.day.getTime()) {
+          if (a.date.getTime() > b.date.getTime()) {
             return -1
-          } else if (a.day.getTime() < b.day.getTime()) {
+          } else if (a.date.getTime() < b.date.getTime()) {
             return 1
           } else {
             return 0
           }
         })
 
-        this.today.total = data[0].count
+        this.today.total = data[0].val
         if (data.length >= 2) {
-          this.today.change = this.today.total - data[1].count
+          this.today.change = this.today.total - data[1].val
         }
       }
     },
@@ -167,7 +167,7 @@ export default {
     countAvg (data, duration) {
       var total = 0
       data.forEach((item) => {
-        total += item['数量']
+        total += item.val
       })
       return parseInt(total / duration)
     }

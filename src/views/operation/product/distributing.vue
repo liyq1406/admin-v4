@@ -11,24 +11,26 @@
       <i class="arrow">&gt;</i>
       <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
     </div> -->
-    <div class="filter-bar filter-bar-head">
+    <!-- <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
-        <!-- <div class="filter-group-item">
+        <div class="filter-group-item">
           <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div> -->
+        </div>
         <div class="filter-group-item">
           <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="panel">
+      <div class="panel-hd bordered">
+      </div>
       <div class="panel-bd">
         <div class="row">
           <div class="col-11">
             <china-heat-map :data="regionData"></china-heat-map>
           </div>
           <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
-            <div class="data-table">
+            <div class="data-table" v-if="dataPer.length > 0">
               <table class="table">
                 <thead>
                   <tr>
@@ -38,18 +40,19 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>广东</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
+                  <tr v-for="data in dataPer">
+                    <template v-if="data.value">
+                      <td>{{data.name}}</td>
+                      <td>{{data.value}}</td>
+                      <td>{{data.percent | toPercentDecimal2}}</td>
+                    </template>
                 </tbody>
               </table>
             </div>
           </div>
         </div>
       </div>
-      <div class="panel-bd">
+      <!-- <div class="panel-bd">
         <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group fr">
@@ -67,18 +70,16 @@
           </div>
           <c-table :headers="headers" :tables="tables" :page="page"></c-table>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 
 <script>
 import api from 'api'
-import SearchBox from 'components/SearchBox'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
-import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
-import RadioButtonGroup from 'components/RadioButtonGroup'
+import {numToPercent} from 'helpers/utils'
 
 export default {
   name: 'Distributing',
@@ -86,61 +87,12 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'search-box': SearchBox,
-    'c-table': Table,
-    ChinaHeatMap,
-    RadioButtonGroup
+    ChinaHeatMap
   },
 
   data () {
     return {
-      query: '',
-      total: 1321,
-      currentPage: 1,
-      countPerPage: 5,
-      distributes: [
-        {
-          region: '广东',
-          mild: '2918 (3.74%)',
-          moderate: '2918 (3.74%)',
-          severe: '2918 (3.74%)',
-          activated: 6513
-        },
-        {
-          region: '广东',
-          mild: '2918 (3.74%)',
-          moderate: '2918 (3.74%)',
-          severe: '2918 (3.74%)',
-          activated: 6513
-        }
-      ],
-      headers: [
-        {
-          key: 'region',
-          title: '地区'
-        },
-        {
-          key: 'mild',
-          title: '轻度',
-          class: 'tac'
-        },
-        {
-          key: 'moderate',
-          title: '中度',
-          class: 'tac'
-        },
-        {
-          key: 'severe',
-          title: '重度',
-          class: 'tac'
-        },
-        {
-          key: 'activated',
-          title: '激活设备',
-          class: 'tac'
-        }
-      ],
-      period: 7,
+      dataPer: [],
       regionData: []
     }
   },
@@ -180,8 +132,13 @@ export default {
         if (res.status === 200) {
           var CNData = res.data['中国']
           var resData = []
+          var regions = []
           for (let i in CNData) {
             if (i !== 'activated' && i !== 'online') {
+              regions.push({
+                name: i,
+                value: CNData[i].activated
+              })
               for (let j in CNData[i]) {
                 if (j !== 'activated' && j !== 'online') {
                   let temp = {
@@ -194,11 +151,30 @@ export default {
               }
             }
           }
+          this.sortRegion(regions)
           this.regionData = resData
         }
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    sortRegion (regions) {
+      // 由大到小排序
+      regions.sort((a, b) => {
+        if (a.value > b.value) {
+          return -1
+        } else if (a.value < b.value) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+
+      if (regions.length > 10) {
+        this.dataPer = numToPercent(regions.slice(0, 10), 'value')
+      } else {
+        this.dataPer = numToPercent(regions, 'value')
+      }
     }
   }
 }

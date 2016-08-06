@@ -95,8 +95,8 @@ export default {
       let res = []
       recv.forEach((item) => {
         let temp = {}
-        temp.day = item.day
-        temp['数量'] = item.count
+        temp.date = item.day
+        temp.val = item.count
         res.push(temp)
       })
       return res
