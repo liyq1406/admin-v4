@@ -26,6 +26,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import {getActiveTrend} from './api-product'
+import { uniformDate } from 'src/filters'
 import api from 'api'
 
 export default {
@@ -92,9 +93,9 @@ export default {
       recv.forEach((item) => {
         item.data.forEach((prodData) => {
           let temp = {}
-          temp.day = prodData.day
-          temp['数量'] = prodData.count
-          temp['产品'] = item.product
+          temp.date = uniformDate(prodData.day)
+          temp.val = prodData.count
+          temp.name = item.product
           res.push(temp)
         })
       })

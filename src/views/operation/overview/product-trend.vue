@@ -42,6 +42,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import {getActivatedTrend} from './api-product'
+import { uniformDate } from 'src/filters'
 import _ from 'lodash'
 
 export default {
@@ -134,9 +135,9 @@ export default {
       recv.forEach((item) => {
         item.data.forEach((prodData) => {
           let temp = {}
-          temp.day = prodData.day
-          temp['数量'] = prodData.count
-          temp['产品'] = item.product
+          temp.date = uniformDate(prodData.day)
+          temp.val = prodData.count
+          temp.name = item.product
           res.push(temp)
         })
       })
@@ -253,7 +254,7 @@ export default {
     countAvg (data, duration) {
       var total = 0
       data.forEach((item) => {
-        total += item['数量']
+        total += item.val
       })
       return parseInt(total / duration)
     }

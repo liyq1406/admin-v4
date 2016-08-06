@@ -3,7 +3,7 @@
     <div class="panel-bd row">
       <div class="col-16">
         <!-- Start: 数据端点-->
-        <div class="data-table with-loading">
+        <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">

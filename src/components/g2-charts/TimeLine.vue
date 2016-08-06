@@ -30,7 +30,7 @@ export default {
     },
     margin: {
       default () {
-        return [50, 50, 30, 30]
+        return [50, 20, 30, 50]
       }
     }
   },
@@ -51,21 +51,16 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        let defs = {}
-        for (var i in this.data[0]) {
-          if (this.data[0][i] instanceof Date) {
-            defs[i] = {
-              alias: '日期',
-              type: 'time'
-            }
-            if (this.scale === 'hour') {
-              defs[i].mask = 'HH-MM'
-            } else {
-              defs[i].mask = 'mm-dd'
-            }
+        let defs = {
+          date: {
+            alias: '日期',
+            type: 'time',
+            mask: 'mm-dd'
           }
         }
-
+        if (this.scale === 'hour') {
+          defs.date.mask = 'HH:MM'
+        }
         this.chart.source(this.data, defs)
         this.chart.repaint()
       } else {
@@ -98,34 +93,32 @@ export default {
         itemWrap: true
       })
 
-      var fields = []
-      var defs = {}
-      for (var i in this.data[0]) {
-        if (this.data[0][i] instanceof Date) {
-          defs[i] = {
-            alias: '日期',
-            type: 'time'
-          }
-          if (this.scale === 'hour') {
-            defs[i].mask = 'HH-MM'
-          } else {
-            defs[i].mask = 'mm-dd'
-          }
+      let defs = {
+        date: {
+          alias: '日期',
+          type: 'time',
+          mask: 'mm-dd'
         }
-        fields.push(i)
+      }
+      if (this.scale === 'hour') {
+        defs.date.mask = 'HH:MM'
       }
 
-      var position = fields[0] + '*' + fields[1]
-      var color = fields[2] || null
+      // x 轴配置
+      chart.axis('date', {
+        title: null
+      })
+      // y 轴配置
+      chart.axis('val', {
+        title: null
+      })
 
       chart.source(this.data, defs)
 
-      var line = chart.line().position(position).size(2)
+      let line = chart.line().position('date*val').size(2)
 
-      // var point = chart.point().position(position).shape(fields[0], ['circle', 'rect', 'diamond']).size(4)
-      if (color) {
-        line.color(color)
-        // point.color(color)
+      if (this.data[0].hasOwnProperty('name')) {
+        line.color('name')
       }
 
       switch (this.type) {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="date-time-mutiple-picker">
     <div class="radio-group-wrap">
       <radio-button-group :items="periodsInfo" :value.sync="period" @select="periodSelect"><span slot="label" class="label"></span></radio-button-group>
     </div>
@@ -180,13 +180,20 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../assets/stylus/common'
+.date-time-mutiple-picker
+  display inline-block
+  font-size 0
 .radio-group-wrap
   display inline-block
+  vertical-align middle
+  font-size 12px
+  margin-right 10px
 .time-range-picker-wrap
   height 28px
   display inline-block
   position relative
   vertical-align middle
+  font-size 12px
   .time-range-show
     padding 0px 10px
     line-height 26px

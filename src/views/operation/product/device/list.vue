@@ -322,7 +322,7 @@ export default {
   route: {
     data () {
       this.originAddModel = _.clone(this.addModel)
-      this.getDevices()
+      this.getDevices(true)
 
       // getProductSummary 方法来自 productSummaryMixin
       this.getProductSummary()

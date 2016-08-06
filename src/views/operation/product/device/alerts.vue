@@ -3,10 +3,7 @@
     <div class="filter-bar">
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getData()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <date-time-multiple-picker :periods="periods" @timechange="onTimeChange"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -18,13 +15,7 @@
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
-              <!-- <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-              </div> -->
               <div class="filter-group-item">
-                <!-- <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search="getList()" @press-enter="getList()">
-                  <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </search-box> -->
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
@@ -44,7 +35,7 @@
               </v-select>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></c-table>
         </div>
       </div>
     </div>
@@ -52,14 +43,14 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
-import locales from 'consts/locales/index'
+// import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
 import Select from 'components/Select'
@@ -76,15 +67,15 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'pager': Pager,
-    'modal': Modal,
     'c-table': Table,
     'v-select': Select,
+    Pager,
+    Modal,
     RadioButtonGroup,
     TimeLine,
     Dropdown,
     SearchBox,
-    DateTimeRangePicker
+    DateTimeMultiplePicker
   },
 
   data () {
@@ -92,8 +83,8 @@ export default {
       key: '',
       deviceID: '',
       productID: '',
-      startTimePick: '',
-      endTimePick: '',
+      // startTimePick: '',
+      // endTimePick: '',
       records: [],
       visibility: {
         label: '全部等级',
@@ -176,10 +167,12 @@ export default {
         tags: ''
       },
       period: 7,
-      periods: locales[Vue.config.lang].data.PERIODS,
+      periods: [7, 30, 90],
+      startTime: 0,
+      endTime: 0,
       product_id: '',
-      alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
-      informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
+      // alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
+      // informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: 0,
         add_today: 0,
@@ -217,101 +210,30 @@ export default {
   },
 
   computed: {
-    // queryCondition () {
-    //   var condition = {
-    //     limit: this.countPerPage,
-    //     offset: (this.currentPage - 1) * this.countPerPage,
-    //     order: {},
-    //     query: {
-    //       from: {
-    //         $in: [this.deviceID]
-    //       }
-    //     }
-    //   }
-    //   if (this.key !== '') {
-    //     condition.query.id = {$in: [this.key]}
-    //   }
-    //
-    //   switch (this.visibility.value) {
-    //     case '通知':
-    //       condition.query['tags'] = { $in: ['通知'] }
-    //       break
-    //     case '轻微':
-    //       condition.query['tags'] = { $in: ['轻微'] }
-    //       break
-    //     case '重度':
-    //       condition.query['tags'] = { $in: ['重度'] }
-    //       break
-    //     default:
-    //   }
-    //
-    //   return condition
-    // },
     queryCondition () {
-      var condition = {}
-      if (this.period === '') {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            product_id: {
-              $in: [this.$route.params.product_id]
-            },
-            create_date: {
-              $gte: this.startTimePick,
-              $lte: this.endTimePick
-            }
-          }
-        }
-      } else {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            product_id: {
-              $in: [this.$route.params.product_id]
-            },
-            create_date: {
-              $lte: this.endTime + 'T00:00:00.000Z',
-              $gte: this.beginTime + 'T00:00:00.000Z'
-            }
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          product_id: {
+            $in: [this.$route.params.product_id]
+          },
+          create_date: {
+            $gte: this.startTime,
+            $lte: this.endTime
           }
         }
       }
-      // var condition = {
-      //   limit: this.countPerPage,
-      //   offset: (this.currentPage - 1) * this.countPerPage,
-      //   order: {},
-      //   query: {
-      //     product_id: {
-      //       $in: [this.currentProduct.id]
-      //     },
-      //     create_date: {
-      //       $lte: this.endTime + 'T00:00:00.000Z',
-      //       $gte: this.beginTime + 'T00:00:00.000Z'
-      //     }
-      //   }
-      // }
-      // if (this.key !== '') {
-      //   condition.query.id = {$in: [this.key]}
-      // }
+
+      // 关键字搜索
       if (this.key.length > 0) {
         condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
       }
 
-      switch (this.visibility.value) {
-        case '通知':
-          condition.query['tags'] = { $in: ['通知'] }
-          break
-        case '轻微':
-          condition.query['tags'] = { $in: ['轻微'] }
-          break
-        case '严重':
-          condition.query['tags'] = { $in: ['严重'] }
-          break
-        default:
+      // 显示指定告警类型
+      if (this.visibility.value !== 'all') {
+        condition.query.tags = { $in: [this.visibility.value] }
       }
 
       return condition
@@ -377,12 +299,6 @@ export default {
     }
   },
 
-  filters: {
-    toTags (value) {
-      return value.length ? value.split(',') : []
-    }
-  },
-
   ready () {
     this.getList()
     // TODO
@@ -429,24 +345,36 @@ export default {
   },
 
   // 监听属性变动
-  watch: {
-    period () {
-      // this.getAlertTrends()
-      // this.getAlertSummary()
-      this.getTagTrend()
-      this.getList()
-    }
-  },
+  // watch: {
+  //   period () {
+  //     // this.getAlertTrends()
+  //     // this.getAlertSummary()
+  //     this.getTagTrend()
+  //     this.getList()
+  //   }
+  // },
 
   methods: {
-    currentPageChange (number) {
+    /**
+     * 当前页码改变
+     * @author shengzhi
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
       this.currentPage = number
       this.getList()
     },
-    pageCountUpdate (count) {
+
+    /**
+     * 每页显示的数量改变
+     * @author shengzhi
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
       this.countPerPage = count
       this.getList()
     },
+
     // 获取趋势与列表
     getData () {
       this.getTagTrend()
@@ -526,10 +454,13 @@ export default {
       // })
     },
 
-    getSpecial (start, end) {
-      this.period = ''
-      this.startTimePick = start
-      this.endTimePick = end
+    /**
+     * 处理时间选择
+     * @author shengzhi
+     */
+    onTimeChange (start, end) {
+      this.startTime = start.getTime()
+      this.endTime = end.getTime()
       this.getTagTrend()
       this.getList()
     },
