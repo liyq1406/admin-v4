@@ -8,17 +8,16 @@
       <div class="panel-bd row">
         <div class="col-16">
           <info-card :info="userSummary" :pic="user.avatar"></info-card>
+          <div class="account-type-box">
+            <!-- <span>{{ user.status-0===1 ? '已启用' : '已停用' }}</span> -->
+            <button :disabled="toggling" @click="toggleMember(user)" class="btn btn-ghost btn-sm"><i :class="{'fa-ban': (user.status - 0 === 1), 'fa-play': !(user.status - 0 === 1)}" class="fa"></i>{{ user.status-0===1 ? ' 停用帐号' : ' 启用帐号' }}</button>
+          </div>
           <div v-stretch="182">
             <info-list :info="userInfo"></info-list>
           </div>
         </div>
         <div class="col-8 with-loading">
-          <!-- <div class="icon-loading" v-show="true">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div> -->
           <div class="position-map">
-            <!-- <x-map :location="[116.39,39.9]"></x-map> -->
-            <!-- <x-map :addr="'汕头'" :zoom="10"></x-map> -->
             <x-map :addr="user.city" :zoom="10"></x-map>
           </div>
           <div class="position-msg">
@@ -33,10 +32,7 @@
       <div class="panel-hd panel-hd-full">
         <h2>账号状态</h2>
       </div>
-      <div class="panel-bd">
-        <span>{{ user.status-0===1 ? '已启用' : '已停用' }}</span>
-        <button :class="{'btn-primary': user.status-0===1, 'btn-success': user.status-0===2, 'disabled': toggling}" :disabled="toggling" @click="toggleMember(user)" class="btn btn-sm"><i :class="{'fa-stop': user.status, 'fa-play': !user.status}" class="fa"></i>{{ user.status-0===1 ? '停用' : '启用' }}</button>
-      </div>
+
     </div>
   </div>
 </template>
@@ -120,7 +116,7 @@
         var result = {
           status: {
             label: '账号状态',
-            value: this.computedVaild(this.user.is_vaild)
+            value: this.computedVaild(this.user.is_vaild) + ' 无激活时间字段返回'
           },
           create_date: {
             label: '创建时间',
@@ -283,4 +279,14 @@
   .position-msg
     padding-left 10px
     padding-top 5px
+  .account-type-box
+    position absolute
+    right 10px
+    top 30px
+    .fa-ban
+      color #c0252e
+    .fa-play
+      color #090
+    .btn-ghost
+      border-radius 2px
 </style>

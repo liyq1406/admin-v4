@@ -4,16 +4,17 @@
       <div class="data-table with-loading">
         <div class="filter-bar">
           <div class="filter-group fl">
-            <div class="filter-group-item">
+            <span class="table-title">设备列表</span>
+            <!-- <div class="filter-group-item">
               <v-select label="全部" width='110px' size="small">
                 <span slot="label">显示</span>
               </v-select>
-            </div>
+            </div> -->
           </div>
           <div class="filter-group fr">
-            <div class="filter-group-item">
+            <!-- <div class="filter-group-item">
               <dropdown></dropdown>
-            </div>
+            </div> -->
             <div class="filter-group-item">
               <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容">
               </search-box>
@@ -202,3 +203,10 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .table-title
+    height 30px
+    line-height 30px
+    font-size 14px
+
+</style>
