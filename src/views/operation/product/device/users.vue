@@ -43,12 +43,18 @@ export default {
           'role': 1, // 角色权限
           'from_id': '123', // 来源用户ID
           'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        },
+        {
+          'user_id': '1999245132',
+          'role': 1, // 角色权限
+          'from_id': '123', // 来源用户ID
+          'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
         }
       ],
       // 设备绑定的用户信息
       usersInfo: [
         {
-          'user_id': '123',
+          'id': '123',
           'nickname': '昵称',
           'email': '邮箱',
           'phone': '手机'
@@ -92,12 +98,12 @@ export default {
       var result = []
       this.deviceUsers.map((item) => {
         var user = {
-          id: item.id,
+          id: item.user_id,
           nickname: this.conputedNickname(item),
-          email: this.conputedEmail(item.id),
-          phone: this.conputedPhone(item.id),
-          lastLogin: this.conputedLastLogin(item.id),
-          online: this.conputedOnline(item.id),
+          email: this.conputedEmail(item.user_id),
+          phone: this.conputedPhone(item.user_id),
+          lastLogin: this.conputedLastLogin(item.user_id),
+          online: this.conputedOnline(item.user_id),
           prototype: item
         }
         result.push(user)
@@ -167,7 +173,6 @@ export default {
      * @return {[type]}      [description]
      */
     conputedEmail (id) {
-      console.log(id)
       var result = ''
       this.usersInfo.map((user) => {
         if (id === user.id) {
@@ -182,7 +187,6 @@ export default {
      * @return {[type]}      [description]
      */
     conputedPhone (id) {
-      console.log(id)
       var result = ''
       this.usersInfo.map((user) => {
         if (id === user.id) {
@@ -197,7 +201,6 @@ export default {
      * @return {[type]}      [description]
      */
     conputedLastLogin (id) {
-      console.log(id)
       var result = ''
       this.usersOnline.map((user) => {
         if (id === user.id) {
@@ -245,28 +248,33 @@ export default {
         // 根据获取回来的id去获取用户详情
         this.getUsersInfo()
         // this.deviceUsers = res.data.list
-        // this.deviceUsers.map((item) => {
-        //
-        // })
+        this.deviceUsers.map((item) => {
+          this.getOnlineType(item)
+        })
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
       })
     },
 
-    getUsersInfo (userId) {
+    /**
+     * 获取用户详细信息
+     * @return {[type]} [description]
+     */
+    getUsersInfo () {
       var idArr = []
       this.deviceUsers.map((item) => {
-        idArr.push(item.id)
+        idArr.push(item.user_id)
       })
       var params = {
         filter: ['id', 'nickname', 'email', 'phone'],
         query: {
-          'id' : { $in: idArr}
+          'id': {'$in': idArr}
         }
       }
       api.user.list(params).then((res) => {
-        console.log(res)
+        // this.usersInfo = res.data.list
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
       })
@@ -277,7 +285,8 @@ export default {
      * @param  {[type]} userId [description]
      * @return {[type]}        [description]
      */
-    getOnlineType (userId) {
+    getOnlineType (user) {
+      var userId = user.user_id
       var result = []
       api.user.getUserSession(userId).then((res) => {
         var obj = {
@@ -291,7 +300,7 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
-    },
+    }
   }
 }
 </script>
