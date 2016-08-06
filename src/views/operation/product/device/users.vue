@@ -1,7 +1,7 @@
 <template>
   <div class="panel device-users">
     <div class="panel-bd row">
-      <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @tbody-nickname="linkToDetails"></c-table>
+      <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></c-table>
     </div>
   </div>
 </template>
@@ -38,35 +38,35 @@ export default {
       users: [],
       // 设备绑定的用户列表
       deviceUsers: [
-        {
-          'user_id': '1605923406',
-          'role': 1, // 角色权限
-          'from_id': '123', // 来源用户ID
-          'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-        },
-        {
-          'user_id': '1999245132',
-          'role': 1, // 角色权限
-          'from_id': '123', // 来源用户ID
-          'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-        }
+        // {
+        //   'user_id': '1605923406',
+        //   'role': 1, // 角色权限
+        //   'from_id': '123', // 来源用户ID
+        //   'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        // },
+        // {
+        //   'user_id': '1999245132',
+        //   'role': 0, // 角色权限
+        //   'from_id': '123', // 来源用户ID
+        //   'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        // }
       ],
       // 设备绑定的用户信息
       usersInfo: [
-        {
-          'id': '123',
-          'nickname': '昵称',
-          'email': '邮箱',
-          'phone': '手机'
-        }
+        // {
+        //   'id': '1605923406',
+        //   'nickname': '昵称',
+        //   'email': '邮箱',
+        //   'phone': '手机'
+        // }
       ],
       // 设备绑定的用户在线情况
       usersOnline: [
-        {
-          'user_id': '123',
-          'online': true,
-          'last_login': '2015-10-09T08:15:40.843Z'
-        }
+        // {
+        //   'user_id': '1999245132',
+        //   'online': true,
+        //   'last_login': '2015-10-09T08:15:40.843Z'
+        // }
       ],
       headers: [
         {
@@ -151,9 +151,9 @@ export default {
      * @return {[type]}      [description]
      */
     conputedNickname (user) {
-      var result = ''
+      var result = '?'
       this.usersInfo.map((item) => {
-        if (user.id === item.id) {
+        if (user.user_id - 0 === item.id - 0) {
           if (item.nickname) {
             if (user.role) {
               result = '<a class="hl-red"><i class="fa fa-user"></i> ' + item.nickname + '</a>'
@@ -175,8 +175,8 @@ export default {
     conputedEmail (id) {
       var result = ''
       this.usersInfo.map((user) => {
-        if (id === user.id) {
-          result = user.email || '未知'
+        if (id - 0 === user.id - 0) {
+          result = user.email || '未填写'
         }
       })
       return result
@@ -189,8 +189,8 @@ export default {
     conputedPhone (id) {
       var result = ''
       this.usersInfo.map((user) => {
-        if (id === user.id) {
-          result = user.Phone || '未知'
+        if (id - 0 === user.id - 0) {
+          result = user.Phone || '未填写'
         }
       })
       return result
@@ -203,7 +203,7 @@ export default {
     conputedLastLogin (id) {
       var result = ''
       this.usersOnline.map((user) => {
-        if (id === user.id) {
+        if (id - 0 === user.user_id - 0) {
           if (user.last_login) {
             result = formatDate(user.last_login)
           } else {
@@ -219,14 +219,13 @@ export default {
      * @return {[type]}      [description]
      */
     conputedOnline (id) {
-      console.log(id)
       var result = ''
       this.usersOnline.map((user) => {
-        if (id === user.id) {
+        if (id - 0 === user.user_id - 0) {
           if (user.online) {
             result = '<span class="online-green">在线</span>'
           } else {
-            result = '<span>离线</span>'
+            result = '离线'
           }
         }
       })
@@ -245,12 +244,28 @@ export default {
       this.loadingData = true
       var { 'device_id': deviceId, 'product_id': productId } = this.$route.params
       api.product.getUsers(productId, deviceId).then((res) => {
+        res.data.list = [
+          {
+            'user_id': '1605923406',
+            'role': 1, // 角色权限
+            'from_id': '123', // 来源用户ID
+            'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+          },
+          {
+            'user_id': '1999245132',
+            'role': 0, // 角色权限
+            'from_id': '123', // 来源用户ID
+            'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+          }
+        ]
         // 根据获取回来的id去获取用户详情
-        this.getUsersInfo()
-        // this.deviceUsers = res.data.list
-        this.deviceUsers.map((item) => {
-          this.getOnlineType(item)
-        })
+        this.deviceUsers = res.data.list
+        if (this.deviceUsers.length) {
+          this.getUsersInfo()
+          this.deviceUsers.map((item) => {
+            this.getOnlineType(item)
+          })
+        }
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
@@ -273,7 +288,7 @@ export default {
         }
       }
       api.user.list(params).then((res) => {
-        // this.usersInfo = res.data.list
+        this.usersInfo = res.data.list
         this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
@@ -287,16 +302,14 @@ export default {
      */
     getOnlineType (user) {
       var userId = user.user_id
-      var result = []
       api.user.getUserSession(userId).then((res) => {
         var obj = {
-          id: userId,
+          user_id: res.data.user_id,
           online: Boolean(res.data.online),
           online_time: res.data.online_time,
           last_login: res.data.last_login
         }
-        result.push(obj)
-        this.usersOnlineType = result
+        this.usersOnline.push(obj)
       }).catch((res) => {
         this.handleError(res)
       })
