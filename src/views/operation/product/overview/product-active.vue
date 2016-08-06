@@ -134,7 +134,6 @@ export default {
     getProductProportion (product) {
       api.statistics.getProductSummary(product.id).then((res) => {
         if (res.status === 200) {
-          console.log(res)
           this.activated = res.data.activated
           this.total = res.data.total
         }

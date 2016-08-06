@@ -4,20 +4,20 @@
       <h2>热力分布</h2>
     </div>
     <!-- TODO -->
-    <div class="mb10 ml15">
+    <!-- <div class="mb10 ml15">
       <a style="color: red">全部</a>
       <i class="arrow">&gt;</i>
       <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
       <i class="arrow">&gt;</i>
       <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
-    </div>
+    </div> -->
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
-        <div class="filter-group-item">
+        <!-- <div class="filter-group-item">
           <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div>
+        </div> -->
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
         </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-11">
-            <china-heat-map></china-heat-map>
+            <china-heat-map :data="regionData"></china-heat-map>
           </div>
           <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
             <div class="data-table">
@@ -42,56 +42,6 @@
                     <td>广东</td>
                     <td>289</td>
                     <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>广西</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>广东</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>广西</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>湖南</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>湖北</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>江西</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>江苏</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>广东</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>广西</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                  <tr>
-                    <td>湖南</td>
-                    <td>1769</td>
-                    <td>86%</td>
                   </tr>
                 </tbody>
               </table>
@@ -123,7 +73,7 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 import SearchBox from 'components/SearchBox'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Table from 'components/Table'
@@ -191,20 +141,7 @@ export default {
         }
       ],
       period: 7,
-      periods: [
-        {
-          value: 1,
-          label: '24h'
-        },
-        {
-          value: 7,
-          label: '7天'
-        },
-        {
-          value: 30,
-          label: '30天'
-        }
-      ]
+      regionData: []
     }
   },
 
@@ -232,10 +169,37 @@ export default {
       return result
     }
   },
+
   ready () {
+    this.getRegion(this.$route.params.id)
   },
 
   methods: {
+    getRegion (pruductId) {
+      api.statistics.getProductRegion(pruductId).then((res) => {
+        if (res.status === 200) {
+          var CNData = res.data['中国']
+          var resData = []
+          for (let i in CNData) {
+            if (i !== 'activated' && i !== 'online') {
+              for (let j in CNData[i]) {
+                if (j !== 'activated' && j !== 'online') {
+                  let temp = {
+                    province: i,
+                    city: j,
+                    value: CNData[i][j].activated
+                  }
+                  resData.push(temp)
+                }
+              }
+            }
+          }
+          this.regionData = resData
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    }
   }
 }
 </script>
