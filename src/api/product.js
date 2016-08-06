@@ -195,6 +195,18 @@ export default {
   },
 
   /**
+   * 获取设备的订阅信息
+   * 获取订阅该设备的用户详细列表。
+   * @param  {String} productId 产品Id
+   * @return {Promise}
+   */
+  getUsers (productId, deviceId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}/subscribes`
+    )
+  },
+
+  /**
    * 产品固件上传
    * @param  {String} productId  产品 ID
    * @param  {File} file        文件流数据

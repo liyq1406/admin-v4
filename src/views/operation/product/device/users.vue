@@ -1,58 +1,7 @@
 <template>
-  <div class="panel">
+  <div class="panel device-users">
     <div class="panel-bd row">
-      <div class="data-table with-loading">
-        <div class="icon-loading" v-show="loadingData">
-          <i class="fa fa-refresh fa-spin"></i>
-        </div>
-        <div class="filter-bar">
-          <div class="filter-group fr">
-            <dropdown :dropdown-width="150">
-              <p>aaa</p>
-            </dropdown>
-          </div>
-          <div class="filter-group">
-            <div class="filter-group-item">
-              <v-select :label="'全部'" width="100px" class="work-orders-select" size="small">
-                <span slot="label">显示</span>
-                <select v-model="status" @change="">
-                  <option :value="0">0</option>
-                  <option :value="1">1</option>
-                  <p> {{'status'}}</p>
-                </select>
-              </v-select>
-            </div>
-          </div>
-        </div>
-        <c-table :headers="headers" :tables="tables" :page="page" @tbody-nickname="linkToDetails" @page-update=""></c-table>
-        <!-- <table class="table table-stripe table-bordered">
-          <thead>
-            <tr>
-              <th>{{ $t('ui.user.fields.nick_name') }}</th>
-              <th>{{ $t('ui.user.fields.account') }}</th>
-              <th>电话</th>
-              <th>用户ID</th>
-              <th>设备权限</th>
-            </tr>
-          </thead>
-          <tbody>
-            <template v-if="users.length > 0">
-              <tr v-for="user in users">
-                <td><a v-link="{path: '/operation/user/'+user.id}" class="hl-red">{{ user.nickname }}</a></td>
-                <td>{{ user.account }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.id }}</td>
-                <td>管理员</td>
-              </tr>
-            </template>
-            <tr v-if="total === 0 && !loadingData">
-              <td colspan="6" class="tac">
-                <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
-      </div>
+      <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @tbody-nickname="linkToDetails"></c-table>
     </div>
   </div>
 </template>
@@ -65,6 +14,7 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Dropdown from 'components/Dropdown'
 import Table from 'components/Table'
+import { formatDate } from 'src/filters'
 
 export default {
   name: 'Users',
@@ -84,7 +34,34 @@ export default {
       total: 0,
       currentPage: 1,
       countPerPage: 10,
+      loadingData: false,
       users: [],
+      // 设备绑定的用户列表
+      deviceUsers: [
+        {
+          'user_id': '1605923406',
+          'role': 1, // 角色权限
+          'from_id': '123', // 来源用户ID
+          'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        }
+      ],
+      // 设备绑定的用户信息
+      usersInfo: [
+        {
+          'user_id': '123',
+          'nickname': '昵称',
+          'email': '邮箱',
+          'phone': '手机'
+        }
+      ],
+      // 设备绑定的用户在线情况
+      usersOnline: [
+        {
+          'user_id': '123',
+          'online': true,
+          'last_login': '2015-10-09T08:15:40.843Z'
+        }
+      ],
       headers: [
         {
           key: 'nickname',
@@ -99,12 +76,12 @@ export default {
           title: '电话'
         },
         {
-          key: 'id',
-          title: '用户ID'
+          key: 'lastLogin',
+          title: '最后一次登录时间'
         },
         {
-          key: 'valid',
-          title: '设备限权'
+          key: 'online',
+          title: '在线状态'
         }
       ]
     }
@@ -113,13 +90,14 @@ export default {
   computed: {
     tables () {
       var result = []
-      this.users.map((item) => {
+      this.deviceUsers.map((item) => {
         var user = {
           id: item.id,
-          nickname: '<a class="hl-red"><i class="fa fa-user"></i> ' + item.nickname + '</a>',
-          email: item.email,
-          phone: item.phone,
-          valid: item.valid,
+          nickname: this.conputedNickname(item),
+          email: this.conputedEmail(item.id),
+          phone: this.conputedPhone(item.id),
+          lastLogin: this.conputedLastLogin(item.id),
+          online: this.conputedOnline(item.id),
           prototype: item
         }
         result.push(user)
@@ -161,107 +139,166 @@ export default {
   },
 
   methods: {
+    /**
+     * 计算当前用户的昵称
+     * @param  {[type]} user [description]
+     * @return {[type]}      [description]
+     */
+    conputedNickname (user) {
+      var result = ''
+      this.usersInfo.map((item) => {
+        if (user.id === item.id) {
+          if (item.nickname) {
+            if (user.role) {
+              result = '<a class="hl-red"><i class="fa fa-user"></i> ' + item.nickname + '</a>'
+            } else {
+              result = '<a class="hl-red">' + item.nickname + '</a>'
+            }
+          } else {
+            result = '未定义'
+          }
+        }
+      })
+      return result
+    },
+    /**
+     * 计算邮箱
+     * @param  {[type]} id [description]
+     * @return {[type]}      [description]
+     */
+    conputedEmail (id) {
+      console.log(id)
+      var result = ''
+      this.usersInfo.map((user) => {
+        if (id === user.id) {
+          result = user.email || '未知'
+        }
+      })
+      return result
+    },
+    /**
+     * 计算手机
+     * @param  {[type]} id [description]
+     * @return {[type]}      [description]
+     */
+    conputedPhone (id) {
+      console.log(id)
+      var result = ''
+      this.usersInfo.map((user) => {
+        if (id === user.id) {
+          result = user.Phone || '未知'
+        }
+      })
+      return result
+    },
+    /**
+     * 计算最后一次登录时间
+     * @param  {[type]} id [description]
+     * @return {[type]}      [description]
+     */
+    conputedLastLogin (id) {
+      console.log(id)
+      var result = ''
+      this.usersOnline.map((user) => {
+        if (id === user.id) {
+          if (user.last_login) {
+            result = formatDate(user.last_login)
+          } else {
+            result = '暂无数据'
+          }
+        }
+      })
+      return result
+    },
+    /**
+     * 计算在线状态
+     * @param  {[type]} id [description]
+     * @return {[type]}      [description]
+     */
+    conputedOnline (id) {
+      console.log(id)
+      var result = ''
+      this.usersOnline.map((user) => {
+        if (id === user.id) {
+          if (user.online) {
+            result = '<span class="online-green">在线</span>'
+          } else {
+            result = '<span>离线</span>'
+          }
+        }
+      })
+      return result
+    },
+    /**
+     * 跳转到详情页
+     * @param  {[type]} table [description]
+     * @return {[type]}       [description]
+     */
     linkToDetails (table) {
       this.$route.router.go('/operation/user/' + table.prototype.id)
     },
     // 获取用户
     getUsers () {
       this.loadingData = true
-      if (this.debug) {
-        this.users = [
-          {
-            id: 123,
-            nickname: '昵称1',
-            email: '123@132.com',
-            phone: '13800138000',
-            valid: -1
-          },
-          {
-            id: 123,
-            nickname: '昵称2',
-            email: '123@132.com',
-            phone: '13800138000',
-            valid: -1
-          }
-        ]
-      }
-      api.user.list(this.queryCondition).then((res) => {
-        if (res.status === 200) {
-          // this.users = res.data.list
-          this.total = res.data.count
-          this.loadingData = false
-        }
+      var { 'device_id': deviceId, 'product_id': productId } = this.$route.params
+      api.product.getUsers(productId, deviceId).then((res) => {
+        // 根据获取回来的id去获取用户详情
+        this.getUsersInfo()
+        // this.deviceUsers = res.data.list
+        // this.deviceUsers.map((item) => {
+        //
+        // })
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
       })
-    }
+    },
+
+    getUsersInfo (userId) {
+      var idArr = []
+      this.deviceUsers.map((item) => {
+        idArr.push(item.id)
+      })
+      var params = {
+        filter: ['id', 'nickname', 'email', 'phone'],
+        query: {
+          'id' : { $in: idArr}
+        }
+      }
+      api.user.list(params).then((res) => {
+        console.log(res)
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取用户在线状态
+     * @param  {[type]} userId [description]
+     * @return {[type]}        [description]
+     */
+    getOnlineType (userId) {
+      var result = []
+      api.user.getUserSession(userId).then((res) => {
+        var obj = {
+          id: userId,
+          online: Boolean(res.data.online),
+          online_time: res.data.online_time,
+          last_login: res.data.last_login
+        }
+        result.push(obj)
+        this.usersOnlineType = result
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
   }
 }
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
 
-  ul.device-details
-    margin 20px 0
-
-    li
-      list-style none
-      line-height 32px
-
-      .label
-        display inline-block
-        width 103px
-
-      .info
-        display inline-block
-
-  .output-log
-    display block
-    height 360px
-    overflow auto
-    font-size 12px
-
-    .log
-      margin 10px 0
-
-    .time
-      margin-right 10px
-      color #999
-
-    .user
-      color orange
-
-    .msg
-      color #333
-
-    .msg-error
-      color red
-
-    .msg-success
-      color green
-  .device-details
-    .editModal1
-      .content-box
-        padding-bottom 30px
-        .content-value
-          padding-bottom 10px
-          .deviceParams
-            height 30px
-            font-size 14px
-    .editModal2
-    .editModal3
-      .content-box
-        .content-value
-          padding-bottom 10px
-          .paramsValue
-            height 32px
-            width 100%
-            line-height 32px
-            background none
-            border 1px solid default-border-color
-            box-sizing border-box
-            font-size 14px
-            padding 0 15px
+  .device-users
+    span.online-green
+      color #33CC00
 </style>
