@@ -12,6 +12,7 @@
     </div>
     <!-- End: 产品信息统计 -->
 
+    <!-- Start: 趋势曲线图 -->
     <div class="panel mt20">
       <!-- <div class="panel-hd">
         <h2>用户趋势</h2>
@@ -20,21 +21,24 @@
         <div class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
-              <radio-button-group :items="trendOption" :value.sync="1"><span slot="label" class="label">趋势</span></radio-button-group>
+              <radio-button-group :items="trendOption" :value.sync="chartCondition.type"><span slot="label" class="label">趋势</span></radio-button-group>
             </div>
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <date-time-range-picker></date-time-range-picker>
+              <date-time-multiple-picker :periods="[7,30,90]" @timechange="onTimeChange"></date-time-multiple-picker>
+              <!-- <date-time-range-picker></date-time-range-picker> -->
             </div>
-            <div class="filter-group-item">
+            <!-- <div class="filter-group-item">
               <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            </div>
+            </div> -->
           </div>
         </div>
         <time-line :data="trends" :type="'smooth'"></time-line>
       </div>
     </div>
+    <!-- End: 趋势曲线图 -->
+
     <div class="panel mt10">
       <div class="panel-hd">
         <div class="actions">
@@ -210,12 +214,13 @@ import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Modal from 'components/Modal'
 import { formatDate } from 'src/filters'
-import Mock from 'mockjs'
+// import Mock from 'mockjs'
 import _ from 'lodash'
+import { createDayRange } from 'helpers/utils'
 
 export default {
   name: 'MajorClients',
@@ -229,7 +234,7 @@ export default {
     'modal': Modal,
     Statistic,
     RadioButtonGroup,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     TimeLine
   },
 
@@ -260,8 +265,11 @@ export default {
           value: 2
         }
       ],
+
       chartCondition: {
-        type: 1 // 1是新增客户 2是新增设备
+        type: 1, // 1是新增客户 2是新增设备
+        startDate: '', // 开始时间
+        endDate: '' // 结束时间
       },
       industrys: [
         '互联网',
@@ -291,7 +299,48 @@ export default {
         // 地址
         location: ''
       },
-      trends: null,
+      trendsData: [
+        // {
+        //   day: '2016-08-06',
+        //   add_heavy_buger: 6,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-08-05',
+        //   add_heavy_buger: 6,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-08-04',
+        //   add_heavy_buger: 4,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-08-03',
+        //   add_heavy_buger: 3,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-08-02',
+        //   add_heavy_buger: 2,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-08-01',
+        //   add_heavy_buger: 1,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-07-31',
+        //   add_heavy_buger: 31,
+        //   add_device: 2
+        // },
+        // {
+        //   day: '2016-07-30',
+        //   add_heavy_buger: 30,
+        //   add_device: 2
+        // }
+      ],
       majorClients: [ // 下面的假数据不要删掉！！！！！！注释掉就行
         // {
         //   'id': 111,
@@ -349,9 +398,44 @@ export default {
       ],
       // 当前用于排序的字段
       sortKey: ''
+      // test: [
+      //   {
+      //     date: new Date('2016-08-06'),
+      //     count: 5
+      //   },
+      //   {
+      //     date: new Date('2016-08-05'),
+      //     count: 6
+      //   },
+      //   {
+      //     date: new Date('2016-08-04'),
+      //     count: 3
+      //   },
+      //   {
+      //     date: new Date('2016-08-03'),
+      //     count: 3
+      //   }
+      // ]
     }
   },
   computed: {
+    /**
+     * 趋势
+     * @return {[type]} [description]
+     */
+    // TODO
+    trends () {
+      var result = []
+      var isAddDevice = this.chartCondition.type === 2
+      this.trendsData.map((item) => {
+        var trend = {
+          date: new Date(item.day),
+          count: isAddDevice ? item.add_device : item.add_heavy_buger
+        }
+        result.push(trend)
+      })
+      return result
+    },
     /**
      * 状态
      * @return {[type]} [description]
@@ -462,25 +546,60 @@ export default {
       this.getMajorClient()
       // 获取统计信息
       this.getSummary()
+      // 获取趋势用于渲染曲线图
+      // this.getTrends()
     }
   },
   ready () {
-    this.trends = Mock.mock({
-      'list|14': [{
-        'date|+1': [
-          new Date(2016, 7, 15),
-          new Date(2016, 7, 16),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 21)
-        ],
-        'count|+1': [6, 8, 9, 3, 9, 3, 9]
-      }]
-    }).list
+    // this.trends = Mock.mock({
+    //   'list|14': [{
+    //     'date|+1': [
+    //       new Date(2016, 7, 15),
+    //       new Date(2016, 7, 16),
+    //       new Date(2016, 7, 17),
+    //       new Date(2016, 7, 18),
+    //       new Date(2016, 7, 19),
+    //       new Date(2016, 7, 20),
+    //       new Date(2016, 7, 21)
+    //     ],
+    //     'count|+1': [6, 8, 9, 3, 9, 3, 9]
+    //   }]
+    // }).list
   },
   methods: {
+    /**
+     * 获取趋势
+     * @return {[type]} [description]
+     */
+    getTrends () {
+      var timeObj = createDayRange(0, 7)
+      var startDate = this.chartCondition.startDate || timeObj.start
+      var endDate = this.chartCondition.endDate || timeObj.end
+      // alert(startDate)
+      // alert(endDate)
+      api.statistics.getHeavyBugerTrend(startDate, endDate).then((res) => {
+        this.trendsData = res.data
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 图表时间范围改变
+     * @param  {[type]} startDate [description]
+     * @param  {[type]} endDate   [description]
+     * @return {[type]}           [description]
+     */
+    onTimeChange (startDate, endDate) {
+      var startYear = startDate.getFullYear()
+      var startMonth = startDate.getMonth() + 1
+      var startDay = startDate.getDate()
+      var endYear = endDate.getFullYear()
+      var endMonth = endDate.getMonth() + 1
+      var endDay = endDate.getDate()
+      this.chartCondition.startDate = `${startYear}-${startMonth}-${startDay}`
+      this.chartCondition.endDate = `${endYear}-${endMonth}-${endDay}`
+      this.getTrends()
+    },
     /**
      * 获取统计信息
      * @return {[type]} [description]
