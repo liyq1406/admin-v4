@@ -26,6 +26,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import {getActiveTrend} from './api-product'
+import api from 'api'
 
 export default {
   name: 'productline',
@@ -51,7 +52,26 @@ export default {
     return {
       period: 7,
       activeData: [], // 活跃设备
-      activatedProportion: [] // 激活占比
+      // activatedProportion: [] // 激活占比
+      total: 0,
+      activated: 0
+    }
+  },
+
+  computed: {
+    activatedProportion () {
+      if (this.total > 0) {
+        return [
+          {
+            name: '未激活设备',
+            value: this.total - this.activated
+          },
+          {
+            name: '激活设备',
+            value: this.activated
+          }
+        ]
+      }
     }
   },
 
@@ -64,6 +84,7 @@ export default {
   },
 
   ready () {
+    this.getSummary()
   },
   methods: {
     combineRecv (recv) {
@@ -100,7 +121,7 @@ export default {
             this.activeData = this.combineRecv(recv.active)
           }
           if (recv.add.length === prodLength) {
-            this.countRecv(recv.add)
+            // this.countRecv(recv.add)
             // this.trends.products.active.data = this.combineRecv(recv)
           }
         }).catch((res) => {
@@ -118,19 +139,29 @@ export default {
         })
       })
 
-      this.activatedProportion = [
-        {
-          name: '未激活设备',
-          value: Math.abs(countAdd - countActivated)
-        },
-        {
-          name: '激活设备',
-          value: countActivated
-        }
-      ]
+      // this.activatedProportion = [
+      //   {
+      //     name: '未激活设备',
+      //     value: Math.abs(countAdd - countActivated)
+      //   },
+      //   {
+      //     name: '激活设备',
+      //     value: countActivated
+      //   }
+      // ]
     },
     activeSelect () {
       this.getActiveProductsTrend(this.products, this.period)
+    },
+    getSummary () {
+      api.statistics.getSummary().then((res) => {
+        if (res.status === 200) {
+          this.activated = res.data.total.activated
+          this.total = res.data.total.total
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   }
 }

@@ -26,6 +26,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import {getActiveTrend} from './api-product'
+import api from 'api'
 
 export default {
   name: 'productline',
@@ -51,7 +52,26 @@ export default {
     return {
       period: 7,
       activeData: [], // 活跃设备
-      activatedProportion: [] // 激活占比
+      // activatedProportion: [] // 激活占比
+      activated: 0,
+      total: 0
+    }
+  },
+
+  computed: {
+    activatedProportion () {
+      if (this.total > 0) {
+        return [
+          {
+            name: '未激活设备',
+            value: this.total - this.activated
+          },
+          {
+            name: '激活设备',
+            value: this.activated
+          }
+        ]
+      }
     }
   },
 
@@ -59,6 +79,7 @@ export default {
     currentProduct () {
       if (this.currentProduct.id) {
         this.getActiveProductsTrend(this.currentProduct, 7)
+        this.getProductProportion(this.currentProduct)
       }
     }
   },
@@ -66,6 +87,7 @@ export default {
   ready () {
     if (this.currentProduct.id) {
       this.getActiveProductsTrend(this.currentProduct, 7)
+      this.getProductProportion(this.currentProduct)
     }
   },
   methods: {
@@ -82,7 +104,7 @@ export default {
     getActiveProductsTrend (product, duration) {
       getActiveTrend(product.id, duration).then((res) => {
         this.activeData = this.combineRecv(res.active)
-        this.countRecv(res.add)
+        // this.countRecv(res.add)
       }).catch((res) => {
         this.handleError(res)
       })
@@ -95,19 +117,30 @@ export default {
         countAdd += item.add
       })
 
-      this.activatedProportion = [
-        {
-          name: '未激活设备',
-          value: Math.abs(countAdd - countActivated)
-        },
-        {
-          name: '激活设备',
-          value: countActivated
-        }
-      ]
+      // this.activatedProportion = [
+      //   {
+      //     name: '未激活设备',
+      //     value: Math.abs(countAdd - countActivated)
+      //   },
+      //   {
+      //     name: '激活设备',
+      //     value: countActivated
+      //   }
+      // ]
     },
     activeSelect () {
       this.getActiveProductsTrend(this.currentProduct, this.period)
+    },
+    getProductProportion (product) {
+      api.statistics.getProductSummary(product.id).then((res) => {
+        if (res.status === 200) {
+          console.log(res)
+          this.activated = res.data.activated
+          this.total = res.data.total
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   }
 }
