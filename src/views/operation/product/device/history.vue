@@ -12,7 +12,7 @@
             <v-select :label="selectedDatapoint.name" width="110px" size="small">
               <span slot="label">显示</span>
               <select v-model="selectedDatapoint">
-                <option v-for="opt in datapoints" :value="opt">{{ opt.name }}</option>
+                <option v-for="opt in datapointOptions" :value="opt">{{ opt.name }}</option>
               </select>
             </v-select>
           </div>
@@ -20,7 +20,7 @@
       </div>
       <div class="device-data-table-box">
         <div class="panel-bd">
-          <time-line :data="trends.data"></time-line>
+          <time-line :data="trendData"></time-line>
         </div>
       </div>
       <div class="history-list">
@@ -50,7 +50,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
 import { formatDate } from 'src/filters'
-import Mock from 'mockjs'
+// import Mock from 'mockjs'
 
 export default {
   name: 'History',
@@ -77,15 +77,15 @@ export default {
       total: 0,
       currentPage: 1,
       countPerPage: 10,
-      allSnapshots: [],
+      snapshots: [],
       currSnapshot: {},
       datapoints: [],
       selectedDatapoint: {},
       // 趋势
-      trends: {
-        data: [],
-        options: {}
-      },
+      // trends: {
+      //   data: [],
+      //   options: {}
+      // },
       columns: [
         {
           key: 'name',
@@ -103,20 +103,32 @@ export default {
     }
   },
   computed: {
-    snapshots () {
-      let result = []
-
+    // 下拉选项
+    datapointOptions () {
+      let result = this.datapoints.filter((item) => {
+        return item.type !== 6 && item.type !== 1
+      })
+      if (result.length) {
+        this.selectedDatapoint = result[0]
+      }
       return result
     },
 
     // 过滤后的的快照列表
     filteredSnapshots () {
       let offset = (this.currentPage - 1) * this.countPerPage
-      let result = this.allSnapshots.slice(offset, offset + this.countPerPage)
+      let result = this.snapshots.slice(offset, offset + this.countPerPage)
       if (result.length) {
         this.currSnapshot = result[0]
       }
       return result
+    },
+
+    // 趋势数据
+    trendData () {
+      return [
+        // {date: now, count: 1, name: '温度'}
+      ]
     },
 
     // 当前设备快照
@@ -147,27 +159,23 @@ export default {
     }
   },
 
-  route: {
-    data () {
-      this.getDatapoints()
-      // 监听窗口尺寸变化
-      // window.onresize = () => {
-      //   this.$refs.trendChart.chart.resize()
-      // }
-      this.trends.data = Mock.mock({
-        'list|16': [{
-          'date|+1': [
-            new Date(2016, 7, 17),
-            new Date(2016, 7, 18),
-            new Date(2016, 7, 19),
-            new Date(2016, 7, 20)
-          ],
-          'count|+1': [6, 8, 9, 8],
-          '产品|+1': ['Power', 'Power', 'Power', 'Power']
-        }]
-      }).list
-    }
-  },
+  // route: {
+  //   data () {
+  //     this.getDatapoints()
+  //     this.trends.data = Mock.mock({
+  //       'list|16': [{
+  //         'date|+1': [
+  //           new Date(2016, 7, 17),
+  //           new Date(2016, 7, 18),
+  //           new Date(2016, 7, 19),
+  //           new Date(2016, 7, 20)
+  //         ],
+  //         'count|+1': [6, 8, 9, 8],
+  //         '产品|+1': ['Power', 'Power', 'Power', 'Power']
+  //       }]
+  //     }).list
+  //   }
+  // },
 
   methods: {
     /**
@@ -177,6 +185,7 @@ export default {
     onTimeChange (start, end) {
       this.startTime = start.getTime()
       this.endTime = end.getTime()
+      this.getDatapoints()
     },
 
     /**
@@ -187,7 +196,6 @@ export default {
       api.product.getDatapoints(this.$route.params.product_id).then((res) => {
         if (res.status === 200) {
           this.datapoints = res.data
-          this.selectedDatapoint = res.data[0]
           // 获取设备快照
           this.getSnapshots()
         }
@@ -223,42 +231,42 @@ export default {
       api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, this.queryCondition).then((res) => {
         if (res.status === 200) {
           // 模拟数据开始 ******************************
-          // this.total = 2
-          // this.allSnapshots = [{
-          //   _id: '123456',
-          //   deviceId: '1605922391',
-          //   cmId: '1605922391',
-          //   ip: '119.131.117.58',
-          //   online: 1,
-          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
-          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
-          //   lastUpdate: formatDate('2016-08-05T14:30:53Z'),
-          //   '0': true,
-          //   '1': 38,
-          //   '2': 47
-          // }, {
-          //   _id: '234567',
-          //   deviceId: '1605922391',
-          //   cmId: '1605922391',
-          //   ip: '119.131.117.58',
-          //   online: 1,
-          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
-          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
-          //   lastUpdate: formatDate('2016-08-05T14:40:47Z'),
-          //   '0': true,
-          //   '1': 42,
-          //   '2': 49
-          // }]
+          this.total = 2
+          this.snapshots = [{
+            _id: '123456',
+            deviceId: '1605922391',
+            cmId: '1605922391',
+            ip: '119.131.117.58',
+            online: 1,
+            lastLogin: formatDate('2016-08-05T14:27:53Z'),
+            lastLogout: formatDate('2016-08-05T14:42:53Z'),
+            lastUpdate: formatDate('2016-08-05T14:30:53Z'),
+            '0': true,
+            '1': 38,
+            '2': 47
+          }, {
+            _id: '234567',
+            deviceId: '1605922391',
+            cmId: '1605922391',
+            ip: '119.131.117.58',
+            online: 1,
+            lastLogin: formatDate('2016-08-05T14:27:53Z'),
+            lastLogout: formatDate('2016-08-05T14:42:53Z'),
+            lastUpdate: formatDate('2016-08-05T14:40:47Z'),
+            '0': true,
+            '1': 42,
+            '2': 49
+          }]
           // 模拟数据结束 ******************************
 
           // 获取全部数组数据
-          this.total = res.data.count
-          this.allSnapshots = res.data.list.map((item) => {
-            item.lastUpdate = formatDate(item.lastUpdate)
-            return item
-          }).sort((a, b) => {
-            return new Date(b.lastUpdate) - new Date(a.lastUpdate)
-          })
+          // this.total = res.data.count
+          // this.snapshots = res.data.list.map((item) => {
+          //   item.lastUpdate = formatDate(item.lastUpdate)
+          //   return item
+          // }).sort((a, b) => {
+          //   return new Date(b.lastUpdate) - new Date(a.lastUpdate)
+          // })
         }
       }).catch((res) => {
         this.handleError(res)
