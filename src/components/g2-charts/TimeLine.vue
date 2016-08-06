@@ -65,7 +65,7 @@ export default {
             }
           }
         }
-        console.log(defs)
+
         this.chart.source(this.data, defs)
         this.chart.repaint()
       } else {
@@ -114,8 +114,6 @@ export default {
         }
         fields.push(i)
       }
-
-      console.log(defs)
 
       var position = fields[0] + '*' + fields[1]
       var color = fields[2] || null

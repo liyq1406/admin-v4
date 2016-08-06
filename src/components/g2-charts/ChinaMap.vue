@@ -74,7 +74,7 @@ export default {
       this.chart = chart
       chart.source(userData)
       chart.axis(false)
-      chart.polygon().position(Stat.map.region('name', mapData)).color('value')
+      chart.polygon().position(Stat.map.region('name', mapData)).color('value', '#BBE1E4-#58BFC6')
       chart.point().position(Stat.map.center('name', mapData))
         .color('#fff')
         .label('name', {offset: 0, label: {fill: '#000', 'font-size': 10}})
