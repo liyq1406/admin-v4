@@ -60,32 +60,27 @@ export default {
 
   data () {
     return {
-      loadingData: true,
-      searching: false,
-      total: 0,
-      currentPage: 1,
-      countPerPage: config.COUNT_PER_PAGE,
       alerts: [],
       visibilityOptions: [
         { label: '全部等级', value: 'all' },
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: '中等', value: '中等' },
+        { label: '重度', value: '重度' }
       ],
-      visibility: {
-        label: '全部等级',
-        value: 'all'
-      },
+      visibility: {},
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
         { label: '设备ID', value: 'from' },
         { label: '告警内容', value: 'alert_name' }
       ],
-      queryType: {
-        label: 'MAC',
-        value: 'mac'
-      },
+      queryType: {},
       key: '',
+      loadingData: true,
+      searching: false,
+      total: 0,
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
       headers: [{
         key: 'content',
         title: '告警内容'
@@ -152,8 +147,8 @@ export default {
       var result = []
       this.alerts.map((item) => {
         let levelCls = ({
-          '通知': 'text-label-warning',
-          '严重': 'text-label-danger'
+          '中等': 'text-label-warning',
+          '重度': 'text-label-danger'
         })[item.tags] || ''
 
         let alert = {
@@ -175,18 +170,24 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
-        this.getAlerts()
+        this.init()
       }
     }
   },
 
   ready () {
     if (this.currentProduct.id) {
-      this.getAlerts()
+      this.init()
     }
   },
 
   methods: {
+    init () {
+      this.visibility = this.visibilityOptions[0]
+      this.queryType = this.queryTypeOptions[0]
+      this.getAlerts()
+    },
+
     /**
      * 将毫秒数格式化为合适显示的时间段
      */
@@ -197,35 +198,6 @@ export default {
       } else {
         return `${Math.floor(n / 60000)}分钟`
       }
-    },
-
-    /**
-     * 获取消息列表
-     * @author weijie
-     */
-    getAlerts () {
-      this.loadingData = true
-      api.alert.getAlerts(this.queryCondition).then((res) => {
-        if (res.status === 200) {
-          this.total = res.data.count
-          this.alerts = res.data.list.map((item) => {
-            let beginTime = new Date(formatDate(item.create_date))
-            // 默认为未读，时间从当前算起
-            let endTime = new Date()
-            // 如果为已读，则从已读时间算起
-            if (item.is_read) {
-              endTime = new Date(formatDate(item.read_time))
-            }
-            // 持续时间
-            item.lasting = endTime.getTime() - beginTime.getTime()
-            return item
-          })
-        }
-        this.loadingData = false
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingData = false
-      })
     },
 
     /**
@@ -246,6 +218,37 @@ export default {
     onPageCountUpdate (count) {
       this.countPerPage = count
       this.getAlerts(true)
+    },
+
+    /**
+     * 获取消息列表
+     * @author weijie
+     */
+    getAlerts () {
+      this.loadingData = true
+
+      api.alert.getAlerts(this.queryCondition).then((res) => {
+        this.loadingData = false
+        if (res.status === 200) {
+          this.total = res.data.count
+          this.alerts = res.data.list.map((item) => {
+            // 计算已读告警持续时间
+            let begin = new Date(formatDate(item.create_date))
+            // 默认为未读，时间从当前算起
+            let end = new Date()
+            // 如果为已读，则从已读时间算起
+            if (item.is_read) {
+              end = new Date(formatDate(item.read_time))
+            }
+            // 持续时间
+            item.lasting = end.getTime() - begin.getTime()
+            return item
+          })
+        }
+      }).catch((res) => {
+        this.loadingData = false
+        this.handleError(res)
+      })
     }
   }
 }

@@ -163,5 +163,17 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/message/trend_hour_tag_rule?product_id=${productId}&tag=${tag}&rule=${ruleId}&start_day=${startDay}&start_hour=${startHour}&end=${endDay}&end_hour=${endHour}`
     )
+  },
+
+  /**
+   * 告警消息设备下按标签小时趋势
+   * @param {Array} params 消息列表
+   */
+  getDeviceTagTrend (productId, deviceId, tag, startDay, endDay, startHour, endHour) {
+    startHour = startHour || '00'
+    endHour = endHour || '00'
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/message/trend_hour_tag?product_id=${productId}&device_id=${deviceId}&tag=${tag}&start_day=${startDay}&start_hour=${startHour}&end_day=${endDay}&end_hour=${endHour}`
+    )
   }
 }

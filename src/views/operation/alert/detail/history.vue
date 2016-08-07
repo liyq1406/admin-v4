@@ -4,10 +4,7 @@
       <div class="filter-bar filter-bar-head">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
-          </div>
-          <div class="filter-group-item">
-            <radio-button-group :items="periods" :value.sync="period" @select="getAll()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+            <date-time-range-picker :periods="periods" @timechange="getSpecial"></date-time-range-picker>
           </div>
         </div>
       </div>
@@ -85,7 +82,7 @@ import { formatDate, uniformDate } from 'src/filters'
 import Select from 'components/Select'
 import TimeLine from 'components/g2-charts/TimeLine'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import dateFormat from 'date-format'
 
 export default {
@@ -98,7 +95,7 @@ export default {
     SearchBox,
     TimeLine,
     RadioButtonGroup,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     'v-select': Select
   },
 
@@ -124,22 +121,37 @@ export default {
       ],
       startTimePick: '',
       endTimePick: '',
-      trendData: [],
-      period: 7,
-      periods: [
-        {
-          value: 1,
-          label: '24h'
-        },
-        {
-          value: 7,
-          label: '7天'
-        },
-        {
-          value: 30,
-          label: '30天'
-        }
-      ],
+      trendData: [{
+        date: '9/20',
+        val: 10,
+        name: '温度'
+      }, {
+        date: '9/21',
+        val: 100,
+        name: '温度'
+      }, {
+        date: '9/22',
+        val: 100,
+        name: '温度'
+      }, {
+        date: '9/23',
+        val: 100,
+        name: '温度'
+      }, {
+        date: '9/24',
+        val: 120,
+        name: '温度'
+      }, {
+        date: '9/25',
+        val: 100,
+        name: '温度'
+      }, {
+        date: '9/26',
+        val: 150,
+        name: '温度'
+      }],
+      period: 1,
+      periods: [1, 7, 30],
       serious: {
         name: '严重',
         data: []
@@ -389,7 +401,7 @@ export default {
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end
-      this.getTagTrend()
+      // this.getTagTrend()
       this.getList()
     },
     getAll () {

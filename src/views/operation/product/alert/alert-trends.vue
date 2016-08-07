@@ -13,11 +13,17 @@
 </template>
 
 <script>
+import api from 'api'
 import TimeLine from 'components/g2-charts/TimeLine'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
+import { globalMixins } from 'src/mixins'
+import { uniformDate } from 'src/filters'
+import _ from 'lodash'
 
 export default {
   name: 'AlertTrends',
+
+  mixins: [globalMixins],
 
   components: {
     TimeLine,
@@ -26,61 +32,77 @@ export default {
 
   data () {
     return {
-      // period: 7,
       periods: [1, 7, 30],
-      startTime: 0,
-      endTime: 0,
-      trendData: [{
-        date: '9/20',
-        val: 10
-      }, {
-        date: '9/21',
-        val: 100
-      }, {
-        date: '9/22',
-        val: 100
-      }, {
-        date: '9/23',
-        val: 100
-      }, {
-        date: '9/24',
-        val: 120
-      }, {
-        date: '9/25',
-        val: 100
-      }, {
-        date: '9/26',
-        val: 150
-      }]
-      // trendData: []
+      startTime: null,
+      endTime: null,
+      trends: {
+        light: [],
+        medium: [],
+        serious: []
+      }
     }
   },
 
-  // computed: {
-  //   trendData () {
-  //     return [{
-  //       date: new Date(),
-  //       value: 10
-  //     }, {
-  //       date: new Date(),
-  //       value: 10
-  //     }]
-  //   }
-  // },
+  computed: {
+    // 趋势数据
+    trendData () {
+      return this.trends.light.concat(this.trends.medium).concat(this.trends.serious)
+    }
+  },
 
   methods: {
     /**
      * 处理时间选择
-     * @author weijie
+     * @author shengzhi
      */
     onTimeChange (start, end) {
-      // this.period = ''
-      this.startTime = start.getTime()
-      this.endTime = end.getTime()
-      // this.getTagTrend()
+      this.startTime = start
+      this.endTime = end
+      this.getTagTrend()
     },
 
-    getTrends () {
+    /**
+     * 获取告警趋势图表数据
+     * @author weijie
+     */
+    getTagTrend () {
+      if (this.startTime === null || this.endTime === null) return
+      let start = uniformDate(this.startTime)
+      let end = uniformDate(this.endTime)
+      const TAGS = {
+        light: '轻微',
+        medium: '中等',
+        serious: '重度'
+      }
+
+      for (var key in TAGS) {
+        ((tag) => {
+          api.alert.getTagTrend(this.$route.params.id, TAGS[tag], start, end).then((res) => {
+            if (res.status === 200) {
+              // 模拟数据开始
+              // res.data = [
+              //   {day: '2016-07-19', hours: [{hour: '00', message: 10}, {hour: '01', message: 20}]},
+              //   {day: '2016-07-20', hours: [{hour: '00', message: 30}, {hour: '01', message: 25}]}
+              // ]
+              // 模拟数据结束
+
+              this.trends[tag] = res.data.map((item) => {
+                // 算出某天告警总数
+                let sum = _.map(item.hours, 'message').reduce((prev, next) => {
+                  return prev + next
+                }, 0)
+                return {
+                  date: item.day,
+                  val: sum,
+                  name: TAGS[tag]
+                }
+              })
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        })(key)
+      }
     }
   }
 }

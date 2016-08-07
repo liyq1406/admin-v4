@@ -1,5 +1,8 @@
 <template>
   <div class="main">
+    <div class="main-title bordered">
+      <h2>概览</h2>
+    </div>
     <panel>
       <div class="product-card">
         <div class="thumb"><img :src="deviceThumb"/></div>
@@ -495,7 +498,7 @@ export default {
 
     & > .info
       font-size 36px
-      margin 7px 0
+      margin 10px 0
 
     & > .change
       top 5px
@@ -517,7 +520,7 @@ export default {
       display block
 
   .info
-    margin-left 240px
+    margin-left 232px
 
     h2
       margin 10px 0 0
