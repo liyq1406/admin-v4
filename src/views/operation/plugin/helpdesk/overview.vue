@@ -6,24 +6,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <!-- <v-select :label="product.name" width="110px" size="small">
-            <span slot="label">产品</span>
-            <select v-model="product" @change="getFeedbackList">
-              <option v-for="prod in products" :value="prod">{{prod.name}}</option>
-            </select>
-          </v-select> -->
-          <float-select :list="list"></float-select>
+          <float-select :list="selectOptions" :trigger-width="110" @select="productSelect"></float-select>
         </div>
       </div>
       <div class="filter-group fr">
-        <!-- <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div> -->
-        <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
+        <div class="filter-group-item fr">
+          <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -32,15 +20,15 @@
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
-        <time-line :data="trends.data"></time-line>
+        <time-line :data="lineData"></time-line>
       </div>
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="summary.pending" :title="summary.pending.title" align="left"></statistic>
+        <statistic :info="summary.total" :title="summary.total.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.avg" :title="summary.avg.title" align="left"></statistic>
+        <statistic :info="summary.untreatedTotal" :title="summary.untreatedTotal.title" align="left"></statistic>
       </div>
       <div class="col-6">
         <statistic :info="summary.weekAdded" :title="summary.weekAdded.title" align="left"></statistic>
@@ -56,10 +44,10 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-9">
-            <pie :data="feedbacks" :height="400" :margin="customPieMargin"></pie>
+            <pie :data="pieData" :height="350" :margin="customPieMargin"></pie>
           </div>
-          <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 400px">
-            <div class="data-table">
+          <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 350px">
+            <div class="data-table" v-if="feedbacks.length > 0">
               <table class="table">
                 <thead>
                   <tr>
@@ -70,35 +58,11 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>使用帮助</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
-                  </tr>
-                  <tr>
-                    <td>产品咨询</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
-                  </tr>
-                  <tr>
-                    <td>投诉建议</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
-                  </tr>
-                  <tr>
-                    <td>产品故障</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
-                  </tr>
-                  <tr>
-                    <td>退货申请</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
+                  <tr v-for="item in feedbacks">
+                    <td>{{item.label}}</td>
+                    <td>{{item.treatedCount}} ({{item.treatedPercent}} %)</td>
+                    <td>{{item.untreatedCount}} ({{item.untreatedPercent}} %)</td>
+                    <td>{{item.Count}}</td>
                   </tr>
                 </tbody>
               </table>
@@ -114,13 +78,11 @@
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
 import api from 'api'
-import Select from 'components/Select'
-import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Pie from 'components/g2-charts/Pie'
 import FloatSelect from 'components/FloatSelect'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -131,11 +93,9 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'v-select': Select,
     FloatSelect,
     Pie,
-    RadioButtonGroup,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     Statistic,
     TimeLine
   },
@@ -148,85 +108,72 @@ export default {
 
   data () {
     return {
-      list: [{
-        value: 1,
-        label: '电饭锅'
-      }, {
-        value: 1,
-        label: '热水器'
-      }, {
-        value: 1,
-        label: '电水壶'
-      }, {
-        value: 1,
-        label: '电热毯子'
-      }, {
-        value: 1,
-        label: '电吹风'
-      }, {
-        value: 1,
-        label: '电热水壶'
-      }],
       product: {
-        name: ''
+        label: '全部'
       },
       customPieMargin: [20, 0, 0, 0],
-      feedbacks: [
-        {
-          name: '使用帮助',
-          value: 50
-        },
-        {
-          name: '产品咨询',
-          value: 30
-        },
-        {
-          name: '投诉建议',
-          value: 20
-        },
-        {
-          name: '产品故障',
-          value: 10
-        }
-      ],
+      feedbacks: [],
       summary: {
-        pending: {
-          total: 23,
+        total: {
+          total: 0,
+          title: '反馈数'
+        },
+        untreatedTotal: {
+          total: 0,
           title: '待处理'
         },
-        avg: {
-          total: 14,
-          unit: '%',
-          title: '平均处理时间率'
-        },
         weekAdded: {
-          total: 145,
-          change: -14,
+          total: 0,
           title: '7天新增'
         },
         monthAdded: {
-          total: 345,
-          change: 40,
+          total: 0,
           title: '30天新增'
         }
       },
-      // 趋势
-      trends: {
-        data: [],
-        options: {}
-      },
       // 时间间隔
-      period: 7,
-      // 待选时间间隔
-      // periods: locales.data.PERIODS,
+      periods: [7, 30, 90],
+
       // 数据是否加载中
-      loadingData: false
+      loadingData: false,
+      pieData: [],
+      lineData: []
+    }
+  },
+
+  computed: {
+    selectOptions () {
+      if (this.products.length > 0) {
+        var res = [{
+          label: '全部'
+        }]
+        this.products.forEach((item) => {
+          let temp = {
+            id: item.id,
+            label: item.name
+          }
+          res.push(temp)
+        })
+        return res
+      } else {
+        return []
+      }
+    },
+    GroupQueryCondition () {
+      if (this.product && this.product.id) {
+        return {
+          query: {
+            product_id: this.product.id
+          }
+        }
+      } else {
+        return {}
+      }
     }
   },
 
   ready () {
     if (this.products.length > 0) {
-      this.product = this.products[0]
       this.getFeedbackList()
     }
   },
@@ -234,26 +181,52 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
-        this.product = this.products[0]
-        // this.getFeedbackList()
+        this.getFeedbackList()
       }
     }
   },
 
   methods: {
     getFeedbackList () {
-      var params = {
-        query: {
-          product_id: this.product.id
-        }
-      }
-      api.helpdesk.getFeedbackList(this.$route.params.app_id, params).then((res) => {
+      api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.GroupQueryCondition).then((res) => {
         if (res.status === 200) {
           console.log(res.data)
+          this.summary.total.total = res.data.total
+          this.summary.untreatedTotal.total = res.data.untreatedTotal
+          this.summary.weekAdded.total = res.data.sevenCount
+          this.summary.monthAdded.total = res.data.thirtyCount
+          this.feedbacks = res.data.labelGroupCount
+          if (res.data.labelGroupCount.length > 0) {
+            res.data.labelGroupCount.forEach((item) => {
+              let temp = {}
+              temp.name = item.label
+              temp.value = item.Count
+              this.pieData.push(temp)
+            })
+          } else {
+            this.pieData = []
+          }
+          // 日统计
+          if (res.data.dayGroupCount.length > 0) {
+            res.data.dayGroupCount.forEach((item) => {
+              let temp = {}
+              temp.val = item.Count
+              temp.date = item.day
+              temp.name = item.label
+              this.lineData.push(temp)
+            })
+          } else {
+            this.lineData = []
+          }
         }
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    timeFilter () {},
+    productSelect (item) {
+      this.product = item
+      this.getFeedbackList()
     }
   }
 }

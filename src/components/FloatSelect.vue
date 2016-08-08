@@ -2,7 +2,7 @@
   <div class="x-float-select-wrap">
     <dropdown :trigger-width="triggerWidth" :dropdown-width="dropdownWidth" :show.sync='showSelectPanel'>
       <div slot='trigger' class="trigger-wrap">
-        <span class="trigger-label">{{selected.label}}</span>
+        <span class="trigger-label" :style="triggerStyle">{{selected.label}}</span>
         <i class="fa fa-sort-down trigger-i"></i>
       </div>
       <div class="select-wrap">
@@ -56,6 +56,25 @@ export default {
   },
 
   computed: {
+    triggerStyle () {
+      // let wid = ${this.triggerWidth - 30}
+      return {
+        width: `${this.triggerWidth - 30}px`
+      }
+    }
+  },
+
+  watch: {
+    list () {
+      if (this.list.length > 0) {
+        this.selected = this.list[0]
+
+        this.selectsStatus.push(true)
+        for (var i = 1; i < this.list.length; i++) {
+          this.selectsStatus.push(false)
+        }
+      }
+    }
   },
 
   ready () {
@@ -101,8 +120,13 @@ export default {
     padding 0 10px
     .trigger-label
       float left
+      display inline-block
+      text-align left
       line-height 24px
       vertical-align top
+      white-space nowrap
+      text-overflow ellipsis
+      overflow hidden
     .trigger-i
       line-height 20px
       float right

@@ -9,8 +9,6 @@
           <div class="filter-group-item fr">
             <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
           </div>
-          <div class="filter-group-item fr">
-          </div>
         </div>
       </div>
       <div class="row bottom-line-height">

@@ -115,7 +115,7 @@ export default {
   position relative
 
   .trigger
-    height 28px
+    height 26px
     width 100%
     display inline-block
     vertical-align middle

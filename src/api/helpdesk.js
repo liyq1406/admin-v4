@@ -6,12 +6,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  getFeedbackGroup (appID, token, params) {
+  getFeedbackGroup (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback/group`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
