@@ -95,7 +95,7 @@
         ☐ 排序
         ✓ 分页 @done(2016-08-05 18:45) @project(功能 / #产品管理 / 告警信息)
     设备地图:
-      ☐ @shengzhi @timestamp(2016-08-08)
+      ✓ @shengzhi @timestamp(2016-08-08) @done(2016-08-08 16:00) @project(功能 / #产品管理 / 设备地图)
     热力分布:
       ☐ @guohao @timestamp(2016-08-08)
     使用分析:

@@ -231,42 +231,42 @@ export default {
       api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, this.queryCondition).then((res) => {
         if (res.status === 200) {
           // 模拟数据开始 ******************************
-          this.total = 2
-          this.snapshots = [{
-            _id: '123456',
-            deviceId: '1605922391',
-            cmId: '1605922391',
-            ip: '119.131.117.58',
-            online: 1,
-            lastLogin: formatDate('2016-08-05T14:27:53Z'),
-            lastLogout: formatDate('2016-08-05T14:42:53Z'),
-            lastUpdate: formatDate('2016-08-05T14:30:53Z'),
-            '0': true,
-            '1': 38,
-            '2': 47
-          }, {
-            _id: '234567',
-            deviceId: '1605922391',
-            cmId: '1605922391',
-            ip: '119.131.117.58',
-            online: 1,
-            lastLogin: formatDate('2016-08-05T14:27:53Z'),
-            lastLogout: formatDate('2016-08-05T14:42:53Z'),
-            lastUpdate: formatDate('2016-08-05T14:40:47Z'),
-            '0': true,
-            '1': 42,
-            '2': 49
-          }]
+          // res.data.count = 2
+          // res.data.list = [{
+          //   _id: '123456',
+          //   deviceId: '1605922391',
+          //   cmId: '1605922391',
+          //   ip: '119.131.117.58',
+          //   online: 1,
+          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
+          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
+          //   lastUpdate: formatDate('2016-08-05T14:30:53Z'),
+          //   '0': true,
+          //   '1': 38,
+          //   '2': 47
+          // }, {
+          //   _id: '234567',
+          //   deviceId: '1605922391',
+          //   cmId: '1605922391',
+          //   ip: '119.131.117.58',
+          //   online: 1,
+          //   lastLogin: formatDate('2016-08-05T14:27:53Z'),
+          //   lastLogout: formatDate('2016-08-05T14:42:53Z'),
+          //   lastUpdate: formatDate('2016-08-05T14:40:47Z'),
+          //   '0': true,
+          //   '1': 42,
+          //   '2': 49
+          // }]
           // 模拟数据结束 ******************************
 
           // 获取全部数组数据
-          // this.total = res.data.count
-          // this.snapshots = res.data.list.map((item) => {
-          //   item.lastUpdate = formatDate(item.lastUpdate)
-          //   return item
-          // }).sort((a, b) => {
-          //   return new Date(b.lastUpdate) - new Date(a.lastUpdate)
-          // })
+          this.total = res.data.count
+          this.snapshots = res.data.list.map((item) => {
+            item.lastUpdate = formatDate(item.lastUpdate)
+            return item
+          }).sort((a, b) => {
+            return new Date(b.lastUpdate) - new Date(a.lastUpdate)
+          })
         }
       }).catch((res) => {
         this.handleError(res)

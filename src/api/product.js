@@ -229,9 +229,21 @@ export default {
    * @param  {String} deviceId 虚拟设备 id
    * @return {Promise}
    */
-  getVDeviceInfo (productId, deviceId) {
+  getVDevice (productId, deviceId) {
     return http.get(
       `${API_SERVER.default}/v2/product/${productId}/v_device/${deviceId}`
+    )
+  },
+
+  /**
+   * 获取虚拟设备数据
+   * @param  {String} productId 产品Id
+   * @param  {Array} params 虚拟设备id数组
+   * @return {Promise}
+   */
+  getVDevices (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/v_devices`, params
     )
   },
 

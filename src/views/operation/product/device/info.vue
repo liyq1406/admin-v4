@@ -6,7 +6,7 @@
         <div class="filter-bar">
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <button class="btn btn-ghost btn-sm" @click="getVDeviceInfo"><i class="fa fa-refresh"></i></button>
+              <button class="btn btn-ghost btn-sm" @click="getVDevice"><i class="fa fa-refresh"></i></button>
             </div>
             <div class="filter-group-item">
               <search-box :key.sync="query" :auto="true" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="cancelSearching" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch"></search-box>
@@ -170,8 +170,8 @@ export default {
     /**
      * 获取虚拟设备数据
      */
-    getVDeviceInfo () {
-      api.product.getVDeviceInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+    getVDevice () {
+      api.product.getVDevice(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
         if (res.status === 200) {
           this.setCurrVirtualDevice(res.data)
           // this.deviceInfo.onlineLong.value = '100小时'

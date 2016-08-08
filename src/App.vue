@@ -189,7 +189,7 @@ export default {
   .main-title
     background #FFF
     padding 10px 15px
-    margin-bottom 5px
+    /*margin-bottom 5px*/
     box-sizing border-box
     clearfix()
 

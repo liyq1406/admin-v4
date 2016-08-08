@@ -10,8 +10,7 @@
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-ghost btn-sm"><i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-                  <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
                 </search-box>
               </div>
             </div>
@@ -149,6 +148,13 @@ export default {
         }
         result.push(dp)
       })
+      if (this.query.length) {
+        result.filter((item) => {
+          let reg = new RegExp(this.query, 'ig')
+          return reg.test(item.name)
+        })
+      }
+      console.log(result)
       return result
     }
   },
@@ -237,25 +243,6 @@ export default {
           content: locales[Vue.config.lang].errors[res.data.error.code]
         })
       })
-    },
-
-    // 搜索
-    handleSearch () {
-      if (this.query.length === 0) {
-        this.getDatapoints()
-        this.getDatapointValues()
-      }
-    },
-
-    // 切换搜索
-    toggleSearching () {
-      this.searching = !this.searching
-    },
-
-    // 取消搜索
-    cancelSearching () {
-      this.getDatapoints()
-      this.getDatapointValues()
     },
 
     // 连接

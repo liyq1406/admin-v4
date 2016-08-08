@@ -164,7 +164,7 @@ export default {
       this.getCurrProduct(this.$route.params.product_id)
       this.getDeviceGeography()
       this.getDeviceInfo()
-      this.getVDeviceInfo()
+      this.getVDevice()
     },
 
     data (transition) {
@@ -245,8 +245,8 @@ export default {
      * 获取虚拟设备数据
      * @author shengzhi
      */
-    getVDeviceInfo () {
-      api.product.getVDeviceInfo(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+    getVDevice () {
+      api.product.getVDevice(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
         if (res.status === 200) {
           this.setCurrVirtualDevice(res.data)
           // this.deviceInfo.onlineLong.value = '100小时'

@@ -1,7 +1,7 @@
 <template>
   <div class="v-pager">
     <div class="fr">
-      <div class="v-pager-control">
+      <div class="v-pager-control" v-if="!simple">
         <v-select width="30px" :label="countPerPage.toString()" size="small">
           <span slot="label">显示行数：</span>
           <select v-model="countPerPage" @change="onCountChange">
@@ -9,7 +9,7 @@
           </select>
         </v-select>
       </div>
-      <div class="v-pager-control">
+      <div class="v-pager-control" v-if="!simple">
         <span>共{{ pages }}页，转到</span>
         <div class="input-text-wrap">
           <input type="number" class="input-text input-text-sm" v-model="destPage" @keyup.enter="goToPage">
