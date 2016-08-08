@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { uniformDate } from 'src/filters'
+
 export default {
   name: 'Line',
 
@@ -41,12 +43,6 @@ export default {
     }
   },
 
-  ready () {
-    if (!this.chart) {
-      this.render()
-    }
-  },
-
   watch: {
     // 监听数据变化，渲染图表
     data () {
@@ -69,11 +65,31 @@ export default {
     }
   },
 
+  ready () {
+    if (!this.chart) {
+      this.render()
+    }
+  },
+
   methods: {
+    /**
+     * 格式化日期对象
+     * @param  {[type]} data [description]
+     * @return {[type]}      [description]
+     */
+    format (data) {
+      if (this.scale === 'day') {
+        data.map((item) => {
+          item.date = uniformDate(new Date(item.date))
+        })
+      }
+      return data
+    },
     render () {
       if (!this.data || this.data.length <= 0) {
         return
       }
+      var data = this.format(this.data)
 
       // 默认配置
       var defaults = {
@@ -113,11 +129,11 @@ export default {
         title: null
       })
 
-      chart.source(this.data, defs)
+      chart.source(data, defs)
 
       let line = chart.line().position('date*val').size(2)
 
-      if (this.data[0].hasOwnProperty('name')) {
+      if (data[0].hasOwnProperty('name')) {
         line.color('name')
       }
 

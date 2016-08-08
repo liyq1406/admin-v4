@@ -401,19 +401,19 @@ export default {
       // test: [
       //   {
       //     date: new Date('2016-08-06'),
-      //     count: 5
+      //     val: 5
       //   },
       //   {
       //     date: new Date('2016-08-05'),
-      //     count: 6
+      //     val: 6
       //   },
       //   {
       //     date: new Date('2016-08-04'),
-      //     count: 3
+      //     val: 3
       //   },
       //   {
       //     date: new Date('2016-08-03'),
-      //     count: 3
+      //     val: 3
       //   }
       // ]
     }
@@ -429,11 +429,12 @@ export default {
       var isAddDevice = this.chartCondition.type === 2
       this.trendsData.map((item) => {
         var trend = {
-          date: new Date(item.day),
-          count: isAddDevice ? item.add_device : item.add_heavy_buger
+          date: item.day,
+          val: isAddDevice ? item.add_device : item.add_heavy_buger
         }
         result.push(trend)
       })
+      result = result.length ? result : null
       return result
     },
     /**
@@ -551,20 +552,6 @@ export default {
     }
   },
   ready () {
-    // this.trends = Mock.mock({
-    //   'list|14': [{
-    //     'date|+1': [
-    //       new Date(2016, 7, 15),
-    //       new Date(2016, 7, 16),
-    //       new Date(2016, 7, 17),
-    //       new Date(2016, 7, 18),
-    //       new Date(2016, 7, 19),
-    //       new Date(2016, 7, 20),
-    //       new Date(2016, 7, 21)
-    //     ],
-    //     'count|+1': [6, 8, 9, 3, 9, 3, 9]
-    //   }]
-    // }).list
   },
   methods: {
     /**
@@ -578,6 +565,38 @@ export default {
       // alert(startDate)
       // alert(endDate)
       api.statistics.getHeavyBugerTrend(startDate, endDate).then((res) => {
+        // res.data = [
+        //   {
+        //     day: '2016-08-06',
+        //     add_heavy_buger: 6,
+        //     add_device: 2
+        //   },
+        //   {
+        //     day: '2016-08-05',
+        //     add_heavy_buger: 6,
+        //     add_device: 2
+        //   },
+        //   {
+        //     day: '2016-08-04',
+        //     add_heavy_buger: 4,
+        //     add_device: 2
+        //   },
+        //   {
+        //     day: '2016-08-03',
+        //     add_heavy_buger: 3,
+        //     add_device: 2
+        //   },
+        //   {
+        //     day: '2016-08-02',
+        //     add_heavy_buger: 2,
+        //     add_device: 2
+        //   },
+        //   {
+        //     day: '2016-08-01',
+        //     add_heavy_buger: 1,
+        //     add_device: 2
+        //   }
+        // ]
         this.trendsData = res.data
       }).catch((res) => {
         this.handleError(res)
