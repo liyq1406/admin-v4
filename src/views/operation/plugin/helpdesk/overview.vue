@@ -6,12 +6,13 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select :label="product.name" width="110px" size="small">
+          <!-- <v-select :label="product.name" width="110px" size="small">
             <span slot="label">产品</span>
             <select v-model="product" @change="getFeedbackList">
               <option v-for="prod in products" :value="prod">{{prod.name}}</option>
             </select>
-          </v-select>
+          </v-select> -->
+          <float-select :list="list"></float-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -119,6 +120,7 @@ import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Pie from 'components/g2-charts/Pie'
+import FloatSelect from 'components/FloatSelect'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
@@ -130,6 +132,7 @@ export default {
 
   components: {
     'v-select': Select,
+    FloatSelect,
     Pie,
     RadioButtonGroup,
     DateTimeRangePicker,
@@ -145,6 +148,25 @@ export default {
 
   data () {
     return {
+      list: [{
+        value: 1,
+        label: '电饭锅'
+      }, {
+        value: 1,
+        label: '热水器'
+      }, {
+        value: 1,
+        label: '电水壶'
+      }, {
+        value: 1,
+        label: '电热毯子'
+      }, {
+        value: 1,
+        label: '电吹风'
+      }, {
+        value: 1,
+        label: '电热水壶'
+      }],
       product: {
         name: ''
       },
@@ -213,7 +235,7 @@ export default {
     products () {
       if (this.products.length > 0) {
         this.product = this.products[0]
-        this.getFeedbackList()
+        // this.getFeedbackList()
       }
     }
   },

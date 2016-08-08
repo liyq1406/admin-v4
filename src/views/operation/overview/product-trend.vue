@@ -172,7 +172,10 @@ export default {
       if (products.length > 5) {
         products = products.slice(products.length - 5)
       }
-      this.repaintTopFive = true
+      this.repaintTopFive = false
+      setTimeout(() => {
+        this.repaintTopFive = true
+      }, 0)
       return products
 
       // if (window.G2) {
@@ -218,7 +221,7 @@ export default {
       })
     },
     activatedSelect () {
-      this.repaintTopFive = false
+      // this.repaintTopFive = false
       this.getActivatedProductsTrend(this.products, this.period)
     },
     // 获取上一个取值周期的所有数据，为了计算平均增长
