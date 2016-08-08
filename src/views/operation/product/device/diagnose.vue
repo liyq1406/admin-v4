@@ -53,7 +53,7 @@
                   </div>
                 </td>
               </tr>
-              <tr v-if="datapoints.length === 0">
+              <tr v-if="datapointList.length === 0">
                 <td colspan="4" class="tac">
                   <i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
                   <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
@@ -149,13 +149,13 @@ export default {
         result.push(dp)
       })
       if (this.query.length) {
-        result.filter((item) => {
+        result = result.filter((item) => {
           let reg = new RegExp(this.query, 'ig')
           return reg.test(item.name)
         })
       }
-      console.log(result)
-      return result
+
+      return _.orderBy(result, ['index'], ['asc'])
     }
   },
 
