@@ -1,10 +1,10 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
-      <div class="filter-bar filter-bar-head">
+      <div class="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <date-time-range-picker :periods="periods" @timechange="getSpecial"></date-time-range-picker>
+            <date-time-multiple-picker :periods="periods" @timechange="getSpecial"></date-time-multiple-picker>
           </div>
         </div>
       </div>
