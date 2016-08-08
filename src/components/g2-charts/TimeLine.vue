@@ -58,10 +58,10 @@ export default {
           defs.date.mask = 'HH:MM'
         }
         this.chart.source(this.data, defs)
-        if (this.data.length >= 30) {
+        if (this.data.length >= 30 && this.point) {
           this.point.size(0)
           // this.point = point
-        } else {
+        } else if (this.point) {
           this.point.size(4)
         }
         this.chart.repaint()
