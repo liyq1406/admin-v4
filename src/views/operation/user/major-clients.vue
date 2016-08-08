@@ -34,7 +34,7 @@
             </div> -->
           </div>
         </div>
-        <time-line :data="trends" :type="'smooth'"></time-line>
+        <time-line :data="trends"></time-line>
       </div>
     </div>
     <!-- End: 趋势曲线图 -->

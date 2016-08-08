@@ -23,7 +23,7 @@
     <!-- <div class="panel">
       <div class="panel-bd">
         <div class="with-loading">
-          <time-line :data="trends" :type="'smooth'"></time-line>
+          <time-line :data="trends"></time-line>
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>

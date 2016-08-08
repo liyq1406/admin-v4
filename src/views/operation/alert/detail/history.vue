@@ -9,7 +9,7 @@
         </div>
       </div>
       <div class="">
-        <time-line :data="trendData" :type="'smooth'"></time-line>
+        <time-line :data="trendData"></time-line>
       </div>
     </div>
     <div class="panel-bd">

@@ -24,10 +24,10 @@
       </div>
       <div class="row">
         <div class="col-24" v-if="trendTabIndex === 0">
-          <time-line :data="activatedData" type="smooth" :margin="customMargin"></time-line>
+          <time-line :data="activatedData" :margin="customMargin"></time-line>
         </div>
         <div class="col-24" v-else>
-          <time-line :data="totalData" type="smooth" :margin="customMargin"></time-line>
+          <time-line :data="totalData" :margin="customMargin"></time-line>
         </div>
       </div>
     </div>

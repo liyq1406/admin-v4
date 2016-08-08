@@ -18,7 +18,7 @@
             </div>
           </div>
         </div>
-        <time-line :data="trends" :type="'smooth'"></time-line>
+        <time-line :data="trends"></time-line>
       </div> -->
     </div>
     <div class="row statistic-group">

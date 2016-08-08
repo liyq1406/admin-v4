@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="">
-      <time-line :data="trendData" :type="'smooth'"></time-line>
+      <time-line :data="trendData"></time-line>
     </div>
 
     <div class="row statistic-group mb30 bt">
@@ -48,7 +48,7 @@
     <!-- <div class="panel no-split-line">
       <div class="panel-bd">
         <div class="with-loading">
-          <time-line :data="alertTrends" :type="'smooth'"></time-line>
+          <time-line :data="alertTrends"></time-line>
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
           </div>

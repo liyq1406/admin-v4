@@ -73,7 +73,9 @@ export var animatedNumber = {
     }
     var loop = () => {
       this.end = (Math.abs(this.end + step) < Math.abs(val)) ? (this.end + step) : val
-      this.el.innerHTML = this.end
+      if (this.el) {
+        this.el.innerHTML = this.end
+      }
       if (Math.abs(this.end) < Math.abs(val)) {
         window.requestAnimationFrame(loop)
       }

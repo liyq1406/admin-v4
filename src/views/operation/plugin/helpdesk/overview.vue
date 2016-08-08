@@ -31,7 +31,7 @@
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
-        <time-line :data="trends.data" :type="'smooth'"></time-line>
+        <time-line :data="trends.data"></time-line>
       </div>
     </div>
     <div class="row statistic-group mb30">

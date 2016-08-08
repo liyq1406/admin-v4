@@ -11,10 +11,10 @@
       </div>
       <div class="row">
         <div class="col-14" v-if="trendTabIndex === 0">
-          <time-line :data="activatedData" :type="'smooth'"></time-line>
+          <time-line :data="activatedData"></time-line>
         </div>
         <div class="col-14" v-else>
-          <time-line :data="totalData" :type="'smooth'"></time-line>
+          <time-line :data="totalData"></time-line>
         </div>
         <div class="col-9">
           <div class="row">

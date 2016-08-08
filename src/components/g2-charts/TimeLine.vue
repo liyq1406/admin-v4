@@ -132,9 +132,13 @@ export default {
       chart.source(data, defs)
 
       let line = chart.line().position('date*val').size(2)
+      let point = chart.point().position('date*val')
 
       if (data[0].hasOwnProperty('name')) {
         line.color('name')
+        if (this.data.length < 30) {
+          point.color('name').shape('name', ['circle', 'rect', 'diamond']).size(4)
+        }
       }
 
       switch (this.type) {

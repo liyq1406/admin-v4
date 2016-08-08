@@ -21,13 +21,13 @@
       </div>
       <div class="row bottom-line-height">
         <div class="mb20" v-if="currIndex === 0">
-          <time-line :data="addData" :type="'smooth'" :margin="customMargin"></time-line>
+          <time-line :data="addData" :margin="customMargin"></time-line>
         </div>
         <div class="mb20" v-if="currIndex === 1">
-          <time-line :data="activeData" :type="'smooth'" :margin="customMargin"></time-line>
+          <time-line :data="activeData" :margin="customMargin"></time-line>
         </div>
         <div class="mb20" v-if="currIndex === 2">
-          <time-line :data="totalData" :type="'smooth'" :margin="customMargin"></time-line>
+          <time-line :data="totalData" :margin="customMargin"></time-line>
         </div>
       </div>
     </panel>

@@ -9,7 +9,7 @@
       </div>
       <div class="row">
         <div class="col-14">
-          <time-line :data="activeData" type="smooth"></time-line>
+          <time-line :data="activeData"></time-line>
         </div>
         <div class="col-10">
           <pie :data="activatedProportion"></pie>
