@@ -244,20 +244,20 @@ export default {
       this.loadingData = true
       var { 'device_id': deviceId, 'product_id': productId } = this.$route.params
       api.product.getUsers(productId, deviceId).then((res) => {
-        res.data.list = [
-          {
-            'user_id': '1605923406',
-            'role': 1, // 角色权限
-            'from_id': '123', // 来源用户ID
-            'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-          },
-          {
-            'user_id': '1999245132',
-            'role': 0, // 角色权限
-            'from_id': '123', // 来源用户ID
-            'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-          }
-        ]
+        // res.data.list = [
+        //   {
+        //     'user_id': '1605923406',
+        //     'role': 1, // 角色权限
+        //     'from_id': '123', // 来源用户ID
+        //     'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        //   },
+        //   {
+        //     'user_id': '1999245132',
+        //     'role': 0, // 角色权限
+        //     'from_id': '123', // 来源用户ID
+        //     'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
+        //   }
+        // ]
         // 根据获取回来的id去获取用户详情
         this.deviceUsers = res.data.list
         if (this.deviceUsers.length) {
