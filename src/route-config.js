@@ -1139,7 +1139,14 @@ let configRouter = (router) => {
    * @return {[type]}             [description]
    */
   // 需要appToken的页面路径 (数组)
-  const NEEDTOKRNPATHS = ['broadcast', 'cookbook', 'operate', 'content']
+  const NEEDTOKRNPATHS = [
+    'broadcast', // 消息推送
+    'recipe', // 云菜谱
+    'cookbook',
+    'operate',
+    'content',
+    'helpdesk' // 用户反馈
+  ]
 
   // apptoken过期时间 单位小时 可以输入小数
   const INVALIDTIME = 1 // (小时)
