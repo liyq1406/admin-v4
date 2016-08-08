@@ -31,7 +31,7 @@
       <ul>
         <li class="btn" @click.stop="toggleToDate">{{ year + '年 ' + month + '月' + date + '日' }}</li>
       </ul>
-      <input type="tel" placeholder="00" v-model="hour" maxlength="2"> : <input type="tel" placeholder="00" v-model="min" maxlength="2">
+      <input @click.stop="" type="tel" placeholder="00" v-model="hour" maxlength="2"> : <input @click.stop="" type="tel" placeholder="00" v-model="min" maxlength="2">
       <div class="button" :class="{ able: isAble }" @click.stop="checkNow">确定</div>
     </div>
     <div style="clear:both;margin-bottom:10px"></div>
