@@ -1,3 +1,4 @@
+import api from 'api'
 /**
  * 判断路由是否为非管理界面页面
  * @param  {String}  path 路由
@@ -1130,6 +1131,70 @@ let configRouter = (router) => {
     }
     // throttle(transition)
     transition.next()
+  })
+
+  /**
+   * 判断当前页面是否需要apptoken
+   * @param  {[type]} (transition [description]
+   * @return {[type]}             [description]
+   */
+  // 需要appToken的页面路径 (数组)
+  const NEEDTOKRNPATHS = ['broadcast', 'cookbook', 'operate', 'content']
+
+  // apptoken过期时间 单位小时 可以输入小数
+  const INVALIDTIME = 1 // (小时)
+  router.beforeEach((transition) => {
+    // 目标路径
+    var path = transition.to.path
+    // 当前页面是否需要apptoken的标志位 默认false
+    var thisPathNeedAppToken = false
+    // 计算当前页面是否需要apptoken的标志位
+    NEEDTOKRNPATHS.map((item) => {
+      var reg = new RegExp('operation/plugins/' + item)
+      if (reg.test(path)) {
+        thisPathNeedAppToken = true
+        return
+      }
+    })
+    // transition.next()
+    if (thisPathNeedAppToken) { // 当前目标路径需要apptoken
+      // appToken是否过期标志位
+      var appId = transition.to.params.app_id
+      var pluginsToken = {}
+      if (window.localStorage.pluginsToken) {
+        pluginsToken = JSON.parse(window.localStorage.pluginsToken)
+      }
+      var appTokenInvalidTime = pluginsToken[appId] && pluginsToken[appId].appTokenInvalidTime - 0
+      var appTokenValid = appTokenInvalidTime > +new Date()
+      if (appTokenValid) { // appToken未过期逻辑
+        transition.next()
+      } else { // appToken过期
+        var params = {
+          'app_id': appId
+        }
+        api.plugin.getAppToKen(params).then((res) => {
+          var params = {
+            appTokenInvalidTime: +new Date() + (1000 * 60 * 60) * INVALIDTIME,
+            token: res.data.access_token,
+            app_id: res.data.app_id
+          }
+          // 重置appToken过期时间
+          pluginsToken[appId] = params
+          window.localStorage.pluginsToken = JSON.stringify(pluginsToken)
+          // window.localStorage[appId + 'AppToken'] = JSON.stringify(params)
+          transition.next()
+        }).catch((err) => {
+          router.app.handleError(err)
+          if (transition.from.path) { // 判断有无上一个页面 有的话返回上一个页面 没有的话跳回概览页
+            router.replace(transition.from.path)
+          } else {
+            router.replace('/dashboard')
+          }
+        })
+      }
+    } else { // 当前目标路径不在数组内 不需要apptoken
+      transition.next()
+    }
   })
 }
 

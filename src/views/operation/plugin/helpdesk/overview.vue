@@ -220,19 +220,15 @@ export default {
 
   methods: {
     getFeedbackList () {
-      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-        var params = {
-          query: {
-            product_id: this.product.id
-          }
+      var params = {
+        query: {
+          product_id: this.product.id
         }
-        api.helpdesk.getFeedbackList(this.$route.params.app_id, token, params).then((res) => {
-          if (res.status === 200) {
-            console.log(res.data)
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      }
+      api.helpdesk.getFeedbackList(this.$route.params.app_id, params).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data)
+        }
       }).catch((res) => {
         this.handleError(res)
       })

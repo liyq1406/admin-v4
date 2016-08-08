@@ -22,12 +22,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  getFeedbackList (appID, token, params) {
+  getFeedbackList (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
