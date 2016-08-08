@@ -1,5 +1,5 @@
 <template>
-  <div data-toggle="buttons" :class="{'redline': hasline}" class="x-radio-btn-group">
+  <div data-toggle="buttons" :class="classes">
     <slot name="label"></slot>
     <label v-for="item in items" :class="{'active': item.value === value}" class="btn">
       <input type="radio" autocomplete="off" checked="{{ checked }}" @click="onSelect(item.value)"/>{{ item.label }}
@@ -24,6 +24,21 @@
       hasline: {
         type: Boolean,
         default: false
+      },
+      // 颜色 [red|...]
+      color: {
+        type: String,
+        default: ''
+      }
+    },
+
+    computed: {
+      classes () {
+        let result = ['x-radio-btn-group']
+        if (this.color) {
+          result.push(`x-radio-btn-group-${this.color}`)
+        }
+        return result.join(' ')
       }
     },
 
@@ -106,11 +121,18 @@
     display inline-block
     margin-right 5px
 
-.redline
+.x-radio-btn-group-red
+  .btn.active
+    background #DA4E37
+    color: #FFF
+    box-shadow inset 1px 1px 3px #c00
+    border-color #A52429
+
+/*.redline
   label
     background none!important
     color #666666
   label.active
     border-bottom 3px solid #DA4E37
-    color #DA4E37
+    color #DA4E37*/
 </style>
