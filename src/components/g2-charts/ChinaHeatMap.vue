@@ -1,5 +1,7 @@
 <template>
-  <div class="x-china-heat-map"></div>
+  <div class="x-china-heat-map">
+    <div v-if="show" id="map-item"></div>
+  </div>
 </template>
 
 <script>
@@ -27,6 +29,13 @@ export default {
     }
   },
 
+  data () {
+    return {
+      chart: null,
+      show: true
+    }
+  },
+
   ready () {
     if (!this.chart) {
       this.render()
@@ -37,7 +46,13 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        this.chart.changeData(this.data)
+        this.show = false
+        setTimeout(() => {
+          this.show = true
+        }, 0)
+        setTimeout(() => {
+          this.render()
+        }, 0)
       } else {
         this.render()
       }
@@ -46,6 +61,8 @@ export default {
 
   methods: {
     render () {
+      var el = document.getElementById('map-item')
+
       if (!this.data || this.data.length <= 0) {
         return
       }
@@ -62,16 +79,12 @@ export default {
         item.longitude = coordinates.longitude
       })
 
-      /* eslint-disable */
-      // var userData = [{"province":"北京市","city":"延庆","latitude":40,"longitude":115.95,"out-temperature":23.9},{"province":"北京市","city":"密云","latitude":40,"longitude":116.83,"out-temperature":26.2}]
-      /* eslint-enable */
-
-      var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
+      var width = el.clientWidth || el.parentNode.clientWidth
       var height = width * (6 / 7)
       var mt = (width - height) / 2
       // 默认配置
       var defaults = {
-        container: this.$el,
+        container: el,
         // forceFit: true,
         width: width,
         height: height,
@@ -81,6 +94,8 @@ export default {
       }
 
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
+
+      this.chart = chart
 
       chart.source(this.data)
 
@@ -112,9 +127,11 @@ export default {
 <style lang="stylus">
 @import '../../assets/stylus/common'
 
-.x-china-map
+.x-china-heat-map
   display inline-block
   max-width 600px
+  min-width 500px
+  height 450px
   text-align center
   margin 0 auto
 </style>

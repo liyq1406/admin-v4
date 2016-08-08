@@ -1,6 +1,6 @@
 <template>
   <div>
-    <panel title="产品分布">
+    <panel title="用户分布">
       <div class="row border-top-style">
         <div class="col-13 tac">
           <china-map :data="data"></china-map>

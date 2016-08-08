@@ -122,8 +122,13 @@ export default {
     }
   },
 
+  route: {
+    data () {
+      this.getRegion(this.$route.params.id)
+    }
+  },
+
   ready () {
-    this.getRegion(this.$route.params.id)
   },
 
   methods: {
