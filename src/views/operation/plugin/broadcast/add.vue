@@ -15,7 +15,10 @@
                 <div class="form-row row">
                   <!-- <radio-button-group :items="types" :value.sync="model.type"></radio-button-group> -->
                   <div class="check-group-box tab-s2">
-                    <ul>
+                    <radio-button-group :items="option" :value.sync="model.type">
+                      <span slot="label" class="label">请选择推送范围</span>
+                    </radio-button-group>
+                    <!-- <ul>
                       <li :class="{'active': model.type === 1}" @click="model.type = 1">
                         <i class="fa fa-{{model.type === 1?'check-': ''}}circle-o"></i>
                         所有用户
@@ -28,7 +31,7 @@
                         <i class="fa fa-{{model.type === 3?'check-': ''}}circle-o"></i>
                         单个用户
                       </li>
-                    </ul>
+                    </ul> -->
                   </div>
                 </div>
                 <div v-show="model.type===1">
@@ -295,6 +298,16 @@
 
     data () {
       return {
+        option: [
+          {
+            label: '新增客户',
+            value: 1
+          },
+          {
+            label: '新增设备',
+            value: 2
+          }
+        ],
         validation: {},
         notSendTags: '',
         tags: {
@@ -415,14 +428,12 @@
         /*line-height 40px*/
         border-bottom 1px dashed #ccc
 
-    .check-group-box
-      .fa
-        /*color #999*/
+    /*.check-group-box
         font-size 18px
         position relative
         top 2px
         &.fa-circle-o
-          color #999
+          color #999*/
   .panel
     border-bottom 0
   .select-group
