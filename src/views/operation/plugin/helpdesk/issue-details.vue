@@ -36,41 +36,52 @@
             </div>
           </div>
         </gallery>
-        <div class="issue-reply">
+        <div class="issue-reply" v-if="firstReply">
           <div class="comment-metas">
-            <span>客服_6120    2016-07-12 16:09:11</span>
+            <span>{{firstReply.name}}    {{firstReply.create_time | formatDate }}</span>
           </div>
-          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
+          <div class="comment-desc">{{ firstReply.content }}</div>
         </div>
       </div>
-      <div class="comment-list-item">
+      <!-- <div class="comment-list-item">
         <div class="comment-metas">
           <span>2016-07-12 18:21:09</span>
         </div>
         <div class="comment-desc">烘烤模式还是不管用，是不是坏了</div>
-        <!-- <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
+      </div> -->
+      <div v-for="item in dealList" class="comment-list-item">
+        <div class="comment-metas">
+          <span>{{ item.user.create_time | formatDate }}</span>
+        </div>
+        <div class="comment-desc">{{ item.user.content }}</div>
+        <gallery :pics="item.user.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
           <div class="pic-grid">
-            <div class="pic" v-for="pic in pics" track-by="$index">
+            <div class="pic" v-for="pic in item.user.image" track-by="$index">
               <img :src="pic" alt="" @click="handleImgClick($index)">
             </div>
           </div>
-        </gallery> -->
-        <!-- <div class="issue-reply">
+        </gallery>
+        <div class="issue-reply" v-if="item.service !== {}">
           <div class="comment-metas">
-            <span>客服_6120    2016-02-12 16:09:11</span>
+            <span>{{item.service.name}}    {{item.service.create_time | formatDate }}</span>
           </div>
-          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
-        </div> -->
+          <div class="comment-desc">{{ item.service.content }}</div>
+        </div>
       </div>
     </div>
     <div class="reply-form mt20">
       <div class="panel-sub-hd">客服回复</div>
       <div class="form">
-        <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
-          <textarea class="input-text" v-model="dealRecord"></textarea>
+        <div v-if="inputAble">
+          暂时无法回复
         </div>
-        <div class="form-actions mt10">
-          <button class="btn btn-primary" @click="submitRecord">提交</button>
+        <div v-else>
+          <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
+            <textarea class="input-text" v-model="dealRecord"></textarea>
+          </div>
+          <div class="form-actions mt10">
+            <button class="btn btn-primary" @click="submitRecord">提交</button>
+          </div>
         </div>
       </div>
     </div>
@@ -101,58 +112,66 @@ export default {
 
   data () {
     return {
+      // 客服第一个回复
+      firstReply: {},
+      inputAble: false,
+      // 客户与客服剩下的反馈数组
+      // otherArr: [{
+      //   user: {},
+      //   service: {}
+      // }],
       userInfo: {
         nickname: {
           label: '昵称',
-          value: 'xiaobai_123'
+          value: ' '
         },
         create_time: {
           label: '提交时间',
-          value: '2016-07-12  16:09:11'
+          value: ' '
         },
         email: {
           label: '邮箱',
-          value: 'sherly@163.com'
+          value: ' '
         },
         phone: {
           label: '手机',
-          value: '13800138000'
+          value: ' '
         }
       },
       deviceInfo: {
         mac: {
           label: 'MAC',
-          value: '1122eebb0088'
+          value: ' '
         },
         onlineLong: {
           label: '累计在线时长',
-          value: '1.6小时'
+          value: ' '
         },
         sn: {
           label: '序列号',
-          value: 'SN918208271983'
+          value: ' '
         },
         model: {
           label: '型号',
-          value: 'wifi-强力烤箱'
+          value: ' '
         }
       },
       appInfo: {
         device: {
           label: '设备信息',
-          value: 'iPhone 6S'
+          value: ' '
         },
         os: {
           label: '系统版本',
-          value: 'iOS 10.1'
+          value: ' '
         },
         lang: {
           label: '语言',
-          value: '简体中文'
+          value: ' '
         },
         resolution: {
           label: '分辨率',
-          value: '1080_1024'
+          value: ' '
         }
       },
       tabItems: ['用户信息', '设备信息', 'APP信息'],
@@ -181,6 +200,46 @@ export default {
     data () {
       this.getIssue()
       this.getFeedbackRecord()
+    }
+  },
+  computed: {
+    // 处理反馈记录
+    dealList () {
+      var otherArr = []
+      var newobj = {
+        user: {},
+        service: {}
+      }
+      this.recordList.map((item) => {
+        // 获取偶数元素(客户回复)
+        if (this.recordList.indexOf(item) % 2 === 0) {
+          // var evenNo = this.recordList.indexOf(item) / 2
+          // this.otherArr[evenNo].user.push(item)
+          newobj.user = item
+          // 如果这是数组最后一个元素，则直接返回
+          if (this.recordList.indexOf(item) + 1 === this.recordList.length) {
+            newobj.service = {}
+            otherArr.push(newobj)
+          }
+        } else {
+          // 获取奇数元素(客服回复)
+          // var oddNo = (this.recordList.indexOf(item) - 1) / 2
+          // this.otherArr[oddNo].service = item
+          newobj.service = item
+          // 如果这不是最后一个元素，继续循环
+          if (this.recordList.indexOf(item) + 1 < this.recordList.length) {
+            otherArr.push(newobj)
+            newobj = {
+              user: {},
+              service: {}
+            }
+          } else {
+            // 如果是最后一个元素
+            otherArr.push(newobj)
+          }
+        }
+      })
+      return otherArr
     }
   },
 
@@ -219,9 +278,9 @@ export default {
       api.device.getInfo(this.issue.product_id, this.issue.device_id).then((res) => {
         if (res.status === 200) {
           // 设备信息
-          this.deviceInfo.mac.value = this.res.mac
-          this.deviceInfo.sn.value = this.res.sn
-          this.deviceInfo.model.value = this.res.mcu_mod
+          this.deviceInfo.mac.value = res.data.mac
+          this.deviceInfo.sn.value = res.data.sn
+          this.deviceInfo.model.value = res.data.mcu_mod
         }
       }).catch((err) => {
         this.handleError(err)
@@ -233,17 +292,65 @@ export default {
         limit: 100,
         query: {
           feedback_id: this.$route.params.id
+        },
+        // 按创建时间升序获取
+        order: {
+          create_time: 1
         }
       }
       api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
-        if (res.status === 200 && res.data.list.length > 0) {
+        if (res.status === 200) {
+          console.log(11111)
           console.log(res.data.list)
+          this.firstReply = res.data.list[0]
           this.recordList = res.data.list
+          // 去除第一个客服回复
+          this.recordList.map((item) => {
+            if (this.recordList.indexOf(item) === 0) {
+              this.recordList.$remove(item)
+            }
+          })
+          // 如果最后一个回复的是客户，打开输入框
+          if (this.recordList.length % 2 !== 0 || this.firstReply) {
+            this.inputAble = true
+          } else {
+            this.inputAble = false
+          }
+          // this.recordList = [
+          //   {_id: '记录ID',
+          //   user_id: '1223',
+          //   feedback_id: '123456',
+          //   reply_id: '12345678',
+          //   name: '客服',
+          //   content: '请致电售后',
+          //   image: ['2.jpg'],
+          //   creator: '小明',
+          //   create_time: '2016-05-17T01:03:27.453Z'},
+          //   {_id: '记录ID',
+          //   user_id: '1223',
+          //   feedback_id: '123456',
+          //   reply_id: '12345678',
+          //   name: '客服',
+          //   content: '请致电售后',
+          //   image: ['2.jpg'],
+          //   creator: '小明',
+          //   create_time: '2016-05-17T01:03:27.453Z'},
+          //   {_id: '记录ID',
+          //   user_id: '1223',
+          //   feedback_id: '123456',
+          //   reply_id: '12345678',
+          //   name: '客服',
+          //   content: '请致电售后',
+          //   image: ['2.jpg'],
+          //   creator: '小明',
+          //   create_time: '2016-05-17T01:03:27.453Z'}
+          // ]
+          // this.dealList(this.recordList)
         } else {
           this.recordList = []
         }
       }).catch((err) => {
-        this.handleErroe(err)
+        this.handleError(err)
       })
     },
     /**
@@ -283,33 +390,37 @@ export default {
       } else {
         this.isRecordEmpty = false
         this.outOfLimit = false
-        var self = this
-        var argvs = arguments
-        var fn = self.getIssues
         var params = {
           feedback_id: this.$route.params.id,
-          name: this.currentMember.name,
+          name: '客服',
           content: this.dealRecord,
           create_time: new Date(),
-          type: 0
+          reply_id: this.issue.reply_id
         }
-        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-          api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, token, params).then((res) => {
-            if (res.status === 200) {
-              this.resetSumit()
-              this.getFeedbackRecord()
-            }
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'helpdesk'
-            }
-            self.handlePluginError(err, env)
-          })
+        api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, params).then((res) => {
+          if (res.status === 200) {
+            this.resetSumit()
+            this.changeStatus()
+            // this.getFeedbackRecord()
+          }
+        }).catch((err) => {
+          this.handleError(err)
         })
       }
+    },
+    // 更新处理状态
+    changeStatus () {
+      var params = {
+        treated_time: new Date(),
+        status: 1
+      }
+      api.helpdesk.updateFeedbackList(this.$route.params.app_id, this.issue._id, params).then((res) => {
+        if (res.status === 200) {
+          this.getFeedbackRecord()
+        }
+      }).catch((err) => {
+        this.handleError(err)
+      })
     }
   }
 }

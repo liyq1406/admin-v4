@@ -32,6 +32,21 @@ export default {
       }
     )
   },
+  /**
+   * 更新用户反馈列表
+   * @param  {string} appID, {string} token {object} params
+   * @return promise
+   */
+  updateFeedbackList (appID, feedbackId, params) {
+    return http.put(
+      `${API_SERVER.feedback}/${appID}/api/feedback/update/${feedbackId}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
+    )
+  },
 
   /**
    * 查询标签

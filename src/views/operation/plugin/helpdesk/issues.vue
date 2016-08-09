@@ -287,7 +287,6 @@ export default {
   // TODO 优化初始化获取 vuex 产品的流程
   route: {
     data () {
-      console.log(21111)
       this.init()
       // this.getIssues()
       this.getLabels()
@@ -354,7 +353,6 @@ export default {
         limit: 20
       }
       api.helpdesk.getFeedbackLabel(this.$route.params.app_id, params).then((res) => {
-        console.log(res)
         if (res.status === 200 && res.data.list.length > 0) {
           this.issueTypeOptions = this.issueTypeOptions.concat(res.data.list)
         }
