@@ -8,8 +8,11 @@
           </div>
         </div>
       </div>
-      <div class="">
-        <time-line :data="trendData"></time-line>
+      <div v-if="showHour">
+        <time-line :data="trendData" :scale="scale"></time-line>
+      </div>
+      <div v-else>
+        <time-line :data="trendData" :scale="scale"></time-line>
       </div>
     </div>
     <div class="panel-bd">
@@ -84,6 +87,7 @@ import TimeLine from 'components/g2-charts/TimeLine'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import dateFormat from 'date-format'
+import {getLastYearDate} from 'helpers/utils'
 
 export default {
   name: 'record-history',
@@ -101,6 +105,7 @@ export default {
 
   data () {
     return {
+      scale: 'hour',
       loadingData: false,
       records: [],
       deviceID: '',
@@ -121,35 +126,6 @@ export default {
       ],
       startTimePick: '',
       endTimePick: '',
-      // trendData: [{
-      //   date: '9/20',
-      //   val: 10,
-      //   name: '温度'
-      // }, {
-      //   date: '9/21',
-      //   val: 100,
-      //   name: '温度'
-      // }, {
-      //   date: '9/22',
-      //   val: 100,
-      //   name: '温度'
-      // }, {
-      //   date: '9/23',
-      //   val: 100,
-      //   name: '温度'
-      // }, {
-      //   date: '9/24',
-      //   val: 120,
-      //   name: '温度'
-      // }, {
-      //   date: '9/25',
-      //   val: 100,
-      //   name: '温度'
-      // }, {
-      //   date: '9/26',
-      //   val: 150,
-      //   name: '温度'
-      // }],
       trendData: [],
       period: 1,
       periods: [1, 7, 30],
@@ -164,7 +140,10 @@ export default {
       light: {
         name: '轻微',
         data: []
-      }
+      },
+      recvDataCount: 0,
+      tempTrendData: [],
+      showHour: true
     }
   },
 
@@ -328,6 +307,7 @@ export default {
 
     // 获取告警趋势图表数据
     getTagTrend () {
+      this.recvDataCount = 0
       var begin
       var end
       if (this.period === '') {
@@ -372,6 +352,10 @@ export default {
 
     // 处理标签数据
     pushArr (arr) {
+      if (this.recvDataCount === 0) {
+        this.tempTrendData = []
+      }
+      this.recvDataCount++
       var rearr = []
       var name = ''
       if (arr === this.normal) {
@@ -381,22 +365,48 @@ export default {
       } else {
         name = '轻微'
       }
-      arr.forEach((item) => {
-        var i = 0
-        var sum = 0
-        while (i < item.hours.length) {
-          sum = sum + item.hours[i].message
-          i++
-        }
-        rearr.push({
-          date: item.day,
-          val: sum,
-          name: name
+      if (this.scale === 'hour') {
+        arr.forEach((item) => {
+          var i = 0
+          while (i < item.hours.length) {
+            rearr.push({
+              date: item.day + ' ' + item.hours[i].hour + ':00:00',
+              val: item.hours[i].message,
+              name: name
+            })
+            i++
+          }
         })
-      })
-      rearr.forEach((newobj) => {
-        this.trendData.push(newobj)
-      })
+      } else {
+        arr.forEach((item) => {
+          var i = 0
+          var sum = 0
+          while (i < item.hours.length) {
+            sum = sum + item.hours[i].message
+            i++
+          }
+          rearr.push({
+            date: item.day,
+            val: sum,
+            name: name
+          })
+        })
+      }
+
+      if (rearr.length > 0) {
+        rearr.forEach((newobj) => {
+          this.tempTrendData.push(newobj)
+        })
+      }
+      // 数据接收完毕
+      if (this.recvDataCount === 3) {
+        if (this.scale === 'hour') {
+          this.showHour = true
+        } else {
+          this.showHour = false
+        }
+        this.trendData = this.tempTrendData
+      }
       // this.trendData = rearr
       // Array.prototype.push.apply(this.trendData, rearr)
       //
@@ -413,6 +423,31 @@ export default {
       // })
     },
     getSpecial (start, end) {
+      // 过滤选择时间
+      // 不能是未来时间
+      // 不能超过12个月
+      var cur = new Date()
+      if (end.getTime() >= cur.getTime()) {
+        end = cur
+      }
+
+      if (start.getTime() > end.getTime()) {
+        return
+      }
+
+      let lastYear = getLastYearDate(end)
+
+      if (start.getTime() < lastYear.getTime()) {
+        start = lastYear
+      }
+
+      // 如果时间小于等于24小时，显示小时数
+      if (end.getTime() - start.getTime() <= 3600 * 24 * 1000) {
+        this.scale = 'hour'
+      } else {
+        this.scale = 'day'
+      }
+
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end

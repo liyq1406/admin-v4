@@ -48,24 +48,13 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        let defs = {
-          date: {
-            alias: '日期',
-            type: 'time',
-            mask: 'mm-dd'
-          }
-        }
-        if (this.scale === 'hour') {
-          defs.date.mask = 'HH:MM'
-        }
-        this.chart.source(this.data, defs)
         if (this.data.length >= 30 && this.point) {
           this.point.size(0)
           // this.point = point
         } else if (this.point) {
           this.point.size(4)
         }
-        this.chart.repaint()
+        this.chart.changeData(this.data)
       } else {
         this.render()
       }
@@ -172,9 +161,9 @@ export default {
 <style lang="stylus">
 .x-time-line
   .default
-    height 300px
+    height 250px
     width 100%
-    line-height 300px
+    line-height 250px
     display inline-block
     text-align center
 </style>
