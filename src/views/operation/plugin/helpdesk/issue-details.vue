@@ -1,14 +1,14 @@
 <template>
   <div class="issue-details">
     <info-card>
-      <h3>sherlyYang</h3>
+      <h3>{{ issue.user_name }}</h3>
       <div class="desc">
-        <span>智能烤箱_A1</span>
+        <span>{{ issue.product_name }}</span>
       </div>
       <div class="issue-metas">
-        <span class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
-        <span class="issue-status handled hidden"><i class="fa fa-check-square-o"></i>已处理</span>
-        <span class="issue-id">ID:2918291121</span>
+        <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
+        <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span>
+        <span class="issue-id">ID:{{ issue.product_id }}</span>
       </div>
     </info-card>
     <div class="tab-s2 mt20 mb5">
@@ -26,9 +26,9 @@
     <div class="comment-list">
       <div class="comment-list-item">
         <div class="comment-metas">
-          <span>2016-07-12 12:11:21</span>
+          <span>{{ issue.create_time | formatDate }}</span>
         </div>
-        <div class="comment-desc">烘烤模式有时不管用，在连续烤3个小时后就不能正常加热了</div>
+        <div class="comment-desc">{{ issue.content }}</div>
         <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
           <div class="pic-grid">
             <div class="pic" v-for="pic in pics" track-by="$index">
@@ -85,6 +85,7 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
+import { formatDate } from 'src/filters'
 // import _ from 'lodash'
 
 export default {
@@ -156,7 +157,7 @@ export default {
       },
       tabItems: ['用户信息', '设备信息', 'APP信息'],
       currIndex: 0,
-      pics: ['http://img54.foodjx.com/9/20130128/634949908155312500536.jpg'],
+      pics: [],
       currPicIndex: 0,
       isShowGallery: false,
       issue: {},
@@ -185,59 +186,64 @@ export default {
 
   methods: {
     getIssue () {
-      var self = this
-      var argvs = arguments
-      var fn = self.getIssues
       var condition = {
         query: {
           _id: this.$route.params.id
         }
       }
-      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-        api.helpdesk.getFeedbackList(this.$route.params.app_id, token, condition).then((res) => {
-          if (res.status === 200 && res.data.list.length === 1) {
-            this.total = res.data.count
-            this.issue = res.data.list[0]
-            this.pics = res.data.list[0].image || []
-          }
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'helpdesk'
-          }
-          self.handlePluginError(err, env)
-        })
+      api.helpdesk.getFeedbackList(this.$route.params.app_id, condition).then((res) => {
+        if (res.status === 200 && res.data.list.length === 1) {
+          this.total = res.data.count
+          this.issue = res.data.list[0]
+          // 用户信息
+          this.userInfo.nickname.value = this.issue.user_name
+          this.userInfo.create_time.value = formatDate(this.issue.create_time)
+          this.userInfo.email.value = this.issue.email
+          this.userInfo.phone.value = this.issue.phone
+          // APP信息
+          this.appInfo.device.value = this.issue.device_info
+          this.appInfo.os.value = this.issue.system_version
+          this.appInfo.lang.value = this.issue.system_language
+          this.appInfo.resolution.value = this.issue.distinguishability
+          this.pics = this.issue.image || []
+          // 设备信息
+          this.getDeviceInfo()
+        }
+      }).catch((err) => {
+        this.handleError(err)
+      })
+    },
+
+    // 获取设备信息
+    getDeviceInfo () {
+      api.device.getInfo(this.issue.product_id, this.issue.device_id).then((res) => {
+        if (res.status === 200) {
+          // 设备信息
+          this.deviceInfo.mac.value = this.res.mac
+          this.deviceInfo.sn.value = this.res.sn
+          this.deviceInfo.model.value = this.res.mcu_mod
+        }
+      }).catch((err) => {
+        this.handleError(err)
       })
     },
 
     getFeedbackRecord () {
-      var self = this
-      var argvs = arguments
-      var fn = self.getFeedbackRecord
       var condition = {
         limit: 100,
         query: {
           feedback_id: this.$route.params.id
         }
       }
-      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-        api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, token, condition).then((res) => {
-          if (res.status === 200 && res.data.list.length > 0) {
-            this.recordList = res.data.list
-          } else {
-            this.recordList = []
-          }
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'helpdesk'
-          }
-          self.handlePluginError(err, env)
-        })
+      api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
+        if (res.status === 200 && res.data.list.length > 0) {
+          console.log(res.data.list)
+          this.recordList = res.data.list
+        } else {
+          this.recordList = []
+        }
+      }).catch((err) => {
+        this.handleErroe(err)
       })
     },
     /**

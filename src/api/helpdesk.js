@@ -38,12 +38,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  getFeedbackLabel (appID, token, params) {
+  getFeedbackLabel (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback_label/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -54,12 +54,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  saveFeedbackLabel (appID, token, params) {
+  saveFeedbackLabel (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback_label/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -70,12 +70,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  putFeedbackLabel (appID, token, labelID, params) {
+  putFeedbackLabel (appID, labelID, params) {
     return http.put(
       `${API_SERVER.feedback}/${appID}/api/feedback_label/update/${labelID}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -86,12 +86,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  delFeedbackLabel (appID, token, labelID) {
+  delFeedbackLabel (appID, labelID) {
     return http.del(
       `${API_SERVER.feedback}/${appID}/api/feedback_label/delete/${labelID}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -102,12 +102,12 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  getFeedbackRecordList (appID, token, params) {
+  getFeedbackRecordList (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback_record/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -117,12 +117,12 @@ export default {
     * @param  {string} appID, {string} token {object} params
     * @return promise
     */
-  saveFeedbackRecord (appID, token, params) {
+  saveFeedbackRecord (appID, params) {
     return http.post(
       `${API_SERVER.feedback}/${appID}/api/feedback_record/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
