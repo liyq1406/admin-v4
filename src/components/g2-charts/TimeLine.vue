@@ -132,6 +132,9 @@ export default {
       if (this.data.length < 30) {
         point = chart.point().position('date*val').shape('name', ['circle', 'rect', 'diamond']).size(4)
         this.point = point
+      } else {
+        point = chart.point().position('date*val').shape('name', ['circle', 'rect', 'diamond']).size(0)
+        this.point = point
       }
 
       if (data[0].hasOwnProperty('name')) {
