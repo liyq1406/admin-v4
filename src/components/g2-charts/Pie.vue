@@ -60,8 +60,6 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        // this.chart.source(this.data)
-        // this.chart.repaint()
         this.chart.changeData(this.data)
       } else {
         this.render()

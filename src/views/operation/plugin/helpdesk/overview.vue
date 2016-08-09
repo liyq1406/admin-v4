@@ -205,24 +205,28 @@ export default {
           this.summary.monthAdded.total = res.data.thirtyCount
           this.feedbacks = res.data.labelGroupCount
           if (res.data.labelGroupCount.length > 0) {
+            let dataRes = []
             res.data.labelGroupCount.forEach((item) => {
               let temp = {}
               temp.name = item.label
               temp.value = item.Count
-              this.pieData.push(temp)
+              dataRes.push(temp)
             })
+            this.pieData = dataRes
           } else {
             this.pieData = []
           }
           // 日统计
           if (res.data.dayGroupCount.length > 0) {
+            let dataRes = []
             res.data.dayGroupCount.forEach((item) => {
               let temp = {}
               temp.val = item.Count
               temp.date = item.day
               temp.name = item.label
-              this.lineData.push(temp)
+              dataRes.push(temp)
             })
+            this.lineData = dataRes
           } else {
             this.lineData = []
           }
