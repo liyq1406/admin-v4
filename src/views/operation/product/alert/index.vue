@@ -29,8 +29,7 @@ import api from 'api'
 // import locales from 'consts/locales/index'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
-import store from 'store'
-import { getCurrProduct } from 'store/actions/products'
+import { setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic'
 // import Mock from 'mockjs'
 import { uniformDate } from 'src/filters'
@@ -41,15 +40,8 @@ import AlertTrends from './alert-trends'
 export default {
   name: 'Alert',
 
-  mixins: [globalMixins],
-
-  store,
-
-  vuex: {
-    actions: {
-      getCurrProduct
-    }
-  },
+  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+  mixins: [globalMixins, setCurrProductMixin],
 
   components: {
     Statistic,
@@ -155,7 +147,6 @@ export default {
 
   route: {
     data () {
-      this.getCurrProduct(this.$route.params.id)
       this.getSummary()
       // this.getTagTrend()
     }

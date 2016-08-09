@@ -1,192 +1,162 @@
 <template>
   <div class="main">
-    <div class="main-title bordered row">
+    <div class="main-title">
       <div class="col-4">
-        <h2>使用分析</h2>
+        <h2>产品分析</h2>
       </div>
-      <div class="col-20">
-        <div class="filter-bar">
-          <div class="filter-group fr">
-            <div class="filter-group-item">
-              <date-time-range-picker></date-time-range-picker>
-            </div>
-            <div class="filter-group-item">
-              <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            </div>
-          </div>
+    </div>
+    <div class="filter-bar filter-bar-head">
+      <div class="filter-group fr">
+        <div class="filter-group-item">
+          <date-time-multiple-picker :periods="periods" @timechange="onTimeChange"></date-time-multiple-picker>
+        </div>
+      </div>
+      <div class="filter-group">
+        <div class="filter-group-item">
+          <radio-button-group :items="dimensions" :value.sync="dimension" color="red"></radio-button-group>
         </div>
       </div>
     </div>
     <div class="panel no-split-line mt20">
-      <div class="panel-hd panel-hd-full bordered">
-        <h2>产品使用时长</h2>
+      <div class="panel-bd" v-if="dimension==='duration'">
+        <interval :data="durationData" :options="chartOptions"></interval>
       </div>
-      <div class="panel-bd">
-        <interval :data="duration.data" :options="duration.options"></interval>
+      <div class="panel-bd" v-if="dimension==='times'">
+        <interval :data="timesData" :options="chartOptions"></interval>
       </div>
-    </div>
-    <div class="panel no-split-line">
-      <div class="panel-hd panel-hd-full bordered">
-        <h2>产品使用次数</h2>
-      </div>
-      <div class="panel-bd">
-        <interval :data="times.data" :options="times.options"></interval>
-      </div>
-    </div>
-    <div class="panel">
-      <div class="panel-hd panel-hd-full bordered">
-        <h2>产品使用时段分布</h2>
-      </div>
-      <div class="panel-bd">
-        <interval :data="userperiod.data" :options="userperiod.options"></interval>
+      <div class="panel-bd" v-if="dimension==='period'">
+        <interval :data="periodData" :options="chartOptions"></interval>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 import { globalMixins } from 'src/mixins'
+import { setCurrProductMixin } from './mixins'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
-import TimeLine from 'components/g2-charts/TimeLine'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
+import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Interval from 'components/g2-charts/Interval'
-import Mock from 'mockjs'
+import { uniformDate } from 'src/filters'
+import _ from 'lodash'
 
 export default {
   name: 'Portrait',
 
-  mixins: [globalMixins],
+  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+  mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    TimeLine,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     RadioButtonGroup,
-    Interval
+    Interval,
+    ChinaHeatMap
   },
 
   data () {
     return {
-      duration: {
-        options: {},
-        data: []
-      },
-      times: {
-        options: {},
-        data: []
-      },
-      userperiod: {
-        options: {},
-        data: []
-      },
-      period: 7,
-      periods: [
-        {
-          value: 1,
-          label: '24h'
+      chartOptions: {
+        legend: false,
+        stack: true,
+        props: {
+          height: 300,
+          plotCfg: {
+            margin: [10, 20, 30, 50]
+          }
         },
-        {
-          value: 7,
-          label: '7天'
+        defs: {
+          'type': {
+            type: 'cat',
+            alias: '时间'
+          },
+          'val': {
+            alias: '数量',
+            min: 0
+          }
         },
-        {
-          value: 30,
-          label: '30天'
-        }
-      ]
+        position: 'type*val',
+        color: 'type'
+      },
+      durationData: [],
+      timesData: [],
+      periodData: [],
+      periods: [1, 7, 30],
+      dimension: 'duration',
+      dimensions: [{
+        label: '单次时长',
+        value: 'duration'
+      }, {
+        label: '使用次数',
+        value: 'times'
+      }, {
+        label: '时段分布',
+        value: 'period'
+      }],
+      startTime: null,
+      endTime: null
     }
   },
 
-  ready () {
-    var durationOptions = {
-      stack: true,
-      props: {
-        height: 300,
-        plotCfg: {
-          margin: [40, 20, 80, 60]
-        }
-      },
-      defs: {
-        'duration': {
-          type: 'cat',
-          alias: '时间'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      position: 'duration*count',
-      color: 'duration'
-    }
-    this.duration.data = Mock.mock({
-      'list|9': [{
-        'duration|+1': ['1小时以内', '2-3小时', '3-4小时', '5-6小时', '7-8小时', '9-10小时', '10-11小时', '11-12小时', '12-13小时'],
-        'count|100-2200': 9
-      }]
-    }).list
-    this.duration.options = durationOptions
+  watch: {
+    dimension () {
+      this.getActionData()
+    },
 
-    var timesOptions = {
-      stack: true,
-      props: {
-        height: 300,
-        plotCfg: {
-          margin: [40, 20, 80, 60]
-        }
-      },
-      defs: {
-        'times': {
-          type: 'cat',
-          alias: ''
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      position: 'times*count',
-      color: 'times'
+    currentProduct () {
+      if (this.currentProduct.id) {
+        this.init()
+      }
     }
-    this.times.data = Mock.mock({
-      'list|9': [{
-        'times|+1': ['1', '2-10', '10-20', '20-50', '50-70', '70-100', '100-150', '150-200', '200-300'],
-        'count|100-12200': 9
-      }]
-    }).list
-    this.times.options = timesOptions
-
-    var userperiodOptions = {
-      stack: true,
-      props: {
-        height: 300,
-        plotCfg: {
-          margin: [40, 20, 80, 60]
-        }
-      },
-      defs: {
-        'userperiod': {
-          type: 'cat',
-          alias: ''
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      position: 'userperiod*count',
-      color: 'userperiod'
-    }
-    this.userperiod.data = Mock.mock({
-      'list|9': [{
-        'userperiod|+1': ['0-1', '2-3', '4-5', '6-7', '8-9', '10-11', '12-13', '14-15', '16-17'],
-        'count|100-12200': 9
-      }]
-    }).list
-    this.userperiod.options = userperiodOptions
   },
 
   methods: {
+    init () {
+
+    },
+
+    /**
+     * 处理时间选择
+     * @author shengzhi
+     */
+    onTimeChange (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getActionData()
+    },
+
+    /**
+     * 获取产品分析数据
+     */
+    getActionData () {
+      if (this.startTime === null || this.endTime === null) return
+
+      const API_FUNCTIONS = {
+        duration: 'getActionDuration',
+        times: 'getActionTimes',
+        period: 'getActionPeriod'
+      }
+      let fn = api.statistics[API_FUNCTIONS[this.dimension]]
+      let start = uniformDate(this.startTime)
+      let end = uniformDate(this.endTime)
+      fn(this.$route.params.id, start, end).then((res) => {
+        if (res.status === 200) {
+          let arr = []
+          for (let key in res.data) {
+            arr.push({
+              type: key,
+              val: res.data[key]
+            })
+          }
+          this[`${this.dimension}Data`] = _.sortBy(arr, (item) => {
+            return parseInt(item.type.split('-')[0])
+          })
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    }
   }
 }
 </script>

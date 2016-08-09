@@ -198,5 +198,44 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/heavy_buger/trend?start_day=${startDay}&end_day=${endDay}`
     )
+  },
+
+  /**
+   * 产品下设备单次使用时长统计
+   * @param  {String} productId 产品 ID
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getActionDuration (productId, startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/product/${productId}/action_duration?start_day=${startDay}&end_day=${endDay}`
+    )
+  },
+
+  /**
+   * 产品下设备使用次数统计
+   * @param  {String} productId 产品 ID
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getActionTimes (productId, startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/product/${productId}/action_times?start_day=${startDay}&end_day=${endDay}`
+    )
+  },
+
+  /**
+   * 产品下设备单次使用时长统计
+   * @param  {String} productId 产品 ID
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getActionPeriod (productId, startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/product/${productId}/action_period?start_day=${startDay}&end_day=${endDay}`
+    )
   }
 }

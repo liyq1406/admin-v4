@@ -61,11 +61,11 @@
     box-sizing border-box
     border 1px solid #BBB
     background-image linear-gradient(top, #FDFDFD, #F5F5F5)
-    font-size 10px
+    font-size 12px
     padding 0 9px
     height 28px
     line-height 26px
-    transition border-color .3s, color .3s
+    transition border-color .3s
     outline none
     cursor pointer
     color #666

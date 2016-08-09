@@ -136,7 +136,7 @@ import Vue from 'vue'
 import locales from 'consts/locales/index'
 import api from 'api'
 import store from 'store/index'
-import { removeProduct, updateProduct, getCurrProduct } from 'store/actions/products'
+import { removeProduct, updateProduct } from 'store/actions/products'
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import Panel from 'components/Panel'
@@ -150,7 +150,7 @@ import Pie from 'components/g2-charts/Pie'
 import ChinaMap from 'components/g2-charts/ChinaMap'
 import defaultDeviceThumb from 'assets/images/device_thumb.png'
 import { globalMixins } from 'src/mixins'
-import { productSummaryMixin } from '../mixins'
+import { productSummaryMixin, setCurrProductMixin } from '../mixins'
 import _ from 'lodash'
 import { createDayRange, beautify } from 'helpers/utils'
 import ProductTrend from './product-trend'
@@ -162,18 +162,15 @@ export default {
 
   layouts: ['topbar', 'sidebar'],
 
-  mixins: [globalMixins, productSummaryMixin],
+  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+  mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   store,
 
   vuex: {
-    getters: {
-      currentProduct: ({ products }) => products.curr
-    },
     actions: {
       removeProduct,
-      updateProduct,
-      getCurrProduct
+      updateProduct
     }
   },
 

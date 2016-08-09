@@ -201,8 +201,7 @@ export default {
       font-weight normal
 
     .filter-bar
-      padding-left 0
-      padding-right 0
+      padding 7px 0 0
 
     &.bordered
       border-bottom 1px solid default-border-color

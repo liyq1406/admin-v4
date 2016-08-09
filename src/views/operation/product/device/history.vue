@@ -20,13 +20,13 @@
       </div>
       <div class="device-data-table-box">
         <div class="panel-bd">
-          <time-line :data="trendData"></time-line>
+          <time-line :data="trendData" scale="hour"></time-line>
         </div>
       </div>
-      <div class="history-list">
+      <div class="history-list mt20">
         <div class="col-dates">
           <ul>
-            <li v-for="snapshot in filteredSnapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.lastUpdate }}</li>
+            <li v-for="snapshot in filteredSnapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.snapshot_date }}</li>
           </ul>
         </div>
         <div class="col-details">
@@ -49,8 +49,8 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
-import { formatDate } from 'src/filters'
-// import Mock from 'mockjs'
+import { uniformDate, formatDate } from 'src/filters'
+import _ from 'lodash'
 
 export default {
   name: 'History',
@@ -77,6 +77,7 @@ export default {
       total: 0,
       currentPage: 1,
       countPerPage: 10,
+      indexes: [],
       snapshots: [],
       currSnapshot: {},
       datapoints: [],
@@ -105,8 +106,14 @@ export default {
   computed: {
     // 下拉选项
     datapointOptions () {
-      let result = this.datapoints.filter((item) => {
-        return item.type !== 6 && item.type !== 1
+      let result = []
+      this.indexes.forEach((index) => {
+        let dp = _.find(this.datapoints, (item) => {
+          return item.type !== 6 && item.type !== 1 && item.index === index
+        })
+        if (dp) {
+          result.push(dp)
+        }
       })
       if (result.length) {
         this.selectedDatapoint = result[0]
@@ -126,9 +133,20 @@ export default {
 
     // 趋势数据
     trendData () {
-      return [
-        // {date: now, count: 1, name: '温度'}
-      ]
+      let result = []
+      let snapshotGroup = _.groupBy(this.snapshots, (item) => {
+        let hour = new Date(formatDate(item.snapshot_date)).getHours()
+        return `${uniformDate(item.snapshot_date)}-${hour}`
+      })
+      for (var key in snapshotGroup) {
+        let dp = snapshotGroup[key][0]
+        result.push({
+          date: formatDate(dp.snapshot_date),
+          val: Number(dp[this.selectedDatapoint.index]),
+          name: this.selectedDatapoint.name
+        })
+      }
+      return result
     },
 
     // 当前设备快照
@@ -176,6 +194,13 @@ export default {
   //     }).list
   //   }
   // },
+  //
+  route: {
+    data () {
+      this.getDatapoints()
+      this.getSnapshotRule()
+    }
+  },
 
   methods: {
     /**
@@ -185,7 +210,7 @@ export default {
     onTimeChange (start, end) {
       this.startTime = start.getTime()
       this.endTime = end.getTime()
-      this.getDatapoints()
+      this.getSnapshots()
     },
 
     /**
@@ -197,7 +222,20 @@ export default {
         if (res.status === 200) {
           this.datapoints = res.data
           // 获取设备快照
-          this.getSnapshots()
+          // this.getSnapshots()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取设备快照规则
+     */
+    getSnapshotRule () {
+      api.snapshot.getRule(this.$route.params.product_id).then((res) => {
+        if (res.status === 200) {
+          this.indexes = res.data.list[0].datapoint
         }
       }).catch((res) => {
         this.handleError(res)
@@ -262,10 +300,10 @@ export default {
           // 获取全部数组数据
           this.total = res.data.count
           this.snapshots = res.data.list.map((item) => {
-            item.lastUpdate = formatDate(item.lastUpdate)
+            item.snapshot_date = formatDate(item.snapshot_date)
             return item
           }).sort((a, b) => {
-            return new Date(b.lastUpdate) - new Date(a.lastUpdate)
+            return new Date(b.snapshot_date) - new Date(a.snapshot_date)
           })
         }
       }).catch((res) => {

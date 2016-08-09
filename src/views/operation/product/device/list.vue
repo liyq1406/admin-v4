@@ -135,13 +135,14 @@ import locales from 'consts/locales/index'
 import _ from 'lodash'
 import { formatDate } from 'src/filters'
 import { globalMixins } from 'src/mixins'
-import { productSummaryMixin } from '../mixins'
+import { productSummaryMixin, setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic2'
 
 export default {
   name: 'DeviceList',
 
-  mixins: [globalMixins, productSummaryMixin],
+  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+  mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
     'v-select': Select,

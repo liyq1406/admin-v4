@@ -79,12 +79,14 @@
 import api from 'api'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import { globalMixins } from 'src/mixins'
+import { setCurrProductMixin } from './mixins'
 import {numToPercent} from 'helpers/utils'
 
 export default {
   name: 'Distributing',
 
-  mixins: [globalMixins],
+  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
+  mixins: [globalMixins, setCurrProductMixin],
 
   components: {
     ChinaHeatMap

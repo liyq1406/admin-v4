@@ -26,7 +26,7 @@ export default {
             alerts: '告警信息',
             device_map: '设备地图',
             distributing: '热力分布',
-            analysis: '使用分析'
+            analysis: '产品分析'
           }
         },
         ios: {
