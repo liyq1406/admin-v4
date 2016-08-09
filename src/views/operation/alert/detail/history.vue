@@ -121,35 +121,36 @@ export default {
       ],
       startTimePick: '',
       endTimePick: '',
-      trendData: [{
-        date: '9/20',
-        val: 10,
-        name: '温度'
-      }, {
-        date: '9/21',
-        val: 100,
-        name: '温度'
-      }, {
-        date: '9/22',
-        val: 100,
-        name: '温度'
-      }, {
-        date: '9/23',
-        val: 100,
-        name: '温度'
-      }, {
-        date: '9/24',
-        val: 120,
-        name: '温度'
-      }, {
-        date: '9/25',
-        val: 100,
-        name: '温度'
-      }, {
-        date: '9/26',
-        val: 150,
-        name: '温度'
-      }],
+      // trendData: [{
+      //   date: '9/20',
+      //   val: 10,
+      //   name: '温度'
+      // }, {
+      //   date: '9/21',
+      //   val: 100,
+      //   name: '温度'
+      // }, {
+      //   date: '9/22',
+      //   val: 100,
+      //   name: '温度'
+      // }, {
+      //   date: '9/23',
+      //   val: 100,
+      //   name: '温度'
+      // }, {
+      //   date: '9/24',
+      //   val: 120,
+      //   name: '温度'
+      // }, {
+      //   date: '9/25',
+      //   val: 100,
+      //   name: '温度'
+      // }, {
+      //   date: '9/26',
+      //   val: 150,
+      //   name: '温度'
+      // }],
+      trendData: [],
       period: 1,
       periods: [1, 7, 30],
       serious: {
@@ -246,9 +247,9 @@ export default {
   // 监听属性变动
   watch: {
     productID () {
-      this.getTagTrend()
+      // this.getTagTrend()
       // if (this.products.length > 0) {
-      //   // this.getTagTrend()
+      //   this.getTagTrend()
       //   this.getList(this.queryCondition)
       // }
     }
@@ -277,6 +278,7 @@ export default {
         if (res.status === 200) {
           this.deviceID = res.data.list[0].from
           this.productID = res.data.list[0].product_id
+          this.getTagTrend()
           // 再获取当前设备的告警记录列表
           // var item = {
           //   offset: 0,
@@ -371,20 +373,33 @@ export default {
     // 处理标签数据
     pushArr (arr) {
       var rearr = []
-      arr.data.forEach((item) => {
+      var name = ''
+      if (arr === this.normal) {
+        name = '通知'
+      } else if (arr === this.serious) {
+        name = '严重'
+      } else {
+        name = '轻微'
+      }
+      arr.forEach((item) => {
         var i = 0
         var sum = 0
         while (i < item.hours.length) {
-          sum += item.hours[i].message
+          sum = sum + item.hours[i].message
           i++
         }
         rearr.push({
-          day: item.day,
-          data: sum,
-          product: item.name
+          date: item.day,
+          val: sum,
+          name: name
         })
       })
-      this.trendData = rearr
+      rearr.forEach((newobj) => {
+        this.trendData.push(newobj)
+      })
+      // this.trendData = rearr
+      // Array.prototype.push.apply(this.trendData, rearr)
+      //
       // arr.data.forEach((item) => {
       //   var dayTotal = 0
       //   item.hours.forEach((message) => {
