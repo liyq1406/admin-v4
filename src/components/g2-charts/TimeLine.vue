@@ -50,11 +50,11 @@ export default {
       if (this.chart) {
         if (this.data.length >= 30 && this.point) {
           this.point.size(0)
-          // this.point = point
         } else if (this.point) {
           this.point.size(4)
         }
-        this.chart.changeData(this.data)
+        this.chart.source(this.data)
+        this.chart.repaint()
       } else {
         this.render()
       }
