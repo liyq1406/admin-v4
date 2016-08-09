@@ -60,8 +60,8 @@
                 <tbody>
                   <tr v-for="item in feedbacks">
                     <td>{{item.label}}</td>
-                    <td>{{item.treatedCount}} ({{item.treatedPercent}} %)</td>
                     <td>{{item.untreatedCount}} ({{item.untreatedPercent}} %)</td>
+                    <td>{{item.treatedCount}} ({{item.treatedPercent}} %)</td>
                     <td>{{item.Count}}</td>
                   </tr>
                 </tbody>
@@ -86,6 +86,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
+import {getLastYearDate} from 'helpers/utils'
 
 export default {
   name: 'Overview',
@@ -137,7 +138,9 @@ export default {
       // 数据是否加载中
       loadingData: false,
       pieData: [],
-      lineData: []
+      lineData: [],
+      startTime: null,
+      endTime: null
     }
   },
 
@@ -159,23 +162,29 @@ export default {
         return []
       }
     },
-    GroupQueryCondition () {
+    groupQueryCondition () {
+      var params = null
       if (this.product && this.product.id) {
-        return {
-          query: {
-            product_id: this.product.id
-          }
+        if (!params) {
+          params = {}
+          params.query = {}
         }
-      } else {
-        return {}
+        params.query.product_id = this.product.id
       }
+
+      if (this.startTime && this.endTime) {
+        if (!params) {
+          params = {}
+          params.query = {}
+        }
+        params.query.create_time = {$gte: {'@date': this.startTime}, $lte: {'@date': this.endTime}}
+      }
+
+      return params
     }
   },
 
   ready () {
-    if (this.products.length > 0) {
-      this.getFeedbackList()
-    }
   },
 
   watch: {
@@ -188,9 +197,8 @@ export default {
 
   methods: {
     getFeedbackList () {
-      api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.GroupQueryCondition).then((res) => {
+      api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.groupQueryCondition).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
           this.summary.total.total = res.data.total
           this.summary.untreatedTotal.total = res.data.untreatedTotal
           this.summary.weekAdded.total = res.data.sevenCount
@@ -223,7 +231,26 @@ export default {
         this.handleError(res)
       })
     },
-    timeFilter () {},
+    timeFilter (start, end) {
+      var cur = new Date()
+      if (end.getTime() >= cur.getTime()) {
+        end = cur
+      }
+
+      if (start.getTime() > end.getTime()) {
+        return
+      }
+
+      let lastYear = getLastYearDate(end)
+
+      if (start.getTime() < lastYear.getTime()) {
+        start = lastYear
+      }
+
+      this.startTime = start
+      this.endTime = end
+      this.getFeedbackList()
+    },
     productSelect (item) {
       this.product = item
       this.getFeedbackList()

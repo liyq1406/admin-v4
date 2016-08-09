@@ -1,6 +1,6 @@
 <template>
   <div class="x-time-line">
-    <div v-if="!data || data.length===0" class="default">没有数据</div>
+    <div v-if="data && data.length===0 && !rendered" class="default">没有数据</div>
   </div>
 </template>
 
@@ -39,7 +39,8 @@ export default {
 
   data () {
     return {
-      chart: null
+      chart: null,
+      rendered: false
     }
   },
 
@@ -162,6 +163,7 @@ export default {
       }
 
       chart.render()
+      this.rendered = true
     }
   }
 }

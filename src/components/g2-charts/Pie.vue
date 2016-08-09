@@ -1,6 +1,6 @@
 <template>
   <div class="x-pie">
-    <div v-if="!data || data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="data && data.length===0 && !rendered" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
   </div>
 </template>
 
@@ -37,7 +37,8 @@ export default {
 
   data () {
     return {
-      chart: null
+      chart: null,
+      rendered: false
     }
   },
 
@@ -59,6 +60,8 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
+        // this.chart.source(this.data)
+        // this.chart.repaint()
         this.chart.changeData(this.data)
       } else {
         this.render()
@@ -114,6 +117,7 @@ export default {
         // })
 
       chart.render()
+      this.rendered = true
 
       chart.on('itemselected', (e) => {
         this.$emit('itemselected', e.data._origin)
