@@ -17,7 +17,7 @@
         </select>
       </v-select>
     </div>
-    <div class="select-box">
+    <div class="select-box" v-show="showDistrict">
       <v-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
         <select v-model="district" @change="handleDistrictChange">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
@@ -78,11 +78,16 @@
       // 区
       district: {
         type: Object,
-        required: true,
+        required: false,
         twoWay: true,
         default () {
           return {}
         }
+      },
+
+      showDistrict: {
+        type: Boolean,
+        default: true
       }
     },
 
