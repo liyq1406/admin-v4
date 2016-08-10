@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" @theader-broadcast-time="sortByTime" @tbody-title="goDetail">
+          <c-table :headers="headers" :tables="tables" :page="page" @theader-broadcast-time="sortByTime" @tbody-title="goDetail">
           </c-table>
         </div>
       </div>
@@ -92,13 +92,13 @@
             class: 'tac'
           },
           {
-            key: 'broadcast_time',
+            key: 'time',
             title: '推送时间',
             sortType: -1,
             class: 'tac'
           },
           {
-            key: 'broadcast_people',
+            key: 'people',
             title: '推送人群',
             class: 'tac'
           },
@@ -113,12 +113,12 @@
             class: 'tac'
           },
           {
-            key: 'arrive_count',
+            key: 'arrive_num',
             title: '抵达数',
             class: 'tac'
           },
           {
-            key: 'arrive_rate',
+            key: 'read_num',
             title: '阅读数',
             class: 'tac'
           }
@@ -132,13 +132,25 @@
         this.histories.map((item) => {
           var history = {
             title: '<a class="hl-red">' + item.title + '</a>',
-            app: item.scope.app_list,
-            broadcast_time: uniformDate(item.time) + ' ' + uniformTime(item.time),
-            people: item.scope.type,
-            status: item.status
+            app: item.scope.app_list || '全部',
+            time: uniformDate(item.time) + ' ' + uniformTime(item.time),
+            people: this.computedPeopleText(item.scope.type),
+            status: this.computedStatusText(item.status),
+            valid_count: item.user_num,
+            arrive_num: item.arrive_num + '<br>(' + parseInt(item.arrive_num / item.user_num * 10000) / 100 + '%)',
+            read_num: item.read_num + '<br>(' + parseInt(item.read_num / item.user_num * 10000) / 100 + '%)',
+            prototype: item
           }
           result.push(history)
         })
+        return result
+      },
+      page () {
+        var result = {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
         return result
       },
       queryCondition () {
@@ -161,6 +173,28 @@
     },
 
     methods: {
+      computedStatusText (status) {
+        var result = ''
+        if (status === 0) {
+          result = '已发送'
+        } else if (status === 1) {
+          result = '发送中'
+        } else if (status === 2) {
+          result = '未发送'
+        }
+        return result
+      },
+      computedPeopleText (type) {
+        var result = ''
+        if (type === 1) {
+          result = '所有用户'
+        } else if (type === 2) {
+          result = '定向推送'
+        } else if (type === 3) {
+          result = '单个用户'
+        }
+        return result
+      },
       goDetail (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
@@ -168,6 +202,7 @@
         api.broadcast.getTasks().then((res) => {
           if (res.status === 200 && res.data.list && res.data.list.length > 0) {
             this.histories = res.data.list
+            this.total = res.data.count
             this.histories.forEach((item) => {
               if (item.scope.app_list && item.scope.app_list.length > 0) {
               }
