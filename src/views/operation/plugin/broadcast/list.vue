@@ -196,7 +196,11 @@
         return result
       },
       goDetail (table) {
-        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+        if (table.prototype.status === 2) {
+          this.$route.router.go(this.$route.path + '/' + table.prototype.id + '/update')
+        } else {
+          this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+        }
       },
       getTasks (querying) {
         api.broadcast.getTasks().then((res) => {
