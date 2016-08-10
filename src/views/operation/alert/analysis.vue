@@ -27,8 +27,11 @@
         </div>
       </div>
     </div>
-    <div class="">
-      <time-line :data="trendData"></time-line>
+    <div v-if="showHour">
+      <time-line :data="trendData" :scale="scale"></time-line>
+    </div>
+    <div v-else>
+      <time-line :data="trendData" :scale="scale"></time-line>
     </div>
 
     <div class="row statistic-group mb30 bt">
@@ -152,6 +155,9 @@ export default {
       normalRules: [],
       // 严重告警规则列表
       seriousRules: [],
+      recvDataCount: 0,
+      showHour: true,
+      tempTrendData: [],
       trendPieData: [],
       trendData: [],
       currentProduct: {},
@@ -358,12 +364,15 @@ export default {
       api.alert.getTagTrend(productId, tag, begin, end).then((res) => {
         if (res.status === 200) {
           if (tag === '轻微') {
+            this.light = res.data
             this.pushDayArr(this.light)
             this.pushAllArr(this.light)
           } else if (tag === '通知') {
+            this.normal = res.data
             this.pushDayArr(this.normal)
             this.pushAllArr(this.normal)
           } else {
+            this.serious = res.data
             this.pushDayArr(this.serious)
             this.pushAllArr(this.serious)
           }
@@ -375,6 +384,7 @@ export default {
 
     // 获取告警趋势图表数据
     getTagTrend () {
+      this.recvDataCount = 0
       var begin
       var end
       if (this.period === '') {
@@ -398,21 +408,62 @@ export default {
 
     // 处理标签每日数据
     pushDayArr (arr) {
+      if (this.recvDataCount === 0) {
+        this.tempTrendData = []
+      }
+      this.recvDataCount++
       var rearr = []
-      arr.data.forEach((item) => {
-        var i = 0
-        var sum = 0
-        while (i < item.hours.length) {
-          sum += item.hours[i].message
-          i++
-        }
-        rearr.push({
-          day: item.day,
-          data: sum,
-          product: item.name
+      var name = ''
+      if (arr === this.normal) {
+        name = '通知'
+      } else if (arr === this.serious) {
+        name = '严重'
+      } else {
+        name = '轻微'
+      }
+      if (this.scale === 'hour') {
+        arr.forEach((item) => {
+          var i = 0
+          while (i < item.hours.length) {
+            rearr.push({
+              date: item.day + ' ' + item.hours[i].hour + ':00:00',
+              val: item.hours[i].message,
+              name: name
+            })
+            i++
+          }
         })
-      })
-      this.trendData = rearr
+      } else {
+        arr.forEach((item) => {
+          var i = 0
+          var sum = 0
+          while (i < item.hours.length) {
+            sum = sum + item.hours[i].message
+            i++
+          }
+          rearr.push({
+            date: item.day,
+            val: sum,
+            name: name
+          })
+        })
+      }
+      if (rearr.length > 0) {
+        rearr.forEach((newobj) => {
+          this.tempTrendData.push(newobj)
+        })
+      }
+
+      // 数据接收完毕
+      if (this.recvDataCount === 3) {
+        if (this.scale === 'hour') {
+          this.showHour = true
+        } else {
+          this.showHour = false
+        }
+        this.trendData = this.tempTrendData
+      }
+      // this.trendData = rearr
 
       // arr.data.forEach((item) => {
       //   var dayTotal = 0
@@ -484,7 +535,7 @@ export default {
             var i = 0
             var sum = 0
             res.data.forEach((alert) => {
-              while (i < alert.hourslength) {
+              while (i < alert.hours.length) {
                 sum += alert.hours[i].message
                 i++
               }
