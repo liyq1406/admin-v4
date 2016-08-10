@@ -21,6 +21,11 @@ export default {
     Dropdown
   },
   props: {
+    time: {
+      default () {
+        return ''
+      }
+    },
     label: {
       type: String,
       default: ''
@@ -46,7 +51,18 @@ export default {
       }
     }
   },
+  watch: {
+    time () {
+      if (this.time) {
+        this.startTime = new Date(this.time)
+      }
+    }
+  },
   ready () {
+    // console.log(this.startTime)
+    // if (this.time) {
+    //   this.startTime = new Date(this.time)
+    // }
   },
   methods: {
     timeChange (microtime) {
