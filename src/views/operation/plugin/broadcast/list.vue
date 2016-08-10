@@ -1,135 +1,35 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>消息列表</h2>
     </div>
-    <div class="panel">
-      <!-- <div class="panel-bd">
-        <div class="filter-bar filter-bar-head">
-          <div class="filter-group fr">
-            <div class="filter-group-item">
-              <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-            </div>
-            <div class="filter-group-item">
-              <date-time-range-picker></date-time-range-picker>
-            </div>
-            <div class="filter-group-item">
-              <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            </div>
-          </div>
-        </div>
-        <time-line :data="trends"></time-line>
-      </div> -->
-    </div>
-    <div class="row statistic-group">
-      <div class="col-6">
-        <statistic :info="messageSummary.avg" :title="messageSummary.avg.title" align="left" :showchange="true"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="messageSummary.percent" :title="messageSummary.percent.title" align="left" :showchange="true"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="messageSummary.click" :title="messageSummary.click.title" align="left" :showchange="true"></statistic>
-      </div>
-      <div class="col-6">
-        <statistic :info="messageSummary.unsend" :title="messageSummary.unsend.title" align="left"></statistic>
-      </div>
-    </div>
+    <!-- <div class="panel">
+    </div> -->
     <div class="panel mt10">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
-              <div class="filter-group-item">
-                <v-select label="全部" width='110px' size="small">
-                  <span slot="label">显示</span>
-                </v-select>
-              </div>
+              <h3>消息记录</h3>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-              </div>
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getHistories" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistories">
-                  <button slot="search-button" @click="getHistories" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  <label>{{ $t('ui.user.search_user') }}</label>
+                <search-box :key.sync="query" :active="searching" @cancel="getTasks" :placeholder="'请输入' + queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getTasks">
+                  <button slot="search-button" @click="getTasks" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <v-select width="90px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </v-select>
                 </search-box>
               </div>
             </div>
           </div>
           <c-table :headers="headers" :tables="tables" @tbody-title="goDetail">
-            <div slot="theader-channel">
-              <select name="" id="">
-                <option value="">选择应用</option>
-              </select>
-            </div>
-            <div slot="theader-status">
-              <select name="" id="">
-                <option value="">推送人群</option>
-              </select>
-            </div>
           </c-table>
         </div>
       </div>
     </div>
-    <!-- <section>
-      <div class="panel">
-        <div class="panel-hd">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getHistory(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getHistory(true)">
-            <v-select width="100px" :label="queryType.label">
-              <select v-model="queryType">
-                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-            <button slot="search-button" @click="getHistory(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
-          </search-box>
-          <h2>推送历史列表</h2>
-        </div>
-        <div class="panel-bd">
-          <div class="data-table with-loading">
-            <div class="icon-loading" v-show="loadingData">
-              <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <table class="table table-stripe table-bordered">
-              <thead>
-                <tr>
-                  <th>推送内容</th>
-                  <th>推送渠道</th>
-                  <th>推送方式</th>
-                  <th>推送状态</th>
-                  <th>推送时间</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="histories.length > 0">
-                  <tr v-for="history in histories">
-                    <td>{{ history.content }}</td>
-                    <td>{{ history.channel }}</td>
-                    <td>{{ history.type }}</td>
-                    <td>
-                      <span v-if="history.status===1" class="hl-green">已发送</span>
-                      <span v-if="history.status===0" class="hl-gray">待发送
-                      </span>
-                      <div class="broadcast-details" v-if="history.status===1">
-                        <p>发送：38492</p>
-                        <p>接收：122232</p>
-                      </div>
-                    </td>
-                    <td>{{ history.broadcast_time }}</td>
-                  </tr>
-                </template>
-                <tr v-if="histories.length === 0 && !loadingData">
-                  <td colspan="5" class="tac">
-                    <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section> -->
   </div>
 </template>
 
@@ -143,7 +43,7 @@
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import TimeLine from 'components/g2-charts/TimeLine'
-  import Mock from 'mockjs'
+  import api from 'api'
 
   export default {
     name: 'BroadcastHistory',
@@ -170,38 +70,15 @@
         countPerPage: config.COUNT_PER_PAGE,
         query: '',
         queryTypeOptions: [
-          { label: '推送内容', value: 'content' },
-          { label: '推送方式', value: 'type' }
+          { label: '推送标题', value: 'title' },
+          { label: '推送平台', value: 'platform' },
+          { label: '推送人群', value: 'people' },
+          { label: '推送状态', value: 'status' }
         ],
         queryType: {
-          label: '推送内容',
-          value: 'content'
+          label: '推送标题',
+          value: 'title'
         },
-        messageSummary: {
-          avg: {
-            total: 1345,
-            change: 1224,
-            title: '月平均有效推送量'
-          },
-          percent: {
-            total: 87,
-            unit: '%',
-            change: 12,
-            title: '月平均抵达量'
-          },
-          click: {
-            total: 54,
-            unit: '%',
-            change: 23,
-            title: '月平均点击率'
-          },
-          unsend: {
-            total: 2,
-            change: 0,
-            title: '待推送数'
-          }
-        },
-        trends: null,
         headers: [
           {
             key: 'title',
@@ -217,6 +94,11 @@
             key: 'broadcast_time',
             title: '推送时间',
             sortType: -1,
+            class: 'tac'
+          },
+          {
+            key: 'broadcast_people',
+            title: '推送人群',
             class: 'tac'
           },
           {
@@ -236,17 +118,7 @@
           },
           {
             key: 'arrive_rate',
-            title: '抵达率',
-            class: 'tac'
-          },
-          {
-            key: 'click_count',
-            title: '点击数',
-            class: 'tac'
-          },
-          {
-            key: 'click_rate',
-            title: '点击数',
+            title: '阅读数',
             class: 'tac'
           }
         ]
@@ -285,71 +157,25 @@
     },
 
     ready () {
-      this.getHistories()
-      this.trends = Mock.mock({
-        'list|14': [{
-          'date|+1': [
-            new Date(2016, 7, 15),
-            new Date(2016, 7, 16),
-            new Date(2016, 7, 17),
-            new Date(2016, 7, 18),
-            new Date(2016, 7, 19),
-            new Date(2016, 7, 20),
-            new Date(2016, 7, 21)
-          ],
-          'count|+1': [6, 8, 9, 3, 9, 3, 9]
-        }]
-      }).list
+      this.getTasks()
     },
 
     methods: {
       goDetail (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
-      getHistories (querying) {
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
-
-        this.histories = [{
-          id: '111',
-          content: '五一家电狂欢盛典，全场狂嗨5天5夜',
-          channel: 'APP1',
-          type: '组播',
-          status: 1,
-          broadcast_time: '2013-03-04 12:30',
-          user_type: '7天未活跃用户'
-        }, {
-          id: '222',
-          content: '五一家电狂欢盛典，全场狂嗨5天5夜',
-          channel: 'APP1',
-          type: '广播',
-          status: 0,
-          broadcast_time: '2013-03-04 12:30',
-          user_type: '7天未活跃用户'
-        }, {
-          id: '333',
-          content: '五一家电狂欢盛典，全场狂嗨5天5夜',
-          channel: 'APP1',
-          type: '组播',
-          status: 1,
-          broadcast_time: '2013-03-04 12:30',
-          user_type: '7天未活跃用户'
-        }, {
-          id: '444',
-          content: '五一家电狂欢盛典，全场狂嗨5天5夜',
-          channel: 'APP1',
-          type: '广播',
-          status: 0,
-          broadcast_time: '2013-03-04 12:30',
-          user_type: '7天未活跃用户'
-        }]
+      getTasks (querying) {
+        api.broadcast.getTasks().then((res) => {
+          console.log(res)
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
 
       // 搜索
       handleSearch () {
         if (this.query.length === 0) {
-          this.getHistories(true)
+          this.getTasks(true)
         }
       },
 
@@ -360,7 +186,7 @@
 
       // 取消搜索
       cancelSearching () {
-        this.getHistories(true)
+        this.getTasks(true)
       }
     }
   }

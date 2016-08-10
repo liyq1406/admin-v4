@@ -38,6 +38,7 @@ import helpdesk from './api/helpdesk'
 import diagnosis from './api/diagnosis'
 import dealer from './api/dealer'
 import heavyBuyer from './api/heavy-buyer'
+import broadcast from './api/broadcast'
 
 export default {
   sms,
@@ -62,5 +63,6 @@ export default {
   helpdesk,
   diagnosis,
   dealer,
-  heavyBuyer
+  heavyBuyer,
+  broadcast
 }
