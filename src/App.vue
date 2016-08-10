@@ -206,6 +206,9 @@ export default {
     &.bordered
       border-bottom 1px solid default-border-color
 
+    & + .x-breadcrumb
+      margin-top -10px
+
 // 视图淡入淡出
 .view
 .header

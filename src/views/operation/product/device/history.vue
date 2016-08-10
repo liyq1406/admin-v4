@@ -108,6 +108,7 @@ export default {
     datapointOptions () {
       let result = []
       this.indexes.forEach((index) => {
+        // 过滤出非字符串类型和非布尔型的快照端点列表
         let dp = _.find(this.datapoints, (item) => {
           return item.type !== 6 && item.type !== 1 && item.index === index
         })
@@ -177,24 +178,6 @@ export default {
     }
   },
 
-  // route: {
-  //   data () {
-  //     this.getDatapoints()
-  //     this.trends.data = Mock.mock({
-  //       'list|16': [{
-  //         'date|+1': [
-  //           new Date(2016, 7, 17),
-  //           new Date(2016, 7, 18),
-  //           new Date(2016, 7, 19),
-  //           new Date(2016, 7, 20)
-  //         ],
-  //         'count|+1': [6, 8, 9, 8],
-  //         '产品|+1': ['Power', 'Power', 'Power', 'Power']
-  //       }]
-  //     }).list
-  //   }
-  // },
-  //
   route: {
     data () {
       this.getDatapoints()

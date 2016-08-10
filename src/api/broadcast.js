@@ -14,6 +14,12 @@ export default {
       `${API_SERVER.default}/v2/broadcast/tasks`, params
     )
   },
+  // 获取单个消息推送任务详情
+  getTask (id) {
+    return http.get(
+      `${API_SERVER.default}/v2/broadcast/tasks/${id}`
+    )
+  },
   // 获取消息推送人数
   getNumOfPeople (params) {
     return http.post(

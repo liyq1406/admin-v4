@@ -43,8 +43,9 @@ export default {
 @import '../assets/stylus/common'
 .x-breadcrumb
   border-bottom 1px solid default-border-color
-  padding 5px 15px
+  padding 5px 15px 10px
   line-height 20px
+  font-size 12px
   clearfix()
 
   a
