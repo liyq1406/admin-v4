@@ -7,7 +7,9 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group" style="display:inline-block">
-            <button @click="addDealer(dealer)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
+            <a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/add'">
+              <button class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
+            </a>
           </div>
         </div>
         <div class="data-table with-loading">

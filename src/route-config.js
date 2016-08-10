@@ -495,6 +495,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 添加经销商
+        'plugins/dealer/:app_id/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/dealer/add'))
+            }, 'admin')
+          }
+        },
         // 经销商详情
         'plugins/dealer/:app_id/list/:dealer_id': {
           component (resolve) {
