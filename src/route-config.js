@@ -409,7 +409,7 @@ let configRouter = (router) => {
         'plugins/broadcast/:app_id/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/add'))
+              resolve(require('./views/operation/plugin/broadcast/form'))
             }, 'admin')
           }
         },
@@ -432,7 +432,7 @@ let configRouter = (router) => {
         'plugins/broadcast/:app_id/list/:id/update': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/broadcast/update'))
+              resolve(require('./views/operation/plugin/broadcast/form'))
             }, 'admin')
           }
         },

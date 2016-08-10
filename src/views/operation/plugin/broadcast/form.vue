@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>新建推送</h2>
+      <h2>{{pageType==='add'?'新建推送':'编辑推送'}}</h2>
     </div>
     <div class="container row">
       <div class="form-box col-16">
@@ -24,7 +24,7 @@
                     <div class="tips">
                       <i class="fa fa-user"></i>
                         向所有应用内的注册用户推送消息，目前总注册用户：
-                        <span>{{'8391'}}</span>
+                        <span>{{usersTotal}}</span>
                     </div>
                   </div>
                   <div class="directional" v-show="scopeType===2">
@@ -399,7 +399,7 @@
         /* 接口获取的数据 **********/
         userIdType: {},
         // 用户总数
-        usersTotal: 2016,
+        usersTotal: 0,
         // 用户标签
         usersTags: ['大客户', '金牌客户', '银牌客户']
         /* end**************************/
@@ -410,6 +410,17 @@
     },
 
     computed: {
+      /**
+       * 计算属性-计算当前页面是编辑还是添加
+       * @return {[type]} [description]
+       */
+      pageType () {
+        var result = 'edit'
+        if (/add/.test(this.$route.path)) {
+          result = 'add'
+        }
+        return result
+      },
       /**
        * 计算属性 用于发送给服务器的参数
        * @return {[type]} [description]
@@ -485,7 +496,25 @@
         return result
       }
     },
+
+    route: {
+      data () {
+        this.getUsersTotal() // 获取总注册用户数
+      }
+    },
     methods: {
+      /**
+       * 获取总注册用户数
+       * @return {[type]} [description]
+       */
+      getUsersTotal () {
+        api.statistics.getSummary().then((res) => {
+          this.usersTotal = res.data.user.user
+        }).catch((res) => {
+          this.usersTotal = '查询失败'
+          this.handleError(res)
+        })
+      },
       /**
        * 检测当前id是否合法
        * @param  {[type]} userId [description]
