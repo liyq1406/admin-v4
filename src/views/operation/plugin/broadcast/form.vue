@@ -635,15 +635,11 @@
        */
       onSubmit () {
         if (this.$validation.valid) {
-          api.broadcast.addTask(this.task).then((res) => {
-            this.showNotice({
-              type: 'success',
-              content: '创建成功'
-            })
-            this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
-          }).catch((res) => {
-            this.handleError(res)
-          })
+          if (this.pageType === 'add') {
+            this.add()
+          } else {
+            this.edit()
+          }
         } else {
           this.showNotice({
             type: 'error',
@@ -655,6 +651,20 @@
         // }).catch((res) => {
         //   this.handleError(res)
         // })
+      },
+      add () {
+        api.broadcast.addTask(this.task).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '创建成功'
+          })
+          this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      edit () {
+        console.log('编辑')
       }
     }
   }
