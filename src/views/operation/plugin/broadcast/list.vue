@@ -25,7 +25,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" @tbody-title="goDetail">
+          <c-table :headers="headers" :tables="tables" @theader-broadcast-time="sortByTime" @tbody-title="goDetail">
           </c-table>
         </div>
       </div>
@@ -44,6 +44,7 @@
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import TimeLine from 'components/g2-charts/TimeLine'
   import api from 'api'
+  import {uniformDate, uniformTime} from 'src/filters'
 
   export default {
     name: 'BroadcastHistory',
@@ -71,7 +72,7 @@
         query: '',
         queryTypeOptions: [
           { label: '推送标题', value: 'title' },
-          { label: '推送平台', value: 'platform' },
+          { label: '推送App', value: 'platform' },
           { label: '推送人群', value: 'people' },
           { label: '推送状态', value: 'status' }
         ],
@@ -86,8 +87,8 @@
             class: 'tac'
           },
           {
-            key: 'channel',
-            title: '推送平台',
+            key: 'app',
+            title: '推送应用',
             class: 'tac'
           },
           {
@@ -130,11 +131,11 @@
         var result = []
         this.histories.map((item) => {
           var history = {
-            title: '<a class="hl-red">' + item.content + '</a>',
-            channel: item.channel,
-            broadcast_time: item.broadcast_time,
-            status: item.status,
-            prototype: item
+            title: '<a class="hl-red">' + item.title + '</a>',
+            app: item.scope.app_list,
+            broadcast_time: uniformDate(item.time) + ' ' + uniformTime(item.time),
+            people: item.scope.type,
+            status: item.status
           }
           result.push(history)
         })
@@ -142,7 +143,6 @@
       },
       queryCondition () {
         var condition = {
-          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {}
@@ -166,7 +166,15 @@
       },
       getTasks (querying) {
         api.broadcast.getTasks().then((res) => {
-          console.log(res)
+          if (res.status === 200 && res.data.list && res.data.list.length > 0) {
+            this.histories = res.data.list
+            this.histories.forEach((item) => {
+              if (item.scope.app_list && item.scope.app_list.length > 0) {
+              }
+            })
+          } else {
+            this.histories = []
+          }
         }).catch((res) => {
           this.handleError(res)
         })
@@ -187,6 +195,16 @@
       // 取消搜索
       cancelSearching () {
         this.getTasks(true)
+      },
+
+      sortByTime (header, index) {
+        this.sortKey = header.key
+        if (header.sortType === 1) {
+          header.sortType = -1
+        } else {
+          header.sortType = 1
+        }
+        this.headers.$set(index, header)
       }
     }
   }

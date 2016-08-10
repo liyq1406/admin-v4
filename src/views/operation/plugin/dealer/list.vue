@@ -326,34 +326,27 @@
     methods: {
       // 获取经销商列表
       getDealer () {
-        // var foo = [{a: 1}, {a: 2}, {a: 1}]
-        // console.log(_.uniq(_.map(foo, 'a')))
-        var self = this
-        var argvs = arguments
-        var fn = self.getDealer
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
-        this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-          console.log(token)
-          api.dealer.getDealer(this.$route.params.app_id, this.queryCondition, token).then((res) => {
-            // console.log(res)
-            this.dealers = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'dealer'
-            }
-            self.handlePluginError(err, env)
-            // this.handleError(res)
-            this.loadingData = false
-          })
-        })
+        // this.loadingData = true
+        // this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+        //   api.dealer.getDealer(this.$route.params.app_id, this.queryCondition, token).then((res) => {
+        //     this.dealers = res.data.list
+        //     this.total = res.data.count
+        //     this.loadingData = false
+        //   }).catch((err) => {
+        //     var env = {
+        //       'fn': fn,
+        //       'argvs': argvs,
+        //       'context': self,
+        //       'plugin': 'dealer'
+        //     }
+        //     self.handlePluginError(err, env)
+        //     // this.handleError(res)
+        //     this.loadingData = false
+        //   })
+        // })
         // api.dealer.getDealer(this.$route.params.app_id, this.queryCondition).then((res) => {
         //   if (res.status === 200) {
         //     this.dealers = res.list
