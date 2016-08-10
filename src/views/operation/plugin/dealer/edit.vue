@@ -190,7 +190,7 @@
           label: '全部',
           link: `/operation/plugins/dealer/${this.$route.params.app_id}/list`
         }, {
-          label: '添加经销商'
+          label: '修改经销商'
         }]
       }
     },
