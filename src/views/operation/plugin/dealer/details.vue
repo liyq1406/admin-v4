@@ -4,18 +4,22 @@
       <h2>经销商管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="tool-bar">
+    <!-- <div class="tool-bar">
       <div class="tool-list">
         <div class="tool-list-item">
-          <div class="trigger" @click.prevent="editDealer(dealer)"><i class="fa fa-pencil"></i><span class="trigger-text">编辑经销商信息</span></div>
+          <div class="trigger"><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/edit'"><i class="fa fa-pencil"></i><span class="trigger-text">编辑经销商信息</span></a></div>
         </div>
       </div>
-    </div>
+    </div> -->
     <div class="panel">
+        <div class="titlemargin">华南经销商<a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/edit'"><i class="fa fa-edit"></i></a></div>
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
-            <ul class="info-details">
+            <div class="listmargin">
+              <info-list :info="deviceInfo"></info-list>
+            </div>
+            <!-- <ul class="info-details">
               <li class="row">
                 <div class="col-5 label">账号:</div>
                 <div class="clo-19 info">{{ dealer.username }}</div>
@@ -44,7 +48,7 @@
                 <div class="col-5 label">从属于:</div>
                 <div class="clo-19 info">{{ dealer.belong_to }}</div>
               </li>
-            </ul>
+            </ul> -->
           </div>
           <div class="col-10">
             <div class="row status">
@@ -232,6 +236,7 @@
   import { globalMixins } from 'src/mixins'
   import { pluginMixins } from '../mixins'
   import Alert from 'components/Alert'
+  import InfoList from 'components/InfoList'
 
   export default {
     name: 'TableDetails',
@@ -244,6 +249,7 @@
       RadioGroup,
       LineChart,
       SearchBox,
+      InfoList,
       'v-select': Select,
       Pager,
       IntelligentTable,
@@ -261,6 +267,40 @@
           // phone: '13800138000',
           // area: '广州总部',
           // belong_to: '海珠'
+        },
+        deviceInfo: {
+          linkman: {
+            label: '联系人',
+            value: '大张工'
+          },
+          phone: {
+            label: '手机号',
+            value: '13800138000'
+          },
+          password: {
+            label: '登录密码',
+            value: '102810821'
+          },
+          id: {
+            label: '账号',
+            value: '0912232221'
+          },
+          area: {
+            label: '负责区域',
+            value: '华南地区'
+          },
+          belong: {
+            label: '从属于',
+            value: '中国地区'
+          },
+          target: {
+            label: '年销售目标',
+            value: '200w'
+          },
+          sale: {
+            label: '已售数量',
+            value: '13k'
+          }
         },
         sales: [{
           _id: 2222,
@@ -336,8 +376,8 @@
     },
 
     ready () {
-      this.getDealer()
-      this.getSales()
+      // this.getDealer()
+      // this.getSales()
     },
     methods: {
       // 获取经销商信息
@@ -510,7 +550,12 @@
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
-
+.titlemargin
+  font-size 20px
+  margin-top 20px
+  margin-left 10px
+.listmargin
+  margin 10px 0
 .fa
   margin-left 5px
 .status
