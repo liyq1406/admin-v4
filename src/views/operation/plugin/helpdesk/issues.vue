@@ -42,7 +42,8 @@
               </a>
             </li>
           </ul>
-          <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div>
+          <!-- <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div> -->
+          <pager v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pager>
         </div>
         <div class="col-18" v-if="issues.length > 0">
           <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -212,8 +213,8 @@ export default {
               $in: [this.selectedProduct.id]
             },
             create_time: {
-              $gte: this.startTimePick,
-              $lte: this.endTimePick
+              $gte: {'@date': this.startTimePick},
+              $lte: {'@date': this.endTimePick}
             }
           }
         }
@@ -226,8 +227,8 @@ export default {
               $in: [this.selectedProduct.id]
             },
             create_time: {
-              $lte: this.endTime + 'T00:00:00.000Z',
-              $gte: this.beginTime + 'T00:00:00.000Z'
+              $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+              $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
             }
           }
         }

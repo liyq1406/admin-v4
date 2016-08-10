@@ -7,7 +7,9 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group" style="display:inline-block">
-            <button @click="addDealer(dealer)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
+            <a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/add'">
+              <button class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
+            </a>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -48,7 +50,7 @@
               <template v-if="dealers.length > 0">
                 <tr v-for="dealer in dealers">
                   <!-- <td>{{* dealer.name }}</td> -->
-                  <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + dealer._id" class="hl-red">{{* dealer.name }}</a></td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer._id" class="hl-red">{{* dealer.name }}</a></td>
                   <td>{{* dealer.username }}</td>
                   <td>{{* dealer.linkman }}</td>
                   <td>{{* dealer.phone }}</td>
@@ -242,20 +244,20 @@
 
     data () {
       return {
-        // dealers: [{
-        //   _id: 111,
-        //   username: 12345,
-        //   name: '广州分部',
-        //   code: '10000',
-        //   linkman: '小明',
-        //   phone: '13800138000',
-        //   area: '华南地区',
-        //   belong_to: '广州分部',
-        //   sale_target: '11000',
-        //   sole: '1213',
-        //   status: 0
-        // }],
-        dealers: [],
+        dealers: [{
+          _id: 111,
+          username: 12345,
+          name: '广州分部',
+          code: '10000',
+          linkman: '小明',
+          phone: '13800138000',
+          area: '华南地区',
+          belong_to: '广州分部',
+          sale_target: '11000',
+          sole: '1213',
+          status: 0
+        }],
+        // dealers: [],
         loadingData: false,
         addModal: {
           show: false,
