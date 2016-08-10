@@ -24,7 +24,7 @@
     <!-- Start: 反馈信息 -->
     <div class="panel-sub-hd bordered mt20">反馈信息</div>
     <div class="comment-list">
-      <div class="comment-list-item">
+      <!-- <div class="comment-list-item">
         <div class="comment-metas">
           <span>{{ issue.create_time | formatDate }}</span>
         </div>
@@ -42,7 +42,7 @@
           </div>
           <div class="comment-desc">{{ firstReply.content }}</div>
         </div>
-      </div>
+      </div> -->
       <!-- <div class="comment-list-item">
         <div class="comment-metas">
           <span>2016-07-12 18:21:09</span>
@@ -61,7 +61,7 @@
             </div>
           </div>
         </gallery>
-        <div class="issue-reply" v-if="item.service !== {}">
+        <div class="issue-reply" v-if="item.service === {}">
           <div class="comment-metas">
             <span>{{item.service.name}}    {{item.service.create_time | formatDate }}</span>
           </div>
@@ -302,16 +302,16 @@ export default {
         if (res.status === 200) {
           console.log(11111)
           console.log(res.data.list)
-          this.firstReply = res.data.list[0]
+          // this.firstReply = res.data.list[0]
           this.recordList = res.data.list
           // 去除第一个客服回复
-          this.recordList.map((item) => {
-            if (this.recordList.indexOf(item) === 0) {
-              this.recordList.$remove(item)
-            }
-          })
+          // this.recordList.map((item) => {
+          //   if (this.recordList.indexOf(item) === 0) {
+          //     this.recordList.$remove(item)
+          //   }
+          // })
           // 如果最后一个回复的是客户，打开输入框
-          if (this.recordList.length % 2 !== 0 || this.firstReply) {
+          if (this.recordList.length % 2 === 0) {
             this.inputAble = true
           } else {
             this.inputAble = false
