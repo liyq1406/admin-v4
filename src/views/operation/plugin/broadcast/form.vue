@@ -182,7 +182,7 @@
                     <label class="form-control col-5">推送描述:</label>
                     <div class="controls col-19">
                       <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
-                        <input v-model="content" type="text" v-validate:content="{required: true, maxlength: 200}" lazy class="input-text"/>
+                        <input v-model="content" name="content" type="text" v-validate:content="{required: true, maxlength: 200}" lazy class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.content.touched && $validation.content.required">请输入内容</span>
@@ -212,7 +212,7 @@
                           <input type="radio" v-model="timeType" :value="2" number/>自定义
                         </label>
                         <div class="row col-14">
-                          <date-picker @timechange="onTimeChange"></date-picker>
+                          <date-picker :time="time" @timechange="onTimeChange"></date-picker>
                         </div>
                       </div>
                     </div>
@@ -411,15 +411,22 @@
 
     computed: {
       /**
+       * 计算属性-当前推送的id
+       * @return {[type]} [description]
+       */
+      id () {
+        return this.$route.params.id
+      },
+      /**
        * 计算属性-计算当前页面是编辑还是添加
        * @return {[type]} [description]
        */
       pageType () {
-        var result = 'edit'
-        if (/add/.test(this.$route.path)) {
-          result = 'add'
-        }
-        return result
+        // var result = 'edit'
+        // if (/add/.test(this.$route.path)) {
+        //   result = 'add'
+        // }
+        return this.id ? 'edit' : 'add'
       },
       /**
        * 计算属性 用于发送给服务器的参数
@@ -500,9 +507,78 @@
     route: {
       data () {
         this.getUsersTotal() // 获取总注册用户数
+        if (this.id) {
+          this.getDetails()
+        }
       }
     },
     methods: {
+      /**
+       * 获取详细推送的详情
+       * @return {[type]} [description]
+       */
+      getDetails () {
+        var params = {
+          // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          query: {
+            id: {'$in': [this.id]}
+          }
+        }
+        api.broadcast.getTasks(params).then((res) => {
+          var details = res.data.list[0]
+          console.log(details)
+          this.title = details.title
+          this.content = details.content
+          this.timeType = 2
+          this.time = details.time
+          this.expire = details.expire
+          this.action
+          alert(details.action.type)
+          switch (details.action.type) {
+            case 0:
+              this.actionType = 1
+              break
+            case 1:
+              this.actionType = 2
+              break
+            case 2:
+              this.actionType = 3
+              break
+            default:
+              this.actionType = 4
+          }
+          this.action.view = ''
+          this.action.url = details.action.url
+          this.action.command = details.action.command
+          this.scopeType = details.scope.type
+          this.user = details.scope.user
+          if (details.scope.app_list && details.scope.app_list.length) {
+            this.selectedApps = details.scope.app_list || []
+          }
+          if (details.scope.product_list && details.scope.product_list.length) {
+            this.selectedProducts = details.scope.product_list
+          }
+          this.group.unlimited = (details.scope.group && details.scope.group.type) === 0
+          if (details.group && details.group.type) {
+            this.group.type = details.group.type
+          }
+          if (details.group && details.group.end_day) {
+            this.group.time = Math.round((+new Date(details.group.end_day) - +new Date(details.group.start_day)) / 1000 / 60 / 60 / 24)
+          }
+          if (details.area && details.area.type) {
+            this.area.type = details.area.type
+          }
+          // 具体地区暂不处理
+          if (details.tag && details.tag.type) {
+            this.tag.type = details.tag.type
+          }
+          if (details.tag && details.tag.tag_list) {
+            this.tag.tag_list = details.tag.tag_list.join()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       /**
        * 获取总注册用户数
        * @return {[type]} [description]
