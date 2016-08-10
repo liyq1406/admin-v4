@@ -5,245 +5,283 @@
     </div>
     <div class="container row">
       <div class="form-box col-16">
-        <form v-form name="validation" @submit.prevent="onSubmit">
-          <div class="panel">
-            <div class="panel-hd">
-              <h3><i class="number">1</i> 推送人群</h3>
-            </div>
-            <div class="panel-bd">
-              <div class="form">
-                <div class="form-row row">
-                  <div class="check-group-box tab-s2">
-                    <radio-button-group :items="pushOption" color="red" :value.sync="scopeType">
-                      <span slot="label" class="label col-5">请选择推送范围</span>
-                    </radio-button-group>
-                  </div>
-                </div>
-                <div v-show="scopeType===1">
-                  <div class="tips">
-                    <i class="fa fa-user"></i>
-                      向所有应用内的注册用户推送消息，目前总注册用户：
-                      <span>{{'8391'}}</span>
-                  </div>
-                </div>
-                <div class="directional" v-show="scopeType===2">
+        <validator name="validation">
+          <form novalidate @submit.prevent="onSubmit">
+            <div class="panel">
+              <div class="panel-hd">
+                <h3><i class="number">1</i> 推送人群</h3>
+              </div>
+              <div class="panel-bd">
+                <div class="form">
                   <div class="form-row row">
-                    <label class="form-control col-5">选择应用</label>
-                    <div class="controls col-19">
-                      <div class="radio-group">
-                        <label class="checkbox mr20" v-for="app in apps">
-                          <input type="checkbox" :value="app.id" v-model="selectedApps">{{app.name}}（{{app.plugin}}）
-                        </label>
-                      </div>
+                    <div class="check-group-box tab-s2">
+                      <radio-button-group :items="pushOption" color="red" :value.sync="scopeType">
+                        <span slot="label" class="label col-5">请选择推送范围</span>
+                      </radio-button-group>
                     </div>
                   </div>
-                  <div class="form-row row">
-                    <label class="form-control col-5">选择产品</label>
-                    <div class="controls col-19">
-                      <div class="radio-group">
-                        <label class="checkbox mr20">
-                          <input type="checkbox" @change="onSelectedAllProducts($event)" v-model="selectedAllProducts">全部产品
-                        </label>
-                        <label class="checkbox mr20" v-for="product in products">
-                          <input type="checkbox" :value="product.id" v-model="selectedProducts">{{product.name}}
-                        </label>
-                      </div>
+                  <div v-show="scopeType===1">
+                    <div class="tips">
+                      <i class="fa fa-user"></i>
+                        向所有应用内的注册用户推送消息，目前总注册用户：
+                        <span>{{'8391'}}</span>
                     </div>
                   </div>
-                  <div class="form-row row">
-                    <label class="form-control col-5">推送人群</label>
-                    <div class="controls col-19 row">
-                      <div class="row">
-                        <label class="radio">
-                          <input type="radio" name="person" :value="true" v-model="group.unlimited"/>不限
-                        </label>
+                  <div class="directional" v-show="scopeType===2">
+                    <div class="form-row row">
+                      <label class="form-control col-5">选择应用</label>
+                      <div class="controls col-19">
+                        <div class="radio-group">
+                          <label class="checkbox mr20" v-for="app in apps">
+                            <input type="checkbox" :value="app.id" v-model="selectedApps">{{app.name}}（{{app.plugin}}）
+                          </label>
+                          <div class="form-tips form-tips-error">
+                            <span v-if="selectedApps.length === 0 && needVerification">至少选择一个应用</span>
+                          </div>
+                        </div>
                       </div>
-                      <div class="row">
-                        <label class="radio col-4">
-                          <input type="radio" name="person" :value="false" v-model="group.unlimited"/>自定义
-                        </label>
-                        <div class="row col-19">
-                          <div class="select-group fl">
-                            <v-select :label="group.type===2?'沉睡用户':'活跃用户'" width="100px">
-                              <select v-model="group.type" @change="group.unlimited=false">
-                                <!-- <option v-for="opt in userTypeOptions" :value="opt">{{ opt.label }}</option> -->
-                                <option :value="1">活跃用户</option>
-                                <option :value="2">沉睡用户</option>
-                              </select>
-                            </v-select>
-                            <v-select :label="selectedGroupText" width="140px" class="ml5">
-                              <select v-model="group.time" @change="group.unlimited=false">
-                                <option :value="7">7天{{group.type===2?'沉睡':'活跃'}}用户</option>
-                                <option :value="30">30天{{group.type===2?'沉睡':'活跃'}}用户</option>
-                              </select>
-                            </v-select>
+                    </div>
+                    <div class="form-row row">
+                      <label class="form-control col-5">选择产品</label>
+                      <div class="controls col-19">
+                        <div class="radio-group">
+                          <label class="checkbox mr20">
+                            <input type="checkbox" @change="onSelectedAllProducts($event)" v-model="selectedAllProducts">全部产品
+                          </label>
+                          <label class="checkbox mr20" v-for="product in products">
+                            <input type="checkbox" :value="product.id" v-model="selectedProducts">{{product.name}}
+                          </label>
+                          <div class="form-tips form-tips-error">
+                            <span v-if="selectedProducts.length === 0 && needVerification">至少选择一个产品</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row row">
+                      <label class="form-control col-5">推送人群</label>
+                      <div class="controls col-19 row">
+                        <div class="row">
+                          <label class="radio">
+                            <input type="radio" name="person" :value="true" v-model="group.unlimited"/>不限
+                          </label>
+                        </div>
+                        <div class="row">
+                          <label class="radio col-4">
+                            <input type="radio" name="person" :value="false" v-model="group.unlimited"/>自定义
+                          </label>
+                          <div class="row col-19">
+                            <div class="select-group fl">
+                              <v-select :label="group.type===2?'沉睡用户':'活跃用户'" width="100px">
+                                <select v-model="group.type" @change="group.unlimited=false">
+                                  <!-- <option v-for="opt in userTypeOptions" :value="opt">{{ opt.label }}</option> -->
+                                  <option :value="1">活跃用户</option>
+                                  <option :value="2">沉睡用户</option>
+                                </select>
+                              </v-select>
+                              <v-select :label="selectedGroupText" width="140px" class="ml5">
+                                <select v-model="group.time" @change="group.unlimited=false">
+                                  <option :value="7">7天{{group.type===2?'沉睡':'活跃'}}用户</option>
+                                  <option :value="30">30天{{group.type===2?'沉睡':'活跃'}}用户</option>
+                                </select>
+                              </v-select>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row row">
+                      <label class="form-control col-5">推送地域</label>
+                      <div class="controls col-19 row">
+                        <div class="row">
+                          <label class="radio">
+                            <input type="radio" :value="0" v-model="area.type"/>不限
+                          </label>
+                        </div>
+                        <div class="row">
+                          <label class="radio col-4">
+                            <input type="radio" :value="1" v-model="area.type"/>自定义
+                          </label>
+                          <div class="row col-19">
+                            <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="area.type=1"></area-select>
+                            <div class="form-tips form-tips-error">
+                              <span v-if="area.type === 1 && !area.province.name && needVerification">请选择推送地域</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="form-row row userTag">
+                      <label class="form-control col-5">用户标签</label>
+                      <div class="controls col-19">
+                        <div class="radio-group fl">
+                          <label class="radio">
+                            <input type="radio" name="tag" :value="0" v-model="tag.type">不限
+                          </label>
+                          <label class="radio">
+                            <input type="radio" name="tag" :value="1" v-model="tag.type">推送到标签用户
+                          </label>
+                          <label class="radio">
+                            <input type="radio" name="tag" :value="2" v-model="tag.type">不推送标签用户
+                          </label>
+                        </div>
+                        <div class="fl row mt10 mb10">
+                          <tag-input :value.sync="tag.tag_list" :candidate="usersTags"></tag-input>
+                          <div class="form-tips form-tips-error">
+                            <span v-if="tag.type!==0 && !tag.tag_list.length && needVerification">请选择用户标签</span>
                           </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="form-row row">
-                    <label class="form-control col-5">推送地域</label>
-                    <div class="controls col-19 row">
-                      <div class="row">
-                        <label class="radio">
-                          <input type="radio" :value="0" v-model="area.type"/>不限
-                        </label>
-                      </div>
-                      <div class="row">
-                        <label class="radio col-4">
-                          <input type="radio" :value="1" v-model="area.type"/>自定义
-                        </label>
-                        <div class="row col-19">
-                          <area-select :province.sync="selectedProvince" :city.sync="selectedCity" :show-district="false" @province-change="area.type=1"></area-select>
+                  <div class="single" v-show="scopeType===3">
+                    <div class="form-row" v-for="userId in user" track-by="$index">
+                      <label class="form-control col-5">请输入用户ID</label>
+                      <div class="controls col-19 clearfix">
+                        <div class="input-text-wrap w200 fl">
+                          <div class="input-text-wrap">
+                            <input type="text" class="input-text input-text-sm" v-model="userId" @change="checkUser(userId)">
+                          </div>
+                          <!-- <div class="form-tips form-tips-error">
+                            <span v-if="userId.length === 0 && needVerification">请输入用户id</span>
+                            <span v-if="userId.length > 0 && !userIdType[userId]">当前用户ID不存在</span>
+                          </div> -->
+                        </div>
+                        <div class="fl btn-box">
+                          <button class="btn btn-sm btn-ghost" @click="user.push('')">
+                            <i class="fa fa-plus"></i>
+                          </button>
+                          <button class="btn btn-sm btn-ghost" v-if="user.length>1" @click="user.$remove(u)">
+                            <i class="fa fa-times"></i>
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="form-row row userTag">
-                    <label class="form-control col-5">用户标签</label>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-hd">
+                <h3><i class="number">2</i> 推送内容</h3>
+              </div>
+              <div class="panel-bd">
+                <div class="form">
+                  <div class="form-row row">
+                    <label class="form-control col-5">推送标题:</label>
                     <div class="controls col-19">
-                      <div class="radio-group fl">
+                      <div v-placeholder="'不可超过20个字符,仅ios有效'" class="input-text-wrap">
+                        <input v-model="title" type="text" name="title" v-validate:title="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.title.touched && $validation.title.required">请输入标题</span>
+                        <span v-if="$validation.title.modified && $validation.title.maxlength">不可超过20个字符</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row row">
+                    <label class="form-control col-5">推送描述:</label>
+                    <div class="controls col-19">
+                      <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
+                        <input v-model="content" type="text" v-validate:content="{required: true, maxlength: 200}" lazy class="input-text"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.content.touched && $validation.content.required">请输入内容</span>
+                        <span v-if="$validation.content.modified && $validation.content.maxlength">不可超过200个字符</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-hd">
+                <h3><i class="number">3</i> 推送时间</h3>
+              </div>
+              <div class="panel-bd">
+                <div class="form">
+                  <div class="form-row row">
+                    <label class="form-control col-5">推送时间:</label>
+                    <div class="controls col-19 row">
+                      <div class="broadcast-time">
                         <label class="radio">
-                          <input type="radio" name="tag" :value="0" v-model="tag.type">不限
-                        </label>
-                        <label class="radio">
-                          <input type="radio" name="tag" :value="1" v-model="tag.type">推送到标签用户
-                        </label>
-                        <label class="radio">
-                          <input type="radio" name="tag" :value="2" v-model="tag.type">不推送标签用户
+                          <input type="radio" v-model="timeType" :value="1" number/>现在
                         </label>
                       </div>
-                      <div class="fl row mt10 mb10">
-                        <tag-input :value.sync="tag.tag_list" :candidate="usersTags"></tag-input>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="single" v-show="scopeType===3">
-                  <div class="form-row" v-for="u in user" track-by="$index">
-                    <label class="form-control col-5">请输入用户ID</label>
-                    <div class="controls col-19 clearfix">
-                      <div class="input-text-wrap w200 fl">
-                        <input type="text" class="input-text input-text-sm" v-model="u">
-                      </div>
-                      <div class="fl btn-box">
-                        <button class="btn btn-sm btn-ghost" @click="user.push('')">
-                          <i class="fa fa-plus"></i>
-                        </button>
-                        <button class="btn btn-sm btn-ghost" v-if="user.length>1" @click="user.$remove(u)">
-                          <i class="fa fa-times"></i>
-                        </button>
+                      <div class="broadcast-time row">
+                        <label class="radio col-6">
+                          <input type="radio" v-model="timeType" :value="2" number/>自定义
+                        </label>
+                        <div class="row col-14">
+                          <date-picker @timechange="onTimeChange"></date-picker>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="panel">
-            <div class="panel-hd">
-              <h3><i class="number">2</i> 推送内容</h3>
-            </div>
-            <div class="panel-bd">
-              <div class="form">
-                <div class="form-row row">
-                  <label class="form-control col-5">推送标题:</label>
-                  <div class="controls col-19">
-                    <div v-placeholder="'不可超过20个字符,仅ios有效'" class="input-text-wrap">
-                      <input v-model="title" type="text" name="title" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row row">
-                  <label class="form-control col-5">推送描述:</label>
-                  <div class="controls col-19">
-                    <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
-                      <input v-model="content" type="text" class="input-text"/>
-                    </div>
-                  </div>
-                </div>
+            <div class="panel">
+              <div class="panel-hd">
+                <h3><i class="number">4</i> 打开方式</h3>
               </div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-hd">
-              <h3><i class="number">3</i> 推送时间</h3>
-            </div>
-            <div class="panel-bd">
-              <div class="form">
-                <div class="form-row row">
-                  <label class="form-control col-5">推送时间:</label>
-                  <div class="controls col-19 row">
-                    <div class="broadcast-time">
-                      <label class="radio">
-                        <input type="radio" v-model="timeType" :value="1" number/>现在
-                      </label>
-                    </div>
-                    <div class="broadcast-time row">
-                      <label class="radio col-6">
-                        <input type="radio" v-model="timeType" :value="2" number/>自定义
-                      </label>
-                      <div class="row col-14">
-                        <date-picker @timechange="onTimeChange"></date-picker>
+              <div class="panel-bd">
+                <div class="form">
+                  <div class="form-row row">
+                    <label class="form-control col-5 radio">
+                      <input type="radio" v-model="actionType" name="openType" :value="1"/>打开指定页面
+                    </label>
+                    <div class="controls col-19">
+                      <div class="input-text-wrap" v-placeholder="'请填写页面activity地址，例如：com.tencent.xlinkpushdemo.main'">
+                        <input type="text" class="input-text" v-model="action.view" v-validate:view="{isrequired: (actionType===1)}" @input="actionType=1"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.view.touched && $validation.view.isrequired">请填写页面activity地址</span>
                       </div>
                     </div>
                   </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="panel">
-            <div class="panel-hd">
-              <h3><i class="number">4</i> 打开方式</h3>
-            </div>
-            <div class="panel-bd">
-              <div class="form">
-                <div class="form-row row">
-                  <label class="form-control col-5 radio">
-                    <input type="radio" v-model="actionType" name="openType" :value="1"/>打开指定页面
-                  </label>
-                  <div class="controls col-19">
-                    <div class="input-text-wrap" v-placeholder="'请填写页面activity地址，例如：com.tencent.xlinkpushdemo.main'">
-                      <input type="text" class="input-text" v-model="action.view" @change="actionType=1"/>
+                  <div class="form-row row">
+                    <label class="form-control col-5 radio">
+                      <input type="radio" v-model="actionType" name="openType" :value="2" number/>打开指定网页
+                    </label>
+                    <div class="controls col-19">
+                      <div class="input-text-wrap" v-placeholder="'请输入网页地址'">
+                        <input type="text" name="openContent" class="input-text"  v-model="action.url" v-validate:url="{isrequired: (actionType===2)}" @input="actionType=2"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.url.touched && $validation.url.isrequired">请填写页面activity地址</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="form-row row">
-                  <label class="form-control col-5 radio">
-                    <input type="radio" v-model="actionType" name="openType" :value="2" number/>打开指定网页
-                  </label>
-                  <div class="controls col-19">
-                    <div class="input-text-wrap" v-placeholder="'请输入网页地址'">
-                      <input type="text" name="openContent" class="input-text"  v-model="action.url" @change="actionType=2"/>
+                  <div class="form-row row">
+                    <label class="form-control col-5 radio">
+                      <input type="radio" v-model="actionType" name="openType" :value="3" number/>自定义内容
+                    </label>
+                    <div class="controls col-19">
+                      <div class="input-text-wrap" v-placeholder="'请输入内容'">
+                        <textarea class="input-text textarea" v-model="action.command" v-validate:command="{isrequired: (actionType===3),maxlength:240}" @input="actionType=3"></textarea>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.command.touched && $validation.command.isrequired">请填写页面activity地址</span>
+                        <span v-if="$validation.command.maxlength">内容不能超过240个字节</span>
+                      </div>
+                      <span class="wordCount">{{action.command.length}}/240</span>
                     </div>
                   </div>
-                </div>
-                <div class="form-row row">
-                  <label class="form-control col-5 radio">
-                    <input type="radio" v-model="actionType" name="openType" :value="3" number/>自定义内容
-                  </label>
-                  <div class="controls col-19">
-                    <div class="input-text-wrap" v-placeholder="'请输入内容'">
-                      <textarea class="input-text textarea" v-model="action.command" @change="actionType=3"></textarea>
-                    </div>
-                    <span class="wordCount">{{action.command.length}}/240</span>
+                  <div class="form-row row">
+                    <label class="form-control col-5 radio">
+                      <input type="radio" v-model="actionType" name="openType" :value="4" number/>直接打开APP
+                    </label>
                   </div>
-                </div>
-                <div class="form-row row">
-                  <label class="form-control col-5 radio">
-                    <input type="radio" v-model="actionType" name="openType" :value="4" number/>直接打开APP
-                  </label>
-                </div>
-                <div class="form-actions row">
-                  <div class="col-offset-5">
-                    <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
+                  <div class="form-actions row">
+                    <div class="col-offset-5">
+                      <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </validator>
       </div>
       <div class="preview col-8">
         <div class="preview-box">
@@ -264,6 +302,8 @@
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
   import store from 'store'
+  import api from 'api'
+  import { createDayRange } from 'helpers/utils'
 
   export default {
     name: 'AddBroadcast',
@@ -305,11 +345,13 @@
             value: 3
           }
         ],
-        // 表单验证器
-        validation: {},
         /* end**************************/
 
         /* 根据用户行为变化的变量 **********/
+        // 当前用户id是否需要验证
+        needVerificationUsers: false,
+        // 当前页面除了用户id以外的各个字段是否需要验证
+        needVerification: false,
         // 消息标题
         title: '',
         // 消息内容
@@ -335,8 +377,8 @@
         // 推送地域
         area: {
           type: 0, // 0不限，1自定义
-          province: '', // 省份
-          city: '' // 城市
+          province: {}, // 省份
+          city: {} // 城市
         },
         // 用户标签
         tag: {
@@ -355,15 +397,59 @@
         /* end**************************/
 
         /* 接口获取的数据 **********/
+        userIdType: {},
         // 用户总数
         usersTotal: 2016,
         // 用户标签
         usersTags: ['大客户', '金牌客户', '银牌客户']
         /* end**************************/
+
+        // 表单验证器
+        // validation: {}
       }
     },
 
     computed: {
+      /**
+       * 计算属性 用于发送给服务器的参数
+       * @return {[type]} [description]
+       */
+      task () {
+        var result = {}
+        result.title = this.title
+        result.content = this.content
+        result.time = this.time || new Date()
+        result.expire = this.expire || new Date()
+        result.action = {}
+        if (this.actionType === 2) {
+          result.action.type = 1
+        } else {
+          result.action.type = 2
+        }
+        result.action.command = this.action.command
+        result.action.url = this.action.url
+        result.scope = {}
+        result.scope.type = this.scopeType
+        result.scope.user = this.user
+        result.scope.app_list = this.selectedApps
+        result.scope.product_list = this.selectedProducts
+        result.scope.group = {}
+        if (this.group.unlimited) {
+          result.scope.group.type = 0
+        } else {
+          result.scope.group.type = this.group.type
+        }
+        result.scope.group.start_day = new Date(createDayRange(0, this.group.time).start)
+        result.scope.group.end_day = new Date(createDayRange(0, this.group.time).end)
+        result.area = {}
+        result.area.type = this.area.type
+        result.area.province = this.area.province.name
+        result.area.city = this.area.city.name
+        result.tag = {}
+        result.tag.type = this.tag.type
+        result.tag.tag_list = this.tag.tag_list.split(',')
+        return result
+      },
       /**
        * 全选app标志位
        * @return {[type]} [description]
@@ -401,6 +487,18 @@
     },
     methods: {
       /**
+       * 检测当前id是否合法
+       * @param  {[type]} userId [description]
+       * @return {[type]}        [description]
+       */
+      checkUser (userId) {
+        this.userIdType[userId] = true
+        console.log('发请求验证userid: ' + userId)
+        setTimeout(() => {
+          this.userIdType[userId] = false
+        }, 1000)
+      },
+      /**
        * 开始时间变化
        * @param  {[type]} time [description]
        * @return {[type]}      [description]
@@ -410,14 +508,6 @@
         this.timeType = 2
         this.time = time
         this.expire = new Date(time - 0 + 1000 * 60 * 60 * 24 * delay)
-      },
-      /**
-       * 用户标签内容变化事件
-       * @param  {[type]} tags [description]
-       * @return {[type]}      [description]
-       */
-      onTagsChange (tags) {
-        console.log(tags)
       },
       /**
        * 产品的全选按钮被点击
@@ -434,8 +524,32 @@
         }
         this.selectedProducts = allApps
       },
+      /**
+       * 表单提交 创建消息推送
+       * @return {[type]} [description]
+       */
       onSubmit () {
-        console.log('表单提交')
+        if (this.$validation.valid) {
+          api.broadcast.addTask(this.task).then((res) => {
+            this.showNotice({
+              type: 'success',
+              content: '创建成功'
+            })
+            this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '请检查填写的内容'
+          })
+        }
+        // api.broadcast.addTask(this.task).then((res) => {
+        //   console.log(res)
+        // }).catch((res) => {
+        //   this.handleError(res)
+        // })
       }
     }
   }

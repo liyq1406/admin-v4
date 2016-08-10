@@ -42,3 +42,19 @@ export function format (val, type) {
 export function equal (val, ref) {
   return val === ref
 }
+
+/**
+ * 验证必填  可以传参数定义是否生效 (目前用于消息推送页面)
+ * @param  {[type]} val [description]
+ * @param  {boolean} needVerification 是否需要验证
+ * @return {[type]}     [description]
+ */
+export function isrequired (val, needVerification) {
+  var result = false
+  if (needVerification) {
+    result = val.length > 0
+  } else {
+    result = true
+  }
+  return result
+}
