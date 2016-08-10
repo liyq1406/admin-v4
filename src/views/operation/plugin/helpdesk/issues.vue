@@ -212,8 +212,8 @@ export default {
               $in: [this.selectedProduct.id]
             },
             create_time: {
-              $gte: this.startTimePick,
-              $lte: this.endTimePick
+              $gte: {'@date': this.startTimePick},
+              $lte: {'@date': this.endTimePick}
             }
           }
         }
@@ -226,8 +226,8 @@ export default {
               $in: [this.selectedProduct.id]
             },
             create_time: {
-              $lte: this.endTime + 'T00:00:00.000Z',
-              $gte: this.beginTime + 'T00:00:00.000Z'
+              $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+              $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
             }
           }
         }

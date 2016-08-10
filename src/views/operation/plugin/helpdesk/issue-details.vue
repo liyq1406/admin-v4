@@ -61,7 +61,7 @@
             </div>
           </div>
         </gallery>
-        <div class="issue-reply" v-if="item.service === {}">
+        <div class="issue-reply" v-if="item.service !== {}">
           <div class="comment-metas">
             <span>{{item.service.name}}    {{item.service.create_time | formatDate }}</span>
           </div>
@@ -280,7 +280,15 @@ export default {
           // 设备信息
           this.deviceInfo.mac.value = res.data.mac
           this.deviceInfo.sn.value = res.data.sn
-          this.deviceInfo.model.value = res.data.mcu_mod
+          this.deviceInfo.firmware_mod.value = res.data.mcu_mod
+        }
+      }).catch((err) => {
+        this.handleError(err)
+      })
+      api.product.getVDevice(this.issue.product_id, this.issue.device_id).then((res) => {
+        if (res.status === 200) {
+          // 设备信息
+          this.deviceInfo.onlineLong.value = res.data.online_count
         }
       }).catch((err) => {
         this.handleError(err)
@@ -390,12 +398,13 @@ export default {
       } else {
         this.isRecordEmpty = false
         this.outOfLimit = false
+        var i = this.recordList.length - 1
         var params = {
           feedback_id: this.$route.params.id,
           name: '客服',
           content: this.dealRecord,
           create_time: new Date(),
-          reply_id: this.issue.reply_id
+          reply_id: this.recordList[i]._id
         }
         api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, params).then((res) => {
           if (res.status === 200) {

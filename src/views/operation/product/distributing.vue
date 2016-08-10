@@ -46,6 +46,7 @@
                       <td>{{data.value}}</td>
                       <td>{{data.percent | toPercentDecimal2}}</td>
                     </template>
+                  </tr>  
                 </tbody>
               </table>
             </div>
