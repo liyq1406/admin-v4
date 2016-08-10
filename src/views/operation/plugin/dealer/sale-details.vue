@@ -4,82 +4,62 @@
       <h2>销售详细信息</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="tool-bar">
-      <div class="tool-list">
-        <div class="tool-list-item">
-          <div class="trigger" @click.prevent="editSale(sale)"><i class="fa fa-pencil"></i><span class="trigger-text">编辑销售信息</span></div>
+    <div class="panel mt15 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <div class="sale-details-head">这是客户名称<i class="fa fa-edit"></i></div>
+          <div v-stretch="192">
+            <info-list :info="userInfo"></info-list>
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="sale-info-head">销售信息
+            <div class="sale-info-body">
+              <div class="row">
+                <div class="col-9">销售日期:</div>
+                <div class="col-15">2014-02-23 12:00:03</div>
+              </div>
+              <div class="row">
+                <div class="col-9">场所层数:</div>
+                <div class="col-15">10</div>
+              </div>
+              <div class="row">
+                <div class="col-9">每层面积:</div>
+                <div class="col-15">110m</div>
+              </div>
+              <div class="row">
+                <div class="col-9">场所总面积:</div>
+                <div class="col-15">880m</div>
+              </div>
+              <div class="row">
+                <div class="col-9">机器放置层数:</div>
+                <div class="col-15">2</div>
+              </div>
+              <div class="row">
+                <div class="col-9">常驻人数:</div>
+                <div class="col-15">12</div>
+              </div>
+              <div class="row">
+                <div class="col-9">有无新风:</div>
+                <div class="col-15">有</div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt20">
+      <div class="panel-hd panel-hd-full bordered">
+        <h2>销售图片</h2>
+      </div>
       <div class="panel-bd">
         <div class="row">
-          <div class="col-12">
-            <ul class="info-details">
-              <li class="row">
-                <div class="col-6 label">客户名称:</div>
-                <div class="clo-18 info">{{ sale.name }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">手机号码:</div>
-                <div class="clo-18 info">{{ sale.phone }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">客户类型:</div>
-                <div class="clo-18 info">{{ sale.user_type }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">省份:</div>
-                <div class="clo-18 info">{{ sale.province }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">城市:</div>
-                <div class="clo-18 info">{{ sale.city }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">区域:</div>
-                <div class="clo-18 info">{{ sale.district }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">详细地址:</div>
-                <div class="clo-18 info">{{ sale.address }}</div>
-              </li>
-            </ul>
-          </div>
-          <div class="col-12">
-            <ul class="info-details">
-              <li class="row">
-                <div class="col-6 label">销售日期:</div>
-                <div class="clo-18 info">{{ sale.create_time | uniformDate}}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">场所层数:</div>
-                <div class="clo-18 info">{{ sale.place_floor_num }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">每层面积:</div>
-                <div class="clo-18 info">{{ sale.floor_area }}㎡</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">场所总面积:</div>
-                <div class="clo-18 info">{{ sale.place_area }}㎡</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">机器放置层数:</div>
-                <div class="clo-18 info">{{ sale.lay_floor }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">常驻人数:</div>
-                <div class="clo-18 info">{{ sale.permanent_population }}</div>
-              </li>
-              <li class="row">
-                <div class="col-6 label">有无新风:</div>
-                <div class="clo-18 info"><span v-if="sale.machine_isexists === 0">无</span><span v-else>有</span></div>
-              </li>
-            </ul>
+          <div v-for="i in 3" class="col-5 sale-img mr20">
+            <img src="" alt="">
           </div>
         </div>
       </div>
+    </div>
       <!-- <div class="panel-hd">
         <h2>销售照片</h2>
         <div class="panel-bd">
@@ -88,7 +68,6 @@
           </v-alert>
         </div>
       </div> -->
-    </div>
     <!--修改销售信息浮层-->
    <modal :show.sync="editModal.show" width="600px">
      <h3 slot="header">修改销售信息</h3>
@@ -222,6 +201,8 @@ import AreaSelect from 'components/AreaSelect'
 import IntelligentTable from 'components/IntelligentTable'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
+import InfoCard from 'components/InfoCard'
+import InfoList from 'components/InfoList'
 import Alert from 'components/Alert'
 
 export default {
@@ -239,11 +220,50 @@ export default {
     'v-select': Select,
     Pager,
     IntelligentTable,
-    Breadcrumb
+    Breadcrumb,
+    InfoCard,
+    InfoList
   },
 
   data () {
     return {
+      userSummary: {
+        title: '这是客户名称'
+      },
+      userInfo: {
+        status: {
+          label: '账号状态',
+          value: ' 无激活时间字段返回'
+        },
+        create_date: {
+          label: '创建时间',
+          value: '查询中..'
+        },
+        email: {
+          label: '邮箱',
+          value: '9299289@qq.com'
+        },
+        phone: {
+          label: '手机',
+          value: '18293900239'
+        },
+        age: {
+          label: '年龄',
+          value: '未知'
+        },
+        gender: {
+          label: '性别',
+          value: '男'
+        },
+        area: {
+          label: '所在区域',
+          value: '字段缺失'
+        },
+        address: {
+          label: '详细地址',
+          value: '字段缺失'
+        }
+      },
       sale: {
         _id: 2233454,
         name: '小明',
@@ -309,7 +329,7 @@ export default {
   },
 
   ready () {
-    this.getSale()
+    // this.getSale()
   },
   methods: {
     getSale () {
@@ -482,5 +502,30 @@ export default {
     .status-item
       border none
       margin-left 0
+
+.sale-details-head
+  margin 10px 10px 15px 10px
+  font-size 18px
+.sale-info-head
+  background-color #F2F2F2
+  border 1px solid #DDDDDD
+  width 80%
+  font-size 15px
+  margin-left auto
+  margin-top 50px
+  line-height 30px
+  text-indent 10px
+  .sale-info-body
+    line-height 25px
+    text-indent 0
+    font-size 10px
+    padding 10px
+    background-color #F8F8F8
+    border-top 1px solid #DDDDDD
+.sale-img
+  img
+    width 100%
+    padding 10px
+    height 140px
 
 </style>
