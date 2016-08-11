@@ -152,6 +152,76 @@ let configRouter = (router) => {
       }
     },
 
+    '/dev': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/dev/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // -------------------------产品开发-------------------------
+        // 创建产品
+        'products/create': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/create'))
+            }, 'admin')
+          }
+        },
+        // 产品信息
+        'products/:id/info': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/info'))
+            }, 'admin')
+          }
+        },
+        // 设备调试
+        'products/:id/debug': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/debug'))
+            }, 'admin')
+          }
+        },
+        // 虚拟设备
+        'products/:id/virtual-devices': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/virtual-devices'))
+            }, 'admin')
+          }
+        },
+        // 告警管理
+        'products/:id/alert': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/alert'))
+            }, 'admin')
+          }
+        },
+        // 数据接口
+        'products/:id/data-forward': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-forward'))
+            }, 'admin')
+          }
+        }
+
+        // -------------------------设备授权-------------------------
+        // -------------------------智能互联-------------------------
+        // -------------------------固件管理-------------------------
+        // -------------------------应用管理-------------------------
+        // -------------------------数据服务-------------------------
+        // -------------------------硬件开发指南----------------------
+        // -------------------------应用开发指南----------------------
+        // -------------------------产测与工具-----------------------
+        // -------------------------设置----------------------------
+        // -------------------------在线购买-------------------------
+      }
+    },
+
     '/operation': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -169,14 +239,6 @@ let configRouter = (router) => {
         },
 
         // -------------------------产品管理-------------------------
-        // 产品添加
-        'product/create': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/create'))
-            }, 'admin')
-          }
-        },
         // 概览
         'products/:id/overview': {
           component (resolve) {
@@ -254,14 +316,6 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/product/wechat'))
-            }, 'admin')
-          }
-        },
-        // 数据转发
-        'products/:id/data-forward': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/data-forward'))
             }, 'admin')
           }
         },

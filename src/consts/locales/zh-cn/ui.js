@@ -10,7 +10,19 @@ export default {
       label: '首页'
     },
     dev: {
-      label: '开发平台'
+      label: '开发平台',
+      // 侧栏导航
+      subs: {
+        products: {
+          subs: {
+            info: '产品信息',
+            debug: '设备调试',
+            virtual_devices: '虚拟设备',
+            alert: '告警管理',
+            data_forward: '数据接口'
+          }
+        }
+      }
     },
     operation: {
       label: '运营平台',
