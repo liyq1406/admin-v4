@@ -204,7 +204,15 @@ let configRouter = (router) => {
         'products/:id/data-forward': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/product/data-forward'))
+              resolve(require('./views/dev/product/data-forward/list'))
+            }, 'admin')
+          }
+        },
+        // 添加规则
+        'products/:id/data-forward/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-forward/add'))
             }, 'admin')
           }
         }
