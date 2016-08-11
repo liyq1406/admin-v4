@@ -103,7 +103,7 @@
               <template v-if="sales.length > 0">
                 <tr v-for="sale in sales">
                   <!-- <td>{{* dealer.name }}</td> -->
-                  <td><a v-link="'/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
                   <td>{{* sale.version }}</td>
                   <td>{{* sale.code }}</td>
                   <td>{{* sale.name }}</td>

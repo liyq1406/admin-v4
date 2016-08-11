@@ -661,7 +661,7 @@ export default {
   // 经销商列表
   dealer: {
     placeholders: {
-      code: '请输入经销商代码',
+      code: '请输入合法的邮箱',
       password: '请输入6-16位字符密码',
       name: '请输入经销商名称',
       contact: '请输入联系人名称',

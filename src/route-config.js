@@ -504,10 +504,10 @@ let configRouter = (router) => {
           }
         },
         // 编辑经销商
-        'plugins/dealer/:app_id/edit': {
+        'plugins/dealer/:app_id/edit/:id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/edit'))
+              resolve(require('./views/operation/plugin/dealer/add'))
             }, 'admin')
           }
         },
