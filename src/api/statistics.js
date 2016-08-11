@@ -237,5 +237,18 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/product/${productId}/action_period?start_day=${startDay}&end_day=${endDay}`
     )
+  },
+
+  /**
+   * 推送任务阅读数日趋势
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getReadTrend (id, startDay, endDay) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/broadcast/read_trend?id=${id}&start_day=${startDay}&end_day=${endDay}`
+    )
   }
 }
