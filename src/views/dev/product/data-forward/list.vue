@@ -1,10 +1,29 @@
 <template>
-  <div class="row">
+  <div class="main">
+    <div class="main-title">
+      <h2>数据转发</h2>
+    </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="action-bar">
+        <!-- <div class="action-bar">
           <div class="action-group">
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
+          </div>
+        </div> -->
+        <div class="filter-bar">
+          <div class="filter-group fr">
+            <!-- <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ '添加规则' }}</button> -->
+            <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-primary"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
+            <div class="filter-group-item">
+              <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
+                <!-- <v-select width="100px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </v-select> -->
+                <button slot="search-button" @click.prevent="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -158,6 +177,7 @@
   import Select from 'components/Select'
   import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
+  import SearchBox from 'components/SearchBox'
 
   export default {
     name: 'DataForward',
@@ -167,12 +187,14 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select
+      'v-select': Select,
+      'search-box': SearchBox
     },
 
     data () {
       return {
         rules: [],            // 规则列表
+        key: '',
         datapoints: [],
         dataForwardType: locales[Vue.config.lang].data.DATA_FORWARD_TYPES,
         dataDestination: locales[Vue.config.lang].data.DATA_DESTINATIONS,
@@ -225,6 +247,16 @@
     },
 
     methods: {
+      // 切换搜索
+      toggleSearching () {
+        this.searching = !this.searching
+      },
+      // 搜索
+      handleSearch () {
+        if (this.key.length === 0) {
+          this.getDealer()
+        }
+      },
       // 取消添加
       onAddCancel () {
         this.resetAdd()
