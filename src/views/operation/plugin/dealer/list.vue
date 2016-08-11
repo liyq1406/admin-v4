@@ -19,7 +19,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDealer" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer">
+                <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDealer" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer">
                   <v-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -47,7 +47,7 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="dealers.length > 0">
+              <template v-if="total > 0">
                 <tr v-for="dealer in dealers">
                   <!-- <td>{{* dealer.name }}</td> -->
                   <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer._id" class="hl-red">{{* dealer.name }}</a></td>
@@ -73,7 +73,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <pager v-if="dealers.length > countPerPage" :total="dealers.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
       </div>
     </div>
 
@@ -244,20 +244,20 @@
 
     data () {
       return {
-        dealers: [{
-          _id: 111,
-          username: 12345,
-          name: '广州分部',
-          code: '10000',
-          linkman: '小明',
-          phone: '13800138000',
-          area: '华南地区',
-          belong_to: '广州分部',
-          sale_target: '11000',
-          sole: '1213',
-          status: 0
-        }],
-        // dealers: [],
+        // dealers: [{
+        //   _id: 111,
+        //   username: 12345,
+        //   name: '广州分部',
+        //   code: '10000',
+        //   linkman: '小明',
+        //   phone: '13800138000',
+        //   area: '华南地区',
+        //   belong_to: '广州分部',
+        //   sale_target: '11000',
+        //   sole: '1213',
+        //   status: 0
+        // }],
+        dealers: [],
         loadingData: false,
         addModal: {
           show: false,
@@ -297,7 +297,7 @@
         total: 0,
         countPerPage: 10,
         currentPage: 1,
-        query: '',
+        key: '',
         adding: false
       }
     },
@@ -315,8 +315,9 @@
         //   // condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
         //   condition.query[this.queryType.value] = { $in: this.query }
         // }
-        if (this.key !== '') {
-          condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
+        if (this.key.length > 0) {
+          // condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
+          condition.query[this.queryType.value] = {$in: [this.key]}
         }
         return condition
       }
@@ -331,34 +332,25 @@
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
-        // this.loadingData = true
-        // this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-        //   api.dealer.getDealer(this.$route.params.app_id, this.queryCondition, token).then((res) => {
-        //     this.dealers = res.data.list
-        //     this.total = res.data.count
-        //     this.loadingData = false
-        //   }).catch((err) => {
-        //     var env = {
-        //       'fn': fn,
-        //       'argvs': argvs,
-        //       'context': self,
-        //       'plugin': 'dealer'
-        //     }
-        //     self.handlePluginError(err, env)
-        //     // this.handleError(res)
-        //     this.loadingData = false
-        //   })
-        // })
+        this.loadingData = true
         // api.dealer.getDealer(this.$route.params.app_id, this.queryCondition).then((res) => {
-        //   if (res.status === 200) {
-        //     this.dealers = res.list
-        //     this.total = res.count
-        //     this.loadingData = false
-        //   }
-        // }).catch((res) => {
-        //   this.handleError(res)
+        //   this.dealers = res.data.list
+        //   this.total = res.data.count
+        //   this.loadingData = false
+        // }).catch((err) => {
+        //   self.handleError(err)
         //   this.loadingData = false
         // })
+        api.dealer.list(this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.dealers = res.data.list
+            this.total = res.data.count
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
       },
 
       // 取消添加
@@ -417,43 +409,43 @@
       },
       // 搜索
       handleSearch () {
-        if (this.query.length === 0) {
+        if (this.key.length === 0) {
           this.getDealer()
         }
       },
       onEditSubmit () {},
       onAddSubmit () {
-        if (this.addValidation.$valid && !this.adding) {
-          var self = this
-          var argvs = arguments
-          var fn = self.onAddSubmit
-          if (typeof querying !== 'undefined') {
-            this.currentPage = 1
-          }
-          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-            // console.log(token)
-            this.adding = true
-            api.dealer.addDealer(this.$route.params.app_id, this.addModal.model, token).then((res) => {
-              if (res.status === 200) {
-                this.getDealer()
-                this.resetAdd()
-              }
-            }).catch((res) => {
-              this.handleError(res)
-              this.adding = false
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'dealer'
-              }
-              self.handlePluginError(err, env)
-              // this.handleError(res)
-              this.adding = false
-            })
-          })
-        }
+        // if (this.addValidation.$valid && !this.adding) {
+        //   var self = this
+        //   var argvs = arguments
+        //   var fn = self.onAddSubmit
+        //   if (typeof querying !== 'undefined') {
+        //     this.currentPage = 1
+        //   }
+        //   this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
+        //     // console.log(token)
+        //     this.adding = true
+        //     api.dealer.addDealer(this.$route.params.app_id, this.addModal.model, token).then((res) => {
+        //       if (res.status === 200) {
+        //         this.getDealer()
+        //         this.resetAdd()
+        //       }
+        //     }).catch((res) => {
+        //       this.handleError(res)
+        //       this.adding = false
+        //     }).catch((err) => {
+        //       var env = {
+        //         'fn': fn,
+        //         'argvs': argvs,
+        //         'context': self,
+        //         'plugin': 'dealer'
+        //       }
+        //       self.handlePluginError(err, env)
+        //       // this.handleError(res)
+        //       this.adding = false
+        //     })
+        //   })
+        // }
       }
     }
   }

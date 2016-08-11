@@ -17,7 +17,7 @@
         <div class="row">
           <div class="col-14">
             <div class="listmargin">
-              <info-list :info="deviceInfo"></info-list>
+              <info-list :info="dealerInfo"></info-list>
             </div>
             <!-- <ul class="info-details">
               <li class="row">
@@ -268,7 +268,7 @@
           // area: '广州总部',
           // belong_to: '海珠'
         },
-        deviceInfo: {
+        dealerInfo: {
           linkman: {
             label: '联系人',
             value: '大张工'
@@ -376,75 +376,55 @@
     },
 
     ready () {
-      // this.getDealer()
+      this.getDealer()
       // this.getSales()
     },
     methods: {
       // 获取经销商信息
       getDealer () {
-        // var foo = [{a: 1}, {a: 2}, {a: 1}]
-        // console.log(_.uniq(_.map(foo, 'a')))
-        var self = this
-        var argvs = arguments
-        var fn = self.getDealer
-        var params = {
-          offset: 0,
-          limit: 10,
-          query: {
-            '_id': this.$route.params.dealer_id
-          }
-        }
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
+        // var params = {
+        //   offset: 0,
+        //   limit: 10,
+        //   query: {
+        //     '_id': this.$route.params.dealer_id
+        //   }
+        // }
+        // if (typeof querying !== 'undefined') {
+        //   this.currentPage = 1
+        // }
         this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-          console.log(token)
-          api.dealer.getDealer(this.$route.params.app_id, params, token).then((res) => {
-            // console.log(res)
-            this.dealer = res.data.list[0]
-            // this.total = res.data.count
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'dealer'
-            }
-            self.handlePluginError(err, env)
-            // this.handleError(res)
-            this.loadingData = false
-          })
+        api.dealer.get(this.$route.params.dealer_id).then((res) => {
+          // console.log(res)
+          this.dealer = res.data
+          this.dealerInfo.linkman.value = this.dealer.name
+          this.dealerInfo.phone.value = this.dealer.phone
+          this.dealerInfo.id.value = this.dealer.id
+          this.dealerInfo.belong.value = this.dealer.upper_dealer_code
+          // todo字段缺失
+          this.dealerInfo.password.value = this.dealer.password
+          this.dealerInfo.area.value = this.dealer.area
+          this.dealerInfo.target.value = this.dealer.target
+          this.dealerInfo.sale.value = this.dealer.sale
+          this.loadingData = false
+        }).catch((err) => {
+          this.handleError(err)
+          this.loadingData = false
         })
       },
       // 获取经销商对应销售信息列表
       getSales () {
-        var self = this
-        var argvs = arguments
-        var fn = self.getDealer
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
         this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-          console.log(token)
-          api.dealer.getSales(this.$route.params.app_id, this.queryCondition, token).then((res) => {
-            // console.log(res)
-            this.sales = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'dealer'
-            }
-            self.handlePluginError(err, env)
-            // this.handleError(res)
-            this.loadingData = false
-          })
+        api.dealer.get(this.queryCondition).then((res) => {
+          // console.log(res)
+          this.sales = res.data.list
+          this.total = res.data.count
+          this.loadingData = false
+        }).catch((err) => {
+          this.handleError(err)
+          this.loadingData = false
         })
       },
       // 初始化编辑表单
