@@ -200,6 +200,22 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 添加告警规则
+        'products/:id/alert/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/alert/add'))
+            }, 'admin')
+          }
+        },
+        // 设置告警规则
+        'products/:id/alert/edit/:rule_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/alert/add'))
+            }, 'admin')
+          }
+        },
         // 数据接口
         'products/:id/data-forward': {
           component (resolve) {
