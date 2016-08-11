@@ -8,7 +8,7 @@
       <form novalidate @submit.prevent="onSubmit">
         <div class="panel no-split-line">
           <div class="panel-hd bordered mt20">
-            <h2>添加账户信息</h2>
+            <h2>{{accountTitle}}</h2>
           </div>
           <div class="panel-bd">
             <div class="row">
@@ -43,7 +43,7 @@
         </div>
         <div class="panel no-split-line">
           <div class="panel-hd bordered mt20">
-            <h2>添加经销商信息</h2>
+            <h2>{{dealerTitle}}</h2>
           </div>
           <div class="panel-bd">
             <div class="row">
@@ -178,14 +178,30 @@
     },
 
     computed: {
+      accountTitle () {
+        if (this.type === 'add') {
+          return '添加账户信息'
+        } else if (this.type === 'edit') {
+          return '编辑账户信息'
+        }
+      },
+      dealerTitle () {
+        if (this.type === 'add') {
+          return '添加经销商信息'
+        } else if (this.type === 'edit') {
+          return '编辑经销商信息'
+        }
+      }
     },
 
     route: {
       data () {
         if (this.$route.params.id) {
           this.type = 'edit'
+          this.breadcrumbNav[1].label = '编辑经销商'
           this.getDealer(this.$route.params.id)
         } else {
+          this.breadcrumbNav[1].label = '添加经销商'
           this.type = 'add'
         }
       }
@@ -206,47 +222,61 @@
       getDealer (id) {
         var params = {
           query: {
-            _id: id
+            id: id
           }
         }
         api.dealer.list(params).then((res) => {
-          console.log(res)
+          if (res.status === 200 && res.data.list > 0) {
+            console.log(res.data.list[0])
+            let dealerRaw = res.data.list[0]
+            this.dealer.username = dealerRaw.email
+            this.dealer.name = dealerRaw.name
+            this.dealer.linkman = dealerRaw.contacter
+            this.dealer.phone = dealerRaw.phone
+            this.dealer.password = dealerRaw.password
+            this.dealer.address = dealerRaw.address
+            this.dealer.area = dealerRaw.region
+          }
         }).catch((res) => {
           this.handleError(res)
         })
       },
       addDealer () {
         var params = {
-          account: this.dealer.username,
+          email: this.dealer.username,
           name: this.dealer.name,
-          email: '',
-          linkman: this.dealer.linkman,
+          contacter: this.dealer.linkman,
           phone: this.dealer.phone,
           password: this.dealer.password,
-          address: this.dealer.addres,
-          area: this.dealer.area,
+          address: this.dealer.address,
+          region: this.dealer.area,
           upper_dealer_code: ''
         }
         api.dealer.create(params).then((res) => {
-          console.log(res)
+          if (res.status === 200) {
+            // 添加成功
+            this.$route.router.go(this.breadcrumbNav[0].link)
+          }
         }).catch((res) => {
           this.handleError(res)
         })
       },
       editDealer () {
         var params = {
-          account: this.dealer.username,
+          email: this.dealer.username,
           name: this.dealer.name,
-          email: '',
-          linkman: this.dealer.linkman,
+          contacter: this.dealer.linkman,
           phone: this.dealer.phone,
           password: this.dealer.password,
-          address: this.dealer.addres,
-          area: this.dealer.area,
+          address: this.dealer.address,
+          region: this.dealer.area,
           upper_dealer_code: ''
         }
         api.dealer.update(this.$route.params.id, params).then((res) => {
-          console.log(res)
+          if (res.status === 200) {
+            // 修改成功
+            this.$route.router.go(this.breadcrumbNav[0].link)
+          }
         }).catch((res) => {
           this.handleError(res)
         })

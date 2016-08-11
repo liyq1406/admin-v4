@@ -658,7 +658,7 @@ export default {
   dealer: {
     placeholders: {
       code: '请输入合法的邮箱',
-      password: '请输入6-16位字符密码',
+      password: '密码长度8-16位, 包含数字和大小写字母',
       name: '请输入经销商名称',
       contact: '请输入联系人名称',
       phone: '请输入手机号码',
