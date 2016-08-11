@@ -66,7 +66,15 @@ export const MAIN_NAV = {
   },
   dev: {
     alias: 'dev',
-    url: '/dev'
+    url: '/dev',
+    subs: [{
+      alias: 'warrant',
+      icon: 'bell',
+      subs: [{
+        alias: 'list',
+        url: '/warrant/list'
+      }]
+    }]
   },
   operation: {
     alias: 'operation',

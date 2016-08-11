@@ -54,9 +54,9 @@ export default {
         url: '/dev',
         subs: []
       }
-      let subs = MAIN_NAV.operation.subs
+      let subs = MAIN_NAV.dev.subs
       // 概览
-      result.subs.push(subs[0])
+      // result.subs.push(subs[0])
 
       // 产品导航
       const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-forward']
@@ -184,7 +184,7 @@ export default {
       // })
 
       // 其他导航
-      result.subs = result.subs.concat(subs.slice(1, subs.length))
+      result.subs = result.subs.concat(subs.slice(0, subs.length))
       // console.log(subs.slice(1, subs.length))
       // this.nav.subs.forEach((item, index) => {
       //   var reg = new RegExp(`${result.url}/${item.alias}`, 'i')

@@ -21,6 +21,12 @@ export default {
             alert: '告警管理',
             data_forward: '数据接口'
           }
+        },
+        warrant: {
+          label: '设备授权',
+          subs: {
+            list: '授权记录'
+          }
         }
       }
     },

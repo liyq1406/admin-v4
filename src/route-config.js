@@ -231,9 +231,17 @@ let configRouter = (router) => {
               resolve(require('./views/dev/product/data-forward/add'))
             }, 'admin')
           }
-        }
+        },
 
         // -------------------------设备授权-------------------------
+        // 授权记录
+        'warrant/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/warrant/list'))
+            }, 'admin')
+          }
+        }
         // -------------------------智能互联-------------------------
         // -------------------------固件管理-------------------------
         // -------------------------应用管理-------------------------
