@@ -251,6 +251,54 @@ let configRouter = (router) => {
           }
         },
         // -------------------------智能互联-------------------------
+        // 微信互联
+        'nest/wechat': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/wechat'))
+            }, 'admin')
+          }
+        },
+        // 亚马逊互联
+        'nest/amazon': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/amazon'))
+            }, 'admin')
+          }
+        },
+        // Google互联
+        'nest/google': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/google'))
+            }, 'admin')
+          }
+        },
+        // philips互联
+        'nest/philips': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/philips'))
+            }, 'admin')
+          }
+        },
+        // 萤石互联
+        'nest/ezviz': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/ezviz'))
+            }, 'admin')
+          }
+        },
+        // 设备联动
+        'nest/ifttt': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/nest/ifttt'))
+            }, 'admin')
+          }
+        },
         // -------------------------固件管理-------------------------
         // 新建任务
         'firmware/add': {

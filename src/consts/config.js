@@ -89,6 +89,28 @@ export const MAIN_NAV = {
         url: '/apps/upgrade'
       }]
     }, {
+      alias: 'nest', // 智能互联
+      icon: 'cog',
+      subs: [{
+        alias: 'wechat',
+        url: '/nest/wechat'
+      }, {
+        alias: 'amazon',
+        url: '/nest/amazon'
+      }, {
+        alias: 'google',
+        url: '/nest/google'
+      }, {
+        alias: 'philips',
+        url: '/nest/philips'
+      }, {
+        alias: 'ezviz',
+        url: '/nest/ezviz'
+      }, {
+        alias: 'ifttt',
+        url: '/nest/ifttt'
+      }]
+    }, {
       alias: 'firmware', // 固件管理
       icon: 'cog',
       subs: [{

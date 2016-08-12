@@ -45,6 +45,17 @@ export default {
             update: '上传新固件'
           }
         },
+        nest: {
+          label: '智能互联',
+          subs: {
+            wechat: '微信互联',
+            amazon: '亚马逊互联',
+            google: 'Google互联',
+            philips: 'philips互联',
+            ezviz: '萤石互联',
+            ifttt: '设备联动'
+          }
+        },
         shopping: {
           label: '在线购买',
           subs: {
