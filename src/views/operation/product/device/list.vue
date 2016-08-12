@@ -278,7 +278,7 @@ export default {
           mac: '<a class="hl-red">' + item.mac + '</a>',
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '是' : '否',
+          is_online: item.is_online ? '在线' : '下线',
           prototype: item
         }
         result.push(device)
