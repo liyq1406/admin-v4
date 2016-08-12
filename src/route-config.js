@@ -241,10 +241,24 @@ let configRouter = (router) => {
               resolve(require('./views/dev/warrant/list'))
             }, 'admin')
           }
-        }
+        },
         // -------------------------智能互联-------------------------
         // -------------------------固件管理-------------------------
         // -------------------------应用管理-------------------------
+        'apps/center': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/apps'))
+            }, 'admin')
+          }
+        },
+        'apps/upgrade': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/apps/upgrade'))
+            }, 'admin')
+          }
+        }
         // -------------------------数据服务-------------------------
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------

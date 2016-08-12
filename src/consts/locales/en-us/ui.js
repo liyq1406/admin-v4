@@ -27,6 +27,13 @@ export default {
           subs: {
             list: '授权记录'
           }
+        },
+        apps: {
+          label: '应用管理',
+          subs: {
+            center: '应用中心',
+            upgrade: '升级管理'
+          }
         }
       }
     },
