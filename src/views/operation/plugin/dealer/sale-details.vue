@@ -7,7 +7,7 @@
     <div class="panel mt15 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <div class="sale-details-head">这是客户名称<i class="fa fa-edit"></i></div>
+          <div class="sale-details-head">{{sale.name}}<i class="fa fa-edit"></i></div>
           <div v-stretch="192">
             <info-list :info="userInfo"></info-list>
           </div>
@@ -17,7 +17,7 @@
             <div class="sale-info-body">
               <div class="row">
                 <div class="col-9">销售日期:</div>
-                <div class="col-15">2014-02-23 12:00:03</div>
+                <div class="col-15">{{sale.sale_time | uniformDate}}</div>
               </div>
               <div class="row">
                 <div class="col-9">场所层数:</div>
@@ -54,8 +54,11 @@
       </div>
       <div class="panel-bd">
         <div class="row">
-          <div v-for="i in 3" class="col-5 sale-img mr20">
-            <img src="" alt="">
+          <div v-if="sale.pictures.length > 0" v-for="pic in sale.pictures" class="col-5 sale-img mr20">
+            <img :src="pic.url" alt="">
+          </div>
+          <div v-else class="nopic">
+            暂时无图片
           </div>
         </div>
       </div>
@@ -231,37 +234,29 @@ export default {
         title: '这是客户名称'
       },
       userInfo: {
-        status: {
-          label: '账号状态',
-          value: ' 无激活时间字段返回'
-        },
-        create_date: {
-          label: '创建时间',
-          value: '查询中..'
-        },
-        email: {
-          label: '邮箱',
-          value: '9299289@qq.com'
-        },
         phone: {
           label: '手机',
-          value: '18293900239'
+          value: ''
         },
-        age: {
-          label: '年龄',
+        type: {
+          label: '客户类型',
+          value: ''
+        },
+        province: {
+          label: '省份',
           value: '未知'
         },
-        gender: {
-          label: '性别',
-          value: '男'
+        city: {
+          label: '城市',
+          value: '未知'
         },
         area: {
           label: '所在区域',
-          value: '字段缺失'
+          value: ''
         },
         address: {
           label: '详细地址',
-          value: '字段缺失'
+          value: ''
         }
       },
       sale: {
@@ -329,49 +324,33 @@ export default {
   },
 
   ready () {
-    // this.getSale()
+    this.getSale()
   },
   methods: {
     getSale () {
       this.loadingData = true
-      var self = this
-      var argvs = arguments
-      var fn = self.getSale
-      var params = {
-        offset: 0,
-        limit: 10,
-        query: {
-          '_id': this.$route.params.sale_id
-        }
-      }
-      this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-        // console.log(token)
-        api.dealer.getSales(this.$route.params.app_id, params, token).then((res) => {
-          // console.log(res)
-          this.sale = res.data.list[0]
-          this.loadingData = false
-          this.loadingData = false
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'dealer'
-          }
-          self.handlePluginError(err, env)
-          // this.handleError(res)
-          this.loadingData = false
-        })
-      })
-      // api.dealer.getSales(this.$route.params.app_id, params).then((res) => {
-      //   if (res.status === 200) {
-      //     this.sale = res.list[0]
-      //     this.loadingData = false
+      // var params = {
+      //   offset: 0,
+      //   limit: 10,
+      //   query: {
+      //     '_id': this.$route.params.sale_id
       //   }
-      // }).catch((res) => {
-      //   this.handleError(res)
-      //   this.loadingData = false
-      // })
+      // }
+      api.dealer.getUser(this.$route.params.sale_id).then((res) => {
+        this.sale = res.data
+        this.userInfo.phone.value = this.sale.phone
+        this.userInfo.type.value = this.sale.client_type
+        this.userInfo.province.value = this.sale.province
+        this.userInfo.city.value = this.sale.city
+        this.userInfo.address.value = this.sale.address
+        // todo 字段缺失
+        this.userInfo.area.value = this.sale.area
+        this.loadingData = false
+        this.loadingData = false
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
+      })
     },
     editProduct () {
       this.showEditModal = true
@@ -476,7 +455,10 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
-
+.nopic
+  height 200px
+  line-height 200px
+  text-align center
 .fa
   margin-left 5px
 .status

@@ -12,7 +12,7 @@
       </div>
     </div> -->
     <div class="panel">
-        <div class="titlemargin">华南经销商<a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/edit'"><i class="fa fa-edit"></i></a></div>
+        <div class="titlemargin">{{dealer.name}}<a v-link="'/operation/plugins/dealer/' + $route.params.app_id + '/edit/' + $route.params.dealer_id"><i class="fa fa-edit"></i></a></div>
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
@@ -103,9 +103,9 @@
               <template v-if="sales.length > 0">
                 <tr v-for="sale in sales">
                   <!-- <td>{{* dealer.name }}</td> -->
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale._id" class="hl-red">{{* sale.create_time | uniformDate }}</a></td>
-                  <td>{{* sale.version }}</td>
-                  <td>{{* sale.code }}</td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{* sale.sale_time | uniformDate }}</a></td>
+                  <td>{{* sale.product_mod }}</td>
+                  <td>{{* sale.sn }}</td>
                   <td>{{* sale.name }}</td>
                   <td>{{* sale.phone }}</td>
                   <!-- <td class="tac">
@@ -271,45 +271,46 @@
         dealerInfo: {
           linkman: {
             label: '联系人',
-            value: '大张工'
+            value: ''
           },
           phone: {
             label: '手机号',
-            value: '13800138000'
+            value: ''
           },
-          password: {
-            label: '登录密码',
-            value: '102810821'
-          },
+          // password: {
+          //   label: '登录密码',
+          //   value: '102810821'
+          // },
           id: {
             label: '账号',
-            value: '0912232221'
+            value: ''
           },
           area: {
             label: '负责区域',
-            value: '华南地区'
+            value: ''
           },
           belong: {
             label: '从属于',
-            value: '中国地区'
+            value: ''
           },
           target: {
             label: '年销售目标',
-            value: '200w'
+            value: ''
           },
           sale: {
             label: '已售数量',
-            value: '13k'
+            value: ''
           }
         },
-        sales: [{
-          _id: 2222,
-          create_time: '2016-5-31 16:18',
-          version: '3.0',
-          code: '123456789',
-          name: '张小明',
-          phone: '13800138000'
-        }],
+        // sales: [{
+        //   _id: 2222,
+        //   create_time: '2016-5-31 16:18',
+        //   version: '3.0',
+        //   code: '123456789',
+        //   name: '张小明',
+        //   phone: '13800138000'
+        // }],
+        sales: [],
         query: '',
         loadingData: false,
         editModal: {
@@ -324,7 +325,8 @@
         queryTypeOptions: [
           { label: '产品型号', value: 'version' },
           { label: '客户名称', value: 'name' },
-          { label: '手机号', value: 'phone' }
+          { label: '手机号', value: 'phone' },
+          { label: '序列号', value: 'sn' }
         ],
         queryType: {
           label: '客户名称',
@@ -357,14 +359,14 @@
           offset: (this.currentPage - 1) * this.countPerPage,
           // order: this.sortOrders,
           query: {
-            'distributer_id': this.$route.params.dealer_id
+            'distributer_id': {$in: [this.$route.params.dealer_id]}
           }
         }
         // if (this.query.length > 0) {
         //   condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
         // }
-        if (this.key !== '') {
-          condition.query[this.queryType.value] = {$regex: this.query, $options: 'i'}
+        if (this.query.length > 0) {
+          condition.query[this.queryType.value] = {$in: [this.query]}
         }
         return condition
       }
@@ -377,7 +379,7 @@
 
     ready () {
       this.getDealer()
-      // this.getSales()
+      this.getSales()
     },
     methods: {
       // 获取经销商信息
@@ -396,15 +398,15 @@
         api.dealer.get(this.$route.params.dealer_id).then((res) => {
           // console.log(res)
           this.dealer = res.data
-          this.dealerInfo.linkman.value = this.dealer.name
+          this.dealerInfo.linkman.value = this.dealer.contacter
           this.dealerInfo.phone.value = this.dealer.phone
-          this.dealerInfo.id.value = this.dealer.id
+          this.dealerInfo.id.value = this.dealer.email
           this.dealerInfo.belong.value = this.dealer.upper_dealer_code
           // todo字段缺失
           this.dealerInfo.password.value = this.dealer.password
-          this.dealerInfo.area.value = this.dealer.area
-          this.dealerInfo.target.value = this.dealer.target
-          this.dealerInfo.sale.value = this.dealer.sale
+          this.dealerInfo.area.value = this.dealer.region
+          this.dealerInfo.target.value = this.dealer.sale_goal
+          this.dealerInfo.sale.value = this.dealer.saled_amount
           this.loadingData = false
         }).catch((err) => {
           this.handleError(err)
@@ -417,7 +419,7 @@
           this.currentPage = 1
         }
         this.loadingData = true
-        api.dealer.get(this.queryCondition).then((res) => {
+        api.dealer.getSales(this.$route.params.dealer_id, this.queryCondition).then((res) => {
           // console.log(res)
           this.sales = res.data.list
           this.total = res.data.count

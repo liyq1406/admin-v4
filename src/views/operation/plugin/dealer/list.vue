@@ -50,12 +50,12 @@
               <template v-if="total > 0">
                 <tr v-for="dealer in dealers">
                   <!-- <td>{{* dealer.name }}</td> -->
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer._id" class="hl-red">{{* dealer.name }}</a></td>
-                  <td>{{* dealer.username }}</td>
-                  <td>{{* dealer.linkman }}</td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer.id" class="hl-red">{{* dealer.name }}</a></td>
+                  <td>{{* dealer.email }}</td>
+                  <td>{{* dealer.contacter }}</td>
                   <td>{{* dealer.phone }}</td>
-                  <td>{{* dealer.area }}</td>
-                  <td>{{* dealer.belong_to || '无' }}</td>
+                  <td>{{* dealer.region }}</td>
+                  <td>{{* dealer.belongTo || '无' }}</td>
                   <td>{{* dealer.sale_target }}</td>
                   <td>{{* dealer.sale_count || 0 }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
@@ -305,7 +305,7 @@
     computed: {
       queryCondition () {
         var condition = {
-          // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           // order: this.sortOrders,
