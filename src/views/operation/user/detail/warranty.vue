@@ -41,6 +41,8 @@
   import SearchBox from 'components/SearchBox'
   import AreaSelect from 'components/AreaSelect'
   import Select from 'components/Select'
+  // import api from 'api'
+  // import dateFormat from 'date-format'
 
   export default {
     components: {
@@ -87,6 +89,10 @@
       }
     },
 
+    ready () {
+      // this.getIssues()
+    },
+
     methods: {
       typeText (index) {
         return (['延保工单', '维修工单'])[index]
@@ -95,6 +101,7 @@
       statusText (index) {
         return (['待处理', '已维修', '已延保'])[index]
       }
+
     }
   }
 </script>

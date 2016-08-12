@@ -28,12 +28,12 @@
     </div>
     <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
-    <div class="panel">
+    <!-- <div class="panel">
       <div class="panel-hd panel-hd-full">
         <h2>账号状态</h2>
       </div>
 
-    </div>
+    </div> -->
   </div>
 </template>
 
