@@ -79,7 +79,7 @@ export const MAIN_NAV = {
       icon: 'bell',
       subs: [{
         alias: 'center',
-        url: '/apps/center'
+        url: '/apps/center/extensions'
       }, {
         alias: 'upgrade',
         url: '/apps/upgrade'

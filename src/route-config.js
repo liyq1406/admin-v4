@@ -250,6 +250,22 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/apps'))
             }, 'admin')
+          },
+          subRoutes: {
+            'customize': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/apps/customize'))
+                }, 'admin')
+              }
+            },
+            'extensions': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/apps/extensions'))
+                }, 'admin')
+              }
+            }
           }
         },
         'apps/upgrade': {
