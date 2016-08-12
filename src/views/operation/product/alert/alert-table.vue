@@ -26,7 +26,7 @@
             </div>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy"></x-table>
       </div>
     </div>
   </div>
@@ -91,7 +91,7 @@ export default {
         key: 'id',
         title: '设备ID'
       }, {
-        key: 'time',
+        key: 'create_date',
         title: '时间',
         sortType: -1
       }, {
@@ -141,6 +141,12 @@ export default {
         condition.query.tags = { $in: [this.visibility.value] }
       }
 
+      this.headers.forEach((item) => {
+        if (item.sortType) {
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+        }
+      })
+
       return condition
     },
 
@@ -155,7 +161,7 @@ export default {
         let alert = {
           content: item.alert_name,
           mac: item.mac,
-          time: formatDate(item.create_date),
+          create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
           level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
@@ -221,6 +227,17 @@ export default {
       this.getAlerts()
     },
 
+    /**
+     * 按某个属性排序
+     * @author shengzhi
+     * @param  {Object} header 表头
+     * @param  {Number} 索引
+     */
+    sortBy (header, index) {
+      header.sortType = header.sortType * -1
+      this.headers.$set(index, header)
+      this.getAlerts()
+    },
     /**
      * 获取消息列表
      * @author weijie

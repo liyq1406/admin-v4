@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="currentProduct" @change="getList">
+            <select v-model="currentProduct" @change="getAlerts">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -17,10 +17,10 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker @timechange = "getListSpecial"></date-time-range-picker>
+          <date-time-range-picker @timechange = "getAlertsSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getList"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getAlerts"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -50,71 +50,30 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <div class="filter-bar">
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+          <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList" @search-deactivate="getList" @search="getList" @press-enter="getList">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts" @search-deactivate="getAlerts" @search="getAlerts" @press-enter="getAlerts">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" @click="getList" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getAlerts" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <v-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="getList">
+                <select v-model="visibility" @change="getAlerts">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </v-select>
             </div>
           </div>
-          <table class="table table-stripe table-bordered" :loading="loadingData">
-            <thead>
-              <tr>
-                <!-- <th>勾选</th> -->
-                <th>告警内容</th>
-                <th>设备MAC</th>
-                <th>设备ID</th>
-                <th>时间</th>
-                <th>持续时长</th>
-                <!-- <th>地点</th> -->
-                <th>告警等级</th>
-                <th>状态</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="alerts.length > 0">
-                <tr v-for="alert in alerts">
-                  <!-- <td><input type="checkbox"></td> -->
-                  <td><a v-link="{'path': '/operation/alerts/detail/'+alert.id}">{{ alert.alert_name }}</a></td>
-                  <td>{{ alert.mac }}</td>
-                  <td>{{ alert.from }}</td>
-                  <td>{{ alert.create_date | formatDate }}</td>
-                  <td>{{ alert.lasting }}h</td>
-                  <!-- <td>{{ alert.location}}</td> -->
-                  <td>
-                    <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':alert.tags==='严重', 'text-label-info':alert.tags==='轻微'}" class="text-label">{{ alert.tags }}</span></template>
-                  </td>
-                  <td><span v-if="alert.is_read">已处理</span><span v-else>未处理</span></td>
-                </tr>
-              </template>
-              <tr v-if="alerts.length === 0 && !loadingData">
-                <td colspan="7" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getList"></pager>
+        </x-table>
       </div>
     </div>
     <!-- 查看告警信息浮层-->
@@ -187,11 +146,12 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
-import dateFormat from 'date-format'
+import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
 import Mock from 'mockjs'
 import { formatDate } from 'src/filters'
+import dateFormat from 'date-format'
 
 export default {
   name: 'Alerts',
@@ -207,6 +167,7 @@ export default {
     DateTimeRangePicker,
     DateTimeSinglePicker,
     'v-select': Select,
+    'x-table': Table,
     SearchBox
   },
 
@@ -304,7 +265,30 @@ export default {
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
         { label: '重度', value: '重度' }
-      ]
+      ],
+      headers: [{
+        key: 'content',
+        title: '告警内容'
+      }, {
+        key: 'mac',
+        title: '设备MAC'
+      }, {
+        key: 'id',
+        title: '设备ID'
+      }, {
+        key: 'create_date',
+        title: '时间',
+        sortType: -1
+      }, {
+        key: 'duration',
+        title: '持续时长'
+      }, {
+        key: 'level',
+        title: '告警等级'
+      }, {
+        key: 'state',
+        title: '状态'
+      }]
     }
   },
 
@@ -319,6 +303,16 @@ export default {
     //   }
     // },
 
+    // 分页信息
+    page () {
+      return {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+    },
+
+    // 查询条件
     queryCondition () {
       var condition = {}
       if (this.period === '') {
@@ -387,7 +381,36 @@ export default {
         default:
       }
 
+      this.headers.forEach((item) => {
+        if (item.sortType) {
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+        }
+      })
+
       return condition
+    },
+
+    tables () {
+      var result = []
+      this.alerts.map((item) => {
+        let levelCls = ({
+          '中等': 'text-label-warning',
+          '重度': 'text-label-danger'
+        })[item.tags] || ''
+
+        let alert = {
+          content: item.alert_name,
+          mac: item.mac,
+          create_date: formatDate(item.create_date),
+          duration: this.prettyDuration(item.lasting),
+          id: item.from,
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+          state: item.is_read ? '已处理' : '未处理',
+          prototype: item
+        }
+        result.push(alert)
+      })
+      return result
     },
 
     TimePick () {
@@ -453,13 +476,8 @@ export default {
 
   route: {
     data () {
-      // this.getAlerts()
-      // this.getAlertTrends()
-      // this.getAlertSummary()
       this.getFirstProduct()
       this.getSummary()
-      // this.getList()
-      // this.getTagTrend()
     }
   },
 
@@ -468,27 +486,12 @@ export default {
     products () {
       this.getFirstProduct()
       if (this.products.length > 0) {
-        // this.getTagTrend()
-        this.getList()
+        this.getAlerts()
       }
     }
-    // period () {
-    //   this.getAlertTrends()
-    //   this.getAlertSummary()
-    // }
   },
 
   methods: {
-    // 获取图表数据
-    // getTagTrend () {
-    //   api.alert.getTagTrend(this.selectedProduct.id, '通知', this.beginTime, this.endTime, '', '').then((res) => {
-    //     if (res.status === 200) {
-    //       console.log(res.data)
-    //     }
-    //   }).catch((res) => {
-    //     this.handleError(res)
-    //   })
-    // },
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
@@ -541,15 +544,59 @@ export default {
         this.handleError(res)
       })
     },
-    getListSpecial (start, end) {
+
+    /**
+     * 将毫秒数格式化为合适显示的时间段
+     */
+    prettyDuration (n) {
+      let hours = (n / 3600000).toFixed(1)
+      if (hours > 1) {
+        return `${hours}小时`
+      } else {
+        return `${Math.floor(n / 60000)}分钟`
+      }
+    },
+
+    /**
+     * 当前页码改变
+     * @author weijie
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
+      this.currentPage = number
+      this.getAlerts()
+    },
+
+    /**
+     * 每页显示的数量改变
+     * @author weijie
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+      this.getAlerts()
+    },
+
+    /**
+     * 按某个属性排序
+     * @author shengzhi
+     * @param  {Object} header 表头
+     * @param  {Number} 索引
+     */
+    sortBy (header, index) {
+      header.sortType = header.sortType * -1
+      this.headers.$set(index, header)
+      this.getAlerts()
+    },
+    getAlertsSpecial (start, end) {
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end
       console.log(start + end)
-      this.getList()
+      this.getAlerts()
     },
     // 获取消息列表@author weijie
-    getList () {
+    getAlerts () {
       this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
