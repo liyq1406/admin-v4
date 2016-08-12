@@ -67,11 +67,11 @@
 
     route: {
       data () {
+        this.$route.router.go('/dev/apps/upgrade/123')
       }
     },
     methods: {
       selectApp (index) {
-        console.log(index)
         this.curIndex = index
       }
     }
