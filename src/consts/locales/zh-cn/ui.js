@@ -34,6 +34,12 @@ export default {
             center: '应用中心',
             upgrade: '升级管理'
           }
+        },
+        settings: {
+          label: '设置',
+          subs: {
+            mail_templates: '邮件模板'
+          }
         }
       }
     },

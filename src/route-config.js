@@ -274,12 +274,20 @@ let configRouter = (router) => {
               resolve(require('./views/dev/apps/upgrade'))
             }, 'admin')
           }
-        }
+        },
         // -------------------------数据服务-------------------------
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------
         // -------------------------设置----------------------------
+        // 邮件模板
+        'settings/mail-templates': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/mail-templates'))
+            }, 'admin')
+          }
+        }
         // -------------------------在线购买-------------------------
       }
     },
@@ -1016,14 +1024,6 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/settings/account'))
-            }, 'admin')
-          }
-        },
-        // 邮件模板
-        'settings/mail-templates': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/settings/mail-templates'))
             }, 'admin')
           }
         },

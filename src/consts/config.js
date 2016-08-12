@@ -88,6 +88,13 @@ export const MAIN_NAV = {
         alias: 'upgrade',
         url: '/apps/upgrade'
       }]
+    }, {
+      alias: 'settings', // 系统设置
+      icon: 'cog',
+      subs: [{
+        alias: 'mail_templates',
+        url: '/settings/mail-templates'
+      }]
     }]
   },
   operation: {
@@ -194,9 +201,6 @@ export const MAIN_NAV = {
       }, {
         alias: 'account',
         url: '/settings/account'
-      }, {
-        alias: 'mail_templates',
-        url: '/settings/mail-templates'
       }]
     }]
   }
