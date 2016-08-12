@@ -23,7 +23,7 @@
                   <div class="row">
                     <div class="col-5">
                       <v-select :label="ruleTypes[addModal.model.type-1]">
-                        <select v-model="addModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
+                        <select v-model="addModal.model.type" @input="onSelectType">
                           <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>
@@ -35,7 +35,7 @@
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
                           <v-select :label="datapointName(addModal.model)">
-                            <select v-model="addModal.model.param" v-form-ctrl name="param">
+                            <select v-model="addModal.model.param">
                               <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                             </select>
                           </v-select>
@@ -46,7 +46,7 @@
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
                           <v-select :label="compareTypes[addModal.model.compare-1]">
-                            <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
+                            <select v-model="addModal.model.compare">
                               <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                             </select>
                           </v-select>
@@ -56,11 +56,11 @@
                     <div class="col-5">
                       <div class="ml10">
                         <div class="input-text-wrap" v-show="addModal.model.type === 1 && datapoints.length">
-                          <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
+                          <input v-model="addModal.value1" type="text" class="input-text"/>
                         </div>
                         <div class="select" v-show="addModal.model.type === 2">
                           <v-select :label="$t('common.'+addModal.value2)">
-                            <select v-model="addModal.value2" v-form-ctrl name="value">
+                            <select v-model="addModal.value2">
                               <option value="online">{{ $t("common.online") }}</option>
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
@@ -75,7 +75,7 @@
                 <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
                 <div class="controls col-16">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
-                    <textarea v-model="addModal.model.content" type="text" maxlength="250" lazy class="input-text"></textarea>
+                    <textarea v-model="addModal.model.content" type="text" maxlength="250" class="input-text"></textarea>
                   </div>
                 </div>
               </div>
@@ -200,9 +200,9 @@
         candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,      // 候选标签
         breadcrumbNav: [{
           label: '全部',
-          link: `/operation/plugins/dealer/${this.$route.params.app_id}/list`
+          link: `/dev/products/${this.$route.params.id}/alert`
         }, {
-          label: '添加经销商'
+          label: '添加告警规则'
         }],
         addModal: {
           show: false,
@@ -232,7 +232,6 @@
     },
     route: {
       data () {
-        this.addOrEdit()
         this.getDataPoint()
       }
     },
@@ -247,15 +246,6 @@
       // 是否显示 Google推送
       isShowGoogle (model) {
         return _.includes(model.notify_target, 5)
-      },
-      addOrEdit () {
-        if (this.$route.params.rule_id) {
-          this.type = 'edit'
-          this.breadcrumbNav[1].label = '设置告警规则'
-        } else {
-          this.breadcrumbNav[1].label = '添加告警规则'
-          this.type = 'add'
-        }
       },
       onSubmit () {},
       getDataPoint () {

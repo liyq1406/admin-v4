@@ -212,7 +212,7 @@ let configRouter = (router) => {
         'products/:id/alert/edit/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/product/alert/add'))
+              resolve(require('./views/dev/product/alert/edit'))
             }, 'admin')
           }
         },

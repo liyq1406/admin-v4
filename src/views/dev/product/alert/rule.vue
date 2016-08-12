@@ -57,7 +57,7 @@
         <tbody>
           <template v-if="rules.length > 0">
             <tr v-for="rule in rules">
-              <td><a>{{* rule.name }}</a></td>
+              <td><a v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
               <td>{{* rule.content }}</td>
               <td>{{* rule.type | ruleLabel }}</td>
               <td><span class="text-label-danger level-style">重度</span></td>
