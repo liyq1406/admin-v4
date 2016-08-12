@@ -17,7 +17,7 @@
                   <label class="form-control col-5 ml20 dealer-label">账号:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
-                      <input v-model="dealer.username" type="email" name="username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>
+                      <input v-model="dealer.username" type="email" name="dealer.username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.username.touched && $autoValidation.username.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
@@ -28,7 +28,7 @@
                   <label class="form-control col-5 ml20 dealer-label">登录密码:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
-                      <input v-model="dealer.password" type="text" name="password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
+                      <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.password.touched && $autoValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span>
@@ -52,7 +52,7 @@
                   <label class="form-control col-5 ml20 dealer-label">经销商名称:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
-                      <input type="text" v-model="dealer.name" name="name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
+                      <input type="text" v-model="dealer.name" name="dealer.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span>
@@ -63,7 +63,7 @@
                   <label class="form-control col-5 ml20 dealer-label">联系人:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.contact')" class="input-text-wrap">
-                      <input type="text" v-model="dealer.linkman" name="linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
+                      <input type="text" v-model="dealer.linkman" name="dealer.linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.linkman.touched && $autoValidation.linkman.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
@@ -74,7 +74,7 @@
                   <label class="form-control col-5 ml20 dealer-label">手机号:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.phone')" class="input-text-wrap">
-                      <input type="text" v-model="dealer.phone" name="phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
+                      <input type="text" v-model="dealer.phone" name="dealer.phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span>
@@ -85,7 +85,7 @@
                   <label class="form-control col-5 ml20 dealer-label">联系地址:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.address')" class="input-text-wrap">
-                      <input type="text" v-model="dealer.address" name="address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
+                      <input type="text" v-model="dealer.address" name="dealer.address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.address')}) }}</span>
@@ -96,7 +96,7 @@
                   <label class="form-control col-5 ml20 dealer-label">负责区域:</label>
                   <div class="controls col-16">
                     <div v-placeholder="$t('ui.dealer.placeholders.area')" class="input-text-wrap">
-                      <input type="text" v-model="dealer.dutyarea" name="password" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
+                      <input type="text" v-model="dealer.area" name="dealer.area" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
@@ -158,7 +158,7 @@
           linkman: '',
           phone: '',
           address: '',
-          dutyarea: '',
+          area: '',
           belongTo: ''
         },
         belongs: [
@@ -221,13 +221,15 @@
       },
       getDealer (id) {
         var params = {
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
           query: {
-            id: id
+            id: {$in: [id]}
           }
         }
         api.dealer.list(params).then((res) => {
-          if (res.status === 200 && res.data.list > 0) {
-            console.log(res.data.list[0])
+          // console.log(res.data)
+          if (res.status === 200 && res.data.list.length > 0) {
+            // console.log(res)
             let dealerRaw = res.data.list[0]
             this.dealer.username = dealerRaw.email
             this.dealer.name = dealerRaw.name
