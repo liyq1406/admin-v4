@@ -16,16 +16,16 @@
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getTasks" :placeholder="'请输入' + queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getTasks">
                   <button slot="search-button" @click="getTasks" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <!-- <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </v-select> -->
                 </search-box>
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" @theader-broadcast-time="sortByTime" @tbody-title="goDetail">
+          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-time="sortByTime" @tbody-title="goDetail"  @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
           </c-table>
         </div>
       </div>
@@ -70,12 +70,6 @@
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
         query: '',
-        queryTypeOptions: [
-          { label: '推送标题', value: 'title' },
-          { label: '推送App', value: 'platform' },
-          { label: '推送人群', value: 'people' },
-          { label: '推送状态', value: 'status' }
-        ],
         queryType: {
           label: '推送标题',
           value: 'title'
@@ -122,7 +116,8 @@
             title: '阅读数',
             class: 'tac'
           }
-        ]
+        ],
+        sortKey: ''
       }
     },
 
@@ -157,12 +152,20 @@
         var condition = {
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
-          query: {}
+          query: {},
+          order: {}
         }
 
         if (this.query.length > 0) {
+          condition.offset = 0
           condition.query[this.queryType.value] = { $like: this.query }
         }
+
+        this.headers.map((item) => {
+          if (item.sortType && (item.key === this.sortKey)) {
+            condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          }
+        })
 
         return condition
       }
@@ -173,6 +176,14 @@
     },
 
     methods: {
+      pageCountUpdate (count) {
+        this.countPerPage = count
+        this.getTasks()
+      },
+      currentPageChange (number) {
+        this.currentPage = number
+        this.getTasks()
+      },
       computedStatusText (status) {
         var result = ''
         if (status === 0) {
@@ -202,8 +213,10 @@
           this.$route.router.go(this.$route.path + '/' + table.prototype.id)
         }
       },
-      getTasks (querying) {
-        api.broadcast.getTasks().then((res) => {
+      getTasks () {
+        this.loadingData = true
+        api.broadcast.getTasks(this.queryCondition).then((res) => {
+          this.loadingData = false
           if (res.status === 200 && res.data.list && res.data.list.length > 0) {
             this.histories = res.data.list
             this.total = res.data.count
@@ -215,6 +228,7 @@
             this.histories = []
           }
         }).catch((res) => {
+          this.loadingData = false
           this.handleError(res)
         })
       },
@@ -244,6 +258,7 @@
           header.sortType = 1
         }
         this.headers.$set(index, header)
+        this.getTasks()
       }
     }
   }

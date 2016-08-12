@@ -8,6 +8,12 @@ export default {
       `${API_SERVER.default}/v2/broadcast/task_add`, params
     )
   },
+  // 新建任务
+  updateTask (taskId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/broadcast/task_add${taskId}`, params
+    )
+  },
   // 获取任务列表
   getTasks (params) {
     return http.post(

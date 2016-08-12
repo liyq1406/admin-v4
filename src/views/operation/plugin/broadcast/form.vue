@@ -147,10 +147,10 @@
                           </div> -->
                         </div>
                         <div class="fl btn-box">
-                          <button class="btn btn-sm btn-ghost" @click="user.push('')">
+                          <button class="btn btn-sm btn-ghost" @click.prevent="user.push('')">
                             <i class="fa fa-plus"></i>
                           </button>
-                          <button class="btn btn-sm btn-ghost" v-if="user.length>1" @click="user.$remove(u)">
+                          <button class="btn btn-sm btn-ghost" v-if="user.length>1" @click.stop.prevent="removeUser(userId)">
                             <i class="fa fa-times"></i>
                           </button>
                         </div>
@@ -232,7 +232,7 @@
                     </label>
                     <div class="controls col-19">
                       <div class="input-text-wrap" v-placeholder="'请填写页面activity地址，例如：com.tencent.xlinkpushdemo.main'">
-                        <input type="text" class="input-text" v-model="action.view" v-validate:view="{isrequired: (actionType===1)}" @input="actionType=1"/>
+                        <input type="text" class="input-text" v-model="action.view" name="action.view" v-validate:view="{isrequired: (actionType===1)}" @input="actionType=1"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.view.touched && $validation.view.isrequired">请填写页面activity地址</span>
@@ -245,7 +245,7 @@
                     </label>
                     <div class="controls col-19">
                       <div class="input-text-wrap" v-placeholder="'请输入网页地址'">
-                        <input type="text" name="openContent" class="input-text"  v-model="action.url" v-validate:url="{isrequired: (actionType===2)}" @input="actionType=2"/>
+                        <input type="text" name="action.url" class="input-text"  v-model="action.url" v-validate:url="{isrequired: (actionType===2)}" @input="actionType=2"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.url.touched && $validation.url.isrequired">请填写页面activity地址</span>
@@ -258,7 +258,7 @@
                     </label>
                     <div class="controls col-19">
                       <div class="input-text-wrap" v-placeholder="'请输入内容'">
-                        <textarea class="input-text textarea" v-model="action.command" v-validate:command="{isrequired: (actionType===3),maxlength:240}" @input="actionType=3"></textarea>
+                        <textarea class="input-text textarea" v-model="action.command" name="action.command" v-validate:command="{isrequired: (actionType===3),maxlength:240}" @input="actionType=3"></textarea>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.command.touched && $validation.command.isrequired">请填写页面activity地址</span>
@@ -448,7 +448,11 @@
         result.action.url = this.action.url
         result.scope = {}
         result.scope.type = this.scopeType
-        result.scope.user = this.user
+        var users = []
+        this.user.map((u) => {
+          users.push(u - 0)
+        })
+        result.scope.user = users
         result.scope.app_list = this.selectedApps
         result.scope.product_list = this.selectedProducts
         result.scope.group = {}
@@ -459,13 +463,13 @@
         }
         result.scope.group.start_day = new Date(createDayRange(0, this.group.time).start)
         result.scope.group.end_day = new Date(createDayRange(0, this.group.time).end)
-        result.area = {}
-        result.area.type = this.area.type
-        result.area.province = this.area.province.name
-        result.area.city = this.area.city.name
-        result.tag = {}
-        result.tag.type = this.tag.type
-        result.tag.tag_list = this.tag.tag_list.split(',')
+        result.scope.area = {}
+        result.scope.area.type = this.area.type
+        result.scope.area.province = this.area.province.name
+        result.scope.area.city = this.area.city.name
+        result.scope.tag = {}
+        result.scope.tag.type = this.tag.type
+        result.scope.tag.tag_list = this.tag.tag_list.split(',')
         return result
       },
       /**
@@ -513,18 +517,16 @@
       }
     },
     methods: {
+      removeUser (u) {
+        this.user.$remove(u)
+      },
       /**
        * 获取详细推送的详情
        * @return {[type]} [description]
        */
+      // TODO
       getDetails () {
-        var params = {
-          // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-          query: {
-            id: {'$in': [this.id]}
-          }
-        }
-        api.broadcast.getTasks(params).then((res) => {
+        api.broadcast.getTask(this.id).then((res) => {
           var details = res.data.list[0]
           console.log(details)
           this.title = details.title
@@ -533,7 +535,6 @@
           this.time = details.time
           this.expire = details.expire
           this.action
-          alert(details.action.type)
           switch (details.action.type) {
             case 0:
               this.actionType = 1
@@ -548,10 +549,10 @@
               this.actionType = 4
           }
           this.action.view = ''
-          this.action.url = details.action.url
-          this.action.command = details.action.command
+          this.action.url = details.action.url || ''
+          this.action.command = details.action.command || ''
           this.scopeType = details.scope.type
-          this.user = details.scope.user
+          this.user = details.scope.user || ['']
           if (details.scope.app_list && details.scope.app_list.length) {
             this.selectedApps = details.scope.app_list || []
           }
@@ -664,7 +665,15 @@
         })
       },
       edit () {
-        console.log('编辑 暂无接口')
+        api.broadcast.updateTask(this.task).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '修改成功'
+          })
+          this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
   }
