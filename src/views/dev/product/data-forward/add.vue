@@ -7,7 +7,7 @@
     <div class="panel">
       <div class="panel-bd bt">
         <div class="form ml30">
-          <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+          <form v-form name="addValidation" @submit.prevent="onAddSubmit">
             <div class="form-row row">
               <label class="form-control col-7">{{ '数据的类型' }}:</label>
               <div class="controls col-17">
