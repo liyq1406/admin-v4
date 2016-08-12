@@ -39,20 +39,20 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <v-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="getDevices(true)">
+                <select v-model="visibility" @change="getDevices">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </v-select>
@@ -297,6 +297,7 @@ export default {
       }
 
       if (this.query.length > 0) {
+        this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
       }
 
@@ -323,7 +324,7 @@ export default {
   route: {
     data () {
       this.originAddModel = _.clone(this.addModel)
-      this.getDevices(true)
+      this.getDevices()
 
       // getProductSummary 方法来自 productSummaryMixin
       this.getProductSummary()
@@ -348,7 +349,7 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getDevices(true)
+      this.getDevices()
     },
 
     /**
@@ -361,11 +362,7 @@ export default {
     },
 
     // 获取设备列表
-    getDevices (querying) {
-      if (typeof querying !== 'undefined') {
-        this.currentPage = 1
-      }
-
+    getDevices () {
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
