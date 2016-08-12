@@ -3,34 +3,34 @@
     <div class="main-title">
       <h2>授权记录</h2>
     </div>
+    <div class="row statistic-group bt">
+      <div class="col-8">
+        <statistic :info="recordSummary.all" :title="recordSummary.all.title" align="left">
+        </statistic>
+      </div>
+      <div class="col-8">
+        <statistic :info="recordSummary.used" :title="recordSummary.used.title" :has-target="true" align="left">
+        </statistic>
+      </div>
+      <div class="col-8">
+        <statistic :info="recordSummary.rest" :title="recordSummary.rest.title" :has-action="true" align="left" :showchange="true">
+          <div slot="action">
+            <button class="btn btn-ghost btn-sm">
+            购买配额
+            </button>
+          </div>
+        </statistic>
+      </div>
+    </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="row statistic-group bt">
-          <div class="col-8">
-            <statistic :info="recordSummary.all" :title="recordSummary.all.title" align="left">
-            </statistic>
-          </div>
-          <div class="col-8">
-            <statistic :info="recordSummary.used" :title="recordSummary.used.title" :has-target="true" align="left">
-            </statistic>
-          </div>
-          <div class="col-8">
-            <statistic :info="recordSummary.rest" :title="recordSummary.rest.title" :has-action="true" align="left" :showchange="true">
-              <div slot="action">
-                <button>
-                购买配额
-                </button>
-              </div>
-            </statistic>
-          </div>
-        </div>
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <span slot="label">明细：</span>
-                <button>手动添加</button>
-                <button>批量导入</button>
+                <button class="btn btn-ghost btn-sm">手动添加</button>
+                <button class="btn btn-ghost btn-sm">批量导入</button>
               </div>
             </div>
             <div class="filter-group fr">
@@ -179,4 +179,5 @@
 <style lang="stylus" scoped>
 .bt
   border-top 1px solid #d9d9d9
+  margin-bottom 20px
 </style>
