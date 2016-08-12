@@ -101,6 +101,7 @@ export default {
     max-height 540px
     overflow-y auto
     box-sizing border-box
+    background #FFF
 
     .table
       margin 0
