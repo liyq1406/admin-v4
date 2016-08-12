@@ -232,6 +232,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 设备联动
+        'products/:id/linkage': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/linkage'))
+            }, 'admin')
+          }
+        },
 
         // -------------------------设备授权-------------------------
         // 授权记录
@@ -748,14 +756,6 @@ let configRouter = (router) => {
         },
 
         // -------------------------设备互联-------------------------
-        // 设备联动
-        'linkage/devices': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/linkage/devices'))
-            }, 'admin')
-          }
-        },
         // nest
         'linkage/nest': {
           component (resolve) {

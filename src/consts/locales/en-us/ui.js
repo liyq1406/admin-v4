@@ -19,7 +19,8 @@ export default {
             debug: '设备调试',
             virtual_devices: '虚拟设备',
             alert: '告警管理',
-            data_forward: '数据接口'
+            data_forward: '数据接口',
+            linkage: '设备互联'
           }
         },
         warrant: {
