@@ -90,5 +90,25 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/dealer_auth`, params
     )
+  },
+  /**
+   * 获取销售信息
+   * @param  {Object} params 认证信息
+   * @return {Promise}
+   */
+  getSales (dealerId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer/${dealerId}/sale_summary`, params
+    )
+  },
+  /**
+   * 获取客户详细信息
+   * @param  {Object} params 认证信息
+   * @return {Promise}
+   */
+  getUser (clientInfoId) {
+    return http.post(
+      `${API_SERVER.default}/v2/dealer/get_client_info/${clientInfoId}`
+    )
   }
 }
