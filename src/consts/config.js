@@ -89,13 +89,6 @@ export const MAIN_NAV = {
         url: '/apps/upgrade'
       }]
     }, {
-      alias: 'settings', // 系统设置
-      icon: 'cog',
-      subs: [{
-        alias: 'mail_templates',
-        url: '/settings/mail-templates'
-      }]
-    }, {
       alias: 'firmware', // 固件管理
       icon: 'cog',
       subs: [{
@@ -107,6 +100,23 @@ export const MAIN_NAV = {
       }, {
         alias: 'manage',
         url: '/firmware/manage'
+      }]
+    }, {
+      alias: 'shopping', // 在线购买
+      icon: 'shopping-cart',
+      subs: [{
+        alias: 'cart',
+        url: '/shopping/cart'
+      }, {
+        alias: 'orders',
+        url: '/shopping/orders'
+      }]
+    }, {
+      alias: 'settings', // 系统设置
+      icon: 'cog',
+      subs: [{
+        alias: 'mail_templates',
+        url: '/settings/mail-templates'
       }]
     }]
   },

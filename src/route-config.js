@@ -336,8 +336,25 @@ let configRouter = (router) => {
               resolve(require('./views/dev/settings/mail-templates'))
             }, 'admin')
           }
-        }
+        },
+
         // -------------------------在线购买-------------------------
+        // 在线购买
+        'shopping/cart': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/shopping/index'))
+            }, 'admin')
+          }
+        },
+        // 购买记录
+        'shopping/orders': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/shopping/orders'))
+            }, 'admin')
+          }
+        }
       }
     },
 

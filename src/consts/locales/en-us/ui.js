@@ -36,12 +36,6 @@ export default {
             upgrade: '升级管理'
           }
         },
-        settings: {
-          label: '设置',
-          subs: {
-            mail_templates: '邮件模板'
-          }
-        },
         firmware: {
           label: '固件管理',
           subs: {
@@ -49,6 +43,19 @@ export default {
             manage: '版本管理',
             add: '新建任务',
             update: '上传新固件'
+          }
+        },
+        shopping: {
+          label: '在线购买',
+          subs: {
+            cart: '在线购买',
+            orders: '购买记录'
+          }
+        },
+        settings: {
+          label: '设置',
+          subs: {
+            mail_templates: '邮件模板'
           }
         }
       }
