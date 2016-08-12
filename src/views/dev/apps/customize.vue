@@ -1,10 +1,17 @@
 <template>
   <div>
     <div class="panel">
-      <div class="panel-bd">
-        <div class="action-bar">
+      <div class="panel-bd customize-list">
+        <!-- <div class="action-bar">
           <div class="action-group">
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
+          </div>
+        </div> -->
+        <div class="filter-bar">
+          <div class="filter-group fl">
+            <div class="filter-group-item">
+              <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
+            </div>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -282,4 +289,6 @@
 
   .secret-key
     font-size 20px
+  .customize-list
+    margin 0 20px
 </style>

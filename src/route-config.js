@@ -313,6 +313,15 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/apps/upgrade'))
             }, 'admin')
+          },
+          subRoutes: {
+            ':id': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/apps/upgrade-panel'))
+                }, 'admin')
+              }
+            }
           }
         },
         // -------------------------数据服务-------------------------

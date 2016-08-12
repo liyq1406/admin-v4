@@ -94,6 +94,9 @@
   @import '../../../assets/stylus/common'
 
   .extension-list
+    margin 0 10px
+    border 1px solid #F2F2F2
+    padding 0 10px
     li
       padding 20px 0
       border-bottom 1px solid default-border-color
