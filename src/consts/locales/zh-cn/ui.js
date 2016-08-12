@@ -41,6 +41,15 @@ export default {
           subs: {
             mail_templates: '邮件模板'
           }
+        },
+        firmware: {
+          label: '固件管理',
+          subs: {
+            list: '升级列表',
+            manage: '版本管理',
+            add: '新建任务',
+            update: '上传新固件'
+          }
         }
       }
     },

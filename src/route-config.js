@@ -252,6 +252,38 @@ let configRouter = (router) => {
         },
         // -------------------------智能互联-------------------------
         // -------------------------固件管理-------------------------
+        // 新建任务
+        'firmware/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/firmware/add'))
+            }, 'admin')
+          }
+        },
+        // 升级列表
+        'firmware/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/firmware/list'))
+            }, 'admin')
+          }
+        },
+        // 版本管理
+        'firmware/manage': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/firmware/manage/index'))
+            }, 'admin')
+          }
+        },
+        // 上传新固件
+        'firmware/update': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/firmware/manage/update'))
+            }, 'admin')
+          }
+        },
         // -------------------------应用管理-------------------------
         'apps/center': {
           component (resolve) {

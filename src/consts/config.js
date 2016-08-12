@@ -95,6 +95,19 @@ export const MAIN_NAV = {
         alias: 'mail_templates',
         url: '/settings/mail-templates'
       }]
+    }, {
+      alias: 'firmware', // 固件管理
+      icon: 'cog',
+      subs: [{
+        alias: 'add',
+        url: '/firmware/add'
+      }, {
+        alias: 'list',
+        url: '/firmware/list'
+      }, {
+        alias: 'manage',
+        url: '/firmware/manage'
+      }]
     }]
   },
   operation: {
