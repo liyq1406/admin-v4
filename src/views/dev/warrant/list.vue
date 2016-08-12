@@ -29,8 +29,8 @@
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <span slot="label">明细：</span>
-                <button class="btn btn-ghost btn-sm">手动添加</button>
-                <button class="btn btn-ghost btn-sm">批量导入</button>
+                <button class="btn btn-ghost btn-sm" @click="onShowAddModal">手动添加</button>
+                <button class="btn btn-ghost btn-sm" @click="onShowAddModal2">批量导入</button>
               </div>
             </div>
             <div class="filter-group fr">
@@ -50,6 +50,57 @@
         </div>
       </div>
     </div>
+    <!-- 手动添加浮层 -->
+    <modal :show.sync="showAddModal" @close="onAddCancel" width="524px">
+      <h3 slot="header">手动添加</h3>
+      <div slot="body" class="form">
+        <validator name="majorClientValidation">
+          <form @submit.prevent="">
+            <div class="form-row row">
+              <label class="form-control col-6">产品:</label>
+              <div class="controls filter-group-item col-18">
+                <v-select :label="addModal.industry">
+                  <select v-model="addModal.product">
+                    <option v-for="industry in industrys" :value="industry">{{industry}}</option>
+                  </select>
+                </v-select>
+              </div>
+            </div>
+            <div class="form-row row">
+              <label class="form-control col-6">MAC:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入MAC地址'" class="input-text-wrap">
+                  <input v-model="addModal.mac" type="text" name="email" v-validate:email="{required: true}" class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validator>
+      </div>
+    </modal>
+    <!-- 批量导入浮层 -->
+    <modal :show.sync="showAddModal2" @close="onAddCancel" width="400px">
+      <h3 slot="header">批量导入</h3>
+      <div slot="body" class="form">
+        <validator name="majorClientValidation">
+          <form @submit.prevent="">
+            <div class="form-row row">
+              <!-- <label class="form-control col-6">导入:</label> -->
+              <button class="btn btn-ghost ben-sm"><i class="fa fa-share-square-o"></i>导入设备</button>
+              <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限txt、cav格式文件</span></p>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onAddCancel2" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validator>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -85,6 +136,9 @@
 
     data () {
       return {
+        showAddModal: false,
+        showAddModal2: false,
+        addModal: {},
         queryTypeOptions: [
           { label: '添加人', value: 'addman' }
         ],
@@ -171,6 +225,51 @@
       onPageCountUpdate (count) {
         this.countPerPage = count
         this.getAlerts(true)
+      },
+      /**
+       * 关闭添加大客户浮层
+       * @return {[type]} [description]
+       */
+      onAddCancel () {
+        this.adding = false
+        this.showAddModal = false
+        // this.$nextTick(() => {
+        //   this.$resetValidation()
+        // })
+      },
+      /**
+       * 显示添加大客户的浮层
+       * @return {[type]} [description]
+       */
+      onShowAddModal () {
+        var addModal = {
+          // 产品
+          product: '',
+          // MAC
+          mac: ''
+        }
+        this.addModal = addModal
+        this.showAddModal = true
+      },
+      /**
+       * 关闭添加大客户浮层
+       * @return {[type]} [description]
+       */
+      onAddCancel2 () {
+        this.adding = false
+        this.showAddModal2 = false
+        // this.$nextTick(() => {
+        //   this.$resetValidation()
+        // })
+      },
+      /**
+       * 显示添加大客户的浮层
+       * @return {[type]} [description]
+       */
+      onShowAddModal2 () {
+        var addModal = {}
+        this.addModal = addModal
+        this.showAddModal2 = true
       }
     }
   }
