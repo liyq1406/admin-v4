@@ -209,9 +209,9 @@
       列表:
         ✓ 消息记录列表 @guohui @done(2016-08-12 09:54) @project(#消息推送 / 推送历史 / 列表)
           ✓ 列表 @done(2016-08-11 09:30) @project(#消息推送 / 推送历史 / 列表)
-          ☐ 筛选 @shengzhi
-          ☐ 排序 @shengzhi
-          ☐ 分页 @shengzhi
+          ✓ 筛选 @guohui @done(2016-08-12 14:30) @project(#消息推送 / 推送历史 / 列表)
+          ✓ 排序 @guohui @done(2016-08-12 14:30) @project(#消息推送 / 推送历史 / 列表)
+          ✓ 分页 @guohui @done(2016-08-12 14:30) @project(#消息推送 / 推送历史 / 列表)
       消息详情:
         ✓ 5个信息栏 @shengzhi @done(2016-08-11 00:56) @project(#消息推送 / 推送历史 / 消息详情)
         ✓ 推送历史图表 @shengzhi @done(2016-08-11 00:56) @project(#消息推送 / 推送历史 / 消息详情)

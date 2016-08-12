@@ -30,7 +30,7 @@
                   <div class="controls col-20">
                     <div class="select">
                       <v-select :label="locales.data.ACCOUNT_TYPES[product.type-1].label">
-                        <select v-model="product.type" v-form-ctrl name="type">
+                        <select v-model="product.type" name="type">
                           <option v-for="type in locales.data.ACCOUNT_TYPES" :value="type.value" :selected="$index===0">{{ type.label }}</option>
                         </select>
                       </v-select>
@@ -42,7 +42,7 @@
                   <div class="controls col-20">
                     <div class="select">
                       <v-select :label="locales.data.DEVICE_TYPES[product.link_type-1]">
-                        <select v-model="product.link_type" v-form-ctrl name="link_type">
+                        <select v-model="product.link_type" name="link_type">
                           <option v-for="type in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>

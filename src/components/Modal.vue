@@ -68,7 +68,6 @@ export default {
 
   .modal-dialog
     position relative
-    background rgba(255, 255, 255, .95)
     margin 0 auto
     width 500px
     box-shadow 0 2px 8px rgba(0, 0, 0, .3)
@@ -90,7 +89,7 @@ export default {
   .modal-header
     padding 8px 15px
     border-bottom 1px solid #DDD
-    background #F3F3F3
+    background #FFF
 
     h3
       font-weight normal
