@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <v-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="currentProduct" @change="getList()">
+            <select v-model="currentProduct" @change="getList">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -20,7 +20,7 @@
           <date-time-range-picker @timechange = "getListSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getList()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="periods" :value.sync="period" @select="getList"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -57,20 +57,20 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList" @search-deactivate="getList" @search="getList" @press-enter="getList">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getList" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <v-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="getList()">
+                <select v-model="visibility" @change="getList">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </v-select>
@@ -370,6 +370,7 @@ export default {
       //   condition.query.id = {$in: [this.key]}
       // }
       if (this.key.length > 0) {
+        this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
       }
 
@@ -468,7 +469,7 @@ export default {
       this.getFirstProduct()
       if (this.products.length > 0) {
         // this.getTagTrend()
-        this.getList(this.queryCondition)
+        this.getList()
       }
     }
     // period () {
@@ -545,7 +546,7 @@ export default {
       this.startTimePick = start
       this.endTimePick = end
       console.log(start + end)
-      this.getList(this.TimePick)
+      this.getList()
     },
     // 获取消息列表@author weijie
     getList () {

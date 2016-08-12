@@ -7,7 +7,7 @@
             <div class="filter-group-item">
               <v-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">明细：</span>
-                <select v-model="visibility" @change="getAlerts()">
+                <select v-model="visibility" @change="getAlerts">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </v-select>
@@ -132,6 +132,7 @@ export default {
 
       // 关键字搜索
       if (this.key.length > 0) {
+        this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
       }
 
@@ -217,7 +218,7 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getAlerts(true)
+      this.getAlerts()
     },
 
     /**
