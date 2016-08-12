@@ -4,6 +4,7 @@
       <div class="icon-loading" v-show="loading">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
+      <slot name="fiter-bar"></slot>
       <table class="table" :class="{'table-bordered':bordered}">
         <thead>
           <tr>
