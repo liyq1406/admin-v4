@@ -1,6 +1,10 @@
 <template>
-  <div class="main">
-    <div class="main-title bordered">
+  <div class="main with-loading">
+    <div class="icon-loading" v-show="submiting">
+      <i class="fa fa-refresh fa-spin"></i>
+    </div>
+
+    <div class="main-title">
       <h2>在线购买</h2>
     </div>
 
@@ -10,15 +14,12 @@
 
     <!-- 确认信息和选择购买信息 -->
     <div class="shopping-section" v-show="currStep===1 || currStep===2">
-      <info @next-step="onInfoSubmit"></info>
+      <info @check-out="onCheckout"></info>
     </div>
 
     <!-- 确认订单 -->
     <div class="shopping-section" v-show="currStep===3 || currStep===4">
-      <order></order>
-      <div class="actions">
-        <button class="btn btn-primary btn-lg" @click="onOrderSubmit">提交订单</button>
-      </div>
+      <order @order-submit="onOrderSubmit"></order>
     </div>
 
     <!-- 支付成功 -->
@@ -49,7 +50,8 @@ export default {
 
   data () {
     return {
-      currStep: 5, // 当前步骤 [0|1|2|3]
+      submiting: false,
+      currStep: 2, // 当前步骤 [1|2|3|4|5]
       steps: ['确认信息', '选择购买信息', '确认订单', '在线支付', '支付成功']
     }
   },
@@ -58,17 +60,26 @@ export default {
     /**
      * 提交信息
      */
-    onInfoSubmit (info) {
-      console.log(info)
+    onCheckout (products) {
+      console.log(products)
       this.currStep = 3
     },
 
     /**
      * 提交订单信息
      */
-    onOrderSubmit () {
+    onOrderSubmit (order) {
+      console.log(order)
       // TODO 调用创建产品接口
-      this.currStep = 5
+      this.currStep = 4
+      this.submiting = true
+      window.setTimeout(() => {
+        this.currStep = 5
+        this.submiting = false
+      }, 1000)
+      window.setTimeout(() => {
+        this.$route.router.replace('orders')
+      }, 3000)
     }
   }
 }

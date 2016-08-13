@@ -124,6 +124,16 @@ export const MAIN_NAV = {
         url: '/firmware/manage'
       }]
     }, {
+      alias: 'data', // 数据服务
+      icon: 'database',
+      subs: [{
+        alias: 'tables',
+        url: '/data/tables'
+      }, {
+        alias: 'snapshot',
+        url: '/data/snapshot'
+      }]
+    }, {
       alias: 'shopping', // 在线购买
       icon: 'shopping-cart',
       subs: [{
@@ -139,16 +149,6 @@ export const MAIN_NAV = {
       subs: [{
         alias: 'mail_templates',
         url: '/settings/mail-templates'
-      }]
-    }, {
-      alias: 'data', // 数据服务
-      icon: 'database',
-      subs: [{
-        alias: 'tables',
-        url: '/data/tables'
-      }, {
-        alias: 'snapshot',
-        url: '/data/snapshot'
       }]
     }]
   },

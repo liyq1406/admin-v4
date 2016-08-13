@@ -59,6 +59,9 @@ export default {
 
 .x-flow
   .tab-s2
+    ul
+      margin-left 15px
+
     li
       margin-right 20px
 
