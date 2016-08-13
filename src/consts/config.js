@@ -73,14 +73,14 @@ export const MAIN_NAV = {
       url: '/products/create'
     }, {
       alias: 'warrant',
-      icon: 'bell',
+      icon: 'plug',
       subs: [{
         alias: 'list',
         url: '/warrant/list'
       }]
     }, {
       alias: 'apps',
-      icon: 'bell',
+      icon: 'th',
       subs: [{
         alias: 'center',
         url: '/apps/center/extensions'
@@ -90,7 +90,7 @@ export const MAIN_NAV = {
       }]
     }, {
       alias: 'nest', // 智能互联
-      icon: 'cog',
+      icon: 'exchange',
       subs: [{
         alias: 'wechat',
         url: '/nest/wechat'
@@ -112,7 +112,7 @@ export const MAIN_NAV = {
       }]
     }, {
       alias: 'firmware', // 固件管理
-      icon: 'cog',
+      icon: 'file-code-o',
       subs: [{
         alias: 'add',
         url: '/firmware/add'
