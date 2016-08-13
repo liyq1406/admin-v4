@@ -147,15 +147,16 @@
                       </div>
                     </div>
                   </div>
+                </div>
               </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">立即升级</button>
-              <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
-              <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
-            </div>
-          </form>
-        </validator>
+              <div class="form-actions">
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">立即升级</button>
+                <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
+                <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
+              </div>
+            </form>
+          </validator>
+        </div>
       </div>
     </div>
   </div>
