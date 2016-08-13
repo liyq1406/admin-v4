@@ -176,6 +176,13 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        'products/:id/info/record': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/info/add-record'))
+            }, 'admin')
+          }
+        },
         // 设备调试
         'products/:id/debug': {
           component (resolve) {
