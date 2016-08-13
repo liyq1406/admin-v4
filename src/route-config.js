@@ -322,16 +322,32 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/firmware/manage/index'))
             }, 'admin')
+          },
+          subRoutes: {
+            'message': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/firmware/manage/message'))
+                }, 'admin')
+              }
+            },
+            'update': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/firmware/manage/update'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 上传新固件
-        'firmware/update': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/firmware/manage/update'))
-            }, 'admin')
-          }
-        },
+        // 'firmware/update': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/firmware/manage/update'))
+        //     }, 'admin')
+        //   }
+        // },
         // -------------------------应用管理-------------------------
         'apps/center': {
           component (resolve) {
