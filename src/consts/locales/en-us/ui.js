@@ -50,7 +50,7 @@ export default {
           subs: {
             wechat: '微信互联',
             amazon: '亚马逊互联',
-            google: 'Google互联',
+            google: 'Google nest',
             philips: 'philips互联',
             ezviz: '萤石互联',
             ifttt: '设备联动'
