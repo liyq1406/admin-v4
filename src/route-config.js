@@ -396,6 +396,22 @@ let configRouter = (router) => {
           }
         },
         // -------------------------数据服务-------------------------
+        // 数据表
+        'data/tables': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/tables'))
+            }, 'admin')
+          }
+        },
+        // 数据快照
+        'data/snapshot': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/snapshot'))
+            }, 'admin')
+          }
+        },
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------

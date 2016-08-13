@@ -36,6 +36,13 @@ export default {
             upgrade: '升级管理'
           }
         },
+        data: {
+          label: '数据服务',
+          subs: {
+            tables: '数据表',
+            snapshot: '数据快照'
+          }
+        },
         firmware: {
           label: '固件管理',
           subs: {

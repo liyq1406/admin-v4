@@ -140,6 +140,16 @@ export const MAIN_NAV = {
         alias: 'mail_templates',
         url: '/settings/mail-templates'
       }]
+    }, {
+      alias: 'data', // 数据服务
+      icon: 'database',
+      subs: [{
+        alias: 'tables',
+        url: '/data/tables'
+      }, {
+        alias: 'snapshot',
+        url: '/data/snapshot'
+      }]
     }]
   },
   operation: {
