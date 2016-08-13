@@ -34,40 +34,7 @@
             </div>
             <div class="panel">
               <div class="panel-hd">
-                <h3><i class="number">2</i> 任务信息</h3>
-              </div>
-              <div class="panel-bd">
-                <div class="form">
-                  <div class="form-row row">
-                    <label class="form-control col-5">任务名称:</label>
-                    <div class="controls col-19">
-                      <div v-placeholder="'请填写任务名称'" class="input-text-wrap">
-                        <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20}" lazy class="input-text"/>
-                      </div>
-                      <div class="form-tips form-tips-error">
-                        <span v-if="$validation.name.touched && $validation.name.required">请输入任务名称</span>
-                        <span v-if="$validation.name.modified && $validation.name.maxlength">不可超过20个字符</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-row row">
-                    <label class="form-control col-5">任务描述:</label>
-                    <div class="controls col-19">
-                      <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
-                        <input v-model="content" name="content" type="text" v-validate:content="{required: true, maxlength: 200}" lazy class="input-text"/>
-                      </div>
-                      <div class="form-tips form-tips-error">
-                        <span v-if="$validation.content.touched && $validation.content.required">请输入任务描述</span>
-                        <span v-if="$validation.content.modified && $validation.content.maxlength">不可超过200个字符</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="panel">
-              <div class="panel-hd">
-                <h3><i class="number">3</i> 升级详情</h3>
+                <h3><i class="number">2</i> 固件信息</h3>
               </div>
               <div class="panel-bd">
                 <div class="form">
@@ -104,23 +71,27 @@
                     </div>
                   </div>
                   <div class="form-row row">
-                    <label class="form-control col-5">起始版本:</label>
+                    <label class="form-control col-5">固件型号:</label>
                     <div class="controls col-19">
-                      <v-select :label="">
-                        <select v-model="" @change="">
-                          <option v-for="item in emptyArr" :value="item"></option>
-                        </select>
-                      </v-select>
+                      <div v-placeholder="'请输入固件型号'" class="input-text-wrap">
+                        <input v-model="style" type="text" name="style" v-validate:style="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.style.touched && $validation.style.required">请输入固件型号</span>
+                        <span v-if="$validation.style.modified && $validation.style.maxlength">不可超过20个字符</span>
+                      </div>
                     </div>
                   </div>
                   <div class="form-row row">
-                    <label class="form-control col-5">目标版本:</label>
+                    <label class="form-control col-5">固件版本号:</label>
                     <div class="controls col-19">
-                      <v-select :label="">
-                        <select v-model="" @change="">
-                          <option v-for="item in emptyArr" :value="item"></option>
-                        </select>
-                      </v-select>
+                      <div v-placeholder="'请输入固件型号'" class="input-text-wrap">
+                        <input v-model="version" type="text" name="version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.version.touched && $validation.version.required">请输入固件版本号</span>
+                        <span v-if="$validation.version.modified && $validation.version.maxlength">不可超过20个字符</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -128,29 +99,34 @@
             </div>
             <div class="panel">
               <div class="panel-hd">
-                <h3><i class="number">4</i> 升级模式</h3>
+                <h3><i class="number">3</i> 上传文件</h3>
+              </div>
+              <div class="panel-bd">
+                <div class="controls">
+                  <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload btn-sm">
+                    <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="" :disabled="uploading"/><i class="fa fa-reply-all"></i>上传固件文件
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="panel-hd">
+                <h3><i class="number">4</i> 版本说明</h3>
               </div>
               <div class="panel-bd">
                 <div class="form">
                   <div class="form-row row">
-                    <label class="form-control col-5">升级模式:</label>
-                    <div class="controls col-19 row">
-                      <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="type" :value="1" number/>自动升级
-                        </label>
-                      </div>
-                      <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="type" :value="2" number/>手动升级
-                        </label>
+                    <label class="form-control col-5 radio">版本说明:</label>
+                    <div class="controls col-19">
+                      <div class="input-text-wrap" v-placeholder="'请输入内容'">
+                        <textarea class="input-text textarea" v-model=" " name="command"></textarea>
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
               <div class="form-actions">
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">立即升级</button>
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
                 <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
                 <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
               </div>
@@ -203,7 +179,9 @@
         title: '',
         content: '',
         timeType: 1,
-        type: 1
+        type: 1,
+        style: '',
+        version: ''
       }
     },
 
