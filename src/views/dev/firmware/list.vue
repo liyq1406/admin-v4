@@ -35,13 +35,13 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>序号</th>
-                <th>描述</th>
-                <th class="tac">识别码</th>
-                <th>起始版本</th>
-                <th>目标版本</th>
+                <th width="8%">序号</th>
+                <th width="20%">描述</th>
+                <th width="10%">识别码</th>
+                <th width="10%">起始版本</th>
+                <th width="10%">目标版本</th>
                 <th>升级进度</th>
-                <th class="tac">状态</th>
+                <th width="12%" class="tac">状态</th>
               </tr>
             </thead>
             <tbody>
@@ -49,11 +49,13 @@
                 <tr v-for="firmware in firmwares">
                   <td>{{$index + 1}}</td>
                   <td>{{ firmware.content }}</td>
-                  <td class="tac">{{ firmware.code }}</td>
+                  <td>{{ firmware.code }}</td>
                   <td>{{ firmware.start_version }}</td>
                   <td>{{ firmware.target_version }}</td>
-                  <td>暂无</td>
-                  <td class="tac"><a v-if="firmware.status === 0" href="##">启动</a><a v-else href="##">暂停</a> <a href="##">编辑</a></td>
+                  <td>
+                    <progress :count="firmware.count" :max="firmware.max" :pause="firmware.status === 0"></progress>
+                  </td>
+                  <td class="tac"><a v-if="firmware.status === 0" href="#" class="hl-red">启动</a><a v-else href="##" class="hl-red">暂停</a><a href="#" class="hl-red ml10">编辑</a></td>
                 </tr>
               </template>
               <tr v-if="firmwares.length === 0 && !loadingData">
@@ -77,6 +79,7 @@ import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
+import Progress from 'components/Progress'
 import Table from 'components/Table'
 import locales from 'consts/locales/index'
 // import _ from 'lodash'
@@ -94,10 +97,11 @@ export default {
   components: {
     'v-select': Select,
     'c-table': Table,
-    'modal': Modal,
-    'search-box': SearchBox,
-    'pager': Pager,
-    Statistic
+    Modal,
+    SearchBox,
+    Pager,
+    Statistic,
+    Progress
   },
 
   data () {
@@ -120,6 +124,8 @@ export default {
           code: '123',
           start_version: 'v-1.0',
           target_version: 'v-2.0',
+          max: 50000,
+          count: 45677,
           status: 0
         },
         {
@@ -127,6 +133,8 @@ export default {
           code: '123',
           start_version: 'v-1.0',
           target_version: 'v-2.0',
+          max: 60000,
+          count: 15666,
           status: 1
         },
         {
@@ -134,13 +142,17 @@ export default {
           code: '123',
           start_version: 'v-1.0',
           target_version: 'v-2.0',
-          status: 0
+          max: 100000,
+          count: 100000,
+          status: 1
         },
         {
           content: '这是描述',
           code: '123',
           start_version: 'v-1.0',
           target_version: 'v-2.0',
+          max: 50000,
+          count: 350,
           status: 1
         }
       ],
