@@ -5,8 +5,37 @@
     </div>
     <div class="tool-bar mt20">
       <div class="tool-list">
-        <div class="tool-list-item">
+        <div class="tool-list-item row">
           <div class="trigger" @click="addModal.show=true"><i class="fa fa-plus"></i><span class="trigger-text">添加数据表</span></div>
+          <div class="details-header">
+            <div class="operation-div">
+              <div class="operation add-line" @click="addLineEvent">
+                <span><i class="fa fa-plus"></i> 添加行</span>
+              </div>
+              <div class="operation del-line" :class="{'disabled': selectedLine.length === 0}" @click="deleteLineEvent">
+                <span><i class="fa fa-trash"></i> 删除行</span>
+              </div>
+              <div class="operation add-column" @click="showAddColumnModal">
+                <span><i class="fa fa-plus"></i> 添加列</span>
+              </div>
+              <div class="operation more">
+                <span><i class="fa fa-reorder"></i> 更多</span>
+                <div class="moreOperation-box">
+                  <ul>
+                    <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
+                    <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
+                    <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
+                    <li @click.stop="showJurisdictionModal"><span>限权设置</span></li>
+                    <li @click.stop=""><span>导出数据</span></li>
+                    <li @click.stop=""><span>导出全部数据表</span></li>
+                  </ul>
+                </div>
+              </div>
+              <!-- <div class="operation filter" @click="showFilterModal">
+                <span><i class="fa fa-filter"></i> 筛选</span>
+              </div> -->
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -34,40 +63,6 @@
           </div>
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
-              <div class="row details-header">
-                <div class="col-8 title-box">
-                  <span>数据表详情</span>
-                </div>
-                <div class="col-16 operation-box tar">
-                  <div class="operation-div">
-                    <div class="operation add-line" @click="addLineEvent">
-                      <span><i class="fa fa-plus"></i> 添加行</span>
-                    </div>
-                    <div class="operation del-line" :class="{'disabled': selectedLine.length === 0}" @click="deleteLineEvent">
-                      <span><i class="fa fa-trash"></i> 删除行</span>
-                    </div>
-                    <div class="operation add-column" @click="showAddColumnModal">
-                      <span><i class="fa fa-plus"></i> 添加列</span>
-                    </div>
-                    <div class="operation more">
-                      <span><i class="fa fa-reorder"></i> 更多</span>
-                      <div class="moreOperation-box">
-                        <ul>
-                          <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
-                          <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
-                          <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
-                          <li @click.stop="showJurisdictionModal"><span>限权设置</span></li>
-                          <li @click.stop=""><span>导出数据</span></li>
-                          <li @click.stop=""><span>导出全部数据表</span></li>
-                        </ul>
-                      </div>
-                    </div>
-                    <!-- <div class="operation filter" @click="showFilterModal">
-                      <span><i class="fa fa-filter"></i> 筛选</span>
-                    </div> -->
-                  </div>
-                </div>
-              </div>
               <div class="details-table">
                 <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
                 <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
@@ -1594,59 +1589,6 @@
     .details-box
       padding-top 20px
       box-sizing border-box
-      .details-header
-        height 26px
-        line-height 24px
-        .title-box
-          font-size 15px
-        .operation-div
-          font-size 0
-        .operation
-          height 26px
-          display inline-block
-          padding 0 10px
-          border 1px solid light-border-color
-          border-right 0
-          box-sizing border-box
-          cursor pointer
-          font-size 12px
-        .disabled
-          color #bbb
-          cursor no-drop
-        .more
-          border-right 1px solid #e0e0e0
-          position relative
-          .moreOperation-box
-            height 0
-            overflow hidden
-            opacity 0
-            position absolute
-            right -1px
-            top 100%
-            white-space nowrap
-            z-index 10
-            background #fff
-            line-height 24px
-            border 1px solid light-border-color
-            transition all ease 0.3s
-            transform translate(0, 10px)
-            li
-              height 24px
-              line-height 24px
-              padding 0 10px
-              border-bottom 1px solid light-border-color
-              transition all ease 0.3s
-              &:hover
-                color red
-                transform translate(-3px)
-          &:hover
-            .moreOperation-box
-              opacity 1
-              height auto
-              transform translate(0, 0)
-        .filter
-          margin-left 20px
-          border-right 1px solid light-border-color
       .tips-box
         box-sizing border-box
         padding 10px
@@ -1690,4 +1632,59 @@
         span
           display inline-block
           text-overflow 100%
+
+.details-header
+  height 26px
+  line-height 24px
+  display inline-block
+  float right
+  .operation-div
+    font-size 0
+    display inline-block
+  .operation
+    height 26px
+    display inline-block
+    padding 0 10px
+    border 1px solid light-border-color
+    border-right 0
+    box-sizing border-box
+    cursor pointer
+    font-size 12px
+  .disabled
+    color #bbb
+    cursor no-drop
+  .more
+    border-right 1px solid #e0e0e0
+    position relative
+    .moreOperation-box
+      height 0
+      overflow hidden
+      opacity 0
+      position absolute
+      right -1px
+      top 100%
+      white-space nowrap
+      z-index 10
+      background #fff
+      line-height 24px
+      border 1px solid light-border-color
+      transition all ease 0.3s
+      transform translate(0, 10px)
+      li
+        height 24px
+        line-height 24px
+        padding 0 10px
+        border-bottom 1px solid light-border-color
+        transition all ease 0.3s
+        &:hover
+          color red
+          transform translate(-3px)
+    &:hover
+      .moreOperation-box
+        opacity 1
+        height auto
+        transform translate(0, 0)
+  .filter
+    margin-left 20px
+    border-right 1px solid light-border-color
 </style>

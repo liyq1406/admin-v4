@@ -1,64 +1,20 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>数据快照</h2>
     </div>
-    <div class="panel mb20">
-      <div class="panel-bd">
-        <div class="form">
-          <div class="form-row row">
-            <label class="form-control col-6">产品:</label>
-            <div class="controls col-18">
-              <v-select :label="productTypes[productType.value].label" width="200px">
-                <select v-model="productType" @change="getProductData(true)">
-                  <option v-for="type in productTypes" :value="type">{{ type.label }}</option>
-                </select>
-              </v-select>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">快照规则:</label>
-            <div class="controls col-9">
-              <v-select :label="snapshotInterval[timeInterval.value].label" width="200px">
-                <select v-model="timeInterval">
-                  <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
-                </select>
-              </v-select>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">快照数据:</label>
-            <div class="controls col-18">
-              <div class="edit-snapshot">
-                <div v-for="dp in dataPointsShow" class="data-tag">{{dp}}</div>
-              </div>
-              <button class="btn btn-ghost btn-sm" @click="showAddModal=true"><i class="fa fa-edit"></i>选择快照数据项</button>
-            </div>
-          </div>
-          <div class="form-actions row">
-            <label class="form-control col-6 height-wrap"></label>
-            <div class="controls col-18">
-              <button class="btn btn-primary" @click="addSnapshotRule">添加快照配置</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="panel">
-      <div class="panel-hd">
-        <h2>快照配置列表</h2>
-      </div>
+    <div class="panel mt20">
       <div class="panel-bd">
         <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group">
               <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px" size="small">
-                <span slot="label">选择产品</span>
+                <span slot="label">显示</span>
                 <select v-model="ruleProductType" @change="getProductRules(true)">
                   <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
                 </select>
               </v-select>
+              <button class="btn btn-primary" @click="showAddModal=true"><i class="fa fa-plus"></i>添加快照配置</button>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -94,33 +50,58 @@
     </div>
     <!-- 添加选择快照数据项浮层-->
     <modal :show.sync="showAddModal" width="600px">
-      <h3 slot="header">选择快照数据项</h3>
-      <div slot="body" class="form">
-        <div class="table-wrap">
-          <div class="data-table">
-            <table class="table table-stripe table-bordered">
-              <thead>
-                <tr>
-                  <th>选择</th>
-                  <th>索引</th>
-                  <th>数据类型</th>
-                  <th>单位符号</th>
-                  <th>描述</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="dp in dataPoints | limitBy countPerPage (currentPage-1)*countPerPage">
-                  <td><input v-model="dp.selected" type="checkbox"/></td>
-                  <td>{{dp.index}}</td>
-                  <td>{{getTypeByValue(dp.type).label}}</td>
-                  <td>{{dp.symbol}}</td>
-                  <td>{{dp.description}}</td>
-                </tr>
-              </tbody>
-            </table>
+      <h3 slot="header">添加快照配置</h3>
+      <div slot="body" class="form form-wrap">
+        <div class="form-row row">
+          <label class="form-control col-4">产品:</label>
+          <div class="controls col-18">
+            <v-select :label="productTypes[productType.value].label" width="200px">
+              <select v-model="productType" @change="getProductData(true)">
+                <option v-for="type in productTypes" :value="type">{{ type.label }}</option>
+              </select>
+            </v-select>
           </div>
-          <div class="data-points-footer">
-            <pager v-if="dataPoints.length > countPerPage" :total="dataPoints.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update=""></pager>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-4">快照规则:</label>
+          <div class="controls col-9">
+            <v-select :label="snapshotInterval[timeInterval.value].label" width="200px">
+              <select v-model="timeInterval">
+                <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
+              </select>
+            </v-select>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-4">快照数据:</label>
+          <div class="controls col-20">
+            <div class="table-wrap">
+              <div class="data-table">
+                <table class="table table-stripe table-bordered">
+                  <thead>
+                    <tr>
+                      <th>选择</th>
+                      <th>索引</th>
+                      <th>数据类型</th>
+                      <th>单位符号</th>
+                      <th>描述</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="dp in dataPoints | limitBy countPerPage (currentPage-1)*countPerPage">
+                      <td><input v-model="dp.selected" type="checkbox"/></td>
+                      <td>{{dp.index}}</td>
+                      <td>{{getTypeByValue(dp.type).label}}</td>
+                      <td>{{dp.symbol}}</td>
+                      <td>{{dp.description}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <div class="data-points-footer">
+                <pager v-if="dataPoints.length > countPerPage" :total="dataPoints.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update=""></pager>
+              </div>
+            </div>
           </div>
         </div>
         <div class="form-actions snapshot-select">
@@ -640,7 +621,7 @@
   }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
   .data-points-footer
     .pager
@@ -660,4 +641,6 @@
     width 100%
     overflow-y hidden
     overflow-x auto
+  .form-wrap
+    padding 10px 20px 0
 </style>
