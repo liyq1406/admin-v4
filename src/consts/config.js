@@ -106,9 +106,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'ezviz',
         url: '/nest/ezviz'
-      }, {
-        alias: 'ifttt',
-        url: '/nest/ifttt'
+      // }, {
+      //   alias: 'ifttt',
+      //   url: '/nest/ifttt'
       }]
     }, {
       alias: 'firmware', // 固件管理

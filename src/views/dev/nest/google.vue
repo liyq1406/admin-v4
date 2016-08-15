@@ -86,7 +86,7 @@
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   // import { pluginFactoryMixin } from '../../opration/plugin/mixins'
   // import _ from 'lodash'
-  // import api from 'api'
+  import api from 'api'
 
   export default {
     name: 'Nest',
@@ -137,26 +137,26 @@
     methods: {
       // 修改config
       editNestConfig () {
-        // this.editing = true
-        // var params = {
-        //   name: this.plugins[0].name,
-        //   enable: this.plugins[0].enable,
-        //   config: {
-        //     client_id: this.plugins[0].config.client_id,
-        //     client_secret: this.plugins[0].config.client_secret
-        //   }
-        // }
-        // if (this.plugins[0].id) {
-        //   api.plugin.update(this.plugins[0].id, params).then((res) => {
-        //     if (res.status === 200) {
-        //       this.getPlugins()
-        //     }
-        //     this.editing = false
-        //   }).catch((res) => {
-        //     this.handleError(res)
-        //     this.editing = false
-        //   })
-        // }
+        this.editing = true
+        var params = {
+          name: this.plugins[0].name,
+          enable: this.plugins[0].enable,
+          config: {
+            client_id: this.plugins[0].config.client_id,
+            client_secret: this.plugins[0].config.client_secret
+          }
+        }
+        if (this.plugins[0].id) {
+          api.plugin.update(this.plugins[0].id, params).then((res) => {
+            if (res.status === 200) {
+              this.getPlugins()
+            }
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
       }
     }
   }

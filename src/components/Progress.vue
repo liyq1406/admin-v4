@@ -1,5 +1,5 @@
 <template>
-  <div :class="classes" class="x-progress">
+  <div :class="classes">
     <div class="progress-bar" v-el:bar :style="progressBarStyle">
       <div class="num" :style="numStyle"><span v-el:count>{{ count }}</span></div>
       <span class="percentage" :class="{'fixed': percentage < 8}">{{ percentage }}%</span>
@@ -184,7 +184,7 @@ export default {
 .x-progress-finished
   .num
     display none
-  
+
   .progress-bar
     &:after
       display none
