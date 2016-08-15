@@ -4,93 +4,140 @@
       <h2>虚拟设备</h2>
     </div>
     <div class="container">
-      <div class="panel">
-        <div class="panel-hd bordered row">
-          <div class="msg-box fl col-10">
-            <div class="title">
-              <h2>设备详情</h2>
+      <div class="device-details-box row">
+        <div class="panel no-split-line" :class="mainPanelClass">
+          <div class="panel-hd bordered row">
+            <div class="msg-box fl col-10">
+              <div class="title">
+                <h2 class="product-title mt5 mb5">智能烤箱</h2>
+              </div>
+              <div class="type-box">
+                <div class="status-box">
+                  <span class="status-text"><i class="fa mr5" :class="{'success': true, 'fail': false}"></i>在线</span>
+                  <label class="ml20 filter-device-info">MAC:</label>
+                  <span class="filter-device-info">AE9F8C007A19</span>
+                </div>
+              </div>
             </div>
-            <div class="type-box">
-              <div class="status-box">
-                <span class="status-text"><i class="fa" :class="{'success': true, 'fail': false}"></i>在线 </span>
-                <span class="status-time"> 2016-07-01  17:32:01</span>
+            <div class="filter-bar fr col-14">
+              <div class="filter-group fr">
+                <div class="filter-group-item mt15">
+                  <button @click="switchRightPanel" class="btn btn-ghost">
+                    <i class="fa fa-angle-double fa-angle-double-left" v-show="hideDownLoad"></i>
+                    <i class="fa fa-angle-double fa-angle-double-right" v-show="!hideDownLoad"></i>
+                    设备日志
+                  </button>
+                </div>
+                <div class="filter-group-item mt15 mr20">
+                  <switch :value.sync="connect"></switch>
+                </div>
               </div>
             </div>
           </div>
-          <div class="filter-bar fr col-14">
-            <div class="filter-group fr">
-              <div class="filter-group-item mt10">
-                <button class="btn btn-ghost">
-                  <i class="fa fa-angle-double fa-angle-double-left" v-show="!showLog"></i>
-                  <i class="fa fa-angle-double fa-angle-double-right" v-show="showLog"></i>
-                  设备日志
-                </button>
+          <div class="panel-bd row">
+            <div class="table-box" :class="tableClass">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th>索引</th>
+                    <th>端点ID</th>
+                    <th>值</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="n in 5">
+                    <td class="w50">{{n}}</td>
+                    <td class="w80">power</td>
+                    <td class="value-td">
+                      <div class="input-box">
+                        <div class="number-box" v-show="n===1">
+                          <range :line-width="'95%'"></range>
+                        </div>
+                        <div class="range-box" v-show="n===2">
+                          <label class="mr20">
+                            <input type="radio" :name="'value'+$index">on
+                          </label>
+                          <label class="mr20">
+                            <input type="radio" :name="'value'+$index">off
+                          </label>
+                        </div>
+                        <div class="number-box" v-show="n===3">
+                          <div class="input-text-wrap">
+                            <input type="text" class="input-text input-text-sm">
+                          </div>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div v-show="hideDownLoad" class="col-8">
+              <!-- Start: 设备日志-->
+              <div class="log-panel">
+                <div class="log-panel-hd">
+                  <div class="actions">
+                    <switch :value.sync="showLog" size="small"></switch>
+                  </div>
+                  <h2>{{ $t('ui.device.log') }}</h2>
+                </div>
+                <div class="log-panel-bd">
+                  <code class="output-log">
+                    <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
+                      <!-- <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                      <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                      <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
+                      <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template> -->
+                    </div>
+                  </code>
+                </div>
               </div>
-              <div class="filter-group-item mt10 mr20">
-                <switch :value.sync="showLog"></switch>
-              </div>
+              <!-- End: 设备日志-->
             </div>
           </div>
         </div>
-        <div class="panel-bd row">
-          <div class="table-box col-16">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>索引</th>
-                  <th>端点ID</th>
-                  <th>值</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="n in 5">
-                  <td class="w50">{{n}}</td>
-                  <td class="w80">power</td>
-                  <td class="value-td">
-                    <div class="input-box">
-                      <div class="number-box" v-show="n===1">
-                        <range :line-width="'95%'"></range>
-                      </div>
-                      <div class="range-box" v-show="n===2">
-                        <label class="mr20">
-                          <input type="radio" :name="'value'+$index">on
-                        </label>
-                        <label class="mr20">
-                          <input type="radio" :name="'value'+$index">off
-                        </label>
-                      </div>
-                      <div class="number-box" v-show="n===3">
-                        <div class="input-text-wrap">
-                          <input type="text" class="input-text input-text-sm">
-                        </div>
-                      </div>
-                    </div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div v-show="!hideDownLoad" class="col-5 download-panel">
+          <div class="title">设备二维码</div>
+          <div class="qrcode">
+            <img src="/static/images/device-qrcode.png"></img>
           </div>
-          <div class="log-box" :class="'col-8'">
-            <!-- Start: 设备日志-->
-            <div class="log-panel">
-              <div class="log-panel-hd">
-                <div class="actions">
-                  <switch :value.sync="showLog" size="small"></switch>
-                </div>
-                <h2>{{ $t('ui.device.log') }}</h2>
+          <div class="tip-qrcode">
+            <span>请使用xlink APP扫描二维码</span>
+          </div>
+          <div class="tip-download">
+            <span>提示：请先下载Demo APP后扫描二维码连接虚拟设备。</span>
+          </div>
+          <div class="ios row">
+            <div class="col-8 icon">
+              <img src="/static/images/download-ios.png" alt="">
+            </div>
+            <div class="col-16">
+              <div class="app-name">
+                <span>Xlink Demo APP</span>
               </div>
-              <div class="log-panel-bd">
-                <code class="output-log">
-                  <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
-                    <!-- <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
-                    <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
-                    <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
-                    <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template> -->
-                  </div>
-                </code>
+              <div class="version">
+                <span>v1.2.0</span>
+              </div>
+              <div class="date">
+                <span>2016-07-17</span>
               </div>
             </div>
-            <!-- End: 设备日志-->
+          </div>
+          <div class="android row">
+            <div class="col-8 icon">
+              <img src="/static/images/download-android.png" alt="">
+            </div>
+            <div class="col-16">
+              <div class="app-name">
+                <span>Xlink Demo APP</span>
+              </div>
+              <div class="version">
+                <span>v1.2.0</span>
+              </div>
+              <div class="date">
+                <span>2016-07-17</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -126,12 +173,36 @@ export default {
           time: '123',
           msg: ['msg']
         }
-      ]
+      ],
+      showLog: false,
+      connect: false,
+      hideDownLoad: false
+    }
+  },
+  computed: {
+    tableClass () {
+      if (this.hideDownLoad) {
+        return 'col-16'
+      } else {
+        return 'col-24'
+      }
+    },
+    mainPanelClass () {
+      if (this.hideDownLoad) {
+        return 'col-24'
+      } else {
+        return 'col-19'
+      }
+    }
+  },
+  methods: {
+    switchRightPanel () {
+      this.hideDownLoad = !this.hideDownLoad
     }
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
 
   .virtual-devices
@@ -221,7 +292,7 @@ export default {
             padding-right 10px
             box-sizing border-box
       .panel-bd
-        min-height 500px
+        min-height 400px
     .device-details-box
       padding 10px
       box-sizing border-box
@@ -270,4 +341,49 @@ export default {
 
       .msg-success
         color green
+  .product-title
+    font-size 20px !important
+    font-weight normal
+  .filter-device-info
+    font-size 10px
+    color #999999
+    text-align center
+  .download-panel
+    margin-top -10px
+    border-left 1px solid #e5e5e5
+    box-sizing border-box
+    padding 15px
+    .title
+      margin-top 20px
+      font-size 16px
+      text-align center
+    .qrcode
+      margin-top 10px
+      img
+        size 185px
+    .tip-qrcode
+      font-size 10px
+      color #666666
+      text-align center
+    .tip-download
+      margin-top 15px
+      padding-top 15px
+      border-top 1px solid #e5e5e5
+      font-size 10px
+      color #666666
+      text-align center
+    /*.ios
+      margin-top 20px
+      .icon
+        padding-left 10px
+        box-sizing border-box*/
+    .android, .ios
+      margin-top 20px
+      .icon
+        padding-left 5px
+        box-sizing border-box
+      .app-name
+        color #5B9BD1
+        font-size 5px
+        font-weight 700
 </style>

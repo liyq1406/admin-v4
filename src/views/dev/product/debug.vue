@@ -48,12 +48,13 @@
           <div class="panel-hd bordered row">
             <div class="msg-box fl col-10">
               <div class="title">
-                <h2>设备详情</h2>
+                <h2 class="product-title mt5 mb5">智能烤箱</h2>
               </div>
               <div class="type-box">
                 <div class="status-box">
-                  <span class="status-text"><i class="fa" :class="{'success': true, 'fail': false}"></i>在线 </span>
-                  <span class="status-time"> 2016-07-01  17:32:01</span>
+                  <span class="status-text"><i class="fa mr5" :class="{'success': true, 'fail': false}"></i>在线</span>
+                  <span class="status-date ml10">2016-07-01</span>
+                  <span class="status-time ml10">17:32:01</span>
                 </div>
               </div>
             </div>
@@ -70,6 +71,16 @@
                   <search-box :placeholder="'搜索端点ID'">
                     <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                   </search-box>
+                </div>
+                <div class="filter-group-item mt5">
+                  <div class="filter-device-info">
+                    <label>ID:</label>
+                    <span>P830183111</span>
+                  </div>
+                  <div class="filter-device-info">
+                    <label>MAC:</label>
+                    <span>AE9F8C007A19</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -175,7 +186,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
 
   .device-debug
@@ -315,4 +326,12 @@ export default {
 
       .msg-success
         color green
+
+  .product-title
+    font-size 20px !important
+    font-weight normal
+  .filter-device-info
+    font-size 10px
+    color #999999
+    text-align center
 </style>
