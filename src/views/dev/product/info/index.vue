@@ -7,7 +7,6 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-16">
-
             <!-- <div class="sale-details-head">智能烤箱<i class="fa fa-edit"></i></div> -->
             <div>
               <info-card>
@@ -35,17 +34,17 @@
           </div>
         </div>
 
-        <div class="mt10">
+        <div class="mt10 mb40">
           <div class="filter-bar">
             <div class="filter-group fl">
               <h3>设备添加纪录</h3>
             </div>
             <div class="filter-group fl">
               <div class="filter-group-item ml10">
-                <button class="btn btn-primary"><i class="fa fa-plus"></i>添加设备</button>
+                <button class="btn btn-primary"><i class="fa fa-plus"></i>导入设备</button>
               </div>
               <div class="filter-group-item">
-                <button class="btn btn-default"><i class="fa fa-plus"></i>导入设备</button>
+                <button class="btn btn-ghost"><i class="fa fa-plus"></i>添加设备</button>
               </div>
             </div>
           </div>

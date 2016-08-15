@@ -38,6 +38,13 @@ export default {
       if (this.height) {
         return this.height.toString() + 'px'
       }
+    },
+
+    // 总数
+    sum () {
+      return this.data.reduce((prev, curr) => {
+        return prev + curr.val
+      }, 0)
     }
   },
 
@@ -74,7 +81,7 @@ export default {
       }
 
       var frag = document.createElement('div')
-      frag.innerHTML = '<div style="position: absolute;width: 100px;top: 85px;left: 135px;text-align: center;color: #999;"><p style="font-size: 10px; margin: 5px 0">产品配额</p><p style="font-size: 20px; margin: 5px 0; color: black">30000</p>'
+      frag.innerHTML = `<div style="position: absolute;width: 100px;top: 85px;left: 50%; margin-left:-50px;text-align: center;color: #999;"><p style="font-size: 10px; margin: 5px 0">产品配额</p><p style="font-size: 20px; margin: 5px 0; color: black">${this.sum}</p>`
       this.$el.appendChild(frag)
       // function formatter (text, item) {
       //   var point = item.point // 每个弧度对应的点
