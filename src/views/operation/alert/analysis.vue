@@ -90,7 +90,7 @@
                     <tr v-for="item in warningLevel">
                       <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
-                      <td>{{ item.value/pieTotal | toPercentDecimal2 }}</td>
+                      <td>{{ item.percent | toPercentDecimal2 }}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">
@@ -124,6 +124,7 @@ import { uniformDate } from 'src/filters'
 import Mock from 'mockjs'
 import Statistic from 'components/Statistic'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
+// import {numToPercent} from 'helpers/utils'
 
 export default {
   name: 'Alerts',
@@ -528,39 +529,101 @@ export default {
         end = this.endTime
       }
       // 遍历处理每个标签数组里对应的告警规则数据
+      var count = 0
       arr.forEach((item) => {
-        // 每个告警规则调用接口获取趋势数据
-        api.alert.getTagTrend(this.currentProduct.id, item.tag, begin, end).then((res) => {
-          if (res.status === 200) {
-            var i = 0
-            var sum = 0
-            res.data.forEach((alert) => {
-              while (i < alert.hours.length) {
-                sum += alert.hours[i].message
-                i++
+        if (item.length === 0) {
+          arr.remove(item)
+        } else {
+          // console.log(1)
+          // 每个告警规则调用接口获取趋势数据
+          api.alert.getTagRuleTrend(this.currentProduct.id, item.tag, item.id, begin, end).then((res) => {
+            // console.log(1)
+            if (res.status === 200) {
+              var i = 0
+              var sum = 0
+              var total = 0
+              res.data.forEach((alert) => {
+                sum = 0
+                i = 0
+                // console.log(alert.hours)
+                while (i < alert.hours.length) {
+                  // sum += alert.hours[i].message
+                  sum = sum + alert.hours[i].message
+                  i++
+                }
+                total = total + sum
+              })
+              item.value = total
+              count++
+              console.log(count, arr.length)
+              if (count === arr.length) {
+                // 处理数组，去除不必要的属性，只留下name与value属性
+                this.handleArr(arr)
               }
-            })
-            item.value = sum
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
-        // 处理数组，去除不必要的属性，只留下name与value属性
-        this.handleArr(item)
+              // console.log(item)
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+          // 处理数组，去除不必要的属性，只留下name与value属性
+          // this.handleArr(item)
+        }
       })
     },
     // 处理数组，去除不必要的属性，只留下name与value属性
     handleArr (arr) {
-      var newarr = []
+      console.log(arr)
+      // var newarr = []
+      // console.log(arr)
       arr.forEach((item) => {
-        var newobj = {}
-        newobj.name = item.name
-        newobj.value = item.value
-        newarr.push(newobj)
+        // console.log(item)
+        // var newobj = {}
+        // newobj.name = item.name
+        // newobj.value = item.value
+        // console.log(newobj)
+        // newarr.push(newobj)
+        delete item.tag
+        delete item.id
       })
-      arr = newarr
+      // arr = newarr
+      // console.log(arr)
+      this.sortRegion(arr)
     },
 
+    sortRegion (arr) {
+      console.log(arr)
+      // console.log(arr)
+      // 由大到小排序
+      arr.sort((a, b) => {
+        if (a.value > b.value) {
+          return -1
+        } else if (a.value < b.value) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      // console.log(arr)
+
+      if (arr.length > 10) {
+        this.numToPercent(arr.slice(0, 10), 'value')
+      } else {
+        this.numToPercent(arr, 'value')
+      }
+      console.log(arr)
+    },
+
+    numToPercent (arr, field) {
+      var total = 0
+      arr.forEach((item) => {
+        total += item[field]
+      })
+
+      arr.map((item) => {
+        item.percent = item[field] / total
+      })
+      return arr
+    },
     // 获取告警规则列表
     getAlertList () {
       api.alert.getRules(this.currentProduct.id).then((res) => {
