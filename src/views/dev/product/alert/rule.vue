@@ -35,7 +35,7 @@
       <div class="filter-group fr">
         <div class="filter-group-item">
           <a v-link="'/dev/products/' +$route.params.id + '/alert/add'">
-            <button class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加告警规则</button>
+            <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加告警规则</button>
           </a>
         </div>
       </div>
@@ -58,7 +58,8 @@
           <template v-if="rules.length > 0">
             <tr v-for="rule in rules">
               <td><a v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
-              <td>{{* rule.content }}</td>
+              <td>
+                <span class="limit-width">{{rule.content }}</span></td>
               <td>{{* rule.type | ruleLabel }}</td>
               <td><span class="text-label-danger level-style">重度</span></td>
               <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
@@ -161,4 +162,8 @@
 .level-style
   display inline-block
   width 50px
+.limit-width
+  display inline-block
+  width 400px
+  overflow hidden
 </style>

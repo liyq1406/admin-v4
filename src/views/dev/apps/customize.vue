@@ -10,7 +10,7 @@
         <div class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
-              <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
+              <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
             </div>
           </div>
         </div>
@@ -98,7 +98,7 @@
                   <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="($index > 3 && isAppExist($index+1)) || type.disabled"/>
                   <span :class="{'hl-gray': ($index > 3 && isAppExist($index+1)) || type.disabled}">{{ type.label }}</span>
                 </label> -->
-                <label v-for="type in appTypes" class="radio">
+                <label v-for="type in appTypes" class="radio app-type-radio">
                   <template v-if="$index<=3">
                     <input type="radio" v-model="addModel.type" name="type" :value="$index+1" :disabled="type.disabled"/>
                     <span :class="{'hl-gray': type.disabled}">{{ type.label }}</span>
@@ -291,4 +291,6 @@
     font-size 20px
   .customize-list
     margin 0 20px
+  .app-type-radio
+    margin-right 0 !important
 </style>

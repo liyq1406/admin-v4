@@ -38,7 +38,7 @@
         </div>
       </div>
     </div>
-    <div class="data-table with-loading">
+    <!-- <div class="data-table with-loading">
       <div class="icon-loading" v-show="loadingData">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
@@ -53,7 +53,6 @@
             <th>持续时长</th>
             <th>告警等级</th>
             <th>{{ $t("ui.alert.info_list.is_read") }}</th>
-            <!-- <th class="tac">{{ $t("common.action") }}</th> -->
           </tr>
         </thead>
         <tbody>
@@ -63,7 +62,6 @@
                 <input type="checkbox" name="selectDone">
               </td>
               <td>
-                <!-- <template v-if="alert.tags"><span v-for="tag in alert.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template> -->
                 <span class="limit-width">{{ alert.content }}</span>
               </td>
               <td></td>
@@ -74,9 +72,6 @@
                 <span class="text-label-danger level-style">重度</span>
               </td>
               <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-              <!-- <td class="tac">
-                <button @click="showAlert(alert)" class="btn btn-link btn-mini">{{ $t("common.details") }}</button>
-              </td> -->
             </tr>
           </template>
           <tr v-if="alerts.length === 0 && !loadingData">
@@ -86,19 +81,15 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    <div class="row">
-      <div class="col-4 mark-style">
-        <v-select width="120px" :label="markType.label">
-          <select v-model="markType">
-            <option v-for="option in markTypeOptions" :value="option">{{ option.label }}</option>
-          </select>
-        </v-select>
+
+    </div> -->
+    <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange">
+      <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+        <label>标记为:</label>
+        <button class="btn btn-ghost">已处理</button>
+        <button class="btn btn-ghost">未处理</button>
       </div>
-      <div class="col-20">
-        <pager v-if="true" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getAlerts"></pager>
-      </div>
-    </div>
+    </c-table>
   </div>
 </template>
 
@@ -110,6 +101,8 @@
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
+  import Table from 'components/Table'
+  import {uniformDate, uniformTime} from 'src/filters'
 
   export default {
     name: 'Alert',
@@ -119,11 +112,43 @@
     components: {
       'v-select': Select,
       SearchBox,
-      Pager
+      Pager,
+      'c-table': Table
     },
 
     data () {
       return {
+        headers: [
+          {
+            key: 'content',
+            title: '告警内容'
+          },
+          {
+            key: 'mac',
+            title: '设备MAC'
+          },
+          {
+            key: 'id',
+            title: '设备ID'
+          },
+          {
+            key: 'time',
+            title: '时间'
+          },
+          {
+            key: 'duration',
+            title: '持续时长'
+          },
+          {
+            key: 'level',
+            title: '告警等级'
+          },
+          {
+            key: 'status',
+            title: '状态',
+            class: 'tac'
+          }
+        ],
         alerts: [],
         total: 0,
         markType: {
@@ -185,17 +210,44 @@
         ],
         loadingData: false,
         currentPage: 1,
-        countPerPage: 10
+        countPerPage: 10,
+        showBatchBtn: false
       }
     },
     computed: {
+      page () {
+        var result = {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
+        return result
+      },
+      tables () {
+        var result = []
+        this.alerts.forEach((alert) => {
+          var content = '<span class="table-limit-width">' + alert.content + '</span>'
+          var table = {
+            content: content,
+            mac: alert.mac,
+            id: '',
+            time: uniformDate(alert.create_date) + ' ' + uniformTime(alert.create_date),
+            duration: '',
+            level: alert.tags,
+            status: alert.is_read ? '已处理' : '未处理',
+            prototype: alert
+          }
+          result.push(table)
+        })
+        return result
+      },
       queryCondition () {
         return {
           limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {
-            product_id: this.$route.params.id
-          }
+          offset: (this.currentPage - 1) * this.countPerPage
+          // query: {
+          //   product_id: this.$route.params.id
+          // }
         }
       }
     },
@@ -220,16 +272,23 @@
           this.handleError(res)
           this.loadingData = false
         })
+      },
+      selectChange (table) {
+        if (table.length > 0) {
+          this.showBatchBtn = true
+        } else {
+          this.showBatchBtn = false
+        }
       }
     }
   }
 </script>
 
-<style lang='stylus' scoped>
+<style lang='stylus'>
 @import '../../../../assets/stylus/common'
-.limit-width
+.table-limit-width
   display inline-block
-  width 400px
+  width 450px
   overflow hidden
 .level-style
   display inline-block

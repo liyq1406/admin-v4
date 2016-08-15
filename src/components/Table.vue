@@ -29,7 +29,7 @@
           <template v-if="tables.length > 0">
             <tr v-for="(tableIndex, table) in tables" track-by="$index">
               <th v-show="selecting" class="tac">
-                <input type="checkbox" :checked="tableIndex>-1" @change="selectedTablesChange(table)">
+                <input type="checkbox" :checked="selectedAll" @change="selectedTablesChange(table)">
               </th>
               <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex, $event)">
                 {{{table[tHeader.key]}}}
@@ -44,7 +44,15 @@
         </tbody>
       </table>
     </div>
-    <pager v-if="page.total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
+    <div class="row">
+      <div class="col-8">
+        <slot name="left-foot">
+        </slot>
+      </div>
+      <div class="col-16 fr">
+        <pager v-if="page.total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate" :simple="simplePage"></pager>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -158,6 +166,11 @@
       bordered: {
         type: Boolean,
         default: true
+      },
+      // page组件的样式
+      simplePage: {
+        type: Boolean,
+        default: false
       }
     },
 
