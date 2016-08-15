@@ -380,7 +380,7 @@ export default {
     .android, .ios
       margin-top 20px
       .icon
-        padding-left 5px
+        padding-left 14px
         box-sizing border-box
       .app-name
         color #5B9BD1
