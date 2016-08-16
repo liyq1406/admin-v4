@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bbr">
       <h2>数据转发</h2>
     </div>
     <div class="panel">
@@ -13,7 +13,7 @@
         <div class="filter-bar">
           <div class="filter-group fr">
             <!-- <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ '添加规则' }}</button> -->
-            <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-primary"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
+            <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-ghost btn-sm"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
             <div class="filter-group-item">
               <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
                 <!-- <v-select width="100px" :label="queryType.label" size="small">
@@ -367,3 +367,8 @@
     }
   }
 </script>
+
+<style lang="stylus" scoped>
+  .bbr
+    border-bottom 1px solid #d9d9d9
+</style>
