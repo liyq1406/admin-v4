@@ -7,19 +7,19 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="row">
-          <div class="col-16">
+          <div class="col-16 alert-max">
             <form @submit.prevent="onSubmit">
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
-                <div class="controls col-16">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
+                <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
                     <input v-model="addModal.model.name" type="text" minlength="2" maxlength="32" lazy class="input-text"/>
                   </div>
                 </div>
               </div>
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.condition") }}:</label>
-                <div class="controls col-16">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.condition") }}:</label>
+                <div class="controls col-19">
                   <div class="row">
                     <div class="col-5">
                       <v-select :label="ruleTypes[addModal.model.type-1]">
@@ -72,22 +72,22 @@
                 </div>
               </div>
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
-                <div class="controls col-16">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
+                <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
                     <textarea v-model="addModal.model.content" type="text" maxlength="250" class="input-text"></textarea>
                   </div>
                 </div>
               </div>
               <div class="form-row row tag-row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.tags") }}:</label>
-                <div class="controls col-16">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.tags") }}:</label>
+                <div class="controls col-19">
                   <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
                 </div>
               </div>
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.notify_type") }}:</label>
-                <div class="controls col-16 mt10">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.notify_type") }}:</label>
+                <div class="controls col-19 mt10">
                   <div class="checkbox-group">
                     <template v-for="type in notifyTypes">
                       <label v-if="$index < 3" class="checkbox">
@@ -132,8 +132,8 @@
                 </div>
               </div>
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("ui.rule.fields.scope") }}:</label>
-                <div class="controls col-16 mt10">
+                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.scope") }}:</label>
+                <div class="controls col-19 mt10">
                   <div class="radio-group">
                     <label v-for="type in scopeTypes" class="radio">
                       <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number/>{{ type }}
@@ -142,8 +142,8 @@
                 </div>
               </div>
               <div class="form-row row mt20">
-                <label class="form-control col-5 ml20 alert-label">{{ $t("common.status") }}:</label>
-                <div class="controls col-16 mt10">
+                <label class="form-control col-5 alert-label">{{ $t("common.status") }}:</label>
+                <div class="controls col-19 mt10">
                   <div class="radio-group">
                     <label class="radio">
                       <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
@@ -155,7 +155,7 @@
                 </div>
               </div>
               <div class="form-actions fr mt10">
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary  alert-add-sumit">提交</button>
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
               </div>
             </form>
           </div>
@@ -298,6 +298,8 @@
 @import '../../../../assets/stylus/common'
 .alert-label
   line-height 32px
-.alert-add-sumit
-    margin-right 60px
+  padding-left 20px
+  box-sizing border-box
+.alert-max
+  max-width 700px
 </style>
