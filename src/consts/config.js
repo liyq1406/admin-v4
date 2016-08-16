@@ -72,11 +72,11 @@ export const MAIN_NAV = {
       icon: 'plus',
       url: '/products/create'
     }, {
-      alias: 'warrant',
+      alias: 'authorize',
       icon: 'plug',
       subs: [{
         alias: 'list',
-        url: '/warrant/list'
+        url: '/authorize/list'
       }]
     }, {
       alias: 'apps',

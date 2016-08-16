@@ -23,7 +23,7 @@ export default {
             linkage: '设备互联'
           }
         },
-        warrant: {
+        authorize: {
           label: '设备授权',
           subs: {
             list: '授权记录'

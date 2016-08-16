@@ -258,10 +258,10 @@ let configRouter = (router) => {
 
         // -------------------------设备授权-------------------------
         // 授权记录
-        'warrant/list': {
+        'authorize/list': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/warrant/list'))
+              resolve(require('./views/dev/authorize/list'))
             }, 'admin')
           }
         },
