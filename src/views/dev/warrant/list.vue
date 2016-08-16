@@ -150,15 +150,15 @@
         recordSummary: {
           all: {
             total: 2323,
-            title: '即将到期'
+            title: '授权额度'
           },
           used: {
             total: 135,
-            title: '待处理数'
+            title: '已使用'
           },
           rest: {
             total: 1125,
-            title: '今日延保数'
+            title: '剩余额度'
           }
         },
         headers: [{
