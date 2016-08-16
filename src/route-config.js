@@ -239,6 +239,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 修改规则
+        'products/:id/data-forward/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-forward/edit'))
+            }, 'admin')
+          }
+        },
         // 设备联动
         'products/:id/linkage': {
           component (resolve) {
