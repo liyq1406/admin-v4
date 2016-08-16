@@ -585,7 +585,7 @@ export default {
         // console.log(newobj)
         // newarr.push(newobj)
         delete item.tag
-        delete item.id
+        // delete item.id
       })
       // arr = newarr
       // console.log(arr)
