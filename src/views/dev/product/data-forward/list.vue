@@ -12,16 +12,16 @@
         </div> -->
         <div class="filter-bar">
           <div class="filter-group fr">
-            <!-- <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ '添加规则' }}</button> -->
-            <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-ghost btn-sm"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
+            <button @click="showAddModal = true" class="btn btn-ghost btn-sm"><i class="fa fa-plus"></i>{{ '添加规则' }}</button>
+            <!-- <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-ghost btn-sm"><i class="fa fa-plus"></i>{{ '添加规则' }}</button> -->
             <div class="filter-group-item">
-              <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
+              <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getRule" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRule">
                 <!-- <v-select width="100px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
                 </v-select> -->
-                <button slot="search-button" @click.prevent="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <button slot="search-button" @click.prevent="getRule" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>
@@ -47,6 +47,7 @@
                   <td><span v-if="rule.destination.type===1">转发到外部url</span><span v-if="rule.destination.type===2">转发到内部插件处理单元</span></td>
                   <td class="tac">
                     <button @click="editRule(rule)" class="btn-link">{{ $t("common.edit") }}</button>
+                    <!-- <button v-link="'/dev/products/' + $route.params.id + '/data-forward/edit'" class="btn-link">{{ $t("common.edit") }}</button> -->
                   </td>
                 </tr>
               </template>
@@ -241,6 +242,29 @@
         this.getRule()
       }
     },
+    computed: {
+      queryCondition () {
+        var condition = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          query: {
+            id: {
+              $in: this.key
+            }
+          }
+        }
+        // condition = {
+        //   limit: this.countPerPage,
+        //   offset: (this.currentPage - 1) * this.countPerPage,
+        //   query: {
+        //     id: {
+        //       $in: this.key
+        //     }
+        //   }
+        // }
+        return condition
+      }
+    },
 
     ready () {
       this.getRule()
@@ -254,7 +278,7 @@
       // 搜索
       handleSearch () {
         if (this.key.length === 0) {
-          this.getDealer()
+          this.getRule()
         }
       },
       // 取消添加
@@ -274,7 +298,7 @@
       // 获取转发规则列表
       getRule () {
         this.loadingData = true
-        api.dataForward.getRule(this.$route.params.id).then((res) => {
+        api.dataForward.getRule(this.$route.params.id, this.queryCondition).then((res) => {
           if (res.status === 200) {
             this.rules = res.data.list
             this.total = res.data.count
