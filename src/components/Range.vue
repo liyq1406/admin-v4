@@ -78,7 +78,8 @@
       'disabled': {
         type: Boolean,
         default: false
-      }
+      },
+      'prototype': ''
     },
     data () {
       return {
@@ -191,14 +192,17 @@
         var result = true
         if (!(this.max > this.min)) {
           result = false
+          console.error(JSON.stringify(this.prototype))
           console.error('组件range出错：最大值max必须比最小值min大！')
         }
         if ((this.max - this.min) % this.step > 0) {
           result = false
+          console.error(JSON.stringify(this.prototype))
           console.error('组件range出错：最大值max和最小值min的差必须是步长step的整数倍！')
         }
         if (this.value < this.min || this.value > this.max) {
           result = false
+          console.error(JSON.stringify(this.prototype))
           console.error('组件range出错：默认值value不能大于最大值max或者小于最小值min！')
         }
         return result
@@ -363,7 +367,8 @@
           min: this.min,
           step: this.step,
           percent: percent,
-          extra: this.extra
+          extra: this.extra,
+          prototype: this.prototype
         }
         this.$emit(name, this.value, params)
       }

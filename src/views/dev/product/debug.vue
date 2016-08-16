@@ -3,58 +3,66 @@
     <div class="main-title">
       <h2>设备调试</h2>
     </div>
-    <div class="container table">
-      <div class="device-list-box table-cell" v-show="!showLog">
+    <div class="container" :class="{'padding': !showLog}">
+      <div class="device-list-box" v-show="!showLog">
         <div class="header-box">
           <div class="title mt10">
             <span>设备列表</span>
           </div>
           <div class="button-group">
-            <button class="add-devices btn btn-ghost">添加设备</button>
-            <button class="search btn btn-ghost"><i class="fa fa-search"></i></button>
+            <button class="add-devices btn btn-ghost" @click="onShowAddModal">
+              <i class="fa fa-plus"></i>
+              添加设备
+            </button>
+            <button class="search btn btn-ghost" @click="getDevices"><i class="fa fa-search"></i></button>
             <div class="search-box" v-show="true">
-              <search-box :placeholder="'请输入abc'"></search-box>
+              <search-box :placeholder="'请输入设备mac'" :key.sync="query" @cancel="getDevices" @press-enter="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" ></search-box>
             </div>
           </div>
         </div>
         <div class="body-box">
-          <div class="devices-box">
-            <div class="device" v-for="n in 5" :class="{'selected': n===1}">
+          <div class="devices-box" v-show="devices.length>0">
+            <div class="device" v-for="device in devices" :class="{'selected': device.id===selectedDevice.id}" @click="selectedDevice=device">
               <div class="status-box w30">
                 <div class="status">
-                  <i class="fa success" v-show="n!==2 && n!==3"></i>
-                  <i class="fa fail" v-show="n===2"></i>
-                  <i class="fa fa-question-circle" v-show="n===3"></i>
+                  <i class="fa success" v-show="device.is_active && device.is_online"></i>
+                  <i class="fa fail" v-show="device.is_active && !device.is_online"></i>
+                  <i class="fa fa-question-circle" v-show="!device.is_active"></i>
                 </div>
               </div>
               <div class="device-msg-box">
                 <div class="mac">
-                  <span>AE9F8C007A19</span>
+                  <span>{{device.mac}}</span>
                 </div>
                 <div class="id">
-                  <span>ID：P8301831111</span>
+                  <span>ID：{{device.id}}</span>
                 </div>
               </div>
             </div>
           </div>
+          <div class="no-devices" v-show="devices.length===0">
+            <span>
+              暂无结果
+            </span>
+          </div>
           <div class="pager-box">
-            <pager :simple="true"></pager>
+            <pager :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" :total="total" @page-update="getDevices"></pager>
           </div>
         </div>
       </div>
 
-      <div class="device-details-box table-cell">
+      <div class="device-details-box">
         <div class="panel">
           <div class="panel-hd bordered row">
             <div class="msg-box fl col-10">
               <div class="title">
-                <h2 class="product-title mt5 mb5">智能烤箱</h2>
+                <h2 class="product-title mt5 mb5">{{selectedDevice.name || '--'}}</h2>
               </div>
               <div class="type-box">
                 <div class="status-box">
-                  <span class="status-text"><i class="fa mr5" :class="{'success': true, 'fail': false}"></i>在线</span>
-                  <span class="status-date ml10">2016-07-01</span>
-                  <span class="status-time ml10">17:32:01</span>
+                  <span class="status-text"><i class="fa mr5" :class="selectedDevice.is_online?'success':'fail'"></i>{{selectedDevice.is_online?'在线':'离线'}}</span>
+                  <span class="status-date ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[0]}}</span>
+                  <span class="status-time ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[1].split('Z')[0]}}</span>
                 </div>
               </div>
             </div>
@@ -68,18 +76,17 @@
                   </button>
                 </div>
                 <div class="filter-group-item">
-                  <search-box :placeholder="'搜索端点ID'">
-                    <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
                   </search-box>
                 </div>
                 <div class="filter-group-item mt5">
                   <div class="filter-device-info">
                     <label>ID:</label>
-                    <span>P830183111</span>
+                    <span>{{selectedDevice.id}}</span>
                   </div>
                   <div class="filter-device-info">
                     <label>MAC:</label>
-                    <span>AE9F8C007A19</span>
+                    <span>{{selectedDevice.mac}}</span>
                   </div>
                 </div>
               </div>
@@ -96,25 +103,25 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="n in 5">
-                    <td class="w50">{{n}}</td>
-                    <td class="w80">power</td>
+                  <tr v-for="datapoint in datapointList | orderBy 'index'">
+                    <td class="w50">{{ datapoint.index }}</td>
+                    <td class="w80">{{ datapoint.name }}</td>
                     <td class="value-td">
                       <div class="input-box">
-                        <div class="number-box" v-show="n===1">
-                          <range :line-width="'95%'"></range>
+                        <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
+                          <range v-if="dataPointType(datapoint.type) === 'number'" :line-width="'95%'" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :prototype="datapoint" @changed="setRangeValue"></range>
                         </div>
-                        <div class="range-box" v-show="n===2">
+                        <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index">on
+                            <input type="radio" :name="'value'+$index" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index">off
+                            <input type="radio" :name="'value'+$index" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
                           </label>
                         </div>
-                        <div class="number-box" v-show="n===3">
+                        <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm">
+                            <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                           </div>
                         </div>
                       </div>
@@ -141,6 +148,9 @@
                       <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template> -->
                     </div>
                   </code>
+                  <div class="clear-btn" @click="logs=[]">
+                    <span>清除日志</span>
+                  </div>
                 </div>
               </div>
               <!-- End: 设备日志-->
@@ -149,15 +159,46 @@
         </div>
       </div>
     </div>
+    <Modal  :show.sync="showAddModal">
+      <h3 slot="header">添加设备</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="onAddSubmit">
+          <div class="form-row row">
+            <label class="form-control col-6">MAC:</label>
+            <div class="controls col-18">
+              <div v-placeholder="'请填写设备MAC'" class="input-text-wrap">
+                <input v-model="addModel.mac" type="text"class="input-text"/>
+              </div>
+              <!-- <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
+              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div> -->
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </Modal>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
+import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
+import dateFormat from 'date-format'
+import locales from 'consts/locales/index'
+// import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
 import Range from 'components/Range'
 import Switch from 'components/Switch'
+import Modal from 'components/Modal'
+import api from 'api'
+import _ from 'lodash'
+
+var socket = null
 
 export default {
   name: 'DeviceDebug',
@@ -165,6 +206,7 @@ export default {
   mixins: [globalMixins],
   components: {
     'search-box': SearchBox,
+    Modal,
     Pager,
     Switch,
     Range
@@ -175,13 +217,330 @@ export default {
   },
   data () {
     return {
-      showLog: true,
+      total: 0,
+      token: '',
+      // 设备列表搜索条件
+      query: '',
+      // 端点搜索条件
+      query2: '',
+      // 显示日志标志位
+      showLog: false,
+      // 正在加载设备列表标志位
+      loadingData: false,
+      // 正在添加设备标志位
+      adding: false,
+      // 显示添加设备浮层
+      showAddModal: false,
+      currentPage: 1,
+      countPerPage: 5,
+      queryType: {
+        label: 'MAC',
+        value: 'mac'
+      },
+      // 添加设备浮层
+      addModel: {
+        mac: ''
+      },
+      // 设备列表
+      devices: [],
+      selectedDevice: {},
+      // 设备日志
       logs: [
         {
           time: '123',
           msg: ['msg']
         }
-      ]
+      ],
+      datapointValues: {},
+      datapoints: [],
+      settingData: false,
+      searching: false,
+      refreshing: false
+    }
+  },
+
+  computed: {
+    datapointList () {
+      let result = []
+      this.datapoints.forEach((item) => {
+        let dp = _.cloneDeep(item)
+        if (this.datapointValues.hasOwnProperty(item.index)) {
+          dp.value = this.datapointValues[item.index]
+        }
+        result.push(dp)
+      })
+      if (this.query2) {
+        result = result.filter((item) => {
+          let reg = new RegExp(this.query2, 'ig')
+          return reg.test(item.name)
+        })
+      }
+
+      return _.orderBy(result, ['index'], ['asc'])
+    },
+    /**
+     * 计算属性-获取设备列表条件
+     * @return {[type]} [description]
+     */
+    queryCondition () {
+      var condition = {
+        filter: ['id', 'mac', 'name', 'is_active', 'active_date', 'is_online', 'last_login'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        // order: this.sortOrders,
+        query: {}
+      }
+
+      if (this.query.length > 0) {
+        this.currentPage = 1
+        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+
+      return condition
+    }
+  },
+  watch: {
+    selectedDevice () {
+      this.connect()
+      this.getDatapoints()
+      this.getDatapointValues()
+    }
+  },
+  route: {
+    data () {
+      // 获取设备列表
+      this.getDevices()
+    },
+    deactivate () {
+      if (socket) {
+        socket.disconnect()
+        socket = null
+      }
+    }
+  },
+
+  methods: {
+    // 获取数据端点列表
+    getDatapoints () {
+      console.log('获取数据端点列表')
+      console.log(this.$route.params.id)
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.datapoints = res.data
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 连接socket逻辑
+     * @return {[type]} [description]
+     */
+    connect () {
+      console.log('连接socket')
+      api.diagnosis.getDeviceToken(this.selectedDevice.id).then((res) => {
+        this.token = res.data.token
+        socket = io.connect('http://' + res.data.addr, {'force new connection': true})
+
+        // 连接 socket
+        socket.on('connect', () => {
+          this.outputLog('Client has connected to the server!', 'connected')
+          window.setTimeout(() => {
+            socket.emit('trace.logs', {id: this.selectedDevice.id, token: this.token})
+          }, 100)
+        })
+
+        // 断开 socket 连接
+        socket.on('disconnect', () => {
+          this.outputLog('The client has disconnected!', 'disconnected')
+        })
+
+        // 输入日志
+        socket.on('trace.log', (data) => {
+          this.outputLog([data.id, data.log], 'user')
+        })
+
+        // 输出状态
+        socket.on('trace.status', (data) => {
+          this.outputLog([data.status, data.msg], 'status')
+        })
+      }).catch((res) => {
+        // this.handleError(res)
+        this.showNotice({
+          type: 'error',
+          content: locales[Vue.config.lang].errors[res.data.error.code]
+        })
+      })
+    },
+    // 获取设备端点值
+    getDatapointValues () {
+      this.refreshing = true
+      api.device.getDatapointValues(this.selectedDevice.id, { act: 'logs' }).then((res) => {
+        // TODO
+        console.log('---------------------------')
+        console.log(JSON.stringify(res))
+        window.setTimeout(() => {
+          this.refreshing = false
+        }, 500)
+        if (res.status === 202) {
+          console.log('设备离线！')
+        } else {
+          var datapointsObj = {}
+          res.data.datapoint.map(function (item) {
+            datapointsObj[item.index] = item.value
+          })
+          this.datapointValues = datapointsObj
+        }
+      }).catch((res) => {
+        this.refreshing = false
+        this.showNotice({
+          type: 'error',
+          content: locales[Vue.config.lang].errors[res.data.error.code]
+        })
+      })
+    },
+    /**
+     * 数据端点编辑 提交表单
+     */
+    setDataEvent (dp) {
+      if (this.refreshing) return
+      if (isNaN(dp.value)) return
+      console.log(JSON.stringify(dp))
+      console.log(dp.value)
+      var params = {
+        datapoint: [
+          {
+            index: dp.index,
+            value: dp.value
+          }
+        ]
+      }
+      // if (this.editModal3.show === true) {
+      //   params.datapoint[0].value = String(params.datapoint[0].value)
+      // }
+      // this.settingData = true
+      api.diagnosis.setDeviceAttribute(this.selectedDevice.id, params).then((res) => {
+        if (res.status === 200) {
+          this.getDatapointValues()
+          // this.getDatapoints()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    setRangeValue (val, params) {
+      if (params.prototype.value !== val) {
+        params.prototype.value = val
+        this.setDataEvent(params.prototype)
+      }
+    },
+
+    /**
+     * 计算当前类型
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
+    dataPointType (type) {
+      var result = ''
+      switch (type) {
+        case 1:
+          result = 'boolean'
+          break
+        case 2:
+        case 3:
+        case 4:
+          result = 'number'
+          break
+        case 6:
+        case 7:
+          result = 'string'
+          break
+        case 8:
+        case 9:
+          result = 'number'
+          break
+        default:
+      }
+      return result
+    },
+
+    // 收集日志信息并格式化输出
+    outputLog (msg, type) {
+      this.logs.push({
+        time: dateFormat('hh:mm:ss.SSS', new Date()),
+        msg: msg,
+        type: type
+      })
+    },
+    /**
+     * 获取设备列表
+     * @return {[type]} [description]
+     */
+    getDevices () {
+      this.loadingData = true
+      api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+        this.devices = res.data.list
+        this.selectedDevice = this.devices[0]
+        this.total = res.data.count
+        this.loadingData = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    /**
+     * 表单提交-添加设备逻辑
+     * @return {[type]} [description]
+     */
+    onAddSubmit () {
+      if (!this.adding) {
+        this.adding = true
+        api.device.add(this.$route.params.id, this.addModel).then((res) => {
+          if (res.status === 200) {
+            this.resetAdd()
+            this.getDevices()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
+      }
+    },
+    // 搜索
+    handleSearch () {
+      if (this.query.length === 0) {
+        this.getDevices()
+      }
+    },
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+
+    // 取消搜索
+    cancelSearching () {
+      this.getDevices()
+    },
+    // 关闭添加浮层并净化添加表单
+    resetAdd () {
+      this.adding = false
+      this.showAddModal = false
+      this.addModel.mac = ''
+    },
+    /**
+     * 取消按钮
+     * @return {[type]} [description]
+     */
+    onAddCancel () {
+      this.resetAdd()
+    },
+    /**
+     * 显示添加设备浮层
+     * @return {[type]} [description]
+     */
+    onShowAddModal () {
+      this.showAddModal = true
     }
   }
 }
@@ -191,10 +550,13 @@ export default {
 
   .device-debug
   .virtual-devices
-    .table
-      display table
-    .table-cell
-      display table-cell
+    .clear-btn
+      text-align center
+      height 20px
+      line-height 20px
+      background #fafafa
+      border-top 1px solid #e5e5e5
+      cursor pointer
     .fa
       &.fa-angle-double
         font-size 16px
@@ -213,12 +575,20 @@ export default {
     .container
       /*color #b5b5b5*/
       border-top 1px solid #ddd
+      position relative
+      box-sizing border-box
+      &.padding
+        padding-left 230px
       .device-list-box
         width 230px
+        height 100%
         border-right 1px solid #ddd
         min-height 600px
         padding-left 10px
         box-sizing border-box
+        position absolute
+        left 0
+        top 0
         .header-box
           padding-left 10px
           padding-bottom 10px
@@ -272,6 +642,10 @@ export default {
                 box-sizing border-box
                 padding-top 8px
                 overflow hidden
+          .no-devices
+            height 400px
+            padding-top 20px
+            text-align center
           .pager-box
             width 100%
             padding-right 10px
