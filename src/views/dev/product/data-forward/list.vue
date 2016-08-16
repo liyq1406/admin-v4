@@ -318,6 +318,7 @@
             this.rules.push(res.data)
             this.getRule()
             this.resetAdd()
+            this.adding = false
           }
         }).catch((res) => {
           this.handleError(res)
@@ -360,6 +361,7 @@
             if (res.status === 200) {
               this.resetEdit()
               this.getRule()
+              this.editing = false
             }
           }).catch((res) => {
             this.handleError(res)
@@ -371,6 +373,7 @@
             if (res.status === 200) {
               this.resetEdit()
               this.getRule()
+              this.editing = false
             }
           }).catch((res) => {
             this.handleError(res)
