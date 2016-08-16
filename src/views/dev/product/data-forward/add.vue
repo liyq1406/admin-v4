@@ -149,12 +149,12 @@
         this.adding = true
         api.dataForward.addRule(this.$route.params.id, this.addModel).then((res) => {
           if (res.status === 200) {
-            this.rules.push(res.data)
+            // this.rules.push(res.data)
             this.$route.router.go('/dev/products/' + this.$route.params.id + '/data-forward')
           }
         }).catch((res) => {
           this.handleError(res)
-          this.adding = false
+          // this.adding = false
         })
       }
     }
