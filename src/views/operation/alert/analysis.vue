@@ -316,6 +316,7 @@ export default {
       this.seriousRules = []
       this.currIndex = 0
       this.getAlertList()
+      this.warningLevel = []
     },
     // 获取第一个产品@author weijie
     getFirstProduct () {
@@ -386,6 +387,7 @@ export default {
     // 获取告警趋势图表数据
     getTagTrend () {
       this.recvDataCount = 0
+      this.warningLevel = []
       var begin
       var end
       if (this.period === '') {
