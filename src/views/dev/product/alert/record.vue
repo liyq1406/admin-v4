@@ -14,30 +14,6 @@
         </div>
       </div>
     </div> -->
-    <div class="filter-bar">
-      <div class="filter-group fl">
-        <div class="filter-group-item">
-          <v-select width="90px" :label="curLevel.label" size="small">
-            <span slot="label">告警等级:</span>
-            <select v-model="curLevel" name="product">
-              <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
-            </select>
-          </v-select>
-        </div>
-      </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <search-box :key.sync="key">
-            <v-select width="100px" :label="queryType.label" size="small">
-              <select v-model="queryType">
-                <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-              </select>
-            </v-select>
-            <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-          </search-box>
-        </div>
-      </div>
-    </div>
     <!-- <div class="data-table with-loading">
       <div class="icon-loading" v-show="loadingData">
         <i class="fa fa-refresh fa-spin"></i>
@@ -84,6 +60,30 @@
 
     </div> -->
     <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange">
+      <div slot="filter-bar" class="filter-bar">
+        <div class="filter-group fl">
+          <div class="filter-group-item">
+            <v-select width="90px" :label="curLevel.label" size="small">
+              <span slot="label">告警等级:</span>
+              <select v-model="curLevel" name="product">
+                <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
+              </select>
+            </v-select>
+          </div>
+        </div>
+        <div class="filter-group fr">
+          <div class="filter-group-item">
+            <search-box :key.sync="key">
+              <v-select width="100px" :label="queryType.label" size="small">
+                <select v-model="queryType">
+                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                </select>
+              </v-select>
+              <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            </search-box>
+          </div>
+        </div>
+      </div>
       <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
         <label>标记为:</label>
         <button class="btn btn-ghost">已处理</button>
