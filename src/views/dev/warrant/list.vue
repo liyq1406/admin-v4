@@ -198,6 +198,7 @@
             warrent: 12345,
             style: '批量导入',
             addman: 'demo@xlink.com',
+            edit: '<button @click="" class="btn-link">刪除</button>',
             prototype: item
           }
           result.push(alert)
