@@ -42,15 +42,12 @@
 
     <!-- 填写产品信息 -->
     <div class="pro-section" v-show="currStep===1">
-      <info @next-step="onInfoSubmit"></info>
+      <info @info-submit="onInfoSubmit"></info>
     </div>
 
     <!-- 创建数据模型 -->
     <div class="pro-section" v-show="currStep===2">
-      <datapoints></datapoints>
-      <div class="actions">
-        <button class="btn btn-primary btn-lg" @click="onProductSubmit">配置完成，下一步</button>
-      </div>
+      <datapoints @datapoint-submit="onDatapointSubmit"></datapoints>
     </div>
 
     <!-- 完成 -->
@@ -90,15 +87,15 @@ export default {
     /**
      * 提交信息
      */
-    onInfoSubmit (info) {
-      console.log(info)
+    onInfoSubmit (product) {
+      this.product = product
       this.currStep = 2
     },
 
     /**
-     * 提交产品信息
+     * 提交数据端点信息
      */
-    onProductSubmit () {
+    onDatapointSubmit () {
       // TODO 调用创建产品接口
       this.currStep = 3
     }

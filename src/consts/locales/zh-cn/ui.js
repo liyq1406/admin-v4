@@ -395,11 +395,13 @@ export default {
     add_product: '添加产品',
     placeholders: {
       name: '请输入产品名称',
+      mode: '请输入产品型号',
       desc: '请输入产品描述'
     },
     fields: {
       name: '产品名称',
       desc: '产品描述',
+      mode: '产品型号',
       link_type: '设备类型',
       is_registerable: '允许用户注册设备',
       is_release: '发布产品'

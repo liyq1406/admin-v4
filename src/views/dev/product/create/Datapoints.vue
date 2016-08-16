@@ -1,71 +1,76 @@
 <template>
-  <div class="panel no-split-line creation-step2">
-    <div class="panel-body">
-      <div class="filter-bar mt20">
-        <div class="filter-group fr">
-          <div class="filter-group-item">
-            <button class="btn btn-ghost" @click="modal.show=true">导入数据模型</button>
+  <div>
+    <div class="panel no-split-line creation-step2">
+      <div class="panel-body">
+        <div class="filter-bar mt20">
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <button class="btn btn-ghost hidden" @click="modal.show=true">导入数据模型</button>
+            </div>
           </div>
+          <h3>配置数据端点</h3>
         </div>
-        <h3>配置数据端点</h3>
+        <div class="data-table mb40">
+          <table class="table">
+            <thead>
+              <tr>
+                <th width="8%">索引</th>
+                <th width="15%">端点 ID</th>
+                <th width="20%">数据类型</th>
+                <th width="15%">单位符号</th>
+                <th width="27%">描述</th>
+                <th width="15%" class="tac">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="datapoint in datapoints">
+                <template v-if="datapoint.editing">
+                  <td>{{ $index }}</td>
+                  <td>
+                    <div class="input-text-wrap">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.name">
+                    </div>
+                  </td>
+                  <td>
+                    <v-select :label="getLabelByKey(datapoint.type)" size="small">
+                      <select v-model="datapoint.type" name="link_type">
+                        <option v-for="type in locales.data.DATAPOINT_TYPES" :value="type.value">{{ type.label }}</option>
+                      </select>
+                    </v-select>
+                  </td>
+                  <td>
+                    <div class="input-text-wrap">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.symbol">
+                    </div>
+                  </td>
+                  <td>
+                    <div class="input-text-wrap">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.description">
+                    </div>
+                  </td>
+                  <td class="tac"><a href="#" class="hl-red mr10" @click.prevent="save(datapoint)">保存</a><a href="#" class="hl-red" @click.prevent="cancel(datapoint)">取消</a></td>
+                </template>
+                <template v-else>
+                  <td>{{ $index }}</td>
+                  <td>{{ datapoint.name }}</td>
+                  <td>{{ datapoint.type }}</td>
+                  <td>{{ datapoint.symbol }}</td>
+                  <td>{{ datapoint.description }}</td>
+                  <td class="tac"><a href="#" class="hl-red" @click.prevent="edit(datapoint)">编辑</a></td>
+                </template>
+              </tr>
+              <tr>
+                <td colspan="6">
+                  <a href="#" @click.prevent="add"><i class="fa fa-plus-circle"></i>添加数据端点</a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
-      <div class="data-table mb40">
-        <table class="table">
-          <thead>
-            <tr>
-              <th width="8%">索引</th>
-              <th width="15%">端点 ID</th>
-              <th width="20%">数据类型</th>
-              <th width="15%">单位符号</th>
-              <th width="27%">描述</th>
-              <th width="15%" class="tac">操作</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="datapoint in datapoints">
-              <template v-if="datapoint.editing">
-                <td>{{ $index }}</td>
-                <td>
-                  <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="datapoint.name">
-                  </div>
-                </td>
-                <td>
-                  <v-select :label="getLabelByKey(datapoint.type)" size="small">
-                    <select v-model="datapoint.type" name="link_type">
-                      <option v-for="type in locales.data.DATAPOINT_TYPES" :value="type.value">{{ type.label }}</option>
-                    </select>
-                  </v-select>
-                </td>
-                <td>
-                  <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="datapoint.symbol">
-                  </div>
-                </td>
-                <td>
-                  <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="datapoint.description">
-                  </div>
-                </td>
-                <td class="tac"><a href="#" class="hl-red mr10" @click.prevent="save(datapoint)">保存</a><a href="#" class="hl-red" @click.prevent="cancel(datapoint)">取消</a></td>
-              </template>
-              <template v-else>
-                <td>{{ $index }}</td>
-                <td>{{ datapoint.name }}</td>
-                <td>{{ datapoint.type }}</td>
-                <td>{{ datapoint.symbol }}</td>
-                <td>{{ datapoint.description }}</td>
-                <td class="tac"><a href="#" class="hl-red" @click.prevent="edit(datapoint)">编辑</a></td>
-              </template>
-            </tr>
-            <tr>
-              <td colspan="6">
-                <a href="#" @click.prevent="add"><i class="fa fa-plus-circle"></i>添加数据端点</a>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+    </div>
+    <div class="actions">
+      <button class="btn btn-primary btn-lg" @click="onBtnClick">配置完成，下一步</button>
     </div>
 
     <modal :show.sync="modal.show" width="720px">
@@ -138,13 +143,18 @@ export default {
   data () {
     return {
       importing: false,
-      datapoints: [{
-        name: 'asdf',
-        type: 1,
-        symbol: 'aaaa',
-        description: 'bbbb',
-        editing: false
-      }],
+      product: {
+        id: '1607d2af658a06001607d2af658a0601'
+      },
+      datapoints: [
+        // {
+        //   name: 'asdf',
+        //   type: 1,
+        //   symbol: 'aaaa',
+        //   description: 'bbbb',
+        //   editing: false
+        // }
+      ],
       modal: {
         show: false
       }
@@ -199,6 +209,13 @@ export default {
      */
     onImportCancel () {
       this.modal.show = false
+    },
+
+    /**
+     * 处理按钮点击事件
+     */
+    onBtnClick () {
+      this.$emit('info-submit', this.product)
     }
   }
 }

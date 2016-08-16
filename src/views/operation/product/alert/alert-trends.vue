@@ -54,6 +54,9 @@ export default {
     /**
      * 处理时间选择
      * @author shengzhi
+     * @param {Date} start 开始时间
+     * @param {Date} end  结束时间
+     * @return null
      */
     onTimeChange (start, end) {
       this.startTime = start

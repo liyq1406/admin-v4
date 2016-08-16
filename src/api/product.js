@@ -7,7 +7,7 @@ export default {
    * @param  {Object} params 产品信息
    * @return {Promise}
    */
-  createProduct (params) {
+  create (params) {
     return http.post(
       `${API_SERVER.default}/v2/product`, params
     )
