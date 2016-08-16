@@ -359,6 +359,7 @@ export default {
       text-align center
     .qrcode
       margin-top 10px
+      text-align center
       img
         size 185px
     .tip-qrcode
@@ -380,10 +381,10 @@ export default {
     .android, .ios
       margin-top 20px
       .icon
-        padding-left 14px
+        text-align center
         box-sizing border-box
       .app-name
         color #5B9BD1
-        font-size 5px
+        font-size 13px
         font-weight 700
 </style>

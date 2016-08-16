@@ -97,8 +97,11 @@
     background-color #F2F2F2
     border 1px solid #E8E8E8
     border-right none
-    margin-bottom 15px
+    border-bottom none
+    padding 5px
     position relative
+    &:last-child
+      border-bottom 1px solid #E8E8E8 !important
     .select-icon
       i
         margin-top 13px
