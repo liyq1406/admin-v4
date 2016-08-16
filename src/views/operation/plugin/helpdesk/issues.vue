@@ -26,7 +26,7 @@
           <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getIssues()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="locales.data.AllPERIODS" :value.sync="period" @select="getIssues()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
@@ -94,7 +94,7 @@ export default {
       startTimePick: '',
       endTimePick: '',
       // 时间间隔
-      period: 7,
+      period: 'all',
       selectedProduct: {},
       productOptions: [],
       // visibility: {
@@ -198,38 +198,58 @@ export default {
   },
 
   computed: {
+    selectOptions () {
+      if (this.products.length > 0) {
+        var res = [{
+          label: '全部'
+        }]
+        this.products.forEach((item) => {
+          let temp = {
+            id: item.id,
+            label: item.name
+          }
+          res.push(temp)
+        })
+        return res
+      } else {
+        return []
+      }
+    },
     // currIssue () {
     //   this.issues [asdsadff]
     //   return {}
     // },
     queryCondition () {
       var condition = {}
+      condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        query: {}
+      }
       if (this.period === '') {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {
-            product_id: {
-              $in: [this.selectedProduct.id]
-            },
-            create_time: {
-              $gte: {'@date': this.startTimePick},
-              $lte: {'@date': this.endTimePick}
-            }
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          },
+          create_time: {
+            $gte: {'@date': this.startTimePick},
+            $lte: {'@date': this.endTimePick}
+          }
+        }
+      } else if (this.period === 'all') {
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
           }
         }
       } else {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {
-            product_id: {
-              $in: [this.selectedProduct.id]
-            },
-            create_time: {
-              $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
-              $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
-            }
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          },
+          create_time: {
+            $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+            $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
           }
         }
       }

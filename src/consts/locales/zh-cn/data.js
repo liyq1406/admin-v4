@@ -49,6 +49,12 @@ export const PERIODS = [
   { label: '30天', value: 30 },
   { label: '90天', value: 90 }
 ]
+// 包含全部时间段
+export const AllPERIODS = [
+  { label: '7天', value: 7 },
+  { label: '30天', value: 30 },
+  { label: '全部', value: 'all' }
+]
 
 // 短时间段
 export const SHORT_PERIODS = [
