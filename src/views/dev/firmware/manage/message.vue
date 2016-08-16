@@ -31,7 +31,7 @@
                   <template v-if="warningLevel.length > 0">
                     <tr v-for="item in warningLevel">
                       <td>{{item.name}}</td>
-                      <td>{{ item.value }}</td>
+                      <td>{{ item.value }}/{{ item.percent | toPercentDecimal2 }}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">
@@ -148,36 +148,7 @@ export default {
 
     return {
       currentProduct: {},
-      warningLevel: [
-        {
-          name: 'v2.0',
-          value: 888
-        },
-        {
-          name: 'v1.2',
-          value: 82
-        },
-        {
-          name: 'v1.1',
-          value: 12
-        },
-        {
-          name: 'v1.0',
-          value: 11
-        },
-        {
-          name: 'v1.4',
-          value: 10
-        },
-        {
-          name: 'v1.5',
-          value: 10
-        },
-        {
-          name: 'v1.3',
-          value: 9
-        }
-      ],
+      warningLevel: [],
       firmwares: [
         {
           content: '这是描述',
@@ -306,6 +277,7 @@ export default {
       if (this.products.length > 0) {
         // this.getTagTrend()
         // this.getAlertList()
+        this.sortRegion(this.warningLevel)
       }
     }
   },
@@ -313,6 +285,7 @@ export default {
   route: {
     data () {
       this.getFirstProduct()
+      this.sortRegion()
     }
   },
 
@@ -320,6 +293,71 @@ export default {
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
+    },
+    sortRegion () {
+      var warningLevel = [
+        {
+          name: 'v2.0',
+          value: 888
+        },
+        {
+          name: 'v1.2',
+          value: 82
+        },
+        {
+          name: 'v1.1',
+          value: 12
+        },
+        {
+          name: 'v1.0',
+          value: 11
+        },
+        {
+          name: 'v1.4',
+          value: 10
+        },
+        {
+          name: 'v1.5',
+          value: 10
+        },
+        {
+          name: 'v1.3',
+          value: 9
+        }
+      ]
+      // console.log(arr)
+      // console.log(arr)
+      // 由大到小排序
+      warningLevel.sort((a, b) => {
+        if (a.value > b.value) {
+          return -1
+        } else if (a.value < b.value) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      // console.log(arr)
+
+      if (warningLevel.length > 10) {
+        this.numToPercent(warningLevel.slice(0, 10), 'value')
+        this.warningLevel = warningLevel
+      } else {
+        this.numToPercent(warningLevel, 'value')
+        this.warningLevel = warningLevel
+      }
+      // console.log(arr)
+    },
+    numToPercent (arr, field) {
+      var total = 0
+      arr.forEach((item) => {
+        total += item[field]
+      })
+
+      arr.map((item) => {
+        item.percent = item[field] / total
+      })
+      return arr
     }
   }
 }
