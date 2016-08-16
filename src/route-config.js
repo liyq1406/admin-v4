@@ -191,6 +191,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 设备授权
+        'products/:id/authorize': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/authorize'))
+            }, 'admin')
+          }
+        },
         // 虚拟设备
         'products/:id/virtual-devices': {
           component (resolve) {

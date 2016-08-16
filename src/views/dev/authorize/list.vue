@@ -59,9 +59,9 @@
             <div class="form-row row">
               <label class="form-control col-6">产品:</label>
               <div class="controls filter-group-item col-18">
-                <v-select :label="addModal.industry">
+                <v-select :label="addModal.product.label">
                   <select v-model="addModal.product">
-                    <option v-for="industry in industrys" :value="industry">{{industry}}</option>
+                    <option v-for="product in products" :value="industry">{{industry}}</option>
                   </select>
                 </v-select>
               </div>
@@ -123,6 +123,12 @@
     name: 'DataForward',
 
     mixins: [globalMixins],
+
+    vuex: {
+      getters: {
+        products: ({ products }) => products.all
+      }
+    },
 
     components: {
       'x-table': Table,
@@ -208,6 +214,9 @@
     },
 
     methods: {
+      init () {
+        this.selectedProduct = this.products[0] || {}
+      },
       /**
        * 当前页码改变
        * @author weijie

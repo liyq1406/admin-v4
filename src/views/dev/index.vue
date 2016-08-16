@@ -59,7 +59,7 @@ export default {
       // result.subs.push(subs[0])
 
       // 产品导航
-      const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-forward', 'linkage']
+      const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-forward', 'linkage', 'authorize']
       this.products.forEach((item) => {
         result.subs.push({
           name: item.name,

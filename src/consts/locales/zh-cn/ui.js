@@ -20,7 +20,8 @@ export default {
             virtual_devices: '虚拟设备',
             alert: '告警管理',
             data_forward: '数据接口',
-            linkage: '设备互联'
+            linkage: '设备互联',
+            authorize: '设备授权'
           }
         },
         authorize: {
