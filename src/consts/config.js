@@ -72,13 +72,6 @@ export const MAIN_NAV = {
       icon: 'plus',
       url: '/products/create'
     }, {
-      alias: 'authorize',
-      icon: 'plug',
-      subs: [{
-        alias: 'list',
-        url: '/authorize/list'
-      }]
-    }, {
       alias: 'apps',
       icon: 'th',
       subs: [{

@@ -266,13 +266,13 @@ let configRouter = (router) => {
 
         // -------------------------设备授权-------------------------
         // 授权记录
-        'authorize/list': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/authorize/list'))
-            }, 'admin')
-          }
-        },
+        // 'authorize/list': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/authorize/list'))
+        //     }, 'admin')
+        //   }
+        // },
         // -------------------------智能互联-------------------------
         // 微信互联
         'nest/wechat': {
