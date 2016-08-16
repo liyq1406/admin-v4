@@ -57,8 +57,8 @@ export default {
       var Stat = window.G2.Stat
       var userData = this.data
       var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
-      var height = width * (6 / 7)
-      var mt = (width - height) / 2
+      width = width * 0.8
+      var height = width * (6 / 7) * 0.8
       // 默认配置
       var defaults = {
         container: this.$el,
@@ -66,7 +66,7 @@ export default {
         width: width,
         height: height,
         plotCfg: {
-          margin: [mt, 0]
+          margin: [30, 10, 0, 0]
         }
       }
 

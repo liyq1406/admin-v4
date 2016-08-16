@@ -12,10 +12,10 @@
           </div>
           <div class="panel-bd">
             <div class="row">
-              <div class="col-14">
+              <div class="col-14 max-width">
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">账号:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">账号:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
                       <input v-model="dealer.username" type="email" name="dealer.username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>
                     </div>
@@ -25,8 +25,8 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">登录密码:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">登录密码:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
                       <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
                     </div>
@@ -47,10 +47,10 @@
           </div>
           <div class="panel-bd">
             <div class="row">
-              <div class="col-14">
+              <div class="col-14 max-width">
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">经销商名称:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">经销商名称:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                       <input type="text" v-model="dealer.name" name="dealer.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
@@ -60,8 +60,8 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">联系人:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">联系人:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.contact')" class="input-text-wrap">
                       <input type="text" v-model="dealer.linkman" name="dealer.linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
                     </div>
@@ -71,8 +71,8 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">手机号:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">手机号:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.phone')" class="input-text-wrap">
                       <input type="text" v-model="dealer.phone" name="dealer.phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
@@ -82,8 +82,8 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">联系地址:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">联系地址:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.address')" class="input-text-wrap">
                       <input type="text" v-model="dealer.address" name="dealer.address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
@@ -93,8 +93,8 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">负责区域:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">负责区域:</label>
+                  <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.area')" class="input-text-wrap">
                       <input type="text" v-model="dealer.area" name="dealer.area" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
                     </div>
@@ -104,20 +104,20 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 ml20 dealer-label">从属于:</label>
-                  <div class="controls col-16">
+                  <label class="form-control col-5 dealer-label">从属于:</label>
+                  <div class="controls col-19">
                     <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                       <input v-model="addModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
                     </div> -->
                     <v-select width="100px" :label="belongType.label">
-                      <select v-model="dealer.belongTo">
-                        <option v-for="option in belongs" :value="option.value">{{ option.label }}</option>
+                      <select v-model="belongType">
+                        <option v-for="option in belongs" :value="option">{{ option.label }}</option>
                       </select>
                     </v-select>
                   </div>
                 </div>
                 <div class="form-actions mt20">
-                  <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary fr dealer-add-sumit">提交</button>
+                  <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary fr">提交</button>
                 </div>
               </div>
             </div>
@@ -161,12 +161,9 @@
           area: '',
           belongTo: ''
         },
-        belongs: [
-          { label: '广州分部', value: '广州分部' }
-        ],
+        belongs: [],
         belongType: {
-          label: '广州分部',
-          value: '广州分部'
+          label: '无'
         },
         breadcrumbNav: [{
           label: '全部',
@@ -204,6 +201,7 @@
           this.breadcrumbNav[1].label = '添加经销商'
           this.type = 'add'
         }
+        this.getDealerList()
       }
     },
 
@@ -227,9 +225,7 @@
           }
         }
         api.dealer.list(params).then((res) => {
-          // console.log(res.data)
           if (res.status === 200 && res.data.list.length > 0) {
-            // console.log(res)
             let dealerRaw = res.data.list[0]
             this.dealer.username = dealerRaw.email
             this.dealer.name = dealerRaw.name
@@ -238,6 +234,37 @@
             this.dealer.password = dealerRaw.password
             this.dealer.address = dealerRaw.address
             this.dealer.area = dealerRaw.region
+
+            if (dealerRaw.upper_dealer_code && dealerRaw.upper_dealer_code !== '') {
+              api.dealer.get(dealerRaw.upper_dealer_code).then((res) => {
+                if (res.status === 200) {
+                  console.log(res.data)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            }
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      getDealerList () {
+        var temp = [{
+          label: '无'
+        }]
+        var params = {
+          filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time']
+        }
+        api.dealer.list(params).then((res) => {
+          if (res.status === 200 && res.data.list.length > 0) {
+            res.data.list.forEach((item) => {
+              temp.push({
+                label: item.name,
+                code: item.dealer_code
+              })
+            })
+            this.belongs = temp
           }
         }).catch((res) => {
           this.handleError(res)
@@ -251,8 +278,10 @@
           phone: this.dealer.phone,
           password: this.dealer.password,
           address: this.dealer.address,
-          region: this.dealer.area,
-          upper_dealer_code: ''
+          region: this.dealer.area
+        }
+        if (this.belongType.code) {
+          params.upper_dealer_code = this.belongType.code
         }
         api.dealer.create(params).then((res) => {
           if (res.status === 200) {
@@ -271,8 +300,12 @@
           phone: this.dealer.phone,
           password: this.dealer.password,
           address: this.dealer.address,
-          region: this.dealer.area,
-          upper_dealer_code: ''
+          region: this.dealer.area
+        }
+        console.log(this.belongType.code)
+        if (this.belongType.code) {
+          console.log(this.belongType.code)
+          params.upper_dealer_code = this.belongType.code
         }
         api.dealer.update(this.$route.params.id, params).then((res) => {
           if (res.status === 200) {
@@ -291,7 +324,8 @@
 @import '../../../../assets/stylus/common'
 .dealer-label
   line-height 32px
-.dealer-add-sumit
-  margin-right 60px
-
+  padding-left 20px
+  box-sizing border-box
+.max-width
+  max-width 700px
 </style>
