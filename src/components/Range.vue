@@ -319,6 +319,7 @@
           ev.preventDefault()
           self.focusEvent()
           rangeEventBox.addEventListener('mousemove', function (ev) {
+            linePosition = self.getPosition(linedom)
             if (self.down) {
               var offsetLeft = ev.x - linePosition.left - _circleR / 2
               if (offsetLeft <= maxLeft && offsetLeft >= 0) {
