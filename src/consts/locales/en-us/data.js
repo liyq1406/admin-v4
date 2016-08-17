@@ -93,6 +93,13 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '未激活', value: 'inactive' }
 ]
 
+// 固件类型
+export const FIRMWARE_TYPES = [
+  { label: 'WIFI', value: 1 },
+  { label: 'MCU', value: 2 },
+  { label: '子设备', value: 3 }
+]
+
 // 产品活跃时间段
 export const ACTIVE_PERIODS = [
   { label: '1天', value: 1 },

@@ -111,6 +111,13 @@ export const PRODUCT_FILTERS = [
   { label: '累计激活', value: 'all' }
 ]
 
+// 固件类型
+export const FIRMWARE_TYPES = [
+  { label: 'WIFI', value: 1 },
+  { label: 'MCU', value: 2 },
+  { label: '子设备', value: 3 }
+]
+
 // 用户过滤器
 export const USER_FILTERS = [
   { label: '新增用户', value: 'added' },
