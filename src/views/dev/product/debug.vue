@@ -93,7 +93,10 @@
             </div>
           </div>
           <div class="panel-bd row">
-            <div class="table-box" :class="{'col-16': showLog, 'col-24': !showLog}">
+            <div class="table-box with-loading" :class="{'col-16': showLog, 'col-24': !showLog}">
+              <div class="icon-loading" v-show="refreshing">
+                <i class="fa fa-refresh fa-spin"></i>
+              </div>
               <table class="table">
                 <thead>
                   <tr>
@@ -103,7 +106,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="datapoint in datapointList | orderBy 'index'">
+                  <tr v-for="datapoint in datapointList">
                     <td class="w50">{{ datapoint.index }}</td>
                     <td class="w80">{{ datapoint.name }}</td>
                     <td class="value-td">
@@ -113,10 +116,10 @@
                         </div>
                         <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
+                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
+                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
                           </label>
                         </div>
                         <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
@@ -142,10 +145,10 @@
                 <div class="log-panel-bd">
                   <code class="output-log">
                     <div v-for="log in logs" class="log"><span class="time">{{ log.time }}</span>
-                      <!-- <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
+                      <template v-if="log.type === 'user'"><span class="user">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
                       <template v-if="log.type === 'status'"><span :class="{'msg-success':log.msg[0]===200, 'msg-error':log.msg[0]!==200}">{{ log.msg[0] }}</span><span class="msg">: {{ log.msg[1] }}</span></template>
                       <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
-                      <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template> -->
+                      <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
                     </div>
                   </code>
                   <div class="clear-btn" @click="logs=[]">
@@ -184,11 +187,11 @@
 </template>
 
 <script>
-import Vue from 'vue'
+// import Vue from 'vue'
 import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
 import dateFormat from 'date-format'
-import locales from 'consts/locales/index'
+// import locales from 'consts/locales/index'
 // import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
@@ -232,7 +235,7 @@ export default {
       // 显示添加设备浮层
       showAddModal: false,
       currentPage: 1,
-      countPerPage: 5,
+      countPerPage: 8,
       queryType: {
         label: 'MAC',
         value: 'mac'
@@ -246,10 +249,10 @@ export default {
       selectedDevice: {},
       // 设备日志
       logs: [
-        {
-          time: '123',
-          msg: ['msg']
-        }
+        // {
+        //   time: '123',
+        //   msg: ['msg']
+        // }
       ],
       datapointValues: {},
       datapoints: [],
@@ -303,7 +306,7 @@ export default {
     selectedDevice () {
       this.connect()
       this.getDatapoints()
-      this.getDatapointValues()
+      this.getDatapointValues(true)
     }
   },
   route: {
@@ -337,6 +340,10 @@ export default {
      * @return {[type]} [description]
      */
     connect () {
+      if (!this.selectedDevice.is_online) {
+        this.outputLog([this.selectedDevice.id, 'The client has disconnected!'], 'status')
+        return
+      }
       console.log('连接socket')
       api.diagnosis.getDeviceToken(this.selectedDevice.id).then((res) => {
         this.token = res.data.token
@@ -365,15 +372,20 @@ export default {
           this.outputLog([data.status, data.msg], 'status')
         })
       }).catch((res) => {
-        // this.handleError(res)
-        this.showNotice({
-          type: 'error',
-          content: locales[Vue.config.lang].errors[res.data.error.code]
-        })
+        this.handleError(res)
+        // this.showNotice({
+        //   type: 'error',
+        //   content: locales[Vue.config.lang].errors[res.data.error.code]
+        // })
       })
     },
     // 获取设备端点值
-    getDatapointValues () {
+    getDatapointValues (init) {
+      if (init) {
+        this.datapointValues = {}
+      }
+      if (!this.selectedDevice.is_online) return
+      console.log('获取设备端点值')
       this.refreshing = true
       api.device.getDatapointValues(this.selectedDevice.id, { act: 'logs' }).then((res) => {
         // TODO
@@ -393,10 +405,11 @@ export default {
         }
       }).catch((res) => {
         this.refreshing = false
-        this.showNotice({
-          type: 'error',
-          content: locales[Vue.config.lang].errors[res.data.error.code]
-        })
+        this.handleError(res)
+        // this.showNotice({
+        //   type: 'error',
+        //   content: locales[Vue.config.lang].errors[res.data.error.code]
+        // })
       })
     },
     /**
@@ -418,18 +431,27 @@ export default {
       // if (this.editModal3.show === true) {
       //   params.datapoint[0].value = String(params.datapoint[0].value)
       // }
-      // this.settingData = true
+      this.refreshing = true
       api.diagnosis.setDeviceAttribute(this.selectedDevice.id, params).then((res) => {
         if (res.status === 200) {
+          this.refreshing = false
           this.getDatapointValues()
           // this.getDatapoints()
         }
       }).catch((res) => {
+        this.refreshing = false
+        this.getDatapointValues()
         this.handleError(res)
       })
     },
-    setRangeValue (val, params) {
-      if (params.prototype.value !== val) {
+    /**
+     * range抛出的事件  value改变
+     * @param {[type]}  val            [description]
+     * @param {[type]}  params         [description]
+     * @param {Boolean} isUserBehavior 是否是用户行为
+     */
+    setRangeValue (val, params, isUserBehavior) {
+      if (params.prototype.value !== val && isUserBehavior) {
         params.prototype.value = val
         this.setDataEvent(params.prototype)
       }
