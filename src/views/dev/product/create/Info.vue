@@ -1,14 +1,14 @@
 <template>
   <div>
-    <div class="panel no-split-line">
-      <div class="panel-body">
-        <div class="info-form">
-          <div class="col-thumb">
-            <div class="thumb"><img :src="deviceThumb"/></div>
-          </div>
-          <div class="col-form">
-            <div class="form">
-              <validator name="validation">
+    <validator name="validation">
+      <div class="panel no-split-line">
+        <div class="panel-body">
+          <div class="info-form">
+            <div class="col-thumb">
+              <div class="thumb"><img :src="deviceThumb"/></div>
+            </div>
+            <div class="col-form">
+              <div class="form">
                 <form novalidate>
                   <div class="form-row row">
                     <label class="form-control col-4">{{ $t("ui.product.fields.name") }}:</label>
@@ -59,15 +59,15 @@
                     </div>
                   </div>
                 </form>
-              </validation>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="actions">
-      <button class="btn btn-primary btn-lg" @click="onBtnClick">下一步</button>
-    </div>
+      <div class="actions">
+        <button class="btn btn-primary btn-lg" @click="onBtnClick" :class="{'disabled': adding || $validation.invalid}" :disabled="adding || $validation.invalid">下一步</button>
+      </div>
+    </validation>
   </div>
 </template>
 
@@ -101,7 +101,8 @@ export default {
         mode: '',
         link_type: 1,
         description: ''
-      }
+      },
+      adding: false
     }
   },
 
@@ -111,13 +112,16 @@ export default {
      */
     onBtnClick () {
       if (this.$validation.valid) {
+        this.adding = true
         api.product.create(this.product).then((res) => {
           if (res.status === 200) {
+            this.adding = false
             // mutation
             this.createProduct(res.data)
             this.$emit('info-submit', res.data)
           }
         }).catch((res) => {
+          this.adding = false
           this.handleError(res)
         })
       }

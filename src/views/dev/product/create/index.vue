@@ -47,12 +47,12 @@
 
     <!-- 创建数据模型 -->
     <div class="pro-section" v-show="currStep===2">
-      <datapoints @datapoint-submit="onDatapointSubmit"></datapoints>
+      <datapoints @datapoint-submit="onDatapointSubmit" :product="product"></datapoints>
     </div>
 
     <!-- 完成 -->
     <div class="pro-section" v-show="currStep===3">
-      <completion></completion>
+      <completion :product="product"></completion>
     </div>
   </div>
 </template>
@@ -78,7 +78,8 @@ export default {
 
   data () {
     return {
-      currStep: 0, // 当前步骤 [0|1|2|3]
+      product: {},
+      currStep: 3, // 当前步骤 [0|1|2|3]
       steps: ['填写产品信息', '创建数据模型', '完成']
     }
   },
@@ -88,6 +89,7 @@ export default {
      * 提交信息
      */
     onInfoSubmit (product) {
+      console.log(product)
       this.product = product
       this.currStep = 2
     },
@@ -95,7 +97,7 @@ export default {
     /**
      * 提交数据端点信息
      */
-    onDatapointSubmit () {
+    onDatapointSubmit (product) {
       // TODO 调用创建产品接口
       this.currStep = 3
     }

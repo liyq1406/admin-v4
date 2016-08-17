@@ -13,8 +13,9 @@
                 <div class="product-name">{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></div>
                 <div class="product-createtime">{{ currentProduct.create_time | formatDate }}</div>
               </info-card>
-              <div class="actions">
-                <button class="btn btn-ghost">发布产品</button>
+              <div class="actions" v-show="currentProduct.name">
+                <span class="released" v-if="currentProduct.is_release"><i class="fa fa-check"></i>已发布</span>
+                <button class="btn btn-ghost" @click="releaseProduct" v-else>发布产品</button>
               </div>
             </div>
             <div v-stretch="192">
@@ -24,7 +25,7 @@
           <div class="col-8">
             <annulus :data="annulusInfo"></annulus>
             <div class="buy-access">
-              <button class="btn btn-primary">购买授权</button>
+              <button class="btn btn-primary" @click="onBuyButtonClick">购买授权</button>
             </div>
             <div class="buy-record">
               <span>购买记录</span>
@@ -159,9 +160,9 @@
             <label class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
             </label>
-            <label class="del-check">
+            <!-- <label class="del-check">
               <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.product.fields.is_release") }}
-            </label>
+            </label> -->
             <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
@@ -392,10 +393,10 @@ export default {
     },
 
     productInfo () {
-      let ret = {
+      return {
         mode: {
           label: '产品型号',
-          value: '-'
+          value: this.currentProduct.mode || ''
         },
         type: {
           label: '产品类型',
@@ -403,7 +404,7 @@ export default {
         },
         link_type: {
           label: '连接类型',
-          value: ''
+          value: this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1]
         },
         qrcode: {
           label: '产品二维码',
@@ -411,16 +412,13 @@ export default {
         },
         description: {
           label: '产品描述',
-          value: ''
+          value: this.currentProduct.description
         },
-        target: {
+        status: {
           label: '产品状态',
           value: '-'
         }
       }
-      ret.link_type.value = this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1]
-      ret.description.value = this.currentProduct.description
-      return ret
     }
   },
 
@@ -431,6 +429,12 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理购买按钮点击
+     */
+    onBuyButtonClick () {
+    },
+
     /**
      * 当前页码改变
      * @author shengzhi
@@ -457,7 +461,7 @@ export default {
      * @return {[type]}       [description]
      */
     linkToDetails (table) {
-      this.$route.router.go(`${this.$route.path}/${table.prototype.id}`)
+      this.$route.router.go(`/dev/products/${table.prototype.id}/debug`)
     },
 
     // 获取设备列表
@@ -513,6 +517,28 @@ export default {
       setTimeout(() => {
         this.editModel = this.originEditModel
       }, 1000)
+    },
+
+    /**
+     * 发布产品
+     */
+    releaseProduct () {
+      this.editModel = _.cloneDeep(this.currentProduct)
+      this.editModel.is_release = true
+      api.product.updateProduct(this.editModel).then((res) => {
+        api.product.getProduct(this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.updateProduct(res.data)
+            this.showNotice({
+              type: 'success',
+              content: '产品发布成功'
+            })
+          }
+        })
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+      })
     },
 
     /**
@@ -687,6 +713,19 @@ export default {
 
   .actions
     absolute right top 10px
+
+    .btn
+      vertical-align middle
+
+    .released
+      display inline-block
+      border 1px solid #BBB
+      height 26px
+      line-height 26px
+      padding 0 15px
+      color green
+      vertical-align middle
+      font-size 12px
 
 .product-name
   margin 0px 10px 5px 0px

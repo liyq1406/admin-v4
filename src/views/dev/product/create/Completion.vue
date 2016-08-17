@@ -4,24 +4,24 @@
       <div class="completion row">
         <div class="pro-info col-8">
           <div class="pro-info-inner">
-            <h3 class="name">空气净化器</h3>
+            <h3 class="name">{{ product.name }}</h3>
             <div class="pro-features">
               <ul>
                 <li>
                   <div class="label">产品型号：</div>
-                  <div class="info">A3w</div>
+                  <div class="info">{{ product.mode }}</div>
                 </li>
                 <li>
                   <div class="label">产品类型：</div>
-                  <div class="info">空气清洁</div>
+                  <div class="info">-</div>
                 </li>
                 <li>
                   <div class="label">连接类型：</div>
-                  <div class="info">Wi-Fi</div>
+                  <div class="info">{{ getLabelByValue(product.link_type) }}</div>
                 </li>
                 <li>
                   <div class="label">产品描述：</div>
-                  <div class="info">第一代家用智能空气净化器</div>
+                  <div class="info">{{ product.description }}</div>
                 </li>
               </ul>
             </div>
@@ -34,7 +34,7 @@
               <p>您现在可以体验模拟设备或立即开始产品开发</p>
             </div>
             <div class="developers">
-              <div class="dev-item">
+              <div class="dev-item dev-hardware">
                 <div class="thumb"></div>
                 <div class="info">
                   <h3>我是硬件开发者</h3>
@@ -42,7 +42,7 @@
                   <div class="operation"><a href="#" class="link-start">立即开始</a></div>
                 </div>
               </div>
-              <div class="dev-item">
+              <div class="dev-item dev-app">
                 <div class="thumb"></div>
                 <div class="info">
                   <h3>我是APP开发者</h3>
@@ -59,12 +59,40 @@
 </template>
 
 <script>
+import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {
   name: 'Completion',
 
-  mixins: [globalMixins]
+  mixins: [globalMixins],
+
+  props: {
+    product: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+
+  methods: {
+    /**
+     * 根据值获取 label
+     * @author shengzhi
+     * @param {Number} val 值
+     */
+    getLabelByValue (val) {
+      let ret = ''
+      let type = _.find(this.locales.data.DATAPOINT_TYPES, (item) => {
+        return item.value === val
+      })
+      if (type) {
+        ret = type.label
+      }
+      return ret
+    }
+  }
 }
 </script>
 
@@ -125,8 +153,8 @@ export default {
         .thumb
           float left
           size 60px
-          background #EEE
-          border-radius 40px
+          background-repeat no-repeat
+          background-size cover
 
         .info
           margin-left 80px
@@ -157,4 +185,12 @@ export default {
             &:hover
               text-decoration none
               background darken(#48B7AF, 10%)
+
+      .dev-hardware
+        .thumb
+          background-image url("../../../../assets/images/products/creation/pc.png")
+
+      .dev-app
+        .thumb
+          background-image url("../../../../assets/images/products/creation/phone.png")
 </style>
