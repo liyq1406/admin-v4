@@ -304,6 +304,7 @@ export default {
   },
   watch: {
     selectedDevice () {
+      if (!this.selectedDevice.id) return
       this.connect()
       this.getDatapoints()
       this.getDatapointValues(true)
@@ -502,7 +503,7 @@ export default {
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
-        this.selectedDevice = this.devices[0]
+        this.selectedDevice = this.devices[0] || {}
         this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
