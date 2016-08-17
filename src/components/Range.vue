@@ -45,7 +45,9 @@
       // 默认值
       'value': {
         type: Number,
-        default: 0
+        default: function () {
+          return this.min
+        }
       },
       // 圆球的直径
       'circleD': {
