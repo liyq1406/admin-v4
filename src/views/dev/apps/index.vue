@@ -28,9 +28,9 @@
             </div>
           </div>
         </div>
-        <tab :nav="secondaryNav"></tab>
       </div>
     </div>
+    <tab :nav="secondaryNav"></tab>
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>

@@ -7,16 +7,16 @@
             <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
           </div>
         </div> -->
-        <div class="filter-bar">
-          <div class="filter-group fl">
-            <div class="filter-group-item">
-              <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
-            </div>
-          </div>
-        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group fl">
+              <div class="filter-group-item">
+                <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.app.create_app") }}</button>
+              </div>
+            </div>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -289,8 +289,6 @@
 
   .secret-key
     font-size 20px
-  .customize-list
-    margin 0 20px
   .app-type-radio
     margin-right 0 !important
 </style>
