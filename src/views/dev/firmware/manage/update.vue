@@ -2,7 +2,7 @@
   <div class="row">
     <div class="form-box col-16">
       <validator name="validation">
-        <form novalidate @submit.prevent="">
+        <form novalidate @submit.prevent="onAddSubmit">
           <div class="panel">
             <div class="panel-hd">
               <h3><i class="number">1</i> 选择产品</h3>
@@ -11,7 +11,12 @@
               <div class="form">
                 <div class="form-row row">
                   <div class="controls col-19 row">
-                    <div class="inb inbradio">
+                    <div v-for="product in products" class="inb inbradio">
+                      <label class="radio">
+                        <input type="radio" v-model="selectProduct" :value="product" @change="" number/>{{product.name}}
+                      </label>
+                    </div>
+                    <!-- <div class="inb inbradio">
                       <label class="radio">
                         <input type="radio" v-model="timeType" :value="1" number/>电饭煲A8
                       </label>
@@ -25,7 +30,7 @@
                       <label class="radio">
                         <input type="radio" v-model="timeType" :value="3" number/>智能灯泡A9
                       </label>
-                    </div>
+                    </div> -->
                   </div>
                 </div>
               </div>
@@ -40,31 +45,31 @@
                 <div class="form-row row">
                   <label class="form-control col-5">固件类型:</label>
                   <div class="controls col-19 row">
-                    <div class="inb inbradio">
+                    <div class="inb inbradio" v-for="opt in locales.data.FIRMWARE_TYPES">
                       <label class="radio">
-                        <input type="radio" v-model="type" :value="1" number/>WIFI
+                        <input type="radio" v-model="addModelType"  :value="opt" name="type" number/>{{opt.label}}
                       </label>
                     </div>
-                    <div class="inb inbradio">
+                    <!-- <div class="inb inbradio">
                       <label class="radio">
                         <input type="radio" v-model="type" :value="2" number/>MCU
                       </label>
-                    </div>
-                    <div class="inb inbradio">
+                    </div> -->
+                    <!-- <div class="inb inbradio">
                       <label class="radio">
                         <input type="radio" v-model="type" :value="3" number/>子设备
                       </label>
-                    </div>
-                    <div class="form-row row" v-show="type === 3">
+                    </div> -->
+                    <div class="form-row row" v-show="addModelType.value!== 1">
                       <label class="form-control col-5">识别码:</label>
                       <div class="controls col-10">
-                        <div v-placeholder="'请输入识别码'" class="input-text-wrap">
-                          <input v-model="code" name="code" type="text" v-validate:code="{required: true, maxlength: 20}" lazy class="input-text"/>
+                        <div class="input-text-wrap">
+                          <input v-model="addmodel.identify" name="identify" type="text" class="input-text"/>
                         </div>
-                        <div class="form-tips form-tips-error">
+                        <!-- <div class="form-tips form-tips-error">
                           <span v-if="$validation.code.touched && $validation.code.required">请输入识别码</span>
                           <span v-if="$validation.code.modified && $validation.code.maxlength">不可超过20个字符</span>
-                        </div>
+                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -73,19 +78,19 @@
                   <label class="form-control col-5">固件型号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入固件型号'" class="input-text-wrap">
-                      <input v-model="style" type="text" name="style" v-validate:style="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      <input v-model="addmodel.mod" type="text" name="mod" v-validate:mod="{required: true, maxlength: 20}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$validation.style.touched && $validation.style.required">请输入固件型号</span>
-                      <span v-if="$validation.style.modified && $validation.style.maxlength">不可超过20个字符</span>
+                      <span v-if="$validation.mod.touched && $validation.mod.required">请输入固件型号</span>
+                      <span v-if="$validation.mod.modified && $validation.mod.maxlength">不可超过20个字符</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-row row">
                   <label class="form-control col-5">固件版本号:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入固件型号'" class="input-text-wrap">
-                      <input v-model="version" type="text" name="version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
+                    <div v-placeholder="'请输入固件版本号'" class="input-text-wrap">
+                      <input v-model="addmodel.version" type="text" name="version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.version.touched && $validation.version.required">请输入固件版本号</span>
@@ -102,9 +107,13 @@
             </div>
             <div class="panel-bd">
               <div class="controls">
-                <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload btn-sm">
+                <!-- <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload btn-sm">
                   <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="" :disabled="uploading"/><i class="fa fa-reply-all"></i>上传固件文件
+                </label> -->
+                <label :class="{'disabled':unableAdd}" class="btn btn-success btn-upload mbt10">
+                  <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addmodel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                 </label>
+                <div v-if="addmodel.file_url.length > 0" class="file-url">url: {{ addmodel.file_url }}</div>
               </div>
             </div>
           </div>
@@ -118,7 +127,7 @@
                   <label class="form-control col-5 radio">版本说明:</label>
                   <div class="controls col-19">
                     <div class="input-text-wrap" v-placeholder="'请输入内容'">
-                      <textarea class="input-text textarea" v-model=" " name="command"></textarea>
+                      <textarea class="input-text textarea" v-model="addmodel.description" name="command"></textarea>
                     </div>
                   </div>
                 </div>
@@ -144,7 +153,8 @@
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
   import store from 'store'
-  // import api from 'api'
+  import * as config from 'consts/config'
+  import api from 'api'
   // import { createDayRange } from 'helpers/utils'
 
   export default {
@@ -172,6 +182,8 @@
     data () {
       return {
         emptyArr: [],
+        addModelType: { label: 'WIFI', value: 1 },
+        selectProduct: {},
         needVerificationUsers: false,
         needVerification: false,
         title: '',
@@ -179,11 +191,32 @@
         timeType: 1,
         type: 1,
         style: '',
-        version: ''
+        version: '',
+        addmodel: {
+          mod: '',
+          version: '',
+          file_url: '',
+          file_md5: '',
+          file_size: '',
+          description: '',
+          release_date: '',
+          is_release: '',
+          type: '',
+          identify: ''
+        }
       }
     },
 
     computed: {
+      unableAdd () {
+        var unable = true
+        if (this.selectProduct.id) {
+          unable = false
+        } else {
+          unable = true
+        }
+        return unable
+      }
     },
 
     route: {
@@ -191,12 +224,82 @@
       }
     },
     methods: {
+      // 添加固件版本操作
+      onAddSubmit () {
+        this.adding = true
+        this.addmodel.type = this.addModelType.value
+        api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
+          if (res.status === 200) {
+            // this.resetAdd()
+            // this.getFirmwares()
+            this.showNotice({
+              type: 'info',
+              content: '成功创建版本！'
+            })
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
+      },
+      // 上传固件文件
+      uploadFirmware (model, firmwareFile, event) {
+        var file = this.$els[firmwareFile].files[0]
+        var input = event.target
+
+        if (file && file.size > config.MAX_FIRMWARE_FILE_SIZE * 1024 * 1024) {
+          this.showNotice({
+            type: 'error',
+            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
+          })
+          return
+        }
+
+        if (window.File && window.FileReader && window.FileList && window.Blob) {
+          var reader = new window.FileReader()
+          reader.onerror = (evt) => {
+            this.showNotice({
+              type: 'error',
+              content: this.$t('ui.upload.read_err')
+            })
+          }
+          // 读取完成
+          reader.onloadend = (evt) => {
+            if (evt.target.readyState === window.FileReader.DONE) {
+              if (!this.uploading) {
+                this.uploading = true
+                api.upload.firmware(this.selectProduct.id, evt.target.result).then((res) => {
+                  if (res.status === 200) {
+                    input.value = ''
+                    this[model].file_url = res.data.url
+                    this[model].file_md5 = res.data.md5
+                    this[model].file_size = res.data.size
+                    this.uploading = false
+                  }
+                }).catch((res) => {
+                  this.handleError(res)
+                  this.uploading = false
+                })
+              }
+            }
+          }
+          reader.readAsArrayBuffer(file)
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: this.$t('ui.upload.compatiblity')
+          })
+        }
+      }
     }
   }
 </script>
 
 <style lang="stylus" scoped>
   @import '../../../../assets/stylus/common'
+  .mbt10
+    margin-top 10px
+    margin-bottom 10px
   .widbtn
     width 100px
     margin-right 10px
