@@ -53,10 +53,11 @@
     <div class="panel">
       <div class="panel-hd panel-hd-full bordered">
         <h2 class="fl mr20">设备列表</h2>
-        <button class="btn btn-primary">管理授权</button>
+        <!-- <button class="btn btn-primary">管理授权</button> -->
+        <a v-link="{path: 'authorize'}" class="btn btn-primary">管理授权</a>
       </div>
       <div class="panel-bd">
-        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -347,7 +348,7 @@ export default {
       this.devices.map((item) => {
         var device = {
           id: item.id,
-          mac: '<a class="hl-red">' + item.mac + '</a>',
+          mac: item.mac,
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
           is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
@@ -453,15 +454,6 @@ export default {
     onPageCountUpdate (count) {
       this.countPerPage = count
       this.getDevices()
-    },
-
-    /**
-     * 跳转至设备详情
-     * @param  {[type]} table [description]
-     * @return {[type]}       [description]
-     */
-    linkToDetails (table) {
-      this.$route.router.go(`/dev/products/${table.prototype.id}/debug`)
     },
 
     // 获取设备列表

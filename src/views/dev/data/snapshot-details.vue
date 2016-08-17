@@ -82,7 +82,7 @@
                     </div>
                     <div class="operation-box col-9">
                       <div class="check-device">
-                        <button class="btn btn-primary" v-link="{path: '/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
+                        <button class="btn btn-primary" v-link="{path: '/dev/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
                       <div class="radio-group-box">
                         <radio-button-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>

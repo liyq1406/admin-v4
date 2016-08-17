@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>邮件模板</h2>
     </div>
     <div class="panel no-split-line mt20">
@@ -35,7 +35,7 @@
         <div v-show="!loading && activateLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="activateStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="activateStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="activateStatus2 === 1 || activateStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.activate_template') }}</h2>
         <div class="leftbox">
-          <radio-group :items="languages" :value.sync="activateLang"></radio-group>
+          <radio-button-group :items="languages" :value.sync="activateLang"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -105,7 +105,7 @@
         <div v-show="!loading && resetLang === 'en-us'" class="status">{{ $t('common.status') }}:<span v-if="resetStatus2 === 0">{{ $t('ui.mail_templates.check_pending') }}</span><span v-if="resetStatus2 === -1" class="hl-red">{{ $t('ui.mail_templates.check_reject') }}</span><span v-if="resetStatus2 === 1 || resetStatus2 === -2" class="hl-green">{{ $t('ui.mail_templates.check_pass') }}</span></div>
         <h2>{{ $t('ui.mail_templates.reset_template') }}</h2>
         <div class="leftbox">
-          <radio-group :items="languages" :value.sync="resetLang"></radio-group>
+          <radio-button-group :items="languages" :value.sync="resetLang"></radio-button-group>
         </div>
       </div>
       <div class="panel-bd">
@@ -276,7 +276,7 @@
 <script>
   import Vue from 'vue'
   import api from 'api'
-  import RadioGroup from 'components/RadioGroup'
+  import RadioButtonGroup from 'components/RadioButtonGroup'
   import locales from 'consts/locales/index'
   import { globalMixins } from 'src/mixins'
 
@@ -286,7 +286,7 @@
     mixins: [globalMixins],
 
     components: {
-      'radio-group': RadioGroup
+      RadioButtonGroup
     },
 
     data () {

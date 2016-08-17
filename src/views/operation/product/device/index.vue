@@ -127,7 +127,7 @@ export default {
       if (typeof onlineLongInfo !== 'undefined') {
         onlineLongInfo = onlineLongInfo > 3600 ? `${(onlineLongInfo / 3600).toFixed(1)}小时` : `${onlineLongInfo}秒`
       } else {
-        onlineLongInfo = '暂无信息'
+        onlineLongInfo = ''
       }
 
       return {

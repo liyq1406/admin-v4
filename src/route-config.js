@@ -428,6 +428,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 数据快照
+        'data/snapshot/:product_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/snapshot-details'))
+            }, 'admin')
+          }
+        },
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------
