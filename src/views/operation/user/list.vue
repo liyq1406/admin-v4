@@ -207,9 +207,9 @@
           user.is_active = user.phone_valid || user.email_valid
           var table = {
             id: '<a style="color: #c0252e">' + user.id + '</a>',
-            nickname: user.nickname || '未定义',
-            email: user.email,
-            phone: user.phone,
+            nickname: user.nickname || '-',
+            email: user.email || '-',
+            phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
             is_active: user.is_active ? '已激活' : '未激活',

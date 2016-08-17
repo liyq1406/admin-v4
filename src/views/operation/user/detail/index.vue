@@ -116,23 +116,23 @@
         var result = {
           status: {
             label: '账号状态',
-            value: this.computedVaild(this.user.is_vaild) + ' 无激活时间字段返回'
+            value: this.computedVaild(this.user.is_vaild)
           },
           create_date: {
             label: '创建时间',
-            value: formatDate(this.user.create_date) || '查询中..'
+            value: formatDate(this.user.create_date) || '-'
           },
           email: {
             label: '邮箱',
-            value: this.user.email
+            value: this.user.email || '-'
           },
           phone: {
             label: '手机',
-            value: this.user.phone
+            value: this.user.phone || '-'
           },
           age: {
             label: '年龄',
-            value: this.user.age || '未知'
+            value: this.user.age >= 0 ? this.user.age : '-'
           },
           gender: {
             label: '性别',
@@ -140,11 +140,11 @@
           },
           area: {
             label: '所在区域',
-            value: this.user.province + this.user.city || '字段缺失'
+            value: this.user.province + this.user.city || '-'
           },
           address: {
             label: '详细地址',
-            value: this.user.address || '字段缺失'
+            value: this.user.address || '-'
           },
           id: {
             label: 'ID',
@@ -204,7 +204,7 @@
        */
       computedGender (gender) {
         var result = {
-          '-1': '未知',
+          '-1': '-',
           '1': '男',
           '2': '女'
         }
@@ -228,6 +228,7 @@
       getUserInfo () {
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {
+            console.log(res.data)
             for (var key in res.data) {
               if (res.data.hasOwnProperty(key)) {
                 this.user[key] = res.data[key]
