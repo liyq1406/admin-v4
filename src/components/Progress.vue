@@ -2,12 +2,12 @@
   <div :class="classes">
     <div class="progress-bar" v-el:bar :style="progressBarStyle">
       <div class="num" :style="numStyle"><span v-el:count>{{ count }}</span></div>
-      <span class="percentage" :class="{'fixed': percentage < 8}">{{ percentage }}%</span>
+      <span  v-if="showPercent" class="percentage" :class="{'fixed': percentage < 8}">{{ percentage }}%</span>
     </div>
     <div class="min">{{ min }}</div>
     <div class="max">{{ max }}</div>
-    <div class="pause-txt">升级暂停</div>
-    <div class="finished-txt">完成升级</div>
+    <div v-show="showText" class="pause-txt">升级暂停</div>
+    <div v-show="showText" class="finished-txt">完成升级</div>
   </div>
 </template>
 
@@ -36,6 +36,16 @@ export default {
     pause: {
       type: Boolean,
       default: false
+    },
+    // 显示百分比？
+    showPercent: {
+      type: Boolean,
+      default: true
+    },
+    // 显示进度文案？
+    showText: {
+      type: Boolean,
+      default: true
     },
 
     // 类前缀
