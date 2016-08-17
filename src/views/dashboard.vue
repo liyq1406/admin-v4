@@ -19,7 +19,7 @@
           <div class="content-box">
             <div class="product" v-for="product in toShowProducts">
               <div class="img-box">
-                <img src="../assets/images/product.png">
+                <img src="../assets/images/device_thumb.png">
               </div>
               <div class="text-box">
                 <div class="line msg">
@@ -78,7 +78,7 @@
           <div class="content-box">
             <div class="product" v-for="product in toShowProducts">
               <div class="img-box">
-                <img src="../assets/images/product.png">
+                <img src="../assets/images/device_thumb.png">
               </div>
               <div class="text-box">
                 <div class="line msg">
