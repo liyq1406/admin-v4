@@ -1,691 +1,287 @@
 <template>
   <div class="page-in">
-    <section class="main-wrap">
-      <div class="main">
-        <div class="row statistic">
-          <div class="col-6">
-            <panel>
-              <statistic :info="statistic.users.info" title="设备总数" tooltip="设备总数说明" :has-chart="true">
-                <interval :data="statistic.users.data" :options="statistic.users.options"></interval>
-              </statistic>
-            </panel>
-          </div>
-          <div class="col-6">
-            <panel>
-              <statistic :info="statistic.devices.total.info" title="激活数" tooltip="激活数说明" color="green" :has-chart="true">
-                <interval :data="statistic.devices.total.data" :options="statistic.devices.total.options"></interval>
-              </statistic>
-            </panel>
-          </div>
-          <div class="col-6">
-            <panel>
-              <statistic :info="statistic.devices.activated.info" title="在线量" tooltip="在线量说明" color="blue" :has-chart="true">
-                <interval :data="statistic.devices.activated.data" :options="statistic.devices.activated.options"></interval>
-              </statistic>
-            </panel>
-          </div>
-          <div class="col-6">
-            <panel>
-              <statistic :info="statistic.devices.online.info" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true">
-                <interval :data="statistic.devices.online.data" :options="statistic.devices.online.options"></interval>
-              </statistic>
-            </panel>
+    <div class="body row">
+      <div class="dev-box container col-12">
+
+        <div class="part part1 base-introduce">
+          <div class="icon-box"></div>
+          <div class="text-box">
+            <h2>我是开发</h2>
+            <div class="description">在开发平台创建产品、开发调试产品，配置产品设备属性，发布产品上线</div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-24">
-            <panel title="产品趋势分析">
-              <div class="left-actions" slot="left-actions">
-                <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-                <radio-button-group :items="locales.data.PRODUCT_FILTERS" :value.sync="trends.products.filter"></radio-button-group>
-              </div>
-              <div class="row">
-                <div class="col-14">
-                  <line :data="trends.products.data" :options="trends.products.options"></line>
-                </div>
-                <div class="col-10">
-                  <div class="row">
-                    <div class="col-10 col-offset-2 tac">
-                      <statistic :info="trends.products.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                    </div>
-                    <div class="col-11 col-offset-1 tac">
-                      <statistic :info="trends.products.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
-                    </div>
-                  </div>
-                  <div class="top">
-                    <h3>今日新增TOP3</h3>
-                    <interval :data="trends.products.topAdded.data" :options="trends.products.topAdded.options"></interval>
-                  </div>
-                  <div class="top">
-                    <h3>今日在线TOP3</h3>
-                    <interval :data="trends.products.topOnline.data" :options="trends.products.topOnline.options"></interval>
-                  </div>
-                </div>
-              </div>
-            </panel>
 
-            <panel title="产品信息占比">
-              <div class="row">
-                <div class="col-14">
-                  <pie :data="proportion.devices.activated.data"></pie>
+        <div class="part part2 product-list">
+          <div class="title-box">
+            <h2>产品开发</h2>
+            <a class="check-all" v-show="products.length" @click="goto('/dev')">查看全部 ></a>
+          </div>
+          <div class="content-box">
+            <div class="product" v-for="product in toShowProducts">
+              <div class="img-box">
+                <img src="../assets/images/product.png">
+              </div>
+              <div class="text-box">
+                <div class="line msg">
+                  <span class="name">{{product.name}}</span>
+                  <span class="product-id">({{product.id}})</span>
                 </div>
-                <div class="col-10">
-                  <pie :data="proportion.devices.online.data"></pie>
+                <div class="info">
+                  <span>授权：{{product['授权'] || 0}}</span>
+                  <span class="ml10">| 设备数：{{product['total'] || '0'}}</span>
+                  <span class="ml10">| 状态：{{product['状态']?'已发布':'未发布'}}</span>
                 </div>
               </div>
-            </panel>
-
-            <panel title="产品区域分布">
-              <div class="left-actions" slot="left-actions">
-                <radio-button-group :items="locales.data.PERIODS" :value.sync="regions.products.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-              </div>
-              <div class="row">
-                <div class="col-16 tac">
-                  <china-map :data="regions.products.data"></china-map>
-                </div>
-                <div class="col-8">
-                  <div class="top">
-                    <h3>产品占比TOP10</h3>
-                    <interval :data="regions.products.top.data" :options="regions.products.top.options"></interval>
-                  </div>
-                </div>
-              </div>
-            </panel>
-
-            <panel title="用户趋势分析">
-              <div class="left-actions" slot="left-actions">
-                <radio-button-group :items="locales.data.PERIODS" :value.sync="trends.users.period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-                <radio-button-group :items="locales.data.USER_FILTERS" :value.sync="trends.users.filter"></radio-button-group>
-              </div>
-              <div class="row">
-                <div class="col-18">
-                  <line :data="trends.users.data" :options="trends.users.options"></line>
-                </div>
-                <div class="col-6 mt40">
-                  <div class="tac">
-                    <statistic :info="trends.users.today.info" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
-                  </div>
-                  <div class="tac">
-                    <statistic :info="trends.users.avg.info" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
-                  </div>
-                </div>
-              </div>
-            </panel>
+            </div>
+            <div class="no-products ml10" v-show="products.length === 0">
+              <span>您还没有任何产品，请点击按钮开始创建</span>
+              <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
+                <i class="fa fa-plus"></i>
+                添加产品
+              </button>
+            </div>
           </div>
         </div>
+
+        <div class="part part3 link-box">
+          <div class="title-box">
+            <h2>开发指南</h2>
+            <a class="check-all">查看全部 ></a>
+          </div>
+          <div class="content-box">
+            <div class="link" v-for="link in links">
+              <i class="fa fa-file-text-o"></i>
+              <a @click="open(link.path)">{{link.content}}</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="part part4 entry">
+          <button class="btn btn-primary" @click="goto('/dev')">立即进入</button>
+        </div>
+
       </div>
-    </section>
+      <div class="operation-box container col-12">
+        <div class="part part1 base-introduce">
+          <div class="icon-box"></div>
+          <div class="text-box">
+            <h2>我是运营</h2>
+            <div class="description">在运营平台查看设备数据、用户数据，查看设备运行状态并针对设备和用户数据统计运营数据</div>
+          </div>
+        </div>
+
+        <div class="part part2 product-list">
+          <div class="title-box">
+            <h2>产品管理</h2>
+            <a class="check-all" v-show="products.length" @click="goto('/operation/overview')">查看全部 ></a>
+          </div>
+          <div class="content-box">
+            <div class="product" v-for="product in toShowProducts">
+              <div class="img-box">
+                <img src="../assets/images/product.png">
+              </div>
+              <div class="text-box">
+                <div class="line msg">
+                  <span class="name">{{product.name}}</span>
+                  <span class="product-id">({{product.id}})</span>
+                </div>
+                <div class="info">
+                  <span>设备数：{{product['total']}}</span>
+                  <span class="ml10">| 激活：{{product['activated']}}</span>
+                  <span class="ml10">| 在线：{{product['online']}}</span>
+                </div>
+              </div>
+            </div>
+            <div class="no-products ml10" v-show="products.length===0">
+              <span>您还没有任何产品，请在开发平台添加您的产品，并配置好后完成发布</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="part part3 link">
+          <div class="title-box">
+            <h2>快捷导航</h2>
+            <a class="check-all" @click="goto('/operation/overview')">查看全部 ></a>
+          </div>
+          <div class="content-box">
+            <div class="nav">
+              <span>产品管理：</span>
+              <a v-for="nav in nav.products" @click="goto(nav.path)">{{nav.content}}</a>
+            </div>
+            <div class="nav">
+              <span>告警服务：</span>
+              <a v-for="nav in nav.alerts" @click="goto(nav.path)">{{nav.content}}</a>
+            </div>
+            <div class="nav">
+              <span>用户管理：</span>
+              <a v-for="nav in nav.users" @click="goto(nav.path)">{{nav.content}}</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="part part4 entry">
+          <button class="btn btn-primary" @click="goto('/operation/overview')">立即进入</button>
+        </div>
+
+      </div>
+    </div>
+    <div class="footer">
+      <span>© 2016  云智易 |  www.xlink.cn</span>
+    </div>
   </div>
 </template>
 
 <script>
-// import api from 'api'
-import Mock from 'mockjs'
-import Panel from 'components/Panel'
-import RadioButtonGroup from 'components/RadioButtonGroup'
-import Statistic from 'components/Statistic'
-import Tooltip from 'components/Tooltip'
-import Line from 'components/g2-charts/Line'
-import Interval from 'components/g2-charts/Interval'
-import Pie from 'components/g2-charts/Pie'
-import ChinaMap from 'components/g2-charts/ChinaMap'
 import { globalMixins } from 'src/mixins'
-import mapData from 'components/g2-charts/map-data.json'
-import moment from 'moment'
-import _ from 'lodash'
+import api from 'api'
 
 export default {
   name: 'Dashboard',
 
-  layouts: ['topbar', 'sidebar'],
+  layouts: ['topbar'],
 
   mixins: [globalMixins],
 
-  components: {
-    Panel,
-    RadioButtonGroup,
-    Statistic,
-    Tooltip,
-    Line,
-    Interval,
-    ChinaMap,
-    Pie
-  },
-
   data () {
     return {
-      // 统计
-      statistic: {
-        // 用户总数
-        users: {
-          options: {},
-          info: {},
-          data: []
+      loading: false,
+      products: [],
+      productSummary: [],
+      links: [
+        {
+          content: '如何接入xlink wifi sdk，需要注意哪些事情？',
+          path: 'http://support.xlink.cn/hc/'
         },
-        // 设备
-        devices: {
-          // 总数
-          total: {
-            options: {},
-            info: {},
-            data: []
-          },
-          // 激活设备
-          activated: {
-            options: {},
-            info: {},
-            data: []
-          },
-          // 在线设备
-          online: {
-            options: {},
-            info: {},
-            data: []
-          }
-        }
-      },
-
-      // 趋势
-      trends: {
-        // 产品
-        products: {
-          options: {},
-          period: 7,
-          filter: 'added',
-          data: [],
-          today: {
-            options: {},
-            info: {}
-          },
-          avg: {
-            options: {},
-            info: {}
-          },
-          topAdded: {
-            options: {},
-            data: []
-          },
-          topOnline: {
-            options: {},
-            data: []
-          }
+        {
+          content: '了解什么是数据端点？',
+          path: 'http://support.xlink.cn/hc/'
         },
-
-        // 用户
-        users: {
-          period: 7,
-          filter: 'added',
-          options: {},
-          data: [],
-          today: {
-            options: {},
-            info: {}
+        {
+          content: '我要开发一个wifi产品，在开发之前需要准备好哪些东西？',
+          path: 'http://support.xlink.cn/hc/'
+        }
+      ],
+      nav: {
+        products: [
+          {
+            content: '产品概览',
+            path: '/operation/overview'
+          }
+        ],
+        alerts: [
+          {
+            content: '告警记录',
+            path: '/operation/alerts/record'
           },
-          avg: {
-            options: {},
-            info: {}
-          }
-        }
-      },
-
-      // 产品信息占比
-      proportion: {
-        devices: {
-          activated: {
-            data: []
+          {
+            content: '告警分析',
+            path: '/operation/alerts/analysis'
           },
-          online: {
-            data: []
+          {
+            content: '热力分布',
+            path: '/operation/alerts/heat'
           }
-        }
-      },
-
-      // 区域分布
-      regions: {
-        products: {
-          period: 7,
-          data: [],
-          top: {
-            options: {},
-            data: []
+        ],
+        users: [
+          {
+            content: '用户概览',
+            path: '/operation/users/overview'
+          },
+          {
+            content: '用户管理',
+            path: '/operation/users/list'
+          },
+          {
+            content: '人群画像',
+            path: '/operation/users/portrait/os'
+          },
+          {
+            content: '用户标签',
+            path: '/operation/users/overview'
           }
-        }
+        ]
       }
     }
   },
 
-  ready () {
-    // 配色
-    const COLORS = {
-      'gray': '#383838',
-      'green': '#4CBF5E',
-      'blue': '#307FC1',
-      'orange': '#F69052'
-    }
-    // 产品
-    const PRODUCTS = ['空气净化器', 'WI-FI智能灯']
-
+  computed: {
     /**
-     * 生成日期数组，用于模拟横轴日期数据
-     * @param  {Number} n 数量
-     * @return {Array}    日期数组
+     * 用于显示的产品数组
+     * @return {[type]} [description]
      */
-    var genDates = (n) => {
+    toShowProducts () {
       var result = []
-      for (var i = n; i >= 1; i--) {
-        result.push(moment().subtract(i, 'days').format('MM-DD'))
-      }
+      this.products.forEach((item1) => {
+        var product = {}
+        product.name = item1.name
+        product.id = item1.id
+        this.productSummary.forEach((item2) => {
+          if (product.id === item2.id) {
+            product.total = item2['total'] || 0
+            product.activated = item2['activated'] || 0
+            product.online = item2['online'] || 0
+          }
+        })
+        result.push(product)
+      })
       return result
     }
-
-    // 顶部4个统计 -----------------------------------------------------
-
-    // 图表基本配置
-    var statisticOptions = {
-      props: {
-        height: 40,
-        plotCfg: {
-          margin: [0, 0, 0, 0]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      axis: false,
-      legend: false,
-      tooltip: false,
-      position: 'date*count'
-    }
-    // var tplStatInfo = {
-    //   'change|-200-2000': 2000,
-    //   'total|100000-1000000': 100000
-    // }
-    // var tplStatData = {
-    //   'list|20': [{
-    //     'date|+1': genDates(20),
-    //     'count|10-200': 10
-    //   }]
-    // }
-    this.statistic.users = {
-      info: {
-        change: 32,
-        total: 3172
-      },
-      data: Mock.mock({
-        'list|20': [{
-          'date|+1': genDates(20),
-          'count|+1': [139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88]
-        }]
-      }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['gray']})
-    }
-    this.statistic.devices.total = {
-      info: {
-        change: 139,
-        total: 58425
-      },
-      data: Mock.mock({
-        'list|20': [{
-          'date|+1': genDates(20),
-          'count|+1': [139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58]
-        }]
-      }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['green']})
-    }
-    this.statistic.devices.activated = {
-      info: Mock.mock({
-        change: 67,
-        total: 29887
-      }),
-      data: Mock.mock({
-        'list|20': [{
-          'date|+1': genDates(20),
-          'count|+1': [58, 74, 88, 139, 106, 157, 64, 124, 157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124]
-        }]
-      }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['blue']})
-    }
-    this.statistic.devices.online = {
-      info: Mock.mock({
-        change: -5,
-        total: 4205
-      }),
-      data: Mock.mock({
-        'list|20': [{
-          'date|+1': genDates(20),
-          'count|+1': [157, 64, 124, 58, 139, 106, 58, 74, 88, 157, 64, 124, 58, 74, 88, 139, 106, 157, 64, 124]
-        }]
-      }).list,
-      options: _.merge({}, statisticOptions, {color: COLORS['orange']})
-    }
-
-    // 产品趋势分析 -----------------------------------------------------
-
-    // 趋势图表配置
-    var productTrendsOptions = {
-      props: {
-        plotCfg: {
-          margin: [60, 0, 50, 60]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        },
-        'product': {
-          alias: '产品'
-        }
-      },
-      position: 'date*count',
-      color: 'product'
-    }
-    var proTrendsData = []
-    // PRODUCTS.forEach((item) => {
-    //   proTrendsData = proTrendsData.concat(Mock.mock({
-    //     'list|7': [{
-    //       'date|+1': genDates(7),
-    //       'count|100-200': 10,
-    //       'product': item
-    //     }]
-    //   }).list)
-    // })
-    proTrendsData = proTrendsData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [24, 14, 25, 34, 17, 29, 33],
-        'product': PRODUCTS[0]
-      }]
-    }).list)
-    proTrendsData = proTrendsData.concat(Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [204, 156, 275, 236, 154, 198, 185],
-        'product': PRODUCTS[1]
-      }]
-    }).list)
-    this.trends.products.data = proTrendsData
-    this.trends.products.options = productTrendsOptions
-
-    // var tplPoductTrends = {
-    //   'change|-200-200': 0,
-    //   'total|10-1000': 1000
-    // }
-    // 今日
-    this.trends.products.today = {
-      info: {
-        change: 5,
-        total: 139
-      }
-    }
-    // 平均
-    this.trends.products.avg = {
-      info: {
-        change: 7,
-        total: 104
-      }
-    }
-
-    // Top3
-    var productTrendsTopOptions = {
-      props: {
-        plotCfg: {
-          margin: [0, 0, 0, 180]
-        }
-      },
-      defs: {
-        'product': {
-          type: 'cat',
-          alias: '产品'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      position: 'product*count'
-    }
-    // var tplProductTrendsTopData = {
-    //   'list|2': [{
-    //     'count|10-20': 10,
-    //     'product|+1': PRODUCTS
-    //   }]
-    // }
-    this.trends.products.topAdded = {
-      data: Mock.mock({
-        'list|2': [{
-          'count|+1': [24, 115],
-          'product|+1': PRODUCTS
-        }]
-      }).list,
-      options: _.merge({}, productTrendsTopOptions, {
-        props: {
-          height: 90
-        },
-        color: 'product',
-        horizontal: true,
-        // axis: false,
-        legend: false
-      })
-    }
-    this.trends.products.topOnline = {
-      data: Mock.mock({
-        'list|2': [{
-          'count|+1': [807, 4709],
-          'product|+1': PRODUCTS
-        }]
-      }).list,
-      options: _.merge({}, productTrendsTopOptions, {
-        props: {
-          height: 80
-        },
-        color: 'product',
-        horizontal: true,
-        // axis: false,
-        legend: false
-      })
-    }
-
-    // 产品区域分布 -----------------------------------------------------
-
-    // var regionData = []
-    // var features = mapData.features
-    // var dataArr = [4576, 3405, 2876, 2406, 2217, 1807, 1777, 1654, 1540, 1440, 1120, 879, 654, 332, 224, 87, 32]
-    // for (var i = 0; i < features.length; i++) {
-    //   var name = features[i].properties.name
-    //   regionData.push({
-    //     'name': name,
-    //     // 'value': Math.round(Math.random() * 1000)
-    //     'value': dataArr[i] || 0
-    //   })
-    // }
-    var regionData = []
-    var features = mapData.features
-    var mapDataArr = [{
-      name: '广东',
-      value: 4576
-    }, {
-      name: '上海',
-      value: 3405
-    }, {
-      name: '北京',
-      value: 2876
-    }, {
-      name: '浙江',
-      value: 2406
-    }, {
-      name: '江苏',
-      value: 2217
-    }, {
-      name: '广西',
-      value: 1807
-    }, {
-      name: '福建',
-      value: 1807
-    }, {
-      name: '重庆',
-      value: 1777
-    }, {
-      name: '山东',
-      value: 1654
-    }, {
-      name: '四川',
-      value: 1540
-    }, {
-      name: '湖南',
-      value: 1540
-    }, {
-      name: '安徽',
-      value: 1120
-    }, {
-      name: '黑龙江',
-      value: 1120
-    }, {
-      name: '河北',
-      value: 1120
-    }, {
-      name: '云南',
-      value: 879
-    }, {
-      name: '江西',
-      value: 879
-    }, {
-      name: '辽宁',
-      value: 654
-    }, {
-      name: '湖北',
-      value: 332
-    }, {
-      name: '山西',
-      value: 224
-    }, {
-      name: '青海',
-      value: 87
-    }]
-    for (var i = 0; i < features.length; i++) {
-      var name = features[i].properties.name
-      regionData.push({
-        'name': name,
-        // 'value': Math.round(Math.random() * 1000)
-        'value': 0
-      })
-    }
-    this.regions.products.data = _.unionBy(mapDataArr, regionData, 'name')
-
-    // Top10
-    var regionsProductTopOptions = {
-      props: {
-        plotCfg: {
-          margin: [0, 0, 0, 80]
-        }
-      },
-      defs: {
-        'name': {
-          type: 'cat',
-          alias: '省份'
-        },
-        'value': {
-          alias: '数量',
-          min: 0
-        }
-      },
-      position: 'name*value'
-    }
-    var regionProductTopData = _.slice(_.orderBy(this.regions.products.data, ['value'], ['asc']), this.regions.products.data.length - 10, this.regions.products.data.length)
-    this.regions.products.top = {
-      data: regionProductTopData,
-      options: _.merge({}, regionsProductTopOptions, {
-        props: {
-          height: 400
-        },
-        color: 'name',
-        horizontal: true,
-        // axis: false,
-        legend: false
-      })
-    }
-
-    // 产品信息占比 -----------------------------------------------------
-    this.proportion.devices.activated = {
-      data: [
-        {name: '已激活设备数', value: 29887},
-        {name: '未激活设备数', value: 28538}
-      ]
-    }
-    this.proportion.devices.online = {
-      data: [
-        {name: '当前离线', value: 25682},
-        {name: '当前在线', value: 4205}
-      ]
-    }
-
-    // 用户趋势分析 -----------------------------------------------------
-
-    // 趋势图表配置
-    var userTrendsOptions = {
-      props: {
-        height: 300,
-        plotCfg: {
-          margin: [60, 0, 50, 60]
-        }
-      },
-      defs: {
-        'date': {
-          type: 'cat',
-          alias: '日期'
-        },
-        'count': {
-          alias: '数量',
-          min: 0
-        },
-        'type': {
-          alias: '新增用户'
-        }
-      },
-      position: 'date*count',
-      color: 'type'
-    }
-    this.trends.users.data = Mock.mock({
-      'list|7': [{
-        'date|+1': genDates(7),
-        'count|+1': [20, 22, 15, 25, 18, 24, 32],
-        'type': '新增用户'
-      }]
-    }).list
-    this.trends.users.options = userTrendsOptions
-
-    // var tplUserTrends = {
-    //   'change|-200-200': 0,
-    //   'total|10-1000': 1000
-    // }
-    // 今日
-    this.trends.users.today = {
-      info: {
-        change: 8,
-        total: 32
-      }
-    }
-    // 平均
-    this.trends.users.avg = {
-      info: {
-        change: 12,
-        total: 43
-      }
+  },
+  route: {
+    data () {
+      this.getProducts()
     }
   },
-
   methods: {
+    /**
+     * 获取产品概览
+     * @param  {[type]} productId [description]
+     * @return {[type]}           [description]
+     */
+    getProductSummary (productId) {
+      api.statistics.getProductSummary(productId).then((res) => {
+        res.data.id = productId
+        this.productSummary.push(res.data)
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 获取产品
+     * @return {[type]} [description]
+     */
+    getProducts () {
+      this.loading = true
+      api.product.all().then((res) => {
+        if (res.data.length > 2) {
+          res.data.length = 2
+        }
+        this.products = res.data
+        this.loading = false
+        res.data.forEach((item) => {
+          this.getProductSummary(item.id)
+        })
+      }).catch((res) => {
+        this.loading = false
+        this.handleError(res)
+      })
+    },
+    /**
+     * 在新窗口中打开
+     * @param  {[type]} path [description]
+     * @return {[type]}      [description]
+     */
+    open (path) {
+      window.open(path)
+    },
+    /**
+     * 切换路由到..
+     * @param  {[type]} path [description]
+     * @return {[type]}      [description]
+     */
+    goto (path) {
+      this.$route.router.go(path)
+    }
   }
 }
 </script>
@@ -693,14 +289,151 @@ export default {
 <style lang="stylus" scoped>
 @import '../assets/stylus/common'
 
-.statistic
-  .x-panel
-    padding 0
+  .page-in
+    width 100%
+    height 100%
+    position relative
+    padding-bottom 107px
+    box-sizing border-box
+    background #fff
+    .body
+      width 100%
+      height 100%
+      padding 35px 20px
+      box-sizing border-box
+      .dev-box
+        border-right 1px solid #dddddd
+        box-sizing border-box
 
-.top
-  h3
-    font-size 14px
-    text-indent 180px
-    margin 20px 0 5px
-    color gray
+    .container
+      padding 0 80px
+      box-sizing border-box
+      height 100%
+      &.dev-box
+        .icon-box
+          background url('../assets/images/developer.png') no-repeat center center / 90% 90%
+
+      &.operation-box
+        .icon-box
+          background url('../assets/images/operation.png') no-repeat center center / 90% 90%
+
+      .part
+        width 100%
+        height auto
+        margin-top 20px
+        .title-box
+          height 30px
+          border-bottom 1px solid #ccc
+          padding 0 10px
+          position relative
+          line-height 30px
+          h2
+            color #333333
+            font-size 14px
+            display inline
+          .check-all
+            position absolute
+            right 10px
+            text-align right
+            color #999
+            &:hover
+              color red
+        .content-box
+          padding 0 10px
+          box-sizing border-box
+          width 100%
+      .part1
+        position relative
+        min-height 85px
+        .icon-box
+          width 85px
+          height 85px
+          position absolute
+          top 0
+          left 0
+
+        .text-box
+          margin-left 100px
+          padding-top 6px
+          h2
+            margin-top 10px
+            font-size 25px
+            padding 0
+            margin 0
+            color #333333
+          .description
+            color #bcbcbc
+      .part2
+        .product
+          width 100%
+          height 50px
+          overflow hidden
+          margin-top 20px
+          position relative
+          padding-left 70px
+          box-sizing border-box
+          .img-box
+            width 50px
+            height 50px
+            border 1px solid #ccc
+            box-sizing border-box
+            position absolute
+            left 0
+            top 0
+            img
+              width 100%
+              height 100%
+          .text-box
+            height 100%
+            color #999999
+            .msg
+              line-height 30px
+              height 30px
+              white-space nowrap
+              text-overflow 100%
+              .name
+                font-size 16px
+                color #DA4E37
+        .no-products
+          height 120px
+          padding-top 50px
+          box-sizing border-box
+          font-size 12px
+      .part3
+        .content-box
+          padding-top 10px
+        .nav
+        .link
+          width 100%
+          height 20px
+          margin-top 10px
+          overflow hidden
+          line-height 20px
+          .fa
+            width 15px
+            height 15px
+        .nav
+          a
+            margin-left 10px
+      .part4
+        text-align center
+        margin-top 50px
+        .btn
+          width 155px
+          height 33px
+          background-color #da4e37
+          font-size 14px
+
+    .footer
+      width 100%
+      height 45px
+      line-height 45px
+      text-align center
+      background #f6f6f6
+      color #999
+      border-top 1px solid #dddddd
+      border-bottom 1px solid #dddddd
+      position absolute
+      bottom 60px
+      left 0
 </style>
