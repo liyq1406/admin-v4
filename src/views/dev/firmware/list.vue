@@ -12,7 +12,7 @@
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
-              <div class="filter-group-item">
+              <!-- <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
@@ -21,13 +21,13 @@
                   </v-select>
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
-              </div>
+              </div> -->
             </div>
             <div class="filter-group">
-              <v-select width="90px" size="small" :label="visibility.label">
+              <v-select width="120px" size="small" placeholder="请选择产品" :label="currProduct.name">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="">
-                  <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+                <select v-model="currProduct" name="product" @change="Productstatus">
+                  <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
               </v-select>
             </div>
@@ -45,20 +45,30 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="firmwares.length > 0">
-                <tr v-for="firmware in firmwares">
+              <template v-if="tasks.length > 0">
+                <tr v-for="task in tasks">
                   <td>{{$index + 1}}</td>
-                  <td>{{ firmware.content }}</td>
-                  <td>{{ firmware.code }}</td>
-                  <td>{{ firmware.start_version }}</td>
-                  <td>{{ firmware.target_version }}</td>
+                  <td>{{ task.content }}</td>
+                  <td><span v-if="task.identify===0">-</span><span v-else>{{ task.identify }}</span></td>
+                  <td>{{ task.from_version }}</td>
+                  <td>{{ task.target_version }}</td>
                   <td>
-                    <progress :count="firmware.count" :max="firmware.max" :pause="firmware.status === 0"></progress>
+                    <!-- 没有升级进度 -->
+                    <div v-if="task.type !== 3">
+                      <progress :count="task.upgrade_count" :max="task.upgrade_count" :pause="false" :show-percent="false" :show-text="false"></progress>
+                    </div>
+                    <div v-else>
+                      <progress :count="task.upgrade_count" :max="task.total_count" :pause="task.status"></progress>
+                    </div>
                   </td>
-                  <td class="tac"><a v-if="firmware.status === 0" href="#" class="hl-red">启动</a><a v-else href="##" class="hl-red">暂停</a><a href="#" class="hl-red ml10">编辑</a></td>
+                  <td class="tac">
+                    <!-- <a v-if="task.status === 0" href="#" class="hl-red" @click="toggleTaskStatus(item)">启动</a><a v-else href="##" class="hl-red" @click="changeStatus(item)">暂停</a><a href="#" class="hl-red ml10">删除</a> -->
+                    <button :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-ghost btn-sm btn-mini mr10">{{ task.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button>
+                    <button @click="removeTask(task)" class="btn btn-ghost btn-sm btn-mini">删除</button>
+                  </td>
                 </tr>
               </template>
-              <tr v-if="firmwares.length === 0 && !loadingData">
+              <tr v-if="tasks.length === 0 && !loadingData">
                 <td colspan="7" class="tac">
                   <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                 </td>
@@ -66,14 +76,14 @@
             </tbody>
           </table>
       </div>
-      <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+      <pager v-if="total > countPerPage" :total="tasks.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
     </div>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-// import api from 'api'
+import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
@@ -83,7 +93,7 @@ import Progress from 'components/Progress'
 import Table from 'components/Table'
 import locales from 'consts/locales/index'
 // import _ from 'lodash'
-import { formatDate } from 'src/filters'
+// import { formatDate } from 'src/filters'
 // import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'
@@ -118,7 +128,9 @@ export default {
     })
 
     return {
-      firmwares: [
+      query: '',
+      searching: false,
+      tasks: [
         {
           content: '这是描述',
           code: '123',
@@ -173,7 +185,9 @@ export default {
       queryType: {
         label: 'MAC',
         value: 'mac'
-      }
+      },
+      products: [],
+      currProduct: {}
     }
   },
 
@@ -185,64 +199,86 @@ export default {
         countPerPage: this.countPerPage
       }
       return result
-    },
-    tables () {
-      var result = []
-      this.devices.map((item) => {
-        var device = {
-          id: item.id,
-          mac: '<a class="hl-red">' + item.mac + '</a>',
-          is_active: item.is_active ? '是' : '否',
-          active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
-          prototype: item
-        }
-        result.push(device)
-      })
-      return result
-    },
-
-    // 筛选条件
-    queryCondition () {
-      var condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: this.sortOrders,
-        query: {}
-      }
-
-      if (this.query.length > 0) {
-        this.currentPage = 1
-        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
-      }
-
-      switch (this.visibility.value) {
-        case 'online':
-          condition.query['is_online'] = { $in: [true] }
-          break
-        case 'offline':
-          condition.query['is_online'] = { $in: [false] }
-          break
-        case 'active':
-          condition.query['is_active'] = { $in: [true] }
-          break
-        case 'inactive':
-          condition.query['is_active'] = { $in: [false] }
-          break
-        default:
-      }
-
-      return condition
     }
   },
 
   route: {
     data () {
+      this.getProducts()
     }
   },
 
   methods: {
+    // 获取产品列表
+    getProducts () {
+      this.loadingProducts = true
+      api.product.all().then((res) => {
+        this.loadingProducts = false
+        this.products = res.data
+        if (this.products.length === 0) {
+          return
+        }
+        this.currProduct = this.products[0]
+        // this.getFirmwares()
+        this.getTasks()
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingProducts = false
+      })
+    },
+    Productstatus () {
+      // this.getFirmwares()
+      this.getTasks()
+    },
+    getTasks () {
+      this.loadingTasks = true
+      api.firmware.taskList(this.currProduct.id).then((res) => {
+        if (res.status === 200) {
+          this.tasks = res.data
+          this.total = res.data.length
+          this.loadingTasks = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingTasks = false
+      })
+    },
+    // 切换任务状态
+    toggleTaskStatus (task) {
+      if (!this.toggling) {
+        this.toggling = true
+        api.firmware.toggleTaskStatus({
+          product_id: this.currProduct.id,
+          upgrade_task_id: task.id,
+          status: task.status ? 0 : 1
+        }).then((res) => {
+          if (res.status === 200) {
+            task.status = !task.status
+            this.toggling = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.toggling = false
+        })
+      }
+    },
+    // 删除升级任务
+    removeTask (task) {
+      var result = window.confirm('确认删除该升级任务吗？')
+      if (result === true) {
+        api.firmware.removeTask({
+          id: task.id,
+          product_id: this.currProduct.id
+        }).then((res) => {
+          if (res.status === 200) {
+            this.getTasks()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.toggling = false
+        })
+      }
+    }
   }
 }
 </script>
