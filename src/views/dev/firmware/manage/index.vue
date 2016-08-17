@@ -1,30 +1,23 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <div class="title-wrap">
         <h2>固件管理</h2>
       </div>
     </div>
-    <div class="panel">
-      <!-- <div class="panel-hd panel-hd-full">
-        <h2>级别分布</h2>
-      </div> -->
-      <div class="panel-bd">
-        <nav class="tab">
-          <ul>
-            <li v-for="item in tabItems">
-              <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <template v-if="!currIndex">
-        <Message></Message>
-      </template>
-      <template v-else>
-        <Update></Update>
-      </template>
-    </div>
+    <nav class="tab">
+      <ul>
+        <li v-for="item in tabItems">
+          <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
+        </li>
+      </ul>
+    </nav>
+    <template v-if="!currIndex">
+      <message></message>
+    </template>
+    <template v-else>
+      <update></update>
+    </template>
   </div>
 </template>
 

@@ -1,102 +1,100 @@
 <template>
-  <div class="main">
-    <div class="panel">
-      <div class="panel-bd">
-        <div class="filter-bar filter-bar-head">
-          <div class="filter-group fl">
-            <div class="filter-group-item">
-              <v-select :label="currentProduct.name" width="110px" size="small">
-                <span slot="label">产品</span>
-                <select v-model="currentProduct" @change="">
-                  <option v-for="product in products" :value="product">{{ product.name }}</option>
-                </select>
-              </v-select>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <pie :data="warningLevel"></pie>
-          </div>
-          <div class="col-11 col-offset-1 data-table-wrap">
-            <div class="data-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>版本号</th>
-                    <th>设备数/占比</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <template v-if="warningLevel.length > 0">
-                    <tr v-for="item in warningLevel">
-                      <td>{{item.name}}</td>
-                      <td>{{ item.value }}/{{ item.percent | toPercentDecimal2 }}</td>
-                    </tr>
-                  </template>
-                  <tr v-if="warningLevel.length === 0">
-                    <td colspan="3"  class="tac">
-                      <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+  <div class="panel">
+    <div class="panel-bd">
+      <div class="filter-bar">
+        <div class="filter-group fl">
+          <div class="filter-group-item">
+            <v-select :label="currentProduct.name" width="110px" size="small">
+              <span slot="label">产品</span>
+              <select v-model="currentProduct" @change="">
+                <option v-for="product in products" :value="product">{{ product.name }}</option>
+              </select>
+            </v-select>
           </div>
         </div>
       </div>
-      </div>
-      <div class="panel-bd">
-        <div class="data-table with-loading">
-          <div class="filter-bar">
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                  <v-select width="90px" :label="queryType.label" size="small">
-                    <select v-model="queryType">
-                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
-                    </select>
-                  </v-select>
-                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                </search-box>
-              </div>
-            </div>
-            <div class="filter-group">
-              <h3>明细</h3>
-            </div>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>固件版本号</th>
-                <th>版本说明</th>
-                <th class="tac">固件类型</th>
-                <th>识别码</th>
-                <th>添加日期</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="firmwares.length > 0">
-                <tr v-for="firmware in firmwares">
-                  <td>{{firmware.version}}</td>
-                  <td>{{ firmware.content }}</td>
-                  <td class="tac">{{ firmware.type }}</td>
-                  <td>{{ firmware.code }}</td>
-                  <td>{{ firmware.add_date }}</td>
-                  <td class="tac"><a href="##">编辑</a></td>
+      <div class="row">
+        <div class="col-12">
+          <pie :data="warningLevel"></pie>
+        </div>
+        <div class="col-11 col-offset-1 data-table-wrap">
+          <div class="data-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>版本号</th>
+                  <th>设备数/占比</th>
                 </tr>
-              </template>
-              <tr v-if="firmwares.length === 0 && !loadingData">
-                <td colspan="7" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                <template v-if="warningLevel.length > 0">
+                  <tr v-for="item in warningLevel">
+                    <td>{{item.name}}</td>
+                    <td>{{ item.value }}/{{ item.percent | toPercentDecimal2 }}</td>
+                  </tr>
+                </template>
+                <tr v-if="warningLevel.length === 0">
+                  <td colspan="3"  class="tac">
+                    <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
-      <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
     </div>
+    </div>
+    <div class="panel-bd">
+      <div class="data-table with-loading">
+        <div class="filter-bar">
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
+                <v-select width="90px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </v-select>
+                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
+          </div>
+          <div class="filter-group">
+            <h3>明细</h3>
+          </div>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>固件版本号</th>
+              <th>版本说明</th>
+              <th class="tac">固件类型</th>
+              <th>识别码</th>
+              <th>添加日期</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <template v-if="firmwares.length > 0">
+              <tr v-for="firmware in firmwares">
+                <td>{{firmware.version}}</td>
+                <td>{{ firmware.content }}</td>
+                <td class="tac">{{ firmware.type }}</td>
+                <td>{{ firmware.code }}</td>
+                <td>{{ firmware.add_date }}</td>
+                <td class="tac"><a href="##">编辑</a></td>
+              </tr>
+            </template>
+            <tr v-if="firmwares.length === 0 && !loadingData">
+              <td colspan="7" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+    <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
   </div>
 </template>
 
