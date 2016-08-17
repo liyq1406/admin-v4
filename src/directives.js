@@ -165,14 +165,22 @@ export var stretch = {
       }
     }
 
-    window.onload = function () {
+    // window.onload = function () {
+    //   self.$maxHeight = parseInt(getComputedStyle(self.$wrapDiv, 'height'))
+    //
+    //   if (self.$maxHeight > self.$minHeight) {
+    //     self.el.appendChild(self.$bottomBar)
+    //     self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
+    //   }
+    // }
+    setTimeout(() => {
       self.$maxHeight = parseInt(getComputedStyle(self.$wrapDiv, 'height'))
 
       if (self.$maxHeight > self.$minHeight) {
         self.el.appendChild(self.$bottomBar)
         self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
       }
-    }
+    }, 1000)
 
     var bindListener = function (a) {
       a.addEventListener('click', function (event) {
