@@ -66,10 +66,10 @@
             <tr>
               <th>固件版本号</th>
               <th>版本说明</th>
-              <th class="tac">固件类型</th>
+              <th>固件类型</th>
               <th>识别码</th>
               <th>添加日期</th>
-              <th>操作</th>
+              <th class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
