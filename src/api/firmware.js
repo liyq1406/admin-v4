@@ -76,6 +76,21 @@ export default {
       `${API_SERVER.default}/v2/upgrade/firmware/task/status`, params
     )
   },
+  /**
+   * 某产品设备各个版本分布
+   * @param  {Object} params
+      {
+        "productId":"产品ID",
+        "upgrade_task_id":"升级任务ID",
+        "status":"任务状态"
+      }
+   * @return status
+   */
+  trend (productId) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/product/${productId}/device_firmware_version`
+    )
+  },
 
   /**
    * 用户查询设备固件最新版本
