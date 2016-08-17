@@ -4,9 +4,9 @@
       <div class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
-            <v-select :label="currentProduct.name" width="110px" size="small">
-              <span slot="label">产品</span>
-              <select v-model="currentProduct" @change="">
+            <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
+              <span slot="label">产品：</span>
+              <select v-model="currProduct" name="product" @change="Productstatus">
                 <option v-for="product in products" :value="product">{{ product.name }}</option>
               </select>
             </v-select>
@@ -74,13 +74,16 @@
           </thead>
           <tbody>
             <template v-if="firmwares.length > 0">
-              <tr v-for="firmware in firmwares">
-                <td>{{firmware.version}}</td>
-                <td>{{ firmware.content }}</td>
-                <td class="tac">{{ firmware.type }}</td>
-                <td>{{ firmware.code }}</td>
-                <td>{{ firmware.add_date }}</td>
-                <td class="tac"><a href="##">编辑</a></td>
+              <tr v-for="firmware in firmwares | orderBy 'version'">
+                <td>{{ firmware.version }}</td>
+                <td>{{ firmware.description }}</td>
+                <td><span v-if="firmware.type===1">WIFI</span><span v-if="firmware.type===2">MCU</span><span v-if="firmware.type===3">子设备</span></td>
+                <td><span v-if="firmware.identify===0">-</span><span v-else>{{ firmware.identify }}</span></td>
+                <td>{{ firmware.create_date | formatDate }}</td>
+                <td class="tac">
+                  <!-- <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button> -->
+                  <button class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
+                </td>
               </tr>
             </template>
             <tr v-if="firmwares.length === 0 && !loadingData">
@@ -98,7 +101,7 @@
 
 <script>
 import Vue from 'vue'
-// import api from 'api'
+import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
@@ -143,7 +146,8 @@ export default {
     })
 
     return {
-      currentProduct: {},
+      currProduct: {},
+      products: [],
       warningLevel: [],
       firmwares: [
         {
@@ -201,11 +205,11 @@ export default {
       }
     }
   },
-  vuex: {
-    getters: {
-      products: ({ products }) => products.all
-    }
-  },
+  // vuex: {
+  //   getters: {
+  //     products: ({ products }) => products.all
+  //   }
+  // },
 
   computed: {
     page () {
@@ -230,65 +234,74 @@ export default {
         result.push(device)
       })
       return result
-    },
-
-    // 筛选条件
-    queryCondition () {
-      var condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: this.sortOrders,
-        query: {}
-      }
-
-      if (this.query.length > 0) {
-        this.currentPage = 1
-        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
-      }
-
-      switch (this.visibility.value) {
-        case 'online':
-          condition.query['is_online'] = { $in: [true] }
-          break
-        case 'offline':
-          condition.query['is_online'] = { $in: [false] }
-          break
-        case 'active':
-          condition.query['is_active'] = { $in: [true] }
-          break
-        case 'inactive':
-          condition.query['is_active'] = { $in: [false] }
-          break
-        default:
-      }
-
-      return condition
     }
   },
   // 监听属性变动
   watch: {
-    products () {
-      this.getFirstProduct()
-      if (this.products.length > 0) {
-        // this.getTagTrend()
-        // this.getAlertList()
-        this.sortRegion(this.warningLevel)
-      }
-    }
+    // products () {
+    //   this.getFirstProduct()
+    //   if (this.products.length > 0) {
+    //     // this.getTagTrend()
+    //     // this.getAlertList()
+    //     this.sortRegion()
+    //   }
+    // }
   },
 
   route: {
     data () {
-      this.getFirstProduct()
+      // this.getFirstProduct()
+      this.getProducts()
       this.sortRegion()
     }
   },
+  ready () {
+    this.getProducts()
+    this.sortRegion()
+  },
 
   methods: {
+
     // 获取第一个产品@author weijie
-    getFirstProduct () {
-      this.currentProduct = this.products[0] || {}
+    // getFirstProduct () {
+    //   this.currentProduct = this.products[0] || {}
+    // },
+    // 获取产品列表
+    getProducts () {
+      console.log(111)
+      this.loadingProducts = true
+      api.product.all().then((res) => {
+        this.loadingProducts = false
+        this.products = res.data
+        if (this.products.length === 0) {
+          return
+        }
+        this.currProduct = this.products[0]
+        this.getFirmwares()
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingProducts = false
+      })
+    },
+    /**
+     * 获取固件列表
+     */
+    getFirmwares () {
+      this.loadingFirmwares = true
+      api.product.getFirmwares(this.currProduct.id).then((res) => {
+        if (res.status === 200) {
+          this.firmwares = res.data
+          this.total = res.data.length
+          this.loadingFirmwares = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingFirmwares = false
+      })
+    },
+    // 更改应用后获取列表与状态
+    Productstatus () {
+      this.getFirmwares()
     },
     sortRegion () {
       var warningLevel = [
