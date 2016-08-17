@@ -21,9 +21,10 @@
      * @param  {[type]} 'change/changed'  方法名
      * @param  {[type]} this.value 值
      * @param  {[type]} params    其他可能用到的参数
+     * @param  {[type]} isUserBehavior    是否是用户行为
      */
      // this.$emit('change', value, params) // 实时上报
-     // this.$emit('changed', value, params) // 非实时上报
+     // this.$emit('changed', value, params, isUserBehavior) // 非实时上报
      //
     props: {
       extra: null,
@@ -126,6 +127,11 @@
       }
     },
     methods: {
+      /**
+       * 按照步长变化一步
+       * @param  {[type]} type [description]
+       * @return {[type]}      [description]
+       */
       stepChange (type) {
         var self = this
         var parentDom = this.$el.getElementsByClassName('range-box')[0]
@@ -154,7 +160,7 @@
           this.transition = false
         }, 0)
         self.computedValue(maxLeft)
-        self.emit('changed')
+        self.emit('changed', true)
       },
       /**
        * 监听按钮事件
@@ -211,8 +217,9 @@
       },
       /**
        * 根据步长重置位置
+       * @param {Boolean} isUserBeHavior 是否是用户行为
        */
-      resetPosition () {
+      resetPosition (isUserBeHavior) {
         var self = this
         if (!this.$el) {
           return
@@ -235,7 +242,7 @@
         //   console.warn('出错')
         // }
         self.computedValue(maxLeft)
-        self.emit('changed')
+        self.emit('changed', isUserBeHavior)
       },
       /**
        * 点击横线
@@ -276,7 +283,7 @@
         document.body.appendChild(rangeEventBox)
         rangeEventBox.addEventListener('mouseup', function (ev) {
           document.body.removeChild(rangeEventBox)
-          self.resetPosition()
+          self.resetPosition(true)
           self.focusEvent()
         }, false)
       },
@@ -300,7 +307,7 @@
             this.transition = false
           }, 50)
           self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
-          self.resetPosition()
+          self.resetPosition(false)
         }, 200)
         self.down = false
         circledom.addEventListener('mousedown', function (ev) {
@@ -328,12 +335,12 @@
             self.down = false
             dx += ev.x
             document.body.removeChild(rangeEventBox)
-            self.resetPosition()
+            self.resetPosition(true)
           }, false)
         }, false)
         circledom.addEventListener('mouseup', function (ev) {
           self.down = false
-          self.resetPosition()
+          self.resetPosition(true)
         }, false)
       },
       /**
@@ -362,17 +369,31 @@
         value = this.step * Math.round(value / this.step)
         this.value = value
       },
-      emit (name) {
+      /**
+       * 抛出事件给父组件
+       * @param  {[type]}  name           可能是change（实时上报）也可能是changed（变化后上报）
+       * @param  {Boolean} isUserBehavior 是否是用户行为
+       * @return {[type]}                 [description]
+       */
+      emit (name, isUserBehavior) {
+        // 是否是用户行为 默认为否
+        isUserBehavior = isUserBehavior || false
         var percent = (this.value - this.min) / (this.max - this.min)
         var params = {
+          // 最大值
           max: this.max,
+          // 最小值
           min: this.min,
+          // 步长
           step: this.step,
+          // 百分比
           percent: percent,
+          // 外面传进来的其余参数
           extra: this.extra,
+          // 原型 也是外面传进来的
           prototype: this.prototype
         }
-        this.$emit(name, this.value, params)
+        this.$emit(name, this.value, params, isUserBehavior)
       }
     }
   }
