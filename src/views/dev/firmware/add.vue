@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>新建任务</h2>
     </div>
     <div class="container row">
-      <div class="form-box col-16">
+      <div class="form-box col-16 mt10">
         <validator name="validation">
           <form novalidate @submit.prevent="onAddTaskSubmit">
             <div class="panel">

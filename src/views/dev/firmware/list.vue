@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>升级列表</h2>
     </div>
 
@@ -58,7 +58,7 @@
                       <progress :count="task.upgrade_count" :max="task.upgrade_count" :pause="false" :show-percent="false" :show-text="false"></progress>
                     </div>
                     <div v-else>
-                      <progress :count="task.upgrade_count" :max="task.total_count" :pause="task.status"></progress>
+                      <progress :count="task.upgrade_count" :max="task.surplus_count" :pause="task.status"></progress>
                     </div>
                   </td>
                   <td class="tac">

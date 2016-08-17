@@ -43,9 +43,6 @@
           </div>
         </div>
       </div>
-    </div>
-    </div>
-    <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="filter-bar">
           <div class="filter-group fr">
@@ -93,8 +90,9 @@
             </tr>
           </tbody>
         </table>
+      </div>
+      <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
     </div>
-    <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
   </div>
 </template>
 
