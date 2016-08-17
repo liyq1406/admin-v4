@@ -110,7 +110,7 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import locales from 'consts/locales/index'
 // import _ from 'lodash'
-import { formatDate } from 'src/filters'
+// import { formatDate } from 'src/filters'
 // import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'
@@ -219,21 +219,6 @@ export default {
         countPerPage: this.countPerPage
       }
       return result
-    },
-    tables () {
-      var result = []
-      this.devices.map((item) => {
-        var device = {
-          id: item.id,
-          mac: '<a class="hl-red">' + item.mac + '</a>',
-          is_active: item.is_active ? '是' : '否',
-          active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
-          prototype: item
-        }
-        result.push(device)
-      })
-      return result
     }
   },
   // 监听属性变动
@@ -252,12 +237,12 @@ export default {
     data () {
       // this.getFirstProduct()
       this.getProducts()
-      this.sortRegion()
+      // this.sortRegion()
     }
   },
   ready () {
     this.getProducts()
-    this.sortRegion()
+    // this.sortRegion()
   },
 
   methods: {
@@ -268,7 +253,7 @@ export default {
     // },
     // 获取产品列表
     getProducts () {
-      console.log(111)
+      // console.log(111)
       this.loadingProducts = true
       api.product.all().then((res) => {
         this.loadingProducts = false
@@ -278,9 +263,32 @@ export default {
         }
         this.currProduct = this.products[0]
         this.getFirmwares()
+        this.getTrend()
       }).catch((res) => {
         this.handleError(res)
         this.loadingProducts = false
+      })
+    },
+    // 获取分布情况
+    getTrend () {
+      api.firmware.trend(this.currProduct.id).then((res) => {
+        if (res.status === 200) {
+          // console.log(res.data)
+          var arr = []
+          res.data.forEach((item) => {
+            var obj = {}
+            obj.name = '版本' + item.firmware_version
+            obj.value = item.total
+            arr.push(obj)
+          })
+          if (arr.length === res.data.length) {
+            console.log(arr)
+            this.warningLevel = arr
+            this.sortRegion(this.warningLevel)
+          }
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
     /**
@@ -302,40 +310,10 @@ export default {
     // 更改应用后获取列表与状态
     Productstatus () {
       this.getFirmwares()
+      this.getTrend()
     },
-    sortRegion () {
-      var warningLevel = [
-        {
-          name: 'v2.0',
-          value: 888
-        },
-        {
-          name: 'v1.2',
-          value: 82
-        },
-        {
-          name: 'v1.1',
-          value: 12
-        },
-        {
-          name: 'v1.0',
-          value: 11
-        },
-        {
-          name: 'v1.4',
-          value: 10
-        },
-        {
-          name: 'v1.5',
-          value: 10
-        },
-        {
-          name: 'v1.3',
-          value: 9
-        }
-      ]
-      // console.log(arr)
-      // console.log(arr)
+    sortRegion (warningLevel) {
+      // console.log(warningLevel)
       // 由大到小排序
       warningLevel.sort((a, b) => {
         if (a.value > b.value) {
