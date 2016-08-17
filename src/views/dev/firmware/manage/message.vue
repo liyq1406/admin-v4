@@ -45,7 +45,7 @@
       </div>
       <div class="data-table with-loading">
         <div class="filter-bar">
-          <div class="filter-group fr">
+          <!-- <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                 <v-select width="90px" :label="queryType.label" size="small">
@@ -56,7 +56,7 @@
                 <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
-          </div>
+          </div> -->
           <div class="filter-group">
             <h3>明细</h3>
           </div>
