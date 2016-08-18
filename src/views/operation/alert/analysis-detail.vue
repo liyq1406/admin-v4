@@ -258,6 +258,7 @@ export default {
   ready () {
     this.getProduct()
     this.getAlertList()
+    this.getList()
   },
 
   computed: {
