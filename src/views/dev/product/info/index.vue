@@ -448,7 +448,7 @@ export default {
 
   route: {
     data () {
-      // 初次获取产品列表，并将获取的数量作为已用配额
+      // 初次获取设备列表，并将获取的数量作为已用配额
       let condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
         limit: this.countPerPage,
