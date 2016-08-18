@@ -35,12 +35,24 @@
                     </div>
                   </div>
                   <div class="form-row row">
+                    <label class="form-control col-4">{{ $t("ui.product.fields.type") }}:</label>
+                    <div class="controls col-20">
+                      <div class="select">
+                        <v-select :label="productType.label">
+                          <select v-model="productType" name="productType">
+                            <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
+                          </select>
+                        </v-select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-row row">
                     <label class="form-control col-4">{{ $t("ui.product.fields.link_type") }}:</label>
                     <div class="controls col-20">
                       <div class="select">
                         <v-select :label="locales.data.DEVICE_TYPES[product.link_type-1]">
                           <select v-model="product.link_type" name="link_type">
-                            <option v-for="type in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                            <option v-for="opt in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ opt }}</option>
                           </select>
                         </v-select>
                       </div>
@@ -50,7 +62,7 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.desc") }}:</label>
                     <div class="controls col-20">
                       <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
-                        <textarea v-model="product.description" type="text" name="product.desc" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
+                        <textarea v-model="product.description" type="text" name="product.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.description.touched && $validation.description.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>
@@ -96,13 +108,24 @@ export default {
   data () {
     return {
       deviceThumb: defaultDeviceThumb,
+      productType: {},
       product: {
         name: '',
         mode: '',
+        type: 0,
         link_type: 1,
         description: ''
       },
       adding: false
+    }
+  },
+
+  computed: {
+    // 产品类型选项
+    productTypeOptions () {
+      let types = this.locales.data.PRODUCT_TYPES.slice(1)
+      this.productType = types[0]
+      return types
     }
   },
 
@@ -113,6 +136,7 @@ export default {
     onBtnClick () {
       if (this.$validation.valid) {
         this.adding = true
+        this.product.type = this.productType.value
         api.product.create(this.product).then((res) => {
           if (res.status === 200) {
             this.adding = false

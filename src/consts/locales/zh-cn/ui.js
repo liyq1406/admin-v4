@@ -403,7 +403,8 @@ export default {
       name: '产品名称',
       desc: '产品描述',
       mode: '产品型号',
-      link_type: '设备类型',
+      type: '产品类型',
+      link_type: '连接类型',
       is_registerable: '允许用户注册设备',
       is_release: '发布产品'
     }

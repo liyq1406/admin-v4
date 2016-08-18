@@ -1,5 +1,11 @@
 <template>
   <div class="x-annulus">
+    <slot>
+      <div class="quota">
+        <div class="quota-tit">{{ title }}</div>
+        <div class="quota-sum">{{ sum }}</div>
+      </div>
+    </slot>
     <div v-if="data && data.length===0 && !rendered" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
   </div>
 </template>
@@ -23,6 +29,10 @@ export default {
       default () {
         return [0, 0, 20, 0]
       }
+    },
+    title: {
+      type: String,
+      default: '产品配额'
     }
   },
 
@@ -67,6 +77,7 @@ export default {
 
   methods: {
     render () {
+      console.log(this.data)
       if (this.data.length <= 0) {
         return
       }
@@ -80,9 +91,6 @@ export default {
         }
       }
 
-      var frag = document.createElement('div')
-      frag.innerHTML = `<div style="position: absolute;width: 100px;top: 85px;left: 50%; margin-left:-50px;text-align: center;color: #999;"><p style="font-size: 10px; margin: 5px 0">产品配额</p><p style="font-size: 20px; margin: 5px 0; color: black">${this.sum}</p>`
-      this.$el.appendChild(frag)
       // function formatter (text, item) {
       //   var point = item.point // 每个弧度对应的点
       //   var percent = point['..percent'] // ..proportion 字段由Stat.summary.proportion统计函数生成
@@ -91,6 +99,7 @@ export default {
       // }
       var Stat = window.G2.Stat
       var chart = new window.G2.Chart(defaults)
+      this.chart = chart
       // 以 year 为维度划分分面
       // chart.facet(['year'])
       chart.source(this.data)
@@ -117,4 +126,22 @@ export default {
     line-height 250px
     display inline-block
     text-align center
+
+  .quota
+    position absolute
+    width 100px
+    top 85px
+    left 50%
+    margin-left -50px
+    text-align center
+    color #999
+
+  .quota-tit
+    font-size 10px
+    margin 5px 0
+
+  .quota-sum
+    font-size 20px
+    margin 5px 0
+    color black
 </style>

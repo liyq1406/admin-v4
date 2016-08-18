@@ -4,7 +4,10 @@
       <div class="x-info-list-item" v-for="(index, item) in info">
         <div class="x-info-list-item-in">
           <div class="x-label">{{ item.label }}</div>
-          <div class="x-val">{{ item.value }}</div>
+          <div v-if="item.slot" class="x-val">
+            <slot :name="index"></slot>
+          </div>
+          <div v-else class="x-val">{{ item.value }}</div>
         </div>
       </div>
     </div>

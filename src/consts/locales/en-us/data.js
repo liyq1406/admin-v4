@@ -84,6 +84,15 @@ export const PERIODS_MAP = {
 // 设备类型
 export const DEVICE_TYPES = ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝牙Mesh设备', 'PC设备']
 
+// 产品类型
+export const PRODUCT_TYPES = [
+  { label: '未定义', value: 0 },
+  { label: '智能照明', value: 1 },
+  { label: '电工', value: 2 },
+  { label: '空气清洁', value: 3 },
+  { label: '安防', value: 4 }
+]
+
 // 设备筛选待选项
 export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '全部', value: 'all' },

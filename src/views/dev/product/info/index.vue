@@ -7,7 +7,6 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-16">
-            <!-- <div class="sale-details-head">智能烤箱<i class="fa fa-edit"></i></div> -->
             <div class="product-info">
               <info-card>
                 <div class="product-name">{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></div>
@@ -19,38 +18,25 @@
               </div>
             </div>
             <div v-stretch="192">
-              <info-list :info="productInfo"></info-list>
+              <info-list :info="productInfo">
+                <a class="hl-red" slot="qrcode" @click.prevent="displayQrcode">点击查看</a>
+              </info-list>
             </div>
           </div>
           <div class="col-8">
             <annulus :data="annulusInfo"></annulus>
-            <div class="buy-access">
+            <div class="buy-access hidden">
               <button class="btn btn-primary" @click="onBuyButtonClick">购买授权</button>
             </div>
-            <div class="buy-record">
+            <div class="buy-record hidden">
               <span>购买记录</span>
             </div>
           </div>
         </div>
-
-        <!-- <div class="mt10 mb40">
-          <div class="filter-bar">
-            <div class="filter-group fl">
-              <h3 class="fl mr20">设备列表</h3>
-              <button class="btn btn-primary">管理授权</button>
-            </div>
-            <div class="filter-group fl">
-              <div class="filter-group-item ml20">
-                <button class="btn btn-primary">管理授权</button>
-              </div>
-            </div>
-          </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></c-table>
-        </div> -->
       </div>
     </div>
 
-    <div class="panel">
+    <div class="panel mt20">
       <div class="panel-hd panel-hd-full bordered">
         <h2 class="fl mr20">设备列表</h2>
         <!-- <button class="btn btn-primary">管理授权</button> -->
@@ -88,86 +74,105 @@
     <modal :show.sync="showEditModal">
       <h3 slot="header">{{ $t("ui.overview.editForm.header") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
-                <input v-model="editModel.name" type="text" v-form-ctrl name="name" maxlength="32" required custom-validator="noSpacesPrefixAndSuffix" lazy class="input-text"/>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.name'), 32]) }}</span><span v-if="editValidation.name.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.product.fields.name')}) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
-                <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
-              </div>
-              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.product.fields.desc'), 250]) }}</span></div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
-            <div class="controls col-18">
-              <div class="select">
-                <v-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
-                  <select v-model="editModel.link_type" v-form-ctrl name="link_type">
-                    <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                  </select>
-                </v-select>
+        <!-- <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook"> -->
+        <validator name="validation">
+          <form novalidate @submit.prevent="onEditSubmit">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
+                  <input v-model="editModel.name" type="text" name="editModel.name" v-validate:name="{required: true, maxlength: 32}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.name'), 32]) }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
-                </label>
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.product.fields.mode") }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
+                  <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{required: true, maxlength: 64}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.mode.touched && $validation.mode.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.mode')}) }}</span>
+                  <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row" v-show="editModel.link_type===5">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
-                </label>
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.product.fields.type") }}:</label>
+              <div class="controls col-18">
+                <div class="select">
+                  <v-select :label="productType.label">
+                    <select v-model="productType" name="productType">
+                      <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
+                    </select>
+                  </v-select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="ifsnapshot" v-model="editModel.ifsnapshot"/>开启快照功能
-                </label>
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
+              <div class="controls col-18">
+                <div class="select">
+                  <v-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
+                    <select v-model="editModel.link_type" name="link_type">
+                      <option v-for="type in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
+                    </select>
+                  </v-select>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row">
-            <div class="controls col-18 col-offset-6">
-              <div class="checkbox-group">
-                <label class="checkbox">
-                  <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
-                </label>
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
+                  <textarea v-model="editModel.description" type="text" name="editModel.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.description.touched && $validation.description.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>
+                  <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.desc'), 250]) }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <label class="del-check">
-              <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
-            </label>
-            <!-- <label class="del-check">
-              <input type="checkbox" name="is_release" v-model="editModel.is_release"/>{{ $t("ui.product.fields.is_release") }}
-            </label> -->
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
+            <div class="form-row row mb0">
+              <div class="controls col-18 col-offset-6">
+                <div class="checkbox-group">
+                  <label class="checkbox">
+                    <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row mb0" v-show="editModel.link_type===5">
+              <div class="controls col-18 col-offset-6">
+                <div class="checkbox-group">
+                  <label class="checkbox">
+                    <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="controls col-18 col-offset-6">
+                <div class="checkbox-group">
+                  <label class="checkbox">
+                    <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
+                  </label>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <label class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
+              </label>
+              <button @click.prevent.stop="resetEdit" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validation>
       </div>
     </modal>
   </div>
@@ -228,6 +233,9 @@ export default {
     })
 
     return {
+      qrcodeModal: {
+        show: false
+      },
       query: '',
       sortKey: '',
       sortOrders: sortOrders,
@@ -236,6 +244,7 @@ export default {
         label: '全部',
         value: 'all'
       },
+      used: 0,
       devices: [],
       total: 0,
       currentPage: 1,
@@ -257,11 +266,13 @@ export default {
       },
       showEditModal: false,
       delChecked: false,
+      productType: {},
       editModel: {
         is_allow_multi_admin: false,
-        ifsnapshot: false,
         name: '',
         description: '',
+        mode: '',
+        type: 0,
         link_type: '',
         is_registerable: false,
         is_active_register: false,
@@ -302,39 +313,44 @@ export default {
       //     class: 'tac'
       //   }
       // ],
-      headers: [
-        {
-          key: 'mac',
-          title: 'MAC'
-        },
-        {
-          key: 'id',
-          title: '设备ID'
-        },
-        {
-          key: 'is_active',
-          title: '是否激活',
-          tooltip: '提示'
-        },
-        {
-          key: 'active_date',
-          title: '激活时间',
-          sortType: -1
-        },
-        {
-          key: 'is_online',
-          title: '在线状态',
-          sortType: -1
-        }
-      ],
-      annulusInfo: [
-        {name: '授权设备', val: 10000},
-        {name: '剩余份额', val: 20000}
-      ]
+      headers: [{
+        key: 'mac',
+        title: 'MAC'
+      }, {
+        key: 'id',
+        title: '设备ID'
+      }, {
+        key: 'is_active',
+        title: '是否激活',
+        tooltip: '提示'
+      }, {
+        key: 'active_date',
+        title: '激活时间',
+        sortType: -1
+      }, {
+        key: 'is_online',
+        title: '在线状态',
+        sortType: -1
+      }]
     }
   },
 
   computed: {
+    // 产品配额
+    annulusInfo () {
+      // 剩余配额
+      let remain = this.currentProduct.quota - this.used
+
+      return [{
+        name: '授权设备',
+        val: this.used
+      }, {
+        name: '剩余份额',
+        val: remain || 0
+      }]
+    },
+
+    // 分页信息
     page () {
       var result = {
         total: this.total,
@@ -343,6 +359,8 @@ export default {
       }
       return result
     },
+
+    // 设备列表
     tables () {
       var result = []
       this.devices.map((item) => {
@@ -361,7 +379,7 @@ export default {
 
     // 筛选条件
     queryCondition () {
-      var condition = {
+      let condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -393,6 +411,7 @@ export default {
       return condition
     },
 
+    // 产品信息
     productInfo () {
       return {
         mode: {
@@ -401,7 +420,7 @@ export default {
         },
         type: {
           label: '产品类型',
-          value: '-'
+          value: this.getTypeLabelByValue(this.currentProduct.type)
         },
         link_type: {
           label: '连接类型',
@@ -409,31 +428,72 @@ export default {
         },
         qrcode: {
           label: '产品二维码',
+          slot: true,
           value: '-'
         },
         description: {
           label: '产品描述',
           value: this.currentProduct.description
-        },
-        status: {
-          label: '产品状态',
-          value: '-'
         }
       }
+    },
+
+    // 产品类型选项
+    productTypeOptions () {
+      let types = this.locales.data.PRODUCT_TYPES.slice(1)
+      this.productType = types[0]
+      return types
     }
   },
 
   route: {
     data () {
-      this.getDevices()
+      // 初次获取产品列表，并将获取的数量作为已用配额
+      let condition = {
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+        limit: this.countPerPage,
+        offset: 0,
+        order: this.sortOrders
+      }
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.devices = res.data.list
+        this.used = this.total = res.data.count
+      }).catch((res) => {
+        this.handleError(res)
+      })
     }
   },
 
   methods: {
     /**
      * 处理购买按钮点击
+     * @author shengzhi
      */
     onBuyButtonClick () {
+    },
+
+    /**
+     * 查看二维码
+     * @author shengzhi
+     */
+    displayQrcode () {
+      this.qrcodeModal.show = true
+    },
+
+    /**
+     * 通过值获取产品类型
+     * @author shengzhi
+     * @param {Number} val 目标值
+     */
+    getTypeLabelByValue (val) {
+      let result = ''
+      let type = _.find(this.locales.data.PRODUCT_TYPES, (item) => {
+        return item.value === val
+      })
+      if (type) {
+        result = type.label
+      }
+      return result
     },
 
     /**
@@ -456,7 +516,23 @@ export default {
       this.getDevices()
     },
 
-    // 获取设备列表
+    /**
+     * 获取所有设备
+     * @author shengzhi
+     */
+    getAllDevices () {
+      api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+        this.devices = res.data.list
+        this.total = res.data.count
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取设备列表
+     * @author shengzhi
+     */
     getDevices () {
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
@@ -469,14 +545,20 @@ export default {
       })
     },
 
-    // 搜索
+    /**
+     * 搜索
+     * @author shengzhi
+     */
     handleSearch () {
       if (this.query.length === 0) {
         this.getDevices()
       }
     },
 
-    // 排序
+    /**
+     * 排序
+     * @author shengzhi
+     */
     sortBy (key) {
       if (typeof key === 'object') {
         key = key.key
@@ -486,51 +568,55 @@ export default {
       this.getDevices()
     },
 
-    // 切换搜索
+    /**
+     * 切换搜索
+     * @author shengzhi
+     */
     toggleSearching () {
       this.searching = !this.searching
     },
 
-    // 取消搜索
+    /**
+     * 取消搜索
+     * @author shengzhi
+     */
     cancelSearching () {
       this.getDevices()
     },
 
-    // 编辑表单钩子
-    editFormHook (form) {
-      this.editForm = form
-    },
-
-    // 关闭编辑浮层并净化编辑表单
+    /**
+     * 关闭编辑浮层并净化编辑表单
+     * @author shengzhi
+     */
     resetEdit () {
       this.editing = false
       this.showEditModal = false
       this.delChecked = false
-      setTimeout(() => {
-        this.editModel = this.originEditModel
-      }, 1000)
     },
 
     /**
      * 发布产品
+     * @author shengzhi
      */
     releaseProduct () {
-      this.editModel = _.cloneDeep(this.currentProduct)
-      this.editModel.is_release = true
-      api.product.updateProduct(this.editModel).then((res) => {
-        api.product.getProduct(this.$route.params.id).then((res) => {
-          if (res.status === 200) {
-            this.updateProduct(res.data)
-            this.showNotice({
-              type: 'success',
-              content: '产品发布成功'
-            })
-          }
+      if (window.confirm('已发布的产品将不允许被删除，确认发布？')) {
+        this.editModel = _.cloneDeep(this.currentProduct)
+        this.editModel.is_release = true
+        api.product.updateProduct(this.editModel).then((res) => {
+          api.product.getProduct(this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.updateProduct(res.data)
+              this.showNotice({
+                type: 'success',
+                content: '产品发布成功'
+              })
+            }
+          })
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
         })
-      }).catch((res) => {
-        this.handleError(res)
-        this.editing = false
-      })
+      }
     },
 
     /**
@@ -538,44 +624,20 @@ export default {
      * @author shengzhi
      */
     editProduct () {
-      api.snapshot.getRule(this.$route.params.id).then((res) => {
-        this.showEditModal = true
-        this.editModel.ifsnapshot = false
-        this.editModel.name = this.currentProduct.name
-        this.editModel.description = this.currentProduct.description
-        this.editModel.link_type = this.currentProduct.link_type
-        this.editModel.is_registerable = this.currentProduct.is_registerable
-        this.editModel.is_active_register = this.currentProduct.is_active_register
-        this.editModel.is_release = this.currentProduct.is_release
-        this.editModel.id = this.$route.params.id
-        this.editModel.is_allow_multi_admin = this.currentProduct.is_allow_multi_admin
-        this.originEditModel = _.clone(this.editModel)
-
-        // TODO: 优化逻辑
-        if (res.data.list.length) {
-          if (res.data.list[0].rule === 0) {
-            this.editModel.ifsnapshot = false
-          } else {
-            this.editModel.ifsnapshot = true
-          }
-        } else {
-          this.editModel.ifsnapshot = false
-        }
-      })
+      this.showEditModal = true
+      this.editModel = _.clone(this.currentProduct)
+      // 保存当前产品信息以便恢复编辑前状态
+      this.originEditModel = _.clone(this.editModel)
     },
 
-    // 取消编辑
-    onEditCancel () {
-      this.resetEdit()
-      // this.product = this.originEditModel
-    },
-
-    // 提交更新
+    /**
+     * 提交更新
+     * @author shengzhi
+     */
     onEditSubmit () {
-      if (this.delChecked && !this.editing) {
+      if (this.delChecked && !this.editing) { // 删除
         this.editing = true
-        var result = window.confirm('确认删除该产品吗?')
-        if (result === true) {
+        if (window.confirm('确认删除该产品吗?')) {
           api.product.deleteProduct(this.$route.params.id).then((res) => {
             if (res.status === 200) {
               this.resetEdit()
@@ -586,112 +648,22 @@ export default {
             this.handleError(res)
             this.editing = false
           })
-        } else {
-          this.editing = false
         }
-      } else if (this.editValidation.$valid && !this.editing) {
+      } else if (this.$validation.valid && !this.editing) { // 编辑
         this.editing = true
-        if (this.editModel.link_type === 5) {
-          api.product.updateProduct(this.editModel).then(() => {
-            api.product.getProduct(this.$route.params.id).then((res) => {
-              if (res.status === 200) {
-                // this.product = res.data
-                this.resetEdit()
-                this.updateProduct(res.data)
-              }
-            })
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        } else {
-          var model = {
-            name: this.editModel.name,
-            description: this.editModel.description,
-            link_type: this.editModel.link_type,
-            is_registerable: this.editModel.is_registerable,
-            is_release: this.editModel.is_release,
-            is_allow_multi_admin: this.editModel.is_allow_multi_admin,
-            id: this.editModel.id
-          }
-          api.product.updateProduct(model).then(() => {
-            api.product.getProduct(this.$route.params.id).then((res) => {
-              if (res.status === 200) {
-                // this.product = res.data
-                this.resetEdit()
-                this.updateProduct(res.data)
-              }
-            })
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        }
-        if (this.editModel.ifsnapshot) {
-          var index = []
-          for (let i = 0; i < 45; i++) {
-            index.push(i)
-          }
-          var params = {
-            rule: 3,
-            interval: 30,
-            storage: {
-              // limit: 0,
-              expire: 86400
-            },
-            datapoint: index
-          }
-          api.snapshot.getRule(this.$route.params.id).then((res) => {
-            if (res.data.list.length === 0) {
-              console.log(params)
-              // console.log(res)
-              api.snapshot.createRule(this.$route.params.id, params).then((res) => {
-              })
-            } else {
-              var index = []
-              for (let i = 0; i < 45; i++) {
-                index.push(i)
-              }
-              var newParams = {
-                _id: res.data.list[0].id,
-                rule: 3,
-                interval: 30,
-                storage: {
-                  // limit: 0,
-                  expire: 86400
-                },
-                datapoint: index
-              }
-              api.snapshot.updateRule(this.$route.params.id, newParams).then((res) => {
-                console.log('Update rule')
-              })
+        this.editModel.type = this.productType.value
+        api.product.updateProduct(this.editModel).then(() => {
+          api.product.getProduct(this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.updateProduct(res.data)
+              this.editing = false
             }
           })
-        } else {
-          api.snapshot.getRule(this.$route.params.id).then((res) => {
-            if (res.data.list.length === 0) {
-              console.log(11)
-            } else {
-              var index = []
-              for (let i = 0; i < 45; i++) {
-                index.push(i)
-              }
-              var morNewParams = {
-                _id: res.data.list[0].id,
-                rule: 0,
-                interval: 30,
-                storage: {
-                  // limit: 0,
-                  expire: 86400
-                },
-                datapoint: index
-              }
-              api.snapshot.updateRule(this.$route.params.id, morNewParams).then((res) => {
-                console.log(111)
-              })
-            }
-          })
-        }
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
       }
     }
   }
