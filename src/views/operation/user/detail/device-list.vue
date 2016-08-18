@@ -1,20 +1,12 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel no-split-line user-device-list">
     <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="filter-bar">
           <div class="filter-group fl">
             <span class="table-title">设备列表</span>
-            <!-- <div class="filter-group-item">
-              <v-select label="全部" width='110px' size="small">
-                <span slot="label">显示</span>
-              </v-select>
-            </div> -->
           </div>
           <div class="filter-group fr">
-            <!-- <div class="filter-group-item">
-              <dropdown></dropdown>
-            </div> -->
             <div class="filter-group-item">
               <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容">
               </search-box>
@@ -27,6 +19,7 @@
           :loading="tableLoadingData"
           @theader-active-date="sortBysomeKey"
           @theader-is-online="sortBysomeKey">
+
         </c-table>
       </div>
     </div>
@@ -65,11 +58,14 @@ export default {
       orderKey: 'active_date', // 默认按时间排序
       subDevices: [ // 用户绑定设备列表
         // {
-        //   'id': '设备ID',
+        //   'id': '1725038552', // 设备id
         //   'mac': '设备MAC地址',
         //   'is_active': true, // 是否激活
-        //   'active_date': '2015-10-09T08:15:40.843Z',
+        //   'active_date': '2015-10-09T08:15:40.843Z', // 激活时间
         //   'is_online': false, // 是否在线
+        //   'product_id': '123123', // 所属的产品ID
+        //   'sn': '1231', // 设备序列号
+        //   'role': '0', // 0为管理员,1为用户
         //   'last_login': '2015-10-09T08:15:40.843Z',
         //   'active_code': '激活码',
         //   'authorize_code': '认证码',
@@ -77,33 +73,30 @@ export default {
         //   'mcu_version': 'MCU版本号',
         //   'firmware_mod': '固件型号',
         //   'firmware_version': '固件版本号',
-        //   'product_id': '所属的产品ID',
         //   'access_key': '设备访问码'
         // }
       ],
+      products: [],
       headers: [
+        {
+          key: 'name',
+          title: '产品名称(型号)'
+        },
         {
           key: 'mac',
           title: 'MAC'
         },
         {
-          key: 'id',
-          title: '设备ID'
-        },
-        {
-          key: 'is_active',
-          title: '是否激活',
-          tooltips: '提示'
+          key: 'sn',
+          title: '序号号（sn）'
         },
         {
           key: 'active_date',
-          title: '激活时间',
-          sortType: -1
+          title: '激活时间'
         },
         {
           key: 'is_online',
-          title: '是否在线',
-          sortType: -1
+          title: '在线状态'
         }
       ]
     }
@@ -118,33 +111,22 @@ export default {
     tables () {
       var result = []
       this.subDevices.map((device) => {
+        var product = {}
+        this.products.forEach((item) => {
+          if (item.id === device.product_id) {
+            product = item
+          }
+        })
         var table = {
-          id: device.id,
+          name: this.computedName(product.name, device.role, product.mode),
           mac: device.mac,
-          is_active: device.is_active ? '是' : '否', // 是否激活
+          sn: device.sn, // 是否激活
           active_date: formatDate(device.active_date),
-          is_online: device.is_online ? '是' : '否', // 是否在线
+          is_online: device.is_online ? '在线' : '离线', // 是否在线
           prototype: device
         }
         result.push(table)
       })
-      var order = this.order
-      // 按照是否在线排序
-      if (this.orderKey === 'is_online') {
-        result.sort((a, b) => {
-          if (order[this.orderKey] === 1) {
-            return a.prototype[this.orderKey]
-          } else {
-            return !a.prototype[this.orderKey]
-          }
-        })
-      }
-      // 按照时间排序
-      if (this.orderKey === 'active_date') {
-        result.sort((a, b) => {
-          return (new Date(a.prototype[this.orderKey]) - new Date(b.prototype[this.orderKey])) * order[this.orderKey]
-        })
-      }
       return result
     },
     /**
@@ -169,6 +151,29 @@ export default {
   },
 
   methods: {
+    computedName (name, role, mode) {
+      var result = ''
+      name = name || ''
+      role = Number(role) || 0
+      mode = mode || ''
+      mode = 'leixi..........ng'
+      result = '<div class="name-box"><i class="fa' + (role === 0 ? ' fa-user' : '') + '"></i><div class="name">' + name + '</div><div class="mode">' + mode + '</div></div>'
+      return result
+    },
+    /**
+     * 获取产品详情
+     * @param  {[type]} productId [description]
+     * @return {[type]}           [description]
+     */
+    getProduct (productId) {
+      api.product.getProduct(productId).then((res) => {
+        this.products.push(res.data)
+        this.tableLoadingData = false
+      }).catch((res) => {
+        this.tableLoadingData = false
+        this.handleError(res)
+      })
+    },
     /**
      * 按某个属性排序
      * @param  {[type]} header [description]
@@ -186,27 +191,98 @@ export default {
     },
     /**
      * 获取用户订阅设备
+     * @return {[type]} [description]
      */
     getSubDevices () {
       this.tableLoadingData = true
       api.user.subDeviceList(this.$route.params.id, this.version).then((res) => {
         if (res.status === 200) {
+          // res.data.list = [
+          //   {
+          //     'id': '1089865316', // 设备id
+          //     'mac': '设备MAC地址',
+          //     'is_active': true, // 是否激活
+          //     'active_date': '2015-10-09T08:15:40.843Z', // 激活时间
+          //     'is_online': false, // 是否在线
+          //     'product_id': '1607d2aee669d4001607d2aee669d401', // 所属的产品ID
+          //     'sn': '1231', // 设备序列号
+          //     'role': '0', // 0为管理员,1为用户
+          //     'last_login': '2015-10-09T08:15:40.843Z',
+          //     'active_code': '激活码',
+          //     'authorize_code': '认证码',
+          //     'mcu_mod': 'MCU型号',
+          //     'mcu_version': 'MCU版本号',
+          //     'firmware_mod': '固件型号',
+          //     'firmware_version': '固件版本号',
+          //     'access_key': '设备访问码'
+          //   },
+          //   {
+          //     'id': '1605929014', // 设备id
+          //     'mac': '设备MAC地址',
+          //     'is_active': true, // 是否激活
+          //     'active_date': '2015-10-09T08:15:40.843Z', // 激活时间
+          //     'is_online': false, // 是否在线
+          //     'product_id': '1607d2ad172d52001607d2ad172d5201', // 所属的产品ID
+          //     'sn': '1231', // 设备序列号
+          //     'role': '0', // 0为管理员,1为用户
+          //     'last_login': '2015-10-09T08:15:40.843Z',
+          //     'active_code': '激活码',
+          //     'authorize_code': '认证码',
+          //     'mcu_mod': 'MCU型号',
+          //     'mcu_version': 'MCU版本号',
+          //     'firmware_mod': '固件型号',
+          //     'firmware_version': '固件版本号',
+          //     'access_key': '设备访问码'
+          //   }
+          // ]
           this.tableLoadingData = false
           this.subDevices = res.data.list
           this.version = res.data.version
+          this.subDevices.forEach((item, index) => {
+            this.getProduct(item.product_id)
+          })
         }
       }).catch((res) => {
         this.tableLoadingData = false
-        // this.handleError(res)
+        this.handleError(res)
       })
     }
   }
 }
 </script>
-<style lang="stylus" scoped>
-  .table-title
-    height 30px
-    line-height 30px
-    font-size 14px
+<style lang="stylus">
+@import '../../../../assets/stylus/common'
 
+  .user-device-list
+    .table-title
+      height 30px
+      line-height 30px
+      font-size 14px
+
+    .name-box
+      width 120px
+      height 40px
+      position relative
+      padding-left 30px
+      box-sizing border-box
+      .fa
+        display block
+        position absolute
+        left 5px
+        top 2px
+        width 15px
+        height 15px
+        font-size 18px
+        color #999
+      .name
+        height 20px
+        line-height 20px
+        font-size 15px
+        color #DA4E37
+        text-overflow 100%
+      .mode
+        height 50px
+        line-height 20px
+        text-overflow 100%
+        color #666666
 </style>
