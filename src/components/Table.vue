@@ -211,6 +211,9 @@
     },
 
     watch: {
+      selecting () {
+        this.selectedTables = []
+      },
       tables () {
         this.initSelected() // 修正选择状态
       }
