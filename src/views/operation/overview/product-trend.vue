@@ -70,7 +70,7 @@ export default {
     return {
       repaintTopFive: true, // 添加该变量为了处理g2的bug： changeData时g2会将传入数组根据source时的数组结构重新排序。所以总过v-if重绘
       trendTabIndex: 0,
-      period: 7,
+      period: 30,
       activatedData: [], // 激活设备数据
       totalData: [], // 累计设备数据
       avg: { // 平均设备数据
@@ -121,7 +121,7 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
-        this.getActivatedProductsTrend(this.products, 7)
+        this.getActivatedProductsTrend(this.products, this.period)
       }
     }
   },

@@ -7,7 +7,7 @@ export function getTrend (duration) {
   if (Array.isArray(duration)) {
     range = createDayRange(duration[0], duration[1])
   } else {
-    range = createDayRange(0, duration)
+    range = createDayRange(1, duration)
   }
   return new Promise((resolve, reject) => {
     api.statistics.getUserTrend(range.start, range.end).then((res) => {

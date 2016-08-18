@@ -7,7 +7,7 @@
             <radio-button-group :items="userCatList" :value.sync="userCat"><span slot="label" class="label"></span></radio-button-group>
           </div>
           <div class="filter-group-item fr">
-            <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
+            <date-time-multiple-picker @timechange="timeFilter" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
           </div>
         </div>
       </div>
@@ -55,6 +55,7 @@ export default {
     return {
       customMargin: [30, 20, 30, 30],
       periods: [7, 30, 90],
+      defaultPeriod: 30,
       addData: [],
       activeData: [],
       totalData: [],
@@ -97,7 +98,7 @@ export default {
       if (data.length < 1) {
         return
       }
-      if (period === 7) { // 只在初始化时计算一次
+      if (period === 30) { // 只在初始化时计算一次
         // 计算最近2天的值
         data.sort((a, b) => {
           if (a.day.getTime() > b.day.getTime()) {
@@ -139,8 +140,8 @@ export default {
     // 2. 选取时间段不能超过12个月
     timeFilter (start, end) {
       var cur = new Date()
-      if (end.getTime() >= cur.getTime()) {
-        end = cur
+      if (end.getTime() >= (cur.getTime() - 3600 * 1000 * 24)) { // 因为当天的累计用户服务器始终未0，所以不请求当天数据！！！！
+        end = new Date(cur.getTime() - 3600 * 1000 * 24)
       }
 
       if (start.getTime() > end.getTime()) {

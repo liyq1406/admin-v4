@@ -50,7 +50,7 @@ export default {
 
   data () {
     return {
-      period: 7,
+      period: 30,
       activeData: [], // 活跃设备
       // activatedProportion: [] // 激活占比
       activated: 0,
@@ -78,7 +78,7 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
-        this.getActiveProductsTrend(this.currentProduct, 7)
+        this.getActiveProductsTrend(this.currentProduct, this.period)
         this.getProductProportion(this.currentProduct)
       }
     }
@@ -86,7 +86,7 @@ export default {
 
   ready () {
     if (this.currentProduct.id) {
-      this.getActiveProductsTrend(this.currentProduct, 7)
+      this.getActiveProductsTrend(this.currentProduct, this.period)
       this.getProductProportion(this.currentProduct)
     }
   },

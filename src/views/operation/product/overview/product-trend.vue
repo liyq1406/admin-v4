@@ -66,7 +66,7 @@ export default {
   data () {
     return {
       trendTabIndex: 0,
-      period: 7,
+      period: 30,
       activatedData: [], // 激活设备数据
       totalData: [], // 累计设备数据
       avg: { // 平均设备数据
@@ -92,14 +92,14 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
-        this.getActivatedProductsTrend(this.currentProduct, 7)
+        this.getActivatedProductsTrend(this.currentProduct, this.period)
       }
     }
   },
 
   ready () {
     if (this.currentProduct.id) {
-      this.getActivatedProductsTrend(this.currentProduct, 7)
+      this.getActivatedProductsTrend(this.currentProduct, this.period)
     }
   },
   methods: {
@@ -133,7 +133,7 @@ export default {
       if (data.length < 1) {
         return
       }
-      if (period === 7) { // 只在初始化时计算一次
+      if (period === 30) { // 只在初始化时计算一次
         // 计算最近2天的值
         data.sort((a, b) => {
           if (a.date.getTime() > b.date.getTime()) {

@@ -61,7 +61,7 @@ export default {
     return {
       customMargin: [30, 20, 30, 30],
       currIndex: 0,
-      period: 7,
+      period: 30,
       avg: {
         change: 0,
         total: 0
@@ -99,7 +99,7 @@ export default {
       if (data.length < 1) {
         return
       }
-      if (period === 7) { // 只在初始化时计算一次
+      if (period === 30) { // 只在初始化时计算一次
         // 计算最近2天的值
         data.sort((a, b) => {
           if (a.day.getTime() > b.day.getTime()) {

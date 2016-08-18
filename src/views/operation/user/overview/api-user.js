@@ -7,7 +7,7 @@ export function getTrend (duration) {
   if (Array.isArray(duration)) {
     range = createDayRange(duration[0], duration[1])
   } else {
-    range = createDayRange(0, duration)
+    range = createDayRange(1, duration)
   }
   return new Promise((resolve, reject) => {
     api.statistics.getUserTrend(range.start, range.end).then((res) => {
@@ -59,7 +59,7 @@ export function getTotalUser () {
     api.statistics.getSummary().then((res) => {
       if (res.status === 200) {
         resolve({
-          total: res.data.user.total || 0,
+          total: res.data.user.user || 0,
           add: res.data.user.today_add
         })
       }

@@ -87,9 +87,9 @@ export default {
     getRecentTrend () {
       getTrend(2).then((res) => {
         var compare = (a, b) => {
-          if (a.day.getTime() > b.day.getTime()) {
+          if (a.date.getTime() > b.date.getTime()) {
             return -1
-          } else if (a.day.getTime() < b.day.getTime()) {
+          } else if (a.date.getTime() < b.date.getTime()) {
             return 1
           } else {
             return 0
@@ -98,17 +98,17 @@ export default {
 
         if (res.add.length > 0) {
           res.add.sort(compare)
-          this.statistic.add.total = res.add[0].count
+          this.statistic.add.total = res.add[0].val
           if (res.add.length > 1) {
-            this.statistic.add.change = res.add[0].count - res.add[1].count
+            this.statistic.add.change = res.add[0].val - res.add[1].val
           }
         }
 
         if (res.active.length > 0) {
           res.active.sort(compare)
-          this.statistic.active.total = res.active[0].count
+          this.statistic.active.total = res.active[0].val
           if (res.active.length > 1) {
-            this.statistic.active.change = res.active[0].count - res.active[1].count
+            this.statistic.active.change = res.active[0].val - res.active[1].val
           }
         }
       }).catch((res) => {
