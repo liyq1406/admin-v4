@@ -30,7 +30,13 @@
               </v-select>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tableData" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :tables="tableData" :selecting="selecting" @tbody-content="getInfo" @selected-change="selectChange" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+            <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+              <label>标记为:</label>
+              <button class="btn btn-ghost" @click="setDeal">已处理</button>
+              <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+            </div>
+          </x-table>
         </div>
       </div>
     </div>
@@ -112,7 +118,10 @@ export default {
       }, {
         key: 'state',
         title: '状态'
-      }]
+      }],
+      selecting: true,
+      showBatchBtn: false,
+      dealList: []
     }
   },
 
@@ -166,7 +175,7 @@ export default {
         })[item.tags] || ''
 
         let alert = {
-          content: item.alert_name,
+          content: '<a>' + item.alert_name + '</a>',
           mac: item.mac,
           time: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
@@ -203,6 +212,56 @@ export default {
       } else {
         return `${Math.floor(n / 60000)}分钟`
       }
+    },
+    selectChange (table) {
+      console.log(table)
+      var result = []
+      table.forEach((item) => {
+        result.push(item.prototype)
+      })
+      // this.dealList = []
+      this.dealList = result
+      if (table.length > 0) {
+        this.showBatchBtn = true
+      } else {
+        this.showBatchBtn = false
+      }
+    },
+    // 标记为已处理
+    setDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 标记为未处理
+    setUnDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertUnread(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 跳转详情信息
+    getInfo (table, header, index) {
+      console.log(table)
+      this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
+      // this.$route.router.go('/operation/alerts/record')
     },
 
     /**

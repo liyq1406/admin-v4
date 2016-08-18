@@ -50,7 +50,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+        <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -72,6 +72,11 @@
                 </select>
               </v-select>
             </div>
+          </div>
+          <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+            <label>标记为:</label>
+            <button class="btn btn-ghost" @click="setDeal">已处理</button>
+            <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
           </div>
         </x-table>
       </div>
@@ -288,7 +293,10 @@ export default {
       }, {
         key: 'state',
         title: '状态'
-      }]
+      }],
+      showBatchBtn: false,
+      dealList: [],
+      selecting: true
     }
   },
 
@@ -399,10 +407,10 @@ export default {
         })[item.tags] || ''
 
         let alert = {
-          content: item.alert_name,
+          content: '<a>' + item.alert_name + '</a>',
           mac: item.mac,
           create_date: formatDate(item.create_date),
-          duration: this.prettyDuration(item.lasting),
+          duration: item.lasting + 'h',
           id: item.from,
           level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
           state: item.is_read ? '已处理' : '未处理',
@@ -642,6 +650,56 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    selectChange (table) {
+      console.log(table)
+      var result = []
+      table.forEach((item) => {
+        result.push(item.prototype)
+      })
+      // this.dealList = []
+      this.dealList = result
+      if (table.length > 0) {
+        this.showBatchBtn = true
+      } else {
+        this.showBatchBtn = false
+      }
+    },
+    // 标记为已处理
+    setDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 标记为未处理
+    setUnDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertUnread(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 跳转详情信息
+    getInfo (table, header, index) {
+      console.log(table)
+      this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
+      // this.$route.router.go('/operation/alerts/record')
     }
     //
     // /**
