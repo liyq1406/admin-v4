@@ -176,7 +176,7 @@
         <div class="form-row row">
           <label class="form-control col-6">授权时间:</label>
           <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.create_time}}
+            <div class="input-text-wrap l32">{{info.create_time | formatDate }}
             </div>
           </div>
         </div>
