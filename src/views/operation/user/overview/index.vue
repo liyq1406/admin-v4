@@ -85,7 +85,7 @@ export default {
 
   methods: {
     getRecentTrend () {
-      getTrend(2).then((res) => {
+      getTrend(7).then((res) => {
         var compare = (a, b) => {
           if (a.date.getTime() > b.date.getTime()) {
             return -1
@@ -111,8 +111,24 @@ export default {
             this.statistic.active.change = res.active[0].val - res.active[1].val
           }
         }
+
+        let seventTotal = 0
+        res.active.forEach((item) => {
+          seventTotal += item.val
+        })
+        this.statistic.seventTotal.total = seventTotal
+        this.getLastSevenUser()
       }).catch((res) => {
         this.handleError(res)
+      })
+    },
+    getLastSevenUser () {
+      getTrend([7, 7]).then((res) => {
+        let lastSeventTotal = 0
+        res.active.forEach((item) => {
+          lastSeventTotal += item.val
+        })
+        this.statistic.seventTotal.change = this.statistic.seventTotal.total - lastSeventTotal
       })
     },
     getUserCount () {

@@ -59,7 +59,7 @@ export default {
       result.subs.push(subs[0])
 
       // 产品导航
-      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'distributing', 'analysis']
+      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
       this.products.forEach((item) => {
         result.subs.push({
           name: item.name,

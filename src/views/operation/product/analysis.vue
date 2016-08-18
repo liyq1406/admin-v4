@@ -28,6 +28,7 @@
         <interval :data="periodData" :options="chartOptions"></interval>
       </div>
     </div>
+    <distributing></distributing>
   </div>
 </template>
 
@@ -40,6 +41,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Interval from 'components/g2-charts/Interval'
 import { uniformDate } from 'src/filters'
+import Distributing from './distributing'
 import _ from 'lodash'
 
 export default {
@@ -48,11 +50,18 @@ export default {
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
   mixins: [globalMixins, setCurrProductMixin],
 
+  vuex: {
+    getters: {
+      currentProduct: ({ products }) => products.curr
+    }
+  },
+
   components: {
     DateTimeMultiplePicker,
     RadioButtonGroup,
     Interval,
-    ChinaHeatMap
+    ChinaHeatMap,
+    Distributing
   },
 
   data () {
@@ -113,7 +122,6 @@ export default {
 
   methods: {
     init () {
-
     },
 
     /**
