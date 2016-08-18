@@ -213,6 +213,7 @@
     watch: {
       selecting () {
         this.selectedTables = []
+        this.selectedAll = false
       },
       tables () {
         this.initSelected() // 修正选择状态
