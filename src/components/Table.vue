@@ -29,7 +29,7 @@
           <template v-if="tables.length > 0">
             <tr v-for="(tableIndex, table) in tables" track-by="$index">
               <th v-show="selecting" class="tac">
-                <input type="checkbox" :checked="selectedAll" @change="selectedTablesChange(table)">
+                <input type="checkbox" :checked="selectedTables.indexOf(table) > -1" @change="selectedTablesChange(table)">
               </th>
               <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex, $event)">
                 {{{table[tHeader.key]}}}
