@@ -1,6 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-bd">
+      <!-- <pre> {{ dealList | json}}</pre> -->
       <div class="data-table with-loading">
         <div class="filter-bar">
           <div class="filter-group fl">
@@ -26,7 +27,13 @@
             </div>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy"></x-table>
+        <x-table :headers="headers" :tables="tables" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+          <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+            <label>标记为:</label>
+            <button class="btn btn-ghost" @click="setDeal">已处理</button>
+            <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+          </div>
+        </x-table>
       </div>
     </div>
   </div>
@@ -60,6 +67,7 @@ export default {
 
   data () {
     return {
+      selecting: true,
       alerts: [],
       visibilityOptions: [
         { label: '全部等级', value: 'all' },
@@ -103,7 +111,9 @@ export default {
       }, {
         key: 'state',
         title: '状态'
-      }]
+      }],
+      showBatchBtn: false,
+      dealList: []
     }
   },
 
@@ -157,9 +167,9 @@ export default {
           '中等': 'text-label-warning',
           '重度': 'text-label-danger'
         })[item.tags] || ''
-
+        // let a = item.alert_name
         let alert = {
-          content: item.alert_name,
+          content: '<a>' + item.alert_name + '</a>',
           mac: item.mac,
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
@@ -267,6 +277,56 @@ export default {
         this.loadingData = false
         this.handleError(res)
       })
+    },
+    selectChange (table) {
+      console.log(table)
+      var result = []
+      table.forEach((item) => {
+        result.push(item.prototype)
+      })
+      // this.dealList = []
+      this.dealList = result
+      if (table.length > 0) {
+        this.showBatchBtn = true
+      } else {
+        this.showBatchBtn = false
+      }
+    },
+    // 标记为已处理
+    setDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 标记为未处理
+    setUnDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertUnread(params).then((res) => {
+        if (res.status === 200) {
+          this.getAlerts()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 跳转详情信息
+    getInfo (table, header, index) {
+      console.log(table)
+      this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
+      // this.$route.router.go('/operation/alerts/record')
     }
   }
 }
