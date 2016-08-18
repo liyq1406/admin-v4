@@ -281,5 +281,19 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/corp`
     )
+  },
+  /**
+   * 获取授权配额
+   * @param  {Object} params 重置密码参数信息
+   * @return {Promise}
+   */
+  getLimit (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/corp/password/forgot`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }
+    )
   }
 }

@@ -251,5 +251,28 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/product/${productId}/devices`, params
     )
+  },
+  // 通过csv批量导入设备
+  // [{
+  //      "mac":"mac地址",
+  //      "sn":"序列号",
+  //      "name":"名字"
+  //   }]
+  sendDevices (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/device_import_batch`, params
+    )
+  },
+  // 查询导入设备历史纪录
+  getRecords (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/device_import/records`, params
+    )
+  },
+  // 查询导入设备记录详情
+  getRecordInfo (productId, importId) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/device_import/${importId}`
+    )
   }
 }
