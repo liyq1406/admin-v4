@@ -124,7 +124,7 @@ export default {
           this.statistic.devices.online.change = toPercentDecimal2(res.data.total.online / res.data.total.total)
           this.statistic.devices.total.change = res.data.total.today_add
           this.statistic.devices.activated.change = res.data.total.today_activated || 0
-          this.statistic.users.total = res.data.user.total
+          this.statistic.users.total = res.data.user.user
           this.statistic.users.change = res.data.user.today_add || 0
         }
       }).catch((res) => {

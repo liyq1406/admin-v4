@@ -12,8 +12,8 @@
           </div>
           <div class="panel-bd">
             <div class="row">
-              <div class="col-14 max-width">
-                <div class="form-row row mt20">
+              <div class="form col-14 max-width">
+                <div class="form-row row">
                   <label class="form-control col-5 dealer-label">账号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
@@ -26,12 +26,18 @@
                 </div>
                 <div class="form-row row mt20">
                   <label class="form-control col-5 dealer-label">登录密码:</label>
-                  <div class="controls col-19">
+                  <div class="controls col-19" v-if="type === 'add'">
                     <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
                       <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$autoValidation.password.touched && $autoValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span>
+                    </div>
+                  </div>
+                  <div class="controls col-19" v-else>
+                    <button class="btn btn-ghost" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
+                    <div v-if="editPassword" v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap mt10">
+                      <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
                     </div>
                   </div>
                 </div>
@@ -47,8 +53,8 @@
           </div>
           <div class="panel-bd">
             <div class="row">
-              <div class="col-14 max-width">
-                <div class="form-row row mt20">
+              <div class="form col-14 max-width">
+                <div class="form-row row">
                   <label class="form-control col-5 dealer-label">经销商名称:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
@@ -148,6 +154,7 @@
 
     data () {
       return {
+        editPassword: false,
         sending: false,
         type: '',
         dealer: {

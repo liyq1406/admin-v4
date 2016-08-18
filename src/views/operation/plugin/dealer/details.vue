@@ -54,13 +54,13 @@
             <div class="row status">
               <div class="col-12">
                 <div class="status-item">
-                  <em>{{ dealer.sale_target || 0 }}</em>
+                  <em>{{ dealer.sale_target || '--' }}</em>
                   <span>年销售目标</span>
                 </div>
               </div>
               <div class="col-12">
                 <div class="status-item">
-                  <em>{{ dealer.sale_count || 0 }}</em>
+                  <em>{{ dealer.sale_count || '--' }}</em>
                   <span>已销售数量</span>
                 </div>
               </div>
@@ -396,17 +396,15 @@
         // }
         this.loadingData = true
         api.dealer.get(this.$route.params.dealer_id).then((res) => {
-          // console.log(res)
           this.dealer = res.data
-          this.dealerInfo.linkman.value = this.dealer.contacter
-          this.dealerInfo.phone.value = this.dealer.phone
-          this.dealerInfo.id.value = this.dealer.email
-          this.dealerInfo.belong.value = this.dealer.upper_dealer_code
+          this.dealerInfo.linkman.value = this.dealer.contacter || '--'
+          this.dealerInfo.phone.value = this.dealer.phone || '--'
+          this.dealerInfo.id.value = this.dealer.email || '--'
+          this.dealerInfo.belong.value = this.dealer.upper_dealer_code || '--'
           // todo字段缺失
-          this.dealerInfo.password.value = this.dealer.password
-          this.dealerInfo.area.value = this.dealer.region
-          this.dealerInfo.target.value = this.dealer.sale_goal
-          this.dealerInfo.sale.value = this.dealer.saled_amount
+          this.dealerInfo.area.value = this.dealer.region || '--'
+          this.dealerInfo.target.value = this.dealer.sale_goal || '--'
+          this.dealerInfo.sale.value = this.dealer.saled_amount || '--'
           this.loadingData = false
         }).catch((err) => {
           this.handleError(err)

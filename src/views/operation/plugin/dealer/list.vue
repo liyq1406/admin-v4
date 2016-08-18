@@ -8,7 +8,7 @@
         <div class="action-bar">
           <div class="action-group" style="display:inline-block">
             <a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/add'">
-              <button class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
+              <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加经销商</button>
             </a>
           </div>
         </div>
@@ -51,13 +51,13 @@
                 <tr v-for="dealer in dealers">
                   <!-- <td>{{* dealer.name }}</td> -->
                   <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + dealer.id" class="hl-red">{{* dealer.name }}</a></td>
-                  <td>{{* dealer.email }}</td>
-                  <td>{{* dealer.contacter }}</td>
-                  <td>{{* dealer.phone }}</td>
-                  <td>{{* dealer.region }}</td>
-                  <td>{{* dealer.belongTo || '无' }}</td>
-                  <td>{{* dealer.sale_target }}</td>
-                  <td>{{* dealer.sale_count || 0 }}</td>
+                  <td>{{* dealer.email || '--'}}</td>
+                  <td>{{* dealer.contacter || '--'}}</td>
+                  <td>{{* dealer.phone || '--'}}</td>
+                  <td>{{* dealer.region || '--'}}</td>
+                  <td>{{* dealer.belongTo || '--' }}</td>
+                  <td>{{* dealer.sale_target || '--'}}</td>
+                  <td>{{* dealer.sale_count || '--' }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
                   <!-- <td class="tac">
                     <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>

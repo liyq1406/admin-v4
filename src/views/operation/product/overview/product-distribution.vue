@@ -9,7 +9,7 @@
           <china-map :data="data"></china-map>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
-          <div class="data-table" v-if="dataPer.length > 0">
+          <div class="data-table">
             <table class="table">
               <thead>
                 <tr>
@@ -25,6 +25,11 @@
                     <td>{{data.value}}</td>
                     <td>{{data.percent | toPercentDecimal2}}</td>
                   </template>
+                </tr>
+                <tr v-if="dataPer.length === 0">
+                  <td colspan="6" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                  </td>
                 </tr>
               </tbody>
             </table>
