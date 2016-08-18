@@ -26,7 +26,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <date-time-multiple-picker :periods="[7,30,90]" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
+              <date-time-multiple-picker :periods="[7,30,90]" @timechange="onTimeChange"></date-time-multiple-picker>
               <!-- <date-time-range-picker></date-time-range-picker> -->
             </div>
             <!-- <div class="filter-group-item">
@@ -240,7 +240,6 @@ export default {
 
   data () {
     return {
-      defaultPeriod: 30,
       query: '',
       searching: false,
       total: 0,
@@ -435,7 +434,7 @@ export default {
         }
         result.push(trend)
       })
-      result = result.length ? result : []
+      result = result.length ? result : null
       return result
     },
     /**
