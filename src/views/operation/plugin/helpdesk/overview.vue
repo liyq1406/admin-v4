@@ -11,7 +11,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item fr">
-          <date-time-multiple-picker @timechange="timeFilter" :periods="periods"></date-time-multiple-picker>
+          <date-time-multiple-picker @timechange="timeFilter" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -112,6 +112,7 @@ export default {
       product: {
         label: '全部'
       },
+      defaultPeriod: 30,
       customPieMargin: [20, 0, 0, 0],
       feedbacks: [],
       summary: {
