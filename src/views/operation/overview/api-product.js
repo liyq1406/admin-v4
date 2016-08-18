@@ -11,7 +11,7 @@ function getTrend (productId, duration) {
 
   return new Promise((resolve, reject) => {
     api.statistics.getProductTrend(productId, range.start, range.end).then((res) => {
-      if (res.status === 200 && res.data.length > 0) {
+      if (res.status === 200) {
         resolve(beautify(res.data, duration))
       }
     }).catch((res) => {

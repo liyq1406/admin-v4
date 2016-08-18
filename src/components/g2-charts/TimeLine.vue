@@ -53,7 +53,8 @@ export default {
         } else if (this.point) {
           this.point.size(4)
         }
-        this.chart.source(this.data)
+        let data = this.format(this.data)
+        this.chart.source(data)
         this.chart.repaint()
       } else {
         this.render()
@@ -85,6 +86,12 @@ export default {
       if (!this.data || this.data.length <= 0) {
         return
       }
+      // TODO
+      if (this.data.length === 1) {
+        this.data = []
+        return
+      }
+
       var data = this.format(this.data)
 
       // 默认配置

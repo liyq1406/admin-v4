@@ -56,9 +56,8 @@ export default {
       }
       var Stat = window.G2.Stat
       var userData = this.data
-      var width = this.$el.clientWidth || this.$el.parentNode.clientWidth
-      width = width * 0.8
-      var height = width * (6 / 7) * 0.8
+      var width = 600
+      var height = width * (5 / 7)
       // 默认配置
       var defaults = {
         container: this.$el,

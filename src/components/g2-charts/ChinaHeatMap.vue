@@ -1,6 +1,7 @@
 <template>
   <div class="x-china-heat-map">
-    <div v-if="show" id="map-item"></div>
+    <div v-if="show" class="map-item"></div>
+    <div v-if="data && data.length===0" class="default">没有数据</div>
   </div>
 </template>
 
@@ -61,7 +62,11 @@ export default {
 
   methods: {
     render () {
-      var el = document.getElementById('map-item')
+      var el = this.$el.firstElementChild
+
+      if (!el || el.className !== 'map-item') {
+        return
+      }
 
       if (!this.data || this.data.length <= 0) {
         return
@@ -79,7 +84,8 @@ export default {
         item.longitude = coordinates.longitude
       })
 
-      var width = el.clientWidth || el.parentNode.clientWidth
+      var width = el.clientWidth || 500
+
       var height = width * (6 / 7)
       var mt = (width - height) / 2
       // 默认配置
@@ -134,4 +140,12 @@ export default {
   height 450px
   text-align center
   margin 0 auto
+  .map-item
+    width 100%
+  .default
+    height 450px
+    width 100%
+    line-height 450px
+    display inline-block
+    text-align center
 </style>
