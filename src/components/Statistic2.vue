@@ -5,11 +5,15 @@
       <slot name="action"></slot>
     </div>
     <div class="tit" v-if="titletop">{{ title }}<i class="fa fa-question-circle" v-tooltip="tooltip" v-if="tooltip"></i></div>
-    <div class="info" v-animated-number="total"></div>
+
+    <div class="info" v-if="animated" v-animated-number="total"></div>
+    <div class="info" v-else>{{ total }}</div>
+
     <div class="unit" v-if="totalUnit">{{totalUnit}}</div>
     <div class="change" v-if="change !== 0" :class="{'decrease': change < 0}">
       <i class="fa" :class="{'fa-long-arrow-up': change > 0, 'fa-long-arrow-down': change < 0}"></i>
-      <span v-animated-number="change"></span>
+      <span v-if="animated" v-animated-number="change"></span>
+      <span v-else>{{ change }}</span>
       <span v-if="changeUnit">{{changeUnit}}</span>
       <span class="ml10" v-if="showchange">{{ percentage }}</span>
     </div>
@@ -124,6 +128,12 @@ export default {
     digits: {
       type: Number,
       default: 2
+    },
+
+    // 是否播放动画
+    animated: {
+      type: Boolean,
+      default: true
     }
   },
 

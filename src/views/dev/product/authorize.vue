@@ -5,19 +5,17 @@
     </div>
     <div class="row statistic-group bt">
       <div class="col-8">
-        <statistic :info="recordSummary.all" :title="recordSummary.all.title" align="left">
+        <statistic :total="currentProduct.quota" title="授权额度" align="left">
         </statistic>
       </div>
       <div class="col-8">
-        <statistic :info="recordSummary.used" :title="recordSummary.used.title" :has-target="true" align="left">
+        <statistic :total="used" title="已使用" :has-target="true" align="left">
         </statistic>
       </div>
       <div class="col-8">
-        <statistic :info="recordSummary.rest" :title="recordSummary.rest.title" :has-action="true" align="left" :showchange="true">
-          <div slot="action">
-            <button class="btn btn-ghost btn-sm">
-            购买配额
-            </button>
+        <statistic :total="remain" title="剩余额度" :has-action="true" align="left" :showchange="true" :animated="false">
+          <div slot="action" class="hidden">
+            <button class="btn btn-ghost btn-sm">购买配额</button>
           </div>
         </statistic>
       </div>
@@ -208,347 +206,362 @@
 </template>
 
 <script>
-  // import Vue from 'vue'
-  import api from 'api'
-  import * as config from 'consts/config'
-  // import locales from 'consts/locales/index'
-  import Modal from 'components/Modal'
-  import Pager from 'components/Pager'
-  import Select from 'components/Select'
-  // import _ from 'lodash'
-  import { globalMixins } from 'src/mixins'
-  import Table from 'components/Table'
-  import SearchBox from 'components/SearchBox'
-  import Breadcrumb from 'components/Breadcrumb'
-  import Statistic from 'components/Statistic'
-  import { formatDate } from 'src/filters'
+// import Vue from 'vue'
+import api from 'api'
+import * as config from 'consts/config'
+// import locales from 'consts/locales/index'
+import Modal from 'components/Modal'
+import Pager from 'components/Pager'
+import Select from 'components/Select'
+// import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
+import { setCurrProductMixin } from './mixins'
+import Table from 'components/Table'
+import SearchBox from 'components/SearchBox'
+import Breadcrumb from 'components/Breadcrumb'
+import Statistic from 'components/Statistic2'
+import { formatDate } from 'src/filters'
 
-  export default {
-    name: 'DataForward',
+export default {
+  name: 'Authorize',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins, setCurrProductMixin],
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.all
-      }
-    },
+  vuex: {
+    getters: {
+      products: ({ products }) => products.all
+    }
+  },
 
-    components: {
-      'x-table': Table,
-      'modal': Modal,
-      'pager': Pager,
-      'v-select': Select,
-      Breadcrumb,
-      Statistic,
-      'search-box': SearchBox
-    },
+  components: {
+    'x-table': Table,
+    'modal': Modal,
+    'pager': Pager,
+    'v-select': Select,
+    Breadcrumb,
+    Statistic,
+    'search-box': SearchBox
+  },
 
-    data () {
-      return {
-        info: {
-          id: '',
-          auth_number: '',
-          auth_member: '',
-          create_time: '',
-          product_id: '',
-          attribute: [{
-            mac: '',
-            name: '',
-            sn: ''
-          }]
-        },
-        showAddModal: false,
-        showAddModal2: false,
-        showAddModal3: false,
-        addModal: {},
-        queryTypeOptions: [
-          { label: '添加人', value: 'auth_member' }
-        ],
-        loadingData: false,
-        addModel: {
+  data () {
+    return {
+      info: {
+        id: '',
+        auth_number: '',
+        auth_member: '',
+        create_time: '',
+        product_id: '',
+        attribute: [{
           mac: '',
-          sn: '',
-          name: ''
-        },
-        queryType: { label: '添加人', value: 'auth_member' },
-        key: '',
-        query: '',
-        total: 0,
-        currentPage: 1,
-        countPerPage: config.COUNT_PER_PAGE,
-        recordSummary: {
-          all: {
-            total: 2323,
-            title: '授权额度'
-          },
-          used: {
-            total: 135,
-            title: '已使用'
-          },
-          rest: {
-            total: 1125,
-            title: '剩余额度'
-          }
-        },
-        headers: [{
-          key: 'time',
-          title: '时间'
-        }, {
-          key: 'warrent',
-          title: '授权数'
-        }, {
-          key: 'addman',
-          title: '添加人'
-        }, {
-          key: 'edit',
-          title: '操作'
-        }],
-        alerts: [{}, {}]
-      }
-    },
+          name: '',
+          sn: ''
+        }]
+      },
+      showAddModal: false,
+      showAddModal2: false,
+      showAddModal3: false,
+      addModal: {},
+      queryTypeOptions: [
+        { label: '添加人', value: 'auth_member' }
+      ],
+      loadingData: false,
+      addModel: {
+        mac: '',
+        sn: '',
+        name: ''
+      },
+      queryType: { label: '添加人', value: 'auth_member' },
+      key: '',
+      query: '',
+      total: 0,
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      used: 0, // 已使用配额
+      // recordSummary: {
+      //   all: {
+      //     count: 0,
+      //     title: '授权额度'
+      //   },
+      //   used: {
+      //     count: 0,
+      //     title: '已使用'
+      //   },
+      //   rest: {
+      //     count: 0,
+      //     title: '剩余额度'
+      //   }
+      // },
+      headers: [{
+        key: 'time',
+        title: '时间'
+      }, {
+        key: 'warrent',
+        title: '授权数'
+      }, {
+        key: 'addman',
+        title: '添加人'
+      }, {
+        key: 'edit',
+        title: '操作'
+      }],
+      alerts: [{}, {}]
+    }
+  },
 
-    route: {
-      data () {
-      }
-    },
-
-    ready () {
+  route: {
+    data () {
       this.getRecords()
-    },
-
-    computed: {
-      tables () {
-        var result = []
-        this.alerts.map((item) => {
-          let alert = {
-            time: formatDate(item.create_time),
-            warrent: item.auth_number,
-            addman: item.auth_member,
-            edit: '<button class="btn-link">查看详情</button>',
-            prototype: item
-          }
-          result.push(alert)
-        })
-        return result
-      },
-      queryCondition () {
-        var condition = {
-          filter: ['_id', 'auth_number', 'auth_member', 'create_time', 'product_id'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {}
-        }
-        if (this.query.length > 0) {
-          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
-        }
-        return condition
+      // 获取产品列表，并将获取的数量作为已用配额
+      let condition = {
+        limit: 1,
+        offset: 0
       }
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.used = res.data.count
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    }
+  },
+
+  computed: {
+    // 剩余配额
+    remain () {
+      let total = this.currentProduct.quota || 0
+      return (total - this.used) || 0
     },
 
-    methods: {
-      getInfo (table, header, index) {
-        // console.log(table.prototype)
-        this.showAddModal3 = true
-        api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
-          if (res.status === 200) {
-            this.info = res.data
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
-      },
-      // 查询导入设备历史纪录
-      getRecords () {
-        this.loadingData = true
-        api.product.getRecords(this.$route.params.id, this.queryCondition).then((res) => {
-          if (res.status === 200) {
-            this.alerts = res.data.list
-            this.loadingData = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
+    tables () {
+      var result = []
+      this.alerts.map((item) => {
+        let alert = {
+          time: formatDate(item.create_time),
+          warrent: item.auth_number,
+          addman: item.auth_member,
+          edit: '<button class="btn-link">查看详情</button>',
+          prototype: item
+        }
+        result.push(alert)
+      })
+      return result
+    },
+    queryCondition () {
+      var condition = {
+        filter: ['_id', 'auth_number', 'auth_member', 'create_time', 'product_id'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        query: {}
+      }
+      if (this.query.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+      return condition
+    }
+  },
+
+  methods: {
+    getInfo (table, header, index) {
+      // console.log(table.prototype)
+      this.showAddModal3 = true
+      api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
+        if (res.status === 200) {
+          this.info = res.data
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 查询导入设备历史纪录
+    getRecords () {
+      this.loadingData = true
+      api.product.getRecords(this.$route.params.id, this.queryCondition).then((res) => {
+        if (res.status === 200) {
+          this.alerts = res.data.list
           this.loadingData = false
-        })
-      },
-      init () {
-        this.selectedProduct = this.products[0] || {}
-      },
-      openModel () {
-        this.addModel.mac = ''
-        this.addModel.sn = ''
-        this.addModel.name = ''
-        this.showAddModal = true
-      },
-      // 关闭添加浮层并净化添加表单
-      resetAdd () {
-        this.adding = false
-        this.showAddModal = false
-        // this.addModel = _.clone(this.originAddModel)
-        // this.$nextTick(() => {
-        //   this.addForm.setPristine()
-        // })
-        this.addModel.mac = ''
-        this.addModel.sn = ''
-        this.addModel.name = ''
-      },
-      // 添加操作
-      onAddSubmit () {
-        // if (this.addValidation.$valid && !this.adding) {
-        //   this.adding = true
-        //   api.device.add(this.$route.params.id, this.addModel).then((res) => {
-        //     if (res.status === 200) {
-        //       this.resetAdd()
-        //       this.getDevices()
-        //     }
-        //   }).catch((res) => {
-        //     this.handleError(res)
-        //     this.adding = false
-        //   })
-        // }
-        this.adding = true
-        var arr = []
-        arr[0] = this.addModel
-        api.product.sendDevices(this.$route.params.id, arr).then((res) => {
-          if (res.status === 200) {
-            this.resetAdd()
-            // this.getDevices()
-            this.getRecords()
-            this.adding = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+    init () {
+      this.selectedProduct = this.products[0] || {}
+    },
+    openModel () {
+      this.addModel.mac = ''
+      this.addModel.sn = ''
+      this.addModel.name = ''
+      this.showAddModal = true
+    },
+    // 关闭添加浮层并净化添加表单
+    resetAdd () {
+      this.adding = false
+      this.showAddModal = false
+      // this.addModel = _.clone(this.originAddModel)
+      // this.$nextTick(() => {
+      //   this.addForm.setPristine()
+      // })
+      this.addModel.mac = ''
+      this.addModel.sn = ''
+      this.addModel.name = ''
+    },
+    // 添加操作
+    onAddSubmit () {
+      // if (this.addValidation.$valid && !this.adding) {
+      //   this.adding = true
+      //   api.device.add(this.$route.params.id, this.addModel).then((res) => {
+      //     if (res.status === 200) {
+      //       this.resetAdd()
+      //       this.getDevices()
+      //     }
+      //   }).catch((res) => {
+      //     this.handleError(res)
+      //     this.adding = false
+      //   })
+      // }
+      this.adding = true
+      var arr = []
+      arr[0] = this.addModel
+      api.product.sendDevices(this.$route.params.id, arr).then((res) => {
+        if (res.status === 200) {
+          this.resetAdd()
+          // this.getDevices()
+          this.getRecords()
           this.adding = false
-        })
-      },
-      /**
-       * 当前页码改变
-       * @author weijie
-       * @param  {Number} number 页码
-       */
-      onCurrPageChage (number) {
-        this.currentPage = number
-        this.getAlerts()
-      },
-      // 批量导入
-      batchImport () {
-        var file = this.$els.macFile.files[0]
-        if (window.File && window.FileReader && window.FileList && window.Blob) {
-          var reader = new window.FileReader()
-          if (!/text\/\w+/.test(file.type)) {
-            this.showNotice({
-              type: 'error',
-              content: file.name + this.$t('ui.upload.type_tips')
-            })
-            return false
-          }
-          reader.onerror = (evt) => {
-            this.showNotice({
-              type: 'error',
-              content: this.$t('ui.upload.read_err')
-            })
-          }
-          this.importing = true
-          // 读取完成
-          reader.onloadend = (evt) => {
-            if (evt.target.readyState === window.FileReader.DONE) {
-              var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
-              var a = []
-              macArr.forEach((element, index) => {
-                if (element !== '') {
-                  a.push(element)
-                }
-              })
-              macArr = a
-              api.product.sendDevices(this.$route.params.id, macArr).then((res) => {
-                if (res.status === 200) {
-                  this.showNotice({
-                    type: 'success',
-                    content: this.$t('ui.upload.success_msg')
-                  })
-                  this.getDevices()
-                }
-                this.importing = false
-              }).catch((res) => {
-                this.handleError(res)
-                this.importing = false
-              })
-            }
-          }
-          reader.readAsText(file)
-        } else {
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
+    },
+    /**
+     * 当前页码改变
+     * @author weijie
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
+      this.currentPage = number
+      this.getAlerts()
+    },
+    // 批量导入
+    batchImport () {
+      var file = this.$els.macFile.files[0]
+      if (window.File && window.FileReader && window.FileList && window.Blob) {
+        var reader = new window.FileReader()
+        if (!/text\/\w+/.test(file.type)) {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.compatiblity')
+            content: file.name + this.$t('ui.upload.type_tips')
+          })
+          return false
+        }
+        reader.onerror = (evt) => {
+          this.showNotice({
+            type: 'error',
+            content: this.$t('ui.upload.read_err')
           })
         }
-      },
-
-      /**
-       * 每页显示的数量改变
-       * @author weijie
-       * @param  {Number} count 数量
-       */
-      onPageCountUpdate (count) {
-        this.countPerPage = count
-        this.getAlerts(true)
-      },
-      // 添加表单钩子
-      addFormHook (form) {
-        this.addForm = form
-      },
-      /**
-       * 关闭添加大客户浮层
-       * @return {[type]} [description]
-       */
-      onAddCancel () {
-        this.adding = false
-        this.showAddModal = false
-        this.addModel.mac = ''
-        // this.$nextTick(() => {
-        //   this.$resetValidation()
-        // })
-      },
-      onAddCancel3 () {
-        this.adding = false
-        this.showAddModal3 = false
-      },
-      /**
-       * 显示添加大客户的浮层
-       * @return {[type]} [description]
-       */
-      onShowAddModal () {
-        var addModal = {
-          // 产品
-          product: '',
-          // MAC
-          mac: ''
+        this.importing = true
+        // 读取完成
+        reader.onloadend = (evt) => {
+          if (evt.target.readyState === window.FileReader.DONE) {
+            var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
+            var a = []
+            macArr.forEach((element, index) => {
+              if (element !== '') {
+                a.push(element)
+              }
+            })
+            macArr = a
+            api.product.sendDevices(this.$route.params.id, macArr).then((res) => {
+              if (res.status === 200) {
+                this.showNotice({
+                  type: 'success',
+                  content: this.$t('ui.upload.success_msg')
+                })
+                this.getDevices()
+              }
+              this.importing = false
+            }).catch((res) => {
+              this.handleError(res)
+              this.importing = false
+            })
+          }
         }
-        this.addModal = addModal
-        this.showAddModal = true
-      },
-      /**
-       * 关闭添加大客户浮层
-       * @return {[type]} [description]
-       */
-      onAddCancel2 () {
-        this.adding = false
-        this.showAddModal2 = false
-        // this.$nextTick(() => {
-        //   this.$resetValidation()
-        // })
-      },
-      /**
-       * 显示添加大客户的浮层
-       * @return {[type]} [description]
-       */
-      onShowAddModal2 () {
-        var addModal = {}
-        this.addModal = addModal
-        this.showAddModal2 = true
+        reader.readAsText(file)
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: this.$t('ui.upload.compatiblity')
+        })
       }
+    },
+
+    /**
+     * 每页显示的数量改变
+     * @author weijie
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+      this.getAlerts(true)
+    },
+    // 添加表单钩子
+    addFormHook (form) {
+      this.addForm = form
+    },
+    /**
+     * 关闭添加大客户浮层
+     * @return {[type]} [description]
+     */
+    onAddCancel () {
+      this.adding = false
+      this.showAddModal = false
+      this.addModel.mac = ''
+      // this.$nextTick(() => {
+      //   this.$resetValidation()
+      // })
+    },
+    onAddCancel3 () {
+      this.adding = false
+      this.showAddModal3 = false
+    },
+    /**
+     * 显示添加大客户的浮层
+     * @return {[type]} [description]
+     */
+    onShowAddModal () {
+      var addModal = {
+        // 产品
+        product: '',
+        // MAC
+        mac: ''
+      }
+      this.addModal = addModal
+      this.showAddModal = true
+    },
+    /**
+     * 关闭添加大客户浮层
+     * @return {[type]} [description]
+     */
+    onAddCancel2 () {
+      this.adding = false
+      this.showAddModal2 = false
+      // this.$nextTick(() => {
+      //   this.$resetValidation()
+      // })
+    },
+    /**
+     * 显示添加大客户的浮层
+     * @return {[type]} [description]
+     */
+    onShowAddModal2 () {
+      var addModal = {}
+      this.addModal = addModal
+      this.showAddModal2 = true
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
