@@ -1,36 +1,37 @@
 <template>
-  <div>
-    <panel title="产品趋势" class="mb20">
-      <div class="left-actions blockdiv" slot="left-actions">
+  <div class="panel no-split-line mt20 mb20">
+    <div class="panel-hd">
+      <h2>产品趋势</h2>
+    </div>
+    <div class="tab-s2 tab-s2-full mt10 mb5">
+      <div class="actions">
         <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period" @select="activatedSelect"><span slot="label" class="label"></span></radio-button-group>
-        <div class="tab-s2 mt10 mb5">
-          <ul>
-            <li v-for="item in locales.data.PRODUCT_FILTERS" @click="trendTabIndex=$index" :class="{'active':trendTabIndex===$index}">{{ item.label }}</li>
-          </ul>
-        </div>
       </div>
-      <div class="row">
-        <div class="col-14" v-if="trendTabIndex === 0">
-          <time-line :data="activatedData"></time-line>
-        </div>
-        <div class="col-14" v-else>
-          <time-line :data="totalData"></time-line>
-        </div>
-        <div class="col-9">
-          <div class="row">
-            <div class="col-24 col-offset-1 tac pd15">
-              <statistic :info="avg.info" :title="avgTitle" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
-            </div>
-          </div>
-          <div class="top">
-            <h3>{{period}}天激活TOP{{topAdded.data.length}}</h3>
-            <template v-if="repaintTopFive">
-              <interval :data="topAdded.data" :options="topAdded.options"></interval>
-            </template>
+      <ul>
+        <li v-for="item in locales.data.PRODUCT_FILTERS" @click="trendTabIndex=$index" :class="{'active':trendTabIndex===$index}">{{ item.label }}</li>
+      </ul>
+    </div>
+    <div class="row">
+      <div class="col-14" v-if="trendTabIndex === 0">
+        <time-line :data="activatedData"></time-line>
+      </div>
+      <div class="col-14" v-else>
+        <time-line :data="totalData"></time-line>
+      </div>
+      <div class="col-9">
+        <div class="row">
+          <div class="col-24 col-offset-1 tac pd15">
+            <statistic :info="avg.info" :title="avgTitle" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
           </div>
         </div>
+        <div class="top">
+          <h3>{{period}}天激活TOP{{topAdded.data.length}}</h3>
+          <template v-if="repaintTopFive">
+            <interval :data="topAdded.data" :options="topAdded.options"></interval>
+          </template>
+        </div>
       </div>
-    </panel>
+    </div>
   </div>
 </template>
 
@@ -47,8 +48,6 @@ import _ from 'lodash'
 
 export default {
   name: 'producttrend',
-
-  layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
 

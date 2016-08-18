@@ -17,7 +17,7 @@
     <div class="target" v-if="hasTarget">
       <slot name="targetArea"></slot>
     </div>
-    <div :class="{'tac': align==='center'}">
+    <div class="hidden" :class="{'tac': align==='center'}">
       <div class="chart" v-if="hasChart">
         <slot></slot>
       </div>

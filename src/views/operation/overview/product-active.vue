@@ -1,21 +1,19 @@
 <template>
-  <div>
-    <panel>
-      <div class="panel-hd bordered">
-        <h2 class="col-4">产品活跃度</h2>
-        <div class="fr col-20 products-trends-head">
-          <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period"  @select="activeSelect"><span slot="label" class="label"></span></radio-button-group>
-        </div>
+  <div class="panel no-split-line">
+    <div class="panel-hd panel-hd-full bordered">
+      <div class="actions">
+        <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period"  @select="activeSelect"><span slot="label" class="label"></span></radio-button-group>
       </div>
-      <div class="row">
-        <div class="col-14">
-          <time-line :data="activeData"></time-line>
-        </div>
-        <div class="col-10">
-          <pie :data="activatedProportion"></pie>
-        </div>
+      <h2>产品活跃度</h2>
+    </div>
+    <div class="row">
+      <div class="col-14">
+        <time-line :data="activeData"></time-line>
       </div>
-    </panel>
+      <div class="col-10">
+        <pie :data="activatedProportion"></pie>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -31,8 +29,6 @@ import api from 'api'
 
 export default {
   name: 'productline',
-
-  layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
 

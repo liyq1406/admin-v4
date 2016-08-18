@@ -1,31 +1,34 @@
 <template>
   <div class="main">
+    <div class="main-title bordered">
+      <h2>概览</h2>
+    </div>
     <div class="row statistic">
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.devices.total" title="设备总数" tooltip="设备总数说明" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="gray"></interval-icon>
+          <statistic :info="statistic.devices.total" title="设备总数" tooltip="设备总数说明" :titletop="true">
+            <!-- <interval-icon color="gray"></interval-icon> -->
           </statistic>
         </panel>
       </div>
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.devices.activated" title="激活数" tooltip="激活数说明" color="green" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="green"></interval-icon>
+          <statistic :info="statistic.devices.activated" title="激活数" tooltip="激活数说明" color="green" :titletop="true">
+            <!-- <interval-icon color="green"></interval-icon> -->
           </statistic>
         </panel>
       </div>
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.devices.online" title="在线量" tooltip="在线量说明" color="blue" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="blue"></interval-icon>
+          <statistic :info="statistic.devices.online" title="在线量" tooltip="在线量说明" color="blue" :titletop="true">
+            <!-- <interval-icon color="blue"></interval-icon> -->
           </statistic>
         </panel>
       </div>
       <div class="col-6">
         <panel>
-          <statistic :info="statistic.users" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="orange"></interval-icon>
+          <statistic :info="statistic.users" title="用户总数" tooltip="用户总数说明" color="orange" :titletop="true">
+            <!-- <interval-icon color="orange"></interval-icon> -->
           </statistic>
         </panel>
       </div>
@@ -45,7 +48,7 @@
 import api from 'api'
 import Panel from 'components/Panel'
 import Statistic from 'components/Statistic'
-import IntervalIcon from 'components/g2-charts/IntervalIcon'
+// import IntervalIcon from 'components/g2-charts/IntervalIcon'
 import { globalMixins } from 'src/mixins'
 import ProductTrend from './product-trend'
 import ProductActive from './product-active'
@@ -63,7 +66,7 @@ export default {
   components: {
     Panel,
     Statistic,
-    IntervalIcon,
+    // IntervalIcon,
     ProductTrend,
     ProductActive,
     ProductDistribution,

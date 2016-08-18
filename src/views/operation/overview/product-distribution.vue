@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <panel title="产品分布">
-      <div class="row border-top-style">
+  <div class="panel no-split-line">
+    <div class="panel-hd panel-hd-full bordered">
+      <h2>产品分布</h2>
+    </div>
+    <div class="panel-bd">
+      <div class="row">
         <div class="col-13 tac">
           <china-map :data="data"></china-map>
         </div>
@@ -28,7 +31,7 @@
           </div>
         </div>
       </div>
-    </panel>
+    </div>
   </div>
 </template>
 
@@ -43,8 +46,6 @@ import _ from 'lodash'
 
 export default {
   name: 'distribution',
-
-  layouts: ['topbar', 'sidebar'],
 
   mixins: [globalMixins],
 
@@ -145,10 +146,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
-.border-top-style
-  border-top 1px solid #e5e5e5
-  margin-top 10px
-</style>

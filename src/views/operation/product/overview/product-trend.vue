@@ -1,7 +1,7 @@
 <template>
-  <div class="panel mt20 no-split-line">
+  <div class="panel mt30 no-split-line">
     <div class="panel-hd">
-      <h2 class="col-4">产品趋势</h2>
+      <h2>产品趋势</h2>
     </div>
     <div class="panel-bd">
       <div class="tab-s2 tab-s2-full mb5">

@@ -1,14 +1,17 @@
 <template>
-  <div class="main">
-    <panel title="用户趋势">
-      <div class="left-actions blockdiv" slot="left-actions">
+  <div class="panel">
+    <div class="panel-hd">
+      <h2>用户趋势</h2>
+    </div>
+    <div class="tab-s2 tab-s2-full mt10 mb5">
+      <div class="actions">
         <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period" @select="getUserTrend"><span slot="label" class="label"></span></radio-button-group>
-        <div class="tab-s2 mt20 mb5">
-          <ul>
-            <li v-for="item in locales.data.USER_FILTERS" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item.label }}</li>
-          </ul>
-        </div>
       </div>
+      <ul>
+        <li v-for="item in locales.data.USER_FILTERS" @click="currIndex=$index" :class="{'active':currIndex===$index}">{{ item.label }}</li>
+      </ul>
+    </div>
+    <div class="panel-bd">
       <div class="row">
         <div class="col-offset-12 col-12 row">
           <div class="col-12">
@@ -30,7 +33,7 @@
           <time-line :data="totalData" :margin="customMargin"></time-line>
         </div>
       </div>
-    </panel>
+    </div>
   </div>
 </template>
 
