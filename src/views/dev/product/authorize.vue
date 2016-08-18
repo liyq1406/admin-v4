@@ -29,7 +29,7 @@
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <span slot="label">明细：</span>
-                <button @click="showAddModal = true" class="btn btn-ghost btn-sm">手动添加</button>
+                <button @click="openModel" class="btn btn-ghost btn-sm">手动添加</button>
                 <!-- <button class="btn btn-ghost btn-sm" @click="onShowAddModal2">批量导入</button> -->
                 <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
                   <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>批量导入
@@ -38,18 +38,18 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="" @search-activate="searching=!searching"  @press-enter="">
+                <search-box :key.sync="query" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
                   <v-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getRecords" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @tbody-edit="getInfo"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
@@ -100,6 +100,22 @@
               <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div> -->
             </div>
           </div>
+          <div class="form-row row">
+            <label class="form-control col-6">序列号:</label>
+            <div class="controls col-18">
+              <div v-placeholder="'请输入序列号'" class="input-text-wrap">
+                <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">名字:</label>
+            <div class="controls col-18">
+              <div v-placeholder="'请输入名字'" class="input-text-wrap">
+                <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+              </div>
+            </div>
+          </div>
           <div class="form-actions">
             <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -126,6 +142,68 @@
         </validator>
       </div>
     </modal>
+    <modal :show.sync="showAddModal3" @close="onAddCancel3">
+      <h3 slot="header">详细信息</h3>
+      <div slot="body" class="form">
+        <div class="form-row row">
+          <label class="form-control col-6">记录ID:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.id}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">产品ID:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.product_id}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">授权数量:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.auth_number}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">授权人员账号:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.auth_member}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">授权时间:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.create_time}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">MAC地址:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.attribute[0].mac}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">名称:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.attribute[0].name}}
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-6">序列号:</label>
+          <div class="controls col-18">
+            <div class="input-text-wrap l32">{{info.attribute[0].sn}}
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -137,12 +215,13 @@
   import Modal from 'components/Modal'
   import Pager from 'components/Pager'
   import Select from 'components/Select'
-  import _ from 'lodash'
+  // import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
   import Table from 'components/Table'
   import SearchBox from 'components/SearchBox'
   import Breadcrumb from 'components/Breadcrumb'
   import Statistic from 'components/Statistic'
+  import { formatDate } from 'src/filters'
 
   export default {
     name: 'DataForward',
@@ -167,17 +246,34 @@
 
     data () {
       return {
+        info: {
+          id: '',
+          auth_number: '',
+          auth_member: '',
+          create_time: '',
+          product_id: '',
+          attribute: [{
+            mac: '',
+            name: '',
+            sn: ''
+          }]
+        },
         showAddModal: false,
         showAddModal2: false,
+        showAddModal3: false,
         addModal: {},
         queryTypeOptions: [
-          { label: '添加人', value: 'addman' }
+          { label: '添加人', value: 'auth_member' }
         ],
+        loadingData: false,
         addModel: {
-          mac: ''
+          mac: '',
+          sn: '',
+          name: ''
         },
-        queryType: { label: '添加人', value: 'addman' },
+        queryType: { label: '添加人', value: 'auth_member' },
         key: '',
+        query: '',
         total: 0,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
@@ -202,9 +298,6 @@
           key: 'warrent',
           title: '授权数'
         }, {
-          key: 'style',
-          title: '导入方式'
-        }, {
           key: 'addman',
           title: '添加人'
         }, {
@@ -221,6 +314,7 @@
     },
 
     ready () {
+      this.getRecords()
     },
 
     computed: {
@@ -228,31 +322,75 @@
         var result = []
         this.alerts.map((item) => {
           let alert = {
-            time: '2016-05-17',
-            warrent: 12345,
-            style: '批量导入',
-            addman: 'demo@xlink.com',
-            edit: '<button @click="" class="btn-link">刪除</button>',
+            time: formatDate(item.create_time),
+            warrent: item.auth_number,
+            addman: item.auth_member,
+            edit: '<button class="btn-link">查看详情</button>',
             prototype: item
           }
           result.push(alert)
         })
         return result
+      },
+      queryCondition () {
+        var condition = {
+          filter: ['_id', 'auth_number', 'auth_member', 'create_time', 'product_id'],
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          query: {}
+        }
+        if (this.query.length > 0) {
+          condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+        }
+        return condition
       }
     },
 
     methods: {
+      getInfo (table, header, index) {
+        // console.log(table.prototype)
+        this.showAddModal3 = true
+        api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
+          if (res.status === 200) {
+            this.info = res.data
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      // 查询导入设备历史纪录
+      getRecords () {
+        this.loadingData = true
+        api.product.getRecords(this.$route.params.id, this.queryCondition).then((res) => {
+          if (res.status === 200) {
+            this.alerts = res.data.list
+            this.loadingData = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
+        })
+      },
       init () {
         this.selectedProduct = this.products[0] || {}
+      },
+      openModel () {
+        this.addModel.mac = ''
+        this.addModel.sn = ''
+        this.addModel.name = ''
+        this.showAddModal = true
       },
       // 关闭添加浮层并净化添加表单
       resetAdd () {
         this.adding = false
         this.showAddModal = false
-        this.addModel = _.clone(this.originAddModel)
-        this.$nextTick(() => {
-          this.addForm.setPristine()
-        })
+        // this.addModel = _.clone(this.originAddModel)
+        // this.$nextTick(() => {
+        //   this.addForm.setPristine()
+        // })
+        this.addModel.mac = ''
+        this.addModel.sn = ''
+        this.addModel.name = ''
       },
       // 添加操作
       onAddSubmit () {
@@ -269,10 +407,14 @@
         //   })
         // }
         this.adding = true
-        api.device.add(this.$route.params.id, this.addModel).then((res) => {
+        var arr = []
+        arr[0] = this.addModel
+        api.product.sendDevices(this.$route.params.id, arr).then((res) => {
           if (res.status === 200) {
             this.resetAdd()
-            this.getDevices()
+            // this.getDevices()
+            this.getRecords()
+            this.adding = false
           }
         }).catch((res) => {
           this.handleError(res)
@@ -318,7 +460,7 @@
                 }
               })
               macArr = a
-              api.device.batchImport(this.$route.params.id, macArr).then((res) => {
+              api.product.sendDevices(this.$route.params.id, macArr).then((res) => {
                 if (res.status === 200) {
                   this.showNotice({
                     type: 'success',
@@ -362,9 +504,14 @@
       onAddCancel () {
         this.adding = false
         this.showAddModal = false
+        this.addModel.mac = ''
         // this.$nextTick(() => {
         //   this.$resetValidation()
         // })
+      },
+      onAddCancel3 () {
+        this.adding = false
+        this.showAddModal3 = false
       },
       /**
        * 显示添加大客户的浮层
@@ -405,6 +552,8 @@
 </script>
 
 <style lang="stylus" scoped>
+.l32
+  line-height 32px
 .bt
   border-top 1px solid #d9d9d9
   margin-bottom 20px
