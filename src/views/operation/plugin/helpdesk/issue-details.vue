@@ -49,30 +49,39 @@
         </div>
         <div class="comment-desc">烘烤模式还是不管用，是不是坏了</div>
       </div> -->
-      <div v-for="item in dealList" class="comment-list-item">
-        <div class="comment-metas">
-          <span>{{ item.user.create_time | formatDate }}</span>
-        </div>
-        <div class="comment-desc">{{ item.user.content }}</div>
-        <gallery :pics="item.user.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
-          <div class="pic-grid">
-            <div class="pic" v-for="pic in item.user.image" track-by="$index">
-              <img :src="pic" alt="" @click="handleImgClick($index)">
-            </div>
-          </div>
-        </gallery>
-        <div class="issue-reply" v-if="item.service !== {}">
+      <!-- begin 曾经用处理过的数组 -->
+      <!-- <div v-for="item in dealList" class="comment-list-item"> -->
+      <!-- end -->
+      <div v-for="item in recordList" class="comment-list-item">
+        <!-- 客户回复 -->
+        <div v-if="item.source === 1" class="pd710">
           <div class="comment-metas">
-            <span>{{item.service.name}}    {{item.service.create_time | formatDate }}</span>
+            <span>{{ item.create_time | formatDate }}</span>
           </div>
-          <div class="comment-desc">{{ item.service.content }}</div>
+          <div class="comment-desc">{{ item.content }}</div>
+          <gallery :pics="item.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
+            <div class="pic-grid">
+              <div class="pic" v-for="pic in item.image" track-by="$index">
+                <img :src="pic" alt="" @click="handleImgClick($index)">
+              </div>
+            </div>
+          </gallery>
         </div>
+        <!-- 客服回复 -->
+        <div v-else class="issue-reply">
+          <img src="../../../../assets/images/user.png" alt="" class="kefuicon">
+          <div class="comment-metas ml50">
+            <span>{{item.name}}    {{item.create_time | formatDate }}</span>
+          </div>
+          <div class="comment-desc ml50">{{ item.content }}</div>
+        </div>
+
       </div>
     </div>
     <div class="reply-form mt20">
       <div class="panel-sub-hd">客服回复</div>
       <div class="form">
-        <div v-if="inputAble">
+        <div v-if="false">
           暂时无法回复
         </div>
         <div v-else>
@@ -114,7 +123,7 @@ export default {
     return {
       // 客服第一个回复
       firstReply: {},
-      inputAble: false,
+      // inputAble: false,
       // 客户与客服剩下的反馈数组
       // otherArr: [{
       //   user: {},
@@ -319,11 +328,11 @@ export default {
           //   }
           // })
           // 如果最后一个回复的是客户，打开输入框
-          if (this.recordList.length % 2 === 0) {
-            this.inputAble = true
-          } else {
-            this.inputAble = false
-          }
+          // if (this.recordList.length % 2 === 0) {
+          //   this.inputAble = true
+          // } else {
+          //   this.inputAble = false
+          // }
           // this.recordList = [
           //   {_id: '记录ID',
           //   user_id: '1223',
@@ -486,18 +495,22 @@ export default {
 // 反馈信息
 .comment-list
   .comment-list-item
-    padding 15px 10px
+    /*padding 7px 10px*/
     font-size 12px
     line-height 22px
     border-bottom 1px solid default-border-color
+    /*border-top 1px solid default-border-color*/
 
     .comment-metas
       color gray-light
 
     .issue-reply
       margin-top 10px
-      border 1px solid default-border-color
-      background-color #F2F2F2
+      margin-bottom 10px
+      clearfix()
+      /*border-top 1px solid default-border-color*/
+      /*border-bottom 1px solid default-border-color*/
+      /*background-color #F2F2F2*/
       padding 7px 10px
 
 .form
@@ -531,4 +544,13 @@ export default {
     .btn
       width 120px
       text-align center
+.kefuicon
+  float left
+  height 40px
+  width 40px
+  margin-right 10px
+.ml50
+  margin-left 50px
+.pd710
+  padding 7px 10px
 </style>
