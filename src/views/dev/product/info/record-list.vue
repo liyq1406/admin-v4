@@ -155,7 +155,7 @@ export default {
       // var params = [this.$route.params.id]
       api.product.getRecordInfo(this.$route.params.id, this.$route.params.import_id, this.queryCondition.limit, this.queryCondition.offset).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
+          // console.log(res.data)
           this.create_time = formatDate(res.data.create_time)
           this.creater = res.data.auth_member
           this.total = res.data.attribute.length
