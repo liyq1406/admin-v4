@@ -10,37 +10,19 @@
         <h2>应用中心</h2>
       </div> -->
       <div class="panel-bd">
-        <div class="plugin-grid row">
-          <div class="col-12" v-for="plugin in plugins">
-            <div class="plugin-grid-item">
-              <div class="inner">
-                <div class="thumb">
-                  <img :src="'static/images/'+plugin.alias+'.png'" alt="">
-                </div>
-                <div class="info">
-                  <h3>{{ plugin.name }}</h3>
-                  <p>{{ plugin.description }}</p>
-                </div>
-                <span class="status">
-                  <switch :disabled="loading" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></switch>
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
+        123
       </div>
+
     </div>
-    <tab :nav="secondaryNav"></tab>
-    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
 <script>
-  import Tab from 'components/Tab'
+  import api from 'api'
   import { globalMixins } from 'src/mixins'
-  import Switch from 'components/Switch'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
+  import _ from 'lodash'
 
   export default {
     name: 'Data',
@@ -57,104 +39,40 @@
       }
     },
 
-    components: {
-      'tab': Tab,
-      'switch': Switch
-    },
+    components: {},
 
     data () {
       return {
-        secondaryNav: [],
-        loading: false,
-        plugins: [{
-          id: '',
-          name: '消息推送',
-          description: '让app具备消息广播，运营通知的特性，支持多维度的推送规则管理。',
-          alias: 'broadcast',
-          enable: false,
-          type: 10
-        }, {
-          id: '',
-          name: '用户反馈',
-          description: '建立在用户与企业之间的反馈渠道，包括使用、售后、故障等业务服务。',
-          alias: 'helpdesk',
-          enable: false,
-          type: 10
-        }, {
-          id: '',
-          name: '在线维保',
-          description: '提供与企业产品相关的售后支持、产品维护、保修记录的查询与管理服务。',
-          alias: 'warranty',
-          enable: false,
-          type: 10
-        }, {
-          id: '',
-          name: '经销商管理',
-          description: '管理企业各经销商，配置商家信息和销售资源数据。',
-          alias: 'dealer',
-          enable: false,
-          type: 10
-        }]
+        loadingData: false,
+        apps: []
       }
     },
 
     route: {
       data () {
-        this.getPlugins()
-        return {
-          secondaryNav: [{
-            label: '拓展应用',
-            link: { path: '/dev/apps/center/extensions' }
-          },
-          {
-            label: '自定义应用',
-            link: { path: '/dev/apps/center/customize' }
-          }]
-        }
+        this.getApps()
       }
+    },
+
+    methods: {
+      // 获取 APP 列表
+      getApps () {
+        this.loadingData = true
+        api.plugin.all().then((res) => {
+          console.log(res)
+          if (res.status === 200) {
+            this.loadingData = false
+            this.apps = _.filter(res.data.list, (item) => {
+              return item.type !== 10
+            })
+          }
+        })
+      }
+
     }
   }
 </script>
+
 <style lang="stylus">
 @import '../../../assets/stylus/common'
-
-  .plugin-grid
-    .col-12:nth-child(even)
-      .plugin-grid-item
-        padding-left 10px
-
-    .col-12:nth-child(odd)
-      .plugin-grid-item
-        padding-right 10px
-
-  .plugin-grid-item
-    padding-top 20px
-
-    .inner
-      border 1px solid default-border-color
-      padding 15px 20px 15px 15px
-      position relative
-      clearfix()
-
-    .thumb
-      float left
-      size 80px
-      margin-right 20px
-
-      img
-        display block
-        size 80px
-
-    .info
-      h3
-        margin 0 0 10px
-        font-weight normal
-        font-size 16px
-
-      p
-        margin 0
-        color gray
-
-    .status
-      absolute right 20px top 15px
 </style>
