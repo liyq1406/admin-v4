@@ -225,6 +225,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 导入记录
+        'products/:id/info/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/info/record-list'))
+            }, 'admin')
+          }
+        },
         // 设备调试
         'products/:id/debug': {
           component (resolve) {

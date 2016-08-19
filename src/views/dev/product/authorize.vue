@@ -362,14 +362,16 @@ export default {
   methods: {
     getInfo (table, header, index) {
       // console.log(table.prototype)
-      this.showAddModal3 = true
-      api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
-        if (res.status === 200) {
-          this.info = res.data
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      // this.showAddModal3 = true
+      // api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
+      //   if (res.status === 200) {
+      //     this.info = res.data
+      //   }
+      // }).catch((res) => {
+      //   this.handleError(res)
+      // })
+      console.log(table)
+      this.$route.router.go('/dev/products/' + table.prototype._id + '/info/list')
     },
     // 查询导入设备历史纪录
     getRecords () {
