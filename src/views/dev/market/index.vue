@@ -2,10 +2,13 @@
   <div class="main">
     <div class="main-title bordered">
       <div class="title-wrap">
-        <h2>应用中心</h2>
+        <h2>应用市场</h2>
       </div>
     </div>
     <div class="panel no-split-line">
+      <div class="panel-hd">
+        <p class="market-introduce">云智易物联平台提供多样化的功能扩展，根据您的需求扩展以下服务，让企业服务能力更丰富。</p>
+      </div>
       <!-- <div class="panel-hd bordered">
         <h2>应用中心</h2>
       </div> -->
@@ -30,16 +33,13 @@
         </div>
       </div>
     </div>
-    <tab :nav="secondaryNav"></tab>
-    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
 <script>
-  import Tab from 'components/Tab'
   import { globalMixins } from 'src/mixins'
   import Switch from 'components/Switch'
-  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
+  // import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
 
   export default {
@@ -50,15 +50,14 @@
     mixins: [globalMixins, pluginFactoryMixin],
 
     vuex: {
-      actions: {
-        createPlugin,
-        updatePlugin,
-        removePlugin
-      }
+      // actions: {
+      //   createPlugin,
+      //   updatePlugin,
+      //   removePlugin
+      // }
     },
 
     components: {
-      'tab': Tab,
       'switch': Switch
     },
 
@@ -94,6 +93,20 @@
           alias: 'dealer',
           enable: false,
           type: 10
+        }, {
+          id: '',
+          name: '云菜谱',
+          description: '面向厨电品类产品，可自定义菜谱类别、菜谱图文内容及分类管理。',
+          alias: 'recipe',
+          enable: false,
+          type: 10
+        }, {
+          id: '',
+          name: '内容管理',
+          description: '发布文章、资讯，自定义自己的内容资讯版块，让前台内容展示更丰富。',
+          alias: 'content',
+          enable: false,
+          type: 10
         }]
       }
     },
@@ -101,16 +114,6 @@
     route: {
       data () {
         this.getPlugins()
-        return {
-          secondaryNav: [{
-            label: '拓展应用',
-            link: { path: '/dev/apps/center/extensions' }
-          },
-          {
-            label: '自定义应用',
-            link: { path: '/dev/apps/center/customize' }
-          }]
-        }
       }
     }
   }
@@ -118,6 +121,14 @@
 <style lang="stylus">
 @import '../../../assets/stylus/common'
 
+  .panel-hd
+    margin-bottom 0
+    .market-introduce
+      background #eaedf2
+      padding 10px 14px
+      color #62878F
+      margin-bottom 0
+      margin-top 20px
   .plugin-grid
     .col-12:nth-child(even)
       .plugin-grid-item
