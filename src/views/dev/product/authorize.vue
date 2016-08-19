@@ -371,7 +371,7 @@ export default {
       //   this.handleError(res)
       // })
       console.log(table)
-      this.$route.router.go('/dev/products/' + table.prototype._id + '/info/list')
+      this.$route.router.go('/dev/products/' + this.$route.params.id + '/info/list/' + table.prototype._id)
     },
     // 查询导入设备历史纪录
     getRecords () {
