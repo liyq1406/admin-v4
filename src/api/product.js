@@ -270,9 +270,9 @@ export default {
     )
   },
   // 查询导入设备记录详情
-  getRecordInfo (productId, importId) {
+  getRecordInfo (productId, importId, limit, offset) {
     return http.post(
-      `${API_SERVER.default}/v2/product/${productId}/device_import/${importId}`
+      `${API_SERVER.default}/v2/product/${productId}/device_import/${importId}?limit=${limit}&offset=${offset}`
     )
   }
 }
