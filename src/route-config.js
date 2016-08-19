@@ -411,6 +411,15 @@ let configRouter = (router) => {
             }
           }
         },
+        // -------------------------应用市场-------------------------
+        // 应用市场
+        'market/index': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/market'))
+            }, 'admin')
+          }
+        },
         // -------------------------数据服务-------------------------
         // 数据表
         'data/tables': {

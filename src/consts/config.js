@@ -72,7 +72,7 @@ export const MAIN_NAV = {
       icon: 'plus',
       url: '/products/create'
     }, {
-      alias: 'apps',
+      alias: 'apps', // 应用管理
       icon: 'th',
       subs: [{
         alias: 'center',
@@ -80,6 +80,13 @@ export const MAIN_NAV = {
       }, {
         alias: 'upgrade',
         url: '/apps/upgrade'
+      }]
+    }, {
+      alias: 'market', // 应用市场
+      icon: 'th',
+      subs: [{
+        alias: 'index',
+        url: '/market/index'
       }]
     }, {
       alias: 'nest', // 智能互联

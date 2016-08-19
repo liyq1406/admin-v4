@@ -37,6 +37,12 @@ export default {
             upgrade: '升级管理'
           }
         },
+        market: {
+          label: '应用市场',
+          subs: {
+            index: '应用市场'
+          }
+        },
         data: {
           label: '数据服务',
           subs: {
