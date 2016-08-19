@@ -68,7 +68,7 @@
           </gallery>
         </div>
         <!-- 客服回复 -->
-        <div v-else class="issue-reply" v-if="item.service !== {}">
+        <div v-else class="issue-reply">
           <img src="../../../../assets/images/user.png" alt="" class="kefuicon">
           <div class="comment-metas ml50">
             <span>{{item.name}}    {{item.create_time | formatDate }}</span>
@@ -507,6 +507,7 @@ export default {
     .issue-reply
       margin-top 10px
       margin-bottom 10px
+      clearfix()
       /*border-top 1px solid default-border-color*/
       /*border-bottom 1px solid default-border-color*/
       /*background-color #F2F2F2*/
