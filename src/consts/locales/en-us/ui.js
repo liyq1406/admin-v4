@@ -33,8 +33,7 @@ export default {
         apps: {
           label: '应用管理',
           subs: {
-            center: '应用中心',
-            upgrade: '升级管理'
+            index: '应用管理'
           }
         },
         market: {

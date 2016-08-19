@@ -75,11 +75,8 @@ export const MAIN_NAV = {
       alias: 'apps', // 应用管理
       icon: 'th',
       subs: [{
-        alias: 'center',
-        url: '/apps/center/extensions'
-      }, {
-        alias: 'upgrade',
-        url: '/apps/upgrade'
+        alias: 'index',
+        url: '/apps/index'
       }]
     }, {
       alias: 'market', // 应用市场
