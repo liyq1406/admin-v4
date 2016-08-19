@@ -301,14 +301,14 @@ export default {
       height 100%
       padding 35px 20px
       box-sizing border-box
+      overflow auto
       .dev-box
         border-right 1px solid #dddddd
         box-sizing border-box
 
     .container
-      padding 0 80px
+      padding 0 80px 50px
       box-sizing border-box
-      height 100%
       &.dev-box
         .icon-box
           background url('../assets/images/developer.png') no-repeat center center / 90% 90%
