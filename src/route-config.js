@@ -924,58 +924,6 @@ let configRouter = (router) => {
           }
         },
 
-        // -------------------------设备互联-------------------------
-        // nest
-        'linkage/nest': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/linkage/nest'))
-            }, 'admin')
-          }
-        },
-        // echo
-        'linkage/echo': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/linkage/echo'))
-            }, 'admin')
-          }
-        },
-
-        // -------------------------数据管理-------------------------
-        // 数据表
-        'data/tables': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/data/tables'))
-            }, 'admin')
-          }
-        },
-        // 数据快照
-        'data/snapshot': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/data/snapshot'))
-            }, 'admin')
-          }
-        },
-        // 数据表详情
-        'data/tables/:product_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/data/details'))
-            }, 'admin')
-          }
-        },
-        // 数据快照详情
-        'data/snapshot/:product_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/data/snapshotDetails'))
-            }, 'admin')
-          }
-        },
-
         // -------------------------用户管理-------------------------
         // 概览
         'users/overview': {
@@ -1025,22 +973,6 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             }
-            // // 维保信息
-            // 'warranty': {
-            //   component (resolve) {
-            //     require.ensure([], (require) => {
-            //       resolve(require('./views/operation/user/major-details/warranty'))
-            //     }, 'admin')
-            //   }
-            // },
-            // // 反馈记录
-            // 'issues': {
-            //   component (resolve) {
-            //     require.ensure([], (require) => {
-            //       resolve(require('./views/operation/user/major-details/issues'))
-            //     }, 'admin')
-            //   }
-            // }
           }
         },
         // 用户设置
@@ -1115,59 +1047,6 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             }
-          }
-        },
-
-        // -------------------------设备地图-------------------------
-        'device-map': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/device-map/index'))
-            }, 'admin')
-          }
-        },
-
-        // -------------------------固件管理-------------------------
-        // 概览
-        'firmwares/overview': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/firmware/overview'))
-            }, 'admin')
-          }
-        },
-        // 版本管理
-        'firmwares/versions': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/firmware/versions'))
-            }, 'admin')
-          }
-        },
-        // 固件升级
-        'firmwares/upgrade': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/firmware/upgrade'))
-            }, 'admin')
-          }
-        },
-
-        // -------------------------统计分析-------------------------
-        // 产品统计
-        'statistic/products': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/statistic/products'))
-            }, 'admin')
-          }
-        },
-        // 用户统计
-        'statistic/users': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/statistic/users'))
-            }, 'admin')
           }
         },
 
@@ -1410,7 +1289,6 @@ let configRouter = (router) => {
     '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
-    '/operation/plugins/nest/:app_id': '/operation/linkage/nest/',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
     '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/list',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/extended-warranties',
@@ -1420,7 +1298,6 @@ let configRouter = (router) => {
     '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
-    '/operation/linkage': '/operation/linkage/devices',
     '/operation/users/portrait': '/operation/users/portrait/os'
   })
 

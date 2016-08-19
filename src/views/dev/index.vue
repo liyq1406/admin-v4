@@ -58,6 +58,12 @@ export default {
       // 概览
       // result.subs.push(subs[0])
 
+      // 产品开发标题
+      result.subs.push({
+        label: '产品开发',
+        type: 'title'
+      })
+
       // 产品导航
       const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-forward', 'linkage', 'authorize']
       this.products.forEach((item) => {

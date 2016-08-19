@@ -166,29 +166,6 @@ export const MAIN_NAV = {
         url: '/alerts/heat'
       }]
     }, {
-      alias: 'linkage', // 设备互联
-      icon: 'clone',
-      subs: [{
-        alias: 'devices',
-        url: '/linkage/devices'
-      }, {
-        alias: 'nest',
-        url: '/linkage/nest'
-      }, {
-        alias: 'echo',
-        url: '/linkage/echo'
-      }]
-    }, {
-      alias: 'data', // 数据管理
-      icon: 'database',
-      subs: [{
-        alias: 'tables',
-        url: '/data/tables'
-      }, {
-        alias: 'snapshot',
-        url: '/data/snapshot'
-      }]
-    }, {
       alias: 'users', // 用户管理
       icon: 'users',
       subs: [{
@@ -209,46 +186,6 @@ export const MAIN_NAV = {
       }, {
         alias: 'analysis',
         url: '/users/analysis'
-      }]
-    // }, {
-    //   alias: 'device_map', // 设备地图
-    //   icon: 'map',
-    //   url: 'device-map'
-    }, {
-      alias: 'firmwares', // 固件管理
-      icon: 'rocket',
-      subs: [{
-        alias: 'overview',
-        url: '/firmwares/overview'
-      }, {
-        alias: 'versions',
-        url: '/firmwares/versions'
-      }, {
-        alias: 'upgrade',
-        url: '/firmwares/upgrade'
-      }]
-    }, {
-      alias: 'statistic', // 统计分析
-      icon: 'bar-chart',
-      subs: [{
-        alias: 'products',
-        url: '/statistic/products'
-      }, {
-        alias: 'users',
-        url: '/statistic/users'
-      }]
-    }, {
-      alias: 'settings', // 系统设置
-      icon: 'cog',
-      subs: [{
-        alias: 'auth',
-        url: '/settings/auth'
-      }, {
-        alias: 'members',
-        url: '/settings/members'
-      }, {
-        alias: 'account',
-        url: '/settings/account'
       }]
     }]
   }

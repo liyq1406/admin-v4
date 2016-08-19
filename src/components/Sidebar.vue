@@ -6,10 +6,14 @@
       <div class="nav-aside-wrap">
         <div class="nav-aside-content">
           <div class="nav-aside-item" v-for="item in subs">
-            <!-- 按钮 -->
-            <div class="nav-aside-actions" v-if="item.action">
-              <a v-link="{path: nav.url + item.url}"><i class="fa" :class="'fa-'+item.icon"></i>添加产品</a>
-            </div>
+            <template v-if="item.type === 'title' || item.action">
+              <!-- 小标题 -->
+              <div class="nav-aside-title" v-if="item.type === 'title'">{{ item.label }} </div>
+              <!-- 按钮 -->
+              <div class="nav-aside-actions" v-if="item.action">
+                <a v-link="{path: nav.url + item.url}"><i class="fa" :class="'fa-'+item.icon"></i>添加产品</a>
+              </div>
+            </template>
             <!-- 导航菜单 -->
             <template v-else>
               <a class="nav-aside-item-title" v-link="{path: nav.url + '/' + (item.url || item.alias) + (item.id?'/' + item.id:'')}" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
@@ -213,6 +217,11 @@ export default {
     &:hover
       background-color #E5E5E5
       text-decoration none
+
+.nav-aside-title
+  margin-top 25px
+  color gray-light
+  padding-left 20px
 
 // 侧栏淡入淡出
 /*.sidebar

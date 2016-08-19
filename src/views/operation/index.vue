@@ -58,6 +58,12 @@ export default {
       // 概览
       result.subs.push(subs[0])
 
+      // 产品管理标题
+      result.subs.push({
+        label: '产品管理',
+        type: 'title'
+      })
+
       // 产品导航
       const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
       this.products.forEach((item) => {
@@ -74,6 +80,12 @@ export default {
             }
           })
         })
+      })
+
+      // 产品服务标题
+      result.subs.push({
+        label: '产品服务',
+        type: 'title'
       })
 
       // 插件导航
