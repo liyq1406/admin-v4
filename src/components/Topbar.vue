@@ -147,7 +147,7 @@ export default {
     line-height 24px
     display block
     min-width 50px
-    border-bottom 1px solid #DDD
+    border-bottom 1px solid light-border-color
     font-size 14px
 
     .fa
@@ -195,7 +195,7 @@ export default {
 
     .sec-nav-item
       border-bottom none
-      border-top 1px solid #DDD
+      border-top 1px solid light-border-color
 
     &:before
       absolute right 30px top -11px
