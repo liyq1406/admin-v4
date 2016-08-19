@@ -61,7 +61,7 @@
           return
         }
         this.value = !this.value
-        this.$dispatch('switch-toggle')
+        this.$dispatch('switch-toggle', this.value)
       }
     }
   }

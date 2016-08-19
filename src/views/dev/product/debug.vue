@@ -132,13 +132,18 @@
                   </tr>
                 </tbody>
               </table>
+              <div class="refresh-box">
+                <button class="btn btn-ghost" @click="getDatapointValues">
+                  <i class="fa fa-refresh" :class="{'fa-spin': refreshing}"></i>刷新
+                </button>
+              </div>
             </div>
             <div class="log-box" v-show="showLog" :class="'col-8'">
               <!-- Start: 设备日志-->
               <div class="log-panel">
                 <div class="log-panel-hd">
                   <div class="actions">
-                    <switch :value.sync="showLog" size="small"></switch>
+                    <switch :value.sync="linkSocket" @switch-toggle="changeSocketType" size="small"></switch>
                   </div>
                   <h2>{{ $t('ui.device.log') }}</h2>
                 </div>
@@ -228,6 +233,8 @@ export default {
       query2: '',
       // 显示日志标志位
       showLog: false,
+      // 连接socket
+      linkSocket: true,
       // 正在加载设备列表标志位
       loadingData: false,
       // 正在添加设备标志位
@@ -324,6 +331,21 @@ export default {
   },
 
   methods: {
+    /**
+     * socket改变状态
+     * @param  {[type]} value [description]
+     * @return {[type]}       [description]
+     */
+    changeSocketType (value) {
+      if (value) {
+        this.connect()
+      } else {
+        if (socket) {
+          socket.disconnect()
+        }
+        this.logs = []
+      }
+    },
     // 获取数据端点列表
     getDatapoints () {
       console.log('获取数据端点列表')
@@ -571,6 +593,16 @@ export default {
 <style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
 
+  .refresh-box
+    position absolute
+    right 0
+    top 0
+    .btn .fa
+      /*height 100%*/
+      font-size 14px
+      line-height 26px
+      color #383838
+      margin-right 5px
   .device-debug
   .virtual-devices
     .clear-btn
