@@ -3,34 +3,26 @@
     <div class="main-title bordered">
       <h2>概览</h2>
     </div>
-    <div class="row statistic">
+    <div class="row statistic mt10">
       <div class="col-6">
-        <panel>
-          <statistic :info="statistic.devices.total" title="设备总数" tooltip="设备总数说明" :titletop="true">
-            <!-- <interval-icon color="gray"></interval-icon> -->
-          </statistic>
-        </panel>
+        <statistic :total="statistic.devices.total.count" :change="statistic.devices.total.change" title="设备总数" tooltip="设备总数说明" color="gray"  :titletop="true">
+          <!-- <interval-icon color="gray"></interval-icon> -->
+        </statistic>
       </div>
       <div class="col-6">
-        <panel>
-          <statistic :info="statistic.devices.activated" title="激活数" tooltip="激活数说明" color="green" :titletop="true">
-            <!-- <interval-icon color="green"></interval-icon> -->
-          </statistic>
-        </panel>
+        <statistic :total="statistic.devices.activated.count" :change="statistic.devices.activated.change" title="激活数" tooltip="激活数说明" color="green" :titletop="true">
+          <!-- <interval-icon color="green"></interval-icon> -->
+        </statistic>
       </div>
       <div class="col-6">
-        <panel>
-          <statistic :info="statistic.devices.online" title="在线量" tooltip="在线量说明" color="blue" :titletop="true">
-            <!-- <interval-icon color="blue"></interval-icon> -->
-          </statistic>
-        </panel>
+        <statistic :total="statistic.devices.online.count" :change="statistic.devices.online.change" change-unit="%" title="在线量" tooltip="在线量说明" color="blue" :titletop="true">
+          <!-- <interval-icon color="blue"></interval-icon> -->
+        </statistic>
       </div>
       <div class="col-6">
-        <panel>
-          <statistic :info="statistic.users" title="用户总数" tooltip="用户总数说明" color="orange" :titletop="true">
-            <!-- <interval-icon color="orange"></interval-icon> -->
-          </statistic>
-        </panel>
+        <statistic :total="statistic.users.count" :change="statistic.users.change" title="用户总数" tooltip="用户总数说明" color="orange" :titletop="true">
+          <!-- <interval-icon color="orange"></interval-icon> -->
+        </statistic>
       </div>
     </div>
     <div class="row">
@@ -46,15 +38,12 @@
 
 <script>
 import api from 'api'
-import Panel from 'components/Panel'
-import Statistic from 'components/Statistic'
-// import IntervalIcon from 'components/g2-charts/IntervalIcon'
+import Statistic from 'components/Statistic2'
 import { globalMixins } from 'src/mixins'
 import ProductTrend from './product-trend'
 import ProductActive from './product-active'
 import ProductDistribution from './product-distribution'
 import UserTrend from './user-trend'
-import {toPercentDecimal2} from 'src/filters'
 
 export default {
   name: 'Dashboard',
@@ -64,7 +53,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Panel,
     Statistic,
     // IntervalIcon,
     ProductTrend,
@@ -85,25 +73,25 @@ export default {
       statistic: {
         // 用户总数
         users: {
-          total: '',
-          change: ''
+          count: 0,
+          change: 0
         },
         // 设备
         devices: {
           // 总数
           total: {
-            total: '',
-            change: ''
+            count: 0,
+            change: 0
           },
           // 激活设备
           activated: {
-            total: '',
-            change: ''
+            count: 0,
+            change: 0
           },
           // 在线设备
           online: {
-            total: '',
-            change: ''
+            count: 0,
+            change: 0
           }
         }
       }
@@ -118,13 +106,13 @@ export default {
     getSummary () {
       api.statistics.getSummary().then((res) => {
         if (res.status === 200) {
-          this.statistic.devices.activated.total = res.data.total.activated
-          this.statistic.devices.total.total = res.data.total.total
-          this.statistic.devices.online.total = res.data.total.online
-          this.statistic.devices.online.change = toPercentDecimal2(res.data.total.online / res.data.total.total)
+          this.statistic.devices.activated.count = res.data.total.activated
+          this.statistic.devices.total.count = res.data.total.total
+          this.statistic.devices.online.count = res.data.total.online
+          this.statistic.devices.online.change = Math.round(res.data.total.online / res.data.total.total * 10000) / 100
           this.statistic.devices.total.change = res.data.total.today_add
           this.statistic.devices.activated.change = res.data.total.today_activated || 0
-          this.statistic.users.total = res.data.user.user
+          this.statistic.users.count = res.data.user.user
           this.statistic.users.change = res.data.user.today_add || 0
         }
       }).catch((res) => {
@@ -134,25 +122,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
-
-.statistic
-  .x-panel
-    padding 0
-
-.top
-  h3
-    font-size 14px
-    text-indent 180px
-    margin 10px 0 5px
-    color gray
-.blockdiv
-  display block!important
-  margin-top 10px
-  /*border-bottom 1px solid #e5e5e5*/
-.pd15
-  .x-statistic-left
-    padding-left 15px!important
-</style>

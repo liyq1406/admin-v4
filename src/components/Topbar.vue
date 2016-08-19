@@ -14,12 +14,22 @@
       <span class="user-name">{{ currentMember.name }}</span>
       <i class="arrow-down"></i>
       <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
+        <div class="user-info">
+          <div class="user">{{ currentMember.name }}</div>
+          <div class="email">{{ currentMember.email }}</div>
+        </div>
         <ul>
           <li class="sec-nav-item">
-            <a v-link="{path: '/operation/settings/account'}">{{ $t("ui.user_menu.account") }}</a>
+            <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("ui.user_menu.account") }}</a>
           </li>
           <li class="sec-nav-item">
-            <a href="#" @click.prevent="quit">{{ $t("ui.user_menu.quit") }}</a>
+            <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>成员管理</a>
+          </li>
+          <li class="sec-nav-item">
+            <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
+          </li>
+          <li class="sec-nav-item">
+            <a href="#" @click.prevent="quit"><i class="fa fa-sign-out"></i>{{ $t("ui.user_menu.quit") }}</a>
           </li>
         </ul>
       </div>
@@ -139,36 +149,47 @@ export default {
     absolute right 10px top 28px
 
   .sec-nav
-    absolute top 54px right
-    size 70px 0
-    text-align right
+    absolute top 61px right
+    /*width 250px*/
+    size 250px 0
+    text-align left
     background #FFF
-    // overflow hidden
     opacity 0
     border 1px solid default-border-color
-    padding 5px
+
+    .user-info
+      line-height 1.5
+      padding 10px 20px
+
+      .user
+        font-size 20px
+
+      .email
+        font-size 12px
 
     .sec-nav-item
       margin-right 0
       line-height 24px
       display block
-      /*padding 0 20px*/
       min-width 50px
-      border-bottom 1px solid #DDD
-      font-size 12px
-      text-align center
+      border-top 1px solid #DDD
+      font-size 14px
+
+      .fa
+        width 24px
+        text-align center
+        font-size 18px
+        margin-right 10px
 
       & > a
         text-decoration none
         color gray
         display block
+        padding 10px 20px
 
         &:hover
           color #000
           background #F3F3F3
-
-      &:last-child
-        border none
 
     &:before
       absolute right 30px top -11px
@@ -179,7 +200,6 @@ export default {
       absolute right 30px top -10px
       content ""
       triangle #FFF 10px up
-
 
   &:hover
     .sec-nav

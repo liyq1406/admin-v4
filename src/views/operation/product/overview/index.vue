@@ -14,22 +14,18 @@
           <div class="row">
             <div class="col-6">
               <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" tooltip="设备总数说明" color="gray" :has-chart="true" align="left" :titletop="true">
-                <!-- <interval-icon color="gray" :height="22"></interval-icon> -->
               </statistic>
             </div>
             <div class="col-6">
               <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" tooltip="激活设备总数说明" color="green" :has-chart="true" align="left" :titletop="true">
-                <!-- <interval-icon color="green" :height="22"></interval-icon> -->
               </statistic>
             </div>
             <div class="col-6">
               <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" tooltip="在线设备总数说明" color="blue" :has-chart="true" :titletop="true">
-                <!-- <interval-icon color="blue" :height="22"></interval-icon> -->
               </statistic>
             </div>
             <div class="col-6">
               <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" tooltip="用户总数说明" color="orange" :has-chart="true" :titletop="true">
-                <!-- <interval-icon color="orange" :height="22"></interval-icon> -->
               </statistic>
             </div>
           </div>
@@ -50,7 +46,6 @@ import { removeProduct, updateProduct } from 'store/actions/products'
 import Panel from 'components/Panel'
 import Statistic from 'components/Statistic2'
 import Tooltip from 'components/Tooltip'
-// import IntervalIcon from 'components/g2-charts/IntervalIcon'
 import defaultDeviceThumb from 'assets/images/device_thumb.png'
 import { globalMixins } from 'src/mixins'
 import { productSummaryMixin, setCurrProductMixin } from '../mixins'

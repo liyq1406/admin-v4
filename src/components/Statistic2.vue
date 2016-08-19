@@ -192,7 +192,7 @@ export default {
     font-weight 100
 
   & > .change
-    absolute right 15px top 15px
+    absolute right 15px top 5px
     color green
     white-space nowrap
     font-size 0

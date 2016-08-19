@@ -152,6 +152,48 @@ let configRouter = (router) => {
       }
     },
 
+    '/account': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/account/index'))
+        }, 'admin')
+      },
+      subRoutes: {
+        // 帐户信息
+        'info': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/info'))
+            }, 'admin')
+          }
+        },
+        // 成员管理
+        'members': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/members'))
+            }, 'admin')
+          }
+        },
+        // 成员详情
+        'members/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/members/details'))
+            }, 'admin')
+          }
+        },
+        // 授权管理
+        'authorize': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/authorize'))
+            }, 'admin')
+          }
+        }
+      }
+    },
+
     '/dev': {
       component (resolve) {
         require.ensure([], (require) => {
