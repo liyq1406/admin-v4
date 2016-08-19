@@ -122,9 +122,9 @@ export default {
         secondaryNav: [{
           label: '设备列表',
           link: { path: `${majorRoot}/devices` }
-        }, {
-          label: '经销商',
-          link: { path: `${majorRoot}/dealers` }
+        // }, {
+        //   label: '经销商',
+        //   link: { path: `${majorRoot}/dealers` }
         }]
       }
     }
