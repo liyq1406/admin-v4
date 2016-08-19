@@ -226,7 +226,7 @@ let configRouter = (router) => {
           }
         },
         // 导入记录
-        'products/:id/info/list': {
+        'products/:id/info/list/:import_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/info/record-list'))
