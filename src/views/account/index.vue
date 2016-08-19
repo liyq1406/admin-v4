@@ -1,5 +1,21 @@
 <template>
-  <div class="page-in">
+  <div class="page-in account-page">
+    <div class="main-title bordered">
+      <h2>我的帐户</h2>
+    </div>
+    <div class="sec-nav mt30">
+      <ul>
+        <li class="sec-nav-item">
+          <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("ui.user_menu.account") }}</a>
+        </li>
+        <li class="sec-nav-item">
+          <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>成员管理</a>
+        </li>
+        <li class="sec-nav-item">
+          <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
+        </li>
+      </ul>
+    </div>
     <section class="main-wrap">
       <!-- Start: 路由视图 -->
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
@@ -32,3 +48,36 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+@import '../../assets/stylus/common'
+
+.account-page
+  background-color #FFF
+
+  .main-wrap
+    top 57px
+    border-left 1px solid light-border-color
+
+.sec-nav
+  position relative
+  z-index 1000
+
+  .sec-nav-item
+    .v-link-active
+      background-color #F3F3F3
+      color gray-dark
+      position relative
+
+      &:before
+        absolute right -11px top 50%
+        margin-top -5px
+        content ""
+        triangle #D3D3D3 10px right
+
+      &:after
+        absolute right -10px top 50%
+        margin-top -5px
+        content ""
+        triangle #F3F3F3 10px right
+</style>

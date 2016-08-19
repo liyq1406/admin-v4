@@ -186,28 +186,29 @@ export default {
   .main
     background #FFF
 
-  .main-title
-    background #FFF
-    padding 10px 15px
-    /*margin-bottom 5px*/
-    box-sizing border-box
-    clearfix()
+// 主标题
+.main-title
+  background #FFF
+  padding 10px 15px
+  /*margin-bottom 5px*/
+  box-sizing border-box
+  clearfix()
 
-    h2
-      float left
-      margin 0
-      font-size 18px
-      line-height 36px
-      font-weight normal
+  h2
+    float left
+    margin 0
+    font-size 18px
+    line-height 36px
+    font-weight normal
 
-    .filter-bar
-      padding 7px 0 0
+  .filter-bar
+    padding 7px 0 0
 
-    &.bordered
-      border-bottom 1px solid default-border-color
+  &.bordered
+    border-bottom 1px solid default-border-color
 
-    & + .x-breadcrumb
-      margin-top -10px
+  & + .x-breadcrumb
+    margin-top -10px
 
 // 视图淡入淡出
 .view

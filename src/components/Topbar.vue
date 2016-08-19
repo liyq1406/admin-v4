@@ -127,6 +127,45 @@ export default {
         border-bottom-color red
         color red
 
+.sec-nav
+  width 240px
+  text-align left
+  background #FFF
+
+  .user-info
+    line-height 1.5
+    padding 10px 20px
+
+    .user
+      font-size 20px
+
+    .email
+      font-size 12px
+
+  .sec-nav-item
+    margin-right 0
+    line-height 24px
+    display block
+    min-width 50px
+    border-bottom 1px solid #DDD
+    font-size 14px
+
+    .fa
+      width 24px
+      text-align center
+      font-size 18px
+      margin-right 10px
+
+    & > a
+      text-decoration none
+      color gray
+      display block
+      padding 10px 20px
+
+      &:hover
+        color #000
+        background #F3F3F3
+
 // 用户导航
 .user-nav
   absolute right top
@@ -150,46 +189,13 @@ export default {
 
   .sec-nav
     absolute top 61px right
-    /*width 250px*/
-    size 250px 0
-    text-align left
-    background #FFF
+    height 0
     opacity 0
     border 1px solid default-border-color
 
-    .user-info
-      line-height 1.5
-      padding 10px 20px
-
-      .user
-        font-size 20px
-
-      .email
-        font-size 12px
-
     .sec-nav-item
-      margin-right 0
-      line-height 24px
-      display block
-      min-width 50px
+      border-bottom none
       border-top 1px solid #DDD
-      font-size 14px
-
-      .fa
-        width 24px
-        text-align center
-        font-size 18px
-        margin-right 10px
-
-      & > a
-        text-decoration none
-        color gray
-        display block
-        padding 10px 20px
-
-        &:hover
-          color #000
-          background #F3F3F3
 
     &:before
       absolute right 30px top -11px
