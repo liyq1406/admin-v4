@@ -23,7 +23,7 @@
           <time-line :data="trendData" scale="hour"></time-line>
         </div>
       </div>
-      <div class="history-list mt20">
+      <div class="history-list mt20" v-if="filteredSnapshots.length">
         <div class="col-dates">
           <ul>
             <li v-for="snapshot in filteredSnapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.snapshot_date }}</li>

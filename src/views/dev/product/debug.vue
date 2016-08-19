@@ -75,7 +75,7 @@
                     设备日志
                   </button>
                 </div>
-                <div class="filter-group-item">
+                <div class="filter-group-item mt10">
                   <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
                   </search-box>
                 </div>

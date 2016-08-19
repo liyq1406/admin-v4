@@ -188,7 +188,7 @@ export default {
     absolute right 10px top 28px
 
   .sec-nav
-    absolute top 61px right
+    absolute top 61px right 5px
     height 0
     opacity 0
     border 1px solid default-border-color
@@ -198,14 +198,14 @@ export default {
       border-top 1px solid light-border-color
 
     &:before
-      absolute right 30px top -11px
+      absolute right 30px top -19px
       content ""
-      triangle #D3D3D3 10px up
+      triangle #D3D3D3 18px up
 
     &:after
-      absolute right 30px top -10px
+      absolute right 30px top -18px
       content ""
-      triangle #FFF 10px up
+      triangle #FFF 18px up
 
   &:hover
     .sec-nav
