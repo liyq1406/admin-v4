@@ -52,6 +52,7 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
+import { setCurrProductMixin } from './mixins'
 import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
@@ -66,7 +67,7 @@ import { formatDate } from 'src/filters'
 export default {
   name: 'Settings',
 
-  mixins: [globalMixins],
+  mixins: [globalMixins, setCurrProductMixin],
 
   components: {
     'v-select': Select,
@@ -81,7 +82,7 @@ export default {
       ids: [],
       devices: [],
       vDevices: [],
-      currProduct: {},
+      currentProduct: {},
       query: '',
       searching: false,
       queryTypeOptions: [
@@ -132,47 +133,17 @@ export default {
   route: {
     data () {
       window.init = this.initMap
-      this.loadingProducts = true
-      api.product.getProduct(this.$route.params.id).then((res) => {
-        if (res.status === 200) {
-          this.loadingProducts = false
-          this.currProduct = res.data
-          if (typeof window.AMap === 'undefined') {
-            var mapApi = document.createElement('script')
-            mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
-            document.getElementsByTagName('body')[0].appendChild(mapApi)
-          } else {
-            this.initMap()
-          }
-        }
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingProducts = false
-      })
+      if (typeof window.AMap === 'undefined') {
+        var mapApi = document.createElement('script')
+        mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
+        document.getElementsByTagName('body')[0].appendChild(mapApi)
+      } else {
+        window.setTimeout(() => {
+          this.initMap()
+        }, 1000)
+      }
     }
   },
-
-  // ready () {
-  //   // 将回调绑定在全局供高德地图加载后调用
-  //   window.init = this.initMap
-  //   this.loadingProducts = true
-  //   api.product.getProduct(this.$route.params.id).then((res) => {
-  //     if (res.status === 200) {
-  //       this.loadingProducts = false
-  //       this.currProduct = res.data
-  //       if (typeof window.AMap === 'undefined') {
-  //         var mapApi = document.createElement('script')
-  //         mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
-  //         document.getElementsByTagName('body')[0].appendChild(mapApi)
-  //       } else {
-  //         this.initMap()
-  //       }
-  //     }
-  //   }).catch((res) => {
-  //     this.handleError(res)
-  //     this.loadingProducts = false
-  //   })
-  // },
 
   watch: {
     zoom () {
@@ -279,7 +250,7 @@ export default {
      */
     getDevices () {
       this.loadingDevices = true
-      return api.device.getList(this.currProduct.id, {
+      return api.device.getList(this.$route.params.id, {
         filter: ['id', 'name', 'mac', 'is_online', 'last_login'],
         limit: this.countPerPage,
         // offset: (this.currentPage - 1) * this.countPerPage,
@@ -296,7 +267,7 @@ export default {
      * @return {[type]} [description]
      */
     getVDevices () {
-      api.product.getVDevices(this.currProduct.id, this.ids).then((res) => {
+      api.product.getVDevices(this.$route.params.id, this.ids).then((res) => {
         this.vDevices = res.data.list
       })
     },
@@ -307,10 +278,10 @@ export default {
      */
     getGeography (deviceId) {
       this.loadingData = true
-      api.device.getInfo(this.currProduct.id, deviceId).then((res) => {
+      api.device.getInfo(this.$route.params.id, deviceId).then((res) => {
         console.log(res.data)
       })
-      api.device.getGeography(this.currProduct.id, deviceId).then((res) => {
+      api.device.getGeography(this.$route.params.id, deviceId).then((res) => {
         if (res.status === 200) {
           this.currIndex = 0
           this.oldCurrIndex = 0
@@ -346,7 +317,7 @@ export default {
      */
     getGeographies () {
       this.loadingData = true
-      api.device.getGeographies(this.currProduct.id, this.queryCondition).then((res) => {
+      api.device.getGeographies(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.data.count) {
           this.ids = _.map(res.data.devices, 'device_id')
         } else {
@@ -507,7 +478,7 @@ export default {
     showPopup (data) {
       var content = ['<div class="map-popup">']
       content.push('<div class="map-popup-header">')
-      content.push(`<h3>${data.device.name || this.currProduct.name}</h3>`)
+      content.push(`<h3>${data.device.name || this.currentProduct.name}</h3>`)
       content.push('</div>')
       content.push('<div class="map-popup-body">')
       content.push(`<div class="info-row mt5 mb10">${data.device.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.vDevice.last_login)}</div>`)
@@ -515,7 +486,7 @@ export default {
       content.push(`<div class="info-row"><span class="label">MAC: </span>${data.device.mac}</div>`)
       content.push(`<div class="info-row"><span class="label">IP: </span>${data.vDevice.ip}</div>`)
       content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.vDevice.online_count)}</div>`)
-      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.currProduct.id}/devices/${data.device_id}">查看详情&gt;&gt;</a></div>`)
+      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.device_id}">查看详情&gt;&gt;</a></div>`)
       content.push('</div>')
       content.push('</div>')
       this.infoWindow.setContent(content.join(''))

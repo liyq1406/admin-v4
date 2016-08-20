@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-16">
             <div class="product-info">
-              <info-card>
+              <info-card class="mb15">
                 <div class="product-name">{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></div>
                 <div class="product-createtime">{{ currentProduct.create_time | formatDate }}</div>
               </info-card>
@@ -17,7 +17,7 @@
                 <button class="btn btn-ghost" @click="releaseProduct" v-else>发布产品</button>
               </div>
             </div>
-            <div v-stretch="192">
+            <div v-stretch="182">
               <info-list :info="productInfo">
                 <a class="hl-red" slot="qrcode" @click.prevent="displayQrcode">点击查看</a>
               </info-list>

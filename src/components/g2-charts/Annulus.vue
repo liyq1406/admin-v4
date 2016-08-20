@@ -1,12 +1,12 @@
 <template>
   <div class="x-annulus">
     <slot>
-      <div class="quota">
+      <div class="quota" v-show="!rendering">
         <div class="quota-tit">{{ title }}</div>
         <div class="quota-sum">{{ sum }}</div>
       </div>
     </slot>
-    <div v-if="data && data.length===0 && !rendered" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="data && data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
   </div>
 </template>
 
@@ -39,7 +39,7 @@ export default {
   data () {
     return {
       chart: null,
-      rendered: false
+      rendering: false
     }
   },
 
@@ -60,7 +60,13 @@ export default {
 
   ready () {
     if (!this.chart) {
-      this.render()
+      if (!this.rendering) {
+        this.rendering = true
+        window.setTimeout(() => {
+          this.render()
+          this.rendering = false
+        }, 500)
+      }
     }
   },
 
@@ -70,14 +76,19 @@ export default {
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
-        this.render()
+        if (!this.rendering) {
+          this.rendering = true
+          window.setTimeout(() => {
+            this.render()
+            this.rendering = false
+          }, 500)
+        }
       }
     }
   },
 
   methods: {
     render () {
-      console.log(this.data)
       if (this.data.length <= 0) {
         return
       }
