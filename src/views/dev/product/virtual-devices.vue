@@ -232,6 +232,22 @@ export default {
         this.handleError(res)
       })
     },
+    setDataEvent (dp) {
+      console.log('设置数据端点值')
+      console.log(dp)
+    },
+    /**
+     * range抛出的事件  value改变
+     * @param {[type]}  val            [description]
+     * @param {[type]}  params         [description]
+     * @param {Boolean} isUserBehavior 是否是用户行为
+     */
+    setRangeValue (val, params, isUserBehavior) {
+      if (params.prototype.value !== val && isUserBehavior) {
+        params.prototype.value = val
+        this.setDataEvent(params.prototype)
+      }
+    },
     switchRightPanel () {
       this.hideDownLoad = !this.hideDownLoad
     },

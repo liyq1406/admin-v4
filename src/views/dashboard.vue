@@ -17,7 +17,7 @@
             <a class="check-all" v-show="products.length" @click="goto('/dev')">查看全部 ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in toShowProducts">
+            <div class="product" v-for="product in toShowProducts" v-show="product.is_release===false">
               <div class="img-box">
                 <img src="../assets/images/device_thumb.png">
               </div>
@@ -29,7 +29,7 @@
                 <div class="info">
                   <span>授权：{{product['授权'] || 0}}</span>
                   <span class="ml10">| 设备数：{{product['total'] || '0'}}</span>
-                  <span class="ml10">| 状态：{{product['状态']?'已发布':'未发布'}}</span>
+                  <!-- <span class="ml10">| 状态：{{product['is_release']?'已发布':'未发布'}}</span> -->
                 </div>
               </div>
             </div>
@@ -46,7 +46,7 @@
         <div class="part part3 link-box">
           <div class="title-box">
             <h2>开发指南</h2>
-            <a class="check-all">查看全部 ></a>
+            <!-- <a class="check-all">查看全部 ></a> -->
           </div>
           <div class="content-box">
             <div class="link" v-for="link in links">
@@ -76,7 +76,7 @@
             <a class="check-all" v-show="products.length" @click="goto('/operation/overview')">查看全部 ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in toShowProducts">
+            <div class="product" v-for="product in toShowProducts" v-show="product.is_release===true">
               <div class="img-box">
                 <img src="../assets/images/device_thumb.png">
               </div>
@@ -101,7 +101,7 @@
         <div class="part part3 link">
           <div class="title-box">
             <h2>快捷导航</h2>
-            <a class="check-all" @click="goto('/operation/overview')">查看全部 ></a>
+            <!-- <a class="check-all" @click="goto('/operation/overview')">查看全部 ></a> -->
           </div>
           <div class="content-box">
             <div class="nav">
@@ -215,6 +215,7 @@ export default {
         var product = {}
         product.name = item1.name
         product.id = item1.id
+        product.is_release = item1.is_release
         this.productSummary.forEach((item2) => {
           if (product.id === item2.id) {
             product.total = item2['total'] || 0
@@ -253,10 +254,22 @@ export default {
     getProducts () {
       this.loading = true
       api.product.all().then((res) => {
-        if (res.data.length > 2) {
-          res.data.length = 2
+        var isReleaseProducts = []
+        var noReleaseProducts = []
+        res.data.forEach((item) => {
+          if (item.is_release) {
+            isReleaseProducts.push(item)
+          } else {
+            noReleaseProducts.push(item)
+          }
+        })
+        if (isReleaseProducts.length > 2) {
+          isReleaseProducts.length = 2
         }
-        this.products = res.data
+        if (noReleaseProducts.length > 2) {
+          noReleaseProducts.length = 2
+        }
+        this.products = isReleaseProducts.concat(noReleaseProducts)
         this.loading = false
         res.data.forEach((item) => {
           this.getProductSummary(item.id)
