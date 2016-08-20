@@ -19,24 +19,26 @@
             <thead>
               <tr>
                 <th width="18%">{{ $t('ui.member.fields.name') }}</th>
-                <th width="28%">{{ $t('ui.member.fields.email') }}</th>
+                <th width="22%">{{ $t('ui.member.fields.email') }}</th>
                 <th width="20%">{{ $t('ui.member.fields.phone') }}</th>
                 <th width="10%">{{ $t('ui.member.fields.role') }}</th>
                 <th width="10%" class="tac">{{ $t('common.status') }}</th>
-                <th width="14%" class="tac" v-if ="this.currentMember.role === 1">{{ $t('common.action') }}</th>
+                <th width="20%">最后一次登录</th>
+                <!-- <th width="14%" class="tac" v-if ="this.currentMember.role === 1">{{ $t('common.action') }}</th> -->
               </tr>
             </thead>
             <tbody>
               <template v-if="filteredMembers.length > 0">
                 <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
-                  <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                  <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span>{{ locales.data.MEMBER_TYPES[member.role-1] }}</span></td>
                   <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ locales.data.MEMBER_STATUS_TYPES[member.status] }}</span></td>
-                  <td class="tac" v-if ="this.currentMember.role === 1">
+                  <td>{{ member.last_auth_time | formatDate}}</td>
+                  <!-- <td class="tac" v-if ="this.currentMember.role === 1">
                     <a href="#" class="hl-red" @click.prevent="deleteMember(member)">{{ $t('common.del') }}</a><a href="#" class="hl-red ml10" @click.prevent="editPwd(member)" v-if="member.role === 2" >修改</a>
-                  </td>
+                  </td> -->
                 </tr>
               </template>
               <tr v-if="filteredMembers.length === 0">

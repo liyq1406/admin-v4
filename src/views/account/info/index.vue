@@ -71,17 +71,19 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
+import { editPasswordMixin } from '../mixins'
 import InfoList from 'components/InfoList'
 import Modal from 'components/Modal'
 import store from 'store'
 import { formatDate } from 'src/filters'
 import api from 'api'
-import _ from 'lodash'
+// import _ from 'lodash'
 
 export default {
   name: 'Info',
 
-  mixins: [globalMixins],
+  // editPasswordMixin提供编辑密码的逻辑
+  mixins: [globalMixins, editPasswordMixin],
 
   store,
 
@@ -98,13 +100,10 @@ export default {
 
   data () {
     return {
-      isShowModal: false, // 是否显示浮层
-      editing: false,
       originModel: {
         oldpassword: '',
         newpassword: ''
       },
-      confirmPassword: '',
       model: {}
     }
   },
@@ -142,28 +141,6 @@ export default {
 
   methods: {
     /**
-     * 修改密码
-     * @author shengzhi
-     */
-    editPwd () {
-      this.isShowModal = true
-      this.confirmPassword = ''
-      this.model = _.clone(this.originModel)
-    },
-
-    /**
-     * 取消修改密码
-     * @author shengzhi
-     */
-    onEditPwdCancel () {
-      this.editing = false
-      this.isShowModal = false
-      this.$nextTick(() => {
-        this.$resetValidation()
-      })
-    },
-
-    /**
      * 提交密码修改
      * @author shengzhi
      */
@@ -184,19 +161,53 @@ export default {
         })
       }
     }
+    // /**
+    //  * 修改密码
+    //  * @author shengzhi
+    //  */
+    // editPwd () {
+    //   this.isShowModal = true
+    //   this.confirmPassword = ''
+    //   this.model = _.clone(this.originModel)
+    // },
+    //
+    // /**
+    //  * 取消修改密码
+    //  * @author shengzhi
+    //  */
+    // onEditPwdCancel () {
+    //   this.editing = false
+    //   this.isShowModal = false
+    //   this.$nextTick(() => {
+    //     this.$resetValidation()
+    //   })
+    // },
+    //
+    // /**
+    //  * 提交密码修改
+    //  * @author shengzhi
+    //  */
+    // onSubmitPwd () {
+    //   if (this.$validation.valid && !this.editing) {
+    //     this.editing = true
+    //     api.corp.memberResetPwd(this.model).then((res) => {
+    //       if (res.status === 200) {
+    //         this.showNotice({
+    //           type: 'success',
+    //           content: this.$t('ui.account.password_msg')
+    //         })
+    //       }
+    //       this.onEditPwdCancel()
+    //     }).catch((res) => {
+    //       this.handleError(res)
+    //       this.editing = false
+    //     })
+    //   }
+    // }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
-
-.account-info
-  padding 30px 40px
-
-  h2
-    font-weight normal
-    font-size 20px
-    margin 0
-    padding-left 8px
+@import '../account-info'
 </style>

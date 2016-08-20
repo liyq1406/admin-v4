@@ -140,7 +140,7 @@ export const USER_FILTERS = [
 export const MEMBER_TYPES = ['管理员', '普通成员']
 
 // 成员状态类型
-export const MEMBER_STATUS_TYPES = ['待激活', '正常', '已停用']
+export const MEMBER_STATUS_TYPES = ['待激活', '启用', '已停用']
 
 // 数据端点类型
 export const DATAPOINT_TYPES = [
