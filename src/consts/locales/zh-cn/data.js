@@ -136,7 +136,7 @@ export const USER_FILTERS = [
 ]
 
 // 成员类型
-export const MEMBER_TYPES = ['管理员', '普通会员']
+export const MEMBER_TYPES = ['管理员', '普通成员']
 
 // 成员状态类型
 export const MEMBER_STATUS_TYPES = ['待激活', '正常', '已停用']

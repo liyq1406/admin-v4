@@ -15,6 +15,8 @@ const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // const DEFAULT_API_SERVER: 'http://localhost:8887',
 // 正式地址
 // const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
+// 灰
+// const DEFAULT_API_SERVER = 'https://api-grey.xlink.cn:443'
 
 // 插件服务器地址
 const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'

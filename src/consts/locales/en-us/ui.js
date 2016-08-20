@@ -682,7 +682,7 @@ export default {
 
   // 成员管理
   member: {
-    search_palceholder: '请输入姓名',
+    search_palceholder: '姓名、邮箱、手机',
     search_label: '查找成员',
     member_list: '成员列表',
     add_member: '添加成员',

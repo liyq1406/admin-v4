@@ -22,7 +22,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <search-box :key.sync="query" :auto="true" :active="searching" :placeholder="$t('ui.member.search_palceholder')" @cancel="cancelSearching" @search-activate="toggleSearching" @search-deactivate="toggleSearching">
-                <label>{{ $t('ui.member.search_label') }}</label>
+                <!-- <label>{{ $t('ui.member.search_label') }}</label> -->
               </search-box>
             </div>
           </div>
@@ -30,8 +30,8 @@
             <thead>
               <tr>
                 <th>{{ $t('ui.member.fields.name') }}</th>
-                <th>{{ $t('ui.member.fields.phone') }}</th>
                 <th>{{ $t('ui.member.fields.email') }}</th>
+                <th>{{ $t('ui.member.fields.phone') }}</th>
                 <th>{{ $t('ui.member.fields.role') }}</th>
                 <!--th 最后一次登录-->
                 <th class="tac">{{ $t('common.status') }}</th>
@@ -42,8 +42,8 @@
               <template v-if="filteredMembers.length > 0">
                 <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><span v-if="member.name.length">{{ member.name }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-                  <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                  <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span>{{ memberTypes[member.role-1] }}</span></td>
                   <!--td 2015-6-3 15:38:53-->
                   <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusTypes[member.status] }}</span></td>
@@ -167,7 +167,7 @@
 
 <script>
   import _ from 'lodash'
-  import Vue from 'vue'
+  // import Vue from 'vue'
   import store from 'store/index'
   import SearchBox from 'components/SearchBox'
   import Modal from 'components/Modal'
@@ -175,7 +175,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Pager from 'components/Pager'
-  import locales from 'consts/locales/index'
+  // import locales from 'consts/locales/index'
   import { globalMixins } from 'src/mixins'
 
   export default {
@@ -229,8 +229,8 @@
         },
         originEditPwdModel: {},
         loadingData: false,
-        memberTypes: locales[Vue.config.lang].data.MEMBER_TYPES,
-        statusTypes: locales[Vue.config.lang].data.MEMBER_STATUS_TYPES,
+        memberTypes: this.locales.data.MEMBER_TYPES,
+        statusTypes: this.locales.data.MEMBER_STATUS_TYPES,
         currentEditMember: {}
       }
     },
@@ -245,11 +245,18 @@
 
     computed: {
       filteredMembers () {
-        var filter = Vue.filter('filterBy')
         if (this.query.length) {
           this.currentPage = 1
         }
-        return filter(this.members, this.query, 'name')
+        return this.members.filter((item) => {
+          console.log(item.email.indexOf(this.query))
+          return item.name.indexOf(this.query) > -1 || item.email.indexOf(this.query) > -1 || item.phone.indexOf(this.query) > -1
+        })
+        // var filter = Vue.filter('filterBy')
+        // if (this.query.length) {
+        //   this.currentPage = 1
+        // }
+        // return filter(this.members, this.query, 'name')
       },
 
       queryCondition () {
