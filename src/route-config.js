@@ -499,6 +499,14 @@ let configRouter = (router) => {
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------
         // -------------------------设置----------------------------
+        // 用户设置
+        'settings/users': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/users'))
+            }, 'admin')
+          }
+        },
         // 邮件模板
         'settings/mail-templates': {
           component (resolve) {
@@ -1032,14 +1040,6 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             }
-          }
-        },
-        // 用户设置
-        'users/settings': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/user/settings'))
-            }, 'admin')
           }
         },
         // 人群画像

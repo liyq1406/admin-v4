@@ -88,6 +88,9 @@ export default {
         type: 'title'
       })
 
+      // 其他固定导航
+      result.subs = result.subs.concat(subs.slice(1, subs.length))
+
       // 插件导航
       this.plugins.forEach((item) => {
         let sub = {
@@ -195,8 +198,6 @@ export default {
         }
       })
 
-      // 其他导航
-      result.subs = result.subs.concat(subs.slice(1, subs.length))
       // console.log(subs.slice(1, subs.length))
       // this.nav.subs.forEach((item, index) => {
       //   var reg = new RegExp(`${result.url}/${item.alias}`, 'i')

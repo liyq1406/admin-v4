@@ -76,17 +76,11 @@ export const MAIN_NAV = {
     }, {
       alias: 'apps', // 应用管理
       icon: 'th',
-      subs: [{
-        alias: 'index',
-        url: '/apps/index'
-      }]
+      url: 'apps/index'
     }, {
       alias: 'market', // 应用市场
-      icon: 'th',
-      subs: [{
-        alias: 'index',
-        url: '/market/index'
-      }]
+      icon: 'shopping-bag',
+      url: 'market/index'
     }, {
       alias: 'nest', // 智能互联
       icon: 'exchange',
@@ -146,6 +140,9 @@ export const MAIN_NAV = {
       alias: 'settings', // 系统设置
       icon: 'cog',
       subs: [{
+        alias: 'users',
+        url: '/settings/users'
+      }, {
         alias: 'mail_templates',
         url: '/settings/mail-templates'
       }]
@@ -183,9 +180,6 @@ export const MAIN_NAV = {
       }, {
         alias: 'major_clients',
         url: '/users/major-clients'
-      }, {
-        alias: 'settings',
-        url: '/users/settings'
       }, {
         alias: 'portrait',
         url: '/users/portrait'

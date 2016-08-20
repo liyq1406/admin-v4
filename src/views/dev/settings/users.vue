@@ -1,11 +1,11 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>{{ $t('ui.user.setting') }}</h2>
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <div class="form mb40 mt30">
+        <div class="form">
           <form v-form name="validation" @submit.prevent="onSubmit">
             <div class="form-row row">
               <label class="checkbox">
