@@ -32,7 +32,7 @@
 
     <!-- 主内容 -->
     <div class="panel no-split-line">
-      <div class="panel-bd apps-container">
+      <div class="panel-bd apps-container" v-show="appList.length>0">
         <!-- 应用列表  -->
         <div class="app-list-box">
           <div class="app" v-for="app in appList" :class="{'selected': app.id === selectedApp.id}" @click="selectApp(app)">
@@ -79,6 +79,17 @@
               </ul>
             </div>
             <component v-if="selectedApp" :is="componentName" :app="selectedApp" @update-curr-app="getApps" transition="view" transition-mode="out-in"></component>
+          </div>
+        </div>
+      </div>
+      <div class="no-product" v-show="appList.length===0">
+        <div class="content">
+          <span>您还没有创建任何应用，请点击“添加应用”立刻开始创建。</span>
+          <div class="btn-box mt10">
+            <button class="btn btn-primary w100" @click="showAddModal=true">
+              <i class="fa fa-plus"></i>
+              添加应用
+            </button>
           </div>
         </div>
       </div>
@@ -364,7 +375,7 @@
           }
         })
         if (!selectedAppInAppList) {
-          this.selectedApp = this.appList[0]
+          this.selectedApp = this.appList[0] || {}
         }
       },
 
@@ -452,6 +463,17 @@
 
   .pointer
     cursor pointer
+
+  .no-product
+    width 100%
+    min-height 200px
+    border 1px solid #ddd
+    text-align center
+    .content
+      display inline-block
+      height 200px
+      margin-top 100px
+      text-align left
   .radio-group-v
     .app-type-radio
       margin-right 0
