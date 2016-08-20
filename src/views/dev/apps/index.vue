@@ -13,7 +13,7 @@
         <div class="filter-group-item" v-if="filterOptions.length">
           <v-select :label="selectedFilter.name" width="110px" size="small">
             <span slot="label">应用类型</span>
-            <select v-model="selectedFilter" @change="changeFilter">
+            <select v-model="selectedFilter" @change="resetSelectedApp">
               <option :value="option" v-for="option in filterOptions">{{ option.name }}</option>
             </select>
           </v-select>
@@ -78,7 +78,7 @@
                 <li :class="{'active': selectedTabIndex-0===2}" @click="selectedTabIndex=2">升级管理</li>
               </ul>
             </div>
-            <component v-if="selectedApp" :is="componentName" :app="selectedApp" transition="view" transition-mode="out-in"></component>
+            <component v-if="selectedApp" :is="componentName" :app="selectedApp" @update-curr-app="getApps" transition="view" transition-mode="out-in"></component>
           </div>
         </div>
       </div>
@@ -329,7 +329,7 @@
             this.apps = _.filter(res.data.list, (item) => {
               return item.type !== 10
             })
-            this.selectedApp = this.appList[0]
+            this.resetSelectedApp()
           }
         })
       },
@@ -338,8 +338,15 @@
        * 过滤条件改变
        * @return {[type]} [description]
        */
-      changeFilter () {
-        if (this.appList.indexOf(this.selectedApp) === -1) {
+      resetSelectedApp () {
+        var selectedAppInAppList = false
+        this.appList.forEach((item) => {
+          if (item.id === this.selectedApp.id) {
+            selectedAppInAppList = true
+            this.selectedApp = item
+          }
+        })
+        if (!selectedAppInAppList) {
           this.selectedApp = this.appList[0]
         }
       },

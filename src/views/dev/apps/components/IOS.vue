@@ -153,7 +153,8 @@
           if (result === true) {
             api.plugin.remove(this.currApp.id).then((res) => {
               if (res.status === 200) {
-                this.removePlugin(this.currApp)
+                this.$emit('update-curr-app')
+                // this.removePlugin(this.currApp)
                 // this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {
@@ -167,7 +168,8 @@
           this.editing = true
           api.plugin.update(this.currApp.id, this.model).then((res) => {
             if (res.status === 200) {
-              this.updatePlugin(res.data)
+              // this.updatePlugin(res.data)
+              this.$emit('update-curr-app')
               // this.$route.router.go('/plugins/customize')
             }
           }).catch((res) => {
