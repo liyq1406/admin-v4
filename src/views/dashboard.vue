@@ -23,8 +23,8 @@
               </div>
               <div class="text-box">
                 <div class="line msg">
-                  <span class="name">{{product.name}}</span>
-                  <span class="product-id">({{product.id}})</span>
+                  <a class="name" v-link="{'path': '/dev/products/' + product.id + '/info'}">{{product.name}}</a>
+                  <!-- <span class="product-id">({{product.id}})</span> -->
                 </div>
                 <div class="info">
                   <span>授权：{{product['授权'] || 0}}</span>
