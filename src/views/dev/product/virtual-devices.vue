@@ -45,25 +45,25 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="n in 5">
-                    <td class="w50">{{n}}</td>
-                    <td class="w80">power</td>
+                  <tr v-for="datapoint in datapointList">
+                    <td class="w50">{{ datapoint.index }}</td>
+                    <td class="w80">{{ datapoint.name }}</td>
                     <td class="value-td">
                       <div class="input-box">
-                        <div class="number-box" v-show="n===1">
-                          <range :line-width="'95%'"></range>
+                        <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
+                          <range v-if="dataPointType(datapoint.type) === 'number'" :line-width="'95%'" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :prototype="datapoint" @changed="setRangeValue"></range>
                         </div>
-                        <div class="range-box" v-show="n===2">
+                        <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index">on
+                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index">off
+                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
                           </label>
                         </div>
-                        <div class="number-box" v-show="n===3">
+                        <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm">
+                            <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                           </div>
                         </div>
                       </div>
@@ -151,6 +151,8 @@ import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
 import Range from 'components/Range'
 import Switch from 'components/Switch'
+import api from 'api'
+import _ from 'lodash'
 
 export default {
   name: 'VirtualDevices',
@@ -166,6 +168,7 @@ export default {
     // 'c-table': Table,
     // Statistic
   },
+
   data () {
     return {
       logs: [
@@ -176,10 +179,24 @@ export default {
       ],
       showLog: false,
       connect: false,
-      hideDownLoad: false
+      hideDownLoad: false,
+      datapoints: [],
+      datapointValues: {}
     }
   },
+
   computed: {
+    datapointList () {
+      let result = []
+      this.datapoints.forEach((item) => {
+        let dp = _.cloneDeep(item)
+        if (this.datapointValues.hasOwnProperty(item.index)) {
+          dp.value = this.datapointValues[item.index]
+        }
+        result.push(dp)
+      })
+      return _.orderBy(result, ['index'], ['asc'])
+    },
     tableClass () {
       if (this.hideDownLoad) {
         return 'col-16'
@@ -195,9 +212,57 @@ export default {
       }
     }
   },
+
+  route: {
+    data () {
+      this.getDatapoints()
+    }
+  },
   methods: {
+    /**
+     * 获取数据端点列表
+     * @return {[type]} [description]
+     */
+    getDatapoints () {
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.datapoints = res.data
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     switchRightPanel () {
       this.hideDownLoad = !this.hideDownLoad
+    },
+
+    /**
+     * 计算当前类型
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
+    dataPointType (type) {
+      var result = ''
+      switch (type) {
+        case 1:
+          result = 'boolean'
+          break
+        case 2:
+        case 3:
+        case 4:
+          result = 'number'
+          break
+        case 6:
+        case 7:
+          result = 'string'
+          break
+        case 8:
+        case 9:
+          result = 'number'
+          break
+        default:
+      }
+      return result
     }
   }
 }

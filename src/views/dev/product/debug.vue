@@ -348,8 +348,6 @@ export default {
     },
     // 获取数据端点列表
     getDatapoints () {
-      console.log('获取数据端点列表')
-      console.log(this.$route.params.id)
       api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
           this.datapoints = res.data

@@ -82,8 +82,8 @@
               </div>
               <div class="text-box">
                 <div class="line msg">
-                  <span class="name">{{product.name}}</span>
-                  <span class="product-id">({{product.id}})</span>
+                  <a class="name" v-link="{'path': '/dev/products/' + product.id + '/info'}">{{product.name}}</a>
+                  <!-- <span class="product-id">({{product.id}})</span> -->
                 </div>
                 <div class="info">
                   <span>设备数：{{product['total']}}</span>

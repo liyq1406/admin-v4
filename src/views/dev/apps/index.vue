@@ -41,7 +41,7 @@
             </div>
             <div class="app-type">
               <span class="type">{{computedAppType(app.type)}}</span>
-              <span class="ml5">版本号</span>
+              <span class="ml5" v-show="false">版本号</span>
             </div>
           </div>
         </div>
@@ -65,7 +65,7 @@
                 <span>创建时间：</span>
                 <span>{{formatDate(selectedApp.create_time)}}</span>
               </div>
-              <div class="msg-box secret-box fr" @click="showSecret">
+              <div class="msg-box secret-box fr pointer" @click="showSecret">
                 <span class="hl-red">Access Key Secret</span>
               </div>
             </div>
@@ -450,6 +450,8 @@
     opacity 0
     transform translate3d(10px, 0, 0)
 
+  .pointer
+    cursor pointer
   .radio-group-v
     .app-type-radio
       margin-right 0
