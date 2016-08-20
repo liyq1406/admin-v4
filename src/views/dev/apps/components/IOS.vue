@@ -168,9 +168,12 @@
           this.editing = true
           api.plugin.update(this.currApp.id, this.model).then((res) => {
             if (res.status === 200) {
-              // this.updatePlugin(res.data)
+              this.showNotice({
+                type: 'success',
+                content: '配置成功'
+              })
               this.$emit('update-curr-app')
-              // this.$route.router.go('/plugins/customize')
+              this.editing = false
             }
           }).catch((res) => {
             this.handleError(res)

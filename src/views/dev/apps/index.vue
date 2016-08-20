@@ -3,7 +3,7 @@
     <!-- 标题 -->
     <div class="main-title">
       <div class="title-wrap">
-        <h2>应用中心</h2>
+        <h2>应用管理</h2>
       </div>
     </div>
 
@@ -35,7 +35,7 @@
       <div class="panel-bd apps-container">
         <!-- 应用列表  -->
         <div class="app-list-box">
-          <div class="app" v-for="app in appList" :class="{'selected': app.id === selectedApp.id}" @click="selectedApp=app">
+          <div class="app" v-for="app in appList" :class="{'selected': app.id === selectedApp.id}" @click="selectApp(app)">
             <div class="app-name">
               <span>{{app.name}}</span>
             </div>
@@ -75,7 +75,7 @@
             <div class="tab-s2 tab-s2-full mb5">
               <ul>
                 <li :class="{'active': selectedTabIndex-0===1}" @click="selectedTabIndex=1">应用配置</li>
-                <li :class="{'active': selectedTabIndex-0===2}" @click="selectedTabIndex=2">升级管理</li>
+                <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===2" @click="selectedTabIndex=2">升级管理</li>
               </ul>
             </div>
             <component v-if="selectedApp" :is="componentName" :app="selectedApp" @update-curr-app="getApps" transition="view" transition-mode="out-in"></component>
@@ -307,8 +307,23 @@
       this.init()
     },
     methods: {
+      /**
+       * 初始化
+       * @return {[type]} [description]
+       */
       init () {
         this.selectedFilter = this.filterOptions[0]
+      },
+      /**
+       * 选中某个app
+       * @param  {[type]} app [description]
+       * @return {[type]}     [description]
+       */
+      selectApp (app) {
+        if (app.type !== this.selectedApp.type) {
+          this.selectedTabIndex = 1
+        }
+        this.selectedApp = app
       },
       /**
        * 显示密钥
@@ -329,13 +344,15 @@
             this.apps = _.filter(res.data.list, (item) => {
               return item.type !== 10
             })
-            this.resetSelectedApp()
+            setTimeout(() => {
+              this.resetSelectedApp()
+            }, 300)
           }
         })
       },
 
       /**
-       * 过滤条件改变
+       * 重置当前app
        * @return {[type]} [description]
        */
       resetSelectedApp () {
