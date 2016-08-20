@@ -1,5 +1,6 @@
 <template>
   <div class="promote">
+    <pre>{{app | json}}</pre>
     <div class="btn-box mt20">
       <button class="btn btn-primary w100">添加升级任务</button>
     </div>
@@ -34,7 +35,7 @@
       Modal
     },
 
-    prop: {
+    props: {
       app: {
         type: Object,
         default () {
@@ -42,6 +43,7 @@
         }
       }
     },
+
     data () {
       return {
       }

@@ -78,10 +78,7 @@
                 <li :class="{'active': selectedTabIndex-0===2}" @click="selectedTabIndex=2">升级管理</li>
               </ul>
             </div>
-            <!-- 应用配置 -->
-            <configure v-show="selectedTabIndex-0===1" :app="selectedApp"></configure>
-            <!-- 升级管理 -->
-            <promote v-show="selectedTabIndex===2"></promote>
+            <component v-if="selectedApp" :is="componentName" :app="selectedApp" transition="view" transition-mode="out-in"></component>
           </div>
         </div>
       </div>
@@ -142,7 +139,10 @@
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import { pluginFactoryMixin } from './mixins'
   import { formatDate } from 'src/filters'
-  import Configure from './components/Configure'
+  import Ios from './components/IOS'
+  import Android from './components/Android'
+  import Web from './components/Web'
+  import Wechat from './components/Wechat'
   import Promote from './components/Promote'
   import Modal from 'components/Modal'
   import _ from 'lodash'
@@ -165,7 +165,10 @@
     components: {
       'v-select': Select,
       Modal,
-      Configure,
+      Ios,
+      Android,
+      Web,
+      Wechat,
       Promote
     },
 
@@ -229,27 +232,55 @@
         selectedApp: {},
         // 应用列表
         apps: [
-          {
-            id: '2e07d2ad3c33aa00',
-            name: 'test',
-            create_time: '2016-01-19T19:26:57.00Z',
-            enable: false,
-            config: {
-              apn: {
-              },
-              secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
-              type: 1,
-              plugin: 'ios'
-            },
-            secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
-            type: 1,
-            plugin: 'ios'
-          }
+          // {
+          //   id: '2e07d2ad3c33aa00',
+          //   name: 'test',
+          //   create_time: '2016-01-19T19:26:57.00Z',
+          //   enable: false,
+          //   config: {
+          //     apn: {
+          //     },
+          //     secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
+          //     type: 1,
+          //     plugin: 'ios'
+          //   },
+          //   secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
+          //   type: 1,
+          //   plugin: 'ios'
+          // }
         ]
       }
     },
 
     computed: {
+      /**
+       * 计算组件名字
+       * @return {[type]} [description]
+       */
+      componentName () {
+        var result = ''
+        if (this.selectedTabIndex === 1) {
+          switch (this.selectedApp.type) {
+            case 1:
+              result = 'ios'
+              break
+            case 2:
+              result = 'android'
+              break
+            case 3:
+              result = 'web'
+              break
+            case 4:
+              result = 'wechat'
+              break
+            default:
+              break
+          }
+        } else {
+          result = 'promote'
+        }
+        return result
+      },
       /**
        * 过滤后的应用列表
        * @return {[type]} [description]
@@ -278,14 +309,12 @@
     methods: {
       init () {
         this.selectedFilter = this.filterOptions[0]
-        this.selectedApp = this.appList[0]
       },
       /**
        * 显示密钥
        * @return {[type]} [description]
        */
       showSecret () {
-        console.log('显示密钥')
         this.showSecretModal = true
       },
       /**
@@ -295,12 +324,12 @@
       getApps () {
         this.loadingData = true
         api.plugin.all().then((res) => {
-          console.log(res)
           if (res.status === 200) {
             this.loadingData = false
             this.apps = _.filter(res.data.list, (item) => {
               return item.type !== 10
             })
+            this.selectedApp = this.appList[0]
           }
         })
       },
@@ -320,23 +349,22 @@
        * @return {[type]} [description]
        */
       onAddSubmit () {
-        this.adding = true
         console.log('表单提交')
-        if (false) {
-          if (this.addModel.type === 1) { // iOS应用
-            this.addModel.plugin = 'ios'
-          } else if (this.addModel.type === 2) { // 安卓应用
-            this.addModel.plugin = 'android'
-          } else if (this.addModel.type === 3) { // web应用
-            this.addModel.plugin = 'web'
-          } else if (this.addModel.type === 4) { // 微信应用
-            this.addModel.plugin = 'wechat'
+        if (true) {
+          if (this.addModal.type === 1) { // iOS应用
+            this.addModal.plugin = 'ios'
+          } else if (this.addModal.type === 2) { // 安卓应用
+            this.addModal.plugin = 'android'
+          } else if (this.addModal.type === 3) { // web应用
+            this.addModal.plugin = 'web'
+          } else if (this.addModal.type === 4) { // 微信应用
+            this.addModal.plugin = 'wechat'
           }
           this.adding = true
-          api.plugin.create(this.addModel).then((res) => {
+          api.plugin.create(this.addModal).then((res) => {
             if (res.status === 200) {
               this.createPlugin(res.data)
-              this.resetAdd()
+              this.onAddCancel()
               this.getApps()
             }
           }).catch((res) => {
@@ -344,9 +372,9 @@
             this.adding = false
           })
         }
-        setTimeout(() => {
-          this.onAddCancel()
-        }, 2000)
+        // setTimeout(() => {
+        //   this.onAddCancel()
+        // }, 2000)
       },
       /**
        * 添加浮层的取消事件
@@ -354,6 +382,7 @@
        */
       onAddCancel () {
         this.showAddModal = false
+        this.adding = false
         this.addModal = {
           name: '',
           type: 1
@@ -386,7 +415,16 @@
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../assets/stylus/common'
+  @import '../../../assets/stylus/common'
+
+  // 视图淡入淡出
+  .view-transition
+    transition transform .3s ease-in-out, opacity .3s ease-in-out
+
+  .view-enter
+  .view-leave
+    opacity 0
+    transform translate3d(10px, 0, 0)
 
   .radio-group-v
     .app-type-radio

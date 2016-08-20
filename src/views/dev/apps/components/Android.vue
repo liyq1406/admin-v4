@@ -3,14 +3,14 @@
   <div class="form configure">
     <form novalidate class="clearfix">
 
-      <!-- <pre> {{ app | json }} </pre> -->
+      <pre> {{ app | json }} </pre>
       <div class="form-row row">
         <label class="form-control col-7">
           应用名称:
         </label>
         <div class="controls col-17">
           <div class="input-text-wrap" v-placeholder="'请填写应用名称'">
-            <input type="text" class="input-text">
+            <input type="text" class="input-text" :name="app.name" v-model="app.name">
           </div>
         </div>
       </div>
