@@ -131,16 +131,17 @@ export const MAIN_NAV = {
         alias: 'snapshots',
         url: '/data/snapshots'
       }]
-    }, {
-      alias: 'shopping', // 在线购买
-      icon: 'shopping-cart',
-      subs: [{
-        alias: 'cart',
-        url: '/shopping/cart'
-      }, {
-        alias: 'orders',
-        url: '/shopping/orders'
-      }]
+    // 暂时隐藏
+    // }, {
+    //   alias: 'shopping', // 在线购买
+    //   icon: 'shopping-cart',
+    //   subs: [{
+    //     alias: 'cart',
+    //     url: '/shopping/cart'
+    //   }, {
+    //     alias: 'orders',
+    //     url: '/shopping/orders'
+    //   }]
     }, {
       alias: 'settings', // 系统设置
       icon: 'cog',
@@ -188,9 +189,10 @@ export const MAIN_NAV = {
       }, {
         alias: 'portrait',
         url: '/users/portrait'
-      }, {
-        alias: 'analysis',
-        url: '/users/analysis'
+      // 暂时隐藏
+      // }, {
+      //   alias: 'analysis',
+      //   url: '/users/analysis'
       }]
     }]
   }

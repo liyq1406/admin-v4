@@ -134,8 +134,8 @@ export default {
         warranty: {
           subs: {
             overview: '概览',
-            extended_warranties: '延保工单',
-            repair: '维修工单',
+            extended_warranties: '故障事件',
+            repair: '维保记录',
             accounts: '网点管理',
             heat: '热力分布'
           }

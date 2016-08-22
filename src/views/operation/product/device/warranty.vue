@@ -67,22 +67,22 @@
         ],
         loadingData: false,
         workOrders: [
-          {
-            id: '45a6dsa5sd46a',
-            name: '王工',
-            product_name: '空调',
-            product_type: 'd41a231a45s6',
-            extended_days: '2016-03-03',
-            status: 0
-          },
-          {
-            id: 'sd4f654s5fs23',
-            name: '张盛志',
-            product_name: '空气净化器',
-            product_type: 'a45s6d41a231',
-            extended_days: '2016-03-03',
-            status: 0
-          }
+          // {
+          //   id: '45a6dsa5sd46a',
+          //   name: '王工',
+          //   product_name: '空调',
+          //   product_type: 'd41a231a45s6',
+          //   extended_days: '2016-03-03',
+          //   status: 0
+          // },
+          // {
+          //   id: 'sd4f654s5fs23',
+          //   name: '张盛志',
+          //   product_name: '空气净化器',
+          //   product_type: 'a45s6d41a231',
+          //   extended_days: '2016-03-03',
+          //   status: 0
+          // }
         ],
         headers: [
           {

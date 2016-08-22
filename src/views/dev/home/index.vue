@@ -1,30 +1,26 @@
 <template>
-  <div class="main">
-    <!-- 标题 -->
-    <div class="main-title">
-      <div class="title-wrap">
-        <h2>应用管理</h2>
+  <div class="main home">
+    <div class="part1 ">
+      <!-- 大屏幕 -->
+      <jumbotron></jumbotron>
+    </div>
+    <div class="part2 mt30">
+      <div class="develop-box">
+        <!-- 开发指南 -->
+        <Guide></Guide>
+      </div>
+      <div class="notice-box">
+        <notice></notice>
       </div>
     </div>
-
-
   </div>
 </template>
 
 <script>
-  // import api from 'api'
-  // import Select from 'components/Select'
-  // import { globalMixins } from 'src/mixins'
-  // import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  // import { pluginFactoryMixin } from './mixins'
-  // import { formatDate } from 'src/filters'
-  // import Ios from './components/IOS'
-  // import Android from './components/Android'
-  // import Web from './components/Web'
-  // import Wechat from './components/Wechat'
-  // import Promote from './components/Promote'
-  // import Modal from 'components/Modal'
-  // import _ from 'lodash'
+  import Jumbotron from './components/Jumbotron'
+  import Guide from './components/Guide'
+  import Notice from './components/Notice'
+  import Footer from 'components/Footer'
 
   export default {
     name: 'home',
@@ -42,26 +38,33 @@
     // },
 
     components: {
-    },
-
-    data () {
-      return {}
-    },
-
-    computed: {},
-
-    route: {
-      data () {
-      }
-    },
-
-    ready () {
-    },
-    methods: {}
+      Jumbotron,
+      Guide,
+      Notice,
+      'x-footer': Footer
+    }
   }
 </script>
 
 <style lang="stylus" scoped>
   @import '../../../assets/stylus/common'
 
+  .home
+    width 100%
+    padding 20px 15px
+    box-sizing border-box
+    .part2
+      width 100%
+      position relative
+      padding-right 330px
+      box-sizing border-box
+      .develop-box
+        width 100%
+        min-height 430px
+      .notice-box
+        position absolute
+        right 0
+        top 0
+        width 310px
+        height 400px
 </style>

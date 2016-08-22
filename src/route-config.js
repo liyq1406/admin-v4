@@ -501,11 +501,27 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 数据快照
+        // 数据快照详情
         'data/snapshots/:product_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/snapshot/details'))
+            }, 'admin')
+          }
+        },
+        // 添加数据快照
+        'data/snapshot/create': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/snapshot/create'))
+            }, 'admin')
+          }
+        },
+        // 编辑数据快照
+        'data/snapshot/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/snapshot/edit'))
             }, 'admin')
           }
         },

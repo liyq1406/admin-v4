@@ -15,10 +15,10 @@
       <div class="row">
         <div class="col-offset-12 col-12 row">
           <div class="col-12">
-            <statistic :info="today" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+            <statistic :info="today" title="" tooltip="今日增长" color="green" :inline="true"></statistic>
           </div>
           <div class="col-12">
-            <statistic :info="avg" :title="period+'天平均增长'" :tooltip="period+'天平均增长'" color="orange" :inline="true"></statistic>
+            <statistic :info="avg" :title="" :tooltip="period+'天平均增长'" color="orange" :inline="true"></statistic>
           </div>
         </div>
       </div>

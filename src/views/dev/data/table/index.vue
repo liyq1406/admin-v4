@@ -98,7 +98,7 @@
               <template v-if="tables.length > 0">
                 <tr v-for="table in tables | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
-                  <td><span>{{ tableTypes[table.type-1] }}</span></td>
+                  <td><span>{{ locales.data.TABLE_TYPES[table.type-1] }}</span></td>
                   <td class="tac">
                     <button @click="editTable(table)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                   </td>
@@ -145,9 +145,9 @@
             </label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :label="tableTypes[addModal.model.type-1]">
+                <v-select :label="locales.data.TABLE_TYPES[addModal.model.type-1]">
                   <select v-model="addModal.model.type" v-form-ctrl name="type" number>
-                    <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
               </div>
@@ -159,7 +159,7 @@
             </label>
             <div class="controls col-18">
               <div class="checkbox-group">
-                <label v-for="type in permissionTypes" class="checkbox">
+                <label v-for="type in locales.data.TABLE_PERMISSION_TYPES" class="checkbox">
                   <input type="checkbox" v-model="addModal.model.permission" name="permission" :value="type.value"/>{{ type.label }}
                 </label>
               </div>
@@ -180,7 +180,7 @@
                   <div class="ml10">
                     <v-select :label="getTypeLabelByValue(field.value)" size="small">
                       <select v-model="field.value">
-                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                        <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                       </select>
                     </v-select>
                   </div>
@@ -220,9 +220,9 @@
             </label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :label="tableTypes[editModal.model.type-1]">
+                <v-select :label="locales.data.TABLE_TYPES[editModal.model.type-1]">
                   <select v-model="editModal.model.type" v-form-ctrl name="type" number>
-                    <option v-for="type in tableTypes" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                    <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
                 </v-select>
               </div>
@@ -232,7 +232,7 @@
             <label class="form-control col-6">{{ $t("ui.table.fields.permission") }}:</label>
             <div class="controls col-18">
               <div class="checkbox-group">
-                <label v-for="type in permissionTypes" class="checkbox">
+                <label v-for="type in locales.data.TABLE_PERMISSION_TYPES" class="checkbox">
                   <input type="checkbox" v-model="editModal.model.permission" name="permission" :value="type.value"/>{{ type.label }}
                 </label>
               </div>
@@ -251,7 +251,7 @@
                   <div class="ml10">
                     <v-select :label="getTypeLabelByValue(field.value)" size="small">
                       <select v-model="field.value">
-                        <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                        <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                       </select>
                     </v-select>
                   </div>
@@ -292,7 +292,7 @@
             <div class="controls col-18">
               <v-select :label="getTypeLabelByValue(addColumnModal.type)">
                 <select v-model="addColumnModal.type">
-                  <option v-for="type in fieldTypes" :value="type.value">{{ type.label }}</option>
+                  <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                 </select>
               </v-select>
             </div>
@@ -382,7 +382,7 @@
         <form @submit.prevent="jurisdictionModalConfirm">
           <div class="form-row row">
             <div class="checkbox-group">
-              <label v-for="type in permissionTypes" class="checkbox">
+              <label v-for="type in locales.data.TABLE_PERMISSION_TYPES" class="checkbox">
                 <input type="checkbox" v-model="jurisdictionModal.modal[type.value]"/>{{ type.label }}
               </label>
             </div>
@@ -473,1165 +473,1157 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  import api from 'api'
-  import * as config from 'consts/config'
-  import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
-  import IntelligentTable from 'components/IntelligentTable'
-  import DatePicker from 'components/DatePicker'
-  import TimePicker from 'components/TimePicker2'
-  import Select from 'components/Select'
-  import locales from 'consts/locales/index'
-  import _ from 'lodash'
-  import { globalMixins } from 'src/mixins'
+import api from 'api'
+import * as config from 'consts/config'
+import Pager from 'components/Pager'
+import Modal from 'components/Modal'
+import IntelligentTable from 'components/IntelligentTable'
+import DatePicker from 'components/DatePicker'
+import TimePicker from 'components/TimePicker2'
+import Select from 'components/Select'
+import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
 
-  export default {
-    name: 'DataTables',
+export default {
+  name: 'DataTables',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    components: {
-      'intelligent-table': IntelligentTable,
-      'date-picker': DatePicker,
-      'time-picker': TimePicker,
-      'modal': Modal,
-      'pager': Pager,
-      'v-select': Select
-    },
+  components: {
+    'intelligent-table': IntelligentTable,
+    'date-picker': DatePicker,
+    'time-picker': TimePicker,
+    'modal': Modal,
+    'pager': Pager,
+    'v-select': Select
+  },
 
-    data () {
-      return {
-        // 大分类
-        dataFirClassList: [
-          // {
-          //   name: '分类1',
-          //   selected: true
-          // },
-          // {
-          //   name: '分类2',
-          //   selected: false
-          // },
-          // {
-          //   name: '分类3',
-          //   selected: false
-          // }
-        ],
-        // 当前是否正在筛选列表
-        isSelecting: true,
-        // 已选择的行
-        selectedLine: [],
-        // 表格头部
-        vHeaders: [
-        ],
-        // 默认表格头部
-        baseVHeaders: [
-          {
-            key: 'objectId',
-            title: 'ID',
-            class: 'nowrap'
-          },
-          {
-            key: 'createAt',
-            title: '创建时间',
-            class: 'nowrap'
-          },
-          {
-            key: 'updateAt',
-            title: '更新时间',
-            class: 'nowrap'
-          },
-          {
-            key: 'creator',
-            title: '创建者',
-            class: 'tac nowrap'
-          }
-          // {
-          //   key: 'operation',
-          //   title: '操作',
-          //   class: 'tac',
-          //   functionName: 'showEditModal'
-          // }
-        ],
-        // 表格内容
-        vTables: [
-          // {
-          //   id: '<a>idididid</a>',
-          //   creatTime: '123',
-          //   updateTime: '更新时间',
-          //   creater: '创建者',
-          //   operation: '<a>编辑</a>',
-          //   tableName: '分类1'
-          // },
-          // {
-          //   id: 'idididid',
-          //   creatTime: '创建时间',
-          //   updateTime: '更新时间',
-          //   creater: '创建者',
-          //   operation: '<a>编辑</a>',
-          //   tableName: '分类1'
-          // }
-        ],
-
-        // 添加列浮层
-        addColumnModal: {
-          show: false,
-          content: '',
-          type: 'string'
+  data () {
+    return {
+      // 大分类
+      dataFirClassList: [
+        // {
+        //   name: '分类1',
+        //   selected: true
+        // },
+        // {
+        //   name: '分类2',
+        //   selected: false
+        // },
+        // {
+        //   name: '分类3',
+        //   selected: false
+        // }
+      ],
+      // 当前是否正在筛选列表
+      isSelecting: true,
+      // 已选择的行
+      selectedLine: [],
+      // 表格头部
+      vHeaders: [
+      ],
+      // 默认表格头部
+      baseVHeaders: [
+        {
+          key: 'objectId',
+          title: 'ID',
+          class: 'nowrap'
         },
+        {
+          key: 'createAt',
+          title: '创建时间',
+          class: 'nowrap'
+        },
+        {
+          key: 'updateAt',
+          title: '更新时间',
+          class: 'nowrap'
+        },
+        {
+          key: 'creator',
+          title: '创建者',
+          class: 'tac nowrap'
+        }
+        // {
+        //   key: 'operation',
+        //   title: '操作',
+        //   class: 'tac',
+        //   functionName: 'showEditModal'
+        // }
+      ],
+      // 表格内容
+      vTables: [
+        // {
+        //   id: '<a>idididid</a>',
+        //   creatTime: '123',
+        //   updateTime: '更新时间',
+        //   creater: '创建者',
+        //   operation: '<a>编辑</a>',
+        //   tableName: '分类1'
+        // },
+        // {
+        //   id: 'idididid',
+        //   creatTime: '创建时间',
+        //   updateTime: '更新时间',
+        //   creater: '创建者',
+        //   operation: '<a>编辑</a>',
+        //   tableName: '分类1'
+        // }
+      ],
 
-        // 删除列浮层
-        delColumnModal: {
-          show: false,
-          selectedColumn: ''
-        },
-        // 筛选浮层
-        filterModal: {
-          show: false,
-          condition: {
-            selectedCondition: '>',
-            conditionList: ['>', '<', '>=', '<='],
-            value: ''
-          },
-          modal: {
-            key: 'id',
-            title: ''
-          }
-        },
-        // 限权设置浮层
-        jurisdictionModal: {
-          show: false,
-          modal: {
-            find: false,
-            update: false,
-            delete: false,
-            get: false,
-            create: false
-          }
-        },
-        // 编辑用户自定义列的内容浮层
-        userEditColumnModal: {
-          show: false,
-          columnName: '提示',
-          fieldType: 'string',
+      // 添加列浮层
+      addColumnModal: {
+        show: false,
+        content: '',
+        type: 'string'
+      },
+
+      // 删除列浮层
+      delColumnModal: {
+        show: false,
+        selectedColumn: ''
+      },
+      // 筛选浮层
+      filterModal: {
+        show: false,
+        condition: {
+          selectedCondition: '>',
+          conditionList: ['>', '<', '>=', '<='],
           value: ''
         },
-        // 编辑用户自定义列的内容浮层验证器
-        userEditColumnModalValidation: {},
-        // 存放时间控件的临时日期和时间
-        datePicker: {
-          date: '2016-06-06',
-          time: '00:00:00'
-        },
-        // 提示浮层
-        confirmModal: {
-          show: false,
-          title: '提示',
-          content: ''
-        },
-        // 后端返回的数据全部放在table里面
-        tables: [],
-        // 限权种类
-        permissionTypes: locales[Vue.config.lang].data.TABLE_PERMISSION_TYPES,
-        // 表格种类
-        tableTypes: locales[Vue.config.lang].data.TABLE_TYPES,
-        // 列种类
-        fieldTypes: locales[Vue.config.lang].data.TABLE_FIELD_TYPES,
-        // 数据表详情基本表头
-        // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
-        currentPage: 1,
-        countPerPage: config.COUNT_PER_PAGE,
-        addModal: {
-          show: false,
-          model: {
-            name: '',
-            type: 1,
-            permission: [],
-            field: {}
-          },
-          fields: []
-        },
-        editModal: {
-          show: false,
-          model: {},
-          fields: []
-        },
-        originAddModel: {
+        modal: {
+          key: 'id',
+          title: ''
+        }
+      },
+      // 限权设置浮层
+      jurisdictionModal: {
+        show: false,
+        modal: {
+          find: false,
+          update: false,
+          delete: false,
+          get: false,
+          create: false
+        }
+      },
+      // 编辑用户自定义列的内容浮层
+      userEditColumnModal: {
+        show: false,
+        columnName: '提示',
+        fieldType: 'string',
+        value: ''
+      },
+      // 编辑用户自定义列的内容浮层验证器
+      userEditColumnModalValidation: {},
+      // 存放时间控件的临时日期和时间
+      datePicker: {
+        date: '2016-06-06',
+        time: '00:00:00'
+      },
+      // 提示浮层
+      confirmModal: {
+        show: false,
+        title: '提示',
+        content: ''
+      },
+      // 后端返回的数据全部放在table里面
+      tables: [],
+      // 数据表详情基本表头
+      // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      addModal: {
+        show: false,
+        model: {
           name: '',
           type: 1,
           permission: [],
           field: {}
         },
-        originEditModel: {},
-        addValidation: {},
-        editValidation: {},
-        delChecked: false,
-        adding: false,
-        editing: false,
-        loadingData: false
-      }
+        fields: []
+      },
+      editModal: {
+        show: false,
+        model: {},
+        fields: []
+      },
+      originAddModel: {
+        name: '',
+        type: 1,
+        permission: [],
+        field: {}
+      },
+      originEditModel: {},
+      addValidation: {},
+      editValidation: {},
+      delChecked: false,
+      adding: false,
+      editing: false,
+      loadingData: false
+    }
+  },
+
+  computed: {
+    // 用户自己添加进去的字段
+    addListKeys () {
+      var result = []
+      var noUserKey = []
+      this.baseVHeaders.map((baseVHeader) => {
+        noUserKey.push(baseVHeader.key)
+      })
+      this.vHeaders.map((vHeader) => {
+        if (noUserKey.indexOf(vHeader.key) === -1) {
+          result.push(vHeader)
+        }
+      })
+      return result
+    },
+    /**
+     * 已经选择的大类
+     * @return {[type]} [description]
+     */
+    selectedFirstClass () {
+      var selectedFirstClass = {}
+      this.dataFirClassList.map((item) => {
+        if (item.selected) {
+          selectedFirstClass = item
+        }
+      })
+      return selectedFirstClass
+    },
+    /**
+     * 已经选择的数据表
+     * @return {[type]} [description]
+     */
+    selectedTable () {
+      var selectedTable = {}
+      this.tables.map((item) => {
+        if (item.name === this.selectedFirstClass.name) {
+          selectedTable = item
+        }
+      })
+      return selectedTable
+    },
+    // 是否可以在添加浮层里面创建字段
+    canCreateAddFields () {
+      var names = _.uniq(_.compact(_.map(this.addModal.fields, 'name')))
+      return names.length === this.addModal.fields.length
     },
 
-    computed: {
-      // 用户自己添加进去的字段
-      addListKeys () {
-        var result = []
-        var noUserKey = []
-        this.baseVHeaders.map((baseVHeader) => {
-          noUserKey.push(baseVHeader.key)
-        })
-        this.vHeaders.map((vHeader) => {
-          if (noUserKey.indexOf(vHeader.key) === -1) {
-            result.push(vHeader)
-          }
-        })
-        return result
-      },
-      /**
-       * 已经选择的大类
-       * @return {[type]} [description]
-       */
-      selectedFirstClass () {
-        var selectedFirstClass = {}
-        this.dataFirClassList.map((item) => {
-          if (item.selected) {
-            selectedFirstClass = item
-          }
-        })
-        return selectedFirstClass
-      },
-      /**
-       * 已经选择的数据表
-       * @return {[type]} [description]
-       */
-      selectedTable () {
-        var selectedTable = {}
-        this.tables.map((item) => {
-          if (item.name === this.selectedFirstClass.name) {
-            selectedTable = item
-          }
-        })
-        return selectedTable
-      },
-      // 是否可以在添加浮层里面创建字段
-      canCreateAddFields () {
-        var names = _.uniq(_.compact(_.map(this.addModal.fields, 'name')))
-        return names.length === this.addModal.fields.length
-      },
+    // 是否可以在编辑浮层里面创建字段
+    canCreateEditFields () {
+      var names = _.uniq(_.compact(_.map(this.editModal.fields, 'name')))
+      return names.length === this.editModal.fields.length
+    }
+  },
 
-      // 是否可以在编辑浮层里面创建字段
-      canCreateEditFields () {
-        var names = _.uniq(_.compact(_.map(this.editModal.fields, 'name')))
-        return names.length === this.editModal.fields.length
-      }
-    },
+  route: {
+    data () {
+      this.getTables()
+    }
+  },
 
-    route: {
-      data () {
-        this.getTables()
-      }
-    },
-
-    methods: {
-      /**
-       * 获取数据表数据以及更新数据表
-       * @param  {[type]} tableName 表名
-       * @param  {[type]} params     过滤参数
-       * @return {[type]}            [description]
-       */
-      getTableData (tableName, params, type) {
-        this.loadingData = true
-        if (type === 3) {
-          // console.log('数据表逻辑')
-          api.dataTable.queryAppData(tableName, params).then((res) => {
-            this.initTableHeader(type) // 根据当前已选择的大类初始化表格头部
-            let jsonTables = JSON.stringify(res.data.list)
-            // 将返回的数据里面的日期格式的内容转化为普通的日期格式
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            result = result.replace(/_id/g, 'objectId')
-            this.vTables = JSON.parse(result)
-            this.loadingData = true
-          }).catch((res) => {
-            this.handleError(res)
-            this.loadingData = false
-          })
-        } else {
-          api.dataTable.queryData(tableName, params).then((res) => {
-            this.initTableHeader() // 根据当前已选择的大类初始化表格头部
-            let jsonTables = JSON.stringify(res.data.list)
-            // 将返回的数据里面的日期格式的内容转化为普通的日期格式
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            this.vTables = JSON.parse(result)
-            this.loadingData = true
-          }).catch((res) => {
-            this.handleError(res)
-            this.loadingData = false
-          })
-        }
-      },
-      /**
-       * 根据已选择数据表更新数据表头部
-       * @return {[type]} [description]
-       */
-      initTableHeader (type) {
-        var vHeaders = _.clone(this.baseVHeaders)
-        if (type === 3) {
-          vHeaders = [
-            {
-              key: 'objectId',
-              title: 'ID',
-              class: 'nowrap'
-            }
-          ]
-        }
-        for (let key in this.selectedFirstClass.field) {
-          var vHeader = {
-            key: key,
-            title: key,
-            type: this.selectedFirstClass.field[key],
-            functionName: 'showEditUserColumnModal',
-            class: 'userColumn' + ((this.selectedFirstClass.field[key] === 'date') ? ' nowrap' : '')
-          }
-          vHeaders.splice(1, 0, vHeader)
-        }
-        this.vHeaders = vHeaders
-      },
-      /**
-       * 初始化数据 用tables的数据初始化各个对象
-       * @return {[type]} [description]
-       */
-      initTable () {
-        var dataFirClassList = []
-        var vHeaders = []
-        this.tables.map((table) => {
-          var dataFirClassListObj = {
-            name: table.name,
-            type: table.type,
-            field: table.field,
-            permission: table.permission,
-            selected: false
-          }
-          dataFirClassList.push(dataFirClassListObj)
-          if (Object.keys(table.field).length) {
-            for (var key in table.field) {
-              var obj = {
-                key: key,
-                title: key,
-                type: table.field[key],
-                functionName: 'showEditUserColumnModal',
-                class: 'userColumn'
-              }
-              this.vHeaders.splice(1, 0, obj)
-            }
-          }
-        })
-
-        this.vHeaders = this.baseVHeaders.concat(vHeaders)
-        this.dataFirClassList = dataFirClassList
-        if (dataFirClassList[0]) {
-          this.selectedFirstClassEvent(dataFirClassList[0])
-        }
-        this.filterModal.modal = _.clone(this.vHeaders[0])
-      },
-      // 显示添加列浮层
-      showAddColumnModal () {
-        this.addColumnModal.show = true
-        this.addColumnModal.content = ''
-        this.addColumnModal.type = 'string'
-      },
-      // 添加列浮层确定按钮按下
-      addColumnModalConfirm () {
-        var key = this.addColumnModal.content
-        var type = this.addColumnModal.type
-        if (key) {
-          var repeat = false
-          this.vHeaders.map((item) => {
-            if (item.title === key) {
-              repeat = true
-            }
-            if (item.key === key) {
-              repeat = true
-            }
-          })
-          if (repeat) {
-            this.showNotice({
-              type: 'error',
-              content: '该列明不可用'
-            })
-          } else {
-            // console.log('向服务器发送数据 编辑当前数据表')
-            let table = {}
-            let field = _.clone(this.selectedFirstClass.field)
-            field[key] = type
-            table.name = this.selectedFirstClass.name
-            table.permission = this.selectedFirstClass.permission
-            table.type = this.selectedFirstClass.type
-            table.field = field
-            this.editing = true
-            api.dataTable.updateTable(table).then((res) => {
-              if (res.status === 200) {
-                var obj = {
-                  key: key,
-                  title: key,
-                  type: type,
-                  functionName: 'showEditUserColumnModal',
-                  class: 'userColumn'
-                }
-                this.vHeaders.splice(1, 0, obj)
-                this.addColumnModal.show = false
-                this.editing = false
-                this.showNotice({
-                  type: 'success',
-                  content: '限权设置成功'
-                })
-              }
-            }).catch((res) => {
-              this.handleError(res)
-              this.editing = false
-            })
-          }
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: '列名不能为空'
-          })
-        }
-      },
-
-      /**
-       * 编辑用户自定义列表
-       * @param  {[type]} line   列
-       * @param  {[type]} column 行
-       * @param  {[type]} tableIndex 当前被编辑的行的索引
-       * @return {[type]}        [description]
-       */
-      showEditUserColumnModal (column, line, lineIndex) {
-        // this.userEditColumnModalValidation.$dirty = true
-        this.userEditColumnModal.show = true
-        this.userEditColumnModal.columnName = column.key
-        this.userEditColumnModal.lineIndex = lineIndex
-        this.userEditColumnModal.fieldType = column.type
-        this.userEditColumnModal.value = line[column.key]
-        this.userEditColumnModal.objectId = line.objectId
-        if (this.userEditColumnModal.fieldType === 'date') {
-          if (line[column.key]) {
-            this.datePicker.date = line[column.key].split(' ')[0]
-            this.datePicker.time = line[column.key].split(' ')[1]
-          } else {
-            let date = new Date()
-            let year = date.getFullYear()
-            let month = date.getMonth() + 1
-            month = month > 9 ? month : ('0' + month)
-            let day = date.getDate()
-            day = day > 9 ? day : ('0' + day)
-            this.datePicker.date = year + '-' + month + '-' + day
-            this.datePicker.time = '00:00:00'
-            this.userEditColumnModal.value = this.datePicker.date + ' ' + this.datePicker.time
-          }
-        }
-        this.userEditColumnModal.show = true
-      },
-
-      /**
-       * 编辑用户自定义列表浮层确定事件
-       * @return {[type]} [description]
-       */
-      userEditColumnModalConfirm () {
-        var params = {}
-        var value = this.userEditColumnModal.value
-        if (value) {
-          if (this.userEditColumnModal.fieldType === 'date') {
-            // 如果是日期类型 拼接秤日期类型的字符串
-            value = this.datePicker.date + 'T' + this.datePicker.time + '.000Z'
-          } else if (this.userEditColumnModal.fieldType === 'string') {
-            // 如果是字符串 转成字符串
-            value = value + ''
-          } else if (this.userEditColumnModal.fieldType === 'int') {
-            // 如果是整型
-            value = parseInt(value)
-          }
-          params[this.userEditColumnModal.columnName] = value
-          // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
-          if (this.userEditColumnModal.objectId) {
-            // 修改数据
-            this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params, this.selectedFirstClass.type)
-          } else {
-            // 新增数据
-            this.createTableData(this.selectedFirstClass.name, params, this.selectedFirstClass.type)
-          }
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: '内容不能为空'
-          })
-        }
-      },
-
-      /**
-       * 修改数据表
-       * @param  {[type]} tableName 表名
-       * @param  {[type]} objectId  列表id
-       * @param  {[type]} params     参数
-       * @return {[type]}            [description]
-       */
-      updateTableData (tableName, objectId, params, type) {
-        this.editing = true
-        if (type === 3) {
-          // console.log('应用级的修改数据')
-          api.dataTable.updateAppData(tableName, objectId, params).then((res) => {
-            var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            result = result.replace(/_id/g, 'objectId')
-            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-            this.userEditColumnModal.show = false
-            this.editing = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        } else {
-          api.dataTable.updateData(tableName, objectId, params).then((res) => {
-            var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-            this.userEditColumnModal.show = false
-            this.editing = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        }
-      },
-
-      /**
-       * 创建数据表并且更新
-       * @param  {[type]} tableName 表名
-       * @param  {[type]} params     参数
-       * @return {[type]}            [description]
-       */
-      createTableData (tableName, params, type) {
-        this.editing = true
-        if (type === 3) {
-          // console.log('应用级的创建数据')
-          api.dataTable.createAppData(tableName, params).then((res) => {
-            var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            result = result.replace(/_id/g, 'objectId')
-            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-            this.userEditColumnModal.show = false
-            this.editing = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        } else {
-          api.dataTable.createData(tableName, params).then((res) => {
-            var jsonTables = JSON.stringify(res.data)
-            let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
-            this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
-            this.userEditColumnModal.show = false
-            this.editing = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        }
-      },
-      /**
-       * 删除数据表
-       * @return {[type]} [description]
-       */
-      deleteDataTable () {
-        // console.log(this.selectedFirstClass.name)
-        this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
-          this.editing = true
-          api.dataTable.deleteTable(this.selectedFirstClass.name).then(() => {
-            // 重新获取数据表
-            this.getTables()
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        })
-      },
-
-      /**
-       * 显示限权浮层
-       * @return {[type]} [description]
-       */
-      showJurisdictionModal () {
-        this.permissionTypes.map((item) => {
-          this.jurisdictionModal.modal[item.value] = false
-        })
-        this.selectedFirstClass.permission.map((item) => {
-          this.jurisdictionModal.modal[item] = true
-        })
-        this.jurisdictionModal.show = true
-      },
-      /**
-       * 限权设置浮层的确定按钮
-       * @return {[type]} [description]
-       */
-      jurisdictionModalConfirm () {
-        var permission = []
-        for (let key in this.jurisdictionModal.modal) {
-          if (this.jurisdictionModal.modal[key]) {
-            permission.push(key)
-          }
-        }
-        var table = {}
-        table.name = this.selectedFirstClass.name
-        table.permission = permission
-        table.type = this.selectedFirstClass.type
-        table.field = this.selectedFirstClass.field
-        this.editing = true
-        api.dataTable.updateTable(table).then((res) => {
-          if (res.status === 200) {
-            var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
-            this.dataFirClassList[index].permission = permission
-            this.showNotice({
-              type: 'success',
-              content: '限权设置成功'
-            })
-            this.editing = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
-        this.jurisdictionModal.show = false
-      },
-      /**
-       * 选择大类
-       * @param  {[type]} selectedFirstClassEvent [description]
-       * @return {[type]}                    [description]
-       */
-      selectedFirstClassEvent (selectedFirstClass) {
-        this.dataFirClassList.map((item) => {
-          item.selected = false
-        })
-        var params = {}
-        this.getTableData(selectedFirstClass.name, params, selectedFirstClass.type)
-        selectedFirstClass.selected = true
-      },
-      /**
-       * 添加行
-       */
-      addLineEvent () {
-        var hasUserColumn = Boolean(this.addListKeys.length)
-        // 判断有没有用户自定义列
-        if (hasUserColumn) {
-          var obj = {}
-          this.addListKeys.map((item) => {
-            obj[item.key] = ''
-          })
-          this.baseVHeaders.map((item) => {
-            obj[item.key] = ''
-          })
-          this.vTables.push(obj)
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: '请先添加列'
-          })
-        }
-      },
-
-      /**
-       * 删除行事件
-       * @return {[type]} [description]
-       */
-      deleteLineEvent () {
-        if (this.selectedLine.length) {
-          // this.confirm('确定删除已选中行？', () => {
-          //
-          // })
-          if (this.selectedFirstClass.type === 3) {
-            this.selectedLine.map((line) => {
-              if (line.objectId) {
-                api.dataTable.deleteAppData(this.selectedFirstClass.name, line.objectId).then(() => {
-                  this.vTables.$remove(line)
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.loadingData = false
-                })
-              } else {
-                this.vTables.$remove(line)
-              }
-            })
-          } else {
-            this.selectedLine.map((line) => {
-              if (line.objectId) {
-                api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
-                  this.vTables.$remove(line)
-                }).catch((res) => {
-                  this.handleError(res)
-                  this.loadingData = false
-                })
-              } else {
-                this.vTables.$remove(line)
-              }
-            })
-          }
-        }
-      },
-
-      /**
-       * 删除所有数据表
-       * @return {[type]} [description]
-       */
-      deleteAllData () {
-        this.confirm('确定要删除所有数据表？', () => {
-          // console.log('发请求删除所有数据 然后重新渲染列表')
-          // console.error('删除所有数据表功能还没实现  没有批量删除接口 现在是模拟删除功能')
-          this.tables = []
-          this.initTable()
-        })
-      },
-
-      /**
-       * 显示筛选条件浮层
-       * @return {[type]} [description]
-       */
-      showFilterModal () {
-        this.filterModal.show = true
-      },
-      /**
-       * 筛选条件浮层确定按钮
-       * @return {[type]} [description]
-       */
-      filterModalConfirm () {
-        // console.log('筛选条件浮层确定按钮')
-        this.filterModal.show = false
-      },
-
-      /**
-       * 显示删除列浮层
-       * @return {[type]} [description]
-       */
-      showDeleteColumnModal () {
-        if (this.addListKeys.length) {
-          this.delColumnModal.selectedColumn = this.addListKeys[0].key
-          this.delColumnModal.show = true
-        } else {
-          this.showNotice({
-            type: 'error',
-            content: '当前没有可删除的列'
-          })
-        }
-      },
-      /**
-       * 删除列浮层确定按钮事件
-       * @return {[type]} [description]
-       */
-      delColumnModalConfirm () {
-        var table = {}
-        var field = _.clone(this.selectedFirstClass.field)
-        delete field[this.delColumnModal.selectedColumn]
-        table.name = this.selectedFirstClass.name
-        table.permission = this.selectedFirstClass.permission
-        table.type = this.selectedFirstClass.type
-        table.field = field
-        this.editing = true
-        api.dataTable.updateTable(table).then((res) => {
-          if (res.status === 200) {
-            var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
-            this.dataFirClassList[index].field = field
-            this.vHeaders.map((item) => {
-              if (item.key === this.delColumnModal.selectedColumn) {
-                this.vHeaders.$remove(item)
-                return
-              }
-            })
-            this.showNotice({
-              type: 'success',
-              content: '删除' + this.delColumnModal.selectedColumn + '成功'
-            })
-          }
-          this.delColumnModal.show = false
-          this.editing = false
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-          this.delColumnModal = false
-        })
-      },
-
-      showEditModal (header, table) {
-        // var obj =  {
-        //   field: {},
-        //   name: 123,
-        //   permission: [],
-        //   type: 1
-        // }
-        // this.editModal.
-        this.editModal.show = true
-        // this.vTables.$remove(table)
-      },
-      /**
-       * 智能表格组件暴露事件 已选择的table发生变化
-       * @param  {[type]} tables [description]
-       * @return {[type]}        [description]
-       */
-      selectedLineChange (tables) {
-        this.selectedLine = tables
-      },
-      /**
-       * 根据 value 获取对应的 label
-       * @param  {String} value 值
-       * @return {String}
-       */
-      getTypeLabelByValue (value) {
-        var result = _.find(this.fieldTypes, (type) => {
-          return type.value === value
-        })
-        return result.label
-      },
-
-      /**
-       * 获取数据表
-       */
-      getTables () {
-        this.loadingData = true
-        api.dataTable.getTables().then((res) => {
-          if (res.status === 200) {
-            this.tables = res.data
-            this.initTable()
-            this.editing = false
-            this.loadingData = false
-          }
+  methods: {
+    /**
+     * 获取数据表数据以及更新数据表
+     * @param  {[type]} tableName 表名
+     * @param  {[type]} params     过滤参数
+     * @return {[type]}            [description]
+     */
+    getTableData (tableName, params, type) {
+      this.loadingData = true
+      if (type === 3) {
+        // console.log('数据表逻辑')
+        api.dataTable.queryAppData(tableName, params).then((res) => {
+          this.initTableHeader(type) // 根据当前已选择的大类初始化表格头部
+          let jsonTables = JSON.stringify(res.data.list)
+          // 将返回的数据里面的日期格式的内容转化为普通的日期格式
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          result = result.replace(/_id/g, 'objectId')
+          this.vTables = JSON.parse(result)
+          this.loadingData = true
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
         })
-      },
-
-      /**
-       * 创建字段
-       * @param  {Array} fields  字段列表
-       * @param  {DomEvent} ev   DOM 事件
-       */
-      createField (fields, ev) {
-        fields.push({ name: '', value: 'string' })
-        // 聚焦新添加的输入框
-        this.$nextTick(() => {
-          var inputs = ev.target.parentNode.getElementsByTagName('input')
-          var lastInput = inputs[inputs.length - 1]
-          lastInput.focus()
+      } else {
+        api.dataTable.queryData(tableName, params).then((res) => {
+          this.initTableHeader() // 根据当前已选择的大类初始化表格头部
+          let jsonTables = JSON.stringify(res.data.list)
+          // 将返回的数据里面的日期格式的内容转化为普通的日期格式
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          this.vTables = JSON.parse(result)
+          this.loadingData = true
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
         })
-      },
-
-      /**
-       * 移除字段
-       * @param  {Object} field  需要移除的字段
-       * @param  {Array}  fields 字段列表
-       */
-      removeField (field, fields) {
-        fields.$remove(field)
-      },
-
-      /**
-       * 添加表单钩子
-       * @param  {Form} form   表单
-       */
-      addFormHook (form) {
-        this.addForm = form
-      },
-
-      /**
-       * 编辑表单钩子
-       * @param  {Form} form   表单
-       */
-      editFormHook (form) {
-        this.editForm = form
-      },
-
-      /**
-       * 关闭添加浮层并净化添加表单
-       */
-      _resetAdd () {
-        this.adding = false
-        this.addModal.show = false
-        this.addModal.model = _.clone(this.originAddModel)
-        this.addModal.fields = []
-        this.$nextTick(() => {
-          this.addForm.setPristine()
-        })
-      },
-
-      /**
-       * 关闭编辑浮层并净化编辑表单
-       */
-      _resetEdit () {
-        this.editing = false
-        this.editModal.show = false
-        this.delChecked = false
-        this.editModal.model = _.clone(this.originEditModel)
-        this.editModal.model.permission = _.clone(this.originEditModel.permission)
-        this.newField = { name: '', value: 'string' }
-      },
-
-      /**
-       * 取消添加
-       */
-      onAddCancel () {
-        this._resetAdd()
-      },
-
-      /**
-       * 添加操作
-       */
-      onAddSubmit () {
-        // 如果字段名称为空或重复，则不允许表单提交
-        if (!this.canCreateAddFields) {
-          this.showNotice({
-            type: 'error',
-            content: '字段名称不允许为空或重复'
-          })
-          return
+      }
+    },
+    /**
+     * 根据已选择数据表更新数据表头部
+     * @return {[type]} [description]
+     */
+    initTableHeader (type) {
+      var vHeaders = _.clone(this.baseVHeaders)
+      if (type === 3) {
+        vHeaders = [
+          {
+            key: 'objectId',
+            title: 'ID',
+            class: 'nowrap'
+          }
+        ]
+      }
+      for (let key in this.selectedFirstClass.field) {
+        var vHeader = {
+          key: key,
+          title: key,
+          type: this.selectedFirstClass.field[key],
+          functionName: 'showEditUserColumnModal',
+          class: 'userColumn' + ((this.selectedFirstClass.field[key] === 'date') ? ' nowrap' : '')
         }
-
-        if (this.addValidation.$valid && !this.adding) {
-          this.adding = true
-          this.addModal.model.name.trim()
-          this.addModal.model.field = {}
-          this.addModal.fields.forEach((item) => {
-            this.addModal.model.field[item.name] = item.value
-          })
-          api.dataTable.createTable(this.addModal.model).then((res) => {
-            if (res.status === 200) {
-              this.getTables()
-              this._resetAdd()
+        vHeaders.splice(1, 0, vHeader)
+      }
+      this.vHeaders = vHeaders
+    },
+    /**
+     * 初始化数据 用tables的数据初始化各个对象
+     * @return {[type]} [description]
+     */
+    initTable () {
+      var dataFirClassList = []
+      var vHeaders = []
+      this.tables.map((table) => {
+        var dataFirClassListObj = {
+          name: table.name,
+          type: table.type,
+          field: table.field,
+          permission: table.permission,
+          selected: false
+        }
+        dataFirClassList.push(dataFirClassListObj)
+        if (Object.keys(table.field).length) {
+          for (var key in table.field) {
+            var obj = {
+              key: key,
+              title: key,
+              type: table.field[key],
+              functionName: 'showEditUserColumnModal',
+              class: 'userColumn'
             }
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
-          })
-        }
-      },
-
-      // 编辑数据表
-      /**
-       * 编辑数据表
-       * @param  {Object} table 数据表
-       */
-      editTable (table) {
-        this.editModal.show = true
-        this.editModal.model = _.clone(table)
-        this.editModal.model.permission = _.clone(table.permission)
-        this.originEditModel = _.clone(table)
-        this.originEditModel.permission = _.clone(table.permission)
-        this.editModal.fields = []
-        for (var key in this.editModal.model.field) {
-          if (this.editModal.model.field.hasOwnProperty(key)) {
-            this.editModal.fields.push({
-              name: key,
-              value: this.editModal.model.field[key]
-            })
+            this.vHeaders.splice(1, 0, obj)
           }
         }
-      },
+      })
 
-      /**
-       * 取消编辑
-       */
-      onEditCancel () {
-        this._resetEdit()
-      },
-
-      /**
-       * 提交更新
-       */
-      onEditSubmit () {
-        // 如果字段名称为空或重复，则不允许表单提交
-        if (!this.delChecked && !this.canCreateEditFields) {
+      this.vHeaders = this.baseVHeaders.concat(vHeaders)
+      this.dataFirClassList = dataFirClassList
+      if (dataFirClassList[0]) {
+        this.selectedFirstClassEvent(dataFirClassList[0])
+      }
+      this.filterModal.modal = _.clone(this.vHeaders[0])
+    },
+    // 显示添加列浮层
+    showAddColumnModal () {
+      this.addColumnModal.show = true
+      this.addColumnModal.content = ''
+      this.addColumnModal.type = 'string'
+    },
+    // 添加列浮层确定按钮按下
+    addColumnModalConfirm () {
+      var key = this.addColumnModal.content
+      var type = this.addColumnModal.type
+      if (key) {
+        var repeat = false
+        this.vHeaders.map((item) => {
+          if (item.title === key) {
+            repeat = true
+          }
+          if (item.key === key) {
+            repeat = true
+          }
+        })
+        if (repeat) {
           this.showNotice({
             type: 'error',
-            content: '字段名称不允许为空或重复'
+            content: '该列明不可用'
           })
-          return
-        }
-
-        this.editing = true
-        if (this.delChecked) {
-          api.dataTable.deleteTable(this.editModal.model.name).then(() => {
-            api.dataTable.getTables().then((res) => {
-              if (res.status === 200) {
-                this._resetEdit()
-                this.getTables()
+        } else {
+          // console.log('向服务器发送数据 编辑当前数据表')
+          let table = {}
+          let field = _.clone(this.selectedFirstClass.field)
+          field[key] = type
+          table.name = this.selectedFirstClass.name
+          table.permission = this.selectedFirstClass.permission
+          table.type = this.selectedFirstClass.type
+          table.field = field
+          this.editing = true
+          api.dataTable.updateTable(table).then((res) => {
+            if (res.status === 200) {
+              var obj = {
+                key: key,
+                title: key,
+                type: type,
+                functionName: 'showEditUserColumnModal',
+                class: 'userColumn'
               }
-            })
+              this.vHeaders.splice(1, 0, obj)
+              this.addColumnModal.show = false
+              this.editing = false
+              this.showNotice({
+                type: 'success',
+                content: '限权设置成功'
+              })
+            }
           }).catch((res) => {
             this.handleError(res)
             this.editing = false
           })
-        } else if (this.editValidation.$valid) {
-          this.editModal.model.field = {}
-          this.editModal.fields.forEach((item) => {
-            this.editModal.model.field[item.name] = item.value
+        }
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '列名不能为空'
+        })
+      }
+    },
+
+    /**
+     * 编辑用户自定义列表
+     * @param  {[type]} line   列
+     * @param  {[type]} column 行
+     * @param  {[type]} tableIndex 当前被编辑的行的索引
+     * @return {[type]}        [description]
+     */
+    showEditUserColumnModal (column, line, lineIndex) {
+      // this.userEditColumnModalValidation.$dirty = true
+      this.userEditColumnModal.show = true
+      this.userEditColumnModal.columnName = column.key
+      this.userEditColumnModal.lineIndex = lineIndex
+      this.userEditColumnModal.fieldType = column.type
+      this.userEditColumnModal.value = line[column.key]
+      this.userEditColumnModal.objectId = line.objectId
+      if (this.userEditColumnModal.fieldType === 'date') {
+        if (line[column.key]) {
+          this.datePicker.date = line[column.key].split(' ')[0]
+          this.datePicker.time = line[column.key].split(' ')[1]
+        } else {
+          let date = new Date()
+          let year = date.getFullYear()
+          let month = date.getMonth() + 1
+          month = month > 9 ? month : ('0' + month)
+          let day = date.getDate()
+          day = day > 9 ? day : ('0' + day)
+          this.datePicker.date = year + '-' + month + '-' + day
+          this.datePicker.time = '00:00:00'
+          this.userEditColumnModal.value = this.datePicker.date + ' ' + this.datePicker.time
+        }
+      }
+      this.userEditColumnModal.show = true
+    },
+
+    /**
+     * 编辑用户自定义列表浮层确定事件
+     * @return {[type]} [description]
+     */
+    userEditColumnModalConfirm () {
+      var params = {}
+      var value = this.userEditColumnModal.value
+      if (value) {
+        if (this.userEditColumnModal.fieldType === 'date') {
+          // 如果是日期类型 拼接秤日期类型的字符串
+          value = this.datePicker.date + 'T' + this.datePicker.time + '.000Z'
+        } else if (this.userEditColumnModal.fieldType === 'string') {
+          // 如果是字符串 转成字符串
+          value = value + ''
+        } else if (this.userEditColumnModal.fieldType === 'int') {
+          // 如果是整型
+          value = parseInt(value)
+        }
+        params[this.userEditColumnModal.columnName] = value
+        // 判断当前的列表id是否存在 存在的话修改数据  不存在的话创建数据
+        if (this.userEditColumnModal.objectId) {
+          // 修改数据
+          this.updateTableData(this.selectedFirstClass.name, this.userEditColumnModal.objectId, params, this.selectedFirstClass.type)
+        } else {
+          // 新增数据
+          this.createTableData(this.selectedFirstClass.name, params, this.selectedFirstClass.type)
+        }
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '内容不能为空'
+        })
+      }
+    },
+
+    /**
+     * 修改数据表
+     * @param  {[type]} tableName 表名
+     * @param  {[type]} objectId  列表id
+     * @param  {[type]} params     参数
+     * @return {[type]}            [description]
+     */
+    updateTableData (tableName, objectId, params, type) {
+      this.editing = true
+      if (type === 3) {
+        // console.log('应用级的修改数据')
+        api.dataTable.updateAppData(tableName, objectId, params).then((res) => {
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          result = result.replace(/_id/g, 'objectId')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+          this.userEditColumnModal.show = false
+          this.editing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      } else {
+        api.dataTable.updateData(tableName, objectId, params).then((res) => {
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+          this.userEditColumnModal.show = false
+          this.editing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      }
+    },
+
+    /**
+     * 创建数据表并且更新
+     * @param  {[type]} tableName 表名
+     * @param  {[type]} params     参数
+     * @return {[type]}            [description]
+     */
+    createTableData (tableName, params, type) {
+      this.editing = true
+      if (type === 3) {
+        // console.log('应用级的创建数据')
+        api.dataTable.createAppData(tableName, params).then((res) => {
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          result = result.replace(/_id/g, 'objectId')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+          this.userEditColumnModal.show = false
+          this.editing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      } else {
+        api.dataTable.createData(tableName, params).then((res) => {
+          var jsonTables = JSON.stringify(res.data)
+          let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
+          this.vTables.$set(this.userEditColumnModal.lineIndex, JSON.parse(result))
+          this.userEditColumnModal.show = false
+          this.editing = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      }
+    },
+    /**
+     * 删除数据表
+     * @return {[type]} [description]
+     */
+    deleteDataTable () {
+      // console.log(this.selectedFirstClass.name)
+      this.confirm('确定要删除数据表' + this.selectedFirstClass.name + '？', () => {
+        this.editing = true
+        api.dataTable.deleteTable(this.selectedFirstClass.name).then(() => {
+          // 重新获取数据表
+          this.getTables()
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      })
+    },
+
+    /**
+     * 显示限权浮层
+     * @return {[type]} [description]
+     */
+    showJurisdictionModal () {
+      this.locales.data.TABLE_PERMISSION_TYPES.map((item) => {
+        this.jurisdictionModal.modal[item.value] = false
+      })
+      this.selectedFirstClass.permission.map((item) => {
+        this.jurisdictionModal.modal[item] = true
+      })
+      this.jurisdictionModal.show = true
+    },
+    /**
+     * 限权设置浮层的确定按钮
+     * @return {[type]} [description]
+     */
+    jurisdictionModalConfirm () {
+      var permission = []
+      for (let key in this.jurisdictionModal.modal) {
+        if (this.jurisdictionModal.modal[key]) {
+          permission.push(key)
+        }
+      }
+      var table = {}
+      table.name = this.selectedFirstClass.name
+      table.permission = permission
+      table.type = this.selectedFirstClass.type
+      table.field = this.selectedFirstClass.field
+      this.editing = true
+      api.dataTable.updateTable(table).then((res) => {
+        if (res.status === 200) {
+          var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
+          this.dataFirClassList[index].permission = permission
+          this.showNotice({
+            type: 'success',
+            content: '限权设置成功'
           })
-          api.dataTable.updateTable(this.editModal.model).then((res) => {
+          this.editing = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+      })
+      this.jurisdictionModal.show = false
+    },
+    /**
+     * 选择大类
+     * @param  {[type]} selectedFirstClassEvent [description]
+     * @return {[type]}                    [description]
+     */
+    selectedFirstClassEvent (selectedFirstClass) {
+      this.dataFirClassList.map((item) => {
+        item.selected = false
+      })
+      var params = {}
+      this.getTableData(selectedFirstClass.name, params, selectedFirstClass.type)
+      selectedFirstClass.selected = true
+    },
+    /**
+     * 添加行
+     */
+    addLineEvent () {
+      var hasUserColumn = Boolean(this.addListKeys.length)
+      // 判断有没有用户自定义列
+      if (hasUserColumn) {
+        var obj = {}
+        this.addListKeys.map((item) => {
+          obj[item.key] = ''
+        })
+        this.baseVHeaders.map((item) => {
+          obj[item.key] = ''
+        })
+        this.vTables.push(obj)
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '请先添加列'
+        })
+      }
+    },
+
+    /**
+     * 删除行事件
+     * @return {[type]} [description]
+     */
+    deleteLineEvent () {
+      if (this.selectedLine.length) {
+        // this.confirm('确定删除已选中行？', () => {
+        //
+        // })
+        if (this.selectedFirstClass.type === 3) {
+          this.selectedLine.map((line) => {
+            if (line.objectId) {
+              api.dataTable.deleteAppData(this.selectedFirstClass.name, line.objectId).then(() => {
+                this.vTables.$remove(line)
+              }).catch((res) => {
+                this.handleError(res)
+                this.loadingData = false
+              })
+            } else {
+              this.vTables.$remove(line)
+            }
+          })
+        } else {
+          this.selectedLine.map((line) => {
+            if (line.objectId) {
+              api.dataTable.deleteData(this.selectedFirstClass.name, line.objectId).then(() => {
+                this.vTables.$remove(line)
+              }).catch((res) => {
+                this.handleError(res)
+                this.loadingData = false
+              })
+            } else {
+              this.vTables.$remove(line)
+            }
+          })
+        }
+      }
+    },
+
+    /**
+     * 删除所有数据表
+     * @return {[type]} [description]
+     */
+    deleteAllData () {
+      this.confirm('确定要删除所有数据表？', () => {
+        // console.log('发请求删除所有数据 然后重新渲染列表')
+        // console.error('删除所有数据表功能还没实现  没有批量删除接口 现在是模拟删除功能')
+        this.tables = []
+        this.initTable()
+      })
+    },
+
+    /**
+     * 显示筛选条件浮层
+     * @return {[type]} [description]
+     */
+    showFilterModal () {
+      this.filterModal.show = true
+    },
+    /**
+     * 筛选条件浮层确定按钮
+     * @return {[type]} [description]
+     */
+    filterModalConfirm () {
+      // console.log('筛选条件浮层确定按钮')
+      this.filterModal.show = false
+    },
+
+    /**
+     * 显示删除列浮层
+     * @return {[type]} [description]
+     */
+    showDeleteColumnModal () {
+      if (this.addListKeys.length) {
+        this.delColumnModal.selectedColumn = this.addListKeys[0].key
+        this.delColumnModal.show = true
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '当前没有可删除的列'
+        })
+      }
+    },
+    /**
+     * 删除列浮层确定按钮事件
+     * @return {[type]} [description]
+     */
+    delColumnModalConfirm () {
+      var table = {}
+      var field = _.clone(this.selectedFirstClass.field)
+      delete field[this.delColumnModal.selectedColumn]
+      table.name = this.selectedFirstClass.name
+      table.permission = this.selectedFirstClass.permission
+      table.type = this.selectedFirstClass.type
+      table.field = field
+      this.editing = true
+      api.dataTable.updateTable(table).then((res) => {
+        if (res.status === 200) {
+          var index = this.dataFirClassList.indexOf(this.selectedFirstClass)
+          this.dataFirClassList[index].field = field
+          this.vHeaders.map((item) => {
+            if (item.key === this.delColumnModal.selectedColumn) {
+              this.vHeaders.$remove(item)
+              return
+            }
+          })
+          this.showNotice({
+            type: 'success',
+            content: '删除' + this.delColumnModal.selectedColumn + '成功'
+          })
+        }
+        this.delColumnModal.show = false
+        this.editing = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+        this.delColumnModal = false
+      })
+    },
+
+    showEditModal (header, table) {
+      // var obj =  {
+      //   field: {},
+      //   name: 123,
+      //   permission: [],
+      //   type: 1
+      // }
+      // this.editModal.
+      this.editModal.show = true
+      // this.vTables.$remove(table)
+    },
+    /**
+     * 智能表格组件暴露事件 已选择的table发生变化
+     * @param  {[type]} tables [description]
+     * @return {[type]}        [description]
+     */
+    selectedLineChange (tables) {
+      this.selectedLine = tables
+    },
+    /**
+     * 根据 value 获取对应的 label
+     * @param  {String} value 值
+     * @return {String}
+     */
+    getTypeLabelByValue (value) {
+      var result = _.find(this.locales.data.TABLE_FIELD_TYPES, (type) => {
+        return type.value === value
+      })
+      return result.label
+    },
+
+    /**
+     * 获取数据表
+     */
+    getTables () {
+      this.loadingData = true
+      api.dataTable.getTables().then((res) => {
+        if (res.status === 200) {
+          this.tables = res.data
+          this.initTable()
+          this.editing = false
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    /**
+     * 创建字段
+     * @param  {Array} fields  字段列表
+     * @param  {DomEvent} ev   DOM 事件
+     */
+    createField (fields, ev) {
+      fields.push({ name: '', value: 'string' })
+      // 聚焦新添加的输入框
+      this.$nextTick(() => {
+        var inputs = ev.target.parentNode.getElementsByTagName('input')
+        var lastInput = inputs[inputs.length - 1]
+        lastInput.focus()
+      })
+    },
+
+    /**
+     * 移除字段
+     * @param  {Object} field  需要移除的字段
+     * @param  {Array}  fields 字段列表
+     */
+    removeField (field, fields) {
+      fields.$remove(field)
+    },
+
+    /**
+     * 添加表单钩子
+     * @param  {Form} form   表单
+     */
+    addFormHook (form) {
+      this.addForm = form
+    },
+
+    /**
+     * 编辑表单钩子
+     * @param  {Form} form   表单
+     */
+    editFormHook (form) {
+      this.editForm = form
+    },
+
+    /**
+     * 关闭添加浮层并净化添加表单
+     */
+    _resetAdd () {
+      this.adding = false
+      this.addModal.show = false
+      this.addModal.model = _.clone(this.originAddModel)
+      this.addModal.fields = []
+      this.$nextTick(() => {
+        this.addForm.setPristine()
+      })
+    },
+
+    /**
+     * 关闭编辑浮层并净化编辑表单
+     */
+    _resetEdit () {
+      this.editing = false
+      this.editModal.show = false
+      this.delChecked = false
+      this.editModal.model = _.clone(this.originEditModel)
+      this.editModal.model.permission = _.clone(this.originEditModel.permission)
+      this.newField = { name: '', value: 'string' }
+    },
+
+    /**
+     * 取消添加
+     */
+    onAddCancel () {
+      this._resetAdd()
+    },
+
+    /**
+     * 添加操作
+     */
+    onAddSubmit () {
+      // 如果字段名称为空或重复，则不允许表单提交
+      if (!this.canCreateAddFields) {
+        this.showNotice({
+          type: 'error',
+          content: '字段名称不允许为空或重复'
+        })
+        return
+      }
+
+      if (this.addValidation.$valid && !this.adding) {
+        this.adding = true
+        this.addModal.model.name.trim()
+        this.addModal.model.field = {}
+        this.addModal.fields.forEach((item) => {
+          this.addModal.model.field[item.name] = item.value
+        })
+        api.dataTable.createTable(this.addModal.model).then((res) => {
+          if (res.status === 200) {
+            this.getTables()
+            this._resetAdd()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
+      }
+    },
+
+    // 编辑数据表
+    /**
+     * 编辑数据表
+     * @param  {Object} table 数据表
+     */
+    editTable (table) {
+      this.editModal.show = true
+      this.editModal.model = _.clone(table)
+      this.editModal.model.permission = _.clone(table.permission)
+      this.originEditModel = _.clone(table)
+      this.originEditModel.permission = _.clone(table.permission)
+      this.editModal.fields = []
+      for (var key in this.editModal.model.field) {
+        if (this.editModal.model.field.hasOwnProperty(key)) {
+          this.editModal.fields.push({
+            name: key,
+            value: this.editModal.model.field[key]
+          })
+        }
+      }
+    },
+
+    /**
+     * 取消编辑
+     */
+    onEditCancel () {
+      this._resetEdit()
+    },
+
+    /**
+     * 提交更新
+     */
+    onEditSubmit () {
+      // 如果字段名称为空或重复，则不允许表单提交
+      if (!this.delChecked && !this.canCreateEditFields) {
+        this.showNotice({
+          type: 'error',
+          content: '字段名称不允许为空或重复'
+        })
+        return
+      }
+
+      this.editing = true
+      if (this.delChecked) {
+        api.dataTable.deleteTable(this.editModal.model.name).then(() => {
+          api.dataTable.getTables().then((res) => {
             if (res.status === 200) {
               this._resetEdit()
               this.getTables()
             }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
           })
-        }
-      },
-
-      /**
-       * 显示自定义的confirm框
-       * @param  {[type]}   content [description]
-       * @param  {Function} fn      [description]
-       * @return {[type]}           [description]
-       */
-      confirm (content, fn) {
-        this.confirmModal.content = content
-        this.confirmModal.fn = fn
-        this.confirmModal.show = true
-      },
-      /**
-       * 提示按钮按下
-       * @param  {[type]}   content [description]
-       * @param  {Function} fn      [description]
-       * @return {[type]}           [description]
-       */
-      confirmModalConfirm () {
-        this.confirmModal.show = false
-        this.confirmModal.fn()
-      },
-
-      // 格式化日期
-      toDate (date) {
-        date = new Date(date)
-        var year = date.getFullYear()
-        var month = date.getMonth() + 1
-        month = month > 9 ? month : '0' + month
-        var day = date.getDate()
-        day = day > 9 ? day : '0' + day
-        return year + '-' + month + '-' + day
-      },
-
-      /**
-       * 格式化后端返回的日期和时间
-       * @param  {[type]} date [description]
-       * @return {[type]}      [description]
-       */
-      formatDateTime (date) {
-        if (/T/.test(date)) {
-          var result = ''
-          result = date.split(/.\d+Z/)[0]
-          result.replace('T', ' ')
-          return result
-        } else {
-          return new Date(date)
-        }
-      },
-
-      /**
-       * 表单验证 验证是否为数字
-       * @param  {[type]} value [description]
-       * @return {[type]}       [description]
-       */
-      checkNumber (value) {
-        // console.log(value)
-        return value - 0 === value - 0
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
+      } else if (this.editValidation.$valid) {
+        this.editModal.model.field = {}
+        this.editModal.fields.forEach((item) => {
+          this.editModal.model.field[item.name] = item.value
+        })
+        api.dataTable.updateTable(this.editModal.model).then((res) => {
+          if (res.status === 200) {
+            this._resetEdit()
+            this.getTables()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.editing = false
+        })
       }
+    },
+
+    /**
+     * 显示自定义的confirm框
+     * @param  {[type]}   content [description]
+     * @param  {Function} fn      [description]
+     * @return {[type]}           [description]
+     */
+    confirm (content, fn) {
+      this.confirmModal.content = content
+      this.confirmModal.fn = fn
+      this.confirmModal.show = true
+    },
+    /**
+     * 提示按钮按下
+     * @param  {[type]}   content [description]
+     * @param  {Function} fn      [description]
+     * @return {[type]}           [description]
+     */
+    confirmModalConfirm () {
+      this.confirmModal.show = false
+      this.confirmModal.fn()
+    },
+
+    // 格式化日期
+    toDate (date) {
+      date = new Date(date)
+      var year = date.getFullYear()
+      var month = date.getMonth() + 1
+      month = month > 9 ? month : '0' + month
+      var day = date.getDate()
+      day = day > 9 ? day : '0' + day
+      return year + '-' + month + '-' + day
+    },
+
+    /**
+     * 格式化后端返回的日期和时间
+     * @param  {[type]} date [description]
+     * @return {[type]}      [description]
+     */
+    formatDateTime (date) {
+      if (/T/.test(date)) {
+        var result = ''
+        result = date.split(/.\d+Z/)[0]
+        result.replace('T', ' ')
+        return result
+      } else {
+        return new Date(date)
+      }
+    },
+
+    /**
+     * 表单验证 验证是否为数字
+     * @param  {[type]} value [description]
+     * @return {[type]}       [description]
+     */
+    checkNumber (value) {
+      // console.log(value)
+      return value - 0 === value - 0
     }
   }
+}
 </script>
 
 <style lang="stylus">
-  @import '../../../../assets/stylus/common'
+@import '../../../../assets/stylus/common'
 
-  .data-tables
-    .panel
-      padding-bottom 20px
-    .first-class-box
-      padding-right 20px
+.data-tables
+  .panel
+    padding-bottom 20px
+  .first-class-box
+    padding-right 20px
+    box-sizing border-box
+    .data-table-box
+      border 1px solid light-border-color
+      border-bottom 0
       box-sizing border-box
-      .data-table-box
-        border 1px solid light-border-color
-        border-bottom 0
-        box-sizing border-box
-        .data-table-li
-          padding-left 10px
-          border-bottom 1px solid light-border-color
-          height 32px
-          line-height 32px
-          &:hover
-            background rgba(0,0,0,0.08)
-          .data-first-class
-            /*width 100%*/
-            height 100%
-            display block
-            white-space nowrap
-            text-overflow 100%
-            transition transform ease 0.1s
-            font-size 12px
-            box-sizing border-box
-            text-decoration blink
-            position relative
-            padding-right 25px
-            .fa
-              line-height 32px
-              position absolute
-              right 0
-              padding-right 10px
-              color gray-light
-        .selected
-          .data-first-class
-            color red
-            border-right 3px solid #c0252e
-    .details-box
-      padding-top 20px
-      box-sizing border-box
-      .tips-box
-        box-sizing border-box
-        padding 10px
-        border 1px solid light-border-color
-        padding-left 20px
-        .problem
-          font-size 18px
-      .userColumn
-        cursor text
+      .data-table-li
+        padding-left 10px
+        border-bottom 1px solid light-border-color
+        height 32px
+        line-height 32px
         &:hover
           background rgba(0,0,0,0.08)
-      .nowrap
-        white-space nowrap
-    .modal.visible
-      .modal-body
-        overflow-x visible
-        overflow-y visible
-    .modal
-      .field-row
-        clearfix()
-        margin-bottom 10px
-        .fa
-          width 26px
-          color lighten(red, 50%)
-          line-height 26px
-          text-align center
-          margin-left 10px
-          cursor pointer
-          border-radius 15px
-          &:hover
-            color red
-      .filterModalTitle
-        line-height 32px
-      .fa-warning
-        font-size 25px
-        color #FF9D00
-      .time-picker
-        display inline-block
-        width 150px
-      .form-control
-        span
-          display inline-block
+        .data-first-class
+          /*width 100%*/
+          height 100%
+          display block
+          white-space nowrap
           text-overflow 100%
+          transition transform ease 0.1s
+          font-size 12px
+          box-sizing border-box
+          text-decoration blink
+          position relative
+          padding-right 25px
+          .fa
+            line-height 32px
+            position absolute
+            right 0
+            padding-right 10px
+            color gray-light
+      .selected
+        .data-first-class
+          color red
+          border-right 3px solid #c0252e
+  .details-box
+    padding-top 20px
+    box-sizing border-box
+    .tips-box
+      box-sizing border-box
+      padding 10px
+      border 1px solid light-border-color
+      padding-left 20px
+      .problem
+        font-size 18px
+    .userColumn
+      cursor text
+      &:hover
+        background rgba(0,0,0,0.08)
+    .nowrap
+      white-space nowrap
+  .modal.visible
+    .modal-body
+      overflow-x visible
+      overflow-y visible
+  .modal
+    .field-row
+      clearfix()
+      margin-bottom 10px
+      .fa
+        width 26px
+        color lighten(red, 50%)
+        line-height 26px
+        text-align center
+        margin-left 10px
+        cursor pointer
+        border-radius 15px
+        &:hover
+          color red
+    .filterModalTitle
+      line-height 32px
+    .fa-warning
+      font-size 25px
+      color #FF9D00
+    .time-picker
+      display inline-block
+      width 150px
+    .form-control
+      span
+        display inline-block
+        text-overflow 100%
 
 .details-header
   height 26px
@@ -1642,6 +1634,7 @@
     font-size 0
     display inline-block
   .operation
+    background #FFF
     height 26px
     display inline-block
     padding 0 10px

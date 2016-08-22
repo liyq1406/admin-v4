@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button class="btn btn-primary" @click="showAddModal=true"><i class="fa fa-plus"></i>添加快照配置</button>
+            <a class="btn btn-primary" v-link="{path: '/dev/data/snapshot/create'}"><i class="fa fa-plus"></i>添加快照配置</a>
           </div>
         </div>
         <div class="data-table">
@@ -41,7 +41,7 @@
                 <td>{{dp.creator}}</td>
                 <td>
                   <a v-link="{ path: $route.path + '/' + dp.productID}" class="hl-red">查看快照</a>
-                  <a @click.prevent="editSnapshot(dp)" class="hl-red ml20">编辑</a>
+                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.id}">编辑</a>
                 </td>
               </tr>
               <tr v-if="productsRules.length === 0">
@@ -199,457 +199,457 @@
 </template>
 
 <script>
-  import Vue from 'vue'
-  // import api from 'api'
-  import * as config from 'consts/config'
-  import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
-  import Select from 'components/Select'
-  import locales from 'consts/locales/index'
-  import _ from 'lodash'
-  import { globalMixins } from 'src/mixins'
-  import api from 'api'
+import Vue from 'vue'
+// import api from 'api'
+import * as config from 'consts/config'
+import Pager from 'components/Pager'
+import Modal from 'components/Modal'
+import Select from 'components/Select'
+import locales from 'consts/locales/index'
+import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
+import api from 'api'
 
-  export default {
-    name: 'DataTables',
+export default {
+  name: 'DataTables',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    components: {
-      'modal': Modal,
-      'pager': Pager,
-      'v-select': Select
-    },
+  components: {
+    'modal': Modal,
+    'pager': Pager,
+    'v-select': Select
+  },
 
+  data () {
+    return {
+      showAddModal: false,
+      showEditModal: false,
+      showEditPointModal: false,
+      delRuleChecked: false,
+      productType: {
+        label: '请选择产品',
+        value: 0,
+        id: ''
+      },
+      ruleProductType: {
+        label: '全部',
+        value: 0,
+        id: ''
+      },
+      snapshotInterval: locales[Vue.config.lang].data.SNAPSHOT_INTERVAL,
+      timeInterval: {
+        label: '10分钟',
+        value: 0
+      },
+      timeIntervalEdit: {
+        label: '10分钟',
+        value: 0
+      },
+      products: [{
+        name: ''
+      }],
+      dataPoints: [],
+      editDataPoints: [],
+      countPerPage: config.COUNT_PER_PAGE,
+      currentPage: 1,
+      currentRulesPage: 1,
+      currentEditPage: 1,
+      productsRules: [],
+      ruleDataPointsShow: [],
+      curentEditRule: {}
+    }
+  },
+
+  route: {
     data () {
-      return {
-        showAddModal: false,
-        showEditModal: false,
-        showEditPointModal: false,
-        delRuleChecked: false,
-        productType: {
-          label: '请选择产品',
-          value: 0,
-          id: ''
-        },
-        ruleProductType: {
-          label: '全部',
-          value: 0,
-          id: ''
-        },
-        snapshotInterval: locales[Vue.config.lang].data.SNAPSHOT_INTERVAL,
-        timeInterval: {
-          label: '10分钟',
-          value: 0
-        },
-        timeIntervalEdit: {
-          label: '10分钟',
-          value: 0
-        },
-        products: [{
-          name: ''
-        }],
-        dataPoints: [],
-        editDataPoints: [],
-        countPerPage: config.COUNT_PER_PAGE,
-        currentPage: 1,
-        currentRulesPage: 1,
-        currentEditPage: 1,
-        productsRules: [],
-        ruleDataPointsShow: [],
-        curentEditRule: {}
-      }
+      this.init()
+    }
+  },
+
+  computed: {
+    // 数据端点类型
+    datapointTypes () {
+      var result = locales[Vue.config.lang].data.DATAPOINT_TYPES
+      _.remove(result, (o) => {
+        return o.value === 5
+      })
+      return result
     },
 
-    route: {
-      data () {
-        this.init()
-      }
+    productTypes () {
+      var types = [{
+        label: '请选择产品',
+        value: 0,
+        id: ''
+      }]
+
+      var i = 1
+      this.products.forEach((item) => {
+        var type = {}
+        type.label = item.name
+        type.value = i
+        type.id = item.id
+        i++
+        types.push(type)
+      })
+
+      return types
+    },
+    ruleProductTypes () {
+      var types = [{
+        label: '全部',
+        value: 0,
+        id: ''
+      }]
+
+      var i = 1
+      this.products.forEach((item) => {
+        var type = {}
+        type.label = item.name
+        type.value = i
+        type.id = item.id
+        i++
+        types.push(type)
+      })
+
+      return types
+    },
+    dataPointsShow () {
+      var datas = []
+      this.dataPoints.forEach((item) => {
+        var data = ''
+        if (item.selected === true) {
+          data = item.name
+          datas.push(data)
+        }
+      })
+
+      return datas
+    },
+    ruleDataPointsShow () {
+      var datas = []
+      this.editDataPoints.forEach((item) => {
+        var data = ''
+        if (item.selected === true) {
+          data = item.name
+          datas.push(data)
+        }
+      })
+
+      return datas
     },
 
-    computed: {
-      // 数据端点类型
-      datapointTypes () {
-        var result = locales[Vue.config.lang].data.DATAPOINT_TYPES
-        _.remove(result, (o) => {
-          return o.value === 5
-        })
-        return result
-      },
-
-      productTypes () {
-        var types = [{
-          label: '请选择产品',
-          value: 0,
-          id: ''
-        }]
-
-        var i = 1
-        this.products.forEach((item) => {
-          var type = {}
-          type.label = item.name
-          type.value = i
-          type.id = item.id
-          i++
-          types.push(type)
-        })
-
-        return types
-      },
-      ruleProductTypes () {
-        var types = [{
-          label: '全部',
-          value: 0,
-          id: ''
-        }]
-
-        var i = 1
-        this.products.forEach((item) => {
-          var type = {}
-          type.label = item.name
-          type.value = i
-          type.id = item.id
-          i++
-          types.push(type)
-        })
-
-        return types
-      },
-      dataPointsShow () {
-        var datas = []
-        this.dataPoints.forEach((item) => {
-          var data = ''
-          if (item.selected === true) {
-            data = item.name
-            datas.push(data)
-          }
-        })
-
-        return datas
-      },
-      ruleDataPointsShow () {
-        var datas = []
-        this.editDataPoints.forEach((item) => {
-          var data = ''
-          if (item.selected === true) {
-            data = item.name
-            datas.push(data)
-          }
-        })
-
-        return datas
-      },
-
-      addRules () {
-        var rule = {
-          rule: 3,
-          interval: 30,
-          storage: {
-            // limit: 0, // 不支持
-            // expire: 0 // 有效期 单位是秒（s） 0表示永久存储
-          },
-          datapoint: []
-        }
-
-        this.dataPoints.forEach((item) => {
-          if (item.selected === true) {
-            rule.datapoint.push(item.index)
-          }
-        })
-
-        switch (this.timeInterval.value) {
-          case 0:
-            rule.interval = 10
-            break
-          case 1:
-            rule.interval = 20
-            break
-          case 2:
-            rule.interval = 30
-            break
-          case 3:
-            rule.interval = 60
-            break
-          default:
-            break
-        }
-        return rule
-      },
-      editRules () {
-        var rule = {
-          _id: '',
-          rule: 3,
-          interval: 30,
-          storage: {
-            // limit: 0, // 不支持
-            // expire: 0 // 有效期 单位是秒（s） 0表示永久存储
-          },
-          datapoint: []
-        }
-        rule._id = this.curentEditRule.id
-        this.editDataPoints.forEach((item) => {
-          if (item.selected === true) {
-            rule.datapoint.push(item.index)
-          }
-        })
-
-        switch (this.timeIntervalEdit.value) {
-          case 0:
-            rule.interval = 10
-            break
-          case 1:
-            rule.interval = 20
-            break
-          case 2:
-            rule.interval = 30
-            break
-          case 3:
-            rule.interval = 60
-            break
-          default:
-            break
-        }
-        return rule
+    addRules () {
+      var rule = {
+        rule: 3,
+        interval: 30,
+        storage: {
+          // limit: 0, // 不支持
+          // expire: 0 // 有效期 单位是秒（s） 0表示永久存储
+        },
+        datapoint: []
       }
+
+      this.dataPoints.forEach((item) => {
+        if (item.selected === true) {
+          rule.datapoint.push(item.index)
+        }
+      })
+
+      switch (this.timeInterval.value) {
+        case 0:
+          rule.interval = 10
+          break
+        case 1:
+          rule.interval = 20
+          break
+        case 2:
+          rule.interval = 30
+          break
+        case 3:
+          rule.interval = 60
+          break
+        default:
+          break
+      }
+      return rule
+    },
+    editRules () {
+      var rule = {
+        _id: '',
+        rule: 3,
+        interval: 30,
+        storage: {
+          // limit: 0, // 不支持
+          // expire: 0 // 有效期 单位是秒（s） 0表示永久存储
+        },
+        datapoint: []
+      }
+      rule._id = this.curentEditRule.id
+      this.editDataPoints.forEach((item) => {
+        if (item.selected === true) {
+          rule.datapoint.push(item.index)
+        }
+      })
+
+      switch (this.timeIntervalEdit.value) {
+        case 0:
+          rule.interval = 10
+          break
+        case 1:
+          rule.interval = 20
+          break
+        case 2:
+          rule.interval = 30
+          break
+        case 3:
+          rule.interval = 60
+          break
+        default:
+          break
+      }
+      return rule
+    }
+  },
+
+  methods: {
+    /**
+     * 通过值查找类型
+     * @param  {Number} type 值
+     */
+    getTypeByValue (value) {
+      return _.find(this.datapointTypes, (o) => {
+        return o.value === value
+      })
     },
 
-    methods: {
-      /**
-       * 通过值查找类型
-       * @param  {Number} type 值
-       */
-      getTypeByValue (value) {
-        return _.find(this.datapointTypes, (o) => {
-          return o.value === value
-        })
-      },
-
-      addSnapshotRule () {
-        this.checkSnapshotExsit()
-      },
-      checkSnapshotExsit () {
-        api.snapshot.getRule(this.productType.id).then((res) => {
-          if (res.status === 200) {
-            if (res.data.count > 0) {
-              // 存在就不创建
-              alert('规则已创建')
-            } else {
-              this.createSnapshotRule()
-            }
+    addSnapshotRule () {
+      this.checkSnapshotExsit()
+    },
+    checkSnapshotExsit () {
+      api.snapshot.getRule(this.productType.id).then((res) => {
+        if (res.status === 200) {
+          if (res.data.count > 0) {
+            // 存在就不创建
+            alert('规则已创建')
+          } else {
+            this.createSnapshotRule()
           }
-        }, (err) => {
-          this.handleError(err)
-        })
-      },
-      createSnapshotRule () {
-        if (this.productType.value === 0) {
-          return
         }
-        api.snapshot.createRule(this.productType.id, this.addRules).then((res) => {
-          if (res.status === 200) {
-            this.productsRules = [] // 清空数组重新获取
-            this.getProductRules(true)
-          }
-        }, (err) => {
-          this.handleError(err)
-        })
-      },
-      editSnapshotRule () {
-        api.snapshot.updateRule(this.curentEditRule.productID, this.editRules).then((res) => {
-          if (res.status === 200) {
-            this.getProductRules(true)
-          }
-        }, (err) => {
-          this.handleError(err)
-        })
-      },
-      deleteSnapshotRule () {
-        api.snapshot.deleteRule(this.curentEditRule.productID, this.curentEditRule.id).then((res) => {
-          if (res.status === 200) {
-            this.delRuleChecked = false
-            this.getProductRules(true)
-          }
-        }, (err) => {
-          this.handleError(err)
-        })
-      },
-      onAddCancel () {
-        this.showAddModal = false
-      },
-      onAddSubmit () {
-        this.showAddModal = false
-      },
-      onEditCancel () {
-        this.showEditModal = false
-      },
-      onEditSubmit () {
-        if (this.delRuleChecked) {
-          // 删除
-          var ret = window.confirm('确认删除快照规则')
-          if (ret) {
-            this.deleteSnapshotRule()
-            this.showEditModal = false
-          }
-        } else {
-          this.editSnapshotRule()
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    createSnapshotRule () {
+      if (this.productType.value === 0) {
+        return
+      }
+      api.snapshot.createRule(this.productType.id, this.addRules).then((res) => {
+        if (res.status === 200) {
+          this.productsRules = [] // 清空数组重新获取
+          this.getProductRules(true)
+        }
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    editSnapshotRule () {
+      api.snapshot.updateRule(this.curentEditRule.productID, this.editRules).then((res) => {
+        if (res.status === 200) {
+          this.getProductRules(true)
+        }
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    deleteSnapshotRule () {
+      api.snapshot.deleteRule(this.curentEditRule.productID, this.curentEditRule.id).then((res) => {
+        if (res.status === 200) {
+          this.delRuleChecked = false
+          this.getProductRules(true)
+        }
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    onAddCancel () {
+      this.showAddModal = false
+    },
+    onAddSubmit () {
+      this.showAddModal = false
+    },
+    onEditCancel () {
+      this.showEditModal = false
+    },
+    onEditSubmit () {
+      if (this.delRuleChecked) {
+        // 删除
+        var ret = window.confirm('确认删除快照规则')
+        if (ret) {
+          this.deleteSnapshotRule()
           this.showEditModal = false
         }
-      },
-      onEditPointCancel () {
-        this.showEditPointModal = false
-      },
-      onEditPointSubmit () {
-        this.showEditPointModal = false
-      },
-      init () {
-        this.getProducts()
-      },
-      getProducts () {
-        api.product.all().then((res) => {
-          this.products = res.data
-          this.getRules()
-        }, (err) => {
-          this.handleError(err)
-        })
-      },
-      getRules () {
-        this.productsRules = []
-        this.products.forEach((item) => {
-          var product = item
-          api.snapshot.getRule(item.id).then((res) => {
-            if (res.status === 200) {
-              if (res.data.count > 0) {
-                // 循环插入
-                res.data.list.forEach((item) => {
-                  item.productName = product.name
-                  item.productID = product.id
-                  this.productsRules.push(item)
-                })
-              }
-            }
-          }, (err) => {
-            this.handleError(err)
-          })
-        })
-      },
-      getProductRules (clearPage) {
-        if (clearPage) {
-          this.currentRulesPage = 1
-        }
-        this.productsRules = []
-        if (this.ruleProductType.value === 0) {
-          this.getRules()
-        } else {
-          var self = this
-          api.snapshot.getRule(this.ruleProductType.id).then((res) => {
-            if (res.status === 200) {
-              if (res.data.count > 0) {
-                // 循环插入
-                res.data.list.forEach((item) => {
-                  item.productName = self.ruleProductType.label
-                  item.productID = self.ruleProductType.id
-                  this.productsRules.push(item)
-                })
-              }
-            }
-          }, (err) => {
-            this.handleError(err)
-          })
-        }
-      },
-      getProductData (clearPage, rule) {
-        if (clearPage) {
-          this.currentPage = 1
-        }
-        if (this.productType.value === 0 && !rule) {
-          return
-        }
-        var id = rule ? rule.productID : this.productType.id
-        api.product.getDatapoints(id).then((res) => {
-          var datas = []
-          res.data.forEach((item) => {
-            var data = {}
-            data.selected = false
-            data.index = item.index
-            data.id = item.id
-            data.name = item.name
-            data.type = item.type
-            data.symbol = item.symbol
-            data.description = item.description
-            if (rule) {
-              var finded = false
-              rule.datapoint.forEach((item) => {
-                if (data.index === item) {
-                  finded = true
-                }
+      } else {
+        this.editSnapshotRule()
+        this.showEditModal = false
+      }
+    },
+    onEditPointCancel () {
+      this.showEditPointModal = false
+    },
+    onEditPointSubmit () {
+      this.showEditPointModal = false
+    },
+    init () {
+      this.getProducts()
+    },
+    getProducts () {
+      api.product.all().then((res) => {
+        this.products = res.data
+        this.getRules()
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    getRules () {
+      this.productsRules = []
+      this.products.forEach((item) => {
+        var product = item
+        api.snapshot.getRule(item.id).then((res) => {
+          if (res.status === 200) {
+            if (res.data.count > 0) {
+              // 循环插入
+              res.data.list.forEach((item) => {
+                item.productName = product.name
+                item.productID = product.id
+                this.productsRules.push(item)
               })
-              if (finded) {
-                data.selected = true
-              }
             }
-            datas.push(data)
-          })
-          if (rule) {
-            this.editDataPoints = datas
-          } else {
-            this.dataPoints = datas
           }
         }, (err) => {
           this.handleError(err)
         })
-      },
-      editSnapshot (rule) {
-        this.curentEditRule = rule
-        this.showEditModal = true
-        this.ruleDataPointsShow = []
-        this.getProductData(false, rule)
-        switch (rule.interval) {
-          case 10:
-            this.timeIntervalEdit.value = 0
-            break
-          case 20:
-            this.timeIntervalEdit.value = 1
-            break
-          case 30:
-            this.timeIntervalEdit.value = 2
-            break
-          case 60:
-            this.timeIntervalEdit.value = 3
-            break
-          default:
-            break
-        }
-
-        if (rule.interval === 60) {
-          this.timeIntervalEdit.label = '1小时'
+      })
+    },
+    getProductRules (clearPage) {
+      if (clearPage) {
+        this.currentRulesPage = 1
+      }
+      this.productsRules = []
+      if (this.ruleProductType.value === 0) {
+        this.getRules()
+      } else {
+        var self = this
+        api.snapshot.getRule(this.ruleProductType.id).then((res) => {
+          if (res.status === 200) {
+            if (res.data.count > 0) {
+              // 循环插入
+              res.data.list.forEach((item) => {
+                item.productName = self.ruleProductType.label
+                item.productID = self.ruleProductType.id
+                this.productsRules.push(item)
+              })
+            }
+          }
+        }, (err) => {
+          this.handleError(err)
+        })
+      }
+    },
+    getProductData (clearPage, rule) {
+      if (clearPage) {
+        this.currentPage = 1
+      }
+      if (this.productType.value === 0 && !rule) {
+        return
+      }
+      var id = rule ? rule.productID : this.productType.id
+      api.product.getDatapoints(id).then((res) => {
+        var datas = []
+        res.data.forEach((item) => {
+          var data = {}
+          data.selected = false
+          data.index = item.index
+          data.id = item.id
+          data.name = item.name
+          data.type = item.type
+          data.symbol = item.symbol
+          data.description = item.description
+          if (rule) {
+            var finded = false
+            rule.datapoint.forEach((item) => {
+              if (data.index === item) {
+                finded = true
+              }
+            })
+            if (finded) {
+              data.selected = true
+            }
+          }
+          datas.push(data)
+        })
+        if (rule) {
+          this.editDataPoints = datas
         } else {
-          this.timeIntervalEdit.label = rule.interval.toString() + '分钟'
+          this.dataPoints = datas
         }
+      }, (err) => {
+        this.handleError(err)
+      })
+    },
+    editSnapshot (rule) {
+      this.curentEditRule = rule
+      this.showEditModal = true
+      this.ruleDataPointsShow = []
+      this.getProductData(false, rule)
+      switch (rule.interval) {
+        case 10:
+          this.timeIntervalEdit.value = 0
+          break
+        case 20:
+          this.timeIntervalEdit.value = 1
+          break
+        case 30:
+          this.timeIntervalEdit.value = 2
+          break
+        case 60:
+          this.timeIntervalEdit.value = 3
+          break
+        default:
+          break
+      }
+
+      if (rule.interval === 60) {
+        this.timeIntervalEdit.label = '1小时'
+      } else {
+        this.timeIntervalEdit.label = rule.interval.toString() + '分钟'
       }
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../../assets/stylus/common'
-  .data-points-footer
-    .pager
-      margin 10px 0 0
-  .edit-snapshot
-    line-height 32px
-  .data-tag
-    display inline-block
-    color gray
-    margin-right 10px
-  .snapshot-select
-    margin-top 30px
-  .height-wrap
-    height 1.5em
-  .table-wrap
-    height 100%
-    width 100%
-    overflow-y hidden
-    overflow-x auto
-  .form-wrap
-    padding 10px 20px 0
+@import '../../../../assets/stylus/common'
+.data-points-footer
+  .pager
+    margin 10px 0 0
+.edit-snapshot
+  line-height 32px
+.data-tag
+  display inline-block
+  color gray
+  margin-right 10px
+.snapshot-select
+  margin-top 30px
+.height-wrap
+  height 1.5em
+.table-wrap
+  height 100%
+  width 100%
+  overflow-y hidden
+  overflow-x auto
+.form-wrap
+  padding 10px 20px 0
 </style>

@@ -19,6 +19,7 @@
             </div>
             <div v-stretch="182">
               <info-list :info="productInfo">
+                <a class="hl-red" slot="key" @click.prevent="displayKey">点击查看</a>
                 <a class="hl-red" slot="qrcode" @click.prevent="displayQrcode">点击查看</a>
               </info-list>
             </div>
@@ -174,6 +175,11 @@
         </validation>
       </div>
     </modal>
+
+    <modal :show.sync="showKeyModal">
+      <h3 slot="header">{{ $t("ui.overview.key") }}</h3>
+      <div slot="body" class="product-key tac">{{ productKey }}</div>
+    </modal>
   </div>
 </template>
 
@@ -263,6 +269,8 @@ export default {
         label: 'MAC',
         value: 'mac'
       },
+      showKeyModal: false,
+      productKey: '',
       showEditModal: false,
       delChecked: false,
       productType: {},
@@ -426,14 +434,21 @@ export default {
           label: '连接类型',
           value: this.locales.data.DEVICE_TYPES[this.currentProduct.link_type - 1]
         },
-        qrcode: {
-          label: '产品二维码',
-          slot: true,
-          value: '-'
+        id: {
+          label: '产品ID',
+          value: this.currentProduct.id
         },
         description: {
           label: '产品描述',
           value: this.currentProduct.description
+        },
+        key: {
+          label: '产品密钥',
+          slot: true
+        },
+        qrcode: {
+          label: '产品二维码',
+          slot: true
         }
       }
     },
@@ -470,6 +485,18 @@ export default {
      * @author shengzhi
      */
     onBuyButtonClick () {
+    },
+
+    // 查看产品密钥
+    displayKey () {
+      api.product.getProductKey(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.productKey = res.data.key
+          this.showKeyModal = true
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
 
     /**
@@ -707,4 +734,7 @@ export default {
   text-align center
   margin-top 3px
   color #999999
+
+.product-key
+  font-size 20px
 </style>

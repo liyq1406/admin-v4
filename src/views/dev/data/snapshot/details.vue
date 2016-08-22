@@ -81,7 +81,7 @@
                       </div>
                     </div>
                     <div class="operation-box col-9">
-                      <div class="check-device">
+                      <div class="check-device hidden">
                         <button class="btn btn-primary" v-link="{path: '/dev/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
                       <div class="radio-group-box">
@@ -191,7 +191,7 @@ export default {
     return {
       breadcrumbNav: [{
         label: '数据快照',
-        link: '/operation/data/snapshot'
+        link: '/dev/data/snapshots'
       }, {
         label: '数据快照详情'
       }],

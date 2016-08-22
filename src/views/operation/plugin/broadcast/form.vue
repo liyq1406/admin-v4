@@ -283,7 +283,7 @@
           </form>
         </validator>
       </div>
-      <div class="preview col-8">
+      <div class="preview col-8 hidden">
         <div class="preview-box">
           <div class="preview-container">
             这里面是预览的内容
