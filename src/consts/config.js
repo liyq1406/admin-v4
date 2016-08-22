@@ -99,9 +99,6 @@ export const MAIN_NAV = {
         alias: 'amazon',
         url: '/linkage/amazon'
       }, {
-        alias: 'philips',
-        url: '/linkage/philips'
-      }, {
         alias: 'ifttt',
         url: '/linkage/ifttt'
       }, {
