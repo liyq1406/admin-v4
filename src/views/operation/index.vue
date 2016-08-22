@@ -169,17 +169,18 @@ export default {
               alias: 'overview',
               url: `/plugins/warranty/${item.id}/overview`
             }, {
-              alias: 'extended_warranties',
-              url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
-            }, {
               alias: 'repair',
               url: `/plugins/warranty/${item.id}/work-orders/repair`
             }, {
+              alias: 'extended_warranties',
+              url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
+            }, {
               alias: 'accounts',
               url: `/plugins/warranty/${item.id}/accounts`
-            }, {
-              alias: 'heat',
-              url: `/plugins/warranty/${item.id}/heat`
+            // 暂时隐藏
+            // }, {
+            //   alias: 'heat',
+            //   url: `/plugins/warranty/${item.id}/heat`
             }]
             break
           case 'broadcast': // 消息推送
@@ -204,6 +205,8 @@ export default {
             break
           case 'dealer': // 经销商管理
             sub.icon = 'sitemap'
+            // sub.alias = 'list'
+            // sub.url = `plugins/dealer/${item.id}/list`
             sub.subs = [{
               alias: 'list',
               url: `/plugins/dealer/${item.id}/list`

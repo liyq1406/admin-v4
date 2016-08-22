@@ -1,13 +1,16 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>延保工单</h2>
+      <h2>故障事件</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width='110px' size="small">
+          <v-select :label="product.name" width='110px' size="small">
             <span slot="label">产品</span>
+            <select v-model="product">
+              <option v-for="opt in productOptions" :value="opt">{{ opt.name }}</option>
+            </select>
           </v-select>
         </div>
       </div>
@@ -32,18 +35,10 @@
     </div> -->
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left">
-          <i class="tips" slot="tips">(小于10天)</i>
-          <div slot="action">
-            <button>
-            一键延保通知
-            </button>
-        </div>
-        </statistic>
+        <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="extendedSummary.unfinished" :title="extendedSummary.unfinished.title" :has-target="true" align="left">
-        </statistic>
+        <statistic :info="extendedSummary.unfinished" :title="extendedSummary.unfinished.title" :has-target="true" align="left"></statistic>
       </div>
       <div class="col-6">
         <statistic :info="extendedSummary.today" :title="extendedSummary.today.title" align="left" :showchange="true"></statistic>
@@ -159,6 +154,7 @@
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
   // import Pager from 'components/Pager'
+  import store from 'store'
   import api from 'api'
   import { pluginMixins } from '../../../mixins'
   import Mock from 'mockjs'
@@ -170,6 +166,14 @@
     name: 'OrderList',
 
     mixins: [globalMixins, pluginMixins],
+
+    store,
+
+    vuex: {
+      getters: {
+        products: ({ products }) => products.all
+      }
+    },
 
     components: {
       'v-select': Select,
@@ -184,6 +188,7 @@
 
     data () {
       return {
+        product: {},
         name: '',
         status: {
           label: '全部',
@@ -226,27 +231,25 @@
         ],
         headers: [
           {
-            key: 'id',
-            title: '工单编号'
+            key: 'device_id',
+            title: '设备ID'
           },
           {
-            key: 'mac',
-            title: '维修设备(mac)'
+            key: 'event_id',
+            title: '事件ID'
           },
           {
-            key: 'invalid_time',
-            title: '到期时间',
+            key: 'description',
+            title: '描述'
+          },
+          {
+            key: 'tag',
+            title: '标签'
+          },
+          {
+            key: 'report_time',
+            title: '上报时间',
             sortType: -1
-          },
-          {
-            key: 'time',
-            title: '延保时间',
-            class: 'tac',
-            sortType: -1
-          },
-          {
-            key: 'addr',
-            title: '地点'
           },
           {
             key: 'state',
@@ -256,29 +259,35 @@
         ],
         extendedSummary: {
           rest: {
-            total: 235,
+            total: 0,
             change: 0,
-            title: '即将到期'
+            title: '事件总数'
           },
           unfinished: {
-            total: 135,
+            total: 0,
             title: '待处理数'
           },
           today: {
-            total: 232,
-            change: -124,
-            title: '今日延保数'
+            total: 0,
+            change: 0,
+            title: '今日事件'
           },
           week: {
-            total: 2802,
-            change: 124,
-            title: '一周维修数'
+            total: 0,
+            change: 0,
+            title: '近7天事件数'
           }
         }
       }
     },
 
     computed: {
+      productOptions () {
+        if (this.products.length) {
+          this.product = this.products[0]
+        }
+        return this.products
+      },
       page () {
         return {
           currentPage: this.currentPage,
@@ -378,88 +387,88 @@
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
       getWarrantyList1 () {
-        this.total = 20
+        // this.total = 20
         this.workOrders = [
-          {
-            id: 'YWD212912341',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '2年',
-            addr: '湖北, 武汉',
-            state: 1
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          },
-          {
-            id: 'YWD212912342',
-            mac: '1108ea95',
-            invalid_time: '2016-1-1   19:21:32',
-            time: '待延保',
-            addr: '湖北, 武汉',
-            state: 0
-          }
+          // {
+          //   id: 'YWD212912341',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '2年',
+          //   addr: '湖北, 武汉',
+          //   state: 1
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // },
+          // {
+          //   id: 'YWD212912342',
+          //   mac: '1108ea95',
+          //   invalid_time: '2016-1-1   19:21:32',
+          //   time: '待延保',
+          //   addr: '湖北, 武汉',
+          //   state: 0
+          // }
         ]
       },
       getWarrantyList (querying) {

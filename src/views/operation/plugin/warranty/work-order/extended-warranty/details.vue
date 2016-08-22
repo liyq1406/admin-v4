@@ -16,11 +16,11 @@
               </div>
               <div class="down row">
                 <div class="col-12">
-                  <span>2016-12-03</span>
+                  <span class="ml0">2016-12-03</span>
                   <span class="ml15">16:12:03</span>
-                  <span>至</span>
+                  <!-- <span>至</span>
                   <span>2018-12-03</span>
-                  <span class="ml15">16:12:03</span>
+                  <span class="ml15">16:12:03</span> -->
                 </div>
                 <div class="col-12">
                   <button>
@@ -153,31 +153,26 @@ export default {
         label: '全部',
         link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
       }, {
-        label: '工单详情'
+        label: '事件详情'
       }],
       historys: [],
       headers: [
         {
-          key: 'id',
-          title: '工单编号'
+          key: 'event_id',
+          title: '事件ID'
         },
         {
-          key: 'mac',
-          title: '维修设备(mac)'
+          key: 'description',
+          title: '描述'
         },
         {
-          key: 'invalid_time',
-          title: '到期时间',
+          key: 'tag',
+          title: '标签'
+        },
+        {
+          key: 'report_time',
+          title: '上报时间',
           sortType: -1
-        },
-        {
-          key: 'time',
-          title: '延保时间',
-          sortType: -1
-        },
-        {
-          key: 'addr',
-          title: '地点'
         },
         {
           key: 'state',

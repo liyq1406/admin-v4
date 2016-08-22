@@ -21,7 +21,7 @@
       <div class="col-9">
         <div class="row">
           <div class="col-24 col-offset-1 tac pd15">
-            <statistic :info="avg.info" :title="avgTitle" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
+            <statistic :info="avg.info" :title="" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
           </div>
         </div>
         <div class="top">

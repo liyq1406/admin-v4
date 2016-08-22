@@ -37,7 +37,7 @@ export default {
     // 标题
     title: {
       type: String,
-      default: '总数'
+      default: ''
     },
 
     // 标题提示说明
