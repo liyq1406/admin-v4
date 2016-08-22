@@ -87,26 +87,26 @@ export const MAIN_NAV = {
       icon: 'shopping-bag',
       url: 'market/index'
     }, {
-      alias: 'nest', // 智能互联
+      alias: 'linkage', // 智能互联
       icon: 'exchange',
       subs: [{
-        alias: 'wechat',
-        url: '/nest/wechat'
+        alias: 'settings',
+        url: '/linkage/settings'
       }, {
         alias: 'google',
-        url: '/nest/google'
+        url: '/linkage/google'
       }, {
         alias: 'amazon',
-        url: '/nest/amazon'
+        url: '/linkage/amazon'
       }, {
         alias: 'philips',
-        url: '/nest/philips'
+        url: '/linkage/philips'
       }, {
         alias: 'ifttt',
-        url: '/nest/ifttt'
+        url: '/linkage/ifttt'
       }, {
         alias: 'ezviz',
-        url: '/nest/ezviz'
+        url: '/linkage/ezviz'
       }]
     }, {
       alias: 'firmware', // 固件管理

@@ -23,7 +23,6 @@ export default {
             virtual_devices: '虚拟设备',
             alert: '告警设置',
             data_forward: '数据接口',
-            linkage: '设备互联',
             authorize: '设备授权'
           }
         },
@@ -61,10 +60,10 @@ export default {
             update: '上传新固件'
           }
         },
-        nest: {
+        linkage: {
           label: '智能互联',
           subs: {
-            wechat: '微信互联',
+            settings: '互联设置',
             amazon: 'Amazon echo',
             google: 'Google nest',
             philips: 'Philips hue',

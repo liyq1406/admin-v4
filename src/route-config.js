@@ -319,14 +319,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 设备联动
-        'products/:id/linkage': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/linkage'))
-            }, 'admin')
-          }
-        },
 
         // -------------------------设备授权-------------------------
         // 授权记录
@@ -338,51 +330,59 @@ let configRouter = (router) => {
         //   }
         // },
         // -------------------------智能互联-------------------------
-        // 微信互联
-        'nest/wechat': {
+        // 设备联动
+        'linkage/settings': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/wechat'))
+              resolve(require('./views/dev/linkage/settings'))
             }, 'admin')
           }
         },
+        // 微信互联（暂时去掉）
+        // 'nest/wechat': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/nest/wechat'))
+        //     }, 'admin')
+        //   }
+        // },
         // 亚马逊互联
-        'nest/amazon': {
+        'linkage/amazon': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/amazon'))
+              resolve(require('./views/dev/linkage/amazon'))
             }, 'admin')
           }
         },
         // Google互联
-        'nest/google': {
+        'linkage/google': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/google'))
+              resolve(require('./views/dev/linkage/google'))
             }, 'admin')
           }
         },
         // philips互联
-        'nest/philips': {
+        'linkage/philips': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/philips'))
+              resolve(require('./views/dev/linkage/philips'))
             }, 'admin')
           }
         },
         // 萤石互联
-        'nest/ezviz': {
+        'linkage/ezviz': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/ezviz'))
+              resolve(require('./views/dev/linkage/ezviz'))
             }, 'admin')
           }
         },
         // 设备联动
-        'nest/ifttt': {
+        'linkage/ifttt': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/nest/ifttt'))
+              resolve(require('./views/dev/linkage/ifttt'))
             }, 'admin')
           }
         },
