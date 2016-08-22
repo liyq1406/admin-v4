@@ -31,12 +31,13 @@
       return {
         // 图片样式
         picStyle: {
+          marginLeft: `${this.gap}px`,
           width: `${this.picWidth}px`
         },
 
         // 文案样式
         textStyle: {
-          marginLeft: `${this.picWidth + this.gap}px`
+          marginLeft: `${this.picWidth + this.gap * 2}px`
         }
       }
     }
