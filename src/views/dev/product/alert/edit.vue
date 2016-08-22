@@ -154,7 +154,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions fr mt10">
+              <div class="form-actions mt10">
                 <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
               </div>
             </form>
@@ -233,11 +233,30 @@
     route: {
       data () {
         this.getDataPoint()
+        // this.getAlerts()
       }
     },
     ready () {
     },
     methods: {
+      getAlerts () {
+        var params = {
+          query: {
+            id: {
+              $like: this.$route.params.rule_id
+            }
+          }
+        }
+        console.log(112)
+        api.alert.getAlerts(params).then((res) => {
+          if (res.status === 200) {
+            console.log(res.data)
+          }
+          this.loadingData = false
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
       // 是否显示 APN推送
       isShowApn (model) {
         return _.includes(model.notify_target, 4)

@@ -61,12 +61,6 @@ export default {
     UserTrend
   },
 
-  vuex: {
-    getters: {
-      products: ({ products }) => products.all
-    }
-  },
-
   data () {
     return {
       // 统计

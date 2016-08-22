@@ -78,7 +78,7 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      products: ({ products }) => products.released
     }
   },
 

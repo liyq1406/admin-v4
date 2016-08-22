@@ -21,9 +21,8 @@ export default {
             info: '产品信息',
             debug: '设备调试',
             virtual_devices: '虚拟设备',
-            alert: '告警管理',
+            alert: '告警设置',
             data_forward: '数据接口',
-            linkage: '设备互联',
             authorize: '设备授权'
           }
         },
@@ -49,7 +48,7 @@ export default {
           label: '数据服务',
           subs: {
             tables: '数据表',
-            snapshot: '数据快照'
+            snapshots: '数据快照'
           }
         },
         firmware: {
@@ -61,15 +60,15 @@ export default {
             update: '上传新固件'
           }
         },
-        nest: {
+        linkage: {
           label: '智能互联',
           subs: {
-            wechat: '微信互联',
-            amazon: '亚马逊互联',
+            settings: '互联设置',
+            amazon: 'Amazon echo',
             google: 'Google nest',
-            philips: 'philips互联',
-            ezviz: '萤石互联',
-            ifttt: '设备联动'
+            philips: 'Philips hue',
+            ezviz: '萤石',
+            ifttt: 'IFTTT'
           }
         },
         shopping: {

@@ -646,7 +646,7 @@ export default {
       .device-picture
         width 65px
         height 65px
-        background url('../../../assets/images/device_thumb.png') center/100%
+        background url('../../../../assets/images/device_thumb.png') center/100%
       .device-base-msg
         height 60px
         line-height 23px

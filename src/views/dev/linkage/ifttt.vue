@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <!-- <div class="main-title">
-      <h2>echo</h2>
-    </div> -->
-    <div class="panel pdt20">
+    <div class="main-title bordered">
+      <h2>IFTTT</h2>
+    </div>
+    <div class="panel">
       <div class="row mt20 mb20">
         <div class="col-16">
           <pic-txt :pic-width="139">
@@ -15,7 +15,7 @@
     </div>
     <div class="panel">
       <div class="linkage-list">
-        <linkage-item name="amazon echo">
+        <linkage-item name="Hue">
           <img slot="thumb" src="../../../assets/images/amazon-echo.png"/>
           <div class="hl-gray">Coming soon...</div>
         </linkage-item>
@@ -30,7 +30,7 @@
   import LinkageItem from './components/LinkageItem'
 
   export default {
-    name: 'Echo',
+    name: 'IFTTT',
 
     components: {
       'pic-txt': PicTxt,
@@ -40,7 +40,3 @@
     mixins: [globalMixins]
   }
 </script>
-<style lang="stylus" scoped>
-.pdt20
-  padding-top 20px
-</style>

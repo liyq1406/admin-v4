@@ -23,10 +23,10 @@
           <li class="sec-nav-item">
             <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("ui.user_menu.account") }}</a>
           </li>
-          <li class="sec-nav-item">
+          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>成员管理</a>
           </li>
-          <li class="sec-nav-item">
+          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
           </li>
           <li class="sec-nav-item">

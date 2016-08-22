@@ -9,7 +9,7 @@
           <div class="panel-hd bordered row">
             <div class="msg-box fl col-10">
               <div class="title">
-                <h2 class="product-title mt5 mb5">智能烤箱</h2>
+                <h2 class="product-title mt5 mb5">{{ currentProduct.name + ' (Demo)' }}</h2>
               </div>
               <div class="type-box">
                 <div class="status-box">
@@ -147,6 +147,7 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
+import { setCurrProductMixin } from './mixins'
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
 import Range from 'components/Range'
@@ -157,7 +158,8 @@ import _ from 'lodash'
 export default {
   name: 'VirtualDevices',
 
-  mixins: [globalMixins],
+  mixins: [globalMixins, setCurrProductMixin],
+
   components: {
     'search-box': SearchBox,
     Pager,

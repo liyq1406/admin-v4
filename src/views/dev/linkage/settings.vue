@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <div class="main-title">
-      <h2>设备联动</h2>
+    <div class="main-title bordered">
+      <h2>互联设置</h2>
     </div>
-    <div class="panel">
+    <div class="panel mt20">
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
         <v-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
@@ -79,7 +79,7 @@
   import api from 'api'
 
   export default {
-    name: 'Devices_link',
+    name: 'Settings',
 
     mixins: [globalMixins],
 

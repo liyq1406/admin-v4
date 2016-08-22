@@ -87,26 +87,26 @@ export const MAIN_NAV = {
       icon: 'shopping-bag',
       url: 'market/index'
     }, {
-      alias: 'nest', // 智能互联
+      alias: 'linkage', // 智能互联
       icon: 'exchange',
       subs: [{
-        alias: 'wechat',
-        url: '/nest/wechat'
-      }, {
-        alias: 'amazon',
-        url: '/nest/amazon'
+        alias: 'settings',
+        url: '/linkage/settings'
       }, {
         alias: 'google',
-        url: '/nest/google'
+        url: '/linkage/google'
+      }, {
+        alias: 'amazon',
+        url: '/linkage/amazon'
       }, {
         alias: 'philips',
-        url: '/nest/philips'
+        url: '/linkage/philips'
+      }, {
+        alias: 'ifttt',
+        url: '/linkage/ifttt'
       }, {
         alias: 'ezviz',
-        url: '/nest/ezviz'
-      // }, {
-      //   alias: 'ifttt',
-      //   url: '/nest/ifttt'
+        url: '/linkage/ezviz'
       }]
     }, {
       alias: 'firmware', // 固件管理
@@ -128,8 +128,8 @@ export const MAIN_NAV = {
         alias: 'tables',
         url: '/data/tables'
       }, {
-        alias: 'snapshot',
-        url: '/data/snapshot'
+        alias: 'snapshots',
+        url: '/data/snapshots'
       }]
     }, {
       alias: 'shopping', // 在线购买

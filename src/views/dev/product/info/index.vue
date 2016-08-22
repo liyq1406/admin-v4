@@ -93,10 +93,9 @@
               <label class="form-control col-6">{{ $t("ui.product.fields.mode") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                  <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{required: true, maxlength: 64}" lazy class="input-text"/>
+                  <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{maxlength: 64}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.mode.touched && $validation.mode.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.mode')}) }}</span>
                   <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
                 </div>
               </div>
@@ -338,15 +337,16 @@ export default {
   computed: {
     // 产品配额
     annulusInfo () {
+      let used = (this.used >= this.currentProduct.quota) ? this.currentProduct.quota : this.used
       // 剩余配额
-      let remain = this.currentProduct.quota - this.used
+      let remain = this.currentProduct.quota - used
 
       return [{
         name: '授权设备',
-        val: this.used
+        val: used
       }, {
         name: '剩余份额',
-        val: remain || 0
+        val: remain
       }]
     },
 
