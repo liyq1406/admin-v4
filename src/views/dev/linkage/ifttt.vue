@@ -5,7 +5,7 @@
     </div>
     <div class="panel bornon">
       <div class="row mt20 mb20">
-        <div class="col-20">
+        <div class="col-24">
           <pic-txt :pic-width="86">
             <img slot="pic" src="../../../assets/images/ifttttit.png" alt="nest互联">
             <p>IFTTT 是“if this, then that” 的缩写，真正让物联网为你服务！通过设定“如果”实现“就’，从而轻松完成各种硬件之间的智慧互联，突破想象，IFTTT触发你的智能生活！ 如：设定门磁传感器与红外报警器之间的IFTTT，如果门磁监测有人经过，红外报警器开启报警模式；</p>
@@ -48,36 +48,6 @@
         <div class="hl-gray" style="line-height:120px;margin-left:110px">Coming soon...</div>
       </div>
     </div>
-    <!-- <div class="panel" >
-      <div class="linkage-list">
-        <linkage-item name="nest thermostat">
-          <img slot="thumb" src="../../../assets/images/nest-smoke.png"/>
-          <div class="row">
-            <div class="col-3">
-              <span class="label-text">联动服务：</span>
-            </div>
-            <div class="col-20">
-              <v-switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></v-switch>
-              <span v-if="!enableThermostat" class="label-text">未开启</span>
-              <span v-else class="label-text">已开启</span>
-            </div>
-          </div>
-        </linkage-item>
-        <linkage-item name="nest smoke">
-          <img slot="thumb" src="../../../assets/images/nest-thermostat.png"/>
-          <div class="row">
-            <div class="col-3">
-              <span class="label-text">联动服务：</span>
-            </div>
-            <div class="col-20">
-              <v-switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></v-switch>
-              <span v-if="!enableSmoke" class="label-text">未开启</span>
-              <span v-else class="label-text">已开启</span>
-            </div>
-          </div>
-        </linkage-item>
-      </div>
-    </div> -->
   </div>
 </template>
 
