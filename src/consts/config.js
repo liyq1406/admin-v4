@@ -62,14 +62,19 @@ export const NOTICE_DURATION = 2000
 export const DEALER_SCOPE_SEPERATOR = '.'
 
 export const MAIN_NAV = {
-  dashboard: {
-    alias: 'dashboard',
-    url: '/dashboard'
-  },
+  // dashboard: {
+  //   alias: 'dashboard',
+  //   url: '/dashboard'
+  // },
   dev: {
     alias: 'dev',
     url: '/dev',
     subs: [{
+      // action: false,
+      icon: 'home',
+      url: '/dev',
+      alias: 'home'
+    }, {
       action: true,
       icon: 'plus',
       url: '/products/create'

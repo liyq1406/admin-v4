@@ -22,7 +22,7 @@ import { MAIN_NAV } from 'consts/config'
 import store from 'store/index'
 
 export default {
-  name: 'Operation',
+  name: 'dev',
 
   layouts: ['topbar', 'sidebar'],
 
@@ -56,7 +56,7 @@ export default {
       }
       let subs = MAIN_NAV.dev.subs
       // 概览
-      // result.subs.push(subs[0])
+      result.subs.push(subs[0])
 
       // 产品开发标题
       result.subs.push({
@@ -83,7 +83,7 @@ export default {
       })
 
       // 其他导航
-      result.subs = result.subs.concat(subs.slice(0, subs.length))
+      result.subs = result.subs.concat(subs.slice(1, subs.length))
       // console.log(subs.slice(1, subs.length))
       // this.nav.subs.forEach((item, index) => {
       //   var reg = new RegExp(`${result.url}/${item.alias}`, 'i')

@@ -13,6 +13,9 @@ export default {
       label: '开发平台',
       // 侧栏导航
       subs: {
+        home: {
+          label: '首页'
+        },
         products: {
           subs: {
             info: '产品信息',

@@ -1,8 +1,9 @@
 <template>
   <header class="header the-header" transition="header" transition-mode="out-in">
-    <a v-link="{ path: '/' }" class="logo"></a>
+    <a v-link="{ path: '/dashboard' }" class="logo"></a>
     <!-- Start: 主导航 -->
     <nav class="nav-header">
+      <!-- <pre>{{mainNav | json}}</pre> -->
       <ul>
         <li v-for="link in mainNav"><a v-link="{path: link.url}"><span class="link-text">{{ $t('ui.main_nav.' + link.alias + '.label') }}</span></a></li>
       </ul>
