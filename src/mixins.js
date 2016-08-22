@@ -65,7 +65,7 @@ export var globalMixins = {
       if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
         this.showNotice({
           type: 'error',
-          content: locales[Vue.config.lang].errors[err.data.error.code]
+          content: locales[Vue.config.lang].errors[err.data.error.code] || '请求出错'
         })
         switch (err.data.error.code) {
           case 4031003:
