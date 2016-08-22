@@ -337,15 +337,16 @@ export default {
   computed: {
     // 产品配额
     annulusInfo () {
+      let used = (this.used >= this.currentProduct.quota) ? this.currentProduct.quota : this.used
       // 剩余配额
-      let remain = this.currentProduct.quota - this.used
+      let remain = this.currentProduct.quota - used
 
       return [{
         name: '授权设备',
-        val: this.used
+        val: used
       }, {
         name: '剩余份额',
-        val: remain || 0
+        val: remain
       }]
     },
 
