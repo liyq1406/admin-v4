@@ -5,38 +5,159 @@
     </div>
     <div class="panel">
       <div class="row mt20 mb20">
-        <div class="col-16">
-          <pic-txt :pic-width="139">
-            <img slot="pic" src="../../../assets/images/amazon.png" alt="amazon echo">
-            <!-- <p>提示：amazon echo是亚马逊智能家庭网关中心，如可以响应用户的语音命令、播放音乐、阅读有声书籍、提供天气预报、发出烹饪和起床警报等。</p> -->
+        <div class="col-20">
+          <pic-txt :pic-width="86">
+            <img slot="pic" src="../../../assets/images/ezviztit.png" alt="nest互联">
+            <p>萤石是基于互联网的民用安防产品，支持无线接入多种类型丰富的无线探测器，如可燃气体、智能门磁等；实现智能探测器与萤石安防产品的智能互联，看家护院神器，全方位安防守护您的监控场所。如：接入探测器与萤石摄像头，一旦家中或者店铺的某个探测器发现异常开始报警，萤石摄像头会立即收到指令，自动将镜头转向报警位置，让千里之外的你，也能第一时间掌握异常情况！</p>
           </pic-txt>
+          <div class="" style="margin-left:110px">
+            <span class="mr5">开启萤石联动服务</span>
+            <!-- <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></v-switch> -->
+            <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></v-switch>
+          </div>
+        </div>
+
+      </div>
+      <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
+        <div class="col-offset-2 col-10">
+          <form>
+            <div class="form-row row mb10">
+              <label class="form-control col-6" style="line-height:32px">APP ID:</label>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input type="text"  v-model="plugins[0].config.client_id" name="client_id" class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <label class="form-control col-6" style="line-height:32px">Access Key:</label>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input type="password" v-model="plugins[0].config.client_secret" name="client_id" class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions col-offset-6 mt20">
+              <!-- <button type="submit" @click.prevent.stop="editNestConfig" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button> -->
+              <button type="submit" @click.prevent.stop="" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
-    <div class="panel">
+    <!-- <div class="panel" >
       <div class="linkage-list">
-        <linkage-item name="ezviz萤石">
-          <img slot="thumb" src="../../../assets/images/amazon-echo.png"/>
-          <div class="hl-gray">Coming soon...</div>
+        <linkage-item name="nest thermostat">
+          <img slot="thumb" src="../../../assets/images/nest-smoke.png"/>
+          <div class="row">
+            <div class="col-3">
+              <span class="label-text">联动服务：</span>
+            </div>
+            <div class="col-20">
+              <v-switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></v-switch>
+              <span v-if="!enableThermostat" class="label-text">未开启</span>
+              <span v-else class="label-text">已开启</span>
+            </div>
+          </div>
+        </linkage-item>
+        <linkage-item name="nest smoke">
+          <img slot="thumb" src="../../../assets/images/nest-thermostat.png"/>
+          <div class="row">
+            <div class="col-3">
+              <span class="label-text">联动服务：</span>
+            </div>
+            <div class="col-20">
+              <v-switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></v-switch>
+              <span v-if="!enableSmoke" class="label-text">未开启</span>
+              <span v-else class="label-text">已开启</span>
+            </div>
+          </div>
         </linkage-item>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
 <script>
   import { globalMixins } from 'src/mixins'
+  import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
   import LinkageItem from './components/LinkageItem'
+  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
+  // import { pluginFactoryMixin } from '../../opration/plugin/mixins'
+  // import _ from 'lodash'
+  import api from 'api'
 
   export default {
-    name: 'Echo',
+    name: 'Nest',
 
     components: {
+      'v-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },
 
-    mixins: [globalMixins]
+    // mixins: [globalMixins, pluginFactoryMixin],
+    mixins: [globalMixins],
+
+    vuex: {
+      actions: {
+        createPlugin,
+        updatePlugin,
+        removePlugin
+      }
+    },
+
+    data () {
+      return {
+        editModel: {},
+        editValidation: {},
+        enableThermostat: false,
+        enableSmoke: false,
+        enableNest: true,
+        loading: false,
+        editing: false,
+        plugins: [{
+          id: '2e07d2ae62ffe000',
+          name: 'Google nest互联',
+          description: '',
+          alias: 'nest',
+          enable: false,
+          type: 10,
+          config: {}
+        }]
+      }
+    },
+    route: {
+      data () {
+        // this.getPlugins()
+      }
+    },
+
+    methods: {
+      // 修改config
+      editNestConfig () {
+        this.editing = true
+        var params = {
+          name: this.plugins[0].name,
+          enable: this.plugins[0].enable,
+          config: {
+            client_id: this.plugins[0].config.client_id,
+            client_secret: this.plugins[0].config.client_secret
+          }
+        }
+        if (this.plugins[0].id) {
+          api.plugin.update(this.plugins[0].id, params).then((res) => {
+            if (res.status === 200) {
+              this.getPlugins()
+            }
+            this.editing = false
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
+      }
+    }
   }
 </script>

@@ -7,14 +7,16 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="row">
-          <div class="col-16 alert-max">
-            <form @submit.prevent="onSubmit">
+          <div class="col-16 alert-max form">
+            <form v-form @submit.prevent="onSubmit" name="editValidation" hook="editFormHook">
               <div class="form-row row mt20">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
-                    <input v-model="addModal.model.name" type="text" minlength="2" maxlength="32" lazy class="input-text"/>
+                    <input v-model="editModal.model.name" type="text"  v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
                   </div>
+                  <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+                  <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -22,20 +24,20 @@
                 <div class="controls col-19">
                   <div class="row">
                     <div class="col-5">
-                      <v-select :label="ruleTypes[addModal.model.type-1]">
-                        <select v-model="addModal.model.type" @input="onSelectType">
+                      <v-select :label="ruleTypes[editModal.model.type-1]">
+                        <select v-model="editModal.model.type" @input="onSelectType">
                           <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>
                     </div>
-                    <div class="col-19" v-show="addModal.model.type === 1 && !datapoints.length">
+                    <div class="col-19" v-show="editModal.model.type === 1 && !datapoints.length">
                       <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
                     </div>
                     <div class="col-8">
-                      <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
+                      <div v-show="editModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="datapointName(addModal.model)">
-                            <select v-model="addModal.model.param">
+                          <v-select :label="datapointName(editModal.model)">
+                            <select v-model="editModal.model.param">
                               <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                             </select>
                           </v-select>
@@ -43,10 +45,10 @@
                       </div>
                     </div>
                     <div class="col-6">
-                      <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
+                      <div v-show="editModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="compareTypes[addModal.model.compare-1]">
-                            <select v-model="addModal.model.compare">
+                          <v-select :label="compareTypes[editModal.model.compare-1]">
+                            <select v-model="editModal.model.compare">
                               <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                             </select>
                           </v-select>
@@ -55,12 +57,12 @@
                     </div>
                     <div class="col-5">
                       <div class="ml10">
-                        <div class="input-text-wrap" v-show="addModal.model.type === 1 && datapoints.length">
-                          <input v-model="addModal.value1" type="text" class="input-text"/>
+                        <div class="input-text-wrap" v-show="editModal.model.type === 1 && datapoints.length">
+                          <input v-model="editModal.value1" type="text" class="input-text"/>
                         </div>
-                        <div class="select" v-show="addModal.model.type === 2">
-                          <v-select :label="$t('common.'+addModal.value2)">
-                            <select v-model="addModal.value2">
+                        <div class="select" v-show="editModal.model.type === 2">
+                          <v-select :label="$t('common.'+editModal.value2)">
+                            <select v-model="editModal.value2">
                               <option value="online">{{ $t("common.online") }}</option>
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
@@ -75,14 +77,16 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
-                    <textarea v-model="addModal.model.content" type="text" maxlength="250" class="input-text"></textarea>
+                    <textarea v-model="editModal.model.content" type="text" maxlength="250" v-form-ctrl name="content" required  lazy class="input-text"></textarea>
                   </div>
+                  <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+                  <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
                 </div>
               </div>
               <div class="form-row row tag-row mt20">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.tags") }}:</label>
                 <div class="controls col-19">
-                  <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
+                  <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -91,7 +95,7 @@
                   <div class="checkbox-group">
                     <template v-for="type in notifyTypes">
                       <label v-if="$index < 3" class="checkbox">
-                        <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
+                        <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                       </label>
                     </template>
                   </div>
@@ -99,14 +103,14 @@
                     <div class="row" v-if="$index === 3">
                       <div class="checkbox-group col-6 mt10">
                         <label class="checkbox">
-                          <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
+                          <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowApn(addModal.model)" class="apn-list">
+                        <div v-show="isShowApn(editModal.model)" class="apn-list">
                           <div class="checkbox-group">
                             <label v-for="app in apps" v-if="app.type===1" class="checkbox">
-                              <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
+                              <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
                         </div>
@@ -115,14 +119,14 @@
                     <div class="row" v-if="$index === 4">
                       <div class="checkbox-group col-6 mt10">
                         <label class="checkbox">
-                          <input type="checkbox" v-model="addModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
+                          <input type="checkbox" v-model="editModal.model.notify_target" name="notify_target" :value="$index+1" number/>{{ type }}
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowGoogle(addModal.model)" class="apn-list">
+                        <div v-show="isShowGoogle(editModal.model)" class="apn-list">
                           <div class="checkbox-group">
                             <label v-for="app in apps" v-if="app.type===2" class="checkbox">
-                              <input type="checkbox" v-model="addModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
+                              <input type="checkbox" v-model="editModal.model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
                         </div>
@@ -136,7 +140,7 @@
                 <div class="controls col-19 mt10">
                   <div class="radio-group">
                     <label v-for="type in scopeTypes" class="radio">
-                      <input type="radio" v-model="addModal.model.scope" name="addModal.model.scope" :value="$index+1" number/>{{ type }}
+                      <input type="radio" v-model="editModal.model.scope" name="editModal.model.scope" :value="$index+1" number/>{{ type }}
                     </label>
                   </div>
                 </div>
@@ -146,10 +150,10 @@
                 <div class="controls col-19 mt10">
                   <div class="radio-group">
                     <label class="radio">
-                      <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
+                      <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="false"/>{{ $t("common.disabled") }}
                     </label>
                     <label class="radio">
-                      <input type="radio" v-model="addModal.model.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
+                      <input type="radio" v-model="editModal.model.is_enable" name="is_enable" :value="true"/>{{ $t("common.enable") }}
                     </label>
                   </div>
                 </div>
@@ -168,6 +172,7 @@
   import api from 'src/api'
   import Vue from 'vue'
   import Select from 'components/Select'
+  // import * as config from 'consts/config'
   import SearchBox from 'components/SearchBox'
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
@@ -204,10 +209,14 @@
         }, {
           label: '修改告警规则'
         }],
-        addModal: {
+        delChecked: false,
+        editing: false,
+        editModal: {
           show: false,
           form: {},
           editingTag: false,
+          editValidation: {},
+          originEditModel: {},
           model: {           // 添加数据模型
             product_id: '',
             name: '',
@@ -266,7 +275,32 @@
       isShowGoogle (model) {
         return _.includes(model.notify_target, 5)
       },
-      onSubmit () {},
+      onSubmit () {
+        if (this.delChecked && !this.editing) { // 删除
+          this.editing = true
+          api.alert.deleteRule(this.editModal.model.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getRules()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        } else if (this.editValidation.$valid && !this.editing) { // 更新
+          this.editing = true
+          this.editModal.model.value = this.editModal.model.type === 1 ? this.editModal.value1 : this.editModal.value2
+          api.alert.updateRule(this.editModal.model, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.resetEdit()
+              this.getRules()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
+      },
       getDataPoint () {
         api.product.getDatapoints(this.$route.params.id).then((res) => {
           if (res.status === 200) {
@@ -274,12 +308,16 @@
               return
             }
             this.datapoints = res.data
-            this.addModal.model.param = res.data[0].id
+            this.editModal.model.param = res.data[0].id
           }
           this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
         })
+      },
+      // 编辑表单钩子
+      editFormHook (form) {
+        this.editModal.form = form
       },
       /**
        * 数据端点名称
@@ -303,11 +341,11 @@
       },
       // 选择告警类型
       onSelectType () {
-        if (this.addModal.model.type === 1) {
-          this.addModal.model.compare = 1
-          this.addModal.model.value = 'online'
+        if (this.editModal.model.type === 1) {
+          this.editModal.model.compare = 1
+          this.editModal.model.value = 'online'
         } else {
-          this.addModal.model.value = ''
+          this.editModal.model.value = ''
         }
       }
     }
