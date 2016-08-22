@@ -154,7 +154,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions fr mt10">
+              <div class="form-actions mt10">
                 <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
               </div>
             </form>
@@ -209,7 +209,7 @@
           form: {},
           editingTag: false,
           model: {           // 添加数据模型
-            product_id: '',
+            product_id: this.$route.params.id,
             name: '',
             tag: '',
             type: 1,
@@ -247,7 +247,18 @@
       isShowGoogle (model) {
         return _.includes(model.notify_target, 5)
       },
-      onSubmit () {},
+      onSubmit () {
+        this.adding = true
+        this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
+        api.alert.addRule(this.addModal.model).then((res) => {
+          if (res.status === 200) {
+            this.$route.router.go('/dev/products/' + this.$route.params.id + '/alert')
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
+      },
       getDataPoint () {
         api.product.getDatapoints(this.$route.params.id).then((res) => {
           if (res.status === 200) {
