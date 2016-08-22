@@ -13,19 +13,28 @@ import _ from 'lodash'
 // 状态初始化
 var state = {
   all: [],
+  released: [],
   curr: {},
   currDevice: {},
   currVirtualDevice: {}
+}
+
+function filterReleased (products) {
+  return products.filter((item) => {
+    return item.is_release
+  })
 }
 
 // 状态变化
 const mutations = {
   [RECEIVE_PRODUCTS] (state, products) {
     state.all = products
+    state.released = filterReleased(state.all)
   },
 
   [CREATE_PRODUCT] (state, product) {
     state.all.push(product)
+    state.released = filterReleased(state.all)
   },
 
   [REMOVE_PRODUCT] (state, product) {
@@ -34,6 +43,7 @@ const mutations = {
       return item.id === product.id
     })
     state.all = products
+    state.released = filterReleased(state.all)
   },
 
   [UPDATE_PRODUCT] (state, product) {
@@ -44,6 +54,7 @@ const mutations = {
       }
       return item
     })
+    state.released = filterReleased(state.all)
   },
 
   [SET_CURRENT_PRODUCT] (state, product) {

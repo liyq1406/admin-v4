@@ -36,7 +36,7 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all,
+      products: ({ products }) => products.released,
       plugins: ({ plugins }) => plugins.all
     }
   },
@@ -101,24 +101,48 @@ export default {
           icon: 'puzzle-piece',
           url: `plugins/${item.plugin}`
         }
+
+        // 排除的插件 id
+        let excluded = ['ios', 'android', 'wechat']
+
+        /**
+         * 判断数组是否存在某个值
+         * @param  {Array} arr  目标数组
+         * @param  {String} key 目标值
+         * @return {Boolean}
+         */
+        let exists = (arr, key) => {
+          let result = false
+          arr.forEach((item) => {
+            if (item === key) {
+              result = true
+            }
+          })
+          return result
+        }
+
         switch (item.plugin) {
-          case 'ios': // iOS
-            sub.icon = 'apple'
-            sub.subs = [{
-              alias: 'settings',
-              url: `/plugins/ios/${item.id}/settings`
-            }]
-            break
-          case 'android': // Android
-            sub.icon = 'android'
-            sub.subs = [{
-              alias: 'settings',
-              url: `/plugins/android/${item.id}/settings`
-            }, {
-              alias: 'version',
-              url: `/plugins/android/${item.id}/version`
-            }]
-            break
+          // 用户自定义 iOS 插件不予展示在侧栏
+          // case 'ios': // iOS
+          //   sub.icon = 'apple'
+          //   sub.subs = [{
+          //     alias: 'settings',
+          //     url: `/plugins/ios/${item.id}/settings`
+          //   }]
+          //   break
+
+          // 用户自定义 iOS 插件不予展示在侧栏
+          // case 'android': // Android
+          //   sub.icon = 'android'
+          //   sub.subs = [{
+          //     alias: 'settings',
+          //     url: `/plugins/android/${item.id}/settings`
+          //   }, {
+          //     alias: 'version',
+          //     url: `/plugins/android/${item.id}/version`
+          //   }]
+          //   break
+
           case 'web': // Web
             sub.icon = 'internet-explorer'
             sub.subs = [{
@@ -126,13 +150,16 @@ export default {
               url: `/plugins/web/${item.id}/settings`
             }]
             break
-          case 'wechat': // Wechat
-            sub.icon = 'wechat'
-            sub.subs = [{
-              alias: 'settings',
-              url: `/plugins/wechat/${item.id}/settings`
-            }]
-            break
+
+          // 用户自定义微信插件不予展示在侧栏
+          // case 'wechat': // Wechat
+          //   sub.icon = 'wechat'
+          //   sub.subs = [{
+          //     alias: 'settings',
+          //     url: `/plugins/wechat/${item.id}/settings`
+          //   }]
+          //   break
+
           case 'recipe': // 云菜谱
             sub.icon = 'cutlery'
             break
@@ -193,7 +220,7 @@ export default {
             break
           default:
         }
-        if (Object.keys(sub).length) {
+        if (!exists(excluded, item.plugin)) {
           result.subs.push(sub)
         }
       })
