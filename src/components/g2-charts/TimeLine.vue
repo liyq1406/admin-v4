@@ -40,7 +40,8 @@ export default {
   data () {
     return {
       chart: null,
-      rendered: false
+      rendered: false,
+      rendering: false
     }
   },
 
@@ -57,13 +58,21 @@ export default {
         this.chart.source(data)
         this.chart.repaint()
       } else {
-        setTimeout(this.render, 1000)
+        if (this.rendering || this.data.length <= 0) {
+          return
+        }
+        this.rendering = true
+        setTimeout(this.render, 500)
       }
     }
   },
 
   ready () {
     if (!this.chart) {
+      if (this.rendering || this.data.length <= 0) {
+        return
+      }
+      this.rendering = true
       this.render()
     }
   },
@@ -163,6 +172,7 @@ export default {
 
       chart.render()
       this.rendered = true
+      this.rendering = false
     }
   }
 }
