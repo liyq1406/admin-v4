@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <!-- <div class="main-title">
-      <h2>echo</h2>
-    </div> -->
-    <div class="panel pdt20">
+    <div class="main-title bordered">
+      <h2>萤石</h2>
+    </div>
+    <div class="panel">
       <div class="row mt20 mb20">
         <div class="col-16">
           <pic-txt :pic-width="139">
@@ -40,7 +40,3 @@
     mixins: [globalMixins]
   }
 </script>
-<style lang="stylus" scoped>
-.pdt20
-  padding-top 20px
-</style>

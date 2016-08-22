@@ -93,20 +93,20 @@ export const MAIN_NAV = {
         alias: 'wechat',
         url: '/nest/wechat'
       }, {
-        alias: 'amazon',
-        url: '/nest/amazon'
-      }, {
         alias: 'google',
         url: '/nest/google'
+      }, {
+        alias: 'amazon',
+        url: '/nest/amazon'
       }, {
         alias: 'philips',
         url: '/nest/philips'
       }, {
+        alias: 'ifttt',
+        url: '/nest/ifttt'
+      }, {
         alias: 'ezviz',
         url: '/nest/ezviz'
-      // }, {
-      //   alias: 'ifttt',
-      //   url: '/nest/ifttt'
       }]
     }, {
       alias: 'firmware', // 固件管理

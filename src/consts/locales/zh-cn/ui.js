@@ -65,11 +65,11 @@ export default {
           label: '智能互联',
           subs: {
             wechat: '微信互联',
-            amazon: '亚马逊互联',
+            amazon: 'Amazon echo',
             google: 'Google nest',
-            philips: 'philips互联',
-            ezviz: '萤石互联',
-            ifttt: '设备联动'
+            philips: 'Philips hue',
+            ezviz: '萤石',
+            ifttt: 'IFTTT'
           }
         },
         shopping: {

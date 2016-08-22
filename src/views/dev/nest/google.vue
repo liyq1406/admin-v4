@@ -1,7 +1,7 @@
 <template>
   <div class="main">
-    <div class="main-title">
-      <h2>nest联动</h2>
+    <div class="main-title bordered">
+      <h2>Google nest</h2>
     </div>
     <div class="panel">
       <div class="row mt20 mb20">
