@@ -29,7 +29,7 @@
         notices: [
           {
             icon: 'apple',
-            title: 'iOS SDK 更新v3.0版本啦！接入更稳定惹！',
+            title: 'iOS SDK 更新v3.0版本啦！',
             time: '2016-08-12'
           },
           {
@@ -39,23 +39,23 @@
           },
           {
             icon: 'android',
-            title: 'Android SDK 更新v3.8版本啦！接入更稳定惹！',
+            title: 'Android SDK 更新v3.8版本啦！',
             time: '2016-07-27'
           },
           {
-            icon: 'apple',
-            title: 'iOS SDK 更新v3.0版本啦！接入更稳定惹！',
+            icon: 'file-text-o',
+            title: 'MCU SDK QC4004 V1.2',
             time: '2016-07-14'
           },
           {
             icon: 'file-text-o',
-            title: '应用开发文档内容有更新，详情进入了解',
+            title: 'JSSDK微信版V0.9',
             time: '2016-07-04'
           },
           {
             icon: 'android',
-            title: 'Android SDK 更新v3.8版本啦！接入更稳定惹！',
-            time: '2016-06-22'
+            title: 'Android SDK 更新v3.7版本啦！',
+            time: '2016-07-04'
           }
         ]
       }

@@ -68,9 +68,6 @@
             title: '固件管理'
           },
           {
-            title: '应用管理'
-          },
-          {
             title: '数据管理'
           }
         ],
@@ -110,7 +107,7 @@
               '远程实时调试，省心省力！',
               '灵活多变设定告警规则，设备故障第一时间通知到位！'
             ],
-            link: '/dev/home'
+            link: '/operation/alerts/record'
           },
           {
             key: 'nest',
@@ -219,7 +216,7 @@
           height 1px
           background #ddd
           position absolute
-          top 250px
+          top 230px
           left 50%
           transform translateX(-50%)
           z-index -1
@@ -283,7 +280,7 @@
       .content4
       .content5
       .content6
-        padding-right 650px
+        padding-right 560px
         box-sizing border-box
         .text-box
           width 100%
@@ -313,7 +310,7 @@
             box-sizing border-box
             border-radius 2px
         .img-box
-          width 650px
+          width 560px
           height 100%
           position absolute
           right 0
