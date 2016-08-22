@@ -7,14 +7,16 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="row">
-          <div class="col-16 alert-max">
-            <form @submit.prevent="onSubmit">
+          <div class="col-16 alert-max form">
+            <form  v-form name="addValidation" @submit.prevent="onSubmit" hook="addFormHook">
               <div class="form-row row mt20">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
-                    <input v-model="addModal.model.name" type="text" minlength="2" maxlength="32" lazy class="input-text"/>
+                    <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" lazy required class="input-text"/>
                   </div>
+                  <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+                  <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -23,7 +25,7 @@
                   <div class="row">
                     <div class="col-5">
                       <v-select :label="ruleTypes[addModal.model.type-1]">
-                        <select v-model="addModal.model.type" @input="onSelectType">
+                        <select v-model="addModal.model.type" name="type" number @input="onSelectType">
                           <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
                       </v-select>
@@ -35,7 +37,7 @@
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
                           <v-select :label="datapointName(addModal.model)">
-                            <select v-model="addModal.model.param">
+                            <select v-model="addModal.model.param" v-form-ctrl name="param">
                               <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                             </select>
                           </v-select>
@@ -46,7 +48,7 @@
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
                           <v-select :label="compareTypes[addModal.model.compare-1]">
-                            <select v-model="addModal.model.compare">
+                            <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
                               <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                             </select>
                           </v-select>
@@ -56,11 +58,13 @@
                     <div class="col-5">
                       <div class="ml10">
                         <div class="input-text-wrap" v-show="addModal.model.type === 1 && datapoints.length">
-                          <input v-model="addModal.value1" type="text" class="input-text"/>
+                          <input v-model="addModal.value1" type="text"
+                          v-form-ctrl name="value" required lazy class="input-text"/>
                         </div>
                         <div class="select" v-show="addModal.model.type === 2">
                           <v-select :label="$t('common.'+addModal.value2)">
-                            <select v-model="addModal.value2">
+                            <select v-model="addModal.value2"
+                             v-form-ctrl name="value">
                               <option value="online">{{ $t("common.online") }}</option>
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
@@ -75,8 +79,10 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
-                    <textarea v-model="addModal.model.content" type="text" maxlength="250" class="input-text"></textarea>
+                    <textarea v-model="addModal.model.content" type="text" v-form-ctrl name="content" required lazy maxlength="250" class="input-text"></textarea>
                   </div>
+                  <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+                  <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
                 </div>
               </div>
               <div class="form-row row tag-row mt20">
@@ -204,6 +210,8 @@
         }, {
           label: '添加告警规则'
         }],
+        addValidation: {},
+        originAddModel: {},
         addModal: {
           show: false,
           form: {},
@@ -238,6 +246,10 @@
     ready () {
     },
     methods: {
+      // 添加表单钩子
+      addFormHook (form) {
+        this.addModal.form = form
+      },
       // 是否显示 APN推送
       isShowApn (model) {
         return _.includes(model.notify_target, 4)
@@ -248,16 +260,18 @@
         return _.includes(model.notify_target, 5)
       },
       onSubmit () {
-        this.adding = true
-        this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
-        api.alert.addRule(this.addModal.model).then((res) => {
-          if (res.status === 200) {
-            this.$route.router.go('/dev/products/' + this.$route.params.id + '/alert')
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
+        if (this.addValidation.$valid && !this.adding) {
+          this.adding = true
+          this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2
+          api.alert.addRule(this.addModal.model).then((res) => {
+            if (res.status === 200) {
+              this.$route.router.go('/dev/products/' + this.$route.params.id + '/alert')
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.adding = false
+          })
+        }
       },
       getDataPoint () {
         api.product.getDatapoints(this.$route.params.id).then((res) => {
@@ -306,7 +320,7 @@
   }
 </script>
 <style lang='stylus' scoped>
-@import '../../../../assets/stylus/common'
+@import '../../../../assets/stylus/partials/form'
 .alert-label
   line-height 32px
   padding-left 20px
