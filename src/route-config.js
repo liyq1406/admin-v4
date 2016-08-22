@@ -489,23 +489,23 @@ let configRouter = (router) => {
         'data/tables': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/tables'))
+              resolve(require('./views/dev/data/table/index'))
             }, 'admin')
           }
         },
         // 数据快照
-        'data/snapshot': {
+        'data/snapshots': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot'))
+              resolve(require('./views/dev/data/snapshot/index'))
             }, 'admin')
           }
         },
         // 数据快照
-        'data/snapshot/:product_id': {
+        'data/snapshots/:product_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot-details'))
+              resolve(require('./views/dev/data/snapshot/details'))
             }, 'admin')
           }
         },

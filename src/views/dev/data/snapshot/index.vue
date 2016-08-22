@@ -5,16 +5,20 @@
     </div>
     <div class="panel mt20">
       <div class="panel-bd">
+        <div class="action-bar">
+          <div class="action-group">
+            <button class="btn btn-primary" @click="showAddModal=true"><i class="fa fa-plus"></i>添加快照配置</button>
+          </div>
+        </div>
         <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group">
-              <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px" size="small">
+              <v-select :label="ruleProductTypes[ruleProductType.value].label" width="160px" size="small">
                 <span slot="label">显示</span>
                 <select v-model="ruleProductType" @change="getProductRules(true)">
                   <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
                 </select>
               </v-select>
-              <button class="btn btn-primary" @click="showAddModal=true"><i class="fa fa-plus"></i>添加快照配置</button>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -38,6 +42,11 @@
                 <td>
                   <a v-link="{ path: $route.path + '/' + dp.productID}" class="hl-red">查看快照</a>
                   <a @click.prevent="editSnapshot(dp)" class="hl-red ml20">编辑</a>
+                </td>
+              </tr>
+              <tr v-if="productsRules.length === 0">
+                <td :colspan="5" class="tac">
+                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>
             </tbody>
@@ -622,7 +631,7 @@
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../assets/stylus/common'
+  @import '../../../../assets/stylus/common'
   .data-points-footer
     .pager
       margin 10px 0 0

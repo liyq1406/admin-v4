@@ -128,8 +128,8 @@ export const MAIN_NAV = {
         alias: 'tables',
         url: '/data/tables'
       }, {
-        alias: 'snapshot',
-        url: '/data/snapshot'
+        alias: 'snapshots',
+        url: '/data/snapshots'
       }]
     }, {
       alias: 'shopping', // 在线购买
