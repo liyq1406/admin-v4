@@ -194,6 +194,13 @@ let configRouter = (router) => {
       }
     },
 
+    '/dev/home': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/dev/index'))
+        }, 'admin')
+      }
+    },
     '/dev': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -1330,6 +1337,7 @@ let configRouter = (router) => {
   // 重定向
   router.redirect({
     '/': '/login',
+    '/dev': '/dev/home',
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',

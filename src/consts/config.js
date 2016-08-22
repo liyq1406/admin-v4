@@ -72,7 +72,7 @@ export const MAIN_NAV = {
     subs: [{
       // action: false,
       icon: 'home',
-      url: '/dev',
+      url: '',
       alias: 'home'
     }, {
       action: true,
