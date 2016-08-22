@@ -21,7 +21,7 @@ export default {
             info: '产品信息',
             debug: '设备调试',
             virtual_devices: '虚拟设备',
-            alert: '告警管理',
+            alert: '告警设置',
             data_forward: '数据接口',
             linkage: '设备互联',
             authorize: '设备授权'
