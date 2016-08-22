@@ -194,13 +194,13 @@ let configRouter = (router) => {
       }
     },
 
-    '/dev/home': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/dev/index'))
-        }, 'admin')
-      }
-    },
+    // '/dev/home': {
+    //   component (resolve) {
+    //     require.ensure([], (require) => {
+    //       resolve(require('./views/dev/index'))
+    //     }, 'admin')
+    //   }
+    // },
     '/dev': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -208,6 +208,13 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
+        'home': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/home'))
+            }, 'admin')
+          }
+        },
         // -------------------------产品开发-------------------------
         // 创建产品
         'products/create': {
