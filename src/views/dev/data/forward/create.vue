@@ -6,21 +6,21 @@
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt20">
       <div class="panel-bd">
-        <snapshot-form></snapshot-form>
+        <forward-form></forward-form>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import SnapshotForm from './SnapshotForm'
+import ForwardForm from './ForwardForm'
 import Breadcrumb from 'components/Breadcrumb'
 
 export default {
   name: 'Creation',
 
   components: {
-    SnapshotForm,
+    ForwardForm,
     Breadcrumb
   },
 

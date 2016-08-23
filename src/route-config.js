@@ -534,7 +534,7 @@ let configRouter = (router) => {
           }
         },
         // 数据转发详情
-        'data/forward/:product_id': {
+        'data/forward/:productId/:forwardId': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/forward/details'))
@@ -550,7 +550,7 @@ let configRouter = (router) => {
           }
         },
         // 编辑数据转发
-        'data/forward/edit/:id': {
+        'data/forward/edit/:productId/:forwardId': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/forward/edit'))
