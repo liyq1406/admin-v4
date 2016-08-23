@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <a class="btn btn-primary" v-link="{path: '/dev/data/snapshot/create'}"><i class="fa fa-plus"></i>添加规则</a>
+            <a class="btn btn-primary" v-link="{path: '/dev/data/forward/create'}"><i class="fa fa-plus"></i>添加规则</a>
           </div>
         </div>
         <div class="data-table with-loading">
@@ -15,13 +15,19 @@
             <i class="fa fa-refresh fa-spin"></i>
           </div>
           <div class="filter-bar">
-            <div class="filter-group">
+            <div class="filter-group fl">
               <v-select :label="selectedProduct.name || ''" width="160px" size="small">
                 <span slot="label">显示</span>
                 <select v-model="selectedProduct" @change="getRule">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
               </v-select>
+            </div>
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
+                </search-box>
+              </div>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -35,7 +41,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="rule in forwardRules">
+              <tr v-for="rule in forwardRules | filterBy key in 'id'">
                 <td>
                   <a class="hl">{{selectedProduct.name}}</a>
                 </td>
@@ -68,6 +74,7 @@
 // import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import Select from 'components/Select'
+import SearchBox from 'components/SearchBox'
 // import locales from 'consts/locales/index'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
@@ -86,11 +93,14 @@ export default {
 
   components: {
     Pager,
+    SearchBox,
     'v-select': Select
   },
 
   data () {
     return {
+      key: '',
+      // 正在加载
       loadingData: false,
       // 当前产品
       selectedProduct: {},
@@ -102,21 +112,21 @@ export default {
       // currentPage: 1,
       // 转发规则列表
       forwardRules: [
-        // {
-        //   'id': '转发规则ID',
-        //   'data_type': [
-        //     '1',
-        //     '2',
-        //     '3',
-        //     '4',
-        //     '5'
-        //   ],
-        //   'destination': {
-        //     'type': 1,
-        //     'url': '转发URL地址',
-        //     'token': 'URL地址验证令牌'
-        //   }
-        // }
+        {
+          'id': '转发规则ID',
+          'data_type': [
+            '1',
+            '2',
+            '3',
+            '4',
+            '5'
+          ],
+          'destination': {
+            'type': 1,
+            'url': '转发URL地址',
+            'token': 'URL地址验证令牌'
+          }
+        }
       ]
     }
   },
@@ -140,7 +150,7 @@ export default {
      */
     init () {
       this.selectedProduct = this.products[0] || {}
-      this.getRule()
+      // this.getRule()
     },
     /**
      * 获取数据转发规则
