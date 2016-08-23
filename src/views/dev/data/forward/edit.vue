@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>设备快照</h2>
+      <h2>数据转发</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt20">
@@ -27,10 +27,10 @@ export default {
   data () {
     return {
       breadcrumbNav: [{
-        label: '设备快照',
+        label: '数据转发',
         link: '/dev/data/snapshots'
       }, {
-        label: '编辑快照'
+        label: '编辑转发规则'
       }]
     }
   }

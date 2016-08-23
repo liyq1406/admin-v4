@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>{{product.name}}设备快照</h2>
+      <h2>{{product.name}}数据转发</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="snapshot-details" v-if="!deviceDatas.length && !loadingData">
@@ -190,10 +190,10 @@ export default {
   data () {
     return {
       breadcrumbNav: [{
-        label: '数据快照',
-        link: '/dev/data/snapshots'
+        label: '数据转发',
+        link: '/dev/data/forward'
       }, {
-        label: '数据快照详情'
+        label: '转发规则'
       }],
       /** ***图表 按钮 start*********/
       loadingProductTrends: false,
