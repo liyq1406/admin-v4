@@ -10,7 +10,7 @@
             </info-list>
           </div>
         </div>
-        <div class="col-8">
+        <div class="col-8 hidden">
           <div class="info-box ml30">
             <div class="info-box-hd">企业信息</div>
             <div class="info-box-bd">

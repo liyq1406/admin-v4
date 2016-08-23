@@ -41,7 +41,7 @@
                 <td>{{dp.creator}}</td>
                 <td>
                   <a v-link="{ path: $route.path + '/' + dp.productID}" class="hl-red">查看快照</a>
-                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.id}">编辑</a>
+                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productID}">编辑</a>
                 </td>
               </tr>
               <tr v-if="productsRules.length === 0">
