@@ -59,6 +59,10 @@
         <label class="form-control col-6">{{ $t("ui.app.fields.app_url") }}:</label>
         <div class="controls col-18 control-text">{{ model.config.url }}</div>
       </div>
+      <div class="form-row row">
+        <label class="form-control col-6">{{ $t("ui.app.fields.app_token") }}:</label>
+        <div class="controls col-18 control-text">{{ model.config.token }}</div>
+      </div>
       <div class="form-actions row">
         <div class="col-offset-6 col-6">
           <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>

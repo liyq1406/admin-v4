@@ -639,7 +639,8 @@ export default {
       wechat_app_secret: 'APPSecret',
       wechat_encrypt: '消息加解密方式',
       wechat_key: '微信秘钥',
-      app_url: 'APPUrl'
+      app_url: 'APPUrl',
+      app_token: 'APPToken'
     }
   },
 
