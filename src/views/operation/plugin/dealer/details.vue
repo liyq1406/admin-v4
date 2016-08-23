@@ -354,12 +354,12 @@
     computed: {
       queryCondition () {
         var condition = {
-          // filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'pictures', 'x_info', 'product_mod'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           // order: this.sortOrders,
           query: {
-            'distributer_id': {$in: [this.$route.params.dealer_id]}
+            // 'distributer_id': {$in: [this.$route.params.dealer_id]}
           }
         }
         // if (this.query.length > 0) {
