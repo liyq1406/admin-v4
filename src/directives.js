@@ -1,4 +1,12 @@
-// input/textarea占位符
+/**
+ * input/textarea占位符
+ * @author shengzhi
+ * 使用方法：
+ *   <div v-placeholder="'请输入帐号'" class="input-text-wrap">
+ *     <input class="input-text" >
+ *   </div>
+ */
+// NOTE 不能在 v-for 循环中使用
 export var placeholder = {
   bind () {
     var vModel
@@ -47,7 +55,13 @@ export var placeholder = {
   }
 }
 
-// 动画数字
+/**
+ * 动画数字
+ * @author shengzhi
+ * 使用方法：
+ *   <div v-animated-number="num"></div> // num 为需展示的数字
+ */
+// FIXME 数字异步传入时不更新
 export var animatedNumber = {
   bind () {
     this.end = 0
@@ -86,9 +100,11 @@ export var animatedNumber = {
 
 /**
  * 弹出提示
+ * @author shengzhi
  * 使用方法：
- *   <div tooltip="要显示的文本">...</div>
+ *   <i class="fa fa-question-circle" tooltip="要显示的文本">...</i>
  */
+// FIXME 提示初始化时会有一瞬间的错位 #shengzhi
 export var tooltip = {
   bind () {
     let inTrigger = false
@@ -153,6 +169,11 @@ export var tooltip = {
   }
 }
 
+/**
+ * 内容超出容器高度时显示展开全部内容的横条
+ * @author guohao
+ */
+// TODO 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容
 export var stretch = {
   bind () {
     var self = this
