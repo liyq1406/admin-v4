@@ -106,9 +106,14 @@ export default {
    * @param  {Object} params 认证信息
    * @return {Promise}
    */
+  // getUser (clientInfoId) {
+  //   return http.post(
+  //     `${API_SERVER.default}/v2/dealer/get_client_info/${clientInfoId}`
+  //   )
+  // }
   getUser (clientInfoId) {
-    return http.post(
-      `${API_SERVER.default}/v2/dealer/get_client_info/${clientInfoId}`
+    return http.get(
+      `${API_SERVER.default}/v2/dealer/client_info/${clientInfoId}`
     )
   }
 }
