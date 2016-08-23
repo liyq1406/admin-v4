@@ -409,9 +409,6 @@ export default {
       console.log('获取设备端点值')
       this.refreshing = true
       api.device.getDatapointValues(this.selectedDevice.id, { act: 'logs' }).then((res) => {
-        // TODO
-        console.log('---------------------------')
-        console.log(JSON.stringify(res))
         window.setTimeout(() => {
           this.refreshing = false
         }, 500)
@@ -439,8 +436,6 @@ export default {
     setDataEvent (dp) {
       if (this.refreshing) return
       if (isNaN(dp.value)) return
-      console.log(JSON.stringify(dp))
-      console.log(dp.value)
       var params = {
         datapoint: [
           {

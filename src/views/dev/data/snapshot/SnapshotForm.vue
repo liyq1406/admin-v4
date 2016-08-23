@@ -1,11 +1,11 @@
 <template>
-  <form novalidate @submit="onSubmit">
+  <form novalidate>
     <div class="form">
       <div class="form-row row">
         <label class="form-control col-3">产品:</label>
         <div class="controls col-21">
           <v-select :label="selectedProduct.label" width="200px">
-            <select v-model="selectedProduct" @change="getDatapoints">
+            <select v-model="selectedProduct">
               <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
             </select>
           </v-select>
@@ -42,7 +42,7 @@
                 </thead>
                 <tbody>
                   <tr v-for="dp in datapoints | limitBy countPerPage (currentPage-1)*countPerPage">
-                    <td><input type="checkbox" @click="toggleSelected(dp)"/></td>
+                    <td><input :checked="dp.selected" type="checkbox" @click="toggleSelected(dp)"/></td>
                     <td>{{dp.index}}</td>
                     <td>{{getTypeByValue(dp.type).label}}</td>
                     <td>{{dp.symbol}}</td>
@@ -59,7 +59,7 @@
       </div>
       <div class="form-actions row">
         <div class="col-20 col-offset-3">
-          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary">{{ $t('common.ok') }}</button>
+          <button :disabled="submiting || selectedDatapoints.length === 0" :class="{'disabled':submiting || selectedDatapoints.length === 0}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
         </div>
       </div>
     </div>
@@ -102,7 +102,10 @@ export default {
 
   data () {
     return {
-      selectedProduct: {}, // 已选产品
+      selectedProduct: {
+        id: 0,
+        label: '请选择产品'
+      }, // 已选产品
       rule: {}, // 快照规则
       submiting: false,
       selectedDatapoints: [],
@@ -110,6 +113,14 @@ export default {
       currentPage: 1,
       countPerPage: 10,
       loadingData: false
+    }
+  },
+
+  watch: {
+    selectedProduct () {
+      if (this.selectedProduct.id) {
+        this.getDatapoints()
+      }
     }
   },
 
@@ -128,12 +139,11 @@ export default {
       })
       if (this.type === 'edit' && result.length > 1) {
         this.selectedProduct = _.find(result, (item) => {
-          return item.id === this.$route.params.id
+          return item.id === this.$route.params.product_id
         })
       } else {
         this.selectedProduct = result[0]
       }
-      console.log(this.selectedProduct)
 
       return result
     },
@@ -210,14 +220,16 @@ export default {
      * @author shengzhi
      */
     getDatapoints () {
-      if (this.selectedProduct.id && this.selectedProduct.id === 0) {
-        this.datapoints = []
-      }
+      // if (this.selectedProduct.id === 0) {
+      //   this.datapoints = []
+      //   return
+      // }
 
       this.loadingData = true
       // 获取产品数据端点列表
       api.product.getDatapoints(this.selectedProduct.id).then((res) => {
         if (res.status === 200) {
+          this.currentPage = 1
           this.allDatapoints = res.data
 
           // 获取产品的已选数据端点列表
@@ -237,7 +249,7 @@ export default {
     },
 
     /**
-     * 表单提交
+     * 快照规则提交
      * @author shengzhi
      */
     onSubmit () {

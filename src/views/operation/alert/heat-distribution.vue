@@ -3,14 +3,6 @@
     <div class="main-title">
       <h2>热力分布</h2>
     </div>
-    <!-- TODO -->
-    <!-- <div class="mb10 ml15">
-      <a style="color: red">全部</a>
-      <i class="arrow">&gt;</i>
-      <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
-      <i class="arrow">&gt;</i>
-      <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
-    </div> -->
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">

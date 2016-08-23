@@ -268,7 +268,7 @@ export default {
   },
 
   ready () {
-    // TODO
+    // TODO 对接口
     this.alertTrends = Mock.mock({
       'list|14': [{
         'date|+1': [

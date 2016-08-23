@@ -51,7 +51,6 @@ export default {
 
   data () {
     return {
-      // TODO
       alertChartData: [],
       records: [],
       deviceID: '',
