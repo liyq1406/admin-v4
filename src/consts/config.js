@@ -127,6 +127,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'snapshots',
         url: '/data/snapshots'
+      }, {
+        alias: 'forward',
+        url: '/data/forward'
       }]
     // 暂时隐藏
     // }, {

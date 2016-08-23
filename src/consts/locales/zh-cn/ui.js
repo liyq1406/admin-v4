@@ -48,7 +48,8 @@ export default {
           label: '数据服务',
           subs: {
             tables: '数据表',
-            snapshots: '数据快照'
+            snapshots: '数据快照',
+            forward: '数据转发'
           }
         },
         firmware: {

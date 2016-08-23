@@ -525,6 +525,38 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 数据转发
+        'data/forward': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/forward/index'))
+            }, 'admin')
+          }
+        },
+        // 数据转发详情
+        'data/forward/:product_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/forward/details'))
+            }, 'admin')
+          }
+        },
+        // 添加数据转发
+        'data/forward/create': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/forward/create'))
+            }, 'admin')
+          }
+        },
+        // 编辑数据转发
+        'data/forward/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/forward/edit'))
+            }, 'admin')
+          }
+        },
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------
