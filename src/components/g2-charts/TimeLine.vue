@@ -95,11 +95,11 @@ export default {
       if (!this.data || this.data.length <= 0) {
         return
       }
-      // FIXME 单条数据时 G2 报错 #guohao
-      if (this.data.length === 1) {
-        this.data = []
-        return
-      }
+      // REVIEW 单条数据时 G2 报错 #GUOHAO
+      // if (this.data.length === 1) {
+      //   this.data = []
+      //   return
+      // }
 
       var data = this.format(this.data)
 

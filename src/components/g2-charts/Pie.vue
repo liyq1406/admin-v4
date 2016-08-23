@@ -38,7 +38,8 @@ export default {
   data () {
     return {
       chart: null,
-      rendered: false
+      rendered: false,
+      rendering: false
     }
   },
 
@@ -52,6 +53,10 @@ export default {
 
   ready () {
     if (!this.chart) {
+      if (this.rendering || this.data.length <= 0) {
+        return
+      }
+      this.rendering = true
       this.render()
     }
   },
@@ -62,7 +67,11 @@ export default {
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
-        this.render()
+        if (this.rendering || this.data.length <= 0) {
+          return
+        }
+        this.rendering = true
+        setTimeout(this.render, 500)
       }
     }
   },
@@ -116,6 +125,7 @@ export default {
 
       chart.render()
       this.rendered = true
+      this.rendering = false
 
       chart.on('itemselected', (e) => {
         this.$emit('itemselected', e.data._origin)
@@ -124,31 +134,6 @@ export default {
       var geom = chart.getGeoms()[0] // 获取所有的图形
       var items = geom.getData() // 获取图形对应的数据
       geom.setSelected(items[0]) // 设置选中
-
-      // var defs = this.options.defs
-      // var defaultLegendOptions = {
-      //   position: 'top'
-      // }
-      //
-      // for (var key in defs) {
-      //   // 不显示坐标轴标题
-      //   chart.axis(key, {
-      //     title: null
-      //   })
-      //
-      //   // 设置横轴点
-      //   if (defs[key].hasOwnProperty('type') && defs[key].type === 'cat') {
-      //     defs[key].values = _.uniq(_.map(this.options.data, key))
-      //   }
-      // }
-      //
-      // chart.axis(this.options.axis || true)
-      // chart.legend(_.merge(defaultLegendOptions, this.options.legend))
-      // chart.tooltip(this.options.tooltip || true)
-
-      // chart.source(this.options.data, defs)
-      // chart.line().position(`${this.options.fields[0]}*${this.options.fields[1]}`).color(this.options.fields[2]).size(this.options.size || 2)
-      // chart.render()
     }
   }
 }
