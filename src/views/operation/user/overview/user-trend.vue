@@ -55,29 +55,8 @@ export default {
     return {
       customMargin: [30, 20, 30, 30],
       periods: [7, 30, 90],
-      defaultPeriod: 7,
-      addData: [{
-        date: '08-17',
-        val: 29
-      }, {
-        date: '08-18',
-        val: 58
-      }, {
-        date: '08-19',
-        val: 40
-      }, {
-        date: '08-20',
-        val: 49
-      }, {
-        date: '08-21',
-        val: 56
-      }, {
-        date: '08-22',
-        val: 51
-      }, {
-        date: '08-23',
-        val: 8
-      }],
+      defaultPeriod: 30,
+      addData: [],
       activeData: [],
       totalData: [],
       userCat: 0,
@@ -176,9 +155,9 @@ export default {
       }
 
       // 计算结束时间距现在多少天
-      // let offset = Math.floor((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
-      // let duration = Math.floor((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
-      // this.getUserTrend([offset, duration + 1])
+      let offset = Math.floor((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
+      let duration = Math.floor((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
+      this.getUserTrend([offset, duration + 1])
 
       this.period = 0
     }

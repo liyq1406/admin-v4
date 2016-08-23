@@ -1,28 +1,17 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>用户反馈</h2>
+      <h2>用户反馈 </h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select :label="product.name" width="110px" size="small">
-            <span slot="label">产品</span>
-            <select v-model="product">
-              <option v-for="prod in products" :value="prod">{{prod.name}}</option>
-            </select>
-          </v-select>
+          <float-select :list="selectOptions" :trigger-width="110" @select="productSelect"></float-select>
         </div>
       </div>
       <div class="filter-group fr">
-        <!-- <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div> -->
-        <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
+        <div class="filter-group-item fr">
+          <date-time-multiple-picker @timechange="timeFilter" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -31,15 +20,15 @@
         <h2>趋势</h2>
       </div>
       <div class="panel-bd">
-        <time-line :data="trends.data"></time-line>
+        <time-line :data="lineData"></time-line>
       </div>
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :info="summary.pending" :title="summary.pending.title" align="left"></statistic>
+        <statistic :info="summary.total" :title="summary.total.title" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="summary.avg" :title="summary.avg.title" align="left"></statistic>
+        <statistic :info="summary.untreatedTotal" :title="summary.untreatedTotal.title" align="left"></statistic>
       </div>
       <div class="col-6">
         <statistic :info="summary.weekAdded" :title="summary.weekAdded.title" align="left"></statistic>
@@ -55,10 +44,10 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-9">
-            <pie :data="feedbacks" :height="400" :margin="customPieMargin"></pie>
+            <pie :data="pieData" :height="350" :margin="customPieMargin"></pie>
           </div>
-          <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 400px">
-            <div class="data-table">
+          <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 350px">
+            <div class="data-table" v-if="feedbacks.length > 0">
               <table class="table">
                 <thead>
                   <tr>
@@ -69,36 +58,12 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr>
-                    <td>使用帮助</td>
-                    <td>12 (2.5%)</td>
-                    <td>456 (97.5%)</td>
-                    <td>468</td>
+                  <tr v-for="item in feedbacks">
+                    <td>{{item.label}}</td>
+                    <td>{{item.untreatedCount}} ({{item.untreatedPercent}} %)</td>
+                    <td>{{item.treatedCount}} ({{item.treatedPercent}} %)</td>
+                    <td>{{item.Count}}</td>
                   </tr>
-                  <tr>
-                    <td>产品咨询</td>
-                    <td>7 (1.8%)</td>
-                    <td>375 (98.2%)</td>
-                    <td>382</td>
-                  </tr>
-                  <tr>
-                    <td>投诉建议</td>
-                    <td>4 (1.7%)</td>
-                    <td>232 (98.3%)</td>
-                    <td>236</td>
-                  </tr>
-                  <tr>
-                    <td>产品故障</td>
-                    <td>2 (1%)</td>
-                    <td>202 (99%)</td>
-                    <td>204</td>
-                  </tr>
-                  <!-- <tr>
-                    <td>退货申请</td>
-                    <td>128 (25%)</td>
-                    <td>9283 (75%)</td>
-                    <td>12800</td>
-                  </tr> -->
                 </tbody>
               </table>
             </div>
@@ -112,19 +77,16 @@
 <script>
 // import Vue from 'vue'
 // import locales from 'consts/locales/index'
-// import api from 'api'
-import Modal from 'components/Modal'
-import Select from 'components/Select'
-import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import api from 'api'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Pie from 'components/g2-charts/Pie'
+import FloatSelect from 'components/FloatSelect'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-
-import Mock from 'mockjs'
+import {getLastYearDate} from 'helpers/utils'
 
 export default {
   name: 'Overview',
@@ -132,117 +94,172 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    Modal,
+    FloatSelect,
     Pie,
-    'v-select': Select,
-    RadioButtonGroup,
-    DateTimeRangePicker,
+    DateTimeMultiplePicker,
     Statistic,
     TimeLine
   },
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      products: ({ products }) => products.released
     }
   },
 
   data () {
     return {
       product: {
-        name: ''
+        label: '全部'
       },
+      defaultPeriod: 30,
       customPieMargin: [20, 0, 0, 0],
-      feedbacks: [
-        {
-          name: '使用帮助',
-          value: 468
-        },
-        {
-          name: '产品咨询',
-          value: 382
-        },
-        {
-          name: '投诉建议',
-          value: 236
-        },
-        {
-          name: '产品故障',
-          value: 204
-        }
-      ],
+      feedbacks: [],
       summary: {
-        pending: {
-          total: 23,
+        total: {
+          total: 0,
+          title: '反馈数'
+        },
+        untreatedTotal: {
+          total: 0,
           title: '待处理'
         },
-        avg: {
-          total: 14,
-          unit: '%',
-          title: '平均处理时间率'
-        },
         weekAdded: {
-          total: 145,
-          change: -14,
+          total: 0,
           title: '7天新增'
         },
         monthAdded: {
-          total: 345,
-          change: 40,
+          total: 0,
           title: '30天新增'
         }
       },
-      // 趋势
-      trends: {
-        data: [],
-        options: {}
-      },
       // 时间间隔
-      period: 7,
-      // 待选时间间隔
-      // periods: locales.data.PERIODS,
+      periods: [7, 30, 90],
+
       // 数据是否加载中
-      loadingData: false
+      loadingData: false,
+      pieData: [],
+      lineData: [],
+      startTime: null,
+      endTime: null
+    }
+  },
+
+  computed: {
+    selectOptions () {
+      if (this.products.length > 0) {
+        var res = [{
+          label: '全部'
+        }]
+        this.products.forEach((item) => {
+          let temp = {
+            id: item.id,
+            label: item.name
+          }
+          res.push(temp)
+        })
+        return res
+      } else {
+        return []
+      }
+    },
+    groupQueryCondition () {
+      var params = null
+      if (this.product && this.product.id) {
+        if (!params) {
+          params = {}
+          params.query = {}
+        }
+        params.query.product_id = this.product.id
+      }
+
+      if (this.startTime && this.endTime) {
+        if (!params) {
+          params = {}
+          params.query = {}
+        }
+        params.query.create_time = {$gte: {'@date': this.startTime}, $lte: {'@date': this.endTime}}
+      }
+
+      return params
     }
   },
 
   ready () {
-    this.trends.data = Mock.mock({
-      'list|16': [{
-        'date|+1': [
-          '2016-7-17',
-          '2016-7-18',
-          '2016-7-19',
-          '2016-7-20',
-          '2016-7-17',
-          '2016-7-18',
-          '2016-7-19',
-          '2016-7-20',
-          '2016-7-17',
-          '2016-7-18',
-          '2016-7-19',
-          '2016-7-20',
-          '2016-7-17',
-          '2016-7-18',
-          '2016-7-19',
-          '2016-7-20'
-        ],
-        'val|+1': [6, 8, 9, 3, 9, 3, 9, 6, 38, 19, 33, 29, 33, 29, 10, 12],
-        'name|+1': ['产品咨询', '产品咨询', '产品咨询', '产品咨询', '故障反馈', '故障反馈', '故障反馈', '故障反馈', '使用建议', '使用建议', '使用建议', '使用建议', '使用指南', '使用指南', '使用指南', '使用指南']
-      }]
-    }).list
   },
 
   watch: {
     products () {
       if (this.products.length > 0) {
-        this.product = this.products[0]
+        this.getFeedbackList()
       }
     }
   },
 
   methods: {
+    getFeedbackList () {
+      api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.groupQueryCondition).then((res) => {
+        if (res.status === 200) {
+          this.summary.total.total = res.data.total
+          this.summary.untreatedTotal.total = res.data.untreatedTotal
+          this.summary.weekAdded.total = res.data.sevenCount
+          this.summary.monthAdded.total = res.data.thirtyCount
+          this.feedbacks = res.data.labelGroupCount
+          if (res.data.labelGroupCount.length > 0) {
+            let dataRes = []
+            res.data.labelGroupCount.forEach((item) => {
+              let temp = {}
+              temp.name = item.label
+              temp.value = item.Count
+              dataRes.push(temp)
+            })
+            this.pieData = dataRes
+          } else {
+            this.pieData = []
+          }
+          // 日统计
+          if (res.data.dayGroupCount.length > 0) {
+            let dataRes = []
+            res.data.dayGroupCount.forEach((item) => {
+              let temp = {}
+              temp.val = item.Count
+              temp.date = item.day
+              temp.name = item.label
+              dataRes.push(temp)
+            })
+            this.lineData = dataRes
+          } else {
+            this.lineData = []
+          }
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    timeFilter (start, end) {
+      var cur = new Date()
+      if (end.getTime() >= cur.getTime()) {
+        end = cur
+      }
 
+      if (start.getTime() > end.getTime()) {
+        return
+      }
+
+      let lastYear = getLastYearDate(end)
+
+      if (start.getTime() < lastYear.getTime()) {
+        start = lastYear
+      }
+
+      this.startTime = start
+      this.endTime = end
+      this.getFeedbackList()
+    },
+    productSelect (item) {
+      this.product = item
+      this.getFeedbackList()
+    }
   }
 }
 </script>

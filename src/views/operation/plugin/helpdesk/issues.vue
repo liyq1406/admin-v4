@@ -1,12 +1,12 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>反馈列表</h2>
+      <h2>反馈列表 </h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item" v-if="products.length">
-          <v-select :label="selectedProduct.name" width="110px" size="small">
+          <v-select :label="selectedProduct.name" @change="getIssues" width="110px" size="small">
             <span slot="label">显示</span>
             <select v-model="selectedProduct">
               <option :value="opt" v-for="opt in products">{{ opt.name }}</option>
@@ -15,7 +15,7 @@
         </div>
         <div class="filter-group-item" v-if="products.length">
           <v-select :label="issueType.label" width="110px" size="small">
-            <select v-model="issueType">
+            <select v-model="issueType"  @change="getIssues">
               <option :value="opt" v-for="opt in issueTypeOptions">{{ opt.label }}</option>
             </select>
           </v-select>
@@ -23,105 +23,34 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
+          <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
         <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <radio-button-group :items="locales.data.AllPERIODS" :value.sync="period" @select="getIssues()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
         </div>
       </div>
     </div>
     <div class="row">
-      <div class="col-6 issue-list">
-        <ul>
-          <!-- <li class="issue-list-item handled">
-            <a href="#">
-              <i class="fa fa-check-square-o"></i>
-              <span class="info">鞋很漂亮，鞋底很软弹，有通气孔走路能觉得到风，够舒服够透气下次我还买</span>
-              <span class="metas"><span>[使用咨询]</span><span>2016-1-1 19:21:32</span></span>
-            </a>
-          </li> -->
-          <li class="issue-list-item" v-for="summary in summaries">
-            <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + summary.id}">
-              <i class="fa fa-check-square-o"></i>
-              <span class="info">{{ summary.title }}</span>
-              <span class="metas"><span>[{{ summary.type }}]</span><span>{{ summary.create_time }}</span></span>
-            </a>
-          </li>
-        </ul>
-        <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div>
+      <div v-if="issues.length > 0">
+        <div class="col-6 issue-list">
+          <ul>
+            <li class="issue-list-item" v-for="issue in issues">
+              <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id}">
+                <i class="fa fa-check-square-o"></i>
+                <span class="info">{{ issue.content }}</span>
+                <span class="metas"><span v-if="issue.label.length > 0">[{{ issue.label[0] }}]</span><span v-else>[暂无分类]</span><span>{{ issue.create_time | formatDate}}</span></span>
+              </a>
+            </li>
+          </ul>
+          <!-- <div class="view-more tac"><a href="#">更多内容&gt;&gt;</a></div> -->
+          <pager v-if="total > countPerPage" :total="total" :simple="true" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pager>
+        </div>
+        <div class="col-18" v-if="issues.length > 0">
+          <router-view transition="view" transition-mode="out-in" class="view"></router-view>
+        </div>
       </div>
-      <div class="col-18">
-        <router-view transition="view" transition-mode="out-in" class="view"></router-view>
-      </div>
+      <div v-else style="height:500px;line-height:500px;text-align:center">暂无数据</div>
     </div>
-    <!-- <div class="panel">
-      <div class="panel-bd">
-        <div class="status-bar mt20">
-          <div class="status">{{{ $t('common.total_results', {count:total}) }}}
-          </div>
-          <v-select width="90px" size="small" :label="issueType.label">
-            <span slot="label">问题类型：</span>
-            <select v-model="issueType" @change="getIssues(true)">
-              <option v-for="option in issueTypeOptions" :value="option">{{ option.label }}</option>
-            </select>
-          </v-select>
-          <v-select width="110px" size="small" :label="period.label">
-            <span slot="label">时间：</span>
-            <select v-model="period" @change="getIssues(true)">
-              <option v-for="option in periodOptions" :value="option">{{ option.label }}</option>
-            </select>
-          </v-select>
-          <v-select width="80px" size="small" :label="status.label">
-            <span slot="label">反馈状态：</span>
-            <select v-model="status" @change="getIssues(true)">
-              <option v-for="option in statusOptions" :value="option">{{ option.label }}</option>
-            </select>
-          </v-select>
-        </div>
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>创建日期</th>
-                <th>客户姓名</th>
-                <th>联系方式</th>
-                <th>产品名称</th>
-                <th>反馈类别</th>
-                <th>状态</th>
-                <th class="tac">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="issues.length > 0">
-                <tr v-for="issue in issues">
-                  <td>{{ issue.create_time | uniformDate}}</td>
-                  <td>{{ issue.user_name }}</td>
-                  <td>{{ issue.phone }}</td>
-                  <td>{{ issue.product_name }}</td>
-                  <td>{{ issue.label }}</td>
-                  <td>
-                    <span class="hl-red" v-if="issue.status === 0">未处理</span>
-                    <span class="hl-gray" v-if="issue.status === 1">已处理</span>
-                  </td>
-                  <td class="tac">
-                    <a class="hl-red" v-link="'/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id">查看</a>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="issues.length === 0 && !loadingData">
-                <td colspan="7" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getIssues"></pager>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -138,6 +67,7 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 import store from 'store'
 import api from 'api'
+import dateFormat from 'date-format'
 
 export default {
   name: 'Issues',
@@ -148,7 +78,7 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      products: ({ products }) => products.released
     }
   },
 
@@ -161,8 +91,10 @@ export default {
 
   data () {
     return {
+      startTimePick: '',
+      endTimePick: '',
       // 时间间隔
-      period: 7,
+      period: 'all',
       selectedProduct: {},
       productOptions: [],
       // visibility: {
@@ -178,58 +110,58 @@ export default {
       originAddModel: {},
       // querying: false,
       loadingData: false,
-      summaries: [{
-        id: 12345,
-        title: '我的烤箱自动预热有问题，有时预热10分钟还是一点温度都没有！',
-        type: '故障申报',
-        create_time: '2016-7-16 17:31:32'
-      },
-      {
-        id: 23456,
-        title: '烘烤模式有时不管用，在连续烤3个小时后就不能正常加热了',
-        type: '故障申报',
-        create_time: '2016-7-12 12:11:21'
-      },
-      {
-        id: 34567,
-        title: '请问怎样使用定时烘烤功能呢，我找了半天没看到在哪里用，能不能重复时间呢？',
-        type: '使用咨询',
-        create_time: '2016-7-1 10:29:09'
-      },
-      {
-        id: 45678,
-        title: '我每次烤完东西后烤箱总是很长时间一直很烫，一般多久才会冷却下来，能不能拔电？',
-        type: '使用咨询',
-        create_time: '2016-6-29 21:21:32'
-      },
-      {
-        id: 56789,
-        title: '烤箱照明灯不亮，才买了不到一个星期4个灯就换了1个，太差了',
-        type: '故障申报',
-        create_time: '2016-6-24 14:51:10'
-      },
-      {
-        id: 67890,
-        title: '每次烤箱启动的时候会听见哒哒的声音，响一小会儿就没了，什么情况？？',
-        type: '故障申报',
-        create_time: '2016-6-23 16:29:39'
-      },
-      {
-        id: 22345,
-        title: '最近开始烤东西的时候会听见明显哒哒的声音，持续半分钟左右，是不是坏了？',
-        type: '故障申报',
-        create_time: '2016-6-22 19:21:32'
-      },
-      {
-        id: 11234,
-        title: '一般烤箱烤完东西多久才能拔掉电源，会不会影响散热？',
-        type: '使用咨询',
-        create_time: '2016-6-1 19:21:32'
-      }],
+      // summaries: [{
+      //   id: 12345,
+      //   title: '我的烤箱自动预热有问题，有时预热10分钟还是一点温度都没有！',
+      //   type: '故障申报',
+      //   create_time: '2016-7-16 17:31:32'
+      // },
+      // {
+      //   id: 23456,
+      //   title: '烘烤模式有时不管用，在连续烤3个小时后就不能正常加热了',
+      //   type: '故障申报',
+      //   create_time: '2016-7-12 12:11:21'
+      // },
+      // {
+      //   id: 34567,
+      //   title: '请问怎样使用定时烘烤功能呢，我找了半天没看到在哪里用，能不能重复时间呢？',
+      //   type: '使用咨询',
+      //   create_time: '2016-7-1 10:29:09'
+      // },
+      // {
+      //   id: 45678,
+      //   title: '我每次烤完东西后烤箱总是很长时间一直很烫，一般多久才会冷却下来，能不能拔电？',
+      //   type: '使用咨询',
+      //   create_time: '2016-6-29 21:21:32'
+      // },
+      // {
+      //   id: 56789,
+      //   title: '烤箱照明灯不亮，才买了不到一个星期4个灯就换了1个，太差了',
+      //   type: '故障申报',
+      //   create_time: '2016-6-24 14:51:10'
+      // },
+      // {
+      //   id: 67890,
+      //   title: '每次烤箱启动的时候会听见哒哒的声音，响一小会儿就没了，什么情况？？',
+      //   type: '故障申报',
+      //   create_time: '2016-6-23 16:29:39'
+      // },
+      // {
+      //   id: 22345,
+      //   title: '最近开始烤东西的时候会听见明显哒哒的声音，持续半分钟左右，是不是坏了？',
+      //   type: '故障申报',
+      //   create_time: '2016-6-22 19:21:32'
+      // },
+      // {
+      //   id: 11234,
+      //   title: '一般烤箱烤完东西多久才能拔掉电源，会不会影响散热？',
+      //   type: '使用咨询',
+      //   create_time: '2016-6-1 19:21:32'
+      // }],
       issueTypeOptions: [
         { label: '全部问题', value: 'all' },
-        { label: '未处理', value: 'unhandled' },
-        { label: '已处理', value: 'handled' }
+        { label: '未处理', value: 0 },
+        { label: '已处理', value: 1 }
       ],
       issueType: {
         label: '全部问题',
@@ -266,11 +198,69 @@ export default {
   },
 
   computed: {
+    selectOptions () {
+      if (this.products.length > 0) {
+        var res = [{
+          label: '全部'
+        }]
+        this.products.forEach((item) => {
+          let temp = {
+            id: item.id,
+            label: item.name
+          }
+          res.push(temp)
+        })
+        return res
+      } else {
+        return []
+      }
+    },
+    // currIssue () {
+    //   this.issues [asdsadff]
+    //   return {}
+    // },
     queryCondition () {
-      var condition = {
+      var condition = {}
+      condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {}
+      }
+      if (this.period === '') {
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          },
+          create_time: {
+            $gte: {'@date': this.startTimePick},
+            $lte: {'@date': this.endTimePick}
+          }
+        }
+      } else if (this.period === 'all') {
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          }
+        }
+      } else {
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          },
+          create_time: {
+            $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+            $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
+          }
+        }
+      }
+      switch (this.issueType.label) {
+        case '未处理':
+          condition.query['status'] = { $in: [0] }
+          break
+        case '已处理':
+          condition.query['status'] = { $in: [1] }
+          break
+        default:
       }
       // const SECONDS_PER_HOUR = 3600
       //
@@ -304,6 +294,14 @@ export default {
       // }
 
       return condition
+    },
+    beginTime () {
+      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+      return dateFormat('yyyy-MM-dd', new Date(past))
+    },
+    endTime () {
+      var end = new Date().getTime()
+      return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
 
@@ -312,77 +310,75 @@ export default {
     data () {
       this.init()
       // this.getIssues()
-      // this.getLabels()
+      this.getLabels()
     }
   },
 
   watch: {
     products () {
       this.init()
+      // if (this.issues[0]) {
+      //   this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
+      // }
+    },
+    issues () {
+      if (this.issues.length && !this.$route.params.id) {
+        this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
+      }
     }
   },
 
   ready () {
-    this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/12345')
+    // this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
   },
 
   methods: {
     init () {
       this.selectedProduct = this.products[0] || {}
+      if (this.products.length > 0) {
+        this.getIssues()
+      }
+    },
+    getSpecial (start, end) {
+      this.period = ''
+      this.startTimePick = start
+      this.endTimePick = end
+      this.getIssues()
     },
     // 获取问题列表
-    getIssues (querying) {
+    getIssues () {
       this.loadingData = true
       if (typeof querying !== 'undefined') {
         this.currentPage = 1
       }
-      var self = this
-      var argvs = arguments
-      var fn = self.getIssues
-      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-        api.helpdesk.getFeedbackList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-          if (res.status === 200 && res.data.list.length > 0) {
-            this.total = res.data.count
-            this.issues = res.data.list
-          } else {
-            this.issues = []
-            this.total = 0
-          }
-          this.loadingData = false
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'helpdesk'
-          }
-          self.handlePluginError(err, env)
-          this.loadingData = false
-        })
+      api.helpdesk.getFeedbackList(this.$route.params.app_id, this.queryCondition).then((res) => {
+        if (res.status === 200 && res.data.list.length > 0) {
+          this.total = res.data.count
+          this.issues = res.data.list
+        } else {
+          this.issues = []
+          this.total = 0
+        }
+        this.loadingData = false
+        // if (this.issues[0]._id !== '') {
+        //   this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
+        // }
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
       })
     },
 
     getLabels () {
-      var self = this
-      var argvs = arguments
-      var fn = self.getLabels
-      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
-        var params = {
-          limit: 20
+      var params = {
+        limit: 20
+      }
+      api.helpdesk.getFeedbackLabel(this.$route.params.app_id, params).then((res) => {
+        if (res.status === 200 && res.data.list.length > 0) {
+          this.issueTypeOptions = this.issueTypeOptions.concat(res.data.list)
         }
-        api.helpdesk.getFeedbackLabel(this.$route.params.app_id, token, params).then((res) => {
-          if (res.status === 200 && res.data.list.length > 0) {
-            this.issueTypeOptions = this.issueTypeOptions.concat(res.data.list)
-          }
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'helpdesk'
-          }
-          self.handlePluginError(err, env)
-        })
+      }).catch((err) => {
+        this.handleError(err)
       })
     },
 

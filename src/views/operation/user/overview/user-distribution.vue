@@ -83,7 +83,6 @@ export default {
           regions[i] = data[i].register
         }
       }
-      regions = {'上海': 1580, '广东': 5898, '浙江': 3561}
       this.fillMapData(regions)
     },
     fillMapData (regions) {

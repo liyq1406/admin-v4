@@ -166,19 +166,19 @@
         var result = [
           {
             title: '用户总数',
-            value: 79
+            value: this.total
           },
           {
             title: '今日新增',
-            value: 2
+            value: this.todayAddCount
           },
           {
             title: '当前在线',
-            value: 28
+            value: this.onlineCount
           },
           {
             title: '七日活跃用户',
-            value: 69
+            value: this.serverDayActiveCount
           }
         ]
         return result
@@ -434,117 +434,6 @@
         this.loadingData = true
         api.user.list(this.queryCondition).then((res) => {
           if (res.status === 200) {
-            res.data.list = [{
-              'id': 1022175532,
-              'phone_valid': false,
-              'create_date': '2016-08-22T11:32:04.246Z',
-              'nickname': 'feedback',
-              'email': 'feedback@pizzahut.com.cn',
-              'phone': '13928769034',
-              'source': 4,
-              'status': 1,
-              'email_valid': false,
-              'account': 'wx_359610a46ed4ee0b36d505f0dc99547c'
-            }, {
-              'id': 1022174571,
-              'phone_valid': false,
-              'nickname': '国豪',
-              'email': 'guohao123@gmail.com',
-              'phone': '18928767821',
-              'create_date': '2016-08-22T11:26:37.653Z',
-              'source': 4,
-              'status': 1,
-              'email_valid': false,
-              'account': 'wx_6e37c429b0a196fdd07b5c8f8c9f0aff'
-            }, {
-              'id': 1022173998,
-              'phone_valid': false,
-              'nickname': '小辉',
-              'email': 'xiaohuihui@sina.com.cn',
-              'phone': '18128769045',
-              'create_date': '2016-08-19T19:46:11.613Z',
-              'source': 4,
-              'status': 1,
-              'email_valid': false,
-              'account': 'wx_0c5220462b2c7e587b9d7c3608931e52'
-            }, {
-              'id': 1022178653,
-              'phone_valid': true,
-              'email': '121763@qq.com',
-              'phone': '13928769034',
-              'create_date': '2016-08-19T17:50:35.332Z',
-              'source': 2,
-              'nickname': 'chiyeuang',
-              'status': 1,
-              'email_valid': false,
-              'account': '18588931703'
-            }, {
-              'id': 1022173124,
-              'phone_valid': true,
-              'email': '2870251173@qq.com',
-              'phone': '13791898121',
-              'create_date': '2016-08-18T14:47:18.516Z',
-              'source': 2,
-              'nickname': '吴洋',
-              'status': 2,
-              'email_valid': false,
-              'account': '13312888452'
-            }, {
-              'id': 1605927206,
-              'phone_valid': false,
-              'nickname': '张合',
-              'email': '385536225@qq.com',
-              'phone': '13928769034',
-              'create_date': '2016-08-16T20:12:30.382Z',
-              'source': 4,
-              'status': 1,
-              'email_valid': false,
-              'account': 'wx_8aadbad9426970dcf20b5dae19361087'
-            }, {
-              'id': 1605922265,
-              'phone_valid': false,
-              'email': '1303261760@qq.com',
-              'phone': '13466255411',
-              'create_date': '2016-08-16T15:54:26.187Z',
-              'source': 3,
-              'nickname': 'Allen',
-              'status': 2,
-              'email_valid': false,
-              'account': 'guopeilun@xlink.cn'
-            }, {
-              'id': 1605929971,
-              'phone_valid': true,
-              'email': '1322525@qq.com',
-              'phone': '13546698125',
-              'create_date': '2016-08-10T15:02:53.602Z',
-              'source': 2,
-              'nickname': 'ghj',
-              'status': 1,
-              'email_valid': false,
-              'account': '17701903345'
-            }, {
-              'id': 1605928755,
-              'phone_valid': false,
-              'nickname': '范小林',
-              'email': '545740802@qq.com',
-              'phone': '13797303207',
-              'create_date': '2016-08-10T08:39:41.490Z',
-              'source': 4,
-              'status': 2,
-              'email_valid': false,
-              'account': 'wx_73b1dca576328cf5c0edab18a623ddad'
-            }, {
-              'id': 1605924905,
-              'phone_valid': false,
-              'nickname': 'maoshunli',
-              'email': '1401769643@qq.com',
-              'phone': '18017488489',
-              'create_date': '2016-08-08T15:59:00.965Z',
-              'source': 4,
-              'status': 1,
-              'email_valid': false,
-              'account': 'wx_70d684ab5b3e6d5079d6530e4f1a0f32'
-            }]
             this.users = res.data.list
             if (this.cacheOnlineType) {
               this.usersOnlineType = []
