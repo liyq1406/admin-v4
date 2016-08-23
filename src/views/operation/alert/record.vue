@@ -465,7 +465,7 @@ export default {
   },
 
   ready () {
-    // TODO
+    // TODO 对接口
     this.alertTrends = Mock.mock({
       'list|14': [{
         'date|+1': [
@@ -709,7 +709,6 @@ export default {
     //   this.loadingData = true
     //   api.alert.getAlerts(this.queryCondition).then((res) => {
     //     if (res.status === 200) {
-    //       // TODO
     //       this.alerts = res.data.list
     //       this.total = res.data.count
     //       this.loadingData = false

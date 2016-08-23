@@ -422,9 +422,8 @@ export default {
   computed: {
     /**
      * 趋势
-     * @return {[type]} [description]
+     * @return {Array}
      */
-    // TODO
     trends () {
       var result = []
       var isAddDevice = this.chartCondition.type === 2

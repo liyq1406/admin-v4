@@ -524,8 +524,8 @@
        * 获取详细推送的详情
        * @return {[type]} [description]
        */
-      // TODO
       getDetails () {
+        // TODO: 优化逻辑
         api.broadcast.getTask(this.id).then((res) => {
           var details = res.data.list[0]
           console.log(details)

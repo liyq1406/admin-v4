@@ -95,7 +95,7 @@ export default {
       if (!this.data || this.data.length <= 0) {
         return
       }
-      // TODO
+      // FIXME 单条数据时 G2 报错
       if (this.data.length === 1) {
         this.data = []
         return

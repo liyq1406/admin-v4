@@ -401,7 +401,7 @@
     },
 
     ready () {
-      // TODO
+      // TODO 对接口
       this.trends = Mock.mock({
         'list|14': [{
           'date|+1': [

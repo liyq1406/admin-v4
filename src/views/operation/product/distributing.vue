@@ -3,7 +3,6 @@
     <div class="main-title">
       <h2>热力分布</h2>
     </div>
-    <!-- TODO -->
     <!-- <div class="mb10 ml15">
       <a style="color: red">全部</a>
       <i class="arrow">&gt;</i>
