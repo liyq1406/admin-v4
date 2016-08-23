@@ -112,21 +112,21 @@ export default {
       // currentPage: 1,
       // 转发规则列表
       forwardRules: [
-        {
-          'id': '转发规则ID',
-          'data_type': [
-            '1',
-            '2',
-            '3',
-            '4',
-            '5'
-          ],
-          'destination': {
-            'type': 1,
-            'url': '转发URL地址',
-            'token': 'URL地址验证令牌'
-          }
-        }
+        // {
+        //   'id': '转发规则ID',
+        //   'data_type': [
+        //     '1',
+        //     '2',
+        //     '3',
+        //     '4',
+        //     '5'
+        //   ],
+        //   'destination': {
+        //     'type': 1,
+        //     'url': '转发URL地址',
+        //     'token': 'URL地址验证令牌'
+        //   }
+        // }
       ]
     }
   },
@@ -150,7 +150,7 @@ export default {
      */
     init () {
       this.selectedProduct = this.products[0] || {}
-      // this.getRule()
+      this.getRule()
     },
     /**
      * 获取数据转发规则
