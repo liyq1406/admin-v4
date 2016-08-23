@@ -126,7 +126,14 @@ export default {
         id: 0,
         label: '请选择产品'
       })
-      this.selectedProduct = result[0]
+      if (this.type === 'edit' && result.length > 1) {
+        this.selectedProduct = _.find(result, (item) => {
+          return item.id === this.$route.params.id
+        })
+      } else {
+        this.selectedProduct = result[0]
+      }
+      console.log(this.selectedProduct)
 
       return result
     },
@@ -147,7 +154,11 @@ export default {
   },
 
   ready () {
-    this.rule = this.locales.data.SNAPSHOT_INTERVAL[0]
+    if (this.type === 'add') {
+      this.rule = this.locales.data.SNAPSHOT_INTERVAL[0]
+    } else {
+      // this.getDatapoints()
+    }
   },
 
   methods: {
@@ -238,9 +249,9 @@ export default {
         },
         datapoint: this.selectedDatapoints
       }
-      api.snapshot.createRule(this.product.Id, model).then((res) => {
+      api.snapshot.createRule(this.selectedProduct.id, model).then((res) => {
         if (res.status === 200) {
-          console.log(res)
+          this.$route.router.replace('/dev/data/snapshots')
         }
       }).catch((res) => {
         this.handleError(res)

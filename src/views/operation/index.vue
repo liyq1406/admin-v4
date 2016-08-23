@@ -223,7 +223,7 @@ export default {
             break
           default:
         }
-        if (!exists(excluded, item.plugin)) {
+        if (!exists(excluded, item.plugin) && item.enable) {
           result.subs.push(sub)
         }
       })

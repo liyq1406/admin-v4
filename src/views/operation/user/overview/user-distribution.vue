@@ -11,7 +11,7 @@
               <thead>
                 <tr>
                   <th>地域</th>
-                  <th>设备数量</th>
+                  <th>用户数量</th>
                   <th>占比</th>
                 </tr>
               </thead>

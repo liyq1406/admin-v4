@@ -223,10 +223,10 @@ export const MAIL_TEMPLATE_LANGUAGES = [
 
 // 产品快照存储时间间隔
 export const SNAPSHOT_INTERVAL = [
-  { label: '10分钟', value: 0 },
-  { label: '20分钟', value: 1 },
-  { label: '30分钟', value: 2 },
-  { label: '1小时', value: 3 }
+  { label: '10分钟', value: 10 },
+  { label: '20分钟', value: 20 },
+  { label: '30分钟', value: 30 },
+  { label: '1小时', value: 60 }
 ]
 
 // 问题类型

@@ -8,12 +8,12 @@
         <div class="col-24">
           <pic-txt :pic-width="86">
             <img slot="pic" src="../../../assets/images/amazon.png" alt="nest互联">
-            <p>提示：nest联动可以帮助您的产品实现和google nest恒温器、烟感器的跨平台设备联动。您可以根据产品需要随时开启或关闭nest设备联动服务。</p>
-            <p>如当电灯开关打开时，自动设定nest的工作状态。</p>
+            <p>通过amazon echo先进的智能语音服务可以让您的产品与echo进行互联，当用户向echo发送一条设备的语音指令时，echo会识别此命令并传递给xlink服务，并最终与您的设备进行智能语音交互。</p>
+            <p>如：向echo说：“Hi alexa，turn on all my lights.”</p>
           </pic-txt>
         </div>
         <div class="mt20" style="padding-left: 126px">
-          <span class="mr5">开启echo服务</span>
+          <span class="mr5">开启amazon echo联动服务</span>
           <!-- <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></v-switch> -->
           <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></v-switch>
         </div>

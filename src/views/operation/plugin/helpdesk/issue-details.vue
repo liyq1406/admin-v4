@@ -1,7 +1,7 @@
 <template>
   <div class="issue-details">
     <info-card>
-      <h3>{{ issue.user_name }}</h3>
+      <h3>{{ issue.user_name }} </h3>
       <div class="desc">
         <span>{{ issue.product_name }}</span>
       </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>反馈列表</h2>
+      <h2>反馈列表 </h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
