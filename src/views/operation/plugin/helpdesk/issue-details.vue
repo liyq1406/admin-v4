@@ -1,14 +1,14 @@
 <template>
   <div class="issue-details">
     <info-card>
-      <h3>{{ issue.user_name }}</h3>
+      <h3>sherlyYang</h3>
       <div class="desc">
-        <span>{{ issue.product_name }}</span>
+        <span>智能烤箱_A1</span>
       </div>
       <div class="issue-metas">
-        <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
-        <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span>
-        <span class="issue-id">ID:{{ issue.product_id }}</span>
+        <span class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
+        <span class="issue-status handled hidden"><i class="fa fa-check-square-o"></i>已处理</span>
+        <span class="issue-id">ID:2918291121</span>
       </div>
     </info-card>
     <div class="tab-s2 mt20 mb5">
@@ -24,11 +24,11 @@
     <!-- Start: 反馈信息 -->
     <div class="panel-sub-hd bordered mt20">反馈信息</div>
     <div class="comment-list">
-      <!-- <div class="comment-list-item">
+      <div class="comment-list-item">
         <div class="comment-metas">
-          <span>{{ issue.create_time | formatDate }}</span>
+          <span>2016-07-12 12:11:21</span>
         </div>
-        <div class="comment-desc">{{ issue.content }}</div>
+        <div class="comment-desc">烘烤模式有时不管用，在连续烤3个小时后就不能正常加热了</div>
         <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
           <div class="pic-grid">
             <div class="pic" v-for="pic in pics" track-by="$index">
@@ -36,61 +36,41 @@
             </div>
           </div>
         </gallery>
-        <div class="issue-reply" v-if="firstReply">
+        <div class="issue-reply">
           <div class="comment-metas">
-            <span>{{firstReply.name}}    {{firstReply.create_time | formatDate }}</span>
+            <span>客服_6120    2016-07-12 16:09:11</span>
           </div>
-          <div class="comment-desc">{{ firstReply.content }}</div>
+          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
         </div>
-      </div> -->
-      <!-- <div class="comment-list-item">
+      </div>
+      <div class="comment-list-item">
         <div class="comment-metas">
           <span>2016-07-12 18:21:09</span>
         </div>
         <div class="comment-desc">烘烤模式还是不管用，是不是坏了</div>
-      </div> -->
-      <!-- begin 曾经用处理过的数组 -->
-      <!-- <div v-for="item in dealList" class="comment-list-item"> -->
-      <!-- end -->
-      <div v-for="item in recordList" class="comment-list-item">
-        <!-- 客户回复 -->
-        <div v-if="item.source === 1" class="pd710">
-          <div class="comment-metas">
-            <span>{{ item.create_time | formatDate }}</span>
-          </div>
-          <div class="comment-desc">{{ item.content }}</div>
-          <gallery :pics="item.image" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
-            <div class="pic-grid">
-              <div class="pic" v-for="pic in item.image" track-by="$index">
-                <img :src="pic" alt="" @click="handleImgClick($index)">
-              </div>
+        <!-- <gallery :pics="pics" :curr="currPicIndex" :show="isShowGallery" @close="handleGalleryClose" @switch="handlePicSwitch">
+          <div class="pic-grid">
+            <div class="pic" v-for="pic in pics" track-by="$index">
+              <img :src="pic" alt="" @click="handleImgClick($index)">
             </div>
-          </gallery>
-        </div>
-        <!-- 客服回复 -->
-        <div v-else class="issue-reply">
-          <img src="../../../../assets/images/user.png" alt="" class="kefuicon">
-          <div class="comment-metas ml50">
-            <span>{{item.name}}    {{item.create_time | formatDate }}</span>
           </div>
-          <div class="comment-desc ml50">{{ item.content }}</div>
-        </div>
-
+        </gallery> -->
+        <!-- <div class="issue-reply">
+          <div class="comment-metas">
+            <span>客服_6120    2016-02-12 16:09:11</span>
+          </div>
+          <div class="comment-desc">您好，如果不能正常加热，请尝试断电10分钟后再重新上电，就可以恢复了。</div>
+        </div> -->
       </div>
     </div>
     <div class="reply-form mt20">
       <div class="panel-sub-hd">客服回复</div>
       <div class="form">
-        <div v-if="false">
-          暂时无法回复
+        <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
+          <textarea class="input-text" v-model="dealRecord"></textarea>
         </div>
-        <div v-else>
-          <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
-            <textarea class="input-text" v-model="dealRecord"></textarea>
-          </div>
-          <div class="form-actions mt10">
-            <button class="btn btn-primary" @click="submitRecord">提交</button>
-          </div>
+        <div class="form-actions mt10">
+          <button class="btn btn-primary" @click="submitRecord">提交</button>
         </div>
       </div>
     </div>
@@ -105,7 +85,6 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
-import { formatDate } from 'src/filters'
 // import _ from 'lodash'
 
 export default {
@@ -121,71 +100,63 @@ export default {
 
   data () {
     return {
-      // 客服第一个回复
-      firstReply: {},
-      // inputAble: false,
-      // 客户与客服剩下的反馈数组
-      // otherArr: [{
-      //   user: {},
-      //   service: {}
-      // }],
       userInfo: {
         nickname: {
           label: '昵称',
-          value: ' '
+          value: 'xiaobai_123'
         },
         create_time: {
           label: '提交时间',
-          value: ' '
+          value: '2016-07-12  16:09:11'
         },
         email: {
           label: '邮箱',
-          value: ' '
+          value: 'sherly@163.com'
         },
         phone: {
           label: '手机',
-          value: ' '
+          value: '13800138000'
         }
       },
       deviceInfo: {
         mac: {
           label: 'MAC',
-          value: ' '
+          value: '1122eebb0088'
         },
         onlineLong: {
           label: '累计在线时长',
-          value: ' '
+          value: '1.6小时'
         },
         sn: {
           label: '序列号',
-          value: ' '
+          value: 'SN918208271983'
         },
         model: {
           label: '型号',
-          value: ' '
+          value: 'wifi-强力烤箱'
         }
       },
       appInfo: {
         device: {
           label: '设备信息',
-          value: ' '
+          value: 'iPhone 6S'
         },
         os: {
           label: '系统版本',
-          value: ' '
+          value: 'iOS 10.1'
         },
         lang: {
           label: '语言',
-          value: ' '
+          value: '简体中文'
         },
         resolution: {
           label: '分辨率',
-          value: ' '
+          value: '1080_1024'
         }
       },
       tabItems: ['用户信息', '设备信息', 'APP信息'],
       currIndex: 0,
-      pics: [],
+      pics: ['http://img54.foodjx.com/9/20130128/634949908155312500536.jpg'],
       currPicIndex: 0,
       isShowGallery: false,
       issue: {},
@@ -207,167 +178,66 @@ export default {
 
   route: {
     data () {
-      this.getIssue()
-      this.getFeedbackRecord()
-    }
-  },
-  computed: {
-    // 处理反馈记录
-    dealList () {
-      var otherArr = []
-      var newobj = {
-        user: {},
-        service: {}
-      }
-      this.recordList.map((item) => {
-        // 获取偶数元素(客户回复)
-        if (this.recordList.indexOf(item) % 2 === 0) {
-          // var evenNo = this.recordList.indexOf(item) / 2
-          // this.otherArr[evenNo].user.push(item)
-          newobj.user = item
-          // 如果这是数组最后一个元素，则直接返回
-          if (this.recordList.indexOf(item) + 1 === this.recordList.length) {
-            newobj.service = {}
-            otherArr.push(newobj)
-          }
-        } else {
-          // 获取奇数元素(客服回复)
-          // var oddNo = (this.recordList.indexOf(item) - 1) / 2
-          // this.otherArr[oddNo].service = item
-          newobj.service = item
-          // 如果这不是最后一个元素，继续循环
-          if (this.recordList.indexOf(item) + 1 < this.recordList.length) {
-            otherArr.push(newobj)
-            newobj = {
-              user: {},
-              service: {}
-            }
-          } else {
-            // 如果是最后一个元素
-            otherArr.push(newobj)
-          }
-        }
-      })
-      return otherArr
+      // this.getIssue()
+      // this.getFeedbackRecord()
     }
   },
 
   methods: {
     getIssue () {
+      var self = this
+      var argvs = arguments
+      var fn = self.getIssues
       var condition = {
         query: {
           _id: this.$route.params.id
         }
       }
-      api.helpdesk.getFeedbackList(this.$route.params.app_id, condition).then((res) => {
-        if (res.status === 200 && res.data.list.length === 1) {
-          this.total = res.data.count
-          this.issue = res.data.list[0]
-          // 用户信息
-          this.userInfo.nickname.value = this.issue.user_name
-          this.userInfo.create_time.value = formatDate(this.issue.create_time)
-          this.userInfo.email.value = this.issue.email
-          this.userInfo.phone.value = this.issue.phone
-          // APP信息
-          this.appInfo.device.value = this.issue.device_info
-          this.appInfo.os.value = this.issue.system_version
-          this.appInfo.lang.value = this.issue.system_language
-          this.appInfo.resolution.value = this.issue.distinguishability
-          this.pics = this.issue.image || []
-          // 设备信息
-          this.getDeviceInfo()
-        }
-      }).catch((err) => {
-        this.handleError(err)
-      })
-    },
-
-    // 获取设备信息
-    getDeviceInfo () {
-      api.device.getInfo(this.issue.product_id, this.issue.device_id).then((res) => {
-        if (res.status === 200) {
-          // 设备信息
-          this.deviceInfo.mac.value = res.data.mac
-          this.deviceInfo.sn.value = res.data.sn
-          this.deviceInfo.firmware_mod.value = res.data.mcu_mod
-        }
-      }).catch((err) => {
-        this.handleError(err)
-      })
-      api.product.getVDevice(this.issue.product_id, this.issue.device_id).then((res) => {
-        if (res.status === 200) {
-          // 设备信息
-          this.deviceInfo.onlineLong.value = res.data.online_count
-        }
-      }).catch((err) => {
-        this.handleError(err)
+      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+        api.helpdesk.getFeedbackList(this.$route.params.app_id, token, condition).then((res) => {
+          if (res.status === 200 && res.data.list.length === 1) {
+            this.total = res.data.count
+            this.issue = res.data.list[0]
+            this.pics = res.data.list[0].image || []
+          }
+        }).catch((err) => {
+          var env = {
+            'fn': fn,
+            'argvs': argvs,
+            'context': self,
+            'plugin': 'helpdesk'
+          }
+          self.handlePluginError(err, env)
+        })
       })
     },
 
     getFeedbackRecord () {
+      var self = this
+      var argvs = arguments
+      var fn = self.getFeedbackRecord
       var condition = {
         limit: 100,
         query: {
           feedback_id: this.$route.params.id
-        },
-        // 按创建时间升序获取
-        order: {
-          create_time: 1
         }
       }
-      api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
-        if (res.status === 200) {
-          console.log(11111)
-          console.log(res.data.list)
-          // this.firstReply = res.data.list[0]
-          this.recordList = res.data.list
-          // 去除第一个客服回复
-          // this.recordList.map((item) => {
-          //   if (this.recordList.indexOf(item) === 0) {
-          //     this.recordList.$remove(item)
-          //   }
-          // })
-          // 如果最后一个回复的是客户，打开输入框
-          // if (this.recordList.length % 2 === 0) {
-          //   this.inputAble = true
-          // } else {
-          //   this.inputAble = false
-          // }
-          // this.recordList = [
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'},
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'},
-          //   {_id: '记录ID',
-          //   user_id: '1223',
-          //   feedback_id: '123456',
-          //   reply_id: '12345678',
-          //   name: '客服',
-          //   content: '请致电售后',
-          //   image: ['2.jpg'],
-          //   creator: '小明',
-          //   create_time: '2016-05-17T01:03:27.453Z'}
-          // ]
-          // this.dealList(this.recordList)
-        } else {
-          this.recordList = []
-        }
-      }).catch((err) => {
-        this.handleError(err)
+      this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+        api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, token, condition).then((res) => {
+          if (res.status === 200 && res.data.list.length > 0) {
+            this.recordList = res.data.list
+          } else {
+            this.recordList = []
+          }
+        }).catch((err) => {
+          var env = {
+            'fn': fn,
+            'argvs': argvs,
+            'context': self,
+            'plugin': 'helpdesk'
+          }
+          self.handlePluginError(err, env)
+        })
       })
     },
     /**
@@ -407,38 +277,33 @@ export default {
       } else {
         this.isRecordEmpty = false
         this.outOfLimit = false
-        var i = this.recordList.length - 1
+        var self = this
+        var argvs = arguments
+        var fn = self.getIssues
         var params = {
           feedback_id: this.$route.params.id,
-          name: '客服',
+          name: this.currentMember.name,
           content: this.dealRecord,
           create_time: new Date(),
-          reply_id: this.recordList[i]._id
+          type: 0
         }
-        api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, params).then((res) => {
-          if (res.status === 200) {
-            this.resetSumit()
-            this.changeStatus()
-            // this.getFeedbackRecord()
-          }
-        }).catch((err) => {
-          this.handleError(err)
+        this.getAppToKen(this.$route.params.app_id, 'helpdesk').then((token) => {
+          api.helpdesk.saveFeedbackRecord(this.$route.params.app_id, token, params).then((res) => {
+            if (res.status === 200) {
+              this.resetSumit()
+              this.getFeedbackRecord()
+            }
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'helpdesk'
+            }
+            self.handlePluginError(err, env)
+          })
         })
       }
-    },
-    // 更新处理状态
-    changeStatus () {
-      var params = {
-        treated_time: new Date(),
-        status: 1
-      }
-      api.helpdesk.updateFeedbackList(this.$route.params.app_id, this.issue._id, params).then((res) => {
-        if (res.status === 200) {
-          this.getFeedbackRecord()
-        }
-      }).catch((err) => {
-        this.handleError(err)
-      })
     }
   }
 }
@@ -495,22 +360,18 @@ export default {
 // 反馈信息
 .comment-list
   .comment-list-item
-    /*padding 7px 10px*/
+    padding 15px 10px
     font-size 12px
     line-height 22px
     border-bottom 1px solid default-border-color
-    /*border-top 1px solid default-border-color*/
 
     .comment-metas
       color gray-light
 
     .issue-reply
       margin-top 10px
-      margin-bottom 10px
-      clearfix()
-      /*border-top 1px solid default-border-color*/
-      /*border-bottom 1px solid default-border-color*/
-      /*background-color #F2F2F2*/
+      border 1px solid default-border-color
+      background-color #F2F2F2
       padding 7px 10px
 
 .form
@@ -544,13 +405,4 @@ export default {
     .btn
       width 120px
       text-align center
-.kefuicon
-  float left
-  height 40px
-  width 40px
-  margin-right 10px
-.ml50
-  margin-left 50px
-.pd710
-  padding 7px 10px
 </style>

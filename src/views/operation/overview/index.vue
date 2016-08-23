@@ -5,22 +5,22 @@
     </div>
     <div class="row statistic mt10">
       <div class="col-6">
-        <statistic :total="statistic.devices.total.count" :change="statistic.devices.total.change" title="设备总数" tooltip="企业的设备总量" color="gray"  :titletop="true">
+        <statistic :total="385234" :change="statistic.devices.total.change" title="设备总数" tooltip="企业的设备总量" color="gray"  :titletop="true">
           <!-- <interval-icon color="gray"></interval-icon> -->
         </statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.activated.count" :change="statistic.devices.activated.change" title="激活数" tooltip="已联网激活的设备数量" color="green" :titletop="true">
+        <statistic :total="234832" :change="statistic.devices.activated.change" title="激活数" tooltip="已联网激活的设备数量" color="green" :titletop="true">
           <!-- <interval-icon color="green"></interval-icon> -->
         </statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.online.count" :change="statistic.devices.online.change" change-unit="%" title="在线量" tooltip="当前在线的设备数量" color="blue" :titletop="true">
+        <statistic :total="56891" :change="statistic.devices.online.change" change-unit="%" title="在线量" tooltip="当前在线的设备数量" color="blue" :titletop="true">
           <!-- <interval-icon color="blue"></interval-icon> -->
         </statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.users.count" :change="statistic.users.change" title="用户总数" tooltip="企业的用户数量" color="orange" :titletop="true">
+        <statistic :total="23710" :change="2" title="用户总数" tooltip="企业的用户数量" color="orange" :titletop="true">
           <!-- <interval-icon color="orange"></interval-icon> -->
         </statistic>
       </div>
@@ -30,7 +30,7 @@
         <product-trend></product-trend>
         <product-active></product-active>
         <product-distribution></product-distribution>
-        <user-trend></user-trend>
+        <!-- <user-trend></user-trend> -->
       </div>
     </div>
   </div>

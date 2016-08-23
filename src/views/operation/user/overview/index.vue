@@ -59,19 +59,19 @@ export default {
       statistic: {
         // 用户总数
         total: {
-          total: '',
+          total: 23710,
           change: ''
         },
         add: {
-          total: '',
+          total: 8,
           change: ''
         },
         active: {
-          total: '',
+          total: 5028,
           change: ''
         },
         seventTotal: {
-          total: '',
+          total: 9691,
           change: ''
         }
       }
@@ -79,8 +79,8 @@ export default {
   },
 
   ready () {
-    this.getUserCount()
-    this.getRecentTrend()
+    // this.getUserCount()
+    // this.getRecentTrend()
   },
 
   methods: {
