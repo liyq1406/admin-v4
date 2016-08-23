@@ -62,7 +62,7 @@ export default {
           return
         }
         this.rendering = true
-        setTimeout(this.render, 500)
+        setTimeout(this.render, 100)
       }
     }
   },
