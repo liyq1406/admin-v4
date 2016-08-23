@@ -107,6 +107,13 @@
           alias: 'content',
           enable: false,
           type: 10
+        }, {
+          id: '',
+          name: '环境数据',
+          description: '面向空气行业产品，提供室外pm2.5等历史与实时数据服务。',
+          alias: 'content',
+          enable: false,
+          type: 10
         }]
       }
     },
