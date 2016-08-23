@@ -4,7 +4,7 @@
     <div class="btn-box mt20 mb20">
       <button class="btn btn-primary w100" @click="onShowEditModal">编辑版本信息</button>
     </div>
-    <c-table :headers="headers" :tables="tables" :bordered="false" @tbody-link="onShowLink"></c-table>
+    <c-table :headers="headers" :tables="tables" :loading="loadingData" :bordered="false" @tbody-apk-url="onShowLink"></c-table>
 
     <!-- 编辑版本信息 -->
     <modal :show.sync="showEditModal" :width="'550px'">
@@ -16,7 +16,7 @@
               <label class="form-control col-6">升级版本号:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入升级版本号'" class="input-text-wrap">
-                  <input v-model="" type="text" class="input-text"/>
+                  <input v-model="editModal.version" type="text" class="input-text"/>
                 </div>
               </div>
             </div>
@@ -24,7 +24,7 @@
               <label class="form-control col-6">下载地址:</label>
               <div class="controls col-18">
                 <div v-placeholder="'下载地址URL'" class="input-text-wrap">
-                  <input v-model="" type="text" class="input-text"/>
+                  <input v-model="editModal.url" type="text" class="input-text"/>
                 </div>
               </div>
             </div>
@@ -32,7 +32,7 @@
               <label class="form-control col-6">HASH值:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入校验值'" class="input-text-wrap">
-                  <input v-model="" type="text" class="input-text"/>
+                  <input v-model="editModal.md5" type="text" class="input-text"/>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
               <label class="form-control col-6">更新日志:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入升级说明'" class="input-text-wrap">
-                  <textarea class="input-text"></textarea>
+                  <textarea v-model="editModal.illustration" class="input-text"></textarea>
                 </div>
               </div>
             </div>
@@ -64,7 +64,7 @@
 </template>
 
 <script>
-  // import api from 'api'
+  import api from 'api'
   // import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -106,32 +106,40 @@
       return {
         // 显示编辑浮层
         showEditModal: false,
+        // 表单正在提交
+        adding: false,
+        // 正在加载
+        loadingData: false,
         linkModal: {
           show: false,
           content: ''
         },
         editModal: {
-
+          'url': '安卓APK文件的下载URL',
+          'version': 'APK的版本号',
+          'illustration': 'APK的版本说明',
+          'md5': '文件md5校验值'
         },
-        versions: [
-          {
-            version: 'v1.0',
-            logs: [],
-            link: 'abcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabsabcabcabs'
-          }
-        ],
+        versions: {
+          api_key: '安卓调用推送所需要的api key',
+          enable: false, // 'gcm推送是否启用'
+          apk_version: 1,
+          apk_illustration: '升级说明',
+          apk_url: 'apk_url',
+          apk_md5: 'apk的md5值'
+        },
         headers: [
           {
-            key: 'version',
+            key: 'apk_version',
             title: '目标版本号',
             class: 'w150'
           },
           {
-            key: 'logs',
+            key: 'apk_illustration',
             title: '更新日志'
           },
           {
-            key: 'link',
+            key: 'apk_url',
             title: '下载链接',
             class: 'w80'
           }
@@ -147,20 +155,19 @@
        */
       tables () {
         var result = []
-        this.versions.forEach((item) => {
-          var table = {
-            version: '123',
-            logs: 222,
-            link: '<a class="hl-red">查看链接</a>',
-            prototype: item
-          }
-          result.push(table)
-        })
+        var table = {
+          apk_version: this.versions.apk_version >= 0 ? this.versions.apk_version : 'N/A',
+          apk_illustration: this.versions.apk_illustration || 'N/A',
+          apk_url: '<a class="hl-red">查看链接</a>',
+          prototype: this.versions
+        }
+        result.push(table)
         return result
       }
     },
 
     ready () {
+      this.versions = this.app.config.gcm
     },
 
     methods: {
@@ -169,7 +176,16 @@
        * @return {[type]} [description]
        */
       onSubmit () {
-        console.log('表单提交')
+        this.adding = true
+        this.editModal.version = Number(this.editModal.version)
+        api.plugin.setAndVersion(this.app.id, this.editModal).then((res) => {
+          this.$emit('update-curr-app')
+          this.adding = false
+          this.showEditModal = false
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
       },
       /**
        * 编辑浮层取消事件
@@ -184,6 +200,10 @@
        */
       onShowEditModal () {
         this.showEditModal = true
+        this.editModal.illustration = this.versions.apk_illustration
+        this.editModal.md5 = this.versions.apk_md5
+        this.editModal.url = this.versions.apk_url
+        this.editModal.version = this.versions.apk_version
       },
       /**
        * 显示链接浮层
@@ -191,8 +211,15 @@
        * @return {[type]}       [description]
        */
       onShowLink (table) {
-        this.linkModal.show = true
-        this.linkModal.content = table.prototype.link
+        if (table.prototype.apk_url) {
+          this.linkModal.show = true
+          this.linkModal.content = table.prototype.apk_url
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '暂无链接'
+          })
+        }
       }
     }
   }

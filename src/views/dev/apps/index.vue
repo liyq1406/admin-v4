@@ -359,6 +359,9 @@
               this.resetSelectedApp()
             }, 300)
           }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingData = false
         })
       },
 
