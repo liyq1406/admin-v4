@@ -1340,50 +1340,6 @@ let configRouter = (router) => {
               resolve(require('./views/operation/plugin/warranty/account/staff-details'))
             }, 'admin')
           }
-        },
-
-        // 设备参数
-        // TODO 废弃？
-        'device-params': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/device-params/index'))
-            }, 'admin')
-          }
-        },
-        // 设备参数详情
-        'device-params/:product_id/:device_id/:mac': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/device-params/details'))
-            }, 'admin')
-          },
-          subRoutes: {
-            // 基本信息
-            'basic-info': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/device-params/basic-info'))
-                }, 'admin')
-              }
-            },
-            // 数据监控
-            'data-monitoring': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/device-params/data-monitoring'))
-                }, 'admin')
-              }
-            },
-            // 故障记录
-            'fault-records': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/device-params/fault-records'))
-                }, 'admin')
-              }
-            }
-          }
         }
       }
     }
@@ -1396,7 +1352,6 @@ let configRouter = (router) => {
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',
-    '/operation/device-params/:product_id/:device_id/:mac': '/operation/device-params/:product_id/:device_id/:mac/basic-info',
     '/operation/data': '/operation/data/tables',
     '/operation/statistic': '/operation/statistic/products',
     '/operation/settings': '/operation/settings/auth',
