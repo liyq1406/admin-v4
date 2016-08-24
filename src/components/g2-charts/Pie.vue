@@ -1,6 +1,6 @@
 <template>
   <div class="x-pie">
-    <div v-if="data && data.length===0 && !rendered" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="(data && data.length===0) || rendering" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
   </div>
 </template>
 
@@ -38,7 +38,6 @@ export default {
   data () {
     return {
       chart: null,
-      rendered: false,
       rendering: false
     }
   },
@@ -124,7 +123,6 @@ export default {
         // })
 
       chart.render()
-      this.rendered = true
       this.rendering = false
 
       chart.on('itemselected', (e) => {
