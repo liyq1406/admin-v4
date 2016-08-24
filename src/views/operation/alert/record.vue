@@ -144,7 +144,6 @@ import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import Mock from 'mockjs'
 import { formatDate } from 'src/filters'
 import dateFormat from 'date-format'
 

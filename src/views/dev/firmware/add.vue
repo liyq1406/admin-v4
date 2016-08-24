@@ -82,16 +82,6 @@
                           <input type="radio" v-model="taskModelType" :value="opt" name="type" number/>{{ opt.label }}
                         </label>
                       </div>
-                      <!-- <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="addmodel.type" :value="2" number/>MCU
-                        </label>
-                      </div>
-                      <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="addmodel.type" :value="3" number/>子设备
-                        </label>
-                      </div> -->
                       <div class="form-row row" v-show="taskModelType.value!==1">
                         <label class="form-control col-5">识别码:</label>
                         <div class="controls col-10">
