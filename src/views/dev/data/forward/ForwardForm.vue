@@ -9,9 +9,9 @@
               <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
             </select>
           </v-select>
-          <div class="product-name">
+          <!-- <div class="product-name">
             <span>{{selectedProduct.label}}</span>
-          </div>
+          </div> -->
         </div>
       </div>
       <div class="form-row row">
