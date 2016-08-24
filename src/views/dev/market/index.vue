@@ -110,8 +110,8 @@
         }, {
           id: '',
           name: '环境数据',
-          description: '面向空气行业产品，提供室外pm2.5等历史与实时数据服务。',
-          alias: 'content',
+          description: '面向空气行业产品，提供室外pm2.5、AQI、pm20、pm25、so2、no2、co、o3等历史与实时数据服务。',
+          alias: 'airquality',
           enable: false,
           type: 10
         }]
