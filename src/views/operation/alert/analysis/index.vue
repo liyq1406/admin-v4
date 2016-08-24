@@ -202,8 +202,8 @@ export default {
 
   ready () {
     if (this.products.length > 0) {
-      this.getSummary()
       this.getFirstProduct()
+      this.getSummary()
       this.getTagTrend()
       this.getAlertList()
     }
@@ -217,8 +217,8 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
-        this.getSummary()
         this.getFirstProduct() // 设置产品列表第一个为当前产品
+        this.getSummary()
         this.getTagTrend()
         this.getAlertList()
       }
@@ -256,7 +256,7 @@ export default {
 
       api.statistics.getProductAlertSummary(this.currentProduct.id).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
+          this.alertSummary.unread.total = res.data.unread
         }
       }).catch((res) => {
         this.handleError(res)
@@ -264,7 +264,7 @@ export default {
       // 获取当天数据
       api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
         if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
+          // this.alertSummary.unread.total = res.data.unread
           this.alertSummary.today.total = res.data.message
         }
       }).catch((res) => {
