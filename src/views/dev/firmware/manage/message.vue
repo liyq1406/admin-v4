@@ -15,7 +15,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <!-- TODO 饼图加载时页面回跳动 #weijie -->
+          <!-- REVIEW 饼图加载时页面回跳动 #guohao -->
           <pie :data="warningLevel"></pie>
         </div>
         <div class="col-11 col-offset-1 data-table-wrap">
@@ -31,7 +31,7 @@
                 <template v-if="warningLevel.length > 0">
                   <tr v-for="item in warningLevel">
                     <td>{{item.name}}</td>
-                    <td>{{ item.value }}/{{ item.percent | toPercentDecimal2 }}</td>
+                    <td>{{ item.value }}/{{ item.percent | toPercentDecimalN 2 }}</td>
                   </tr>
                 </template>
                 <tr v-if="warningLevel.length === 0">

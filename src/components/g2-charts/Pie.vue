@@ -1,6 +1,6 @@
 <template>
   <div class="x-pie">
-    <div v-if="(data && data.length===0) || rendering" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="(data && data.length===0 && !rendered) || rendering" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
   </div>
 </template>
 
@@ -38,7 +38,8 @@ export default {
   data () {
     return {
       chart: null,
-      rendering: false
+      rendering: false,
+      rendered: false // 解决第二次传入空数组，空图标和没有数据同时存在的问题
     }
   },
 
@@ -124,6 +125,7 @@ export default {
 
       chart.render()
       this.rendering = false
+      this.rendered = true
 
       chart.on('itemselected', (e) => {
         this.$emit('itemselected', e.data._origin)

@@ -70,7 +70,7 @@
                     <tr v-for="item in warningLevel">
                       <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
-                      <td>{{ item.percent | toPercentDecimal2 }}</td>
+                      <td>{{ item.percent | toPercentDecimalN 2 }}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">
@@ -261,6 +261,7 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
+      // TODO 接口字段缺失 需要产品下统计概览数据 显示获取的全局的数据
       // 获取当天数据
       api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
         if (res.status === 200) {
@@ -472,6 +473,13 @@ export default {
     },
 
     sortRegion (arr) {
+      // 如果数据为0,不处理
+      for (let i = 0; i < arr.length; i++) {
+        if (!arr[i].value) {
+          arr = arr.splice(i, 1)
+        }
+      }
+      console.log(arr)
       // 由大到小排序
       arr.sort((a, b) => {
         if (a.value > b.value) {

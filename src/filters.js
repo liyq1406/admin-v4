@@ -121,25 +121,25 @@ export function uniformMinuteTime (date, correct) {
  * @param  {Float} value 浮点数
  * @return {String}
  */
-// TODO: 改成保留 N 位小数，函数名称改成 toDecimal #guohao
-export function toDecimal2 (value) {
-  var f = parseFloat(value)
-  if (isNaN(f)) {
-    return ''
-  }
-  f = Math.round(f * 100) / 100
-  var s = f.toString()
-  var rs = s.indexOf('.')
-  if (rs < 0) {
-    rs = s.length
-    s = s + '.'
-  }
-  for (var i = s.length; i <= rs + 2; i++) {
-    s = s + '0'
-  }
-
-  return s
-}
+// REVIEW: 改成保留 N 位小数，函数名称改成 toDecimal #guohao
+// export function toDecimal2 (value) {
+//   var f = parseFloat(value)
+//   if (isNaN(f)) {
+//     return ''
+//   }
+//   f = Math.round(f * 100) / 100
+//   var s = f.toString()
+//   var rs = s.indexOf('.')
+//   if (rs < 0) {
+//     rs = s.length
+//     s = s + '.'
+//   }
+//   for (var i = s.length; i <= rs + 2; i++) {
+//     s = s + '0'
+//   }
+//
+//   return s
+// }
 
 /**
  * 百分比表示浮点数,保留2位小数： 例 0.0201 => 2.01%
@@ -147,11 +147,51 @@ export function toDecimal2 (value) {
  * @return {String}
  */
 // TODO: 函数名称改成 toPercent #guohao
-export function toPercentDecimal2 (value) {
+// export function toPercentDecimal2 (value) {
+//   var f = parseFloat(value)
+//   if (isNaN(f)) {
+//     return ''
+//   }
+//
+//   return toDecimal2(f * 100) + '%'
+// }
+
+/**
+ * 处理浮点数,保留n位小数
+ * @param  {Float} value 浮点数
+ * @param  {int} n 保留多少位
+ * @return {String}
+ */
+export function toDecimalN (value, n) {
+  var f = parseFloat(value)
+  if (isNaN(f)) {
+    return ''
+  }
+  f = Math.round(f * Math.pow(10, n)) / Math.pow(10, n)
+  var s = f.toString()
+  var rs = s.indexOf('.')
+  if (rs < 0) {
+    rs = s.length
+    s = s + '.'
+  }
+  for (var i = s.length; i <= rs + n; i++) {
+    s = s + '0'
+  }
+
+  return s
+}
+
+/**
+ * 百分比表示浮点数,保留n位小数： 例 0.0201 => 2.01%
+ * @param  {Float} value 浮点数
+ * @param  {int} n 保留多少位
+ * @return {String}
+ */
+export function toPercentDecimalN (value, n) {
   var f = parseFloat(value)
   if (isNaN(f)) {
     return ''
   }
 
-  return toDecimal2(f * 100) + '%'
+  return toDecimalN(f * 100, n) + '%'
 }
