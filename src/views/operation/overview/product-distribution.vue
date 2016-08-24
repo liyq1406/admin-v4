@@ -45,7 +45,7 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import PercentageBar from 'components/PercentageBar'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
-import {numToPercent} from 'helpers/utils'
+import {numToPercent} from 'utils'
 import { toPercentDecimal2 } from 'src/filters'
 import _ from 'lodash'
 

@@ -40,7 +40,7 @@ import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import store from 'store'
 import api from 'api'
-import { isEmpty } from 'helpers/utils'
+import { isEmpty } from 'utils'
 import { DEALER_SCOPE_SEPERATOR } from 'consts/config'
 
 export default {

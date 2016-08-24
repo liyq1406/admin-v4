@@ -90,7 +90,7 @@
 
 <script>
   import api from 'api'
-  import base64 from 'helpers/base64'
+  import base64 from 'utils/base64'
   import { globalMixins } from 'src/mixins'
   import Alert from 'components/Alert'
 

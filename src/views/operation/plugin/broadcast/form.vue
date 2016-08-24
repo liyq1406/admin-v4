@@ -303,7 +303,7 @@
   import TagInput from 'components/TagInput'
   import store from 'store'
   import api from 'api'
-  import { createDayRange } from 'helpers/utils'
+  import { createDayRange } from 'utils'
 
   export default {
     name: 'AddBroadcast',

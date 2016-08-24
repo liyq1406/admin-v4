@@ -54,7 +54,7 @@
   import { formatDate } from 'src/filters'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
-  import {createDayRange} from 'helpers/utils'
+  import {createDayRange} from 'utils'
 
   export default {
     name: 'UserList',

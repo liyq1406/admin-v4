@@ -110,7 +110,7 @@ import { globalMixins } from 'src/mixins'
 import { uniformDate } from 'src/filters'
 import Statistic from 'components/Statistic'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
-// import {numToPercent} from 'helpers/utils'
+// import {numToPercent} from 'utils'
 
 // TODO 代码待优化 #weijie
 

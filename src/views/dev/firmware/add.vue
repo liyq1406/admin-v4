@@ -166,7 +166,7 @@
   import store from 'store'
   import api from 'api'
   import _ from 'lodash'
-  // import { createDayRange } from 'helpers/utils'
+  // import { createDayRange } from 'utils'
 
   // TODO 添加流程确定：选择产品如果版本数小于1？表单通过验证才可以点击按钮？ #weijie
   // TODO 消除冗余代码 #weijie

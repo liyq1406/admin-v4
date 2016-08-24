@@ -87,7 +87,7 @@ import TimeLine from 'components/g2-charts/TimeLine'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import dateFormat from 'date-format'
-import {getLastYearDate} from 'helpers/utils'
+import {getLastYearDate} from 'utils'
 
 export default {
   name: 'record-history',

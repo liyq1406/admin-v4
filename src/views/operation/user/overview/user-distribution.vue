@@ -44,7 +44,7 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
 import {getUserRegion} from './api-user'
-import {numToPercent} from 'helpers/utils'
+import {numToPercent} from 'utils'
 import _ from 'lodash'
 
 export default {
