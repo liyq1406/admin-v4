@@ -121,6 +121,7 @@ export function uniformMinuteTime (date, correct) {
  * @param  {Float} value 浮点数
  * @return {String}
  */
+// TODO: 改成保留 N 位小数，函数名称改成 toDecimal #guohao
 export function toDecimal2 (value) {
   var f = parseFloat(value)
   if (isNaN(f)) {
@@ -145,6 +146,7 @@ export function toDecimal2 (value) {
  * @param  {Float} value 浮点数
  * @return {String}
  */
+// TODO: 函数名称改成 toPercent #guohao
 export function toPercentDecimal2 (value) {
   var f = parseFloat(value)
   if (isNaN(f)) {

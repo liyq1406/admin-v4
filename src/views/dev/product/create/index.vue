@@ -98,7 +98,6 @@ export default {
      * 提交数据端点信息
      */
     onDatapointSubmit (product) {
-      // TODO 调用创建产品接口
       this.currStep = 3
     }
   }
