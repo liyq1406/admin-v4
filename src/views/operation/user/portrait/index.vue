@@ -194,7 +194,7 @@ export default {
   },
 
   ready () {
-    // TODO: 所有相关功能没对接口 #shengzhi
+    // TODO: 所有相关功能没对接口 #guohui
     this.simulationData()
   },
 
