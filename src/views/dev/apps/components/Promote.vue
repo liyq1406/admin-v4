@@ -4,7 +4,7 @@
     <div class="btn-box mt20 mb20">
       <button class="btn btn-primary w100" @click="onShowEditModal">编辑版本信息</button>
     </div>
-    <c-table :headers="headers" :tables="tables" :loading="loadingData" :bordered="false" @tbody-apk-url="onShowLink"></c-table>
+    <x-table :headers="headers" :tables="tables" :loading="loadingData" :bordered="false" @tbody-apk-url="onShowLink"></x-table>
 
     <!-- 编辑版本信息 -->
     <modal :show.sync="showEditModal" :width="'550px'">
@@ -90,7 +90,7 @@
 
     components: {
       Modal,
-      'c-table': Table
+      'x-table': Table
     },
 
     props: {

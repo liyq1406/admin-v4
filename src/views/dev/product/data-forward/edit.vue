@@ -22,11 +22,11 @@
               <label class="form-control col-7">{{ '分发类型' }}:</label>
               <div class="controls col-17">
                 <div class="select">
-                  <v-select :label="dataDestination[editModel.destination.type-1]">
+                  <x-select :label="dataDestination[editModel.destination.type-1]">
                     <select v-model="editModel.destination.type" name="type" number>
                       <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -83,7 +83,7 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select,
+      'x-select': Select,
       Breadcrumb,
       'search-box': SearchBox
     },

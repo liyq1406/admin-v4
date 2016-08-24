@@ -6,9 +6,9 @@
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="snapshot-details" v-if="!deviceDatas.length && !loadingData">
       <div class="panel">
-        <v-alert :cols="7">
+        <x-alert :cols="7">
           <p>该产品暂无设备</p>
-        </v-alert>
+        </x-alert>
       </div>
     </div>
     <div class="snapshot-details with-loading" v-else>
@@ -22,11 +22,11 @@
               <div class="device-list-box">
                 <div class="action-bar">
                   <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-                    <v-select width="130px" :label="queryType.label" size="small">
+                    <x-select width="130px" :label="queryType.label" size="small">
                       <select v-model="queryType">
                         <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                     <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                   </search-box>
                 </div>
@@ -183,8 +183,8 @@ export default {
     Pager,
     IntelligentTable,
     Breadcrumb,
-    'v-select': Select,
-    'v-alert': Alert
+    'x-select': Select,
+    'x-alert': Alert
   },
 
   data () {

@@ -7,11 +7,11 @@
       <div class="filter-group fr">
         <div class="filter-group-item">
           <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
-            <v-select width="106px" :label="queryType.label" size="small">
+            <x-select width="106px" :label="queryType.label" size="small">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
               </select>
-            </v-select>
+            </x-select>
             <button slot="search-button" @click="handleSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
           </search-box>
         </div>
@@ -24,9 +24,9 @@
       <div class="icon-loading" v-show="loadingDevices">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
-      <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
+      <x-alert v-show="!devices.length && !loadingDevices" :cols="18">
         <p>{{ infoMsg }}</p>
-      </v-alert>
+      </x-alert>
       <div v-show="devices.length" class="device-list mb20">
         <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
           <div class="list-item-cont">
@@ -70,9 +70,9 @@ export default {
   mixins: [globalMixins, setCurrProductMixin],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     'search-box': SearchBox,
-    'v-alert': Alert,
+    'x-alert': Alert,
     'pager': Pager,
     AreaSelect
   },

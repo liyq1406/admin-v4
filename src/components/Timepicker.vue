@@ -1,10 +1,10 @@
 <template>
   <div :class="classes">
-    <v-select width="80px" :label="value">
+    <x-select width="80px" :label="value">
       <select v-model="value" @change="selectTime">
         <option :value="timeValue(n)" v-for="n in 24">{{ timeValue(n) }}</option>
       </select>
-    </v-select>
+    </x-select>
   </div>
 </template>
 
@@ -36,7 +36,7 @@
     },
 
     components: {
-      'v-select': Select
+      'x-select': Select
     },
 
     computed: {

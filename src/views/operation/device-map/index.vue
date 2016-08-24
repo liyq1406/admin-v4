@@ -3,9 +3,9 @@
     <!-- 无产品时显示添加提示 -->
     <div class="panel" v-if="!productOptions.length && !loadingProducts">
       <div class="panel-bd">
-        <v-alert :cols="7">
+        <x-alert :cols="7">
           <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
-        </v-alert>
+        </x-alert>
       </div>
     </div>
 
@@ -14,12 +14,12 @@
       <div class="panel-hd">
         <h2>{{ $t("ui.main_nav.operation.subs.device_map.label") }}</h2>
         <div class="leftbox">
-          <v-select width="160px" :label="currProduct.name" size="small">
+          <x-select width="160px" :label="currProduct.name" size="small">
             <span slot="label">选择产品：</span>
             <select v-model="currProduct" @change="getGeographies">
               <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="panel-bd">
@@ -29,17 +29,17 @@
           </div>
           <div class="action-bar">
             <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
-              <v-select width="106px" :label="queryType.label" size="small">
+              <x-select width="106px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
               <button slot="search-button" @click="handleSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
             </search-box>
           </div>
-          <v-alert v-show="!devices.length && !loadingDevices" :cols="18">
+          <x-alert v-show="!devices.length && !loadingDevices" :cols="18">
             <p>{{ infoMsg }}</p>
-          </v-alert>
+          </x-alert>
         </div>
       </div>
       <div v-show="devices.length" class="device-list mb20">
@@ -82,9 +82,9 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'search-box': SearchBox,
-      'v-alert': Alert,
+      'x-alert': Alert,
       'pager': Pager
     },
 

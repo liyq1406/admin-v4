@@ -13,12 +13,12 @@
         </div>
         <div class="status-bar">
           <div class="status">{{{ $t('common.total_results', {count:total}) }}}</div>
-          <v-select size="small" width="120px" placeholder="请选择类别" :label="category.label">
+          <x-select size="small" width="120px" placeholder="请选择类别" :label="category.label">
             <span slot="label">类别：</span>
             <select v-model="category" @change="getIngredients">
               <option v-for="option in categoryOptions" :value="option">{{ option.label }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
@@ -108,7 +108,7 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'modal': Modal,
       'search-box': SearchBox,
       'pager': Pager

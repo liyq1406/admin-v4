@@ -54,7 +54,7 @@ export default {
   .left-actions
     display inline-block
 
-    .v-select
+    .x-select
       display inline-block
       margin 12px 0 0 20px
 
@@ -78,7 +78,7 @@ export default {
     float right
     margin-top 10px
 
-    .v-select
+    .x-select
       float none
       margin 0
 
@@ -115,7 +115,7 @@ export default {
   .controls
     .area-select
       display inline-block
-      .v-select
+      .x-select
         display inline-block
 
   .action-bar
@@ -123,7 +123,7 @@ export default {
     padding-top 20px
     margin-bottom 20px
 
-    .v-select
+    .x-select
       display inline-block
 
     .search-box

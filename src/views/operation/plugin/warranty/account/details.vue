@@ -56,23 +56,23 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="key" :active="searching" :placeholder="'请输入关键字'" @cancel="getBranchStaffsList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getBranchStaffsList(true)">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <div class="filter-group-item">
-                <v-select width="120px" size="small" :label="statusOptions[status.value].label">
+                <x-select width="120px" size="small" :label="statusOptions[status.value].label">
                   <label slot="label">状态</label>
                   <select v-model="status" :status.sync="" @change="getBranchStaffsList(true)">
                     <option v-for="option in statusOptions" :value="option" :selected="option.value===2">{{option.label}}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -178,12 +178,12 @@
               </div>
             </div>
           </div>
-          <!-- <v-select :label="addCustomOptions[addModel.status].label" width="120px">
+          <!-- <x-select :label="addCustomOptions[addModel.status].label" width="120px">
             <label slot="label">状态</label>
             <select v-model="addModel.status" name="status">
               <option v-for="customOption in addCustomOptions" :value="customOption.value">{{customOption.label}}</option>
             </select>
-          </v-select> -->
+          </x-select> -->
 
           <div class="form-actions">
             <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -361,7 +361,7 @@ export default {
   },
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     SearchBox,
     Pager,
     Modal,

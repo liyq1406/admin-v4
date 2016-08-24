@@ -75,10 +75,10 @@
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <v-alert :cols="16" type="success" :title="$t('ui.auth.by_phone_success')">
+      <x-alert :cols="16" type="success" :title="$t('ui.auth.by_phone_success')">
         <p>{{ $t("ui.auth.by_phone_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </v-alert>
+      </x-alert>
     </div>
   </div>
   <!-- <div class="form form-auth form-fetch-password">
@@ -176,7 +176,7 @@
 
     components: {
       'captcha': Captcha,
-      'v-alert': Alert
+      'x-alert': Alert
     },
 
     data () {

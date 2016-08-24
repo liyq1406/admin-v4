@@ -23,11 +23,11 @@
     vertical-align middle
     font-size 12px
 
-  .v-select
+  .x-select
     display inline-block
     font-size 12px
 
-    .v-select-trigger
+    .x-select-trigger
       border-color #BBB
 
   .btn

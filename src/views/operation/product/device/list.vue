@@ -40,25 +40,25 @@
               </div> -->
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
-              <v-select width="90px" size="small" :label="visibility.label">
+              <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
                 <select v-model="visibility" @change="getDevices">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
   </div>
@@ -87,8 +87,8 @@ export default {
   mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    'v-select': Select,
-    'c-table': Table,
+    'x-select': Select,
+    'x-table': Table,
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,

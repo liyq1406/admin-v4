@@ -27,11 +27,11 @@
             <div class="controls col-20">
               <div class="select-group">
                 <div class="select">
-                  <v-select width="160px" placeholder="请选择难度" :label="difficulty">
+                  <x-select width="160px" placeholder="请选择难度" :label="difficulty">
                     <select v-model="difficulty" name="difficulty">
                       <option v-for="opt in difficulties" :value="opt" :selected="difficulty===opt">{{ opt }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -41,11 +41,11 @@
             <div class="controls col-20">
               <div class="select-group">
                 <div v-for="category in classification" class="select">
-                  <v-select width="160px" placeholder="请选择类别" :label="category.main">
+                  <x-select width="160px" placeholder="请选择类别" :label="category.main">
                     <select v-model="category.main">
                       <option v-for="opt in categories | dropSlected classification category 'main'" :value="opt.main" :selected="opt.main===category.main">{{ opt.main }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <span @click="removeObj(category, classification)" class="fa fa-times"></span>
                 </div>
               </div>
@@ -87,12 +87,12 @@
                   <div class="row">
                     <div class="col-6 device-name">{{ device.name }}</div>
                     <div class="col-9">
-                      <v-select width="70px" :label="device.count.toString()" size="small">
+                      <x-select width="70px" :label="device.count.toString()" size="small">
                         <span slot="label">烹饪步骤数量：</span>
                         <select v-model="device.count" name="count" @change="setSteps(device)">
                           <option v-for="n in device.max" :value="n+1">{{ n+1 }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                     <div class="col-7 cooking-time">
                       <span>时长：</span>
@@ -113,11 +113,11 @@
                         <div class="col-6 mt10" v-for="(byteIndex, byte) in step.bytes">
                           <div class="mr10">
                             <div class="byte-name">{{ byte.label }}</div>
-                            <v-select width="100%" :label="byte.value.toString()+(byte.unit || '')" size="small" :disabled="byte.max === byte.min" @change="setRange(step.bytes, byte)">
+                            <x-select width="100%" :label="byte.value.toString()+(byte.unit || '')" size="small" :disabled="byte.max === byte.min" @change="setRange(step.bytes, byte)">
                               <select v-model="byte.value" :disabled="byte.max === byte.min">
                                 <option v-for="n in (byte.max - byte.min + 1)" :value="n+byte.min">{{ (n+byte.min)+(byte.unit || '') }}</option>
                               </select>
-                            </v-select>
+                            </x-select>
                           </div>
                         </div>
                       </div>
@@ -200,12 +200,12 @@
       <h3 slot="header">选择食材</h3>
       <div slot="body" class="ingredient-box">
         <div class="status-bar">
-          <v-select size="small" width="120px" :label="ingredientSelectModal.category.label">
+          <x-select size="small" width="120px" :label="ingredientSelectModal.category.label">
             <span slot="label">类别：</span>
             <select v-model="ingredientSelectModal.category" @change="getIngredients">
               <option v-for="option in ingredientCategoryOptions" :value="option">{{ option.label }}</option>
             </select>
-          </v-select>
+          </x-select>
           <search-box :key.sync="ingredientSelectModal.query" :active="ingredientSelectModal.searching" :placeholder="$t('ui.recipe.placeholders.search_condi')" @cancel="getIngredients" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getIngredients">
             <button slot="search-button" @click="getIngredients" class="btn btn-primary"><i class="fa fa-search"></i></button>
           </search-box>
@@ -279,7 +279,7 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'search-box': SearchBox,
       'pager': Pager,
       'modal': Modal,
@@ -1040,7 +1040,7 @@
       .status-bar
         padding 0
         border 0
-        .v-select
+        .x-select
           float left
           display inline-block
           padding-left 10px

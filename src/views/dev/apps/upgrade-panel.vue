@@ -72,8 +72,8 @@
         </div>
       </div>
     </div>
-    <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :simple-page="true" :bordered="false">
-    </c-table>
+    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :simple-page="true" :bordered="false">
+    </x-table>
 
     <modal :show.sync="showModal" @close="" width="600px">
       <h3 slot="header">添加升级任务</h3>
@@ -149,7 +149,7 @@
     mixins: [globalMixins],
 
     components: {
-      'c-table': Table,
+      'x-table': Table,
       Modal
     },
     data () {

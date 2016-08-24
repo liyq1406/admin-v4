@@ -54,13 +54,13 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select :label="selectedFilterIndustry || '全部'" width='110px' size="small">
+                <x-select :label="selectedFilterIndustry || '全部'" width='110px' size="small">
                   <span slot="label">显示</span>
                   <select v-model="selectedFilterIndustry" @change="getMajorClient">
                     <option :value="">全部</option>
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="filter-group fr">
@@ -75,12 +75,12 @@
               </search-box>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
             <!-- <div class="select-box" slot="theader-industry">
-              <v-select label="行业" width='80px' size="small">
-              </v-select>
+              <x-select label="行业" width='80px' size="small">
+              </x-select>
             </div> -->
-          </c-table>
+          </x-table>
         </div>
       </div>
     </div>
@@ -136,11 +136,11 @@
             <div class="form-row row">
               <label class="form-control col-6">行业:</label>
               <div class="controls filter-group-item col-18">
-                <v-select :label="addModal.industry">
+                <x-select :label="addModal.industry">
                   <select v-model="addModal.industry">
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
-                </v-select>
+                </x-select>
                 <!-- <div v-placeholder="'请输入行业'" class="input-text-wrap">
                   <input v-model="addModal.industry" type="text" name="addModal.industry" v-validate:industry="{required: true}" class="input-text"/>
                 </div>
@@ -229,8 +229,8 @@ export default {
 
   components: {
     'search-box': SearchBox,
-    'v-select': Select,
-    'c-table': Table,
+    'x-select': Select,
+    'x-table': Table,
     'modal': Modal,
     Statistic,
     RadioButtonGroup,

@@ -12,12 +12,12 @@
                 <input type="checkbox" v-model="model.is_user_active"/>
                 <span>用户必须激活方可登录平台</span>
               </label>
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>若没有设置该项目，那么：</p>
                 <p>1. 手机注册的用户不需要输入验证码便可注册并且激活。</p>
                 <p>2. 邮箱注册的用户，无需点击邮箱中的激活链接，便可登录平台</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </div>
             <p>第三方验证</p>
             <div class="form-row row">
@@ -59,7 +59,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-tooltip': Tooltip
+      'x-tooltip': Tooltip
     },
 
     data () {

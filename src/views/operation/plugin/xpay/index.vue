@@ -25,7 +25,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-alert': Alert,
+      'x-alert': Alert,
       'tab': Tab
     },
 

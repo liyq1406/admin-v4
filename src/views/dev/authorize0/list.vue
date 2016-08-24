@@ -36,11 +36,11 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="" @search-activate="searching=!searching"  @press-enter="">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -59,11 +59,11 @@
             <div class="form-row row">
               <label class="form-control col-6">产品:</label>
               <div class="controls filter-group-item col-18">
-                <v-select :label="addModal.product.label">
+                <x-select :label="addModal.product.label">
                   <select v-model="addModal.product">
                     <option v-for="product in products" :value="industry">{{industry}}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="form-row row">
@@ -134,7 +134,7 @@
       'x-table': Table,
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select,
+      'x-select': Select,
       Breadcrumb,
       Statistic,
       'search-box': SearchBox

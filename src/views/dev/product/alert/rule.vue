@@ -5,24 +5,24 @@
         <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("ui.rule.add_rule") }}</button>
         <div class="fl">
           <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
-          <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
+          <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
             <span slot="label">请选择产品：</span>
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
     </div> -->
     <div class="filter-bar">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select width="90px" :label="curLevel.label" size="small">
+          <x-select width="90px" :label="curLevel.label" size="small">
             <span slot="label">告警等级:</span>
             <select v-model="curLevel" name="product">
               <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -96,7 +96,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       SearchBox,
       Pager
     },

@@ -22,12 +22,12 @@
               </div>
             </div>
             <div class="filter-group">
-              <v-select width="90px" size="small" :label="visibility.label">
+              <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label" class="mr10">明细</span>
                 <select v-model="visibility" @change="getAlerts">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <x-table :headers="headers" :tables="tableData" :selecting="selecting" @tbody-content="getInfo" @selected-change="selectChange" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
@@ -64,7 +64,7 @@ export default {
 
   components: {
     'x-table': Table,
-    'v-select': Select,
+    'x-select': Select,
     Pager,
     RadioButtonGroup,
     TimeLine,

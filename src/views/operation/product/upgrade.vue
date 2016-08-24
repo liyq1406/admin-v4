@@ -241,11 +241,11 @@
             <label class="form-control col-6">{{ $t("ui.task.fields.from_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('ui.task.select_from_version')" :label="addTaskModel.from_version.toString()">
+                <x-select :placeholder="$t('ui.task.select_from_version')" :label="addTaskModel.from_version.toString()">
                   <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
                     <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div v-if="addTaskModel.from_version > 0" class="form-tips mt5">url: {{ addTaskModel.from_version | firmwareUrl }}</div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("ui.task.select_from_version") }}</span></div>
@@ -255,11 +255,11 @@
             <label class="form-control col-6">{{ $t("ui.task.fields.target_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('ui.task.select_target_version')" :label="addTaskModel.target_version.toString()">
+                <x-select :placeholder="$t('ui.task.select_target_version')" :label="addTaskModel.target_version.toString()">
                   <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
                     <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div v-if="addTaskModel.target_version > 0" class="form-tips mt5">url: {{ addTaskModel.target_version | firmwareUrl }}</div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("ui.task.select_target_version") }}</span></div>
@@ -290,7 +290,7 @@
 
     components: {
       'modal': Modal,
-      'v-select': Select
+      'x-select': Select
     },
 
     data () {

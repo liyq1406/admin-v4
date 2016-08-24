@@ -9,21 +9,21 @@
         <div class="panel-bd">
           <div class="action-bar">
             <search-box class="work-order-search-box" :key.sync="key" :active="searching" :placeholder="'请输入'+ queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getRecords(true)" @cancel="getRecords(true)">
-              <v-select width="100px" :label="queryType.label">
+              <x-select width="100px" :label="queryType.label">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
               <button slot="search-button" class="btn btn-primary" @click="getRecords(true)"><i class="fa fa-search"></i></button>
             </search-box>
           </div>
 
           <div class="status-bar">
-            <v-select width="80px" :label="dateType.label" size="small">
+            <x-select width="80px" :label="dateType.label" size="small">
               <select v-model="dateType" @change = "getRecords(true)">
                 <option v-for="option in dateTypeOptions" :value="option">{{ option.label }}</option>
               </select>
-            </v-select>
+            </x-select>
             <date-time-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" :from-time.sync="startTime" :to-time.sync="endTime" input-width="94px" @select-day="getRecords(true)" @select-time="getRecords(true)">
               <span slot="label">记录时间：</span>
             </date-time-range-picker>
@@ -100,7 +100,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
       'pager': Pager,

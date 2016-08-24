@@ -34,11 +34,11 @@
                 <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="category in model.classification" class="select">
-                      <v-select width="150px" :label="category.main">
+                      <x-select width="150px" :label="category.main">
                         <select v-model="category.main">
                           <option v-for="option in categories | dropSlected model.classification category 'main'" :value="option.main">{{ option.main }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                       <span @click="delSelected(model.classification, category)" class="fa fa-times"></span>
                     </div>
                   </div>
@@ -50,11 +50,11 @@
                 <div class="controls col-18">
                   <div class="select-group">
                     <div v-for="rule in model.properties.push_rules" class="select">
-                      <v-select width="150px" :label="rule">
+                      <x-select width="150px" :label="rule">
                         <select v-model="rule">
                           <option v-for="option in rules | dropSlected model.properties.push_rules rule" :value="option">{{ option }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                       <span @click="delSelected(model.properties.push_rules, rule)" class="fa fa-times"></span>
                     </div>
                   </div>
@@ -98,7 +98,7 @@
 
     components: {
       'image-uploader': ImageUploader,
-      'v-select': Select
+      'x-select': Select
     },
 
     store,

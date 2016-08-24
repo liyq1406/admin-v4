@@ -5,12 +5,12 @@
         <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("ui.rule.add_rule") }}</button>
         <div class="fl">
           <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
-          <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
+          <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
             <span slot="label">请选择产品：</span>
             <select v-model="currProduct" name="product" @change="Productstatus">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
     </div> -->
@@ -59,26 +59,26 @@
       </table>
 
     </div> -->
-    <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange">
+    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange">
       <div slot="filter-bar" class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
-            <v-select width="90px" :label="curLevel.label" size="small">
+            <x-select width="90px" :label="curLevel.label" size="small">
               <span slot="label">告警等级:</span>
               <select v-model="curLevel" name="product">
                 <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
               </select>
-            </v-select>
+            </x-select>
           </div>
         </div>
         <div class="filter-group fr">
           <div class="filter-group-item">
             <search-box :key.sync="key">
-              <v-select width="100px" :label="queryType.label" size="small">
+              <x-select width="100px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
               <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
             </search-box>
           </div>
@@ -89,7 +89,7 @@
         <button class="btn btn-ghost">已处理</button>
         <button class="btn btn-ghost">未处理</button>
       </div>
-    </c-table>
+    </x-table>
   </div>
 </template>
 
@@ -110,10 +110,10 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       SearchBox,
       Pager,
-      'c-table': Table
+      'x-table': Table
     },
 
     data () {

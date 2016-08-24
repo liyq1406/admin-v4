@@ -96,11 +96,11 @@
               </div>
             </div>
             <div class="form-row">
-              <v-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
+              <x-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
                 <select v-model="model.type" name="model.type">
                   <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
             <div class="form-row row-check">
               <label class="checkbox">
@@ -116,10 +116,10 @@
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <v-alert :cols="16" type="success" :title="$t('ui.auth.register_success')">
+      <x-alert :cols="16" type="success" :title="$t('ui.auth.register_success')">
         <p>{{ $t("ui.auth.register_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </v-alert>
+      </x-alert>
     </div>
   </div>
 </template>
@@ -141,8 +141,8 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
-      'v-alert': Alert
+      'x-select': Select,
+      'x-alert': Alert
     },
 
     data () {

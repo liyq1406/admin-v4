@@ -12,7 +12,7 @@
           </pic-txt>
           <!-- <div class="" style="margin-left:110px">
             <span class="mr5">开启萤石联动服务</span>
-            <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></v-switch>
+            <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
           </div> -->
         </div>
 
@@ -65,7 +65,7 @@
     name: 'Nest',
 
     components: {
-      'v-switch': Switch,
+      'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },

@@ -8,11 +8,11 @@
         <h2>{{ $t("ui.statistic.trends") }}</h2>
         <div class="leftbox">
           <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-          <v-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
+          <x-select size="small" width="160px" placeholder="请选择产品" :label="product.name">
             <select v-model="product" @change="getProductData">
               <option v-for="option in productsOptions" :value="option">{{ option.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="panel-bd">
@@ -47,10 +47,10 @@
                 <div class="cont">
                   <div class="num">0</div>
                   <div class="label"><span>{{ $t("ui.statistic.products.active") }}</span>
-                    <v-tooltip>
+                    <x-tooltip>
                       <span>{{ $t('ui.statistic.products.active_tips') }}</span>
                       <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-                    </v-tooltip>
+                    </x-tooltip>
                   </div>
                 </div>
               </div>
@@ -119,11 +119,11 @@
 
     components: {
       RadioButtonGroup,
-      'v-select': Select,
+      'x-select': Select,
       LineChart,
       MapChart,
       Pager,
-      'v-tooltip': Tooltip
+      'x-tooltip': Tooltip
     },
 
     data () {

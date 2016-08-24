@@ -9,12 +9,12 @@
         </div>
         <div class="filter-group">
           <div class="filter-group-item">
-            <v-select :label="selectedDatapoint.name" width="110px" size="small">
+            <x-select :label="selectedDatapoint.name" width="110px" size="small">
               <span slot="label">显示</span>
               <select v-model="selectedDatapoint">
                 <option v-for="opt in datapointOptions" :value="opt">{{ opt.name }}</option>
               </select>
-            </v-select>
+            </x-select>
           </div>
         </div>
       </div>
@@ -30,7 +30,7 @@
           </ul>
         </div>
         <div class="col-details">
-          <c-table :headers="columns" :tables="currSnapshotInfo" :bordered="false"></c-table>
+          <x-table :headers="columns" :tables="currSnapshotInfo" :bordered="false"></x-table>
         </div>
       </div>
       <pager v-if="total" :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager>
@@ -60,9 +60,9 @@ export default {
   components: {
     LineChart,
     'pager': Pager,
-    'c-table': Table,
+    'x-table': Table,
     'intelligent-table': IntelligentTable,
-    'v-select': Select,
+    'x-select': Select,
     RadioButtonGroup,
     DateTimeMultiplePicker,
     TimeLine

@@ -112,7 +112,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Switch,
     Range,
     SearchBox

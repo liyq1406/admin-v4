@@ -219,8 +219,8 @@ export default {
     Switch,
     Range
     // 'api': api,
-    // 'v-select': Select,
-    // 'c-table': Table,
+    // 'x-select': Select,
+    // 'x-table': Table,
     // Statistic
   },
   data () {

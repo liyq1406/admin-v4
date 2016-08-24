@@ -1,7 +1,7 @@
 <template>
   <div class="panel device-users">
     <div class="panel-bd row">
-      <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></c-table>
+      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></x-table>
     </div>
   </div>
 </template>
@@ -22,8 +22,8 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'c-table': Table,
-    'v-select': Select,
+    'x-table': Table,
+    'x-select': Select,
     SearchBox,
     Dropdown
   },

@@ -100,21 +100,21 @@
                   <div class="form-row row">
                     <label class="form-control col-5">起始版本:</label>
                     <div class="controls col-19">
-                      <v-select :placeholder="$t('ui.task.select_from_version')" :label="addmodel.from_version.toString()">
+                      <x-select :placeholder="$t('ui.task.select_from_version')" :label="addmodel.from_version.toString()">
                         <select v-model="addmodel.from_version" name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
                           <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                   <div class="form-row row">
                     <label class="form-control col-5">目标版本:</label>
                     <div class="controls col-19">
-                      <v-select  :placeholder="$t('ui.task.select_target_version')" :label="addmodel.target_version.toString()">
+                      <x-select  :placeholder="$t('ui.task.select_target_version')" :label="addmodel.target_version.toString()">
                         <select v-model="addmodel.target_version" name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
                           <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
@@ -187,7 +187,7 @@
     },
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'date-picker': DatePicker,
       'area-select': AreaSelect,
       'tag-input': TagInput,
@@ -426,7 +426,7 @@
         padding-bottom 10px
         border-bottom 1px solid #d9d9d9
   .select-group
-    .v-select
+    .x-select
       display inline-block
 
 </style>

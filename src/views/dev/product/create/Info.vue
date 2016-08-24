@@ -37,11 +37,11 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.type") }}:</label>
                     <div class="controls col-20">
                       <div class="select">
-                        <v-select :label="productType.label">
+                        <x-select :label="productType.label">
                           <select v-model="productType" name="productType">
                             <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
                           </select>
-                        </v-select>
+                        </x-select>
                       </div>
                     </div>
                   </div>
@@ -49,11 +49,11 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.link_type") }}:</label>
                     <div class="controls col-20">
                       <div class="select">
-                        <v-select :label="locales.data.DEVICE_TYPES[product.link_type-1]">
+                        <x-select :label="locales.data.DEVICE_TYPES[product.link_type-1]">
                           <select v-model="product.link_type" name="link_type">
                             <option v-for="opt in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ opt }}</option>
                           </select>
-                        </v-select>
+                        </x-select>
                       </div>
                     </div>
                   </div>
@@ -101,7 +101,7 @@ export default {
   },
 
   components: {
-    'v-select': Select
+    'x-select': Select
   },
 
   data () {

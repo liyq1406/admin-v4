@@ -6,12 +6,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select :label="currentProduct.name" width="110px" size="small">
+          <x-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
             <select v-model="currentProduct" @change="changProduct">
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -113,7 +113,7 @@ export default {
     Pager,
     RadioButtonGroup,
     Statistic,
-    'v-select': Select,
+    'x-select': Select,
     DateTimeMultiplePicker,
     SearchBox,
     Pie,

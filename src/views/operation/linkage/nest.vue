@@ -14,7 +14,7 @@
         </div>
         <div class="col-8 tar">
           <span class="mr5">开启nest服务</span>
-          <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></v-switch>
+          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -52,7 +52,7 @@
               <span class="label-text">联动服务：</span>
             </div>
             <div class="col-20">
-              <v-switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></v-switch>
+              <x-switch size="small" :value.sync="enableThermostat" :disabled="enableNest"></x-switch>
               <span v-if="!enableThermostat" class="label-text">未开启</span>
               <span v-else class="label-text">已开启</span>
             </div>
@@ -65,7 +65,7 @@
               <span class="label-text">联动服务：</span>
             </div>
             <div class="col-20">
-              <v-switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></v-switch>
+              <x-switch size="small" :value.sync="enableSmoke" :disabled="enableNest"></x-switch>
               <span v-if="!enableSmoke" class="label-text">未开启</span>
               <span v-else class="label-text">已开启</span>
             </div>
@@ -90,7 +90,7 @@
     name: 'Nest',
 
     components: {
-      'v-switch': Switch,
+      'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
     },

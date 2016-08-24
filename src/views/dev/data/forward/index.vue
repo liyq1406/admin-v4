@@ -16,12 +16,12 @@
           </div>
           <div class="filter-bar">
             <div class="filter-group fl">
-              <v-select :label="selectedProduct.name || ''" width="160px" size="small">
+              <x-select :label="selectedProduct.name || ''" width="160px" size="small">
                 <span slot="label">显示</span>
                 <select v-model="selectedProduct" @change="getRule">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -94,7 +94,7 @@ export default {
   components: {
     Pager,
     SearchBox,
-    'v-select': Select
+    'x-select': Select
   },
 
   data () {

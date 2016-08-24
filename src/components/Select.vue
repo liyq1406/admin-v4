@@ -1,8 +1,8 @@
 <template>
   <div :class="classes">
     <slot name="label"></slot>
-    <div class="v-select-wrap" :style="selectWrapStyle">
-      <div class="v-select-trigger">
+    <div class="x-select-wrap" :style="selectWrapStyle">
+      <div class="x-select-trigger">
         <span>{{ label.length > 0 ? label : placeholder }}</span>
         <slot></slot>
         <i class="caret"></i>
@@ -50,7 +50,7 @@
       // 类前缀
       classPrefix: {
         type: String,
-        default: 'v-select'
+        default: 'x-select'
       }
     },
 
@@ -91,12 +91,12 @@
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .v-select
+  .x-select
     & > span
       display inline-block
       vertical-align middle
 
-    .v-select-wrap
+    .x-select-wrap
       position relative
       width 100%
       display inline-block
@@ -104,7 +104,7 @@
       min-width 70px
       vertical-align middle
 
-    .v-select-trigger
+    .x-select-trigger
       position relative
       border 1px solid default-border-color
       height 30px
@@ -136,11 +136,11 @@
         absolute right 8px top 12px
         triangle gray-dark 10px down
 
-  .v-select-sm
+  .x-select-sm
     & > span
       font-size 12px !important
 
-    .v-select-trigger
+    .x-select-trigger
       height 26px
       line-height 26px
       padding-left 8px
@@ -157,13 +157,13 @@
       .caret
         top 11px
 
-  .v-select-active
-    .v-select-trigger
+  .x-select-active
+    .x-select-trigger
       span
         color gray-darker
 
-  .v-select-disabled
-    .v-select-trigger
+  .x-select-disabled
+    .x-select-trigger
       span
         color gray-lighter
 

@@ -22,18 +22,18 @@
           <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box :key.sync="key">
-                <v-select width="80px" :label="queryType.label" size="small">
+                <x-select width="80px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
                 <button slot="search-button" @click.prevent="" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>
         </div>
-        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData">
-        </c-table>
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData">
+        </x-table>
       </div>
     </div>
   </div>
@@ -54,8 +54,8 @@
     mixins: [globalMixins],
 
     components: {
-      'c-table': Table,
-      'v-select': Select,
+      'x-table': Table,
+      'x-select': Select,
       Breadcrumb,
       SearchBox
     },

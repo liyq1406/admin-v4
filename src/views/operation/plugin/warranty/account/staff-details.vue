@@ -171,7 +171,7 @@ export default {
   },
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Modal,
     Breadcrumb
   },

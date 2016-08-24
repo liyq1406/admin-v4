@@ -33,16 +33,16 @@
       </div>
     </div>
     <div class="auth-msg-box" v-show="!verifycodeValid && !resetsuccess">
-      <v-alert :cols="16" type="error">
+      <x-alert :cols="16" type="error">
         <p>{{ $t("ui.auth.activate_fail_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </v-alert>
+      </x-alert>
     </div>
     <div class="auth-msg-box" v-show="resetsuccess">
-      <v-alert :cols="16" type="success" :title="$t('ui.auth.reset_success')">
+      <x-alert :cols="16" type="success" :title="$t('ui.auth.reset_success')">
         <p>{{ $t("ui.auth.reset_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
-      </v-alert>
+      </x-alert>
     </div>
   </div>
   <!-- <div v-show="!validating" class="form form-auth form-fetch-password">
@@ -102,7 +102,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-alert': Alert
+      'x-alert': Alert
     },
 
     data () {

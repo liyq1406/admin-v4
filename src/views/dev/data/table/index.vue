@@ -145,11 +145,11 @@
             </label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :label="locales.data.TABLE_TYPES[addModal.model.type-1]">
+                <x-select :label="locales.data.TABLE_TYPES[addModal.model.type-1]">
                   <select v-model="addModal.model.type" v-form-ctrl name="type" number>
                     <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -178,11 +178,11 @@
                 </div>
                 <div class="col-11">
                   <div class="ml10">
-                    <v-select :label="getTypeLabelByValue(field.value)" size="small">
+                    <x-select :label="getTypeLabelByValue(field.value)" size="small">
                       <select v-model="field.value">
                         <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </div>
                 </div>
                 <div class="col-2">
@@ -220,11 +220,11 @@
             </label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :label="locales.data.TABLE_TYPES[editModal.model.type-1]">
+                <x-select :label="locales.data.TABLE_TYPES[editModal.model.type-1]">
                   <select v-model="editModal.model.type" v-form-ctrl name="type" number>
                     <option v-for="type in locales.data.TABLE_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -249,11 +249,11 @@
                 </div>
                 <div class="col-11">
                   <div class="ml10">
-                    <v-select :label="getTypeLabelByValue(field.value)" size="small">
+                    <x-select :label="getTypeLabelByValue(field.value)" size="small">
                       <select v-model="field.value">
                         <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </div>
                 </div>
                 <div class="col-2">
@@ -290,11 +290,11 @@
           <div class="form-row row">
             <label class="form-control col-6">类型:</label>
             <div class="controls col-18">
-              <v-select :label="getTypeLabelByValue(addColumnModal.type)">
+              <x-select :label="getTypeLabelByValue(addColumnModal.type)">
                 <select v-model="addColumnModal.type">
                   <option v-for="type in locales.data.TABLE_FIELD_TYPES" :value="type.value">{{ type.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-actions">
@@ -313,11 +313,11 @@
           <div class="form-row row">
             <label class="form-control col-6">列名:</label>
             <div class="controls col-12">
-              <v-select :label="delColumnModal.selectedColumn" :width="'150px'">
+              <x-select :label="delColumnModal.selectedColumn" :width="'150px'">
                 <select v-model="delColumnModal.selectedColumn">
                   <option v-for="addListKey in addListKeys" track-by="$index" :value="addListKey.key">{{ addListKey.key }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-actions">
@@ -337,11 +337,11 @@
             <div class="controls row">
               <span class="filterModalTitle col-6">选择列：</span>
               <div class="select-box col-18">
-                <v-select :label="filterModal.modal.title">
+                <x-select :label="filterModal.modal.title">
                   <select v-model="filterModal.modal">
                     <option v-for="header in vHeaders" :value="header">{{ header.title }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -349,11 +349,11 @@
             <div class="controls row">
               <span class="filterModalTitle col-6">筛选条件：</span>
               <div class="select-box col-18">
-                <v-select :label="filterModal.condition.selectedCondition">
+                <x-select :label="filterModal.condition.selectedCondition">
                   <select v-model="filterModal.condition.selectedCondition">
                     <option v-for="condition in filterModal.condition.conditionList" :value="condition">{{ condition }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -444,12 +444,12 @@
             </div>
             <!-- 布尔 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'boolean'">
-              <v-select :label="userEditColumnModal.value+''" size="small">
+              <x-select :label="userEditColumnModal.value+''" size="small">
                 <select v-model="userEditColumnModal.value">
                   <option :value="true" selected>true</option>
                   <option :value="false">false</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
             <!-- 日期 -->
             <div class="controls col-18" v-show="userEditColumnModal.fieldType === 'date'">
@@ -495,7 +495,7 @@ export default {
     'time-picker': TimePicker,
     'modal': Modal,
     'pager': Pager,
-    'v-select': Select
+    'x-select': Select
   },
 
   data () {

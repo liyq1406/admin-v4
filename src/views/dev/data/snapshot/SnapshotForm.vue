@@ -5,11 +5,11 @@
         <label class="form-control col-3">产品:</label>
         <div class="controls col-21">
           <template v-if="type==='add'">
-            <v-select :label="selectedProduct.label" width="200px">
+            <x-select :label="selectedProduct.label" width="200px">
               <select v-model="selectedProduct">
                 <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
               </select>
-            </v-select>
+            </x-select>
           </template>
           <div class="control-text" v-else>{{ selectedProduct.name }}</div>
         </div>
@@ -17,11 +17,11 @@
       <div class="form-row row">
         <label class="form-control col-3">快照规则:</label>
         <div class="controls col-21">
-          <v-select :label="interval.label" width="200px">
+          <x-select :label="interval.label" width="200px">
             <select v-model="interval">
               <option v-for="opt in locales.data.SNAPSHOT_INTERVAL" :value="opt">{{ opt.label }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="form-row row">
@@ -89,7 +89,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Pager
   },
 

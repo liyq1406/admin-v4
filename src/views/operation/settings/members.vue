@@ -100,11 +100,11 @@
               <label class="form-control col-6">{{ $t("ui.member.fields.role") }}:</label>
               <div class="controls col-18">
                 <div class="select">
-                  <v-select :label="memberTypes[addModel.type-1]">
+                  <x-select :label="memberTypes[addModel.type-1]">
                     <select v-model="addModel.type" v-form-ctrl name="role">
                       <option v-for="type in memberTypes" :value="$index + 1" :selected="$index===1">{{ type }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -187,7 +187,7 @@
       'search-box': SearchBox,
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select
+      'x-select': Select
     },
     // 状态管理
     store,

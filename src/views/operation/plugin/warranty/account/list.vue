@@ -162,7 +162,7 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'area-select': AreaSelect,
       'modal': Modal,
       'search-box': SearchBox,

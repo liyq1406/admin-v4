@@ -67,11 +67,11 @@
           </div>
           <div class="form-row row">
             <div class="select">
-              <v-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
+              <x-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
                 <select v-model="model.type" v-form-ctrl name="type" custom-validator="checkTypeValid">
                   <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
             <div v-if="validation.$submitted" class="form-tips form-tips-error"><span v-if="validation.type.$error.customValidator">{{ $t("ui.auth.type_tips") }}</span></div>
           </div>
@@ -104,7 +104,7 @@
 
     components: {
       'captcha': Captcha,
-      'v-select': Select
+      'x-select': Select
     },
 
     data () {

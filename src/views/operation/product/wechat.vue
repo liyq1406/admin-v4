@@ -5,12 +5,12 @@
         <div class="action-bar row">
           <div class="col-12">
             <a v-show="wetips" v-link="{ path: '/apps' }" class="nontip">没有微信应用，点击此处跳转添加页面</a>
-            <v-select v-else="wetips" width="200px" placeholder="请选择应用" :label="currProduct.name">
+            <x-select v-else="wetips" width="200px" placeholder="请选择应用" :label="currProduct.name">
               <span slot="label">选择应用:</span>
               <select v-model="currProduct" name="app" @change="Appstatus">
                 <option v-for="app in apps" :value="app">{{ app.name }}</option>
               </select>
-            </v-select>
+            </x-select>
           </div>
           <div class="col-12">
             <button @click.prevent.stop="productEmpower" :disabled="empowering" :class="{'disabled':empowering}" v-text="empowering ? $t('common.unempower') : $t('common.empower')" class="btn btn-primary fr">产品授权</button>
@@ -63,13 +63,13 @@
           <div class="form-row row">
             <label class="form-control col-7">
               product_id:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>设备的产品编号（由微信硬件平台分配）。可在公众号设备功能管理页面查询。</p>
                 <p>当 op_type 为‘0’，product_id 为‘1’时，不要填写 product_id 字段（会引起不必要错误）；</p>
                 <p>当 op_typy 为‘0’，product_id 不为‘1’时，必须填写 product_id 字段；</p>
                 <p>当 op_type 为 1 时，不要填写 product_id 字段。</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="input-text-wrap">
@@ -82,10 +82,10 @@
           <div class="form-row row">
             <label class="form-control col-7">
               auth_key:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>auth及通信的加密key，第三方需要将key烧制在设备上（128bit），格式采用16进制串的方式（长度为32字节），不需要0X前缀，如:1234567890ABCDEF1234567890ABCDEF</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="input-text-wrap">
@@ -96,12 +96,12 @@
           <div class="form-row row">
             <label class="form-control col-7">
               close_strategy:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>断开策略，目前支持：</p>
                 <p>1：退出公众号页面时即断开连接</p>
                 <p>2：退出公众号之后保持连接不断开</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -114,12 +114,12 @@
           <div class="form-row row">
             <label class="form-control col-7">
               conn_strategy:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>连接策略，32位整型，按bit位置位，目前仅第1bit和第3bit位有效（bit置0为无效，1为有效；第2bit已被废弃），且bit位可以按或置位（如1|4=5），各bit置位含义说明如下：</p>
                 <p>1：（第1bit置位）在公众号对话页面，不停的尝试连接设备</p>
                 <p>4：（第3bit置位）处于非公众号页面（如主界面等），微信自动连接。当用户切换微信到前台时，可能尝试去连接设备，连上后一定时间会断开</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -132,12 +132,12 @@
           <div class="form-row row">
             <label class="form-control col-7">
               crypt_method:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>auth加密方法，目前支持两种取值：</p>
                 <p>0：不加密</p>
                 <p>1：AES加密（CBC模式，PKCS7填充方式）</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -150,12 +150,12 @@
           <div class="form-row row">
             <label class="form-control col-7">
               auth_ver:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>auth version，设备和微信进行auth时，会根据该版本号来确认auth buf和auth key的格式（各version对应的auth buf及key的具体格式可以参看“客户端蓝牙外设协议”），该字段目前支持取值：</p>
                 <p>0：不加密的version</p>
                 <p>1：version 1</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -168,13 +168,13 @@
           <div class="form-row row">
             <label class="form-control col-7">
               manu_mac_pos:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>表示mac地址在厂商广播manufature data里含有mac地址的偏移，取值如下：</p>
                 <p>-1：在尾部</p>
                 <p>-2：表示不包含mac地址</p>
                 <p>其他：非法偏</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -187,7 +187,7 @@
           <div class="form-row row">
             <label class="form-control col-7">
               connect_protocol:
-              <v-tooltip placement="right" width="380px">
+              <x-tooltip placement="right" width="380px">
                 <p>支持以下四种连接协议： </p>
                 <p>android classic bluetooth – 1</p>
                 <p>ios classic bluetooth – 2</p>
@@ -198,7 +198,7 @@
                 <p>1|2：表示设备支持andiod 和ios 两种classic bluetooth，但是客户端优先选择andriod classic bluetooth 协议，如果andriod classic bluetooth协议连接失败，再选择ios classic bluetooth协议进行连接</p>
                 <p>（注：安卓平台不同时支持BLE和classic类型）</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -211,13 +211,13 @@
           <div class="form-row row">
             <label class="form-control col-7">
               ser_mac_pos:
-              <v-tooltip placement="right" width="300px">
+              <x-tooltip placement="right" width="300px">
                 <p>表示mac地址在厂商serial number里含有mac地址的偏移，取值如下：</p>
                 <p>-1：表示在尾部 </p>
                 <p>-2：表示不包含mac地址 </p>
                 <p>其他：非法偏移</p>
                 <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </v-tooltip>
+              </x-tooltip>
             </label>
             <div class="controls col-17">
               <div class="radio-group">
@@ -290,8 +290,8 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select,
-      'v-tooltip': Tooltip
+      'x-select': Select,
+      'x-tooltip': Tooltip
     },
 
     data () {

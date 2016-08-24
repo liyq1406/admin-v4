@@ -22,7 +22,7 @@
       // 类前缀
       classPrefix: {
         type: String,
-        default: 'v-switch'
+        default: 'x-switch'
       },
 
       disabled: {
@@ -70,7 +70,7 @@
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .v-switch
+  .x-switch
     position relative
     display inline-block
     vertical-align middle
@@ -93,21 +93,21 @@
     &.disabled
       cursor not-allowed
 
-  .v-switch-on
+  .x-switch-on
     background green
     text-align left
 
     .switch-block
       left 17px
 
-  .v-switch-sm
+  .x-switch-sm
     size 36px 22px
     line-height 22px
 
     .switch-block
       size 20px
 
-    &.v-switch-on
+    &.x-switch-on
       .switch-block
         left 15px
 </style>

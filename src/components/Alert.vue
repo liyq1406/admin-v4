@@ -4,7 +4,7 @@
       <div :class="classes">
         <div :class="'fa fa-' + icon + '-circle'"></div>
         <h2>{{ title }}</h2>
-        <div class="v-alert-cont">
+        <div class="x-alert-cont">
           <slot></slot>
         </div>
       </div>
@@ -38,7 +38,7 @@
       // 类前缀
       classPrefix: {
         type: String,
-        default: 'v-alert'
+        default: 'x-alert'
       }
     },
 
@@ -79,7 +79,7 @@
 <style lang="stylus">
   @import '../assets/stylus/common'
 
-  .v-alert
+  .x-alert
     position relative
     padding-left 50px
     margin 80px 0
@@ -108,15 +108,15 @@
         width 80px
         text-align center
 
-  .v-alert-error
+  .x-alert-error
     .fa
       color red
 
-  .v-alert-success
+  .x-alert-success
     .fa
       color green
 
-  .v-alert-info
+  .x-alert-info
     .fa
       color blue
 </style>

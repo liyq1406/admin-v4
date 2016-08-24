@@ -24,11 +24,11 @@
             <!-- <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="getRecords" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -74,7 +74,7 @@ export default {
     'x-table': Table,
     'modal': Modal,
     'pager': Pager,
-    'v-select': Select,
+    'x-select': Select,
     Breadcrumb,
     Statistic,
     'search-box': SearchBox

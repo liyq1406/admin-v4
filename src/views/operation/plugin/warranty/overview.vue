@@ -6,9 +6,9 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width="110px" size="small">
+          <x-select label="空气净化器" width="110px" size="small">
             <span slot="label">产品</span>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -155,7 +155,7 @@ export default {
   components: {
     Modal,
     Pie,
-    'v-select': Select,
+    'x-select': Select,
     RadioButtonGroup,
     DateTimeRangePicker,
     Statistic,

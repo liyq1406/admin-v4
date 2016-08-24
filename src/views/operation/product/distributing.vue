@@ -73,7 +73,7 @@
             </div>
             <h3>明细</h3>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page"></x-table>
         </div>
       </div> -->
     </div>

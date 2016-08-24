@@ -6,21 +6,21 @@
     <div class="panel mt20">
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
-        <v-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
+        <x-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
           <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
-        </v-alert>
+        </x-alert>
 
         <!-- Start: 数据端点列表 -->
         <template v-if="products.length && !loadingProducts">
           <div class="data-table with-loading">
             <div class="filter-bar">
               <div class="filter-group">
-                <v-select width="160px" placeholder="请选择产品" size="small" :label="currProduct.name">
+                <x-select width="160px" placeholder="请选择产品" size="small" :label="currProduct.name">
                   <span slot="label">产品：</span>
                   <select v-model="currProduct" name="product" @change="getDatapoints">
                     <option v-for="product in products" :value="product">{{ product.name }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="icon-loading" v-show="loadingDatapoints">
@@ -46,12 +46,12 @@
                     <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
                       <span class="status">
-                        <v-switch size="small" :value.sync="datapoint.isControlable"></v-switch>
+                        <x-switch size="small" :value.sync="datapoint.isControlable"></x-switch>
                       </span>
                     </td>
                     <td class="tac">
                       <span class="status">
-                        <v-switch size="small" :value.sync="datapoint.isEnable"></v-switch>
+                        <x-switch size="small" :value.sync="datapoint.isEnable"></x-switch>
                       </span>
                     </td>
                   </tr>
@@ -84,9 +84,9 @@
     mixins: [globalMixins],
 
     components: {
-      'v-alert': Alert,
-      'v-select': Select,
-      'v-switch': Switch
+      'x-alert': Alert,
+      'x-select': Select,
+      'x-switch': Switch
     },
 
     data () {

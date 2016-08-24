@@ -24,11 +24,11 @@
                 <div class="controls col-19">
                   <div class="row">
                     <div class="col-5">
-                      <v-select :label="ruleTypes[editModal.model.type-1]">
+                      <x-select :label="ruleTypes[editModal.model.type-1]">
                         <select v-model="editModal.model.type" @input="onSelectType">
                           <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                     <div class="col-19" v-show="editModal.model.type === 1 && !datapoints.length">
                       <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
@@ -36,22 +36,22 @@
                     <div class="col-8">
                       <div v-show="editModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="datapointName(editModal.model)">
+                          <x-select :label="datapointName(editModal.model)">
                             <select v-model="editModal.model.param">
                               <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
                     <div class="col-6">
                       <div v-show="editModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="compareTypes[editModal.model.compare-1]">
+                          <x-select :label="compareTypes[editModal.model.compare-1]">
                             <select v-model="editModal.model.compare">
                               <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
@@ -61,12 +61,12 @@
                           <input v-model="editModal.value1" type="text" class="input-text"/>
                         </div>
                         <div class="select" v-show="editModal.model.type === 2">
-                          <v-select :label="$t('common.'+editModal.value2)">
+                          <x-select :label="$t('common.'+editModal.value2)">
                             <select v-model="editModal.value2">
                               <option value="online">{{ $t("common.online") }}</option>
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
@@ -187,7 +187,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       TagInput,
       SearchBox,
       Pager,

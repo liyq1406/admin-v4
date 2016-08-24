@@ -5,9 +5,9 @@
         <h2>消息推送</h2>
       </div>
       <div class="panel-bd">
-        <v-alert :cols="7">
+        <x-alert :cols="7">
           <p>未获得使用该插件的权限</p>
-        </v-alert>
+        </x-alert>
       </div>
     </div>
   </div>
@@ -23,7 +23,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-alert': Alert
+      'x-alert': Alert
     }
   }
 </script>

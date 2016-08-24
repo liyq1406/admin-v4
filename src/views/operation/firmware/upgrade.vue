@@ -14,9 +14,9 @@
     <!-- 无产品时显示添加提示 -->
     <div class="panel" v-if="!products.length && !loadingProducts">
       <div class="panel-bd">
-        <v-alert :cols="7">
+        <x-alert :cols="7">
           <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
-        </v-alert>
+        </x-alert>
       </div>
     </div>
 
@@ -32,12 +32,12 @@
           </div>
           <div class="filter-bar">
             <div class="filter-group">
-              <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
+              <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
                 <span slot="label">产品：</span>
                 <select v-model="currProduct" name="product" @change="Productstatus">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -104,11 +104,11 @@
             <label class="form-control col-6">{{ $t("ui.task.fields.from_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('ui.task.select_from_version')" :label="addTaskModel.from_version.toString()">
+                <x-select :placeholder="$t('ui.task.select_from_version')" :label="addTaskModel.from_version.toString()">
                   <select v-model="addTaskModel.from_version" v-form-ctrl name="from_version" custom-validator="checkTypeValid" @change="selectFrom" number>
                     <option v-for="firmware in fromFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.from_version.$error.customValidator">{{ $t("ui.task.select_from_version") }}</span></div>
             </div>
@@ -117,11 +117,11 @@
             <label class="form-control col-6">{{ $t("ui.task.fields.target_version") }}:</label>
             <div class="controls col-18">
               <div class="select">
-                <v-select :placeholder="$t('ui.task.select_target_version')" :label="addTaskModel.target_version.toString()">
+                <x-select :placeholder="$t('ui.task.select_target_version')" :label="addTaskModel.target_version.toString()">
                   <select v-model="addTaskModel.target_version" v-form-ctrl name="target_version" custom-validator="checkTypeValid" @change="selectTarget" number>
                     <option v-for="firmware in targetFirmwares | orderBy 'version'" :value="firmware.version.toString()">{{ firmware.version }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
               <div v-if="addTaskValidation.$submitted" class="form-tips form-tips-error"><span v-if="addTaskValidation.target_version.$error.customValidator">{{ $t("ui.task.select_target_version") }}</span></div>
             </div>
@@ -153,8 +153,8 @@
 
     components: {
       'modal': Modal,
-      'v-select': Select,
-      'v-alert': Alert
+      'x-select': Select,
+      'x-alert': Alert
     },
 
     data () {

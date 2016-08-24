@@ -9,21 +9,21 @@
           <div class="form-row row">
             <label class="form-control col-6">产品:</label>
             <div class="controls col-18">
-              <v-select :label="productTypes[productType.value].label" width="200px">
+              <x-select :label="productTypes[productType.value].label" width="200px">
                 <select v-model="productType" @change="getProductData(true)">
                   <option v-for="type in productTypes" :value="type">{{ type.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-row row">
             <label class="form-control col-6">快照规则:</label>
             <div class="controls col-9">
-              <v-select :label="snapshotInterval[timeInterval.value].label" width="200px">
+              <x-select :label="snapshotInterval[timeInterval.value].label" width="200px">
                 <select v-model="timeInterval">
                   <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-row row">
@@ -53,12 +53,12 @@
         <div class="data-table">
           <div class="filter-bar">
             <div class="filter-group">
-              <v-select :label="ruleProductTypes[ruleProductType.value].label" width="200px" size="small">
+              <x-select :label="ruleProductTypes[ruleProductType.value].label" width="200px" size="small">
                 <span slot="label">选择产品</span>
                 <select v-model="ruleProductType" @change="getProductRules(true)">
                   <option v-for="i in ruleProductTypes" :value="i">{{ i.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -139,11 +139,11 @@
           <div class="form-row row">
             <label class="form-control col-6">快照规则:</label>
             <div class="controls col-9">
-              <v-select :label="snapshotInterval[timeIntervalEdit.value].label" width="200px">
+              <x-select :label="snapshotInterval[timeIntervalEdit.value].label" width="200px">
                 <select v-model="timeIntervalEdit">
                   <option v-for="time in snapshotInterval" :value="time">{{ time.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-row row">
@@ -228,7 +228,7 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select
+      'x-select': Select
     },
 
     data () {

@@ -4,12 +4,12 @@
       <div class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
-            <v-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
+            <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name" size="small">
               <span slot="label">产品：</span>
               <select v-model="currProduct" name="product" @change="Productstatus">
                 <option v-for="product in products" :value="product">{{ product.name }}</option>
               </select>
-            </v-select>
+            </x-select>
           </div>
         </div>
       </div>
@@ -49,11 +49,11 @@
           <!-- <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                <v-select width="90px" :label="queryType.label" size="small">
+                <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
-                </v-select>
+                </x-select>
                 <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -122,8 +122,8 @@ export default {
   // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
 
   components: {
-    'v-select': Select,
-    'c-table': Table,
+    'x-select': Select,
+    'x-table': Table,
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,

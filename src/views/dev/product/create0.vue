@@ -32,11 +32,11 @@
                 <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
-                    <v-select :label="deviceTypes[model.link_type-1]">
+                    <x-select :label="deviceTypes[model.link_type-1]">
                       <select v-model="model.link_type" v-form-ctrl name="link_type">
                         <option v-for="type in deviceTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </div>
                 </div>
               </div>
@@ -73,7 +73,7 @@
     },
 
     components: {
-      'v-select': Select
+      'x-select': Select
     },
 
     data () {

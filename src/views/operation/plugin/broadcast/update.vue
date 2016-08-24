@@ -12,11 +12,11 @@
               <div class="form-row row">
                 <label class="form-control col-6">推送渠道:</label>
                 <div class="controls col-18">
-                  <v-select :label="channel.label" width="200px">
+                  <x-select :label="channel.label" width="200px">
                     <select v-model="channel" v-form-ctrl name="channel">
                       <option v-for="opt in channelOptions" :value="opt">{{ opt.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
               <div class="form-row row">
@@ -35,16 +35,16 @@
                   <div class="row mb10">
                     <div class="col-4 control-text">用户类型</div>
                     <div class="col-20 select-group">
-                      <v-select :label="userType.label" width="100px">
+                      <x-select :label="userType.label" width="100px">
                         <select v-model="userType" v-form-ctrl name="userType">
                           <option v-for="opt in userTypeOptions" :value="opt">{{ opt.label }}</option>
                         </select>
-                      </v-select>
-                      <v-select :label="userTypeRange.label" width="140px" class="ml5">
+                      </x-select>
+                      <x-select :label="userTypeRange.label" width="140px" class="ml5">
                         <select v-model="userTypeRange" v-form-ctrl name="userTypeRange">
                           <option v-for="opt in userTypeRangeOptions" :value="opt">{{ opt.label }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                   <div class="row mb10">
@@ -181,7 +181,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'date-picker': DatePicker,
       'time-picker': TimePicker,
       'area-select': AreaSelect
@@ -255,6 +255,6 @@
   @import '../../../../assets/stylus/common'
 
   .select-group
-    .v-select
+    .x-select
       display inline-block
 </style>

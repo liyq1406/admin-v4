@@ -32,12 +32,12 @@
             </div>
           </div>
           <div class="filter-group">
-            <v-select width="90px" size="small" :label="visibility.label">
+            <x-select width="90px" size="small" :label="visibility.label">
               <span slot="label">明细：</span>
               <select v-model="visibility" @change="getList()">
                 <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
               </select>
-            </v-select>
+            </x-select>
           </div>
         </div>
         <table class="table table-stripe table-bordered" :loading="loadingData">
@@ -100,7 +100,7 @@ export default {
     TimeLine,
     RadioButtonGroup,
     DateTimeMultiplePicker,
-    'v-select': Select
+    'x-select': Select
   },
 
   data () {

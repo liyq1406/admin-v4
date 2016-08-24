@@ -115,11 +115,11 @@
                     <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                       <input v-model="addModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
                     </div> -->
-                    <v-select width="100px" :label="belongType.label">
+                    <x-select width="100px" :label="belongType.label">
                       <select v-model="belongType">
                         <option v-for="option in belongs" :value="option">{{ option.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </div>
                 </div>
                 <div class="form-actions mt20">
@@ -148,7 +148,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       Breadcrumb
     },
 

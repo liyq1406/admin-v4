@@ -103,9 +103,9 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select label="全部" width='110px' size="small">
+                <x-select label="全部" width='110px' size="small">
                   <span slot="label">显示</span>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="filter-group fr">
@@ -119,7 +119,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></x-table>
         </div>
       </div>
     </div>
@@ -146,8 +146,8 @@ export default {
     Breadcrumb,
     InfoCard,
     InfoList,
-    'c-table': Table,
-    'v-select': Select,
+    'x-table': Table,
+    'x-select': Select,
     SearchBox
   },
 

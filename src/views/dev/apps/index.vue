@@ -11,12 +11,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item" v-if="filterOptions.length">
-          <v-select :label="selectedFilter.name" width="110px" size="small">
+          <x-select :label="selectedFilter.name" width="110px" size="small">
             <span slot="label">应用类型</span>
             <select v-model="selectedFilter" @change="resetSelectedApp">
               <option :value="option" v-for="option in filterOptions">{{ option.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -174,7 +174,7 @@
     },
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       Modal,
       Ios,
       Android,

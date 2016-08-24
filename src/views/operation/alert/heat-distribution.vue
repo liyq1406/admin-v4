@@ -6,13 +6,13 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select :label="currentProduct.name" width="110px" size="small">
+          <x-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
             <select v-model="currentProduct" @change="getRegion">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
     </div>
@@ -136,7 +136,7 @@ export default {
     Pager,
     RadioButtonGroup,
     LineChart,
-    'v-select': Select,
+    'x-select': Select,
     SearchBox,
     ChinaHeatMap
   },

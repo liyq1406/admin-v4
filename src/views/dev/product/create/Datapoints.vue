@@ -33,19 +33,19 @@
                   </td>
                   <td>
                     <template v-if="datapoint.type === 1 || datapoint.type === 6">
-                      <v-select :label="getLabelByValue(datapoint.type)" size="small">
+                      <x-select :label="getLabelByValue(datapoint.type)" size="small">
                         <select v-model="datapoint.type" name="link_type">
                           <option v-for="type in datapointTypes" :value="type.value">{{ type.label }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </template>
                     <div class="row" v-else>
                       <div class="col-10">
-                        <v-select :label="getLabelByValue(datapoint.type)" size="small">
+                        <x-select :label="getLabelByValue(datapoint.type)" size="small">
                           <select v-model="datapoint.type" name="link_type">
                             <option v-for="type in datapointTypes" :value="type.value">{{ type.label }}</option>
                           </select>
-                        </v-select>
+                        </x-select>
                       </div>
                       <div class="col-7">
                         <div class="ml5">
@@ -97,19 +97,19 @@
                 </td>
                 <td>
                   <template v-if="addModel.type === 1 || addModel.type === 6">
-                    <v-select :label="getLabelByValue(addModel.type)" size="small">
+                    <x-select :label="getLabelByValue(addModel.type)" size="small">
                       <select v-model="addModel.type" name="link_type">
                         <option v-for="type in datapointTypes" :value="type.value">{{ type.label }}</option>
                       </select>
-                    </v-select>
+                    </x-select>
                   </template>
                   <div class="row" v-else>
                     <div class="col-10">
-                      <v-select :label="getLabelByValue(addModel.type)" size="small">
+                      <x-select :label="getLabelByValue(addModel.type)" size="small">
                         <select v-model="addModel.type" name="link_type">
                           <option v-for="type in datapointTypes" :value="type.value">{{ type.label }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                     <div class="col-7">
                       <div class="ml5">
@@ -220,7 +220,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Modal
   },
 

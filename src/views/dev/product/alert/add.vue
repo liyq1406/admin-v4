@@ -24,11 +24,11 @@
                 <div class="controls col-19">
                   <div class="row">
                     <div class="col-5">
-                      <v-select :label="ruleTypes[addModal.model.type-1]">
+                      <x-select :label="ruleTypes[addModal.model.type-1]">
                         <select v-model="addModal.model.type" name="type" number @input="onSelectType">
                           <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                     <div class="col-19" v-show="addModal.model.type === 1 && !datapoints.length">
                       <a class="control-text ml20 hl-red">无数据端点，请点击添加</a>
@@ -36,22 +36,22 @@
                     <div class="col-8">
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="datapointName(addModal.model)">
+                          <x-select :label="datapointName(addModal.model)">
                             <select v-model="addModal.model.param" v-form-ctrl name="param">
                               <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
                     <div class="col-6">
                       <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                         <div class="select">
-                          <v-select :label="compareTypes[addModal.model.compare-1]">
+                          <x-select :label="compareTypes[addModal.model.compare-1]">
                             <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
                               <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
@@ -62,13 +62,13 @@
                           v-form-ctrl name="value" required lazy class="input-text"/>
                         </div>
                         <div class="select" v-show="addModal.model.type === 2">
-                          <v-select :label="$t('common.'+addModal.value2)">
+                          <x-select :label="$t('common.'+addModal.value2)">
                             <select v-model="addModal.value2"
                              v-form-ctrl name="value">
                               <option value="online">{{ $t("common.online") }}</option>
                               <option value="offline">{{ $t("common.offline") }}</option>
                             </select>
-                          </v-select>
+                          </x-select>
                         </div>
                       </div>
                     </div>
@@ -188,7 +188,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       TagInput,
       SearchBox,
       Pager,

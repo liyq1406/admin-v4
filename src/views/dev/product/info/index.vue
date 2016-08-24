@@ -49,22 +49,22 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
-              <v-select width="90px" size="small" :label="visibility.label">
+              <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
                 <select v-model="visibility" @change="getDevices">
                   <option v-for="option in locales.data.DEVICE_VISIBILITY_OPTIONS" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
         </x-table>
@@ -105,11 +105,11 @@
               <label class="form-control col-6">{{ $t("ui.product.fields.type") }}:</label>
               <div class="controls col-18">
                 <div class="select">
-                  <v-select :label="productType.label">
+                  <x-select :label="productType.label">
                     <select v-model="productType" name="productType">
                       <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -117,11 +117,11 @@
               <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
               <div class="controls col-18">
                 <div class="select">
-                  <v-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
+                  <x-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
                     <select v-model="editModel.link_type" name="link_type">
                       <option v-for="type in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -216,7 +216,7 @@ export default {
 
   components: {
     'x-table': Table,
-    'v-select': Select,
+    'x-select': Select,
     InfoCard,
     InfoList,
     Annulus,

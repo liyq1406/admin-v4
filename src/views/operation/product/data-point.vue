@@ -82,11 +82,11 @@
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
               <div class="controls col-18">
                 <div class="select">
-                  <v-select :label="addModelType.label">
+                  <x-select :label="addModelType.label">
                     <select v-model="addModelType" name="type">
                       <option v-for="type in datapointTypes" :value="type" :selected="$index===0">{{ type.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -180,11 +180,11 @@
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.type") }}:</label>
               <div class="controls col-18">
                 <div class="select">
-                  <v-select :label="editModelType.label">
+                  <x-select :label="editModelType.label">
                     <select v-model="editModelType" name="type">
                       <option v-for="type in datapointTypes" :value="type" :selected="$index===0">{{ type.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
               </div>
             </div>
@@ -274,7 +274,7 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select
+      'x-select': Select
     },
 
     props: {

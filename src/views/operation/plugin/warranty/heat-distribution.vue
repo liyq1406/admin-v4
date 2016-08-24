@@ -14,13 +14,13 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width='110px' size="small">
+          <x-select label="空气净化器" width='110px' size="small">
             <span slot="label">产品</span>
-          </v-select>
+          </x-select>
         </div>
         <div class="filter-group-item">
-          <v-select label="维修" size="small">
-          </v-select>
+          <x-select label="维修" size="small">
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -136,7 +136,7 @@ export default {
     Pager,
     RadioButtonGroup,
     LineChart,
-    'v-select': Select,
+    'x-select': Select,
     SearchBox,
     ChinaHeatMap
   },

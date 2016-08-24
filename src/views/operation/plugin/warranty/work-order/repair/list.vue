@@ -6,9 +6,9 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select label="空气净化器" width='110px' size="small">
+          <x-select label="空气净化器" width='110px' size="small">
             <span slot="label">产品</span>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -40,9 +40,9 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select label="全部" width='110px' size="small">
+                <x-select label="全部" width='110px' size="small">
                   <span slot="label">显示</span>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="filter-group fr">
@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></x-table>
         </div>
       </div>
     </div>
@@ -64,22 +64,22 @@
       <div class="panel-bd">
         <div class="action-bar">
           <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入'+ queryType.label" @press-enter="getOrderWorkList(true)">
-            <v-select width="100px" :label="queryType.label">
+            <x-select width="100px" :label="queryType.label">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
               </select>
-            </v-select>
+            </x-select>
             <button slot="search-button" class="btn btn-primary" @click="getOrderWorkList(true)"><i class="fa fa-search"></i></button>
           </search-box>
         </div>
 
         <div class="status-bar">
-          <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
+          <x-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
             <span slot="label">工单状态</span>
             <select v-model="status" @change="getOrderWorkList(true)">
               <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
             </select>
-          </v-select>
+          </x-select>
 
           <date-range-picker input-size="small" class="mr20" :from.sync="startDate" :to.sync="endDate" input-width="94px" @select-day="getOrderWorkList(true)">
             <span slot="label">创建时间</span>
@@ -157,10 +157,10 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
-      'c-table': Table,
+      'x-table': Table,
       'date-range-picker': DateRangePicker,
       Statistic,
       RadioButtonGroup,

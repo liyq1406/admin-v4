@@ -13,11 +13,11 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="" @search-activate="searching=!searching"  @press-enter="">
-                  <v-select width="90px" :label="queryType.label" size="small">
+                  <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -79,7 +79,7 @@ export default {
   components: {
     SearchBox,
     Pager,
-    'v-select': Select
+    'x-select': Select
   },
 
   data () {

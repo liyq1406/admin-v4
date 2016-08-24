@@ -16,17 +16,17 @@
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getTasks" :placeholder="'请输入' + queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getTasks">
                   <button slot="search-button" @click="getTasks" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  <!-- <v-select width="90px" :label="queryType.label" size="small">
+                  <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select> -->
+                  </x-select> -->
                 </search-box>
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-time="sortByTime" @tbody-title="goDetail"  @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
-          </c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-time="sortByTime" @tbody-title="goDetail"  @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
+          </x-table>
         </div>
       </div>
     </div>
@@ -52,8 +52,8 @@
     mixins: [globalMixins],
 
     components: {
-      'v-select': Select,
-      'c-table': Table,
+      'x-select': Select,
+      'x-table': Table,
       'search-box': SearchBox,
       Statistic,
       RadioButtonGroup,

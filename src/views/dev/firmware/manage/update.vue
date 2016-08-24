@@ -172,7 +172,7 @@
     },
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'date-picker': DatePicker,
       'area-select': AreaSelect,
       'tag-input': TagInput,
@@ -357,7 +357,7 @@
         padding-bottom 10px
         border-bottom 1px solid #d9d9d9
   .select-group
-    .v-select
+    .x-select
       display inline-block
 
 </style>

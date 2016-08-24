@@ -13,14 +13,14 @@
             </div>
           </div>
         </div>
-        <c-table
+        <x-table
           :headers="headers"
           :tables="tables | filterBy query in 'id' 'mac'"
           :loading="tableLoadingData"
           @theader-active-date="sortBysomeKey"
           @theader-is-online="sortBysomeKey">
 
-        </c-table>
+        </x-table>
       </div>
     </div>
   </div>
@@ -44,8 +44,8 @@ export default {
   components: {
     SearchBox,
     Dropdown,
-    'v-select': Select,
-    'c-table': Table,
+    'x-select': Select,
+    'x-table': Table,
     Pager
   },
 

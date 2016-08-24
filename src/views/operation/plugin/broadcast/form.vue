@@ -71,19 +71,19 @@
                           </label>
                           <div class="row col-19">
                             <div class="select-group fl">
-                              <v-select :label="group.type===2?'沉睡用户':'活跃用户'" width="100px">
+                              <x-select :label="group.type===2?'沉睡用户':'活跃用户'" width="100px">
                                 <select v-model="group.type" @change="group.unlimited=false">
                                   <!-- <option v-for="opt in userTypeOptions" :value="opt">{{ opt.label }}</option> -->
                                   <option :value="1">活跃用户</option>
                                   <option :value="2">沉睡用户</option>
                                 </select>
-                              </v-select>
-                              <v-select :label="selectedGroupText" width="140px" class="ml5">
+                              </x-select>
+                              <x-select :label="selectedGroupText" width="140px" class="ml5">
                                 <select v-model="group.time" @change="group.unlimited=false">
                                   <option :value="7">7天{{group.type===2?'沉睡':'活跃'}}用户</option>
                                   <option :value="30">30天{{group.type===2?'沉睡':'活跃'}}用户</option>
                                 </select>
-                              </v-select>
+                              </x-select>
                             </div>
                           </div>
                         </div>
@@ -320,7 +320,7 @@
     },
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'date-picker': DatePicker,
       'area-select': AreaSelect,
       'tag-input': TagInput,
@@ -725,7 +725,7 @@
   .panel
     border-bottom 0
   .select-group
-    .v-select
+    .x-select
       display inline-block
   .preview-box
     width 300px

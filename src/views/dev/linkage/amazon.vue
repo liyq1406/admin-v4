@@ -14,8 +14,8 @@
         </div>
         <div class="mt20" style="padding-left: 126px">
           <span class="mr5">开启amazon echo联动服务</span>
-          <!-- <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></v-switch> -->
-          <v-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></v-switch>
+          <!-- <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
+          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -155,7 +155,7 @@
     components: {
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem,
-      'v-switch': Switch
+      'x-switch': Switch
     },
 
     mixins: [globalMixins],

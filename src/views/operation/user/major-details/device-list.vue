@@ -5,12 +5,12 @@
         <div class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
-              <v-select :label="selectedProduct.name" width='110px' size="small">
+              <x-select :label="selectedProduct.name" width='110px' size="small">
                 <span slot="label">显示</span>
                 <select v-model="selectedProduct" @change="getDevices">
                   <option v-for="product in products" :value="product">{{product.name}}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="filter-group fr">
@@ -22,13 +22,13 @@
             </div>
           </div>
         </div>
-        <c-table
+        <x-table
         :headers="headers"
         :tables="tables"
         :page="page"
         :loading="loadingData"
         @theader-is-active="sortBySomeKey"  @theader-active-date="sortBySomeKey"  @theader-is-online="sortBySomeKey"
-        ></c-table>
+        ></x-table>
       </div>
     </div>
   </div>
@@ -58,8 +58,8 @@ export default {
 
   components: {
     SearchBox,
-    'v-select': Select,
-    'c-table': Table
+    'x-select': Select,
+    'x-table': Table
 
   },
 

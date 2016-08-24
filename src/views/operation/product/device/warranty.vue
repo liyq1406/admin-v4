@@ -13,20 +13,20 @@
           </div>
           <div class="filter-group">
             <div class="filter-group-item">
-              <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
+              <x-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
                 <span slot="label">工单状态</span>
                 <select v-model="status" @change="getWarrantyList(true)">
                   <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
                   <p> {{status}}</p>
                 </select>
-              </v-select>
+              </x-select>
             </div>
             <!-- <div class="filter-group-item">
               <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
             </div> -->
           </div>
         </div>
-        <c-table :headers="headers" :tables="tables"></c-table>
+        <x-table :headers="headers" :tables="tables"></x-table>
       </div>
     </div>
   </div>
@@ -41,8 +41,8 @@
 
   export default {
     components: {
-      'v-select': Select,
-      'c-table': Table,
+      'x-select': Select,
+      'x-table': Table,
       'area-select': AreaSelect,
       'search-box': SearchBox
     },

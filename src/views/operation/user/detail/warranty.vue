@@ -46,7 +46,7 @@
 
   export default {
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox
     },

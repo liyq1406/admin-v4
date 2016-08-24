@@ -19,13 +19,13 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select :label="selectedFilter.name" width='110px' size="small">
+                <x-select :label="selectedFilter.name" width='110px' size="small">
                   <span slot="label">显示</span>
                   <select v-model="selectedFilter" @change="getUsers">
                     <!-- <option :value="">全部</option> -->
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="filter-group fr">
@@ -37,7 +37,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
     </div>
@@ -64,8 +64,8 @@
     components: {
       'search-box': SearchBox,
       'api': api,
-      'v-select': Select,
-      'c-table': Table,
+      'x-select': Select,
+      'x-table': Table,
       Statistic
     },
 

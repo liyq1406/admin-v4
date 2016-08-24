@@ -18,12 +18,12 @@
           </div>
           <div class="filter-bar">
             <div class="filter-group">
-              <v-select width="160px" placeholder="请选择产品" size="small" :label="currProduct.name">
+              <x-select width="160px" placeholder="请选择产品" size="small" :label="currProduct.name">
                 <span slot="label">产品：</span>
                 <select v-model="currProduct" name="product" @change="Productstatus">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <table class="table table-stripe table-bordered">
@@ -69,11 +69,11 @@
           <div class="form-row row">
             <label class="form-control col-5">产品:</label>
             <div class="controls col-19">
-              <v-select v-else width="200px" placeholder="请选择产品" :label="addProduct.name">
+              <x-select v-else width="200px" placeholder="请选择产品" :label="addProduct.name">
                 <select v-model="addProduct" name="addproduct" @change="addProductstatus">
                   <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
-              </v-select>
+              </x-select>
             </div>
           </div>
           <div class="form-row row">
@@ -91,11 +91,11 @@
             <div class="controls col-19">
               <div class="row">
                 <div class="col-5">
-                  <v-select :label="ruleTypes[addModal.model.type-1]">
+                  <x-select :label="ruleTypes[addModal.model.type-1]">
                     <select v-model="addModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
                 <div class="col-19" v-show="addModal.model.type === 1 && !datapoints.length">
                   <a v-link="{path: '/products/' + addProduct.id + '/data-point' }" class="control-text ml20 hl-red">无数据端点，请点击添加</a>
@@ -103,22 +103,22 @@
                 <div class="col-8">
                   <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                     <div class="select">
-                      <v-select :label="datapointName(addModal.model)">
+                      <x-select :label="datapointName(addModal.model)">
                         <select v-model="addModal.model.param" v-form-ctrl name="param">
                           <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
                 <div class="col-6">
                   <div v-show="addModal.model.type === 1 && datapoints.length" class="ml10">
                     <div class="select">
-                      <v-select :label="compareTypes[addModal.model.compare-1]">
+                      <x-select :label="compareTypes[addModal.model.compare-1]">
                         <select v-model="addModal.model.compare" v-form-ctrl name="compare" number>
                           <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
@@ -128,12 +128,12 @@
                       <input v-model="addModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
                     </div>
                     <div class="select" v-show="addModal.model.type === 2">
-                      <v-select :label="$t('common.'+addModal.value2)">
+                      <x-select :label="$t('common.'+addModal.value2)">
                         <select v-model="addModal.value2" v-form-ctrl name="value">
                           <option value="online">{{ $t("common.online") }}</option>
                           <option value="offline">{{ $t("common.offline") }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
@@ -154,11 +154,11 @@
             <label class="form-control col-5">{{ $t("ui.rule.fields.inform_type") }}:</label>
             <div class="controls col-19">
               <div class="select">
-                <v-select :label="informTypes[addModal.model.notify_type-1]">
+                <x-select :label="informTypes[addModal.model.notify_type-1]">
                   <select v-model="addModal.model.notify_type" v-form-ctrl name="notify_type" number>
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -272,31 +272,31 @@
             <div class="controls col-19">
               <div class="row">
                 <div class="col-5">
-                  <v-select :label="ruleTypes[editModal.model.type-1]">
+                  <x-select :label="ruleTypes[editModal.model.type-1]">
                     <select v-model="editModal.model.type" v-form-ctrl name="type" number @input="onSelectType">
                       <option v-for="type in ruleTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                 </div>
                 <div class="col-8">
                   <div v-show="editModal.model.type === 1" class="ml10">
                     <div class="select">
-                      <v-select :label="datapointName(editModal.model)">
+                      <x-select :label="datapointName(editModal.model)">
                         <select v-model="editModal.model.param" v-form-ctrl name="param">
                           <option v-for="option in datapoints" :value="option.id">{{ option.name }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
                 <div class="col-6">
                   <div v-show="editModal.model.type === 1" class="ml10">
                     <div class="select">
-                      <v-select :label="compareTypes[editModal.model.compare-1]">
+                      <x-select :label="compareTypes[editModal.model.compare-1]">
                         <select v-model="editModal.model.compare" v-form-ctrl name="compare" number>
                           <option v-for="type in compareTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
@@ -306,12 +306,12 @@
                       <input v-model="editModal.value1" type="text" v-form-ctrl name="value" required lazy class="input-text"/>
                     </div>
                     <div class="select" v-show="editModal.model.type === 2">
-                      <v-select :label="$t('common.'+editModal.value2)">
+                      <x-select :label="$t('common.'+editModal.value2)">
                         <select v-model="editModal.value2" v-form-ctrl name="value">
                           <option value="online">{{ $t("common.online") }}</option>
                           <option value="offline">{{ $t("common.offline") }}</option>
                         </select>
-                      </v-select>
+                      </x-select>
                     </div>
                   </div>
                 </div>
@@ -332,11 +332,11 @@
             <label class="form-control col-5">{{ $t("ui.rule.fields.inform_type") }}:</label>
             <div class="controls col-19">
               <div class="select">
-                <v-select :label="informTypes[editModal.model.notify_type-1]">
+                <x-select :label="informTypes[editModal.model.notify_type-1]">
                   <select v-model="editModal.model.notify_type" v-form-ctrl name="notify_type" number>
                     <option v-for="type in informTypes" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -449,7 +449,7 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select,
+      'x-select': Select,
       'tag-input': TagInput
     },
 

@@ -77,11 +77,11 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getSales" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getSales">
-                  <v-select width="100px" :label="queryType.label" size="small">
+                  <x-select width="100px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </v-select>
+                  </x-select>
                   <button slot="search-button" @click="getSales" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
@@ -198,11 +198,11 @@
              <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                <input v-model="editModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div> -->
-             <v-select width="100px" :label="belongType.label">
+             <x-select width="100px" :label="belongType.label">
                <select v-model="editModal.model.belong_to">
                  <option v-for="option in belongs" :value="option.value">{{ option.label }}</option>
                </select>
-             </v-select>
+             </x-select>
            </div>
          </div>
          <div class="form-actions">
@@ -244,13 +244,13 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'v-alert': Alert,
+      'x-alert': Alert,
       Modal,
       RadioGroup,
       LineChart,
       SearchBox,
       InfoList,
-      'v-select': Select,
+      'x-select': Select,
       Pager,
       IntelligentTable,
       Breadcrumb

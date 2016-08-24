@@ -4,11 +4,11 @@
       <div class="form-row row" v-show="type==='add'">
         <label class="form-control col-4">产品:</label>
         <div class="controls col-14">
-          <v-select v-show="type==='add'" :label="selectedProduct.label" width="200px">
+          <x-select v-show="type==='add'" :label="selectedProduct.label" width="200px">
             <select v-model="selectedProduct">
               <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
             </select>
-          </v-select>
+          </x-select>
           <!-- <div class="product-name">
             <span>{{selectedProduct.label}}</span>
           </div> -->
@@ -27,11 +27,11 @@
       <div class="form-row row">
         <label class="form-control col-4">分发类型:</label>
         <div class="controls col-14">
-          <v-select :label="dataDestination[model.destination.type-1]" width="200px">
+          <x-select :label="dataDestination[model.destination.type-1]" width="200px">
             <select v-model="model.destination.type" name="type" number>
               <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="form-row row">
@@ -77,7 +77,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Pager
   },
 

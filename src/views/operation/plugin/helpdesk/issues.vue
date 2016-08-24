@@ -6,19 +6,19 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item" v-if="products.length">
-          <v-select :label="selectedProduct.name" @change="getIssues" width="110px" size="small">
+          <x-select :label="selectedProduct.name" @change="getIssues" width="110px" size="small">
             <span slot="label">显示</span>
             <select v-model="selectedProduct">
               <option :value="opt" v-for="opt in products">{{ opt.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
         <div class="filter-group-item" v-if="products.length">
-          <v-select :label="issueType.label" width="110px" size="small">
+          <x-select :label="issueType.label" width="110px" size="small">
             <select v-model="issueType"  @change="getIssues">
               <option :value="opt" v-for="opt in issueTypeOptions">{{ opt.label }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -83,7 +83,7 @@ export default {
   },
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     Pager,
     RadioButtonGroup,
     DateTimeRangePicker

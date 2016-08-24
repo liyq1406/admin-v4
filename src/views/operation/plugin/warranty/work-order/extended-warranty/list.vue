@@ -6,12 +6,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <v-select :label="product.name" width='110px' size="small">
+          <x-select :label="product.name" width='110px' size="small">
             <span slot="label">产品</span>
             <select v-model="product">
               <option v-for="opt in productOptions" :value="opt">{{ opt.name }}</option>
             </select>
-          </v-select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -54,9 +54,9 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <v-select label="全部" width='110px' size="small">
+                <x-select label="全部" width='110px' size="small">
                   <span slot="label">显示</span>
-                </v-select>
+                </x-select>
               </div>
             </div>
             <div class="filter-group fr">
@@ -70,7 +70,7 @@
               </div>
             </div>
           </div>
-          <c-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></x-table>
         </div>
       </div>
     </div>
@@ -84,13 +84,13 @@
         </div>
 
         <div class="status-bar">
-          <v-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
+          <x-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
             <span slot="label">工单状态</span>
             <select v-model="status" @change="getWarrantyList(true)">
               <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
               <p> {{status}}</p>
             </select>
-          </v-select>
+          </x-select>
 
           <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
         </div>
@@ -176,10 +176,10 @@
     },
 
     components: {
-      'v-select': Select,
+      'x-select': Select,
       'area-select': AreaSelect,
       'search-box': SearchBox,
-      'c-table': Table,
+      'x-table': Table,
       // 'pager': Pager,
       TimeLine,
       Statistic,

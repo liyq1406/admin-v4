@@ -7,9 +7,9 @@
     <div class="left-actions blockdiv clearfix mt10" slot="left-actions">
       <div class="filter-group fl ml20">
         <div class="filter-group-item">
-          <!-- <v-select label="空气净化器" width="110px" size="small">
+          <!-- <x-select label="空气净化器" width="110px" size="small">
             <span slot="label">产品：空气净化器</span>
-          </v-select> -->
+          </x-select> -->
           <div class="lh28">
             <span v-for="tag in alert.tag | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ alert.tag }}</span><span class="ml10">{{alert.name}}</span></div>
         </div>
@@ -28,11 +28,11 @@
         <div class="filter-group fr">
           <div class="filter-group-item">
             <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
-              <v-select width="90px" :label="queryType.label" size="small">
+              <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>
-              </v-select>
+              </x-select>
               <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
             </search-box>
           </div>
@@ -41,7 +41,7 @@
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></c-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
     </div>
@@ -79,10 +79,10 @@ export default {
   components: {
     Modal,
     // Pie,
-    'v-select': Select,
+    'x-select': Select,
     RadioButtonGroup,
     DateTimeRangePicker,
-    'c-table': Table,
+    'x-table': Table,
     Statistic,
     Breadcrumb,
     TimeLine,

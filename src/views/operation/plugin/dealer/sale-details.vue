@@ -66,9 +66,9 @@
       <!-- <div class="panel-hd">
         <h2>销售照片</h2>
         <div class="panel-bd">
-          <v-alert :cols="7">
+          <x-alert :cols="7">
             <p>暂时无照片</p>
-          </v-alert>
+          </x-alert>
         </div>
       </div> -->
     <!--修改销售信息浮层-->
@@ -214,13 +214,13 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'v-alert': Alert,
+    'x-alert': Alert,
     Modal,
     RadioGroup,
     AreaSelect,
     LineChart,
     SearchBox,
-    'v-select': Select,
+    'x-select': Select,
     Pager,
     IntelligentTable,
     Breadcrumb,

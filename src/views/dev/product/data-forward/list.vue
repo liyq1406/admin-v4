@@ -16,11 +16,11 @@
             <!-- <button v-link="'/dev/products/' + $route.params.id + '/data-forward/add'" class="btn btn-ghost btn-sm"><i class="fa fa-plus"></i>{{ '添加规则' }}</button> -->
             <div class="filter-group-item">
               <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getRule" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getRule">
-                <!-- <v-select width="100px" :label="queryType.label" size="small">
+                <!-- <x-select width="100px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
-                </v-select> -->
+                </x-select> -->
                 <button slot="search-button" @click.prevent="getRule" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
@@ -81,11 +81,11 @@
             <label class="form-control col-7">{{ '分发类型' }}:</label>
             <div class="controls col-17">
               <div class="select">
-                <v-select :label="dataDestination[addModel.destination.type-1]">
+                <x-select :label="dataDestination[addModel.destination.type-1]">
                   <select v-model="addModel.destination.type" name="type" number>
                     <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -131,11 +131,11 @@
             <label class="form-control col-7">{{ '分发类型' }}:</label>
             <div class="controls col-17">
               <div class="select">
-                <v-select :label="dataDestination[editModel.destination.type-1]">
+                <x-select :label="dataDestination[editModel.destination.type-1]">
                   <select v-model="editModel.destination.type" name="type" number>
                     <option v-for="type in dataDestination" :value="$index+1" :selected="$index===0">{{ type }}</option>
                   </select>
-                </v-select>
+                </x-select>
               </div>
             </div>
           </div>
@@ -188,7 +188,7 @@
     components: {
       'modal': Modal,
       'pager': Pager,
-      'v-select': Select,
+      'x-select': Select,
       'search-box': SearchBox
     },
 

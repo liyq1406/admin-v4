@@ -1,14 +1,14 @@
 <template>
   <div class="auth-form">
     <div class="auth-msg-box" v-show="activateSuccess">
-      <v-alert :cols="16" type="success" :title="successTitle">
+      <x-alert :cols="16" type="success" :title="successTitle">
         <p>{{ successMsg }}</p>
-      </v-alert>
+      </x-alert>
     </div>
     <div class="auth-msg-box" v-show="activateFail">
-      <v-alert :cols="16" type="error" :title="failTitle">
+      <x-alert :cols="16" type="error" :title="failTitle">
         <p>{{ failMsg }}</p>
-      </v-alert>
+      </x-alert>
     </div>
   </div>
 </template>
@@ -27,7 +27,7 @@
     mixins: [globalMixins],
 
     components: {
-      'v-alert': Alert
+      'x-alert': Alert
     },
 
     data () {

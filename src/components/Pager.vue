@@ -2,12 +2,12 @@
   <div class="v-pager">
     <div class="fr">
       <div class="v-pager-control" v-if="!simple">
-        <v-select width="30px" :label="countPerPage.toString()" size="small">
+        <x-select width="30px" :label="countPerPage.toString()" size="small">
           <span slot="label">显示行数：</span>
           <select v-model="countPerPage" @change="onCountChange">
             <option v-for="n in countOptions" :value="n">{{ n }}</option>
           </select>
-        </v-select>
+        </x-select>
       </div>
       <div class="v-pager-control" v-if="!simple">
         <span>共{{ pages }}页，转到</span>
@@ -41,7 +41,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'v-select': Select,
+    'x-select': Select,
     ButtonGroup
   },
 
