@@ -104,30 +104,31 @@ export var animatedNumber = {
  * 使用方法：
  *   <i class="fa fa-question-circle" tooltip="要显示的文本">...</i>
  */
-// FIXME 提示初始化时会有一瞬间的错位 #shengzhi
+// REVIEW 提示初始化时会有一瞬间的错位 #shengzhi
 export var tooltip = {
   bind () {
     let inTrigger = false
     let inPopup = false
     this.popup = document.createElement('div')
+    this.popup.style.visibility = 'hidden'
     this.popup.classList.add('x-tooltip', 'x-tooltip-top', 'hidden')
     document.body.appendChild(this.popup)
 
     // 显示提示框
     let showPopup = () => {
       this.popup.classList.remove('hidden')
-      window.setTimeout(() => {
-        var x = this.el.getBoundingClientRect().left + document.documentElement.scrollLeft
-        var y = this.el.getBoundingClientRect().top + document.documentElement.scrollTop
-
-        // TODO 这里的12是硬编码，莫名其妙的差了12像数
-        this.popup.style.left = `${x - (this.el.clientWidth + this.popup.clientWidth) / 2 + 12}px`
+      var x = this.el.getBoundingClientRect().left + document.documentElement.scrollLeft
+      var y = this.el.getBoundingClientRect().top + document.documentElement.scrollTop
+      this.show = window.setTimeout(() => {
+        this.popup.style.left = `${x + this.el.clientWidth / 2 - this.popup.clientWidth / 2}px`
         this.popup.style.top = `${y - this.popup.clientHeight - 10}px`
-      }, 500)
+        this.popup.style.visibility = 'visible'
+      }, 300)
     }
 
     // 隐藏提示框
     let hidePopup = () => {
+      this.popup.style.visibility = 'hidden'
       this.popup.classList.add('hidden')
     }
 
@@ -139,11 +140,12 @@ export var tooltip = {
 
     this.el.addEventListener('mouseout', (e) => {
       inTrigger = false
+      window.clearTimeout(this.show)
       window.setTimeout(() => {
         if (!inPopup) {
           hidePopup()
         }
-      }, 200)
+      }, 300)
     })
 
     this.popup.addEventListener('mouseover', (e) => {
@@ -152,11 +154,12 @@ export var tooltip = {
 
     this.popup.addEventListener('mouseout', (e) => {
       inPopup = false
+      window.clearTimeout(this.show)
       window.setTimeout(() => {
         if (!inTrigger) {
           hidePopup()
         }
-      }, 200)
+      }, 300)
     })
   },
 
