@@ -186,7 +186,7 @@ export default {
   },
 
   ready () {
-    // FIXME 路由切换到用户反馈概览，页面就退出到登录页 #guohao #weijie
+    // REVIEW 路由切换到用户反馈概览，页面就退出到登录页 插件接口显示token失效 #guohao
   },
 
   watch: {

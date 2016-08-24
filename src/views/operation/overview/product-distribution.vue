@@ -25,8 +25,8 @@
                     <td>{{data.name}}</td>
                     <td>{{data.value}}</td>
                     <td>
-                      <percentage-bar :percentage="toPercentDecimalN(data.percent, 2)"></percentage-bar>
-                      <!-- {{data.percent | toPercentDecimalN}} -->
+                      <percentage-bar :percentage="toPercentDecimal(data.percent, 2)"></percentage-bar>
+                      <!-- {{data.percent | toPercentDecimal}} -->
                     </td>
                   </template>
                 </tr>
@@ -46,7 +46,7 @@ import PercentageBar from 'components/PercentageBar'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
 import {numToPercent} from 'utils'
-import { toPercentDecimalN } from 'src/filters'
+import { toPercentDecimal } from 'src/filters'
 import _ from 'lodash'
 
 export default {
@@ -83,7 +83,7 @@ export default {
   ready () {
   },
   methods: {
-    toPercentDecimalN,
+    toPercentDecimal,
 
     getProductsDistribution (products) {
       var prodRegions = []

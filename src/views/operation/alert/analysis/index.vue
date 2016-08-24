@@ -70,7 +70,7 @@
                     <tr v-for="item in warningLevel">
                       <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
-                      <td>{{ item.percent | toPercentDecimalN 2 }}</td>
+                      <td>{{ item.percent | toPercentDecimal 2 }}</td>
                     </tr>
                   </template>
                   <tr v-if="warningLevel.length === 0">

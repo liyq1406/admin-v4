@@ -162,7 +162,7 @@ export function uniformMinuteTime (date, correct) {
  * @param  {int} n 保留多少位
  * @return {String}
  */
-export function toDecimalN (value, n) {
+export function toDecimal (value, n) {
   var f = parseFloat(value)
   if (isNaN(f)) {
     return ''
@@ -187,11 +187,11 @@ export function toDecimalN (value, n) {
  * @param  {int} n 保留多少位
  * @return {String}
  */
-export function toPercentDecimalN (value, n) {
+export function toPercentDecimal (value, n) {
   var f = parseFloat(value)
   if (isNaN(f)) {
     return ''
   }
 
-  return toDecimalN(f * 100, n) + '%'
+  return toDecimal(f * 100, n) + '%'
 }

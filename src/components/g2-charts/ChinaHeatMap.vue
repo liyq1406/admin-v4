@@ -82,16 +82,21 @@ export default {
       }
       var Stat = window.G2.Stat
 
-      this.data.forEach((item) => {
-        var coordinates = {}
+      for (let i = 0; i < this.data.length; i++) {
+        let item = this.data[i]
+        let coordinates = {}
         if (item.city) {
           coordinates = Parser(item.city)
         } else {
           coordinates = Parser(item.province)
         }
-        item.latitude = coordinates.latitude
-        item.longitude = coordinates.longitude
-      })
+        if (coordinates) {
+          item.latitude = coordinates.latitude
+          item.longitude = coordinates.longitude
+        } else {
+          this.data.splice(i, 1)
+        }
+      }
 
       var width = el.clientWidth || 500
 
@@ -131,7 +136,7 @@ export default {
         }
       })
       chart.heatmap().position(Stat.map.location('longitude*latitude')).color('value')
-        .size(15) // 调整热力图一个点可以影响的范围
+        .size(20) // 调整热力图一个点可以影响的范围
         .label('city', {label: {opacity: 0}}) // 设置文本但是不显示，使得tooltip可以显示对应的字段
       chart.render()
       this.rendering = false

@@ -115,7 +115,7 @@ export default {
   },
 
   ready () {
-    // FIXME 路由切换到消息列表，页面就退出到登录页 #guohao #weijie
+    // REVIEW 路由切换到消息列表，页面就退出到登录页 插件接口显示token失效 #guohao
     if (this.plugins.length > 0) {
       var appId
       this.plugins.forEach((item) => {
