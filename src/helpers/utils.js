@@ -95,21 +95,44 @@ export const getLastYearDate = (cur) => {
 }
 
 /**
- * 返回值是否为空(包括空格字符串)
+ * 安全的类型判断
+ * @param {Any} obj 需判断类型的对象
+ * @return {String}
+ */
+export const type = (obj) => {
+  let map = {
+    '[object Boolean]': 'boolean',
+    '[object Number]': 'number',
+    '[object String]': 'string',
+    '[object Function]': 'function',
+    '[object Array]': 'array',
+    '[object Date]': 'date',
+    '[object RegExp]': 'regExp',
+    '[object Undefined]': 'undefined',
+    '[object Null]': 'null',
+    '[object Object]': 'object'
+  }
+  if (obj instanceof window.Element) {
+    return 'element'
+  }
+  return map[Object.prototype.toString.call(obj)]
+}
+
+/**
+ * 判断返回值是否为空(包括空格字符串)
  * @author shengzhi
  * @param  {Any} val 目标值
  * @return {Boolean}
  */
 export const isEmpty = (val) => {
   if (val === undefined || val === null) return true
-  let type = Object.prototype.toString.call(val).slice(8, -1)
 
-  switch (type) {
-    case 'String':
+  switch (type(val)) {
+    case 'string':
       return !val.trim()
-    case 'Array':
+    case 'array':
       return !val.length
-    case 'Object':
+    case 'object':
       return !Object.keys(val).length
     default:
       return false
