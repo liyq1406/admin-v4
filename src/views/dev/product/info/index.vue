@@ -44,7 +44,7 @@
         <a v-link="{path: 'authorize'}" class="btn btn-primary">管理授权</a>
       </div>
       <div class="panel-bd">
-        <c-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -67,7 +67,7 @@
               </v-select>
             </div>
           </div>
-        </c-table>
+        </x-table>
       </div>
     </div>
 
@@ -215,7 +215,7 @@ export default {
   },
 
   components: {
-    'c-table': Table,
+    'x-table': Table,
     'v-select': Select,
     InfoCard,
     InfoList,
@@ -303,41 +303,28 @@ export default {
           user: 'djfds@gmail.com'
         }
       ],
-      // headers: [
-      //   {
-      //     key: 'time',
-      //     title: '操作时间',
-      //     class: 'tac'
-      //   },
-      //   {
-      //     key: 'count',
-      //     title: '导入设备数',
-      //     class: 'tac'
-      //   },
-      //   {
-      //     key: 'user',
-      //     title: '操作人',
-      //     class: 'tac'
-      //   }
-      // ],
       headers: [{
         key: 'mac',
         title: 'MAC'
       }, {
         key: 'id',
-        title: '设备ID'
+        title: '设备ID',
+        class: 'wp25'
       }, {
         key: 'is_active',
         title: '是否激活',
-        tooltip: '提示'
+        tooltip: '设备已联网激活',
+        class: 'wp10'
       }, {
         key: 'active_date',
         title: '激活时间',
-        sortType: -1
+        sortType: -1,
+        class: 'wp20'
       }, {
         key: 'is_online',
         title: '在线状态',
-        sortType: -1
+        sortType: -1,
+        class: 'wp10'
       }]
     }
   },
