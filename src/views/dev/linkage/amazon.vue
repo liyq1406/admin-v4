@@ -62,10 +62,10 @@
                 </div>
                 <div class="input-box">
                   <div class="radio-group">
-                    <labe class="radio">
+                    <label class="radio">
                       <input type="radio"/>HTTPS
                     </label>
-                    <labe class="radio">
+                    <label class="radio">
                       <input type="radio"/>Lambda ARN (Amazon Resource Name)
                     </label>
                   </div>
@@ -86,10 +86,10 @@
                 <div class="input-box">
                   <div class="box">
                     <div class="radio-group">
-                      <labe class="radio">
+                      <label class="radio">
                         <input type="radio"/>HTTPS
                       </label>
-                      <labe class="radio">
+                      <label class="radio">
                         <input type="radio"/>Lambda ARN (Amazon Resource Name)
                       </label>
                     </div>
