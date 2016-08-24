@@ -1,26 +1,21 @@
 <template>
   <div>
+    <div class="main-title bordered">
+      <h2>概览</h2>
+    </div>
     <panel>
-      <div class="row user-card">
+      <div class="row user-card mt15">
         <div class="col-6 total-box">
-          <statistic :info="statistic.total" title="总用户数" color="gray" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="gray"></interval-icon>
-          </statistic>
+          <statistic :info="statistic.total" title="总用户数" color="gray" align="left" :titletop="true"></statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.add" title="今日新增" color="green" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="green"></interval-icon>
-          </statistic>
+          <statistic :info="statistic.add" title="今日新增" color="green" align="left" :titletop="true"></statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.active" title="今日活跃用户" color="blue" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="blue"></interval-icon>
-          </statistic>
+          <statistic :info="statistic.active" title="今日活跃用户" color="blue" align="left" :titletop="true"></statistic>
         </div>
         <div class="col-6">
-          <statistic :info="statistic.seventTotal" title="过去7天活跃用户数" color="orange" :has-chart="true" align="center" :titletop="true">
-            <interval-icon color="orange"></interval-icon>
-          </statistic>
+          <statistic :info="statistic.seventTotal" title="过去7天活跃用户数" color="orange" align="left" :titletop="true"></statistic>
         </div>
       </div>
     </panel>
@@ -37,7 +32,6 @@ import Statistic from 'components/Statistic'
 import { globalMixins } from 'src/mixins'
 import UserTrend from './user-trend'
 import UserDistribution from './user-distribution'
-import IntervalIcon from 'components/g2-charts/IntervalIcon'
 import {getTotalUser, getTrend} from './api-user'
 
 export default {
@@ -49,8 +43,7 @@ export default {
     Panel,
     Statistic,
     UserTrend,
-    UserDistribution,
-    IntervalIcon
+    UserDistribution
   },
 
   data () {
