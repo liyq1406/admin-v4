@@ -29,12 +29,12 @@
             <table class="table table-stripe table-bordered">
               <thead>
                 <tr>
-                  <th>索引</th>
-                  <th>端点ID</th>
+                  <th width="10%">索引</th>
+                  <th width="25%">端点ID</th>
                   <th>描述</th>
                   <!-- <th>修改时间</th> -->
-                  <th class="tac">是否可控</th>
-                  <th class="tac">开启联动</th>
+                  <th width="15%" class="tac">是否可控</th>
+                  <th width="15%" class="tac">开启联动</th>
                 </tr>
               </thead>
               <tbody>
@@ -106,7 +106,10 @@
     },
 
     methods: {
-      // 获取产品列表
+      /**
+       * 获取产品列表
+       * @author shengzhi
+       */
       getProducts () {
         this.loadingProducts = true
         api.product.all().then((res) => {
@@ -122,7 +125,10 @@
         })
       },
 
-      // 获取数据端点
+      /**
+       * 获取数据端点
+       * @author shengzhi
+       */
       getDatapoints () {
         this.loadingDatapoints = true
         api.product.getDatapoints(this.currProduct.id).then((res) => {
