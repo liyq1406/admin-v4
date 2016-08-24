@@ -70,7 +70,7 @@ export default {
      */
     onOrderSubmit (order) {
       console.log(order)
-      // TODO 调用创建产品接口
+      // TODO 调用创建订单接口
       this.currStep = 4
       this.submiting = true
       window.setTimeout(() => {

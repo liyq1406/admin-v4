@@ -3,8 +3,8 @@
     <div class="main-title">
       <h2>人群画像</h2>
     </div>
-    <div class="panel">
-      <div class="panel-hd">
+    <div class="panel no-split-line">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>性别</h2>
       </div>
       <div class="panel-bd">
@@ -41,7 +41,7 @@
       </div>
 
       <!-- 年龄 -->
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>年龄</h2>
       </div>
       <div class="panel-bd">
@@ -93,7 +93,7 @@
       </div>
 
       <!-- 语言 -->
-      <div class="panel-hd">
+      <div class="panel-hd panel-hd-full bordered">
         <h2>语言</h2>
       </div>
       <div class="panel-bd">
@@ -194,6 +194,7 @@ export default {
   },
 
   ready () {
+    // TODO: 所有相关功能没对接口 #shengzhi
     this.simulationData()
   },
 

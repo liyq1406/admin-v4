@@ -127,7 +127,7 @@
         this.loadingDatapoints = true
         api.product.getDatapoints(this.currProduct.id).then((res) => {
           if (res.status === 200) {
-            // TODO 接口完善时请删除这个遍历操作，并修改 HTML 中的的数据绑定字段
+            // TODO 接口完善时请删除这个遍历操作，并修改 HTML 中的的数据绑定字段 #shengzhi
             res.data.map((item) => {
               item.isControlable = false
               item.isEnable = false
