@@ -15,6 +15,7 @@
       </div>
       <div class="row">
         <div class="col-12">
+          <!-- TODO 饼图加载时页面回跳动 #weijie -->
           <pie :data="warningLevel"></pie>
         </div>
         <div class="col-11 col-offset-1 data-table-wrap">
@@ -100,7 +101,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import api from 'api'
 import * as config from 'consts/config'
 import Select from 'components/Select'
@@ -108,7 +108,6 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-import locales from 'consts/locales/index'
 // import _ from 'lodash'
 // import { formatDate } from 'src/filters'
 // import { globalMixins } from 'src/mixins'
@@ -150,47 +149,42 @@ export default {
       products: [],
       warningLevel: [],
       firmwares: [
-        {
-          content: '这是描述',
-          code: '123',
-          version: 'v-1.0',
-          type: 'WIFI',
-          add_date: '2016-08-16 20:00:00'
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          version: 'v-1.0',
-          type: 'WIFI',
-          add_date: '2016-08-16 20:00:00'
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          version: 'v-1.0',
-          type: 'WIFI',
-          add_date: '2016-08-16 20:00:00'
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          version: 'v-1.0',
-          type: 'WIFI',
-          add_date: '2016-08-16 20:00:00'
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          version: 'v-1.0',
-          type: 'WIFI',
-          add_date: '2016-08-16 20:00:00'
-        }
+        // {
+        //   content: '这是描述',
+        //   code: '123',
+        //   version: 'v-1.0',
+        //   type: 'WIFI',
+        //   add_date: '2016-08-16 20:00:00'
+        // },
+        // {
+        //   content: '这是描述',
+        //   code: '123',
+        //   version: 'v-1.0',
+        //   type: 'WIFI',
+        //   add_date: '2016-08-16 20:00:00'
+        // },
+        // {
+        //   content: '这是描述',
+        //   code: '123',
+        //   version: 'v-1.0',
+        //   type: 'WIFI',
+        //   add_date: '2016-08-16 20:00:00'
+        // },
+        // {
+        //   content: '这是描述',
+        //   code: '123',
+        //   version: 'v-1.0',
+        //   type: 'WIFI',
+        //   add_date: '2016-08-16 20:00:00'
+        // },
+        // {
+        //   content: '这是描述',
+        //   code: '123',
+        //   version: 'v-1.0',
+        //   type: 'WIFI',
+        //   add_date: '2016-08-16 20:00:00'
+        // }
       ],
-      visibility: {
-        label: '全部',
-        value: 'all'
-      },
-      visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
       total: 0,
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,

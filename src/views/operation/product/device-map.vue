@@ -130,6 +130,7 @@ export default {
     }
   },
 
+  // TODO 设备地图有时候加载不出来 #shengzhi
   route: {
     data () {
       window.init = this.initMap

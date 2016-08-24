@@ -164,6 +164,7 @@ export default {
   },
 
   ready () {
+    // TODO 完成快照规则编辑 #shengzhi
     if (this.type === 'add') {
       this.rule = this.locales.data.SNAPSHOT_INTERVAL[0]
     } else {

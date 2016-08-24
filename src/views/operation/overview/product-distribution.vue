@@ -9,6 +9,7 @@
           <china-map :data="data"></china-map>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
+          <!-- TODO 占比改成柱状图形式 #guohui -->
           <div class="data-table" v-if="dataPer.length > 0">
             <table class="table">
               <thead>
@@ -23,8 +24,10 @@
                   <template v-if="data.value">
                     <td>{{data.name}}</td>
                     <td>{{data.value}}</td>
-                    <!-- TODO 占比改成柱状图形式 #shengzhi -->
-                    <td>{{data.percent | toPercentDecimal2}}</td>
+                    <td>
+                      <percentage-bar :percentage="toPercentDecimal2(data.percent)"></percentage-bar>
+                      <!-- {{data.percent | toPercentDecimal2}} -->
+                    </td>
                   </template>
                 </tr>
               </tbody>
@@ -39,10 +42,11 @@
 <script>
 import mapData from 'components/g2-charts/map-data.json'
 import ChinaMap from 'components/g2-charts/ChinaMap'
-import Panel from 'components/Panel'
+import PercentageBar from 'components/PercentageBar'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
 import {numToPercent} from 'helpers/utils'
+import { toPercentDecimal2 } from 'src/filters'
 import _ from 'lodash'
 
 export default {
@@ -51,7 +55,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Panel,
+    PercentageBar,
     ChinaMap
   },
 
@@ -79,6 +83,8 @@ export default {
   ready () {
   },
   methods: {
+    toPercentDecimal2,
+
     getProductsDistribution (products) {
       var prodRegions = []
       products.forEach((item) => {

@@ -24,16 +24,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="panel">
-      <div class="panel-bd">
-        <div class="with-loading">
-          <time-line :data="alertTrends"></time-line>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="alertSummary.unread" :title="alertSummary.unread.title" align="left"></statistic>
@@ -158,6 +148,8 @@ import Mock from 'mockjs'
 import { formatDate } from 'src/filters'
 import dateFormat from 'date-format'
 
+// TODO 消除代码冗余 #weijie
+
 export default {
   name: 'Alerts',
 
@@ -247,7 +239,6 @@ export default {
           change: 0
         }
       },
-      alertTrends: [],
       today: dateFormat('yyyy-MM-dd', new Date()),
       loadingData: false,
       startTimePick: '',
@@ -301,16 +292,6 @@ export default {
   },
 
   computed: {
-    // queryCondition () {
-    //   return {
-    //     limit: this.countPerPage,
-    //     offset: (this.currentPage - 1) * this.countPerPage
-    //     if (this.key !== '') {
-    //       condition.query.id = {$regex: this.key, $options: 'i'}
-    //     }
-    //   }
-    // },
-
     // 分页信息
     page () {
       return {
@@ -354,23 +335,6 @@ export default {
           }
         }
       }
-      // var condition = {
-      //   limit: this.countPerPage,
-      //   offset: (this.currentPage - 1) * this.countPerPage,
-      //   order: {},
-      //   query: {
-      //     product_id: {
-      //       $in: [this.currentProduct.id]
-      //     },
-      //     create_date: {
-      //       $lte: this.endTime + 'T00:00:00.000Z',
-      //       $gte: this.beginTime + 'T00:00:00.000Z'
-      //     }
-      //   }
-      // }
-      // if (this.key !== '') {
-      //   condition.query.id = {$in: [this.key]}
-      // }
       if (this.key.length > 0) {
         this.currentPage = 1
         condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
@@ -462,24 +426,6 @@ export default {
     toTags (value) {
       return value.length ? value.split(',') : []
     }
-  },
-
-  ready () {
-    // TODO 对接口
-    this.alertTrends = Mock.mock({
-      'list|14': [{
-        'date|+1': [
-          new Date(2016, 7, 15),
-          new Date(2016, 7, 16),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 21)
-        ],
-        'count|+1': [6, 8, 9, 5, 9, 12, 9]
-      }]
-    }).list
   },
 
   route: {

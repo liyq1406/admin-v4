@@ -9,6 +9,7 @@
           <china-map :data="data"></china-map>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
+          <!-- TODO 占比改成柱状图形式 #guohui -->
           <div class="data-table">
             <table class="table">
               <thead>
@@ -23,7 +24,6 @@
                   <template v-if="data.value">
                     <td>{{data.name}}</td>
                     <td>{{data.value}}</td>
-                    <!-- TODO 占比改成柱状图形式 #shengzhi -->
                     <td>{{data.percent | toPercentDecimal2 }}</td>
                   </template>
                 </tr>
