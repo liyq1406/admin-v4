@@ -216,7 +216,7 @@ export default {
      * 获取设备快照规则
      */
     getSnapshotRule () {
-      api.snapshot.getRule(this.$route.params.product_id).then((res) => {
+      api.snapshot.getRules(this.$route.params.product_id).then((res) => {
         if (res.status === 200) {
           this.indexes = res.data.list[0].datapoint
         }

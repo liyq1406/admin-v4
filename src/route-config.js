@@ -518,7 +518,7 @@ let configRouter = (router) => {
           }
         },
         // 编辑数据快照
-        'data/snapshot/edit/:product_id': {
+        'data/snapshot/edit/:product_id/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/snapshot/edit'))

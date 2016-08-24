@@ -4,18 +4,21 @@
       <div class="form-row row">
         <label class="form-control col-3">产品:</label>
         <div class="controls col-21">
-          <v-select :label="selectedProduct.label" width="200px">
-            <select v-model="selectedProduct">
-              <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
-            </select>
-          </v-select>
+          <template v-if="type==='add'">
+            <v-select :label="selectedProduct.label" width="200px">
+              <select v-model="selectedProduct">
+                <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
+              </select>
+            </v-select>
+          </template>
+          <div class="control-text" v-else>{{ selectedProduct.name }}</div>
         </div>
       </div>
       <div class="form-row row">
         <label class="form-control col-3">快照规则:</label>
         <div class="controls col-21">
-          <v-select :label="rule.label" width="200px">
-            <select v-model="rule">
+          <v-select :label="interval.label" width="200px">
+            <select v-model="interval">
               <option v-for="opt in locales.data.SNAPSHOT_INTERVAL" :value="opt">{{ opt.label }}</option>
             </select>
           </v-select>
@@ -58,7 +61,12 @@
         </div>
       </div>
       <div class="form-actions row">
-        <div class="col-20 col-offset-3">
+        <div class="col-3" v-if="type==='edit'">
+          <label class="del-check">
+            <input type="checkbox" name="del" v-model="delChecked"/>删除快照
+          </label>
+        </div>
+        <div class="col-20" :class="{'col-offset-3':type==='add'}">
           <button :disabled="submiting || selectedDatapoints.length === 0" :class="{'disabled':submiting || selectedDatapoints.length === 0}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
         </div>
       </div>
@@ -106,21 +114,14 @@ export default {
         id: 0,
         label: '请选择产品'
       }, // 已选产品
-      rule: {}, // 快照规则
+      interval: {}, // 快照规则
       submiting: false,
       selectedDatapoints: [],
       allDatapoints: [],
       currentPage: 1,
       countPerPage: 10,
+      delChecked: false,
       loadingData: false
-    }
-  },
-
-  watch: {
-    selectedProduct () {
-      if (this.selectedProduct.id) {
-        this.getDatapoints()
-      }
     }
   },
 
@@ -137,13 +138,6 @@ export default {
         id: 0,
         label: '请选择产品'
       })
-      if (this.type === 'edit' && result.length > 1) {
-        this.selectedProduct = _.find(result, (item) => {
-          return item.id === this.$route.params.product_id
-        })
-      } else {
-        this.selectedProduct = result[0]
-      }
 
       return result
     },
@@ -163,16 +157,43 @@ export default {
     }
   },
 
-  ready () {
-    // TODO 完成快照规则编辑 #shengzhi
-    if (this.type === 'add') {
-      this.rule = this.locales.data.SNAPSHOT_INTERVAL[0]
-    } else {
-      // this.getDatapoints()
+  watch: {
+    selectedProduct () {
+      if (this.selectedProduct.id) {
+        this.getDatapoints()
+      }
+    },
+
+    products () {
+      this.init()
     }
   },
 
+  ready () {
+    this.init()
+  },
+
   methods: {
+    // REVIEW 完成快照规则编辑 #shengzhi
+    /**
+     * 初始化
+     */
+    init () {
+      if (this.products.length) {
+        if (this.type === 'add') {
+          this.selectedProduct = {
+            id: 0,
+            label: '请选择产品'
+          }
+          this.interval = this.locales.data.SNAPSHOT_INTERVAL[0]
+        } else {
+          this.selectedProduct = _.find(this.products, (item) => {
+            return item.id === this.$route.params.product_id
+          })
+        }
+      }
+    },
+
     /**
      * 判断数据端点是否已选
      * @author shengzhi
@@ -188,6 +209,11 @@ export default {
       return ret
     },
 
+    /**
+     * 选择切换
+     * @author shengzhi
+     * @param {Object} datapoint 目标数据端点
+     */
     toggleSelected (datapoint) {
       if (this.isSelected(datapoint)) {
         this.selectedDatapoints.$remove(datapoint.index)
@@ -217,34 +243,44 @@ export default {
     },
 
     /**
+     * 获取产品快照规则
+     * @author shengzhi
+     */
+    getRule () {
+      this.loadingData = true
+      api.snapshot.getRule(this.$route.params.product_id, this.$route.params.rule_id).then((res) => {
+        if (res.status === 200) {
+          this.loadingData = false
+          this.interval = _.find(this.locales.data.SNAPSHOT_INTERVAL, (o) => {
+            return o.value === res.data.interval
+          })
+          this.selectedDatapoints = res.data.datapoint || []
+        }
+      }).catch((res) => {
+        this.loadingData = false
+        this.handleError(res)
+      })
+    },
+
+    /**
      * 获取数据端点
      * @author shengzhi
      */
     getDatapoints () {
-      // if (this.selectedProduct.id === 0) {
-      //   this.datapoints = []
-      //   return
-      // }
-
       this.loadingData = true
       // 获取产品数据端点列表
       api.product.getDatapoints(this.selectedProduct.id).then((res) => {
         if (res.status === 200) {
+          this.loadingData = false
           this.currentPage = 1
           this.allDatapoints = res.data
 
-          // 获取产品的已选数据端点列表
-          api.snapshot.getRule(this.selectedProduct.id).then((res) => {
-            if (res.status === 200) {
-              this.loadingData = false
-              this.selectedDatapoints = res.data.datapoint || []
-            }
-          }).catch((res) => {
-            this.loadingData = false
-            this.handleError(res)
-          })
+          if (this.type === 'edit') {
+            this.getRule()
+          }
         }
       }).catch((res) => {
+        this.loadingData = false
         this.handleError(res)
       })
     },
@@ -256,19 +292,41 @@ export default {
     onSubmit () {
       let model = {
         rule: 3,
-        interval: this.rule.value,
+        interval: this.interval.value,
         storage: {
           expire: 0
         },
         datapoint: this.selectedDatapoints
       }
-      api.snapshot.createRule(this.selectedProduct.id, model).then((res) => {
-        if (res.status === 200) {
-          this.$route.router.replace('/dev/data/snapshots')
+
+      if (this.type === 'add') { // 添加
+        api.snapshot.createRule(this.selectedProduct.id, model).then((res) => {
+          if (res.status === 200) {
+            this.$route.router.replace('/dev/data/snapshots')
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      } else {
+        if (this.delChecked) { // 删除
+          api.snapshot.deleteRule(this.selectedProduct.id, this.$route.params.rule_id).then((res) => {
+            if (res.status === 200) {
+              this.$route.router.replace('/dev/data/snapshots')
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        } else {
+          model._id = this.$route.params.rule_id
+          api.snapshot.updateRule(this.selectedProduct.id, model).then((res) => {
+            if (res.status === 200) { // 编辑
+              this.$route.router.replace('/dev/data/snapshots')
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
         }
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      }
     }
   }
 }

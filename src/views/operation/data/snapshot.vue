@@ -438,7 +438,7 @@
         this.checkSnapshotExsit()
       },
       checkSnapshotExsit () {
-        api.snapshot.getRule(this.productType.id).then((res) => {
+        api.snapshot.getRules(this.productType.id).then((res) => {
           if (res.status === 200) {
             if (res.data.count > 0) {
               // 存在就不创建
@@ -526,7 +526,7 @@
         this.productsRules = []
         this.products.forEach((item) => {
           var product = item
-          api.snapshot.getRule(item.id).then((res) => {
+          api.snapshot.getRules(item.id).then((res) => {
             if (res.status === 200) {
               if (res.data.count > 0) {
                 // 循环插入
@@ -551,7 +551,7 @@
           this.getRules()
         } else {
           var self = this
-          api.snapshot.getRule(this.ruleProductType.id).then((res) => {
+          api.snapshot.getRules(this.ruleProductType.id).then((res) => {
             if (res.status === 200) {
               if (res.data.count > 0) {
                 // 循环插入

@@ -496,7 +496,7 @@ export default {
     },
     // 获取当前产品快照规则
     getRule () {
-      api.snapshot.getRule(this.$route.params.product_id).then((res) => {
+      api.snapshot.getRules(this.$route.params.product_id).then((res) => {
         // 匹配数据端点信息
         api.product.getDatapoints(this.$route.params.product_id).then((r) => {
           if (r.status === 200) {

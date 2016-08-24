@@ -41,7 +41,7 @@
                 <td>{{dp.creator}}</td>
                 <td>
                   <a v-link="{ path: $route.path + '/' + dp.productID}" class="hl-red">查看快照</a>
-                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productID}">编辑</a>
+                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productID+'/'+dp.id}">编辑</a>
                 </td>
               </tr>
               <tr v-if="productsRules.length === 0">
@@ -428,7 +428,7 @@ export default {
       this.checkSnapshotExsit()
     },
     checkSnapshotExsit () {
-      api.snapshot.getRule(this.productType.id).then((res) => {
+      api.snapshot.getRules(this.productType.id).then((res) => {
         if (res.status === 200) {
           if (res.data.count > 0) {
             // 存在就不创建
@@ -516,7 +516,7 @@ export default {
       this.productsRules = []
       this.products.forEach((item) => {
         var product = item
-        api.snapshot.getRule(item.id).then((res) => {
+        api.snapshot.getRules(item.id).then((res) => {
           if (res.status === 200) {
             if (res.data.count > 0) {
               // 循环插入
@@ -541,7 +541,7 @@ export default {
         this.getRules()
       } else {
         var self = this
-        api.snapshot.getRule(this.ruleProductType.id).then((res) => {
+        api.snapshot.getRules(this.ruleProductType.id).then((res) => {
           if (res.status === 200) {
             if (res.data.count > 0) {
               // 循环插入
