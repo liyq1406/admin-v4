@@ -1,14 +1,17 @@
 <template>
-  <form novalidate @submit="onSubmit">
+  <form novalidate>
     <div class="form">
-      <div class="form-row row">
+      <div class="form-row row" v-show="type==='add'">
         <label class="form-control col-4">产品:</label>
         <div class="controls col-14">
-          <v-select :label="selectedProduct.label" width="200px">
+          <v-select v-show="type==='add'" :label="selectedProduct.label" width="200px">
             <select v-model="selectedProduct">
               <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
             </select>
           </v-select>
+          <div class="product-name">
+            <span>{{selectedProduct.label}}</span>
+          </div>
         </div>
       </div>
       <div class="form-row row">
@@ -16,7 +19,7 @@
         <div class="controls col-14">
           <div class="checkbox-group">
             <label v-for="type in dataForwardType" class="checkbox">
-              <input type="checkbox" v-model="model.data_type" :value="$index+1"/>{{ type }}
+              <input type="checkbox" name="data_type" v-model="model.data_type" :value="$index+1"/>{{ type }}
             </label>
           </div>
         </div>
@@ -49,7 +52,7 @@
       </div>
       <div class="form-actions row">
         <div class="col-20 col-offset-4">
-          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary w100">{{ $t('common.ok') }}</button>
+          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary w100" v-text="submiting ? $t('common.handling') : $t('common.ok')" @click="onSubmit"></button>
         </div>
       </div>
     </div>
@@ -97,7 +100,10 @@ export default {
     return {
       loadingData: false,
       // 已选产品
-      selectedProduct: {},
+      selectedProduct: {
+        id: '',
+        label: ''
+      },
       // 转发规则
       rule: {},
       // 转发规则浮层
@@ -159,8 +165,8 @@ export default {
       api.dataForward.getRule(this.$route.params.productId, params).then((res) => {
         if (res.status === 200) {
           let rule = res.data.list[0]
-          this.modal = {
-            data_type: [].concat(rule.data_type),
+          this.model = {
+            data_type: [1, 4],
             destination: {
               type: rule.destination.type,
               url: rule.destination.url,
@@ -179,12 +185,51 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      console.log('表单提交')
+      this.submiting = true
       if (this.type === 'add') {
-        console.log('添加')
+        this.add()
       } else {
-        console.log('编辑')
+        this.edit()
       }
+    },
+
+    /**
+     * 添加
+     */
+    add () {
+      api.dataForward.addRule(this.selectedProduct.id, this.model).then((res) => {
+        if (res.status === 200) {
+          this.submiting = false
+          this.showNotice({
+            type: 'success',
+            content: '添加成功'
+          })
+          this.$route.router.go('/dev/data/forward')
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.submiting = false
+      })
+    },
+
+    /**
+     * 编辑
+     * @return {[type]} [description]
+     */
+    edit () {
+      api.dataForward.updateRule(this.$route.params.productId, this.$route.params.forwardId, this.model).then((res) => {
+        if (res.status === 200) {
+          this.submiting = false
+          this.showNotice({
+            type: 'success',
+            content: '编辑成功'
+          })
+          this.$route.router.go('/dev/data/forward')
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.submiting = false
+      })
     }
   }
 }

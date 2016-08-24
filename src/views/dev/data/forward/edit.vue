@@ -28,7 +28,7 @@ export default {
     return {
       breadcrumbNav: [{
         label: '数据转发',
-        link: '/dev/data/snapshots'
+        link: '/dev/data/forward'
       }, {
         label: '编辑转发规则'
       }]
