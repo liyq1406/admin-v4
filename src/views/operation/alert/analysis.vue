@@ -48,21 +48,8 @@
         <statistic :info="alertSummary.month" :title="alertSummary.month.title" align="left"></statistic>
       </div>
     </div>
-    <!-- <div class="panel no-split-line">
-      <div class="panel-bd">
-        <div class="with-loading">
-          <time-line :data="alertTrends"></time-line>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-      </div>
-    </div> -->
 
     <div class="panel">
-      <!-- <div class="panel-hd panel-hd-full">
-        <h2>级别分布</h2>
-      </div> -->
       <div class="panel-bd">
         <nav class="tab">
           <ul>
@@ -121,10 +108,11 @@ import dateFormat from 'date-format'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
 import { uniformDate } from 'src/filters'
-import Mock from 'mockjs'
 import Statistic from 'components/Statistic'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
-// import {numToPercent} from 'helpers/utils'
+// import {numToPercent} from 'utils'
+
+// TODO 代码待优化 #weijie
 
 export default {
   name: 'Alerts',
@@ -170,7 +158,6 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
-      alertTrends: [],
       today: dateFormat('yyyy-MM-dd', new Date()),
       loadingData: false,
       startTimePick: '',
@@ -265,24 +252,6 @@ export default {
     toTags (value) {
       return value.length ? value.split(',') : []
     }
-  },
-
-  ready () {
-    // TODO 对接口
-    this.alertTrends = Mock.mock({
-      'list|14': [{
-        'date|+1': [
-          new Date(2016, 7, 15),
-          new Date(2016, 7, 16),
-          new Date(2016, 7, 17),
-          new Date(2016, 7, 18),
-          new Date(2016, 7, 19),
-          new Date(2016, 7, 20),
-          new Date(2016, 7, 21)
-        ],
-        'count|+1': [6, 8, 9, 3, 9, 3, 9]
-      }]
-    }).list
   },
 
   route: {
@@ -466,19 +435,6 @@ export default {
         }
         this.trendData = this.tempTrendData
       }
-      // this.trendData = rearr
-
-      // arr.data.forEach((item) => {
-      //   var dayTotal = 0
-      //   item.hours.forEach((obj) => {
-      //     dayTotal = dayTotal + obj.message
-      //   })
-      //   this.trendData.push({
-      //     day: item.day,
-      //     data: dayTotal,
-      //     product: item.name
-      //   })
-      // })
     },
 
     // 处理标签总饼图概览数据
@@ -502,19 +458,6 @@ export default {
         })
       }
       this.warningLevel = this.trendPieData
-      // var total = 0
-      // arr.data.forEach((item) => {
-      //   var dayTotal = 0
-      //   item.hours.forEach((message) => {
-      //     dayTotal = dayTotal + message.message
-      //   })
-      //   total = total + dayTotal
-      // })
-      // this.trendPieData.push({
-      //   name: arr.name,
-      //   value: total
-      // })
-      // this.warningLevel = this.trendPieData
     },
 
     // 处理单个标签下的饼图数据
@@ -575,20 +518,9 @@ export default {
     // 处理数组，去除不必要的属性，只留下name与value属性
     handleArr (arr) {
       console.log(arr)
-      // var newarr = []
-      // console.log(arr)
       arr.forEach((item) => {
-        // console.log(item)
-        // var newobj = {}
-        // newobj.name = item.name
-        // newobj.value = item.value
-        // console.log(newobj)
-        // newarr.push(newobj)
         delete item.tag
-        // delete item.id
       })
-      // arr = newarr
-      // console.log(arr)
       this.sortRegion(arr)
     },
 

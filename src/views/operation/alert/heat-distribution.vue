@@ -125,7 +125,7 @@ import SearchBox from 'components/SearchBox'
 import dateFormat from 'date-format'
 import LineChart from 'components/charts/Line'
 import { globalMixins } from 'src/mixins'
-import {numToPercent} from 'helpers/utils'
+import {numToPercent} from 'utils'
 
 export default {
   name: 'Alerts',

@@ -61,7 +61,7 @@ export var placeholder = {
  * 使用方法：
  *   <div v-animated-number="num"></div> // num 为需展示的数字
  */
-// FIXME 数字异步传入时不更新
+// FIXME 数字异步传入时不更新 #shengzhi
 export var animatedNumber = {
   bind () {
     this.end = 0
@@ -176,7 +176,7 @@ export var tooltip = {
  * 内容超出容器高度时显示展开全部内容的横条
  * @author guohao
  */
-// TODO 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容
+// TODO 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容 #guohao
 export var stretch = {
   bind () {
     var self = this

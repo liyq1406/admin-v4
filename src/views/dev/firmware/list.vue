@@ -41,7 +41,7 @@
                 <th width="10%">起始版本</th>
                 <th width="10%">目标版本</th>
                 <th>升级进度</th>
-                <th width="12%" class="tac">状态</th>
+                <th width="18%" class="tac">状态</th>
               </tr>
             </thead>
             <tbody>
@@ -63,8 +63,7 @@
                   </td>
                   <td class="tac">
                     <!-- <a v-if="task.status === 0" href="#" class="hl-red" @click="toggleTaskStatus(item)">启动</a><a v-else href="##" class="hl-red" @click="changeStatus(item)">暂停</a><a href="#" class="hl-red ml10">删除</a> -->
-                    <button :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-ghost btn-sm btn-mini mr10">{{ task.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button>
-                    <button @click="removeTask(task)" class="btn btn-ghost btn-sm btn-mini">删除</button>
+                    <button :disabled="toggling" @click="toggleTaskStatus(task)" class="btn btn-ghost btn-sm btn-mini mr10">{{ task.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button><button @click="removeTask(task)" class="btn btn-ghost btn-sm btn-mini">删除</button>
                   </td>
                 </tr>
               </template>

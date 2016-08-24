@@ -85,7 +85,7 @@ import api from 'api'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
-import {numToPercent} from 'helpers/utils'
+import {numToPercent} from 'utils'
 
 export default {
   name: 'Distributing',

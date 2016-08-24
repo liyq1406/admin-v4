@@ -86,7 +86,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import {getLastYearDate} from 'helpers/utils'
+import {getLastYearDate} from 'utils'
 
 export default {
   name: 'Overview',

@@ -82,16 +82,6 @@
                           <input type="radio" v-model="taskModelType" :value="opt" name="type" number/>{{ opt.label }}
                         </label>
                       </div>
-                      <!-- <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="addmodel.type" :value="2" number/>MCU
-                        </label>
-                      </div>
-                      <div class="inb inbradio">
-                        <label class="radio">
-                          <input type="radio" v-model="addmodel.type" :value="3" number/>子设备
-                        </label>
-                      </div> -->
                       <div class="form-row row" v-show="taskModelType.value!==1">
                         <label class="form-control col-5">识别码:</label>
                         <div class="controls col-10">
@@ -176,7 +166,11 @@
   import store from 'store'
   import api from 'api'
   import _ from 'lodash'
-  // import { createDayRange } from 'helpers/utils'
+  // import { createDayRange } from 'utils'
+
+  // TODO 添加流程确定：选择产品如果版本数小于1？表单通过验证才可以点击按钮？ #weijie
+  // TODO 消除冗余代码 #weijie
+  // TODO 添加表单验证 #weijie
 
   export default {
     name: 'AddBroadcast',

@@ -9,6 +9,7 @@
           <china-map :data="data"></china-map>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
+          <!-- TODO 占比改成柱状图形式 #guohui -->
           <div class="data-table">
             <table class="table">
               <thead>
@@ -23,7 +24,6 @@
                   <template v-if="data.value">
                     <td>{{data.name}}</td>
                     <td>{{data.value}}</td>
-                    <!-- TODO 占比改成柱状图形式 #shengzhi -->
                     <td>{{data.percent | toPercentDecimal2 }}</td>
                   </template>
                 </tr>
@@ -47,7 +47,7 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
-import {numToPercent} from 'helpers/utils'
+import {numToPercent} from 'utils'
 import _ from 'lodash'
 
 export default {

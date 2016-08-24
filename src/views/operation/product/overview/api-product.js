@@ -1,5 +1,5 @@
 import api from 'api'
-import {createDayRange, beautify} from 'helpers/utils'
+import {createDayRange, beautify} from 'utils'
 
 function getTrend (productId, duration) {
   var range

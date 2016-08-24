@@ -220,7 +220,7 @@ import Modal from 'components/Modal'
 import { formatDate } from 'src/filters'
 // import Mock from 'mockjs'
 import _ from 'lodash'
-import { createDayRange } from 'helpers/utils'
+import { createDayRange } from 'utils'
 
 export default {
   name: 'MajorClients',

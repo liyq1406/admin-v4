@@ -155,7 +155,7 @@
   import store from 'store'
   import * as config from 'consts/config'
   import api from 'api'
-  // import { createDayRange } from 'helpers/utils'
+  // import { createDayRange } from 'utils'
 
   export default {
     name: 'AddBroadcast',

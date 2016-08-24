@@ -3,7 +3,7 @@ import VueRouter from 'vue-router'
 import VueForm from 'vue-form'
 import VueVlidator from 'vue-validator'
 import i18n from 'vue-i18n'
-import browser from './helpers/browser'
+import browser from 'utils/browser'
 
 // 多语言配置文件
 import locales from './consts/locales/index'
