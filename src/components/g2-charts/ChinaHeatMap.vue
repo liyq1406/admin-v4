@@ -33,13 +33,18 @@ export default {
   data () {
     return {
       chart: null,
-      show: true
+      show: true,
+      rendering: false
     }
   },
 
   ready () {
     if (!this.chart) {
-      this.render()
+      if (this.rendering || this.data.length <= 0) {
+        return
+      }
+      this.rendering = true
+      setTimeout(this.render, 500)
     }
   },
 
@@ -55,7 +60,11 @@ export default {
           this.render()
         }, 0)
       } else {
-        this.render()
+        if (this.rendering || this.data.length <= 0) {
+          return
+        }
+        this.rendering = true
+        setTimeout(this.render, 500)
       }
     }
   },
@@ -125,6 +134,7 @@ export default {
         .size(15) // 调整热力图一个点可以影响的范围
         .label('city', {label: {opacity: 0}}) // 设置文本但是不显示，使得tooltip可以显示对应的字段
       chart.render()
+      this.rendering = false
     }
   }
 }

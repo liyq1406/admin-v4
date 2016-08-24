@@ -28,13 +28,18 @@ export default {
 
   data () {
     return {
-      chart: null
+      chart: null,
+      rendering: false
     }
   },
 
   ready () {
     if (!this.chart) {
-      this.render()
+      if (this.rendering || this.data.length <= 0) {
+        return
+      }
+      this.rendering = true
+      setTimeout(this.render, 500)
     }
   },
 
@@ -44,7 +49,11 @@ export default {
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
-        this.render()
+        if (this.rendering || this.data.length <= 0) {
+          return
+        }
+        this.rendering = true
+        setTimeout(this.render, 500)
       }
     }
   },
@@ -79,6 +88,7 @@ export default {
         .label('name', {offset: 0, label: {fill: '#000', 'font-size': 10}})
         .size(0)
       chart.render()
+      this.rendering = false
     }
   }
 }
