@@ -165,6 +165,19 @@ export default {
   },
 
   /**
+   * 消息产品下统计概览
+    * @param  {String} productId 产品id
+   * @param  {String} startDay 开始日期
+   * @param  {String} endDay   结束日期
+   * @return {Promise}
+   */
+  getProductAlertSummary (productId) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/message/product_summary?product_id=${productId}`
+    )
+  },
+
+  /**
    * 消息日趋势
    * @param  {String} startDay 开始日期
    * @param  {String} endDay   结束日期

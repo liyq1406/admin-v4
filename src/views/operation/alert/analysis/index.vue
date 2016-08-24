@@ -201,8 +201,8 @@ export default {
   },
 
   ready () {
-    this.getSummary()
     if (this.products.length > 0) {
+      this.getSummary()
       this.getFirstProduct()
       this.getTagTrend()
       this.getAlertList()
@@ -217,6 +217,7 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
+        this.getSummary()
         this.getFirstProduct() // 设置产品列表第一个为当前产品
         this.getTagTrend()
         this.getAlertList()
@@ -227,6 +228,7 @@ export default {
   methods: {
     // 切换产品时执行
     changProduct () {
+      this.getSummary()
       this.getTagTrend()
       this.trendPieData = []
       this.lightRules = []
@@ -251,6 +253,14 @@ export default {
       monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
       var now = new Date().getTime()
       now = dateFormat('yyyy-MM-dd', new Date(now))
+
+      api.statistics.getProductAlertSummary(this.currentProduct.id).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
       // 获取当天数据
       api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
         if (res.status === 200) {
@@ -441,7 +451,6 @@ export default {
                 total = total + sum
               })
               item.value = total
-              console.log(item)
               count++
               if (count === arr.length) {
                 // 处理数组，去除不必要的属性，只留下name与value属性
