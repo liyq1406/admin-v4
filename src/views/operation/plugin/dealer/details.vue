@@ -122,7 +122,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <pager v-if="sales.length > countPerPage" :total="sales.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
       </div>
     </div>
     <!--修改经销商信息浮层-->
@@ -341,6 +341,7 @@
         },
         countPerPage: 10,
         currentPage: 1,
+        total: 0,
         editing: false,
         breadcrumbNav: [{
           label: '全部',
@@ -352,9 +353,18 @@
     },
 
     computed: {
+      // 分页信息
+      page () {
+        var result = {
+          total: this.total,
+          currentPage: this.currentPage,
+          countPerPage: this.countPerPage
+        }
+        return result
+      },
       queryCondition () {
         var condition = {
-          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'pictures', 'x_info', 'product_mod'],
+          filter: ['name', 'id', 'email', 'phone', 'client_type', 'province', 'city', 'address', 'sn', 'sale_time', 'product_mod'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           // order: this.sortOrders,
