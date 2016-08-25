@@ -7,7 +7,7 @@
     <div class="panel mt15 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <div class="sale-details-head">{{sale.name}}<i class="fa fa-edit"></i></div>
+          <div class="sale-details-head">{{sale.name}}</div>
           <div v-stretch="192">
             <info-list :info="userInfo"></info-list>
           </div>
@@ -15,33 +15,9 @@
         <div class="col-8">
           <div class="sale-info-head">销售信息
             <div class="sale-info-body">
-              <div class="row">
-                <div class="col-9">销售日期:</div>
-                <div class="col-15">{{sale.sale_time | uniformDate}}</div>
-              </div>
-              <div class="row">
-                <div class="col-9">场所层数:</div>
-                <div class="col-15">10</div>
-              </div>
-              <div class="row">
-                <div class="col-9">每层面积:</div>
-                <div class="col-15">110m</div>
-              </div>
-              <div class="row">
-                <div class="col-9">场所总面积:</div>
-                <div class="col-15">880m</div>
-              </div>
-              <div class="row">
-                <div class="col-9">机器放置层数:</div>
-                <div class="col-15">2</div>
-              </div>
-              <div class="row">
-                <div class="col-9">常驻人数:</div>
-                <div class="col-15">12</div>
-              </div>
-              <div class="row">
-                <div class="col-9">有无新风:</div>
-                <div class="col-15">有</div>
+              <div class="row" v-for="info in sale.x_info">
+                <div class="col-9">{{info.key}}:</div>
+                <div class="col-15">{{info.value}}</div>
               </div>
             </div>
           </div>
@@ -53,11 +29,13 @@
         <h2>销售图片</h2>
       </div>
       <div class="panel-bd">
-        <div class="row">
-          <div v-if="sale.pictures.length > 0" v-for="pic in sale.pictures" class="col-5 sale-img mr20">
+        <div  v-if="sale.pictures.length > 0" class="row">
+          <div v-for="pic in sale.pictures" class="col-5 sale-img mr20">
             <img :src="pic.url" alt="">
           </div>
-          <div v-else class="nopic">
+        </div>
+        <div  v-else class="row">
+          <div class="nopic">
             暂时无图片
           </div>
         </div>
@@ -278,7 +256,8 @@ export default {
         product_type: '类型一',
         product_sn: '88888',
         remark: '暂无备注',
-        create_time: '2016.06.03 14:56'
+        create_time: '2016.06.03 14:56',
+        pictures: []
       },
       query: '',
       loadingData: false,
@@ -344,7 +323,7 @@ export default {
         this.userInfo.city.value = this.sale.city
         this.userInfo.address.value = this.sale.address
         // todo 字段缺失
-        this.userInfo.area.value = this.sale.area
+        this.userInfo.area.value = this.sale.region
         this.loadingData = false
         this.loadingData = false
       }).catch((err) => {
@@ -508,6 +487,6 @@ export default {
   img
     width 100%
     padding 10px
-    height 140px
+    height 160px
 
 </style>
