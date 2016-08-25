@@ -479,7 +479,6 @@ export default {
           arr = arr.splice(i, 1)
         }
       }
-      console.log(arr)
       // 由大到小排序
       arr.sort((a, b) => {
         if (a.value > b.value) {

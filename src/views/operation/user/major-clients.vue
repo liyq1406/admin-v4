@@ -75,6 +75,7 @@
               </search-box>
             </div>
           </div>
+          <!-- FIXME 翻页功能为实现 -->
           <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
             <!-- <div class="select-box" slot="theader-industry">
               <x-select label="行业" width='80px' size="small">

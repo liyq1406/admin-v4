@@ -72,8 +72,8 @@
             </tbody>
           </table>
         </div>
-        <!-- 分页-->
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
+        <!-- FIXME 翻页后 搜索条件错误-->
+        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
       </div>
     </div>
 

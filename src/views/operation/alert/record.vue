@@ -40,6 +40,7 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
+        <!-- FIXME 表格页码不为0时，搜索条件不正确 -->
         <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
