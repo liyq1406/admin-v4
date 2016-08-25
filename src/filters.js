@@ -146,7 +146,7 @@ export function uniformMinuteTime (date, correct) {
  * @param  {Float} value 浮点数
  * @return {String}
  */
-// TODO: 函数名称改成 toPercent #guohao
+// REVIEW: 函数名称改成 toPercent #guohao
 // export function toPercentDecimal2 (value) {
 //   var f = parseFloat(value)
 //   if (isNaN(f)) {

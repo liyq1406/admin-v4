@@ -176,7 +176,7 @@ export var tooltip = {
  * 内容超出容器高度时显示展开全部内容的横条
  * @author guohao
  */
-// TODO 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容 #guohao
+// REVIEW 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容 #guohao
 export var stretch = {
   bind () {
     var self = this
@@ -189,22 +189,13 @@ export var stretch = {
       }
     }
 
-    // window.onload = function () {
-    //   self.$maxHeight = parseInt(getComputedStyle(self.$wrapDiv, 'height'))
-    //
-    //   if (self.$maxHeight > self.$minHeight) {
-    //     self.el.appendChild(self.$bottomBar)
-    //     self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
-    //   }
-    // }
     setTimeout(() => {
-      self.$maxHeight = parseInt(getComputedStyle(self.$wrapDiv, 'height'))
+      self.$maxHeight = parseInt(getComputedStyle(self.$listDiv, 'height'))
 
       if (self.$maxHeight > self.$minHeight) {
         self.el.appendChild(self.$bottomBar)
-        self.$wrapDiv.style.height = self.$minHeight.toString() + 'px'
       }
-    }, 1000)
+    }, 500)
 
     var bindListener = function (a) {
       a.addEventListener('click', function (event) {
@@ -230,14 +221,22 @@ export var stretch = {
       wrapDiv.style.width = '100%'
       wrapDiv.style.height = 'auto'
       wrapDiv.style.overflow = 'hidden'
+
+      var listDiv = document.createElement('div') // 为了计算el内容高度
+      listDiv.style.width = '100%'
+      listDiv.style.height = 'auto'
+      listDiv.style.overflow = 'hidden'
+
       var node = el.firstChild
       while (node) {
         var temp = node.nextSibling
-        wrapDiv.appendChild(node)
+        listDiv.appendChild(node)
         node = temp
       }
 
       el.appendChild(wrapDiv)
+      wrapDiv.appendChild(listDiv)
+      self.$listDiv = listDiv
       self.$wrapDiv = wrapDiv // 绑定wrap div 元素到指令对象上
 
       var div = document.createElement('div')
@@ -264,9 +263,9 @@ export var stretch = {
 
   update (value) {
     this.$minHeight = parseInt(value)
+    this.$wrapDiv.style.height = this.$minHeight.toString() + 'px'
   },
 
   unbind () {
-    window.onload = null
   }
 }
