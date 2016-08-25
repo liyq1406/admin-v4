@@ -8,88 +8,23 @@
         <h2>性别</h2>
       </div>
       <div class="panel-bd">
-        <div class="row">
-          <div class="col-12">
-            <interval :data="sex.data" :options="sex.options"></interval>
-          </div>
-          <div class="col-11 col-offset-1 data-table-wrap" style="min-height: 250px">
-            <div class="data-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>性别</th>
-                    <th>数量</th>
-                    <th>占比</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>男</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>女</td>
-                    <td>1769</td>
-                    <td>86%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <sex></sex>
       </div>
 
       <!-- 年龄 -->
       <div class="panel-hd panel-hd-full bordered">
-        <h2>年龄</h2>
+        <h2>年龄分布</h2>
       </div>
       <div class="panel-bd">
-        <div class="row">
-          <div class="col-12">
-            <interval :data="age.data" :options="age.options"></interval>
-          </div>
-          <div class="col-11 col-offset-1 data-table-wrap" style="min-height: 300px">
-            <div class="data-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>年龄</th>
-                    <th>数量</th>
-                    <th>占比</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>18岁以下</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>20-29岁</td>
-                    <td>1769</td>
-                    <td>26%</td>
-                  </tr>
-                  <tr>
-                    <td>30-39岁</td>
-                    <td>289</td>
-                    <td>14%</td>
-                  </tr>
-                  <tr>
-                    <td>40-49岁</td>
-                    <td>1769</td>
-                    <td>26%</td>
-                  </tr>
-                  <tr>
-                    <td>50岁以上</td>
-                    <td>1769</td>
-                    <td>26%</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <age></age>
+      </div>
+
+      <!-- 终端分布 -->
+      <div class="panel-hd panel-hd-full bordered">
+        <h2>终端分布</h2>
+      </div>
+      <div class="panel-bd">
+        <terminal></terminal>
       </div>
 
       <!-- 语言 -->
@@ -155,6 +90,9 @@ import { globalMixins } from 'src/mixins'
 import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
+import Sex from './components/Sex'
+import Age from './components/Age'
+import Terminal from './components/Terminal'
 import Mock from 'mockjs'
 import Tab from 'components/Tab'
 
@@ -167,7 +105,10 @@ export default {
     TimeLine,
     DateTimeSinglePicker,
     Interval,
-    Tab
+    Tab,
+    Age,
+    Terminal,
+    Sex
   },
 
   data () {
