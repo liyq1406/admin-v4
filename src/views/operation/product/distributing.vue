@@ -106,7 +106,8 @@ export default {
   data () {
     return {
       dataPer: [],
-      regionData: []
+      regionData: [],
+      getted: false
     }
   },
 
@@ -138,7 +139,11 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
+        if (this.getted) {
+          return
+        }
         this.getRegion(this.currentProduct.id)
+        this.getted = true
       }
     }
   },
@@ -149,7 +154,11 @@ export default {
   },
 
   ready () {
+    if (this.getted) {
+      return
+    }
     this.getRegion(this.$route.params.id)
+    this.getted = true
   },
 
   methods: {
@@ -170,7 +179,7 @@ export default {
                   let temp = {
                     province: i,
                     city: j,
-                    value: CNData[i][j].activated
+                    value: CNData[i][j].activated || 0
                   }
                   resData.push(temp)
                 }

@@ -76,25 +76,28 @@ export default {
       if (!el || el.className !== 'map-item') {
         return
       }
-
       if (!this.data || this.data.length <= 0) {
         return
       }
+
+      let cloneData = _.clone(this.data)
+
       var Stat = window.G2.Stat
 
-      for (let i = 0; i < this.data.length; i++) {
-        let item = this.data[i]
+      for (let i = 0; i < cloneData.length; i++) {
+        let item = cloneData[i]
         let coordinates = {}
         if (item.city) {
           coordinates = Parser(item.city)
         } else {
           coordinates = Parser(item.province)
         }
-        if (coordinates) {
+        if (coordinates && coordinates.latitude && coordinates.longitude) {
           item.latitude = coordinates.latitude
           item.longitude = coordinates.longitude
         } else {
-          this.data.splice(i, 1)
+          cloneData.splice(i, 1) // 不能直接操纵数组，会引发watch操作
+          i--
         }
       }
 
@@ -115,9 +118,7 @@ export default {
 
       var chart = new window.G2.Chart(_.merge({}, defaults, this.options.props))
 
-      this.chart = chart
-
-      chart.source(this.data)
+      chart.source(cloneData)
 
       // 绘制地图的背景
       new window.G2.Plugin.GMap({
@@ -139,6 +140,7 @@ export default {
         .size(20) // 调整热力图一个点可以影响的范围
         .label('city', {label: {opacity: 0}}) // 设置文本但是不显示，使得tooltip可以显示对应的字段
       chart.render()
+      this.chart = chart
       this.rendering = false
     }
   }
