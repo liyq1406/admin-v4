@@ -4,7 +4,7 @@
       <button @click.prevent.stop='showTimePicker=!showTimePicker' class="time-range-show" readonly="readonly">{{label === '' ? timeShowPanel: label}}
         <span class="fa fa-sort-down ml10"></span>
       </button>
-      <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='showTime'></date-time-picker>
+      <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='time' :show-time='showTime'></date-time-picker>
     </div>
   </div>
 </template>
@@ -22,8 +22,9 @@ export default {
   },
   props: {
     time: {
+      type: Date,
       default () {
-        return ''
+        return new Date()
       }
     },
     label: {
@@ -51,18 +52,8 @@ export default {
       }
     }
   },
-  watch: {
-    time () {
-      if (this.time) {
-        this.startTime = new Date(this.time)
-      }
-    }
-  },
   ready () {
-    // console.log(this.startTime)
-    // if (this.time) {
-    //   this.startTime = new Date(this.time)
-    // }
+    this.startTime = this.time
   },
   methods: {
     timeChange (microtime) {
@@ -71,7 +62,6 @@ export default {
       this.dispatchTime()
     },
     dispatchTime () {
-      // this.showTimePicker = false
       this.$dispatch('timechange', this.startTime)
     }
   }
