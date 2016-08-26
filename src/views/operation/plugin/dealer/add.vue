@@ -122,6 +122,17 @@
                     </x-select>
                   </div>
                 </div>
+                <div class="form-row row mt20">
+                  <label class="form-control col-5 dealer-label">销售指标:</label>
+                  <div class="controls col-19">
+                    <div v-placeholder="'请输入销售指标'" class="input-text-wrap">
+                      <input type="text" v-model="dealer.sale_goal" name="dealer.sale_goal" maxlength="16" v-validate:sale_goal="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$autoValidation.sale_goal.touched && $autoValidation.sale_goal.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
+                    </div>
+                  </div>
+                </div>
                 <div class="form-actions mt20">
                   <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary fr">提交</button>
                 </div>
@@ -166,7 +177,8 @@
           phone: '',
           address: '',
           area: '',
-          belongTo: ''
+          belongTo: '',
+          sale_goal: ''
         },
         belongs: [],
         belongType: {
@@ -241,6 +253,7 @@
             this.dealer.password = dealerRaw.password
             this.dealer.address = dealerRaw.address
             this.dealer.area = dealerRaw.region
+            this.dealer.sale_goal = dealerRaw.sale_goal
 
             if (dealerRaw.upper_dealer_code && dealerRaw.upper_dealer_code !== '') {
               api.dealer.get(dealerRaw.upper_dealer_code).then((res) => {
@@ -285,7 +298,8 @@
           phone: this.dealer.phone,
           password: this.dealer.password,
           address: this.dealer.address,
-          region: this.dealer.area
+          region: this.dealer.area,
+          sale_goal: this.dealer.sale_goal
         }
         if (this.belongType.code) {
           params.upper_dealer_code = this.belongType.code
@@ -307,7 +321,8 @@
           phone: this.dealer.phone,
           password: this.dealer.password,
           address: this.dealer.address,
-          region: this.dealer.area
+          region: this.dealer.area,
+          sale_goal: this.dealer.sale_goal
         }
         console.log(this.belongType.code)
         if (this.belongType.code) {

@@ -56,8 +56,8 @@
                   <td>{{* dealer.phone || '--'}}</td>
                   <td>{{* dealer.region || '--'}}</td>
                   <td>{{* dealer.belongTo || '--' }}</td>
-                  <td>{{* dealer.sale_target || '--'}}</td>
-                  <td>{{* dealer.sale_count || '--' }}</td>
+                  <td>{{* dealer.sale_goal || '--'}}</td>
+                  <td>{{* dealer.saled_amount || '--' }}</td>
                   <td><span v-if="dealer.status === 1" class="hl-green">启用</span><span v-else class="hl-gray">停用</span></td>
                   <!-- <td class="tac">
                     <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>

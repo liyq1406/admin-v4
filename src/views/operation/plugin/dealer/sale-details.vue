@@ -306,6 +306,21 @@ export default {
     this.getSale()
   },
   methods: {
+    /**
+     * 处理图片点击
+     * @params {Number} index 图片索引
+     */
+    handleImgClick (index) {
+      this.currPicIndex = index
+      this.isShowGallery = true
+    },
+    /**
+     * 处理画廊关闭
+     * @param  {Boolean} visible 是否可见
+     */
+    handleGalleryClose (visible) {
+      this.isShowGallery = visible
+    },
     getSale () {
       this.loadingData = true
       // var params = {

@@ -54,13 +54,13 @@
             <div class="row status">
               <div class="col-12">
                 <div class="status-item">
-                  <em>{{ dealer.sale_target || '--' }}</em>
+                  <em>{{ dealer.sale_goal || '--' }}</em>
                   <span>年销售目标</span>
                 </div>
               </div>
               <div class="col-12">
                 <div class="status-item">
-                  <em>{{ dealer.sale_count || '--' }}</em>
+                  <em>{{ dealer.saled_amount || '--' }}</em>
                   <span>已销售数量</span>
                 </div>
               </div>
