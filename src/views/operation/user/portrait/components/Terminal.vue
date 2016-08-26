@@ -46,16 +46,16 @@
           color: 'terminal'
         },
         data: [
-          {
-            terminal: 'iPhone',
-            count: 1657,
-            a: '系统'
-          },
-          {
-            terminal: 'Android',
-            count: 1627,
-            a: '系统'
-          }
+          // {
+          //   terminal: 'iPhone',
+          //   count: 1657,
+          //   a: '系统'
+          // },
+          // {
+          //   terminal: 'Android',
+          //   count: 1627,
+          //   a: '系统'
+          // }
         ]
       }
     },
