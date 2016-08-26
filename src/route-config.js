@@ -949,6 +949,22 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 添加销售记录
+        'plugins/dealer/:app_id/list/:dealer_id/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/dealer/add-sale'))
+            }, 'admin')
+          }
+        },
+        // 编辑销售记录
+        'plugins/dealer/:app_id/list/:dealer_id/edit/:sale_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/dealer/add-sale'))
+            }, 'admin')
+          }
+        },
         // 销售详情
         'plugins/dealer/:app_id/list/:dealer_id/sales/:sale_id': {
           component (resolve) {

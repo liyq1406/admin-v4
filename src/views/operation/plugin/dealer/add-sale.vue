@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>经销商管理</h2>
+      <h2>销售记录管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <validator name="autoValidation">
@@ -196,16 +196,16 @@
     computed: {
       accountTitle () {
         if (this.type === 'add') {
-          return '添加账户信息'
+          return '添加销售记录'
         } else if (this.type === 'edit') {
-          return '编辑账户信息'
+          return '编辑销售记录'
         }
       },
       dealerTitle () {
         if (this.type === 'add') {
-          return '添加经销商信息'
+          return '添加销售记录'
         } else if (this.type === 'edit') {
-          return '编辑经销商信息'
+          return '编辑销售记录'
         }
       }
     },
@@ -214,10 +214,10 @@
       data () {
         if (this.$route.params.id) {
           this.type = 'edit'
-          this.breadcrumbNav[1].label = '编辑经销商'
+          this.breadcrumbNav[1].label = '编辑销售记录'
           this.getDealer(this.$route.params.id)
         } else {
-          this.breadcrumbNav[1].label = '添加经销商'
+          this.breadcrumbNav[1].label = '添加销售记录'
           this.type = 'add'
         }
         this.getDealerList()
