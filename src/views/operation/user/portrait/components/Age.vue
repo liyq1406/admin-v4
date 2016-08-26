@@ -40,16 +40,7 @@
           },
           position: window.G2.Stat.summary.percent('age*count')
         },
-        data: [
-          // {
-          //   age: '女性',
-          //   count: 1657
-          // },
-          // {
-          //   age: '男性',
-          //   count: 1627
-          // }
-        ]
+        data: []
       }
     },
 

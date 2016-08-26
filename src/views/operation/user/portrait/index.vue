@@ -19,12 +19,28 @@
         <age></age>
       </div>
 
+      <!-- 语言 -->
+      <div class="panel-hd panel-hd-full bordered">
+        <h2>语言</h2>
+      </div>
+      <div class="panel-bd">
+        <language></language>
+      </div>
+
       <!-- 终端分布 -->
       <div class="panel-hd panel-hd-full bordered">
         <h2>终端分布</h2>
       </div>
       <div class="panel-bd">
         <terminal></terminal>
+      </div>
+
+      <!-- 机型 -->
+      <div class="panel-hd panel-hd-full bordered">
+        <h2>机型分布TOP10</h2>
+      </div>
+      <div class="panel-bd">
+        <phone-type></phone-type>
       </div>
 
       <!-- 语言 -->
@@ -79,8 +95,6 @@
         </div>
       </div>
     </div>
-    <tab :nav="secondaryNav"></tab>
-    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
@@ -92,7 +106,9 @@ import TimeLine from 'components/g2-charts/TimeLine'
 import Interval from 'components/g2-charts/Interval'
 import Sex from './components/Sex'
 import Age from './components/Age'
+import Language from './components/Language'
 import Terminal from './components/Terminal'
+import PhoneType from './components/PhoneType'
 import Mock from 'mockjs'
 import Tab from 'components/Tab'
 
@@ -107,13 +123,14 @@ export default {
     Interval,
     Tab,
     Age,
+    Language,
+    PhoneType,
     Terminal,
     Sex
   },
 
   data () {
     return {
-      secondaryNav: [],
       // 性别占比
       sex: {
         options: {},
@@ -130,7 +147,6 @@ export default {
 
   route: {
     data (transition) {
-      return this.sonRoute(transition)
     }
   },
 
@@ -140,19 +156,6 @@ export default {
   },
 
   methods: {
-    sonRoute (transition) {
-      var deviceDetailRoot = '/operation/users/portrait'
-
-      return {
-        secondaryNav: [{
-          label: '终端系统',
-          link: { path: `${deviceDetailRoot}/os` }
-        }, {
-          label: '终端机型',
-          link: { path: `${deviceDetailRoot}/model` }
-        }]
-      }
-    },
     /**
      * 模拟数据
      * @return {[type]} [description]
