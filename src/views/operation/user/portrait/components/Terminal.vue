@@ -9,6 +9,7 @@
 <script>
   import PercentTable from 'components/PercentTable'
   import Interval from 'components/g2-charts/Interval'
+  import api from 'api'
 
   export default {
     name: 'terminal',
@@ -69,10 +70,20 @@
        * @return {[type]} [description]
        */
       getData () {
-        console.log('获取数据')
-      },
-      sort () {
-        console.log('排序')
+        api.statistics.getUserOs().then((res) => {
+          let data = []
+          res.data.forEach((item) => {
+            let obj = {
+              terminal: item.operate_system,
+              count: item.total,
+              a: '系统'
+            }
+            data.push(obj)
+          })
+          this.data = data
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
 

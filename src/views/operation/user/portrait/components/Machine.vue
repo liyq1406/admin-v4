@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <pie :data="languages" :height="400"></pie>
+      <pie :data="machines" :height="400"></pie>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap">
       <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
@@ -15,7 +15,7 @@ import PercentTable from 'components/PercentTable'
 import api from 'api'
 
 export default {
-  name: 'portrait-model',
+  name: 'machines',
 
   components: {
     Pie,
@@ -39,7 +39,7 @@ export default {
           sortType: -1
         }
       ],
-      languages: [
+      machines: [
         // {
         //   name: 'iphone 5',
         //   value: 50
@@ -88,10 +88,10 @@ export default {
     tables () {
       var result = []
       var total = 0
-      this.languages.forEach((item) => {
+      this.machines.forEach((item) => {
         total += item.value - 0
       })
-      this.languages.forEach((item) => {
+      this.machines.forEach((item) => {
         let percent = item.value / total
         percent = item.value / total * 100
         percent = percent.toFixed(1) + '%'
@@ -119,16 +119,16 @@ export default {
      * @return {[type]} [description]
      */
     getData () {
-      api.statistics.getUserLanguage().then((res) => {
+      api.statistics.getUserMachine().then((res) => {
         var result = []
         res.data.forEach((item) => {
           let obj = {
-            name: item.language,
+            name: item.machine_name,
             value: item.total
           }
           result.push(obj)
         })
-        this.languages = result
+        this.machines = result
       }).catch((res) => {
         this.handleError(res)
       })

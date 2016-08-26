@@ -263,5 +263,70 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/broadcast/read_trend?id=${id}&start_day=${startDay}&end_day=${endDay}`
     )
+  },
+
+  /**
+   * 统计企业下的用户男女数量
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getUserSex () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/user_sex`
+    )
+  },
+
+  /**
+   * 统计企业下特定年龄段的用户数量
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getUserAge (minAge, maxAge) {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/user_age?minage=${minAge}&maxage=${maxAge}`
+    )
+  },
+
+  /**
+   * 统计企业下的用户语言数量
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getUserLanguage () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/user_language`
+    )
+  },
+
+  /**
+   * 统计企业下的用户的终端系统分布
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getUserOs () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/user_os`
+    )
+  },
+
+  /**
+   * 统计企业下的用户的机型分布
+   * @param  {String} productId 推送任务id
+   * @param  {String} startDay  开始日期
+   * @param  {String} endDay    结束日期
+   * @return {Promise}
+   */
+  getUserMachine () {
+    return http.get(
+      `${API_SERVER.default}/v2/statistics/user_machine`
+    )
   }
 }

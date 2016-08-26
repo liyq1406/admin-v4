@@ -1,15 +1,12 @@
 <template>
   <div class="row sex-box">
     <interval :data="data" :options="options"></interval>
-    <!-- <div class="col-11 col-offset-1 data-table-wrap" style="min-height: 250px">
-      <percent-table @theader-percent="sort"></percent-table>
-    </div> -->
   </div>
 </template>
 <script>
   import PercentTable from 'components/PercentTable'
   import Interval from 'components/g2-charts/Interval'
-
+  import api from 'api'
   export default {
     name: 'sex',
 
@@ -45,16 +42,16 @@
           color: 'sex'
         },
         data: [
-          {
-            sex: '女性',
-            count: 1657,
-            cat: '性别'
-          },
-          {
-            sex: '男性',
-            count: 1627,
-            cat: '性别'
-          }
+          // {
+          //   sex: '女性',
+          //   count: 1657,
+          //   cat: '性别'
+          // },
+          // {
+          //   sex: '男性',
+          //   count: 1627,
+          //   cat: '性别'
+          // }
         ]
       }
     },
@@ -69,10 +66,21 @@
        * @return {[type]} [description]
        */
       getData () {
-        console.log('获取数据')
-      },
-      sort () {
-        console.log('排序')
+        api.statistics.getUserSex().then((res) => {
+          let male = {
+            sex: '男性',
+            count: res.data.male_total,
+            cat: '性别'
+          }
+          let female = {
+            sex: '女性',
+            count: res.data.female_total,
+            cat: '性别'
+          }
+          this.data = [male, female]
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
 

@@ -18,8 +18,8 @@
         </tr>
       </thead>
       <tbody>
-        <template v-if="tables.length > 0">
-          <tr v-for="(tableIndex, table) in tables" track-by="$index">
+        <template v-if="resetTables.length > 0">
+          <tr v-for="(tableIndex, table) in resetTables" track-by="$index">
             <td v-for="tHeader in headers" :class="tHeader.class">
               <template v-if="tHeader.key === 'percent'">
                 <percentage-bar :percentage="table.percent" :color="table.color"></percentage-bar>
@@ -30,7 +30,7 @@
             </td>
           </tr>
         </template>
-        <tr v-if="tables.length === 0">
+        <tr v-if="resetTables.length === 0">
           <td :colspan="headers.length + 1" class="tac">
             <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
           </td>
@@ -75,6 +75,15 @@
     },
 
     computed: {
+      resetTables () {
+        var result = []
+        result = this.tables.map((item, index) => {
+          item.percent = String(item.percent).replace('%', '') + '%'
+          item.color = item.color || this.colors[index]
+          return item
+        })
+        return result
+      },
       /**
        * 用于渲染的颜色数组
        * @return {[type]} [description]
@@ -110,6 +119,9 @@
     watch: {
       headers () {
         this.checkData()
+      },
+      tables () {
+        this.checkData()
       }
     },
     methods: {
@@ -130,29 +142,30 @@
        */
       checkData () {
         // 检查headers是否含有percent 如果没有的话自动为其插入
-        let hasPercent = false
-        this.headers.forEach((item) => {
-          if (item.key === 'percent') {
-            hasPercent = true
-            if (item.sortType === undefined) {
-              item.sortType = -1
-            }
-          }
-        })
-        if (!hasPercent) {
-          let header = {
-            key: 'percent',
-            title: '占比',
-            sortType: -1,
-            class: 'tal'
-          }
-          this.headers.push(header)
-        }
+        // let hasPercent = false
+        // this.headers.forEach((item) => {
+        //   if (item.key === 'percent') {
+        //     hasPercent = true
+        //     if (item.sortType === undefined) {
+        //       item.sortType = -1
+        //     }
+        //   }
+        // })
+        // if (!hasPercent) {
+        //   let header = {
+        //     key: 'percent',
+        //     title: '占比',
+        //     sortType: -1,
+        //     class: 'tal'
+        //   }
+        //   this.headers.push(header)
+        // }
         // 检查tables是否含有percent属性 如果没有的话默认是0
-        this.tables.forEach((item, index) => {
-          item.percent = String(item.percent).replace('%', '') + '%'
-          item.color = item.color || this.colors[index]
-        })
+        // this.tables.forEach((item, index) => {
+        //   item.percent = String(item.percent).replace('%', '') + '%'
+        //   item.color = item.color || this.colors[index]
+        // })
+        // console.log(this.tables)
       },
       /**
        * 驼峰字符串转普通中划线字符串
