@@ -106,8 +106,7 @@ export default {
   data () {
     return {
       dataPer: [],
-      regionData: [],
-      getted: false
+      regionData: []
     }
   },
 
@@ -139,11 +138,7 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
-        if (this.getted) {
-          return
-        }
         this.getRegion(this.currentProduct.id)
-        this.getted = true
       }
     }
   },
@@ -154,11 +149,6 @@ export default {
   },
 
   ready () {
-    if (this.getted) {
-      return
-    }
-    this.getRegion(this.$route.params.id)
-    this.getted = true
   },
 
   methods: {

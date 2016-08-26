@@ -40,8 +40,7 @@ export default {
   data () {
     return {
       chart: null,
-      rendered: false,
-      rendering: false
+      rendered: false
     }
   },
 
@@ -58,21 +57,16 @@ export default {
         this.chart.source(data)
         this.chart.repaint()
       } else {
-        if (this.rendering || this.data.length <= 0) {
-          return
+        // 检查组件dom是否就绪
+        if (this._isReady) {
+          this.render()
         }
-        this.rendering = true
-        setTimeout(this.render, 500)
       }
     }
   },
 
   ready () {
     if (!this.chart) {
-      if (this.rendering || this.data.length <= 0) {
-        return
-      }
-      this.rendering = true
       this.render()
     }
   },
@@ -172,7 +166,6 @@ export default {
 
       chart.render()
       this.rendered = true
-      this.rendering = false
     }
   }
 }

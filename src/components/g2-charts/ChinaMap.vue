@@ -28,18 +28,13 @@ export default {
 
   data () {
     return {
-      chart: null,
-      rendering: false
+      chart: null
     }
   },
 
   ready () {
     if (!this.chart) {
-      if (this.rendering || this.data.length <= 0) {
-        return
-      }
-      this.rendering = true
-      setTimeout(this.render, 500)
+      this.render()
     }
   },
 
@@ -49,11 +44,10 @@ export default {
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
-        if (this.rendering || this.data.length <= 0) {
-          return
+        // 检查组件dom是否就绪
+        if (this._isReady) {
+          this.render()
         }
-        this.rendering = true
-        setTimeout(this.render, 500)
       }
     }
   },
@@ -88,7 +82,6 @@ export default {
         .label('name', {offset: 0, label: {fill: '#000', 'font-size': 10}})
         .size(0)
       chart.render()
-      this.rendering = false
     }
   }
 }
