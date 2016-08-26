@@ -56,7 +56,7 @@
               <div class="filter-group-item">
                 <x-select :label="selectedFilterIndustry || '全部'" width='110px' size="small">
                   <span slot="label">显示</span>
-                  <select v-model="selectedFilterIndustry" @change="getMajorClient">
+                  <select v-model="selectedFilterIndustry" @change="getMajorClient(true)">
                     <option :value="">全部</option>
                     <option v-for="industry in industrys" :value="industry">{{industry}}</option>
                   </select>
@@ -68,19 +68,15 @@
               :key.sync="query"
               :active="searching"
               :placeholder="'搜索客户名称'"
-              @cancel="getMajorClient" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch"
-              @press-enter="getMajorClient"
+              @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch"
+              @press-enter="getMajorClient(true)"
               >
                 <button slot="search-button" @click="getMajorClient(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>
-          <!-- FIXME 翻页功能为实现 -->
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails">
-            <!-- <div class="select-box" slot="theader-industry">
-              <x-select label="行业" width='80px' size="small">
-              </x-select>
-            </div> -->
+          <!-- REVIEW 翻页功能为实现 #guohao-->
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="tableLoadingData" @theader-device-sum="sortBySomeKey" @theader-create-time="sortBySomeKey" @tbody-name="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
           </x-table>
         </div>
       </div>
@@ -661,8 +657,10 @@ export default {
      * 获取大客户列表
      * @return {[type]} [description]
      */
-    getMajorClient () {
-      console.log('获取大客户列表')
+    getMajorClient (reset) {
+      if (reset === true) {
+        this.currentPage = 1
+      }
       this.tableLoadingData = true
       api.heavyBuyer.getHeavyBuyer(this.queryCondition).then((res) => {
         this.tableLoadingData = false
@@ -672,6 +670,25 @@ export default {
         this.tableLoadingData = false
         this.handleError(err)
       })
+    },
+    /**
+     * 当前页码改变
+     * @author weijie
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
+      this.currentPage = number
+      this.getMajorClient()
+    },
+
+    /**
+     * 每页显示的数量改变
+     * @author weijie
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+      this.getMajorClient()
     },
     /**
      * 添加大客户函数
@@ -738,7 +755,7 @@ export default {
     // 搜索
     handleSearch () {
       if (this.query.length === 0) {
-        this.getMajorClient()
+        this.getMajorClient(true)
       }
     },
     /**

@@ -8,7 +8,7 @@
             <div class="filter-group-item">
               <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">明细：</span>
-                <select v-model="visibility" @change="getAlerts">
+                <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
@@ -16,13 +16,13 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts" @search-activate="searching=!searching"  @press-enter="getAlerts">
+              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
                 <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                   </select>
                 </x-select>
-                <button slot="search-button" @click="getAlerts" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <button slot="search-button" @click="getAlerts(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>
@@ -252,9 +252,11 @@ export default {
      * 获取消息列表
      * @author weijie
      */
-    getAlerts () {
+    getAlerts (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       this.loadingData = true
-
       api.alert.getAlerts(this.queryCondition).then((res) => {
         this.loadingData = false
         if (res.status === 200) {
@@ -279,7 +281,6 @@ export default {
       })
     },
     selectChange (table) {
-      console.log(table)
       var result = []
       table.forEach((item) => {
         result.push(item.prototype)

@@ -39,7 +39,7 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
               </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -58,7 +58,7 @@
               </x-select>
             </div>
           </div>
-          <!-- FIXME 表格页码不为0时, 搜索有问题 -->
+          <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
@@ -300,7 +300,10 @@ export default {
     },
 
     // 获取设备列表
-    getDevices () {
+    getDevices (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
@@ -315,7 +318,7 @@ export default {
     // 搜索
     handleSearch () {
       if (this.query.length === 0) {
-        this.getDevices()
+        this.getDevices(true)
       }
     },
 

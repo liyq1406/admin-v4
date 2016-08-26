@@ -21,7 +21,7 @@
               <div class="filter-group-item">
                 <x-select :label="selectedFilter.name" width='110px' size="small">
                   <span slot="label">显示</span>
-                  <select v-model="selectedFilter" @change="getUsers">
+                  <select v-model="selectedFilter" @change="getUsers(true)">
                     <!-- <option :value="">全部</option> -->
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
                   </select>
@@ -30,14 +30,14 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getUsers" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers">
-                  <button slot="search-button" @click="getUsers" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                  <button slot="search-button" @click="getUsers(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                   <label>{{ $t('ui.user.search_user') }}</label>
                 </search-box>
               </div>
             </div>
           </div>
-          <!-- FIXME 表格页码不为0时，搜索条件不正确 -->
+          <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-create-date="sortBySomeKey" @tbody-id="goDetails" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
         </div>
       </div>
@@ -431,7 +431,10 @@
         this.$route.router.go('/operation/users/details/' + table.prototype.id)
       },
       // 获取用户
-      getUsers () {
+      getUsers (reset) {
+        if (reset) {
+          this.currentPage = 1
+        }
         this.loadingData = true
         api.user.list(this.queryCondition).then((res) => {
           if (res.status === 200) {
@@ -455,7 +458,7 @@
       // 搜索
       handleSearch () {
         if (this.query.length === 0) {
-          this.getUsers()
+          this.getUsers(true)
         }
       },
 

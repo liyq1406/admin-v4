@@ -56,7 +56,7 @@
       getData () {
         console.log('获取数据')
         const AGE_TYPES = ['19岁以下', '20-29岁', '30-39岁', '40-49岁', '50岁以上']
-        this. data = AGE_TYPES.map((item, index) => {
+        this.data = AGE_TYPES.map((item, index) => {
           var data = {
             age: item,
             count: 100 * (index + 1)

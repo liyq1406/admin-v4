@@ -40,25 +40,25 @@
     </div>
     <div class="panel">
       <div class="panel-bd">
-        <!-- FIXME 表格页码不为0时，搜索条件不正确 -->
+        <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
         <x-table :headers="headers" :selecting="selecting" @selected-change="selectChange" @tbody-content="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts" @search-deactivate="getAlerts" @search="getAlerts" @press-enter="getAlerts">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-deactivate="getAlerts(true)" @search="getAlerts(true)" @press-enter="getAlerts(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </x-select>
-                  <button slot="search-button" @click="getAlerts" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getAlerts(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="getAlerts">
+                <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
@@ -546,11 +546,13 @@ export default {
       this.period = ''
       this.startTimePick = start
       this.endTimePick = end
-      console.log(start + end)
       this.getAlerts()
     },
     // 获取消息列表@author weijie
-    getAlerts () {
+    getAlerts (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {

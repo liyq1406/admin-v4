@@ -16,21 +16,21 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts" @search-activate="searching=!searching"  @press-enter="getAlerts">
-                  <button slot="search-button" @click="getAlerts" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
+                  <button slot="search-button" @click="getAlerts(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label" class="mr10">明细</span>
-                <select v-model="visibility" @change="getAlerts">
+                <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
             </div>
           </div>
-          <!-- FIXME 表格页码不为0时，搜索条件不正确 -->
+          <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
           <x-table :headers="headers" :tables="tableData" :selecting="selecting" @tbody-content="getInfo" @selected-change="selectChange" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
             <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
               <label>标记为:</label>
@@ -215,7 +215,6 @@ export default {
       }
     },
     selectChange (table) {
-      console.log(table)
       var result = []
       table.forEach((item) => {
         result.push(item.prototype)
@@ -260,7 +259,6 @@ export default {
     },
     // 跳转详情信息
     getInfo (table, header, index) {
-      console.log(table)
       this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
       // this.$route.router.go('/operation/alerts/record')
     },
@@ -344,10 +342,12 @@ export default {
      * 获取告警历史
      * @author weijie
      */
-    getAlerts () {
+    getAlerts (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       if (this.startTime === null || this.endTime === null) return
       this.loadingData = true
-
       api.alert.getAlerts(this.queryCondition).then((res) => {
         this.loadingData = false
         if (res.status === 200) {
