@@ -374,6 +374,7 @@ export default {
 
     // 筛选条件
     queryCondition () {
+      // FIXME 页码切换后进行搜索，页码没有重置导致结果显示不正确 #shengzhi
       let condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
         limit: this.countPerPage,
