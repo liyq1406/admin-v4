@@ -296,29 +296,29 @@ let configRouter = (router) => {
           }
         },
         // 数据接口
-        'products/:id/data-forward': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/data-forward/list'))
-            }, 'admin')
-          }
-        },
-        // 添加规则
-        'products/:id/data-forward/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/data-forward/add'))
-            }, 'admin')
-          }
-        },
-        // 修改规则
-        'products/:id/data-forward/edit': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/data-forward/edit'))
-            }, 'admin')
-          }
-        },
+        // 'products/:id/data-forward': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/product/data-forward/list'))
+        //     }, 'admin')
+        //   }
+        // },
+        // // 添加规则
+        // 'products/:id/data-forward/add': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/product/data-forward/add'))
+        //     }, 'admin')
+        //   }
+        // },
+        // // 修改规则
+        // 'products/:id/data-forward/edit': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/product/data-forward/edit'))
+        //     }, 'admin')
+        //   }
+        // },
 
         // -------------------------设备授权-------------------------
         // 授权记录
