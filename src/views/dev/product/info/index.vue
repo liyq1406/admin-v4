@@ -663,6 +663,8 @@ export default {
             this.handleError(res)
             this.editing = false
           })
+        } else {
+          this.editing = false
         }
       } else if (this.$validation.valid && !this.editing) { // 编辑
         this.editing = true
