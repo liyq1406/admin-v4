@@ -14,9 +14,10 @@
               <i class="fa fa-plus"></i>
               添加设备
             </button>
-            <button class="search btn btn-ghost" @click="getDevices"><i class="fa fa-search"></i></button>
             <div class="search-box" v-show="true">
-              <search-box :placeholder="'请输入设备mac'" :key.sync="query" @cancel="getDevices" @press-enter="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" ></search-box>
+              <search-box :placeholder="'请输入设备mac'" :key.sync="query" @cancel="getDevices" @press-enter="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" >
+                <button slot="search-button" class="search btn btn-ghost" @click="getDevices"><i class="fa fa-search"></i></button>
+              </search-box>
             </div>
           </div>
         </div>
@@ -583,7 +584,7 @@ export default {
   }
 }
 </script>
-<style lang="stylus" scoped>
+<style lang="stylus">
   @import '../../../assets/stylus/common'
 
   .refresh-box
@@ -644,10 +645,11 @@ export default {
             margin-top 5px
             line-height 35px
             .add-devices
-              width 139px
-              margin-right 5px
+              width 191px
           .search-box
             width 100%
+            .search-box-input
+              width 158px
         .body-box
           width 100%
           .devices-box
