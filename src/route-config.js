@@ -295,6 +295,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 数据端点
+        'products/:id/data-point': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-point'))
+            }, 'admin')
+          }
+        },
         // 数据接口
         // 'products/:id/data-forward': {
         //   component (resolve) {

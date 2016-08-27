@@ -22,6 +22,7 @@ export default {
             debug: '设备调试',
             virtual_devices: '虚拟设备',
             alert: '告警设置',
+            data_point: '数据端点',
             data_forward: '数据接口',
             authorize: '设备授权'
           }
