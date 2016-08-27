@@ -165,7 +165,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <label class="del-check">
+              <label class="del-check" v-if="!editModel.is_release">
                 <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
               </label>
               <button @click.prevent.stop="resetEdit" class="btn btn-default">{{ $t("common.cancel") }}</button>
