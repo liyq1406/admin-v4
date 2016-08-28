@@ -298,9 +298,11 @@ export default {
         if (res.status === 200) {
           this.datapoints = res.data.map((item) => {
             item.editing = false
+            this.adding = false
             return item
           })
           this.loadingData = false
+          this.adding = false
         }
       }).catch((res) => {
         this.handleError(res)
@@ -355,7 +357,7 @@ export default {
       if (this.adding) { // 添加
         api.product.addDataPoint(this.product.id, datapoint).then((res) => {
           if (res.status === 200) {
-            this.adding = false
+            // this.adding = false
             this.getDatapoints()
           }
         }).catch((res) => {
