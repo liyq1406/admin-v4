@@ -7,7 +7,7 @@
     <div class="panel mt10">
       <div class="panel-bd">
         <div class="form">
-          <validator name="addValidation">
+          <validator name="validation">
             <form novalidate @submit.prevent="onSubmit">
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
@@ -16,8 +16,8 @@
                     <input v-model="model.index" type="text" name="index" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.index.touched && $addValidation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
-                    <span v-if="$addValidation.index.modified && $addValidation.index.format">{{ $t('ui.validation.numberic') }}</span>
+                    <span v-if="$validation.index.touched && $validation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
+                    <span v-if="$validation.index.modified && $validation.index.format">{{ $t('ui.validation.numberic') }}</span>
                   </div>
                 </div>
               </div>
@@ -28,8 +28,8 @@
                     <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 32}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
-                    <span v-if="$addValidation.name.modified && $addValidation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.name'), 32]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.name'), 32]) }}</span>
                   </div>
                 </div>
               </div>
@@ -45,7 +45,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row row" v-show="modelType.value!==1 && modelType.value!==6">
+              <div class="form-row row" v-if="modelType.value!==1 && modelType.value!==6">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.range") }}:</label>
                 <div class="controls col-18">
                   <div class="row">
@@ -62,22 +62,22 @@
                     </div>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.min.modified && $addValidation.min.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$addValidation.min.modified && $addValidation.min.min">{{ $t('ui.validation.min', [$t('ui.datapoint.fields.min'), modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808]) }}</span>
-                    <span v-if="($addValidation.min.modified && $addValidation.min.max) || ($addValidation.max.modified && $addValidation.max.min)">最大值必须大于最小值</span>
-                    <span v-if="$addValidation.max.modified && $addValidation.max.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$addValidation.max.modified && $addValidation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
+                    <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
+                    <span v-if="$validation.min.modified && $validation.min.min">{{ $t('ui.validation.min', [$t('ui.datapoint.fields.min'), modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808]) }}</span>
+                    <span v-if="($validation.min.modified && $validation.min.max) || ($validation.max.modified && $validation.max.min)">最大值必须大于最小值</span>
+                    <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
+                    <span v-if="$validation.max.modified && $validation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
                   </div>
                 </div>
               </div>
-              <div class="form-row row" v-show="modelType.value!==1">
+              <div class="form-row row" v-if="modelType.value!==1">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.symbol") }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ui.datapoint.placeholders.symbol')" class="input-text-wrap">
                     <input v-model="model.symbol" type="text" name="model.symbol" v-validate:symbol="{maxlength: 10}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.symbol.modified && $addValidation.symbol.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.symbol'), 10]) }}</span>
+                    <span v-if="$validation.symbol.modified && $validation.symbol.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.symbol'), 10]) }}</span>
                   </div>
                 </div>
               </div>
@@ -88,7 +88,7 @@
                     <textarea v-model="model.description" type="text" name="model.description" v-validate:description="{maxlength: 250}" class="input-text" lazy></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$addValidation.description.modified && $addValidation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.description'), 250]) }}</span>
+                    <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.description'), 250]) }}</span>
                   </div>
                 </div>
               </div>
@@ -265,15 +265,22 @@ export default {
       })
     },
 
+    /**
+     * 提交按钮
+     * @return {[type]} [description]
+     */
     onSubmit () {
-      this.submiting = true
-      if (this.type === 'add') {
-        this.addDataPoint()
-      } else {
-        if (this.delChecked) {
-          this.deleteDataPoint()
+      // 判断表单验证是否通过
+      if (this.$validation.valid || this.delChecked) {
+        this.submiting = true
+        if (this.type === 'add') {
+          this.addDataPoint()
         } else {
-          this.updateDataPoint()
+          if (this.delChecked) {
+            this.deleteDataPoint()
+          } else {
+            this.updateDataPoint()
+          }
         }
       }
     },
@@ -308,6 +315,26 @@ export default {
      */
     updateDataPoint () {
       console.log('编辑数据端点')
+      let params = {
+        'id': this.model.id,
+        'name': this.model.name,
+        'type': this.model.type,
+        'index': this.model.index,
+        'description': this.model.description,
+        'symbol': this.model.symbol
+      }
+      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
+        params.min = this.model.min
+        params.max = this.model.max
+      }
+      api.product.updateDataPoint(this.$route.params.id, params).then((res) => {
+        this.showSuccess('更新成功')
+        this.goList()
+        this.submiting = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.submiting = false
+      })
     },
 
     /**
@@ -324,10 +351,19 @@ export default {
       })
     },
 
+    /**
+     * 跳回列表页
+     * @return {[type]} [description]
+     */
     goList () {
       this.$route.router.go('/dev/products/' + this.$route.params.id + '/data-point')
     },
 
+    /**
+     * 显示成功文案
+     * @param  {[type]} str [description]
+     * @return {[type]}     [description]
+     */
     showSuccess (str) {
       this.showNotice({
         type: 'success',
