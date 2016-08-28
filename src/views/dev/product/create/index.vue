@@ -80,7 +80,7 @@ export default {
     return {
       product: {},
       currStep: 0, // 当前步骤 [0|1|2|3]
-      steps: ['填写产品信息', '创建数据模型', '完成']
+      steps: ['填写产品信息', '创建数据端点', '完成']
     }
   },
 
