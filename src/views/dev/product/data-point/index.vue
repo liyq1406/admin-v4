@@ -1,6 +1,8 @@
 <template>
   <div class="main">
-    123
+    <div class="main-title bordered">
+      <h2>数据端点</h2>
+    </div>
   </div>
 </template>
 
