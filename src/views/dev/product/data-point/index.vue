@@ -3,15 +3,13 @@
     <div class="main-title bordered">
       <h2>数据端点</h2>
     </div>
-    <div class="panel mt20">
-      <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
-            <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
-          </div>
+    <div class="mt20">
+      <div class="action-bar mb10">
+        <div class="action-group">
+          <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint"></x-table>
       </div>
+      <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint"></x-table>
     </div>
   </div>
 </template>

@@ -109,16 +109,10 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import api from 'api'
-// import * as config from 'consts/config'
-// import locales from 'consts/locales/index'
 import Select from 'components/Select'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
-// import { setCurrProductMixin } from './mixins'
 import Breadcrumb from 'components/Breadcrumb'
-// import { formatDate } from 'src/filters'
 
 export default {
   name: 'Authorize',
@@ -314,7 +308,6 @@ export default {
      * @return {[type]} [description]
      */
     updateDataPoint () {
-      console.log('编辑数据端点')
       let params = {
         'id': this.model.id,
         'name': this.model.name,
@@ -342,13 +335,17 @@ export default {
      * @return {[type]} [description]
      */
     deleteDataPoint () {
-      api.product.deleteDataPoint(this.$route.params.id, this.dataPointId).then((res) => {
-        this.showSuccess('删除成功')
-        this.goList()
-      }).catch((res) => {
-        this.handleError(res)
+      if (window.confirm('确定要删除改数据端点？')) {
+        api.product.deleteDataPoint(this.$route.params.id, this.dataPointId).then((res) => {
+          this.showSuccess('删除成功')
+          this.goList()
+        }).catch((res) => {
+          this.handleError(res)
+          this.submiting = false
+        })
+      } else {
         this.submiting = false
-      })
+      }
     },
 
     /**
