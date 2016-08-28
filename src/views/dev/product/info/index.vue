@@ -106,7 +106,7 @@
               <div class="controls col-18">
                 <div class="select">
                   <x-select :label="productType.label">
-                    <select v-model="productType" name="productType">
+                    <select v-model="productType" name="productType.label">
                       <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
                     </select>
                   </x-select>
@@ -444,7 +444,9 @@ export default {
     // 产品类型选项
     productTypeOptions () {
       let types = this.locales.data.PRODUCT_TYPES.slice(1)
-      this.productType = types[0]
+      this.productType = this.locales.data.PRODUCT_TYPES.find((item) => {
+        return item.value === this.editModel.type
+      })
       return types
     }
   },
