@@ -303,6 +303,24 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+
+        // 添加数据端点
+        'products/:id/data-point/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-point/form'))
+            }, 'admin')
+          }
+        },
+
+        // 编辑数据端点
+        'products/:id/data-point/edit/:dataPointId': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/data-point/form'))
+            }, 'admin')
+          }
+        },
         // 数据接口
         // 'products/:id/data-forward': {
         //   component (resolve) {
