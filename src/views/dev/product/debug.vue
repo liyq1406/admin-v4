@@ -61,7 +61,10 @@
               </div>
               <div class="type-box">
                 <div class="status-box">
-                  <span class="status-text"><i class="fa mr5" :class="selectedDevice.is_online?'success':'fail'"></i>{{selectedDevice.is_online?'在线':'离线'}}</span>
+                  <span v-if="selectedDevice.is_active" class="status-text"><i class="fa mr5" :class="selectedDevice.is_online?'success':'fail'"></i>{{selectedDevice.is_online?'在线':'离线'}}</span>
+                  <span v-else>
+                    <i class="fa fa-question-circle mr5" ></i>未激活
+                  </span>
                   <span class="status-date ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[0]}}</span>
                   <span class="status-time ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[1].split('Z')[0]}}</span>
                 </div>
@@ -178,6 +181,22 @@
               </div>
               <!-- <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
               <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div> -->
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">序列号:</label>
+            <div class="controls col-18">
+              <div v-placeholder="'请输入序列号'" class="input-text-wrap">
+                <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-6">名字:</label>
+            <div class="controls col-18">
+              <div v-placeholder="'请输入名字'" class="input-text-wrap">
+                <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+              </div>
             </div>
           </div>
           <div class="form-actions">
@@ -503,7 +522,7 @@ export default {
 
     // 收集日志信息并格式化输出
     outputLog (msg, type) {
-      this.logs.push({
+      this.logs.unshift({
         time: dateFormat('hh:mm:ss.SSS', new Date()),
         msg: msg,
         type: type
