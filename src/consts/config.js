@@ -5,6 +5,8 @@
 
 // 测试服务器地址
 const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
+// 测试demo服务器地址 add by guohao 2016/8/28
+// const DEFAULT_API_SERVER = 'http://api-demo.xlink.cn'
 // 天际
 // const DEFAULT_API_SERVER = 'https://dev-man.360tj.com:8016'
 // 测试图表
@@ -20,6 +22,8 @@ const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 
 // 插件服务器地址
 const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
+// 测试 demo服务器地址 add by guohao 2016/8/28
+// const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
 // 天际
 // const DEFAULT_PLUGIN_SERVER = 'https://dev-man.360tj.com:8016'
 
