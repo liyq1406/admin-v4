@@ -3,13 +3,23 @@
     <div class="main-title bordered">
       <h2>数据端点</h2>
     </div>
-    <div class="container mt10">
-      <div class="action-bar mb10">
-        <div class="action-group">
-          <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
+    <div class="container">
+      <div class="action-bar">
+        <div slot="filter-bar" class="filter-bar">
+          <div class="action-group fl">
+            <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
+          </div>
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
+              </search-box>
+            </div>
+          </div>
         </div>
       </div>
-      <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint"></x-table>
+      <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint">
+
+      </x-table>
     </div>
   </div>
 </template>
@@ -18,6 +28,7 @@
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import Table from 'components/Table'
+import SearchBox from 'components/SearchBox'
 import api from 'api'
 // import _ from 'lodash'
 
@@ -27,6 +38,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
+    SearchBox,
     'x-table': Table
   },
 
@@ -35,6 +47,7 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
+      key: '',
       datapoints: [
         {
           index: 0,
@@ -91,7 +104,12 @@ export default {
           description: item.description,
           edit: '<a class="hl-red">编辑</a>'
         }
-        result.push(datapoint)
+        // 根据搜索框内容过滤
+        let reg = new RegExp(this.key)
+        let regTarget = datapoint.index + datapoint.name + datapoint.type + datapoint.symbol + datapoint.description
+        if (this.key.length === 0 || reg.test(regTarget)) {
+          result.push(datapoint)
+        }
       })
       return result
     }
@@ -184,4 +202,7 @@ export default {
   .container
     padding 10px
     box-sizing border-box
+    .filter-bar
+      padding-left 0
+      padding-right 0
 </style>
