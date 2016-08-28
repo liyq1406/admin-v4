@@ -26,9 +26,10 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.mode") }}:</label>
                     <div class="controls col-20">
                       <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                        <input v-model="product.mode" type="text" name="product.mode" v-validate:mode="{maxlength: 64}" lazy class="input-text"/>
+                        <input v-model="product.mode" type="text" name="product.mode" v-validate:mode="{required: true, maxlength: 64}" lazy class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
+                        <span v-if="$validation.mode.touched && $validation.mode.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.mode')}) }}</span>
                         <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
                       </div>
                     </div>
@@ -76,7 +77,7 @@
         </div>
       </div>
       <div class="actions">
-        <button class="btn btn-primary btn-lg" @click="onBtnClick" :class="{'disabled': adding || $validation.invalid}" :disabled="adding || $validation.invalid">下一步</button>
+        <button class="btn btn-primary btn-lg" @click="onBtnClick" :class="{'disabled': adding}">下一步</button>
       </div>
     </validation>
   </div>
@@ -147,6 +148,10 @@ export default {
           this.adding = false
           this.handleError(res)
         })
+      } else {
+        this.$validation.name.touched = true
+        this.$validation.description.touched = true
+        this.$validation.mode.touched = true
       }
     }
   }

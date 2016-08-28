@@ -13,7 +13,7 @@
                 </li>
                 <li>
                   <div class="label">产品类型：</div>
-                  <div class="info">-</div>
+                  <div class="info">{{ getProductModeByValue(product.type) }}</div>
                 </li>
                 <li>
                   <div class="label">连接类型：</div>
@@ -59,7 +59,6 @@
 </template>
 
 <script>
-import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -83,10 +82,22 @@ export default {
      * @param {Number} val 值
      */
     getLabelByValue (val) {
+      return this.locales.data.DEVICE_TYPES[val - 1] || '--'
+    },
+    /**
+     * 根据产品类型值获取 label
+     * @author shengzhi
+     * @param {Number} val 值
+     */
+    getProductModeByValue (val) {
+      if (!this.locales.data.PRODUCT_TYPES) {
+        return
+      }
       let ret = ''
-      let type = _.find(this.locales.data.DATAPOINT_TYPES, (item) => {
+      let type = this.locales.data.PRODUCT_TYPES.find((item) => {
         return item.value === val
       })
+
       if (type) {
         ret = type.label
       }

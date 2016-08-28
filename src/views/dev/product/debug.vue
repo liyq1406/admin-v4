@@ -55,7 +55,7 @@
       <div class="device-details-box">
         <div class="panel">
           <div class="panel-hd bordered row">
-            <div class="msg-box fl col-10">
+            <div class="msg-box fl col-8">
               <div class="title">
                 <h2 class="product-title mt5 mb5">{{selectedDevice.name || '--'}}</h2>
               </div>
@@ -67,7 +67,7 @@
                 </div>
               </div>
             </div>
-            <div class="filter-bar fr col-14">
+            <div class="filter-bar fr col-16">
               <div class="filter-group fr">
                 <div class="filter-group-item mt10">
                   <button class="btn btn-ghost" @click="showLog = !showLog">
@@ -82,12 +82,10 @@
                 </div>
                 <div class="filter-group-item mt5">
                   <div class="filter-device-info">
-                    <label>ID:</label>
-                    <span>{{selectedDevice.id}}</span>
+                    <span>ID:{{selectedDevice.id}}</span>
                   </div>
                   <div class="filter-device-info">
-                    <label>MAC:</label>
-                    <span>{{selectedDevice.mac}}</span>
+                    <span>MAC:{{selectedDevice.mac}}</span>
                   </div>
                 </div>
               </div>
@@ -692,6 +690,12 @@ export default {
                 box-sizing border-box
                 padding-top 8px
                 overflow hidden
+                .mac
+                  span
+                    text-overflow ellipsis
+                    overflow hidden
+                    display inline-block
+                    max-width 110px
           .no-devices
             height 400px
             padding-top 20px
@@ -758,4 +762,11 @@ export default {
     font-size 10px
     color #999999
     text-align center
+    max-width 160px
+    overflow hidden
+    span
+      max-width 160px
+      overflow hidden
+      text-overflow ellipsis
+      display inline-block
 </style>

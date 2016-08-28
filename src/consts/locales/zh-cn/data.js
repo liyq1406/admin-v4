@@ -86,10 +86,14 @@ export const DEVICE_TYPES = ['WiFi设备', 'Zigbee网关', '蓝牙设备', '蓝�
 // 产品类型
 export const PRODUCT_TYPES = [
   { label: '未定义', value: 0 },
-  { label: '智能照明', value: 1 },
-  { label: '电工', value: 2 },
-  { label: '空气清洁', value: 3 },
-  { label: '安防', value: 4 }
+  { label: '消费电子', value: 1 },
+  { label: '智能家居', value: 2 },
+  { label: '智能安防', value: 3 },
+  { label: '商用/工控设备', value: 4 },
+  { label: '照明电工', value: 5 },
+  { label: '生活电器', value: 6 },
+  { label: '暖通空气', value: 7 },
+  { label: '其他', value: 8 }
 ]
 
 // 设备筛选待选项
