@@ -3,7 +3,7 @@
     <div class="main-title bordered">
       <h2>数据端点</h2>
     </div>
-    <div class="mt20">
+    <div class="container mt10">
       <div class="action-bar mb10">
         <div class="action-group">
           <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
@@ -181,4 +181,7 @@ export default {
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
 
+  .container
+    padding 10px
+    box-sizing border-box
 </style>
