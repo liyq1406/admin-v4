@@ -426,6 +426,10 @@ export default {
       arr[0] = this.addModel
       api.product.sendDevices(this.$route.params.id, arr).then((res) => {
         if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '添加成功'
+          })
           this.resetAdd()
           // this.getDevices()
           this.getRecords()
