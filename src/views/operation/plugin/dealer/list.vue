@@ -72,7 +72,6 @@
             </tbody>
           </table>
         </div>
-        <!-- REVIEW 翻页后 搜索条件错误 #guohao-->
         <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
       </div>
     </div>

@@ -58,7 +58,6 @@
               </x-select>
             </div>
           </div>
-          <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>

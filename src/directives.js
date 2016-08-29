@@ -176,7 +176,6 @@ export var tooltip = {
  * 内容超出容器高度时显示展开全部内容的横条
  * @author guohao
  */
-// REVIEW 初始化时容器设置默认高度，内容设置 visibility: hidden，加载完成后再显示内容 #guohao
 export var stretch = {
   bind () {
     var self = this

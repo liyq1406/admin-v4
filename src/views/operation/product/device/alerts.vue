@@ -30,7 +30,6 @@
               </x-select>
             </div>
           </div>
-          <!-- REVIEW 表格页码不为0时，搜索条件不正确 #guohao-->
           <x-table :headers="headers" :tables="tableData" :selecting="selecting" @tbody-content="getInfo" @selected-change="selectChange" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
             <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
               <label>标记为:</label>
