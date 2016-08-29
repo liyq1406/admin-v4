@@ -14,32 +14,68 @@
             <div class="row">
               <div class="form col-14 max-width">
                 <div class="form-row row">
-                  <label class="form-control col-5 dealer-label">账号:</label>
+                  <label class="form-control col-5 dealer-label">客户名称:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
-                      <input v-model="dealer.username" type="email" name="dealer.username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>
+                    <div v-placeholder="'请输入客户名称'" class="input-text-wrap">
+                      <input v-model="saled.name" type="text" name="saled.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.username.touched && $autoValidation.username.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
                 </div>
-                <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">登录密码:</label>
-                  <div class="controls col-19" v-if="type === 'add'">
-                    <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
-                      <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
+                <div class="form-row row">
+                  <label class="form-control col-5 dealer-label">客户类型:</label>
+                  <div class="controls col-19">
+                    <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
+                      <input v-model="addModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
+                    </div> -->
+                    <x-select :label="belongType.label">
+                      <select v-model="belongType">
+                        <option v-for="option in belongs" :value="option">{{ option.label }}</option>
+                      </select>
+                    </x-select>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 dealer-label">客户类型:</label>
+                  <div class="controls col-19">
+                    <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
+                  </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 dealer-label">详细地址:</label>
+                  <div class="controls col-19">
+                    <div v-placeholder="'请输入详细地址'" class="input-text-wrap">
+                      <input v-model="saled.address" type="text" name="saled.address" minlength="2" maxlength="32" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.password.touched && $autoValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span>
+                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
-                  <div class="controls col-19" v-else>
-                    <button class="btn btn-ghost" @click.prevent.stop="editPassword = !editPassword">修改密码</button>
-                    <div v-if="editPassword" v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap mt10">
-                      <input v-model="dealer.password" type="text" name="dealer.password" minlength="6" maxlength="16" v-validate:password="{required: true}" lazy class="input-text"/>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 dealer-label">手机号:</label>
+                  <div class="controls col-19">
+                    <div v-placeholder="'请输入手机号码'" class="input-text-wrap">
+                      <input v-model="saled.phone" type="text" name="saled.phone" minlength="2" maxlength="32" v-validate:phone="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
+                </div>
+                <div class="form-row row">
+                  <label class="form-control col-5 dealer-label">销售日期:</label>
+                  <!-- <div class="controls col-19">
+                    <div class="input-text-wrap">
+                      <input v-model="saled.sale_time" type="date" name="saled.sale_time" minlength="2" maxlength="32" v-validate:sale_time="{required: true}" lazy class="input-text"/>
+                    </div>
+                    <div class="form-tips form-tips-error">
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                    </div>
+                  </div> -->
+                  <date-time-single-picker :show-time='false' :time="nowDate" @timechange = ""></date-time-single-picker>
                 </div>
                   <!-- </form>
                 </validator> -->
@@ -49,15 +85,15 @@
         </div>
         <div class="panel no-split-line">
           <div class="panel-hd bordered mt20">
-            <h2>{{dealerTitle}}</h2>
+            <h2>详细信息</h2>
           </div>
           <div class="panel-bd">
             <div class="row">
               <div class="form col-14 max-width">
                 <div class="form-row row">
-                  <label class="form-control col-5 dealer-label">经销商名称:</label>
+                  <label class="form-control col-5 dealer-label">所在层数:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
+                    <div v-placeholder="'请输入所在层数'" class="input-text-wrap">
                       <input type="text" v-model="dealer.name" name="dealer.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -66,9 +102,9 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">联系人:</label>
+                  <label class="form-control col-5 dealer-label">每层面积(m³):</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.contact')" class="input-text-wrap">
+                    <div v-placeholder="'请输入每层面积'" class="input-text-wrap">
                       <input type="text" v-model="dealer.linkman" name="dealer.linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -77,9 +113,9 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">手机号:</label>
+                  <label class="form-control col-5 dealer-label">场所总面积(m³):</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.phone')" class="input-text-wrap">
+                    <div v-placeholder="'请输入总面积'" class="input-text-wrap">
                       <input type="text" v-model="dealer.phone" name="dealer.phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -88,9 +124,9 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">联系地址:</label>
+                  <label class="form-control col-5 dealer-label">机器放置层数:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.address')" class="input-text-wrap">
+                    <div v-placeholder="'如2层'" class="input-text-wrap">
                       <input type="text" v-model="dealer.address" name="dealer.address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -99,9 +135,9 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">负责区域:</label>
+                  <label class="form-control col-5 dealer-label">常驻人数:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="$t('ui.dealer.placeholders.area')" class="input-text-wrap">
+                    <div v-placeholder="'如老人2，小孩1'" class="input-text-wrap">
                       <input type="text" v-model="dealer.area" name="dealer.area" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -110,22 +146,18 @@
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">从属于:</label>
-                  <div class="controls col-19">
-                    <!-- <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
-                      <input v-model="addModal.model.belong_to" type="text" name="belong_to" required minlength="2" maxlength="32" lazy class="input-text"/>
-                    </div> -->
-                    <x-select width="100px" :label="belongType.label">
-                      <select v-model="belongType">
-                        <option v-for="option in belongs" :value="option">{{ option.label }}</option>
-                      </select>
-                    </x-select>
+                  <label class="form-control col-5 dealer-label">有无新风:</label>
+                  <div class="controls col-19" style="height:32px;line-height:32px">
+                    <input type="radio" v-model="dealer.area" name="dealer.area" class="input-text"/>
+                    <label for="dealer.area" style="margin-right:20px">有</label>
+                    <input type="radio" v-model="dealer.area" name="dealer.area" class="input-text"/>
+                    <label for="dealer.area">无</label>
                   </div>
                 </div>
                 <div class="form-row row mt20">
-                  <label class="form-control col-5 dealer-label">销售指标:</label>
+                  <label class="form-control col-5 dealer-label">自定义备注:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入销售指标'" class="input-text-wrap">
+                    <div v-placeholder="'请输入备注'" class="input-text-wrap">
                       <input type="text" v-model="dealer.sale_goal" name="dealer.sale_goal" maxlength="16" v-validate:sale_goal="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
@@ -134,7 +166,7 @@
                   </div>
                 </div>
                 <div class="form-actions mt20">
-                  <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary fr">提交</button>
+                  <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary">提交</button>
                 </div>
               </div>
             </div>
@@ -152,6 +184,9 @@
   import Breadcrumb from 'components/Breadcrumb'
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
+  import AreaSelect from 'components/AreaSelect'
+  import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
   export default {
     name: 'TableDetails',
@@ -160,14 +195,26 @@
 
     components: {
       'x-select': Select,
-      Breadcrumb
+      Breadcrumb,
+      'area-select': AreaSelect,
+      DateTimeSinglePicker,
+      DateTimeRangePicker
     },
 
     data () {
       return {
+        curProvince: {},
+        curCity: {},
+        curDistrict: {},
+        nowDate: new Date('2016-08-20T09:39:30.612Z'),
         editPassword: false,
         sending: false,
         type: '',
+        saled: {
+          name: '',
+          address: '',
+          phone: ''
+        },
         dealer: {
           _id: '',
           username: '',
@@ -180,9 +227,17 @@
           belongTo: '',
           sale_goal: ''
         },
-        belongs: [],
+        belongs: [{
+          label: '客户一',
+          value: 0
+        },
+        {
+          label: '客户二',
+          value: 1
+        }],
         belongType: {
-          label: '无'
+          label: '客户一',
+          value: 0
         },
         breadcrumbNav: [{
           label: '全部',
@@ -212,21 +267,24 @@
 
     route: {
       data () {
-        if (this.$route.params.id) {
+        if (this.$route.params.sale_id) {
           this.type = 'edit'
           this.breadcrumbNav[1].label = '编辑销售记录'
-          this.getDealer(this.$route.params.id)
+          // this.getSaled(this.$route.params.id)
         } else {
           this.breadcrumbNav[1].label = '添加销售记录'
           this.type = 'add'
         }
-        this.getDealerList()
+        // this.getDealerList()
       }
     },
 
     ready () {
     },
     methods: {
+      getWarrantyList () {
+        console.log('搜索')
+      },
       onSubmit () {
         if (this.$autoValidation.valid && !this.sending) {
           if (this.type === 'add') {
