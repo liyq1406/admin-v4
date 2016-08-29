@@ -81,6 +81,21 @@
                   </div>
                 </div>
               </div>
+              <div class="form-row row" v-if="modelType.value!==1">
+                <label class="form-control col-6">读写状态:</label>
+                <div class="controls col-18">
+                  <div class="input-box">
+                    <label>
+                      <input type="radio" name="writeType" v-model="model.is_write" :value="true">
+                      <span>可读写</span>
+                    </label>
+                    <label class="ml10">
+                      <input type="radio" name="writeType" v-model="model.is_write" :value="false">
+                      <span>只读</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.description") }}:</label>
                 <div class="controls col-18">
@@ -253,7 +268,7 @@ export default {
     getDatapoint () {
       api.product.getDataPoint(this.$route.params.id, this.dataPointId).then((res) => {
         this.model = res.data
-        this.modelType = this.datapointTypes[res.data.type]
+        this.modelType = this.datapointTypes[res.data.type - 1]
       }).catch((res) => {
         this.handleError(res)
       })
@@ -314,7 +329,8 @@ export default {
         'type': this.model.type,
         'index': this.model.index,
         'description': this.model.description,
-        'symbol': this.model.symbol
+        'symbol': this.model.symbol,
+        'is_write': this.model.is_write
       }
       if (this.modelType.value !== 1 && this.modelType.value !== 6) {
         params.min = this.model.min
@@ -375,4 +391,7 @@ export default {
 
   .form
     width 600px
+    .input-box
+      height 32px
+      line-height 32px
 </style>
