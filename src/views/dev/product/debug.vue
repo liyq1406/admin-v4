@@ -112,16 +112,16 @@
                     <td class="w50">{{ datapoint.index }}</td>
                     <td class="w80">{{ datapoint.name }}</td>
                     <td class="value-td">
-                      <div class="input-box">
+                      <div class="input-box" v-if="datapoint.is_write">
                         <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
-                          <range v-if="dataPointType(datapoint.type) === 'number'" :line-width="'95%'" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :prototype="datapoint" @changed="setRangeValue"></range>
+                          <range v-if="dataPointType(datapoint.type) === 'number'" :disabled="!selectedDevice.is_online" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="setRangeValue" @ondisable="onDisable"></range>
                         </div>
-                        <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
+                        <div class="boolean-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
+                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">true
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
+                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">false
                           </label>
                         </div>
                         <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
@@ -129,6 +129,9 @@
                             <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                           </div>
                         </div>
+                      </div>
+                      <div class="input-box" v-if="!datapoint.is_write">
+                        <span>{{datapoint.value}}</span>
                       </div>
                     </td>
                   </tr>
@@ -218,7 +221,7 @@ import dateFormat from 'date-format'
 // import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
-import Range from 'components/Range'
+import Range from 'components/Range1'
 import Switch from 'components/Switch'
 import Modal from 'components/Modal'
 import api from 'api'
@@ -368,6 +371,7 @@ export default {
     getDatapoints () {
       api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
+          console.log(res.data)
           this.datapoints = res.data
         }
       }).catch((res) => {
@@ -485,9 +489,9 @@ export default {
      * @param {Boolean} isUserBehavior 是否是用户行为
      */
     setRangeValue (val, params, isUserBehavior) {
-      if (params.prototype.value !== val && isUserBehavior) {
-        params.prototype.value = val
-        this.setDataEvent(params.prototype)
+      if (params.expand.value !== val && isUserBehavior) {
+        params.expand.value = val
+        this.setDataEvent(params.expand)
       }
     },
 
@@ -597,6 +601,24 @@ export default {
      */
     onShowAddModal () {
       this.showAddModal = true
+    },
+
+    /**
+     * range不可用时候用户点击回调
+     * @return {[type]} [description]
+     */
+    onDisable () {
+      if (this.selectedDevice.is_online) {
+        this.showNotice({
+          type: 'error',
+          content: '当前数据端点不可控！'
+        })
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '设备不在线！'
+        })
+      }
     }
   }
 }
