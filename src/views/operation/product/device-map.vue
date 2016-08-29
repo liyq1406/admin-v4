@@ -305,11 +305,7 @@ export default {
         this.devices = []
         this.map.clearMap()
         this.loadingData = false
-        this.infoMsg = '暂无该设备的定位数据'
-        // this.showNotice({
-        //   type: 'error',
-        //   content: '暂无该设备的定位数据'
-        // })
+        this.handleError(res)
       })
     },
 

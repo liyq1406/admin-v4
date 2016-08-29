@@ -48,20 +48,20 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </x-select>
-                  <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
             <div class="filter-group">
               <x-select width="90px" size="small" :label="visibility.label">
                 <span slot="label">{{ $t('common.display') }}：</span>
-                <select v-model="visibility" @change="getDevices">
+                <select v-model="visibility" @change="getDevices(true)">
                   <option v-for="option in locales.data.DEVICE_VISIBILITY_OPTIONS" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
@@ -374,7 +374,7 @@ export default {
 
     // 筛选条件
     queryCondition () {
-      // FIXME 页码切换后进行搜索，页码没有重置导致结果显示不正确 #shengzhi
+      // REVIEW 页码切换后进行搜索，页码没有重置导致结果显示不正确 #guohao
       let condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
         limit: this.countPerPage,
@@ -550,7 +550,10 @@ export default {
      * 获取设备列表
      * @author shengzhi
      */
-    getDevices () {
+    getDevices (reset) {
+      if (reset === true) {
+        this.currentPage = 1
+      }
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
@@ -568,7 +571,7 @@ export default {
      */
     handleSearch () {
       if (this.query.length === 0) {
-        this.getDevices()
+        this.getDevices(true)
       }
     },
 
