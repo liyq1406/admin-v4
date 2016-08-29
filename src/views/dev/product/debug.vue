@@ -65,8 +65,8 @@
                   <span v-else>
                     <i class="fa fa-question-circle mr5" ></i>未激活
                   </span>
-                  <span class="status-date ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[0]}}</span>
-                  <span class="status-time ml10">{{selectedDevice.last_login && selectedDevice.last_login.split('T')[1].split('Z')[0]}}</span>
+                  <span class="status-date ml10">{{selectedDevice.last_login | uniformDate}}</span>
+                  <span class="status-time ml10">{{selectedDevice.last_login | uniformTime}}</span>
                 </div>
               </div>
             </div>
