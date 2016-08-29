@@ -5,7 +5,7 @@
         <div class="filter-bar mt20">
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <button class="btn btn-ghost hidden" @click="modal.show=true">导入数据模型</button>
+              <button class="btn btn-ghost hidden" @click="showModal=true">导入数据模型</button>
             </div>
           </div>
           <h3>配置数据端点</h3>
@@ -155,61 +155,15 @@
     <div class="actions">
       <button class="btn btn-primary btn-lg" @click="onBtnClick">配置完成，下一步</button>
     </div>
-
-    <modal :show.sync="modal.show" width="720px">
-      <h3 slot="header">导入数据模型</h3>
-      <div slot="body" class="form">
-        <div class="data-models">
-          <div class="model-list">
-            <ul>
-              <li class="active">智能照明</li>
-              <li>电工产品</li>
-            </ul>
-          </div>
-          <div class="model-details">
-            <div class="data-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th width="10%">索引</th>
-                    <th width="20%">端点 ID</th>
-                    <th width="20%">数据类型</th>
-                    <th width="20%">单位符号</th>
-                    <th width="30%">描述</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>0</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                  </tr>
-                  <tr>
-                    <td>0</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                    <td>asdf</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="form-actions">
-          <button @click.prevent.stop="onImportCancel" class="btn btn-default">取消</button>
-          <button :disabled="importing" :class="{'disabled':importing}" class="btn btn-primary">导入</button>
-        </div>
-      </div>
-    </modal>
+  </div>
+  <div>
+    <data-model :show.sync="showModal"></data-model>
   </div>
 </template>
 
 <script>
 import Select from 'components/Select'
-import Modal from 'components/Modal'
+import DataModel from './data-model'
 import { globalMixins } from 'src/mixins'
 import api from 'api'
 import _ from 'lodash'
@@ -221,7 +175,7 @@ export default {
 
   components: {
     'x-select': Select,
-    Modal
+    DataModel
   },
 
   props: {
@@ -238,7 +192,6 @@ export default {
       adding: false,
       editing: false,
       loadingData: false,
-      importing: false,
       datapoints: [],
       originAddModel: {
         index: 0,
@@ -249,9 +202,7 @@ export default {
       },
       originEditModel: {},
       addModel: {},
-      modal: {
-        show: false
-      },
+      showModal: false,
       requireDatapointName: false // 判断端点ID是否缺失
     }
   },
@@ -415,15 +366,6 @@ export default {
         this.datapoints.$set(index, _.clone(this.originEditModel))
       }
     },
-
-    /**
-     * 取消导入
-     * @author shengzhi
-     */
-    onImportCancel () {
-      this.modal.show = false
-    },
-
     /**
      * 处理按钮点击事件
      * @author shengzhi
@@ -436,7 +378,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../../assets/stylus/common'
+@import '../../../../../assets/stylus/common'
 
 .btn-link
   padding 0
@@ -462,43 +404,6 @@ export default {
 
         .form-actions
           padding-right 20px
-
-  .data-models
-    margin-bottom 20px
-    border-bottom 1px solid default-border-color
-    clearfix()
-
-    .model-list
-      float left
-      width 160px
-      background #F2F2F2
-      height 380px
-      overflow-y auto
-
-      li
-        padding 10px 30px
-        line-height 20px
-        font-size 12px
-        position relative
-        cursor pointer
-
-        &.active
-          background red
-          color #FFF
-
-          &:after
-            absolute right top 50%
-            content ''
-            triangle #FFF 10px left
-            margin-top -5px
-
-    .model-details
-      margin-left 160px
-      height 380px
-      overflow-y auto
-
-      .data-table
-        padding 30px
 
   .require-warnning
     border 1px solid red
