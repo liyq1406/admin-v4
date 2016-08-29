@@ -28,7 +28,7 @@
                   <td>{{ $index }}</td>
                   <td>
                     <div class="input-text-wrap">
-                      <input type="text" class="input-text input-text-sm" v-model="datapoint.name">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.name" :class="{'require-warnning': requireDatapointName }">
                     </div>
                   </td>
                   <td>
@@ -50,14 +50,14 @@
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值">
                           </div>
                         </div>
                       </div>
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值">
                           </div>
                         </div>
                       </div>
@@ -65,12 +65,12 @@
                   </td>
                   <td>
                     <div class="input-text-wrap" v-show="datapoint.type!==1">
-                      <input type="text" class="input-text input-text-sm" v-model="datapoint.symbol">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.symbol" maxlength="10">
                     </div>
                   </td>
                   <td>
                     <div class="input-text-wrap">
-                      <input type="text" class="input-text input-text-sm" v-model="datapoint.description">
+                      <input type="text" class="input-text input-text-sm" v-model="datapoint.description" maxlength="250">
                     </div>
                   </td>
                   <td class="tac">
@@ -92,7 +92,7 @@
                 <td>{{ addModel.index }}</td>
                 <td>
                   <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="addModel.name">
+                    <input type="text" class="input-text input-text-sm" v-model="addModel.name" :class="{'require-warnning': requireDatapointName }">
                   </div>
                 </td>
                 <td>
@@ -114,14 +114,14 @@
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="text" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值">
                         </div>
                       </div>
                     </div>
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="text" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值">
                         </div>
                       </div>
                     </div>
@@ -129,7 +129,7 @@
                 </td>
                 <td>
                   <div class="input-text-wrap" v-show="addModel.type!==1">
-                    <input type="text" class="input-text input-text-sm" v-model="addModel.symbol">
+                    <input type="text" class="input-text input-text-sm" v-model="addModel.symbol" maxlength="10">
                   </div>
                 </td>
                 <td>
@@ -251,7 +251,8 @@ export default {
       addModel: {},
       modal: {
         show: false
-      }
+      },
+      requireDatapointName: false // 判断端点ID是否缺失
     }
   },
 
@@ -299,6 +300,7 @@ export default {
           this.datapoints = res.data.map((item) => {
             item.editing = false
             this.adding = false
+            this.editing = false
             return item
           })
           this.loadingData = false
@@ -354,6 +356,13 @@ export default {
      * @param {Object} datapoint 目标数据端点
      */
     save (datapoint) {
+      // 端点ID为必填
+      if (!datapoint.name || datapoint.name === '') {
+        this.requireDatapointName = true
+        return
+      } else {
+        this.requireDatapointName = false
+      }
       if (this.adding) { // 添加
         api.product.addDataPoint(this.product.id, datapoint).then((res) => {
           if (res.status === 200) {
@@ -366,10 +375,10 @@ export default {
       } else { // 修改
         api.product.updateDataPoint(this.product.id, datapoint).then((res) => {
           if (res.status === 200) {
-            this.editing = false
             this.getDatapoints()
           }
         }).catch((res) => {
+          this.editing = false
           this.handleError(res)
         })
       }
@@ -490,4 +499,7 @@ export default {
 
       .data-table
         padding 30px
+
+  .require-warnning
+    border 1px solid red
 </style>

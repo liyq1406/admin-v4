@@ -22,6 +22,8 @@ const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 
 // 插件服务器地址
 const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
+// 插件服务器灰度地址
+// const DEFAULT_PLUGIN_SERVER = 'http://api-grey.xlink.cn:3000'
 // 测试 demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
 // 天际

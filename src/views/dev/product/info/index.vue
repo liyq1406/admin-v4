@@ -101,7 +101,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row row">
+            <!-- <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.product.fields.type") }}:</label>
               <div class="controls col-18">
                 <div class="select">
@@ -112,7 +112,7 @@
                   </x-select>
                 </div>
               </div>
-            </div>
+            </div> -->
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
               <div class="controls col-18">
@@ -279,7 +279,6 @@ export default {
         name: '',
         description: '',
         mode: '',
-        type: 0,
         link_type: '',
         is_registerable: false,
         is_active_register: false,
@@ -672,7 +671,6 @@ export default {
         }
       } else if (this.$validation.valid && !this.editing) { // 编辑
         this.editing = true
-        this.editModel.type = this.productType.value
         api.product.updateProduct(this.editModel).then(() => {
           api.product.getProduct(this.$route.params.id).then((res) => {
             if (res.status === 200) {

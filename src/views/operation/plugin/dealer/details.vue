@@ -69,13 +69,13 @@
         </div>
       </div>
       <div class="panel-bd">
-        <div class="action-bar">
+        <!-- <div class="action-bar">
           <div class="action-group fr" style="display:inline-block">
             <a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/add'">
               <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加销售记录</button>
             </a>
           </div>
-        </div>
+        </div> -->
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
@@ -103,7 +103,7 @@
                 <th>序列号</th>
                 <th>客户名称</th>
                 <th>手机号</th>
-                <th class="tac">{{ $t("common.action") }}</th>
+                <!-- <th class="tac">{{ $t("common.action") }}</th> -->
               </tr>
             </thead>
             <tbody>
@@ -115,9 +115,9 @@
                   <td>{{* sale.sn }}</td>
                   <td>{{* sale.name }}</td>
                   <td>{{* sale.phone }}</td>
-                  <td class="tac">
+                  <!-- <td class="tac">
                     <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                  </td>
+                  </td> -->
                 </tr>
               </template>
               <tr v-if="sales.length === 0 && !loadingData">
