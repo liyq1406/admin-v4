@@ -308,6 +308,10 @@ export default {
      */
     save (datapoint) {
       // 端点ID为必填
+      if (this.loadingData) {
+        return
+      }
+      this.loadingData = true
       if (!datapoint.name || datapoint.name === '') {
         this.requireDatapointName = true
         return
@@ -322,6 +326,7 @@ export default {
           }
         }).catch((res) => {
           this.handleError(res)
+          this.loadingData = false
         })
       } else { // 修改
         api.product.updateDataPoint(this.product.id, datapoint).then((res) => {
@@ -331,6 +336,7 @@ export default {
         }).catch((res) => {
           this.editing = false
           this.handleError(res)
+          this.loadingData = true
         })
       }
     },
