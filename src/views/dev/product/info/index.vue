@@ -451,6 +451,8 @@ export default {
 
   route: {
     data () {
+      // 切换产品不切换路由的时候重置上次的编辑状态
+      this.delChecked = false
       // 初次获取设备列表，并将获取的数量作为已用配额
       let condition = {
         filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],

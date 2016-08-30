@@ -387,7 +387,6 @@ export default {
         this.outputLog([this.selectedDevice.id, 'The client has disconnected!'], 'status')
         return
       }
-      console.log('连接socket')
       api.diagnosis.getDeviceToken(this.selectedDevice.id).then((res) => {
         this.token = res.data.token
         socket = io.connect('http://' + res.data.addr, {'force new connection': true})
