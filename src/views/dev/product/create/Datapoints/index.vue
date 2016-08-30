@@ -15,11 +15,12 @@
             <thead>
               <tr>
                 <th width="8%">索引</th>
-                <th width="15%">端点 ID</th>
+                <th width="14%">端点 ID</th>
                 <th width="27%">数据类型</th>
                 <th width="8%">单位符号</th>
-                <th width="27%">描述</th>
-                <th width="15%" class="tac">操作</th>
+                <th width="20%">描述</th>
+                <th width="11%">读写</th>
+                <th width="12%" class="tac">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -73,6 +74,14 @@
                       <input type="text" class="input-text input-text-sm" v-model="datapoint.description" maxlength="250">
                     </div>
                   </td>
+                  <td>
+                    <x-select :label="datapoint.is_write?'可读写':'只读'" size="small">
+                      <select v-model="datapoint.is_write" name="is_write">
+                        <option :value="true">可读写</option>
+                        <option :value="false">只读</option>
+                      </select>
+                    </x-select>
+                  </td>
                   <td class="tac">
                     <button class="btn btn-link mr10" @click.prevent="save(datapoint)">保存</button><button class="btn btn-link" @click.prevent="cancel(datapoint, $index)">取消</button>
                   </td>
@@ -83,6 +92,12 @@
                   <td>{{ getLabelByValue(datapoint.type) }}</td>
                   <td>{{ datapoint.symbol }}</td>
                   <td>{{ datapoint.description }}</td>
+                  <!-- <td>{{ datapoint.is_write }}</td> -->
+                  <td>
+                    <span>
+                      {{datapoint.is_write?'可读写':'只读'}}
+                    </span>
+                  </td>
                   <td class="tac">
                     <button class="btn btn-link mr10" @click.prevent="edit(datapoint)" :disabled="editing && !datapoint.editing" :class="{'disabled':editing && !datapoint.editing}">编辑</button><button class="btn btn-link" @click.prevent="remove(datapoint)" :disabled="editing && !datapoint.editing" :class="{'disabled':editing && !datapoint.editing}">删除</button>
                   </td>
@@ -137,12 +152,20 @@
                     <input type="text" class="input-text input-text-sm" v-model="addModel.description" maxlength="250">
                   </div>
                 </td>
+                <td>
+                  <x-select :label="addModel.is_write?'可读写':'只读'" size="small">
+                    <select v-model="addModel.is_write" name="is_write">
+                      <option :value="true">可读写</option>
+                      <option :value="false">只读</option>
+                    </select>
+                  </x-select>
+                </td>
                 <td class="tac">
                   <button class="btn btn-link mr10" @click.prevent="save(addModel)">保存</button><button class="btn btn-link" @click.prevent="cancel(addModel)">取消</button>
                 </td>
               </tr>
               <tr>
-                <td colspan="6">
+                <td colspan="7">
                   <!-- <a href="#" @click.prevent="add"><i class="fa fa-plus-circle"></i>添加数据端点</a> -->
                   <button class="btn btn-link btn-add" @click.prevent="add" :disabled="adding || editing" :class="{'disabled':adding || editing}"><i class="fa fa-plus-circle"></i>添加数据端点</button>
                 </td>
@@ -198,7 +221,8 @@ export default {
         name: '',
         type: 1,
         description: '',
-        symbol: ''
+        symbol: '',
+        is_write: true
       },
       originEditModel: {},
       addModel: {},
@@ -248,6 +272,7 @@ export default {
       this.loadingData = true
       api.product.getDatapoints(this.product.id).then((res) => {
         if (res.status === 200) {
+          console.log(res.data)
           this.datapoints = res.data.map((item) => {
             item.editing = false
             this.adding = false
