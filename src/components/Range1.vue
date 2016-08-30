@@ -424,7 +424,7 @@
     top 0
     left 0
     z-index 500
-    background rgba(0,0,0,0.5)
+    /*background rgba(0,0,0,0.5)*/
 
   .c-range-box
     width 100%
@@ -480,6 +480,7 @@
         top 50%
         left 0
         background red
+        cursor e-resize
         &.focus
           box-shadow 1px 1px 1px rgba(0,0,0,0.2)
         .currentValue
