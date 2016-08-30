@@ -40,8 +40,8 @@
     <div class="panel mt20">
       <div class="panel-hd panel-hd-full bordered">
         <h2 class="fl mr20">设备列表</h2>
-        <!-- <button class="btn btn-primary">管理授权</button> -->
         <a v-link="{path: 'authorize'}" class="btn btn-primary">管理授权</a>
+        <!-- <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button> -->
       </div>
       <div class="panel-bd">
         <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
@@ -180,6 +180,8 @@
       <h3 slot="header">{{ $t("ui.overview.key") }}</h3>
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
+
+    <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr>
   </div>
 </template>
 
@@ -199,6 +201,7 @@ import Select from 'components/Select'
 import store from 'store'
 import _ from 'lodash'
 import { formatDate } from 'src/filters'
+import BatchExportQr from './batch-export-qr'
 
 export default {
   name: 'ProductInfo',
@@ -221,7 +224,8 @@ export default {
     InfoList,
     Annulus,
     Modal,
-    SearchBox
+    SearchBox,
+    BatchExportQr
   },
 
   data () {
@@ -238,6 +242,7 @@ export default {
     })
 
     return {
+      showExportQRCode: false,
       qrcodeModal: {
         show: false
       },
