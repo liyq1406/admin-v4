@@ -71,7 +71,8 @@
         selfValue: 0,
         focus: false, // 标志当前组件是否获得焦点
         left: 0, // 用于存放当前小球的偏移量
-        transition: false // 用于标志当前是否使用css3的transition
+        transition: false, // 用于标志当前是否使用css3的transition
+        initTransition: false // 组件初始化动画
       }
     },
     computed: {
@@ -175,14 +176,8 @@
         var halfWidth = sliderDom.offsetWidth / 2
         var linePosition = this.getPosition(linedom)
         var dx
-        setTimeout(() => {
-          this.transition = true
-          setTimeout(() => {
-            this.transition = false
-          }, 50)
-          self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
-          self.resetPosition(false)
-        }, 200)
+        self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
+        self.resetPosition(false, this.initTransition)
         self.down = false
         sliderDom.addEventListener('mousedown', function (ev) {
           var rangeEventBox = document.createElement('div')
@@ -288,7 +283,7 @@
        * 根据步长重置位置
        * @param {Boolean} isUserBeHavior 是否是用户行为
        */
-      resetPosition (isUserBeHavior) {
+      resetPosition (isUserBeHavior, transition) {
         var self = this
         if (!this.$el) {
           return
@@ -298,7 +293,9 @@
         var parentWidth = parentDom.clientWidth
         var maxLeft = parentWidth - sliderDom.clientWidth
         var stepWidth = maxLeft / ((self.max - self.min) / self.step)
-        this.transition = true
+        if (transition) {
+          this.transition = true
+        }
         setTimeout(() => {
           this.transition = false
         }, 0)
