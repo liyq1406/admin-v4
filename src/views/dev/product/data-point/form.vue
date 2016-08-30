@@ -13,19 +13,19 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap">
-                    <input v-model="model.index" type="text" name="index" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
+                    <input v-model="model.index" type="text" name="index" readonly="readyonly" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                   </div>
-                  <div class="form-tips form-tips-error">
+                  <!-- <div class="form-tips form-tips-error">
                     <span v-if="$validation.index.touched && $validation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
                     <span v-if="$validation.index.modified && $validation.index.format">{{ $t('ui.validation.numberic') }}</span>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.name") }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ui.datapoint.placeholders.name')" class="input-text-wrap">
-                    <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 32}" class="input-text" lazy/>
+                    <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 32}" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
@@ -51,13 +51,13 @@
                   <div class="row">
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                        <input v-model="model.min" type="text" name="model.min" class="input-text" lazy v-validate:min="{format: 'numberic', min: modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808, max: addMax}" class="input-text" lazy/>
+                        <input v-model="model.min" type="text" name="model.min" class="input-text" lazy v-validate:min="{format: 'numberic', min: modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808, max: addMax}" class="input-text"/>
                       </div>
                     </div>
                     <div class="col-2 tac control-text">-</div>
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                        <input v-model="model.max" type="text" name="model.max" class="input-text" lazy v-validate:max="{format: 'numberic', min: addMin, max: modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807}"/>
+                        <input v-model="model.max" type="text" name="model.max" class="input-text" v-validate:max="{format: 'numberic', min: addMin, max: modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807}"/>
                       </div>
                     </div>
                   </div>
@@ -74,14 +74,14 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.symbol") }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ui.datapoint.placeholders.symbol')" class="input-text-wrap">
-                    <input v-model="model.symbol" type="text" name="model.symbol" v-validate:symbol="{maxlength: 10}" class="input-text" lazy/>
+                    <input v-model="model.symbol" type="text" name="model.symbol" v-validate:symbol="{maxlength: 10}" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.symbol.modified && $validation.symbol.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.symbol'), 10]) }}</span>
                   </div>
                 </div>
               </div>
-              <div class="form-row row" v-if="modelType.value!==1">
+              <div class="form-row row">
                 <label class="form-control col-6">读写状态:</label>
                 <div class="controls col-18">
                   <div class="input-box">
@@ -100,7 +100,7 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.description") }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ui.datapoint.placeholders.description')" class="input-text-wrap">
-                    <textarea v-model="model.description" type="text" name="model.description" v-validate:description="{maxlength: 250}" class="input-text" lazy></textarea>
+                    <textarea v-model="model.description" type="text" name="model.description" v-validate:description="{maxlength: 250}" class="input-text"></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.description'), 250]) }}</span>
@@ -154,13 +154,14 @@ export default {
         label: '布尔类型'
       },
       model: {
-        index: '',
+        index: 0,
         name: '',
         type: 1,
         min: '',
         max: '',
         description: '',
-        symbol: ''
+        symbol: '',
+        is_write: true
       }
     }
   },
@@ -256,6 +257,8 @@ export default {
     data () {
       if (this.type === 'edit') {
         this.getDatapoint()
+      } else if (this.type === 'add') {
+        this.model.index = this.$route.params.addIndex
       }
     }
   },
@@ -291,6 +294,8 @@ export default {
             this.updateDataPoint()
           }
         }
+      } else {
+        this.$validation.name.touched = true
       }
     },
 

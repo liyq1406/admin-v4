@@ -305,7 +305,7 @@ let configRouter = (router) => {
         },
 
         // 添加数据端点
-        'products/:id/data-point/add': {
+        'products/:id/data-point/add/:addIndex': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/data-point/form'))

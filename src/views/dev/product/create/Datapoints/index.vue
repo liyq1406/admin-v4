@@ -28,7 +28,7 @@
                   <td>{{ $index }}</td>
                   <td>
                     <div class="input-text-wrap">
-                      <input type="text" class="input-text input-text-sm" v-model="datapoint.name" :class="{'require-warnning': requireDatapointName }">
+                      <input type="text" class="input-text input-text-sm" maxlength="32" v-model="datapoint.name" :class="{'require-warnning': requireDatapointName }">
                     </div>
                   </td>
                   <td>
@@ -92,7 +92,7 @@
                 <td>{{ addModel.index }}</td>
                 <td>
                   <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="addModel.name" :class="{'require-warnning': requireDatapointName }">
+                    <input type="text" class="input-text input-text-sm" v-model="addModel.name" :class="{'require-warnning': requireDatapointName }" maxlength="32">
                   </div>
                 </td>
                 <td>
@@ -134,7 +134,7 @@
                 </td>
                 <td>
                   <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="addModel.description">
+                    <input type="text" class="input-text input-text-sm" v-model="addModel.description" maxlength="250">
                   </div>
                 </td>
                 <td class="tac">

@@ -112,6 +112,13 @@ export default {
         }
       })
       return result
+    },
+    maxIndex () {
+      let temp = [-1]
+      this.datapoints.forEach((item) => {
+        temp.push(item.index)
+      })
+      return Math.max(...temp) + 1
     }
   },
   route: {
@@ -141,7 +148,7 @@ export default {
      * 添加数据端点
      */
     addDataPoint () {
-      this.$route.router.go(this.$route.path + '/add')
+      this.$route.router.go(this.$route.path + '/add/' + this.maxIndex)
     },
     /**
      * 编辑数据端点
