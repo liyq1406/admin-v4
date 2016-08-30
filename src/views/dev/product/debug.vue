@@ -23,7 +23,7 @@
         </div>
         <div class="body-box">
           <div class="devices-box" v-show="devices.length>0">
-            <div class="device" v-for="device in devices" :class="{'selected': device.id===selectedDevice.id}" @click="selectedDevice=device">
+            <div class="device" v-for="device in devices" :class="{'selected': device.id===selectedDevice.id}" @click="selectedDeviceId = device.id">
               <div class="status-box w30">
                 <div class="status">
                   <i class="fa success" v-show="device.is_active && device.is_online"></i>
@@ -274,7 +274,7 @@ export default {
       },
       // 设备列表
       devices: [],
-      selectedDevice: {},
+      selectedDeviceId: '',
       // 设备日志
       logs: [
         // {
@@ -282,7 +282,7 @@ export default {
         //   msg: ['msg']
         // }
       ],
-      datapointValues: {},
+      datapointValueArr: [],
       datapoints: [],
       settingData: false,
       searching: false,
@@ -291,6 +291,26 @@ export default {
   },
 
   computed: {
+    /**
+     * 计算属性 数据端点值
+     * @return {[type]} [description]
+     */
+    datapointValues () {
+      var result = {}
+      this.datapointValueArr.forEach((item) => {
+        result[item.index] = item.value
+      })
+      return result
+    },
+    selectedDevice () {
+      var result = {}
+      this.devices.forEach((item) => {
+        if (item.id === this.selectedDeviceId) {
+          result = item
+        }
+      })
+      return result
+    },
     datapointList () {
       let result = []
       this.datapoints.forEach((item) => {
@@ -371,7 +391,6 @@ export default {
     getDatapoints () {
       api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
           this.datapoints = res.data
         }
       }).catch((res) => {
@@ -385,7 +404,7 @@ export default {
     connect () {
       if (!this.selectedDevice.is_online) {
         this.outputLog([this.selectedDevice.id, 'The client has disconnected!'], 'status')
-        return
+        // return
       }
       api.diagnosis.getDeviceToken(this.selectedDevice.id).then((res) => {
         this.token = res.data.token
@@ -406,6 +425,7 @@ export default {
 
         // 输入日志
         socket.on('trace.log', (data) => {
+          this.analysis(data) // 解析数据
           this.outputLog([data.id, data.log], 'user')
         })
 
@@ -424,23 +444,18 @@ export default {
     // 获取设备端点值
     getDatapointValues (init) {
       if (init) {
-        this.datapointValues = {}
+        this.datapointValueArr = []
       }
       if (!this.selectedDevice.is_online) return
-      console.log('获取设备端点值')
       this.refreshing = true
-      api.device.getDatapointValues(this.selectedDevice.id, { act: 'logs' }).then((res) => {
+      api.device.getDatapointValues(this.selectedDeviceId, { act: 'logs' }).then((res) => {
         window.setTimeout(() => {
           this.refreshing = false
         }, 500)
         if (res.status === 202) {
           console.log('设备离线！')
         } else {
-          var datapointsObj = {}
-          res.data.datapoint.map(function (item) {
-            datapointsObj[item.index] = item.value
-          })
-          this.datapointValues = datapointsObj
+          this.datapointValueArr = res.data.datapoint
         }
       }).catch((res) => {
         this.refreshing = false
@@ -450,6 +465,38 @@ export default {
         //   content: locales[Vue.config.lang].errors[res.data.error.code]
         // })
       })
+    },
+
+    /**
+     * 解析数据
+     * @param  {[type]}  data socket返回的数据
+     * @return {Boolean}      [description]
+     */
+    analysis (data) {
+      // 判断是不是当前的设备
+      if (this.selectedDeviceId === data.id) {
+        let log = JSON.parse(data.log)
+        if (log && log.state) {
+          if (log.state === 'disconnect') {
+            this.devices.forEach((item, index) => {
+              if (item.id === this.selectedDeviceId) {
+                item.is_online = false
+                this.devices.$set(index, item)
+              }
+            })
+          }
+        }
+        if (log.msg && log.msg.device && log.msg.device.datapoint) {
+          log.msg.device.datapoint.map((item) => {
+            // this.datapointValues[item.index] = item.value
+            this.datapointValueArr.forEach((point, index) => {
+              if (point.index === item.index) {
+                this.datapointValueArr.$set(index, item)
+              }
+            })
+          })
+        }
+      }
     },
     /**
      * 数据端点编辑 提交表单
@@ -539,7 +586,8 @@ export default {
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
-        this.selectedDevice = this.devices[0] || {}
+        // this.selectedDevice = this.devices[0] || {}
+        this.selectedDeviceId = this.devices[0] && this.devices[0].id
         this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
