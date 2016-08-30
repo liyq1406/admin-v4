@@ -114,7 +114,7 @@
                     <td class="value-td">
                       <div class="input-box" v-if="datapoint.is_write">
                         <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
-                          <range v-if="dataPointType(datapoint.type) === 'number'" :disabled="!selectedDevice.is_online" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="setRangeValue" @ondisable="onDisable"></range>
+                          <range :disabled="!selectedDevice.is_online" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="setRangeValue" @ondisable="onDisable"></range>
                         </div>
                         <div class="boolean-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
@@ -126,7 +126,7 @@
                         </div>
                         <div class="string-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
+                            <input type="text" class="input-text input-text-sm" :value="datapoint.value" @change="setDataEvent(datapoint)">
                           </div>
                         </div>
                       </div>
@@ -455,7 +455,19 @@ export default {
         if (res.status === 202) {
           console.log('设备离线！')
         } else {
-          this.datapointValueArr = res.data.datapoint
+          if (this.datapointValueArr.length) {
+            console.log('个别数据更新')
+            res.data.datapoint.forEach((item1) => {
+              this.datapointValueArr.forEach((item2) => {
+                if (item1.index === item2.index && item2.value !== item1.value) {
+                  item2.value = item1.value
+                  item2[item2.index] = item1.value
+                }
+              })
+            })
+          } else {
+            this.datapointValueArr = res.data.datapoint
+          }
         }
       }).catch((res) => {
         this.refreshing = false
@@ -502,13 +514,6 @@ export default {
      * 数据端点编辑 提交表单
      */
     setDataEvent (dp) {
-      this.datapointValueArr.forEach((item, index) => {
-        if (item.index === dp.index) {
-          item.value = dp.value
-          item[item.index] = dp.value
-          this.datapointValueArr.$set(index, item)
-        }
-      })
       if (this.refreshing) return
       // if (isNaN(dp.value)) return
       var params = {
@@ -519,15 +524,11 @@ export default {
           }
         ]
       }
-      // if (this.editModal3.show === true) {
-      //   params.datapoint[0].value = String(params.datapoint[0].value)
-      // }
       this.refreshing = true
       api.diagnosis.setDeviceAttribute(this.selectedDevice.id, params).then((res) => {
         if (res.status === 200) {
           this.refreshing = false
-          this.getDatapointValues()
-          // this.getDatapoints()
+          this.getDatapointValues(false)
         }
       }).catch((res) => {
         this.refreshing = false
