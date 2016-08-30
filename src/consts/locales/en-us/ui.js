@@ -148,6 +148,11 @@ export default {
             issues: '消息列表'
           }
         },
+        splashwnd: {
+          subs: {
+            list: 'APP闪屏设置'
+          }
+        },
         dealer: {
           subs: {
             list: '经销商列表'

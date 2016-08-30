@@ -7,7 +7,7 @@
     <div class="container row">
       <div class="form-box col-16 mt10">
         <validator name="validation">
-          <form novalidate @submit.prevent="onAddSubmit">
+          <form novalidate @submit.prevent="">
             <div class="form">
               <div class="form-row row">
                 <label class="form-control col-5">应用名称:</label>
@@ -20,10 +20,30 @@
                 </div>
               </div>
               <div class="form-row row">
+                <label class="form-control col-5">图片ID:</label>
+                <div class="controls col-19">
+                  <div class="input-text-wrap line32">{{modal.picture_id}}</div>
+                </div>
+              </div>
+              <div class="form-row row">
                 <label class="form-control col-5">图片描述:</label>
                 <div class="controls col-19">
-                  <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
-                    <input v-model="description" name="description" type="text" v-validate:description="{required: true, maxlength: 200}" lazy class="input-text"/>
+                  <div class="input-text-wrap line32">{{modal.picture_description}}</div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-5">创建时间:</label>
+                <div class="controls col-19">
+                  <div class="input-text-wrap line32">{{modal.create_time | formatDate}}</div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-5">上传图片:</label>
+                <div class="controls col-19">
+                  <div class="input-text-wrap">
+                    <!-- <input v-model="" name="description" type="file" class="input-text"/> -->
+                    <!-- <image-uploader :images="images" @modified="onModifiedImages"></image-uploader> -->
+                    <img :src="modal.picture_url" alt="" style="width:100%">
                   </div>
                   <!-- <div class="form-tips form-tips-error">
                     <span v-if="$validation.description.touched && $validation.description.required">请输入任务描述</span>
@@ -32,20 +52,13 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-5">上传图片:</label>
+                <label class="form-control col-5">图片大小:</label>
                 <div class="controls col-19">
-                  <div class="input-text-wrap">
-                    <!-- <input v-model="" name="description" type="file" class="input-text"/> -->
-                    <image-uploader :images="model.images" @modified="onModifiedImages"></image-uploader>
-                  </div>
-                  <!-- <div class="form-tips form-tips-error">
-                    <span v-if="$validation.description.touched && $validation.description.required">请输入任务描述</span>
-                    <span v-if="$validation.description.modified && $validation.description.maxlength">不可超过200个字符</span>
-                  </div> -->
+                  <div class="input-text-wrap line32">{{modal.picture_size}}</div>
                 </div>
               </div>
               <div class="form-actions">
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">提交</button>
+                <button type="" :disabled="deling" :class="{'disabled':deling}" @click.prevent="delSplashWnd" class="btn btn-primary widbtn">删除</button>
                 <!-- <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button> -->
                 <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
               </div>
@@ -68,6 +81,7 @@
   import Breadcrumb from 'components/Breadcrumb'
   import store from 'store'
   import api from 'api'
+  // import { formatDate } from 'src/filters'
   // import _ from 'lodash'
   // import { createDayRange } from 'utils'
 
@@ -97,14 +111,19 @@
 
     data () {
       return {
-        images: {},
-        model: {
-          images: [{}]
+        deling: false,
+        modal: {
+          create_time: '',
+          picture_description: '',
+          picture_id: '',
+          picture_size: '',
+          picture_url: ''
         },
+        images: [{}],
         description: '',
         breadcrumbNav: [{
           label: '图片列表',
-          link: '/operation/plugins/splashwnd/list'
+          link: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/'
         }, {
           label: '详情'
         }],
@@ -143,9 +162,34 @@
     route: {
       data () {
         // this.getFirmwares()
+        this.getSingleSplashWnd()
       }
     },
     methods: {
+      // 获取详细信息
+      getSingleSplashWnd () {
+        api.plugin.getSingleSplashWnd(this.$route.params.selected_id, this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            console.log(res.data)
+            this.modal = res.data
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      // 删除详细信息
+      delSplashWnd () {
+        this.deling = true
+        api.plugin.delSplashWnd(this.$route.params.selected_id, this.$route.params.id).then((res) => {
+          if (res.status === 200) {
+            this.deling = false
+            this.$route.router.go('/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list')
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.deling = false
+        })
+      },
       /**
        * 处理图片上传
        * @param  {Array} images 图片路径数组
@@ -164,7 +208,7 @@
         }
         api.plugin.addSplashWnd(params).then((res) => {
           if (res.status === 200) {
-            this.$route.router.go({path: '/operation/plugins/splashwnd/list'})
+            this.$route.router.go({path: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/'})
           }
           this.showNotice({
             type: 'info',

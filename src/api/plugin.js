@@ -126,5 +126,14 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/plugin/app_splashwnd_list`, params
     )
+  },
+  /**
+   * 获取SplashWnd图片详情
+   * @param
+   */
+  getSingleSplashWnd (appId, pictureId) {
+    return http.get(
+      `${API_SERVER.default}/v2/plugin/app_splashwnd/${appId}/${pictureId}`
+    )
   }
 }

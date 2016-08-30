@@ -3,28 +3,33 @@
     <div class="main-title bordered">
       <h2>APP启动图片</h2>
     </div>
-    <div class="filter-bar ">
-      <div class="filter-group fl">
-        <div class="filter-group-item">
-          <x-select :label="currentPlugin.name" width="110px" size="small">
-            <span slot="label">选择应用</span>
-            <select v-model="currentPlugin" @change="getSplashWnd">
-              <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
-              <option v-for="plugin in filterPlugins" :value="plugin">{{ plugin.name }}</option>
-            </select>
-          </x-select>
-          <a class="btn btn-primary" v-link="{ path: '/operation/plugins/splashwnd/list/' + currentPlugin.id + '/add' }"><i class="fa fa-plus"></i>添加启动图片</a>
+    <div v-if="filterPlugins.length">
+      <div class="filter-bar ">
+        <div class="filter-group fl">
+          <div class="filter-group-item">
+            <x-select :label="currentPlugin.name" width="110px" size="small">
+              <span slot="label">选择应用</span>
+              <select v-model="currentPlugin" @change="getSplashWnd">
+                <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
+                <option v-for="plugin in filterPlugins" :value="plugin">{{ plugin.name }}</option>
+              </select>
+            </x-select>
+            <button class="btn btn-primary" :disabled="list.length === 5" :class="{'disabled':list.length === 5}" v-link="{ path: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/' + currentPlugin.id + '/add' }"><i class="fa fa-plus"></i>添加启动图片</button>
+          </div>
+        </div>
+        <div class="filter-group fr fontblue">
+          <i class="fa fa-exclamation-circle" aria-hidden="true"></i>提示：添加应用启动闪屏图片，最多只能添加5张
         </div>
       </div>
-      <div class="filter-group fr fontblue">
-        <i class="fa fa-exclamation-circle" aria-hidden="true"></i>提示：添加应用启动闪屏图片，最多只能添加5张
+      <div class="panel">
+        <div class="panel-bd">
+          <x-table :headers="headers" @selected-change="" @tbody-picture-id="showPic" @tbody-picture-url="showUrl" @tbody-edit="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+          </x-table>
+        </div>
       </div>
     </div>
-    <div class="panel">
-      <div class="panel-bd">
-        <x-table :headers="headers" @selected-change="" @tbody-picture-id="showPic" @tbody-picture-url="showUrl" @tbody-edit="getInfo" :tables="tables" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
-        </x-table>
-      </div>
+    <div v-else style="text-align:center;line-height:200px">
+      暂无应用
     </div>
     <!-- 查看图片浮层-->
     <modal :show.sync="showModal">
@@ -143,8 +148,8 @@ export default {
         key: 'create_time',
         title: '更新时间'
       }, {
-        key: 'picture_url',
-        title: '下载地址'
+        key: 'picture_size',
+        title: '图片大小'
       }, {
         key: 'edit',
         title: '操作'
@@ -179,7 +184,7 @@ export default {
           picture_id: '<a>' + item.picture_id + '</a>',
           picture_description: item.picture_description,
           create_time: formatDate(item.create_time),
-          picture_url: '<a>查看链接</a>',
+          picture_size: item.picture_size,
           edit: '<a>编辑</a>',
           prototype: item
         }
@@ -307,7 +312,7 @@ export default {
     // 跳转详情信息
     getInfo (table, header, index) {
       // console.log(table)
-      this.$route.router.go('/operation/plugins/splashwnd/list/' + this.currentPlugin.id + '/edit/' + table.prototype.picture_id)
+      this.$route.router.go('/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/' + this.currentPlugin.id + '/edit/' + table.prototype.picture_id)
       // this.$route.router.go('/operation/alerts/record')
     },
     // 打开图片预览
