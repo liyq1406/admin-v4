@@ -942,6 +942,30 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 闪屏管理
+        'plugins/splashwnd/list': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/splashwnd/list'))
+            }, 'admin')
+          }
+        },
+        // 添加闪屏
+        'plugins/splashwnd/list/:selected_id/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/splashwnd/add'))
+            }, 'admin')
+          }
+        },
+        // 编辑闪屏
+        'plugins/splashwnd/list/:selected_id/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/splashwnd/edit'))
+            }, 'admin')
+          }
+        },
 
         // 经销商管理
         'plugins/dealer/:app_id/list': {

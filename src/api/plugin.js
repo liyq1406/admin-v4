@@ -90,5 +90,41 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/plugin/app_android_apk/${id}/latest?corp_id=${corpId}`
     )
+  },
+  /**
+   * 上传SplashWnd图片
+   * @param
+   */
+  updatePic (params) {
+    return http.upload(
+      `${API_SERVER.default}/v2/plugin/app_splashwnd_upload`, params
+    )
+  },
+  /**
+   * 添加SplashWnd图片接口
+   * @param
+   */
+  addSplashWnd (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/plugin/app_splashwnd`, params
+    )
+  },
+  /**
+   * 删除SplashWnd图片接口
+   * @param
+   */
+  delSplashWnd (appId, pictureId) {
+    return http.del(
+      `${API_SERVER.default}/v2/plugin/app_splashwnd/${appId}/${pictureId}`
+    )
+  },
+  /**
+   * 获取SplashWnd图片列表
+   * @param
+   */
+  getSplashWnd (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/plugin/app_splashwnd_list`, params
+    )
   }
 }
