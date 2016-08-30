@@ -65,8 +65,8 @@
                   <span v-else>
                     <i class="fa fa-question-circle mr5" ></i>未激活
                   </span>
-                  <span class="status-date ml10">{{selectedDevice.last_login | uniformDate}}</span>
-                  <span class="status-time ml10">{{selectedDevice.last_login | uniformTime}}</span>
+                  <span class="status-date ml10">{{selectedDevice.last_login | uniformDate true}}</span>
+                  <span class="status-time ml10">{{selectedDevice.last_login | uniformTime true}}</span>
                 </div>
               </div>
             </div>
@@ -88,7 +88,7 @@
                     <span>ID:{{selectedDevice.id}}</span>
                   </div>
                   <div class="filter-device-info">
-                    <span>MAC:{{selectedDevice.mac}}</span>
+                    <span v-tooltip="selectedDevice.mac">MAC:{{selectedDevice.mac}}</span>
                   </div>
                 </div>
               </div>
@@ -803,10 +803,8 @@ export default {
     font-size 10px
     color #999999
     text-align center
-    max-width 160px
-    overflow hidden
     span
-      max-width 160px
+      max-width 135px
       overflow hidden
       text-overflow ellipsis
       display inline-block

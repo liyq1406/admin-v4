@@ -102,7 +102,7 @@ export var animatedNumber = {
  * 弹出提示
  * @author shengzhi
  * 使用方法：
- *   <i class="fa fa-question-circle" tooltip="要显示的文本">...</i>
+ *   <i class="fa fa-question-circle" v-tooltip="要显示的文本">...</i>
  */
 // REVIEW 提示初始化时会有一瞬间的错位 #shengzhi
 export var tooltip = {

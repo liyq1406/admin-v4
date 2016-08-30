@@ -14,7 +14,7 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.name") }}:</label>
                     <div class="controls col-20">
                       <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
-                        <input v-model="product.name" type="text" name="product.name" v-validate:name="{required: true, maxlength: 32}" lazy class="input-text"/>
+                        <input v-model="product.name" type="text" name="product.name" v-validate:name="{required: true, maxlength: 32}" class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span>
@@ -26,7 +26,7 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.mode") }}:</label>
                     <div class="controls col-20">
                       <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                        <input v-model="product.mode" type="text" name="product.mode" v-validate:mode="{required: true, maxlength: 64}" lazy class="input-text"/>
+                        <input v-model="product.mode" type="text" name="product.mode" v-validate:mode="{required: true, maxlength: 64}" class="input-text"/>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.mode.touched && $validation.mode.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.mode')}) }}</span>
@@ -62,7 +62,7 @@
                     <label class="form-control col-4">{{ $t("ui.product.fields.desc") }}:</label>
                     <div class="controls col-20">
                       <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
-                        <textarea v-model="product.description" type="text" name="product.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
+                        <textarea v-model="product.description" type="text" name="product.description" v-validate:description="{required: true, maxlength: 250}" class="input-text"></textarea>
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.description.touched && $validation.description.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>

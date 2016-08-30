@@ -55,7 +55,7 @@ export function uniformDate (date, correct) {
     return date
   }
 
-  if (correct instanceof Boolean && correct) {
+  if (typeof correct === 'boolean' && correct) {
     formatDate = new Date(formatDate.getTime() - 3600 * 8 * 1000)
   }
 
@@ -81,7 +81,7 @@ export function uniformTime (date, correct) {
     return date
   }
 
-  if (correct instanceof Boolean && correct) {
+  if (typeof correct === 'boolean' && correct) {
     formatDate = new Date(formatDate.getTime() - 3600 * 8 * 1000)
   }
 
