@@ -122,6 +122,7 @@
     },
     watch: {
       value () {
+        this.init()
         this.emit('change')
       }
     },
