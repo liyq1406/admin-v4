@@ -142,6 +142,11 @@ export default {
             heat: '热力分布'
           }
         },
+        splashwnd: {
+          subs: {
+            list: 'APP闪屏设置'
+          }
+        },
         helpdesk: {
           subs: {
             overview: '概览',

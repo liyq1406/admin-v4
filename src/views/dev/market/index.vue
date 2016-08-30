@@ -114,6 +114,13 @@
           alias: 'airquality',
           enable: false,
           type: 10
+        }, {
+          id: '',
+          name: 'APP闪屏设置',
+          description: '对APP进行闪屏设置。',
+          alias: 'splashwnd',
+          enable: false,
+          type: 10
         }]
       }
     },

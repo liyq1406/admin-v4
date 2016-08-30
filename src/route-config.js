@@ -943,7 +943,7 @@ let configRouter = (router) => {
           }
         },
         // 闪屏管理
-        'plugins/splashwnd/list': {
+        'plugins/splashwnd/:app_id/list': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/splashwnd/list'))
@@ -951,7 +951,7 @@ let configRouter = (router) => {
           }
         },
         // 添加闪屏
-        'plugins/splashwnd/list/:selected_id/add': {
+        'plugins/splashwnd/:app_id/list/:selected_id/add': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/splashwnd/add'))
@@ -959,7 +959,7 @@ let configRouter = (router) => {
           }
         },
         // 编辑闪屏
-        'plugins/splashwnd/list/:selected_id/edit/:id': {
+        'plugins/splashwnd/:app_id/list/:selected_id/edit/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/splashwnd/edit'))

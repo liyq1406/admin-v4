@@ -104,7 +104,7 @@
         description: '',
         breadcrumbNav: [{
           label: '图片列表',
-          link: '/operation/plugins/splashwnd/list'
+          link: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/'
         }, {
           label: '详情'
         }],
@@ -160,11 +160,12 @@
           picture_description: this.description,
           picture_id: this.images[0].picture_id,
           create_time: this.images[0].create_time,
-          picture_url: this.images[0].picture_url
+          picture_url: this.images[0].picture_url,
+          picture_size: this.images[0].picture_size
         }
         api.plugin.addSplashWnd(params).then((res) => {
           if (res.status === 200) {
-            this.$route.router.go({path: '/operation/plugins/splashwnd/list'})
+            this.$route.router.go({path: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/'})
           }
           this.showNotice({
             type: 'info',

@@ -13,7 +13,7 @@
               <option v-for="plugin in filterPlugins" :value="plugin">{{ plugin.name }}</option>
             </select>
           </x-select>
-          <a class="btn btn-primary" v-link="{ path: '/operation/plugins/splashwnd/list/' + currentPlugin.id + '/add' }"><i class="fa fa-plus"></i>添加启动图片</a>
+          <button class="btn btn-primary" :disabled="list.length === 5" :class="{'disabled':list.length === 5}" v-link="{ path: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/' + currentPlugin.id + '/add' }"><i class="fa fa-plus"></i>添加启动图片</button>
         </div>
       </div>
       <div class="filter-group fr fontblue">
@@ -143,8 +143,8 @@ export default {
         key: 'create_time',
         title: '更新时间'
       }, {
-        key: 'picture_url',
-        title: '下载地址'
+        key: 'picture_size',
+        title: '图片大小'
       }, {
         key: 'edit',
         title: '操作'
@@ -179,7 +179,7 @@ export default {
           picture_id: '<a>' + item.picture_id + '</a>',
           picture_description: item.picture_description,
           create_time: formatDate(item.create_time),
-          picture_url: '<a>查看链接</a>',
+          picture_size: item.picture_size,
           edit: '<a>编辑</a>',
           prototype: item
         }
@@ -307,7 +307,7 @@ export default {
     // 跳转详情信息
     getInfo (table, header, index) {
       // console.log(table)
-      this.$route.router.go('/operation/plugins/splashwnd/list/' + this.currentPlugin.id + '/edit/' + table.prototype.picture_id)
+      this.$route.router.go('/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/' + this.currentPlugin.id + '/edit/' + table.prototype.picture_id)
       // this.$route.router.go('/operation/alerts/record')
     },
     // 打开图片预览

@@ -212,6 +212,13 @@ export default {
               url: `/plugins/dealer/${item.id}/list`
             }]
             break
+          case 'splashwnd': // 闪屏设置
+            sub.icon = 'inbox'
+            sub.subs = [{
+              alias: 'list',
+              url: `/plugins/splashwnd/${item.id}/list`
+            }]
+            break
           case 'nest': // Google Nest网关
             sub.icon = 'google'
             break
