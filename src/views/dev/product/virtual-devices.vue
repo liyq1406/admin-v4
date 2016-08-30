@@ -51,14 +51,14 @@
                     <td class="value-td">
                       <div class="input-box">
                         <div class="number-box" v-if="dataPointType(datapoint.type) === 'number'">
-                          <range v-if="dataPointType(datapoint.type) === 'number'" :line-width="'95%'" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :prototype="datapoint" @changed="setRangeValue"></range>
+                          <range v-if="dataPointType(datapoint.type) === 'number'" :line-width="'95%'" :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="setRangeValue"></range>
                         </div>
                         <div class="range-box" v-show="dataPointType(datapoint.type) === 'boolean'">
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)">on
+                            <input type="radio" :name="'value'+$index" :value="true" v-model="datapoint.value" @change="setDataEvent(datapoint)"> true
                           </label>
                           <label class="mr20">
-                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">off
+                            <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)"> false
                           </label>
                         </div>
                         <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
@@ -150,7 +150,7 @@ import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import SearchBox from 'components/SearchBox'
 import Pager from 'components/Pager'
-import Range from 'components/Range'
+import Range from 'components/Range1'
 import Switch from 'components/Switch'
 import api from 'api'
 import _ from 'lodash'
@@ -245,9 +245,9 @@ export default {
      * @param {Boolean} isUserBehavior 是否是用户行为
      */
     setRangeValue (val, params, isUserBehavior) {
-      if (params.prototype.value !== val && isUserBehavior) {
-        params.prototype.value = val
-        this.setDataEvent(params.prototype)
+      if (params.expand.value !== val && isUserBehavior) {
+        params.expand.value = val
+        this.setDataEvent(params.expand)
       }
     },
     switchRightPanel () {
