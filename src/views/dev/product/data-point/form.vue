@@ -51,7 +51,7 @@
                   <div class="row">
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                        <input v-model="model.min" type="text" name="model.min" class="input-text" lazy v-validate:min="{format: 'numberic', min: modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808, max: addMax}" class="input-text"/>
+                        <input v-model="model.min" type="text" name="model.min" class="input-text" lazy v-validate:min="validateMin" class="input-text"/>
                       </div>
                     </div>
                     <div class="col-2 tac control-text">-</div>
@@ -63,7 +63,7 @@
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$validation.min.modified && $validation.min.min">{{ $t('ui.validation.min', [$t('ui.datapoint.fields.min'), modelType.value === 2 || modelType.value === 3 ? 0 : -9223372036854775808]) }}</span>
+                    <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
                     <span v-if="($validation.min.modified && $validation.min.max) || ($validation.max.modified && $validation.max.min)">最大值必须大于最小值</span>
                     <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.max.modified && $validation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
@@ -167,6 +167,24 @@ export default {
   },
 
   computed: {
+    /**
+     * 计算属性 最小值的表单验证
+     * @return {[type]} [description]
+     */
+    validateMin () {
+      var result = {}
+      result.format = 'numberic'
+      result.max = this.addMax
+      result.min = -9223372036854775808
+      if (this.modelType.value === 2) { // 单字节
+        result.min = 0
+      } else if (this.modelType.value === 3) { // 短整型有符号
+        result.min = -32768
+      } else if (this.modelType.value === 4) { // 32位整型（有符号）
+        result.min = -2147483648
+      }
+      return result
+    },
     type () {
       if (this.$route.params.dataPointId) {
         return 'edit'

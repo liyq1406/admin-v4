@@ -457,7 +457,6 @@ export default {
           console.log('设备离线！')
         } else {
           if (this.datapointValueArr.length) {
-            console.log('个别数据更新')
             res.data.datapoint.forEach((item1) => {
               this.datapointValueArr.forEach((item2) => {
                 if (item1.index === item2.index && item2.value !== item1.value) {
