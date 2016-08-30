@@ -124,7 +124,7 @@
                             <input type="radio" :name="'value'+$index" :value="false" v-model="datapoint.value" @change="setDataEvent(datapoint)">false
                           </label>
                         </div>
-                        <div class="number-box" v-show="dataPointType(datapoint.type) === 'string'">
+                        <div class="string-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
                             <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                           </div>
@@ -502,13 +502,20 @@ export default {
      * 数据端点编辑 提交表单
      */
     setDataEvent (dp) {
+      this.datapointValueArr.forEach((item, index) => {
+        if (item.index === dp.index) {
+          item.value = dp.value
+          item[item.index] = dp.value
+          this.datapointValueArr.$set(index, item)
+        }
+      })
       if (this.refreshing) return
-      if (isNaN(dp.value)) return
+      // if (isNaN(dp.value)) return
       var params = {
         datapoint: [
           {
             index: dp.index,
-            value: dp.value
+            value: dp.value || 0
           }
         ]
       }
