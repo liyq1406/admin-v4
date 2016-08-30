@@ -99,6 +99,7 @@
               <div class="icon-loading" v-show="refreshing">
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
+              <range :value="3"></range>
               <table class="table">
                 <thead>
                   <tr>

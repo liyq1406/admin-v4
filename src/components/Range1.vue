@@ -28,7 +28,7 @@
     /**
      * 暴露的方法：内容改变（实时上报和非实时上报）
      * @param  {[type]} 'change/changed'  方法名
-     * @param  {[type]} this.value 值
+     * @param  {[type]} this.selfValue 值
      * @param  {[type]} params    其他可能用到的参数
      * @param  {[type]} isUserBehavior    是否是用户行为
      */
@@ -68,6 +68,7 @@
     },
     data () {
       return {
+        selfValue: 0,
         focus: false, // 标志当前组件是否获得焦点
         left: 0, // 用于存放当前小球的偏移量
         transition: false // 用于标志当前是否使用css3的transition
@@ -116,17 +117,20 @@
        * @return {[type]} [description]
        */
       currentValue () {
-        var result = (parseInt((this.value - 0) * 100) / 100).toString()
+        var result = (parseInt((this.selfValue - 0) * 100) / 100).toString()
         return result
       }
     },
     watch: {
       value () {
         this.init()
+      },
+      selfValue () {
         this.emit('change')
       }
     },
     ready () {
+      this.selfValue = this.value
       if (this.checkData()) { // 检查传入数据是否正确 正确的话执行初始化
         this.init()
       }
@@ -141,16 +145,16 @@
         if (!(this.max > this.min)) {
           result = false
           console.error('组件range出错：最大值max必须比最小值min大！')
-          this.value = this.min
+          this.selfValue = this.min
         }
         if ((this.max - this.min) % this.step > 0) {
           result = false
           console.error('组件range出错：最大值max和最小值min的差必须是步长step的整数倍！')
         }
-        if (this.value < this.min || this.value > this.max) {
+        if (this.selfValue < this.min || this.selfValue > this.max) {
           result = false
           console.error('组件range出错：默认值value不能大于最大值max或者小于最小值min！')
-          this.value = this.min
+          this.selfValue = this.min
         }
         if (!result) {
           this.disabled = true
@@ -299,13 +303,6 @@
           this.transition = false
         }, 0)
         self.left = Math.round(self.left / stepWidth) * stepWidth
-        // if (self.left % stepWidth >= stepWidth / 2) {
-        //   console.log('当前数需要前进' + stepWidth * parseInt(self.left / stepWidth) )
-        // } else if (self.left % stepWidth < stepWidth / 2) {
-        //
-        // } else {
-        //   console.warn('出错')
-        // }
         self.computedValue(maxLeft)
         self.emit('changed', isUserBeHavior)
       },
@@ -379,7 +376,7 @@
       computedValue (maxLeft) {
         var value = this.min + this.left / maxLeft * (this.max - this.min)
         value = this.step * Math.round(value / this.step)
-        this.value = value
+        this.selfValue = value
       },
 
       /**
@@ -398,7 +395,7 @@
       emit (name, isUserBehavior) {
         // 是否是用户行为 默认为否
         isUserBehavior = isUserBehavior || false
-        var percent = (this.value - this.min) / (this.max - this.min)
+        var percent = (this.selfValue - this.min) / (this.max - this.min)
         var params = {
           // 最大值
           max: this.max,
@@ -411,7 +408,7 @@
           // 拓展用 从外面传进来 原封不动传出去
           expand: this.expand
         }
-        this.$emit(name, this.value, params, isUserBehavior)
+        this.$emit(name, this.selfValue, params, isUserBehavior)
       }
     }
   }
@@ -427,7 +424,7 @@
     top 0
     left 0
     z-index 500
-    /*background rgba(0,0,0,0.5)*/
+    background rgba(0,0,0,0.5)
 
   .c-range-box
     width 100%
