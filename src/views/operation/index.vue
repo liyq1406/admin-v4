@@ -201,6 +201,9 @@ export default {
             }, {
               alias: 'issues',
               url: `/plugins/helpdesk/${item.id}/issues`
+            }, {
+              alias: 'settings',
+              url: `/plugins/helpdesk/${item.id}/settings`
             }]
             break
           case 'dealer': // 经销商管理

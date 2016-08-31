@@ -150,7 +150,8 @@ export default {
         helpdesk: {
           subs: {
             overview: '概览',
-            issues: '消息列表'
+            issues: '消息列表',
+            settings: '设置'
           }
         },
         dealer: {

@@ -935,6 +935,13 @@ let configRouter = (router) => {
             }
           }
         },
+        'plugins/helpdesk/:app_id/settings': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/helpdesk/settings'))
+            }, 'admin')
+          }
+        },
         // 禁止访问
         'plugins/helpdesk/:app_id/forbidden': {
           component (resolve) {
