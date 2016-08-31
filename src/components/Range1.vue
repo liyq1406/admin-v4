@@ -75,13 +75,10 @@
         left: 0, // 用于存放当前小球的偏移量
         transition: false, // 用于标志当前是否使用css3的transition
         initTransition: false, // 组件初始化动画
-        isUserBehavior: true
+        usePercent: true
       }
     },
     computed: {
-      usePercent () {
-        return this.isUserBehavior
-      },
       percent () {
         var percent = (this.selfValue - this.min) / (this.max - this.min) * 100
         return percent
@@ -219,20 +216,12 @@
             self.down = false
             dx += ev.x
             document.body.removeChild(rangeEventBox)
-            self.isUserBeHavior = true
-            setTimeout(() => {
-              self.isUserBeHavior = false
-            }, 0)
-            self.resetPosition()
+            self.resetPosition(true)
           }, false)
         }, false)
         sliderDom.addEventListener('mouseup', function (ev) {
           self.down = false
-          self.isUserBeHavior = true
-          setTimeout(() => {
-            self.isUserBeHavior = false
-          }, 0)
-          self.resetPosition()
+          self.resetPosition(true)
         }, false)
       },
       /**
@@ -303,9 +292,9 @@
 
       /**
        * 根据步长重置位置
-       *
+       * @param {Boolean} isUserBeHavior 是否是用户行为
        */
-      resetPosition (transition) {
+      resetPosition (isUserBeHavior, transition) {
         var self = this
         if (!this.$el) {
           return
@@ -313,7 +302,6 @@
         var parentDom = this.$el.getElementsByClassName('range-box-container')[0]
         // var sliderDom = parentDom.children[1]
         var parentWidth = parentDom.clientWidth
-        // var maxLeft = parentWidth - sliderDom.clientWidth
         var maxLeft = parentWidth
         var stepWidth = maxLeft / ((self.max - self.min) / self.step)
         if (transition) {
@@ -324,7 +312,7 @@
         }, 0)
         self.left = Math.round(self.left / stepWidth) * stepWidth
         self.computedValue(maxLeft)
-        self.emit('changed', this.isUserBeHavior)
+        self.emit('changed', isUserBeHavior)
       },
       /**
        * 点击横线
@@ -367,11 +355,7 @@
         document.body.appendChild(rangeEventBox)
         rangeEventBox.addEventListener('mouseup', function (ev) {
           document.body.removeChild(rangeEventBox)
-          this.isUserBeHavior = true
-          setTimeout(() => {
-            this.isUserBeHavior = false
-          }, 0)
-          self.resetPosition()
+          self.resetPosition(true)
           self.focusEvent()
         }, false)
       },
@@ -414,9 +398,12 @@
       /**
        * 抛出事件给父组件
        * @param  {[type]}  name           可能是change（实时上报）也可能是changed（变化后上报）
+       * @param  {Boolean} isUserBehavior 是否是用户行为
        * @return {[type]}                 [description]
        */
-      emit (name) {
+      emit (name, isUserBehavior) {
+        // 是否是用户行为 默认为否
+        isUserBehavior = isUserBehavior || false
         var percent = (this.selfValue - this.min) / (this.max - this.min)
         var params = {
           // 最大值
@@ -430,7 +417,7 @@
           // 拓展用 从外面传进来 原封不动传出去
           expand: this.expand
         }
-        this.$emit(name, this.selfValue, params, this.isUserBehavior)
+        this.$emit(name, this.selfValue, params, isUserBehavior)
       }
     }
   }
