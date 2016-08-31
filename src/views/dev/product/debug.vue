@@ -176,38 +176,43 @@
     <Modal  :show.sync="showAddModal">
       <h3 slot="header">添加设备</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="onAddSubmit">
-          <div class="form-row row">
-            <label class="form-control col-6">MAC:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请填写设备MAC'" class="input-text-wrap">
-                <input v-model="addModel.mac" type="text"class="input-text"/>
-              </div>
-              <!-- <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div> -->
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">序列号:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请输入序列号'" class="input-text-wrap">
-                <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+        <validator name="addValidation">
+          <form @submit.prevent="onAddSubmit">
+            <div class="form-row row">
+              <label class="form-control col-6">MAC:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请填写设备MAC'" class="input-text-wrap required-sign">
+                  <input v-model="addModel.mac"  v-validate:mac="{required: true}" type="text"class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">
+                    MAC为必填项
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">名字:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+            <div class="form-row row">
+              <label class="form-control col-6">序列号:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入序列号'" class="input-text-wrap">
+                  <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
+            <div class="form-row row">
+              <label class="form-control col-6">名字:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入名字'" class="input-text-wrap">
+                  <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validator>
       </div>
     </Modal>
   </div>
@@ -264,14 +269,16 @@ export default {
       // 显示添加设备浮层
       showAddModal: false,
       currentPage: 1,
-      countPerPage: 8,
+      countPerPage: 10,
       queryType: {
         label: 'MAC',
         value: 'mac'
       },
       // 添加设备浮层
       addModel: {
-        mac: ''
+        mac: '',
+        sn: '',
+        name: ''
       },
       // 设备列表
       devices: [],
@@ -609,7 +616,8 @@ export default {
      * @return {[type]} [description]
      */
     onAddSubmit () {
-      if (!this.adding) {
+      this.$addValidation.mac.touched = true
+      if (this.$addValidation.valid && !this.adding) {
         this.adding = true
         api.device.add(this.$route.params.id, this.addModel).then((res) => {
           if (res.status === 200) {
@@ -642,12 +650,17 @@ export default {
       this.adding = false
       this.showAddModal = false
       this.addModel.mac = ''
+      this.addModel.sn = ''
+      this.addModel.name = ''
     },
     /**
      * 取消按钮
      * @return {[type]} [description]
      */
     onAddCancel () {
+      this.$nextTick(() => {
+        this.$resetValidation()
+      })
       this.resetAdd()
     },
     /**
@@ -726,7 +739,7 @@ export default {
         width 230px
         height 100%
         border-right 1px solid #ddd
-        min-height 600px
+        min-height 700px
         padding-left 10px
         box-sizing border-box
         position absolute
