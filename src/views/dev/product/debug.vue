@@ -590,7 +590,8 @@ export default {
     outputLog (msg, type) {
       let log = document.querySelector('.output-log')
       let isMoved = false
-      if (log.scrollTop >= 0) {
+
+      if (log && log.scrollTop >= 0) {
         if (log.scrollHeight - (log.scrollTop + log.clientHeight) < 100) {
           isMoved = true
         }
@@ -603,7 +604,9 @@ export default {
       if (isMoved) {
         setTimeout(() => {
           let logend = document.querySelector('.logend')
-          logend.scrollIntoView()
+          if (logend) {
+            logend.scrollIntoView()
+          }
         }, 100)
       }
     },

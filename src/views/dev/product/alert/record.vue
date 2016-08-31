@@ -1,65 +1,6 @@
 <template>
   <div class="panel-bd">
-    <!-- <div class="action-bar">
-      <div class="action-group">
-        <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("ui.rule.add_rule") }}</button>
-        <div class="fl">
-          <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
-          <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
-            <span slot="label">请选择产品：</span>
-            <select v-model="currProduct" name="product" @change="Productstatus">
-              <option v-for="product in products" :value="product">{{ product.name }}</option>
-            </select>
-          </x-select>
-        </div>
-      </div>
-    </div> -->
-    <!-- <div class="data-table with-loading">
-      <div class="icon-loading" v-show="loadingData">
-        <i class="fa fa-refresh fa-spin"></i>
-      </div>
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th><input type="checkbox" name="selectAll"></th>
-            <th>{{ $t("ui.alert.info_list.content") }}</th>
-            <th>设备MAC</th>
-            <th>设备ID</th>
-            <th>{{ $t("ui.alert.info_list.create_date") }}</th>
-            <th>持续时长</th>
-            <th>告警等级</th>
-            <th>{{ $t("ui.alert.info_list.is_read") }}</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="alerts.length > 0">
-            <tr v-for="alert in alerts">
-              <td>
-                <input type="checkbox" name="selectDone">
-              </td>
-              <td>
-                <span class="limit-width">{{ alert.content }}</span>
-              </td>
-              <td></td>
-              <td></td>
-              <td>{{ alert.create_date | formatDate }}</td>
-              <td>1.1h</td>
-              <td>
-                <span class="text-label-danger level-style">重度</span>
-              </td>
-              <td><span v-if="alert.is_read" class="hl-gray">{{ $t("common.read") }}</span><span v-else>{{ $t("common.unread") }}</span></td>
-            </tr>
-          </template>
-          <tr v-if="alerts.length === 0 && !loadingData">
-            <td colspan="8" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-
-    </div> -->
-    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange">
+    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
       <div slot="filter-bar" class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
@@ -279,6 +220,25 @@
         } else {
           this.showBatchBtn = false
         }
+      },
+      /**
+       * 当前页码改变
+       * @author weijie
+       * @param  {Number} number 页码
+       */
+      onCurrPageChage (number) {
+        this.currentPage = number
+        this.getAlerts()
+      },
+
+      /**
+       * 每页显示的数量改变
+       * @author weijie
+       * @param  {Number} count 数量
+       */
+      onPageCountUpdate (count) {
+        this.countPerPage = count
+        this.getAlerts(true)
       }
     }
   }

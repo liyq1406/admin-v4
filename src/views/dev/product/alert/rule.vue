@@ -77,7 +77,7 @@
       </table>
     </div>
     <!-- 分页-->
-    <pager v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+    <!-- <pager v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager> -->
   </div>
 </template>
 
@@ -153,6 +153,25 @@
           this.handleError(res)
           this.loadingData = false
         })
+      },
+      /**
+       * 当前页码改变
+       * @author weijie
+       * @param  {Number} number 页码
+       */
+      onCurrPageChage (number) {
+        this.currentPage = number
+        this.getRules()
+      },
+
+      /**
+       * 每页显示的数量改变
+       * @author weijie
+       * @param  {Number} count 数量
+       */
+      onPageCountUpdate (count) {
+        this.countPerPage = count
+        this.getRules(true)
       }
     }
   }
