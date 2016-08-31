@@ -56,12 +56,17 @@
         </thead>
         <tbody>
           <template v-if="rules.length > 0">
-            <tr v-for="rule in rules">
+            <tr v-for="rule in rulesFilter">
               <td><a v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
               <td>
                 <span class="limit-width">{{rule.content }}</span></td>
               <td>{{* rule.type | ruleLabel }}</td>
-              <td><span class="text-label-danger level-style">重度</span></td>
+              <td>
+                <span v-if="rule.tag === '严重'" class="text-label-danger level-style">{{rule.tag}}</span>
+                <span v-if="rule.tag === '轻微'" class="text-label-warnning level-style">{{rule.tag}}</span>
+                <span v-if="rule.tag === '通知'" class="text-label level-style">{{rule.tag}}</span>
+                <span v-if="rule.tag !== '通知' && rule.tag !== '严重' && rule.tag !== '轻微'">--</span>
+              </td>
               <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
               <!-- <td class="tac">
                 <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
@@ -89,6 +94,7 @@
   import locales from 'consts/locales/index'
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
+  import _ from 'lodash'
 
   export default {
     name: 'Alert',
@@ -128,11 +134,11 @@
           },
           {
             value: 2,
-            label: '中等'
+            label: '通知'
           },
           {
             value: 3,
-            label: '重度'
+            label: '严重'
           }
         ],
         loadingData: false,
@@ -147,6 +153,22 @@
     },
     ready () {
       this.getRules()
+    },
+    computed: {
+      rulesFilter () {
+        let temp = _.clone(this.rules)
+        let res = temp.filter((item) => {
+          let key = item.content.indexOf(this.key)
+          let name = item.name.indexOf(this.key)
+
+          let tag = true
+          if (this.curLevel.value !== 0) {
+            tag = item.tag === this.curLevel.label
+          }
+          return (key !== -1 || name !== -1) && tag
+        })
+        return res
+      }
     },
     watch: {
       productID () {
