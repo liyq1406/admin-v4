@@ -95,6 +95,13 @@
 
     mixins: [globalMixins],
 
+    props: {
+      productID: {
+        type: String,
+        default: ''
+      }
+    },
+
     components: {
       'x-select': Select,
       SearchBox,
@@ -140,6 +147,13 @@
     },
     ready () {
       this.getRules()
+    },
+    watch: {
+      productID () {
+        if (this.productID !== '') {
+          this.getRules()
+        }
+      }
     },
     methods: {
       getRules () {

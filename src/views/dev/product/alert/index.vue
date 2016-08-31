@@ -19,10 +19,10 @@
         </nav>
       </div>
       <template v-if="!currIndex">
-        <rule></rule>
+        <rule :product-id="currentProduct.id"></rule>
       </template>
       <template v-else>
-        <record></record>
+        <record :product-id="currentProduct.id"></record>
       </template>
     </div>
   </div>
@@ -32,11 +32,12 @@
   import { globalMixins } from 'src/mixins'
   import Rule from './rule'
   import Record from './record'
+  import { setCurrProductMixin } from '../mixins'
 
   export default {
     name: 'Alert',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, setCurrProductMixin],
 
     components: {
       Rule,
