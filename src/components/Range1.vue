@@ -41,7 +41,7 @@
       // 步长
       'step': {
         type: Number,
-        default: 10
+        default: 1
       },
       // 最小值
       'min': {
