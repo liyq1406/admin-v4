@@ -154,7 +154,7 @@ export default {
   size 100%
 
 .page-in
-  absolute left top 61px right bottom
+  absolute left top 54px right bottom
 
 .auth-page
   background url('assets/images/main_bg.jpg') no-repeat center top
@@ -177,7 +177,7 @@ export default {
 
 // 主内容区
 .main-wrap
-  absolute top right bottom left 240px
+  absolute top right bottom left 200px
   overflow auto
 
   /*.main

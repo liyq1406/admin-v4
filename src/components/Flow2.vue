@@ -1,10 +1,10 @@
 <template>
   <div class="x-flow">
     <div class="tab">
-      <div class="item" v-for="item in stepsBeautify" @click="handleClick($index)" :class="{'active':curr===$index+1, 'finished':curr>$index+1, 'unclickable':!clickable}" track-by="$index">
+      <div class="item" v-for="item in stepsBeautify" @click="handleClick($index)" :class="{'active':(curr-1)*2===$index, 'finished':(curr-1)*2>$index, 'unclickable':!clickable}" track-by="$index">
         <template v-if="item">
           <span class="num">
-            <i class="fa fa-check" v-if="curr>$index+1"></i>
+            <i class="fa fa-check" v-if="curr>($index / 2)+1"></i>
             <i v-else>{{ ($index / 2)+1 }}</i>
           </span>
           <span>{{ item }}</span>

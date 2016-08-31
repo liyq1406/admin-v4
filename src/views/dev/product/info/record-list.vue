@@ -14,11 +14,16 @@
                   添加时间： {{create_time}}
                 </div>
                 <div class="infolist">
-                  操作者： {{creater}}
+                  添加人： {{creater}}
                 </div>
                 <div class="infolist">
                   导入数量： {{total}}
                 </div>
+              </div>
+            </div>
+            <div class="filter-group fr mr20">
+              <div class="filter-group-item">
+                <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button>
               </div>
             </div>
             <!-- <div class="filter-group fr">
@@ -38,6 +43,7 @@
         </div>
       </div>
     </div>
+    <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr>
   </div>
 </template>
 
@@ -50,19 +56,19 @@ import Modal from 'components/Modal'
 import Pager from 'components/Pager'
 import Select from 'components/Select'
 // import _ from 'lodash'
-// import { globalMixins } from 'src/mixins'
+import { globalMixins } from 'src/mixins'
 // import { setCurrProductMixin } from './mixins'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Statistic from 'components/Statistic2'
 import { formatDate } from 'src/filters'
-// import { formatDate } from 'src/filters'
+import BatchExportQr from './batch-export-qr'
 
 export default {
   name: 'Authorize',
 
-  // mixins: [globalMixins],
+  mixins: [globalMixins],
 
   vuex: {
     getters: {
@@ -77,11 +83,13 @@ export default {
     'x-select': Select,
     Breadcrumb,
     Statistic,
-    'search-box': SearchBox
+    'search-box': SearchBox,
+    BatchExportQr
   },
 
   data () {
     return {
+      showExportQRCode: false,
       records: [],
       create_time: '',
       creater: '',

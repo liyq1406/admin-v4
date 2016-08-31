@@ -181,7 +181,7 @@
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
 
-    <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr>
+    <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
 </template>
 
@@ -201,7 +201,7 @@ import Select from 'components/Select'
 import store from 'store'
 import _ from 'lodash'
 import { formatDate } from 'src/filters'
-import BatchExportQr from './batch-export-qr'
+// import BatchExportQr from './batch-export-qr'
 
 export default {
   name: 'ProductInfo',
@@ -224,8 +224,7 @@ export default {
     InfoList,
     Annulus,
     Modal,
-    SearchBox,
-    BatchExportQr
+    SearchBox
   },
 
   data () {
@@ -242,7 +241,7 @@ export default {
     })
 
     return {
-      showExportQRCode: false,
+      // showExportQRCode: false,
       qrcodeModal: {
         show: false
       },

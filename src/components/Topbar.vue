@@ -30,6 +30,9 @@
             <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
           </li>
           <li class="sec-nav-item">
+            <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>企业信息</a>
+          </li>
+          <li class="sec-nav-item">
             <a href="#" @click.prevent="quit"><i class="fa fa-sign-out"></i>{{ $t("ui.user_menu.quit") }}</a>
           </li>
         </ul>
@@ -88,15 +91,15 @@ export default {
 // 头部
 .the-header
   absolute left top
-  size 100% 61px
-  background #F2F2F2
+  size 100% 54px
+  background #FAFAFA
   border-bottom 1px solid #E5E5E5
 
 // Logo
 .logo
   float left
-  size 240px 62px
-  background #BC282B url("../assets/images/logo.png") no-repeat center
+  size 200px 55px
+  background url("../assets/images/logo.png") no-repeat center
 
 // 头部导航
 .nav-header
@@ -109,14 +112,14 @@ export default {
 
   li
     display inline-block
-    line-height 61px
+    line-height 54px
     margin-right 34px
     font-size 13px
 
     a
       color #838383
       display inline-block
-      line-height 52px
+      line-height 46px
       padding-top 4px
       border-bottom 4px solid transparent
 
@@ -129,7 +132,7 @@ export default {
         color red
 
 .sec-nav
-  width 240px
+  width 200px
   text-align left
   background #FFF
 
@@ -170,8 +173,8 @@ export default {
 // 用户导航
 .user-nav
   absolute right top
-  size auto 61px
-  line-height 61px
+  size auto 55px
+  line-height 54px
   z-index 1
   text-align right
   padding 0 20px
@@ -189,7 +192,7 @@ export default {
     absolute right 10px top 28px
 
   .sec-nav
-    absolute top 61px right 5px
+    absolute top 54px right 5px
     height 0
     opacity 0
     border 1px solid default-border-color

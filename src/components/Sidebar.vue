@@ -115,7 +115,7 @@ export default {
 // 侧栏
 .sidebar
   absolute left top
-  size 239px 100%
+  size 199px 100%
   background #F2F2F2
   border-right 1px solid #ECECEC
 
@@ -126,11 +126,11 @@ export default {
   overflow hidden
 
 .nav-aside-wrap
-  size 270px 100%
+  size 230px 100%
   overflow-y auto
 
 .nav-aside-content
-  width 240px
+  width 200px
   padding-top 10px
 
 .nav-aside-item
