@@ -75,7 +75,8 @@
         left: 0, // 用于存放当前小球的偏移量
         transition: false, // 用于标志当前是否使用css3的transition
         initTransition: false, // 组件初始化动画
-        usePercent: true
+        usePercent: true, // 使用百分比渲染
+        legal: true // 传入数据是否合法
       }
     },
     computed: {
@@ -126,6 +127,9 @@
        */
       currentValue () {
         var result = (parseInt((this.selfValue - 0) * 100) / 100).toString()
+        if (!this.legal) {
+          result = this.value
+        }
         return result
       }
     },
@@ -167,6 +171,7 @@
         if (!result) {
           this.disabled = true
         }
+        this.legal = result
         return result
       },
       /**
