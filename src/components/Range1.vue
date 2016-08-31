@@ -41,7 +41,7 @@
       // 步长
       'step': {
         type: Number,
-        default: 1
+        default: 10
       },
       // 最小值
       'min': {
@@ -338,9 +338,10 @@
         } else if (left > maxLeft) {
           left = maxLeft
         }
+        this.transition = true
         setTimeout(() => {
           this.transition = false
-        }, 0)
+        }, 200)
         self.left = left
         self.createTouchMask()
       },
