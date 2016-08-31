@@ -192,6 +192,14 @@ let configRouter = (router) => {
               resolve(require('./views/account/authorize'))
             }, 'admin')
           }
+        },
+        // 企业信息
+        'corp': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/corp'))
+            }, 'admin')
+          }
         }
       }
     },

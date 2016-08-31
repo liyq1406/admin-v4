@@ -14,6 +14,9 @@
         <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
           <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
         </li>
+        <li class="sec-nav-item">
+          <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>企业信息</a>
+        </li>
       </ul>
     </div>
     <section class="main-wrap">
@@ -79,14 +82,14 @@ export default {
       position relative
 
       &:before
-        absolute right -11px top 50%
-        margin-top -5px
+        absolute right -15px top 50%
+        margin-top -7px
         content ""
-        triangle #D3D3D3 10px right
+        triangle #D3D3D3 14px right
 
       &:after
-        absolute right -10px top 50%
-        margin-top -5px
+        absolute right -14px top 50%
+        margin-top -7px
         content ""
-        triangle #F3F3F3 10px right
+        triangle #F3F3F3 14px right
 </style>

@@ -10,21 +10,6 @@
             </info-list>
           </div>
         </div>
-        <div class="col-8 hidden">
-          <div class="info-box ml30">
-            <div class="info-box-hd">企业信息</div>
-            <div class="info-box-bd">
-              <table class="table">
-                <tbody>
-                  <tr>
-                    <td class="wp25">企业名称:</td>
-                    <td>aaa</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -247,17 +232,4 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../account-info'
-
-.info-box
-  border 1px solid #E9E9E9
-
-  .info-box-hd
-    background-color #E9E9E9
-    padding 10px 20px
-    color #000
-
-  .info-box-bd
-    .table
-      td
-        padding 6px 0 6px 20px
 </style>
