@@ -156,7 +156,7 @@
        */
       checkData (showError) {
         var result = true
-        if (this.max < this.min) {
+        if (this.max <= this.min) {
           result = false
           if (showError) {
             console.error('组件range出错：最大值max必须比最小值min大！')
