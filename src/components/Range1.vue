@@ -18,10 +18,10 @@
             <span>{{currentValue}}</span>
           </div>
         </div>
-        <div class="no-control-mask" v-show="disabled" @click="onDisabled"></div>
         <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
       </div>
     </div>
+    <div class="no-control-mask" v-show="disabled" @click="onDisabled"></div>
   </div>
 </template>
 
