@@ -28,10 +28,12 @@
               <div class="filter-group-item">
                 <span slot="label">明细：</span>
                 <button @click="openModel" class="btn btn-ghost btn-sm">手动添加</button>
-                <!-- <button class="btn btn-ghost btn-sm" @click="onShowAddModal2">批量导入</button> -->
-                <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+                <button class="btn btn-ghost btn-sm" @click="onShowAddModal2">
+                <i class="fa fa-reply-all"></i>
+                批量导入</button>
+                <!-- <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
                   <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>批量导入
-                </label>
+                </label> -->
               </div>
             </div>
             <div class="filter-group fr">
@@ -83,42 +85,47 @@
         </validator>
       </div>
     </modal> -->
+    <!-- 手动添加浮层 -->
     <modal :show.sync="showAddModal">
       <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
       <div slot="body" class="form">
-        <!-- <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook"> -->
-        <form @submit.prevent="onAddSubmit">
-          <div class="form-row row">
-            <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
-            <div class="controls col-18">
-              <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap">
-                <input v-model="addModel.mac" type="text" name="mac" required lazy class="input-text"/>
-              </div>
-              <!-- <div v-if="addValidation.$submitted && addValidation.mac.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div>
-              <div v-if="addValidation.mac.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mac.$error.required">{{ $t('ui.validation.required', {field: $t('ui.overview.addForm.mac')}) }}</span></div> -->
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">序列号:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请输入序列号'" class="input-text-wrap">
-                <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+        <validator name="addValidation">
+          <form novalidate @submit.prevent="onAddSubmit">
+            <div class="form-row row">
+              <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
+              <div class="controls col-18">
+                <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap required-sign">
+                  <input v-model="addModel.mac" type="text" name="mac" v-validate:mac="{required: true}" class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">
+                    MAC为必填项
+                  </span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-6">名字:</label>
-            <div class="controls col-18">
-              <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+            <div class="form-row row">
+              <label class="form-control col-6">序列号:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入序列号'" class="input-text-wrap">
+                  <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-          </div>
-        </form>
+            <div class="form-row row">
+              <label class="form-control col-6">名字:</label>
+              <div class="controls col-18">
+                <div v-placeholder="'请输入名字'" class="input-text-wrap">
+                  <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validator>
       </div>
     </modal>
     <!-- 批量导入浮层 -->
@@ -129,7 +136,9 @@
           <form @submit.prevent="">
             <div class="form-row row">
               <!-- <label class="form-control col-6">导入:</label> -->
-              <button class="btn btn-ghost ben-sm"><i class="fa fa-share-square-o"></i>导入设备</button>
+              <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+                <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>批量导入
+              </label>
               <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限txt、cav格式文件</span></p>
             </div>
             <div class="form-actions">
@@ -304,7 +313,7 @@ export default {
         key: 'edit',
         title: '操作'
       }],
-      alerts: [{}, {}]
+      alerts: []
     }
   },
 
@@ -409,36 +418,27 @@ export default {
     },
     // 添加操作
     onAddSubmit () {
-      // if (this.addValidation.$valid && !this.adding) {
-      //   this.adding = true
-      //   api.device.add(this.$route.params.id, this.addModel).then((res) => {
-      //     if (res.status === 200) {
-      //       this.resetAdd()
-      //       this.getDevices()
-      //     }
-      //   }).catch((res) => {
-      //     this.handleError(res)
-      //     this.adding = false
-      //   })
-      // }
-      this.adding = true
-      var arr = []
-      arr[0] = this.addModel
-      api.product.sendDevices(this.$route.params.id, arr).then((res) => {
-        if (res.status === 200) {
-          this.showNotice({
-            type: 'success',
-            content: '添加成功'
-          })
-          this.resetAdd()
-          // this.getDevices()
-          this.getRecords()
+      this.$addValidation.mac.touched = true
+      if (this.$addValidation.valid && !this.adding) {
+        this.adding = true
+        var arr = []
+        arr[0] = this.addModel
+        api.product.sendDevices(this.$route.params.id, arr).then((res) => {
+          if (res.status === 200) {
+            this.showNotice({
+              type: 'success',
+              content: '添加成功'
+            })
+            this.resetAdd()
+            // this.getDevices()
+            this.getRecords()
+            this.adding = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
           this.adding = false
-        }
-      }).catch((res) => {
-        this.handleError(res)
-        this.adding = false
-      })
+        })
+      }
     },
     /**
      * 当前页码改变
@@ -486,6 +486,7 @@ export default {
                   content: this.$t('ui.upload.success_msg')
                 })
                 this.getDevices()
+                this.showAddModal2 = false
               }
               this.importing = false
             }).catch((res) => {
