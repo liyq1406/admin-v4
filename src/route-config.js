@@ -152,6 +152,8 @@ let configRouter = (router) => {
       }
     },
 
+    // 帐号
+    // ==================================================
     '/account': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -194,13 +196,8 @@ let configRouter = (router) => {
       }
     },
 
-    // '/dev/home': {
-    //   component (resolve) {
-    //     require.ensure([], (require) => {
-    //       resolve(require('./views/dev/index'))
-    //     }, 'admin')
-    //   }
-    // },
+    // 开发平台
+    // ==================================================
     '/dev': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -208,6 +205,7 @@ let configRouter = (router) => {
         }, 'admin')
       },
       subRoutes: {
+        // 首页
         'home': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -216,7 +214,7 @@ let configRouter = (router) => {
           }
         },
         // -------------------------产品开发-------------------------
-        // 创建产品
+        // 添加产品
         'products/create': {
           component (resolve) {
             require.ensure([], (require) => {
@@ -229,13 +227,6 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/info'))
-            }, 'admin')
-          }
-        },
-        'products/:id/info/record': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/info/add-record'))
             }, 'admin')
           }
         },
@@ -252,14 +243,6 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/debug'))
-            }, 'admin')
-          }
-        },
-        // 设备授权
-        'products/:id/authorize': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/authorize'))
             }, 'admin')
           }
         },
@@ -318,6 +301,14 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/data-point/form'))
+            }, 'admin')
+          }
+        },
+        // 设备授权
+        'products/:id/authorize': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/authorize'))
             }, 'admin')
           }
         },
@@ -624,6 +615,8 @@ let configRouter = (router) => {
       }
     },
 
+    // 运营平台
+    // ==================================================
     '/operation': {
       component (resolve) {
         require.ensure([], (require) => {
@@ -714,13 +707,13 @@ let configRouter = (router) => {
           }
         },
         // 微信导入
-        'products/:id/wechat': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/wechat'))
-            }, 'admin')
-          }
-        },
+        // 'products/:id/wechat': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/product/wechat'))
+        //     }, 'admin')
+        //   }
+        // },
         // 上下线记录
         'products/:product_id/records': {
           component (resolve) {
@@ -1403,7 +1396,6 @@ let configRouter = (router) => {
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',
     '/operation/data': '/operation/data/tables',
-    '/operation/statistic': '/operation/statistic/products',
     '/operation/settings': '/operation/settings/auth',
     '/operation/users': '/operation/users/overview',
     '/operation/users/details/:id': '/operation/users/details/:id/devices',

@@ -12,12 +12,7 @@
                 <input type="checkbox" v-model="model.is_user_active"/>
                 <span>用户必须激活方可登录平台</span>
               </label>
-              <x-tooltip placement="right" width="300px">
-                <p>若没有设置该项目，那么：</p>
-                <p>1. 手机注册的用户不需要输入验证码便可注册并且激活。</p>
-                <p>2. 邮箱注册的用户，无需点击邮箱中的激活链接，便可登录平台</p>
-                <i class="fa fa-question-circle hl-orange" slot="trigger"></i>
-              </x-tooltip>
+              <i class="fa fa-question-circle hl-orange" v-tooltip="'若没有设置该项目，那么：<br>1. 手机注册的用户不需要输入验证码便可注册并且激活。<br>2. 邮箱注册的用户，无需点击邮箱中的激活链接，便可登录平台'"></i>
             </div>
             <p>第三方验证</p>
             <div class="form-row row">
@@ -51,16 +46,11 @@
 <script>
   import api from 'api'
   import { globalMixins } from 'src/mixins'
-  import Tooltip from 'components/Tooltip'
 
   export default {
     name: 'UserSetting',
 
     mixins: [globalMixins],
-
-    components: {
-      'x-tooltip': Tooltip
-    },
 
     data () {
       return {
