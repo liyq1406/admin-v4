@@ -196,6 +196,7 @@
 
     data () {
       return {
+        editValidation: {},
         datapoints: [],
         ruleTypes: locales[Vue.config.lang].data.RULE_TYPES,
         compareTypes: locales[Vue.config.lang].data.RULE_COMPARE_TYPES,
@@ -215,7 +216,6 @@
           show: false,
           form: {},
           editingTag: false,
-          editValidation: {},
           originEditModel: {},
           model: {           // 添加数据模型
             product_id: '',
@@ -242,24 +242,18 @@
     route: {
       data () {
         this.getDataPoint()
-        // this.getAlerts()
+        this.getAlerts()
       }
     },
     ready () {
     },
     methods: {
       getAlerts () {
-        var params = {
-          query: {
-            id: {
-              $like: this.$route.params.rule_id
-            }
-          }
-        }
-        console.log(112)
-        api.alert.getAlerts(params).then((res) => {
-          if (res.status === 200) {
-            console.log(res.data)
+        api.alert.getRules(this.$route.params.id).then((res) => {
+          if (res.status === 200 && res.data.length > 0) {
+            this.editModal.model = res.data.find((item) => {
+              return item.id === this.$route.params.rule_id
+            })
           }
           this.loadingData = false
         }).catch((res) => {
