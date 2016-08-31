@@ -86,9 +86,14 @@
                 </div>
               </div>
               <div class="form-row row tag-row mt20">
-                <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.tags") }}:</label>
+                <label class="form-control col-5 alert-label">告警等级:</label>
                 <div class="controls col-19">
-                  <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input>
+                  <!-- <tag-input :value.sync="addModal.model.tag" :candidate="candidateTags" :editing.sync="addModal.editingTag" @adding-tag="addModal.show = true"></tag-input> -->
+                  <x-select width="90px" :label="addModal.model.tag" size="small">
+                    <select v-model="addModal.model.tag">
+                      <option v-for="level in warningLevels" :value="level">{{ level }}</option>
+                    </select>
+                  </x-select>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -135,6 +140,9 @@
                       </div>
                     </div>
                   </template>
+                  <div v-if="notifyChecked && addModal.model.notify_target.length === 0" class="form-tips form-tips-error">
+                    <span>通知方式为必选项</span>
+                  </div>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -219,7 +227,7 @@
           model: {           // 添加数据模型
             product_id: this.$route.params.id,
             name: '',
-            tag: '',
+            tag: '通知',
             type: 1,
             notify_target: [],
             notify_apps: [],
@@ -233,7 +241,9 @@
           },
           value1: '0',
           value2: 'online'
-        }
+        },
+        warningLevels: ['通知', '轻微', '严重'],
+        notifyChecked: false
       }
     },
     filters: {
@@ -260,6 +270,11 @@
         return _.includes(model.notify_target, 5)
       },
       onSubmit () {
+        if (this.addModal.model.notify_target.length === 0) {
+          this.notifyChecked = true
+          if (this.addValidation.$valid) {}
+          return
+        }
         if (this.addValidation.$valid && !this.adding) {
           this.adding = true
           this.addModal.model.value = this.addModal.model.type === 1 ? this.addModal.value1 : this.addModal.value2

@@ -86,7 +86,12 @@
               <div class="form-row row tag-row mt20">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.tags") }}:</label>
                 <div class="controls col-19">
-                  <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input>
+                  <!-- <tag-input :value.sync="editModal.model.tag" :candidate="candidateTags" :editing.sync="editModal.editingTag" @adding-tag="editModal.show = true"></tag-input> -->
+                  <x-select width="90px" :label="editModal.model.tag" size="small">
+                    <select v-model="editModal.model.tag">
+                      <option v-for="level in warningLevels" :value="level">{{ level }}</option>
+                    </select>
+                  </x-select>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -133,6 +138,9 @@
                       </div>
                     </div>
                   </template>
+                  <div v-if="notifyChecked && editModal.model.notify_target.length === 0" class="form-tips form-tips-error">
+                    <span>通知方式为必选项</span>
+                  </div>
                 </div>
               </div>
               <div class="form-row row mt20">
@@ -157,6 +165,11 @@
                     </label>
                   </div>
                 </div>
+              </div>
+              <div class="form-row mt20">
+                <label class="del-check fr">
+                  <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.rule.del_rule") }}
+                </label>
               </div>
               <div class="form-actions mt10">
                 <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
@@ -234,7 +247,9 @@
           },
           value1: '0',
           value2: 'online'
-        }
+        },
+        warningLevels: ['通知', '轻微', '严重'],
+        notifyChecked: false
       }
     },
     filters: {
@@ -270,12 +285,16 @@
         return _.includes(model.notify_target, 5)
       },
       onSubmit () {
+        if (this.editModal.model.notify_target.length === 0) {
+          this.notifyChecked = true
+          if (this.editValidation.$valid) {}
+          return
+        }
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
           api.alert.deleteRule(this.editModal.model.id).then((res) => {
             if (res.status === 200) {
-              this.resetEdit()
-              this.getRules()
+              this.$route.router.go('/dev/products/' + this.$route.params.id + '/alert')
             }
           }).catch((res) => {
             this.handleError(res)
@@ -286,8 +305,7 @@
           this.editModal.model.value = this.editModal.model.type === 1 ? this.editModal.value1 : this.editModal.value2
           api.alert.updateRule(this.editModal.model, this.$route.params.id).then((res) => {
             if (res.status === 200) {
-              this.resetEdit()
-              this.getRules()
+              this.$route.router.go('/dev/products/' + this.$route.params.id + '/alert')
             }
           }).catch((res) => {
             this.handleError(res)

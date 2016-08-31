@@ -62,8 +62,8 @@
                 <span class="limit-width">{{rule.content }}</span></td>
               <td>{{* rule.type | ruleLabel }}</td>
               <td>
-                <span v-if="rule.tag === '严重'" class="text-label-danger level-style">{{rule.tag}}</span>
-                <span v-if="rule.tag === '轻微'" class="text-label-warnning level-style">{{rule.tag}}</span>
+                <span v-if="rule.tag === '严重'" class="text-label text-label-danger level-style">{{rule.tag}}</span>
+                <span v-if="rule.tag === '轻微'" class="text-label text-label-warning level-style">{{rule.tag}}</span>
                 <span v-if="rule.tag === '通知'" class="text-label level-style">{{rule.tag}}</span>
                 <span v-if="rule.tag !== '通知' && rule.tag !== '严重' && rule.tag !== '轻微'">--</span>
               </td>
