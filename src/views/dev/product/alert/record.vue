@@ -57,6 +57,13 @@
       'x-table': Table
     },
 
+    props: {
+      productID: {
+        type: String,
+        default: ''
+      }
+    },
+
     data () {
       return {
         headers: [
@@ -185,10 +192,12 @@
       queryCondition () {
         return {
           limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage
-          // query: {
-          //   product_id: this.$route.params.id
-          // }
+          offset: (this.currentPage - 1) * this.countPerPage,
+          query: {
+            product_id: {
+              '$in': [this.$route.params.id]
+            }
+          }
         }
       }
     },
@@ -199,6 +208,13 @@
     },
     ready () {
       this.getAlerts()
+    },
+    watch: {
+      productID () {
+        if (this.productID !== '') {
+          this.getAlerts()
+        }
+      }
     },
     methods: {
       getAlerts () {
