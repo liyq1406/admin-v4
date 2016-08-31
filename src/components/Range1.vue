@@ -1,24 +1,26 @@
 <template>
   <div class="c-range-box">
-    <div class="range-box-container" @click="focusEvent">
-      <div class="line" @mouseDown="select">
-        <div class="selected-background" :style="selectedBackgroundStyle"></div>
-        <div class="min">
-          <span class="vertical-line"></span>
-          <span class="num">{{min}}</span>
+    <div class="padding-box" :style="'padding-right: '+10+'px'">
+      <div class="range-box-container" @click="focusEvent">
+        <div class="line" @mouseDown="select">
+          <div class="selected-background" :style="selectedBackgroundStyle"></div>
+          <div class="min">
+            <span class="vertical-line"></span>
+            <span class="num">{{min}}</span>
+          </div>
+          <div class="max">
+            <span class="num">{{max}}</span>
+            <span class="vertical-line"></span>
+          </div>
         </div>
-        <div class="max">
-          <span class="num">{{max}}</span>
-          <span class="vertical-line"></span>
+        <div class="slider-box" :style="sliderStype">
+          <div class="currentValue">
+            <span>{{currentValue}}</span>
+          </div>
         </div>
+        <div class="no-control-mask" v-show="disabled" @click="onDisabled"></div>
+        <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
       </div>
-      <div class="slider-box" :style="sliderStype">
-        <div class="currentValue">
-          <span>{{currentValue}}</span>
-        </div>
-      </div>
-      <div class="no-control-mask" v-show="disabled" @click="onDisabled"></div>
-      <input type="text" class="hide-input" @blur="blurEvent" @keydown="keydown">
     </div>
   </div>
 </template>
@@ -72,10 +74,18 @@
         focus: false, // 标志当前组件是否获得焦点
         left: 0, // 用于存放当前小球的偏移量
         transition: false, // 用于标志当前是否使用css3的transition
-        initTransition: false // 组件初始化动画
+        initTransition: false, // 组件初始化动画
+        isUserBehavior: true
       }
     },
     computed: {
+      usePercent () {
+        return this.isUserBehavior
+      },
+      percent () {
+        var percent = (this.selfValue - this.min) / (this.max - this.min) * 100
+        return percent
+      },
       /**
        * 计算属性 滑块样式
        * @return {[type]} [description]
@@ -84,7 +94,7 @@
         let transition = this.transition ? 'left ease 0.2s' : 'left ease 0s'
         var result = {
           width: '10px',
-          left: `${this.left}px`,
+          left: this.usePercent ? `${this.percent}%` : `${this.left}px`,
           backgroundColor: this.focus ? '#b30610' : '#c0252e',
           webkitTransition: transition,
           mozTransition: transition,
@@ -102,7 +112,7 @@
       selectedBackgroundStyle () {
         let transition = this.transition ? 'width ease 0.2s' : 'width ease 0s'
         var result = {
-          width: `${this.left}px`,
+          width: this.usePercent ? `${this.percent}%` : `${this.left}px`,
           backgroundColor: this.focus ? '#b30610' : '#c0252e',
           webkitTransition: transition,
           mozTransition: transition,
@@ -168,18 +178,22 @@
        */
       init () {
         var self = this
-        var parentDom = this.$el.getElementsByClassName('range-box-container')[0]
+        var parentDom = self.$el.getElementsByClassName('range-box-container')[0]
         var linedom = parentDom.children[0]
         var sliderDom = parentDom.children[1]
         var parentWidth = parentDom.clientWidth
-        var maxLeft = parentWidth - sliderDom.clientWidth
         var halfWidth = sliderDom.offsetWidth / 2
+        // var maxLeft = parentWidth - halfWidth * 2
+        var maxLeft = parentWidth
         var linePosition = this.getPosition(linedom)
         var dx
         self.left = maxLeft * ((self.value - self.min) / (self.max - self.min))
         self.resetPosition(false, this.initTransition)
         self.down = false
         sliderDom.addEventListener('mousedown', function (ev) {
+          var parentDom = self.$el.getElementsByClassName('range-box-container')[0]
+          var parentWidth = parentDom.clientWidth
+          var maxLeft = parentWidth
           var rangeEventBox = document.createElement('div')
           rangeEventBox.className = 'range-event-box'
           document.body.appendChild(rangeEventBox)
@@ -205,12 +219,20 @@
             self.down = false
             dx += ev.x
             document.body.removeChild(rangeEventBox)
-            self.resetPosition(true)
+            self.isUserBeHavior = true
+            setTimeout(() => {
+              self.isUserBeHavior = false
+            }, 0)
+            self.resetPosition()
           }, false)
         }, false)
         sliderDom.addEventListener('mouseup', function (ev) {
           self.down = false
-          self.resetPosition(true)
+          self.isUserBeHavior = true
+          setTimeout(() => {
+            self.isUserBeHavior = false
+          }, 0)
+          self.resetPosition()
         }, false)
       },
       /**
@@ -281,17 +303,18 @@
 
       /**
        * 根据步长重置位置
-       * @param {Boolean} isUserBeHavior 是否是用户行为
+       *
        */
-      resetPosition (isUserBeHavior, transition) {
+      resetPosition (transition) {
         var self = this
         if (!this.$el) {
           return
         }
         var parentDom = this.$el.getElementsByClassName('range-box-container')[0]
-        var sliderDom = parentDom.children[1]
+        // var sliderDom = parentDom.children[1]
         var parentWidth = parentDom.clientWidth
-        var maxLeft = parentWidth - sliderDom.clientWidth
+        // var maxLeft = parentWidth - sliderDom.clientWidth
+        var maxLeft = parentWidth
         var stepWidth = maxLeft / ((self.max - self.min) / self.step)
         if (transition) {
           this.transition = true
@@ -301,7 +324,7 @@
         }, 0)
         self.left = Math.round(self.left / stepWidth) * stepWidth
         self.computedValue(maxLeft)
-        self.emit('changed', isUserBeHavior)
+        self.emit('changed', this.isUserBeHavior)
       },
       /**
        * 点击横线
@@ -319,7 +342,8 @@
         }
         var sliderDom = line.nextElementSibling
         var halfWidth = sliderDom.offsetWidth / 2
-        var maxLeft = line.clientWidth - halfWidth * 2
+        // var maxLeft = line.clientWidth - halfWidth * 2
+        var maxLeft = line.clientWidth
         var left = ev.clientX - self.getPosition(line).left - halfWidth
         if (left < 0) {
           left = 0
@@ -343,7 +367,11 @@
         document.body.appendChild(rangeEventBox)
         rangeEventBox.addEventListener('mouseup', function (ev) {
           document.body.removeChild(rangeEventBox)
-          self.resetPosition(true)
+          this.isUserBeHavior = true
+          setTimeout(() => {
+            this.isUserBeHavior = false
+          }, 0)
+          self.resetPosition()
           self.focusEvent()
         }, false)
       },
@@ -386,12 +414,9 @@
       /**
        * 抛出事件给父组件
        * @param  {[type]}  name           可能是change（实时上报）也可能是changed（变化后上报）
-       * @param  {Boolean} isUserBehavior 是否是用户行为
        * @return {[type]}                 [description]
        */
-      emit (name, isUserBehavior) {
-        // 是否是用户行为 默认为否
-        isUserBehavior = isUserBehavior || false
+      emit (name) {
         var percent = (this.selfValue - this.min) / (this.max - this.min)
         var params = {
           // 最大值
@@ -405,7 +430,7 @@
           // 拓展用 从外面传进来 原封不动传出去
           expand: this.expand
         }
-        this.$emit(name, this.selfValue, params, isUserBehavior)
+        this.$emit(name, this.selfValue, params, this.isUserBehavior)
       }
     }
   }
@@ -431,6 +456,10 @@
     /*padding 0 10px*/
     box-sizing border-box
     margin 5px 0
+    .padding-box
+      box-sizing border-box
+      width 100%
+      height 100%
     .range-box-container
       width 100%
       height 100%
@@ -444,6 +473,17 @@
         top 50%
         background #d5d5d5
         cursor pointer
+        &:after
+          width 10px
+          height 10px
+          content ""
+          display block
+          background #d5d5d5
+          position absolute
+          left 100%
+          top 50%
+          transform translate(0,-50%)
+
         .selected-background
           background #6699cc
           width 10px
@@ -469,6 +509,7 @@
           left 0
         .max
           right 0
+          transform translate(10px)
       .slider-box
         width 10px
         height 24px
