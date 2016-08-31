@@ -26,7 +26,9 @@
 </template>
 
 <script>
+  import { globalMixins } from 'src/mixins'
   module.exports = {
+    mixins: [globalMixins],
     /**
      * 暴露的方法：内容改变（实时上报和非实时上报）
      * @param  {[type]} 'change/changed'  方法名
@@ -152,20 +154,32 @@
        * 检查用户传入的数据是否合法
        * @return {[type]} [description]
        */
-      checkData () {
+      checkData (showError) {
         var result = true
-        if (!(this.max > this.min)) {
+        if (this.max < this.min) {
           result = false
-          console.error('组件range出错：最大值max必须比最小值min大！')
+          if (showError) {
+            console.error('组件range出错：最大值max必须比最小值min大！')
+          }
           this.selfValue = this.min
         }
         if ((this.max - this.min) % this.step > 0) {
           result = false
-          console.error('组件range出错：最大值max和最小值min的差必须是步长step的整数倍！')
+          if (showError) {
+            this.showErrors('最大值和最小值的差必须是步长的整数倍！')
+            console.error('组件range出错：最大值max和最小值min的差必须是步长step的整数倍！')
+          }
         }
-        if (this.selfValue < this.min || this.selfValue > this.max) {
+        if (this.value < this.min || this.value > this.max) {
           result = false
-          console.error('组件range出错：默认值value不能大于最大值max或者小于最小值min！')
+          if (showError) {
+            if (this.value < this.min) {
+              this.showErrors('默认值不能小于最小值！')
+            } else if (this.value > this.max) {
+              this.showErrors('默认值不能大于最大值！')
+            }
+            console.error('组件range出错：默认值value不能大于最大值max或者小于最小值min！')
+          }
           this.selfValue = this.min
         }
         if (!result) {
@@ -399,6 +413,9 @@
        * @return {[type]} [description]
        */
       onDisabled () {
+        if (!this.legal) {
+          this.checkData(true)
+        }
         this.$emit('ondisable')
       },
       /**
@@ -424,6 +441,13 @@
           expand: this.expand
         }
         this.$emit(name, this.selfValue, params, isUserBehavior)
+      },
+
+      showErrors (str) {
+        this.showNotice({
+          type: 'error',
+          content: str
+        })
       }
     }
   }
