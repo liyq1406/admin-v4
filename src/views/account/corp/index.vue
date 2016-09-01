@@ -3,12 +3,12 @@
     <div class="account-info">
       <h2>{{ corp.company }} <a href="#" @click.prevent="editCorp" class="fa fa-edit"></a></h2>
       <div class="details row">
-        <div class="col-16">
+        <div class="col-24">
           <div v-stretch="182">
             <info-list :info="corpInfo"></info-list>
           </div>
         </div>
-        <div class="col-8">
+        <!-- <div class="col-8">
           <div class="logo-info">
             <div class="mb5">企业Logo</div>
             <div class="thumbnail">
@@ -19,7 +19,7 @@
             </div>
             <div class="hl-gray mt5">图片规格：200*55</div>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
 
@@ -116,6 +116,7 @@ export default {
 
   vuex: {
     getters: {
+      corp: ({ system }) => system.corp,
       currentMember: ({ system }) => system.currentMember
     }
   },
@@ -132,7 +133,6 @@ export default {
         newpassword: ''
       },
       model: {},
-      corp: {},
       isShowModal: false,
       loadingCorp: false
     }
@@ -195,25 +195,10 @@ export default {
 
   route: {
     data () {
-      this.getCorpInfo()
     }
   },
 
   methods: {
-    /**
-     * 获取企业信息
-     * @author shengzhi
-     */
-    getCorpInfo () {
-      this.loadingCorp = true
-      api.corp.getCorpInfo().then((res) => {
-        this.corp = res.data
-        this.loadingCorp = false
-      }).catch((res) => {
-        this.handleError(res)
-        this.loadingCorp = false
-      })
-    },
 
     /**
      * 修改企业信息
