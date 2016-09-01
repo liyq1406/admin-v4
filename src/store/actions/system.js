@@ -9,6 +9,11 @@ export const setLayouts = ({ dispatch }, layouts) => {
 }
 
 // 获取当前帐户成员
+export const setCorp = ({ dispatch }, corp) => {
+  dispatch(types.RECEIVE_CORP, corp)
+}
+
+// 获取当前帐户成员
 export const setCurrentMember = ({ dispatch }, member) => {
   dispatch(types.RECEIVE_MEMBER, member)
 }

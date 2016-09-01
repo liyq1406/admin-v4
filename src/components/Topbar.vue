@@ -1,6 +1,6 @@
 <template>
   <header class="header the-header" transition="header" transition-mode="out-in">
-    <a v-link="{ path: '/dashboard' }" class="logo"></a>
+    <a v-link="{ path: '/dashboard' }" class="logo" :style="logo?'background-image: url('+logo+')': ''"></a>
     <!-- Start: 主导航 -->
     <nav class="nav-header">
       <!-- <pre>{{mainNav | json}}</pre> -->
@@ -57,6 +57,7 @@ export default {
 
   vuex: {
     getters: {
+      corp: ({ system }) => system.corp,
       currentMember: ({ system }) => system.currentMember
     }
   },
@@ -65,6 +66,13 @@ export default {
     return {
       isShowUserNav: false,
       mainNav: MAIN_NAV
+    }
+  },
+
+  computed: {
+    logo () {
+      var result = this.corp.logo
+      return result
     }
   },
 

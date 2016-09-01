@@ -1,4 +1,5 @@
 import {
+  RECEIVE_CORP,
   RECEIVE_MEMBER,
   SWITCH_LAYOUTS,
   SET_LOADING_STATUS,
@@ -11,6 +12,7 @@ import {
 
 // 状态初始化
 var state = {
+  corp: {},  // 当前企业信息
   currentMember: {},  // 当前成员信息
   layouts: [],        // 当前页面布局
   loading: false,     // 是否正在加载
@@ -23,6 +25,11 @@ var state = {
 
 // 状态变化
 const mutations = {
+  // 接收到企业信息
+  [RECEIVE_CORP] (state, corp) {
+    state.corp = corp
+  },
+
   // 接收到帐户成员信息
   [RECEIVE_MEMBER] (state, member) {
     state.currentMember = member

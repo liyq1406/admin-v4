@@ -36,7 +36,7 @@
 <script>
 import store from 'store/index'
 import { globalMixins } from './mixins'
-import { removeError, hideError, setCurrentMember } from './store/actions/system'
+import { removeError, hideError, setCurrentMember, setCorp } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
 import Vue from 'vue'
@@ -67,6 +67,7 @@ export default {
       error: ({ system }) => system.error,
       isShowError: ({ system }) => system.isShowError,
       notices: ({ system }) => system.notices,
+      corp: ({ system }) => system.corp,
       currentMember: ({ system }) => system.currentMember,
       products: ({ products }) => products.all,
       plugins: ({ plugins }) => plugins.all
@@ -74,6 +75,7 @@ export default {
     actions: {
       hideError,
       removeError,
+      setCorp,
       setCurrentMember,
       getAllProducts,
       createPlugin,
@@ -93,6 +95,7 @@ export default {
         this.getMember()
         this.getProducts()
         this.getPlugins()
+        this.getCorpInfo()
       }
     }
   },
@@ -106,6 +109,18 @@ export default {
   },
 
   methods: {
+    /**
+     * 获取企业信息
+     * @author shengzhi
+     */
+    getCorpInfo () {
+      api.corp.getCorpInfo().then((res) => {
+        console.log(res.data)
+        this.setCorp(res.data)
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 判断是否是否包含某种布局
      * @param  {String}  layout 目标布局

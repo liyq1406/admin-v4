@@ -4,6 +4,8 @@
 
 // 系统
 // ------------------------------
+// 接受到企业信息
+export const RECEIVE_CORP = 'RECEIVE_CORP'
 
 // 接受到账户成员信息
 export const RECEIVE_MEMBER = 'RECEIVE_MEMBER'
