@@ -57,7 +57,7 @@
         <tbody>
           <template v-if="rules.length > 0">
             <tr v-for="rule in rulesFilter">
-              <td><a v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
+              <td><a class="hl-red" v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
               <td>
                 <span class="limit-width">{{rule.content }}</span></td>
               <td>{{* rule.type | ruleLabel }}</td>
