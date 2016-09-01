@@ -217,6 +217,14 @@
                       </div>
                     </div>
                   </div>
+                  <div class="form-row row">
+                    <label class="form-control col-5">过期时间:</label>
+                    <div class="controls col-19 row">
+                      <div class="broadcast-time row">
+                        <date-picker :time="expire" @timechange="onExpireTimeChange"></date-picker>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -357,9 +365,9 @@
         // 消息内容
         content: '',
         // 推送时间
-        time: new Date(), // yyyy-MM-dd'T'HH:mm:ss.SS'Z'
+        time: new Date(), // 时间对象
         // 失效时间
-        expire: '', // yyyy-MM-dd'T'HH:mm:ss.SS'Z'
+        expire: new Date(+new Date() + 30 * 1000 * 60 * 60 * 24), // 时间对象 默认是开始时间加30天
         // 推送时间类型
         timeType: 1, // 1为现在，2为自定义时间
         // 推送类型
@@ -437,7 +445,7 @@
         result.title = this.title
         result.content = this.content
         result.time = this.time || new Date()
-        result.expire = this.expire || new Date()
+        result.expire = this.expire
         result.action = {}
         if (this.actionType === 2) {
           result.action.type = 1
@@ -609,10 +617,17 @@
        * @return {[type]}      [description]
        */
       onTimeChange (time) {
-        var delay = 30 // 30天后过期
+        // var delay = 30 // 30天后过期
         this.timeType = 2
         this.time = time
-        this.expire = new Date(time - 0 + 1000 * 60 * 60 * 24 * delay)
+        // this.expire = new Date(time - 0 + 1000 * 60 * 60 * 24 * delay)
+      },
+      /**
+       * 过期时间变化
+       * @return {[type]} [description]
+       */
+      onExpireTimeChange (expire) {
+        this.expire = expire
       },
       /**
        * 产品的全选按钮被点击
@@ -634,6 +649,13 @@
        * @return {[type]} [description]
        */
       onSubmit () {
+        if (this.expire - this.time <= 0) {
+          this.showNotice({
+            type: 'error',
+            content: '过期时间必须大于推送时间！'
+          })
+          return
+        }
         if (this.$validation.valid) {
           if (this.pageType === 'add') {
             this.add()
