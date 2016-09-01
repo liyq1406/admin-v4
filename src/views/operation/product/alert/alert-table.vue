@@ -7,7 +7,7 @@
           <div class="filter-group fl">
             <div class="filter-group-item">
               <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">明细：</span>
+                <span slot="label">显示：</span>
                 <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
@@ -73,8 +73,7 @@ export default {
         { label: '全部等级', value: 'all' },
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
-        { label: '中等', value: '中等' },
-        { label: '重度', value: '重度' }
+        { label: '严重', value: '严重' }
       ],
       visibility: {},
       queryTypeOptions: [
@@ -167,9 +166,9 @@ export default {
           '中等': 'text-label-warning',
           '重度': 'text-label-danger'
         })[item.tags] || ''
-        // let a = item.alert_name
+        let content = '<span class="table-limit-width">' + item.content + '</span>'
         let alert = {
-          content: '<a>' + item.alert_name + '</a>',
+          content: content,
           mac: item.mac,
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
@@ -325,7 +324,6 @@ export default {
     },
     // 跳转详情信息
     getInfo (table, header, index) {
-      console.log(table)
       this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
       // this.$route.router.go('/operation/alerts/record')
     }

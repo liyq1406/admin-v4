@@ -1,6 +1,6 @@
 <template>
   <div class="panel-bd">
-    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
       <div slot="filter-bar" class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
@@ -27,8 +27,8 @@
       </div>
       <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
         <label>标记为:</label>
-        <button class="btn btn-ghost" @click="setStatusRead(true)">已处理</button>
-        <button class="btn btn-ghost" @click="setStatusUnread(false)">未处理</button>
+        <button class="btn btn-ghost" @click="setDeal">已处理</button>
+        <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
       </div>
     </x-table>
   </div>
@@ -43,7 +43,7 @@
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
   import Table from 'components/Table'
-  import {uniformDate, uniformTime, toDecimal} from 'src/filters'
+  import {formatDate} from 'src/filters'
 
   export default {
     name: 'Alert',
@@ -66,37 +66,29 @@
 
     data () {
       return {
-        headers: [
-          {
-            key: 'content',
-            title: '告警内容'
-          },
-          {
-            key: 'mac',
-            title: '设备MAC'
-          },
-          {
-            key: 'id',
-            title: '设备ID'
-          },
-          {
-            key: 'time',
-            title: '时间'
-          },
-          {
-            key: 'duration',
-            title: '持续时长'
-          },
-          {
-            key: 'level',
-            title: '告警等级'
-          },
-          {
-            key: 'status',
-            title: '状态',
-            class: 'tac'
-          }
-        ],
+        headers: [{
+          key: 'content',
+          title: '告警内容'
+        }, {
+          key: 'mac',
+          title: '设备MAC'
+        }, {
+          key: 'id',
+          title: '设备ID'
+        }, {
+          key: 'create_date',
+          title: '时间',
+          sortType: -1
+        }, {
+          key: 'duration',
+          title: '持续时长'
+        }, {
+          key: 'level',
+          title: '告警等级'
+        }, {
+          key: 'state',
+          title: '状态'
+        }],
         alerts: [],
         total: 0,
         markType: {
@@ -161,7 +153,7 @@
         countPerPage: 10,
         showBatchBtn: false,
         searching: false,
-        alertIDList: []
+        dealList: []
       }
     },
     computed: {
@@ -175,32 +167,23 @@
       },
       tables () {
         var result = []
-        this.alerts.forEach((alert) => {
-          var content = '<span class="table-limit-width">' + alert.content + '</span>'
-          var table = {
+        this.alerts.forEach((item) => {
+          let levelCls = ({
+            '中等': 'text-label-warning',
+            '重度': 'text-label-danger'
+          })[item.tags] || ''
+          let content = '<span class="table-limit-width">' + item.content + '</span>'
+          let alert = {
             content: content,
-            mac: alert.mac,
-            id: alert.from,
-            time: uniformDate(alert.create_date) + ' ' + uniformTime(alert.create_date),
-            duration: '',
-            level: alert.tags,
-            status: alert.is_read ? '已处理' : '未处理',
-            prototype: alert,
-            alertid: alert.id
+            mac: item.mac,
+            create_date: formatDate(item.create_date),
+            duration: this.prettyDuration(item.lasting),
+            id: item.from,
+            level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+            state: item.is_read ? '已处理' : '未处理',
+            prototype: item
           }
-          if (alert.is_read) {
-            let end = new Date(alert.read_time) || new Date()
-            let start = new Date(alert.create_date) || new Date()
-            let duration = (end.getTime() - start.getTime()) / (3600 * 1000)
-            table.duration = toDecimal(duration, 1) + 'h'
-          } else {
-            let end = new Date()
-            let start = new Date(alert.create_date) || new Date()
-            let duration = (end.getTime() - start.getTime() + 3600 * 1000 * 8) / (3600 * 1000)
-            table.duration = toDecimal(duration, 1) + 'h'
-          }
-          table.duration
-          result.push(table)
+          result.push(alert)
         })
         return result
       },
@@ -212,7 +195,8 @@
             product_id: {
               '$in': [this.$route.params.id]
             }
-          }
+          },
+          order: {}
         }
 
         if (this.curLevel.value !== 0) {
@@ -233,6 +217,12 @@
             }
           }
         }
+
+        this.headers.forEach((item) => {
+          if (item.sortType) {
+            params.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          }
+        })
         return params
       }
     },
@@ -258,10 +248,22 @@
         }
         this.loadingData = true
         api.alert.getAlerts(this.queryCondition).then((res) => {
+          this.loadingData = false
           if (res.status === 200) {
-            this.alerts = res.data.list
+            this.alerts = res.data.list.map((item) => {
+              // 计算已读告警持续时间
+              let begin = new Date(formatDate(item.create_date))
+              // 默认为未读，时间从当前算起
+              let end = new Date()
+              // 如果为已读，则从已读时间算起
+              if (item.is_read) {
+                end = new Date(formatDate(item.read_time))
+              }
+              // 持续时间
+              item.lasting = end.getTime() - begin.getTime()
+              return item
+            })
             this.total = res.data.count
-            this.loadingData = false
           }
         }).catch((res) => {
           this.handleError(res)
@@ -274,11 +276,11 @@
         } else {
           this.showBatchBtn = false
         }
-        let params = []
+        var result = []
         table.forEach((item) => {
-          params.push(item.alertid)
+          result.push(item.prototype)
         })
-        this.alertIDList = params
+        this.dealList = result
       },
       /**
        * 当前页码改变
@@ -314,8 +316,14 @@
       cancelSearching () {
         this.getAlerts()
       },
-      setStatusRead () {
-        api.alert.setAlertRead(this.alertIDList).then((res) => {
+      // 标记为已处理
+      setDeal () {
+        var params = []
+        this.dealList.forEach((item) => {
+          params.push(item.id)
+        })
+        // var params = [this.$route.params.id]
+        api.alert.setAlertRead(params).then((res) => {
           if (res.status === 200) {
             this.getAlerts()
           }
@@ -323,14 +331,42 @@
           this.handleError(res)
         })
       },
-      setStatusUnread () {
-        api.alert.setAlertUnread(this.alertIDList).then((res) => {
+      // 标记为未处理
+      setUnDeal () {
+        var params = []
+        this.dealList.forEach((item) => {
+          params.push(item.id)
+        })
+        // var params = [this.$route.params.id]
+        api.alert.setAlertUnread(params).then((res) => {
           if (res.status === 200) {
             this.getAlerts()
           }
         }).catch((res) => {
           this.handleError(res)
         })
+      },
+      /**
+       * 将毫秒数格式化为合适显示的时间段
+       */
+      prettyDuration (n) {
+        let hours = (n / 3600000).toFixed(1)
+        if (hours > 1) {
+          return `${hours}小时`
+        } else {
+          return `${Math.floor(n / 60000)}分钟`
+        }
+      },
+      /**
+       * 按某个属性排序
+       * @author shengzhi
+       * @param  {Object} header 表头
+       * @param  {Number} 索引
+       */
+      sortBy (header, index) {
+        header.sortType = header.sortType * -1
+        this.headers.$set(index, header)
+        this.getAlerts()
       }
     }
   }
