@@ -94,7 +94,7 @@
           </tbody>
         </table>
       </div>
-      <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager>
+      <!-- <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage"  :count-per-page="countPerPage"@count-update="pageCountUpdate" @page-update="currentPageChange"></pager> -->
     </div>
   </div>
 </template>
@@ -239,7 +239,24 @@ export default {
   },
 
   methods: {
-
+    /**
+     * 当前页码改变
+     * @param  {[type]} page [description]
+     * @return {[type]}      [description]
+     */
+    currentPageChange (page) {
+      console.log(page)
+    },
+    /**
+     * 每页显示数量改变
+     * @param  {[type]} count [description]
+     * @return {[type]}       [description]
+     */
+    pageCountUpdate (count) {
+      console.log(count)
+      this.countPerPage = count - 0
+      this.getFirmwares()
+    },
     // 获取第一个产品@author weijie
     // getFirstProduct () {
     //   this.currentProduct = this.products[0] || {}
