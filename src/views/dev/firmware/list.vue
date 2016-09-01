@@ -48,7 +48,7 @@
               <template v-if="tasks.length > 0">
                 <tr v-for="task in tasks">
                   <td>{{$index + 1}}</td>
-                  <td>{{ task.content }}</td>
+                  <td>{{ task.description }}</td>
                   <td><span v-if="task.identify===0">-</span><span v-else>{{ task.identify }}</span></td>
                   <td>{{ task.from_version }}</td>
                   <td>{{ task.target_version }}</td>
@@ -130,42 +130,42 @@ export default {
       query: '',
       searching: false,
       tasks: [
-        {
-          content: '这是描述',
-          code: '123',
-          start_version: 'v-1.0',
-          target_version: 'v-2.0',
-          max: 50000,
-          count: 45677,
-          status: 0
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          start_version: 'v-1.0',
-          target_version: 'v-2.0',
-          max: 60000,
-          count: 15666,
-          status: 1
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          start_version: 'v-1.0',
-          target_version: 'v-2.0',
-          max: 100000,
-          count: 100000,
-          status: 1
-        },
-        {
-          content: '这是描述',
-          code: '123',
-          start_version: 'v-1.0',
-          target_version: 'v-2.0',
-          max: 50000,
-          count: 350,
-          status: 1
-        }
+        // {
+        //   description: '这是描述',
+        //   code: '123',
+        //   start_version: 'v-1.0',
+        //   target_version: 'v-2.0',
+        //   max: 50000,
+        //   count: 45677,
+        //   status: 0
+        // },
+        // {
+        //   description: '这是描述',
+        //   code: '123',
+        //   start_version: 'v-1.0',
+        //   target_version: 'v-2.0',
+        //   max: 60000,
+        //   count: 15666,
+        //   status: 1
+        // },
+        // {
+        //   description: '这是描述',
+        //   code: '123',
+        //   start_version: 'v-1.0',
+        //   target_version: 'v-2.0',
+        //   max: 100000,
+        //   count: 100000,
+        //   status: 1
+        // },
+        // {
+        //   description: '这是描述',
+        //   code: '123',
+        //   start_version: 'v-1.0',
+        //   target_version: 'v-2.0',
+        //   max: 50000,
+        //   count: 350,
+        //   status: 1
+        // }
       ],
       visibility: {
         label: '全部',
