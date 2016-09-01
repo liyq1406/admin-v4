@@ -31,7 +31,7 @@
               <th v-show="selecting" class="tac">
                 <input type="checkbox" :checked="selectedTables.indexOf(table) > -1" @change="selectedTablesChange(table)">
               </th>
-              <td v-for="tHeader in headers" :class="tHeader.class" @click="tbodyClick(tHeader, table, tableIndex, $event)">
+              <td v-for="tHeader in headers" :class="tHeader.class" @click.prevent="tbodyClick(tHeader, table, tableIndex, $event)">
                 {{{table[tHeader.key]}}}
               </td>
             </tr>
