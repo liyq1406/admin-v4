@@ -1465,13 +1465,13 @@ let configRouter = (router) => {
     // 当前页面是否需要apptoken的标志位 默认false
     var thisPathNeedAppToken = false
     // 计算当前页面是否需要apptoken的标志位
-    if (transition.to.params.app_id) {
+    if (transition.to.params && transition.to.params.app_id) {
       thisPathNeedAppToken = true
     }
     // transition.next()
     if (thisPathNeedAppToken) { // 当前目标路径需要apptoken
       // appToken是否过期标志位
-      var appId = transition.to.params.app_id
+      var appId = transition.to.params && transition.to.params.app_id
       var pluginsToken = {}
       if (window.localStorage.pluginsToken) {
         pluginsToken = JSON.parse(window.localStorage.pluginsToken)
