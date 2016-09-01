@@ -39,11 +39,11 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
-                  <x-select width="90px" :label="queryType.label" size="small">
+                  <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
-                  </x-select>
+                  </x-select> -->
                   <button slot="search-button" @click="getRecords" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
