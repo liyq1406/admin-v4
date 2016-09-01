@@ -166,13 +166,13 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row mt20">
+              <div class="form-row mt20 border-top">
                 <label class="del-check fr">
                   <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.rule.del_rule") }}
                 </label>
               </div>
               <div class="form-actions mt10">
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary submit-btn">提交</button>
               </div>
             </form>
           </div>
@@ -369,4 +369,12 @@
   line-height 32px
 .alert-max
   max-width 700px
+.border-top
+  border-top 1px solid #DDDDDD
+  padding-top 20px
+  margin-left -20px
+.submit-btn
+  width 120px
+  margin-top 20px
+  margin-left 120px
 </style>

@@ -168,8 +168,8 @@
                   </div>
                 </div>
               </div>
-              <div class="form-actions mt10">
-                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary">提交</button>
+              <div class="form-actions mt10 border-top">
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}"  class="btn btn-primary submit-btn">提交</button>
               </div>
             </form>
           </div>
@@ -342,4 +342,12 @@
   box-sizing border-box
 .alert-max
   max-width 700px
+.border-top
+  border-top 1px solid #DDDDDD
+  padding-top 20px
+  margin-left -20px
+.submit-btn
+  width 120px
+  margin-top 20px
+  margin-left 120px
 </style>

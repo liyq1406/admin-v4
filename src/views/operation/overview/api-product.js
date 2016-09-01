@@ -6,7 +6,7 @@ function getTrend (productId, duration) {
   if (Array.isArray(duration)) {
     range = createDayRange(duration[0], duration[1])
   } else {
-    range = createDayRange(1, duration)
+    range = createDayRange(0, duration)
   }
 
   return new Promise((resolve, reject) => {
