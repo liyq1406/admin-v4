@@ -357,7 +357,7 @@
         // 消息内容
         content: '',
         // 推送时间
-        time: '', // yyyy-MM-dd'T'HH:mm:ss.SS'Z'
+        time: new Date(), // yyyy-MM-dd'T'HH:mm:ss.SS'Z'
         // 失效时间
         expire: '', // yyyy-MM-dd'T'HH:mm:ss.SS'Z'
         // 推送时间类型
