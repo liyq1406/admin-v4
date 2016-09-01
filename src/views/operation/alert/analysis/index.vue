@@ -16,7 +16,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-multiple-picker @timechange = "getSpecial" :periods="periods"></date-time-multiple-picker>
+          <date-time-multiple-picker @timechange = "getSpecial" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -103,6 +103,7 @@ import { globalMixins } from 'src/mixins'
 import { uniformDate } from 'src/filters'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
+// import _ from 'lodash'
 
 export default {
   name: 'Alerts',
@@ -153,6 +154,7 @@ export default {
       periods: [1, 7, 30],
       warningLevel: [],
       showlink: false,
+      defaultPeriod: 7,
       alertSummary: {
         unread: {
           title: '待处理告警',
@@ -187,7 +189,10 @@ export default {
         name: '轻微',
         data: []
       },
-      scale: 'hour' // 折线图默认以小时显示
+      scale: 'hour', // 折线图默认以小时显示
+      loadingTagTrendCount: 0,
+      loadingTagTrend: false,
+      loadingAlertList: false
     }
   },
 
@@ -293,6 +298,10 @@ export default {
     getSingleTag (productId, tag, begin, end, beginHour, endHour) {
       // 获取标签'轻微'的趋势
       api.alert.getTagTrend(productId, tag, begin, end, beginHour, endHour).then((res) => {
+        this.loadingTagTrendCount++
+        if (this.loadingTagTrendCount === 3) {
+          this.loadingTagTrend = false
+        }
         if (res.status === 200) {
           if (tag === '轻微') {
             this.light = res.data
@@ -309,12 +318,21 @@ export default {
           }
         }
       }).catch((res) => {
+        this.loadingTagTrendCount++
+        if (this.loadingTagTrendCount === 3) {
+          this.loadingTagTrend = false
+        }
         this.handleError(res)
       })
     },
 
     // 获取告警趋势图表数据
     getTagTrend () {
+      if (this.loadingTagTrend) {
+        return
+      }
+      this.loadingTagTrend = true
+      this.loadingTagTrendCount = 0
       this.recvDataCount = 0
       this.warningLevel = []
       this.trendPieData = []
@@ -424,7 +442,7 @@ export default {
     },
 
     // 处理单个标签下的饼图数据
-    sortArr (arr) {
+    sortArr (arr, tag) {
       let begin = uniformDate(this.startTimePick)
       let beginHour = this.startTimePick.getHours()
       let end = uniformDate(this.endTimePick)
@@ -455,7 +473,7 @@ export default {
               count++
               if (count === arr.length) {
                 // 处理数组，去除不必要的属性，只留下name与value属性
-                this.handleArr(arr)
+                this.handleArr(arr, tag)
               }
             }
           }).catch((res) => {
@@ -464,21 +482,15 @@ export default {
         }
       })
     },
-    // 处理数组，去除不必要的属性，只留下name与value属性
-    handleArr (arr) {
-      arr.forEach((item) => {
-        delete item.tag
-      })
-      this.sortRegion(arr)
-    },
-
-    sortRegion (arr) {
+    handleArr (arr, tag) {
       // 如果数据为0,不处理
       for (let i = 0; i < arr.length; i++) {
         if (!arr[i].value) {
-          arr = arr.splice(i, 1)
+          arr.splice(i, 1)
+          i--
         }
       }
+
       // 由大到小排序
       arr.sort((a, b) => {
         if (a.value > b.value) {
@@ -512,10 +524,15 @@ export default {
     },
     // 获取告警规则列表
     getAlertList () {
+      if (this.loadingAlertList) {
+        return
+      }
+      this.loadingAlertList = true
       this.lightRules = []
       this.normalRules = []
       this.seriousRules = []
       api.alert.getRules(this.currentProduct.id).then((res) => {
+        this.loadingAlertList = false
         if (res.status === 200) {
           res.data.forEach((item) => {
             if (item.tag === '轻微') {
@@ -530,7 +547,7 @@ export default {
                 id: item.id,
                 tag: '通知'
               })
-            } else {
+            } else if (item.tag === '严重') {
               this.seriousRules.push({
                 name: item.name,
                 id: item.id,
@@ -538,11 +555,12 @@ export default {
               })
             }
           })
-          this.sortArr(this.lightRules)
-          this.sortArr(this.normalRules)
-          this.sortArr(this.seriousRules)
+          this.sortArr(this.lightRules, '轻微')
+          this.sortArr(this.normalRules, '通知')
+          this.sortArr(this.seriousRules, '严重')
         }
       }).catch((res) => {
+        this.loadingAlertList = false
         this.handleError(res)
       })
     },

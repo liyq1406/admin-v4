@@ -2,7 +2,7 @@
   <div class="panel no-split-line">
     <div class="panel-hd panel-hd-full bordered">
       <div class="actions">
-        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange"></date-time-multiple-picker>
+        <date-time-multiple-picker :periods="periods" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
       </div>
       <h2>趋势</h2>
     </div>
@@ -47,7 +47,8 @@ export default {
         medium: [],
         serious: []
       },
-      recvDataCount: 0
+      recvDataCount: 0,
+      defaultPeriod: 7
     }
   },
 
