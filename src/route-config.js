@@ -1398,6 +1398,14 @@ let configRouter = (router) => {
               resolve(require('./views/operation/plugin/warranty/account/staff-details'))
             }, 'admin')
           }
+        },
+        // 环境数据
+        'plugins/airquality/:app_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/airquality'))
+            }, 'admin')
+          }
         }
       }
     }

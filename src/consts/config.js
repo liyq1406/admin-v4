@@ -43,7 +43,10 @@ export const API_SERVER = {
   feedback: `${DEFAULT_PLUGIN_SERVER}/module/feedback`,
 
   // 经销商管理
-  dealer: `${DEFAULT_PLUGIN_SERVER}/module/distributer`
+  dealer: `${DEFAULT_PLUGIN_SERVER}/module/distributer`,
+
+  // 环境数据
+  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`
 }
 
 // 默认每页记录数

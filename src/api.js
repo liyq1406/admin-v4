@@ -39,6 +39,7 @@ import diagnosis from './api/diagnosis'
 import dealer from './api/dealer'
 import heavyBuyer from './api/heavy-buyer'
 import broadcast from './api/broadcast'
+import airquality from './api/airquality'
 
 export default {
   sms,
@@ -64,5 +65,6 @@ export default {
   diagnosis,
   dealer,
   heavyBuyer,
-  broadcast
+  broadcast,
+  airquality
 }
