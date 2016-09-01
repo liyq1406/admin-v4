@@ -78,7 +78,7 @@
                   <label class="form-control col-5">固件型号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入固件型号'" class="input-text-wrap">
-                      <input v-model="addmodel.mod" type="text" name="mod" v-validate:mod="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      <input v-model="addmodel.mod" type="text" name="addmodel.mod" v-validate:mod="{required: true, maxlength: 20}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.mod.touched && $validation.mod.required">请输入固件型号</span>
@@ -90,7 +90,7 @@
                   <label class="form-control col-5">固件版本号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入固件版本号'" class="input-text-wrap">
-                      <input v-model="addmodel.version" type="text" name="version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      <input v-model="addmodel.version" type="text" name="addmodel.version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.version.touched && $validation.version.required">请输入固件版本号</span>
@@ -226,8 +226,28 @@
     methods: {
       // 添加固件版本操作
       onAddSubmit () {
+        console.log(this.$validation.valid)
+        if (!this.$validation.valid) {
+          this.$validation.mod.touched = true
+          this.$validation.version.touched = true
+          return
+        }
+        if (!this.selectProduct.id) {
+          this.showErrors('请选择产品！')
+          return
+        }
+        if (!this.addmodel.file_url) {
+          this.showErrors('请上传固件！')
+          return
+        }
+        if (!this.addmodel.description) {
+          this.showErrors('请添加版本说明，250字以内！')
+          return
+        }
         this.adding = true
         this.addmodel.type = this.addModelType.value
+        this.addmodel.is_release = true
+        this.addmodel.release_date = new Date()
         api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
           if (res.status === 200) {
             // this.resetAdd()
@@ -240,6 +260,12 @@
         }).catch((res) => {
           this.handleError(res)
           this.adding = false
+        })
+      },
+      showErrors (str) {
+        this.showNotice({
+          type: 'error',
+          content: str
         })
       },
       // 上传固件文件
