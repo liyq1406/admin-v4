@@ -17,10 +17,8 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker @timechange = "getAlertsSpecial"></date-time-range-picker>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period" @select="getAlerts"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <!-- <date-time-range-picker @timechange = "getAlertsSpecial"></date-time-range-picker> -->
+          <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -139,8 +137,7 @@ import Statistic from 'components/Statistic'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
-import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
+import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
@@ -160,8 +157,7 @@ export default {
     RadioButtonGroup,
     TimeLine,
     Statistic,
-    DateTimeRangePicker,
-    DateTimeSinglePicker,
+    DateTimeMultiplePicker,
     'x-select': Select,
     'x-table': Table,
     SearchBox
@@ -199,20 +195,7 @@ export default {
         tags: ''
       },
       period: 7,
-      periods: [
-        {
-          value: 1,
-          label: '24h'
-        },
-        {
-          value: 7,
-          label: '7天'
-        },
-        {
-          value: 30,
-          label: '30天'
-        }
-      ],
+      periods: [1, 7, 30],
       product_id: '',
       alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
@@ -259,7 +242,7 @@ export default {
         { label: '全部等级', value: 'all' },
         { label: '通知', value: '通知' },
         { label: '轻微', value: '轻微' },
-        { label: '重度', value: '重度' }
+        { label: '严重', value: '严重' }
       ],
       headers: [{
         key: 'content',
@@ -302,35 +285,17 @@ export default {
 
     // 查询条件
     queryCondition () {
-      var condition = {}
-      if (this.period === '') {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            product_id: {
-              $in: [this.currentProduct.id]
-            },
-            create_date: {
-              $gte: this.startTimePick,
-              $lte: this.endTimePick
-            }
-          }
-        }
-      } else {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            product_id: {
-              $in: [this.currentProduct.id]
-            },
-            create_date: {
-              $lte: this.endTime + 'T00:00:00.000Z',
-              $gte: this.beginTime + 'T00:00:00.000Z'
-            }
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          product_id: {
+            $in: [this.currentProduct.id]
+          },
+          create_date: {
+            $lte: this.endTimePick,
+            $gte: this.startTimePick
           }
         }
       }
@@ -346,8 +311,8 @@ export default {
         case '轻微':
           condition.query['tags'] = { $in: ['轻微'] }
           break
-        case '重度':
-          condition.query['tags'] = { $in: ['重度'] }
+        case '严重':
+          condition.query['tags'] = { $in: ['严重'] }
           break
         default:
       }
@@ -363,21 +328,22 @@ export default {
 
     tables () {
       var result = []
-      this.alerts.map((item) => {
+      this.alerts.forEach((item) => {
         let levelCls = ({
           '中等': 'text-label-warning',
           '重度': 'text-label-danger'
         })[item.tags] || ''
 
+        let content = '<span class="table-limit-width">' + item.content + '</span>'
         let alert = {
-          content: '<a>' + item.alert_name + '</a>',
+          content: content,
           mac: item.mac,
           create_date: formatDate(item.create_date),
-          duration: item.lasting + 'h',
+          duration: this.prettyDuration(item.lasting),
           id: item.from,
           level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
           state: item.is_read ? '已处理' : '未处理',
-          prototype: item
+          prototype: alert
         }
         result.push(alert)
       })
@@ -385,7 +351,7 @@ export default {
     },
 
     TimePick () {
-      var condition = {
+      var params = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
@@ -399,25 +365,31 @@ export default {
           }
         }
       }
-      if (this.key !== '') {
-        condition.query.id = {$in: [this.key]}
+      if (this.curLevel.value !== 0) {
+        params.query.tags = {
+          '$in': [this.curLevel.label]
+        }
       }
 
-      return condition
+      if (this.key !== '') {
+        if (this.queryType.value === 'from') {
+          // 设备ID不能用模糊匹配
+          params.query.from = {
+            '$in': [this.key]
+          }
+        } else {
+          params.query[this.queryType.value] = {
+            '$like': this.key
+          }
+        }
+      }
+
+      return params
     },
 
     selectedProduct () {
       var product = this.currentProduct
       return product
-    },
-
-    beginTime () {
-      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(past))
-    },
-    endTime () {
-      var end = new Date().getTime()
-      return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
 
@@ -437,8 +409,8 @@ export default {
   // 监听属性变动
   watch: {
     products () {
-      this.getFirstProduct()
       if (this.products.length > 0) {
+        this.getFirstProduct()
         this.getAlerts()
       }
     }
@@ -448,17 +420,6 @@ export default {
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
-      // setTimeout(() => {
-      //   this.getTagTrend()
-      // }, 3000)
-    },
-
-    // 获取数据@author weijie
-    getDate () {
-      // console.log(123)
-      console.log(this.beginTime)
-      console.log(this.endTime)
-      // this.getTagTrend()
     },
 
     // 获取告警概览@author weijie
@@ -542,10 +503,14 @@ export default {
       this.getAlerts()
     },
     getAlertsSpecial (start, end) {
-      this.period = ''
-      this.startTimePick = start
-      this.endTimePick = end
-      this.getAlerts()
+      this.startTimePick = new Date(start.getTime() + 3600 * 1000 * 8)
+      this.endTimePick = new Date(end.getTime() + 3600 * 1000 * 8)
+      if (this.products.length > 0) {
+        if (!this.currentProduct.id) {
+          this.getFirstProduct()
+        }
+        this.getAlerts()
+      }
     },
     // 获取消息列表@author weijie
     getAlerts (reset) {
@@ -555,25 +520,18 @@ export default {
       this.loadingData = true
       api.alert.getAlerts(this.queryCondition).then((res) => {
         if (res.status === 200) {
-          // console.log(res.data.list)
-          // this.alerts = res.data.list
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
             // 计算已读告警持续时间
+            let begin = new Date(formatDate(item.create_date))
+            // 默认为未读，时间从当前算起
+            let end = new Date()
+            // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              let beginTime = new Date(formatDate(item.create_date))
-              let endTime = new Date(formatDate(item.read_time))
-              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-              // console.log(lasting.toFixed(1))
-              item.lasting = lasting.toFixed(1)
-            } else {
-              // 计算未读告警持续时间
-              let beginTime = new Date(formatDate(item.create_date))
-              let endTime = new Date()
-              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-              // console.log(lasting.toFixed(1))
-              item.lasting = lasting.toFixed(1)
+              end = new Date(formatDate(item.read_time))
             }
+            // 持续时间
+            item.lasting = end.getTime() - begin.getTime()
             return item
           })
           this.loadingData = false
@@ -599,12 +557,10 @@ export default {
       })
     },
     selectChange (table) {
-      console.log(table)
       var result = []
       table.forEach((item) => {
         result.push(item.prototype)
       })
-      // this.dealList = []
       this.dealList = result
       if (table.length > 0) {
         this.showBatchBtn = true
@@ -618,7 +574,6 @@ export default {
       this.dealList.forEach((item) => {
         params.push(item.id)
       })
-      // var params = [this.$route.params.id]
       api.alert.setAlertRead(params).then((res) => {
         if (res.status === 200) {
           this.getAlerts()
@@ -644,53 +599,8 @@ export default {
     },
     // 跳转详情信息
     getInfo (table, header, index) {
-      console.log(table)
       this.$route.router.go('/operation/alerts/detail/' + table.prototype.id)
-      // this.$route.router.go('/operation/alerts/record')
     }
-    //
-    // /**
-    //  * 获取告警信息列表
-    //  */
-    // getAlerts () {
-    //   this.loadingData = true
-    //   api.alert.getAlerts(this.queryCondition).then((res) => {
-    //     if (res.status === 200) {
-    //       this.alerts = res.data.list
-    //       this.total = res.data.count
-    //       this.loadingData = false
-    //     }
-    //   }).catch((res) => {
-    //     this.handleError(res)
-    //     this.loadingData = false
-    //   })
-    // },
-    //
-    // // 告警统计信息
-    // getAlertSummary () {
-    //   api.statistics.getAlertSummary(this.past, this.today).then((res) => {
-    //     if (res.status === 200) {
-    //       this.alertSummary.unread.total = res.data.unread
-    //       this.alertSummary.add_today.total = res.data.add_today
-    //       this.alertSummary.device.total = res.data.device
-    //       this.alertSummary.message.total = res.data.message
-    //     }
-    //   }).catch((res) => {
-    //     this.handleError(res)
-    //   })
-    // },
-    //
-    // /**
-    //  * 获取告警趋势
-    //  */
-    // getAlertTrends () {
-    //   api.statistics.getAlertTrend(this.past, this.today).then((res) => {
-    //     if (res.status === 200) {
-    //     }
-    //   }).catch((res) => {
-    //     this.handleError(res)
-    //   })
-    // }
   }
 }
 </script>
