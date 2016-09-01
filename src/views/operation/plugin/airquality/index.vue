@@ -19,7 +19,7 @@
             <date-time-range-picker @timechange=""></date-time-range-picker>
           </div>
           <div class="filter-group-item">
-            <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="area.type=1" select-size="small"></area-select>
+            <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
           </div>
         </div>
         <div class="filter-group fr">
@@ -177,9 +177,29 @@ export default {
         }
       })
 
+      if (this.queryAreaStr) {
+        condition.query = {
+          'location.position': {
+            $regex: this.queryAreaStr,
+            $options: 'i'
+          }
+        }
+      }
+
       return condition
     },
 
+    queryAreaStr () {
+      let result = ''
+      if (this.area.province.proID) {
+        result = this.area.province.name
+      }
+      if (this.area.city.proID) {
+        result = this.area.city.name
+      }
+      result = result.substr(0, 2)
+      return result
+    },
     tables () {
       var result = []
       this.dataList.forEach((item) => {
