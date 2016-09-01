@@ -226,7 +226,6 @@
     methods: {
       // 添加固件版本操作
       onAddSubmit () {
-        console.log(this.$validation.valid)
         if (!this.$validation.valid) {
           this.$validation.mod.touched = true
           this.$validation.version.touched = true
