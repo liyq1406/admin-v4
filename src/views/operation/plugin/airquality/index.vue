@@ -4,7 +4,7 @@
       <h2>环境数据</h2>
     </div>
 
-    <x-table :headers="headers">
+    <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
       <div class="filter-bar" slot="filter-bar">
         <div class="filter-group">
           <div class="filter-group-item">
@@ -39,6 +39,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
+import { formatDate } from 'src/filters'
 
 import api from 'api'
 
@@ -63,10 +64,13 @@ export default {
 
   data () {
     return {
+      // 总数
       total: 0,
+      // 每页数量
       countPerPage: config.COUNT_PER_PAGE,
+      // 当前页
       currentPage: 1,
-      period: 7,
+      // 正在加载数据
       loadingData: false,
       selectedOption: { label: '全部', value: 'all' },
       options: [
@@ -91,31 +95,58 @@ export default {
         },
         {
           key: 'pm25',
-          title: '室外pm2.5'
+          title: '室外pm2.5',
+          class: 'tac'
         },
         {
-          key: 'aqi',
-          title: 'AQI'
+          key: 'pm10',
+          title: 'pm10',
+          class: 'tac'
+        },
+        {
+          key: 'pm25',
+          title: 'pm25',
+          class: 'tac'
+        },
+        {
+          key: 'so2',
+          title: 'so2',
+          class: 'tac'
+        },
+        {
+          key: 'no2',
+          title: 'no2',
+          class: 'tac'
+        },
+        {
+          key: 'co',
+          title: 'co',
+          class: 'tac'
+        },
+        {
+          key: 'o3',
+          title: 'o3',
+          class: 'tac'
         }
       ],
       dataList: [
-        {
-          _id: '123',
-          update_time: '2016-08-30T08:00:00.000Z',
-          aqi: 'aqi',
-          co: 'co',
-          no2: 'no2',
-          o3: 'o3',
-          pm10: 'pm10',
-          pm25: 'pm25',
-          so2: 'so2',
-          location: {
-            country: 'CN',
-            id: 'TUZHQFX485K9',
-            name: '亚东',
-            position: '亚东,日喀则,西藏,中国'
-          }
-        }
+        // {
+        //   _id: '123',
+        //   update_time: '2016-08-30T08:00:00.000Z',
+        //   aqi: 'aqi',
+        //   co: 'co',
+        //   no2: 'no2',
+        //   o3: 'o3',
+        //   pm10: 'pm10',
+        //   pm25: 'pm25',
+        //   so2: 'so2',
+        //   location: {
+        //     country: 'CN',
+        //     id: 'TUZHQFX485K9',
+        //     name: '亚东',
+        //     position: '亚东,日喀则,西藏,中国'
+        //   }
+        // }
       ]
     }
   },
@@ -132,12 +163,41 @@ export default {
 
     // 查询条件
     queryCondition () {
-      let result = {}
-      return result
+      var condition = {
+        // filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {}
+      }
+
+      this.headers.map((item) => {
+        if (item.sortType) {
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+        }
+      })
+
+      return condition
     },
 
     tables () {
       var result = []
+      this.dataList.forEach((item) => {
+        var table = {
+          _id: item._id,
+          update_time: formatDate(item.update_time),
+          aqi: item.aqi,
+          co: item.co,
+          no2: item.no2,
+          o3: item.o3,
+          pm10: item.pm10,
+          pm25: item.pm25,
+          so2: item.so2,
+          location: item.location.position,
+          prototype: item
+        }
+        result.push(table)
+      })
       return result
     }
   },
@@ -153,11 +213,48 @@ export default {
       this.loadingData = true
       api.airquality.getAirQualitys(this.$route.params.app_id, this.queryCondition).then((res) => {
         console.log(res.data)
+        this.dataList = res.data.list
+        this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
         this.loadingData = false
         this.handleError(res)
       })
+    },
+    /**
+     * 每页显示的数量改变
+     * 国辉
+     * @param  {[type]} count 每页显示数量
+     * @return {[type]}       [description]
+     */
+    pageCountUpdate (count) {
+      this.countPerPage = count
+      this.getList()
+    },
+    /**
+     * 当前页码改变
+     * 国辉
+     * @param  {[type]} number [description]
+     * @return {[type]}        [description]
+     */
+    currentPageChange (number) {
+      this.currentPage = number
+      this.getList()
+    },
+    /**
+     * 按某个属性排序
+     * 国辉
+     * @param  {[type]} table [description]
+     * @return {[type]}       [description]
+     */
+    sortBySomeKey (header, index) {
+      if (header.sortType === 1) {
+        header.sortType = -1
+      } else {
+        header.sortType = 1
+      }
+      this.headers.$set(index, header)
+      this.getList()
     }
   }
 }
