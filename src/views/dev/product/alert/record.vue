@@ -6,7 +6,7 @@
           <div class="filter-group-item">
             <x-select width="90px" :label="curLevel.label" size="small">
               <span slot="label">告警等级:</span>
-              <select v-model="curLevel" name="product">
+              <select v-model="curLevel" name="product" @change="getAlerts(true)">
                 <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
               </select>
             </x-select>
@@ -14,9 +14,9 @@
         </div>
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <search-box :key.sync="key">
+            <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
               <x-select width="100px" :label="queryType.label" size="small">
-                <select v-model="queryType">
+                <select v-model="queryType" @change="getAlerts(true)">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                 </select>
               </x-select>
@@ -27,8 +27,8 @@
       </div>
       <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
         <label>标记为:</label>
-        <button class="btn btn-ghost">已处理</button>
-        <button class="btn btn-ghost">未处理</button>
+        <button class="btn btn-ghost" @click="setStatusRead(true)">已处理</button>
+        <button class="btn btn-ghost" @click="setStatusUnread(false)">未处理</button>
       </div>
     </x-table>
   </div>
@@ -43,7 +43,7 @@
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
   import Table from 'components/Table'
-  import {uniformDate, uniformTime} from 'src/filters'
+  import {uniformDate, uniformTime, toDecimal} from 'src/filters'
 
   export default {
     name: 'Alert',
@@ -114,20 +114,20 @@
           }
         ],
         queryType: {
-          value: 0,
+          value: 'mac',
           label: 'MAC地址'
         },
         queryTypeOptions: [
           {
-            value: 0,
+            value: 'mac',
             label: 'MAC地址'
           },
           {
-            value: 1,
+            value: 'from',
             label: '设备ID'
           },
           {
-            value: 2,
+            value: 'content',
             label: '告警内容'
           }
         ],
@@ -149,17 +149,19 @@
           },
           {
             value: 2,
-            label: '中等'
+            label: '通知'
           },
           {
             value: 3,
-            label: '重度'
+            label: '严重'
           }
         ],
         loadingData: false,
         currentPage: 1,
         countPerPage: 10,
-        showBatchBtn: false
+        showBatchBtn: false,
+        searching: false,
+        alertIDList: []
       }
     },
     computed: {
@@ -178,19 +180,32 @@
           var table = {
             content: content,
             mac: alert.mac,
-            id: '',
+            id: alert.from,
             time: uniformDate(alert.create_date) + ' ' + uniformTime(alert.create_date),
             duration: '',
             level: alert.tags,
             status: alert.is_read ? '已处理' : '未处理',
-            prototype: alert
+            prototype: alert,
+            alertid: alert.id
           }
+          if (alert.is_read) {
+            let end = new Date(alert.read_time) || new Date()
+            let start = new Date(alert.create_date) || new Date()
+            let duration = (end.getTime() - start.getTime()) / (3600 * 1000)
+            table.duration = toDecimal(duration, 1) + 'h'
+          } else {
+            let end = new Date()
+            let start = new Date(alert.create_date) || new Date()
+            let duration = (end.getTime() - start.getTime() + 3600 * 1000 * 8) / (3600 * 1000)
+            table.duration = toDecimal(duration, 1) + 'h'
+          }
+          table.duration
           result.push(table)
         })
         return result
       },
       queryCondition () {
-        return {
+        let params = {
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {
@@ -199,6 +214,26 @@
             }
           }
         }
+
+        if (this.curLevel.value !== 0) {
+          params.query.tags = {
+            '$in': [this.curLevel.label]
+          }
+        }
+
+        if (this.key !== '') {
+          if (this.queryType.value === 'from') {
+            // 设备ID不能用模糊匹配
+            params.query.from = {
+              '$in': [this.key]
+            }
+          } else {
+            params.query[this.queryType.value] = {
+              '$like': this.key
+            }
+          }
+        }
+        return params
       }
     },
     filters: {
@@ -217,7 +252,10 @@
       }
     },
     methods: {
-      getAlerts () {
+      getAlerts (reset) {
+        if (reset === true) {
+          this.currentPage = 1
+        }
         this.loadingData = true
         api.alert.getAlerts(this.queryCondition).then((res) => {
           if (res.status === 200) {
@@ -236,6 +274,11 @@
         } else {
           this.showBatchBtn = false
         }
+        let params = []
+        table.forEach((item) => {
+          params.push(item.alertid)
+        })
+        this.alertIDList = params
       },
       /**
        * 当前页码改变
@@ -255,6 +298,39 @@
       onPageCountUpdate (count) {
         this.countPerPage = count
         this.getAlerts(true)
+      },
+      /**
+       * 切换搜索
+       * @author shengzhi
+       */
+      toggleSearching () {
+        this.searching = !this.searching
+      },
+
+      /**
+       * 取消搜索
+       * @author shengzhi
+       */
+      cancelSearching () {
+        this.getAlerts()
+      },
+      setStatusRead () {
+        api.alert.setAlertRead(this.alertIDList).then((res) => {
+          if (res.status === 200) {
+            this.getAlerts()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      setStatusUnread () {
+        api.alert.setAlertUnread(this.alertIDList).then((res) => {
+          if (res.status === 200) {
+            this.getAlerts()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
   }
