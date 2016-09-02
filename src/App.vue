@@ -115,7 +115,6 @@ export default {
      */
     getCorpInfo () {
       api.corp.getCorpInfo().then((res) => {
-        console.log(res.data)
         this.setCorp(res.data)
       }).catch((res) => {
         this.handleError(res)

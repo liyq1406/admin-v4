@@ -7,6 +7,7 @@
           <h2>{{ member.name }}</h2>
           <div class="actions" v-if="currentMember.role === 1 && member.role === 2">
             <button class="btn btn-ghost" @click="toggleAccount"><i class="hl-red fa" :class="{'fa-ban': member.status === 1, 'fa-undo': member.status !== 1}"></i>{{ member.status === 1 ? '停用帐号' : '启用帐号'}}</button>
+            <button class="btn btn-ghost" @click="delMember"><i class="hl-red fa fa-times"></i>删除成员</button>
           </div>
           <div v-stretch="182">
             <info-list :info="accountInfo">
@@ -72,6 +73,7 @@ import Breadcrumb from 'components/Breadcrumb'
 import store from 'store'
 import { formatDate } from 'src/filters'
 import api from 'api'
+// import _ from 'lodash'
 
 export default {
   name: 'MemberDetails',
@@ -141,7 +143,7 @@ export default {
 
   route: {
     data () {
-      this.getMember(this.$route.params.id)
+      this.getMember()
     }
   },
 
@@ -152,10 +154,50 @@ export default {
      * @param {String} id 用户 ID
      * @return {void}
      */
-    getMember (id) {
+    getMember (id = this.$route.params.id) {
       api.corp.getMember(id).then((res) => {
         if (res.status === 200) {
           this.member = res.data
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 切换成员状态
+     * @param  {[type]} id =             this.member.id [description]
+     * @return {[type]}    [description]
+     */
+    toggleAccount (id = this.member.id) {
+      console.log('停用或者启用成员，接口未实现')
+      // let params = _.clone(this.member)
+      // if (params.status === 1) {
+      //   params
+      // } else {
+      //   console.log('当前状态为2')
+      // }
+    },
+    /**
+     * 删除成员
+     * @return {[type]} [description]
+     */
+    delMember () {
+      if (!window.confirm('确定删除？')) {
+        return
+      }
+      api.corp.delMember(this.member.id).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '删除成功！'
+          })
+          this.$route.router.go('/account/members')
+        } else {
+          this.showNotice({
+            type: 'error',
+            content: '删除失败！'
+          })
         }
       }).catch((res) => {
         this.handleError(res)
