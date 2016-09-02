@@ -331,8 +331,8 @@ export default {
       var result = []
       this.alerts.forEach((item) => {
         let levelCls = ({
-          '中等': 'text-label-warning',
-          '重度': 'text-label-danger'
+          '轻微': 'text-label-warning',
+          '严重': 'text-label-danger'
         })[item.tags] || ''
 
         let content = '<span class="table-limit-width">' + item.content + '</span>'

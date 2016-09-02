@@ -134,7 +134,10 @@ export default {
         order: {},
         query: {
           product_id: {
-            $in: [this.$route.params.id]
+            $in: [this.$route.params.product_id]
+          },
+          from: {
+            $in: [this.$route.params.device_id]
           }
         }
       }

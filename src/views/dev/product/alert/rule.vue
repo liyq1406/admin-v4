@@ -1,19 +1,5 @@
 <template>
   <div class="panel-bd">
-    <!-- <div class="action-bar">
-      <div class="action-group">
-        <button @click="addRule(rule)" class="btn btn-success" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>{{ $t("ui.rule.add_rule") }}</button>
-        <div class="fl">
-          <a  v-show="tips" v-link="{ path: '/product/create' }" class="nontip">没有产品，点击此处跳转添加页面</a>
-          <x-select v-else width="200px" placeholder="请选择产品" :label="currProduct.name">
-            <span slot="label">请选择产品：</span>
-            <select v-model="currProduct" name="product" @change="Productstatus">
-              <option v-for="product in products" :value="product">{{ product.name }}</option>
-            </select>
-          </x-select>
-        </div>
-      </div>
-    </div> -->
     <div class="filter-bar">
       <div class="filter-group fl">
         <div class="filter-group-item">
@@ -62,10 +48,8 @@
                 <span class="limit-width">{{rule.content }}</span></td>
               <td>{{* rule.type | ruleLabel }}</td>
               <td>
-                <span v-if="rule.tag === '严重'" class="text-label text-label-danger level-style">{{rule.tag}}</span>
-                <span v-if="rule.tag === '轻微'" class="text-label text-label-warning level-style">{{rule.tag}}</span>
-                <span v-if="rule.tag === '通知'" class="text-label level-style">{{rule.tag}}</span>
-                <span v-if="rule.tag !== '通知' && rule.tag !== '严重' && rule.tag !== '轻微'">--</span>
+                <span class="text-label level-style" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
+                <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
               </td>
               <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
               <!-- <td class="tac">
@@ -130,15 +114,15 @@
           },
           {
             value: 1,
-            label: '轻微'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
           },
           {
             value: 2,
-            label: '通知'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
           },
           {
             value: 3,
-            label: '严重'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.red
           }
         ],
         loadingData: false,
@@ -156,8 +140,8 @@
     },
     computed: {
       rulesFilter () {
-        let temp = _.clone(this.rules)
-        let res = temp.filter((item) => {
+        var temp = _.clone(this.rules)
+        temp = temp.filter((item) => {
           let key = item.content.indexOf(this.key)
           let name = item.name.indexOf(this.key)
 
@@ -167,7 +151,8 @@
           }
           return (key !== -1 || name !== -1) && tag
         })
-        return res
+
+        return temp
       }
     },
     watch: {
@@ -208,6 +193,17 @@
       onPageCountUpdate (count) {
         this.countPerPage = count
         this.getRules(true)
+      },
+      tagStyle (tag) {
+        switch (tag) {
+          case locales[Vue.config.lang].data.ALERT_LEVELS.orange:
+            return 'text-label-warning'
+          case locales[Vue.config.lang].data.ALERT_LEVELS.red:
+            return 'text-label-danger'
+          default:
+            break
+        }
+        return ''
       }
     }
   }

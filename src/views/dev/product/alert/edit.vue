@@ -248,7 +248,7 @@
           value1: '0',
           value2: 'online'
         },
-        warningLevels: ['通知', '轻微', '严重'],
+        warningLevels: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
         notifyChecked: false
       }
     },
