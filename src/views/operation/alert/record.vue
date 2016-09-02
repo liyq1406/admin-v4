@@ -18,7 +18,7 @@
       <div class="filter-group fr">
         <div class="filter-group-item">
           <!-- <date-time-range-picker @timechange = "getAlertsSpecial"></date-time-range-picker> -->
-          <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods"></date-time-multiple-picker>
+          <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
         </div>
       </div>
     </div>
@@ -171,6 +171,7 @@ export default {
 
   data () {
     return {
+      defaultPeriod: 7,
       currentProduct: {
         id: ''
       },

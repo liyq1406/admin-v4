@@ -135,17 +135,20 @@ export default {
     // 趋势数据
     trendData () {
       let result = []
-      let snapshotGroup = _.groupBy(this.snapshots, (item) => {
-        let hour = new Date(formatDate(item.snapshot_date)).getHours()
-        return `${uniformDate(item.snapshot_date)}-${hour}`
-      })
-      for (var key in snapshotGroup) {
-        let dp = snapshotGroup[key][0]
-        result.push({
-          date: formatDate(dp.snapshot_date),
-          val: Number(dp[this.selectedDatapoint.index]),
-          name: this.selectedDatapoint.name
+      if (this.selectedDatapoint.index) {
+        let snapshotGroup = _.groupBy(this.snapshots, (item) => {
+          let hour = new Date(formatDate(item.snapshot_date)).getHours()
+          return `${uniformDate(item.snapshot_date)}-${hour}`
         })
+
+        for (var key in snapshotGroup) {
+          let dp = snapshotGroup[key][0]
+          result.push({
+            date: formatDate(dp.snapshot_date),
+            val: Number(dp[this.selectedDatapoint.index]),
+            name: this.selectedDatapoint.name
+          })
+        }
       }
       return result
     },
