@@ -173,7 +173,7 @@ export default {
     startHour = startHour || '00'
     endHour = endHour || '00'
     return http.get(
-      `${API_SERVER.default}/v2/statistics/message/trend_hour_tag?product_id=${productId}&device_id=${deviceId}&tag=${tag}&start_day=${startDay}&start_hour=${startHour}&end_day=${endDay}&end_hour=${endHour}`
+      `${API_SERVER.default}/v2/statistics/message/trend_hour_tag_device?product_id=${productId}&device_id=${deviceId}&tag=${tag}&start_day=${startDay}&start_hour=${startHour}&end_day=${endDay}&end_hour=${endHour}`
     )
   },
   /**
