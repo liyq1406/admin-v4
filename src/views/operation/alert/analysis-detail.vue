@@ -107,17 +107,17 @@ export default {
           title: '设备MAC'
         },
         {
+          key: 'id',
+          title: '设备ID'
+        },
+        {
           key: 'time',
-          title: '上报时间',
+          title: '时间',
           sortType: -1
         },
         {
           key: 'duration',
           title: '持续时长'
-        },
-        {
-          key: 'addr',
-          title: '所在地'
         },
         {
           key: 'state',
@@ -147,7 +147,7 @@ export default {
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
         query: {
-          id: {
+          alert_id: {
             $in: [this.$route.params.id]
           },
           product_id: {
@@ -178,6 +178,7 @@ export default {
       this.records.map((item) => {
         var alert = {
           mac: item.mac,
+          id: item.from,
           time: item.create_date,
           duration: item.lasting + 'h',
           state: item.is_read ? '已处理' : '未处理',
@@ -199,8 +200,8 @@ export default {
       this.getList()
     },
     getSpecial (start, end) {
-      this.startTimePick = start
-      this.endTimePick = end
+      this.startTimePick = new Date(start.getTime() + 3600 * 1000 * 8)
+      this.endTimePick = new Date(end.getTime() + 3600 * 1000 * 8)
       this.getList(true)
     },
     // 获取告警历史@author weijie

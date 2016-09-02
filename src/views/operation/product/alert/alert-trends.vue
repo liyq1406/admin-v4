@@ -35,6 +35,13 @@ export default {
     DateTimeMultiplePicker
   },
 
+  props: {
+    productId: {
+      type: String,
+      default: null
+    }
+  },
+
   data () {
     return {
       showHour: true,
@@ -56,6 +63,12 @@ export default {
     // 趋势数据
     trendData () {
       return this.trends.light.concat(this.trends.medium).concat(this.trends.serious)
+    }
+  },
+
+  watch: {
+    productId () {
+      this.getTagTrend()
     }
   },
 
