@@ -68,7 +68,7 @@
                 <tbody>
                   <template v-if="warningLevel.length > 0">
                     <tr v-for="item in warningLevel">
-                      <td><a v-if="this.showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }">{{item.name}}</a><i v-else>{{item.name}}</i></td>
+                      <td><a v-if="showlink===true" v-link="{ path: '/operation/alerts/analysis/' + item.id + '/' + this.currentProduct.id }" :class="{'hl-red': showlink}">{{item.name}}</a><i v-else>{{item.name}}</i></td>
                       <td>{{item.value || 0}}</td>
                       <td>{{ item.percent | toPercentDecimal 2 }}</td>
                     </tr>
@@ -104,6 +104,8 @@ import { uniformDate } from 'src/filters'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
+import locales from 'consts/locales/index'
+import Vue from 'vue'
 
 export default {
   name: 'Alerts',
@@ -141,7 +143,7 @@ export default {
       trendPieData: [],
       trendData: [],
       currentProduct: {},
-      tabItems: ['全部', '轻微', '通知', '严重'],
+      tabItems: ['全部'].concat(locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS),
       currIndex: 0,
       levelTitle: '告警',
       key: '',
@@ -178,15 +180,15 @@ export default {
         }
       },
       serious: {
-        name: '严重',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.red,
         data: []
       },
       normal: {
-        name: '通知',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.blue,
         data: []
       },
       light: {
-        name: '轻微',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.orange,
         data: []
       },
       scale: 'hour', // 折线图默认以小时显示
@@ -296,24 +298,23 @@ export default {
 
     // 获取单个标签趋势数据
     getSingleTag (productId, tag, begin, end, beginHour, endHour) {
-      // 获取标签'轻微'的趋势
       api.alert.getTagTrend(productId, tag, begin, end, beginHour, endHour).then((res) => {
         this.loadingTagTrendCount++
         if (this.loadingTagTrendCount === 3) {
           this.loadingTagTrend = false
         }
         if (res.status === 200) {
-          if (tag === '轻微') {
+          if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.blue) {
             this.light = res.data
-            this.pushDayArr(this.light)
+            this.pushDayArr(this.light, tag)
             this.pushAllArr(this.light, tag)
-          } else if (tag === '通知') {
+          } else if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.orange) {
             this.normal = res.data
-            this.pushDayArr(this.normal)
+            this.pushDayArr(this.normal, tag)
             this.pushAllArr(this.normal, tag)
-          } else {
+          } else if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.red) {
             this.serious = res.data
-            this.pushDayArr(this.serious)
+            this.pushDayArr(this.serious, tag)
             this.pushAllArr(this.serious, tag)
           }
         }
@@ -341,31 +342,18 @@ export default {
       let end = uniformDate(this.endTimePick)
       let endHour = this.endTimePick.getHours()
 
-      // 获取标签'轻微'的趋势
-      this.getSingleTag(this.currentProduct.id, '轻微', begin, end, beginHour, endHour)
-
-      // 获取标签'通知'的趋势
-      this.getSingleTag(this.currentProduct.id, '通知', begin, end, beginHour, endHour)
-
-      // 获取标签'严重'的趋势
-      this.getSingleTag(this.currentProduct.id, '严重', begin, end, beginHour, endHour)
+      locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS.forEach((item) => {
+        this.getSingleTag(this.currentProduct.id, item, begin, end, beginHour, endHour)
+      })
     },
 
     // 处理标签每日数据
-    pushDayArr (arr) {
+    pushDayArr (arr, tag) {
       if (this.recvDataCount === 0) {
         this.tempTrendData = []
       }
       this.recvDataCount++
       var rearr = []
-      var name = ''
-      if (arr === this.normal) {
-        name = '通知'
-      } else if (arr === this.serious) {
-        name = '严重'
-      } else {
-        name = '轻微'
-      }
       if (this.scale === 'hour') {
         arr.forEach((item) => {
           var i = 0
@@ -373,7 +361,7 @@ export default {
             rearr.push({
               date: item.day + ' ' + item.hours[i].hour + ':00:00',
               val: item.hours[i].message,
-              name: name
+              name: tag
             })
             i++
           }
@@ -389,7 +377,7 @@ export default {
           rearr.push({
             date: item.day,
             val: sum,
-            name: name
+            name: tag
           })
         })
       }
@@ -535,29 +523,29 @@ export default {
         this.loadingAlertList = false
         if (res.status === 200) {
           res.data.forEach((item) => {
-            if (item.tag === '轻微') {
+            if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.orange) {
               this.lightRules.push({
                 name: item.name,
                 id: item.id,
-                tag: '轻微'
+                tag: locales[Vue.config.lang].data.ALERT_LEVELS.orange
               })
-            } else if (item.tag === '通知') {
+            } else if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.blue) {
               this.normalRules.push({
                 name: item.name,
                 id: item.id,
-                tag: '通知'
+                tag: locales[Vue.config.lang].data.ALERT_LEVELS.blue
               })
-            } else if (item.tag === '严重') {
+            } else if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.red) {
               this.seriousRules.push({
                 name: item.name,
                 id: item.id,
-                tag: '严重'
+                tag: locales[Vue.config.lang].data.ALERT_LEVELS.red
               })
             }
           })
-          this.sortArr(this.lightRules, '轻微')
-          this.sortArr(this.normalRules, '通知')
-          this.sortArr(this.seriousRules, '严重')
+          this.sortArr(this.lightRules, locales[Vue.config.lang].data.ALERT_LEVELS.orange)
+          this.sortArr(this.normalRules, locales[Vue.config.lang].data.ALERT_LEVELS.blue)
+          this.sortArr(this.seriousRules, locales[Vue.config.lang].data.ALERT_LEVELS.red)
         }
       }).catch((res) => {
         this.loadingAlertList = false
@@ -589,22 +577,22 @@ export default {
         case 0:
           this.warningLevel = this.trendPieData
           this.showlink = false
-          this.levelTitle = '告警'
+          this.levelTitle = '全部'
           break
         case 1:
           this.warningLevel = this.lightRules
           this.showlink = true
-          this.levelTitle = '轻微'
+          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.blue
           break
         case 2:
           this.warningLevel = this.normalRules
           this.showlink = true
-          this.levelTitle = '通知'
+          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.orange
           break
         case 3:
           this.warningLevel = this.seriousRules
           this.showlink = true
-          this.levelTitle = '严重'
+          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.red
           break
         default:
 
