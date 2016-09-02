@@ -335,7 +335,7 @@ export default {
           '严重': 'text-label-danger'
         })[item.tags] || ''
 
-        let content = '<span class="table-limit-width">' + item.content + '</span>'
+        let content = '<a class="table-limit-width hl-red">' + item.content + '</a>'
         let alert = {
           content: content,
           mac: item.mac,
@@ -344,7 +344,7 @@ export default {
           id: item.from,
           level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
           state: item.is_read ? '已处理' : '未处理',
-          prototype: alert
+          prototype: item
         }
         result.push(alert)
       })

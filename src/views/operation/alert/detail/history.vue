@@ -4,7 +4,7 @@
       <div class="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <date-time-multiple-picker :periods="periods" @timechange="getSpecial"></date-time-multiple-picker>
+            <date-time-multiple-picker :periods="periods" @timechange="getSpecial" :default-period="defaultPeriod"></date-time-multiple-picker>
           </div>
         </div>
       </div>
@@ -32,10 +32,10 @@
             </div>
           </div>
           <div class="filter-group">
-            <x-select width="90px" size="small" :label="visibility.label">
+            <x-select width="90px" size="small" :label="visibility">
               <span slot="label">明细：</span>
               <select v-model="visibility" @change="getList()">
-                <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
+                <option v-for="option in visibilityOptions" :value="option">{{ option }}</option>
               </select>
             </x-select>
           </div>
@@ -57,7 +57,7 @@
                 <td>{{ record.create_date | formatDate }}</td>
                 <td>{{ record.lasting }}h</td>
                 <td>
-                  <template v-if="record.tags"><span v-for="tag in record.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ record.tags }}</span></template>
+                  <span class="text-label" :class="tagStyle(record.tag)">{{ record.tags }}</span>
                 </td>
                 <td><span v-if="record.is_read">已处理</span><span v-else>未处理</span></td>
               </tr>
@@ -86,8 +86,9 @@ import Select from 'components/Select'
 import TimeLine from 'components/g2-charts/TimeLine'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import dateFormat from 'date-format'
 import {getLastYearDate} from 'utils'
+import locales from 'consts/locales/index'
+import Vue from 'vue'
 
 export default {
   name: 'record-history',
@@ -114,31 +115,23 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
-      visibility: {
-        label: '全部等级',
-        value: 'all'
-      },
-      visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
-      ],
+      visibility: '全部等级',
+      visibilityOptions: ['全部等级'].concat(locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS),
       startTimePick: '',
       endTimePick: '',
       trendData: [],
       period: 1,
       periods: [1, 7, 30],
       serious: {
-        name: '严重',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.red,
         data: []
       },
       normal: {
-        name: '通知',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.blue,
         data: []
       },
       light: {
-        name: '轻微',
+        name: locales[Vue.config.lang].data.ALERT_LEVELS.orange,
         data: []
       },
       recvDataCount: 0,
@@ -147,49 +140,24 @@ export default {
     }
   },
 
-  filters: {
-    toTags (value) {
-      return value.length ? value.split(',') : []
-    }
-  },
-
   ready () {
     this.getList()
-    // this.getTagTrend()
   },
 
   computed: {
 
     queryCondition () {
-      var condition = {}
-      if (this.period === '') {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            id: {
-              $in: [this.$route.params.id]
-            },
-            create_date: {
-              $gte: this.startTimePick,
-              $lte: this.endTimePick
-            }
-          }
-        }
-      } else {
-        condition = {
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
-          query: {
-            from: {
-              $in: [this.deviceID]
-            },
-            create_date: {
-              $lte: this.endTime + 'T00:00:00.000Z',
-              $gte: this.beginTime + 'T00:00:00.000Z'
-            }
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          from: {
+            $in: [this.deviceID]
+          },
+          create_date: {
+            $lte: this.startTimePick,
+            $gte: this.endTimePick
           }
         }
       }
@@ -197,45 +165,16 @@ export default {
         condition.query.id = {$in: [this.key]}
       }
 
-      switch (this.visibility.value) {
-        case '通知':
-          condition.query['tags'] = { $in: ['通知'] }
-          break
-        case '轻微':
-          condition.query['tags'] = { $in: ['轻微'] }
-          break
-        case '严重':
-          condition.query['tags'] = { $in: ['严重'] }
-          break
-        default:
+      if (this.visibility !== '全部等级') {
+        condition.query['tags'] = { $in: [this.visibility] }
       }
 
       return condition
-    },
-
-    beginTime () {
-      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(past))
-    },
-    endTime () {
-      var end = new Date().getTime()
-      return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
 
   // 监听属性变动
   watch: {
-    productID () {
-      // this.getTagTrend()
-      // if (this.products.length > 0) {
-      //   this.getTagTrend()
-      //   this.getList(this.queryCondition)
-      // }
-    }
-    // period () {
-    //   this.getAlertTrends()
-    //   this.getAlertSummary()
-    // }
   },
 
   methods: {
@@ -308,42 +247,35 @@ export default {
     // 获取告警趋势图表数据
     getTagTrend () {
       this.recvDataCount = 0
-      var begin
-      var end
-      if (this.period === '') {
-        var startTimePick = uniformDate(this.startTimePick)
-        var endTimePick = uniformDate(this.endTimePick)
-        begin = startTimePick
-        end = endTimePick
-      } else {
-        begin = this.beginTime
-        end = this.endTime
-      }
+      let begin = uniformDate(this.startTimePick)
+      let beginHour = this.startTimePick.getHours()
+      let end = uniformDate(this.endTimePick)
+      let endHour = this.endTimePick.getHours()
       // 获取标签'轻微'的趋势
-      api.alert.getTagTrend(this.productID, '轻微', begin, end).then((res) => {
+      api.alert.getTagTrend(this.productID, this.locales.data.ALERT_LEVELS.orange, begin, end, beginHour, endHour).then((res) => {
         if (res.status === 200) {
           this.light = res.data
-          this.pushArr(this.light)
+          this.pushArr(this.light, this.locales.data.ALERT_LEVELS.orange)
         }
       }).catch((res) => {
         this.handleError(res)
       })
 
       // 获取标签'通知'的趋势
-      api.alert.getTagTrend(this.productID, '通知', begin, end).then((res) => {
+      api.alert.getTagTrend(this.productID, this.locales.data.ALERT_LEVELS.blue, begin, end, beginHour, endHour).then((res) => {
         if (res.status === 200) {
           this.normal = res.data
-          this.pushArr(this.normal)
+          this.pushArr(this.normal, this.locales.data.ALERT_LEVELS.blue)
         }
       }).catch((res) => {
         this.handleError(res)
       })
 
       // 获取标签'严重'的趋势
-      api.alert.getTagTrend(this.productID, '严重', begin, end).then((res) => {
+      api.alert.getTagTrend(this.productID, this.locales.data.ALERT_LEVELS.red, begin, end).then((res) => {
         if (res.status === 200) {
           this.serious = res.data
-          this.pushArr(this.serious)
+          this.pushArr(this.serious, this.locales.data.ALERT_LEVELS.red)
         }
       }).catch((res) => {
         this.handleError(res)
@@ -351,20 +283,12 @@ export default {
     },
 
     // 处理标签数据
-    pushArr (arr) {
+    pushArr (arr, tag) {
       if (this.recvDataCount === 0) {
         this.tempTrendData = []
       }
       this.recvDataCount++
       var rearr = []
-      var name = ''
-      if (arr === this.normal) {
-        name = '通知'
-      } else if (arr === this.serious) {
-        name = '严重'
-      } else {
-        name = '轻微'
-      }
       if (this.scale === 'hour') {
         arr.forEach((item) => {
           var i = 0
@@ -372,7 +296,7 @@ export default {
             rearr.push({
               date: item.day + ' ' + item.hours[i].hour + ':00:00',
               val: item.hours[i].message,
-              name: name
+              name: tag
             })
             i++
           }
@@ -388,7 +312,7 @@ export default {
           rearr.push({
             date: item.day,
             val: sum,
-            name: name
+            name: tag
           })
         })
       }
@@ -407,20 +331,6 @@ export default {
         }
         this.trendData = this.tempTrendData
       }
-      // this.trendData = rearr
-      // Array.prototype.push.apply(this.trendData, rearr)
-      //
-      // arr.data.forEach((item) => {
-      //   var dayTotal = 0
-      //   item.hours.forEach((message) => {
-      //     dayTotal = dayTotal + message.message
-      //   })
-      //   this.trendData.push({
-      //     day: item.day,
-      //     data: dayTotal,
-      //     product: item.name
-      //   })
-      // })
     },
     getSpecial (start, end) {
       // 过滤选择时间
@@ -448,7 +358,6 @@ export default {
         this.scale = 'day'
       }
 
-      this.period = ''
       this.startTimePick = start
       this.endTimePick = end
       // this.getTagTrend()
@@ -457,6 +366,17 @@ export default {
     getAll () {
       this.getTagTrend()
       this.getList()
+    },
+    tagStyle (tag) {
+      switch (tag) {
+        case locales[Vue.config.lang].data.ALERT_LEVELS.orange:
+          return 'text-label-warning'
+        case locales[Vue.config.lang].data.ALERT_LEVELS.red:
+          return 'text-label-danger'
+        default:
+          break
+      }
+      return ''
     }
   }
 }

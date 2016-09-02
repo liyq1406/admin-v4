@@ -71,6 +71,9 @@ export default {
 
   methods: {
     render () {
+      if (!this._isReady) {
+        return
+      }
       var el = this.$el.firstElementChild
 
       if (!el || el.className !== 'map-item') {
