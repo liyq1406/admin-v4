@@ -238,3 +238,9 @@ export const ISSUE_TYPES = [
   { label: '新增问题', value: 0 },
   { label: '待处理问题', value: 1 }
 ]
+
+export const ALERT_LEVELS = {
+  blue: '通知',
+  orange: '轻微',
+  red: '严重'
+}

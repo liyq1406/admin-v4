@@ -137,15 +137,15 @@
           },
           {
             value: 1,
-            label: '轻微'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.orange
           },
           {
             value: 2,
-            label: '通知'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.blue
           },
           {
             value: 3,
-            label: '严重'
+            label: locales[Vue.config.lang].data.ALERT_LEVELS.red
           }
         ],
         loadingData: false,
@@ -168,10 +168,11 @@
       tables () {
         var result = []
         this.alerts.forEach((item) => {
-          let levelCls = ({
-            '中等': 'text-label-warning',
-            '重度': 'text-label-danger'
-          })[item.tags] || ''
+          var temp = {}
+          temp[locales[Vue.config.lang].data.ALERT_LEVELS.red] = 'text-label-danger'
+          temp[locales[Vue.config.lang].data.ALERT_LEVELS.orange] = 'text-label-warning'
+
+          let levelCls = temp[item.tags] || ''
           let content = '<span class="table-limit-width">' + item.content + '</span>'
           let alert = {
             content: content,
