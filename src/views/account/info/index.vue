@@ -49,7 +49,7 @@
               <label class="form-control col-6">{{ $t('ui.auth.fields.confirm_password') }}</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.oldpassword}" lazy class="input-text"/>
+                  <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.newpassword}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
