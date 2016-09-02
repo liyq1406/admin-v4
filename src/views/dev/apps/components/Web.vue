@@ -95,6 +95,7 @@
       init () {
         this.currApp = this.app
         this.model.name = this.currApp.name
+        this.model.enable = this.currApp.enable
         this.model.config.url = this.currApp.config.url
       },
 

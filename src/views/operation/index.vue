@@ -145,10 +145,12 @@ export default {
 
           case 'web': // Web
             sub.icon = 'internet-explorer'
-            sub.subs = [{
-              alias: 'settings',
-              url: `/plugins/web/${item.id}/settings`
-            }]
+            sub.label = item.name
+            sub.url = item.config.url
+            // sub.subs = [{
+            //   alias: 'settings',
+            //   url: `/plugins/web/${item.id}/settings`
+            // }]
             break
 
           // 用户自定义微信插件不予展示在侧栏

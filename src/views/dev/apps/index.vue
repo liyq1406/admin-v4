@@ -398,7 +398,9 @@
           } else if (this.addModal.type === 4) { // 微信应用
             this.addModal.plugin = 'wechat'
           }
+          this.addModal.enable = true
           this.adding = true
+
           api.plugin.create(this.addModal).then((res) => {
             if (res.status === 200) {
               this.createPlugin(res.data)
