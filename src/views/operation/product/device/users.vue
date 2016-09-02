@@ -265,6 +265,8 @@ export default {
           this.deviceUsers.map((item) => {
             this.getOnlineType(item)
           })
+        } else {
+          this.loadingData = false
         }
       }).catch((res) => {
         this.handleError(res)
