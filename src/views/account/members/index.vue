@@ -30,7 +30,7 @@
             <tbody>
               <template v-if="filteredMembers.length > 0">
                 <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
-                  <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
+                  <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a></td>
                   <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span>{{ locales.data.MEMBER_TYPES[member.role-1] }}</span></td>

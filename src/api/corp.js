@@ -137,6 +137,11 @@ export default {
     )
   },
 
+  setMemberRole (id, roleType, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/corp/member/${id}/role/${roleType}`, params
+    )
+  },
   /**
    * 成员重置密码
    * 成员重置自己的密码，成员只能重置自己的密码，管理员不能修改其他任何成员的密码。

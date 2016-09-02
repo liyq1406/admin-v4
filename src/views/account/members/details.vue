@@ -5,12 +5,16 @@
       <div class="details row">
         <div class="col-16">
           <h2>{{ member.name }}</h2>
-          <div class="actions" v-if="currentMember.role === 1 && member.role === 2">
+          <div class="actions" v-if="currentMember.role === 1 && member.role === 1">
             <button class="btn btn-ghost" @click="toggleAccount"><i class="hl-red fa" :class="{'fa-ban': member.status === 1, 'fa-undo': member.status !== 1}"></i>{{ member.status === 1 ? '停用帐号' : '启用帐号'}}</button>
             <button class="btn btn-ghost" @click="delMember"><i class="hl-red fa fa-times"></i>删除成员</button>
           </div>
           <div v-stretch="182">
             <info-list :info="accountInfo">
+              <div slot="role">
+                {{MEMBER_TYPES[member.role]}}
+                <a class="fa fa-edit" @click="onShowMemberRoleModal" v-if="member.role !== 1"></a>
+              </div>
               <div slot="password">
                 <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role === 2">修改密码</a>
                 <span class="hl-gray" v-else>无权修改</span>
@@ -21,6 +25,28 @@
       </div>
     </div>
 
+    <!-- 切换状态浮层   -->
+    <modal :show.sync="showMemberRoleModal">
+      <h3 slot="header">修改角色</h3>
+      <div slot="body" class="form">
+        <form novalidate @submit.prevent="onSubmitMemberRole">
+          <div class="form-row row">
+            <label class="form-control col-6">角色: </label>
+            <div class="controls col-18">
+              <x-select :label="role.label">
+                <select v-model="role" @change="">
+                  <option v-for="(key, type) in MEMBER_TYPES" :value="{label: type, value: key}">{{type}}</option>
+                </select>
+              </x-select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="onSubmitMemberRoleCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          </div>
+        </form>
+      </div>
+    </modal>
     <!-- 修改密码浮层 start -->
     <modal :show.sync="isShowModal" width="400px">
       <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
@@ -72,6 +98,7 @@ import Modal from 'components/Modal'
 import Breadcrumb from 'components/Breadcrumb'
 import store from 'store'
 import { formatDate } from 'src/filters'
+import Select from 'components/Select'
 import api from 'api'
 // import _ from 'lodash'
 
@@ -92,11 +119,22 @@ export default {
   components: {
     InfoList,
     Modal,
+    'x-select': Select,
     Breadcrumb
   },
 
   data () {
     return {
+      role: {
+        value: 0,
+        label: ''
+      },
+      MEMBER_TYPES: {
+        '1': '管理员',
+        '2': '运营人员',
+        '3': '开发人员'
+      },
+      showMemberRoleModal: false,
       originModel: {
         newpassword: ''
       },
@@ -115,7 +153,7 @@ export default {
       return {
         role: {
           label: '角色',
-          value: this.locales.data.MEMBER_TYPES[this.member.role - 1]
+          slot: true
         },
         password: {
           label: '密码',
@@ -149,6 +187,44 @@ export default {
 
   methods: {
     /**
+     * 编辑成员角色表单提交
+     * @return {[type]} [description]
+     */
+    onSubmitMemberRole () {
+      console.log('表单提交')
+      let roleType = this.role.value
+      let params = {
+        // 'role_id': '自定义角色ID'
+      }
+      console.log(roleType)
+      console.log(params)
+      api.corp.setMemberRole(this.member.id, roleType, params).then((res) => {
+        console.log(res)
+        this.showNotice({
+          type: 'success',
+          content: '设置成功！'
+        })
+        this.getMember()
+        this.onSubmitMemberRoleCancel()
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 编辑成员按钮事件
+     * @return {[type]} [description]
+     */
+    onShowMemberRoleModal () {
+      this.showMemberRoleModal = true
+    },
+    /**
+     * 编辑成员角色浮层取消事件
+     * @return {[type]} [description]
+     */
+    onSubmitMemberRoleCancel () {
+      this.showMemberRoleModal = false
+    },
+    /**
      * 获取用户信息
      * @author shengzhi
      * @param {String} id 用户 ID
@@ -158,6 +234,10 @@ export default {
       api.corp.getMember(id).then((res) => {
         if (res.status === 200) {
           this.member = res.data
+          this.role = {
+            value: this.member.role,
+            label: this.MEMBER_TYPES[this.member.role]
+          }
         }
       }).catch((res) => {
         this.handleError(res)
