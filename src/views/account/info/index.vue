@@ -1,7 +1,10 @@
 <template>
   <div class="main">
     <div class="account-info">
-      <h2>{{ currentMember.name }}</h2>
+      <h2>
+        {{ currentMember.name }}
+        <a class="fa fa-edit" @click="showEditModal"></a>
+      </h2>
       <div class="details row">
         <div class="col-16">
           <div v-stretch="182">
@@ -12,7 +15,43 @@
         </div>
       </div>
     </div>
-
+    <modal :show.sync="isShowEditModal">
+      <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
+      <div slot="body" class="form">
+        <validator name="editInfoValidation">
+          <form novalidate @submit.prevent="onSubmitEditInfo">
+            <div class="form-row row">
+              <label class="form-control col-6">名称</label>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input type="text" v-model="editModel.name" name="editModel.name" v-validate:name="{required: true}" class="input-text"/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$editInfoValidation.name.touched && $editInfoValidation.name.required">名称为必填项</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <label class="form-control col-6">角色</label>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <x-select :label="role.label">
+                    <select v-model="role">
+                      <option v-if="currentMember.role === 1" :value="{label: '管理员', value: 1}">管理员</option>
+                      <option v-for="(key, role) in MEMBER_TYPES" v-if="key - 0 !== 1 || true" :value="{label: role, value: key}">{{role}}</option>
+                    </select>
+                  </x-select>
+                </div>
+              </div>
+            </div>
+            <div class="form-actions">
+              <button @click.prevent.stop="onEditInfoCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            </div>
+          </form>
+        </validator>
+      </div>
+    </modal>
     <!-- 修改密码浮层 start -->
     <modal :show.sync="isShowModal" width="400px">
       <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
@@ -77,6 +116,8 @@ import Modal from 'components/Modal'
 import store from 'store'
 import { formatDate } from 'src/filters'
 import api from 'api'
+import Select from 'components/Select'
+import { setCurrentMember } from '../../../store/actions/system'
 // import _ from 'lodash'
 
 export default {
@@ -90,16 +131,29 @@ export default {
   vuex: {
     getters: {
       currentMember: ({ system }) => system.currentMember
+    },
+    actions: {
+      setCurrentMember
     }
   },
 
   components: {
+    'x-select': Select,
     InfoList,
     Modal
   },
 
   data () {
     return {
+      editing: false,
+      role: {
+        value: 0,
+        label: ''
+      },
+      isShowEditModal: false,
+      editModel: {
+        name: ''
+      },
       originModel: {
         oldpassword: '',
         newpassword: ''
@@ -114,7 +168,7 @@ export default {
       return {
         role: {
           label: '角色',
-          value: this.locales.data.MEMBER_TYPES[this.currentMember.role - 1]
+          value: this.MEMBER_TYPES[this.currentMember.role]
         },
         password: {
           label: '密码',
@@ -140,13 +194,107 @@ export default {
     }
   },
 
+  watch: {
+    currentMember () {
+      this.init()
+    }
+  },
   route: {
     data () {
       this.getCorpInfo()
     }
   },
 
+  ready () {
+    this.init()
+  },
+
   methods: {
+    init () {
+      this.role = {
+        value: this.currentMember.role,
+        label: this.MEMBER_TYPES[this.currentMember.role]
+      }
+    },
+    /**
+     * 编辑信息提交表单
+     * @return {[type]} [description]
+     */
+    onSubmitEditInfo () {
+      console.log('编辑信息提交表单')
+      this.editing = true
+      if (this.currentMember.role !== this.role.value) {
+        this.setRole()
+      }
+      if (this.currentMember.name !== this.editModel.name) {
+        this.setMemberInfo()
+      }
+    },
+    setMemberInfo () {
+      this.editModel.is_notice = true
+      this.editModel.is_alert = true
+      api.corp.updateMember(this.currentMember.id, this.editModel).then((res) => {
+        console.log(res.data)
+        this.onEditInfoCancel()
+        this.showNotice({
+          type: 'success',
+          content: '更新成功'
+        })
+        this.getMember()
+      }).catch((res) => {
+        this.onEditInfoCancel()
+        this.handleError(res)
+      })
+    },
+    /**
+     * 获取成员信息
+     * @return {[type]} [description]
+     */
+    getMember () {
+      api.corp.getMember(this.currentMember.id).then((res) => {
+        this.setCurrentMember(res.data)
+      }).catch((res) => {
+        this.$route.router.go('/login')
+      })
+    },
+    /**
+     * 设置角色
+     * @return {[type]} [description]
+     */
+    setRole () {
+      let roleType = this.role.value
+      let params = {
+        // 'role_id': '自定义角色ID'
+      }
+      api.corp.setMemberRole(this.currentMember.id, roleType, params).then((res) => {
+        this.onEditInfoCancel()
+        this.showNotice({
+          type: 'success',
+          content: '角色设置成功！'
+        })
+        this.getMember()
+        // this.onEditInfoCancel()
+      }).catch((res) => {
+        this.onEditInfoCancel()
+        this.handleError(res)
+      })
+    },
+    /**
+     * 编辑按钮
+     * @return {[type]} [description]
+     */
+    showEditModal () {
+      this.editModel.name = this.currentMember.name
+      this.isShowEditModal = true
+    },
+    /**
+     * 取消编辑个人信息
+     * @return {[type]} [description]
+     */
+    onEditInfoCancel () {
+      this.editing = false
+      this.isShowEditModal = false
+    },
     /**
      * 获取企业信息
      * @author shengzhi

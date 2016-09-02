@@ -129,11 +129,6 @@ export default {
         value: 0,
         label: ''
       },
-      MEMBER_TYPES: {
-        '1': '管理员',
-        '2': '运营人员',
-        '3': '开发人员'
-      },
       showMemberRoleModal: false,
       originModel: {
         newpassword: ''
@@ -191,15 +186,11 @@ export default {
      * @return {[type]} [description]
      */
     onSubmitMemberRole () {
-      console.log('表单提交')
       let roleType = this.role.value
       let params = {
         // 'role_id': '自定义角色ID'
       }
-      console.log(roleType)
-      console.log(params)
       api.corp.setMemberRole(this.member.id, roleType, params).then((res) => {
-        console.log(res)
         this.showNotice({
           type: 'success',
           content: '设置成功！'

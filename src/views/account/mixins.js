@@ -6,6 +6,11 @@ export const editPasswordMixin = {
       isShowModal: false, // 是否显示浮层
       editing: false,
       confirmPassword: '',
+      MEMBER_TYPES: {
+        '1': '管理员',
+        '2': '运营人员',
+        '3': '开发人员'
+      },
       model: {}
     }
   },
