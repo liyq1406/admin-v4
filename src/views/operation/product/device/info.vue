@@ -92,14 +92,12 @@ export default {
         }
         result.push(dp)
       })
-
       if (this.query.length) {
-        let reg = new RegExp(this.query, 'ig')
+        let reg = new RegExp(this.query, 'i')
         result = result.filter((item) => {
           return reg.test(item.name)
         })
       }
-
       return _.orderBy(result, ['index'], ['asc'])
     }
   },
