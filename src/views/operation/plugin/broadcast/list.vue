@@ -132,8 +132,8 @@
             people: this.computedPeopleText(item.scope.type),
             status: this.computedStatusText(item.status),
             valid_count: item.user_num,
-            arrive_num: item.arrive_num + '<br>(' + parseInt(item.arrive_num / item.user_num * 10000) / 100 + '%)',
-            read_num: item.read_num + '<br>(' + parseInt(item.read_num / item.user_num * 10000) / 100 + '%)',
+            arrive_num: item.arrive_num + '<br>(' + ((parseInt(item.arrive_num / item.user_num * 10000) / 100) || 0) + '%)',
+            read_num: item.read_num + '<br>(' + ((parseInt(item.read_num / item.user_num * 10000) / 100) || 0) + '%)',
             prototype: item
           }
           result.push(history)
