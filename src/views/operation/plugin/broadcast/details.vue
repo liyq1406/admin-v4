@@ -296,7 +296,7 @@ export default {
 
     // 面包屑导航
     breadcrumbNav () {
-      let root = `/operation/plugins/broadcast/${this.$route.params.id}`
+      let root = `/operation/plugins/broadcast/${this.$route.params.app_id}`
       let result = [{
         label: '消息历史',
         link: { path: `${root}/list` }

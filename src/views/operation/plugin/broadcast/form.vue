@@ -124,7 +124,7 @@
                             <input type="radio" name="tag" :value="2" v-model="tag.type">不推送标签用户
                           </label>
                         </div>
-                        <div class="fl row mt10 mb10">
+                        <div class="fl row mt10 mb10" v-show="tag.type!==0">
                           <tag-input :value.sync="tag.tag_list" :candidate="usersTags"></tag-input>
                           <div class="form-tips form-tips-error">
                             <span v-if="tag.type!==0 && !tag.tag_list.length && needVerification">请选择用户标签</span>
