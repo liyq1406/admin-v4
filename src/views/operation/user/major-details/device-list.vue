@@ -27,7 +27,7 @@
         :tables="tables"
         :page="page"
         :loading="loadingData"
-        @theader-is-active="sortBySomeKey"  @theader-active-date="sortBySomeKey"  @theader-is-online="sortBySomeKey"
+        @theader-is-active="sortBySomeKey"  @theader-active-date="sortBySomeKey"  @theader-is-online="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"
         ></x-table>
       </div>
     </div>
@@ -226,6 +226,26 @@ export default {
   },
 
   methods: {
+    /**
+     * 当前页码改变
+     * 国辉
+     * @param  {[type]} number [description]
+     * @return {[type]}        [description]
+     */
+    currentPageChange (number) {
+      this.currentPage = number
+      this.getDevices()
+    },
+    /**
+     * 每页显示的数量改变
+     * 国辉
+     * @param  {[type]} count 每页显示数量
+     * @return {[type]}       [description]
+     */
+    pageCountUpdate (count) {
+      this.countPerPage = count
+      this.getDevices()
+    },
     /**
      * 获取用户订阅设备
      */
