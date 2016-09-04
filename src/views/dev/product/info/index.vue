@@ -168,8 +168,8 @@
               <label class="del-check" v-if="!editModel.is_release">
                 <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
               </label>
-              <button @click.prevent.stop="resetEdit" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="resetEdit" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validation>

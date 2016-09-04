@@ -121,8 +121,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>
@@ -142,8 +142,8 @@
               <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限txt、cav格式文件</span></p>
             </div>
             <div class="form-actions">
-              <button @click.prevent.stop="onAddCancel2" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onAddCancel2" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>

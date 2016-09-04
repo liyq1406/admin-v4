@@ -16,7 +16,7 @@
       </div>
     </div>
     <modal :show.sync="isShowEditModal">
-      <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
+      <h3 slot="header">编辑帐号信息</h3>
       <div slot="body" class="form">
         <validator name="editInfoValidation">
           <form novalidate @submit.prevent="onSubmitEditInfo">
@@ -45,8 +45,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button @click.prevent.stop="onEditInfoCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onEditInfoCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>
@@ -97,8 +97,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>

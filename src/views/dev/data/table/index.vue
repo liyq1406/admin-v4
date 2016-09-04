@@ -193,8 +193,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -267,8 +267,8 @@
             <label class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.table.del_table") }}
             </label>
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -298,8 +298,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="addColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="addColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -321,8 +321,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="delColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="delColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -368,8 +368,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="filterModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="filterModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -388,8 +388,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="jurisdictionModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="jurisdictionModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -403,8 +403,8 @@
           <p><i class="fa fa-warning "></i> {{confirmModal.content}}</p>
         </div>
         <div class="form-actions">
-          <button @click.prevent.stop="confirmModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click.prevent.stop="confirmModalConfirm" type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          <button @click.prevent.stop="confirmModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
@@ -462,8 +462,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="userEditColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing || !userEditColumnModal.value" :class="{'disabled':(editing || !userEditColumnModal.value)}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="userEditColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>

@@ -141,8 +141,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="onEditAccountCancel" class="btn btn-default">{{ $t('common.cancel') }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onEditAccountCancel" class="btn btn-default">{{ $t('common.cancel') }}</button>
           </div>
         </form>
       </div>
@@ -173,8 +173,8 @@
             <div v-if="pwdValidation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="editPwdModel.newpassword && pwdValidation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="pwdValidation.confirmPassword.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>

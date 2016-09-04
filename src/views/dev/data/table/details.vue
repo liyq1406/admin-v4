@@ -71,7 +71,7 @@
         </tbody>
       </table>
       <div slot="footer" class="modal-footer">
-        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
+        <button @click.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
       </div>
     </modal>
   </div>

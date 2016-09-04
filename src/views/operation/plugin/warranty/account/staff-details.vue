@@ -106,8 +106,8 @@
             <label class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/>删除客服
             </label>
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>

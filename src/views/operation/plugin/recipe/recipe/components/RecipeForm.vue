@@ -188,8 +188,8 @@
           </div>
         </div>
         <div class="form-actions">
-          <button @click.prevent.stop="onDeviceSelectCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click.prevent.stop="addCookingDevice" class="btn btn-primary">{{ $t('common.ok') }}</button>
+          <button @click.prevent.stop="onDeviceSelectCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
@@ -249,8 +249,8 @@
         </div>
         <div class="button-box">
           <div class="form-actions">
-            <button @click.prevent.stop="ingredientSelectModal.show=false" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="ingredientSelectModal.adding" :class="{'disabled':ingredientSelectModal.adding}" v-text="ingredientSelectModal.adding ? $t('common.handling') : $t('common.ok')" @click.prevent.stop="confirmSelected" class="btn btn-primary"></button>
+            <button @click.prevent.stop="ingredientSelectModal.show=false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </div>
       </div>

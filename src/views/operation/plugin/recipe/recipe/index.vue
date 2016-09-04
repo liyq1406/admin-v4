@@ -70,8 +70,8 @@
             </div>
           </div>
           <div class="form-actions">
-            <button @click.prevent.stop="onCateCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onCateCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>

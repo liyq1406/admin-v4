@@ -186,8 +186,8 @@
           </x-select> -->
 
           <div class="form-actions">
-            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="false" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>
@@ -254,8 +254,8 @@
             <label class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/>删除网点
             </label>
-            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </div>

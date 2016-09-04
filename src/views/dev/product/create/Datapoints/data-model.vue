@@ -48,8 +48,8 @@
           </div>
         </div>
         <div class="form-actions">
-          <button @click.prevent.stop="onImportCancel" class="btn btn-default">取消</button>
           <button :disabled="importing" :class="{'disabled':importing}" class="btn btn-primary">导入</button>
+          <button @click.prevent.stop="onImportCancel" class="btn btn-default">取消</button>
         </div>
       </div>
     </modal>

@@ -144,8 +144,8 @@
            </div>
          </div>
          <div class="form-actions snapshot-select">
-           <!-- <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button> -->
            <button @click="saveDataPoints" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+           <!-- <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button> -->
          </div>
        </div>
      </modal>

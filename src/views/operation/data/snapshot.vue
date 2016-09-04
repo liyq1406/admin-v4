@@ -124,8 +124,8 @@
           </div>
         </div>
         <div class="form-actions snapshot-select">
-          <button @click="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click="onAddSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          <button @click="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
@@ -160,8 +160,8 @@
           <label class="del-check">
             <input type="checkbox" name="del" v-model="delRuleChecked"/>删除规则
           </label>
-          <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click="onEditSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
@@ -199,8 +199,8 @@
           </div>
         </div>
         <div class="form-actions snapshot-select">
-          <button @click="onEditPointCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           <button @click="onEditPointSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+          <button @click="onEditPointCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
