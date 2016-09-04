@@ -256,7 +256,7 @@
                         <input type="text" name="action.url" class="input-text"  v-model="action.url" v-validate:url="{isrequired: (actionType===2)}" @input="actionType=2"/>
                       </div>
                       <div class="form-tips form-tips-error">
-                        <span v-if="$validation.url.touched && $validation.url.isrequired">请填写页面activity地址</span>
+                        <span v-if="$validation.url.touched && $validation.url.isrequired">请输入网页地址</span>
                       </div>
                     </div>
                   </div>
@@ -269,7 +269,7 @@
                         <textarea class="input-text textarea" v-model="action.command" name="action.command" v-validate:command="{isrequired: (actionType===3),maxlength:240}" @input="actionType=3"></textarea>
                       </div>
                       <div class="form-tips form-tips-error">
-                        <span v-if="$validation.command.touched && $validation.command.isrequired">请填写页面activity地址</span>
+                        <span v-if="$validation.command.touched && $validation.command.isrequired">请填写内容</span>
                         <span v-if="$validation.command.maxlength">内容不能超过240个字节</span>
                       </div>
                       <span class="wordCount">{{action.command.length}}/240</span>
