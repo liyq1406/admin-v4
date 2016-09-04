@@ -127,7 +127,7 @@
                         </div>
                         <div class="string-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm" :value="datapoint.value" @change="setDataEvent(datapoint)">
+                            <input type="text" class="input-text input-text-sm" :value="datapoint.value" @change="setDataEvent(datapoint, 'string', $event)">
                           </div>
                         </div>
                       </div>
@@ -369,6 +369,7 @@ export default {
   },
   route: {
     data () {
+      this.currentPage = 1 // 切换路由时候初始化
       // 获取设备列表
       this.getDevices()
     },
@@ -521,14 +522,20 @@ export default {
     /**
      * 数据端点编辑 提交表单
      */
-    setDataEvent (dp) {
+    setDataEvent (dp, type, ev) {
       if (this.refreshing) return
+      let index = dp.index
+      let value = dp.value
+      if (type === 'string') {
+        console.log(ev.target.value)
+        value = ev.target.value
+      }
       // if (isNaN(dp.value)) return
       var params = {
         datapoint: [
           {
-            index: dp.index,
-            value: dp.value || 0
+            index: index,
+            value: value
           }
         ]
       }
