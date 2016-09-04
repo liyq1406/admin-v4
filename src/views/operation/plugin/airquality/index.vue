@@ -8,15 +8,16 @@
       <div class="filter-bar" slot="filter-bar">
         <div class="filter-group">
           <div class="filter-group-item">
-            <x-select width="90px" size="small" :label="selectedOption.label">
+            <span class="label">{{ $t('common.display') }}：</span>
+            <!-- <x-select width="90px" size="small" :label="selectedOption.label">
               <span slot="label">{{ $t('common.display') }}：</span>
               <select v-model="selectedOption" @change="">
                 <option v-for="option in options" :value="option">{{ option.label }}</option>
               </select>
-            </x-select>
+            </x-select> -->
           </div>
           <div class="filter-group-item">
-            <date-time-range-picker @timechange=""></date-time-range-picker>
+            <date-time-range-picker @timechange="timechange"></date-time-range-picker>
           </div>
           <div class="filter-group-item">
             <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
@@ -82,6 +83,10 @@ export default {
       area: {
         province: {},
         city: {}
+      },
+      time: {
+        startDate: new Date((+new Date()) - 7 * 1000 * 60 * 60 * 24),
+        endDate: new Date()
       },
       headers: [
         {
@@ -162,13 +167,19 @@ export default {
     },
 
     // 查询条件
+    // TODO 加了日期就获取不到数据 国辉
     queryCondition () {
       var condition = {
         // filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
-        query: {}
+        query: {
+          'update_time': {
+            $gt: this.time.startDate,
+            $lt: this.time.endDate
+          }
+        }
       }
 
       this.headers.map((item) => {
@@ -178,11 +189,9 @@ export default {
       })
 
       if (this.queryAreaStr) {
-        condition.query = {
-          'location.position': {
-            $regex: this.queryAreaStr,
-            $options: 'i'
-          }
+        condition.query['location.position'] = {
+          $regex: this.queryAreaStr,
+          $options: 'i'
         }
       }
 
@@ -241,6 +250,15 @@ export default {
         this.handleError(res)
       })
     },
+
+    timechange (startDate, endDate) {
+      let time = {
+        startDate: startDate,
+        endDate: endDate
+      }
+      this.time = time
+      this.getList()
+    },
     /**
      * 每页显示的数量改变
      * 国辉
@@ -279,3 +297,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+  .filter-group-item
+    .label
+      line-height 28px
+</style>
