@@ -52,9 +52,9 @@
             </tbody>
           </table>
         </div>
-        <div class="data-points-footer">
+        <!-- <div class="data-points-footer">
           <pager v-if="productsRules.length > countPerPage" :total="productsRules.length" :current.sync="currentRulesPage" :count-per-page="countPerPage" @page-update=""></pager>
-        </div>
+        </div> -->
       </div>
     </div>
     <!-- 添加选择快照数据项浮层-->

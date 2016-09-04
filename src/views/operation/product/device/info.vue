@@ -20,6 +20,7 @@
             <tr>
               <th>{{ $t('ui.datapoint.fields.index') }}</th>
               <th>{{ $t('ui.datapoint.fields.name') }}</th>
+              <th>端点类型</th>
               <th>{{ $t('ui.datapoint.fields.description') }}</th>
               <th>{{ $t('ui.device.current_value') }}</th>
             </tr>
@@ -28,6 +29,7 @@
             <tr v-for="datapoint in filteredDatapoints">
               <td>{{ datapoint.index }}</td>
               <td>{{ datapoint.name }}</td>
+              <td>{{dataPointType(datapoint.type)}}</td>
               <td>{{ datapoint.description }}</td>
               <td>{{ datapoint.value }}</td>
             </tr>
@@ -99,6 +101,48 @@ export default {
         })
       }
       return _.orderBy(result, ['index'], ['asc'])
+    },
+    // 数据端点类型
+    dataPointTypes () {
+      var result = [
+        {
+          value: 1,
+          label: '布尔类型'
+        },
+        {
+          value: 2,
+          label: '单字节(无符号)'
+        },
+        {
+          value: 3,
+          label: '16位短整型（有符号）'
+        },
+        {
+          value: 4,
+          label: '32位整型（有符号）'
+        },
+        {
+          value: 5,
+          label: '浮点'
+        },
+        {
+          value: 6,
+          label: '字符串'
+        },
+        {
+          value: 7,
+          label: '字节数组'
+        },
+        {
+          value: 8,
+          label: '16位短整型（无符号）'
+        },
+        {
+          value: 9,
+          label: '32位整型（无符号）'
+        }
+      ]
+      return result
     }
   },
 
@@ -139,6 +183,20 @@ export default {
         this.refreshing = false
         this.handleError(res)
       })
+    },
+    /**
+     * 计算当前类型
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
+    dataPointType (type) {
+      var result = ''
+      this.dataPointTypes.forEach((item) => {
+        if (item.value === type) {
+          result = item.label
+        }
+      })
+      return result
     }
   }
 }
