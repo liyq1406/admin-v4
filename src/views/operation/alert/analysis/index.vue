@@ -261,19 +261,19 @@ export default {
       var now = new Date().getTime()
       now = dateFormat('yyyy-MM-dd', new Date(now))
 
-      api.statistics.getProductAlertSummary(this.currentProduct.id).then((res) => {
-        if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      // api.statistics.getProductAlertSummary(this.currentProduct.id).then((res) => {
+      //   if (res.status === 200) {
+      //     this.alertSummary.unread.total = res.data.unread
+      //   }
+      // }).catch((res) => {
+      //   this.handleError(res)
+      // })
       // TODO 接口字段缺失 需要产品下统计概览数据 显示获取的全局的数据
       // 获取当天数据
       api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
         if (res.status === 200) {
-          // this.alertSummary.unread.total = res.data.unread
-          this.alertSummary.today.total = res.data.message
+          this.alertSummary.unread.total = res.data.unread
+          this.alertSummary.today.total = res.data.add_today
         }
       }).catch((res) => {
         this.handleError(res)
@@ -523,17 +523,17 @@ export default {
         this.loadingAlertList = false
         if (res.status === 200) {
           res.data.forEach((item) => {
-            if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.orange) {
+            if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.blue) {
               this.lightRules.push({
                 name: item.name,
                 id: item.id,
-                tag: locales[Vue.config.lang].data.ALERT_LEVELS.orange
+                tag: locales[Vue.config.lang].data.ALERT_LEVELS.blue
               })
-            } else if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.blue) {
+            } else if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.orange) {
               this.normalRules.push({
                 name: item.name,
                 id: item.id,
-                tag: locales[Vue.config.lang].data.ALERT_LEVELS.blue
+                tag: locales[Vue.config.lang].data.ALERT_LEVELS.orange
               })
             } else if (item.tag === locales[Vue.config.lang].data.ALERT_LEVELS.red) {
               this.seriousRules.push({
@@ -543,8 +543,8 @@ export default {
               })
             }
           })
-          this.sortArr(this.lightRules, locales[Vue.config.lang].data.ALERT_LEVELS.orange)
-          this.sortArr(this.normalRules, locales[Vue.config.lang].data.ALERT_LEVELS.blue)
+          this.sortArr(this.lightRules, locales[Vue.config.lang].data.ALERT_LEVELS.blue)
+          this.sortArr(this.normalRules, locales[Vue.config.lang].data.ALERT_LEVELS.orange)
           this.sortArr(this.seriousRules, locales[Vue.config.lang].data.ALERT_LEVELS.red)
         }
       }).catch((res) => {
@@ -580,9 +580,9 @@ export default {
           this.levelTitle = '全部'
           break
         case 1:
-          this.warningLevel = this.lightRules
+          this.warningLevel = this.seriousRules
           this.showlink = true
-          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.blue
+          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.red
           break
         case 2:
           this.warningLevel = this.normalRules
@@ -590,9 +590,9 @@ export default {
           this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.orange
           break
         case 3:
-          this.warningLevel = this.seriousRules
+          this.warningLevel = this.lightRules
           this.showlink = true
-          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.red
+          this.levelTitle = locales[Vue.config.lang].data.ALERT_LEVELS.blue
           break
         default:
 

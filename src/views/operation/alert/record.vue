@@ -413,6 +413,7 @@ export default {
       if (this.products.length > 0) {
         this.getFirstProduct()
         this.getAlerts()
+        this.getSummary()
       }
     }
   },
@@ -433,11 +434,12 @@ export default {
       monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
       var now = new Date().getTime()
       now = dateFormat('yyyy-MM-dd', new Date(now))
+      // TODO 接口字段缺失 需要产品下统计概览数据 显示获取的全局的数据
       // 获取当天数据
       api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.unread.total = res.data.unread
-          this.alertSummary.today.total = res.data.message
+          this.alertSummary.today.total = res.data.add_today
         }
       }).catch((res) => {
         this.handleError(res)

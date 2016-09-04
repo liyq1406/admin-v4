@@ -320,7 +320,6 @@
               return
             }
             this.datapoints = res.data
-            this.editModal.model.param = res.data[0].id
           }
           this.loadingData = false
         }).catch((res) => {
@@ -337,6 +336,8 @@
       datapointName (model) {
         var result
         if (this.datapoints.length > 0 && typeof model.param !== 'undefined' && model.param.length > 0) {
+          console.log(model)
+          console.log(this.datapoints)
           var datapoint = _.find(this.datapoints, (item) => {
             return item.id === model.param
           })

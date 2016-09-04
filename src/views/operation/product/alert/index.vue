@@ -17,8 +17,8 @@
         <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
       </div>
     </div>
-    <alert-trends></alert-trends>
-    <alert-table></alert-table>
+    <alert-trends :product-id="productID"></alert-trends>
+    <alert-table :product-id="productID"></alert-table>
   </div>
 </template>
 
@@ -32,7 +32,6 @@ import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic'
 // import Mock from 'mockjs'
-import { uniformDate } from 'src/filters'
 import dateFormat from 'date-format'
 import AlertTable from './alert-table'
 import AlertTrends from './alert-trends'
@@ -54,7 +53,7 @@ export default {
       alertChartData: [],
       records: [],
       deviceID: '',
-      productID: '',
+      productID: null,
       trendData: [],
       serious: {
         name: '严重',
@@ -68,39 +67,7 @@ export default {
         name: '轻微',
         data: []
       },
-      // alerts: [{
-      //   content: '设备下线',
-      //   level: 1
-      // }, {
-      //   content: 'PM2.5超过指标',
-      //   level: 3
-      // }, {
-      //   content: 'PM2.5超过指标',
-      //   level: 3
-      // }, {
-      //   content: 'PM2.5超过指标',
-      //   level: 3
-      // }, {
-      //   content: 'PM2.5超过指标',
-      //   level: 3
-      // }, {
-      //   content: 'AQI过低',
-      //   level: 2
-      // }, {
-      //   content: 'AQI过低',
-      //   level: 2
-      // }, {
-      //   content: 'AQI过低',
-      //   level: 2
-      // }, {
-      //   content: '滤网失效',
-      //   level: 3
-      // }, {
-      //   content: '滤网失效',
-      //   level: 3
-      // }],
       loadingData: false,
-      productName: '',
       alertSummary: {
         unhandle: {
           total: '',
@@ -147,7 +114,12 @@ export default {
   route: {
     data () {
       this.getSummary()
-      // this.getTagTrend()
+    }
+  },
+
+  watch: {
+    currentProduct () {
+      this.productID = this.currentProduct.id
     }
   },
 
@@ -187,80 +159,6 @@ export default {
       }).catch((res) => {
         this.handleError(res)
       })
-    },
-
-    // 获取告警趋势图表数据
-    getTagTrend () {
-      var begin
-      var end
-      if (this.period === '') {
-        var startTime = uniformDate(this.startTime)
-        var endTime = uniformDate(this.endTime)
-        begin = startTime
-        end = endTime
-      } else {
-        begin = this.beginTime
-        end = this.endTime
-      }
-      // 获取标签'轻微'的趋势
-      api.alert.getTagTrend(this.$route.params.id, '轻微', begin, end).then((res) => {
-        if (res.status === 200) {
-          this.light = res.data
-          this.pushArr(this.light)
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-
-      // 获取标签'通知'的趋势
-      api.alert.getTagTrend(this.$route.params.id, '通知', begin, end).then((res) => {
-        if (res.status === 200) {
-          this.normal = res.data
-          this.pushArr(this.normal)
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-
-      // 获取标签'严重'的趋势
-      api.alert.getTagTrend(this.$route.params.id, '严重', begin, end).then((res) => {
-        if (res.status === 200) {
-          this.serious = res.data
-          this.pushArr(this.serious)
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
-
-    // 处理标签数据
-    pushArr (arr) {
-      var rearr = []
-      arr.data.forEach((item) => {
-        var i = 0
-        var sum = 0
-        while (i < item.hours.length) {
-          sum += item.hours[i].message
-          i++
-        }
-        rearr.push({
-          day: item.day,
-          data: sum,
-          product: item.name
-        })
-      })
-      this.trendData = rearr
-      // arr.data.forEach((item) => {
-      //   var dayTotal = 0
-      //   item.hours.forEach((message) => {
-      //     dayTotal = dayTotal + message.message
-      //   })
-      //   this.trendData.push({
-      //     day: item.day,
-      //     data: dayTotal,
-      //     product: item.name
-      //   })
-      // })
     }
   }
 }

@@ -150,19 +150,19 @@ export default {
       deviceInfo: {
         mac: {
           label: 'MAC',
-          value: ' '
+          value: '-'
         },
         onlineLong: {
           label: '累计在线时长',
-          value: ' '
+          value: '-'
         },
         sn: {
           label: '序列号',
-          value: ' '
+          value: '-'
         },
         model: {
           label: '型号',
-          value: ' '
+          value: '-'
         }
       },
       appInfo: {
@@ -284,24 +284,26 @@ export default {
 
     // 获取设备信息
     getDeviceInfo () {
-      api.device.getInfo(this.issue.product_id, this.issue.device_id).then((res) => {
-        if (res.status === 200) {
-          // 设备信息
-          this.deviceInfo.mac.value = res.data.mac
-          this.deviceInfo.sn.value = res.data.sn
-          this.deviceInfo.firmware_mod.value = res.data.mcu_mod
-        }
-      }).catch((err) => {
-        this.handleError(err)
-      })
-      api.product.getVDevice(this.issue.product_id, this.issue.device_id).then((res) => {
-        if (res.status === 200) {
-          // 设备信息
-          this.deviceInfo.onlineLong.value = res.data.online_count
-        }
-      }).catch((err) => {
-        this.handleError(err)
-      })
+      if (this.issue.device_id) {
+        api.device.getInfo(this.issue.product_id, this.issue.device_id).then((res) => {
+          if (res.status === 200) {
+            // 设备信息
+            this.deviceInfo.mac.value = res.data.mac
+            this.deviceInfo.sn.value = res.data.sn
+            this.deviceInfo.firmware_mod.value = res.data.mcu_mod
+          }
+        }).catch((err) => {
+          this.handleError(err)
+        })
+        api.product.getVDevice(this.issue.product_id, this.issue.device_id).then((res) => {
+          if (res.status === 200) {
+            // 设备信息
+            this.deviceInfo.onlineLong.value = res.data.online_count
+          }
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      }
     },
 
     getFeedbackRecord () {
@@ -318,7 +320,7 @@ export default {
       api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
         if (res.status === 200) {
           console.log(11111)
-          console.log(res.data.list)
+          console.log(res)
           // this.firstReply = res.data.list[0]
           this.recordList = res.data.list
           // 去除第一个客服回复

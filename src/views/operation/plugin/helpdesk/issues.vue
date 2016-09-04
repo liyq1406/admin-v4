@@ -31,14 +31,14 @@
       </div>
     </div>
     <div class="row">
-      <div v-if="issues.length > 0">
+      <div v-if="issues.length">
         <div class="col-6 issue-list">
           <ul>
             <li class="issue-list-item" v-for="issue in issues">
               <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id}">
                 <i class="fa fa-check-square-o"></i>
                 <span class="info">{{ issue.content }}</span>
-                <span class="metas"><span v-if="issue.label.length > 0">[{{ issue.label[0] }}]</span><span v-else>[暂无分类]</span><span>{{ issue.create_time | formatDate}}</span></span>
+                <span class="metas"><span v-if="issue.label">[{{ issue.label[0] }}]</span><span v-else>[暂无分类]</span><span>{{ issue.create_time | formatDate}}</span></span>
               </a>
             </li>
           </ul>
