@@ -649,6 +649,22 @@
        * @return {[type]} [description]
        */
       onSubmit () {
+        if (this.scopeType === 2) {
+          if (this.selectedApps.length === 0) {
+            this.showNotice({
+              type: 'error',
+              content: '请选择应用'
+            })
+            return
+          }
+          if (this.selectedProducts.length === 0) {
+            this.showNotice({
+              type: 'error',
+              content: '请选择产品'
+            })
+            return
+          }
+        }
         if (this.expire - this.time <= 0) {
           this.showNotice({
             type: 'error',

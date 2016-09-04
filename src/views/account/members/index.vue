@@ -79,9 +79,12 @@
               <label class="form-control col-6">姓名:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
-                  <input type="text" v-model="addModel.name" v-form-ctrl required name="name" lazy class="input-text"/>
+                  <input type="text" v-model="addModel.name" v-form-ctrl required maxlength="10" name="name" class="input-text"/>
                 </div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span><span v-if="validation.name.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.name')}) }}</span></div>
+                <div v-if="validation.name.$dirty" class="form-tips form-tips-error">
+                  <span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
+                  <span v-if="validation.name.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.name')}) }}</span>
+                </div>
               </div>
             </div>
             <div class="form-row row">
