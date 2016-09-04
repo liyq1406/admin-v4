@@ -47,10 +47,10 @@
                       <div v-placeholder="'请填写任务名称'" class="input-text-wrap">
                         <input v-model="addmodel.name" type="text" name="name" v-validate:name="{required: true, maxlength: 20}" lazy class="input-text"/>
                       </div>
-                      <!-- <div class="form-tips form-tips-error">
+                      <div class="form-tips form-tips-error">
                         <span v-if="$validation.name.touched && $validation.name.required">请输入任务名称</span>
                         <span v-if="$validation.name.modified && $validation.name.maxlength">不可超过20个字符</span>
-                      </div> -->
+                      </div>
                     </div>
                   </div>
                   <div class="form-row row">
@@ -59,10 +59,10 @@
                       <div v-placeholder="'不可超过200个字符'" class="input-text-wrap">
                         <input v-model="addmodel.description" name="description" type="text" v-validate:description="{required: true, maxlength: 200}" lazy class="input-text"/>
                       </div>
-                      <!-- <div class="form-tips form-tips-error">
+                      <div class="form-tips form-tips-error">
                         <span v-if="$validation.description.touched && $validation.description.required">请输入任务描述</span>
                         <span v-if="$validation.description.modified && $validation.description.maxlength">不可超过200个字符</span>
-                      </div> -->
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -121,28 +121,28 @@
               </div>
             </div>
             <div class="panel">
-              <!-- <div class="panel-hd">
+              <div class="panel-hd">
                 <h3><i class="number">4</i> 升级模式</h3>
-              </div> -->
-              <!-- <div class="panel-bd">
+              </div>
+              <div class="panel-bd">
                 <div class="form">
                   <div class="form-row row">
                     <label class="form-control col-5">升级模式:</label>
                     <div class="controls col-19 row">
                       <div class="inb inbradio">
                         <label class="radio">
-                          <input type="radio" v-model="type" :value="1" number/>自动升级
+                          <input type="radio" v-model="addmodel.task_type" :value="0" number/>自动升级
                         </label>
                       </div>
                       <div class="inb inbradio">
                         <label class="radio">
-                          <input type="radio" v-model="type" :value="2" number/>手动升级
+                          <input type="radio" v-model="addmodel.task_type" :value="1" number/>手动升级
                         </label>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div> -->
+              </div>
               <div class="form-actions">
                 <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">立即升级</button>
                 <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
@@ -218,7 +218,8 @@
           target_version: '',
           target_version_url: '',
           target_version_md5: '',
-          target_version_size: 0
+          target_version_size: 0,
+          task_type: 0
         },
         firmwares: [],
         adding: false
@@ -266,10 +267,20 @@
         return url
       }
     },
+
+    watch: {
+      products () {
+        this.selectProduct = this.products[0]
+      }
+    },
     route: {
       data () {
         // this.getFirmwares()
       }
+    },
+
+    ready () {
+      this.selectProduct = this.products[0]
     },
     methods: {
       getTypeLabelByValue (val) {
@@ -279,6 +290,11 @@
       },
       // 提交添加任务表单
       onAddTaskSubmit () {
+        console.log(this.$validation.valid)
+        if (!this.$validation.valid) {
+          this.$validation.name.touched = true
+          return
+        }
         this.adding = true
         // if (taskModelType.value!==1) {
         //   this.addmodel.identify = 0
