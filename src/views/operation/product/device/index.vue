@@ -99,7 +99,7 @@ export default {
       if (typeof onlineLongInfo !== 'undefined') {
         onlineLongInfo = onlineLongInfo > 3600 ? `${(onlineLongInfo / 3600).toFixed(1)}小时` : `${onlineLongInfo}秒`
       } else {
-        onlineLongInfo = ''
+        onlineLongInfo = '-'
       }
 
       return {
@@ -181,7 +181,7 @@ export default {
           // this.deviceInfo.onlineLong.value = '100小时'
         }
       }).catch((res) => {
-        this.handleError(res)
+        // this.handleError(res)
       })
     },
 
