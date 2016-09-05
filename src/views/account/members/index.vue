@@ -34,7 +34,7 @@
                   <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span>{{ locales.data.MEMBER_TYPES[member.role-1] }}</span></td>
-                  <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ locales.data.MEMBER_STATUS_TYPES[member.status] }}</span></td>
+                  <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{statusText(member.status)}}</span></td>
                   <td>{{ member.last_auth_time | formatDate}}</td>
                   <!-- <td class="tac" v-if ="this.currentMember.role === 1">
                     <a href="#" class="hl-red" @click.prevent="deleteMember(member)">{{ $t('common.del') }}</a><a href="#" class="hl-red ml10" @click.prevent="editPwd(member)" v-if="member.role === 2" >修改</a>
@@ -238,6 +238,10 @@ export default {
   },
 
   methods: {
+    statusText (status) {
+      let result = ['未激活', '已启用', '已停用']
+      return result[status]
+    },
     /**
      * 获取企业成员
      */

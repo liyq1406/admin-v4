@@ -240,14 +240,31 @@ export default {
      * @param  {[type]} id =             this.member.id [description]
      * @return {[type]}    [description]
      */
-    toggleAccount (id = this.member.id) {
-      console.log('停用或者启用成员，接口未实现')
-      // let params = _.clone(this.member)
-      // if (params.status === 1) {
-      //   params
-      // } else {
-      //   console.log('当前状态为2')
-      // }
+    toggleAccount () {
+      let id = this.member.id
+      let type = ''
+      let status = 0
+      let text = ''
+      if (this.member.status === 1) {
+        type = 'disableMember'
+        status = 2
+        text = '停用成功！'
+      } else if (this.member.status === 2) {
+        type = 'enableMember'
+        status = 1
+        text = '启用成功！'
+      } else {
+        return
+      }
+      api.corp[type](id).then((res) => {
+        this.member.status = status
+        this.showNotice({
+          type: 'success',
+          content: text
+        })
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
     /**
      * 删除成员

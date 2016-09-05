@@ -300,5 +300,27 @@ export default {
         }
       }
     )
+  },
+  /**
+   * 停用成员
+   * @param  {string} member_id 成员id
+   * @return {Promise}
+   */
+  disableMember (member_id) {
+    return http.put(
+      `${API_SERVER.default}/v2/corp/member/${member_id}/disable`
+    )
+  },
+
+  /**
+   * 启用成员
+   * @param  {string} member_id 成员id
+   * @return {Promise}
+   */
+  enableMember (member_id) {
+    return http.put(
+      `${API_SERVER.default}/v2/corp/member/${member_id}/enable`
+    )
   }
+
 }
