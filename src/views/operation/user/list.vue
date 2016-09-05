@@ -444,7 +444,10 @@
             this.users.map((item) => {
               this.getOnlineType(item.id)
             })
-            this.total = res.data.count
+            // 默认第一次取了全部数量不再修改
+            if (this.total === 0) {
+              this.total = res.data.count
+            }
             this.loadingData = false
           }
         }).catch((res) => {
