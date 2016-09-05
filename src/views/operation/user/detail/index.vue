@@ -256,16 +256,34 @@
       toggleMember (user) {
         if (!this.toggling) {
           this.toggling = true
-          api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
-            // this.getTasks()
-            if (res.status === 200) {
-              user.status = user.status - 0 === 1 ? 2 : 1
+          if (user.status - 0 === 1) {
+            if (window.confirm('确认停用该用户吗?')) {
+              api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
+                // this.getTasks()
+                if (res.status === 200) {
+                  user.status = user.status - 0 === 1 ? 2 : 1
+                }
+                this.toggling = false
+              }).catch((res) => {
+                this.handleError(res)
+                this.toggling = false
+              })
+            } else {
+              this.toggling = false
+              return
             }
-            this.toggling = false
-          }).catch((res) => {
-            this.handleError(res)
-            this.toggling = false
-          })
+          } else {
+            api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
+              // this.getTasks()
+              if (res.status === 200) {
+                user.status = user.status - 0 === 1 ? 2 : 1
+              }
+              this.toggling = false
+            }).catch((res) => {
+              this.handleError(res)
+              this.toggling = false
+            })
+          }
         }
       }
     }

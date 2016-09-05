@@ -56,104 +56,88 @@
       <modal :show.sync="showModal" @close="onAddCancel">
         <h3 slot="header">{{ $t('ui.member.add_member') }}</h3>
         <div slot="body" class="form">
-          <form v-form name="validation" hook="addHook">
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.member.fields.email") }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.member.placeholders.email')" class="input-text-wrap">
-                  <input v-model="addModel.email" type="email" v-form-ctrl name="email" maxlength="32" required lazy class="input-text"/>
-                </div>
-                <div v-if="validation.email.$dirty" class="form-tips form-tips-error"><span v-if="validation.email.$error.required">{{ $t('ui.validation.required', {field: $t('ui.member.fields.email')}) }}</span><span v-if="validation.email.$error.email">{{ $t('ui.validation.format', {field: $t('ui.member.fields.email')}) }}</span></div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">手机号码:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
-                  <input type="text" v-model="addModel.phone" v-form-ctrl required :pattern="patterns.PHONE" name="phone" lazy class="input-text"/>
-                </div>
-                <div v-if="validation.phone.$dirty" class="form-tips form-tips-error"><span v-if="validation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span><span v-if="validation.phone.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span></div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">姓名:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
-                  <input type="text" v-model="addModel.name" v-form-ctrl required maxlength="10" name="name" class="input-text"/>
-                </div>
-                <div v-if="validation.name.$dirty" class="form-tips form-tips-error">
-                  <span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
-                  <span v-if="validation.name.$error.pattern">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.name')}) }}</span>
+          <validator name="validation">
+            <form novalidate hook="addHook" @submit.prevent="onAddSubmit">
+              <div class="form-row row">
+                <label class="form-control col-6">{{ $t("ui.member.fields.email") }}:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.member.placeholders.email')" class="input-text-wrap">
+                    <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}"  maxlength="32" required lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.email.touched && $validation.email.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
+                    <span v-if="$validation.email.modified && $validation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.member.fields.role") }}:</label>
-              <div class="controls col-18">
-                <div class="select">
-                  <x-select :label="locales.data.MEMBER_TYPES[addModel.type-1]">
-                    <select v-model="addModel.type" v-form-ctrl name="role">
-                      <option v-for="type in locales.data.MEMBER_TYPES" :value="$index + 1" :selected="$index===1">{{ type }}</option>
-                    </select>
-                  </x-select>
+              <div class="form-row row">
+                <label class="form-control col-6">手机号码:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
+                    <input type="text" v-model="addModel.phone" v-validate:phone="{required: true, format: 'phone'}" name="addModel.phone" lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.phone.touched && $validation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    <span v-if="$validation.phone.modified && $validation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">密码:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
-                  <input type="password" v-model="addModel.password" v-form-ctrl required maxlength="16" minlength="8" name="password" lazy class="input-text"/>
+              <div class="form-row row">
+                <label class="form-control col-6">姓名:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
+                    <input type="text" v-model="addModel.name" v-validate:name="{required: true, format: 'space'}" maxlength="10" name="name" class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.format">名字不能全为空格</span>
+                  </div>
                 </div>
-                <div v-if="validation.password.$dirty" class="form-tips form-tips-error">
-                  <span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                  <span v-if="validation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 8]) }}</span>
-                  <span v-if="validation.password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-6">{{ $t("ui.member.fields.role") }}:</label>
+                <div class="controls col-18">
+                  <div class="select">
+                    <x-select :label="locales.data.MEMBER_TYPES[addModel.type-1]">
+                      <select v-model="addModel.type" name="addModel.type">
+                        <option v-for="type in locales.data.MEMBER_TYPES" :value="$index + 1" :selected="$index===1">{{ type }}</option>
+                      </select>
+                    </x-select>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">确认密码:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
-                  <input type="password" v-model="confirmPassword" v-form-ctrl required custom-validator="checkEqualToPassword" name="confirmPassword" lazy class="input-text"/>
+              <div class="form-row row">
+                <label class="form-control col-6">密码:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+                    <input type="password" v-model="addModel.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" name="addModel.password" lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.password.touched && $validation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                    <span v-if="$validation.password.modified && $validation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
+                    <span v-if="$validation.password.modified && $validation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                  </div>
                 </div>
-                <div v-if="validation.confirmPassword.$dirty" class="form-tips form-tips-error"><span v-if="model.password && validation.confirmPassword.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="validation.confirmPassword.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
               </div>
-            </div>
-            <div class="form-actions">
-              <!-- <button type="submit" @click.prevent.stop="onAddSubmit" class="btn btn-primary">{{ $t('common.add') }}</button> -->
-              <button type="submit"  @click.prevent.stop="onAddSubmit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.add')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t('common.cancel') }}</button>
-            </div>
-          </form>
-        </div>
-      </modal>
-
-      <!-- 编辑密码 -->
-      <modal :show.sync="showEditPwdModal" width="320px" @close="onEditPwdCancel">
-        <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
-        <div slot="body" class="form">
-          <form v-form name="pwdValidation" @submit.prevent="onSubmitPwd" hook="editPwdHook">
-            <div class="form-row row">
-              <div v-placeholder="$t('ui.account.placeholders.new_password')" class="input-text-wrap">
-                <input type="password" v-model="editPwdModel.newpassword" v-form-ctrl required maxlength="16" minlength="8" name="newpassword" lazy class="input-text"/>
+              <div class="form-row row">
+                <label class="form-control col-6">确认密码:</label>
+                <div class="controls col-18">
+                  <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+                    <input type="password" v-model="confirmPassword" v-validate:confirm-password="{required: true, equal: addModel.password}"  name="confirmPassword" lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                    <span v-if="$validation.confirmPassword.modified && $validation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                  </div>
+                </div>
               </div>
-              <div v-if="pwdValidation.$submitted && pwdValidation.newpassword.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span></div>
-              <div v-if="pwdValidation.newpassword.$dirty" class="form-tips form-tips-error"><span v-if="pwdValidation.newpassword.$error.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span><span v-if="pwdValidation.newpassword.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.account.fields.new_password'), 8]) }}</span><span v-if="pwdValidation.newpassword.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.account.fields.new_password'), 16]) }}</span></div>
-            </div>
-            <div class="form-row row">
-              <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
-                <input type="password" v-model="confirmPassword2" v-form-ctrl required custom-validator="checkEqualToPassword2" name="confirmPassword2" lazy class="input-text"/>
+              <div class="form-actions">
+                <!-- <button type="submit" @click.prevent.stop="onAddSubmit" class="btn btn-primary">{{ $t('common.add') }}</button> -->
+                <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.add')" class="btn btn-primary"></button>
+                <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t('common.cancel') }}</button>
               </div>
-              <div v-if="pwdValidation.$submitted && pwdValidation.confirmPassword2.$pristine" class="form-tips form-tips-error"><span v-if="pwdValidation.confirmPassword2.$error.required">{{ $t("ui.auth.confirm_password") }}</span></div>
-              <div v-if="pwdValidation.confirmPassword2.$dirty" class="form-tips form-tips-error"><span v-if="editPwdModel.newpassword && pwdValidation.confirmPassword2.$error.required">{{ $t("ui.auth.confirm_password") }}</span><span v-if="pwdValidation.confirmPassword2.$error.customValidator">{{ $t("ui.auth.confirm_password_tips") }}</span></div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            </div>
-          </form>
+            </form>
+          </validator>
         </div>
       </modal>
     </div>
@@ -197,7 +181,6 @@ export default {
       searching: false,
       users: [],
       showModal: false,
-      showEditPwdModal: false,
       model: {},
       validation: {},
       members: [],
@@ -270,76 +253,11 @@ export default {
     },
 
     /**
-     * 检查密码是否跟添加密码一致
-     * @param  {String} value 密码
-     */
-    checkEqualToPassword (value) {
-      return value === this.addModel.password
-    },
-
-    /**
-     * 检查密码是否跟修改密码一致
-     * @param  {String} value 密码
-     */
-    checkEqualToPassword2 (value) {
-      return value === this.editPwdModel.newpassword
-    },
-
-    /**
-     * 修改密码表单钩子
-     */
-    editPwdHook (form) {
-      this.editPwdForm = form
-    },
-
-    /**
      * 添加成员表单钩子
      * @param {[type]} form [description]
      */
     addHook (form) {
       this.addForm = (form)
-    },
-
-    // 取消修改密码
-    onEditPwdCancel () {
-      this.resetEditPassword()
-    },
-
-    // 初始化编辑用户信息表单
-    editPwd (member) {
-      this.showEditPwdModal = true
-      this.currentEditMember = member
-      this.originEditPwdModel = _.clone(this.editPwdModel)
-    },
-
-    // 关闭编辑浮层并净化编辑表单
-    resetEditPassword () {
-      this.editing = false
-      this.showEditPwdModal = false
-      this.editPwdModel = _.clone(this.originEditPwdModel)
-      this.confirmPassword2 = ''
-      this.$nextTick(() => {
-        this.editPwdForm.setPristine()
-      })
-    },
-
-    // 提交密码修改
-    onSubmitPwd () {
-      if (this.pwdValidation.$valid && !this.editing) {
-        this.editing = true
-        api.user.editMember(this.currentEditMember.id, this.editPwdModel).then((res) => {
-          if (res.status === 200) {
-            this.showNotice({
-              type: 'success',
-              content: this.$t('ui.account.password_msg')
-            })
-          }
-          this.resetEditPassword()
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
-      }
     },
 
     setQuery (query) {
@@ -358,9 +276,7 @@ export default {
     resetAdd () {
       this.addModel = _.clone(this.originAddModel)
       this.showModal = false
-      this.$nextTick(() => {
-        this.addForm.setPristine()
-      })
+      this.$resetValidation()
     },
 
     // 取消添加
@@ -371,9 +287,7 @@ export default {
     addMember () {
       this.originAddModel = _.clone(this.addModel)
       this.confirmPassword = ''
-      this.$nextTick(() => {
-        this.addForm.setPristine()
-      })
+      this.$resetValidation()
       this.showModal = true
     },
 
@@ -381,8 +295,9 @@ export default {
      * 添加成员
      */
     onAddSubmit () {
-      if (this.validation.$valid) {
+      if (this.$validation.valid) {
         this.adding = true
+        this.addModel.name = this.addModel.name.trim()
         api.user.addMember(this.addModel).then((res) => {
           this.adding = false
           if (res.status === 200) {
@@ -393,22 +308,8 @@ export default {
           this.handleError(res)
           this.adding = false
         })
-      }
-    },
-
-    /**
-     * 删除企业成员
-     * @param  {Object} member 待删除成员
-     */
-    deleteMember (member) {
-      if (window.confirm(this.$t('ui.member.del_msg'))) {
-        api.corp.delMember(member.id).then((res) => {
-          if (res.status === 200) {
-            this.members.$remove(member)
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      } else {
+        this.$validation.email.touched = true
       }
     }
   }

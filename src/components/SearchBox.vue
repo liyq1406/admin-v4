@@ -2,7 +2,7 @@
   <div :class="{'auto-search': auto, 'active': active && key.length}" class="search-box">
     <slot></slot>
     <div class="search-box-input">
-      <input :placeholder="placeholder" v-model="key" @focus="handleFocus(key)" @blur="handleBlur(key)" @keyup.enter.prevent="$dispatch('press-enter')"/>
+      <input :placeholder="placeholder" v-model="key" @focus="handleFocus(key)" @blur="handleBlur(key)" :number="maxlength" @keyup.enter.prevent="$dispatch('press-enter')"/>
       <div @mousedown="handleCancelClick" class="fa fa-times-circle"></div>
     </div>
     <slot name="search-button"></slot>
@@ -96,8 +96,13 @@
 </style>
 
 <script>
+  import { globalMixins } from 'src/mixins'
+
   export default {
+    mixins: [globalMixins],
+
     props: {
+      max: false,
       key: {
         type: String,
         twoWay: true,
@@ -119,6 +124,15 @@
 
     watch: {
       key () {
+        if (this.max > 0) {
+          if (this.key - 0 > this.max - 0) {
+            this.showNotice({
+              type: 'error',
+              content: `输入的值不能大于${this.max}`
+            })
+            return
+          }
+        }
         this.$dispatch('search')
       }
     },
