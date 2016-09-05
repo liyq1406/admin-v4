@@ -64,7 +64,7 @@
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
-                <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></intelligent-table>
+                <x-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
                 <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
               </div>
             </div>
@@ -77,42 +77,6 @@
             </div>
           </div>
         </div>
-        <!-- <div class="action-bar">
-          <div class="action-group">
-            <button @click="addModal.show = true" class="btn btn-success"><i class="fa fa-plus"></i>{{ $t("ui.table.create_table") }}</button>
-          </div>
-        </div>
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>{{ $t("ui.table.fields.name") }}</th>
-                <th>{{ $t("ui.table.fields.type") }}</th>
-                <th class="tac">{{ $t("common.action") }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="tables.length > 0">
-                <tr v-for="table in tables | limitBy countPerPage (currentPage-1)*countPerPage">
-                  <td><a v-link="{path: '/data/tables/' + table.name}" class="hl-red">{{ table.name }}</a></td>
-                  <td><span>{{ locales.data.TABLE_TYPES[table.type-1] }}</span></td>
-                  <td class="tac">
-                    <button @click="editTable(table)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="tables.length === 0 && !loadingData">
-                <td colspan="3" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="tables.length > countPerPage" :total="tables.length" :current.sync="currentPage" :count-per-page="countPerPage"></pager> -->
       </div>
     </div>
 
@@ -490,7 +454,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'intelligent-table': IntelligentTable,
+    'x-table': IntelligentTable,
     'date-picker': DatePicker,
     'time-picker': TimePicker,
     'modal': Modal,
@@ -859,8 +823,14 @@ export default {
           table.permission = this.selectedFirstClass.permission
           table.type = this.selectedFirstClass.type
           table.field = field
+          table.selected = true
           this.editing = true
           api.dataTable.updateTable(table).then((res) => {
+            this.dataFirClassList.forEach((item, index) => {
+              if (item.name === table.name) {
+                this.dataFirClassList.$set(index, table)
+              }
+            })
             if (res.status === 200) {
               var obj = {
                 key: key,
@@ -874,7 +844,7 @@ export default {
               this.editing = false
               this.showNotice({
                 type: 'success',
-                content: '限权设置成功'
+                content: '设置成功'
               })
             }
           }).catch((res) => {
@@ -1006,6 +976,7 @@ export default {
       if (type === 3) {
         // console.log('应用级的创建数据')
         api.dataTable.createAppData(tableName, params).then((res) => {
+          alert('这里给原始的列表添加属性')
           var jsonTables = JSON.stringify(res.data)
           let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
           result = result.replace(/_id/g, 'objectId')
