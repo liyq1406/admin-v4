@@ -64,12 +64,12 @@
                       <label class="form-control col-5">识别码:</label>
                       <div class="controls col-10">
                         <div class="input-text-wrap">
-                          <input v-model="addmodel.identify" name="identify" type="text" class="input-text"/>
+                          <input v-model="addmodel.identify" v-validate:identify="{required: addModelType.value!== 1, maxlength: 20}"  name="addmodel.identify" type="text" class="input-text"/>
                         </div>
-                        <!-- <div class="form-tips form-tips-error">
-                          <span v-if="$validation.code.touched && $validation.code.required">请输入识别码</span>
-                          <span v-if="$validation.code.modified && $validation.code.maxlength">不可超过20个字符</span>
-                        </div> -->
+                        <div class="form-tips form-tips-error">
+                          <span v-if="$validation.identify.touched && $validation.identify.required">请输入识别码</span>
+                          <span v-if="$validation.identify.modified && $validation.identify.maxlength">不可超过20个字符</span>
+                        </div>
                       </div>
                     </div>
                   </div>
