@@ -28,6 +28,11 @@ export function format (val, type) {
       result = val ? /^(http:\/\/|https:\/\/)(.{4,})$/.test(val) : true
       break
 
+    // URL
+    case 'space':
+      result = val.trim().length > 0
+      break
+
     default:
       result = false
   }
