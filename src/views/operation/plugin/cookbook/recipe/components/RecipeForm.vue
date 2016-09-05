@@ -697,6 +697,12 @@ export default {
 
       this.editing = true
       this.images = _.compact(this.images)
+      let major = this.major_ingredients.map((item) => {
+        return Object.keys(item).length > 0
+      })
+      let minor = this.minor_ingredients.map((item) => {
+        return Object.keys(item).length > 0
+      })
       let params = {
         name: this.name,
         images: this.images,
@@ -713,8 +719,8 @@ export default {
           },
           sub: this.category.sub.name
         }],
-        major_ingredients: this.major_ingredients,
-        minor_ingredients: this.minor_ingredients,
+        major_ingredients: major,
+        minor_ingredients: minor,
         cooking_steps: this.cooking_steps,
         tips: this.tips,
         status: this.status,

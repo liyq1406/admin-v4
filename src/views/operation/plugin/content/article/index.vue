@@ -14,7 +14,7 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="'请输入' + searchType.label" @press-enter="">
+                <search-box :key.sync="query" :placeholder="'请输入' + searchType.label" @cancel="getArticleList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getArticleList(true)">
                   <v-select width="80px" :label="searchType.label" size="small">
                     <select v-model="searchType">
                       <option v-for="option in searchTypeOptions" :value="option">{{ option.label }}</option>
@@ -71,7 +71,7 @@ export default {
         title: '标题'
       }, {
         key: 'creator',
-        title: '创建者',
+        title: '作者',
         class: 'wp15'
       }, {
         key: 'create_time',
@@ -87,7 +87,6 @@ export default {
         class: 'wp10'
       }],
       articles: [],
-      key: '',
       queryTypeOptions: [
         { label: '全部', value: 0 },
         { label: '已发布', value: 1 },
@@ -108,12 +107,14 @@ export default {
       total: 0,
       countPerPage: 10,
       currentPage: 1,
+      query: '',
+      searching: false,
       loadingData: false
     }
   },
 
   computed: {
-    // 标签列表
+    // 文章列表
     articleList () {
       let result = []
       this.articles.forEach((item) => {
@@ -121,7 +122,7 @@ export default {
           name: `<a class="hl-red">${item.name}</a>`,
           creator: item.creator,
           create_time: formatDate(item.create_time),
-          pageviews: item.pageviews,
+          pageviews: item.pageviews || '-',
           status: item.status === 1 ? '<span>已发布</span>' : '<span class="hl-orange">待审核</span>',
           prototype: item
         })
@@ -147,8 +148,8 @@ export default {
         query: {}
       }
 
-      if (this.key !== '') {
-        condition.query[this.searchType.value] = {$regex: this.key, $options: 'i'}
+      if (this.query !== '') {
+        condition.query[this.searchType.value] = {$regex: this.query, $options: 'i'}
       }
 
       if (this.queryType.value === 1) {
@@ -203,6 +204,12 @@ export default {
         this.handleError(err)
       })
     },
+
+    /**
+     * 获取文章列表
+     * @author shengzhi
+     * @param {Boolean} reset 是否重置页码
+     */
     getArticleList (reset) {
       if (reset) {
         this.currentPage = 1
@@ -211,22 +218,22 @@ export default {
       api.content.getArticleList(this.$route.params.app_id, this.queryCondition).then((res) => {
         if (res.status === 200) {
           // 虚拟数据开始----------------------------
-          res.data.list = [{
-            _id: '1231safsdf',
-            name: '四月水果当季尝',
-            creator: 'Jon',
-            create_time: '2016-12-07T12:34:54Z',
-            pageviews: 1203,
-            status: 1
-          }, {
-            _id: '1231safsde',
-            name: '五一劳动节，享受劳动的乐趣',
-            creator: 'Jon',
-            create_time: '2016-12-07T12:34:54Z',
-            pageviews: 1500,
-            status: 0
-          }]
-          res.data.count = 2
+          // res.data.list = [{
+          //   _id: '1231safsdf',
+          //   name: '四月水果当季尝',
+          //   creator: 'Jon',
+          //   create_time: '2016-12-07T12:34:54Z',
+          //   pageviews: 1203,
+          //   status: 1
+          // }, {
+          //   _id: '1231safsde',
+          //   name: '五一劳动节，享受劳动的乐趣',
+          //   creator: 'Jon',
+          //   create_time: '2016-12-07T12:34:54Z',
+          //   pageviews: 1500,
+          //   status: 0
+          // }]
+          // res.data.count = 2
           // 虚拟数据结束----------------------------
           this.articles = res.data.list
           this.total = res.data.count
@@ -236,6 +243,23 @@ export default {
         this.handleError(err)
         this.loadingData = false
       })
+    },
+
+    // 搜索
+    handleSearch () {
+      if (this.query.length === 0) {
+        this.getArticleList()
+      }
+    },
+
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+
+    // 取消搜索
+    cancelSearching () {
+      this.getArticleList()
     }
   }
 }
