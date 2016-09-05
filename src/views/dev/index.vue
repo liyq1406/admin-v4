@@ -2,7 +2,7 @@
   <div class="page-in">
     <sidebar :nav="secNav"></sidebar>
 
-    <section class="main-wrap">
+    <section class="main-wrap" v-if="showContent">
       <!-- <pre>
         {{ subs | json}}
       </pre> -->
@@ -43,6 +43,7 @@ export default {
 
   data () {
     return {
+      showContent: false,
       nav: {}
     }
   },
@@ -98,6 +99,7 @@ export default {
   },
 
   ready () {
+    this.showContent = true
     // var subs = []
     // subs.push(MAIN_NAV.operation.subs[0])
     // console.log(this.subs)
