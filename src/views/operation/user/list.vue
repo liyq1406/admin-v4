@@ -357,6 +357,7 @@
        */
       pageCountUpdate (count) {
         this.countPerPage = count
+        this.currentPage = 1
         this.getUsers()
       },
       /**
