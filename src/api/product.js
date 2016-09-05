@@ -274,5 +274,12 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/product/${productId}/device_import/${importId}?limit=${limit}&offset=${offset}`
     )
+  },
+
+  // 查询导入设备记录详情
+  updateDeviceMsg (productId, deviceId, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}`, params
+    )
   }
 }

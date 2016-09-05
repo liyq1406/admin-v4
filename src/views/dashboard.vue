@@ -82,7 +82,7 @@
               </div>
               <div class="text-box">
                 <div class="line msg">
-                  <a class="name" v-link="{'path': '/dev/products/' + product.id + '/info'}">{{product.name}}</a>
+                  <a class="name" v-link="{'path': '/operation/products/' + product.id + '/overview'}">{{product.name}}</a>
                   <!-- <span class="product-id">({{product.id}})</span> -->
                 </div>
                 <div class="info">

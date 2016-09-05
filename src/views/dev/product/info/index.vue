@@ -44,7 +44,7 @@
         <!-- <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button> -->
       </div>
       <div class="panel-bd">
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage">
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -181,6 +181,25 @@
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
 
+    <modal :show.sync="showDeviceEditModal">
+      <h3 slot="header">编辑设备</h3>
+      <div slot="body" class="form">
+        <form novalidate @submit.prevent="onDeviceEditModalSubmit">
+          <div class="form-row row">
+            <label class="form-control col-4">SN:</label>
+            <div class="controls col-20">
+              <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
+                <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" lazy class="input-text"/>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="showDeviceEditModal = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          </div>
+        </form>
+      </div>
+    </modal>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
 </template>
@@ -306,6 +325,10 @@ export default {
           user: 'djfds@gmail.com'
         }
       ],
+      showDeviceEditModal: false,
+      deviceEditModal: {
+        sn: ''
+      },
       headers: [{
         key: 'mac',
         title: 'MAC'
@@ -323,6 +346,9 @@ export default {
         title: '激活时间',
         sortType: -1,
         class: 'wp20'
+      }, {
+        key: 'sn',
+        title: 'SN'
       }, {
         key: 'is_online',
         title: '在线状态',
@@ -367,6 +393,7 @@ export default {
           mac: item.mac,
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
+          sn: '<a class="hl-red">' + (item.sn || ' - ') + '</a>',
           is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
           prototype: item
         }
@@ -378,7 +405,7 @@ export default {
     // 筛选条件
     queryCondition () {
       let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: this.sortOrders,
@@ -460,12 +487,13 @@ export default {
       this.query = ''
       // 初次获取设备列表，并将获取的数量作为已用配额
       let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
         limit: this.countPerPage,
         offset: 0,
         order: this.sortOrders
       }
       api.device.getList(this.$route.params.id, condition).then((res) => {
+        console.log(res.data)
         this.devices = res.data.list
         this.used = this.total = res.data.count
       }).catch((res) => {
@@ -475,6 +503,43 @@ export default {
   },
 
   methods: {
+    setSn () {
+      let productId = this.$route.params.id
+      let deviceId = this.deviceEditModal.deviceId
+      let params = {
+        sn: this.deviceEditModal.sn
+      }
+      api.product.updateDeviceMsg(productId, deviceId, params).then((res) => {
+        this.getDevices()
+        this.showDeviceEditModal = false
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * sn编辑浮层提交表单
+     * @return {[type]} [description]
+     */
+    onDeviceEditModalSubmit () {
+      if (this.deviceEditModal.sn.length) {
+        this.setSn()
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '请输入设备sn'
+        })
+      }
+    },
+    /**
+     * 显示sn编辑浮层
+     * @param  {[type]} device [description]
+     * @return {[type]}        [description]
+     */
+    onShowDeviceEditModal (device) {
+      this.deviceEditModal.sn = device.prototype.sn
+      this.deviceEditModal.deviceId = device.id
+      this.showDeviceEditModal = true
+    },
     /**
      * 处理购买按钮点击
      * @author shengzhi
@@ -544,6 +609,7 @@ export default {
      */
     getAllDevices () {
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+        console.log(res.data.list[0])
         this.devices = res.data.list
         this.total = res.data.count
       }).catch((res) => {
@@ -566,6 +632,7 @@ export default {
       }
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
+        console.log(res.data.list[0])
         this.devices = res.data.list
         this.total = res.data.count
         this.loadingData = false

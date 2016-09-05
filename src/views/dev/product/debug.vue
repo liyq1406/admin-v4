@@ -55,22 +55,34 @@
       <div class="device-details-box">
         <div class="panel">
           <div class="panel-hd bordered row">
-            <div class="msg-box fl col-8">
-              <div class="title">
+            <div class="msg-box fl col-14">
+              <div class="title row">
                 <h2 class="product-title mt5 mb5">{{selectedDevice.name || '--'}}</h2>
-              </div>
-              <div class="type-box">
-                <div class="status-box">
+                <div class="other-msg">
                   <span v-if="selectedDevice.is_active" class="status-text"><i class="fa mr5" :class="selectedDevice.is_online?'success':'fail'"></i>{{selectedDevice.is_online?'在线':'离线'}}</span>
                   <span v-else>
                     <i class="fa fa-question-circle mr5" ></i>未激活
                   </span>
-                  <span class="status-date ml10">{{selectedDevice.last_login | uniformDate true}}</span>
-                  <span class="status-time ml10">{{selectedDevice.last_login | uniformTime true}}</span>
+                  <span class="status-date ml10 mr10">{{selectedDevice.last_login | uniformDate true}}</span>
+                  <!-- <span class="status-time ml10 mr10">{{selectedDevice.last_login | uniformTime true}}</span> -->
+                </div>
+
+              </div>
+              <div class="type-box">
+                <div class="status-box">
+                  <span class="mr10">ID:{{selectedDevice.id}}</span>
+                  <span class="mr10" v-tooltip="selectedDevice.mac">MAC:{{selectedDevice.mac}}</span>
+                  <span class="mr10">SN: {{selectedDevice.sn || '-'}}</span>
+                </div>
+              </div>
+              <div class="filter-group-item mt5">
+                <div class="filter-device-info">
+                </div>
+                <div class="filter-device-info">
                 </div>
               </div>
             </div>
-            <div class="filter-bar fr col-16">
+            <div class="filter-bar fr col-10">
               <div class="filter-group fr">
                 <div class="filter-group-item mt10">
                   <button class="btn btn-ghost" @click="showLog = !showLog">
@@ -82,14 +94,6 @@
                 <div class="filter-group-item mt10">
                   <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
                   </search-box>
-                </div>
-                <div class="filter-group-item mt5">
-                  <div class="filter-device-info">
-                    <span>ID:{{selectedDevice.id}}</span>
-                  </div>
-                  <div class="filter-device-info">
-                    <span v-tooltip="selectedDevice.mac">MAC:{{selectedDevice.mac}}</span>
-                  </div>
                 </div>
               </div>
             </div>
@@ -344,7 +348,7 @@ export default {
      */
     queryCondition () {
       var condition = {
-        filter: ['id', 'mac', 'name', 'is_active', 'active_date', 'is_online', 'last_login'],
+        filter: ['id', 'mac', 'name', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         // order: this.sortOrders,
@@ -844,6 +848,21 @@ export default {
       box-sizing border-box
       .value-td
         height 50px
+      .panel-hd
+        .title
+          height 32px
+          overflow hidden
+          .product-title
+          .other-msg
+            display inline
+            height 32px
+            line-height 32px
+          .product-title
+            margin 5px 0
+            margin-right 20px
+        .type-box
+          font-size 12px
+          color #aaa
     .log-panel
       margin-left 30px
       border 1px solid #E5E5E5

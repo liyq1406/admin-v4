@@ -116,7 +116,7 @@
         var result = {
           status: {
             label: '账号状态',
-            value: this.computedVaild(this.user.is_vaild)
+            value: this.computedVaild(this.user.status)
           },
           create_date: {
             label: '创建时间',
@@ -218,9 +218,9 @@
        */
       computedVaild (status) {
         var result = '未知'
-        if (status === true) {
+        if (status === 1) {
           result = '已激活'
-        } else if (status === false) {
+        } else if (status === 2) {
           result = '未激活'
         }
         return result
@@ -261,7 +261,8 @@
               api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
                 // this.getTasks()
                 if (res.status === 200) {
-                  user.status = user.status - 0 === 1 ? 2 : 1
+                  // user.status = user.status - 0 === 1 ? 2 : 1
+                  this.getUserInfo()
                 }
                 this.toggling = false
               }).catch((res) => {
@@ -276,7 +277,8 @@
             api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
               // this.getTasks()
               if (res.status === 200) {
-                user.status = user.status - 0 === 1 ? 2 : 1
+                // user.status = user.status - 0 === 1 ? 2 : 1
+                this.getUserInfo()
               }
               this.toggling = false
             }).catch((res) => {
