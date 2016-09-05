@@ -150,31 +150,34 @@
               <div class="controls col-18">
                 <div class="clearfix">
                   <!-- 国家 -->
-                  <div class="fl mr5 w120">
+                  <!-- <div class="fl mr5 w120">
                     <div v-placeholder="'国家'" class="input-text-wrap">
                       <input v-model="addModal.country" type="text" name="country" v-validate:country="{required: false}" class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$majorClientValidation.country.touched && $majorClientValidation.country.required">国家为必填</span>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- 省份 -->
-                  <div class="fl mr5 w120">
+                  <!-- <div class="fl mr5 w120">
                     <div v-placeholder="'省份'" class="input-text-wrap">
                       <input v-model="addModal.province" type="text" name="province" v-validate:province="{required: true}" class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$majorClientValidation.province.touched && $majorClientValidation.province.required">省份为必填</span>
                     </div>
-                  </div>
+                  </div> -->
                   <!-- 城市 -->
-                  <div class="fl w120">
+                  <!-- <div class="fl w120">
                     <div v-placeholder="'城市'" class="input-text-wrap">
                       <input v-model="addModal.city" type="text" name="city" v-validate:city="{required: true}" class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$majorClientValidation.city.touched && $majorClientValidation.city.required">城市为必填</span>
                     </div>
+                  </div> -->
+                  <div class="filter-group-item">
+                    <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
                   </div>
                 </div>
               </div>
@@ -214,6 +217,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Modal from 'components/Modal'
 import { formatDate } from 'src/filters'
+import AreaSelect from 'components/AreaSelect'
 // import Mock from 'mockjs'
 import _ from 'lodash'
 import { createDayRange } from 'utils'
@@ -227,6 +231,7 @@ export default {
     'search-box': SearchBox,
     'x-select': Select,
     'x-table': Table,
+    'area-select': AreaSelect,
     'modal': Modal,
     Statistic,
     RadioButtonGroup,
@@ -236,6 +241,10 @@ export default {
 
   data () {
     return {
+      curProvince: {},
+      curCity: {},
+      curDistrict: {},
+      adding: false,
       defaultPeriod: 30,
       query: '',
       searching: false,
@@ -550,6 +559,9 @@ export default {
   ready () {
   },
   methods: {
+    getWarrantyList () {
+      console.log('搜索')
+    },
     /**
      * 获取趋势
      * @return {[type]} [description]
@@ -694,19 +706,27 @@ export default {
      * 添加大客户函数
      */
     addMajorClient () {
+      this.adding = true
       if (this.$majorClientValidation.valid) {
         var params = _.clone(this.addModal)
+        params.province = this.curProvince.name
+        params.city = this.curCity.name
         api.heavyBuyer.addHeavyBuyer(params).then((res) => {
           console.log(res)
           this.showNotice({
             type: 'success',
             content: '添加成功'
           })
+          this.adding = false
           this.onAddCancel()
           this.getMajorClient()
         }).catch((err) => {
           this.handleError(err)
+          this.adding = false
         })
+      } else {
+        alert('请确认填写的表单是否正确')
+        this.adding = false
       }
     },
     /**
