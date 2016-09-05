@@ -303,23 +303,23 @@ export default {
   },
   /**
    * 停用成员
-   * @param  {string} member_id 成员id
+   * @param  {string} memberId 成员id
    * @return {Promise}
    */
-  disableMember (member_id) {
+  disableMember (memberId) {
     return http.put(
-      `${API_SERVER.default}/v2/corp/member/${member_id}/disable`
+      `${API_SERVER.default}/v2/corp/member/${memberId}/disable`
     )
   },
 
   /**
    * 启用成员
-   * @param  {string} member_id 成员id
+   * @param  {string} memberId 成员id
    * @return {Promise}
    */
-  enableMember (member_id) {
+  enableMember (memberId) {
     return http.put(
-      `${API_SERVER.default}/v2/corp/member/${member_id}/enable`
+      `${API_SERVER.default}/v2/corp/member/${memberId}/enable`
     )
   }
 
