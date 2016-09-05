@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>文章管理</h2>
+      <h2>内容管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
 

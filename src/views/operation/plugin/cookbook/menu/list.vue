@@ -36,7 +36,6 @@ import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
 import { formatDate } from 'src/filters'
-import _ from 'lodash'
 
 export default {
   name: 'MenuList',
@@ -62,7 +61,7 @@ export default {
         title: '标题'
       }, {
         key: 'creator',
-        title: '创建者',
+        title: '作者',
         class: 'wp20'
       }, {
         key: 'create_time',
@@ -80,7 +79,6 @@ export default {
       key: '',
       loadingData: false,
       menus: [],
-      creators: [],
       total: 0,
       countPerPage: 10,
       currentPage: 1,
@@ -96,7 +94,7 @@ export default {
       this.menus.forEach((item) => {
         result.push({
           name: `<a class="hl-red">${item.name}</a>`,
-          creator: this.creators[item.creator] ? this.creators[item.creator].name : '-',
+          creator: item.creator,
           create_time: formatDate(item.create_time),
           pageviews: item.pageviews || '-',
           status: item.status === 1 ? '<span>已发布</span>' : '<span class="hl-orange">待审核</span>',
@@ -208,18 +206,6 @@ export default {
           this.menus = res.data.list
           // 记录数
           this.total = res.data.count
-          // creator字段返回的是成员 id，这里需要将这些 id 去重并获取成员信息
-          // this.creators对象以成员 id 作为键
-          let idArr = _.uniq(_.map(res.data.list, 'creator'))
-          for (let i = 0, len = idArr.length; i < len; i++) {
-            ((index) => {
-              api.corp.getMember(idArr[index]).then((res) => {
-                let toAssign = {}
-                toAssign[idArr[index]] = res.data
-                this.creators = _.extend({}, this.creators, toAssign)
-              })
-            })(i)
-          }
           this.loadingData = false
         }
       }).catch((res) => {

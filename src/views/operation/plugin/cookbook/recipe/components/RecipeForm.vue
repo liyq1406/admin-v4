@@ -724,7 +724,7 @@ export default {
         cooking_steps: this.cooking_steps,
         tips: this.tips,
         status: this.status,
-        creator: this.currentMember.email
+        creator: this.currentMember.name
       }
       let process
       let noticeCont = ({

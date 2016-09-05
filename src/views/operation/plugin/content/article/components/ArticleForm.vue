@@ -95,13 +95,9 @@ export default {
       var params = {
         name: this.model.name,
         text: this.model.text,
-        status: parseInt(this.model.status)
+        status: parseInt(this.model.status),
+        creator: this.currentMember.name
       }
-
-      if (this.type === 'add') {
-        params.creator = this.currentMember.name
-      }
-
       return params
     }
   },

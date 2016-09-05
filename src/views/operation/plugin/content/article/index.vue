@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>文章管理</h2>
+      <h2>内容管理</h2>
     </div>
     <div class="panel mt20">
       <div class="panel-bd">

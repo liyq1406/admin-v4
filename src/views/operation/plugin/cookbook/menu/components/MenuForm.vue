@@ -140,7 +140,6 @@ export default {
       originModel: {
         name: '',
         instructions: '',
-        // menu: [{name: '小炒肉', id: 'asds4455664654'}, {name: '西红柿炒鸡蛋', id: 'asds4455664624'}],
         menu: [],
         status: 0
       },
@@ -150,14 +149,14 @@ export default {
       columns: [{
         key: 'name',
         title: '标题'
-      // }, {
-      //   key: 'creator',
-      //   title: '创建者',
-      //   class: 'wp20'
+      }, {
+        key: 'creator',
+        title: '作者',
+        class: 'wp15'
       }, {
         key: 'type',
         title: '类型',
-        class: 'wp20'
+        class: 'wp15'
       }, {
         key: 'operation',
         title: '操作',
@@ -186,7 +185,7 @@ export default {
         let typeIndex = item.type || 1
         result.push({
           name: item.name,
-          // creator: this.creators[item.creator] ? this.creators[item.creator].name : '-',
+          creator: item.creator,
           type: types[typeIndex - 1],
           operation: item.added ? '<span class="hl-gray">已添加</span>' : '<a class="hl-red">+ 添加</a>',
           origin: item
@@ -328,11 +327,11 @@ export default {
       })[this.type]
 
       this.submiting = true
+      // 作者
+      this.model.creator = this.currentMember.name
       if (this.type === 'edit') {
         process = api.cookbook.editMenu(appId, this.$route.params.id, token, this.model)
       } else {
-        // 创建者
-        this.model.creator = this.currentMember.id
         process = api.cookbook.addMenu(appId, token, this.model)
       }
 
@@ -416,19 +415,6 @@ export default {
           })
           // 记录数
           this.total = res.data.count
-
-          // creator字段返回的是成员 id，这里需要将这些 id 去重并获取成员信息
-          // this.creators对象以成员 id 作为键
-          let idArr = _.uniq(_.map(res.data.list, 'creator'))
-          for (let i = 0, len = idArr.length; i < len; i++) {
-            ((index) => {
-              api.corp.getMember(idArr[index]).then((res) => {
-                let toAssign = {}
-                toAssign[idArr[index]] = res.data
-                this.creators = _.extend({}, this.creators, toAssign)
-              })
-            })(i)
-          }
           this.loadingData = false
         }
       }).catch((res) => {
