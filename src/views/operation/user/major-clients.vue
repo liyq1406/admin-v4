@@ -520,7 +520,7 @@ export default {
        * @return {[type]}            [description]
        */
       if (this.query) {
-        condition.query['name'] = { $like: [this.query] }
+        condition.query['name'] = { $like: this.query }
       }
       // 下拉框筛选
       if (this.selectedFilterIndustry) {
@@ -687,6 +687,7 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
+      this.currentPage = 1
       this.getMajorClient()
     },
     /**
