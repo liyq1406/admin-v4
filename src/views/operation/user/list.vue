@@ -30,7 +30,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="'ID'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
                   <button slot="search-button" @click="getUsers(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                   <label>{{ $t('ui.user.search_user') }}</label>
                 </search-box>
@@ -235,8 +235,7 @@
         }
 
         if (this.query.length > 0) {
-          condition.query['phone'] = { $like: this.query }
-          condition.query['email'] = { $like: this.query }
+          condition.query['id'] = { $in: [this.query] }
         }
 
         if (this.selectedFilter.value) {
