@@ -4,7 +4,7 @@
  */
 
 // 测试服务器地址
-// const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
+const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_API_SERVER = 'http://api-demo.xlink.cn'
 // 天际
@@ -18,12 +18,12 @@
 // 正式地址
 // const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
 // 灰
-const DEFAULT_API_SERVER = 'https://api-grey.xlink.cn:443'
+// const DEFAULT_API_SERVER = 'https://api-grey.xlink.cn:443'
 
 // 插件服务器地址
-// const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
+const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3002'
 // 插件服务器灰度地址
-const DEFAULT_PLUGIN_SERVER = 'http://api-grey.xlink.cn:3000'
+// const DEFAULT_PLUGIN_SERVER = 'http://api-grey.xlink.cn:3000'
 // 测试 demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
 // 天际
@@ -46,7 +46,13 @@ export const API_SERVER = {
   dealer: `${DEFAULT_PLUGIN_SERVER}/module/distributer`,
 
   // 环境数据
-  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`
+  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`,
+
+  // 云菜谱
+  cookbook: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
+
+  // 内容管理
+  content: `${DEFAULT_PLUGIN_SERVER}/module/contents`
 }
 
 // 默认每页记录数

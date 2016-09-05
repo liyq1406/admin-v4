@@ -165,6 +165,24 @@ export default {
 
           case 'recipe': // 云菜谱
             sub.icon = 'cutlery'
+            sub.alias = 'cookbook'
+            sub.subs = [{
+              alias: 'recipes',
+              url: `/plugins/cookbook/${item.id}/recipes`
+            }, {
+              alias: 'menus',
+              url: `/plugins/cookbook/${item.id}/menus`
+            }, {
+              alias: 'categories',
+              url: `/plugins/cookbook/${item.id}/categories`
+            }, {
+              alias: 'tags',
+              url: `/plugins/cookbook/${item.id}/tags`
+            // 暂时隐藏
+            // }, {
+            //   alias: 'heat',
+            //   url: `/plugins/warranty/${item.id}/heat`
+            }]
             break
           case 'warranty': // 在线维保
             sub.icon = 'support'
@@ -232,7 +250,9 @@ export default {
             sub.icon = 'credit-card'
             break
           case 'content': // 内容管理
-
+            sub.alias = 'content'
+            sub.icon = 'newspaper-o'
+            sub.url = 'plugins/content'
             break
           default:
         }

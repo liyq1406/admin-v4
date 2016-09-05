@@ -40,6 +40,8 @@ import dealer from './api/dealer'
 import heavyBuyer from './api/heavy-buyer'
 import broadcast from './api/broadcast'
 import airquality from './api/airquality'
+import cookbook from './api/cookbook'
+import content from './api/content'
 
 export default {
   sms,
@@ -66,5 +68,7 @@ export default {
   dealer,
   heavyBuyer,
   broadcast,
-  airquality
+  airquality,
+  cookbook,
+  content
 }

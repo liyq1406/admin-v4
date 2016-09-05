@@ -902,6 +902,134 @@ let configRouter = (router) => {
           }
         },
 
+        // 菜谱管理
+        // ------------------------------
+        // 菜谱列表
+        '/plugins/cookbook/:app_id/recipes': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/recipe/list'))
+            }, 'admin')
+          }
+        },
+        // 添加菜谱
+        '/plugins/cookbook/:app_id/recipe/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/recipe/add'))
+            }, 'admin')
+          }
+        },
+        // 编辑菜谱
+        '/plugins/cookbook/:app_id/recipes/:id/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/recipe/edit'))
+            }, 'admin')
+          }
+        },
+        // 菜单列表
+        '/plugins/cookbook/:app_id/menus': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/menu/list'))
+            }, 'admin')
+          }
+        },
+        // 菜单列表
+        '/plugins/cookbook/:app_id/menu/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/menu/add'))
+            }, 'admin')
+          }
+        },
+        // 菜单列表
+        '/plugins/cookbook/:app_id/menus/:id/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/menu/edit'))
+            }, 'admin')
+          }
+        },
+        // 类别列表
+        '/plugins/cookbook/:app_id/categories': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/category/list'))
+            }, 'admin')
+          }
+        },
+        // 类别二级列表
+        '/plugins/cookbook/:app_id/categories/:parent_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/category/subs'))
+            }, 'admin')
+          }
+        },
+        '/plugins/cookbook/:app_id/tags': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/cookbook/tag/list'))
+            }, 'admin')
+          }
+        },
+
+        // 内容管理
+        // ------------------------------
+        // 文章列表
+        '/plugins/content/:app_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/content/article/index'))
+            }, 'admin')
+          }
+        },
+        // 添加文章
+        '/plugins/content/:app_id/article/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/content/article/add'))
+            }, 'admin')
+          }
+        },
+        // 编辑文章
+        '/plugins/content/:app_id/articles/:id/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/content/article/edit'))
+            }, 'admin')
+          }
+        },
+
+        // 运营位管理
+        // ------------------------------
+        // 运营位列表
+        '/plugins/operate-position/:app_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/operate-position/list'))
+            }, 'admin')
+          }
+        },
+        // 管理运营位
+        '/plugins/operate-position/:app_id/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/operate-position/details'))
+            }, 'admin')
+          }
+        },
+        // 运营位添加内容
+        '/plugins/operate-position/:app_id/:id/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/operate-position/add'))
+            }, 'admin')
+          }
+        },
+
         // Google nest
         'plugins/nest/:app_id/forbidden': {
           component (resolve) {
