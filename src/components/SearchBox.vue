@@ -126,7 +126,6 @@
       key () {
         if (this.max > 0) {
           if (this.key - 0 > this.max - 0) {
-            console.log('超过')
             this.showNotice({
               type: 'error',
               content: `输入的值不能大于${this.max}`
