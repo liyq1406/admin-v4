@@ -30,7 +30,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="$t('ui.user.fields.account')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="'ID'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
                   <button slot="search-button" @click="getUsers(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
                   <label>{{ $t('ui.user.search_user') }}</label>
                 </search-box>
@@ -71,6 +71,7 @@
 
     data () {
       return {
+        allTotal: 0,
         // 是否缓存用户在线状态
         cacheOnlineType: false,
         query: '',
@@ -166,7 +167,7 @@
         var result = [
           {
             title: '用户总数',
-            value: this.total
+            value: this.allTotal
           },
           {
             title: '今日新增',
@@ -212,7 +213,7 @@
             phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
-            is_active: user.is_active ? '已激活' : '未激活',
+            is_active: user.status === 1 ? '已激活' : '未激活',
             online: this.computedOnline(user.id),
             status: this.computedStatus(user.status),
             prototype: user
@@ -235,19 +236,20 @@
         }
 
         if (this.query.length > 0) {
-          condition.query['phone'] = { $like: this.query }
-          condition.query['email'] = { $like: this.query }
+          condition.query['id'] = { $in: [this.query] }
         }
 
         if (this.selectedFilter.value) {
           switch (this.selectedFilter.value) {
             case 1: // 已激活 查询手机不是未验证并且邮箱不是未验证
-              condition.query['phone_valid'] = { $nin: [false] }
-              condition.query['email_valid'] = { $nin: [false] }
+              // condition.query['phone_valid'] = { $nin: [false] }
+              // condition.query['email_valid'] = { $nin: [false] }
+              condition.query['status'] = { $in: [1] }
               break
             case 2: // 未激活 查询手机未验证并且邮箱未验证
-              condition.query['phone_valid'] = { $in: [false] }
-              condition.query['email_valid'] = { $in: [false] }
+              // condition.query['phone_valid'] = { $in: [false] }
+              // condition.query['email_valid'] = { $in: [false] }
+              condition.query['status'] = { $in: [2] }
               break
             default:
               break
@@ -355,6 +357,7 @@
        */
       pageCountUpdate (count) {
         this.countPerPage = count
+        this.currentPage = 1
         this.getUsers()
       },
       /**
@@ -445,6 +448,9 @@
             this.users.map((item) => {
               this.getOnlineType(item.id)
             })
+            if (this.allTotal === 0) {
+              this.allTotal = res.data.count
+            }
             this.total = res.data.count
             this.loadingData = false
           }
