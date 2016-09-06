@@ -2,7 +2,7 @@
  * 项目基本配置
  * @type {Object}
  */
-let protocol = `${window.location.protocol}`
+let protocol = window.location.protocol
 // 测试服务器地址
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
