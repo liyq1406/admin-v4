@@ -3,31 +3,34 @@
     <div class="main-title">
       <h2>环境数据</h2>
     </div>
+    <div class="panel">
+      <div class="panel-bd">
+        <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
+          <div class="filter-bar" slot="filter-bar">
+            <div class="filter-group">
+              <div class="filter-group-item">
+                <span class="label">{{ $t('common.display') }}：</span>
+                <!-- <x-select width="90px" size="small" :label="selectedOption.label">
+                  <span slot="label">{{ $t('common.display') }}：</span>
+                  <select v-model="selectedOption" @change="">
+                    <option v-for="option in options" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select> -->
+              </div>
+              <div class="filter-group-item">
+                <date-time-range-picker @timechange="timechange"></date-time-range-picker>
+              </div>
+              <div class="filter-group-item">
+                <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
+              </div>
+            </div>
+            <div class="filter-group fr">
 
-    <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
-      <div class="filter-bar" slot="filter-bar">
-        <div class="filter-group">
-          <div class="filter-group-item">
-            <span class="label">{{ $t('common.display') }}：</span>
-            <!-- <x-select width="90px" size="small" :label="selectedOption.label">
-              <span slot="label">{{ $t('common.display') }}：</span>
-              <select v-model="selectedOption" @change="">
-                <option v-for="option in options" :value="option">{{ option.label }}</option>
-              </select>
-            </x-select> -->
+            </div>
           </div>
-          <div class="filter-group-item">
-            <date-time-range-picker @timechange="timechange"></date-time-range-picker>
-          </div>
-          <div class="filter-group-item">
-            <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
-          </div>
-        </div>
-        <div class="filter-group fr">
-
-        </div>
+        </x-table>
       </div>
-    </x-table>
+    </div>
 
   </div>
 </template>
