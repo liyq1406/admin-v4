@@ -13,10 +13,7 @@
     <!-- End: 产品信息统计 -->
 
     <!-- Start: 趋势曲线图 -->
-    <div class="panel mt20">
-      <!-- <div class="panel-hd">
-        <h2>用户趋势</h2>
-      </div> -->
+    <!-- <div class="panel mt20">
       <div class="panel-hd">
         <div class="filter-bar">
           <div class="filter-group fl">
@@ -27,16 +24,12 @@
           <div class="filter-group fr">
             <div class="filter-group-item">
               <date-time-multiple-picker :periods="[7,30,90]" @timechange="onTimeChange" :default-period="defaultPeriod"></date-time-multiple-picker>
-              <!-- <date-time-range-picker></date-time-range-picker> -->
             </div>
-            <!-- <div class="filter-group-item">
-              <radio-button-group :items="locales.data.PERIODS" :value.sync="7"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-            </div> -->
           </div>
         </div>
         <time-line :data="trends"></time-line>
       </div>
-    </div>
+    </div> -->
     <!-- End: 趋势曲线图 -->
 
     <div class="panel mt10">
