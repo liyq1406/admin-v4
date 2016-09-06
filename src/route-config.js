@@ -1014,7 +1014,7 @@ let configRouter = (router) => {
           }
         },
         // 管理运营位
-        '/plugins/operate-position/:app_id/:id': {
+        '/plugins/operate-position/:app_id/stall/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/details'))
@@ -1022,7 +1022,7 @@ let configRouter = (router) => {
           }
         },
         // 运营位添加内容
-        '/plugins/operate-position/:app_id/:id/add': {
+        '/plugins/operate-position/:app_id/stall/:id/add': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/add'))

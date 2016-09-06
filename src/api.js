@@ -42,6 +42,7 @@ import broadcast from './api/broadcast'
 import airquality from './api/airquality'
 import cookbook from './api/cookbook'
 import content from './api/content'
+import operate from './api/operate'
 
 export default {
   sms,
@@ -70,5 +71,6 @@ export default {
   broadcast,
   airquality,
   cookbook,
-  content
+  content,
+  operate
 }

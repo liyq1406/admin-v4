@@ -68,4 +68,7 @@ export default {
   .arrow
     color gray-light
     margin-right 5px
+
+  &.no-split-line
+    border-bottom none
 </style>

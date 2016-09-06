@@ -97,10 +97,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="button-list childinblock">
-                  <div @click="handleStepEvent1('ADD', mainIngredient, $index)" class="control-button button-add"><i class="icon fa fa-plus"></i></div>
-                  <div v-show="mainIngredients.length>1" @click="handleStepEvent1('DEL', mainIngredient, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
-                </div> -->
                 <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
               </div>
               <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
@@ -124,10 +120,6 @@
                     </div>
                   </div>
                 </div>
-                <!-- <div class="button-list childinblock">
-                  <div @click="handleStepEvent2('ADD', supportIngredient, $index)" class="control-button button-add"><i class="icon fa fa-plus"></i></div>
-                  <div v-show="supportIngredients.length>1" @click="handleStepEvent2('DEL', supportIngredient, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
-                </div> -->
                 <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
               </div>
               <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
@@ -186,14 +178,14 @@
           <div class="form-actions row">
             <div class="col-offset-4">
               <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-              <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-lg">预览</button>
+              <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
             </div>
           </div>
         </form>
       </validator>
     </div>
     <!-- 预览 -->
-    <!-- <modal :show.sync="showMask" width="300px">
+    <!-- <modal :show.sync="isShowPreview" width="300px">
       <h3 slot="header">预览</h3>
       <div slot="body" class="form">
         <validator name="autoValidation">
@@ -207,54 +199,62 @@
         </validator>
       </div>
     </modal> -->
-    <div v-show="showMask" transition="modal" class="mask">
-      <div class="mask-wrapper">
-        <div :style="dialogStyle" class="mask-dialog">
-          <div class="mask-header">
+    <div v-show="isShowPreview" transition="modal" class="mask">
+      <div class="preview-wrapper">
+        <div :style="dialogStyle" class="preview-dialog">
+          <div class="preview-header">
             <h3>预览</h3>
           </div>
-          <div class="mask-body">
-            <p class="cookname">{{ name }}</p>
-            <div class="cookpic">
+          <div class="preview-body">
+            <div class="app-header">{{ name }}</div>
+            <div class="preview-thumb">
               <img :src="images[0]">
             </div>
-            <div class="cookdiv">
-              <b>{{name}}</b>
-              <p class="introduce">{{ instructions }}</p>
-              <ul class="introlist">
-                <li>难度：{{properties.difficulty}}</li>
-                <li>时间：{{properties.cooking_time}}</li>
-              </ul>
-            </div>
-            <div class="cookdiv">
-              <div class="posdiv">
-                <b>用料：</b>
-                <span>添加到我的菜篮</span>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <h3>{{name}}</h3>
               </div>
-              <div v-for="food in major_ingredients">
-                <ul class="foolist">
-                  <li>{{ food.name }}</li>
-                  <li>{{ food.unit }}</li>
-                </ul>
+              <div class="preview-panel-bd">
+                <p class="introduce">{{ instructions }}</p>
+                <div class="metas">
+                  <div class="meta">{{properties.difficulty}}</div>
+                  <div class="meta">{{properties.cooking_time}}</div>
+                </div>
               </div>
             </div>
-            <div class="cookdiv">
-              <div class="posdiv">
-                <b>步骤：</b>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <div class="preview-panel-hd-actions"><span>添加到我的菜篮</span></div>
+                <h3>步骤：</h3>
               </div>
-              <div>
+              <div class="preview-panel-bd">
+                <table>
+                  <tbody>
+                    <tr v-for="ingredient in major_ingredients">
+                      <td>{{ ingredient.name }}</td>
+                      <td>{{ ingredient.unit }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <h3>步骤：</h3>
+              </div>
+              <div class="preview-panel-bd">
                 <p v-for="step in cooking_steps">
                   {{$index+1}}、{{step.description}}
                 </p>
               </div>
             </div>
-            <div class="cookdiv">
+            <div class="preview-panel">
               <ul class="introlist">
                 <li>收藏菜谱</li>
                 <li>添加到我的常用菜</li>
               </ul>
             </div>
-            <div class="cookdiv">
+            <div class="preview-panel">
               <h4>选择厨具并开始烹饪</h4>
             </div>
           </div>
@@ -347,63 +347,42 @@ export default {
       tag: '',
       editingTag: false,
       show: false,
-      devices: [],
-      isShowDeviceSelectModal: false,
-      selectedDevice: {},
-      deviceTips: [],
       difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
       cookingtimes: ['5分钟', '10分钟', '15分钟', '30分钟', '60分钟', '90分钟', '2小时', '数小时', '1天', '数天'],
-      major_ingredients: [{}],
-      minor_ingredients: [{}],
+      major_ingredients: [],
+      minor_ingredients: [],
       // allDevices: DEVICES,
       allDevices: '',
       // candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
       candidateTags: [],
       categories: [],
-      ingredientCategories: [],
       adding: false,
-      mainIngredients: [{
-        name: '',
-        dosage: ''
-      }],
-      supportIngredients: [{
-        name: '',
-        dosage: ''
-      }],
-      mainName: ' ',
-      mainDosage: ' ',
-      supportName: ' ',
-      supportDosage: ' ',
       status: 0,
-      showMask: false
+      isShowPreview: false
     }
   },
 
   computed: {
-    autoexecs () {
-      var result = []
-      // console.log(this.decToHex(0))
-      this.devices.forEach((item) => {
-        var execArr = [this.decToHex(item.count)]
-        item.steps.forEach((step) => {
-          step.bytes.forEach((byte) => {
-            execArr.push(this.decToHex(byte.value))
-          })
-        })
-        for (var i = 99, len = execArr.length; i >= len; i--) {
-          execArr[i] = this.decToHex(0)
-        }
-        result.push(execArr.join(' '))
-      })
-      return result
-    },
+    // autoexecs () {
+    //   var result = []
+    //   // console.log(this.decToHex(0))
+    //   this.devices.forEach((item) => {
+    //     var execArr = [this.decToHex(item.count)]
+    //     item.steps.forEach((step) => {
+    //       step.bytes.forEach((byte) => {
+    //         execArr.push(this.decToHex(byte.value))
+    //       })
+    //     })
+    //     for (var i = 99, len = execArr.length; i >= len; i--) {
+    //       execArr[i] = this.decToHex(0)
+    //     }
+    //     result.push(execArr.join(' '))
+    //   })
+    //   return result
+    // },
 
     categoryOptions () {
       return _.differenceBy(this.categories, this.classifications, 'main')
-    },
-
-    deviceOptions () {
-      return _.differenceBy(this.allDevices, this.devices, 'name')
     }
   },
 
@@ -456,15 +435,15 @@ export default {
   },
 
   methods: {
-    /**
-     * 十进制转换为十六进制
-     * @param  {Number} n 目标数字
-     * @return {String}   十六进制字符串
-     */
-    decToHex (n) {
-      var str = n.toString(16)
-      return str.length === 1 ? `0${str}` : str
-    },
+    // /**
+    //  * 十进制转换为十六进制
+    //  * @param  {Number} n 目标数字
+    //  * @return {String}   十六进制字符串
+    //  */
+    // decToHex (n) {
+    //   var str = n.toString(16)
+    //   return str.length === 1 ? `0${str}` : str
+    // },
 
     /**
      * 处理图片上传
@@ -682,7 +661,7 @@ export default {
 
     // 关闭预览
     dismiss () {
-      this.showMask = false
+      this.isShowPreview = false
     },
 
     /**
@@ -697,12 +676,13 @@ export default {
 
       this.editing = true
       this.images = _.compact(this.images)
-      let major = this.major_ingredients.map((item) => {
+      let major = this.major_ingredients.filter((item) => {
         return Object.keys(item).length > 0
       })
-      let minor = this.minor_ingredients.map((item) => {
+      let minor = this.minor_ingredients.filter((item) => {
         return Object.keys(item).length > 0
       })
+      console.log(major)
       let params = {
         name: this.name,
         images: this.images,
@@ -766,15 +746,15 @@ export default {
     display table
     transition opacity .2s ease
 
-    .mask-wrapper
+    .preview-wrapper
       display table-cell
       vertical-align middle
 
-    .mask-dialog
+    .preview-dialog
       position relative
       background rgba(255, 255, 255, .95)
       margin 0 auto
-      width 400px
+      width 320px
       box-shadow 0 2px 8px rgba(0, 0, 0, .3)
       transition all .3s ease
 
@@ -791,7 +771,7 @@ export default {
         &:hover
           color red
 
-    .mask-header
+    .preview-header
       padding 10px 20px
       border-bottom 1px solid #DDD
 
@@ -800,71 +780,101 @@ export default {
         color gray-darker
         margin 0
 
-    .mask-body
-      padding 10px
+    .preview-body
       max-height 540px
       overflow-y auto
       box-sizing border-box
       background-color #F2F2F2
-      div
-        background-color #fff
-        border-box box-sizing
-      .cookname
+      .app-header
         font-size 18px
         text-align center
-        margin 0 auto 0 auto
         padding 10px 0
-        border-bottom 1px solid #999
+        border-bottom 1px solid default-border-color
         background-color #fff
-      .cookpic
+      .preview-thumb
         /*width 380px*/
         height 200px
-        margin 10px 0 10px 0
+        margin-bottom 10px
         img
           width 100%
           height 100%
-      .cookdiv
-        padding 10px
+      .preview-panel
+        background #FFF
+        padding 0 10px
         margin-bottom 10px
-        b
-          font-size 18px
-          margin-bottom 10px
-        .introduce
-          text-indent 2em
-          margin 0
-          padding-bottom 10px
-          border-bottom 1px solid #999
-        .introlist
-          clearfix()
-          margin-top 5px
-          li
-            float left
-            width 50%
-            text-align center
-            line-height 25px
-            height 25px
-        .posdiv
-          position relative
-          padding-bottom 10px
-          border-bottom 1px solid #999
-          margin-bottom 10px
+      .preview-panel-hd
+        font-size 12px
+        margin-bottom 10px
+        padding 10px 0
+        border-bottom 1px solid light-border-color
+
+        .preview-panel-hd-actions
+          float right
+
           span
             display inline-block
-            position absolute
-            right 5px
-            background-color #999
-            font-size 12px
-            padding 3px 10px
-            border-radius 10px
-            color #fff
-        h4
+            background #999
+            color #FFF
+            line-height 20px
+            padding 0 10px
+            border-radius 20px
+
+        h3
+          font-size 14px
+          margin 0
+      .preview-panel-bd
+        font-size 12px
+        padding-bottom 10px
+
+        table
+          width 100%
+          td
+            padding 5px 0
+      .introduce
+        margin 0
+        border-bottom 1px solid light-border-color
+        padding-bottom 10px
+
+      .metas
+        padding-top 10px
+        clearfix()
+
+        .meta
+          float left
+          width 50%
           text-align center
-        .foolist
-          clearfix()
-          li
-            float left
-            width 50%
-            text-align left
+      .introlist
+        clearfix()
+        margin-top 5px
+        li
+          float left
+          width 50%
+          text-align center
+          padding 10px 0
+          line-height 25px
+          height 25px
+      .posdiv
+        position relative
+        padding-bottom 10px
+        border-bottom 1px solid #999
+        margin-bottom 10px
+        span
+          display inline-block
+          position absolute
+          right 5px
+          background-color #999
+          font-size 12px
+          padding 3px 10px
+          border-radius 10px
+          color #fff
+      h4
+        text-align center
+      .foolist
+        clearfix()
+        li
+          float left
+          width 50%
+          text-align left
       .table
         margin 0
 
@@ -873,13 +883,13 @@ export default {
         text-align center
         margin-bottom 30px
 
-    .mask-actions
+    .preview-actions
         text-align center
 
         .btn
           width 120px
 
-    .mask-footer
+    .preview-footer
       padding 0 30px 20px
       text-align right
       clearfix()

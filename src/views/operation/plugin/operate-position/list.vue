@@ -1,113 +1,111 @@
 <template>
-  <section class="main-wrap operate-stall">
-    <div class="main">
-      <div class="panel">
-        <div class="panel-hd">
-          <div class="actions">
-            <button class="btn btn-success" @click="showAddModal">
-              <i class="fa fa-plus"></i>
-              添加运营位
-            </button>
+  <div class="main">
+    <div class="main-title bordered">
+      <h2>运营位管理</h2>
+    </div>
+    <div class="panel mt20">
+      <div class="panel-bd">
+        <div class="action-bar">
+          <div class="action-group">
+            <button class="btn btn-primary" @click="showAddModal"><i class="fa fa-plus"></i>添加运营位 </button>
           </div>
-          <h2>运营位</h2>
         </div>
-        <div class="panel-bd">
-          <div class="data-table with-loading">
-            <div class="icon-loading" v-show="loadingData">
-              <i class="fa fa-refresh fa-spin"></i>
-            </div>
-            <table class="table table-stripe table-bordered">
-              <thead>
-                <tr>
-                  <th>名称</th>
-                  <th class="w180">图片规格（宽*高）</th>
-                  <th class="w80 tac">操作</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="stalls.length > 0">
-                  <tr v-for="stall in stalls">
-                    <td>
-                      <a class="hl-red" v-link="{'path': '/plugins/operate/'+ $route.params.app_id +'/stall/' + stall._id}">
-                        {{ stall.name }}
-                      </a>
-                    </td>
-                    <td>{{ stall.width }}*{{ stall.height }}</td>
-                    <td class="tac">
-                      <a class="hl-red" @click="showEditModal(stall)">
-                        编辑
-                      </a>
-                    </td>
-                  </tr>
-                </template>
-                <tr v-if="total === 0 && !loadingData">
-                  <td colspan="6" class="tac">
-                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+        <div class="data-table with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <table class="table table-stripe table-bordered">
+            <thead>
+              <tr>
+                <th>名称</th>
+                <th class="w180">图片规格（宽*高）</th>
+                <th class="w80 tac">操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <template v-if="stalls.length > 0">
+                <tr v-for="stall in stalls">
+                  <td>
+                    <a class="hl-red" v-link="{'path': 'stall/' + stall._id, append: true}">
+                      {{ stall.name }}
+                    </a>
+                  </td>
+                  <td>{{ stall.width }}*{{ stall.height }}</td>
+                  <td class="tac">
+                    <a class="hl-red" @click="showEditModal(stall)">
+                      编辑
+                    </a>
                   </td>
                 </tr>
-              </tbody>
-            </table>
-          </div>
-          <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getStalls"></pager>
+              </template>
+              <tr v-if="total === 0">
+                <td colspan="3" class="tac">
+                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <modal :show.sync="modal.show" @close="closeModal">
-          <h3 slot="header">{{ modalTitle }}</h3>
-          <div slot="body" class="form">
-            <validator name="validation">
-              <form novalidate @submit.prevent="onSubmit">
-                <div class="form-row row">
-                  <label class="form-control col-6">名称：</label>
-                  <div class="controls col-18">
-                    <div class="input-text-wrap" v-placeholder="'请输入运营位名称'">
-                      <input type="text" class="input-text" v-model="modal.stall.name" name="modal.stall.name" v-validate:name="{required: true}">
-                    </div>
-                    <div class="form-tips form-tips-error">
-                      <span v-if="$validation.name.touched && $validation.name.required">名称为必填项</span>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-row row">
-                  <label class="form-control col-6">运营图片：</label>
-                  <div class="picture col-18">
-                    <div class="tips">
-                      <span>为运营位指定一个展示图片（单位：像素）</span>
-                    </div>
-                    <div class="value-box row">
-                      <div class="width col-12 row">
-                        <label class="col-5">宽：</label>
-                        <div class="input-text-wrap col-10">
-                          <input type="text" class="input-text" v-model="modal.stall.width" name="modal.stall.width" v-validate:width="{required: true}">
-                        </div>
-                        <div class="form-tips form-tips-error col-10">
-                          <span v-if="$validation.width.touched && $validation.width.required">宽为必填项</span>
-                        </div>
-                      </div>
-                      <div class="height col-12 row">
-                        <label class="col-5">高：</label>
-                        <div class="input-text-wrap col-10">
-                          <input type="text" class="input-text" v-model="modal.stall.height" name="modal.stall.height" v-validate:height="{required: true}">
-                        </div>
-                        <div class="form-tips form-tips-error col-10">
-                          <span v-if="$validation.height.touched && $validation.height.required">高为必填项</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-actions">
-                  <label class="del-check" v-show="modal.type==='edit'">
-                    <input type="checkbox" name="del" v-model="modal.delChecked"/>{{ '删除运营位' }}
-                  </label>
-                  <button type="reset" @click.prevent.stop="closeModal" class="btn btn-default">{{ $t("common.cancel") }}</button>
-                  <button type="submit" :disabled="modal.editing || !$validation.valid" :class="{'disabled':modal.editing || !$validation.valid}" v-text="modal.editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-                </div>
-              </form>
-            </validator>
-          </div>
-        </modal>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getStalls"></pager>
       </div>
+
+      <modal :show.sync="modal.show" @close="closeModal">
+        <h3 slot="header">{{ modalTitle }}</h3>
+        <div slot="body" class="form">
+          <validator name="validation">
+            <form novalidate @submit.prevent="onSubmit">
+              <div class="form-row row">
+                <label class="form-control col-6">名称：</label>
+                <div class="controls col-18">
+                  <div class="input-text-wrap" v-placeholder="'请输入运营位名称'">
+                    <input type="text" class="input-text" v-model="modal.stall.name" name="modal.stall.name" v-validate:name="{required: true}">
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.name.touched && $validation.name.required">名称为必填项</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-6">运营图片：</label>
+                <div class="picture col-18">
+                  <div class="control-text">
+                    <span>为运营位指定一个展示图片（单位：像素）</span>
+                  </div>
+                  <div class="value-box row">
+                    <div class="width col-12 row">
+                      <label class="col-5 control-text">宽：</label>
+                      <div class="input-text-wrap col-10">
+                        <input type="text" class="input-text" v-model="modal.stall.width" name="modal.stall.width" v-validate:width="{required: true}">
+                      </div>
+                      <div class="form-tips form-tips-error col-10">
+                        <span v-if="$validation.width.touched && $validation.width.required">宽为必填项</span>
+                      </div>
+                    </div>
+                    <div class="height col-12 row">
+                      <label class="col-5 control-text">高：</label>
+                      <div class="input-text-wrap col-10">
+                        <input type="text" class="input-text" v-model="modal.stall.height" name="modal.stall.height" v-validate:height="{required: true}">
+                      </div>
+                      <div class="form-tips form-tips-error col-10">
+                        <span v-if="$validation.height.touched && $validation.height.required">高为必填项</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions">
+                <label class="del-check" v-show="modal.type==='edit'">
+                  <input type="checkbox" name="del" v-model="modal.delChecked"/>{{ '删除运营位' }}
+                </label>
+                <button type="submit" :disabled="modal.editing" :class="{'disabled':modal.editing}" v-text="modal.editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+                <button type="reset" @click.prevent.stop="closeModal" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              </div>
+            </form>
+          </validator>
+        </div>
+      </modal>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
@@ -150,20 +148,7 @@
             height: ''
           }
         },
-        stalls: [
-          // {
-          //   _id: '123156453',
-          //   name: '名称',
-          //   width: '320',
-          //   height: '120'
-          // },
-          // {
-          //   _id: '123156453',
-          //   name: '名称',
-          //   width: '320',
-          //   height: '120'
-          // }
-        ],
+        stalls: [],
         searching: false,
         total: 0,
         currentPage: 1,

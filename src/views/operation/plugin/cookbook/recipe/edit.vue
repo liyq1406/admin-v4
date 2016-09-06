@@ -3,17 +3,52 @@
     <div class="main-title">
       <h2>菜谱管理</h2>
     </div>
-    <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-      <div class="panel-bd">
-        <recipe-form type="edit"></recipe-form>
+    <breadcrumb :nav="breadcrumbNav" class="no-split-line"></breadcrumb>
+    <nav class="tab">
+      <ul>
+        <li v-for="link in nav"><a :class="{'active': $index===curr}" @click.prevent="curr=$index">{{ link }}</a></li>
+      </ul>
+    </nav>
+    <template v-if="curr===0">
+      <div class="panel">
+        <div class="panel-bd">
+          <recipe-form type="edit"></recipe-form>
+        </div>
       </div>
-    </div>
-    <div class="panel">
-      <div class="panel-bd">
-        <button @click.prevent="deleteRecipe" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ui.recipe.del') }}</button>
+      <div class="panel">
+        <div class="panel-bd">
+          <button @click.prevent="deleteRecipe" class="btn btn-primary btn-lg mt10 mb10">{{ $t('ui.recipe.del') }}</button>
+        </div>
       </div>
-    </div>
+    </template>
+    <template v-if="curr===1">
+      <div class="panel mt20">
+        <div class="panel-hd">
+          <h2>烹饪设备列表</h2>
+        </div>
+        <div class="panel-bd">
+          <div class="data-table with-loading">
+            <div class="icon-loading" v-show="loadingData">
+              <i class="fa fa-refresh fa-spin"></i>
+            </div>
+            <table class="table table-stripe table-bordered">
+              <thead>
+                <tr>
+                  <th class="wp20">烹饪设备</th>
+                  <th>指令</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>烤箱</td>
+                  <td><span class="hl-red">{time:80s,temp:80}</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </template>
   </div>
 </template>
 
@@ -43,7 +78,9 @@ export default {
         link: `/operation/plugins/cookbook/${this.$route.params.app_id}/recipes`
       }, {
         label: '编辑菜谱'
-      }]
+      }],
+      nav: ['基本信息', '烹饪设置'],
+      curr: 0
     }
   },
 
@@ -73,3 +110,40 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+@import '../../../../../assets/stylus/common'
+
+// 选项卡
+.tab
+  margin 5px 0
+  padding 0 15px
+  border-bottom 1px solid default-border-color
+
+  ul
+    reset-list()
+    font-size 0
+
+  li
+    display inline-block
+    font-size 13px
+
+    a
+      display block
+      padding 0 20px
+      line-height 28px
+      color gray
+
+      &:hover
+        text-decoration none
+        color gray-darker
+
+      &.active
+        height 28px
+        background-color #fff
+        border 1px solid default-border-color
+        border-bottom none!important
+        position relative
+        bottom -1px
+        font-weight bold
+</style>
