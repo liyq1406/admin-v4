@@ -37,7 +37,7 @@
             <li class="issue-list-item" v-for="issue in issues">
               <a v-link="{path: '/operation/plugins/helpdesk/' + $route.params.app_id + '/issues/' + issue._id}">
                 <i class="fa fa-check-square-o"></i>
-                <span class="info">{{ issue.content }}</span>
+                <span class="info overhid">{{ issue.content }}</span>
                 <span class="metas"><span v-if="issue.label">[{{ issue.label[0] }}]</span><span v-else>[暂无分类]</span><span>{{ issue.create_time | formatDate}}</span></span>
               </a>
             </li>
@@ -404,7 +404,8 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
-
+.overhid
+  word-wrap break-word
 .issue-list
   position relative
   margin-bottom 40px
