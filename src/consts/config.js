@@ -2,7 +2,7 @@
  * 项目基本配置
  * @type {Object}
  */
-
+let protocol = `${window.location.protocol}`
 // 测试服务器地址
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
@@ -16,14 +16,14 @@
 // 开发者本地
 // const DEFAULT_API_SERVER: 'http://localhost:8887',
 // 正式地址
-// const DEFAULT_API_SERVER = 'https://api2.xlink.cn:443'
+// const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn:443`
 // 灰
-const DEFAULT_API_SERVER = 'https://api-grey.xlink.cn:443'
+const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn:443`
 
 // 插件服务器地址
 // const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
 // 插件服务器灰度地址
-const DEFAULT_PLUGIN_SERVER = 'http://api-grey.xlink.cn:3000'
+const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn:3000`
 // 测试 demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
 // 天际
