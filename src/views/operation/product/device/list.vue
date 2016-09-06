@@ -260,6 +260,7 @@ export default {
 
   route: {
     data () {
+      this.query = ''
       this.originAddModel = _.clone(this.addModel)
       this.getDevices()
 
