@@ -638,6 +638,8 @@ export default {
        */
       api.statistics.getHeavyBugerSummary().then((res) => {
         this.devicesCount = res.data.device
+        this.addMajorClientsCount = res.data.current_month_heavy_buger
+        this.addDevicesCount = res.data.current_month_device
       }).catch((res) => {
         this.handleError(res)
       })
@@ -646,23 +648,23 @@ export default {
        * 获取本月新增大客户数和新增设备数
        * @return {[type]} [description]
        */
-      var year = new Date().getFullYear()
-      var month = new Date().getMonth() + 1
-      var day = new Date().getDate()
-      var startDay = `${year}-${month}-01`
-      var endDay = `${year}-${month}-${day}`
-      api.statistics.getHeavyBugerTrend(startDay, endDay).then((res) => {
-        var addMajorClientsCount = 0
-        var addDevicesCount = 0
-        res.data.map((item) => {
-          addMajorClientsCount += item.add_heavy_buger
-          addDevicesCount += item.add_device
-        })
-        this.addMajorClientsCount = addMajorClientsCount
-        this.addDevicesCount = addDevicesCount
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      // var year = new Date().getFullYear()
+      // var month = new Date().getMonth() + 1
+      // var day = new Date().getDate()
+      // var startDay = `${year}-${month}-01`
+      // var endDay = `${year}-${month}-${day}`
+      // api.statistics.getHeavyBugerTrend(startDay, endDay).then((res) => {
+      //   var addMajorClientsCount = 0
+      //   var addDevicesCount = 0
+      //   res.data.map((item) => {
+      //     addMajorClientsCount += item.add_heavy_buger
+      //     addDevicesCount += item.add_device
+      //   })
+      //   this.addMajorClientsCount = addMajorClientsCount
+      //   this.addDevicesCount = addDevicesCount
+      // }).catch((res) => {
+      //   this.handleError(res)
+      // })
     },
     /**
      * 获取大客户列表
