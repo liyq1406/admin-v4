@@ -94,7 +94,7 @@
           </tbody>
         </table>
       </div>
-      <!-- <pager v-if="total > countPerPage" :total="firmwares.length" :current.sync="currentPage"  :count-per-page="countPerPage"@count-update="pageCountUpdate" @page-update="currentPageChange"></pager> -->
+      <pager v-if="total > 0" :total="total" :current.sync="currentPage"  :count-per-page="countPerPage "@count-update="pageCountUpdate"  @page-update="currentPageChange"></pager>
     </div>
   </div>
 </template>
@@ -245,7 +245,8 @@ export default {
      * @return {[type]}      [description]
      */
     currentPageChange (page) {
-      console.log(page)
+      this.currentPage = page
+      this.getFirmwares()
     },
     /**
      * 每页显示数量改变
@@ -253,7 +254,6 @@ export default {
      * @return {[type]}       [description]
      */
     pageCountUpdate (count) {
-      console.log(count)
       this.countPerPage = count - 0
       this.getFirmwares()
     },
@@ -305,6 +305,7 @@ export default {
      * 获取固件列表
      */
     getFirmwares () {
+      // TODO 改接口 需要做分页功能
       this.loadingFirmwares = true
       api.product.getFirmwares(this.currProduct.id).then((res) => {
         if (res.status === 200) {
