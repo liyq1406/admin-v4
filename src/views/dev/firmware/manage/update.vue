@@ -218,11 +218,20 @@
         return unable
       }
     },
-
-    route: {
-      data () {
+    watch: {
+      products () {
+        this.selectProduct = this.products[0]
       }
     },
+
+    created () {
+      this.selectProduct = this.products[0]
+    },
+    // route: {
+    //   data () {
+    //     this.selectProduct = this.products[0]
+    //   }
+    // },
     methods: {
       // 添加固件版本操作
       onAddSubmit () {
