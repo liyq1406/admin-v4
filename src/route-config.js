@@ -924,8 +924,24 @@ let configRouter = (router) => {
         '/plugins/recipes/:app_id/recipes/:id/edit': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipes/recipe/edit'))
+              resolve(require('./views/operation/plugin/recipes/recipe/edit/index'))
             }, 'admin')
+          },
+          subRoutes: {
+            'basic-info': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/recipes/recipe/edit/basic-info'))
+                }, 'admin')
+              }
+            },
+            'devices': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/recipes/recipe/edit/devices'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 菜单列表
@@ -1497,7 +1513,7 @@ let configRouter = (router) => {
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
-    '/operation/plugins/recipe/:app_id': '/operation/plugins/recipe/:app_id/list',
+    '/operation/plugins/recipes/:app_id/recipes/:id/edit': '/operation/plugins/recipes/:app_id/recipes/:id/edit/basic-info',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/extended-warranties',
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',

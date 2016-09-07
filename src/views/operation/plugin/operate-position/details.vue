@@ -125,7 +125,7 @@ export default {
         limit: 1,
         offset: 0
       }
-      api.operate.getOperatePosition(this.appID, token, params).then((res) => {
+      api.operate.getOperatePositions(this.appID, token, params).then((res) => {
         this.operatePosition = res.data.list[0]
       })
       this.getOperatePositionContents()
@@ -152,7 +152,7 @@ export default {
         offset: 0
       }
 
-      api.operate.getOperatePositionContent(appId, token, condition).then((res) => {
+      api.operate.getOperatePositionsContent(appId, token, condition).then((res) => {
         if (res.status === 200) {
           this.stallContentList = res.data.list
         }

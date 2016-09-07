@@ -6,7 +6,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getType (appId, token, params) {
+  getCategories (appId, token, params) {
     return http.post(
       `${API_SERVER.recipes}/${appId}/api/recipeProps/list`, params, {
         headers: {
@@ -20,7 +20,7 @@ export default {
   /**
    * 类别保存
    */
-  setType (appId, token, params) {
+  createCategory (appId, token, params) {
     return http.post(
       `${API_SERVER.recipes}/${appId}/api/recipeProps/save`, params, {
         headers: {
@@ -34,7 +34,7 @@ export default {
   /**
    * 类别编辑
    */
-  editType (appId, recipePropsID, token, params) {
+  updateCategory (appId, recipePropsID, token, params) {
     return http.put(
       `${API_SERVER.recipes}/${appId}/api/recipeProps/update/${recipePropsID}`, params, {
         headers: {
@@ -48,7 +48,7 @@ export default {
   /**
    * 类别删除
    */
-  delType (appId, recipePropsID, token) {
+  deleteCategory (appId, recipePropsID, token) {
     return http.del(
       `${API_SERVER.recipes}/${appId}/api/recipeProps/delete/${recipePropsID}`, {}, {
         headers: {

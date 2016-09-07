@@ -40,8 +40,9 @@
         </div>
         <div class="form-actions row">
           <div class="col-offset-4">
-            <button class="btn btn-primary btn-lg" @click.prevent.stop="previewArticle">预览</button>
             <button class="btn btn-primary btn-lg">提交</button>
+            <!-- <button class="btn btn-ghost btn-lg" @click.prevent.stop="previewArticle">预览</button> -->
+            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" v-if="type==='edit'">删除</button>
           </div>
         </div>
       </form>
@@ -143,7 +144,12 @@ export default {
      * @author shengzhi
      */
     onArticleSubmit () {
-      if (this.$validation.invalid || this.submitting) return
+      if (this.submiting) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
 
       let process
       let noticeCont = ({
@@ -163,6 +169,25 @@ export default {
             content: noticeCont
           })
           this.$route.router.go(`/operation/plugins/content/${this.$route.params.app_id}`)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 删除文章
+     */
+    deleteArticle () {
+      if (!window.confirm('确定要删除该篇文章吗？')) return
+
+      api.content.delArticle(this.$route.params.app_id, this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '文章删除成功'
+          })
+          this.$route.router.go({path: `/operation/plugins/content/${this.$route.params.app_id}`})
         }
       }).catch((res) => {
         this.handleError(res)

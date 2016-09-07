@@ -27,8 +27,8 @@
             <label v-if="type === 'edit'" class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
             </label>
-            <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onCancel" class="btn btn-default" v-if="type==='edit'">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </validator>
@@ -128,7 +128,12 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.$validation.invalid || this.submiting) return
+      if (this.submiting) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
@@ -143,19 +148,22 @@ export default {
 
       if (this.isSub) {
         params.parent_id = this.$route.params.parent_id
+      } else {
+        params.parent_id = 0
       }
 
       if (this.type === 'add') {
         // 添加
         params.creator = this.currentMember.name
-        process = api.recipes.setType(appId, token, params)
+        process = api.recipes.createCategory(appId, token, params)
       } else {
+        console.log(1111)
         if (this.delChecked) {
           // 删除
-          process = api.recipes.delType(appId, this.category._id, token)
+          process = api.recipes.deleteCategory(appId, this.category._id, token)
         } else {
           //  更新
-          process = api.recipes.editType(appId, this.category._id, token, params)
+          process = api.recipes.updateCategory(appId, this.category._id, token, params)
         }
       }
       process.then((res) => {

@@ -179,6 +179,7 @@
             <div class="col-offset-4">
               <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
               <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
+              <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
             </div>
           </div>
         </form>
@@ -467,7 +468,7 @@ export default {
         }
       }
       this.loadingData = true
-      api.recipes.getType(appId, token, condition).then((res) => {
+      api.recipes.getCategories(appId, token, condition).then((res) => {
         if (res.status === 200) {
           console.log(res.data.list)
           res.data.list.forEach((item) => {
@@ -499,7 +500,7 @@ export default {
         }
       }
       this.loadingData = true
-      api.recipes.getType(appId, token, condition).then((res) => {
+      api.recipes.getCategories(appId, token, condition).then((res) => {
         if (res.status === 200) {
           console.log(res.data.list)
           res.data.list.forEach((item) => {
@@ -530,7 +531,7 @@ export default {
         }
       }
       this.loadingData = true
-      api.recipes.getType(appId, token, condition).then((res) => {
+      api.recipes.getCategories(appId, token, condition).then((res) => {
         if (res.status === 200) {
           res.data.list.forEach((item) => {
             var obj = {}
@@ -729,6 +730,29 @@ export default {
       }).catch((res) => {
         this.handleError(res)
         this.editing = false
+      })
+    },
+
+    /**
+     * 删除菜谱
+     */
+    deleteRecipe () {
+      if (!window.confirm('确定要删除该菜谱吗？')) return
+
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+
+      api.recipes.delRecipes(appId, this.$route.params.id, token).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '菜谱删除成功'
+          })
+          this.$route.router.go({path: `/operation/plugins/recipes/${this.$route.params.app_id}/recipes`})
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     }
   }

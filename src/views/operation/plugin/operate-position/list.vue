@@ -196,7 +196,7 @@
         this.loadingData = true
         this.appID = this.$route.params.app_id
         this.token = JSON.parse(window.localStorage.pluginsToken)[this.appID].token
-        api.operate.getOperatePosition(this.appID, this.token, this.queryCondition).then((res) => {
+        api.operate.getOperatePositions(this.appID, this.token, this.queryCondition).then((res) => {
           console.log(res.data.list)
           this.operationPostions = res.data.list
           this.total = res.data.count
@@ -212,12 +212,11 @@
        * 添加运营位
        * @return {[type]} [description]
        */
-      addStall () {
+      addOperatePosition () {
         if (this.$validation.valid) {
           var params = this.modal.operationPostion
           params.content = []
           params.creator = this.currentMember.name
-          params.create_time = (new Date()).toISOString()
           api.operate.addOperatePosition(this.appID, this.token, params).then((res) => {
             this.getOperatePositions()
             this.closeModal()
@@ -235,7 +234,7 @@
        * 更新运营位
        * @return {[type]} [description]
        */
-      updateStall () {
+      updateOperatePosition () {
         if (this.$validation.valid) {
           var params = this.modal.operationPostion
           params.content = []
@@ -256,7 +255,7 @@
        * 删除运营位
        * @return {[type]} [description]
        */
-      deleteStall () {
+      delOperatePosition () {
         console.log('删除运营位')
         console.log(this.modal.operationPostion)
         api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id).then((res) => {
@@ -300,12 +299,12 @@
       onSubmit () {
         this.modal.editing = true
         if (this.modal.type === 'add') { // 添加运营位
-          this.addStall()
+          this.addOperatePosition()
         } else { // 编辑运营位
           if (this.modal.delChecked) { // 删除运营位
-            this.deleteStall()
+            this.delOperatePosition()
           } else { // 编辑运营位
-            this.updateStall()
+            this.updateOperatePosition()
           }
         }
       },
@@ -328,24 +327,3 @@
     }
   }
 </script>
-<style lang="stylus">
-  @import '../../../../assets/stylus/common'
-
-  .operate-stall
-    .form
-      .picture
-        height 74px
-        line-height 32px
-        .tips
-          height 32px
-          margin-bottom 10px
-      .form-actions
-        margin-top 40px
-
-    .panel-hd
-      padding-bottom 10px
-      .actions .btn
-        height 32px
-        line-height 32px
-
-</style>

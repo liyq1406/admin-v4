@@ -202,7 +202,7 @@ export default {
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
       params.query._id = this.$route.params.parent_id
-      api.recipes.getType(appId, token, params).then((res) => {
+      api.recipes.getCategories(appId, token, params).then((res) => {
         if (res.status === 200) {
           this.parentCategory = res.data.list[0]
         }
@@ -220,7 +220,7 @@ export default {
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
       this.loadingData = true
-      api.recipes.getType(appId, token, this.queryCondition).then((res) => {
+      api.recipes.getCategories(appId, token, this.queryCondition).then((res) => {
         if (res.status === 200) {
           this.subCategories = res.data.list
           // 记录数

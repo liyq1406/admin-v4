@@ -68,8 +68,8 @@
               <label v-if="modal.type === 'edit'" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此设备
               </label>
-              <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>
@@ -192,7 +192,12 @@ export default {
     },
 
     onSubmit () {
-      if (this.$validation.invalid || this.submiting) return
+      if (this.submiting) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
 
       this.submiting = true
       let appId = this.$route.params.app_id

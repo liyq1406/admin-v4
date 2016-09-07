@@ -64,7 +64,8 @@ export default {
       },
       addModel: {
         name: '',
-        instructions: ''
+        instructions: '',
+        parent_id: 0
       },
       category: {},
       delChecked: false
@@ -108,10 +109,9 @@ export default {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {
-          parent_id: 0
-        },
-        order: {
-          create_time: -1
+          parent_id: {
+            $in: [0]
+          }
         }
       }
       return condition
@@ -190,7 +190,7 @@ export default {
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
       this.loadingData = true
-      api.recipes.getType(appId, token, this.queryCondition).then((res) => {
+      api.recipes.getCategories(appId, token, this.queryCondition).then((res) => {
         if (res.status === 200) {
           // 虚拟数据开始----------------------------
           // res.data.list = [{

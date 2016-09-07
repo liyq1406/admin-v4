@@ -6,7 +6,7 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getOperatePosition (appID, token, params) {
+  getOperatePositions (appID, token, params) {
     return http.post(
       `${API_SERVER.operate}/${appID}/api/operatePosition/list`, params, {
         headers: {
