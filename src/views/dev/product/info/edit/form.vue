@@ -163,9 +163,8 @@
           if (window.confirm('确认删除该产品吗?')) {
             api.product.deleteProduct(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.resetEdit()
                 this.removeProduct(this.currentProduct)
-                this.$route.router.go('/dev')
+                alert('删除成功')
               }
             }).catch((res) => {
               this.handleError(res)
@@ -183,7 +182,6 @@
           api.product.updateProduct(this.editModel).then(() => {
             api.product.getProduct(this.$route.params.id).then((res) => {
               if (res.status === 200) {
-                this.resetEdit()
                 this.updateProduct(res.data)
                 this.editing = false
               }
