@@ -38,7 +38,7 @@
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey"></x-table>
         </div>
       </div>
     </div>
@@ -111,7 +111,7 @@ export default {
           title: '设备ID'
         },
         {
-          key: 'time',
+          key: 'create_date',
           title: '时间',
           sortType: -1
         },
@@ -171,6 +171,13 @@ export default {
           }
         }
       }
+
+      this.headers.map((item) => {
+        if (item.sortType) {
+          params.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+        }
+      })
+
       return params
     },
     tables () {
@@ -179,7 +186,7 @@ export default {
         var alert = {
           mac: item.mac,
           id: item.from,
-          time: item.create_date,
+          create_date: formatDate(item.create_date),
           duration: item.lasting + 'h',
           state: item.is_read ? '已处理' : '未处理',
           prototype: item
@@ -191,6 +198,21 @@ export default {
   },
 
   methods: {
+    /**
+     * 按某个属性排序
+     * 国辉
+     * @param  {[type]} table [description]
+     * @return {[type]}       [description]
+     */
+    sortBySomeKey (header, index) {
+      if (header.sortType === 1) {
+        header.sortType = -1
+      } else {
+        header.sortType = 1
+      }
+      this.headers.$set(index, header)
+      this.getList()
+    },
     currentPageChange (number) {
       this.currentPage = number
       this.getList()
