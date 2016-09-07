@@ -238,6 +238,30 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 编辑产品信息
+        'products/:id/info/edit': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/info/edit/index'))
+            }, 'admin')
+          },
+          subRoutes: {
+            'form': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/info/edit/form'))
+                }, 'admin')
+              }
+            },
+            'word': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/info/edit/word'))
+                }, 'admin')
+              }
+            }
+          }
+        },
         // 导入记录
         'products/:id/info/list/:import_id': {
           component (resolve) {
@@ -1496,6 +1520,7 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/login',
     '/dev': '/dev/home',
+    '/dev/products/:id/info/edit': '/dev/products/:id/info/edit/form',
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',
