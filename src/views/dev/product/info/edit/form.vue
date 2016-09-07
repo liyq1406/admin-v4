@@ -176,7 +176,6 @@
         }
       },
       onSubmit () {
-        console.log('表单提交')
         if (this.$validation.valid && !this.editing) { // 编辑
           this.editing = true
           api.product.updateProduct(this.editModel).then(() => {
@@ -184,6 +183,10 @@
               if (res.status === 200) {
                 this.updateProduct(res.data)
                 this.editing = false
+                this.showNotice({
+                  type: 'success',
+                  content: '更新成功！'
+                })
               }
             })
           }).catch((res) => {
