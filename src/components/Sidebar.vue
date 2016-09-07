@@ -106,10 +106,13 @@ export default {
      * 判断链接是否激活
      */
     isActive (link) {
-      link = this.genTopLevelLink(link).split('/#!')[1]
-      let path = this.$route.path
-      let reg = new RegExp(link, 'i')
-      return reg.test(path)
+      if (this.genTopLevelLink(link)) {
+        link = this.genTopLevelLink(link).split('/#!')[1]
+        let path = this.$route.path
+        let reg = new RegExp(link, 'i')
+        return reg.test(path)
+      }
+      return false
     },
 
     /**
