@@ -33,7 +33,7 @@
                   <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a></td>
                   <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
                   <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-                  <td><span>{{ locales.data.MEMBER_TYPES[member.role-1] }}</span></td>
+                  <td><span>{{ MEMBER_TYPES[member.role-1] }}</span></td>
                   <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{statusText(member.status)}}</span></td>
                   <td>{{ member.last_auth_time | formatDate}}</td>
                   <!-- <td class="tac" v-if ="this.currentMember.role === 1">
@@ -98,9 +98,9 @@
                 <label class="form-control col-6">{{ $t("ui.member.fields.role") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
-                    <x-select :label="locales.data.MEMBER_TYPES[addModel.type-1]">
+                    <x-select :label="MEMBER_TYPES[addModel.type]">
                       <select v-model="addModel.type" name="addModel.type">
-                        <option v-for="type in locales.data.MEMBER_TYPES" :value="$index + 1" :selected="$index===1">{{ type }}</option>
+                        <option v-for="type in MEMBER_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                       </select>
                     </x-select>
                   </div>
@@ -154,11 +154,12 @@ import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import { globalMixins } from 'src/mixins'
+import { editPasswordMixin } from '../mixins'
 
 export default {
   name: 'MemberSettings',
 
-  mixins: [globalMixins],
+  mixins: [globalMixins, editPasswordMixin],
 
   components: {
     'search-box': SearchBox,
