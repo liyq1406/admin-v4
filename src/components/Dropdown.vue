@@ -1,6 +1,6 @@
 <template>
   <div class="x-dropdown-wrap" :class="classes">
-    <div class="trigger" @click="show=!show" :style="triggerStyle">
+    <div class="trigger" @click="onTriggerClick" :style="triggerStyle">
       <slot name="trigger">
         <i class="fa fa-bars"></i>
       </slot>
@@ -21,8 +21,7 @@ export default {
     // 是否显示下拉框
     show: {
       type: Boolean,
-      default: false,
-      twoway: true
+      default: false
     },
 
     // 下拉框宽度
@@ -102,6 +101,16 @@ export default {
     if (this._closeEvent) {
       this._closeEvent.remove()
     }
+  },
+
+  methods: {
+    /**
+     * 处理点击
+     */
+    onTriggerClick () {
+      this.show = !this.show
+      this.$emit('toogle', this.show)
+    }
   }
 }
 </script>
@@ -122,7 +131,6 @@ export default {
     text-align center
     cursor pointer
     background-color #FCFCFC
-    border 1px solid #BCBCBC
     box-sizing border-box
 
     i

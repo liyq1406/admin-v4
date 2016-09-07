@@ -1,6 +1,6 @@
 <template>
   <div class="with-loading">
-    <content-form form-type="add"></content-form>
+    <content-form form-type="edit"></content-form>
   </div>
 </template>
 
@@ -9,7 +9,7 @@ import ContentForm from './components/ContentForm'
 import { globalMixins } from 'src/mixins'
 
 export default {
-  name: 'AddContent',
+  name: 'EditContent',
 
   mixins: [globalMixins],
 

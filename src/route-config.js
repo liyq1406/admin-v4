@@ -1062,10 +1062,18 @@ let configRouter = (router) => {
           }
         },
         // 运营位添加内容
-        '/plugins/operate-position/:app_id/stall/:id/add': {
+        '/plugins/operate-position/:app_id/stall/:id/add/:contentType': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/add'))
+            }, 'admin')
+          }
+        },
+        // 运营位编辑内容
+        '/plugins/operate-position/:app_id/stall/:id/edit/:contentType/:contentId': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/operate-position/edit'))
             }, 'admin')
           }
         },
