@@ -320,7 +320,7 @@ export default {
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
-      api.recipes.getType(appId, token, condition).then((res) => {
+      api.recipes.getCategories(appId, token, condition).then((res) => {
         if (res.status === 200) {
           this.categories = res.data.list
         }

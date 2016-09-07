@@ -58,6 +58,7 @@
             <div class="col-offset-4">
               <button type="submit" :disabled="submiting" :class="{'disabled': submiting}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
               <!-- <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-lg">预览</button> -->
+              <button @click.prevent="deleteMenu" class="btn btn-ghost btn-lg" v-if="type==='edit'">删除该菜单</button>
             </div>
           </div>
         </form>
@@ -346,6 +347,29 @@ export default {
       }).catch((res) => {
         this.handleError(res)
         this.editing = false
+      })
+    },
+
+    /**
+     * 删除菜单
+     */
+    deleteMenu () {
+      if (!window.confirm('确定要删除该菜单吗？')) return
+
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+
+      api.recipes.delMenu(appId, this.$route.params.id, token).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '菜单删除成功'
+          })
+          this.$route.router.go({path: `/operation/plugins/recipes/${this.$route.params.app_id}/menus`})
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
 

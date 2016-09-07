@@ -256,7 +256,7 @@
               condition.query['status'] = { $in: [2] }
               break
             case 3: // 在线
-              condition.query['is_online'] = true
+              condition.query['is_online'] = {$in: [true]}
               break
             default:
               break
