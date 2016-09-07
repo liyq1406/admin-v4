@@ -47,6 +47,15 @@ export const API_SERVER = {
 
   // 环境数据
   airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`
+
+  // 云菜谱
+  cookbook: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
+
+  // 内容管理
+  content: `${DEFAULT_PLUGIN_SERVER}/module/contents`,
+
+  // 运营位管理
+  operate: `${DEFAULT_PLUGIN_SERVER}/module/operatePosition`
 }
 
 // 默认每页记录数

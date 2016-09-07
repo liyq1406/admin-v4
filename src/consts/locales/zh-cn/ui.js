@@ -159,6 +159,14 @@ export default {
             list: '经销商列表'
           }
         },
+        cookbook: {
+          subs: {
+            recipes: '菜谱管理',
+            menus: '菜单管理',
+            categories: '类别管理',
+            tags: '标签管理'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {
@@ -885,7 +893,8 @@ export default {
       name: '请填写菜谱标题',
       instructions: '请填写菜谱描述',
       tips: '请填写菜谱备注',
-      search_condi: '请填写查询条件'
+      search_condi: '请填写查询条件',
+      skill: '在此添加烹饪技巧'
     },
     fields: {
       name: '标题',

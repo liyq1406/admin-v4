@@ -82,7 +82,9 @@
     },
 
     destroyed () {
-      tinymce.remove()
+      window.setTimeout(() => {
+        tinymce.remove()
+      }, 500)
     },
     watch: {
       value () {

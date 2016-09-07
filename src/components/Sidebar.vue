@@ -16,7 +16,7 @@
             </template>
             <!-- 导航菜单 -->
             <template v-else>
-              <a class="nav-aside-item-title" v-link="{path: nav.url + '/' + (item.url || item.alias) + (item.id?'/' + item.id:'')}" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
+              <a class="nav-aside-item-title" :href="genTopLevelLink(item)" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
               <ul class="sub-nav" v-show="item.subs && item.subs.length && item.unfold">
                 <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + strikeToLodash(link.alias)) }}</span></a></li>
               </ul>
@@ -89,6 +89,16 @@ export default {
   // },
 
   methods: {
+    genTopLevelLink (link) {
+      let result = `/#!${this.nav.url}/${link.url || link.alias}${link.id ? '/' + link.id : ''}`
+
+      if (link.alias === 'web') {
+        result = link.url
+      }
+
+      return result
+    },
+
     /**
      * 中划线转下划线
      * @param  {String} val  目标值
