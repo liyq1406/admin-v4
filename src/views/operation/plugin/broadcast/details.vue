@@ -21,7 +21,7 @@
         <statistic :total="readPercent" total-unit="%" title="阅读率" align="left"></statistic>
       </div>
     </div>
-    <div class="panel no-split-line mt20">
+    <div class="panel mt20">
       <div class="filter-bar">
         <div class="filter-group fr">
           <!-- <div class="filter-group-item">

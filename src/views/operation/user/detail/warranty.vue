@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">

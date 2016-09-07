@@ -155,7 +155,7 @@
 
     .select-box
       display inline-block
-      margin-bottom 5px
+
     .x-select
       margin-right 5px !important
       font-size 14px !important

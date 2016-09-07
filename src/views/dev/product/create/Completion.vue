@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <div class="panel-body">
       <div class="completion row">
         <div class="pro-info col-8">

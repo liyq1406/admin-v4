@@ -31,7 +31,7 @@
     </div>
 
     <!-- 主内容 -->
-    <div class="panel no-split-line">
+    <div class="panel">
       <div class="panel-bd apps-container" v-show="appList.length>0">
         <!-- 应用列表  -->
         <div class="app-list-box">

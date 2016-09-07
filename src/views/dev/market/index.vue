@@ -5,7 +5,7 @@
         <h2>应用市场</h2>
       </div>
     </div>
-    <div class="panel no-split-line">
+    <div class="panel">
       <div class="panel-hd">
         <p class="market-introduce">云智易物联平台提供多样化的功能扩展，根据您的需求扩展以下服务，让企业服务能力更丰富。</p>
       </div>

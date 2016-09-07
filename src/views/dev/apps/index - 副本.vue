@@ -5,7 +5,7 @@
         <h2>应用中心</h2>
       </div>
     </div>
-    <div class="panel no-split-line">
+    <div class="panel">
       <!-- <div class="panel-hd bordered">
         <h2>应用中心</h2>
       </div> -->

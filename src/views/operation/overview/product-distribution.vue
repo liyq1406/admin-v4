@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <div class="panel-hd panel-hd-full bordered">
       <h2>产品分布</h2>
     </div>

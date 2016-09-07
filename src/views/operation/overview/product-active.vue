@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <div class="panel-hd panel-hd-full bordered">
       <div class="actions">
         <radio-button-group style="float:right" :items="locales.data.PERIODS" :value.sync="period"  @select="activeSelect"><span slot="label" class="label"></span></radio-button-group>

@@ -3,7 +3,7 @@
     <div class="main-title bordered">
       <h2>产品信息</h2>
     </div>
-    <div class="panel no-split-line mt20">
+    <div class="panel mt20">
       <div class="panel-bd">
         <div class="row">
           <div class="col-16">

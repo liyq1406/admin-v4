@@ -1,15 +1,15 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>{{pageType==='add'?'新建推送':'编辑推送'}}</h2>
     </div>
     <div class="container row">
       <div class="form-box col-16">
         <validator name="validation">
           <form novalidate @submit.prevent="onSubmit">
-            <div class="panel">
-              <div class="panel-hd">
-                <h3><i class="number">1</i> 推送人群</h3>
+            <div class="panel mt20">
+              <div class="panel-hd bordered">
+                <h2><i class="number">1</i> 推送人群</h2>
               </div>
               <div class="panel-bd">
                 <div class="form">
@@ -161,8 +161,8 @@
               </div>
             </div>
             <div class="panel">
-              <div class="panel-hd">
-                <h3><i class="number">2</i> 推送内容</h3>
+              <div class="panel-hd bordered">
+                <h2><i class="number">2</i> 推送内容</h2>
               </div>
               <div class="panel-bd">
                 <div class="form">
@@ -194,8 +194,8 @@
               </div>
             </div>
             <div class="panel">
-              <div class="panel-hd">
-                <h3><i class="number">3</i> 推送时间</h3>
+              <div class="panel-hd bordered">
+                <h2><i class="number">3</i> 推送时间</h2>
               </div>
               <div class="panel-bd">
                 <div class="form">
@@ -229,8 +229,8 @@
               </div>
             </div>
             <div class="panel">
-              <div class="panel-hd">
-                <h3><i class="number">4</i> 打开方式</h3>
+              <div class="panel-hd bordered">
+                <h2><i class="number">4</i> 打开方式</h2>
               </div>
               <div class="panel-bd">
                 <div class="form">
@@ -718,7 +718,10 @@
 
 <style lang="stylus" scoped>
   @import '../../../../assets/stylus/common'
-
+  .panel
+    .panel-hd
+      h3
+        margin 10px 0
   .number
     display inline-block
     width 20px
@@ -733,6 +736,7 @@
     bottom 2px
   .form
     max-width 640px
+    padding-top 10px
     padding-left 30px
     box-sizing border-box
     .directional .form-row.userTag
@@ -760,8 +764,6 @@
       padding-bottom 5px
       .label
         line-height 26px
-  .panel
-    border-bottom 0
   .select-group
     .x-select
       display inline-block

@@ -5,7 +5,7 @@
     </div>
     <div class="container">
       <div class="device-details-box row">
-        <div class="panel no-split-line" :class="mainPanelClass">
+        <div class="panel" :class="mainPanelClass">
           <div class="panel-hd bordered row">
             <div class="msg-box fl col-10">
               <div class="title">

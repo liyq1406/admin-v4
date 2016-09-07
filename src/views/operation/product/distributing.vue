@@ -1,81 +1,41 @@
 <template>
-  <div class="main">
-    <div class="main-title">
+  <div class="panel">
+    <div class="panel-hd bordered panel-hd-full">
       <h2>热力分布</h2>
     </div>
-    <!-- <div class="mb10 ml15">
-      <a style="color: red">全部</a>
-      <i class="arrow">&gt;</i>
-      <a style="color: red">国家: 中国 <i class="fa fa-sort-down" style="color: black"></i></a>
-      <i class="arrow">&gt;</i>
-      <a style="color: red">省份: 广东 <i class="fa fa-sort-down" style="color: black"></i></a>
-    </div> -->
-    <!-- <div class="filter-bar filter-bar-head">
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
+    <div class="panel-bd">
+      <div class="row">
+        <div class="col-11">
+          <china-heat-map :data="regionData"></china-heat-map>
         </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="locales.data.PERIODS" :value.sync="period"><span slot="label" class="label"></span></radio-button-group>
-        </div>
-      </div>
-    </div> -->
-    <div class="panel">
-      <div class="panel-hd bordered">
-      </div>
-      <div class="panel-bd">
-        <div class="row">
-          <div class="col-11">
-            <china-heat-map :data="regionData"></china-heat-map>
-          </div>
-          <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
-            <div class="data-table">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>地域</th>
-                    <th>设备数量</th>
-                    <th>占比</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="data in dataPer">
-                    <template v-if="data.value">
-                      <td>{{data.name}}</td>
-                      <td>{{data.value}}</td>
-                      <td>{{data.percent | toPercentDecimal 2}}</td>
-                    </template>
-                  </tr>
-                  <tr v-if="dataPer.length === 0">
-                    <td colspan="6" class="tac">
-                      <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
+        <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
+          <div class="data-table">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>地域</th>
+                  <th>设备数量</th>
+                  <th>占比</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="data in dataPer">
+                  <template v-if="data.value">
+                    <td>{{data.name}}</td>
+                    <td>{{data.value}}</td>
+                    <td>{{data.percent | toPercentDecimal 2}}</td>
+                  </template>
+                </tr>
+                <tr v-if="dataPer.length === 0">
+                  <td colspan="6" class="tac">
+                    <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-      <!-- <div class="panel-bd">
-        <div class="data-table">
-          <div class="filter-bar">
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa- fa-share-square-o"></i></button>
-              </div>
-              <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" placeholder="请输入搜索内容" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  <label>{{ $t('ui.user.search_user') }}</label>
-                </search-box>
-              </div>
-            </div>
-            <h3>明细</h3>
-          </div>
-          <x-table :headers="headers" :tables="tables" :page="page"></x-table>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>

@@ -1,7 +1,10 @@
 <template>
-  <div>
-    <panel title="用户分布">
-      <div class="row border-top-style">
+  <div class="panel">
+    <div class="panel-hd panel-hd-full bordered">
+      <h2>用户分布</h2>
+    </div>
+    <div class="panel-bd">
+      <div class="row">
         <div class="col-13 tac">
           <china-map :data="data"></china-map>
         </div>
@@ -34,7 +37,7 @@
           </div>
         </div>
       </div>
-    </panel>
+    </div>
   </div>
 </template>
 
