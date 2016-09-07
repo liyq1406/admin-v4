@@ -344,7 +344,7 @@
         border-bottom 1px solid #ddd
         cursor pointer
         box-sizing border-box
-
+        margin 0
         /*overflow hidden*/
         &:last-child
           border-right 0
