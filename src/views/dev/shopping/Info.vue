@@ -1,6 +1,6 @@
 <template>
   <div class="info-confirm">
-    <div class="panel no-split-line mt30">
+    <div class="panel mt30">
       <div class="panel-hd bordered">
         <h2><i class="num">1</i> 确认信息</h2>
       </div>
@@ -9,7 +9,7 @@
         <p>公司名称：广州云湾信息科技有限公司</p>
       </div>
     </div>
-    <div class="panel no-split-line mt30">
+    <div class="panel mt30">
       <div class="panel-hd">
         <h2><i class="num">2</i> 选择购买信息 <span class="hints"><i class="fa fa-exclamation-triangle"></i>配额数须在区间1000-20000内，已开通0台</span></h2>
       </div>

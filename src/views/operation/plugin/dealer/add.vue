@@ -6,7 +6,7 @@
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <validator name="autoValidation">
       <form novalidate @submit.prevent="onSubmit">
-        <div class="panel no-split-line">
+        <div class="panel">
           <div class="panel-hd bordered mt20">
             <h2>{{accountTitle}}</h2>
           </div>
@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <div class="panel no-split-line">
+        <div class="panel">
           <div class="panel-hd bordered mt20">
             <h2>{{dealerTitle}}</h2>
           </div>

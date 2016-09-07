@@ -16,7 +16,7 @@
             </template>
             <!-- 导航菜单 -->
             <template v-else>
-              <a class="nav-aside-item-title" :href="genTopLevelLink(item)" @click="toggle(item, $event)"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
+              <a class="nav-aside-item-title" :href="genTopLevelLink(item)" @click="toggle(item, $event)" :class="{'v-link-active':isActive(item)}"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
               <ul class="sub-nav" v-show="item.subs && item.subs.length && item.unfold">
                 <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + strikeToLodash(link.alias)) }}</span></a></li>
               </ul>
@@ -89,6 +89,9 @@ export default {
   // },
 
   methods: {
+    /**
+     * 生成顶级链接地址
+     */
     genTopLevelLink (link) {
       let result = `/#!${this.nav.url}/${link.url || link.alias}${link.id ? '/' + link.id : ''}`
 
@@ -97,6 +100,16 @@ export default {
       }
 
       return result
+    },
+
+    /**
+     * 判断链接是否激活
+     */
+    isActive (link) {
+      link = this.genTopLevelLink(link).split('/#!')[1]
+      let path = this.$route.path
+      let reg = new RegExp(link, 'i')
+      return reg.test(path)
     },
 
     /**

@@ -1,7 +1,7 @@
 <template>
   <div>
     <validator name="validation">
-      <div class="panel no-split-line">
+      <div class="panel">
         <div class="panel-body">
           <div class="info-form">
             <div class="col-thumb">

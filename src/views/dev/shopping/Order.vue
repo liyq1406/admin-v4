@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <table class="table table-bordered mt20">
       <thead>
         <tr>

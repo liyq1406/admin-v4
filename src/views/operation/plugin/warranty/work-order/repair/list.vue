@@ -20,7 +20,7 @@
         </div>
       </div>
     </div>
-    <div class="row statistic-group mb30">
+    <div class="row statistic-group mb20">
       <div class="col-6">
         <statistic :info="repairSummary.unrepair" :title="repairSummary.unrepair.title" align="left"></statistic>
       </div>

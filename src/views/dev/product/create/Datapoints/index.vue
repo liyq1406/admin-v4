@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="panel no-split-line creation-step2">
+    <div class="panel creation-step2">
       <div class="panel-body">
         <div class="filter-bar mt20">
           <div class="filter-group fr">

@@ -1,24 +1,22 @@
 <template>
-  <div>
+  <div class="main">
     <div class="main-title bordered">
       <h2>概览</h2>
     </div>
-    <panel>
-      <div class="row user-card mt15">
-        <div class="col-6 total-box">
-          <statistic :info="statistic.total" title="总用户数" color="gray" align="left" :titletop="true"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="statistic.add" title="今日新增" color="green" align="left" :titletop="true"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="statistic.active" title="今日活跃用户" color="blue" align="left" :titletop="true"></statistic>
-        </div>
-        <div class="col-6">
-          <statistic :info="statistic.seventTotal" title="过去7天活跃用户数" color="orange" align="left" :titletop="true"></statistic>
-        </div>
+    <div class="row user-card mt15">
+      <div class="col-6 total-box">
+        <statistic :info="statistic.total" title="总用户数" color="gray" align="left" :titletop="true"></statistic>
       </div>
-    </panel>
+      <div class="col-6">
+        <statistic :info="statistic.add" title="今日新增" color="green" align="left" :titletop="true"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="statistic.active" title="今日活跃用户" color="blue" align="left" :titletop="true"></statistic>
+      </div>
+      <div class="col-6">
+        <statistic :info="statistic.seventTotal" title="过去7天活跃用户数" color="orange" align="left" :titletop="true"></statistic>
+      </div>
+    </div>
     <user-trend></user-trend>
     <user-distribution></user-distribution>
   </div>
@@ -27,7 +25,6 @@
 <script>
 // import api from 'api'
 // import G2 from 'g2'
-import Panel from 'components/Panel'
 import Statistic from 'components/Statistic'
 import { globalMixins } from 'src/mixins'
 import UserTrend from './user-trend'
@@ -40,7 +37,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Panel,
     Statistic,
     UserTrend,
     UserDistribution

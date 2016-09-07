@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line mt20 mb20">
+  <div class="panel mt20 mb20">
     <div class="panel-hd">
       <h2>产品趋势</h2>
     </div>

@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <div class="panel no-split-line mt20">
+    <div class="panel mt20">
       <div class="panel-bd" v-if="dimension==='duration'">
         <interval :data="durationData" :options="chartOptions"></interval>
       </div>

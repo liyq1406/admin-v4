@@ -1,10 +1,10 @@
 <template>
   <div class="main">
-    <div class="main-title bordered">
+    <div class="main-title bordered mb10">
       <h2>APP启动图片</h2>
     </div>
     <div v-if="filterPlugins.length">
-      <div class="filter-bar ">
+      <div class="filter-bar">
         <div class="filter-group fl">
           <div class="filter-group-item">
             <x-select :label="currentPlugin.name" width="110px" size="small">
@@ -17,7 +17,7 @@
             <button class="btn btn-primary" :disabled="list.length === 5" :class="{'disabled':list.length === 5}" v-link="{ path: '/operation/plugins/splashwnd/' + this.$route.params.app_id + '/list/' + currentPlugin.id + '/add' }"><i class="fa fa-plus"></i>添加启动图片</button>
           </div>
         </div>
-        <div class="filter-group fr fontblue">
+        <div class="filter-group fr tips-text">
           <i class="fa fa-exclamation-circle" aria-hidden="true"></i>提示：添加应用启动闪屏图片，最多只能添加5张
         </div>
       </div>
@@ -332,8 +332,11 @@ export default {
   }
 }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
+.filter-bar
+  padding 7px 15px
 
-.fontblue
+.tips-text
   color #2698DD
+  line-height 28px
 </style>

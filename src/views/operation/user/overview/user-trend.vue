@@ -1,7 +1,10 @@
 <template>
-  <div class="main">
-    <panel title="用户趋势">
-      <div class="left-actions blockdiv filter-bar filter-bar-head" slot="left-actions">
+  <div class="panel">
+    <div class="panel-hd">
+      <h2>用户趋势</h2>
+    </div>
+    <div class="panel-bd">
+      <div class="filter-bar filter-bar-head filter-bar-full">
         <div class="filter-group">
           <div class="filter-group-item">
             <radio-button-group :items="userCatList" :value.sync="userCat"><span slot="label" class="label"></span></radio-button-group>
@@ -22,7 +25,7 @@
           <time-line :data="totalData" :margin="customMargin"></time-line>
         </div>
       </div>
-    </panel>
+    </div>
   </div>
 </template>
 

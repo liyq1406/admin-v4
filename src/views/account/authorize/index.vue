@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="panel no-split-line mt30">
+    <div class="panel mt30">
       <div class="panel-bd ml20 mr20">
         <div class="action-bar">
           <button class="btn btn-primary" @click.stop.prevent="addKey"><i class="fa fa-plus"></i>添加授权</button>

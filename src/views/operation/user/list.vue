@@ -6,7 +6,7 @@
     </div>
     <!-- <pre> {{ usersOnlineType | json}} </pre> -->
     <!-- Start: 产品信息统计 -->
-    <div class="row statistic-group mb30">
+    <div class="row statistic-group mb20">
       <div class="col-6" v-for="statistic in statisticArr">
         <statistic :total="statistic.value" :title="statistic.title" align="left"></statistic>
       </div>

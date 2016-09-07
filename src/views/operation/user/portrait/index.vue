@@ -3,7 +3,7 @@
     <div class="main-title">
       <h2>人群画像</h2>
     </div>
-    <div class="panel no-split-line">
+    <div class="panel">
       <!-- 性别 -->
       <div class="panel-hd panel-hd-full bordered">
         <h2>性别</h2>

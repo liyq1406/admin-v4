@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line user-device-list">
+  <div class="panel user-device-list">
     <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="filter-bar">

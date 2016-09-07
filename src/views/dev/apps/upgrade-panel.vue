@@ -2,7 +2,7 @@
   <div class="upgrade-panel">
     <!-- <validator name="autoValidation">
       <form novalidate @submit.prevent="">
-        <div class="panel no-split-line">
+        <div class="panel">
           <div class="panel-hd mt30">
             <h2 class="title">26度佳</h2>
           </div>

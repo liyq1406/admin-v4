@@ -3,7 +3,7 @@
     <div class="main-title bordered">
       <h2>邮件模板</h2>
     </div>
-    <div class="panel no-split-line mt20">
+    <div class="panel mt20">
       <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.mail_templates.general") }}</h2>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="panel no-split-line">
+  <div class="panel">
     <alert :cols="5" type="success" title="支付成功">
       <p>您的订单已成功支付</p>
     </alert>

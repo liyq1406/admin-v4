@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <div class="panel no-split-line mt20 mb30">
+    <div class="panel mt20 mb30">
       <div class="panel-hd with-actions ml20 mr20">
         <div class="actions">
           <search-box :key.sync="query" :auto="true" :active="searching" :placeholder="$t('ui.member.search_palceholder')" @cancel="cancelSearching" @search-activate="toggleSearching" @search-deactivate="toggleSearching">
