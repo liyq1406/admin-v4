@@ -452,9 +452,9 @@
               this.usersOnlineType = []
             }
             // 如果不缓存设备在线状态可以把这行注释掉
-            this.users.map((item) => {
-              this.getOnlineType(item.id)
-            })
+            // this.users.map((item) => {
+            //   this.getOnlineType(item.id)
+            // })
             if (this.allTotal === 0) {
               this.allTotal = res.data.count
             }
