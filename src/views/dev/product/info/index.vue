@@ -624,6 +624,10 @@ export default {
     getDevices (reset) {
       if (this.queryType.value === 'id') {
         if (this.query - 0 > 1620000000) {
+          this.showNotice({
+            type: 'error',
+            content: '设备ID不可超过1620000000'
+          })
           return
         }
       }

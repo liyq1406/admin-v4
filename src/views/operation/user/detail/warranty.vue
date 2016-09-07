@@ -71,20 +71,20 @@
         ],
         loadingData: false,
         workOrders: [
-          {
-            _id: '45a6dsa5sd46a',
-            create_time: '2016-1-1 19:21:32',
-            handle_time: '2016-1-1 19:21:32',
-            type: 0,
-            status: 0
-          },
-          {
-            _id: '45a6dsa5sd46a',
-            create_time: '2016-1-1 19:21:32',
-            handle_time: '2016-1-1 19:21:32',
-            type: 0,
-            status: 0
-          }
+          // {
+          //   _id: '45a6dsa5sd46a',
+          //   create_time: '2016-1-1 19:21:32',
+          //   handle_time: '2016-1-1 19:21:32',
+          //   type: 0,
+          //   status: 0
+          // },
+          // {
+          //   _id: '45a6dsa5sd46a',
+          //   create_time: '2016-1-1 19:21:32',
+          //   handle_time: '2016-1-1 19:21:32',
+          //   type: 0,
+          //   status: 0
+          // }
         ]
       }
     },

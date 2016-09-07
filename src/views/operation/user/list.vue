@@ -93,6 +93,10 @@
           {
             name: '未激活',
             value: 2
+          },
+          {
+            name: '在线',
+            value: 3
           }
         ],
         /**
@@ -214,7 +218,7 @@
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
             is_active: user.status === 1 ? '已激活' : '未激活',
-            online: this.computedOnline(user.id),
+            online: user.is_online === true ? '在线' : '下线',
             status: this.computedStatus(user.status),
             prototype: user
           }
@@ -228,7 +232,7 @@
        */
       queryCondition () {
         var condition = {
-          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
+          filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid', 'is_online'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           order: {},
@@ -250,6 +254,9 @@
               // condition.query['phone_valid'] = { $in: [false] }
               // condition.query['email_valid'] = { $in: [false] }
               condition.query['status'] = { $in: [2] }
+              break
+            case 3: // 在线
+              condition.query['is_online'] = true
               break
             default:
               break

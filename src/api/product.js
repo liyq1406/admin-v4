@@ -129,9 +129,9 @@ export default {
    * 获取固件版本列表
    * @return {Promise}
    */
-  getFirmwares (productId) {
-    return http.get(
-      `${API_SERVER.default}/v2/product/${productId}/firmwares`
+  getFirmwares (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/firmwares`, params
     )
   },
 
