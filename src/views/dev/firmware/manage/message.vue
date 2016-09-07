@@ -212,6 +212,17 @@ export default {
         countPerPage: this.countPerPage
       }
       return result
+    },
+    /**
+     * 列表查询条件
+     * @return {[type]} [description]
+     */
+    queryCondition () {
+      var condition = {
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage
+      }
+      return condition
     }
   },
   // 监听属性变动
@@ -255,6 +266,7 @@ export default {
      */
     pageCountUpdate (count) {
       this.countPerPage = count - 0
+      this.currentPage = 1
       this.getFirmwares()
     },
     // 获取第一个产品@author weijie
@@ -307,10 +319,10 @@ export default {
     getFirmwares () {
       // TODO 改接口 需要做分页功能
       this.loadingFirmwares = true
-      api.product.getFirmwares(this.currProduct.id).then((res) => {
+      api.product.getFirmwares(this.currProduct.id, this.queryCondition).then((res) => {
         if (res.status === 200) {
-          this.firmwares = res.data
-          this.total = res.data.length
+          this.firmwares = res.data.list
+          this.total = res.data.count
           this.loadingFirmwares = false
         }
       }).catch((res) => {
