@@ -293,7 +293,7 @@ export default {
 
     // 切换日志显示
     toggleLog () {
-      if (!this.showLog) {
+      if (this.showLog) {
         this.connect()
       } else {
         if (socket) {
