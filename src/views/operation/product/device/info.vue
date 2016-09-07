@@ -34,7 +34,7 @@
               <td>{{ datapoint.value }}</td>
             </tr>
             <tr v-if="filteredDatapoints.length === 0">
-              <td colspan="4" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
+              <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
                 <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
               </td>
             </tr>
