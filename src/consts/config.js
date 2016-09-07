@@ -46,7 +46,7 @@ export const API_SERVER = {
   dealer: `${DEFAULT_PLUGIN_SERVER}/module/distributer`,
 
   // 环境数据
-  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`
+  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`,
 
   // 云菜谱
   cookbook: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
