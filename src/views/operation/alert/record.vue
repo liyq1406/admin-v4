@@ -426,7 +426,8 @@ export default {
 
     // 获取告警概览@author weijie
     getSummary () {
-      var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
+      var todayBeginTime = new Date().getTime()
+      // var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
       todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
       var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
