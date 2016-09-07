@@ -327,10 +327,10 @@ export default {
           process = api.content.getArticleList(appId, this.queryCondition)
           break
         case 1:
-          process = api.cookbook.getCookbook(appId, this.token, this.queryCondition)
+          process = api.recipes.getRecipes(appId, this.token, this.queryCondition)
           break
         case 2:
-          process = api.cookbook.getMenus(appId, this.token, this.queryCondition)
+          process = api.recipes.getMenus(appId, this.token, this.queryCondition)
           break
         default:
       }

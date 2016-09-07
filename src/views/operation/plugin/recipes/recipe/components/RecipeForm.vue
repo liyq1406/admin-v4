@@ -1,0 +1,1119 @@
+<template>
+  <div class="recipe-form">
+    <div class="form with-loading">
+      <div class="icon-loading" v-show="loadingData">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
+      <validator name="validation">
+        <form novalidate @submit.prevent="onRecipeSubmit">
+          <div class="form-row row">
+            <label class="form-control col-4">{{ $t("ui.recipe.fields.name") }}:</label>
+            <div class="controls col-20">
+              <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
+                <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 250}" lazy class="input-text"/>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 250]) }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
+            <div class="controls col-7 controls-image">
+              <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
+              <!-- <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div> -->
+            </div>
+            <div class="col-13 step-text" style="height:120px;">
+              <div class="input-text-wrap" style="height:100%">
+                <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的心得吧" class="input-text"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">时长:</label>
+            <div class="controls col-20">
+              <div class="select-group">
+                <div class="select">
+                  <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
+                    <select v-model="properties.cooking_time" name="properties.cooking_time">
+                      <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
+                    </select>
+                  </v-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">难度:</label>
+            <div class="controls col-20">
+              <div class="select-group">
+                <div class="select">
+                  <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
+                    <select v-model="properties.difficulty" name="properties.difficulty">
+                      <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
+                    </select>
+                  </v-select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">{{ $t("ui.ingredient.fields.classification") }}:</label>
+            <div class="controls col-20">
+              <div class="select-group1">
+                <div class="select mrt20">
+                  <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
+                    <select v-model="category.main" @change="handleMainType(category)">
+                      <option v-for="opt in categories_main"  :value="opt" :label= "opt.name" :selected="opt.name===category.main">{{ opt.main }}</option>
+                    </select>
+                  </v-select>
+                  <v-select v-show="categories_sub.length && category.main " width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
+                    <select v-model="category.sub">
+                      <option v-for="opt in categories_sub" :value="opt" :label= "opt.name" :selected="opt.name===category.sub">{{ opt.main }}</option>
+                    </select>
+                  </v-select>
+                  <!-- <span @click="removeObj(category, classifications)" class="fa fa-times"></span> -->
+                </div>
+              </div>
+              <!-- <button @click.prevent="addCategory" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button> -->
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">主料:</label>
+            <div class=" col-20">
+              <div class="mrt20" v-for="major in major_ingredients">
+                <div class="controls col-8">
+                  <div class="form-row row">
+                    <div class="input-text-wrap">
+                      <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="controls col-offset-1 col-4">
+                  <div class="form-row row">
+                    <div class="input-text-wrap">
+                      <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
+                    </div>
+                  </div>
+                </div>
+                <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
+              </div>
+              <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">辅料:</label>
+            <div class=" col-20">
+              <div class="mrt20" v-for="minor in minor_ingredients">
+                <div class="controls col-8">
+                  <div class="form-row row">
+                    <div class="input-text-wrap">
+                      <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="controls col-offset-1 col-4">
+                  <div class="form-row row">
+                    <div class="input-text-wrap">
+                      <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
+                    </div>
+                  </div>
+                </div>
+                <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
+              </div>
+              <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">步骤:</label>
+            <div class="controls col-20">
+              <div class="alert-text">小提示：<br/>1、步骤图宽度在150像素至150像素；<br/>2、每个步骤用一段话描述，如果不需要可将内容留空；</div>
+              <div v-for="cooking_step in cooking_steps" class="step-box row">
+                <div class="col-3">第{{ $index+1 }}步:</div>
+                <div class="col-8">
+                  <image-uploader :images="cooking_step.images" @modified="onModifiedImages(cooking_step.images)" class="mb0"></image-uploader>
+                </div>
+                <div class="col-13 step-text">
+                  <div class="input-text-wrap">
+                    <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
+                  </div>
+                </div>
+                <div class="button-list">
+                  <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                  <div v-show="cooking_steps.length>1&&$index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                  <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add"><i class="icon fa fa-plus"></i></div>
+                  <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">烹饪技巧:</label>
+            <div class="controls col-20">
+              <div v-placeholder="$t('ui.recipe.placeholders.skill')" class="input-text-wrap">
+                <textarea v-model="tips" type="text" name="tips" lazy class="input-text"></textarea>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">标签:</label>
+            <div class="controls col-20">
+              <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-4">状态:</label>
+            <div class="controls col-20">
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
+                </label>
+                <label class="radio">
+                  <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
+                </label>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions row">
+            <div class="col-offset-4">
+              <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+              <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
+            </div>
+          </div>
+        </form>
+      </validator>
+    </div>
+    <!-- 预览 -->
+    <!-- <modal :show.sync="isShowPreview" width="300px">
+      <h3 slot="header">预览</h3>
+      <div slot="body" class="form">
+        <validator name="autoValidation">
+          <form novalidate >
+            <div class="form-row row">
+              <label class="form-control col-6">名称:</label>
+              <div class="controls col-18">
+              </div>
+            </div>
+          </form>
+        </validator>
+      </div>
+    </modal> -->
+    <div v-show="isShowPreview" transition="modal" class="mask">
+      <div class="preview-wrapper">
+        <div :style="dialogStyle" class="preview-dialog">
+          <div class="preview-header">
+            <h3>预览</h3>
+          </div>
+          <div class="preview-body">
+            <div class="app-header">{{ name }}</div>
+            <div class="preview-thumb">
+              <img :src="images[0]">
+            </div>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <h3>{{name}}</h3>
+              </div>
+              <div class="preview-panel-bd">
+                <p class="introduce">{{ instructions }}</p>
+                <div class="metas">
+                  <div class="meta">{{properties.difficulty}}</div>
+                  <div class="meta">{{properties.cooking_time}}</div>
+                </div>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <div class="preview-panel-hd-actions"><span>添加到我的菜篮</span></div>
+                <h3>步骤：</h3>
+              </div>
+              <div class="preview-panel-bd">
+                <table>
+                  <tbody>
+                    <tr v-for="ingredient in major_ingredients">
+                      <td>{{ ingredient.name }}</td>
+                      <td>{{ ingredient.unit }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <div class="preview-panel-hd">
+                <h3>步骤：</h3>
+              </div>
+              <div class="preview-panel-bd">
+                <p v-for="step in cooking_steps">
+                  {{$index+1}}、{{step.description}}
+                </p>
+              </div>
+            </div>
+            <div class="preview-panel">
+              <ul class="introlist">
+                <li>收藏菜谱</li>
+                <li>添加到我的常用菜</li>
+              </ul>
+            </div>
+            <div class="preview-panel">
+              <h4>选择厨具并开始烹饪</h4>
+            </div>
+          </div>
+          <span @click="dismiss" class="fa fa-times-circle"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+// import Vue from 'vue'
+import api from 'api'
+import Modal from 'components/Modal'
+import Pager from 'components/Pager'
+import Select from 'components/Select'
+import SearchBox from 'components/SearchBox'
+import ImageUploader from 'components/ImageUploader'
+import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
+import { pluginMixins } from '../../../mixins'
+import TagInput from 'components/TagInput'
+// import locales from 'consts/locales/index'
+// import { DEVICES } from '../../config'
+import store from 'src/store'
+
+export default {
+  name: 'RecipeForm',
+
+  mixins: [globalMixins, pluginMixins],
+
+  components: {
+    'v-select': Select,
+    'search-box': SearchBox,
+    'pager': Pager,
+    'modal': Modal,
+    'image-uploader': ImageUploader,
+    'tag-input': TagInput
+  },
+
+  store,
+
+  vuex: {
+    getters: {
+      currentMember: ({ system }) => system.currentMember
+    }
+  },
+
+  props: {
+    type: {
+      type: String,
+      default: 'add'
+    }
+  },
+
+  data () {
+    return {
+      name: '',
+      images: [''], // 成品图
+      difficulty: '不限',
+      category: {
+        main: {
+          name: '',
+          _id: ''
+        },
+        sub: {
+          name: '',
+          _id: ''
+        }
+      },
+      instructions: '',
+      cooking_steps: [{
+        description: '',
+        time: '',
+        images: ['']
+      }],
+      properties: {
+        user_cooking_time: '',
+        cooking_time: '5分钟',
+        difficulty: '不限',
+        label: ''
+      },
+      classification: {
+        main: '',
+        sub: ''
+      },
+      categories_main: [],
+      categories_sub: [],
+      tips: '',
+      tag: '',
+      editingTag: false,
+      show: false,
+      difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
+      cookingtimes: ['5分钟', '10分钟', '15分钟', '30分钟', '60分钟', '90分钟', '2小时', '数小时', '1天', '数天'],
+      major_ingredients: [],
+      minor_ingredients: [],
+      // allDevices: DEVICES,
+      allDevices: '',
+      // candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
+      candidateTags: [],
+      categories: [],
+      adding: false,
+      status: 0,
+      isShowPreview: false
+    }
+  },
+
+  computed: {
+    // autoexecs () {
+    //   var result = []
+    //   // console.log(this.decToHex(0))
+    //   this.devices.forEach((item) => {
+    //     var execArr = [this.decToHex(item.count)]
+    //     item.steps.forEach((step) => {
+    //       step.bytes.forEach((byte) => {
+    //         execArr.push(this.decToHex(byte.value))
+    //       })
+    //     })
+    //     for (var i = 99, len = execArr.length; i >= len; i--) {
+    //       execArr[i] = this.decToHex(0)
+    //     }
+    //     result.push(execArr.join(' '))
+    //   })
+    //   return result
+    // },
+
+    categoryOptions () {
+      return _.differenceBy(this.categories, this.classifications, 'main')
+    }
+  },
+
+  ready () {
+    let appId = this.$route.params.app_id
+    // 从 localStorage 中获取app token
+    let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+    // 如果是编辑表单
+    if (this.type === 'edit') {
+      var condition = {
+        filter: [],
+        limit: 1,
+        offset: 0,
+        query: {
+          _id: this.$route.params.id
+        }
+      }
+      api.recipes.getRecipes(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          var data = res.data.list[0] ? res.data.list[0] : null
+
+          this.name = data.name
+          this.instructions = data.instructions
+          this.properties.cooking_time = data.properties.cooking_time
+          this.properties.difficulty = data.properties.difficulty
+          this.tag = data.properties.label
+          this.category.main = data.classification[0].main
+          this.category.sub.name = data.classification[0].sub
+          this.major_ingredients = data.major_ingredients
+          this.minor_ingredients = data.minor_ingredients
+          this.cooking_steps = data.cooking_steps
+          this.tips = data.tips
+          this.status = data.status
+          var images = ['']
+          data.images.forEach((item, index) => {
+            images[index] = item
+          })
+          this.images = images
+          this.getOption()
+        }
+      })
+    }
+
+    // 获取所有菜谱分类
+    this.getCategories()
+    // 获取所有标签
+    this.getTags()
+    // 获取所有食材
+    // this.getIngredients()
+  },
+
+  methods: {
+    // /**
+    //  * 十进制转换为十六进制
+    //  * @param  {Number} n 目标数字
+    //  * @return {String}   十六进制字符串
+    //  */
+    // decToHex (n) {
+    //   var str = n.toString(16)
+    //   return str.length === 1 ? `0${str}` : str
+    // },
+
+    /**
+     * 处理图片上传
+     * @param  {Array} images 图片路径数组
+     */
+    onModifiedImages (images, data) {
+      images = data
+    },
+
+    /**
+     * 获取菜谱父分类
+     */
+    getCategories () {
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      let condition = {
+        limit: 200,
+        query: {
+          parent_id: 0
+        }
+      }
+      this.loadingData = true
+      api.recipes.getType(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.list)
+          res.data.list.forEach((item) => {
+            var obj = {}
+            obj.name = item.name
+            obj._id = item._id
+            this.categories_main.push(obj)
+          })
+          // this.categories_main = res.data.list
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    // 获取对应父类的子类
+    handleMainType (data) {
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      this.categories_sub = []
+      data.sub = {}
+      var condition = {
+        limit: 500,
+        query: {
+          parent_id: data.main._id
+        }
+      }
+      this.loadingData = true
+      api.recipes.getType(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.list)
+          res.data.list.forEach((item) => {
+            var obj = {}
+            obj.name = item.name
+            obj._id = item._id
+            this.categories_sub.push(obj)
+            this.loadingData = false
+          })
+          // this.categories_main = res.data.list
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    // 编辑时判断是否出现子类别，获取对应option
+    getOption () {
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      let condition = {
+        limit: 500,
+        query: {
+          parent_id: this.category.main._id
+        }
+      }
+      this.loadingData = true
+      api.recipes.getType(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          res.data.list.forEach((item) => {
+            var obj = {}
+            obj.name = item.name
+            obj._id = item._id
+            this.categories_sub.push(obj)
+            this.loadingData = false
+          })
+          // this.categories_main = res.data.list
+          this.loadingData = false
+        }
+      })
+    },
+
+    /**
+     * 获取标签
+     */
+    getTags () {
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      let condition = {
+        limit: 200,
+        query: {}
+      }
+
+      this.loadingData = true
+      api.recipes.getTags(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          this.candidateTags = res.data.list.map((item) => {
+            return item.label
+          })
+          this.loadingData = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    /**
+     * 添加菜谱类别
+     */
+    addCategory () {
+      var newCate = {}
+      newCate.main = ''
+      newCate.sub = ''
+      this.classifications.push(newCate)
+    },
+
+    /**
+     * 添加主料
+     */
+    addMajor () {
+      var newMajor = {}
+      newMajor.name = ''
+      newMajor.unit = ''
+      this.major_ingredients.push(newMajor)
+    },
+
+    /**
+     * 添加辅料
+     */
+    addMinor () {
+      var newMinor = {}
+      newMinor.name = ''
+      newMinor.unit = ''
+      this.minor_ingredients.push(newMinor)
+    },
+
+    /**
+     * 设置步骤
+     * @param {Objcet} device 设备
+     */
+    setSteps (device) {
+      var arr = []
+      for (var i = 0, len = device.count; i < len; i++) {
+        if (i < device.steps.length) {
+          arr[i] = _.cloneDeep(device.steps[i])
+        } else {
+          arr[i] = _.cloneDeep(this.allDevices[device.id].template)
+        }
+      }
+      device.steps = arr
+    },
+
+    /**
+     * 菜谱步骤右边四个小操作按钮的事件
+     * @param  {[type]} step      当前操作的步骤对象
+     * @param  {[type]} index     当前操作的步骤index
+     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+     * @return {[type]}           无返回
+     */
+    handleStepEvent (eventType, step, index) {
+      var newstep = {
+        description: '',
+        time: 0,
+        images: ['']
+      }
+      switch (eventType) {
+        case 'MOVE_UP':
+          this.cooking_steps.splice(index, 1)
+          this.cooking_steps.splice(index - 1, 0, step)
+          break
+        case 'MOVE_DOWN':
+          this.cooking_steps.splice(index, 1)
+          this.cooking_steps.splice(index + 1, 0, step)
+          break
+        case 'ADD':
+          this.cooking_steps.splice(index + 1, 0, newstep)
+          break
+        case 'DEL':
+          this.cooking_steps.$remove(step)
+          break
+        default:
+          break
+      }
+    },
+
+    /**
+     * 通用删除事件
+     * @param  {Object} obj 要删除的对象
+     * @param  {Array}  arr 要删除的对象的父数组
+     */
+    removeObj (obj, arr) {
+      arr.$remove(obj)
+    },
+
+    // 关闭预览
+    dismiss () {
+      this.isShowPreview = false
+    },
+
+    /**
+     * 菜谱表单提交
+     */
+    onRecipeSubmit () {
+      if (this.$validation.invalid || this.editing) return
+
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+
+      this.editing = true
+      this.images = _.compact(this.images)
+      let major = this.major_ingredients.filter((item) => {
+        return Object.keys(item).length > 0
+      })
+      let minor = this.minor_ingredients.filter((item) => {
+        return Object.keys(item).length > 0
+      })
+      console.log(major)
+      let params = {
+        name: this.name,
+        images: this.images,
+        instructions: this.instructions,
+        properties: {
+          cooking_time: this.properties.cooking_time,
+          difficulty: this.properties.difficulty,
+          label: this.tag
+        },
+        classification: [{
+          main: {
+            name: this.category.main.name,
+            _id: this.category.main._id
+          },
+          sub: this.category.sub.name
+        }],
+        major_ingredients: major,
+        minor_ingredients: minor,
+        cooking_steps: this.cooking_steps,
+        tips: this.tips,
+        status: this.status,
+        creator: this.currentMember.name
+      }
+      let process
+      let noticeCont = ({
+        add: '菜谱添加成功！',
+        edit: '菜谱修改成功！'
+      })[this.type]
+
+      if (this.type === 'edit') {
+        process = api.recipes.editRecipes(appId, this.$route.params.id, token, params)
+      } else {
+        process = api.recipes.addRecipes(appId, token, params)
+      }
+
+      process.then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: noticeCont
+          })
+          this.$route.router.go({path: '/operation/plugins/recipes/' + this.$route.params.app_id + '/recipes'})
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+      })
+    }
+  }
+}
+</script>
+
+<style lang="stylus">
+  @import '../../../../../../assets/stylus/common'
+  /*预览*/
+  .mask
+    fixed left top
+    size 100%
+    background rgba(0, 0, 0, .6)
+    z-index 1000
+    display table
+    transition opacity .2s ease
+
+    .preview-wrapper
+      display table-cell
+      vertical-align middle
+
+    .preview-dialog
+      position relative
+      background rgba(255, 255, 255, .95)
+      margin 0 auto
+      width 320px
+      box-shadow 0 2px 8px rgba(0, 0, 0, .3)
+      transition all .3s ease
+
+      .fa-times-circle
+        absolute right top 3px
+        size 40px
+        line-height 40px
+        text-align center
+        cursor pointer
+        font-size 16px
+        color #666
+        transition color .3s
+
+        &:hover
+          color red
+
+    .preview-header
+      padding 10px 20px
+      border-bottom 1px solid #DDD
+
+      h3
+        font-weight normal
+        color gray-darker
+        margin 0
+
+    .preview-body
+      max-height 540px
+      overflow-y auto
+      box-sizing border-box
+      background-color #F2F2F2
+      .app-header
+        font-size 18px
+        text-align center
+        padding 10px 0
+        border-bottom 1px solid default-border-color
+        background-color #fff
+      .preview-thumb
+        /*width 380px*/
+        height 200px
+        margin-bottom 10px
+        img
+          width 100%
+          height 100%
+      .preview-panel
+        background #FFF
+        padding 0 10px
+        margin-bottom 10px
+      .preview-panel-hd
+        font-size 12px
+        margin-bottom 10px
+        padding 10px 0
+        border-bottom 1px solid light-border-color
+
+        .preview-panel-hd-actions
+          float right
+
+          span
+            display inline-block
+            background #999
+            color #FFF
+            line-height 20px
+            padding 0 10px
+            border-radius 20px
+
+        h3
+          font-size 14px
+          margin 0
+      .preview-panel-bd
+        font-size 12px
+        padding-bottom 10px
+
+        table
+          width 100%
+          td
+            padding 5px 0
+      .introduce
+        margin 0
+        border-bottom 1px solid light-border-color
+        padding-bottom 10px
+
+      .metas
+        padding-top 10px
+        clearfix()
+
+        .meta
+          float left
+          width 50%
+          text-align center
+      .introlist
+        clearfix()
+        margin-top 5px
+        li
+          float left
+          width 50%
+          text-align center
+          padding 10px 0
+          line-height 25px
+          height 25px
+      .posdiv
+        position relative
+        padding-bottom 10px
+        border-bottom 1px solid #999
+        margin-bottom 10px
+        span
+          display inline-block
+          position absolute
+          right 5px
+          background-color #999
+          font-size 12px
+          padding 3px 10px
+          border-radius 10px
+          color #fff
+      h4
+        text-align center
+      .foolist
+        clearfix()
+        li
+          float left
+          width 50%
+          text-align left
+      .table
+        margin 0
+
+      // 错误信息
+      .error-msg
+        text-align center
+        margin-bottom 30px
+
+    .preview-actions
+        text-align center
+
+        .btn
+          width 120px
+
+    .preview-footer
+      padding 0 30px 20px
+      text-align right
+      clearfix()
+      /*end*/
+  .previewForm
+    display table-cell
+    vertical-align middle
+  .dis
+    display inline-block
+  .m10
+    margin 10px
+  .childinblock div
+    display inline-block
+    margin-top 5px
+    margin-left 5px
+  .mrt20
+    margin-bottom 20px
+  .recipe-form
+    .form
+      .form-row
+        max-height 5000px
+
+        .controls
+          .select-group1
+            position relative
+            width 400px
+            margin 0 10px 10px 0
+            padding-right 30px
+          .input-text-wrap
+            input.input-text-time
+              border 1px solid default-border-color
+              display inline-block
+              width 120px
+              box-sizing border-box
+              font-size 14px
+              height 32px
+              line-height 32px
+              padding 6px 20px
+              margin-right 10px
+            span.text-time
+              margin-right 10px
+
+          .delete-input
+            position absolute
+            right 5px
+            top 5px
+            span.fa
+              color #c0252e
+
+      // 步骤
+      .step-box
+        margin-top 20px
+        width 100%
+        position relative
+        clearfix()
+        label.form-control
+          float left
+          text-align right
+          /*width 70px*/
+          line-height 120px
+          /*padding-right 20px*/
+          box-sizing border-box
+        .controls-image
+          float left
+          width 182px
+          min-width 182px
+          overflow hidden
+
+          .image-uploader-item
+            margin-bottom 0
+        .step-text
+          box-sizing border-box
+          height 120px
+          .input-text-wrap
+          .input-text
+            height 100%
+        .button-list
+          position absolute
+          left 100.5%
+          height 120px
+          opacity 0
+          /*transition opacity ease 0.3s*/
+          .control-button
+            height 25px
+            width 25px
+            line-height 25px
+            margin-bottom 6px
+            background #999
+            text-align center
+            cursor pointer
+            &:hover
+              background red
+            i.icon
+              color #fff
+        &:hover
+          .button-list
+            opacity 1
+
+      .ingredient-row
+        table
+          margin-top 0
+
+          td
+            padding 5px 0
+
+        .ingredient-name
+          margin-right 20px
+
+        .fa-times
+          color #c0252e
+
+      // 设备列表
+      .device-list
+        .device-list-item
+          position relative
+          font-size 12px
+
+          .device-name
+            font-size 14px
+            font-weight bold
+            line-height 26px
+
+          .cooking-time
+            line-height 26px
+
+            .input-text-wrap
+              display inline-block
+
+              .input-text
+                font-size 12px
+                size 90px 26px
+                line-height 24px
+                padding 0 5px
+
+          .fa-times
+            font-size 14px
+            size 24px
+            line-height 24px
+            background rgba(255, 0, 0, .5)
+            color #FFF
+            text-align center
+            z-index 100
+
+        .step-list-item
+          margin 20px 0
+          border 1px solid default-border-color
+          padding 0 0 10px 10px
+
+          .step-num
+            text-align center
+
+            span
+              position relative
+              display inline-block
+              line-height 24px
+              padding 0 20px
+              border 1px solid default-border-color
+              border-radius 20px
+              font-weight bold
+              background #FFF
+              top -13px
+  // 浮窗
+  .modal
+    .modal-body
+      clearfix()
+      .status-bar
+        padding 0
+        border 0
+        .v-select
+          float left
+          display inline-block
+          padding-left 10px
+        .search-box
+          float right
+
+    .to-select-list
+      width 65%
+      float left
+
+    .pager
+      margin-top 10px
+
+    .selected-list
+      width 33%
+      float right
+      border 1px solid light-border-color
+      box-sizing border-box
+      background #FFF
+
+      h3
+        font-size 14px
+        padding 0 20px
+        line-height 35px
+        margin 0
+        border-bottom 1px solid #e4e4e4
+
+      ul
+        margin 0
+        max-height 310px
+        list-style none
+        overflow auto
+
+      li
+        border-bottom 1px solid #e4e4e4
+        font-size 12px
+        position relative
+        line-height 30px
+        padding 0 20px
+
+        .fa
+          height 100%
+          top 0
+          line-height 30px
+
+        &:nth-child(2n-1)
+          background #F9F9F9
+
+        &:last-child
+          border-bottom none
+
+    .button-box
+      width 100%
+      box-sizing border-box
+      text-align right
+      .btn
+        margin-left 10px
+</style>

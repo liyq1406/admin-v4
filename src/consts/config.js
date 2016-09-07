@@ -49,7 +49,7 @@ export const API_SERVER = {
   airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`,
 
   // 云菜谱
-  cookbook: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
+  recipes: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
 
   // 内容管理
   content: `${DEFAULT_PLUGIN_SERVER}/module/contents`,

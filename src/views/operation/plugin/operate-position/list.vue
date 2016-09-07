@@ -23,16 +23,16 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="stalls.length > 0">
-                <tr v-for="stall in stalls">
+              <template v-if="operationPostions.length > 0">
+                <tr v-for="operationPostion in operationPostions">
                   <td>
-                    <a class="hl-red" v-link="{'path': 'stall/' + stall._id, append: true}">
-                      {{ stall.name }}
+                    <a class="hl-red" v-link="{'path': 'stall/' + operationPostion._id, append: true}">
+                      {{ operationPostion.name }}
                     </a>
                   </td>
-                  <td>{{ stall.width }}*{{ stall.height }}</td>
+                  <td>{{ operationPostion.width }}*{{ operationPostion.height }}</td>
                   <td class="tac">
-                    <a class="hl-red" @click="showEditModal(stall)">
+                    <a class="hl-red" @click="showEditModal(operationPostion)">
                       编辑
                     </a>
                   </td>
@@ -46,7 +46,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getStalls"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOperatePositions"></pager>
       </div>
 
       <modal :show.sync="modal.show" @close="closeModal">
@@ -58,7 +58,7 @@
                 <label class="form-control col-6">名称：</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap" v-placeholder="'请输入运营位名称'">
-                    <input type="text" class="input-text" v-model="modal.stall.name" name="modal.stall.name" v-validate:name="{required: true}">
+                    <input type="text" class="input-text" v-model="modal.operationPostion.name" name="modal.operationPostion.name" v-validate:name="{required: true}">
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">名称为必填项</span>
@@ -75,7 +75,7 @@
                     <div class="width col-12 row">
                       <label class="col-5 control-text">宽：</label>
                       <div class="input-text-wrap col-10">
-                        <input type="text" class="input-text" v-model="modal.stall.width" name="modal.stall.width" v-validate:width="{required: true}">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.width" name="modal.operationPostion.width" v-validate:width="{required: true}">
                       </div>
                       <div class="form-tips form-tips-error col-10">
                         <span v-if="$validation.width.touched && $validation.width.required">宽为必填项</span>
@@ -84,7 +84,7 @@
                     <div class="height col-12 row">
                       <label class="col-5 control-text">高：</label>
                       <div class="input-text-wrap col-10">
-                        <input type="text" class="input-text" v-model="modal.stall.height" name="modal.stall.height" v-validate:height="{required: true}">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.height" name="modal.operationPostion.height" v-validate:height="{required: true}">
                       </div>
                       <div class="form-tips form-tips-error col-10">
                         <span v-if="$validation.height.touched && $validation.height.required">高为必填项</span>
@@ -116,7 +116,7 @@
   import Pager from 'components/Pager'
   import * as config from 'consts/config'
   export default {
-    name: 'operate-stall', // 运营管理-运营位
+    name: 'operate-operationPostion', // 运营管理-运营位
 
     layout: 'admin',
 
@@ -142,13 +142,13 @@
           type: 'edit',
           delChecked: false,
           editing: false,
-          stall: {
+          operationPostion: {
             name: '',
             width: '',
             height: ''
           }
         },
-        stalls: [],
+        operationPostions: [],
         searching: false,
         total: 0,
         currentPage: 1,
@@ -158,17 +158,20 @@
     },
 
     computed: {
+      // 查询条件
       queryCondition () {
-        var condition = {
+        let condition = {
           filter: ['_id', 'name', 'width', 'height'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
-          order: {'create_date': 'desc'},
+          order: {'create_time': -1},
           query: {}
         }
 
         return condition
       },
+
+      // 浮层标题
       modalTitle () {
         var result = {
           'add': '添加运营位',
@@ -177,9 +180,10 @@
         return result[this.modal.type]
       }
     },
+
     route: {
       data () {
-        this.getStalls()
+        this.getOperatePositions()
       }
     },
 
@@ -188,13 +192,13 @@
        * 获取运营位列表
        * @return {[type]} [description]
        */
-      getStalls () {
+      getOperatePositions () {
         this.loadingData = true
         this.appID = this.$route.params.app_id
         this.token = JSON.parse(window.localStorage.pluginsToken)[this.appID].token
-        var params = this.queryCondition
-        api.operate.getOperatePosition(this.appID, this.token, params).then((res) => {
-          this.stalls = res.data.list
+        api.operate.getOperatePosition(this.appID, this.token, this.queryCondition).then((res) => {
+          console.log(res.data.list)
+          this.operationPostions = res.data.list
           this.total = res.data.count
           this.loadingData = false
         }).catch((err) => {
@@ -210,19 +214,19 @@
        */
       addStall () {
         if (this.$validation.valid) {
-          var params = this.modal.stall
+          var params = this.modal.operationPostion
           params.content = []
           params.creator = this.currentMember.name
           params.create_time = (new Date()).toISOString()
           api.operate.addOperatePosition(this.appID, this.token, params).then((res) => {
-            this.getStalls()
+            this.getOperatePositions()
             this.closeModal()
           }).catch((err) => {
             this.handleError(err)
             this.modal.editing = false
           })
         } else {
-          console.warn('参数验证不通过:' + JSON.stringify(this.modal.stall))
+          console.warn('参数验证不通过:' + JSON.stringify(this.modal.operationPostion))
           this.modal.editing = false
         }
       },
@@ -233,18 +237,18 @@
        */
       updateStall () {
         if (this.$validation.valid) {
-          var params = this.modal.stall
+          var params = this.modal.operationPostion
           params.content = []
-          api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.stall._id).then((res) => {
+          api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id).then((res) => {
             // console.log(res)
-            this.getStalls()
+            this.getOperatePositions()
             this.closeModal()
           }).catch((err) => {
             this.handleError(err)
             this.modal.editing = false
           })
         } else {
-          console.warn('参数验证不通过：' + JSON.stringify(this.modal.stall))
+          console.warn('参数验证不通过：' + JSON.stringify(this.modal.operationPostion))
         }
       },
 
@@ -254,10 +258,10 @@
        */
       deleteStall () {
         console.log('删除运营位')
-        console.log(this.modal.stall)
-        api.operate.delOperatePosition(this.appID, this.token, this.modal.stall._id).then((res) => {
+        console.log(this.modal.operationPostion)
+        api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id).then((res) => {
           // console.log(res)
-          this.getStalls()
+          this.getOperatePositions()
           this.closeModal()
         }).catch((err) => {
           this.handleError(err)
@@ -276,16 +280,16 @@
 
       /**
        * 显示编辑运营位浮层
-       * @param  {[type]} stall [description]
+       * @param  {[type]} operationPostion [description]
        * @return {[type]}       [description]
        */
-      showEditModal (stall) {
+      showEditModal (operationPostion) {
         this.modal.type = 'edit'
-        this.modal.stall = {
-          _id: stall._id,
-          name: stall.name,
-          width: stall.width,
-          height: stall.height
+        this.modal.operationPostion = {
+          _id: operationPostion._id,
+          name: operationPostion.name,
+          width: operationPostion.width,
+          height: operationPostion.height
         }
         this.modal.show = true
       },
@@ -315,7 +319,7 @@
         this.modal.show = false
         this.modal.editing = false
         this.modal.delChecked = false
-        this.modal.stall = {
+        this.modal.operationPostion = {
           name: '',
           width: '',
           height: ''

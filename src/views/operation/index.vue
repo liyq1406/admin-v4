@@ -165,19 +165,19 @@ export default {
 
           case 'recipe': // 云菜谱
             sub.icon = 'cutlery'
-            sub.alias = 'cookbook'
+            sub.alias = 'recipes'
             sub.subs = [{
               alias: 'recipes',
-              url: `/plugins/cookbook/${item.id}/recipes`
+              url: `/plugins/recipes/${item.id}/recipes`
             }, {
               alias: 'menus',
-              url: `/plugins/cookbook/${item.id}/menus`
+              url: `/plugins/recipes/${item.id}/menus`
             }, {
               alias: 'categories',
-              url: `/plugins/cookbook/${item.id}/categories`
+              url: `/plugins/recipes/${item.id}/categories`
             }, {
               alias: 'tags',
-              url: `/plugins/cookbook/${item.id}/tags`
+              url: `/plugins/recipes/${item.id}/tags`
             // 暂时隐藏
             // }, {
             //   alias: 'heat',
