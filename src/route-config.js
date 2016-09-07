@@ -905,73 +905,73 @@ let configRouter = (router) => {
         // 菜谱管理
         // ------------------------------
         // 菜谱列表
-        '/plugins/cookbook/:app_id/recipes': {
+        '/plugins/recipes/:app_id/recipes': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/recipe/list'))
+              resolve(require('./views/operation/plugin/recipes/recipe/list'))
             }, 'admin')
           }
         },
         // 添加菜谱
-        '/plugins/cookbook/:app_id/recipe/add': {
+        '/plugins/recipes/:app_id/recipe/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/recipe/add'))
+              resolve(require('./views/operation/plugin/recipes/recipe/add'))
             }, 'admin')
           }
         },
         // 编辑菜谱
-        '/plugins/cookbook/:app_id/recipes/:id/edit': {
+        '/plugins/recipes/:app_id/recipes/:id/edit': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/recipe/edit'))
+              resolve(require('./views/operation/plugin/recipes/recipe/edit'))
             }, 'admin')
           }
         },
         // 菜单列表
-        '/plugins/cookbook/:app_id/menus': {
+        '/plugins/recipes/:app_id/menus': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/menu/list'))
+              resolve(require('./views/operation/plugin/recipes/menu/list'))
             }, 'admin')
           }
         },
         // 菜单列表
-        '/plugins/cookbook/:app_id/menu/add': {
+        '/plugins/recipes/:app_id/menu/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/menu/add'))
+              resolve(require('./views/operation/plugin/recipes/menu/add'))
             }, 'admin')
           }
         },
         // 菜单列表
-        '/plugins/cookbook/:app_id/menus/:id/edit': {
+        '/plugins/recipes/:app_id/menus/:id/edit': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/menu/edit'))
+              resolve(require('./views/operation/plugin/recipes/menu/edit'))
             }, 'admin')
           }
         },
         // 类别列表
-        '/plugins/cookbook/:app_id/categories': {
+        '/plugins/recipes/:app_id/categories': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/category/list'))
+              resolve(require('./views/operation/plugin/recipes/category/list'))
             }, 'admin')
           }
         },
         // 类别二级列表
-        '/plugins/cookbook/:app_id/categories/:parent_id': {
+        '/plugins/recipes/:app_id/categories/:parent_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/category/subs'))
+              resolve(require('./views/operation/plugin/recipes/category/subs'))
             }, 'admin')
           }
         },
-        '/plugins/cookbook/:app_id/tags': {
+        '/plugins/recipes/:app_id/tags': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/cookbook/tag/list'))
+              resolve(require('./views/operation/plugin/recipes/tag/list'))
             }, 'admin')
           }
         },
@@ -1379,69 +1379,6 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/settings/account'))
-            }, 'admin')
-          }
-        },
-
-        // 饮食管理
-        'plugins/recipe/:app_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/index'))
-            }, 'admin')
-          },
-          subRoutes: {
-            // 菜谱管理
-            'list': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/recipe/recipe/index'))
-                }, 'admin')
-              }
-            },
-            // 食材管理
-            'ingredient': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/plugin/recipe/ingredient/index'))
-                }, 'admin')
-              }
-            }
-          }
-        },
-        // 禁止访问
-        'plugins/recipe/:app_id/forbidden': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/forbidden'))
-            }, 'admin')
-          }
-        },
-        'plugins/recipe/:app_id/ingredient/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/ingredient/add'))
-            }, 'admin')
-          }
-        },
-        'plugins/recipe/:app_id/ingredient/:id/edit': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/ingredient/edit'))
-            }, 'admin')
-          }
-        },
-        'plugins/recipe/:app_id/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/recipe/add'))
-            }, 'admin')
-          }
-        },
-        'plugins/recipe/:app_id/:id/edit': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipe/recipe/edit'))
             }, 'admin')
           }
         },

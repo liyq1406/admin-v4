@@ -30,7 +30,6 @@ import alert from './api/alert'
 import app from './api/app'
 import plugin from './api/plugin'
 import upload from './api/upload'
-import diet from './api/diet'
 import dataForward from './api/data-forward'
 import snapshot from './api/snapshot'
 import warranty from './api/warranty'
@@ -40,7 +39,7 @@ import dealer from './api/dealer'
 import heavyBuyer from './api/heavy-buyer'
 import broadcast from './api/broadcast'
 import airquality from './api/airquality'
-import cookbook from './api/cookbook'
+import recipes from './api/recipes'
 import content from './api/content'
 import operate from './api/operate'
 
@@ -60,7 +59,6 @@ export default {
   app,
   plugin,
   upload,
-  diet,
   dataForward,
   snapshot,
   warranty,
@@ -70,7 +68,7 @@ export default {
   heavyBuyer,
   broadcast,
   airquality,
-  cookbook,
+  recipes,
   content,
   operate
 }

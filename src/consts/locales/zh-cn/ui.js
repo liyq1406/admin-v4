@@ -159,7 +159,7 @@ export default {
             list: '经销商列表'
           }
         },
-        cookbook: {
+        recipes: {
           subs: {
             recipes: '菜谱管理',
             menus: '菜单管理',
