@@ -309,8 +309,8 @@ export default {
       this.loadingFirmwares = true
       api.product.getFirmwares(this.currProduct.id).then((res) => {
         if (res.status === 200) {
-          this.firmwares = res.data
-          this.total = res.data.length
+          this.firmwares = res.data.list
+          this.total = res.data.count
           this.loadingFirmwares = false
         }
       }).catch((res) => {
