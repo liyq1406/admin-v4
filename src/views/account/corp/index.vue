@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="account-info">
-      <h2>{{ corp.company }} <a href="#" @click.prevent="editCorp" class="fa fa-edit"></a></h2>
+      <h2>{{ corp.company }}</h2>
       <div class="details row">
         <div class="col-24">
           <div v-stretch="182">
@@ -23,73 +23,6 @@
       </div>
     </div>
 
-    <!-- 修改密码浮层 start -->
-    <modal :show.sync="isShowModal" width="400px">
-      <h3 slot="header">修改信息</h3>
-      <div slot="body" class="form">
-        <validator name="validation">
-          <form novalidate @submit.prevent="onSubmit">
-            <div class="form-row row">
-              <label class="form-control col-6">企业名称</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <input type="text" v-model="model.name" name="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 250}" lazy class="input-text"/>
-                </div>
-                <!-- <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.old_password'), 2]) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.old_password'), 250]) }}</span>
-                </div> -->
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">联系人</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <input type="text" v-model="model.contact" name="model.contact" v-validate:contact="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
-                </div>
-                <!-- <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.old_password'), 2]) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.old_password'), 250]) }}</span>
-                </div> -->
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">手机</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <input type="text" v-model="model.phone" name="model.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
-                </div>
-                <!-- <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.old_password'), 2]) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.old_password'), 250]) }}</span>
-                </div> -->
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">邮箱</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <input type="text" v-model="model.email" name="model.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
-                </div>
-                <!-- <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.old_password'), 2]) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.old_password'), 250]) }}</span>
-                </div> -->
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="onEditPwdCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            </div>
-          </form>
-        </validator>
-      </div>
-    </modal>
-    <!-- 修改密码浮层 end -->
   </div>
 </template>
 
@@ -100,7 +33,7 @@ import InfoList from 'components/InfoList'
 import Modal from 'components/Modal'
 import store from 'store'
 import { formatDate } from 'src/filters'
-import api from 'api'
+// import api from 'api'
 import { isEmpty } from 'src/utils'
 import defaultLogo from 'assets/images/logo.png'
 import blankImg from 'assets/images/blank.png'
@@ -128,13 +61,6 @@ export default {
 
   data () {
     return {
-      originModel: {
-        oldpassword: '',
-        newpassword: ''
-      },
-      model: {},
-      isShowModal: false,
-      loadingCorp: false
     }
   },
 
@@ -190,44 +116,6 @@ export default {
         result = this.corp.logo || defaultLogo
       }
       return result
-    }
-  },
-
-  route: {
-    data () {
-    }
-  },
-
-  methods: {
-
-    /**
-     * 修改企业信息
-     * @author shengzhi
-     */
-    editCorp () {
-      this.isShowModal = true
-    },
-
-    /**
-     * 提交信息修改
-     * @author shengzhi
-     */
-    onSubmit () {
-      if (this.$validation.valid && !this.editing) {
-        this.editing = true
-        api.corp.memberResetPwd(this.model).then((res) => {
-          if (res.status === 200) {
-            this.showNotice({
-              type: 'success',
-              content: this.$t('ui.account.password_msg')
-            })
-          }
-          this.onEditPwdCancel()
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
-      }
     }
   }
 }
