@@ -12,6 +12,11 @@ export function format (val, type) {
       result = val ? /^[-+]?[0-9]+$/.test(val) : true
       break
 
+    // 正整数
+    case 'integer':
+      result = val ? /^[1-9]\d*$/.test(val) : true
+      break
+
     // 邮箱格式
     case 'email':
       // result = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(val)

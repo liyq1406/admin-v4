@@ -58,10 +58,12 @@
                 <label class="form-control col-6">名称：</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap" v-placeholder="'请输入运营位名称'">
-                    <input type="text" class="input-text" v-model="modal.operationPostion.name" name="modal.operationPostion.name" v-validate:name="{required: true}">
+                    <input type="text" class="input-text" v-model="modal.operationPostion.name" name="modal.operationPostion.name" v-validate:name="{required: true, minlength: 1, maxlength: 20}">
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">名称为必填项</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '名称'}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', ['名称', 1]) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['名称', 20]) }}</span>
                   </div>
                 </div>
               </div>
@@ -71,33 +73,57 @@
                   <div class="control-text">
                     <span>为运营位指定一个展示图片（单位：像素）</span>
                   </div>
-                  <div class="value-box row">
+                  <div class="row">
+                    <label class="form-control col-2">宽：</label>
+                    <div class="controls col-8">
+                      <div class="input-text-wrap">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.width" name="modal.operationPostion.width" v-validate:width="{required: true, format: 'integer'}">
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.width.touched && $validation.width.required">宽为必填项</span>
+                        <span v-if="$validation.width.modified && $validation.width.format">宽必须为正整数</span>
+                      </div>
+                    </div>
+                    <label class="form-control col-2 col-offset-4">高：</label>
+                    <div class="controls col-8">
+                      <div class="input-text-wrap">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.height" name="modal.operationPostion.height" v-validate:height="{required: true, format: 'integer'}">
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.height.touched && $validation.height.required">高为必填项</span>
+                        <span v-if="$validation.height.modified && $validation.height.format">高必须为正整数</span>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- <div class="value-box row">
                     <div class="width col-12 row">
                       <label class="col-5 control-text">宽：</label>
-                      <div class="input-text-wrap col-10">
-                        <input type="text" class="input-text" v-model="modal.operationPostion.width" name="modal.operationPostion.width" v-validate:width="{required: true}">
+                      <div class="input-text-wrap col-15">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.width" name="modal.operationPostion.width" v-validate:width="{required: true, format: 'integer'}">
                       </div>
-                      <div class="form-tips form-tips-error col-10">
+                      <div class="form-tips form-tips-error col-20">
                         <span v-if="$validation.width.touched && $validation.width.required">宽为必填项</span>
+                        <span v-if="$validation.width.modified && $validation.width.format">宽必须为正整数</span>
                       </div>
                     </div>
                     <div class="height col-12 row">
                       <label class="col-5 control-text">高：</label>
-                      <div class="input-text-wrap col-10">
-                        <input type="text" class="input-text" v-model="modal.operationPostion.height" name="modal.operationPostion.height" v-validate:height="{required: true}">
+                      <div class="input-text-wrap col-15">
+                        <input type="text" class="input-text" v-model="modal.operationPostion.height" name="modal.operationPostion.height" v-validate:height="{required: true, format: 'integer'}">
                       </div>
-                      <div class="form-tips form-tips-error col-10">
+                      <div class="form-tips form-tips-error col-20">
                         <span v-if="$validation.height.touched && $validation.height.required">高为必填项</span>
+                        <span v-if="$validation.height.modified && $validation.height.format">高必须为正整数</span>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
               </div>
               <div class="form-actions">
                 <label class="del-check" v-show="modal.type==='edit'">
                   <input type="checkbox" name="del" v-model="modal.delChecked"/>{{ '删除运营位' }}
                 </label>
-                <button type="submit" :disabled="modal.editing" :class="{'disabled':modal.editing}" v-text="modal.editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+                <button type="submit" :disabled="modal.submitting" :class="{'disabled':modal.submitting}" v-text="modal.submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
                 <button type="reset" @click.prevent.stop="closeModal" class="btn btn-default">{{ $t("common.cancel") }}</button>
               </div>
             </form>
@@ -141,7 +167,7 @@
           show: false,
           type: 'edit',
           delChecked: false,
-          editing: false,
+          submitting: false,
           operationPostion: {
             name: '',
             width: '',
@@ -208,65 +234,65 @@
         })
       },
 
-      /**
-       * 添加运营位
-       * @return {[type]} [description]
-       */
-      addOperatePosition () {
-        if (this.$validation.valid) {
-          var params = this.modal.operationPostion
-          params.content = []
-          params.creator = this.currentMember.name
-          api.operate.addOperatePosition(this.appID, this.token, params).then((res) => {
-            this.getOperatePositions()
-            this.closeModal()
-          }).catch((err) => {
-            this.handleError(err)
-            this.modal.editing = false
-          })
-        } else {
-          console.warn('参数验证不通过:' + JSON.stringify(this.modal.operationPostion))
-          this.modal.editing = false
-        }
-      },
-
-      /**
-       * 更新运营位
-       * @return {[type]} [description]
-       */
-      updateOperatePosition () {
-        if (this.$validation.valid) {
-          var params = this.modal.operationPostion
-          params.content = []
-          api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id).then((res) => {
-            // console.log(res)
-            this.getOperatePositions()
-            this.closeModal()
-          }).catch((err) => {
-            this.handleError(err)
-            this.modal.editing = false
-          })
-        } else {
-          console.warn('参数验证不通过：' + JSON.stringify(this.modal.operationPostion))
-        }
-      },
-
-      /**
-       * 删除运营位
-       * @return {[type]} [description]
-       */
-      delOperatePosition () {
-        console.log('删除运营位')
-        console.log(this.modal.operationPostion)
-        api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id).then((res) => {
-          // console.log(res)
-          this.getOperatePositions()
-          this.closeModal()
-        }).catch((err) => {
-          this.handleError(err)
-          this.modal.editing = false
-        })
-      },
+      // /**
+      //  * 添加运营位
+      //  * @return {[type]} [description]
+      //  */
+      // addOperatePosition () {
+      //   if (this.$validation.valid) {
+      //     var params = this.modal.operationPostion
+      //     params.content = []
+      //     params.creator = this.currentMember.name
+      //     api.operate.addOperatePosition(this.appID, this.token, params).then((res) => {
+      //       this.getOperatePositions()
+      //       this.closeModal()
+      //     }).catch((err) => {
+      //       this.handleError(err)
+      //       this.modal.submitting = false
+      //     })
+      //   } else {
+      //     console.warn('参数验证不通过:' + JSON.stringify(this.modal.operationPostion))
+      //     this.modal.submitting = false
+      //   }
+      // },
+      //
+      // /**
+      //  * 更新运营位
+      //  * @return {[type]} [description]
+      //  */
+      // updateOperatePosition () {
+      //   if (this.$validation.valid) {
+      //     var params = this.modal.operationPostion
+      //     params.content = []
+      //     api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id).then((res) => {
+      //       // console.log(res)
+      //       this.getOperatePositions()
+      //       this.closeModal()
+      //     }).catch((err) => {
+      //       this.handleError(err)
+      //       this.modal.submitting = false
+      //     })
+      //   } else {
+      //     console.warn('参数验证不通过：' + JSON.stringify(this.modal.operationPostion))
+      //   }
+      // },
+      //
+      // /**
+      //  * 删除运营位
+      //  * @return {[type]} [description]
+      //  */
+      // delOperatePosition () {
+      //   console.log('删除运营位')
+      //   console.log(this.modal.operationPostion)
+      //   api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id).then((res) => {
+      //     // console.log(res)
+      //     this.getOperatePositions()
+      //     this.closeModal()
+      //   }).catch((err) => {
+      //     this.handleError(err)
+      //     this.modal.submitting = false
+      //   })
+      // },
 
       /**
        * 显示添加运营位浮层
@@ -292,21 +318,43 @@
         }
         this.modal.show = true
       },
+
       /**
        * 表单提交
        * @return {[type]} [description]
        */
       onSubmit () {
-        this.modal.editing = true
-        if (this.modal.type === 'add') { // 添加运营位
-          this.addOperatePosition()
-        } else { // 编辑运营位
-          if (this.modal.delChecked) { // 删除运营位
-            this.delOperatePosition()
+        if (this.modal.submitting) return
+
+        let process
+
+        if (this.modal.delChecked) { // 删除运营位
+          process = api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id)
+        } else {
+          if (this.$validation.invalid) {
+            this.$validate(true)
+            return
+          }
+          let params = this.modal.operationPostion
+
+          if (this.modal.type === 'add') { // 添加运营位
+            params.content = []
+            params.creator = this.currentMember.name
+            process = api.operate.addOperatePosition(this.appID, this.token, params)
           } else { // 编辑运营位
-            this.updateOperatePosition()
+            process = api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id)
           }
         }
+
+        this.modal.submitting = true
+        process.then((res) => {
+          // console.log(res)
+          this.getOperatePositions()
+          this.closeModal()
+        }).catch((err) => {
+          this.handleError(err)
+          this.modal.submitting = false
+        })
       },
 
       /**
@@ -316,7 +364,7 @@
       closeModal () {
         this.$resetValidation()
         this.modal.show = false
-        this.modal.editing = false
+        this.modal.submitting = false
         this.modal.delChecked = false
         this.modal.operationPostion = {
           name: '',
