@@ -122,43 +122,43 @@ export default {
           'name': 'id',
           'label': '设备ID',
           'hidden': false,
-          'sort': 2
+          'sort': 1
         },
         {
           'name': 'is_active',
           'label': '是否激活',
           'hidden': false,
-          'sort': 3
+          'sort': 1
         },
         {
           'name': 'is_online',
           'label': '激活时间',
           'hidden': false,
-          'sort': 4
+          'sort': 1
         },
         {
           'name': 'is_online',
           'label': '是否在线',
           'hidden': false,
-          'sort': 5
+          'sort': 1
         },
         {
           'name': 'sn',
           'label': 'SN',
           'hidden': true,
-          'sort': 6
+          'sort': 1
         },
         {
           'name': 'online_count',
           'label': '累计在线时间',
           'hidden': true,
-          'sort': 7
+          'sort': 1
         },
         {
           'name': 'firmware_version',
           'label': '固件版本号',
           'hidden': true,
-          'sort': 8
+          'sort': 1
         }
       ],
       // 服务器返回的数据
@@ -347,29 +347,23 @@ export default {
         needResetData = true
         this.dataList.datapoints = this.datapoints
       }
+      this.dataList.datapoints = this.dataList.datapoints || this.datapoints || []
       let datapoints = this.dataList.datapoints.map((item) => {
-        let dataPointNames = this.datapoints.map((point) => point.name)
-        if (dataPointNames.indexOf(item.name) === -1) {
-          needResetData = true
-        }
-
         let obj = {}
         obj.name = item.name
         obj.label = item.label || item.name
         obj.hidden = item.hidden === false ? item.hidden : true
-        obj.sort = item.sort || 9
+        obj.sort = item.sort || 2
         obj.show = !item.hidden
         obj.type = 'datapoints'
         return obj
       })
       result = this.dataList.base_fileds.concat(datapoints)
-      console.log(result)
       result.sort((a, b) => {
-        return a.sort - b.sort
+        a.sort - b.sort
       })
       this.fieldList = result
       if (needResetData) {
-        alert('不同')
         // this.setFiled()
       }
     },
