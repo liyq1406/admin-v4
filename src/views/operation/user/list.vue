@@ -30,9 +30,14 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="'ID'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                <search-box :key.sync="query" :active="searching" @cancel="getUsers(true)" :placeholder="'请输入查询内容'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getUsers(true)">
+                  <x-select width="100px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </x-select>
                   <button slot="search-button" @click="getUsers(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
-                  <label>{{ $t('ui.user.search_user') }}</label>
+                  <!-- <label>{{ $t('ui.user.search_user') }}</label> -->
                 </search-box>
               </div>
             </div>
@@ -81,6 +86,14 @@
         countPerPage: config.COUNT_PER_PAGE,
         loadingData: false,
         users: [],
+        queryTypeOptions: [
+          { label: '邮箱', value: 'email' },
+          { label: '手机', value: 'phone' }
+        ],
+        queryType: {
+          label: '邮箱',
+          value: 'email'
+        },
         filters: [
           {
             name: '全部',
@@ -240,7 +253,8 @@
         }
 
         if (this.query.length > 0) {
-          condition.query['id'] = { $in: [this.query] }
+          // condition.query['id'] = { $in: [this.query] }
+          condition.query[this.queryType.value] = {$in: [this.query]}
         }
 
         if (this.selectedFilter.value) {
@@ -334,7 +348,7 @@
        * @return {[type]} [description]
        */
       getServerDayActiveCount () {
-        var time = createDayRange(0, 7)
+        var time = createDayRange(1, 7)
         api.statistics.getUserTrend(time.start, time.end).then((res) => {
           var count = 0
           res.data.map((item) => {

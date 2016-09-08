@@ -38,7 +38,13 @@
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange" @theader-create-date="sortBySomeKey" :selecting="selecting" @selected-change="selectChange">
+            <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+              <label>标记为:</label>
+              <button class="btn btn-ghost" @click="setDeal">已处理</button>
+              <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+            </div>
+          </x-table>
         </div>
       </div>
     </div>
@@ -92,8 +98,7 @@ export default {
       key: '',
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'from' },
-        { label: '告警内容', value: 'content' }
+        { label: '设备ID', value: 'from' }
       ],
       queryType: {
         label: 'MAC',
@@ -132,7 +137,10 @@ export default {
       }],
       product: {},
       total: 0,
-      periods: [1, 7, 30]
+      periods: [1, 7, 30],
+      showBatchBtn: false,
+      dealList: [],
+      selecting: true
     }
   },
 
@@ -281,6 +289,49 @@ export default {
           break
       }
       return ''
+    },
+    // 标记为已处理
+    setDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertRead(params).then((res) => {
+        if (res.status === 200) {
+          this.getList()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 标记为未处理
+    setUnDeal () {
+      var params = []
+      this.dealList.forEach((item) => {
+        params.push(item.id)
+      })
+      // var params = [this.$route.params.id]
+      api.alert.setAlertUnread(params).then((res) => {
+        if (res.status === 200) {
+          this.getList()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    selectChange (table) {
+      var result = []
+      table.forEach((item) => {
+        result.push(item.prototype)
+      })
+      // this.dealList = []
+      this.dealList = result
+      if (table.length > 0) {
+        this.showBatchBtn = true
+      } else {
+        this.showBatchBtn = false
+      }
     }
   }
 }
