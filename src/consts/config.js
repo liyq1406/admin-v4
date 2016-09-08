@@ -18,7 +18,7 @@ let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.locatio
 // 正式地址
 // const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn:443`
 // 灰
-const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn:443`
+const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
 
 // 插件服务器地址
 // const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
