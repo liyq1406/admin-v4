@@ -53,9 +53,9 @@ export default {
    * @param  {string} appID, {string} token {object} params
    * @return promise
    */
-  getFeedbackLabel (appID, params) {
+  getFeedbackLabel (appID) {
     return http.post(
-      `${API_SERVER.feedback}/${appID}/api/feedback_label/list`, params, {
+      `${API_SERVER.feedback}/${appID}/api/feedback_label/list`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
