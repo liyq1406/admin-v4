@@ -253,10 +253,10 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
-            'word': {
+            'field': {
               component (resolve) {
                 require.ensure([], (require) => {
-                  resolve(require('./views/dev/product/info/edit/word'))
+                  resolve(require('./views/dev/product/info/edit/field'))
                 }, 'admin')
               }
             }

@@ -63,7 +63,7 @@ export default {
           link: { path: `${deviceDetailRoot}/form` }
         }, {
           label: '产品字段',
-          link: { path: `${deviceDetailRoot}/word` }
+          link: { path: `${deviceDetailRoot}/field` }
         }]
       }
     }

@@ -8,8 +8,7 @@
   export default {
     props: {
       value: {
-        type: Boolean,
-        twoWay: true
+        type: Boolean
       },
 
       // 尺寸
