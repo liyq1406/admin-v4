@@ -113,6 +113,54 @@ Vue.filter('formatCategories', {
 })
 
 /**
+ * 用户反馈类别过滤器
+ */
+Vue.filter('formatTags', {
+  read (val) {
+    let cateStr = ''
+    val.map((tag, index) => {
+      cateStr += tag
+      // if (tag.sub.length) {
+      //   cateStr += ':'
+      //   tag.sub.map((item, i) => {
+      //     cateStr += item
+      //     if (i < tag.sub.length - 1) {
+      //       cateStr += ','
+      //     }
+      //   })
+      // }
+      if (index < val.length - 1) {
+        cateStr += '\n'
+      }
+    })
+    return cateStr
+  },
+
+  write (val, oldVal) {
+    let ret = []
+    let arr = val.split('\n')
+    arr.map((item, index) => {
+      if (item.length) {
+        let string = ''
+        let temp = item
+        string = temp
+        // if (temp[1]) {
+        //   let subArr = temp[1].split(',')
+        //   subArr = subArr.map((item) => {
+        //     return item.trim()
+        //   })
+        //   string.sub = subArr
+        // } else {
+        //   string.sub = []
+        // }
+        ret.push(string)
+      }
+    })
+    return ret
+  }
+})
+
+/**
  * 推送规则过滤器
  */
 Vue.filter('formatRules', {
