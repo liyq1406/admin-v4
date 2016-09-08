@@ -9,11 +9,11 @@
         <div class="form">
           <div class="form-row">
             <div class="input-text-wrap">
-              <textarea class="input-text"></textarea>
+              <textarea class="input-text" v-model="tags | formatTags"></textarea>
             </div>
           </div>
           <div class="form-action">
-            <button class="btn btn-primary btn-lg">保存</button>
+            <button class="btn btn-primary btn-lg" @click.prevent="updateTags">保存</button>
           </div>
         </div>
       </div>
@@ -24,11 +24,57 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
+import api from 'api'
 
 export default {
   name: 'Settings',
 
-  mixins: [globalMixins, pluginMixins]
+  mixins: [globalMixins, pluginMixins],
+
+  data () {
+    return {
+      tags: []
+    }
+  },
+
+  route: {
+    data () {
+      this.getTags()
+    }
+  },
+
+  methods: {
+    // 获取标签
+    getTags () {
+      api.helpdesk.getFeedbackLabel(this.$route.params.app_id).then((res) => {
+        console.log(res)
+        this.tags = res.data.label
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    // 编辑标签
+    updateTags () {
+      var params = {
+        label: []
+      }
+      params.label = this.tags
+      api.helpdesk.saveFeedbackLabel(this.$route.params.app_id, params).then((res) => {
+        console.log(res)
+        this.showNotice({
+          type: 'info',
+          content: '已成功修改标签'
+        })
+        this.getTags()
+      }).catch((res) => {
+        this.showNotice({
+          type: 'error',
+          content: '修改标签失败'
+        })
+        this.handleError(res)
+      })
+    }
+  }
 }
 </script>
 
