@@ -281,5 +281,19 @@ export default {
     return http.put(
       `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}`, params
     )
+  },
+
+  // 获取用户管理个性化设置
+  getProductField (productId) {
+    return http.get(
+      `${API_SERVER.default}/v2/customization?id=corp.${productId}.device.list`
+    )
+  },
+
+  // 设置设备管理个性化设置
+  setProductField (productId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/customization?id=corp.${productId}.device.list`, params
+    )
   }
 }

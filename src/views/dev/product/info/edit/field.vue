@@ -67,7 +67,7 @@
 </template>
 
 <script>
-// import api from 'api'
+import api from 'api'
 // import * as config from 'consts/config'
 import Select from 'components/Select'
 import Switch from 'components/Switch'
@@ -126,50 +126,103 @@ export default {
   },
 
   methods: {
+    /**
+     * 是否显示按钮切换事件
+     * @param  {[type]} field [description]
+     * @return {[type]}       [description]
+     */
     toggleHidden (field) {
       field.hidden = !field.hidden
-      console.log('这里要发请求出去设置为隐藏')
+      // console.log('这里要发请求出去设置隐藏与否')
+      // console.log(this.sortDataList())
+      this.loading = true
+      api.product.getProductField(this.$route.params.id, this.sortDataList()).then((res) => {
+        this.dataList = res.data
+        this.loading = false
+      }).catch((res) => {
+        this.loading = false
+        this.handleError(res)
+      })
     },
+    /**
+     * 将当前数据重算位置 返回可以发给服务器的数据
+     * @return {[type]} [description]
+     */
+    sortDataList (fieldList) {
+      fieldList = fieldList || this.fieldList
+      let result = {}
+      result.base_fileds = []
+      result.datapoints = []
+      fieldList.forEach((item, index) => {
+        let obj = {
+          'name': item.name,
+          'label': item.label,
+          'hidden': item.hidden,
+          'sort': index + 1
+        }
+        result[item.type].push(obj)
+      })
+      return result
+    },
+    /**
+     * 向服务器获取数据
+     * @return {[type]} [description]
+     */
     getData () {
       this.loading = true
-      setTimeout(() => {
-        this.dataList = {
-          'base_fileds': [
-            {
-              'name': '111',
-              'label': '222',
-              'hidden': true,
-              'sort': 1
-            },
-            {
-              'name': '111',
-              'label': '222',
-              'hidden': false,
-              'sort': 2
-            }
-          ],
-          'datapoints': [
-            {
-              'index': 0,
-              'name': '222',
-              'label': '333',
-              'hidden': true,
-              'sort': 0
-            },
-            {
-              'index': 0,
-              'name': '222',
-              'label': '333',
-              'hidden': false,
-              'sort': 3
-            }
-          ]
-        }
+      api.product.getProductField(this.$route.params.id).then((res) => {
+        console.log(res)
+        this.dataList = res.data
         this.loading = false
-      }, 1000)
+      }).catch((res) => {
+        this.loading = false
+        this.handleError(res)
+      })
+      // setTimeout(() => {
+      //   this.dataList = {
+      //     'base_fileds': [
+      //       {
+      //         'name': '111',
+      //         'label': '222',
+      //         'hidden': true,
+      //         'sort': 1
+      //       },
+      //       {
+      //         'name': '111',
+      //         'label': '222',
+      //         'hidden': false,
+      //         'sort': 2
+      //       }
+      //     ],
+      //     'datapoints': [
+      //       {
+      //         'index': 0,
+      //         'name': '222',
+      //         'label': '333',
+      //         'hidden': true,
+      //         'sort': 0
+      //       },
+      //       {
+      //         'index': 0,
+      //         'name': '222',
+      //         'label': '333',
+      //         'hidden': false,
+      //         'sort': 3
+      //       }
+      //     ]
+      //   }
+      //   this.loading = false
+      // }, 1000)
     },
+    /**
+     * 初始化 将服务器返回的数据合并成一个数据用于渲染页面
+     * @return {[type]} [description]
+     */
     init () {
       var result = []
+      if (!this.dataList.base_fileds || !this.dataList.datapoints) {
+        return
+      }
       this.dataList.base_fileds.forEach((item) => {
         item.show = !item.hidden
         item.type = 'base_fileds'
@@ -184,6 +237,11 @@ export default {
       })
       this.fieldList = result
     },
+    /**
+     * 计算当前的类型 返回中文文本
+     * @param  {[type]} type [description]
+     * @return {[type]}      [description]
+     */
     translate (type) {
       return type === 'base_fileds' ? '基本字段' : '数据端点'
     }
