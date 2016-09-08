@@ -179,15 +179,19 @@ export default {
         order: {},
         query: {
           'update_time': {
-            $gt: this.time.startDate,
-            $lt: this.time.endDate
+            $gte: {
+              '@date': this.time.startDate
+            },
+            $lte: {
+              '@date': this.time.endDate
+            }
           }
         }
       }
 
       this.headers.map((item) => {
         if (item.sortType) {
-          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+          condition.order[item.key] = (item.sortType === 1 ? '1' : '-1')
         }
       })
 
