@@ -208,9 +208,14 @@
 
         if (this.key !== '') {
           if (this.queryType.value === 'from') {
+            // 设备ID
+            let temp = parseInt(this.key)
+            if (!temp || temp > 1620000000) {
+              temp = 1620000000
+            }
             // 设备ID不能用模糊匹配
             params.query.from = {
-              '$in': [this.key]
+              '$in': [temp]
             }
           } else {
             params.query[this.queryType.value] = {

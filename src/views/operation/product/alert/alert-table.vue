@@ -140,9 +140,22 @@ export default {
       }
 
       // 关键字搜索
-      if (this.key.length > 0) {
-        this.currentPage = 1
-        condition.query[this.queryType.value] = this.queryType.value === 'from' ? { $in: [Number(this.key)] } : { $like: this.key }
+      if (this.key !== '') {
+        if (this.queryType.value === 'from') {
+          // 设备ID
+          let temp = parseInt(this.key)
+          if (!temp || temp > 1620000000) {
+            temp = 1620000000
+          }
+          // 设备ID不能用模糊匹配
+          condition.query.from = {
+            '$in': [temp]
+          }
+        } else {
+          condition.query[this.queryType.value] = {
+            '$like': this.key
+          }
+        }
       }
 
       // 显示指定告警类型
