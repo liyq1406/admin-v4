@@ -144,7 +144,7 @@ export default {
         },
         splashwnd: {
           subs: {
-            list: 'APP闪屏设置'
+            list: 'APP启动页设置'
           }
         },
         helpdesk: {
