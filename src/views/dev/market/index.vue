@@ -116,8 +116,8 @@
           type: 10
         }, {
           id: '',
-          name: 'APP闪屏设置',
-          description: '对APP进行闪屏设置。',
+          name: 'APP启动页设置',
+          description: '对APP进行启动页设置。',
           alias: 'splashwnd',
           enable: false,
           type: 10
