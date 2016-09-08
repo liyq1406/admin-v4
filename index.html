@@ -7,8 +7,23 @@
     <link rel="shortcut icon" href="/static/images/favicon.ico" />
     <link rel="stylesheet" href="/static/vendor/font-awesome/css/font-awesome.min.css" />
     <link rel="stylesheet" href="/static/vendor/font-awesome/css/font-awesome.min.css" />
+    <!--[if lte IE 9]>
+    <style>
+    .incompatable { background-color: #fff; width: 500px; margin: 120px auto 0; padding: 50px 0; border-radius: 8px; }
+    .incompatable .fa { font-size: 90px; color: #C0252E; margin: 20px; }
+    .incompatable p { font-size: 14px; }
+    </style>
+    <![endif]-->
   </head>
   <body>
+    <!--[if lte IE 9]>
+    <div class="incompatable">
+      <div style="text-align:center">
+        <i class="fa fa-exclamation-circle"></i>
+        <p>抱歉，管理台只支持IE9以上的浏览器，推荐使用谷歌浏览器或火狐浏览器进行浏览</p>
+      </div>
+    </div>
+    <![endif]-->
     <div id="app"></div>
     <!-- built files will be auto injected -->
     <script>
