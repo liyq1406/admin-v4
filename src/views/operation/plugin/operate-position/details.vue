@@ -8,7 +8,7 @@
       <div class="panel-hd">
         <div class="actions">
           <dropdown :trigger-width="90" :dropdown-width="130" :show="isShowDropdown" @toggle="onDropdownToggle">
-            <button class="btn btn-primary" slot="trigger" :class="{'disabled': contentList.length>=4}" :disabled="contentList.length>=4">添加内容 <i class="fa fa-caret-down"></i></button>
+            <button class="btn btn-primary" slot="trigger" :class="{'disabled': loadingData || contentList.length>=maxCount}" :disabled="loadingData || contentList.length>=maxCount">添加内容 <i class="fa fa-caret-down"></i></button>
             <div class="dropdown-menu">
               <div class="dropdown-menu-item" v-for="(type, label) in types" @click="addContent(type)">{{ label }}</div>
             </div>
@@ -92,8 +92,10 @@ export default {
 
   data () {
     return {
+      // 最大的允许添加数量
+      maxCount: 4,
       // 正在加载数据
-      loadingData: false,
+      loadingData: true,
       // 正在删除的索引
       deletingIndex: -1,
       operatePosition: {},
@@ -193,6 +195,7 @@ export default {
             if (r.status === 200) {
               this.contentList = r.data.list
               this.ordering = false
+              this.loadingData = false
             }
           })
         }
@@ -296,7 +299,9 @@ export default {
      * 处理下拉状态切换
      */
     onDropdownToggle (show) {
-      this.isShowDropdown = show
+      if (!this.loadingData && this.contentList.length < this.maxCount) {
+        this.isShowDropdown = !show
+      }
     }
   }
 }

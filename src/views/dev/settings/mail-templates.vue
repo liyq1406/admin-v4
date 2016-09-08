@@ -374,7 +374,25 @@
             name: '激活邮件模板',
             subject: '欢迎注册云智易',
             sender: '',
-            content: '<p>亲爱的&nbsp%username%，</p>\n\n<div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>\n\n<div>&nbsphttp://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</div>\n\n<div>&nbsp（本链接将在48小时后失效）</div>\n\n<div>&nbsp</div>\n\n<div>本邮件由系统自动发出，请勿回复</div>\n\n<div>&nbsp</div>\n\n<div>云智易</div>\n\n<div>%date%</div>',
+            content: `<p>亲爱的&nbsp;%username%，</p>
+
+                      <div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>
+
+                      <p><a href="http://admin.xlink.cn/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://admin.xlink.cn/#!/user-email-activate/%corp_id%/%email%/%verifycode%</a></p>
+
+                      <p><a> </a></p>
+
+                      <div><a>&nbsp;（本链接将在48小时后失效）</a></div>
+
+                      <div><a>&nbsp;</a></div>
+
+                      <div><a>本邮件由系统自动发出，请勿回复</a></div>
+
+                      <div><a>&nbsp;</a></div>
+
+                      <div><a>云智易</a></div>
+
+                      <div><a>%date%</a></div>`,
             type: 1,
             lang: 'zh-cn'
           }
@@ -382,7 +400,18 @@
             name: '激活邮件英文模板',
             subject: 'Welcome to XLINK',
             sender: '',
-            content: '<p>Dear %username%,</p>\n\n<p>Welcome to register XLINK,please click the link below to activate your account.</p>\n\n<p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate<a></p>\n\n<p>(this link will be valid within 48 hours)<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p><br />\n\nXLINK<br />\n\n%date%</p>',
+            content: `<p>Dear %username%,</p>
+
+                    <p>Welcome to register,please click the link below to activate your account.</p>
+
+                    <p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</a></p>
+
+                    <p><a> </a></p>
+
+                    <p><a>(this link will be valid within 48 hours)<br />
+                    *Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</a></p>
+
+                    <p><a>%date%</a></p>`,
             type: 1,
             lang: 'en-us'
           }

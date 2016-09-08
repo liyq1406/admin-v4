@@ -108,8 +108,7 @@ export default {
      * 处理点击
      */
     onTriggerClick () {
-      this.show = !this.show
-      this.$emit('toogle', this.show)
+      this.$emit('toggle', this.show)
     }
   }
 }
