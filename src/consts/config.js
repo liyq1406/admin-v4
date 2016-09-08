@@ -188,9 +188,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'analysis',
         url: '/alerts/analysis'
-      }, {
-        alias: 'heat',
-        url: '/alerts/heat'
+      // }, {
+      //   alias: 'heat',
+      //   url: '/alerts/heat'
       }]
     }, {
       alias: 'users', // 用户管理

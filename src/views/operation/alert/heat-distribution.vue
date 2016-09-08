@@ -201,14 +201,14 @@ export default {
             if (i !== '通知' && i !== '严重' && i !== '轻微') {
               regions.push({
                 name: i,
-                value: CNData[i].通知 + CNData[i].轻微 + CNData[i].严重
+                value: CNData[i].通知 || 0 + CNData[i].轻微 || 0 + CNData[i].严重 || 0
               })
               for (let j in CNData[i]) {
                 if (j !== '通知' && j !== '严重' && j !== '轻微') {
                   let temp = {
                     province: i,
                     city: j,
-                    value: CNData[i][j].通知 + CNData[i][j].轻微 + CNData[i][j].严重
+                    value: CNData[i][j].通知 || 0 + CNData[i][j].轻微 || 0 + CNData[i][j].严重 || 0
                   }
                   resData.push(temp)
                 }

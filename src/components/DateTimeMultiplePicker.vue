@@ -154,7 +154,8 @@ export default {
       if (this.period === 1) { // 当取24小时时,将starttime设置为昨天此刻
         this.startTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24)
       } else { // 其他天数,将starttime设置为(n - 1)天前此刻
-        this.startTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24 * (this.period - 1))
+        this.startTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24 * this.period)
+        this.endTime = new Date(this.endTime.getTime() - 3600 * 1000 * 24)
       }
     },
     periodSelect () {

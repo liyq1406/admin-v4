@@ -160,22 +160,22 @@ export default {
       alertSummary: {
         unread: {
           title: '待处理告警',
-          total: 0,
+          total: '--',
           change: 0
         },
         today: {
           title: '今日告警',
-          total: 0,
+          total: '--',
           change: 0
         },
         week: {
           title: '7天告警数',
-          total: 0,
+          total: '--',
           change: 0
         },
         month: {
           title: '30天告警数',
-          total: 0,
+          total: '--',
           change: 0
         }
       },
@@ -258,19 +258,10 @@ export default {
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
       var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
       monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
-      var now = new Date().getTime()
+      var now = new Date().getTime() - 1 * 24 * 3600 * 1000
       now = dateFormat('yyyy-MM-dd', new Date(now))
 
-      // api.statistics.getProductAlertSummary(this.currentProduct.id).then((res) => {
-      //   if (res.status === 200) {
-      //     this.alertSummary.unread.total = res.data.unread
-      //   }
-      // }).catch((res) => {
-      //   this.handleError(res)
-      // })
-      // TODO 接口字段缺失 需要产品下统计概览数据 显示获取的全局的数据
-      // 获取当天数据
-      api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.currentProduct.id, todayBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.unread.total = res.data.unread
           this.alertSummary.today.total = res.data.add_today
@@ -279,7 +270,7 @@ export default {
         this.handleError(res)
       })
       // 获取7天数据
-      api.statistics.getAlertSummary(weekBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.currentProduct.id, weekBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.week.total = res.data.message
         }
@@ -287,7 +278,7 @@ export default {
         this.handleError(res)
       })
       // 获取30天数据
-      api.statistics.getAlertSummary(monthBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.currentProduct.id, monthBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.month.total = res.data.message
         }

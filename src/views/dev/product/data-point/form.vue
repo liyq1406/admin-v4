@@ -51,17 +51,25 @@
                   <div class="row">
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                        <input v-model="model.min" type="text" name="model.min" class="input-text" lazy v-validate:min="validateMin" class="input-text"/>
+                        <input v-model="model.min" type="number" name="model.min" class="input-text" lazy v-validate:min="validateMin" class="input-text"/>
                       </div>
                     </div>
                     <div class="col-2 tac control-text">-</div>
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                        <input v-model="model.max" type="text" name="model.max" class="input-text" v-validate:max="{format: 'numberic', min: addMin, max: modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807}"/>
+                        <input v-model="model.max" type="number" name="model.max" class="input-text" v-validate:max="{required: true, format: 'numberic', min: addMin, max: modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807}"/>
                       </div>
                     </div>
                   </div>
                   <div class="form-tips form-tips-error">
+                    <div class="row">
+                      <div class="col-13">
+                        <span v-if="$validation.min.touched && $validation.min.required">最小值为必填项</span>
+                      </div>
+                      <div class="col-11">
+                        <span v-if="$validation.max.touched && $validation.max.required">最大值为必填项</span>
+                      </div>
+                    </div>
                     <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
                     <span v-if="($validation.min.modified && $validation.min.max) || ($validation.max.modified && $validation.max.min)">最大值必须大于最小值</span>
@@ -183,6 +191,7 @@ export default {
       } else if (this.modelType.value === 4) { // 32位整型（有符号）
         result.min = -2147483648
       }
+      result.required = true
       return result
     },
     type () {
@@ -313,7 +322,7 @@ export default {
           }
         }
       } else {
-        this.$validation.name.touched = true
+        this.$validate(true)
       }
     },
 

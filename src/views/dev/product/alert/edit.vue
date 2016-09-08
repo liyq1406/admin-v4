@@ -60,7 +60,7 @@
                         <div class="input-text-wrap" v-show="editModal.model.type === 1 && datapoints.length">
                           <input v-model="editModal.value1" type="text" class="input-text"/>
                         </div>
-                        <div class="select" v-show="editModal.model.type === 2">
+                        <div class="select" v-if="editModal.model.type === 2">
                           <x-select :label="$t('common.'+editModal.value2)">
                             <select v-model="editModal.value2">
                               <option value="online">{{ $t("common.online") }}</option>
@@ -269,7 +269,11 @@
             this.editModal.model = res.data.find((item) => {
               return item.id === this.$route.params.rule_id
             })
-            this.editModal.value2 = this.editModal.model.value
+            if (this.editModal.model.type === 1) {
+              this.editModal.value1 = this.editModal.model.value
+            } else {
+              this.editModal.value2 = this.editModal.model.value
+            }
           }
           this.loadingData = false
         }).catch((res) => {

@@ -160,7 +160,7 @@ export default {
       // 计算结束时间距现在多少天
       let offset = Math.floor((cur.getTime() - end.getTime()) / (3600 * 1000 * 24))
       let duration = Math.floor((end.getTime() - start.getTime()) / (3600 * 1000 * 24))
-      this.getUserTrend([offset, duration + 2])
+      this.getUserTrend([offset, duration + 1])
 
       this.period = 0
     }

@@ -171,9 +171,9 @@ export default {
    * @param  {String} endDay   结束日期
    * @return {Promise}
    */
-  getProductAlertSummary (productId) {
+  getProductAlertSummary (productId, startDay, endDay) {
     return http.get(
-      `${API_SERVER.default}/v2/statistics/message/product_summary?product_id=${productId}`
+      `${API_SERVER.default}/v2/statistics/message/product_summary?product_id=${productId}&start_day=${startDay}&end_day=${endDay}`
     )
   },
 

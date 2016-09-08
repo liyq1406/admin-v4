@@ -113,13 +113,13 @@ export default {
 
   route: {
     data () {
-      this.getSummary()
     }
   },
 
   watch: {
     currentProduct () {
       this.productID = this.currentProduct.id
+      this.getSummary()
     }
   },
 
@@ -132,19 +132,19 @@ export default {
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
       var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
       monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
-      var now = new Date().getTime()
+      var now = new Date().getTime() - 1 * 24 * 3600 * 1000
       now = dateFormat('yyyy-MM-dd', new Date(now))
       // 获取当天数据
-      api.statistics.getAlertSummary(todayBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.productID, todayBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.unhandle.total = res.data.unread
-          this.alertSummary.message.total = res.data.message
+          this.alertSummary.message.total = res.data.add_today
         }
       }).catch((res) => {
         this.handleError(res)
       })
       // 获取7天数据
-      api.statistics.getAlertSummary(weekBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.productID, weekBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.sevenday.total = res.data.message
         }
@@ -152,7 +152,7 @@ export default {
         this.handleError(res)
       })
       // 获取30天数据
-      api.statistics.getAlertSummary(monthBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.productID, monthBeginTime, now).then((res) => {
         if (res.status === 200) {
           this.alertSummary.thirtyday.total = res.data.message
         }
