@@ -38,7 +38,7 @@
                   <x-select :label="role.label">
                     <select v-model="role">
                       <option v-if="currentMember.role === 1" :value="{label: '管理员', value: 1}">管理员</option>
-                      <option v-for="(key, role) in MEMBER_TYPES" v-if="key - 0 !== 1 || true" :value="{label: role, value: key}">{{role}}</option>
+                      <option v-for="(key, role) in MEMBER_TYPES" v-if="key - 0 !== 1" :value="{label: role, value: key}">{{role}}</option>
                     </select>
                   </x-select>
                 </div>
