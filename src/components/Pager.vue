@@ -123,8 +123,15 @@ export default {
     },
 
     goToPage (ev) {
-      this.onPageChange(this.destPage)
-      this.destPage = ''
+      if (this.destPage > 0 && this.destPage < (this.total / this.countPerPage)) {
+        this.onPageChange(this.destPage)
+        this.destPage = ''
+      } else {
+        this.showNotice({
+          type: 'error',
+          content: '页数不合法！'
+        })
+      }
     },
 
     // 处理
