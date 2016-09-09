@@ -142,16 +142,14 @@ export default {
             this.adding = false
             // mutation
             this.createProduct(res.data)
-            this.$emit('info-submit', res.data)
+            this.$emit('next', 'info', res.data)
           }
         }).catch((res) => {
           this.adding = false
           this.handleError(res)
         })
       } else {
-        this.$validation.name.touched = true
-        this.$validation.description.touched = true
-        this.$validation.mode.touched = true
+        this.$validate(true)
       }
     }
   }
