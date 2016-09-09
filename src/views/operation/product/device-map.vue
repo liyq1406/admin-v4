@@ -82,11 +82,11 @@ export default {
       ids: [],
       devices: [],
       vDevices: [],
-      currentProduct: {},
       query: '',
       searching: false,
       queryTypeOptions: [
         { label: '设备ID', value: 'id' },
+        { label: 'MAC', value: 'mac' },
         { label: '所在区域', value: 'area' }
       ],
       queryType: {
@@ -148,14 +148,14 @@ export default {
 
   watch: {
     zoom () {
-      if (this.queryType.value !== 'id' || !this.query) {
+      if (this.queryType.value === 'area' || !this.query) {
         this.currentPage = 1
         this.getGeographies()
       }
     },
 
     mapCenter () {
-      if (this.queryType.value !== 'id' || !this.query) {
+      if (this.queryType.value === 'area' || !this.query) {
         this.getGeographies()
       }
     },
@@ -478,11 +478,15 @@ export default {
       content.push(`<h3>${data.device.name || this.currentProduct.name}</h3>`)
       content.push('</div>')
       content.push('<div class="map-popup-body">')
-      content.push(`<div class="info-row mt5 mb10">${data.device.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.vDevice.last_login)}</div>`)
+      if (data.vDevice) {
+        content.push(`<div class="info-row mt5 mb10">${data.device.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.vDevice.last_login)}</div>`)
+      }
       // content.push(`<div class="info-row"><span class="label">设备ID: </span>${data.device.id}</div>`)
       content.push(`<div class="info-row"><span class="label">MAC: </span>${data.device.mac}</div>`)
-      content.push(`<div class="info-row"><span class="label">IP: </span>${data.vDevice.ip}</div>`)
-      content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.vDevice.online_count)}</div>`)
+      if (data.vDevice) {
+        content.push(`<div class="info-row"><span class="label">IP: </span>${data.vDevice.ip}</div>`)
+        content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.vDevice.online_count)}</div>`)
+      }
       content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.device_id}">查看详情&gt;&gt;</a></div>`)
       content.push('</div>')
       content.push('</div>')

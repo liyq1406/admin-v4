@@ -441,7 +441,7 @@ export default {
       return {
         mode: {
           label: '产品型号',
-          value: this.currentProduct.mode || ''
+          value: this.currentProduct.mode || '-'
         },
         type: {
           label: '产品类型',
@@ -573,7 +573,7 @@ export default {
      * @param {Number} val 目标值
      */
     getTypeLabelByValue (val) {
-      let result = ''
+      let result = '-'
       let type = _.find(this.locales.data.PRODUCT_TYPES, (item) => {
         return item.value === val
       })

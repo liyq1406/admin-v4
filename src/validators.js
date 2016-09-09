@@ -33,9 +33,9 @@ export function format (val, type) {
       result = val ? /^(http:\/\/|https:\/\/)(.{4,})$/.test(val) : true
       break
 
-    // URL
-    case 'space':
-      result = val.trim().length > 0
+    // 字符串开始与结尾无空格
+    case 'no-spaces-both-ends':
+      result = val.trim().length === val.length
       break
 
     default:
