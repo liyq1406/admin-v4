@@ -684,11 +684,6 @@
             content: '请检查填写的内容'
           })
         }
-        // api.broadcast.addTask(this.task).then((res) => {
-        //   console.log(res)
-        // }).catch((res) => {
-        //   this.handleError(res)
-        // })
       },
       add () {
         api.broadcast.addTask(this.task).then((res) => {

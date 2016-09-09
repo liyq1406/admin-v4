@@ -4,9 +4,10 @@
       <div class="form">
         <validator name="validation">
           <form novalidate @submit.prevent="onSubmit">
+            <!-- 产品名称 -->
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
-              <div class="controls col-18">
+              <label class="form-control col-5">{{ $t("ui.product.fields.name") }}:</label>
+              <div class="controls col-19">
                 <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
                   <input v-model="editModel.name" type="text" name="editModel.name" v-validate:name="{required: true, maxlength: 32}" lazy class="input-text"/>
                 </div>
@@ -16,9 +17,10 @@
                 </div>
               </div>
             </div>
+            <!-- 产品型号 -->
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.mode") }}:</label>
-              <div class="controls col-18">
+              <label class="form-control col-5">{{ $t("ui.product.fields.mode") }}:</label>
+              <div class="controls col-19">
                 <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
                   <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{maxlength: 64}" lazy class="input-text"/>
                 </div>
@@ -27,9 +29,23 @@
                 </div>
               </div>
             </div>
+            <!-- 产品类型 -->
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
-              <div class="controls col-18">
+              <label class="form-control col-5">产品类型:</label>
+              <div class="controls col-19">
+                <div class="select">
+                  <x-select :label="productType" :placeholder="'请选择类型'">
+                    <select v-model="editModel.type" name="editModel.type">
+                      <option v-for="type in locales.data.ACCOUNT_TYPES" :value="type.value">{{ type.label }}</option>
+                    </select>
+                  </x-select>
+                </div>
+              </div>
+            </div>
+            <!-- 连接类型 -->
+            <div class="form-row row">
+              <label class="form-control col-5">{{ $t("ui.product.fields.link_type") }}:</label>
+              <div class="controls col-19">
                 <div class="select">
                   <x-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
                     <select v-model="editModel.link_type" name="link_type">
@@ -39,9 +55,10 @@
                 </div>
               </div>
             </div>
+            <!-- 产品描述 -->
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
-              <div class="controls col-18">
+              <label class="form-control col-5">{{ $t("ui.product.fields.desc") }}:</label>
+              <div class="controls col-19">
                 <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
                   <textarea v-model="editModel.description" type="text" name="editModel.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
                 </div>
@@ -51,26 +68,22 @@
                 </div>
               </div>
             </div>
+            <!-- 产品管理 -->
             <div class="form-row row mb0">
-              <div class="controls col-18 col-offset-6">
+              <label class="form-control col-5">产品管理:</label>
+              <div class="controls col-19">
                 <div class="checkbox-group">
                   <label class="checkbox">
                     <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
                   </label>
                 </div>
-              </div>
-            </div>
-            <div class="form-row row mb0" v-show="editModel.link_type===5">
-              <div class="controls col-18 col-offset-6">
-                <div class="checkbox-group">
+
+                <div class="checkbox-group" v-show="editModel.link_type===5">
                   <label class="checkbox">
                     <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
                   </label>
                 </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <div class="controls col-18 col-offset-6">
+
                 <div class="checkbox-group">
                   <label class="checkbox">
                     <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
@@ -79,8 +92,18 @@
               </div>
             </div>
 
+            <!-- 产品图片 -->
+            <div class="form-row row mb0">
+              <label class="form-control col-5">产品图片:</label>
+              <div class="controls col-19">
+                <div class="img-box">
+                  <image-uploader :images="editModel.pics" @modified="imageChange"></image-uploader>
+                </div>
+              </div>
+            </div>
+
             <div class="form-actions row">
-              <div class="col-offset-6">
+              <div class="col-offset-5">
                 <button type="submit" class="btn btn-primary btn-lg">{{ '提交' }}</button>
                 <button type="submit" class="btn btn-primary btn-lg" @click.prevent="deleteProduct">{{ '删除产品' }}</button>
               </div>
@@ -98,6 +121,7 @@
   import { removeProduct, updateProduct } from 'store/actions/products'
   import { setCurrProductMixin } from '../../mixins'
   import store from 'store'
+  import ImageUploader from 'components/ImageUploader'
   import Select from 'components/Select'
   import _ from 'lodash'
   import { globalMixins } from 'src/mixins'
@@ -118,11 +142,13 @@
     },
 
     components: {
-      'x-select': Select
+      'x-select': Select,
+      ImageUploader
     },
 
     data () {
       return {
+        images: [''],
         delChecked: false,
         editing: false,
         editModel: {
@@ -136,11 +162,24 @@
           is_release: false,
           'user_role_authority': '接口未实现',
           'scan_mode': '接口未实现',
-          id: ''
+          type: 0,
+          id: '',
+          pics: []
         }
       }
     },
 
+    computed: {
+      productType () {
+        var result = ''
+        this.locales.data.ACCOUNT_TYPES.forEach((item) => {
+          if (item.value === this.editModel.type) {
+            result = item.label
+          }
+        })
+        return result
+      }
+    },
     watch: {
       currentProduct () {
         this.getDetails()
@@ -152,9 +191,25 @@
       }
     },
     methods: {
+      imageChange (images) {
+        console.log(images)
+        this.editModel.pics = images
+      },
+      /**
+       * 获取当前产品信息
+       * @return {[type]} [description]
+       */
       getDetails () {
         this.editModel = _.clone(this.currentProduct)
+        this.editModel.pics = this.editModel.pics || ['']
+        if (this.editModel.pics.length === 0) {
+          this.editModel.pics = ['']
+        }
       },
+      /**
+       * 删除产品函数
+       * @return {[type]} [description]
+       */
       deleteProduct () {
         console.log('这个地方删除产品')
         if (!this.editing) { // 删除
@@ -174,6 +229,10 @@
           }
         }
       },
+      /**
+       * 表单提交
+       * @return {[type]} [description]
+       */
       onSubmit () {
         if (this.$validation.valid && !this.editing) { // 编辑
           this.editing = true
