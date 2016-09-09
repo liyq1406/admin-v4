@@ -43,7 +43,7 @@
                       </label>
                     </div>
                     <div class="range-box" v-if="dataPointType(datapoint.type) === 'number'">
-                      <range :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :extra="datapoint" @changed="onRangeChanged"></range>
+                      <range :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="onRangeChanged"></range>
                     </div>
                     <div class="string-box w160" v-if="dataPointType(datapoint.type) === 'string'">
                       <div class="input-text-wrap">
@@ -327,9 +327,7 @@ export default {
         case 1:
           result = 'boolean'
           break
-        case 2:
-        case 3:
-        case 4:
+        case 6:
           result = 'string'
           break
         default:
@@ -345,7 +343,7 @@ export default {
      * @param  {Object} params 参数
      */
     onRangeChanged (val, params) {
-      let dp = params.extra
+      let dp = params.expand
       dp.value = val
       this.setDataEvent(dp)
     },
