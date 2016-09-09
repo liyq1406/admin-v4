@@ -77,7 +77,7 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
-                    <textarea v-model="editModal.model.content" type="text" maxlength="250" v-form-ctrl name="content" required  lazy class="input-text"></textarea>
+                    <textarea v-lengthtip="{max: 250, model: editModal.model.content}" v-model="editModal.model.content" type="text" maxlength="250" v-form-ctrl name="content" required  lazy class="input-text"></textarea>
                   </div>
                   <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
                   <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
