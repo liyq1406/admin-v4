@@ -82,10 +82,12 @@
               <label class="form-control col-6">客户名称:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名称'" class="input-text-wrap">
-                  <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true}" class="input-text"/>
+                  <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">名称为必填</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.minlength">{{ $t('ui.validation.minlength', ['客户名称', 2]) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.maxlength">{{ $t('ui.validation.maxlength', ['客户名称', 40]) }}</span>
                 </div>
               </div>
             </div>
@@ -93,10 +95,12 @@
               <label class="form-control col-6">联系人:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入联系人'" class="input-text-wrap">
-                  <input v-model="addModal.contacter" type="text" name="contacter" v-validate:contacter="{required: false}" class="input-text"/>
+                  <input v-model="addModal.contacter" type="text" name="contacter" v-validate:contacter="{required: false, minlength: 2, maxlength: 32}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.required">联系人为必填</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.minlength">{{ $t('ui.validation.minlength', ['联系人', 2]) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.maxlength">{{ $t('ui.validation.maxlength', ['联系人', 40]) }}</span>
                 </div>
               </div>
             </div>
@@ -104,10 +108,11 @@
               <label class="form-control col-6">联系电话:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入联系电话'" class="input-text-wrap">
-                  <input v-model="addModal.phone" type="text" name="phone" v-validate:phone="{required: true}" class="input-text"/>
+                  <input v-model="addModal.phone" type="text" name="phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.phone.touched && $majorClientValidation.phone.required">联系电话为必填</span>
+                  <span v-if="$majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
                 </div>
               </div>
             </div>
@@ -115,10 +120,11 @@
               <label class="form-control col-6">邮箱:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入邮箱'" class="input-text-wrap">
-                  <input v-model="addModal.email" type="text" name="email" v-validate:email="{required: true}" class="input-text"/>
+                  <input v-model="addModal.email" type="text" name="email" v-validate:email="{required: true, format: 'email'}" required lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.email.touched && $majorClientValidation.email.required">邮箱为必填</span>
+                  <span v-if="$majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
                 </div>
               </div>
             </div>
@@ -180,10 +186,12 @@
               <div class="controls col-18">
                 <!-- 地址 -->
                 <div v-placeholder="'请输入地址'" class="input-text-wrap">
-                  <textarea v-model="addModal.location" type="text" name="location" v-validate:location="{required: true}" class="input-text"></textarea>
+                  <textarea v-model="addModal.location" type="text" name="location" v-validate:location="{required: true, minlength: 6, maxlength: 240}" class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.required">地址为必填</span>
+                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.minlength">{{ $t('ui.validation.minlength', ['详细地址', 6]) }}</span>
+                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.maxlength">{{ $t('ui.validation.maxlength', ['详细地址', 240]) }}</span>
                 </div>
               </div>
             </div>
