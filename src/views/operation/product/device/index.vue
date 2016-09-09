@@ -117,15 +117,19 @@ export default {
         },
         model: {
           label: '型号',
-          value: this.currDevice.firmware_mod
+          value: this.currentProduct.mode
         },
-        sn: {
-          label: '序列号',
-          value: this.currDevice.sn || '暂无信息'
+        firmware_mod: {
+          label: '固件版本',
+          value: this.currDevice.firmware_mod || '-'
         },
         id: {
           label: '设备ID',
           value: this.currDevice.id
+        },
+        sn: {
+          label: 'sn',
+          value: this.currDevice.sn || '-'
         }
       }
     }
