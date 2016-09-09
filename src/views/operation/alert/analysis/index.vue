@@ -328,10 +328,17 @@ export default {
       this.recvDataCount = 0
       this.warningLevel = []
       this.trendPieData = []
+      let beginHour = null
+      let endHour = null
+      if (this.endTimePick.getTime() - this.startTimePick.getTime() < 3600 * 1000 * 24) {
+        beginHour = this.startTimePick.getHours()
+        endHour = this.endTimePick.getHours()
+      } else {
+        beginHour = '00'
+        endHour = '24'
+      }
       let begin = uniformDate(this.startTimePick)
-      let beginHour = this.startTimePick.getHours()
       let end = uniformDate(this.endTimePick)
-      let endHour = this.endTimePick.getHours()
 
       locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS.forEach((item) => {
         this.getSingleTag(this.currentProduct.id, item, begin, end, beginHour, endHour)
@@ -422,10 +429,17 @@ export default {
 
     // 处理单个标签下的饼图数据
     sortArr (arr, tag) {
+      let beginHour = null
+      let endHour = null
+      if (this.endTimePick.getTime() - this.startTimePick.getTime() < 3600 * 1000 * 24) {
+        beginHour = this.startTimePick.getHours()
+        endHour = this.endTimePick.getHours()
+      } else {
+        beginHour = '00'
+        endHour = '24'
+      }
       let begin = uniformDate(this.startTimePick)
-      let beginHour = this.startTimePick.getHours()
       let end = uniformDate(this.endTimePick)
-      let endHour = this.endTimePick.getHours()
 
       // 遍历处理每个标签数组里对应的告警规则数据
       var count = 0
