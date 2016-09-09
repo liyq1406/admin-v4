@@ -141,7 +141,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'src/filters'
+import { formatDate, uniformDate } from 'src/filters'
 import dateFormat from 'date-format'
 
 // TODO 消除代码冗余 #weijie
@@ -297,6 +297,12 @@ export default {
             $gte: this.startTimePick
           }
         }
+      }
+      if (this.endTimePick.getTime() - this.startTimePick.getTime() > 3600 * 1000 * 24) {
+        this.endTimePick = new Date(this.endTimePick.getTime() + 3600 * 1000 * 24)
+        this.startTimePick = new Date(this.startTimePick.getTime() + 3600 * 1000 * 24)
+        condition.query.create_date.$lte = new Date(uniformDate(this.endTimePick))
+        condition.query.create_date.$gte = new Date(uniformDate(this.startTimePick))
       }
       // 关键字搜索
       if (this.key !== '') {

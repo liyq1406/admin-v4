@@ -338,6 +338,7 @@ export default {
       this.loadingData = true
       if (!datapoint.name || datapoint.name === '') {
         this.requireDatapointName = true
+        this.loadingData = false
         return
       } else {
         this.requireDatapointName = false
