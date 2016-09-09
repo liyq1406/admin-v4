@@ -228,6 +228,36 @@ let configRouter = (router) => {
             require.ensure([], (require) => {
               resolve(require('./views/dev/product/create'))
             }, 'admin')
+          },
+          subRoutes: {
+            'guide': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/create/guide'))
+                }, 'admin')
+              }
+            },
+            'baseinfo': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/create/info'))
+                }, 'admin')
+              }
+            },
+            'data-points': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/create/data-points'))
+                }, 'admin')
+              }
+            },
+            'completion': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/create/completion'))
+                }, 'admin')
+              }
+            }
           }
         },
         // 产品信息
@@ -1528,6 +1558,7 @@ let configRouter = (router) => {
   router.redirect({
     '/': '/login',
     '/dev': '/dev/home',
+    '/dev/products/create': '/dev/products/create/guide',
     '/dev/products/:id/info/edit': '/dev/products/:id/info/edit/form',
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',

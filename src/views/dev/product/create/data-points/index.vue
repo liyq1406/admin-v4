@@ -178,9 +178,9 @@
     <div class="actions">
       <button class="btn btn-primary btn-lg" @click="onBtnClick">配置完成，下一步</button>
     </div>
-  </div>
-  <div>
-    <data-model :show.sync="showModal"></data-model>
+    <div>
+      <data-model :show.sync="showModal"></data-model>
+    </div>
   </div>
 </template>
 
@@ -272,7 +272,6 @@ export default {
       this.loadingData = true
       api.product.getDatapoints(this.product.id).then((res) => {
         if (res.status === 200) {
-          console.log(res.data)
           this.datapoints = res.data.map((item) => {
             item.editing = false
             this.adding = false
@@ -402,7 +401,7 @@ export default {
      * @author shengzhi
      */
     onBtnClick () {
-      this.$emit('datapoint-submit', this.product)
+      this.$emit('next', 'data-points')
     }
   }
 }
