@@ -31,11 +31,11 @@
               <template v-if="filteredMembers.length > 0">
                 <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
                   <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a></td>
-                  <td><span v-if="member.email.length">{{ member.email }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-                  <td><span v-if="member.phone.length">{{ member.phone }}</span><span v-else class="hl-gray">{{ $t('common.not_set') }}</span></td>
-                  <td><span>{{ MEMBER_TYPES[member.role-1] }}</span></td>
-                  <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{statusText(member.status)}}</span></td>
-                  <td>{{ member.last_auth_time | formatDate}}</td>
+                  <td>{{ member.email || '-' }}</td>
+                  <td>{{ member.phone || '-' }}</td>
+                  <td><span>{{ MEMBER_TYPES[member.role] }}</span></td>
+                  <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusText(member.status) }}</span></td>
+                  <td>{{ member.last_auth_time | formatDate }}</td>
                   <!-- <td class="tac" v-if ="this.currentMember.role === 1">
                     <a href="#" class="hl-red" @click.prevent="deleteMember(member)">{{ $t('common.del') }}</a><a href="#" class="hl-red ml10" @click.prevent="editPwd(member)" v-if="member.role === 2" >修改</a>
                   </td> -->
@@ -52,7 +52,7 @@
         <pager v-if="filteredMembers.length > countPerPage" :total="filteredMembers.length" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true"></pager>
       </div>
 
-      <!-- 新版添加成员 -->
+      <!-- 添加成员 -->
       <modal :show.sync="showModal" @close="onAddCancel">
         <h3 slot="header">{{ $t('ui.member.add_member') }}</h3>
         <div slot="body" class="form">
