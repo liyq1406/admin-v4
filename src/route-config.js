@@ -158,7 +158,7 @@ let configRouter = (router) => {
       component (resolve) {
         require.ensure([], (require) => {
           resolve(require('./views/account/index'))
-        }, 'admin')
+        }, 'account')
       },
       subRoutes: {
         // 帐户信息
@@ -166,7 +166,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/account/info'))
-            }, 'admin')
+            }, 'account')
           }
         },
         // 成员管理
@@ -174,7 +174,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/account/members'))
-            }, 'admin')
+            }, 'account')
           }
         },
         // 成员详情
@@ -182,7 +182,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/account/members/details'))
-            }, 'admin')
+            }, 'account')
           }
         },
         // 授权管理
@@ -190,7 +190,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/account/authorize'))
-            }, 'admin')
+            }, 'account')
           }
         },
         // 企业信息
@@ -198,7 +198,7 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/account/corp'))
-            }, 'admin')
+            }, 'account')
           }
         }
       }
