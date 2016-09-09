@@ -428,7 +428,7 @@
         var result = {
           '1': 'Web',
           '2': 'Android',
-          '3': 'IOS',
+          '3': 'iOS',
           '4': '微信'
         }
         return result[source]

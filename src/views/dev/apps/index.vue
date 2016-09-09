@@ -203,7 +203,7 @@
         // 应用类型
         appTypes: [
           {
-            name: 'IOS',
+            name: 'iOS',
             type: 1
           },
           {
@@ -228,7 +228,7 @@
             type: 0
           },
           {
-            name: 'IOS',
+            name: 'iOS',
             type: 1
           },
           {
@@ -435,7 +435,7 @@
         var result = ''
         switch (num) {
           case 1:
-            result = 'IOS'
+            result = 'iOS'
             break
           case 2:
             result = 'Android'
