@@ -25,13 +25,9 @@
 <script>
 // import Vue from 'vue'
 import api from 'api'
-// import * as config from 'consts/config'
-// import locales from 'consts/locales/index'
-// import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic'
-// import Mock from 'mockjs'
 import dateFormat from 'date-format'
 import AlertTable from './alert-table'
 import AlertTrends from './alert-trends'
@@ -113,6 +109,8 @@ export default {
 
   route: {
     data () {
+      this.productID = this.$route.params.id
+      this.getSummary()
     }
   },
 

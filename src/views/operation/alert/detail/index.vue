@@ -164,7 +164,7 @@ export default {
           value: this.info.product_name || 'N/A'
         },
         status: {
-          label: '设备状态',
+          label: '状态',
           value: this.info.is_read ? '已处理' : '未处理'
         },
         duration: {
