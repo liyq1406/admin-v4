@@ -177,7 +177,7 @@
        */
       onSubmit () {
         this.adding = true
-        this.editModal.version = Number(this.editModal.version)
+        this.editModal.version = this.editModal.version
         api.plugin.setAndVersion(this.app.id, this.editModal).then((res) => {
           this.$emit('update-curr-app')
           this.adding = false
@@ -188,7 +188,7 @@
         })
       },
       /**
-       * 编辑浮层取消事件
+       * [onEditCancel description]
        * @return {[type]} [description]
        */
       onEditCancel () {
