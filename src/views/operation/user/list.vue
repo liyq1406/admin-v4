@@ -254,7 +254,9 @@
 
         if (this.query.length > 0) {
           // condition.query['id'] = { $in: [this.query] }
-          condition.query[this.queryType.value] = {$in: [this.query]}
+          condition.query[this.queryType.value] = {
+            '$like': this.query
+          }
         }
 
         if (this.selectedFilter.value) {
