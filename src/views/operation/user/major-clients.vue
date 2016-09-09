@@ -242,6 +242,7 @@ export default {
       query: '',
       searching: false,
       total: 0,
+      allTotal: 0,
       currentPage: 1,
       countPerPage: 10,
       tableLoadingData: false,
@@ -443,7 +444,7 @@ export default {
       var result = [
         {
           title: '大客户总数',
-          value: this.total
+          value: this.allTotal
         },
         {
           title: '本月新增大客户',
@@ -672,6 +673,10 @@ export default {
         this.tableLoadingData = false
         this.majorClients = res.data.list
         this.total = res.data.count
+        // 已进入获取全部总数放进概览
+        if (this.allTotal === 0) {
+          this.allTotal = res.data.count
+        }
       }).catch((err) => {
         this.tableLoadingData = false
         this.handleError(err)
