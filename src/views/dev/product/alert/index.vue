@@ -5,26 +5,19 @@
         <h2>告警设置</h2>
       </div>
     </div>
-    <div class="panel">
-      <!-- <div class="panel-hd panel-hd-full">
-        <h2>级别分布</h2>
-      </div> -->
-      <div class="panel-bd">
-        <nav class="tab">
-          <ul>
-            <li v-for="item in tabItems">
-              <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-      <template v-if="!currIndex">
-        <rule :product-id="currentProduct.id"></rule>
-      </template>
-      <template v-else>
-        <record :product-id="currentProduct.id"></record>
-      </template>
-    </div>
+    <nav class="tab">
+      <ul>
+        <li v-for="item in tabItems">
+          <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
+        </li>
+      </ul>
+    </nav>
+    <template v-if="!currIndex">
+      <rule :product-id="currentProduct.id"></rule>
+    </template>
+    <template v-else>
+      <record :product-id="currentProduct.id"></record>
+    </template>
   </div>
 </template>
 
@@ -65,7 +58,7 @@
 .bt
   border-top 1px solid #d9d9d9
 .tab
-  margin 15px 0
+  margin-bottom 15px
   padding 0 15px
   border-bottom 1px solid default-border-color
 

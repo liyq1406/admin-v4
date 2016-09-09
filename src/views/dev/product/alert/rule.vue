@@ -1,72 +1,73 @@
 <template>
-  <div class="panel-bd">
-    <div class="filter-bar">
-      <div class="filter-group fl">
-        <div class="filter-group-item">
-          <x-select width="90px" :label="curLevel.label" size="small">
-            <span slot="label">告警等级:</span>
-            <select v-model="curLevel" name="product">
-              <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
-            </select>
-          </x-select>
-        </div>
+  <div class="panel">
+    <div class="panel-hd">
+      <div class="actions">
+        <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}" @click="onAddBtnClick"><i class="fa fa-plus"></i>添加告警规则</button>
       </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <search-box :key.sync="key">
-            <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-          </search-box>
-        </div>
-      </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <a v-link="'/dev/products/' +$route.params.id + '/alert/add'">
-            <button class="btn btn-primary" :disabled="tips" :class="{'disabled': tips}"><i class="fa fa-plus"></i>添加告警规则</button>
-          </a>
-        </div>
-      </div>
+      <h2>规则列表</h2>
     </div>
-    <div class="data-table with-loading">
-      <div class="icon-loading" v-show="loadingData">
-        <i class="fa fa-refresh fa-spin"></i>
-      </div>
-      <table class="table table-stripe table-bordered">
-        <thead>
-          <tr>
-            <th>{{ $t("ui.rule.fields.name") }}</th>
-            <th>{{ $t("ui.rule.fields.content") }}</th>
-            <th>{{ $t("ui.rule.fields.type") }}</th>
-            <th>告警等级</th>
-            <th class="tac">状态</th>
-          </tr>
-        </thead>
-        <tbody>
-          <template v-if="rules.length > 0">
-            <tr v-for="rule in rulesFilter">
-              <td><a class="hl-red" v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
-              <td>
-                <span class="limit-width">{{rule.content }}</span></td>
-              <td>{{* rule.type | ruleLabel }}</td>
-              <td>
-                <span class="text-label level-style" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
-                <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
-              </td>
-              <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
-              <!-- <td class="tac">
-                <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
-              </td> -->
+    <div class="panel-bd">
+      <div class="data-table with-loading">
+        <div class="icon-loading" v-show="loadingData">
+          <i class="fa fa-refresh fa-spin"></i>
+        </div>
+        <div class="filter-bar">
+          <div class="filter-group fl">
+            <div class="filter-group-item">
+              <x-select width="90px" :label="curLevel.label" size="small">
+                <span slot="label">告警等级:</span>
+                <select v-model="curLevel" name="product">
+                  <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
+                </select>
+              </x-select>
+            </div>
+          </div>
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <search-box :key.sync="key">
+                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
+          </div>
+        </div>
+        <table class="table table-stripe table-bordered">
+          <thead>
+            <tr>
+              <th>{{ $t("ui.rule.fields.name") }}</th>
+              <th>{{ $t("ui.rule.fields.content") }}</th>
+              <th>{{ $t("ui.rule.fields.type") }}</th>
+              <th>告警等级</th>
+              <th class="tac">状态</th>
             </tr>
-          </template>
-          <tr v-if="rules.length === 0 && !loadingData">
-            <td colspan="5" class="tac">
-              <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            <template v-if="rules.length > 0">
+              <tr v-for="rule in rulesFilter">
+                <td><a class="hl-red" v-link="'/dev/products/' +$route.params.id + '/alert/edit/' + rule.id">{{* rule.name }}</a></td>
+                <td>
+                  <span class="limit-width">{{rule.content }}</span></td>
+                <td>{{* rule.type | ruleLabel }}</td>
+                <td>
+                  <span class="text-label level-style" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
+                  <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
+                </td>
+                <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
+                <!-- <td class="tac">
+                  <button @click="editRule(rule)" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
+                </td> -->
+              </tr>
+            </template>
+            <tr v-if="rules.length === 0 && !loadingData">
+              <td colspan="5" class="tac">
+                <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 分页-->
+      <!-- <pager v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager> -->
     </div>
-    <!-- 分页-->
-    <!-- <pager v-if="true" :total="rules.length" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="onCurrPageChage" @count-update="onPageCountUpdate"></pager> -->
   </div>
 </template>
 
@@ -163,6 +164,14 @@
       }
     },
     methods: {
+      /**
+       * 处理添加按钮点击
+       * @author shengzhi
+       */
+      onAddBtnClick () {
+        this.$route.router.go({path: 'add', append: true})
+      },
+
       getRules () {
         this.loadingData = true
         api.alert.getRules(this.$route.params.id).then((res) => {

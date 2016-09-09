@@ -1,36 +1,38 @@
 <template>
-  <div class="panel-bd">
-    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
-      <div slot="filter-bar" class="filter-bar">
-        <div class="filter-group fl">
-          <div class="filter-group-item">
-            <x-select width="90px" :label="curLevel.label" size="small">
-              <span slot="label">告警等级:</span>
-              <select v-model="curLevel" name="product" @change="getAlerts(true)">
-                <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
-              </select>
-            </x-select>
-          </div>
-        </div>
-        <div class="filter-group fr">
-          <div class="filter-group-item">
-            <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
-              <x-select width="100px" :label="queryType.label" size="small">
-                <select v-model="queryType" @change="getAlerts(true)">
-                  <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+  <div class="panel">
+    <div class="panel-bd">
+      <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" :selecting="true" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
+        <div slot="filter-bar" class="filter-bar">
+          <div class="filter-group fl">
+            <div class="filter-group-item">
+              <x-select width="90px" :label="curLevel.label" size="small">
+                <span slot="label">告警等级:</span>
+                <select v-model="curLevel" name="product" @change="getAlerts(true)">
+                  <option v-for="level in warningLevels" :value="level">{{ level.label }}</option>
                 </select>
               </x-select>
-              <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
-            </search-box>
+            </div>
+          </div>
+          <div class="filter-group fr">
+            <div class="filter-group-item">
+              <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
+                <x-select width="100px" :label="queryType.label" size="small">
+                  <select v-model="queryType" @change="getAlerts(true)">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
+                </x-select>
+                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              </search-box>
+            </div>
           </div>
         </div>
-      </div>
-      <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-        <label>标记为:</label>
-        <button class="btn btn-ghost" @click="setDeal">已处理</button>
-        <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
-      </div>
-    </x-table>
+        <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
+          <label>标记为:</label>
+          <button class="btn btn-ghost" @click="setDeal">已处理</button>
+          <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+        </div>
+      </x-table>
+    </div>
   </div>
 </template>
 
