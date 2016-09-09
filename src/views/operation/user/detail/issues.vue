@@ -160,8 +160,8 @@ export default {
         }
         this.loadingData = false
       }).catch((err) => {
-        this.handleError(err)
         this.loadingData = false
+        this.handleError(err)
       })
     }
   }
