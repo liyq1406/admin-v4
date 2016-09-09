@@ -514,7 +514,7 @@ export default {
         ],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
+        order: {'create_time': 'desc'},
         query: {}
       }
       /**
@@ -720,6 +720,7 @@ export default {
           this.adding = false
           this.onAddCancel()
           this.getMajorClient()
+          this.getSummary()
         }).catch((err) => {
           this.handleError(err)
           this.adding = false
