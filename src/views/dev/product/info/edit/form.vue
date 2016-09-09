@@ -153,7 +153,6 @@
     },
     methods: {
       getDetails () {
-        console.log(this.currentProduct)
         this.editModel = _.clone(this.currentProduct)
       },
       deleteProduct () {

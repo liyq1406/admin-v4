@@ -48,7 +48,7 @@
                 <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
               </th>
               <th class="tac">
-                <a class="hl-red">编辑</a>
+                <a class="hl-red" @click="onShowEditSortModal(field, $index)">编辑</a>
               </th>
             </tr>
             <tr v-if="fieldList.length === 0">
@@ -60,6 +60,7 @@
         </table>
       </div>
     </div>
+    <!-- 编辑字段名浮层 -->
     <modal :show.sync="showEditLabelModal">
       <h3 slot="header">编辑字段名</h3>
       <div slot="body" class="form">
@@ -82,6 +83,28 @@
             </div>
           </form>
         </validator>
+      </div>
+    </modal>
+    <!-- 编辑排序浮层 -->
+    <modal :show.sync="showEditSortModal">
+      <h3 slot="header">编辑排序</h3>
+      <div slot="body" class="form">
+        <form @submit.prevent="onEditSortSubmit">
+          <div class="form-row row">
+            <label class="form-control col-5">编辑序号:</label>
+            <div class="controls col-19">
+              <x-select :label="editSortModal.targetIndex + ''">
+                <select v-model="editSortModal.targetIndex">
+                  <option v-for="n in fieldList.length" :value="n + 1">{{ n + 1 }}</option>
+                </select>
+              </x-select>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          </div>
+        </form>
       </div>
     </modal>
   </div>
@@ -177,6 +200,11 @@ export default {
       },
       showEditSortModal: false,
 
+      editSortModal: {
+        oldIndex: 0,
+        targetIndex: 0,
+        target: {}
+      },
       editing: false
     }
   },
@@ -211,6 +239,29 @@ export default {
 
   methods: {
     /**
+     * 编辑排序表单提交
+     * @return {[type]} [description]
+     */
+    onEditSortSubmit () {
+      var target = _.clone(this.fieldList.$remove(this.editSortModal.target)[0])
+      var fieldList = _.clone(this.fieldList)
+      fieldList.splice(this.editSortModal.targetIndex - 1, 0, target)
+      this.fieldList = fieldList
+      this.setFiled()
+    },
+    /**
+     * 显示编辑排序事件
+     * @param  {[type]} field 当前选中的字段
+     * @param  {[type]} index 当前选中字段的索引
+     * @return {[type]}       [description]
+     */
+    onShowEditSortModal (field, index) {
+      this.showEditSortModal = true
+      this.editSortModal.oldIndex = index + 1
+      this.editSortModal.targetIndex = index + 1
+      this.editSortModal.target = field
+    },
+    /**
      * 浮层的取消按钮
      * @return {[type]} [description]
      */
@@ -221,7 +272,8 @@ export default {
     },
     /**
      * 显示编辑字段名浮层
-     * @param  {[type]} field [description]
+     * @param  {[type]} field 当前选中的字段
+     * @param  {[type]} index 当前选中的字段的索引
      * @return {[type]}       [description]
      */
     onShowEditLabelModal (field, index) {
@@ -234,7 +286,6 @@ export default {
      * @return {[type]} [description]
      */
     getDataPoint () {
-      console.log('获取数据端点')
       this.loadingDataPoint = true
       api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
@@ -264,10 +315,9 @@ export default {
       field.hidden = !field.hidden
       this.setFiled()
     },
+
     setFiled (fieldList) {
       this.loadingDataField = true
-      console.log('调用设置接口')
-      console.log(this.sortDataList(fieldList))
       api.product.setProductField(this.$route.params.id, this.sortDataList(fieldList)).then((res) => {
         this.onCancel()
         this.dataList = res.data
@@ -279,6 +329,7 @@ export default {
     },
     /**
      * 将当前数据重算位置 返回可以发给服务器的数据
+     * 这个函数会忽略传进来的sort参数  根据数组位置重新算出当前的sort值 然后返回一个数组
      * @return {[type]} [description]
      */
     sortDataList (fieldList) {
@@ -294,7 +345,6 @@ export default {
           'sort': index + 1
         }
         if (item.type === 'datapoints') {
-          console.log(item.index)
           obj.index = item.index
         }
         result[item.type].push(obj)
@@ -361,6 +411,7 @@ export default {
       // 初始化数据端点 用获取数据端点接口返回的数据端点去初始化当前的每个类型为数据端点的产品字段
       let datapoints = []
       this.datapoints.forEach((item1) => {
+        //  标志位 标志：当前数据端点是否在字段列表中
         let hasPoints = false
         this.dataList.datapoints.forEach((item2) => {
           if (item1.name === item2.name) {
@@ -410,6 +461,13 @@ export default {
       return type === 'base_fields' ? '基本字段' : '数据端点'
     },
 
+    /**
+     * 返回两个数组的非公共项 数组中的每一项必须是一个对象
+     * @param  {[type]} arr1 第一个数组
+     * @param  {[type]} arr2 第二个数组
+     * @param  {[type]} key  对比的依据
+     * @return {[type]}      [description]
+     */
     dArray (arr1, arr2, key) {
       var result1 = _.differenceBy(arr1, arr2, key)
       var result2 = _.differenceBy(arr2, arr1, key)
