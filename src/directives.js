@@ -255,7 +255,6 @@ export var stretch = {
       bindListener(a)
       div.appendChild(a)
       self.$bottomBar = div
-      // el.appendChild(div)
     }
     domInit(this.el)
   },

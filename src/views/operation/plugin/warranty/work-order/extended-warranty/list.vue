@@ -16,23 +16,10 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="periods" :value.sync="period"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+          <date-time-range-picker></date-time-range-picker>
         </div>
       </div>
     </div>
-    <!-- <div class="panel">
-      <div class="panel-bd">
-        <div class="with-loading">
-          <time-line :data="trends"></time-line>
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-        </div>
-      </div>
-    </div> -->
     <div class="row statistic-group mb30">
       <div class="col-6">
         <statistic :info="extendedSummary.rest" :title="extendedSummary.rest.title" :has-action="true" align="left"></statistic>
@@ -61,9 +48,6 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-              </div>
-              <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
                   <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
                 </search-box>
@@ -74,74 +58,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="panel">
-      <div class="panel-bd">
-        <div class="action-bar">
-          <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
-            <button slot="search-button" class="btn btn-primary" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
-            <label></label>
-          </search-box>
-        </div>
-
-        <div class="status-bar">
-          <x-select :label="statusOptions[status.value].label" width="100px" class="work-orders-select" size="small">
-            <span slot="label">工单状态</span>
-            <select v-model="status" @change="getWarrantyList(true)">
-              <option v-for="option in statusOptions" :value="option">{{option.label}}</option>
-              <p> {{status}}</p>
-            </select>
-          </x-select>
-
-          <area-select :province.sync="curProvince" :city.sync="curCity" :district.sync="curDistrict" label="所在地区" select-size="small" @province-change="getWarrantyList(true)" @city-change="getWarrantyList(true)" @district-change="getWarrantyList(true)"></area-select>
-        </div>
-
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>工单编号</th>
-                <th>客户姓名</th>
-                <th>产品名称</th>
-                <th>产品型号</th>
-                <th>创建日期</th>
-                <th>工单状态</th>
-                <th>操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="workOrders.length > 0">
-                <tr v-for="order in workOrders">
-                  <td>{{order._id}}</td>
-                  <td>{{order.name}}</td>
-                  <td>{{order.product_name}}</td>
-                  <td>{{order.product_type}}</td>
-                  <td>{{order.extended_days | uniformDate}}</td>
-                  <td>
-                    <div v-if="order.status === 0">已过期</div>
-                    <div v-else class='hl-green'>未过期</div>
-                  </td>
-                  <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + order._id}" class="hl-red">查看详情</a></td>
-                </tr>
-              </template>
-              <tr v-if="workOrders.length === 0 && !loadingData">
-                <td colspan="7" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="row">
-          <div class="col-8 mb40">{{{ $t('common.total_results', {count:total}) }}}</div>
-          <div class="col-16">
-            <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getWarrantyList"></pager>
-          </div>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -153,13 +69,11 @@
   import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
-  // import Pager from 'components/Pager'
+  import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import store from 'store'
   import api from 'api'
   import { pluginMixins } from '../../../mixins'
   import Mock from 'mockjs'
-  import TimeLine from 'components/g2-charts/TimeLine'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
   import Statistic from 'components/Statistic'
 
   export default {
@@ -180,10 +94,8 @@
       'area-select': AreaSelect,
       'search-box': SearchBox,
       'x-table': Table,
-      // 'pager': Pager,
-      TimeLine,
-      Statistic,
-      RadioButtonGroup
+      DateTimeRangePicker,
+      Statistic
     },
 
     data () {

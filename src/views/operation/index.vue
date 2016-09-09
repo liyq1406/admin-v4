@@ -187,9 +187,9 @@ export default {
           case 'warranty': // 在线维保
             sub.icon = 'support'
             sub.subs = [{
-              alias: 'overview',
-              url: `/plugins/warranty/${item.id}/overview`
-            }, {
+            //   alias: 'overview',
+            //   url: `/plugins/warranty/${item.id}/overview`
+            // }, {
               alias: 'repair',
               url: `/plugins/warranty/${item.id}/work-orders/repair`
             }, {
