@@ -88,7 +88,7 @@ export default {
         },
         {
           key: 'sn',
-          title: '序号号（sn）'
+          title: '序列号（sn）'
         },
         {
           key: 'active_date',

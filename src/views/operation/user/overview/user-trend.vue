@@ -58,7 +58,7 @@ export default {
     return {
       customMargin: [30, 20, 30, 30],
       periods: [7, 30, 90],
-      defaultPeriod: 30,
+      defaultPeriod: 7,
       addData: [],
       activeData: [],
       totalData: [],

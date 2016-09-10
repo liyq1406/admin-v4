@@ -77,7 +77,7 @@
       <h3 slot="header">添加大客户</h3>
       <div slot="body" class="form">
         <validator name="majorClientValidation">
-          <form @submit.prevent="addMajorClient">
+          <form @submit.prevent="addMajorClient" novalidate>
             <div class="form-row row">
               <label class="form-control col-6">客户名称:</label>
               <div class="controls col-18">
@@ -196,8 +196,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
@@ -562,7 +562,7 @@ export default {
   },
   methods: {
     getWarrantyList () {
-      console.log('搜索')
+      // console.log('搜索')
     },
     /**
      * 获取趋势
@@ -720,7 +720,6 @@ export default {
         params.province = this.curProvince.name
         params.city = this.curCity.name
         api.heavyBuyer.addHeavyBuyer(params).then((res) => {
-          console.log(res)
           this.showNotice({
             type: 'success',
             content: '添加成功'
@@ -775,6 +774,9 @@ export default {
         location: ''
       }
       this.addModal = addModal
+      this.curProvince = {}
+      this.curCity = {}
+      this.curDistrict = {}
       this.showAddModal = true
     },
     // 切换搜索
