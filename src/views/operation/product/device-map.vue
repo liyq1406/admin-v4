@@ -65,7 +65,7 @@ import _ from 'lodash'
 import { formatDate } from 'src/filters'
 
 export default {
-  name: 'Settings',
+  name: 'DeviceMap',
 
   mixins: [globalMixins, setCurrProductMixin],
 
@@ -99,7 +99,7 @@ export default {
       oldCurrIndex: 0,
       currIndex: 0,
       currHover: -1,
-      map: {},
+      map: null,
       points: [],
       markers: [],
       infoWindow: {},
@@ -107,7 +107,7 @@ export default {
       placeSearch: {},
       mapHeight: 500,
       mapCenter: [],
-      zoom: 10,
+      zoom: 3,
       loadingData: true,
       loadingProducts: true,
       loadingDevices: true,
@@ -127,26 +127,31 @@ export default {
       }
 
       return condition
+    },
+
+    currentProductId () {
+      return this.$route.params.id
     }
   },
 
-  // TODO 设备地图有时候加载不出来 #shengzhi
-  route: {
-    data () {
-      window.init = this.initMap
-      if (typeof window.AMap === 'undefined') {
-        var mapApi = document.createElement('script')
-        mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
-        document.getElementsByTagName('body')[0].appendChild(mapApi)
-      } else {
-        window.setTimeout(() => {
-          this.initMap()
-        }, 1000)
-      }
+  ready () {
+    window.init = this.initMap
+    if (typeof window.AMap === 'undefined') {
+      var mapApi = document.createElement('script')
+      mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
+      document.getElementsByTagName('body')[0].appendChild(mapApi)
+    } else {
+      this.initMap()
     }
   },
 
   watch: {
+    // 当前产品 ID
+    currentProductId () {
+      this.initMap()
+    },
+
+    // 缩放
     zoom () {
       if (this.queryType.value === 'area' || !this.query) {
         this.currentPage = 1
@@ -154,17 +159,23 @@ export default {
       }
     },
 
+    // 地图中心坐标
     mapCenter () {
       if (this.queryType.value === 'area' || !this.query) {
         this.getGeographies()
       }
     },
 
+    // 当前滑过的设备列表项
     currHover () {
       if (this.currHover >= 0) {
         this.markers[this.currHover].setzIndex(10000)
       }
     }
+  },
+
+  destroyed () {
+    this.map = null
   },
 
   methods: {
@@ -175,6 +186,7 @@ export default {
         zoom: this.zoom
       })
 
+      // 信息窗口
       this.infoWindow = new AMap.InfoWindow({
         offset: new AMap.Pixel(-10, -46)
       })
@@ -205,12 +217,6 @@ export default {
             })
           }
         })
-        // AMap.event.addListener(this.citySearch, 'error', (res) => {
-        //   this.showNotice({
-        //     type: 'error',
-        //     content: res.info
-        //   })
-        // })
 
         AMap.event.addListener(this.placeSearch, 'complete', (res) => {
           if (res && res.poiList && res.poiList.pois.length > 0) {
@@ -225,12 +231,6 @@ export default {
             })
           }
         })
-        // AMap.event.addListener(this.placeSearch, 'error', (res) => {
-        //   this.showNotice({
-        //     type: 'error',
-        //     content: res.info
-        //   })
-        // })
 
         // 监听缩放事件
         AMap.event.addListener(this.map, 'zoomchange', (res) => {
@@ -250,26 +250,27 @@ export default {
      * @return {[type]} [description]
      */
     getDevices () {
-      this.loadingDevices = true
-      return api.device.getList(this.$route.params.id, {
+      let condition = {
         filter: ['id', 'name', 'mac', 'is_online', 'last_login'],
         limit: this.countPerPage,
-        // offset: (this.currentPage - 1) * this.countPerPage,
         query: {
           'id': {
             $in: this.ids
           }
         }
-      })
-    },
+      }
+      this.loadingDevices = true
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.devices = res.data.list
+        this.total = res.data.count
 
-    /**
-     * 获取虚拟设备
-     * @return {[type]} [description]
-     */
-    getVDevices () {
-      api.product.getVDevices(this.$route.params.id, this.ids).then((res) => {
-        this.vDevices = res.data.list
+        // 获取虚拟设备
+        api.product.getVDevices(this.$route.params.id, this.ids).then((r) => {
+          this.loadingData = false
+          this.loadingDevices = false
+          this.vDevices = r.data.list
+          this.setMarkers()
+        })
       })
     },
 
@@ -290,15 +291,7 @@ export default {
           this.points = [res.data]
           this.mapCenter = [res.data.lon, res.data.lat]
           this.map.setCenter(this.mapCenter)
-
-          this.getDevices().then((r) => {
-            this.loadingData = false
-            this.loadingDevices = false
-            this.devices = r.data.list
-            this.total = r.data.count
-            this.setMarkers()
-          })
-          this.getVDevices()
+          this.getDevices()
         }
       }).catch((res) => {
         this.ids = []
@@ -326,15 +319,8 @@ export default {
         this.points = res.data.devices
         this.total = res.data.count
         this.map.setCenter(this.mapCenter)
-        this.getDevices().then((r) => {
-          this.loadingData = false
-          this.loadingDevices = false
-          this.devices = r.data.list
-          this.setMarkers()
-        })
-        this.getVDevices()
+        this.getDevices()
       }).catch((res) => {
-        // this.handleError(res)
         this.loadingData = false
       })
     },
@@ -346,8 +332,10 @@ export default {
       var markers = []
       this.map.clearMap()
 
+      // 绘制搜索区域
       // this.drawRegion()
       // 点
+      console.log(this.vDevices)
       this.points.forEach((point, index) => {
         point.index = index
         point.device = this.devices[index]
@@ -456,7 +444,6 @@ export default {
      * 将毫秒数格式化为合适显示的时间段
      */
     prettyDuration (n) {
-      console.log(n)
       let hours = (n / 3600).toFixed(1)
       let minutes = Math.floor(n / 60)
       if (hours > 1) {
