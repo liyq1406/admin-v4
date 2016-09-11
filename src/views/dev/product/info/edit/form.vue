@@ -192,7 +192,6 @@
     },
     methods: {
       imageChange (images) {
-        console.log(images)
         this.editModel.pics = images
       },
       /**
@@ -200,7 +199,7 @@
        * @return {[type]} [description]
        */
       getDetails () {
-        this.editModel = _.clone(this.currentProduct)
+        this.editModel = _.cloneDeep(this.currentProduct)
         this.editModel.pics = this.editModel.pics || ['']
         if (this.editModel.pics.length === 0) {
           this.editModel.pics = ['']
@@ -211,14 +210,17 @@
        * @return {[type]} [description]
        */
       deleteProduct () {
-        console.log('这个地方删除产品')
         if (!this.editing) { // 删除
           this.editing = true
           if (window.confirm('确认删除该产品吗?')) {
             api.product.deleteProduct(this.$route.params.id).then((res) => {
               if (res.status === 200) {
                 this.removeProduct(this.currentProduct)
-                alert('删除成功')
+                this.showNotice({
+                  type: 'success',
+                  content: '产品删除成功！'
+                })
+                this.$route.router.replace('/dev/home')
               }
             }).catch((res) => {
               this.handleError(res)
@@ -245,6 +247,7 @@
                   type: 'success',
                   content: '更新成功！'
                 })
+                this.$route.router.replace(`/dev/products/${this.$route.params.id}/info`)
               }
             })
           }).catch((res) => {
