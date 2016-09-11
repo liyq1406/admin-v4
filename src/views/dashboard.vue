@@ -17,7 +17,7 @@
             <a class="check-all" v-show="products.length" @click="goto('/dev')">查看全部 ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in toShowProducts" v-show="product.is_release===false">
+            <div class="product" v-for="product in noReleaseProducts">
               <div class="img-box">
                 <img src="../assets/images/device_thumb.png">
               </div>
@@ -33,7 +33,7 @@
                 </div>
               </div>
             </div>
-            <div class="no-products ml10" v-show="products.length === 0">
+            <div class="no-products ml10" v-show="noReleaseProducts.length === 0">
               <span>您还没有任何产品，请点击按钮开始创建</span>
               <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
                 <i class="fa fa-plus"></i>
@@ -76,7 +76,7 @@
             <a class="check-all" v-show="products.length" @click="goto('/operation/overview')">查看全部 ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in toShowProducts" v-show="product.is_release===true">
+            <div class="product" v-for="product in releaseProducts">
               <div class="img-box">
                 <img src="../assets/images/device_thumb.png">
               </div>
@@ -92,7 +92,7 @@
                 </div>
               </div>
             </div>
-            <div class="no-products ml10" v-show="products.length===0">
+            <div class="no-products ml10" v-show="releaseProducts.length===0">
               <span>您还没有任何产品，请在开发平台添加您的产品，并配置好后完成发布</span>
             </div>
           </div>
@@ -209,7 +209,7 @@ export default {
      * 用于显示的产品数组
      * @return {[type]} [description]
      */
-    toShowProducts () {
+    allProducts () {
       var result = []
       this.products.forEach((item1) => {
         var product = {}
@@ -224,6 +224,24 @@ export default {
           }
         })
         result.push(product)
+      })
+      return result
+    },
+    releaseProducts () {
+      var result = []
+      this.allProducts.map((item) => {
+        if (item.is_release) {
+          result.push(item)
+        }
+      })
+      return result
+    },
+    noReleaseProducts () {
+      var result = []
+      this.allProducts.map((item) => {
+        if (!item.is_release) {
+          result.push(item)
+        }
       })
       return result
     }
