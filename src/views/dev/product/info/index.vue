@@ -71,111 +71,6 @@
       </div>
     </div>
 
-    <!-- 编辑产品浮层-->
-    <modal :show.sync="showEditModal">
-      <h3 slot="header">{{ $t("ui.overview.editForm.header") }}</h3>
-      <div slot="body" class="form">
-        <!-- <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook"> -->
-        <validator name="validation">
-          <form novalidate @submit.prevent="onEditSubmit">
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.name") }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.product.placeholders.name')" class="input-text-wrap">
-                  <input v-model="editModel.name" type="text" name="editModel.name" v-validate:name="{required: true, maxlength: 32}" lazy class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.name')}) }}</span>
-                  <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.name'), 32]) }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.mode") }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                  <input v-model="editModel.mode" type="text" name="editModel.mode" v-validate:mode="{maxlength: 64}" lazy class="input-text"/>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$validation.mode.modified && $validation.mode.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.mode'), 64]) }}</span>
-                </div>
-              </div>
-            </div>
-            <!-- <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.type") }}:</label>
-              <div class="controls col-18">
-                <div class="select">
-                  <x-select :label="productType.label">
-                    <select v-model="productType" name="productType.label">
-                      <option v-for="opt in productTypeOptions" :value="opt">{{ opt.label }}</option>
-                    </select>
-                  </x-select>
-                </div>
-              </div>
-            </div> -->
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.link_type") }}:</label>
-              <div class="controls col-18">
-                <div class="select">
-                  <x-select :label="locales.data.DEVICE_TYPES[editModel.link_type-1]">
-                    <select v-model="editModel.link_type" name="link_type">
-                      <option v-for="type in locales.data.DEVICE_TYPES" :value="$index+1" :selected="$index===0">{{ type }}</option>
-                    </select>
-                  </x-select>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">{{ $t("ui.product.fields.desc") }}:</label>
-              <div class="controls col-18">
-                <div v-placeholder="$t('ui.product.placeholders.desc')" class="input-text-wrap">
-                  <textarea v-model="editModel.description" type="text" name="editModel.description" v-validate:description="{required: true, maxlength: 250}" lazy class="input-text"></textarea>
-                </div>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$validation.description.touched && $validation.description.required">{{ $t('ui.validation.required', {field: $t('ui.product.fields.desc')}) }}</span>
-                  <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.product.fields.desc'), 250]) }}</span>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row mb0">
-              <div class="controls col-18 col-offset-6">
-                <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>{{ $t("ui.product.fields.is_registerable") }}
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row mb0" v-show="editModel.link_type===5">
-              <div class="controls col-18 col-offset-6">
-                <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许动态注册设备
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <div class="controls col-18 col-offset-6">
-                <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_allow_multi_admin" v-model="editModel.is_allow_multi_admin"/>允许设备多个管理员
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-actions">
-              <label class="del-check" v-if="!editModel.is_release">
-                <input type="checkbox" name="del" v-model="delChecked"/>{{ $t("ui.overview.editForm.del") }}
-              </label>
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="resetEdit" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            </div>
-          </form>
-        </validation>
-      </div>
-    </modal>
-
     <modal :show.sync="showKeyModal">
       <h3 slot="header">{{ $t("ui.overview.key") }}</h3>
       <div slot="body" class="product-key tac">{{ productKey }}</div>
@@ -294,37 +189,7 @@ export default {
       },
       showKeyModal: false,
       productKey: '',
-      showEditModal: false,
       delChecked: false,
-      productType: {},
-      editModel: {
-        is_allow_multi_admin: false,
-        name: '',
-        description: '',
-        mode: '',
-        link_type: '',
-        is_registerable: false,
-        is_active_register: false,
-        is_release: false,
-        id: ''
-      },
-      originEditModel: {},
-      editValidation: {},
-      tables: [
-        {
-          time: '<a class="hl-red">2016-03-18 08:10:19</a>',
-          count: 2000,
-          user: '12@qq.com'
-        }, {
-          time: '<a class="hl-red">2016-04-18 08:10:19</a>',
-          count: 4000,
-          user: '113@163.com'
-        }, {
-          time: '<a class="hl-red">2016-05-18 08:10:19</a>',
-          count: 6000,
-          user: 'djfds@gmail.com'
-        }
-      ],
       showDeviceEditModal: false,
       deviceEditModal: {
         sn: ''
@@ -468,15 +333,6 @@ export default {
           slot: true
         }
       }
-    },
-
-    // 产品类型选项
-    productTypeOptions () {
-      let types = this.locales.data.PRODUCT_TYPES.slice(1)
-      this.productType = this.locales.data.PRODUCT_TYPES.find((item) => {
-        return item.value === this.editModel.type
-      })
-      return types
     }
   },
 
@@ -686,24 +542,14 @@ export default {
     },
 
     /**
-     * 关闭编辑浮层并净化编辑表单
-     * @author shengzhi
-     */
-    resetEdit () {
-      this.editing = false
-      this.showEditModal = false
-      this.delChecked = false
-    },
-
-    /**
      * 发布产品
      * @author shengzhi
      */
     releaseProduct () {
       if (window.confirm('已发布的产品将不允许被删除，确认发布？')) {
-        this.editModel = _.cloneDeep(this.currentProduct)
-        this.editModel.is_release = true
-        api.product.updateProduct(this.editModel).then((res) => {
+        let editModel = _.cloneDeep(this.currentProduct)
+        editModel.is_release = true
+        api.product.updateProduct(editModel).then((res) => {
           api.product.getProduct(this.$route.params.id).then((res) => {
             if (res.status === 200) {
               this.updateProduct(res.data)
@@ -721,52 +567,11 @@ export default {
     },
 
     /**
-     * 初始化产品编辑表单
+     * 编辑产品
      * @author shengzhi
      */
     editProduct () {
-      this.showEditModal = true
-      this.editModel = _.clone(this.currentProduct)
-      // 保存当前产品信息以便恢复编辑前状态
-      this.originEditModel = _.clone(this.editModel)
-    },
-
-    /**
-     * 提交更新
-     * @author shengzhi
-     */
-    onEditSubmit () {
-      if (this.delChecked && !this.editing) { // 删除
-        this.editing = true
-        if (window.confirm('确认删除该产品吗?')) {
-          api.product.deleteProduct(this.$route.params.id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.removeProduct(this.currentProduct)
-              this.$route.router.go('/dev')
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.editing = false
-          })
-        } else {
-          this.editing = false
-        }
-      } else if (this.$validation.valid && !this.editing) { // 编辑
-        this.editing = true
-        api.product.updateProduct(this.editModel).then(() => {
-          api.product.getProduct(this.$route.params.id).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.updateProduct(res.data)
-              this.editing = false
-            }
-          })
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
-      }
+      this.$route.router.go({path: 'edit', append: true})
     }
   }
 }
