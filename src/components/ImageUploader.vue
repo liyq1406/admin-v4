@@ -15,8 +15,11 @@
 <script>
   import api from '../api'
   import * as config from 'consts/config'
+  import { globalMixins } from 'src/mixins'
 
   export default {
+    mixins: [globalMixins],
+
     props: {
       images: {
         type: Array,
@@ -70,7 +73,7 @@
                     this.uploading = false
                   }
                 }).catch((res) => {
-                  this.handleError(res.data.error)
+                  this.handleError(res)
                   this.uploading = false
                 })
               }
