@@ -7,7 +7,7 @@
     <div class="panel mt15 mb20 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card :info="deviceSummary"></info-card>
+          <info-card :info="deviceSummary" :pic="'/static/images/device_thumb.png'"></info-card>
           <div v-stretch="182">
             <info-list :info="deviceInfo"></info-list>
           </div>
