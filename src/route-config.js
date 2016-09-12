@@ -1608,7 +1608,8 @@ let configRouter = (router) => {
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
-    '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history'
+    '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
+    '/dev/firmware/manage': '/dev/firmware/manage/message'
   })
 
   router.beforeEach((transition) => {

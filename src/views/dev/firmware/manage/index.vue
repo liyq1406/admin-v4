@@ -1,11 +1,11 @@
 <template>
   <div class="main">
-    <div class="main-title bordered">
+    <div class="main-title">
       <div class="title-wrap">
         <h2>固件管理</h2>
       </div>
     </div>
-    <nav class="tab">
+    <!-- <nav class="tab">
       <ul>
         <li v-for="item in tabItems">
           <a @click="selectLevel($index)" :class="{'active':currIndex===$index}">{{ item }}</a>
@@ -17,7 +17,13 @@
     </template>
     <template v-else>
       <update></update>
-    </template>
+    </template> -->
+    <div class="panel">
+      <div class="panel-bd">
+        <tab :nav="secondaryNav"></tab>
+      </div>
+    </div>
+    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
@@ -25,6 +31,7 @@
   import { globalMixins } from 'src/mixins'
   import Message from './message'
   import Update from './update'
+  import Tab from 'components/Tab'
 
   export default {
     name: 'Alert',
@@ -33,13 +40,21 @@
 
     components: {
       Message,
-      Update
+      Update,
+      'tab': Tab
     },
 
     data () {
       return {
         tabItems: ['版本信息', '上传新固件'],
-        currIndex: 0
+        currIndex: 0,
+        secondaryNav: [{
+          label: '版本信息',
+          link: { path: '/dev/firmware/manage/message' }
+        }, {
+          label: '上传新固件',
+          link: { path: '/dev/firmware/manage/update' }
+        }]
       }
     },
     methods: {

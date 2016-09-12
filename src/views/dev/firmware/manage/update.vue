@@ -255,7 +255,7 @@
               content: '成功创建版本！'
             })
             this.adding = false
-            window.location.reload()
+            this.$route.router.go('/dev/firmware/manage')
           }
         }).catch((res) => {
           this.handleError(res)
