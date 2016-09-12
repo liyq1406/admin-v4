@@ -62,7 +62,15 @@ export default {
   computed: {
     // 趋势数据
     trendData () {
-      return this.trends.light.concat(this.trends.medium).concat(this.trends.serious)
+      let temp = this.trends.light.concat(this.trends.medium).concat(this.trends.serious)
+      if (temp.length === 0) { // 销毁图标并重新渲染
+        this.showHour = !this.showHour
+        setTimeout(() => {
+          this.showHour = !this.showHour
+        }, 0)
+      }
+
+      return temp
     }
   },
 

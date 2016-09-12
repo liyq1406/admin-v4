@@ -9,30 +9,7 @@
           <china-map :data="data"></china-map>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
-          <!-- TODO 占比改成柱状图形式 #guohui -->
-          <div class="data-table" v-if="dataPer.length > 0">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>地域</th>
-                  <th>设备数量</th>
-                  <th>占比</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr v-for="data in dataPer">
-                  <template v-if="data.value">
-                    <td>{{data.name}}</td>
-                    <td>{{data.value}}</td>
-                    <td>
-                      <percentage-bar :percentage="toPercentDecimal(data.percent, 2)"></percentage-bar>
-                      <!-- {{data.percent | toPercentDecimal}} -->
-                    </td>
-                  </template>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+          <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
@@ -42,11 +19,11 @@
 <script>
 import mapData from 'components/g2-charts/map-data.json'
 import ChinaMap from 'components/g2-charts/ChinaMap'
-import PercentageBar from 'components/PercentageBar'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
 import {numToPercent} from 'utils'
 import { toPercentDecimal } from 'src/filters'
+import PercentTable from 'components/PercentTable'
 import _ from 'lodash'
 
 export default {
@@ -55,8 +32,8 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    PercentageBar,
-    ChinaMap
+    ChinaMap,
+    PercentTable
   },
 
   vuex: {
@@ -68,10 +45,40 @@ export default {
   data () {
     return {
       data: [],
-      dataPer: []
+      dataPer: [],
+      headers: [
+        {
+          key: 'region',
+          title: '地域'
+        },
+        {
+          key: 'count',
+          title: '设备数量'
+        },
+        {
+          key: 'percent',
+          title: '占比',
+          sortType: -1
+        }
+      ]
     }
   },
 
+  computed: {
+    tables () {
+      var result = []
+      this.dataPer.map((item) => {
+        var distribute = {
+          region: item.name,
+          count: item.value,
+          percent: item.percent * 100,
+          prototype: item
+        }
+        result.push(distribute)
+      })
+      return result
+    }
+  },
   watch: {
     products () {
       if (this.products.length > 0) {
@@ -84,6 +91,14 @@ export default {
   },
   methods: {
     toPercentDecimal,
+
+    sort (header) {
+      this.headers.forEach((item) => {
+        if (item.key === 'percent') {
+          item.sortType = header.sortType * -1
+        }
+      })
+    },
 
     getProductsDistribution (products) {
       var prodRegions = []

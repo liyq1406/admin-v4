@@ -9,7 +9,7 @@
           <china-heat-map :data="regionData"></china-heat-map>
         </div>
         <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
-          <div class="data-table">
+          <!-- <div class="data-table">
             <table class="table">
               <thead>
                 <tr>
@@ -33,7 +33,8 @@
                 </tr>
               </tbody>
             </table>
-          </div>
+          </div> -->
+          <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
@@ -46,6 +47,7 @@ import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import {numToPercent} from 'utils'
+import PercentTable from 'components/PercentTable'
 
 export default {
   name: 'Distributing',
@@ -60,13 +62,29 @@ export default {
   },
 
   components: {
-    ChinaHeatMap
+    ChinaHeatMap,
+    PercentTable
   },
 
   data () {
     return {
       dataPer: [],
-      regionData: []
+      regionData: [],
+      headers: [
+        {
+          key: 'region',
+          title: '地域'
+        },
+        {
+          key: 'count',
+          title: '设备数量'
+        },
+        {
+          key: 'percent',
+          title: '占比',
+          sortType: -1
+        }
+      ]
     }
   },
 
@@ -80,13 +98,11 @@ export default {
     },
     tables () {
       var result = []
-      this.distributes.map((item) => {
+      this.dataPer.map((item) => {
         var distribute = {
-          region: item.region,
-          mild: item.mild,
-          moderate: item.moderate,
-          severe: item.severe,
-          activated: item.activated,
+          region: item.name,
+          count: item.value,
+          percent: item.percent * 100,
           prototype: item
         }
         result.push(distribute)
@@ -109,9 +125,19 @@ export default {
   },
 
   ready () {
+    if (this.currentProduct.id) {
+      this.getRegion(this.currentProduct.id)
+    }
   },
 
   methods: {
+    sort (header) {
+      this.headers.forEach((item) => {
+        if (item.key === 'percent') {
+          item.sortType = header.sortType * -1
+        }
+      })
+    },
     getRegion (pruductId) {
       api.statistics.getProductRegion(pruductId).then((res) => {
         if (res.status === 200) {

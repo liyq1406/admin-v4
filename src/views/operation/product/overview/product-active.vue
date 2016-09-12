@@ -8,7 +8,9 @@
     </div>
     <div class="row">
       <div class="col-14">
-        <time-line :data="activeData"></time-line>
+        <template v-if="repaintLine">
+          <time-line :data="activeData"></time-line>
+        </template>
       </div>
       <div class="col-10">
         <pie :data="activatedProportion"></pie>
@@ -52,7 +54,8 @@ export default {
       activeData: [], // 活跃设备
       // activatedProportion: [] // 激活占比
       activated: 0,
-      total: 0
+      total: 0,
+      repaintLine: true
     }
   },
 
@@ -102,6 +105,12 @@ export default {
     getActiveProductsTrend (product, duration) {
       getActiveTrend(product.id, duration).then((res) => {
         this.activeData = this.combineRecv(res.active)
+        if (this.activeData.length === 0) {
+          this.repaintLine = false
+          setTimeout((res) => {
+            this.repaintLine = true
+          }, 0)
+        }
         // this.countRecv(res.add)
       }).catch((res) => {
         this.handleError(res)

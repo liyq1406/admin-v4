@@ -118,6 +118,18 @@ export default {
       getActivatedTrend(product.id, duration).then((res) => {
         this.activatedData = this.combineRecv(res.activated)
         this.totalData = this.combineRecv(res.total)
+        // 强制重新渲染
+        if (this.activatedData.length === 0 && this.trendTabIndex === 0) {
+          this.trendTabIndex = 1
+          setTimeout((res) => {
+            this.trendTabIndex = 0
+          }, 0)
+        } else if (this.totalData.length === 0 && this.trendTabIndex === 1) {
+          this.trendTabIndex = 0
+          setTimeout((res) => {
+            this.trendTabIndex = 1
+          }, 0)
+        }
         this.avg.total = this.countAvg(this.activatedData, duration)
         // 计算上个取值周期的平均值
         this.getLastDurationData(product, [duration, duration])

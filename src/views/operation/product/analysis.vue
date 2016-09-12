@@ -91,7 +91,7 @@ export default {
       durationData: [],
       timesData: [],
       periodData: [],
-      periods: [1, 7, 30],
+      periods: [7, 30, 90],
       dimension: 'duration',
       dimensions: [{
         label: '单次时长',
@@ -115,15 +115,11 @@ export default {
 
     currentProduct () {
       if (this.currentProduct.id) {
-        this.init()
       }
     }
   },
 
   methods: {
-    init () {
-    },
-
     /**
      * 处理时间选择
      * @author shengzhi
