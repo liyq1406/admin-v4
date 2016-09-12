@@ -60,7 +60,7 @@
                         <input type="radio" v-model="type" :value="3" number/>子设备
                       </label>
                     </div> -->
-                    <div class="form-row row" v-show="addModelType.value!== 1">
+                    <div class="form-row row" v-if="addModelType.value!== 1">
                       <label class="form-control col-5">识别码:</label>
                       <div class="controls col-10">
                         <div class="input-text-wrap">
@@ -236,6 +236,31 @@
     methods: {
       // 添加固件版本操作
       onAddSubmit () {
+        if (this.adding) return
+
+        if (this.$validation.invalid) {
+          this.$validate(true)
+          return
+        }
+        this.adding = true
+        this.addmodel.type = this.addModelType.value
+        this.addmodel.is_release = true
+        this.addmodel.release_date = new Date()
+        api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
+          if (res.status === 200) {
+            // this.resetAdd()
+            // this.getFirmwares()
+            this.showNotice({
+              type: 'info',
+              content: '成功创建版本！'
+            })
+            this.adding = false
+            window.location.reload()
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.adding = false
+        })
         // if (!this.$validation.valid) {
         //   this.$validation.mod.touched = true
         //   this.$validation.version.touched = true
@@ -253,23 +278,6 @@
         //   this.showErrors('请添加版本说明，250字以内！')
         //   return
         // }
-        this.adding = true
-        this.addmodel.type = this.addModelType.value
-        this.addmodel.is_release = true
-        this.addmodel.release_date = new Date()
-        api.product.addFirmware(this.selectProduct.id, this.addmodel).then((res) => {
-          if (res.status === 200) {
-            // this.resetAdd()
-            // this.getFirmwares()
-            this.showNotice({
-              type: 'info',
-              content: '成功创建版本！'
-            })
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
       },
       showErrors (str) {
         this.showNotice({
