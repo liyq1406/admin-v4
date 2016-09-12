@@ -139,7 +139,8 @@ export default {
             extended_warranties: '故障事件',
             repair: '维保记录',
             accounts: '网点管理',
-            heat: '热力分布'
+            heat: '热力分布',
+            settings: '设置'
           }
         },
         splashwnd: {

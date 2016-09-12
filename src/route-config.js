@@ -1502,6 +1502,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 维保设置
+        'plugins/warranty/:app_id/settings': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/settings'))
+            }, 'admin')
+          }
+        },
         // 网点管理
         'plugins/warranty/:app_id/accounts': {
           component (resolve) {
