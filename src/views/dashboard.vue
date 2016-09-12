@@ -14,10 +14,10 @@
         <div class="part part2 product-list">
           <div class="title-box">
             <h2>产品开发</h2>
-            <a class="check-all" v-show="products.length" @click="goto('/dev')">查看全部 ></a>
+            <a class="check-all" v-show="isReleaseProductsCount + noReleaseProductsCount" @click="goto('/dev')">查看全部({{isReleaseProductsCount + noReleaseProductsCount}}) ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in noReleaseProducts">
+            <div class="product" v-for="product in devProducts">
               <div class="img-box">
                 <img src="../assets/images/device_thumb.png">
               </div>
@@ -29,11 +29,11 @@
                 <div class="info">
                   <span>授权：{{product['授权'] || 0}}</span>
                   <span class="ml10">| 设备数：{{product['total'] || '0'}}</span>
-                  <!-- <span class="ml10">| 状态：{{product['is_release']?'已发布':'未发布'}}</span> -->
+                  <span class="ml10">| 状态：{{product['is_release']?'已发布':'未发布'}}</span>
                 </div>
               </div>
             </div>
-            <div class="no-products ml10" v-show="noReleaseProducts.length === 0">
+            <div class="no-products ml10" v-show="devProducts.length === 0">
               <span>您还没有任何产品，请点击按钮开始创建</span>
               <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
                 <i class="fa fa-plus"></i>
@@ -73,7 +73,7 @@
         <div class="part part2 product-list">
           <div class="title-box">
             <h2>产品管理</h2>
-            <a class="check-all" v-show="products.length" @click="goto('/operation/overview')">查看全部 ></a>
+            <a class="check-all" v-show="isReleaseProductsCount" @click="goto('/operation/overview')">查看全部({{isReleaseProductsCount}}) ></a>
           </div>
           <div class="content-box">
             <div class="product" v-for="product in releaseProducts">
@@ -145,6 +145,8 @@ export default {
   data () {
     return {
       loading: false,
+      isReleaseProductsCount: 0,
+      noReleaseProductsCount: 0,
       products: [],
       productSummary: [],
       links: [
@@ -236,10 +238,15 @@ export default {
       })
       return result
     },
-    noReleaseProducts () {
+    devProducts () {
       var result = []
       this.allProducts.map((item) => {
         if (!item.is_release) {
+          result.push(item)
+        }
+      })
+      this.allProducts.map((item) => {
+        if (item.is_release && result.length < 2) {
           result.push(item)
         }
       })
@@ -281,6 +288,8 @@ export default {
             noReleaseProducts.push(item)
           }
         })
+        this.isReleaseProductsCount = isReleaseProducts.length
+        this.noReleaseProductsCount = noReleaseProducts.length
         if (isReleaseProducts.length > 2) {
           isReleaseProducts.length = 2
         }
