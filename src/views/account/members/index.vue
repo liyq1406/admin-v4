@@ -29,7 +29,7 @@
             </thead>
             <tbody>
               <template v-if="filteredMembers.length > 0">
-                <tr v-for="member in filteredMembers | limitBy countPerPage (currentPage-1)*countPerPage">
+                <tr v-for="member in filteredMembers">
                   <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a></td>
                   <td>{{ member.email || '-' }}</td>
                   <td>{{ member.phone || '-' }}</td>
@@ -49,7 +49,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="filteredMembers.length > countPerPage" :total="filteredMembers.length" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true"></pager>
+        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="getMembers"></pager>
       </div>
 
       <!-- 添加成员 -->
@@ -178,6 +178,7 @@ export default {
 
   data () {
     return {
+      total: 0,
       query: '',
       searching: false,
       users: [],
@@ -231,7 +232,7 @@ export default {
     queryCondition () {
       var condition = {
         offset: this.countPerPage * (this.currentPage - 1),
-        limit: 1000
+        limit: this.countPerPage
       }
 
       return condition
@@ -250,6 +251,7 @@ export default {
       this.loadingData = true
       api.corp.getMembers(this.queryCondition).then((res) => {
         this.members = res.data.list
+        this.total = res.data.count
         this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
