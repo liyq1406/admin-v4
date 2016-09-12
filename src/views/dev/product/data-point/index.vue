@@ -76,7 +76,13 @@ export default {
         },
         {
           key: 'description',
-          title: '描述'
+          title: '描述',
+          class: 'wp40'
+        },
+        {
+          key: 'is_write',
+          title: '读写',
+          class: 'tac'
         },
         {
           key: 'edit',
@@ -102,6 +108,7 @@ export default {
           type: this.dataPointType(item.type),
           symbol: item.symbol,
           description: item.description,
+          'is_write': item.is_write ? '可读写' : '只读',
           edit: '<a class="hl-red">编辑</a>'
         }
         // 根据搜索框内容过滤
