@@ -64,7 +64,7 @@
           <div class="col-20 data-table-border details-box">
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
-                <x-table :headers.sync="vHeaders" :tables.sync="vTables" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
+                <x-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
                 <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
               </div>
             </div>
@@ -679,6 +679,15 @@ export default {
     canCreateEditFields () {
       var names = _.uniq(_.compact(_.map(this.editModal.fields, 'name')))
       return names.length === this.editModal.fields.length
+    },
+
+    page () {
+      var result = {
+        total: this.total, // 数据总数
+        currentPage: this.currentPage, // 当前页
+        countPerPage: this.countPerPage // 每页数量
+      }
+      return result
     }
   },
 
@@ -1073,7 +1082,9 @@ export default {
       this.dataFirClassList.map((item) => {
         item.selected = false
       })
-      var params = {}
+      var params = {
+        limit: 200
+      }
       this.getTableData(selectedFirstClass.name, params, selectedFirstClass.type)
       selectedFirstClass.selected = true
     },
