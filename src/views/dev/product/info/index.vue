@@ -214,6 +214,10 @@ export default {
       }, {
         key: 'sn',
         title: 'SN'
+      // }, {
+      //   key: 'firmware',
+      //   title: '固件版本号',
+      //   class: 'tac'
       }, {
         key: 'is_online',
         title: '在线状态',
@@ -259,6 +263,7 @@ export default {
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
           sn: '<a class="hl-red">' + (item.sn || ' - ') + '</a>',
+          firmware: item.firmware,
           is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
           prototype: item
         }
@@ -270,7 +275,7 @@ export default {
     // 筛选条件
     queryCondition () {
       let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: this.sortOrders,
@@ -342,19 +347,20 @@ export default {
       this.delChecked = false
       this.query = ''
       // 初次获取设备列表，并将获取的数量作为已用配额
-      let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
-        limit: this.countPerPage,
-        offset: 0,
-        order: this.sortOrders
-      }
-      api.device.getList(this.$route.params.id, condition).then((res) => {
-        console.log(res.data)
-        this.devices = res.data.list
-        this.used = this.total = res.data.count
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      this.getDevices()
+      // let condition = {
+      //   filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
+      //   limit: this.countPerPage,
+      //   offset: 0,
+      //   order: this.sortOrders
+      // }
+      // api.device.getList(this.$route.params.id, condition).then((res) => {
+      //   console.log(res.data)
+      //   this.devices = res.data.list
+      //   this.used = this.total = res.data.count
+      // }).catch((res) => {
+      //   this.handleError(res)
+      // })
     }
   },
 
@@ -457,20 +463,6 @@ export default {
     onPageCountUpdate (count) {
       this.countPerPage = count
       this.getDevices()
-    },
-
-    /**
-     * 获取所有设备
-     * @author shengzhi
-     */
-    getAllDevices () {
-      api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
-        console.log(res.data.list[0])
-        this.devices = res.data.list
-        this.total = res.data.count
-      }).catch((res) => {
-        this.handleError(res)
-      })
     },
 
     /**
