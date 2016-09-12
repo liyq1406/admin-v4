@@ -234,10 +234,9 @@
           this.adding = false
         })
       },
-      // 编辑固件版本操作
-      onEditSubmit () {
-        this.adding = true
-        api.product.updateFirmware(this.$route.params.product_id, this.firmware).then((res) => {
+      // 删除固件版本
+      delSubmit () {
+        api.product.deleteFirmware(this.$route.params.product_id, this.firmware).then((res) => {
           if (res.status === 200) {
             // this.resetAdd()
             // this.getFirmwares()
