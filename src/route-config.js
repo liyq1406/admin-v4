@@ -482,6 +482,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 编辑版本
+        'firmware/edit/:product_id/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/firmware/manage/edit'))
+            }, 'admin')
+          }
+        },
         // 版本管理
         'firmware/manage': {
           component (resolve) {
