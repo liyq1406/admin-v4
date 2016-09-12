@@ -27,11 +27,12 @@
       <x-alert v-show="!devices.length && !loadingDevices" :cols="18">
         <p>{{ infoMsg }}</p>
       </x-alert>
-      <div v-show="devices.length" class="device-list mb20">
-        <div class="device-list-item" v-for="device in devices" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
+      <div v-show="deviceList.length" class="device-list mb20">
+        <div class="device-list-item" v-for="device in deviceList" :class="{'active':currIndex===$index || currHover===$index}" @click="handleDeviceItemClick($index)" @mouseover="pullUp($index)" @mouseout="pushDown($index)">
           <div class="list-item-cont">
             <div class="icon-num">{{ $index+1 }}</div>
             <div class="device-id">{{ device.mac }}</div>
+            <div class="device-address">{{ device.address }}</div>
             <div class="status">
               <span v-if="device.is_online" class="hl-green">在线</span>
               <span v-else class="hl-gray">离线</span>
@@ -82,6 +83,7 @@ export default {
       ids: [],
       devices: [],
       vDevices: [],
+      geographies: [],
       query: '',
       searching: false,
       queryTypeOptions: [
@@ -103,6 +105,7 @@ export default {
       points: [],
       markers: [],
       infoWindow: {},
+      geocoder: {},
       citySearch: {},
       placeSearch: {},
       mapHeight: 500,
@@ -116,6 +119,7 @@ export default {
   },
 
   computed: {
+    // 查询条件
     queryCondition () {
       var condition = {
         offset: this.countPerPage * (this.currentPage - 1),
@@ -129,8 +133,42 @@ export default {
       return condition
     },
 
+    // 当前产品 ID
     currentProductId () {
       return this.$route.params.id
+    },
+
+    // 设备列表
+    deviceList () {
+      let result = []
+
+      // 给设备列表添加虚拟设备信息
+      result = this.devices.map((item) => {
+        let vDevice = _.find(this.vDevices, (obj) => {
+          return obj.device_id === item.id
+        }) || {}
+
+        item.last_login = vDevice.last_login || ''
+        item.ip = vDevice.ip || ''
+        item.online_count = vDevice.online_count || 0
+
+        return item
+      })
+
+      // 给设备列表添加地理位置信息
+      result = result.map((item) => {
+        let geo = _.find(this.geographies, (obj) => {
+          return obj.device_id === item.id
+        }) || {}
+
+        item.lat = geo.lat || null
+        item.lon = geo.lon || null
+        item.address = geo.address
+
+        return item
+      })
+
+      return result
     }
   },
 
@@ -192,14 +230,19 @@ export default {
       })
 
       // 工具条与比例尺
-      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.CitySearch', 'AMap.PlaceSearch'], () => {
+      AMap.plugin(['AMap.ToolBar', 'AMap.Scale', 'AMap.CitySearch', 'AMap.PlaceSearch', 'AMap.Geocoder'], () => {
         var toolBar = new AMap.ToolBar()
         var scale = new AMap.Scale()
+
         this.citySearch = new AMap.CitySearch()
         this.placeSearch = new AMap.PlaceSearch({
           pageSize: 10,
           pageIndex: 1,
           city: '全国' // 城市
+        })
+        this.geocoder = new AMap.Geocoder({
+          radius: 1000,
+          extensions: 'all'
         })
 
         this.map.addControl(toolBar)
@@ -280,9 +323,9 @@ export default {
      */
     getGeography (deviceId) {
       this.loadingData = true
-      api.device.getInfo(this.$route.params.id, deviceId).then((res) => {
-        console.log(res.data)
-      })
+      // api.device.getInfo(this.$route.params.id, deviceId).then((res) => {
+      //   console.log(res.data)
+      // })
       api.device.getGeography(this.$route.params.id, deviceId).then((res) => {
         if (res.status === 200) {
           this.currIndex = 0
@@ -310,6 +353,21 @@ export default {
       api.device.getGeographies(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.data.count) {
           this.ids = _.map(res.data.devices, 'device_id')
+          console.log(res.data.devices)
+          res.data.devices.forEach((item, index) => {
+            this.geocoder.getAddress([item.lon, item.lat], (status, result) => {
+              let address = ''
+              if (status === 'complete' && result.info === 'OK') {
+                address = result.regeocode.formattedAddress
+              }
+              this.geographies.push({
+                device_id: item.device_id,
+                lon: item.lon,
+                lat: item.lat,
+                address: address
+              })
+            })
+          })
         } else {
           this.ids = []
           this.infoMsg = '当前区域未找到设备'
@@ -335,23 +393,21 @@ export default {
       // 绘制搜索区域
       // this.drawRegion()
       // 点
-      console.log(this.vDevices)
-      this.points.forEach((point, index) => {
-        point.index = index
-        point.device = this.devices[index]
-        point.vDevice = this.vDevices[index]
+      _.clone(this.deviceList).forEach((device, index) => {
+        device.index = index
+        // point.device = this.deviceList[index]
         var classes = ['map-marker']
         if (index === this.currIndex) {
           classes.push('map-marker-active')
         }
         var marker = new AMap.Marker({
           map: this.map,
-          position: [point.lon, point.lat],
+          position: [device.lon, device.lat],
           icon: 'static/images/marker.png',
           content: `<span class="${classes.join(' ')}">${index + 1}</span>`,
           offset: {x: -15, y: -36}
         })
-        marker.extData = point
+        marker.extData = device
         marker.on('click', this.onMarkerClick)
         marker.on('mouseover', this.onMarkerMouseOver)
         marker.on('mouseout', this.onMarkerMouseOut)
@@ -462,19 +518,15 @@ export default {
     showPopup (data) {
       var content = ['<div class="map-popup">']
       content.push('<div class="map-popup-header">')
-      content.push(`<h3>${data.device.name || this.currentProduct.name}</h3>`)
+      content.push(`<h3>${data.name || this.currentProduct.name}</h3>`)
       content.push('</div>')
       content.push('<div class="map-popup-body">')
-      if (data.vDevice) {
-        content.push(`<div class="info-row mt5 mb10">${data.device.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.vDevice.last_login)}</div>`)
-      }
+      content.push(`<div class="info-row mt5 mb10">${data.is_online ? '<span class="on-line">在线</span>' : '<span class="off-line">下线</span>'} ${formatDate(data.last_login)}</div>`)
       // content.push(`<div class="info-row"><span class="label">设备ID: </span>${data.device.id}</div>`)
-      content.push(`<div class="info-row"><span class="label">MAC: </span>${data.device.mac}</div>`)
-      if (data.vDevice) {
-        content.push(`<div class="info-row"><span class="label">IP: </span>${data.vDevice.ip}</div>`)
-        content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.vDevice.online_count)}</div>`)
-      }
-      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.device_id}">查看详情&gt;&gt;</a></div>`)
+      content.push(`<div class="info-row"><span class="label">MAC: </span>${data.mac}</div>`)
+      content.push(`<div class="info-row"><span class="label">地址: </span>${data.address}</div>`)
+      content.push(`<div class="info-row"><span class="label">在线时长: </span>${this.prettyDuration(data.online_count)}</div>`)
+      content.push(`<div class="info-row tar"><a href="/#!/operation/products/${this.$route.params.id}/devices/${data.id}">查看详情&gt;&gt;</a></div>`)
       content.push('</div>')
       content.push('</div>')
       this.infoWindow.setContent(content.join(''))
