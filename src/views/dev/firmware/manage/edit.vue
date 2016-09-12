@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-actions">
                   <button @submit.prevent.stop="onEditSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
-                  <button @click.prevent.stop="" class="btn btn-default widbtn">删除固件</button>
+                  <button @click.prevent.stop="delSubmit" class="btn btn-default widbtn">删除固件</button>
                   <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
                 </div>
               </div>
@@ -236,20 +236,21 @@
       },
       // 删除固件版本
       delSubmit () {
-        api.product.deleteFirmware(this.$route.params.product_id, this.firmware).then((res) => {
-          if (res.status === 200) {
-            // this.resetAdd()
-            // this.getFirmwares()
-            this.showNotice({
-              type: 'info',
-              content: '修改成功！'
-            })
-            this.$route.router.go('/dev/firmware/manage')
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
+        var result = window.confirm('确认删除该版本吗?')
+        if (result === true) {
+          api.product.deleteFirmware(this.$route.params.product_id, this.firmware.id).then((res) => {
+            if (res.status === 200) {
+              this.showNotice({
+                type: 'info',
+                content: '删除成功！'
+              })
+              this.$route.router.go('/dev/firmware/manage')
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.adding = false
+          })
+        }
       },
       showErrors (str) {
         this.showNotice({
