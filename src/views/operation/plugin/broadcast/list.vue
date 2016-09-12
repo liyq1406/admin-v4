@@ -153,7 +153,9 @@
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {},
-          order: {}
+          order: {
+            time: 'desc'
+          }
         }
 
         if (this.query.length > 0) {
@@ -186,11 +188,11 @@
       },
       computedStatusText (status) {
         var result = ''
-        if (status === 0) {
+        if (status === 2) {
           result = '已发送'
         } else if (status === 1) {
           result = '发送中'
-        } else if (status === 2) {
+        } else if (status === 0) {
           result = '未发送'
         }
         return result
