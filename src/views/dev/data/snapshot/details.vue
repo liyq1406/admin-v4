@@ -105,7 +105,7 @@
                   </div>
                   <div class="table-box">
                     <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
-                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2"></pager>
+                    <pager v-if="snapshots.length > countPerPage2" :total="snapshots.length" :current.sync="currentPage2" :count-per-page="countPerPage2" :simple="true"></pager>
                   </div>
                 </div>
               </div>
