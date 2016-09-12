@@ -253,6 +253,7 @@ export default {
     getMember () {
       api.corp.getMember(this.currentMember.id).then((res) => {
         this.setCurrentMember(res.data)
+        window.localStorage.memberRole = res.data.role
       }).catch((res) => {
         this.$route.router.go('/login')
       })

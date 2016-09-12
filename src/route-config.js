@@ -1669,6 +1669,40 @@ let configRouter = (router) => {
       transition.next()
     }
   })
+
+  /**
+   * 区分用户身份 确定页面访问权限
+   * @param  {[type]} (transition [description]
+   * @return {[type]}             [description]
+   */
+  router.beforeEach((transition) => {
+    var reg = {
+      2: /^\/operation/,
+      3: /^\/dev/
+    }
+    var identity = {
+      2: '运营人员',
+      3: '开发人员'
+    }
+    var memberRole = window.localStorage.getItem('memberRole')
+    if ((reg[2].test(transition.to.path) || reg[3].test(transition.to.path)) && (memberRole - 0 === 2 || memberRole - 0 === 3)) {
+      if (reg[memberRole].test(transition.to.path)) {
+        transition.next()
+      } else {
+        router.app.showNotice({
+          type: 'error',
+          content: `您是${identity[memberRole]}，您没有限权访问该页面！`
+        })
+        if (transition.from.path && reg[memberRole].test(transition.from.path)) {
+          router.replace(transition.from.path)
+        } else {
+          router.replace('/dashboard')
+        }
+      }
+    } else {
+      transition.next()
+    }
+  })
 }
 
 export default configRouter
