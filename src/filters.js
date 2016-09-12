@@ -50,7 +50,7 @@ export function uniformDate (date, correct) {
   if (date instanceof Date) {
     formatDate = date
   } else if (date && date.length > 0) {
-    formatDate = new Date(date)
+    formatDate = new Date(Date.parse(date))
   } else {
     return date
   }

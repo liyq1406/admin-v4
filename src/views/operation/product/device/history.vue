@@ -137,7 +137,7 @@ export default {
       let result = []
       if (this.selectedDatapoint.index) {
         let snapshotGroup = _.groupBy(this.snapshots, (item) => {
-          let hour = new Date(formatDate(item.snapshot_date)).getHours()
+          let hour = item.snapshot_date.split(' ')[1].split(':')[0]
           return `${uniformDate(item.snapshot_date)}-${hour}`
         })
 
