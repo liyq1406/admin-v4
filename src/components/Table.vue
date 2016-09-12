@@ -1,6 +1,6 @@
 <template>
   <div class="intelligent-table-box">
-    <div class="table-content data-table with-loading">
+    <div class="table-content data-table with-loading" v-show="headers.length > 0">
       <div class="icon-loading" v-show="loading">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
@@ -44,7 +44,7 @@
         </tbody>
       </table>
     </div>
-    <div class="row">
+    <div class="row" v-show="headers.length > 0">
       <div class="col-8">
         <slot name="left-foot">
         </slot>
