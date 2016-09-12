@@ -62,7 +62,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import { pluginMixins } from '../../../mixins'
   import Select from 'components/Select'
   import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
@@ -71,12 +70,11 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Statistic from 'components/Statistic'
-  import Mock from 'mockjs'
 
   export default {
     name: 'OrderList',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins],
 
     components: {
       'x-select': Select,
@@ -182,22 +180,6 @@
             key: 'state',
             title: '状态',
             class: 'tac'
-          }
-        ],
-        trends: null,
-        period: 7,
-        periods: [
-          {
-            value: 1,
-            label: '24h'
-          },
-          {
-            value: 7,
-            label: '7天'
-          },
-          {
-            value: 30,
-            label: '30天'
           }
         ]
       }
@@ -316,151 +298,18 @@
 
     route: {
       data () {
-        this.getOrderWorkList1()
+        this.getOrderWorkList()
       }
     },
 
     ready () {
-      // TODO 对接口
-      this.trends = Mock.mock({
-        'list|14': [{
-          'date|+1': [
-            new Date(2016, 7, 15),
-            new Date(2016, 7, 16),
-            new Date(2016, 7, 17),
-            new Date(2016, 7, 18),
-            new Date(2016, 7, 19),
-            new Date(2016, 7, 20),
-            new Date(2016, 7, 21)
-          ],
-          'count|+1': [6, 8, 9, 3, 9, 3, 9]
-        }]
-      }).list
     },
 
     methods: {
       goDetails (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
-      getOrderWorkList1 () {
-        this.total = 50
-        this.workOrders = [
-          {
-            id: 'YWD21291233',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-22   19:21:32',
-            person: '张小琴',
-            content: '更换滤网',
-            addr: '广东，广州',
-            level: '1',
-            state: '0'
-          },
-          {
-            id: 'YWD21291232',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-21   12:33:12',
-            person: '王献强',
-            content: '更换滤网',
-            addr: '广东，广州',
-            level: '1',
-            state: '0'
-          },
-          {
-            id: 'YWD21291231',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-21   11:21:39',
-            person: '张小琴',
-            content: '电源故障，电压不稳定',
-            addr: '广东，深圳',
-            level: '2',
-            state: '0'
-          },
-          {
-            id: 'YWD21291229',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-21   11:18:09',
-            person: '张小琴',
-            content: '电机转速过高，异响',
-            addr: '广东，深圳',
-            level: '2',
-            state: '1'
-          },
-          {
-            id: 'YWD21291228',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-21   9:17:32',
-            person: '王献强',
-            content: '更换滤网',
-            addr: '广东，佛山',
-            level: '3',
-            state: '0'
-          },
-          {
-            id: 'YWD21291227',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-20   15:13:30',
-            person: '王献强',
-            content: '更换滤网',
-            addr: '湖北，武汉',
-            level: '2',
-            state: '0'
-          },
-          {
-            id: 'YWD21291226',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-20   15:13:30',
-            person: '张小琴',
-            content: '更换滤网',
-            addr: '湖北，武汉',
-            level: '1',
-            state: '0'
-          },
-          {
-            id: 'YWD21291225',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-19   10:21:33',
-            person: '张小琴',
-            content: '外壳松动，更换A/B壳',
-            addr: '广西，桂林',
-            level: '1',
-            state: '0'
-          },
-          {
-            id: 'YWD21291224',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-19   10:08:46',
-            person: '王献强',
-            content: '制冷异常，强制冷失效',
-            addr: '河南，开封',
-            level: '2',
-            state: '0'
-          },
-          {
-            id: 'YWD21291223',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-18   16:22:38',
-            person: '张小琴',
-            content: '噪音过大',
-            addr: '广东，广州',
-            level: '3',
-            state: '0'
-          },
-          {
-            id: 'YWD21291222',
-            mac: 'a1ds54asd',
-            create_date: '2016-07-18   16:11:32',
-            person: '张小琴',
-            content: '更换滤网',
-            addr: '湖北, 武汉',
-            level: '3',
-            state: '0'
-          }
-        ]
-      },
       getOrderWorkList (querying) {
-        var self = this
-        var argvs = arguments
-        var fn = self.getOrderWorkList
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
@@ -472,27 +321,16 @@
           return
         }
 
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.loadingData = false
-          })
+        api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+          this.total = res.data.count
+          this.workOrders = res.data.list
+          this.loadingData = false
+        }).catch((err) => {
+          this.handleError(err)
+          this.loadingData = false
         })
       },
       getBranchIdByName (name) {
-        var self = this
-        var argvs = arguments
-        var fn = self.getBranchIdByName
         var condition = {
           filter: [],
           limit: 1,
@@ -501,37 +339,22 @@
           query: {}
         }
         condition.query.name = {$regex: name, $options: 'i'}
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
-            this.branchs = res.data.list
-            api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-              this.total = res.data.count
-              this.workOrders = res.data.list
-              this.loadingData = false
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'warranty'
-              }
-              self.handlePluginError(err, env)
-              this.loadingData = false
-            })
+        api.warranty.getBranchList(this.$route.params.app_id, condition).then((res) => {
+          this.branchs = res.data.list
+          api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+            this.total = res.data.count
+            this.workOrders = res.data.list
+            this.loadingData = false
           }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
+            this.handleError(err)
             this.loadingData = false
           })
+        }).catch((err) => {
+          this.handleError(err)
+          this.loadingData = false
         })
       },
       onAddBtnClick () {
-        console.log('xxx')
         this.$route.router.go({path: 'add', append: true})
       }
     }

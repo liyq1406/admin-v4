@@ -6,12 +6,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getWarrantyList (appID, token, params) {
+  getWarrantyList (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/warranty/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -22,12 +22,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getOrderWorkList (appID, token, params) {
+  getOrderWorkList (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/work_orders/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -38,12 +38,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getRepairDetailList (appID, token, params) {
+  getRepairDetailList (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/repair_details/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -54,12 +54,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchList (appID, token, params) {
+  getBranchList (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/branch/list`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -70,12 +70,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  AddBranch (appID, token, params) {
+  AddBranch (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/branch/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -86,12 +86,12 @@ export default {
     * @param  Object 查询参数
     * @return status
     */
-  UpdateBranch (appID, token, params, branchId) {
+  UpdateBranch (appID, params, branchId) {
     return http.put(
       `${API_SERVER.warranty}/${appID}/api/branch/update/${branchId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -103,12 +103,12 @@ export default {
    * @param  String 网点ID
    * @return status
    */
-  deleteBranch (appID, token, branchId) {
+  deleteBranch (appID, branchId) {
     return http.del(
       `${API_SERVER.warranty}/${appID}/api/branch/delete/${branchId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -119,12 +119,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  getBranchStaffsList (appID, token, params) {
+  getBranchStaffsList (appID, params) {
     return http.post(
      `${API_SERVER.warranty}/${appID}/api/outlet_staffs/list`, params, {
        headers: {
          'Content-Type': 'application/x-www-form-urlencoded',
-         'Access-Token': token
+         'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
        }
      }
    )
@@ -135,12 +135,12 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  AddBranchStaffs (appID, token, params) {
+  AddBranchStaffs (appID, params) {
     return http.post(
       `${API_SERVER.warranty}/${appID}/api/outlet_staffs/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -151,12 +151,12 @@ export default {
   * @param  Object 查询参数
   * @return status
   */
-  UpdateBranchStaffs (appID, token, staffId, params) {
+  UpdateBranchStaffs (appID, staffId, params) {
     return http.put(
       `${API_SERVER.warranty}/${appID}/api/outlet_staffs/update/${staffId}`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )
@@ -167,12 +167,12 @@ export default {
    * @param  Object 查询参数
    * @return status
    */
-  deleteStaff (appID, token, staffId) {
+  deleteStaff (appID, staffId) {
     return http.del(
       `${API_SERVER.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
-          'Access-Token': token
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
         }
       }
     )

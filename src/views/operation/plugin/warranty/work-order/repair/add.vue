@@ -113,7 +113,7 @@
         addValidation: {},
         breadcrumbNav: [{
           label: '全部',
-          link: `/operation/plugins/warranty${this.$route.params.app_id}/work-orders/repair`
+          link: `/operation/plugins/warranty/${this.$route.params.app_id}/work-orders/repair`
         }, {
           label: '添加工单'
         }],

@@ -146,7 +146,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import { pluginMixins } from '../../mixins'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
   import Select from 'components/Select'
@@ -159,7 +158,7 @@
   export default {
     // name: 'AccountList',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins],
 
     components: {
       'x-select': Select,
@@ -250,28 +249,17 @@
     methods: {
       // 获取网点列表
       getBranchList () {
-        // if (typeof querying !== 'undefined') {
-        //   this.currentPage = 1
-        // }
-        var self = this
-        var argvs = arguments
-        var fn = self.getBranchList
+        if (typeof querying !== 'undefined') {
+          this.currentPage = 1
+        }
         this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getBranchList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-            this.accounts = res.data.list
-            this.total = res.data.count
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.loadingData = false
-          })
+        api.warranty.getBranchList(this.$route.params.app_id, this.queryCondition).then((res) => {
+          this.accounts = res.data.list
+          this.total = res.data.count
+          this.loadingData = false
+        }).catch((err) => {
+          this.handleError(err)
+          this.loadingData = false
         })
       },
 
@@ -293,31 +281,20 @@
       },
       // 添加操作
       onAddSubmit () {
-        var self = this
-        var argvs = arguments
-        var fn = self.onAddSubmit
         if (this.$addValidation.invalid || this.adding) return
         this.adding = true
         this.addModel.province = this.selectedProvince.name
         this.addModel.city = this.selectedCity.name
         this.addModel.district = this.selectedDistrict.name
         this.addModel.create_time = new Date()
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.AddBranch(this.$route.params.app_id, token, this.addModel).then((res) => {
-            this.adding = false
-            this.showAddModal = false
-            this.getBranchList()
-            this.resetAdd()
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.adding = false
-          })
+        api.warranty.AddBranch(this.$route.params.app_id, this.addModel).then((res) => {
+          this.adding = false
+          this.showAddModal = false
+          this.getBranchList()
+          this.resetAdd()
+        }).catch((err) => {
+          this.handleError(err)
+          this.adding = false
         })
       }
     }

@@ -72,14 +72,12 @@
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import store from 'store'
   import api from 'api'
-  import { pluginMixins } from '../../../mixins'
-  import Mock from 'mockjs'
   import Statistic from 'components/Statistic'
 
   export default {
     name: 'OrderList',
 
-    mixins: [globalMixins, pluginMixins],
+    mixins: [globalMixins],
 
     store,
 
@@ -272,140 +270,25 @@
 
     route: {
       data () {
-        this.getWarrantyList1()
+        this.getWarrantyList()
       }
     },
 
-    ready () {
-      // TODO 对接口
-      this.trends = Mock.mock({
-        'list|14': [{
-          'date|+1': [
-            new Date(2016, 7, 15),
-            new Date(2016, 7, 16),
-            new Date(2016, 7, 17),
-            new Date(2016, 7, 18),
-            new Date(2016, 7, 19),
-            new Date(2016, 7, 20),
-            new Date(2016, 7, 21)
-          ],
-          'count|+1': [6, 8, 9, 3, 9, 3, 9]
-        }]
-      }).list
-    },
+    ready () {},
 
     methods: {
       goDetails (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
-      getWarrantyList1 () {
-        // this.total = 20
-        this.workOrders = [
-          // {
-          //   id: 'YWD212912341',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '2年',
-          //   addr: '湖北, 武汉',
-          //   state: 1
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // },
-          // {
-          //   id: 'YWD212912342',
-          //   mac: '1108ea95',
-          //   invalid_time: '2016-1-1   19:21:32',
-          //   time: '待延保',
-          //   addr: '湖北, 武汉',
-          //   state: 0
-          // }
-        ]
-      },
       getWarrantyList (querying) {
-        var self = this
-        var argvs = arguments
-        var fn = self.getWarrantyList
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
         this.loadingData = true
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.getWarrantyList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.loadingData = false
-          })
+        api.warranty.getWarrantyList(this.$route.params.app_id, this.queryCondition).then((res) => {
+          this.total = res.data.count
+          this.workOrders = res.data.list
+          this.loadingData = false
         }).catch((err) => {
           this.handleError(err)
           this.loadingData = false

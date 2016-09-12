@@ -198,6 +198,9 @@ export default {
             }, {
               alias: 'accounts',
               url: `/plugins/warranty/${item.id}/accounts`
+            }, {
+              alias: 'settings',
+              url: `/plugins/warranty/${item.id}/settings`
             // 暂时隐藏
             // }, {
             //   alias: 'heat',
