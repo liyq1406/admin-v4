@@ -134,7 +134,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
+              <button @submit.prevent="onAddSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
               <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
               <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
             </div>
@@ -181,6 +181,7 @@
 
     data () {
       return {
+        adding: false,
         emptyArr: [],
         addModelType: { label: 'WIFI', value: 1 },
         selectProduct: {},
@@ -235,23 +236,23 @@
     methods: {
       // 添加固件版本操作
       onAddSubmit () {
-        if (!this.$validation.valid) {
-          this.$validation.mod.touched = true
-          this.$validation.version.touched = true
-          return
-        }
-        if (!this.selectProduct.id) {
-          this.showErrors('请选择产品！')
-          return
-        }
-        if (!this.addmodel.file_url) {
-          this.showErrors('请上传固件！')
-          return
-        }
-        if (!this.addmodel.description) {
-          this.showErrors('请添加版本说明，250字以内！')
-          return
-        }
+        // if (!this.$validation.valid) {
+        //   this.$validation.mod.touched = true
+        //   this.$validation.version.touched = true
+        //   return
+        // }
+        // if (!this.selectProduct.id) {
+        //   this.showErrors('请选择产品！')
+        //   return
+        // }
+        // if (!this.addmodel.file_url) {
+        //   this.showErrors('请上传固件！')
+        //   return
+        // }
+        // if (!this.addmodel.description) {
+        //   this.showErrors('请添加版本说明，250字以内！')
+        //   return
+        // }
         this.adding = true
         this.addmodel.type = this.addModelType.value
         this.addmodel.is_release = true

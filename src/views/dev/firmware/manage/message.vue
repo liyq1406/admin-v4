@@ -82,7 +82,7 @@
                 <td>{{ firmware.create_date | formatDate }}</td>
                 <td class="tac">
                   <!-- <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button> -->
-                  <button class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
+                  <button v-link="{ path: '/dev/firmware/edit/' + currProduct.id + '/' + firmware.id }" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
                 </td>
               </tr>
             </template>

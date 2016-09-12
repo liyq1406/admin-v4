@@ -134,6 +134,15 @@ export default {
       `${API_SERVER.default}/v2/product/${productId}/firmwares`, params
     )
   },
+  /**
+   * 获取单个固件版本详细信息
+   * @return {Promise}
+   */
+  getFirmware (productId, firmwareId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/firmware/${firmwareId}`
+    )
+  },
 
   /**
    * 添加数据端点
