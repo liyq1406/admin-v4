@@ -156,6 +156,10 @@ export default {
 
 <style lang="stylus" scpoed>
 
+  .amap-copyright
+  .amap-logo
+    display none
+    visibility hidden
   .map-box
     width 100%
     height 100%

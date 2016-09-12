@@ -18,7 +18,10 @@
           </div>
           <div class="mt10 ml30">
             <x-map :location="deviceLocation" height="220px"></x-map>
-            <div class="device-ip mt5">ip: {{ currVirtualDevice.ip }}</div>
+            <div class="device-ip mt5">
+              <span v-if="currVirtualDevice.ip">ip: {{ currVirtualDevice.ip }} </span>
+              <span v-show="province">{{province}} {{city}}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -70,6 +73,8 @@ export default {
 
   data () {
     return {
+      province: '',
+      city: '',
       deviceLocation: [],
       secondaryNav: [],
       breadcrumbNav: [{
@@ -210,6 +215,9 @@ export default {
      */
     getDeviceGeography () {
       api.device.getGeography(this.$route.params.product_id, this.$route.params.device_id).then((res) => {
+        let {province, city} = res.data
+        this.province = province
+        this.city = city
         if (res.status === 200) {
           this.deviceLocation = [res.data.lon, res.data.lat]
         }
