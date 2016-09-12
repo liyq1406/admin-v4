@@ -51,14 +51,14 @@
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="number" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值" :class="{'require-warnning': requireDatapointMin }">
                           </div>
                         </div>
                       </div>
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="number" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值" :class="{'require-warnning': requireDatapointMax }">
                           </div>
                         </div>
                       </div>
@@ -129,14 +129,14 @@
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="number" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值" :class="{'require-warnning': requireDatapointMin }">
                         </div>
                       </div>
                     </div>
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="number" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值" :class="{'require-warnning': requireDatapointMax }">
                         </div>
                       </div>
                     </div>
@@ -227,7 +227,9 @@ export default {
       originEditModel: {},
       addModel: {},
       showModal: false,
-      requireDatapointName: false // 判断端点ID是否缺失
+      requireDatapointName: false, // 判断端点ID是否缺失
+      requireDatapointMin: false, // 判断端点最大值是否缺失
+      requireDatapointMax: false // 判断端点最小值是否缺失
     }
   },
 
@@ -336,12 +338,28 @@ export default {
         return
       }
       this.loadingData = true
+
+      // 表单验证
       if (!datapoint.name || datapoint.name === '') {
         this.requireDatapointName = true
         this.loadingData = false
         return
       } else {
         this.requireDatapointName = false
+      }
+      if (!datapoint.min || datapoint.min === '') {
+        this.requireDatapointMin = true
+        this.loadingData = false
+        return
+      } else {
+        this.requireDatapointMin = false
+      }
+      if (!datapoint.max || datapoint.max === '') {
+        this.requireDatapointMax = true
+        this.loadingData = false
+        return
+      } else {
+        this.requireDatapointMax = false
       }
       if (this.adding) { // 添加
         api.product.addDataPoint(this.product.id, datapoint).then((res) => {

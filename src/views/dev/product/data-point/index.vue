@@ -7,7 +7,7 @@
       <div class="action-bar">
         <div slot="filter-bar" class="filter-bar">
           <div class="action-group fl">
-            <button @click="addDataPoint" class="btn btn-success"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
+            <button @click="addDataPoint" class="btn btn-primary"><i class="fa fa-plus"></i> {{ $t("ui.datapoint.add_datapoint") }}</button>
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">

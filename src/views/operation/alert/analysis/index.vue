@@ -249,11 +249,19 @@ export default {
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
     },
-
+    getUnreadCount (start, end) {
+      let beginTime = dateFormat('yyyy-MM-dd', new Date(start))
+      let endTime = dateFormat('yyyy-MM-dd', new Date(end))
+      api.statistics.getProductAlertSummary(this.currentProduct.id, beginTime, endTime).then((res) => {
+        if (res.status === 200) {
+          this.alertSummary.unread.total = res.data.unread
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     // 获取告警概览@author weijie
     getSummary () {
-      var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
-      todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
       var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
       var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
@@ -261,17 +269,11 @@ export default {
       var now = new Date().getTime() - 1 * 24 * 3600 * 1000
       now = dateFormat('yyyy-MM-dd', new Date(now))
 
-      api.statistics.getProductAlertSummary(this.currentProduct.id, todayBeginTime, now).then((res) => {
-        if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
-          this.alertSummary.today.total = res.data.add_today
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
       // 获取7天数据
       api.statistics.getProductAlertSummary(this.currentProduct.id, weekBeginTime, now).then((res) => {
         if (res.status === 200) {
+          this.alertSummary.unread.total = res.data.unread
+          this.alertSummary.today.total = res.data.add_today
           this.alertSummary.week.total = res.data.message
         }
       }).catch((res) => {
@@ -573,6 +575,7 @@ export default {
         }
         this.getTagTrend()
         this.getAlertList()
+        this.getUnreadCount(start, end)
       }
     },
 
