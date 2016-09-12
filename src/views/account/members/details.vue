@@ -5,7 +5,7 @@
       <div class="details row">
         <div class="col-16">
           <h2>{{ member.name }}</h2>
-          <div class="actions" v-if="currentMember.role === 1 && member.role === 1">
+          <div class="actions" v-if="currentMember.role === 1 && member.role !== 1">
             <button class="btn btn-ghost" @click="toggleAccount"><i class="hl-red fa" :class="{'fa-ban': member.status === 1, 'fa-undo': member.status !== 1}"></i>{{ member.status === 1 ? '停用帐号' : '启用帐号'}}</button>
             <button class="btn btn-ghost" @click="delMember"><i class="hl-red fa fa-times"></i>删除成员</button>
           </div>
