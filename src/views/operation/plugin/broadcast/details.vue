@@ -132,7 +132,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import store from 'store'
 import api from 'api'
-import { formatDate, uniformDate } from 'src/filters'
+import { uniformDate, uniformTime } from 'src/filters'
 import _ from 'lodash'
 
 export default {
@@ -214,7 +214,7 @@ export default {
       result.content = this.task.content
 
       // 推送时间
-      result.time = formatDate(this.task.time)
+      result.time = uniformDate(this.task.time) + ' ' + uniformTime(this.task.time)
 
       // 打开方式
       let action = this.task.action

@@ -210,9 +210,9 @@
       },
       goDetail (table) {
         if (table.prototype.status === 2) {
-          this.$route.router.go(this.$route.path + '/' + table.prototype.id + '/update')
-        } else {
           this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+        } else {
+          this.$route.router.go(this.$route.path + '/' + table.prototype.id + '/update')
         }
       },
       getTasks () {
