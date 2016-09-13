@@ -8,7 +8,7 @@
           </search-box>
         </div>
         <h2>{{ $t('ui.member.member_list') }}</h2>
-        <button class="btn btn-primary fl ml20" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>添加成员</button>
+        <a class="btn btn-primary fl ml20" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>添加成员</a>
       </div>
       <div class="panel-bd ml20 mr20">
         <div class="data-table with-loading">
