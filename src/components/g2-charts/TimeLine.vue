@@ -115,6 +115,9 @@ export default {
           alias: '日期',
           type: 'time',
           mask: 'mm-dd'
+        },
+        val: {
+          type: 'linear'
         }
       }
       if (this.scale === 'hour') {
