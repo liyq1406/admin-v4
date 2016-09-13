@@ -92,7 +92,8 @@ export default {
         },
         {
           key: 'active_date',
-          title: '激活时间'
+          title: '激活时间',
+          sortType: -1
         },
         {
           key: 'is_online',
@@ -126,6 +127,15 @@ export default {
           prototype: device
         }
         result.push(table)
+      })
+      let sortType = -1
+      this.headers.forEach((item) => {
+        if (item.sortType) {
+          sortType = item.sortType
+        }
+      })
+      result.sort((a, b) => {
+        return ((+new Date(a.active_date)) - (+new Date(b.active_date))) * sortType
       })
       return result
     },
