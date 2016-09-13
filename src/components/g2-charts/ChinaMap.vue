@@ -81,6 +81,20 @@ export default {
         .color('#fff')
         .label('name', {offset: 0, label: {fill: '#000', 'font-size': 10}})
         .size(0)
+
+      chart.on('tooltipchange', (ev) => {
+        var item = ev.items[0]
+        item.name = '数量'
+        ev.items.push({
+          name: '占比',
+          title: '占比',
+          marker: true,
+          color: item.color,
+          value: (_.find(this.data, (i) => {
+            return item.title === i.name
+          })).percent * 100 + '%'
+        })
+      })
       chart.render()
     }
   }
