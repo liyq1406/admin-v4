@@ -36,7 +36,7 @@
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </x-select>
-                  <button slot="search-button" @click="getUsers(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getUsers(true)" class="btn"><i class="fa fa-search"></i></button>
                   <!-- <label>{{ $t('ui.user.search_user') }}</label> -->
                 </search-box>
               </div>

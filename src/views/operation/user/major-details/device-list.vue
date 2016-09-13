@@ -16,7 +16,7 @@
           <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box :key.sync="query" :active="searching" @cancel="getDevices" placeholder="请输入搜索内容" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
-                <button slot="search-button" @click="getDevices" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <button slot="search-button" @click="getDevices" class="btn"><i class="fa fa-search"></i></button>
                 <!-- <label>{{ $t('ui.user.search_user') }}</label> -->
               </search-box>
             </div>

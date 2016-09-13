@@ -57,14 +57,8 @@
               </div>
             </div>
             <div class="filter-group fr">
-              <search-box
-              :key.sync="query"
-              :active="searching"
-              :placeholder="'搜索客户名称'"
-              @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch"
-              @press-enter="getMajorClient(true)"
-              >
-                <button slot="search-button" @click="getMajorClient(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+              <search-box :key.sync="query" :active="searching" :placeholder="'搜索客户名称'" @cancel="getMajorClient(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMajorClient(true)">
+                <button slot="search-button" @click="getMajorClient(true)" class="btn"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>

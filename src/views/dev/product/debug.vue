@@ -16,7 +16,7 @@
             </button>
             <div class="search-box" v-show="true">
               <search-box :placeholder="'请输入设备mac'" :key.sync="query" @cancel="getDevices" @press-enter="getDevices" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" >
-                <button slot="search-button" class="search btn btn-ghost" @click="getDevices"><i class="fa fa-search"></i></button>
+                <button slot="search-button" class="search btn" @click="getDevices"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>
@@ -92,8 +92,7 @@
                   </button>
                 </div>
                 <div class="filter-group-item mt10">
-                  <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
-                  </search-box>
+                  <search-box :placeholder="'搜索端点ID'" :key.sync="query2" :active="searching" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
                 </div>
               </div>
             </div>

@@ -10,8 +10,7 @@
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-ghost btn-sm"><i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
-                </search-box>
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
               </div>
             </div>
             <h3>{{ $t('ui.device.datapoint') }}</h3>

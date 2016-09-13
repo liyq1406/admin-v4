@@ -78,7 +78,7 @@
             trigger: 'axis'
           },
           grid: {
-            x: 50,
+            x: 90,
             y: 32,
             x2: 15
           },

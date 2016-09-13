@@ -1,9 +1,9 @@
 <template>
   <div class="main">
-    <div class="main-title">
+    <div class="main-title bordered">
       <h2>授权记录</h2>
     </div>
-    <div class="row statistic-group bt">
+    <div class="row statistic-group">
       <div class="col-8">
         <statistic :total="currentProduct.quota" title="授权额度" align="left">
         </statistic>
@@ -20,15 +20,15 @@
         </statistic>
       </div>
     </div>
-    <div class="panel">
+    <div class="panel mt15">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <span slot="label">明细：</span>
-                <button @click="openModel" class="btn btn-ghost btn-sm">手动添加</button>
-                <button class="btn btn-ghost btn-sm" @click="onShowAddModal2">
+                <button @click="showAddModal" class="btn btn-ghost btn-sm">手动添加</button>
+                <button class="btn btn-ghost btn-sm" @click="showBatchModal">
                 <i class="fa fa-reply-all"></i>
                 批量导入</button>
                 <!-- <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
@@ -38,37 +38,39 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="'请输入添加人'" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
+                <search-box :key.sync="query" :placeholder="'请输入添加人'" :active="searching" @cancel="getRecords(true)" @search-activate="searching=!searching"  @press-enter="getRecords(true)">
                   <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </x-select> -->
-                  <button slot="search-button" @click="getRecords" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getRecords(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @tbody-edit="getInfo"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
+          <x-table :headers="columns" :tables="recordList" :page="page" :loading="loadingData" @tbody-operate="viewInfo"  @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
+
     <!-- 手动添加浮层 -->
-    <modal :show.sync="showAddModal">
+    <modal :show.sync="isShowAddModal" @close="onAddCancel">
       <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
       <div slot="body" class="form">
-        <validator name="addValidation">
+        <validator name="validation">
           <form novalidate @submit.prevent="onAddSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap required-sign">
-                  <input v-model="addModel.mac" type="text" name="mac" v-validate:mac="{required: true}" class="input-text"/>
+                  <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'word'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">
-                    MAC为必填项
-                  </span>
+                  <span v-if="$validation.mac.touched && $validation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.format">MAC只能包含数字和字母</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.minlength">{{ $t('ui.validation.minlength', ['MAC', 2]) }}</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.maxlength">{{ $t('ui.validation.maxlength', ['MAC', 64]) }}</span>
                 </div>
               </div>
             </div>
@@ -76,7 +78,10 @@
               <label class="form-control col-6">序列号:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入序列号'" class="input-text-wrap">
-                  <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+                  <input v-model="addModel.sn" type="text" name="addModel.sn" v-validate:sn="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号不允许前后带空格</span>
                 </div>
               </div>
             </div>
@@ -84,7 +89,10 @@
               <label class="form-control col-6">名字:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                  <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.modified && $validation.name.format">名字不允许前后带空格</span>
                 </div>
               </div>
             </div>
@@ -96,87 +104,25 @@
         </validator>
       </div>
     </modal>
+
     <!-- 批量导入浮层 -->
-    <modal :show.sync="showAddModal2" @close="onAddCancel" width="400px">
+    <modal :show.sync="isShowBatchModal" @close="onBatchCancel" width="400px">
       <h3 slot="header">批量导入</h3>
       <div slot="body" class="form">
-        <validator name="majorClientValidation">
-          <form @submit.prevent="">
-            <div class="form-row row">
-              <!-- <label class="form-control col-6">导入:</label> -->
-              <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
-                <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>批量导入
-              </label>
-              <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限txt、cav格式文件</span></p>
-            </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="onAddCancel2" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            </div>
-          </form>
-        </validator>
-      </div>
-    </modal>
-    <modal :show.sync="showAddModal3" @close="onAddCancel3">
-      <h3 slot="header">详细信息</h3>
-      <div slot="body" class="form">
-        <div class="form-row row">
-          <label class="form-control col-6">记录ID:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.id}}
-            </div>
+        <form @submit.prevent="">
+          <div class="form-row row">
+            <!-- <label class="form-control col-6">导入:</label> -->
+            <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
+              <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量导入
+            </label>
+            <span class="file-name">{{ file.name }}</span>
+            <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限csv格式文件</span></p>
           </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">产品ID:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.product_id}}
-            </div>
+          <div class="form-actions">
+            <button @click.prevent.stop="batchImport" :disabled="importing" :class="{'disabled':importing}" v-text="importing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onBatchCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">授权数量:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.auth_number}}
-            </div>
-          </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">授权人员账号:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.auth_member}}
-            </div>
-          </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">授权时间:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.create_time | formatDate }}
-            </div>
-          </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">MAC地址:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.attribute[0].mac}}
-            </div>
-          </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">名称:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.attribute[0].name}}
-            </div>
-          </div>
-        </div>
-        <div class="form-row row">
-          <label class="form-control col-6">序列号:</label>
-          <div class="controls col-18">
-            <div class="input-text-wrap l32">{{info.attribute[0].sn}}
-            </div>
-          </div>
-        </div>
-        </div>
+        </form>
       </div>
     </modal>
   </div>
@@ -190,7 +136,7 @@ import * as config from 'consts/config'
 import Modal from 'components/Modal'
 import Pager from 'components/Pager'
 import Select from 'components/Select'
-// import _ from 'lodash'
+import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from './mixins'
 import Table from 'components/Table'
@@ -222,31 +168,18 @@ export default {
 
   data () {
     return {
-      info: {
-        id: '',
-        auth_number: '',
-        auth_member: '',
-        create_time: '',
-        product_id: '',
-        attribute: [{
-          mac: '',
-          name: '',
-          sn: ''
-        }]
-      },
-      showAddModal: false,
-      showAddModal2: false,
-      showAddModal3: false,
-      addModal: {},
+      isShowAddModal: false,
+      isShowBatchModal: false,
       queryTypeOptions: [
         { label: '添加人', value: 'auth_member' }
       ],
       loadingData: false,
-      addModel: {
+      originAddModel: {
         mac: '',
         sn: '',
         name: ''
       },
+      addModel: {},
       queryType: { label: '添加人', value: 'auth_member' },
       key: '',
       query: '',
@@ -268,7 +201,7 @@ export default {
       //     title: '剩余额度'
       //   }
       // },
-      headers: [{
+      columns: [{
         key: 'time',
         title: '时间'
       }, {
@@ -278,10 +211,13 @@ export default {
         key: 'addman',
         title: '添加人'
       }, {
-        key: 'edit',
+        key: 'operate',
         title: '操作'
       }],
-      alerts: []
+      records: [],
+      file: {},
+      adding: false,
+      importing: false
     }
   },
 
@@ -290,15 +226,7 @@ export default {
       this.currentPage = 1
       this.getRecords()
       // 获取产品列表，并将获取的数量作为已用配额
-      let condition = {
-        limit: 1,
-        offset: 0
-      }
-      api.device.getList(this.$route.params.id, condition).then((res) => {
-        this.used = res.data.count
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      this.getUsed()
     }
   },
 
@@ -312,26 +240,30 @@ export default {
       }
       return result
     },
+
     // 剩余配额
     remain () {
       let total = this.currentProduct.quota || 0
       return (total - this.used) || 0
     },
 
-    tables () {
+    // 授权记录列表
+    recordList () {
       var result = []
-      this.alerts.map((item) => {
-        let alert = {
+      this.records.map((item) => {
+        let record = {
           time: formatDate(item.create_time),
           warrent: item.auth_number,
           addman: item.auth_member,
-          edit: '<button class="btn-link">查看详情</button>',
+          operate: '<button class="btn-link">查看详情</button>',
           prototype: item
         }
-        result.push(alert)
+        result.push(record)
       })
       return result
     },
+
+    // 查询条件
     queryCondition () {
       var condition = {
         filter: ['_id', 'auth_number', 'auth_member', 'create_time', 'product_id'],
@@ -347,24 +279,43 @@ export default {
   },
 
   methods: {
-    getInfo (table, header, index) {
-      // console.log(table.prototype)
-      // this.showAddModal3 = true
-      // api.product.getRecordInfo(this.$route.params.id, table.prototype._id).then((res) => {
-      //   if (res.status === 200) {
-      //     this.info = res.data
-      //   }
-      // }).catch((res) => {
-      //   this.handleError(res)
-      // })
-      this.$route.router.go('/dev/products/' + this.$route.params.id + '/info/list/' + table.prototype._id)
+    /**
+     * 获取已用配额
+     */
+    getUsed () {
+      let condition = {
+        limit: 1,
+        offset: 0
+      }
+      api.device.getList(this.$route.params.id, condition).then((res) => {
+        this.used = res.data.count
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
-    // 查询导入设备历史纪录
-    getRecords () {
+
+    /**
+     * 查看详情
+     * @author shengzhi
+     * @param {Object} record 记录
+     */
+    viewInfo (record) {
+      this.$route.router.go({path: 'info/list/' + record.prototype._id})
+    },
+
+    /**
+     * 查询导入设备历史纪录
+     * @author shengzhi
+     * @param {Boolean} reset 是否重置页码
+     */
+    getRecords (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       this.loadingData = true
       api.product.getRecords(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.status === 200) {
-          this.alerts = res.data.list
+          this.records = res.data.list
           this.total = res.data.count
           this.loadingData = false
         }
@@ -373,50 +324,45 @@ export default {
         this.loadingData = false
       })
     },
-    init () {
-      this.selectedProduct = this.products[0] || {}
+
+    showAddModal () {
+      this.addModel = _.clone(this.originAddModel)
+      this.isShowAddModal = true
     },
-    openModel () {
-      this.addModel.mac = ''
-      this.addModel.sn = ''
-      this.addModel.name = ''
-      this.showAddModal = true
-    },
+
     // 关闭添加浮层并净化添加表单
-    resetAdd () {
+    onAddCancel () {
       this.adding = false
-      this.showAddModal = false
-      // this.addModel = _.clone(this.originAddModel)
-      // this.$nextTick(() => {
-      //   this.addForm.setPristine()
-      // })
-      this.addModel.mac = ''
-      this.addModel.sn = ''
-      this.addModel.name = ''
+      this.isShowAddModal = false
+      this.$resetValidation()
     },
+
     // 添加操作
     onAddSubmit () {
-      this.$addValidation.mac.touched = true
-      if (this.$addValidation.valid && !this.adding) {
-        this.adding = true
-        var arr = []
-        arr[0] = this.addModel
-        api.product.sendDevices(this.$route.params.id, arr).then((res) => {
-          if (res.status === 200) {
-            this.showNotice({
-              type: 'success',
-              content: '添加成功'
-            })
-            this.resetAdd()
-            this.getRecords()
-            this.adding = false
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
+      if (this.adding) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
       }
+
+      this.adding = true
+      api.product.importDevices(this.$route.params.id, [this.addModel]).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '添加成功'
+          })
+          this.getUsed()
+          this.onAddCancel()
+          this.getRecords()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
     },
+
     /**
      * 当前页码改变
      * @author weijie
@@ -426,15 +372,24 @@ export default {
       this.currentPage = number
       this.getRecords()
     },
-    // 批量导入
+
+    /**
+     * 选择文件
+     */
+    selectFile () {
+      this.file = this.$els.macFile.files[0]
+    },
+
+    /**
+     * 批量导入
+     */
     batchImport () {
-      var file = this.$els.macFile.files[0]
       if (window.File && window.FileReader && window.FileList && window.Blob) {
         var reader = new window.FileReader()
-        if (!/text\/\w+/.test(file.type)) {
+        if (!/text\/\w+/.test(this.file.type)) {
           this.showNotice({
             type: 'error',
-            content: file.name + this.$t('ui.upload.type_tips')
+            content: this.file.name + this.$t('ui.upload.type_tips')
           })
           return false
         }
@@ -449,20 +404,23 @@ export default {
         reader.onloadend = (evt) => {
           if (evt.target.readyState === window.FileReader.DONE) {
             var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
-            var a = []
-            macArr.forEach((element, index) => {
-              if (element !== '') {
-                a.push(element)
+            macArr = macArr.slice(1).map((item) => {
+              let macObj = item.split(',')
+              return {
+                mac: macObj[0] ? macObj[0].trim() : '',
+                sn: macObj[1] ? macObj[1].trim() : '',
+                name: macObj[2] ? macObj[2].trim() : ''
               }
             })
-            macArr = a
-            api.product.sendDevices(this.$route.params.id, macArr).then((res) => {
+            api.product.importDevices(this.$route.params.id, macArr).then((res) => {
               if (res.status === 200) {
                 this.showNotice({
                   type: 'success',
                   content: this.$t('ui.upload.success_msg')
                 })
-                this.showAddModal2 = false
+                this.getUsed()
+                this.getRecords()
+                this.onBatchCancel()
               }
               this.importing = false
             }).catch((res) => {
@@ -471,7 +429,7 @@ export default {
             })
           }
         }
-        reader.readAsText(file)
+        reader.readAsText(this.file)
       } else {
         this.showNotice({
           type: 'error',
@@ -487,70 +445,37 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getRecords(true)
+      this.getRecords()
     },
-    // 添加表单钩子
-    addFormHook (form) {
-      this.addForm = form
-    },
+
     /**
-     * 关闭添加大客户浮层
-     * @return {[type]} [description]
+     * 关闭批量导入浮层
      */
-    onAddCancel () {
-      this.adding = false
-      this.showAddModal = false
-      this.addModel.mac = ''
-      // this.$nextTick(() => {
-      //   this.$resetValidation()
-      // })
+    onBatchCancel () {
+      this.$els.macFile.value = ''
+      this.file = {}
+      this.importing = false
+      this.isShowBatchModal = false
     },
-    onAddCancel3 () {
-      this.adding = false
-      this.showAddModal3 = false
-    },
+
     /**
      * 显示添加大客户的浮层
      * @return {[type]} [description]
      */
-    onShowAddModal () {
-      var addModal = {
-        // 产品
-        product: '',
-        // MAC
-        mac: ''
-      }
-      this.addModal = addModal
-      this.showAddModal = true
-    },
-    /**
-     * 关闭添加大客户浮层
-     * @return {[type]} [description]
-     */
-    onAddCancel2 () {
-      this.adding = false
-      this.showAddModal2 = false
-      // this.$nextTick(() => {
-      //   this.$resetValidation()
-      // })
-    },
-    /**
-     * 显示添加大客户的浮层
-     * @return {[type]} [description]
-     */
-    onShowAddModal2 () {
-      var addModal = {}
-      this.addModal = addModal
-      this.showAddModal2 = true
+    showBatchModal () {
+      this.isShowBatchModal = true
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-.l32
-  line-height 32px
-.bt
-  border-top 1px solid #d9d9d9
-  margin-bottom 20px
+.btn-upload
+  vertical-align middle
+
+.file-name
+  display inline-block
+  margin-left 10px
+  line-height 28px
+  vertical-align middle
 </style>

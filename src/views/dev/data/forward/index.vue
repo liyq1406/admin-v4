@@ -25,8 +25,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')">
-                </search-box>
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')"></search-box>
               </div>
             </div>
           </div>

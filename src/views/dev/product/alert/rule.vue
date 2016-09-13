@@ -25,7 +25,7 @@
           <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box :key.sync="key">
-                <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>

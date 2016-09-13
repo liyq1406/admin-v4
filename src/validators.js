@@ -17,6 +17,11 @@ export function format (val, type) {
       result = val ? /^[1-9]\d*$/.test(val) : true
       break
 
+    // 字母+数字
+    case 'word':
+      result = /^\w+$/.test(val)
+      break
+
     // 邮箱格式
     case 'email':
       // result = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(val)

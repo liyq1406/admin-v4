@@ -267,7 +267,7 @@ export default {
   //      "sn":"序列号",
   //      "name":"名字"
   //   }]
-  sendDevices (productId, params) {
+  importDevices (productId, params) {
     return http.post(
       `${API_SERVER.default}/v2/product/${productId}/device_import_batch`, params
     )

@@ -61,7 +61,7 @@
                       <option v-for="option in queryTypeOptions" :value="option" :selected="$index===0">{{ option.label }}</option>
                     </select>
                   </x-select>
-                  <button slot="search-button" class="btn btn-primary" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" class="btn" @click="getBranchStaffsList"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
