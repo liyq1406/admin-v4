@@ -14,10 +14,10 @@
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.sender") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.mail_templates.placeholders.sender')" class="input-text-wrap">
-                  <input v-model="sender" type="text" v-form-ctrl name="sender" required lazy custom-validator="noSpaces" class="input-text"/>
+                  <input v-model="sender" type="text" v-form-ctrl name="sender" required custom-validator="noSpaces" class="input-text"/>
                 </div>
                 <div v-if="validation.$submitted && validation.sender.$pristine" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
-                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">{{ $t('ui.validation.format', {field: $t('ui.mail_templates.fields.sender')}) }}</span></div>
+                <div v-if="validation.sender.$dirty" class="form-tips form-tips-error"><span v-if="validation.sender.$error.required">{{ $t('ui.validation.required', {field: $t('ui.mail_templates.fields.sender')}) }}</span><span v-if="validation.sender.$error.customValidator">前后不能有空格</span></div>
               </div>
             </div>
             <div class="form-actions row">

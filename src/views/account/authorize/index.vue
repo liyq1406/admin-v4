@@ -65,7 +65,7 @@
     <modal :show.sync="isShowAddModal" @close="onAddCancel">
       <h3 slot="header">添加授权</h3>
       <div slot="body" class="form">
-        <validator name="addValidation">
+        <validator name="validation">
           <form novalidate @submit.prevent="onAddSubmit">
             <div class="form-row row">
               <label class="form-control col-6">授权名称:</label>
@@ -74,9 +74,9 @@
                   <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}"  lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
-                  <span v-if="$addValidation.name.touched && $addValidation.name.modified && $addValidation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.app.fields.name'), 2]) }}</span>
-                  <span v-if="$addValidation.name.touched && $addValidation.name.modified && $addValidation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.app.fields.name'), 32]) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.app.fields.name'), 2]) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.app.fields.name'), 32]) }}</span>
                 </div>
               </div>
             </div>
@@ -264,9 +264,7 @@ export default {
     resetAdd () {
       this.adding = false
       this.isShowAddModal = false
-      this.$nextTick(() => {
-        this.$resetValidation()
-      })
+      this.$resetValidation()
     },
 
     /**
@@ -282,18 +280,22 @@ export default {
      * @author shengzhi
      */
     onAddSubmit () {
-      if (this.$addValidation.valid && !this.adding) {
-        this.adding = true
-        api.empower.addKeys(this.model).then((res) => {
-          if (res.status === 200) {
-            this.resetAdd()
-            this.getKeys()
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
+      if (this.adding) return
+      console.log(this.$validation.invalid)
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
       }
+      this.adding = true
+      api.empower.addKeys(this.model).then((res) => {
+        if (res.status === 200) {
+          this.resetAdd()
+          this.getKeys()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
     }
   }
 }
