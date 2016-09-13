@@ -3,6 +3,7 @@
     <div class="panel mt30">
       <div class="panel-bd ml20 mr20">
         <div class="action-bar">
+          <span class="title">授权列表</span>
           <button class="btn btn-primary" @click.stop.prevent="addKey"><i class="fa fa-plus"></i>添加授权</button>
         </div>
         <div class="data-table with-loading">
@@ -304,4 +305,7 @@ export default {
 <style lang="stylus" scoped>
 .secret-key
   font-size 20px
+.title
+  font-size 15px
+  padding-right 10px
 </style>
