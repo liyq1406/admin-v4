@@ -346,6 +346,7 @@ export default {
       // 切换产品不切换路由的时候重置上次的编辑状态
       this.delChecked = false
       this.query = ''
+      this.currentPage = 1
       // 初次获取设备列表，并将获取的数量作为已用配额
       this.getDevices()
       // let condition = {
@@ -484,7 +485,6 @@ export default {
       }
       this.loadingData = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
-        console.log(res.data.list[0])
         this.devices = res.data.list
         this.total = res.data.count
         this.loadingData = false

@@ -18,10 +18,10 @@
       <div class="col-14" v-else>
         <time-line :data="totalData"></time-line>
       </div>
-      <div class="col-9">
+      <div class="col-9 col-offset-1">
         <div class="row">
-          <div class="col-24 col-offset-1 tac pd15">
-            <statistic :info="avg.info" :title="" :tooltip="avgTooltip" color="orange" :inline="true"></statistic>
+          <div class="col-20 col-offset-4">
+            <statistic :info="avg.info" :title="avgTooltip" :tooltip="avgTooltip" color="orange" :titletop="true"></statistic>
           </div>
         </div>
         <div class="top">

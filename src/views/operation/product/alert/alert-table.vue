@@ -199,6 +199,7 @@ export default {
   watch: {
     currentProduct () {
       if (this.currentProduct.id) {
+        this.currentPage = 1
         this.init()
       }
     }

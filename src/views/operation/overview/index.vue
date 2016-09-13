@@ -5,7 +5,7 @@
     </div>
     <div class="row statistic mt10">
       <div class="col-6">
-        <statistic :total="statistic.devices.total.count" :change="statistic.devices.total.change" title="设备总数" tooltip="企业的设备总量" color="gray"  :titletop="true">
+        <statistic :total="statistic.devices.total.count" :change="statistic.devices.total.change" title="设备总数" tooltip="企业的设备总量" color="gray" :titletop="true">
           <!-- <interval-icon color="gray"></interval-icon> -->
         </statistic>
       </div>
