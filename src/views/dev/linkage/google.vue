@@ -15,7 +15,7 @@
         <div class="col-8 tar">
           <span class="mr5">开启nest服务</span>
           <!-- <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
-          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle=""></x-switch>
+          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="toggle"></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -75,10 +75,22 @@
         </linkage-item>
       </div>
     </div>
+    <modal :show.sync="isShowAlertModel" @close="isShowAlertModel = false">
+      <h3 slot="header">提示</h3>
+      <div slot="body" class="form">
+        <div class="form-row row">
+          {{{alertModel.content}}}
+        </div>
+        <div class="form-actions">
+          <button type="submit" @click.parent="isShowAlertModel = false" v-text="$t('common.ok')" class="btn btn-primary w100"></button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
+  import Modal from 'components/Modal'
   import { globalMixins } from 'src/mixins'
   import Switch from 'components/Switch'
   import PicTxt from 'components/PicTxt'
@@ -92,6 +104,7 @@
     name: 'Nest',
 
     components: {
+      Modal,
       'x-switch': Switch,
       'pic-txt': PicTxt,
       'linkage-item': LinkageItem
@@ -110,6 +123,11 @@
 
     data () {
       return {
+        isShowAlertModel: false,
+        alertModel: {
+          type: '',
+          content: ''
+        },
         editModel: {},
         editValidation: {},
         enableThermostat: false,
@@ -135,6 +153,27 @@
     },
 
     methods: {
+      toggle (val) {
+        this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
+        setTimeout(() => {
+          var obj = {
+            id: '2e07d2ae62ffe000',
+            name: 'Google nest互联',
+            description: '',
+            alias: 'nest',
+            enable: false,
+            type: 10,
+            config: {}
+          }
+          obj.enable = !val
+          this.plugins.$set(0, obj)
+        }, 0)
+      },
+      showAlert (str) {
+        this.isShowAlertModel = true
+        this.alertModel.type = 'warm'
+        this.alertModel.content = str
+      },
       // 修改config
       editNestConfig () {
         this.editing = true

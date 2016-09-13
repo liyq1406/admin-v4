@@ -153,7 +153,7 @@
       showAlert (str) {
         this.isShowAlertModel = true
         this.alertModel.type = 'warm'
-        this.alertModel.content = '<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>'
+        this.alertModel.content = str
       }
     }
   }
