@@ -302,22 +302,23 @@ export default {
      * 添加成员
      */
     onAddSubmit () {
-      if (this.$validation.valid) {
-        this.adding = true
-        this.addModel.name = this.addModel.name.trim()
-        api.user.addMember(this.addModel).then((res) => {
-          this.adding = false
-          if (res.status === 200) {
-            this.getMembers()
-            this.resetAdd()
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
-      } else {
-        this.$validation.email.touched = true
+      if (this.adding) return
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
       }
+      this.adding = true
+      this.addModel.name = this.addModel.name.trim()
+      api.user.addMember(this.addModel).then((res) => {
+        this.adding = false
+        if (res.status === 200) {
+          this.getMembers()
+          this.resetAdd()
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.adding = false
+      })
     }
   }
 }
