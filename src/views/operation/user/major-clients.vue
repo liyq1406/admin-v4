@@ -196,8 +196,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
         </validator>
@@ -714,28 +714,30 @@ export default {
      * 添加大客户函数
      */
     addMajorClient () {
-      this.adding = true
-      if (this.$majorClientValidation.valid) {
-        var params = _.clone(this.addModal)
-        params.province = this.curProvince.name
-        params.city = this.curCity.name
-        api.heavyBuyer.addHeavyBuyer(params).then((res) => {
-          this.showNotice({
-            type: 'success',
-            content: '添加成功'
-          })
-          this.adding = false
-          this.onAddCancel()
-          this.getMajorClient()
-          this.getSummary()
-        }).catch((err) => {
-          this.handleError(err)
-          this.adding = false
-        })
-      } else {
-        alert('请确认填写的表单是否正确')
-        this.adding = false
+      if (this.adding) {
+        return
       }
+      if (this.$majorClientValidation.invalid) {
+        this.$validate(true)
+        return
+      }
+      this.adding = true
+      var params = _.clone(this.addModal)
+      params.province = this.curProvince.name
+      params.city = this.curCity.name
+      api.heavyBuyer.addHeavyBuyer(params).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: '添加成功'
+        })
+        this.adding = false
+        this.onAddCancel()
+        this.getMajorClient()
+        this.getSummary()
+      }).catch((err) => {
+        this.handleError(err)
+        this.adding = false
+      })
     },
     /**
      * 关闭添加大客户浮层
