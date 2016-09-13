@@ -298,7 +298,7 @@ export default {
 
   // 表单验证
   validation: {
-    required: '{field}为必填项',
+    required: '请输入{field}',
     format: '{field}格式有误',
     numberic: '请填写数字格式',
     max: '{0}不能大于{1}',
