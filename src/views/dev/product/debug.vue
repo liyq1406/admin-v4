@@ -702,12 +702,7 @@ export default {
      * @return {[type]} [description]
      */
     onDisable () {
-      if (this.selectedDevice.is_online) {
-        this.showNotice({
-          type: 'error',
-          content: '当前数据端点不可控！'
-        })
-      } else {
+      if (!this.selectedDevice.is_online) {
         this.showNotice({
           type: 'error',
           content: '设备不在线！'
