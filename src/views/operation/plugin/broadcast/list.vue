@@ -127,7 +127,7 @@
         this.histories.map((item) => {
           var history = {
             title: '<a class="hl-red">' + item.title + '</a>',
-            app: item.scope.app_list || '全部',
+            app: item.appNames || '全部',
             time: uniformDate(item.time) + ' ' + uniformTime(item.time),
             people: this.computedPeopleText(item.scope.type),
             status: this.computedStatusText(item.status),
@@ -222,6 +222,8 @@
           if (res.status === 200 && res.data.list && res.data.list.length > 0) {
             this.histories = res.data.list
             this.total = res.data.count
+            // 获取APP名称
+            this.getAppName()
             this.histories.forEach((item) => {
               if (item.scope.app_list && item.scope.app_list.length > 0) {
               }
@@ -232,6 +234,29 @@
         }).catch((res) => {
           this.loadingData = false
           this.handleError(res)
+        })
+      },
+      // 获取APP名字
+      getAppName () {
+        console.log(111)
+        this.histories.forEach((item, index) => {
+          var Apps = []
+          if (item.scope.type === 2) {
+            console.log(222)
+            item.scope.app_list.forEach((app) => {
+              console.log(33)
+              api.plugin.get(app).then((res) => {
+                Apps.push(res.data.name)
+                item.appNames = Apps.join(' , ')
+                this.histories.$set(index, item)
+              })
+            })
+            // console.log(Apps)
+            // item.appNames = Apps.join(' , ')
+            // console.log(item.appNames)
+            // this.histories.$set(index, item)
+            // Apps = []
+          }
         })
       },
 
