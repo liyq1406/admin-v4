@@ -33,10 +33,23 @@
         </div>
       </div>
     </div>
+    <!-- 警告弹窗   -->
+    <modal :show.sync="isShowAlertModel" @close="isShowAlertModel = false">
+      <h3 slot="header">提示</h3>
+      <div slot="body" class="form">
+        <div class="form-row row">
+          {{{alertModel.content}}}
+        </div>
+        <div class="form-actions">
+          <button type="submit" @click.parent="isShowAlertModel = false" v-text="$t('common.ok')" class="btn btn-primary w100"></button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
 <script>
+  import Modal from 'components/Modal'
   import { globalMixins } from 'src/mixins'
   import Switch from 'components/Switch'
   // import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
@@ -58,11 +71,17 @@
     },
 
     components: {
+      Modal,
       'switch': Switch
     },
 
     data () {
       return {
+        isShowAlertModel: false,
+        alertModel: {
+          type: '',
+          content: ''
+        },
         secondaryNav: [],
         loading: false,
         plugins: [{
@@ -128,6 +147,13 @@
     route: {
       data () {
         this.getPlugins()
+      }
+    },
+    methods: {
+      showAlert (str) {
+        this.isShowAlertModel = true
+        this.alertModel.type = 'warm'
+        this.alertModel.content = '<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <a class="hl-red">bd@xlink.cn</a> 申请开通。</span>'
       }
     }
   }

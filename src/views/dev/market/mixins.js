@@ -34,6 +34,14 @@ export const pluginFactoryMixin = {
      * @param  {Object} plugin 当前插件
      */
     pluginToggle (plugin) {
+      var noAllowAlias = ['warranty', 'recipe', 'airquality']
+      if (noAllowAlias.indexOf(plugin.alias) > -1) {
+        this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 bd@xlink.cn 申请开通。')
+        setTimeout(() => {
+          plugin.enable = !plugin.enable
+        }, 500)
+        return
+      }
       this.loading = true
       var params = {
         name: plugin.name,
