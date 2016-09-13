@@ -675,6 +675,7 @@ export default {
     },
     // 关闭添加浮层并净化添加表单
     resetAdd () {
+      this.$resetValidation()
       this.adding = false
       this.showAddModal = false
       this.addModel.mac = ''
@@ -686,9 +687,6 @@ export default {
      * @return {[type]} [description]
      */
     onAddCancel () {
-      this.$nextTick(() => {
-        this.$resetValidation()
-      })
       this.resetAdd()
     },
     /**
