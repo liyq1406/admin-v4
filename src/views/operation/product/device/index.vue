@@ -19,7 +19,8 @@
           <div class="mt10 ml30">
             <x-map :location="deviceLocation" height="220px"></x-map>
             <div class="device-ip mt5">
-              <span v-if="currVirtualDevice.ip">ip: {{ currVirtualDevice.ip }} </span>
+              <span v-show="!currVirtualDevice.ip"> 未激活 </span>
+              <span v-show="currVirtualDevice.ip">ip: {{ currVirtualDevice.ip }} </span>
               <span v-show="province">{{province}} {{city}}</span>
             </div>
           </div>
@@ -110,7 +111,7 @@ export default {
       return {
         mac: {
           label: 'MAC',
-          value: this.currDevice.mac
+          value: this.currDevice.mac || '-'
         },
         onlineLong: {
           label: '累计在线时长',
@@ -122,7 +123,7 @@ export default {
         },
         model: {
           label: '型号',
-          value: this.currentProduct.mode
+          value: this.currentProduct.mode || '-'
         },
         firmware_mod: {
           label: '固件版本',
@@ -130,7 +131,7 @@ export default {
         },
         id: {
           label: '设备ID',
-          value: this.currDevice.id
+          value: this.currDevice.id || '-'
         },
         sn: {
           label: 'sn',
