@@ -3,7 +3,7 @@
     <table class="table">
       <thead>
         <tr>
-          <th v-for="tHeader in headers" :class="{[tHeader.class]: true, 'pointer': tHeader.sortType || tHeader.pointer}" @click="theaderClick(tHeader, $index)">
+          <th v-for="tHeader in headers" :class="headerClass(tHeader)" @click="theaderClick(tHeader, $index)">
             <div class="theader-box">
               <slot :name="'theader-' + hump2line(tHeader.key)">
                 {{{tHeader.title}}}
@@ -174,6 +174,20 @@
        */
       hump2line (humpName) {
         return humpName.replace(/([A-Z])/g, '-$1').toLowerCase()
+      },
+
+      /**
+       * 计算theader的类名
+       * @param  {[type]} tHeader [description]
+       * @return {[type]}         [description]
+       */
+      headerClass (tHeader) {
+        var result = {}
+        if (tHeader.class) {
+          result[tHeader.class] = true
+        }
+        result.pointer = Boolean(tHeader.sortType || tHeader.pointer)
+        return result
       }
     }
   }
