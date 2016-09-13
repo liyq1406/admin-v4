@@ -672,6 +672,10 @@
           })
           return
         }
+        if (this.$validation.invalid) {
+          this.$validate(true)
+          return
+        }
         if (this.$validation.valid) {
           if (this.pageType === 'add') {
             this.add()
