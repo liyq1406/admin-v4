@@ -95,7 +95,8 @@ export default {
     genTopLevelLink (link) {
       let result = `/#!${this.nav.url}/${link.url || link.alias}${link.id ? '/' + link.id : ''}`
 
-      if (link.alias === 'web') {
+      let reg = /^http/
+      if (reg.test(link.url)) {
         result = link.url
       }
 
@@ -128,6 +129,13 @@ export default {
       if (nav.subs && nav.subs.length) {
         e.preventDefault()
         nav.unfold = !nav.unfold
+        return
+      }
+      var path = this.genTopLevelLink(nav)
+      let reg = /^http/
+      if (reg.test(path)) {
+        e.preventDefault()
+        window.open(path)
       }
     }
   }
