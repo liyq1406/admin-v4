@@ -145,7 +145,7 @@ export default {
         {
           key: 'is_active',
           title: '是否激活',
-          tooltip: '提示'
+          tooltip: '设备已联网激活'
         },
         {
           key: 'active_date',
