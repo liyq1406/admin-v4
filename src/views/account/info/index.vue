@@ -316,21 +316,24 @@ export default {
      * @author shengzhi
      */
     onSubmitPwd () {
-      if (this.$validation.valid && !this.editing) {
-        this.editing = true
-        api.corp.memberResetPwd(this.model).then((res) => {
-          if (res.status === 200) {
-            this.showNotice({
-              type: 'success',
-              content: this.$t('ui.account.password_msg')
-            })
-          }
-          this.onEditPwdCancel()
-        }).catch((res) => {
-          this.handleError(res)
-          this.editing = false
-        })
+      if (this.adding) return
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
       }
+      this.editing = true
+      api.corp.memberResetPwd(this.model).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: this.$t('ui.account.password_msg')
+          })
+        }
+        this.onEditPwdCancel()
+      }).catch((res) => {
+        this.handleError(res)
+        this.editing = false
+      })
     }
     // /**
     //  * 修改密码
