@@ -12,13 +12,13 @@
       </ul>
     </div>
     <div class="panel-bd">
-      <div class="row">
+      <div class="row mt10">
         <div class="col-offset-12 col-12 row">
           <div class="col-12">
-            <statistic :info="today" title="今日增长" tooltip="今日增长" color="green" :inline="true"></statistic>
+            <statistic :info="today" title="今日增长" tooltip="今日增长" color="green" :titletop="true"></statistic>
           </div>
           <div class="col-12">
-            <statistic :info="avg" title="7天平均增长" tooltip="7天平均增长" color="orange" :inline="true"></statistic>
+            <statistic :info="avg" :title="period+'天平均增长'" :tooltip="period+'天平均增长'" color="orange" :titletop="true"></statistic>
           </div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default {
 
   data () {
     return {
-      customMargin: [30, 20, 30, 30],
+      customMargin: [10, 20, 30, 50],
       currIndex: 0,
       period: 30,
       avg: {
@@ -98,6 +98,7 @@ export default {
     },
     countTodayAdd (addData, period) {
       var data = _.clone(addData)
+      // console.log(period)
       // 只在初始化计算一次
       if (data.length < 1) {
         return
@@ -105,18 +106,20 @@ export default {
       if (period === 30) { // 只在初始化时计算一次
         // 计算最近2天的值
         data.sort((a, b) => {
-          if (a.day.getTime() > b.day.getTime()) {
+          let t1 = new Date(a.day).getTime()
+          let t2 = new Date(b.day).getTime()
+          if (t1 > t2) {
             return -1
-          } else if (a.day.getTime() < b.day.getTime()) {
+          } else if (t1 < t2) {
             return 1
           } else {
             return 0
           }
         })
 
-        this.today.total = data[0].count
+        this.today.total = data[0].val
         if (data.length < 2) {
-          this.today.change = this.today.total - data[1].count
+          this.today.change = this.today.total - data[1].val
         }
       }
     },
@@ -127,7 +130,7 @@ export default {
       }
       let total = 0
       data.forEach((item) => {
-        total += item.count
+        total += item.val
       })
       return parseInt(total / duration)
     },

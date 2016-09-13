@@ -12,13 +12,13 @@
           <li v-for="item in locales.data.PRODUCT_FILTERS" :class="{'active':trendTabIndex===$index}" @click="trendTabIndex=$index">{{ item.label }}</li>
         </ul>
       </div>
-      <div class="row">
+      <div class="row mt10">
         <div class="col-offset-12 col-12 row">
           <div class="col-12">
-            <statistic :info="today" title="" tooltip="今日增长" color="green" :inline="true"></statistic>
+            <statistic :info="today" title="今日增长" tooltip="今日增长" color="green" :titletop="true"></statistic>
           </div>
           <div class="col-12">
-            <statistic :info="avg" :title="" :tooltip="period+'天平均增长'" color="orange" :inline="true"></statistic>
+            <statistic :info="avg" :title="period+'天平均增长'" :tooltip="period+'天平均增长'" color="orange" :titletop="true"></statistic>
           </div>
         </div>
       </div>
@@ -65,6 +65,7 @@ export default {
 
   data () {
     return {
+      customMargin: [10, 20, 30, 50],
       trendTabIndex: 0,
       period: 30,
       activatedData: [], // 激活设备数据

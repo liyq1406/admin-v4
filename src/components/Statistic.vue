@@ -191,7 +191,7 @@ export default {
 
 .x-statistic-left
   text-align left
-  padding 5px 15px 15px 40px
+  padding 5px 15px 15px 30px
   & > .tit
     color gray-light
 
