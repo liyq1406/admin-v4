@@ -10,7 +10,7 @@
             <span>设备列表</span>
           </div>
           <div class="button-group">
-            <button class="add-devices btn btn-ghost" @click="onShowAddModal">
+            <button class="add-devices btn btn-primary" @click="onShowAddModal">
               <i class="fa fa-plus"></i>
               添加设备
             </button>
@@ -796,13 +796,15 @@ export default {
               &:first-child
                 border-top 1px solid #ddd
               &.selected
-                background #f8f8f8
+                background #eee
+                transition background ease 0.5s
                 &:before
                   content ""
                   display block
                   width 15px
                   height 15px
-                  background #f8f8f8
+                  transition background ease 0.5s
+                  background #eee
                   transform rotate(45deg) translate(-10px, 0)
                   border-right 1px solid #ddd
                   border-top 1px solid #ddd

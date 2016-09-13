@@ -24,7 +24,7 @@ export default {
             alert: '告警设置',
             data_point: '数据端点',
             data_forward: '数据接口',
-            authorize: '设备授权'
+            authorize: '授权管理'
           }
         },
         authorize: {
