@@ -38,7 +38,7 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
+                <search-box :key.sync="query" :placeholder="'请输入添加人'" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">
                   <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -53,38 +53,6 @@
         </div>
       </div>
     </div>
-    <!-- 手动添加浮层 -->
-    <!-- <modal :show.sync="showAddModal" @close="onAddCancel" width="524px">
-      <h3 slot="header">手动添加</h3>
-      <div slot="body" class="form">
-        <validator name="majorClientValidation">
-          <form @submit.prevent="">
-            <div class="form-row row">
-              <label class="form-control col-6">产品:</label>
-              <div class="controls filter-group-item col-18">
-                <x-select :label="addModal.product.label">
-                  <select v-model="addModal.product">
-                    <option v-for="product in products" :value="industry">{{industry}}</option>
-                  </select>
-                </x-select>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-6">MAC:</label>
-              <div class="controls col-18">
-                <div v-placeholder="'请输入MAC地址'" class="input-text-wrap">
-                  <input v-model="addModal.mac" type="text" name="email" v-validate:email="{required: true}" class="input-text"/>
-                </div>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            </div>
-          </form>
-        </validator>
-      </div>
-    </modal> -->
     <!-- 手动添加浮层 -->
     <modal :show.sync="showAddModal">
       <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
@@ -319,6 +287,7 @@ export default {
 
   route: {
     data () {
+      this.currentPage = 1
       this.getRecords()
       // 获取产品列表，并将获取的数量作为已用配额
       let condition = {
@@ -334,6 +303,15 @@ export default {
   },
 
   computed: {
+    // 分页信息
+    page () {
+      var result = {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+      return result
+    },
     // 剩余配额
     remain () {
       let total = this.currentProduct.quota || 0
@@ -379,7 +357,6 @@ export default {
       // }).catch((res) => {
       //   this.handleError(res)
       // })
-      console.log(table)
       this.$route.router.go('/dev/products/' + this.$route.params.id + '/info/list/' + table.prototype._id)
     },
     // 查询导入设备历史纪录
@@ -388,6 +365,7 @@ export default {
       api.product.getRecords(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.status === 200) {
           this.alerts = res.data.list
+          this.total = res.data.count
           this.loadingData = false
         }
       }).catch((res) => {
@@ -430,7 +408,6 @@ export default {
               content: '添加成功'
             })
             this.resetAdd()
-            // this.getDevices()
             this.getRecords()
             this.adding = false
           }
@@ -447,7 +424,7 @@ export default {
      */
     onCurrPageChage (number) {
       this.currentPage = number
-      this.getAlerts()
+      this.getRecords()
     },
     // 批量导入
     batchImport () {
@@ -485,7 +462,6 @@ export default {
                   type: 'success',
                   content: this.$t('ui.upload.success_msg')
                 })
-                this.getDevices()
                 this.showAddModal2 = false
               }
               this.importing = false
@@ -511,7 +487,7 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getAlerts(true)
+      this.getRecords(true)
     },
     // 添加表单钩子
     addFormHook (form) {

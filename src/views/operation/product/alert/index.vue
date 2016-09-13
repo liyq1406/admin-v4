@@ -124,8 +124,10 @@ export default {
   methods: {
     // 获取告警概览@author weijie
     getSummary () {
-      var todayBeginTime = new Date().getTime() - 1 * 24 * 3600 * 1000
-      todayBeginTime = dateFormat('yyyy-MM-dd', new Date(todayBeginTime))
+      var todayTime = new Date().getTime()
+      todayTime = dateFormat('yyyy-MM-dd', new Date(todayTime))
+      var initTime = new Date(0)
+      initTime = dateFormat('yyyy-MM-dd', new Date(initTime))
       var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
       var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
@@ -133,7 +135,7 @@ export default {
       var now = new Date().getTime() - 1 * 24 * 3600 * 1000
       now = dateFormat('yyyy-MM-dd', new Date(now))
       // 获取当天数据
-      api.statistics.getProductAlertSummary(this.productID, todayBeginTime, now).then((res) => {
+      api.statistics.getProductAlertSummary(this.productID, initTime, todayTime).then((res) => {
         if (res.status === 200) {
           this.alertSummary.unhandle.total = res.data.unread
           this.alertSummary.message.total = res.data.add_today

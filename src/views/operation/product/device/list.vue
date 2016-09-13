@@ -262,6 +262,7 @@ export default {
     data () {
       this.query = ''
       this.originAddModel = _.clone(this.addModel)
+      this.currentPage = 1
       this.getDevices()
 
       // getProductSummary 方法来自 productSummaryMixin
