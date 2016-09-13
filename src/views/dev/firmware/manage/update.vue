@@ -90,11 +90,12 @@
                   <label class="form-control col-5">固件版本号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="'请输入固件版本号'" class="input-text-wrap">
-                      <input v-model="addmodel.version" type="text" name="addmodel.version" v-validate:version="{required: true, maxlength: 20}" lazy class="input-text"/>
+                      <input v-model="addmodel.version" type="text" name="addmodel.version" v-validate:version="{required: true, maxlength: 20, format: 'integer'}" class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$validation.version.touched && $validation.version.required">请输入固件版本号</span>
                       <span v-if="$validation.version.modified && $validation.version.maxlength">不可超过20个字符</span>
+                      <span v-if="$validation.version.modified && $validation.version.format">固件版本号必须是整数</span>
                     </div>
                   </div>
                 </div>
@@ -134,7 +135,7 @@
               </div>
             </div>
             <div class="form-actions">
-              <button @submit.prevent="onAddSubmit" type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" class="btn btn-primary widbtn">保存</button>
               <button @click.prevent.stop="" class="btn btn-default widbtn">取消</button>
               <!-- <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary">{{ $t("common.cancel") }}</button> -->
             </div>
@@ -211,7 +212,7 @@
     computed: {
       unableAdd () {
         var unable = true
-        if (this.selectProduct.id) {
+        if (this.selectProduct && this.selectProduct.id) {
           unable = false
         } else {
           unable = true
@@ -240,6 +241,13 @@
 
         if (this.$validation.invalid) {
           this.$validate(true)
+          return
+        }
+        if (!this.addmodel.file_url.length) {
+          this.showNotice({
+            type: 'error',
+            content: '请上传固件文件'
+          })
           return
         }
         this.adding = true
