@@ -10,11 +10,13 @@
         </x-select>
       </div>
       <div class="v-pager-control" v-if="!simple">
-        <span>共{{ pages }}页，转到</span>
-        <div class="input-text-wrap">
-          <input type="number" class="input-text input-text-sm" v-model="destPage" number @keyup.enter="goToPage">
+        <div class="turn-to-page">
+          <span>共{{ pages }}页，转到</span>
+          <div class="input-text-wrap">
+            <input type="number" class="input-text input-text-sm" v-model="destPage" number @keyup.enter="goToPage">
+          </div>
+          <span>页</span>
         </div>
-        <span>页</span>
       </div>
       <div class="v-pager-control">
         <span>第{{ countPerPage*(current-1)+1 }}-{{ rangeText }}项，共{{ total }}项</span>
@@ -160,9 +162,13 @@ export default {
     .input-text-wrap
       display inline-block
       width 50px
+      vertical-align middle
 
       .input-text
         text-align center
+    .turn-to-page
+      display inline-block
+      vertical-align middle
 
   .x-btn-group
     .btn

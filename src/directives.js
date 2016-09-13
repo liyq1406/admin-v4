@@ -181,16 +181,11 @@ export var stretch = {
     var self = this
 
     var getComputedStyle = function (obj, attr) {
-      if (obj.currentStyle) {
-        return obj.currentStyle[attr]
-      } else {
-        return window.getComputedStyle(obj, false)[attr]
-      }
+      return window.getComputedStyle(obj, false)[attr]
     }
 
     setTimeout(() => {
       self.$maxHeight = parseInt(getComputedStyle(self.$listDiv, 'height'))
-
       if (self.$maxHeight > self.$minHeight) {
         self.el.appendChild(self.$bottomBar)
       }
