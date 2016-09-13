@@ -60,13 +60,15 @@
           </div>
         </div>
       </div>
-      <div class="form-actions row">
-        <div class="col-3" v-if="type==='edit'">
+      <div class="form-row row" v-if="type==='edit'">
+        <div class="col-21 col-offset-3">
           <label class="del-check">
-            <input type="checkbox" name="del" v-model="delChecked"/>删除快照
+            <input type="checkbox" name="del" v-model="delChecked"/> 删除快照
           </label>
         </div>
-        <div class="col-20" :class="{'col-offset-3':type==='add'}">
+      </div>
+      <div class="form-actions row">
+        <div class="col-21 col-offset-3">
           <button :disabled="submiting || selectedDatapoints.length === 0" :class="{'disabled':submiting || selectedDatapoints.length === 0}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
         </div>
       </div>
@@ -273,7 +275,9 @@ export default {
         if (res.status === 200) {
           this.loadingData = false
           this.currentPage = 1
-          this.allDatapoints = res.data
+          this.allDatapoints = res.data.sort((a, b) => {
+            return a.index - b.index
+          })
 
           if (this.type === 'edit') {
             this.getRule()
@@ -290,6 +294,8 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
+      if (this.submiting) return
+
       let model = {
         rule: 3,
         interval: this.interval.value,
@@ -298,35 +304,28 @@ export default {
         },
         datapoint: this.selectedDatapoints
       }
+      let process
 
+      this.submiting = true
       if (this.type === 'add') { // 添加
-        api.snapshot.createRule(this.selectedProduct.id, model).then((res) => {
-          if (res.status === 200) {
-            this.$route.router.replace('/dev/data/snapshots')
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+        process = api.snapshot.createRule(this.selectedProduct.id, model)
       } else {
         if (this.delChecked) { // 删除
-          api.snapshot.deleteRule(this.selectedProduct.id, this.$route.params.rule_id).then((res) => {
-            if (res.status === 200) {
-              this.$route.router.replace('/dev/data/snapshots')
-            }
-          }).catch((res) => {
-            this.handleError(res)
-          })
+          process = api.snapshot.deleteRule(this.selectedProduct.id, this.$route.params.rule_id)
         } else {
           model._id = this.$route.params.rule_id
-          api.snapshot.updateRule(this.selectedProduct.id, model).then((res) => {
-            if (res.status === 200) { // 编辑
-              this.$route.router.replace('/dev/data/snapshots')
-            }
-          }).catch((res) => {
-            this.handleError(res)
-          })
+          process = api.snapshot.updateRule(this.selectedProduct.id, model)
         }
       }
+      process.then((res) => {
+        this.submiting = false
+        if (res.status === 200) {
+          this.$route.router.replace('/dev/data/snapshots')
+        }
+      }).catch((res) => {
+        this.submiting = false
+        this.handleError(res)
+      })
     }
   }
 }

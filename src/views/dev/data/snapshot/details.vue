@@ -143,7 +143,7 @@
              <pager v-if="datapoints.length > countPerPage3" :total="datapoints.length" :current.sync="currentPage3" :count-per-page="countPerPage3" @page-update=""></pager>
            </div>
          </div>
-         <div class="form-actions snapshot-select">
+         <div class="form-actions snapshot-select mt10">
            <button @click="saveDataPoints" type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
            <!-- <button @click="onEditCancel" class="btn btn-default">{{ $t("common.cancel") }}</button> -->
          </div>
@@ -323,6 +323,8 @@ export default {
     selectedDatapoints () {
       return this.datapoints.filter((item) => {
         return item.selected
+      }).sort((a, b) => {
+        return a.index - b.index
       })
     },
 
@@ -514,7 +516,9 @@ export default {
                 }
               })
             })
-            this.datapoints = dps
+            this.datapoints = dps.sort((a, b) => {
+              return a.index - b.index
+            })
           }
         }).catch((res) => {
           this.handleError(res)
