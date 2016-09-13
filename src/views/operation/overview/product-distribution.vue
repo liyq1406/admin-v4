@@ -130,10 +130,12 @@ export default {
     fillMapData (regions) {
       var mapDataArr = []
       for (let i in regions) {
-        mapDataArr.push({
-          name: i,
-          value: regions[i]
-        })
+        if (regions[i] !== 0) {
+          mapDataArr.push({
+            name: i,
+            value: regions[i]
+          })
+        }
       }
 
       // 由大到小排序
@@ -153,6 +155,7 @@ export default {
         this.dataPer = numToPercent(mapDataArr, 'value')
       }
 
+      mapDataArr = numToPercent(mapDataArr, 'value')
       var regionData = []
       var features = mapData.features
 
@@ -160,7 +163,8 @@ export default {
         var name = features[i].properties.name
         regionData.push({
           'name': name,
-          'value': 0
+          'value': 0,
+          'percent': 0
         })
       }
       this.data = _.unionBy(mapDataArr, regionData, 'name')

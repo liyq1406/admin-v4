@@ -128,6 +128,8 @@ export default {
       } else {
         this.dataPer = numToPercent(mapDataArr, 'value')
       }
+
+      mapDataArr = numToPercent(mapDataArr, 'value')
       var regionData = []
       var features = mapData.features
 
@@ -135,7 +137,8 @@ export default {
         var name = features[i].properties.name
         regionData.push({
           'name': name,
-          'value': 0
+          'value': 0,
+          'percent': 0
         })
       }
 
