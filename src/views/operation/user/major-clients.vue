@@ -35,10 +35,10 @@
     <div class="panel mt10">
       <div class="panel-hd">
         <div class="actions">
-          <a class="btn btn-primary" @click="onShowAddModal">
+          <button class="btn btn-primary" @click="onShowAddModal">
             <i class="fa fa-plus"></i>
             新增大客户
-          </a>
+          </button>
         </div>
         <h2>大客户列表</h2>
       </div>
@@ -95,7 +95,7 @@
               <label class="form-control col-6">联系人:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入联系人'" class="input-text-wrap">
-                  <input v-model="addModal.contacter" type="text" name="contacter" v-validate:contacter="{required: false, minlength: 2, maxlength: 32}" class="input-text"/>
+                  <input v-model="addModal.contacter" type="text" name="addModal.contacter" v-validate:contacter="{required: false, minlength: 2, maxlength: 32}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.required">联系人为必填</span>
@@ -108,11 +108,11 @@
               <label class="form-control col-6">联系电话:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入联系电话'" class="input-text-wrap">
-                  <input v-model="addModal.phone" type="text" name="phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
+                  <input v-model="addModal.phone" type="number" name="addModal.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.phone.touched && $majorClientValidation.phone.required">联系电话为必填</span>
-                  <span v-if="$majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
                 </div>
               </div>
             </div>
@@ -120,11 +120,11 @@
               <label class="form-control col-6">邮箱:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入邮箱'" class="input-text-wrap">
-                  <input v-model="addModal.email" type="text" name="email" v-validate:email="{required: true, format: 'email'}" required lazy class="input-text"/>
+                  <input v-model="addModal.email" type="email" name="addModal.email" v-validate:email="{required: true, format: 'email'}" required lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.email.touched && $majorClientValidation.email.required">邮箱为必填</span>
-                  <span v-if="$majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
                 </div>
               </div>
             </div>
@@ -186,7 +186,7 @@
               <div class="controls col-18">
                 <!-- 地址 -->
                 <div v-placeholder="'请输入地址'" class="input-text-wrap">
-                  <textarea v-model="addModal.location" type="text" name="location" v-validate:location="{required: true, minlength: 6, maxlength: 240}" class="input-text"></textarea>
+                  <textarea v-model="addModal.location" type="text" name="addModal.location" v-validate:location="{required: true, minlength: 6, maxlength: 240}" class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.required">地址为必填</span>
@@ -196,8 +196,8 @@
               </div>
             </div>
             <div class="form-actions">
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
@@ -572,8 +572,6 @@ export default {
       var timeObj = createDayRange(0, 7)
       var startDate = this.chartCondition.startDate || timeObj.start
       var endDate = this.chartCondition.endDate || timeObj.end
-      // alert(startDate)
-      // alert(endDate)
       api.statistics.getHeavyBugerTrend(startDate, endDate).then((res) => {
         // res.data = [
         //   {
@@ -682,9 +680,7 @@ export default {
         this.majorClients = res.data.list
         this.total = res.data.count
         // 已进入获取全部总数放进概览
-        if (this.allTotal === 0) {
-          this.allTotal = res.data.count
-        }
+        this.allTotal = res.data.count
       }).catch((err) => {
         this.tableLoadingData = false
         this.handleError(err)
@@ -714,30 +710,28 @@ export default {
      * 添加大客户函数
      */
     addMajorClient () {
-      if (this.adding) {
-        return
-      }
-      if (this.$majorClientValidation.invalid) {
-        this.$validate(true)
-        return
-      }
       this.adding = true
-      var params = _.clone(this.addModal)
-      params.province = this.curProvince.name
-      params.city = this.curCity.name
-      api.heavyBuyer.addHeavyBuyer(params).then((res) => {
-        this.showNotice({
-          type: 'success',
-          content: '添加成功'
+      if (this.$majorClientValidation.valid) {
+        var params = _.clone(this.addModal)
+        params.province = this.curProvince.name
+        params.city = this.curCity.name
+        api.heavyBuyer.addHeavyBuyer(params).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '添加成功'
+          })
+          this.adding = false
+          this.onAddCancel()
+          this.getMajorClient()
+          this.getSummary()
+        }).catch((err) => {
+          this.handleError(err)
+          this.adding = false
         })
+      } else {
+        this.$validate(true)
         this.adding = false
-        this.onAddCancel()
-        this.getMajorClient()
-        this.getSummary()
-      }).catch((err) => {
-        this.handleError(err)
-        this.adding = false
-      })
+      }
     },
     /**
      * 关闭添加大客户浮层
@@ -746,9 +740,7 @@ export default {
     onAddCancel () {
       this.adding = false
       this.showAddModal = false
-      this.$nextTick(() => {
-        this.$resetValidation()
-      })
+      this.$resetValidation()
     },
     /**
      * 显示添加大客户的浮层
