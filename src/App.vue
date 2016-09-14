@@ -92,7 +92,7 @@ export default {
   watch: {
     layouts () {
       if (this.hasLayout('topbar')) {
-        // this.getMember()
+        this.getMember()
         this.getProducts()
         this.getPlugins()
         this.getCorpInfo()
