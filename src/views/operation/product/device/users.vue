@@ -99,6 +99,7 @@ export default {
       this.deviceUsers.map((item) => {
         var user = {
           id: item.user_id,
+          role: item.role,
           nickname: this.conputedNickname(item),
           email: this.conputedEmail(item.user_id),
           phone: this.conputedPhone(item.user_id),
@@ -107,6 +108,9 @@ export default {
           prototype: item
         }
         result.push(user)
+      })
+      result.sort((a, b) => {
+        return b.role - a.role
       })
       return result
     },
@@ -151,17 +155,14 @@ export default {
      * @return {[type]}      [description]
      */
     conputedNickname (user) {
-      var result = '?'
+      var result = '-'
       this.usersInfo.map((item) => {
+        let nickname = item.nickname || '-'
         if (user.user_id - 0 === item.id - 0) {
-          if (item.nickname) {
-            if (user.role) {
-              result = '<a class="hl-red"><i class="fa fa-user"></i> ' + item.nickname + '</a>'
-            } else {
-              result = '<a class="hl-red">' + item.nickname + '</a>'
-            }
+          if (user.role) {
+            result = '<span><i class="fa fa-user"></i> ' + nickname + '</span>'
           } else {
-            result = '未定义'
+            result = '<span>' + nickname + '</span>'
           }
         }
       })
@@ -176,7 +177,7 @@ export default {
       var result = ''
       this.usersInfo.map((user) => {
         if (id - 0 === user.id - 0) {
-          result = user.email || '未填写'
+          result = user.email || '-'
         }
       })
       return result
@@ -190,7 +191,7 @@ export default {
       var result = ''
       this.usersInfo.map((user) => {
         if (id - 0 === user.id - 0) {
-          result = user.Phone || '未填写'
+          result = user.phone || '-'
         }
       })
       return result
@@ -204,10 +205,10 @@ export default {
       var result = ''
       this.usersOnline.map((user) => {
         if (id - 0 === user.user_id - 0) {
-          if (user.last_login) {
-            result = formatDate(user.last_login)
+          if (user.last_online) {
+            result = formatDate(user.last_online)
           } else {
-            result = '暂无数据'
+            result = '-'
           }
         }
       })
@@ -309,7 +310,7 @@ export default {
           user_id: res.data.user_id,
           online: Boolean(res.data.online),
           online_time: res.data.online_time,
-          last_login: res.data.last_login
+          last_online: res.data.last_online
         }
         this.usersOnline.push(obj)
       }).catch((res) => {

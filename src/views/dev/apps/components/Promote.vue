@@ -80,6 +80,9 @@
     mixins: [globalMixins],
 
     vuex: {
+      getters: {
+        corp: ({ system }) => system.corp
+      },
       actions: {
         createPlugin,
         updatePlugin,
@@ -155,8 +158,9 @@
       tables () {
         var result = []
         var table = {
-          apk_version: this.versions.apk_version >= 0 ? this.versions.apk_version : 'N/A',
-          apk_illustration: this.versions.apk_illustration || 'N/A',
+          apk_version: this.versions.version || '-',
+          apk_illustration: this.versions.illustration || '-',
+          apk_md5: this.md5 || '-',
           apk_url: '<a class="hl-red">查看链接</a>',
           prototype: this.versions
         }
@@ -166,10 +170,24 @@
     },
 
     ready () {
-      this.versions = this.app.config.gcm
+      // this.versions = this.app.config.gcm
+      this.getVersions()
     },
 
     methods: {
+      /**
+       * 获取版本信息
+       */
+      getVersions () {
+        api.plugin.getAndVersion(this.app.id, this.corp.id).then((res) => {
+          if (res.status === 200) {
+            this.versions = res.data
+          }
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+
       /**
        * 编辑浮层表单提交
        * @return {[type]} [description]
@@ -178,7 +196,8 @@
         this.adding = true
         this.editModal.version = this.editModal.version
         api.plugin.setAndVersion(this.app.id, this.editModal).then((res) => {
-          this.$emit('update-curr-app')
+          // this.$emit('update-curr-app')
+          this.getVersions()
           this.adding = false
           this.showEditModal = false
         }).catch((res) => {
@@ -199,10 +218,10 @@
        */
       onShowEditModal () {
         this.showEditModal = true
-        this.editModal.illustration = this.versions.apk_illustration
-        this.editModal.md5 = this.versions.apk_md5
-        this.editModal.url = this.versions.apk_url
-        this.editModal.version = this.versions.apk_version
+        this.editModal.illustration = this.versions.illustration
+        this.editModal.md5 = this.versions.md5
+        this.editModal.url = this.versions.url
+        this.editModal.version = this.versions.version
       },
       /**
        * 显示链接浮层
@@ -210,9 +229,9 @@
        * @return {[type]}       [description]
        */
       onShowLink (table) {
-        if (table.prototype.apk_url) {
+        if (table.prototype.url) {
           this.linkModal.show = true
-          this.linkModal.content = table.prototype.apk_url
+          this.linkModal.content = table.prototype.url
         } else {
           this.showNotice({
             type: 'error',
