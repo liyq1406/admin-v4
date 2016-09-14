@@ -2,6 +2,13 @@ import * as http from 'src/http'
 import { API_SERVER } from 'consts/config'
 
 export default {
+  refreshToken () {
+    return http.post(
+      `${API_SERVER.default}/v2/corp/token/refresh`, {
+        'refresh_token': window.localStorage.getItem('refreshToken')
+      }
+    )
+  },
   /**
    * 企业帐号注册
    * @param  {Object} params 注册信息

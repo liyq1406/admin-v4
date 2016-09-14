@@ -69,7 +69,8 @@ export var globalMixins = {
         })
         switch (err.data.error.code) {
           case 4031003:
-            alert('出错 即将跳回登录页')
+            // console.log('即将返回登录页面, 错误信息如下')
+            // console.log(err)
             // this.showNotice({
             //   type: 'error',
             //   content: locales[Vue.config.lang].errors[err.data.error.code]

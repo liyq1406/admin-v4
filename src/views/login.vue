@@ -140,7 +140,6 @@
             window.localStorage.setItem('refreshToken', res.data.refresh_token)
             window.localStorage.setItem('expireIn', res.data.expire_in)
             window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
-            console.log(res)
             // window.localStorage.setItem('expireAt', today.getTime() + 10000)
             // 设置记住密码
             if (this.rememberPwd) {

@@ -101,6 +101,7 @@ export default {
   },
 
   ready () {
+    this.refreshToken()
     document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform'
     // 监听子组件的更新成员信息事件
     this.$on('update-member', (member) => {
@@ -109,6 +110,17 @@ export default {
   },
 
   methods: {
+    refreshToken () {
+      api.corp.refreshToken().then((res) => {
+        var today = new Date()
+        window.localStorage.setItem('accessToken', res.data.access_token)
+        window.localStorage.setItem('refreshToken', res.data.refresh_token)
+        window.localStorage.setItem('expireIn', res.data.expire_in)
+        window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 获取企业信息
      * @author shengzhi
