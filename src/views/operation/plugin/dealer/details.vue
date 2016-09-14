@@ -475,23 +475,15 @@
         var fn = self.getDealer
         if (this.delChecked && !this.editing) { // 删除
           this.editing = true
-          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-            api.dealer.delDealer(this.$route.params.app_id, this.dealer._id, token).then((res) => {
-              this.$route.router.go({path: '/plugins/dealer/' + this.$route.params.app_id + '/list'})
-              // this.resetEdit()
-              // this.getSales()
-              this.editing = false
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'dealer'
-              }
-              self.handlePluginError(err, env)
-              // this.handleError(res)
-              this.editing = false
-            })
+          api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
+            this.$route.router.go({path: '/plugins/dealer/' + this.$route.params.app_id + '/list'})
+            // this.resetEdit()
+            // this.getSales()
+            this.editing = false
+          }).catch((res) => {
+            self.handleError(res)
+            // this.handleError(res)
+            this.editing = false
           })
           // api.dealer.delDealer(this.$route.params.app_id, this.dealer._id).then((res) => {
           //   if (res.status === 200) {
@@ -504,23 +496,20 @@
           // })
         } else if (this.editValidation.$valid && !this.editing) { // 更新
           this.editing = true
-          this.getAppToKen(this.$route.params.app_id, 'dealer').then((token) => {
-            console.log(token)
-            api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model, token).then((res) => {
-              this.resetEdit()
-              this.getDealer()
-              this.getSales()
-            }).catch((err) => {
-              var env = {
-                'fn': fn,
-                'argvs': argvs,
-                'context': self,
-                'plugin': 'dealer'
-              }
-              self.handlePluginError(err, env)
-              // this.handleError(res)
-              this.editing = false
-            })
+          api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
+            this.resetEdit()
+            this.getDealer()
+            this.getSales()
+          }).catch((err) => {
+            var env = {
+              'fn': fn,
+              'argvs': argvs,
+              'context': self,
+              'plugin': 'dealer'
+            }
+            self.handlePluginError(err, env)
+            // this.handleError(res)
+            this.editing = false
           })
           // api.dealer.updateDealer(this.$route.params.app_id, this.dealer._id, this.editModal.model).then((res) => {
           //   if (res.status === 200) {

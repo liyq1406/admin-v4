@@ -1,8 +1,5 @@
 import api from 'api'
 import _ from 'lodash'
-const INVALID = 'invalid'
-var count = new Map()
-var LIMIT = 0
 
 export const pluginFactoryMixin = {
   methods: {
@@ -100,115 +97,6 @@ export const pluginFactoryMixin = {
           this.handleError(res)
           this.loading = false
         })
-      }
-    }
-  }
-}
-
-export const pluginMixins = {
-  methods: {
-    getAppToKen (appID, plugin) {
-      var self = this
-      return new Promise((resolve, reject) => {
-        var token = self.getPluginToken(plugin)
-        if (token && token !== INVALID) {
-          resolve(token)
-        } else {
-          var params = {
-            'app_id': appID
-          }
-          api.plugin.getAppToKen(params).then((res) => {
-            if (res.status === 200) {
-              self.setPluginToken(plugin, res.data.access_token)
-              resolve(res.data.access_token)
-            }
-          }, (err) => {
-            if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
-              switch (err.data.error.code) {
-                case 4031003:
-                  this.$route.router.go('/login')
-                  break
-                default:
-                  this.showError(err.data.error)
-              }
-            } else {
-              console.log(err)
-            }
-          })
-        }
-      })
-    },
-
-    handlePluginError (err, env) {
-      var self = this
-      if (err.status === 403 && err.data.error.code === 4031003) {
-        self.setPluginToken(env.plugin, INVALID)
-
-        // 重新请求
-        // 引用自身，会造成死循环, 加一个限制，最多执行重复请求LIMIT次
-        if (count.has(env.fn) && count.get(env.fn) > LIMIT) {
-          count.set(env.fn, 0)
-        } else if (count.has(env.fn) && count.get(env.fn) <= LIMIT) {
-          var i = count.get(env.fn) + 1
-          count.set(env.fn, i)
-          setTimeout(() => {
-            self.reRequest(env)
-          }, 100)
-        } else if (!count.has(env.fn)) {
-          count.set(env.fn, 1)
-          setTimeout(() => {
-            self.reRequest(env)
-          }, 100)
-        }
-      } else {
-        env.context.handleError(err)
-      }
-    },
-
-    setPluginToken (plugin, value) {
-      switch (plugin) {
-        case 'warranty':
-          window.localStorage.warrantyAccessToken = value
-          break
-        case 'recipe':
-          window.localStorage.recipeAccessToken = value
-          break
-        case 'helpdesk':
-          window.localStorage.helpdeskAccessToken = value
-          break
-        case 'dealer':
-          window.localStorage.dealerAccessToken = value
-          break
-        default:
-          break
-      }
-    },
-
-    getPluginToken (plugin) {
-      var token = ''
-      switch (plugin) {
-        case 'warranty':
-          token = window.localStorage.warrantyAccessToken
-          break
-        case 'recipe':
-          token = window.localStorage.recipeAccessToken
-          break
-        case 'helpdesk':
-          token = window.localStorage.helpdeskAccessToken
-          break
-        case 'dealer':
-          token = window.localStorage.dealerAccessToken
-          break
-        default:
-          break
-      }
-
-      return token
-    },
-
-    reRequest (env) {
-      if (env.fn instanceof Function && env.argvs instanceof Object && env.context instanceof Object) {
-        env.fn.apply(env.context, env.argvs)
       }
     }
   }

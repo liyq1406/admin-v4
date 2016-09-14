@@ -100,34 +100,13 @@ export const pluginFactoryMixin = {
 export const pluginMixins = {
   methods: {
     getAppToKen (appID, plugin) {
-      var self = this
+      // var self = this
       return new Promise((resolve, reject) => {
-        var token = self.getPluginToken(plugin)
-        if (token && token !== INVALID) {
-          resolve(token)
-        } else {
-          var params = {
-            'app_id': appID
-          }
-          api.plugin.getAppToKen(params).then((res) => {
-            if (res.status === 200) {
-              self.setPluginToken(plugin, res.data.access_token)
-              resolve(res.data.access_token)
-            }
-          }, (err) => {
-            if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
-              switch (err.data.error.code) {
-                case 4031003:
-                  this.$route.router.go('/login')
-                  break
-                default:
-                  this.showError(err.data.error)
-              }
-            } else {
-              console.log(err)
-            }
-          })
+        var pluginsToken = {}
+        if (window.localStorage.pluginsToken) {
+          pluginsToken = JSON.parse(window.localStorage.pluginsToken)
         }
+        resolve(pluginsToken[appID] && pluginsToken[appID].token)
       })
     },
 
