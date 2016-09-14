@@ -18,10 +18,10 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t('ui.datapoint.fields.index') }}</th>
-                <th>{{ $t('ui.datapoint.fields.name') }}</th>
-                <th>{{ $t('ui.datapoint.fields.description') }}</th>
-                <th class="w200">{{ $t('ui.device.current_value') }}</th>
+                <th class="wp5">{{ $t('ui.datapoint.fields.index') }}</th>
+                <th class="wp20">{{ $t('ui.datapoint.fields.name') }}</th>
+                <th class="wp25">{{ $t('ui.datapoint.fields.description') }}</th>
+                <th>{{ $t('ui.device.current_value') }}</th>
               </tr>
             </thead>
             <tbody>
