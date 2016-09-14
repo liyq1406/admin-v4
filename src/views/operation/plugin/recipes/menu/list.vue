@@ -15,7 +15,7 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" placeholder="请输入关键字" @cancel="getMenus(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMenus(true)">
-                  <button slot="search-button" @click="getMenus(true)" class="btn btn-primary">{{ $t('common.search') }}</button>
+                  <button slot="search-button" @click="getMenus(true)" class="btn">{{ $t('common.search') }}</button>
                 </search-box>
               </div>
             </div>

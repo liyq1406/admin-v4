@@ -27,7 +27,7 @@
             </div> -->
             <div class="filter-group-item">
               <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search="getList()" @press-enter="getList()">
-                <button slot="search-button" @click="getList()" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                <button slot="search-button" @click="getList()" class="btn"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>

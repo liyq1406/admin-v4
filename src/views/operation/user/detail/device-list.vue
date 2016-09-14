@@ -8,8 +8,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容">
-              </search-box>
+              <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容"></search-box>
             </div>
           </div>
         </div>

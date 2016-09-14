@@ -49,7 +49,7 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                  <button slot="search-button" @click="" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>

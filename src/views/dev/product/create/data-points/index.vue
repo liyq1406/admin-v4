@@ -222,7 +222,9 @@ export default {
         type: 1,
         description: '',
         symbol: '',
-        is_write: true
+        is_write: true,
+        min: 0,
+        max: 100
       },
       originEditModel: {},
       addModel: {},
@@ -340,21 +342,28 @@ export default {
       this.loadingData = true
 
       // 表单验证
-      if (!datapoint.name || datapoint.name === '') {
+      if (datapoint.name === '') {
         this.requireDatapointName = true
         this.loadingData = false
         return
       } else {
         this.requireDatapointName = false
       }
-      if (!datapoint.min || datapoint.min === '') {
+      if (datapoint.min === '') {
         this.requireDatapointMin = true
         this.loadingData = false
         return
       } else {
         this.requireDatapointMin = false
       }
-      if (!datapoint.max || datapoint.max === '') {
+      if (datapoint.max === '') {
+        this.requireDatapointMax = true
+        this.loadingData = false
+        return
+      } else {
+        this.requireDatapointMax = false
+      }
+      if (datapoint.max <= datapoint.min) {
         this.requireDatapointMax = true
         this.loadingData = false
         return

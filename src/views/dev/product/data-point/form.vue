@@ -72,7 +72,6 @@
                     </div>
                     <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
-                    <span v-if="!$validation.max.required && (($validation.min.modified && $validation.min.max) || ($validation.max.modified && $validation.max.min))">最大值必须大于最小值</span>
                     <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.max.modified && $validation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
                   </div>
@@ -165,8 +164,8 @@ export default {
         index: 0,
         name: '',
         type: 1,
-        min: '',
-        max: '',
+        min: 0,
+        max: 100,
         description: '',
         symbol: '',
         is_write: true
@@ -261,7 +260,7 @@ export default {
       if (this.modelType.value === 4) {
         min = -9223372036854775808
       }
-      return this.model.min || min
+      return this.model.min === '' ? min : parseInt(this.model.min) + 1
     },
 
     addMax () {

@@ -9,7 +9,7 @@
           <div class="filter-group fr">
             <div class="filter-group-item">
               <search-box class="work-order-search-box" :key.sync="key" :placeholder="'请输入工单编号'" @press-enter="getWarrantyList(true)">
-                <button slot="search-button" class="btn btn-primary" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
+                <button slot="search-button" class="btn" @click="getWarrantyList(true)"><i class="fa fa-search"></i></button>
               </search-box>
             </div>
           </div>

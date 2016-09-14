@@ -20,7 +20,7 @@
                       <option v-for="option in searchTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </v-select>
-                  <button slot="search-button" class="btn btn-primary" @click="getArticleList(true)">搜索</button>
+                  <button slot="search-button" class="btn" @click="getArticleList(true)">搜索</button>
                 </search-box>
               </div>
             </div>

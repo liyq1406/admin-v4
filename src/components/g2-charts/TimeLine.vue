@@ -44,6 +44,31 @@ export default {
     }
   },
 
+  computed: {
+    min () {
+      let temp = []
+      this.data.forEach((item) => {
+        temp.push(item.val)
+      })
+      return Math.min(...temp)
+    },
+    max () {
+      let temp = []
+      this.data.forEach((item) => {
+        temp.push(item.val)
+      })
+      return Math.max(...temp)
+    },
+    tickCount () {
+      let range = this.max - this.min
+      if (range <= 5) {
+        return parseInt(range)
+      } else {
+        return 5
+      }
+    }
+  },
+
   watch: {
     // 监听数据变化，渲染图表
     data () {
@@ -117,7 +142,8 @@ export default {
           mask: 'mm-dd'
         },
         val: {
-          type: 'linear'
+          type: 'linear',
+          tickCount: this.tickCount
         }
       }
       if (this.scale === 'hour') {

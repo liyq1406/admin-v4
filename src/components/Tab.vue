@@ -82,7 +82,7 @@ export default {
         color gray-darker
 
       &.v-link-active
-        height 28px
+        height 29px
         background-color #fff
         border 1px solid default-border-color
         border-bottom none!important

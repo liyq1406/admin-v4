@@ -15,7 +15,7 @@
             <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" @cancel="getTasks" :placeholder="'请输入' + queryType.label" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getTasks">
-                  <button slot="search-button" @click="getTasks" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getTasks" class="btn"><i class="fa fa-search"></i></button>
                   <!-- <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>

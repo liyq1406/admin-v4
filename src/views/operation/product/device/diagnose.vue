@@ -10,8 +10,7 @@
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-ghost btn-sm"><i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching">
-                </search-box>
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
               </div>
             </div>
             <h3>{{ $t('ui.device.datapoint') }}</h3>
@@ -19,10 +18,10 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th>{{ $t('ui.datapoint.fields.index') }}</th>
-                <th>{{ $t('ui.datapoint.fields.name') }}</th>
-                <th>{{ $t('ui.datapoint.fields.description') }}</th>
-                <th class="w200">{{ $t('ui.device.current_value') }}</th>
+                <th class="wp5">{{ $t('ui.datapoint.fields.index') }}</th>
+                <th class="wp20">{{ $t('ui.datapoint.fields.name') }}</th>
+                <th class="wp25">{{ $t('ui.datapoint.fields.description') }}</th>
+                <th>{{ $t('ui.device.current_value') }}</th>
               </tr>
             </thead>
             <tbody>

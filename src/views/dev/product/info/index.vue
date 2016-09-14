@@ -54,7 +54,7 @@
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                     </select>
                   </x-select>
-                  <button slot="search-button" @click="getDevices(true)" class="btn btn-primary"><i class="fa fa-search"></i></button>
+                  <button slot="search-button" @click="getDevices(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>

@@ -26,8 +26,12 @@ export const setLoadingStatus = ({ dispatch }, status) => {
 // 弹出错误提示
 export const showError = ({ dispatch }, error, fn) => {
   let err = {}
-  err.code = error.code
-  err.msg = locales[Vue.config.lang].errors[error.code]
+  if (typeof error === 'string') {
+    err.msg = error
+  } else {
+    err.code = error.code
+    err.msg = locales[Vue.config.lang].errors[error.code]
+  }
   dispatch(types.RECEIVE_ERROR, err, fn)
 }
 

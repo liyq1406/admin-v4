@@ -12,7 +12,7 @@
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
               </select>
             </x-select>
-            <button slot="search-button" @click="handleSearch" class="btn btn-primary"><i class="fa fa-search"></i></button>
+            <button slot="search-button" @click="handleSearch" class="btn"><i class="fa fa-search"></i></button>
           </search-box>
         </div>
       </div>
@@ -358,6 +358,7 @@ export default {
             this.geocoder.getAddress([item.lon, item.lat], (status, result) => {
               let address = ''
               if (status === 'complete' && result.info === 'OK') {
+                console.log(result.regeocode)
                 address = result.regeocode.formattedAddress
               }
               this.geographies.push({
