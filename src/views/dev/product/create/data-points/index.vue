@@ -224,7 +224,7 @@ export default {
         symbol: '',
         is_write: true,
         min: 0,
-        max: 1
+        max: 100
       },
       originEditModel: {},
       addModel: {},
@@ -357,6 +357,13 @@ export default {
         this.requireDatapointMin = false
       }
       if (datapoint.max === '') {
+        this.requireDatapointMax = true
+        this.loadingData = false
+        return
+      } else {
+        this.requireDatapointMax = false
+      }
+      if (datapoint.max <= datapoint.min) {
         this.requireDatapointMax = true
         this.loadingData = false
         return
