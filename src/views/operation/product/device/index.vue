@@ -191,6 +191,7 @@ export default {
           // this.deviceInfo.onlineLong.value = '100小时'
         }
       }).catch((res) => {
+        this.setCurrVirtualDevice({})
         // this.handleError(res)
       })
     },
