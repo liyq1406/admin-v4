@@ -148,7 +148,6 @@
   import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import { pluginFactoryMixin } from './mixins'
   import { formatDate } from 'src/filters'
   import Ios from './components/IOS'
   import Android from './components/Android'
@@ -163,7 +162,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins, pluginFactoryMixin],
+    mixins: [globalMixins],
 
     vuex: {
       actions: {

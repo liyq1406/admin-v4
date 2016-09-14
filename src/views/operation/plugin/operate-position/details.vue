@@ -120,7 +120,7 @@ export default {
 
       if (contentArr && contentArr.length) {
         contentArr.forEach((item) => {
-          let content = this.contentList.find((o) => {
+          let content = _.find(this.contentList, (o) => {
             return o._id === item.id
           })
           if (content) {

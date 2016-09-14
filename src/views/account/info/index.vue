@@ -234,7 +234,6 @@ export default {
       this.editModel.is_notice = true
       this.editModel.is_alert = true
       api.corp.updateMember(this.currentMember.id, this.editModel).then((res) => {
-        console.log(res.data)
         this.onEditInfoCancel()
         this.showNotice({
           type: 'success',
@@ -255,6 +254,10 @@ export default {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
       }).catch((res) => {
+        this.showNotice({
+          type: 'error',
+          content: '暂无当前用户信息'
+        })
         this.$route.router.go('/login')
       })
     },

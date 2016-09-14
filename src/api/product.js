@@ -304,5 +304,12 @@ export default {
     return http.post(
       `${API_SERVER.default}/v2/customization?id=corp.${productId}.device.list`, params
     )
+  },
+  // 通过设备导入记录批量导出二维码
+  // https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/产品与设备管理接口.md#export_device_qrcode_by_import
+  exportQrcodeByImportRecord (productId, params) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/export/qrcode_by_import_record?query=${params}`
+    )
   }
 }

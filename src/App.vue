@@ -92,7 +92,7 @@ export default {
   watch: {
     layouts () {
       if (this.hasLayout('topbar')) {
-        this.getMember()
+        // this.getMember()
         this.getProducts()
         this.getPlugins()
         this.getCorpInfo()
@@ -131,11 +131,16 @@ export default {
       }) >= 0
     },
 
+    // TODO token失效问题
     getMember () {
       api.corp.getMember(window.localStorage.getItem('memberId')).then((res) => {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
       }).catch((res) => {
+        this.showNotice({
+          type: 'error',
+          content: '暂无当前用户信息'
+        })
         this.$route.router.go('/login')
       })
     },

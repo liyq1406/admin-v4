@@ -293,7 +293,7 @@ export default {
     getRule () {
       api.alert.getRules(this.$route.params.id).then((res) => {
         if (res.status === 200 && res.data.length > 0) {
-          this.model = res.data.find((item) => {
+          this.model = _.find(res.data, (item) => {
             return item.id === this.$route.params.rule_id
           })
           if (this.model.type === 1) {

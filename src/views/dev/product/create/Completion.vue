@@ -60,6 +60,7 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
+import _ from 'lodash'
 
 export default {
   name: 'Completion',
@@ -94,7 +95,7 @@ export default {
         return
       }
       let ret = ''
-      let type = this.locales.data.PRODUCT_TYPES.find((item) => {
+      let type = _.find(this.locales.data.PRODUCT_TYPES, (item) => {
         return item.value === val
       })
 

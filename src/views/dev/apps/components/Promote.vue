@@ -68,7 +68,6 @@
   // import Select from 'components/Select'
   import { globalMixins } from 'src/mixins'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import { pluginFactoryMixin } from '../mixins'
   import Table from 'components/Table'
   import Modal from 'components/Modal'
   // import _ from 'lodash'
@@ -78,7 +77,7 @@
 
     layout: 'admin',
 
-    mixins: [globalMixins, pluginFactoryMixin],
+    mixins: [globalMixins],
 
     vuex: {
       actions: {

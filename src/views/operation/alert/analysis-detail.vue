@@ -66,6 +66,7 @@ import { globalMixins } from 'src/mixins'
 import { formatDate, uniformDate } from 'src/filters'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
+import _ from 'lodash'
 
 export default {
   name: 'Overview',
@@ -283,7 +284,7 @@ export default {
     getRules () {
       api.alert.getRules(this.$route.params.product_id).then((res) => {
         if (res.status === 200) {
-          this.alert = res.data.find((item) => {
+          this.alert = _.find(res.data, (item) => {
             return item.id === this.$route.params.id
           })
         }

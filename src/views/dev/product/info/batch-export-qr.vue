@@ -48,11 +48,12 @@
             <div class="row item">
               <div class="col-6 label">二维码信息预览:</div>
               <div class="col-18">
+                <span class="qrcode-preview">{{preview}}</span>
               </div>
               </div>
           </div>
           <div class="fr mr10 mt20">
-            <button class="btn btn-primary btn-lg"  @click="step = 3">批量导出</button>
+            <button class="btn btn-primary btn-lg"  @click="exportQrcode">批量导出</button>
           </div>
         </div>
       </div>
@@ -62,6 +63,7 @@
 
 <script>
   import Modal from 'components/Modal'
+  import api from 'api'
 
   export default {
     name: 'batch-export-qr',
@@ -78,9 +80,6 @@
     data () {
       return {
         tipLabel: '您可以自定义二维码附件信息，如url地址、版本信息、下载地址等，<br/>格式以key：value区分，附件信息添加越多，二维码信息越复杂；<br/>例：url ： www.baidu.com',
-        startSN: '',
-        endSN: '',
-        SNList: ['xxxxxxxx'],
         snSelect: true,
         pidSelect: true,
         macSelect: false,
@@ -92,7 +91,52 @@
         ]
       }
     },
-    computed: {},
+    computed: {
+      queryCondition () {
+        let temp = {
+          record_id: this.$route.params.import_id,
+          custom_field: this.customField,
+          custom_property: this.customProperty
+        }
+        return window.btoa(JSON.stringify(temp))
+      },
+      customProperty () {
+        let temp = {}
+        for (let i = 0; i < this.customRules.length - 1; i++) {
+          temp[this.customRules[i].key] = this.customRules[i].value
+        }
+        return temp
+      },
+      customField () {
+        let temp = []
+        if (this.snSelect) {
+          temp.push('sn')
+        }
+        if (this.macSelect) {
+          temp.push('mac')
+        }
+        if (this.pidSelect) {
+          temp.push('product_id')
+        }
+        return temp
+      },
+      preview () {
+        let temp = 'XQR:T:D;'
+        if (this.snSelect) {
+          temp = temp + 'SN:%SN%;'
+        }
+        if (this.macSelect) {
+          temp = temp + 'MAC:%MAC%;'
+        }
+        if (this.pidSelect) {
+          temp = temp + 'PID:%PID%;'
+        }
+        for (let i = 0; i < this.customRules.length - 1; i++) {
+          temp = temp + this.customRules[i].key + ':' + this.customRules[i].value + ';'
+        }
+        return temp
+      }
+    },
     ready () {},
     methods: {
       addRule (index) {
@@ -109,6 +153,13 @@
       },
       delRule (index) {
         this.customRules.splice(index, 1)
+      },
+      exportQrcode () {
+        api.product.exportQrcodeByImportRecord(this.$route.params.id, this.queryCondition).then((res) => {
+          console.log(res)
+        }).catch((res) => {
+          this.handleError(res)
+        })
       }
     }
   }
@@ -188,5 +239,9 @@
       height 32px
       width 32px
       i
-        line-height 32px
+        line-height 32px !important
+  .qrcode-preview
+    display inline-block
+    word-break break-all
+    font-size 13px
 </style>

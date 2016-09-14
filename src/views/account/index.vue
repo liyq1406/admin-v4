@@ -73,7 +73,7 @@ export default {
 
 .sec-nav
   position relative
-  z-index 1000
+  z-index 1
 
   .sec-nav-item
     .v-link-active
@@ -92,4 +92,11 @@ export default {
         margin-top -7px
         content ""
         triangle #F3F3F3 14px right
+</style>
+
+<style lang="css" scoped>
+  /*为ie加的hack*/
+  .main-wrap{
+  	z-index: 2\0
+  }
 </style>

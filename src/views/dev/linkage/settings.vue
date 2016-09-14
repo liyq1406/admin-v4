@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <!-- 无产品时显示添加提示 -->
         <x-alert v-if="!products.length && !loadingProducts && !loadingDatapoints" :cols="7">
-          <p>还没有产品哦，请<a v-link="{ path: '/product/create' }" class="hl-red">点击此处</a>添加</p>
+          <p>还没有产品哦，请<a v-link="{ path: '/dev/products/create/guide' }" class="hl-red">点击此处</a>添加</p>
         </x-alert>
 
         <!-- Start: 数据端点列表 -->
