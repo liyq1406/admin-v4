@@ -683,7 +683,6 @@ export default {
       let minor = this.minor_ingredients.filter((item) => {
         return Object.keys(item).length > 0
       })
-      console.log(major)
       let params = {
         name: this.name,
         images: this.images,
@@ -705,8 +704,10 @@ export default {
         cooking_steps: this.cooking_steps,
         tips: this.tips,
         status: this.status,
-        creator: this.currentMember.name
+        creator: this.currentMember.name,
+        all_shared: this.status === 1 ? 1 : 0
       }
+
       let process
       let noticeCont = ({
         add: '菜谱添加成功！',
