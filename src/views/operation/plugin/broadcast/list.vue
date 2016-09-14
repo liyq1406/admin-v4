@@ -238,13 +238,10 @@
       },
       // 获取APP名字
       getAppName () {
-        console.log(111)
         this.histories.forEach((item, index) => {
           var Apps = []
           if (item.scope.type === 2) {
-            console.log(222)
             item.scope.app_list.forEach((app) => {
-              console.log(33)
               api.plugin.get(app).then((res) => {
                 Apps.push(res.data.name)
                 item.appNames = Apps.join(' , ')
