@@ -37,7 +37,7 @@ import { formatDate } from 'src/filters'
 import { isEmpty } from 'src/utils'
 import defaultLogo from 'assets/images/logo.png'
 import blankImg from 'assets/images/blank.png'
-// import _ from 'lodash'
+import _ from 'lodash'
 
 export default {
   name: 'Info',
@@ -96,7 +96,7 @@ export default {
 
       if (!isEmpty(this.corp)) {
         result.id.value = this.corp.id || '-'
-        result.type.value = this.locales.data.ACCOUNT_TYPES.find((item) => {
+        result.type.value = _.find(this.locales.data.ACCOUNT_TYPES, (item) => {
           return item.value === this.corp.type
         }).label || '-'
         result.createTime.value = formatDate(this.corp.create_time) || '-'
