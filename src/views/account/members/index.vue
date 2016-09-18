@@ -86,7 +86,7 @@
                 <label class="form-control col-6">姓名:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
-                    <input type="text" v-model="addModel.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}" maxlength="10" name="name" class="input-text"/>
+                    <input type="text" v-model="addModel.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}" maxlength="10" name="addModel.name" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
