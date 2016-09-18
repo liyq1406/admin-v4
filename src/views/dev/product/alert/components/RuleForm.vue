@@ -115,7 +115,7 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowApn" class="apn-list">
+                        <div v-show="isShowApn" class="apn-list mt10">
                           <div class="checkbox-group">
                             <label v-for="app in apps" v-if="app.type===1" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
@@ -192,6 +192,7 @@ import api from 'src/api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import _ from 'lodash'
+import store from 'store'
 
 export default {
   name: 'RuleForm',
@@ -200,6 +201,14 @@ export default {
 
   components: {
     'x-select': Select
+  },
+
+  store,
+
+  vuex: {
+    getters: {
+      apps: ({ plugins }) => plugins.all
+    }
   },
 
   props: {
@@ -391,4 +400,8 @@ export default {
 
   .submit-btn
     width 120px
+
+.apn-list
+  border 1px solid #ddd
+  padding 5px
 </style>
