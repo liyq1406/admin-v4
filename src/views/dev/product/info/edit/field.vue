@@ -38,18 +38,18 @@
           </thead>
           <tbody>
             <tr v-for="field in fieldList">
-              <th class="tac">{{$index + 1}}</th>
-              <th>{{field.name}}</th>
-              <th>
+              <td class="tac">{{$index + 1}}</td>
+              <td>{{field.name}}</td>
+              <td>
                 <a class="hl-red" @click="onShowEditLabelModal(field, $index)">{{field.label}}</a>
-              </th>
-              <th class="tac">{{translate(field.type)}}</th>
-              <th class="tac">
+              </td>
+              <td class="tac">{{translate(field.type)}}</td>
+              <td class="tac">
                 <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
-              </th>
-              <th class="tac">
+              </td>
+              <td class="tac">
                 <a class="hl-red" @click="onShowEditSortModal(field, $index)">编辑</a>
-              </th>
+              </td>
             </tr>
             <tr v-if="fieldList.length === 0">
               <td :colspan="6" class="tac">
@@ -70,9 +70,9 @@
               <label class="form-control col-5">请输入字段名:</label>
               <div class="controls col-19">
                 <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                  <input v-model="editLabelModal.label" v-validate:label="{required: true, maxlength: 20}" type="text" name="editLabelModal.label" class="input-text"/>
+                  <input v-model="editLabelModal.label" v-validate:label="{required: true, maxlengtd: 20}" type="text" name="editLabelModal.label" class="input-text"/>
                 </div>
-                <div class="form-tips" :class="{'form-tips-error': $editLabelValidation.label.touched && $editLabelValidation.label.required || $editLabelValidation.label.modified && $editLabelValidation.label.maxlength}">
+                <div class="form-tips" :class="{'form-tips-error': $editLabelValidation.label.touched && $editLabelValidation.label.required || $editLabelValidation.label.modified && $editLabelValidation.label.maxlengtd}">
                   <span>注：字段名不能为空，且不超过20个字符</span>
                 </div>
               </div>
