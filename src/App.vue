@@ -45,6 +45,7 @@ import Modal from './components/Modal'
 import Topbar from 'components/Topbar'
 import Toast from './components/Toast'
 import _ from 'lodash'
+import { API_SERVER } from 'consts/config'
 
 export default {
   name: 'App',
@@ -85,6 +86,7 @@ export default {
 
   data () {
     return {
+      refreshed: false,
       customApps: []
     }
   },
@@ -110,16 +112,48 @@ export default {
   },
 
   methods: {
+    /**
+     * 刷新token
+     * @return {[type]} [description]
+     */
     refreshToken () {
-      api.corp.refreshToken().then((res) => {
-        var today = new Date()
-        window.localStorage.setItem('accessToken', res.data.access_token)
-        window.localStorage.setItem('refreshToken', res.data.refresh_token)
-        window.localStorage.setItem('expireIn', res.data.expire_in)
-        window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
-      }).catch((res) => {
-        this.handleError(res)
-      })
+      // 定义需要刷新与否的标志位 默认是true
+      let needRefresh = true
+      // 定义常量 不需要刷新token的页面
+      const NOREFRESHPATH = ['/login', '/register', '/fetch', '/forbidden', '/password-reset', '/member-activate', '/email-activate', '/user-password-reset', '/user-email-activate']
+      // 判断当前页面是否需要刷新
+      for (let i = 0; i < NOREFRESHPATH.length; i++) {
+        let reg = new RegExp(`^${NOREFRESHPATH[i]}`)
+        if (reg.test(this.$route.path)) {
+          needRefresh = false
+          break
+        }
+      }
+      // 如果不需要刷新 直接return
+      if (!needRefresh) return
+      // 刷新token逻辑
+      this.refreshed = false
+      var params = {
+        'refresh_token': window.localStorage.getItem('refreshToken')
+      }
+      var xmlhttp = new window.XMLHttpRequest()
+      xmlhttp.open('POST', `${API_SERVER.default}/v2/corp/token/refresh`, false) // 这里的false表示同步
+      xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded')
+      xmlhttp.setRequestHeader('Access-Token', window.localStorage.getItem('accessToken'))
+      xmlhttp.onreadystatechange = () => {
+        if (xmlhttp.readyState === 4 && xmlhttp.status === 200) {
+          let res = {}
+          res.status = xmlhttp.status
+          res.data = JSON.parse(xmlhttp.responseText)
+          let today = new Date()
+          window.localStorage.setItem('accessToken', res.data.access_token)
+          window.localStorage.setItem('refreshToken', res.data.refresh_token)
+          window.localStorage.setItem('expireIn', res.data.expire_in)
+          window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
+        }
+        this.refreshed = true
+      }
+      xmlhttp.send(JSON.stringify(params))
     },
     /**
      * 获取企业信息
