@@ -150,6 +150,7 @@ export default {
           window.localStorage.setItem('refreshToken', res.data.refresh_token)
           window.localStorage.setItem('expireIn', res.data.expire_in)
           window.localStorage.setItem('expireAt', today.getTime() + res.data.expire_in * 1000)
+          window.localStorage.removeItem('pluginsToken')
         }
         this.refreshed = true
       }
