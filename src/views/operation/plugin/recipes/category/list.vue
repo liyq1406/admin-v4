@@ -4,12 +4,13 @@
       <h2>类别管理</h2>
     </div>
     <div class="panel mt20">
-      <div class="panel-bd">
-        <div class="action-bar">
-          <div class="action-group">
-            <button @click="addCategory" class="btn btn-primary"><i class="fa fa-plus"></i>添加类别</button>
-          </div>
+      <div class="panel-hd">
+        <div class="actions">
+          <button @click="addCategory" class="btn btn-ghost" :disabled="addDisabled" :class="{'disabled':addDisabled}"><i class="fa fa-plus"></i>添加类别</button>
         </div>
+        <h2>类别列表</h2>
+      </div>
+      <div class="panel-bd">
         <x-table :headers="columns" :tables="categoryList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="editCategory" :simple-page="true"></x-table>
       </div>
     </div>
@@ -41,6 +42,7 @@ export default {
 
   data () {
     return {
+      maxCount: 50,
       columns: [{
         key: 'name',
         title: '名称',
@@ -79,6 +81,15 @@ export default {
   },
 
   computed: {
+    // 是否允许添加
+    addDisabled () {
+      let result = true
+      if (this.total < this.maxCount) {
+        result = false
+      }
+      return result
+    },
+
     // 类别列表
     categoryList () {
       let result = []

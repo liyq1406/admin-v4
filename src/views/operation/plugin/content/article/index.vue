@@ -184,6 +184,7 @@ export default {
      */
     onCurrentPageChange (page) {
       this.currentPage = page
+      this.getArticleList()
     },
 
     /**

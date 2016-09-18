@@ -6,7 +6,7 @@
     <validator name="validation">
       <form novalidate @submit.prevent="onArticleSubmit">
         <div class="form-row row">
-          <label class="form-control col-4">文章标题:</label>
+          <label class="form-control col-4"><i class="hl-red">*</i> 文章标题:</label>
           <div class="controls col-20">
             <div v-placeholder="'请输入标题'" class="input-text-wrap">
               <input v-model="model.name" name="model.name" type="text" v-validate:name="{required: true, maxlength: 250}" lazy class="input-text"/>
@@ -18,15 +18,17 @@
           </div>
         </div>
         <div class="form-row row">
-          <label class="form-control col-4">正文:</label>
+          <label class="form-control col-4"><i class="hl-red">*</i> 正文:</label>
           <div class="controls col-20">
-            <div class="radio-group mb10">
-              <editor @change="onContentChange" :value="model.text"></editor>
+            <editor @change="onContentChange" :value="model.text"></editor>
+            <input type="text" v-model="model.text" name="model.text" v-validate:text="{required: true}" class="hidden">
+            <div class="form-tips form-tips-error">
+              <span v-if="$validation.text.touched && $validation.text.required">{{ $t('ui.validation.required', {field: '正文'}) }}</span>
             </div>
           </div>
         </div>
         <div class="form-row row">
-          <label class="form-control col-4">状态:</label>
+          <label class="form-control col-4"><i class="hl-red">*</i> 状态:</label>
           <div class="controls col-20">
             <div class="radio-group">
               <label class="radio">
@@ -40,9 +42,9 @@
         </div>
         <div class="form-actions row">
           <div class="col-offset-4">
-            <button class="btn btn-primary btn-lg">提交</button>
-            <!-- <button class="btn btn-ghost btn-lg" @click.prevent.stop="previewArticle">预览</button> -->
-            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" v-if="type==='edit'">删除</button>
+            <button class="btn btn-primary btn-lg" :disabled="submiting || deleting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')"></button>
+            <button class="btn btn-ghost btn-lg" @click.prevent.stop="previewArticle">预览</button>
+            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" :disabled="submiting || deleting" :class="{'disabled':deleting}" v-if="type==='edit'" v-text="deleting ? $t('common.handling') : $t('common.del')"></button>
           </div>
         </div>
       </form>
@@ -86,6 +88,7 @@ export default {
         status: 0
       },
       submitting: false,
+      deleting: false,
       loadingData: false
     }
   },
@@ -157,6 +160,7 @@ export default {
         edit: '文章修改成功！'
       })[this.type]
 
+      this.submiting = true
       if (this.type === 'add') {
         process = api.content.addArticle(this.$route.params.app_id, this.formParams)
       } else {
@@ -171,6 +175,7 @@ export default {
           this.$route.router.go(`/operation/plugins/content/${this.$route.params.app_id}`)
         }
       }).catch((res) => {
+        this.submiting = false
         this.handleError(res)
       })
     },
@@ -181,6 +186,7 @@ export default {
     deleteArticle () {
       if (!window.confirm('确定要删除该篇文章吗？')) return
 
+      this.deleting = true
       api.content.delArticle(this.$route.params.app_id, this.$route.params.id).then((res) => {
         if (res.status === 200) {
           this.showNotice({
