@@ -226,7 +226,7 @@
             <div class="preview-panel">
               <div class="preview-panel-hd">
                 <div class="preview-panel-hd-actions"><span>添加到我的菜篮</span></div>
-                <h3>步骤：</h3>
+                <h3>用料：</h3>
               </div>
               <div class="preview-panel-bd">
                 <table>
