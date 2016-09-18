@@ -20,7 +20,7 @@
             <x-map :location="deviceLocation" height="220px"></x-map>
             <div class="device-ip mt5">
               <span v-show="!currVirtualDevice.ip"> 未激活 </span>
-              <span v-show="currVirtualDevice.ip">ip: {{ currVirtualDevice.ip }} </span>
+              <span v-show="currVirtualDevice.ip">{{ currVirtualDevice.ip }} </span>
               <span v-show="province">{{province}} {{city}}</span>
             </div>
           </div>
