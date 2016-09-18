@@ -140,6 +140,11 @@
     methods: {
       handleCancelClick () {
         this.key = ''
+        let inputDoms = this.$el.getElementsByTagName('input')
+        if (inputDoms.length > 0) {
+          let inputDom = inputDoms[0]
+          inputDom.value = ''
+        }
         this.$dispatch('cancel')
       },
 

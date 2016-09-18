@@ -96,7 +96,8 @@
         let temp = {
           record_id: this.$route.params.import_id,
           custom_field: this.customField,
-          custom_property: this.customProperty
+          custom_property: this.customProperty,
+          access_token: window.localStorage.getItem('accessToken')
         }
         return window.btoa(JSON.stringify(temp))
       },
