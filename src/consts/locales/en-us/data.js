@@ -166,7 +166,16 @@ export const RULE_TYPES = ['数据端点', '设备状态']
 export const RULE_COMPARE_TYPES = ['等于', '大于', '小于', '大于或等于', '小于或等于', '不等于']
 
 // 通知类型
-export const RULE_INFORM_TYPES = ['通知类型', '告警类型']
+export const RULE_INFORM_TYPES = [
+  {
+    label: '通知类型',
+    value: 1
+  },
+  {
+    label: '告警类型',
+    value: 2
+  }
+]
 
 // 通知方式
 export const RULE_NOTIFY_TYPES = ['短信', '邮箱', '应用内推送', 'APN推送', 'Google推送']

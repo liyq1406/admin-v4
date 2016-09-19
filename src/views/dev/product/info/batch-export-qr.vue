@@ -117,12 +117,12 @@
           temp.push('mac')
         }
         if (this.pidSelect) {
-          temp.push('product_id')
+          temp.push('pid')
         }
         return temp
       },
       preview () {
-        let temp = 'XQR:T:D;'
+        let temp = 'XQR:T:D;QK:%QRKEY%'
         if (this.snSelect) {
           temp = temp + 'SN:%SN%;'
         }
