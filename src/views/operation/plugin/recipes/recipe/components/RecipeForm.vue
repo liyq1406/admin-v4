@@ -6,177 +6,212 @@
       </div>
       <validator name="validation">
         <form novalidate @submit.prevent="onRecipeSubmit">
-          <div class="form-row row">
-            <label class="form-control col-4"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
-            <div class="controls col-20">
-              <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
-                <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
-              </div>
-              <div class="form-tips form-tips-error">
-                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
-                <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">{{ $t("ui.ingredient.fields.images") }}:</label>
-            <div class="controls col-7 controls-image">
-              <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
-              <!-- <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div> -->
-            </div>
-            <div class="col-13 step-text" style="height:120px;">
-              <div class="input-text-wrap" style="height:100%">
-                <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的心得吧" class="input-text"></textarea>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">时长:</label>
-            <div class="controls col-20">
-              <div class="select-group">
-                <div class="select">
-                  <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
-                    <select v-model="properties.cooking_time" name="properties.cooking_time">
-                      <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
-                    </select>
-                  </v-select>
+          <div class="panel mt30 mb30 bordered">
+            <div class="panel-bd">
+              <div class="form-row row">
+                <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
+                <div class="controls col-21">
+                  <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
+                    <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">难度:</label>
-            <div class="controls col-20">
-              <div class="select-group">
-                <div class="select">
-                  <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
-                    <select v-model="properties.difficulty" name="properties.difficulty">
-                      <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
-                    </select>
-                  </v-select>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">{{ $t("ui.ingredient.fields.classification") }}:</label>
-            <div class="controls col-20">
-              <div class="select-group1">
-                <div class="select mrt20">
-                  <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
-                    <select v-model="category.main" @change="handleMainType(category)">
-                      <option v-for="opt in categories_main"  :value="opt" :label= "opt.name" :selected="opt.name===category.main">{{ opt.main }}</option>
-                    </select>
-                  </v-select>
-                  <v-select v-show="categories_sub.length && category.main " width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
-                    <select v-model="category.sub">
-                      <option v-for="opt in categories_sub" :value="opt" :label= "opt.name" :selected="opt.name===category.sub">{{ opt.main }}</option>
-                    </select>
-                  </v-select>
-                  <!-- <span @click="removeObj(category, classifications)" class="fa fa-times"></span> -->
-                </div>
-              </div>
-              <!-- <button @click.prevent="addCategory" class="btn btn-success"><i class="fa fa-plus"></i>添加类别</button> -->
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">主料:</label>
-            <div class=" col-20">
-              <div class="mrt20" v-for="major in major_ingredients">
-                <div class="controls col-8">
-                  <div class="form-row row">
-                    <div class="input-text-wrap">
-                      <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
+              <div class="form-row row">
+                <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.ingredient.fields.images") }}:</label>
+                <div class="controls col-21">
+                  <div class="thumb-info">
+                    <div class="thumb">
+                      <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
+                      <!-- <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div> -->
+                    </div>
+                    <div class="info-text">
+                      <div class="input-text-wrap" style="height:100%">
+                        <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的心得吧" v-validate:instructions="{required: true, maxlength: 60}" class="input-text"></textarea>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('ui.validation.required', {field: '心得'}) }}</span>
+                        <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['心得', 60]) }}</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="controls col-offset-1 col-4">
-                  <div class="form-row row">
-                    <div class="input-text-wrap">
-                      <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-3">时长:</label>
+                <div class="controls col-21">
+                  <div class="select-group">
+                    <div class="select">
+                      <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
+                        <select v-model="properties.cooking_time" name="properties.cooking_time">
+                          <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
+                        </select>
+                      </v-select>
                     </div>
                   </div>
                 </div>
-                <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
               </div>
-              <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
+              <div class="form-row row">
+                <label class="form-control col-3">难度:</label>
+                <div class="controls col-21">
+                  <div class="select-group">
+                    <div class="select">
+                      <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
+                        <select v-model="properties.difficulty" name="properties.difficulty">
+                          <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
+                        </select>
+                      </v-select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-3">{{ $t("ui.ingredient.fields.classification") }}:</label>
+                <div class="controls col-21">
+                  <div class="select-group1">
+                    <div class="select">
+                      <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
+                        <select v-model="category.main" @change="handleMainType(category)">
+                          <option v-for="opt in categories_main"  :value="opt" :label= "opt.name" :selected="opt.name===category.main">{{ opt.main }}</option>
+                        </select>
+                      </v-select>
+                      <v-select v-show="categories_sub.length && category.main " width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
+                        <select v-model="category.sub">
+                          <option v-for="opt in categories_sub" :value="opt" :label= "opt.name" :selected="opt.name===category.sub">{{ opt.main }}</option>
+                        </select>
+                      </v-select>
+                      <span @click="removeObj(category, classifications)" class="fa fa-times ml10"></span>
+                    </div>
+                  </div>
+                  <button @click.prevent="addCategory" class="btn btn-primary"><i class="fa fa-plus"></i>添加类别</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-row row">
-            <label class="form-control col-4">辅料:</label>
-            <div class=" col-20">
-              <div class="mrt20" v-for="minor in minor_ingredients">
-                <div class="controls col-8">
-                  <div class="form-row row">
-                    <div class="input-text-wrap">
-                      <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
+          <div class="panel mb20">
+            <div class="panel-bd">
+              <div class="form-row row">
+                <label class="form-control col-3">主料:</label>
+                <div class="col-20 row">
+                  <div class="col-12 mb10" v-for="major in major_ingredients">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="input-text-wrap">
+                          <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
+                        </div>
+                      </div>
+                      <div class="col-8 col-offset-1">
+                        <div class="input-text-wrap">
+                          <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
+                      </div>
                     </div>
                   </div>
                 </div>
-                <div class="controls col-offset-1 col-4">
-                  <div class="form-row row">
-                    <div class="input-text-wrap">
-                      <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
-                    </div>
-                  </div>
+                <div class="action col-offset-3">
+                  <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
                 </div>
-                <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
               </div>
-              <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
+              <div class="form-row row">
+                <label class="form-control col-3">辅料:</label>
+                <div class="col-20 row">
+                  <div class="col-12 mb10" v-for="minor in minor_ingredients">
+                    <div class="row">
+                      <div class="col-12">
+                        <div class="input-text-wrap">
+                          <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
+                        </div>
+                      </div>
+                      <div class="col-8 col-offset-1">
+                        <div class="input-text-wrap">
+                          <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
+                        </div>
+                      </div>
+                      <div class="col-3">
+                        <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="action col-offset-3">
+                  <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="form-row row">
-            <label class="form-control col-4">步骤:</label>
-            <div class="controls col-20">
-              <div class="alert-text">小提示：<br/>1、步骤图宽度在150像素至150像素；<br/>2、每个步骤用一段话描述，如果不需要可将内容留空；</div>
-              <div v-for="cooking_step in cooking_steps" class="step-box row">
+          <div class="form-row panel mb20 bordered">
+            <div class="panel-hd panel-hd-full bordered">
+              <h2>菜谱步骤</h2>
+            </div>
+            <div class="panel-bd">
+              <div v-for="cooking_step in cooking_steps" class="thumb-info mt20 mb15 row">
                 <div class="col-3">第{{ $index+1 }}步:</div>
-                <div class="col-8">
-                  <image-uploader :images="cooking_step.images" @modified="onModifiedImages(cooking_step.images)" class="mb0"></image-uploader>
-                </div>
-                <div class="col-13 step-text">
-                  <div class="input-text-wrap">
-                    <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
+                <div class="col-21">
+                  <div class="thumb">
+                    <image-uploader :images="cooking_step.images" @modified="onModifiedImages(cooking_step.images)" class="mb0"></image-uploader>
+                  </div>
+                  <div class="info-text">
+                    <div class="input-text-wrap">
+                      <textarea v-model="cooking_step.description" type="text" lazy placeholder="请填写步骤的描述" class="input-text"></textarea>
+                    </div>
+                    <div class="button-list">
+                      <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
+                      <div v-show="cooking_steps.length>1&&$index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
+                      <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add" v-if="cooking_steps.length<maxStepCount"><i class="icon fa fa-plus"></i></div>
+                      <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+                    </div>
                   </div>
                 </div>
-                <div class="button-list">
-                  <div v-show="cooking_steps.length>1&&$index>0" @click="handleStepEvent('MOVE_UP', cooking_step, $index)" class="control-button button-up"><i class="icon fa fa-long-arrow-up"></i></div>
-                  <div v-show="cooking_steps.length>1&&$index<(cooking_steps.length-1)" @click="handleStepEvent('MOVE_DOWN', cooking_step, $index)" class="control-button button-down"><i class="icon fa fa-long-arrow-down"></i></div>
-                  <div @click="handleStepEvent('ADD', cooking_step, $index)" class="control-button button-add"><i class="icon fa fa-plus"></i></div>
-                  <div v-show="cooking_steps.length>1" @click="handleStepEvent('DEL', cooking_step, $index)" class="control-button button-del"><i class="icon fa fa-times"></i></div>
+              </div>
+            </div>
+          </div>
+          <div class="panel mb20 bordered">
+            <div class="panel-bd">
+              <div class="form-row row">
+                <label class="form-control col-3"><i class="hl-red">*</i> 烹饪技巧:</label>
+                <div class="controls col-21">
+                  <div v-placeholder="$t('ui.recipe.placeholders.skill')" class="input-text-wrap">
+                    <textarea v-model="tips" type="text" name="tips" v-validate:tips="{required: true, maxlength: 100}" lazy class="input-text"></textarea>
+                  </div>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.tips.touched && $validation.tips.required">{{ $t('ui.validation.required', {field: '烹饪技巧'}) }}</span>
+                    <span v-if="$validation.tips.modified && $validation.tips.maxlength">{{ $t('ui.validation.maxlength', ['烹饪技巧', 100]) }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-3">标签:</label>
+                <div class="controls col-21">
+                  <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
                 </div>
               </div>
             </div>
           </div>
-          <div class="form-row row">
-            <label class="form-control col-4">烹饪技巧:</label>
-            <div class="controls col-20">
-              <div v-placeholder="$t('ui.recipe.placeholders.skill')" class="input-text-wrap">
-                <textarea v-model="tips" type="text" name="tips" lazy class="input-text"></textarea>
+          <div class="panel mb20">
+            <div class="panel-bd">
+              <div class="form-row row">
+                <label class="form-control col-3">状态:</label>
+                <div class="controls col-21">
+                  <div class="radio-group">
+                    <label class="radio">
+                      <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
+                    </label>
+                    <label class="radio">
+                      <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
+                    </label>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="form-row row">
-            <label class="form-control col-4">标签:</label>
-            <div class="controls col-20">
-              <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
-            </div>
-          </div>
-          <div class="form-row row">
-            <label class="form-control col-4">状态:</label>
-            <div class="controls col-20">
-              <div class="radio-group">
-                <label class="radio">
-                  <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
-                </label>
-                <label class="radio">
-                  <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
-                </label>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions row">
+          <div class="form-actions mb40 row">
             <div class="col-offset-4">
               <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
               <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
@@ -233,6 +268,10 @@
                 <table>
                   <tbody>
                     <tr v-for="ingredient in major_ingredients">
+                      <td>{{ ingredient.name }}</td>
+                      <td>{{ ingredient.unit }}</td>
+                    </tr>
+                    <tr v-for="ingredient in minor_ingredients">
                       <td>{{ ingredient.name }}</td>
                       <td>{{ ingredient.unit }}</td>
                     </tr>
@@ -355,16 +394,17 @@ export default {
       show: false,
       difficulties: ['不限', '新手', '初级', '中级', '高级', '厨神'],
       cookingtimes: ['5分钟', '10分钟', '15分钟', '30分钟', '60分钟', '90分钟', '2小时', '数小时', '1天', '数天'],
-      major_ingredients: [],
-      minor_ingredients: [],
+      major_ingredients: [{name: '', unit: ''}],
+      minor_ingredients: [{name: '', unit: ''}],
       // allDevices: DEVICES,
       allDevices: '',
       // candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
       candidateTags: [],
       categories: [],
       adding: false,
-      status: 0,
-      isShowPreview: false
+      status: 1,
+      isShowPreview: false,
+      maxStepCount: 15
     }
   },
 
@@ -649,6 +689,7 @@ export default {
           this.cooking_steps.splice(index + 1, 0, newstep)
           break
         case 'DEL':
+          if (!window.confirm('您确定要删除该步骤？')) return
           this.cooking_steps.$remove(step)
           break
         default:
@@ -662,6 +703,13 @@ export default {
      * @param  {Array}  arr 要删除的对象的父数组
      */
     removeObj (obj, arr) {
+      if (arr.length <= 1) {
+        this.showNotice({
+          type: 'error',
+          content: '默认项不允许删除'
+        })
+        return
+      }
       arr.$remove(obj)
     },
 
@@ -714,8 +762,7 @@ export default {
         cooking_steps: this.cooking_steps,
         tips: this.tips,
         status: this.status,
-        creator: this.currentMember.name,
-        all_shared: this.status === 1 ? 1 : 0
+        creator: this.currentMember.name
       }
 
       let process
@@ -771,407 +818,415 @@ export default {
 </script>
 
 <style lang="stylus">
-  @import '../../../../../../assets/stylus/common'
-  /*预览*/
-  .mask
-    fixed left top
-    size 100%
-    background rgba(0, 0, 0, .6)
-    z-index 1000
-    display table
-    transition opacity .2s ease
+@import '../../../../../../assets/stylus/common'
 
-    .preview-wrapper
-      display table-cell
-      vertical-align middle
+// 图文
+.thumb-info
+  width 100%
+  position relative
+  clearfix()
+  label.form-control
+    float left
+    text-align right
+    /*width 70px*/
+    line-height 120px
+    /*padding-right 20px*/
+    box-sizing border-box
+  .controls-image
+    float left
+    width 182px
+    min-width 182px
+    overflow hidden
 
-    .preview-dialog
-      position relative
-      background rgba(255, 255, 255, .95)
-      margin 0 auto
-      width 320px
-      box-shadow 0 2px 8px rgba(0, 0, 0, .3)
-      transition all .3s ease
+    .image-uploader-item
+      margin-bottom 0
+  .thumb
+    float left
+    width 170px
 
-      .fa-times-circle
-        absolute right top 3px
-        size 40px
-        line-height 40px
-        text-align center
-        cursor pointer
-        font-size 16px
-        color #666
-        transition color .3s
-
-        &:hover
-          color red
-
-    .preview-header
-      padding 10px 20px
-      border-bottom 1px solid #DDD
-
-      h3
-        font-weight normal
-        color gray-darker
-        margin 0
-
-    .preview-body
-      max-height 540px
-      overflow-y auto
-      box-sizing border-box
-      background-color #F2F2F2
-
-      .app-header
-        font-size 18px
-        text-align center
-        padding 10px 0
-        border-bottom 1px solid default-border-color
-        background-color #fff
-      .preview-thumb
-        /*width 380px*/
-        height 200px
-        margin-bottom 10px
-        img
-          width 100%
-          height 100%
-      .preview-panel
-        background #FFF
-        padding 0 10px
-        margin-bottom 10px
-      .preview-panel-hd
-        font-size 12px
-        margin-bottom 10px
-        padding 10px 0
-        border-bottom 1px solid light-border-color
-
-        .preview-panel-hd-actions
-          float right
-
-          span
-            display inline-block
-            background #999
-            color #FFF
-            line-height 20px
-            padding 0 10px
-            border-radius 20px
-
-        h3
-          font-size 14px
-          margin 0
-      .preview-panel-bd
-        font-size 12px
-        padding-bottom 10px
-
-        table
-          width 100%
-          td
-            padding 5px 0
-
-      .device-panel
-        padding 1px 0 15px
-
-      .introduce
-        margin 0
-        border-bottom 1px solid light-border-color
-        padding-bottom 10px
-
-      .metas
-        padding-top 10px
-        clearfix()
-
-        .meta
-          float left
-          width 50%
-          text-align center
-      .introlist
-        clearfix()
-        margin-top 5px
-        li
-          float left
-          width 50%
-          text-align center
-          padding 10px 0
-          line-height 25px
-          height 25px
-      .posdiv
-        position relative
-        padding-bottom 10px
-        border-bottom 1px solid #999
-        margin-bottom 10px
-        span
-          display inline-block
-          position absolute
-          right 5px
-          background-color #999
-          font-size 12px
-          padding 3px 10px
-          border-radius 10px
-          color #fff
-      h4
-        text-align center
-      .foolist
-        clearfix()
-        li
-          float left
-          width 50%
-          text-align left
-      .table
-        margin 0
-
-      // 错误信息
-      .error-msg
-        text-align center
-        margin-bottom 30px
-
-    .cooking-devices
+    .image-uploader-item
+      margin-bottom 0
+  .info-text
+    margin-left 170px
+    box-sizing border-box
+    height 120px
+    position relative
+    .input-text-wrap
+    .input-text
+      height 100%
+  .button-list
+    absolute right -30px top
+    height 120px
+    opacity 0
+    /*transition opacity ease 0.3s*/
+    .control-button
+      height 25px
+      width 25px
+      line-height 25px
+      margin-bottom 6px
+      background #999
       text-align center
+      cursor pointer
+      &:hover
+        background red
+      i.icon
+        color #fff
+  &:hover
+    .button-list
+      opacity 1
 
-      .cooking-device-item
-        display inline-block
-        size 64px
-        background-color #F3F3F3
-        background-repeat no-repeat
-        background-position center center
-        border-radius 40px
-        margin 0 15px
+/*预览*/
+.mask
+  fixed left top
+  size 100%
+  background rgba(0, 0, 0, .6)
+  z-index 1000
+  display table
+  transition opacity .2s ease
 
-      .device1
-        background-image url('../assets/images/device_1.png')
-
-      .device2
-        background-image url('../assets/images/device_2.png')
-
-    .preview-actions
-        text-align center
-
-        .btn
-          width 120px
-
-    .preview-footer
-      padding 0 30px 20px
-      text-align right
-      clearfix()
-      /*end*/
-  .previewForm
+  .preview-wrapper
     display table-cell
     vertical-align middle
-  .dis
-    display inline-block
-  .m10
-    margin 10px
-  .childinblock div
-    display inline-block
-    margin-top 5px
-    margin-left 5px
-  .mrt20
-    margin-bottom 20px
-  .recipe-form
-    .form
-      .form-row
-        max-height 5000px
 
-        .controls
-          .select-group1
-            position relative
-            width 400px
-            margin 0 10px 10px 0
-            padding-right 30px
-          .input-text-wrap
-            input.input-text-time
-              border 1px solid default-border-color
-              display inline-block
-              width 120px
-              box-sizing border-box
-              font-size 14px
-              height 32px
-              line-height 32px
-              padding 6px 20px
-              margin-right 10px
-            span.text-time
-              margin-right 10px
+  .preview-dialog
+    position relative
+    background rgba(255, 255, 255, .95)
+    margin 0 auto
+    width 320px
+    box-shadow 0 2px 8px rgba(0, 0, 0, .3)
+    transition all .3s ease
 
-          .delete-input
-            position absolute
-            right 5px
-            top 5px
-            span.fa
-              color #c0252e
+    .fa-times-circle
+      absolute right top 3px
+      size 40px
+      line-height 40px
+      text-align center
+      cursor pointer
+      font-size 16px
+      color #666
+      transition color .3s
 
-      // 步骤
-      .step-box
-        margin-top 20px
+      &:hover
+        color red
+
+  .preview-header
+    padding 10px 20px
+    border-bottom 1px solid #DDD
+
+    h3
+      font-weight normal
+      color gray-darker
+      margin 0
+
+  .preview-body
+    max-height 540px
+    overflow-y auto
+    box-sizing border-box
+    background-color #F2F2F2
+
+    .app-header
+      font-size 18px
+      text-align center
+      padding 10px 0
+      border-bottom 1px solid default-border-color
+      background-color #fff
+    .preview-thumb
+      /*width 380px*/
+      height 200px
+      margin-bottom 10px
+      img
         width 100%
-        position relative
-        clearfix()
-        label.form-control
-          float left
-          text-align right
-          /*width 70px*/
-          line-height 120px
-          /*padding-right 20px*/
-          box-sizing border-box
-        .controls-image
-          float left
-          width 182px
-          min-width 182px
-          overflow hidden
-
-          .image-uploader-item
-            margin-bottom 0
-        .step-text
-          box-sizing border-box
-          height 120px
-          .input-text-wrap
-          .input-text
-            height 100%
-        .button-list
-          position absolute
-          left 100.5%
-          height 120px
-          opacity 0
-          /*transition opacity ease 0.3s*/
-          .control-button
-            height 25px
-            width 25px
-            line-height 25px
-            margin-bottom 6px
-            background #999
-            text-align center
-            cursor pointer
-            &:hover
-              background red
-            i.icon
-              color #fff
-        &:hover
-          .button-list
-            opacity 1
-
-      .ingredient-row
-        table
-          margin-top 0
-
-          td
-            padding 5px 0
-
-        .ingredient-name
-          margin-right 20px
-
-        .fa-times
-          color #c0252e
-
-      // 设备列表
-      .device-list
-        .device-list-item
-          position relative
-          font-size 12px
-
-          .device-name
-            font-size 14px
-            font-weight bold
-            line-height 26px
-
-          .cooking-time
-            line-height 26px
-
-            .input-text-wrap
-              display inline-block
-
-              .input-text
-                font-size 12px
-                size 90px 26px
-                line-height 24px
-                padding 0 5px
-
-          .fa-times
-            font-size 14px
-            size 24px
-            line-height 24px
-            background rgba(255, 0, 0, .5)
-            color #FFF
-            text-align center
-            z-index 100
-
-        .step-list-item
-          margin 20px 0
-          border 1px solid default-border-color
-          padding 0 0 10px 10px
-
-          .step-num
-            text-align center
-
-            span
-              position relative
-              display inline-block
-              line-height 24px
-              padding 0 20px
-              border 1px solid default-border-color
-              border-radius 20px
-              font-weight bold
-              background #FFF
-              top -13px
-  // 浮窗
-  .modal
-    .modal-body
-      clearfix()
-      .status-bar
-        padding 0
-        border 0
-        .v-select
-          float left
-          display inline-block
-          padding-left 10px
-        .search-box
-          float right
-
-    .to-select-list
-      width 65%
-      float left
-
-    .pager
-      margin-top 10px
-
-    .selected-list
-      width 33%
-      float right
-      border 1px solid light-border-color
-      box-sizing border-box
+        height 100%
+    .preview-panel
       background #FFF
+      padding 0 10px
+      margin-bottom 10px
+    .preview-panel-hd
+      font-size 12px
+      margin-bottom 10px
+      padding 10px 0
+      border-bottom 1px solid light-border-color
+
+      .preview-panel-hd-actions
+        float right
+
+        span
+          display inline-block
+          background #999
+          color #FFF
+          line-height 20px
+          padding 0 10px
+          border-radius 20px
 
       h3
         font-size 14px
-        padding 0 20px
-        line-height 35px
         margin 0
-        border-bottom 1px solid #e4e4e4
+    .preview-panel-bd
+      font-size 12px
+      padding-bottom 10px
 
-      ul
-        margin 0
-        max-height 310px
-        list-style none
-        overflow auto
+      table
+        width 100%
+        td
+          padding 5px 0
 
+    .device-panel
+      padding 1px 0 15px
+
+    .introduce
+      margin 0
+      border-bottom 1px solid light-border-color
+      padding-bottom 10px
+
+    .metas
+      padding-top 10px
+      clearfix()
+
+      .meta
+        float left
+        width 50%
+        text-align center
+    .introlist
+      clearfix()
+      margin-top 5px
       li
-        border-bottom 1px solid #e4e4e4
+        float left
+        width 50%
+        text-align center
+        padding 10px 0
+        line-height 25px
+        height 25px
+    .posdiv
+      position relative
+      padding-bottom 10px
+      border-bottom 1px solid #999
+      margin-bottom 10px
+      span
+        display inline-block
+        position absolute
+        right 5px
+        background-color #999
         font-size 12px
-        position relative
-        line-height 30px
-        padding 0 20px
+        padding 3px 10px
+        border-radius 10px
+        color #fff
+    h4
+      text-align center
+    .foolist
+      clearfix()
+      li
+        float left
+        width 50%
+        text-align left
+    .table
+      margin 0
 
-        .fa
-          height 100%
-          top 0
-          line-height 30px
+    // 错误信息
+    .error-msg
+      text-align center
+      margin-bottom 30px
 
-        &:nth-child(2n-1)
-          background #F9F9F9
+  .cooking-devices
+    text-align center
 
-        &:last-child
-          border-bottom none
+    .cooking-device-item
+      display inline-block
+      size 64px
+      background-color #F3F3F3
+      background-repeat no-repeat
+      background-position center center
+      border-radius 40px
+      margin 0 15px
 
-    .button-box
-      width 100%
-      box-sizing border-box
-      text-align right
+    .device1
+      background-image url('../assets/images/device_1.png')
+
+    .device2
+      background-image url('../assets/images/device_2.png')
+
+  .preview-actions
+      text-align center
+
       .btn
-        margin-left 10px
+        width 120px
+
+  .preview-footer
+    padding 0 30px 20px
+    text-align right
+    clearfix()
+    /*end*/
+.panel
+  padding-bottom 5px
+.previewForm
+  display table-cell
+  vertical-align middle
+.dis
+  display inline-block
+.m10
+  margin 10px
+.childinblock div
+  display inline-block
+  margin-top 5px
+  margin-left 5px
+.recipe-form
+  .form
+    max-width 800px
+    .form-row
+      max-height 5000px
+
+      .controls
+        .select-group1
+          position relative
+          width 400px
+          margin 0 10px 10px 0
+          padding-right 30px
+        .input-text-wrap
+          input.input-text-time
+            border 1px solid default-border-color
+            display inline-block
+            width 120px
+            box-sizing border-box
+            font-size 14px
+            height 32px
+            line-height 32px
+            padding 6px 20px
+            margin-right 10px
+          span.text-time
+            margin-right 10px
+
+        .delete-input
+          position absolute
+          right 5px
+          top 5px
+          span.fa
+            color #c0252e
+
+    .ingredient-row
+      table
+        margin-top 0
+
+        td
+          padding 5px 0
+
+      .ingredient-name
+        margin-right 20px
+
+      .fa-times
+        color #c0252e
+
+    // 设备列表
+    .device-list
+      .device-list-item
+        position relative
+        font-size 12px
+
+        .device-name
+          font-size 14px
+          font-weight bold
+          line-height 26px
+
+        .cooking-time
+          line-height 26px
+
+          .input-text-wrap
+            display inline-block
+
+            .input-text
+              font-size 12px
+              size 90px 26px
+              line-height 24px
+              padding 0 5px
+
+        .fa-times
+          font-size 14px
+          size 24px
+          line-height 24px
+          background rgba(255, 0, 0, .5)
+          color #FFF
+          text-align center
+          z-index 100
+
+      .step-list-item
+        margin 20px 0
+        border 1px solid default-border-color
+        padding 0 0 10px 10px
+
+        .step-num
+          text-align center
+
+          span
+            position relative
+            display inline-block
+            line-height 24px
+            padding 0 20px
+            border 1px solid default-border-color
+            border-radius 20px
+            font-weight bold
+            background #FFF
+            top -13px
+// 浮窗
+.modal
+  .modal-body
+    clearfix()
+    .status-bar
+      padding 0
+      border 0
+      .v-select
+        float left
+        display inline-block
+        padding-left 10px
+      .search-box
+        float right
+
+  .to-select-list
+    width 65%
+    float left
+
+  .pager
+    margin-top 10px
+
+  .selected-list
+    width 33%
+    float right
+    border 1px solid light-border-color
+    box-sizing border-box
+    background #FFF
+
+    h3
+      font-size 14px
+      padding 0 20px
+      line-height 35px
+      margin 0
+      border-bottom 1px solid #e4e4e4
+
+    ul
+      margin 0
+      max-height 310px
+      list-style none
+      overflow auto
+
+    li
+      border-bottom 1px solid #e4e4e4
+      font-size 12px
+      position relative
+      line-height 30px
+      padding 0 20px
+
+      .fa
+        height 100%
+        top 0
+        line-height 30px
+
+      &:nth-child(2n-1)
+        background #F9F9F9
+
+      &:last-child
+        border-bottom none
+
+  .button-box
+    width 100%
+    box-sizing border-box
+    text-align right
+    .btn
+      margin-left 10px
 </style>

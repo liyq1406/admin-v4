@@ -97,6 +97,16 @@
                   </x-select>
                 </div>
               </div>
+              <div class="form-row row tag-row">
+                <label class="form-control col-5 alert-label">通知类型:</label>
+                <div class="controls col-19">
+                  <x-select width="120px" :label="model.notify_type === 1 ? '通知类型' : '告警类型'">
+                    <select v-model="model.notify_type">
+                      <option v-for="opt in locales.data.RULE_INFORM_TYPES" :value="opt.value">{{ opt.label }}</option>
+                    </select>
+                  </x-select>
+                </div>
+              </div>
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.notify_type") }}:</label>
                 <div class="controls col-19">

@@ -280,10 +280,19 @@
                       <input type="radio" v-model="actionType" name="openType" :value="4" number/>直接打开APP
                     </label>
                   </div>
-                  <div class="form-actions row">
-                    <div class="col-offset-5">
-                      <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
-                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel">
+              <div class="form bordered-top">
+                <div class="form-actions mt20 row">
+                  <div class="col-5" v-if="pageType!=='add'">
+                    <label class="del-check">
+                      <input type="checkbox" name="del" v-model="delChecked"/>删除
+                    </label>
+                  </div>
+                  <div class="col-19" :class="{'col-offset-5':type==='add'}">
+                    <button type="submit" class="btn btn-primary btn-lg">{{ $t("common.ok") }}</button>
                   </div>
                 </div>
               </div>
@@ -337,6 +346,7 @@
 
     data () {
       return {
+        delChecked: false,
         /* 交互用写死的变量 **********/
         // 推送范围选项
         pushOption: [
@@ -778,5 +788,6 @@
       height 100%
       overflow-x hidden
       overflow-y auto
-
+  .bordered-top
+    border-top 1px solid #e5e5e5
 </style>

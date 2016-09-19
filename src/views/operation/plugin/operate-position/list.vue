@@ -26,7 +26,6 @@
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '名称'}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', ['名称', 1]) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['名称', 20]) }}</span>
                     <span v-if="$validation.name.touched && $validation.name.format">名称不允许前后带空格</span>
                   </div>
@@ -294,6 +293,7 @@ export default {
       let process
 
       if (this.modal.delChecked) { // 删除运营位
+        if (!window.confirm('您确定要删除该运营位？')) return
         process = api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id)
       } else {
         if (this.$validation.invalid) {
