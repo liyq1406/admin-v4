@@ -13,7 +13,7 @@
         <div class="turn-to-page">
           <span>共{{ pages }}页，转到</span>
           <div class="input-text-wrap">
-            <input type="number" class="input-text input-text-sm" v-model="destPage" number @keyup.enter="goToPage">
+            <input type="number" class="input-text input-text-sm" v-model="destPage" number @keyup.enter.prevent.stop="goToPage">
           </div>
           <span>页</span>
         </div>
@@ -125,7 +125,7 @@ export default {
     },
 
     goToPage (ev) {
-      if (this.destPage > 0 && this.destPage < (this.total / this.countPerPage)) {
+      if (this.destPage > 0 && this.destPage <= Math.ceil(this.total / this.countPerPage)) {
         this.onPageChange(this.destPage)
         this.destPage = ''
       } else {

@@ -160,6 +160,9 @@
         let tempIframe = document.createElement('iframe')
         tempIframe.src = url
         document.body.appendChild(tempIframe)
+        setTimeout(() => {
+          document.body.removeChild(tempIframe)
+        }, 1000)
       }
     }
   }
