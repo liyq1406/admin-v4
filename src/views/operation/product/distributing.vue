@@ -102,7 +102,7 @@ export default {
         var distribute = {
           region: item.name,
           count: item.value,
-          percent: item.percent * 100,
+          percent: Math.round(item.percent * 100),
           prototype: item
         }
         result.push(distribute)
