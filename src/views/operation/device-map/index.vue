@@ -153,7 +153,8 @@
             this.currProduct = this.productOptions[0]
             if (typeof window.AMap === 'undefined') {
               var mapApi = document.createElement('script')
-              mapApi.src = `http://webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
+              let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
+              mapApi.src = `${protocol}//webapi.amap.com/maps?v=1.3&key=${config.AMAP_KEY}&callback=init`
               document.getElementsByTagName('body')[0].appendChild(mapApi)
             } else {
               this.initMap()
