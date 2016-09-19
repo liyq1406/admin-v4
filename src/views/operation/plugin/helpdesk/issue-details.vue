@@ -105,7 +105,8 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
-import { formatDate } from 'src/filters'
+// import { formatDate } from 'src/filters'
+import { uniformDate, uniformTime } from 'src/filters'
 // import _ from 'lodash'
 
 export default {
@@ -265,7 +266,8 @@ export default {
           this.issue = res.data.list[0]
           // 用户信息
           this.userInfo.nickname.value = this.issue.user_name
-          this.userInfo.create_time.value = formatDate(this.issue.create_time)
+          // this.userInfo.create_time.value = formatDate(this.issue.create_time)
+          this.userInfo.create_time.value = uniformDate(new Date(this.issue.create_time)) + ' ' + uniformTime(new Date(this.issue.create_time))
           this.userInfo.email.value = this.issue.email
           this.userInfo.phone.value = this.issue.phone
           // APP信息
