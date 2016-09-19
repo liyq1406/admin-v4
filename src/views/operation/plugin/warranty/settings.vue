@@ -46,7 +46,7 @@ export default {
   methods: {
     // 获取标签
     getTags () {
-      api.helpdesk.getFeedbackLabel(this.$route.params.app_id).then((res) => {
+      api.warranty.getWarrantyLabel(this.$route.params.app_id).then((res) => {
         console.log(res)
         this.tags = res.data.label
       }).catch((res) => {
@@ -59,7 +59,7 @@ export default {
         label: []
       }
       params.label = this.tags
-      api.helpdesk.saveFeedbackLabel(this.$route.params.app_id, params).then((res) => {
+      api.warranty.saveWarrantyLabel(this.$route.params.app_id, params).then((res) => {
         console.log(res)
         this.showNotice({
           type: 'info',
