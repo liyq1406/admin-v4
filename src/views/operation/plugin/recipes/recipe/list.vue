@@ -93,7 +93,7 @@ export default {
         class: 'wp20'
       }, {
         key: 'create_time',
-        title: '推送时间',
+        title: '创建时间',
         class: 'wp20'
       }, {
         key: 'pageviews',
@@ -143,7 +143,7 @@ export default {
           name: `<a class="hl-red">${item.name}</a>`,
           creator: item.creator,
           create_time: formatDate(item.create_time),
-          pageviews: item.pageviews || '-',
+          pageviews: item.pageviews || 0,
           status: item.status === 1 ? '<span>已发布</span>' : '<span class="hl-orange">待审核</span>',
           origin: item
         })

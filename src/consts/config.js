@@ -72,7 +72,7 @@ export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'
 export const MAX_FIRMWARE_FILE_SIZE = 8
 
 // 允许上传的最大图片文件大小（单位：Mb）
-export const MAX_IMAGE_FILE_SIZE = 8
+export const MAX_IMAGE_FILE_SIZE = 2
 
 // 验证码刷新等待间隔(单位:秒)
 export const VERIFYCODE_DURATION = 90

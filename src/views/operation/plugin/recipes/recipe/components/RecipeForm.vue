@@ -7,14 +7,15 @@
       <validator name="validation">
         <form novalidate @submit.prevent="onRecipeSubmit">
           <div class="form-row row">
-            <label class="form-control col-4">{{ $t("ui.recipe.fields.name") }}:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
             <div class="controls col-20">
               <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
-                <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 250}" lazy class="input-text"/>
+                <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 250]) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.format">菜谱名称不允许前后带空格</span>
               </div>
             </div>
           </div>
@@ -218,8 +219,8 @@
               <div class="preview-panel-bd">
                 <p class="introduce">{{ instructions }}</p>
                 <div class="metas">
-                  <div class="meta">{{properties.difficulty}}</div>
-                  <div class="meta">{{properties.cooking_time}}</div>
+                  <div class="meta"><i class="fa fa-hand-pointer-o"></i> {{properties.difficulty}}</div>
+                  <div class="meta"><i class="fa fa-clock-o"></i> {{properties.cooking_time}}</div>
                 </div>
               </div>
             </div>
@@ -251,12 +252,16 @@
             </div>
             <div class="preview-panel">
               <ul class="introlist">
-                <li>收藏菜谱</li>
-                <li>添加到我的常用菜</li>
+                <li><i class="fa fa-star"></i> 收藏菜谱</li>
+                <li><i class="fa fa-plus-circle"></i> 添加到我的常用菜</li>
               </ul>
             </div>
-            <div class="preview-panel">
+            <div class="preview-panel device-panel">
               <h4>选择厨具并开始烹饪</h4>
+              <div class="cooking-devices">
+                <div class="cooking-device-item device1"></div>
+                <div class="cooking-device-item device2"></div>
+              </div>
             </div>
           </div>
           <span @click="dismiss" class="fa fa-times-circle"></span>
@@ -669,7 +674,12 @@ export default {
      * 菜谱表单提交
      */
     onRecipeSubmit () {
-      if (this.$validation.invalid || this.editing) return
+      if (this.editing) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
@@ -810,6 +820,7 @@ export default {
       overflow-y auto
       box-sizing border-box
       background-color #F2F2F2
+
       .app-header
         font-size 18px
         text-align center
@@ -855,6 +866,10 @@ export default {
           width 100%
           td
             padding 5px 0
+
+      .device-panel
+        padding 1px 0 15px
+
       .introduce
         margin 0
         border-bottom 1px solid light-border-color
@@ -907,6 +922,24 @@ export default {
       .error-msg
         text-align center
         margin-bottom 30px
+
+    .cooking-devices
+      text-align center
+
+      .cooking-device-item
+        display inline-block
+        size 64px
+        background-color #F3F3F3
+        background-repeat no-repeat
+        background-position center center
+        border-radius 40px
+        margin 0 15px
+
+      .device1
+        background-image url('../assets/images/device_1.png')
+
+      .device2
+        background-image url('../assets/images/device_2.png')
 
     .preview-actions
         text-align center

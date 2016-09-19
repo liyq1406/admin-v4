@@ -1,5 +1,5 @@
 <template>
-  <modal :show.sync="isShow" width="480px">
+  <modal :show.sync="isShow" width="480px" @close="onCancel">
     <h3 slot="header">{{ modalTitle }}</h3>
     <div slot="body" class="form">
       <validator name="validation">
@@ -8,10 +8,11 @@
             <label class="form-control col-6">名称:</label>
             <div class="controls col-18">
               <div class="input-text-wrap required-sign">
-                <input v-model="category.name" type="text" v-validate:name="['required']" class="input-text"/>
+                <input v-model="category.name" type="text" v-validate:name="{required: true, maxlength: 20}" class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
               </div>
             </div>
           </div>
@@ -19,7 +20,10 @@
             <label class="form-control col-6">描述:</label>
             <div class="controls col-18">
               <div class="input-text-wrap">
-                <textarea v-model="category.instructions" type="text" lazy class="input-text"></textarea>
+                <textarea v-model="category.instructions" type="text" lazy class="input-text" v-validate:instructions="{maxlength: 40}"></textarea>
+              </div>
+              <div class="form-tips form-tips-error">
+                <span v-if="$validation.instructions.touched && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['描述', 40]) }}</span>
               </div>
             </div>
           </div>
@@ -28,7 +32,7 @@
               <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
             </label>
             <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="onCancel" class="btn btn-default" v-if="type==='edit'">{{ $t("common.cancel") }}</button>
+            <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
       </validator>
@@ -146,7 +150,7 @@ export default {
       }
       let process
 
-      if (this.isSub) {
+      if (this.isSub) { // 子类别
         params.parent_id = this.$route.params.parent_id
       } else {
         params.parent_id = 0
@@ -157,7 +161,6 @@ export default {
         params.creator = this.currentMember.name
         process = api.recipes.createCategory(appId, token, params)
       } else {
-        console.log(1111)
         if (this.delChecked) {
           // 删除
           process = api.recipes.deleteCategory(appId, this.category._id, token)
@@ -173,6 +176,7 @@ export default {
           this.submiting = false
         }
       }).catch((res) => {
+        this.submiting = false
         this.handleError(res)
       })
     }

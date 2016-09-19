@@ -1,8 +1,9 @@
 <template>
   <div class="html-editor">
     <textarea class="editor" name="openContent" class="input-text"></textarea>
-
-    <input style="width:0px;height:0;overflow:hidden" class="editor-image" name="image" type="file" @change.prevent="upload($event, $index)">
+    <div class="editor-image">
+      <input class="editor-image" name="image" type="file" @change.prevent="upload($event, $index)">
+    </div>
   </div>
 </template>
 
@@ -19,10 +20,11 @@
   import 'tinymce/plugins/link/plugin'
   import 'tinymce/plugins/autoresize/plugin'
   import 'tinymce/plugins/image/plugin'
-  import 'tinymce/plugins/code/plugin'
-  import 'tinymce/plugins/preview/plugin'
-  import 'tinymce/plugins/searchreplace/plugin'
-  import 'tinymce/plugins/fullscreen/plugin'
+  // import 'tinymce/plugins/code/plugin'
+  // import 'tinymce/plugins/preview/plugin'
+  // import 'tinymce/plugins/searchreplace/plugin'
+  // import 'tinymce/plugins/fullscreen/plugin'
+  import 'tinymce/plugins/textcolor/plugin'
 
   export default {
     name: 'Editor',
@@ -46,14 +48,17 @@
       var self = this
       var editorConfig = {
         selector: '.editor', // 选择器
-        menubar: true, // 是否显示菜单栏
+        menubar: false, // 是否显示菜单栏
+        statusbar: false, // 是否显示状态栏
         theme: 'modern', // 主题样式
-        skin: 'lightgray',
+        skin: 'lightgray', // 皮肤样式
         skin_url: '/static/vendor/tinymce/skins/lightgray', // 皮肤
         toolbar_items_size: 'small', // 工具栏图标大小
-        plugins: ['link', 'autoresize', 'fullscreen', 'image', 'code', 'preview', 'searchreplace'], // 插件
-        toolbar1: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify', // 工具栏1
-        toolbar2: 'searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image code | preview fullscreen', // 工具栏2
+        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt', // 候选字体大小
+        plugins: ['link', 'autoresize', 'image', 'textcolor'], // 插件
+        // toolbar1: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify', // 工具栏1
+        // toolbar2: 'searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image code | preview fullscreen', // 工具栏2
+        toolbar1: 'fontsizeselect | forecolor bold italic underline link image', // 工具栏1
         file_browser_callback: function (fieldName, url, type, win) {
           self.editorImageSrc = win.document.getElementById(fieldName)
           if (type === 'image') {
@@ -153,4 +158,13 @@
 </script>
 
 <style lang="stylus">
+@import '../assets/stylus/common'
+
+.html-editor
+  .mce-panel
+    border-color default-border-color
+
+.editor-image
+  height 0
+  overflow hidden
 </style>
