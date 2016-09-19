@@ -73,6 +73,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Statistic from 'components/Statistic'
+  import { formatDate } from 'src/filters'
 
   export default {
     name: 'OrderList',
@@ -141,6 +142,7 @@
           label: '工单编号',
           value: '_id'
         },
+        query: '',
         branchs: [],
         repairSummary: {
           unrepair: {
@@ -180,15 +182,15 @@
             title: '维修内容',
             class: 'w200'
           },
-          {
-            key: 'addr',
-            title: '地点'
-          },
-          {
-            key: 'level',
-            title: '维修等级',
-            class: 'tac'
-          },
+          // {
+          //   key: 'addr',
+          //   title: '地点'
+          // },
+          // {
+          //   key: 'level',
+          //   title: '维修等级',
+          //   class: 'tac'
+          // },
           {
             key: 'state',
             title: '状态',
@@ -210,15 +212,15 @@
         var result = []
         this.workOrders.map((item) => {
           var workOrder = {
-            id: '<a class="hl-red">' + item.id + '</a>',
-            mac: item.mac,
-            create_date: item.create_date,
-            person: item.person,
-            content: item.content,
-            addr: item.addr,
-            level: resetLevel(item.level),
+            id: '<a class="hl-red">' + item._id + '</a>',
+            // mac: item.mac,
+            create_date: formatDate(item.create_time),
+            person: item.assigned_name,
+            content: item.remark,
+            // addr: item.addr,
+            // level: resetLevel(item.level),
             // state: item.state - 0 === 1 ? '维修中' : '待处理',
-            state: resetState(item.state),
+            state: resetState(item.status || 0),
             prototype: item
           }
           result.push(workOrder)
@@ -238,24 +240,24 @@
           var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
           return html
         }
-        function resetLevel (state) {
-          var result = [
-            {
-              text: '一级',
-              backgroundColor: '#ff9966'
-            },
-            {
-              text: '二级',
-              backgroundColor: '#9cc'
-            },
-            {
-              text: '三级',
-              backgroundColor: '#cb4a52'
-            }
-          ]
-          var html = '<div class="level" style="color:#FFF; background-color: ' + result[state - 1].backgroundColor + '">' + result[state - 1].text + '</div>'
-          return html
-        }
+        // function resetLevel (state) {
+        //   var result = [
+        //     {
+        //       text: '一级',
+        //       backgroundColor: '#ff9966'
+        //     },
+        //     {
+        //       text: '二级',
+        //       backgroundColor: '#9cc'
+        //     },
+        //     {
+        //       text: '三级',
+        //       backgroundColor: '#cb4a52'
+        //     }
+        //   ]
+        //   var html = '<div class="level" style="color:#FFF; background-color: ' + result[state - 1].backgroundColor + '">' + result[state - 1].text + '</div>'
+        //   return html
+        // }
       },
       queryCondition () {
         var condition = {
@@ -285,30 +287,33 @@
         }
 
         // 取地区 省市区
-        if (this.curProvince.name !== this.$t('common.any')) {
-          condition.query.province = this.curProvince.name
-        }
-        if (this.curCity.name !== this.$t('common.any')) {
-          condition.query.city = this.curCity.name
-        }
-        if (this.curDistrict.name !== this.$t('common.any')) {
-          condition.query.district = this.curDistrict.name
-        }
+        // if (this.curProvince.name !== this.$t('common.any')) {
+        //   condition.query.province = this.curProvince.name
+        // }
+        // if (this.curCity.name !== this.$t('common.any')) {
+        //   condition.query.city = this.curCity.name
+        // }
+        // if (this.curDistrict.name !== this.$t('common.any')) {
+        //   condition.query.district = this.curDistrict.name
+        // }
         // 去工单状态 过期和未过期
         if (this.status.value !== 0) {
           condition.query.status = this.status.label
         }
         // 取搜索条件
-        if (this.key !== '') {
-          if (this.queryType.value === 'branch') {
-            var ids = []
-            this.branchs.forEach((item) => {
-              ids.push({'@data': item._id})
-            })
-            condition.query.branch_id = {'$in': ids}
-          } else {
-            condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
-          }
+        // if (this.query !== '') {
+        //   if (this.queryType.value === 'branch') {
+        //     var ids = []
+        //     this.branchs.forEach((item) => {
+        //       ids.push({'@data': item._id})
+        //     })
+        //     condition.query.branch_id = {'$in': ids}
+        //   } else {
+        //     condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
+        //   }
+        // }
+        if (this.query !== '') {
+          condition.query._id = {$in: [this.query]}
         }
         // 取时间条件
         if (this.startDate !== undefined && this.startDate !== '') {
@@ -358,8 +363,13 @@
         this.getOrderWorkList()
       },
       goDetails (table) {
-        this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+        console.log(table)
+        this.$route.router.go(this.$route.path + '/' + table.prototype._id)
       },
+      // goInfo (table, header, index) {
+      //   console.log(table)
+      //   this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/' + table.prototype.id)
+      // },
       // 获取概览
       getSummary () {
         api.warranty.getSummary(this.$route.params.app_id).then((res) => {
