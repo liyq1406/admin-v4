@@ -1099,6 +1099,7 @@ export default {
      * @return {[type]}                    [description]
      */
     selectedFirstClassEvent (selectedFirstClass) {
+      this.currentPage = 1
       this.dataFirClassList.map((item) => {
         item.selected = false
       })
