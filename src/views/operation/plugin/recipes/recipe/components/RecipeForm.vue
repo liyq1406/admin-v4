@@ -15,7 +15,7 @@
               <div class="form-tips form-tips-error">
                 <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
                 <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.format">菜谱名称不允许前后带空格</span>
+                <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
               </div>
             </div>
           </div>

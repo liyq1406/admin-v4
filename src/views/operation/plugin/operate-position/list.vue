@@ -10,46 +10,10 @@
             <button class="btn btn-primary" @click="showAddModal"><i class="fa fa-plus"></i>添加运营位 </button>
           </div>
         </div>
-        <div class="data-table with-loading">
-          <div class="icon-loading" v-show="loadingData">
-            <i class="fa fa-refresh fa-spin"></i>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>名称</th>
-                <th class="w180">图片规格（宽*高）</th>
-                <th class="w80 tac">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <template v-if="operationPostions.length > 0">
-                <tr v-for="operationPostion in operationPostions">
-                  <td>
-                    <a class="hl-red" v-link="{'path': 'stall/' + operationPostion._id, append: true}">
-                      {{ operationPostion.name }}
-                    </a>
-                  </td>
-                  <td>{{ operationPostion.width }}*{{ operationPostion.height }}</td>
-                  <td class="tac">
-                    <a class="hl-red" @click="showEditModal(operationPostion)">
-                      编辑
-                    </a>
-                  </td>
-                </tr>
-              </template>
-              <tr v-if="total === 0">
-                <td colspan="3" class="tac">
-                  <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getOperatePositions"></pager>
+        <x-table :headers="columns" :tables="operationPositoinList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" @tbody-operation="showEditModal" :simple-page="true"></x-table>
       </div>
 
-      <modal :show.sync="modal.show" @close="closeModal">
+      <modal :show.sync="modal.show" @close="onSubmitCancel">
         <h3 slot="header">{{ modalTitle }}</h3>
         <div slot="body" class="form">
           <validator name="validation">
@@ -64,7 +28,7 @@
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '名称'}) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', ['名称', 1]) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['名称', 20]) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.format">名称不允许前后带空格</span>
+                    <span v-if="$validation.name.touched && $validation.name.format">名称不允许前后带空格</span>
                   </div>
                 </div>
               </div>
@@ -125,7 +89,7 @@
                   <input type="checkbox" name="del" v-model="modal.delChecked"/>{{ '删除运营位' }}
                 </label>
                 <button type="submit" :disabled="modal.submitting" :class="{'disabled':modal.submitting}" v-text="modal.submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-                <button type="reset" @click.prevent.stop="closeModal" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                <button type="reset" @click.prevent.stop="onSubmitCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               </div>
             </form>
           </validator>
@@ -136,243 +100,243 @@
 </template>
 
 <script>
-  import api from 'api'
-  import { globalMixins } from 'src/mixins'
-  // import { setCurrentMember } from './store/actions/system'
-  import Modal from 'components/Modal'
-  import Pager from 'components/Pager'
-  import * as config from 'consts/config'
-  export default {
-    name: 'operate-operationPostion', // 运营管理-运营位
+import api from 'api'
+import { globalMixins } from 'src/mixins'
+import Modal from 'components/Modal'
+import Table from 'components/Table'
+import * as config from 'consts/config'
 
-    layout: 'admin',
+export default {
+  name: 'OperationPostion', // 运营管理-运营位
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    vuex: {
-      getters: {
-        currentMember: ({ system }) => system.currentMember
-      }
-    },
+  vuex: {
+    getters: {
+      currentMember: ({ system }) => system.currentMember
+    }
+  },
 
-    components: {
-      'modal': Modal,
-      // 'search-box': SearchBox,
-      'pager': Pager
-    },
+  components: {
+    Modal,
+    'x-table': Table
+  },
 
-    data () {
-      return {
-        validation: {},
-        modal: {
-          show: false,
-          type: 'edit',
-          delChecked: false,
-          submitting: false,
-          operationPostion: {
-            name: '',
-            width: '',
-            height: ''
-          }
-        },
-        operationPostions: [],
-        searching: false,
-        total: 0,
-        currentPage: 1,
-        countPerPage: config.COUNT_PER_PAGE,
-        loadingData: false
-      }
-    },
-
-    computed: {
-      // 查询条件
-      queryCondition () {
-        let condition = {
-          filter: ['_id', 'name', 'width', 'height'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {'create_time': -1},
-          query: {}
-        }
-
-        return condition
-      },
-
-      // 浮层标题
-      modalTitle () {
-        var result = {
-          'add': '添加运营位',
-          'edit': '编辑运营位'
-        }
-        return result[this.modal.type]
-      }
-    },
-
-    route: {
-      data () {
-        this.getOperatePositions()
-      }
-    },
-
-    methods: {
-      /**
-       * 获取运营位列表
-       * @return {[type]} [description]
-       */
-      getOperatePositions () {
-        this.loadingData = true
-        this.appID = this.$route.params.app_id
-        this.token = JSON.parse(window.localStorage.pluginsToken)[this.appID].token
-        api.operate.getOperatePositions(this.appID, this.token, this.queryCondition).then((res) => {
-          console.log(res.data.list)
-          this.operationPostions = res.data.list
-          this.total = res.data.count
-          this.loadingData = false
-        }).catch((err) => {
-          // this.handleError(err)
-          console.log(err)
-          this.loadingData = false
-        })
-      },
-
-      // /**
-      //  * 添加运营位
-      //  * @return {[type]} [description]
-      //  */
-      // addOperatePosition () {
-      //   if (this.$validation.valid) {
-      //     var params = this.modal.operationPostion
-      //     params.content = []
-      //     params.creator = this.currentMember.name
-      //     api.operate.addOperatePosition(this.appID, this.token, params).then((res) => {
-      //       this.getOperatePositions()
-      //       this.closeModal()
-      //     }).catch((err) => {
-      //       this.handleError(err)
-      //       this.modal.submitting = false
-      //     })
-      //   } else {
-      //     console.warn('参数验证不通过:' + JSON.stringify(this.modal.operationPostion))
-      //     this.modal.submitting = false
-      //   }
-      // },
-      //
-      // /**
-      //  * 更新运营位
-      //  * @return {[type]} [description]
-      //  */
-      // updateOperatePosition () {
-      //   if (this.$validation.valid) {
-      //     var params = this.modal.operationPostion
-      //     params.content = []
-      //     api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id).then((res) => {
-      //       // console.log(res)
-      //       this.getOperatePositions()
-      //       this.closeModal()
-      //     }).catch((err) => {
-      //       this.handleError(err)
-      //       this.modal.submitting = false
-      //     })
-      //   } else {
-      //     console.warn('参数验证不通过：' + JSON.stringify(this.modal.operationPostion))
-      //   }
-      // },
-      //
-      // /**
-      //  * 删除运营位
-      //  * @return {[type]} [description]
-      //  */
-      // delOperatePosition () {
-      //   console.log('删除运营位')
-      //   console.log(this.modal.operationPostion)
-      //   api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id).then((res) => {
-      //     // console.log(res)
-      //     this.getOperatePositions()
-      //     this.closeModal()
-      //   }).catch((err) => {
-      //     this.handleError(err)
-      //     this.modal.submitting = false
-      //   })
-      // },
-
-      /**
-       * 显示添加运营位浮层
-       * @return {[type]} [description]
-       */
-      showAddModal () {
-        this.modal.type = 'add'
-        this.modal.show = true
-      },
-
-      /**
-       * 显示编辑运营位浮层
-       * @param  {[type]} operationPostion [description]
-       * @return {[type]}       [description]
-       */
-      showEditModal (operationPostion) {
-        this.modal.type = 'edit'
-        this.modal.operationPostion = {
-          _id: operationPostion._id,
-          name: operationPostion.name,
-          width: operationPostion.width,
-          height: operationPostion.height
-        }
-        this.modal.show = true
-      },
-
-      /**
-       * 表单提交
-       * @return {[type]} [description]
-       */
-      onSubmit () {
-        if (this.modal.submitting) return
-
-        let process
-
-        if (this.modal.delChecked) { // 删除运营位
-          process = api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id)
-        } else {
-          if (this.$validation.invalid) {
-            this.$validate(true)
-            return
-          }
-          let params = this.modal.operationPostion
-
-          if (this.modal.type === 'add') { // 添加运营位
-            params.content = []
-            params.creator = this.currentMember.name
-            process = api.operate.addOperatePosition(this.appID, this.token, params)
-          } else { // 编辑运营位
-            process = api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id)
-          }
-        }
-
-        this.modal.submitting = true
-        process.then((res) => {
-          // console.log(res)
-          this.getOperatePositions()
-          this.closeModal()
-        }).catch((err) => {
-          this.handleError(err)
-          this.modal.submitting = false
-        })
-      },
-
-      /**
-       * 关闭浮层
-       * @return {[type]} [description]
-       */
-      closeModal () {
-        this.$resetValidation()
-        this.modal.show = false
-        this.modal.submitting = false
-        this.modal.delChecked = false
-        this.modal.operationPostion = {
+  data () {
+    return {
+      columns: [{
+        key: 'name',
+        title: '名称'
+      }, {
+        key: 'size',
+        title: '图片规格（宽*高）',
+        class: 'wp30'
+      }, {
+        key: 'operation',
+        title: '操作',
+        class: 'wp20'
+      }],
+      modal: {
+        show: false,
+        type: 'edit',
+        delChecked: false,
+        submitting: false,
+        operationPostion: {
           name: '',
           width: '',
           height: ''
         }
+      },
+      operationPostions: [],
+      searching: false,
+      total: 0,
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      loadingData: false
+    }
+  },
+
+  computed: {
+    // 查询条件
+    queryCondition () {
+      let condition = {
+        filter: ['_id', 'name', 'width', 'height'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {'create_time': -1},
+        query: {}
+      }
+
+      return condition
+    },
+
+    // 浮层标题
+    modalTitle () {
+      var result = {
+        'add': '添加运营位',
+        'edit': '编辑运营位'
+      }
+      return result[this.modal.type]
+    },
+
+    // 运营位列表
+    operationPositoinList () {
+      let result = []
+      this.operationPostions.forEach((item) => {
+        result.push({
+          name: `<a class="hl-red">${item.name}</a>`,
+          size: `${item.width} * ${item.height}`,
+          operation: '<a class="hl-red">编辑</a>',
+          origin: item
+        })
+      })
+      return result
+    },
+
+    // 分页信息
+    page () {
+      var result = {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+      return result
+    }
+  },
+
+  route: {
+    data () {
+      this.getOperatePositions()
+    }
+  },
+
+  methods: {
+    /**
+     * 处理名称点击
+     * @author shengzhi
+     * @params {Object} operationPostion 目标运营位
+     */
+    onNameClick (operationPostion) {
+      this.$route.router.go({'path': 'stall/' + operationPostion.origin._id, append: true})
+    },
+
+    /**
+     * 处理每页数量更新
+     * @author shengzhi
+     * @param {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+    },
+
+    /**
+     * 处理页码更新
+     * @author shengzhi
+     * @param {Number} page 页码
+     */
+    onCurrentPageChange (page) {
+      this.currentPage = page
+      this.getOperatePositions()
+    },
+
+    /**
+     * 获取运营位列表
+     * @return {[type]} [description]
+     */
+    getOperatePositions () {
+      this.loadingData = true
+      this.appID = this.$route.params.app_id
+      this.token = JSON.parse(window.localStorage.pluginsToken)[this.appID].token
+      api.operate.getOperatePositions(this.appID, this.token, this.queryCondition).then((res) => {
+        console.log(res.data.list)
+        this.operationPostions = res.data.list
+        this.total = res.data.count
+        this.loadingData = false
+      }).catch((err) => {
+        // this.handleError(err)
+        console.log(err)
+        this.loadingData = false
+      })
+    },
+
+    /**
+     * 显示添加运营位浮层
+     * @return {[type]} [description]
+     */
+    showAddModal () {
+      this.modal.type = 'add'
+      this.modal.show = true
+    },
+
+    /**
+     * 显示编辑运营位浮层
+     * @param  {[type]} operationPostion [description]
+     * @return {[type]}       [description]
+     */
+    showEditModal (operationPostion) {
+      this.modal.type = 'edit'
+      this.modal.operationPostion = {
+        _id: operationPostion.origin._id,
+        name: operationPostion.origin.name,
+        width: operationPostion.origin.width,
+        height: operationPostion.origin.height
+      }
+      this.modal.show = true
+    },
+
+    /**
+     * 表单提交
+     * @return {[type]} [description]
+     */
+    onSubmit () {
+      if (this.modal.submitting) return
+
+      let process
+
+      if (this.modal.delChecked) { // 删除运营位
+        process = api.operate.delOperatePosition(this.appID, this.token, this.modal.operationPostion._id)
+      } else {
+        if (this.$validation.invalid) {
+          this.$validate(true)
+          return
+        }
+        let params = this.modal.operationPostion
+
+        if (this.modal.type === 'add') { // 添加运营位
+          params.content = []
+          params.creator = this.currentMember.name
+          process = api.operate.addOperatePosition(this.appID, this.token, params)
+        } else { // 编辑运营位
+          process = api.operate.updateOperatePosition(this.appID, this.token, params, this.modal.operationPostion._id)
+        }
+      }
+
+      this.modal.submitting = true
+      process.then((res) => {
+        // console.log(res)
+        this.getOperatePositions()
+        this.onSubmitCancel()
+      }).catch((err) => {
+        this.handleError(err)
+        this.modal.submitting = false
+      })
+    },
+
+    /**
+     * 关闭浮层
+     * @return {[type]} [description]
+     */
+    onSubmitCancel () {
+      this.$resetValidation()
+      this.modal.show = false
+      this.modal.submitting = false
+      this.modal.delChecked = false
+      this.modal.operationPostion = {
+        name: '',
+        width: '',
+        height: ''
       }
     }
   }
+}
 </script>

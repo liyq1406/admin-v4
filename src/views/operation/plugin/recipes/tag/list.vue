@@ -34,11 +34,13 @@
             <div class="form-row row">
               <label class="form-control col-6">名称:</label>
               <div class="controls col-18">
-                <div class="input-text-wrap required-sign">
-                  <input v-model="model.label" type="text" v-validate:label="['required']" class="input-text"/>
+                <div class="input-text-wrap required-sign" v-placeholder="'请输入1-20字符'">
+                  <input v-model="model.label" name="model.label" type="text" v-validate:label="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.label.touched && $validation.label.required">{{ $t('ui.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>
+                  <span v-if="$validation.label.modified && $validation.label.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
+                  <span v-if="$validation.label.touched && $validation.label.format">名称不允许前后带空格</span>
                 </div>
               </div>
             </div>
