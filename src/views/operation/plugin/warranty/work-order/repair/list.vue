@@ -6,14 +6,17 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <x-select label="空气净化器" width='110px' size="small">
+          <x-select :label="selectedProduct.name" @change="getOrderWorkList" width="110px" size="small">
             <span slot="label">产品</span>
+            <select v-model="selectedProduct">
+              <option :value="opt" v-for="opt in products">{{ opt.name }}</option>
+            </select>
           </x-select>
         </div>
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <date-time-range-picker></date-time-range-picker>
+          <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
         </div>
       </div>
     </div>
@@ -76,6 +79,12 @@
 
     mixins: [globalMixins],
 
+    vuex: {
+      getters: {
+        products: ({ products }) => products.released
+      }
+    },
+
     components: {
       'x-select': Select,
       'area-select': AreaSelect,
@@ -87,6 +96,10 @@
 
     data () {
       return {
+        useTime: false,
+        startTimePick: '',
+        endTimePick: '',
+        selectedProduct: {},
         name: '',
         key: '',
         curProvince: {},
@@ -253,6 +266,24 @@
           query: {}
         }
 
+        condition.query = {
+          product_id: {
+            $in: [this.selectedProduct.id]
+          // },
+          // create_time: {
+          //   $gte: {'@date': this.startTimePick},
+          //   $lte: {'@date': this.endTimePick}
+          }
+        }
+        if (this.useTime === true) {
+          condition.query = {
+            create_time: {
+              $gte: {'@date': this.startTimePick},
+              $lte: {'@date': this.endTimePick}
+            }
+          }
+        }
+
         // 取地区 省市区
         if (this.curProvince.name !== this.$t('common.any')) {
           condition.query.province = this.curProvince.name
@@ -298,28 +329,57 @@
 
     route: {
       data () {
-        this.getOrderWorkList()
+        // this.getOrderWorkList()
+        this.init()
+        // this.getSummary()
       }
     },
 
     ready () {
     },
 
+    watch: {
+      products () {
+        this.init()
+      }
+    },
+
     methods: {
+      init () {
+        this.selectedProduct = this.products[0] || {}
+        if (this.products.length > 0) {
+          this.getOrderWorkList()
+        }
+      },
+      getSpecial (start, end) {
+        this.useTime = true
+        this.startTimePick = start
+        this.endTimePick = end
+        this.getOrderWorkList()
+      },
       goDetails (table) {
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
+      // 获取概览
+      getSummary () {
+        api.warranty.getSummary(this.$route.params.app_id).then((res) => {
+          console.log(res.data)
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      },
+      // 获取工单列表
       getOrderWorkList (querying) {
-        if (typeof querying !== 'undefined') {
-          this.currentPage = 1
-        }
+        // if (typeof querying !== 'undefined') {
+        //   this.currentPage = 1
+        // }
 
         this.loadingData = true
         // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
-        if (this.key !== '' && this.queryType.value === 'branch') {
-          this.getBranchIdByName(this.key)
-          return
-        }
+        // if (this.key !== '' && this.queryType.value === 'branch') {
+        //   this.getBranchIdByName(this.key)
+        //   return
+        // }
 
         api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
           this.total = res.data.count
