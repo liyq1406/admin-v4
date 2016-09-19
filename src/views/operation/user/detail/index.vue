@@ -83,7 +83,9 @@
           'province': '', // 省份
           'city': '', // 城市
           'gender': -1, // 性别，-1:未知，1：男，2：女
-          'age': 0 // 年龄
+          'age': 0, // 年龄
+          'phone_valid': false,
+          'email_valid': false
         }, // 用户信息
         breadcrumbNav: [{
           label: '全部',
@@ -172,7 +174,6 @@
        * @return {[type]}        [description]
        */
       getOnlineType (userId) {
-        console.log(userId)
         api.user.getUserSession(userId).then((res) => {
           this.userSession.online = res.data.online
         }).catch((res) => {
@@ -216,19 +217,23 @@
        * @param  {[type]} status [description]
        * @return {[type]}        [description]
        */
-      computedVaild (status) {
-        var result = '未知'
+      computedVaild () {
+        var result = '-'
+        let status = this.user.status
+        let is_vaild = this.user.is_vaild
+        var str1 = is_vaild ? '已激活' : '未激活'
+        var str2 = ''
         if (status === 1) {
-          result = '已激活'
+          str2 = '已启用'
         } else if (status === 2) {
-          result = '未激活'
+          str2 = '已停用'
         }
+        result = str1 + ' ' + str2
         return result
       },
       getUserInfo () {
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            console.log(res.data)
             for (var key in res.data) {
               if (res.data.hasOwnProperty(key)) {
                 this.user[key] = res.data[key]
