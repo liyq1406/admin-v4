@@ -240,7 +240,7 @@ export default {
         api.warranty.deleteStaff(this.$route.params.app_id, this.$route.params.id).then((res) => {
           this.editing = false
           this.showEditModal = false
-          this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
+          this.$route.router.replace('/operation/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
         }).catch((err) => {
           this.handleError(err)
           this.editing = false
