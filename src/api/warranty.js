@@ -70,7 +70,12 @@ export default {
    */
   getSummary (appID) {
     return http.post(
-      `${API_SERVER.warranty}/${appID}/api/work_orders/group`
+      `${API_SERVER.warranty}/${appID}/api/work_orders/group`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
     )
   },
 
