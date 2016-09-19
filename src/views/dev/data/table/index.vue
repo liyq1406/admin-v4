@@ -26,8 +26,8 @@
                     <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
                     <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
                     <li @click.stop="showJurisdictionModal"><span>限权设置</span></li>
-                    <li @click.stop=""><span>导出数据</span></li>
-                    <li @click.stop=""><span>导出全部数据表</span></li>
+                    <!-- <li @click.stop=""><span>导出数据</span></li>
+                    <li @click.stop=""><span>导出全部数据表</span></li> -->
                   </ul>
                 </div>
               </div>
@@ -65,7 +65,7 @@
             <div class="selected-first-class" v-show="selectedFirstClass.selected">
               <div class="details-table">
                 <x-table :headers.sync="vHeaders" :tables.sync="vTables" :page="page" :selected-table="selectedLine" :selecting.sync="true" @selected-change="selectedLineChange"></x-table>
-                <!-- <intelligent-table :headers.sync="vHeaders" :tables.sync="vTables"></intelligent-table> -->
+                <pager :total="total" :current="currentPage" :count-per-page="countPerPage" @page-update="pageCurrentChange" @count-update="pageCountUpdate"></pager>
               </div>
             </div>
             <div class="tips-box" v-show="!selectedFirstClass.selected">
@@ -597,6 +597,7 @@ export default {
       // baseHeader: ['objectId', 'createAt', 'updateAt', 'creator'],
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
+      total: 0,
       addModal: {
         show: false,
         model: {
@@ -624,11 +625,20 @@ export default {
       delChecked: false,
       adding: false,
       editing: false,
-      loadingData: false
+      loadingData: false,
+      currentSelectedClass: null
     }
   },
 
   computed: {
+    queryCondition () {
+      var condition = {
+        offset: this.countPerPage * (this.currentPage - 1),
+        limit: this.countPerPage
+      }
+
+      return condition
+    },
     // 用户自己添加进去的字段
     addListKeys () {
       var result = []
@@ -679,15 +689,6 @@ export default {
     canCreateEditFields () {
       var names = _.uniq(_.compact(_.map(this.editModal.fields, 'name')))
       return names.length === this.editModal.fields.length
-    },
-
-    page () {
-      var result = {
-        total: this.total, // 数据总数
-        currentPage: this.currentPage, // 当前页
-        countPerPage: this.countPerPage // 每页数量
-      }
-      return result
     }
   },
 
@@ -698,6 +699,23 @@ export default {
   },
 
   methods: {
+    /**
+     * 每页显示数据条数改变
+     * @param  {[type]} count [description]
+     * @return {[type]}       [description]
+     */
+    pageCountUpdate (count) {
+      this.countPerPage = count
+      this.getTableData(this.currentSelectedClass.name, this.queryCondition, this.currentSelectedClass.type)
+    },
+    /**
+     * 当前页改变
+     * @return {[type]} [description]
+     */
+    pageCurrentChange (current) {
+      this.currentPage = current
+      this.getTableData(this.currentSelectedClass.name, this.queryCondition, this.currentSelectedClass.type)
+    },
     /**
      * 获取数据表数据以及更新数据表
      * @param  {[type]} tableName 表名
@@ -716,6 +734,7 @@ export default {
           result = result.replace(/_id/g, 'objectId')
           this.vTables = JSON.parse(result)
           this.loadingData = true
+          this.total = res.data.count
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
@@ -728,6 +747,7 @@ export default {
           let result = jsonTables.replace(/(\d+-\d+-\d+)T(\d+:\d+:\d+).\d+Z/g, '$1 $2')
           this.vTables = JSON.parse(result)
           this.loadingData = true
+          this.total = res.data.count
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
@@ -1082,11 +1102,9 @@ export default {
       this.dataFirClassList.map((item) => {
         item.selected = false
       })
-      var params = {
-        limit: 200
-      }
-      this.getTableData(selectedFirstClass.name, params, selectedFirstClass.type)
+      this.getTableData(selectedFirstClass.name, this.queryCondition, selectedFirstClass.type)
       selectedFirstClass.selected = true
+      this.currentSelectedClass = selectedFirstClass
     },
     /**
      * 添加行

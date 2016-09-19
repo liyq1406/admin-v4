@@ -529,7 +529,8 @@
     route: {
       data () {
         this.getUsersTotal() // 获取总注册用户数
-        if (this.id) {
+        console.log(this.$route.params.id)
+        if (this.$route.params.id) {
           this.getDetails()
         }
       }
@@ -543,14 +544,16 @@
        * @return {[type]} [description]
        */
       getDetails () {
+        console.log('getDetails')
         api.broadcast.getTask(this.id).then((res) => {
-          var details = res.data.list[0]
+          console.log(res)
+          var details = res.data
           console.log(details)
           this.title = details.title
           this.content = details.content
           this.timeType = 2
-          this.time = details.time
-          this.expire = details.expire
+          this.time = new Date(details.time)
+          this.expire = new Date(details.expire)
           this.action
           switch (details.action.type) {
             case 0:
@@ -690,7 +693,12 @@
           if (this.pageType === 'add') {
             this.add()
           } else {
-            this.edit()
+            console.log(this.delChecked)
+            if (this.delChecked) {
+              this.deleteBreakcast()
+            } else {
+              this.edit()
+            }
           }
         } else {
           this.showNotice({
@@ -711,10 +719,21 @@
         })
       },
       edit () {
-        api.broadcast.updateTask(this.task).then((res) => {
+        api.broadcast.updateTask(this.$route.params.id, this.task).then((res) => {
           this.showNotice({
             type: 'success',
             content: '修改成功'
+          })
+          this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
+        }).catch((res) => {
+          this.handleError(res)
+        })
+      },
+      deleteBreakcast () {
+        api.broadcast.deleteTask(this.$route.params.id).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '删除成功'
           })
           this.$route.router.go(`/operation/plugins/broadcast/${this.$route.params.app_id}/list`)
         }).catch((res) => {

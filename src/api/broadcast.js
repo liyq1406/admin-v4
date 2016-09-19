@@ -8,10 +8,16 @@ export default {
       `${API_SERVER.default}/v2/broadcast/task_add`, params
     )
   },
-  // 新建任务
+  // 更新任务
   updateTask (taskId, params) {
-    return http.post(
-      `${API_SERVER.default}/v2/broadcast/task_add${taskId}`, params
+    return http.put(
+      `${API_SERVER.default}/v2/broadcast/task/${taskId}`, params
+    )
+  },
+  // 删除任务
+  delTask (taskId) {
+    return http.del(
+      `${API_SERVER.default}/v2/broadcast/task/${taskId}`
     )
   },
   // 获取任务列表
