@@ -2,7 +2,7 @@
   <div :class="{'auto-search': auto, 'active': active && key.length}" class="search-box">
     <slot></slot>
     <div class="search-box-input">
-      <input :placeholder="placeholder" v-model="key" type="text" @focus="handleFocus(key)" @blur="handleBlur(key)" :number="maxlength" @keypress.enter.prevent="enterPress"/>
+      <input :placeholder="placeholder" v-model="key" type="text" @focus="handleFocus(key)" @blur="handleBlur(key)" :number="maxlength" @keypress.enter.prevent.stop="enterPress"/>
       <div @mousedown="handleCancelClick" class="fa fa-times-circle"></div>
     </div>
     <slot name="search-button"></slot>

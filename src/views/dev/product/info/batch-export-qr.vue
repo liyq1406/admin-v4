@@ -63,7 +63,7 @@
 
 <script>
   import Modal from 'components/Modal'
-  import api from 'api'
+  import { API_SERVER } from 'consts/config'
 
   export default {
     name: 'batch-export-qr',
@@ -156,11 +156,13 @@
         this.customRules.splice(index, 1)
       },
       exportQrcode () {
-        api.product.exportQrcodeByImportRecord(this.$route.params.id, this.queryCondition).then((res) => {
-          console.log(res)
-        }).catch((res) => {
-          this.handleError(res)
-        })
+        let url = `${API_SERVER.default}/v2/product/${this.$route.params.id}/export/qrcode_by_import_record?query=${this.queryCondition}`
+        let tempIframe = document.createElement('iframe')
+        tempIframe.src = url
+        document.body.appendChild(tempIframe)
+        setTimeout(() => {
+          document.body.removeChild(tempIframe)
+        }, 1000)
       }
     }
   }
