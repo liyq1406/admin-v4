@@ -206,7 +206,6 @@
       getFirmware () {
         api.product.getFirmware(this.$route.params.product_id, this.$route.params.id).then((res) => {
           if (res.status === 200) {
-            console.log(res.data)
             this.firmware = res.data
             // this.total = res.data.count
             // this.loadingFirmwares = false
