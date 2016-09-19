@@ -137,32 +137,55 @@ export default {
     // },
     // 获取问题列表
     getIssues (appId) {
-      console.log(111)
       this.loadingData = true
-      var params = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        query: {
-          user_id: {
-            $in: [this.$route.params.id]
-          }
-        }
-      }
+
       // 传对应appId
       // var appId = '2e07d2af20918e00'
-      api.helpdesk.getFeedbackList(appId, params).then((res) => {
-        if (res.status === 200 && res.data.list.length > 0) {
-          this.total = res.data.count
-          this.issues = res.data.list
-        } else {
-          this.issues = []
-          this.total = 0
+      var pluginsToken = {}
+      if (window.localStorage.pluginsToken) {
+        pluginsToken = JSON.parse(window.localStorage.pluginsToken)
+      }
+      var params1 = {
+        'app_id': appId
+      }
+      api.plugin.getAppToKen(params1).then((res) => {
+        let par = {
+          appTokenInvalidTime: +new Date() + (1000 * 60 * 60) * 1,
+          token: res.data.access_token,
+          app_id: res.data.app_id
         }
-        this.loadingData = false
+        // 重置appToken过期时间
+        pluginsToken[appId] = par
+        window.localStorage.pluginsToken = JSON.stringify(pluginsToken)
+        // window.localStorage[appId + 'AppToken'] = JSON.stringify(params)
+        var params = {
+          limit: this.countPerPage,
+          offset: (this.currentPage - 1) * this.countPerPage,
+          query: {
+            user_id: {
+              $in: [this.$route.params.id]
+            }
+          }
+        }
+        api.helpdesk.getFeedbackList(appId, params).then((res) => {
+          if (res.status === 200 && res.data.list.length > 0) {
+            this.total = res.data.count
+            this.issues = res.data.list
+          } else {
+            this.issues = []
+            this.total = 0
+          }
+          this.loadingData = false
+        }).catch((err) => {
+          this.loadingData = false
+          this.handleError(err)
+        })
       }).catch((err) => {
-        this.loadingData = false
         this.handleError(err)
       })
+    },
+    refreshToken (appId) {
+
     }
   }
 }
