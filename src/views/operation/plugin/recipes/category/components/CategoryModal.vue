@@ -8,7 +8,7 @@
             <label class="form-control col-6">名称:</label>
             <div class="controls col-18">
               <div class="input-text-wrap required-sign" v-placeholder="'请填写菜谱类别名称，如“菜系”'">
-                <input v-model="category.name" type="text" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
+                <input v-model="category.name" name="category.name" type="text" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>

@@ -1,10 +1,6 @@
 <template>
   <div class="recipe-basic">
-    <div class="panel">
-      <div class="panel-bd">
-        <recipe-form type="edit"></recipe-form>
-      </div>
-    </div>
+    <recipe-form type="edit"></recipe-form>
   </div>
 </template>
 

@@ -4,11 +4,7 @@
       <h2>菜谱管理</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-      <div class="panel-bd">
-        <recipe-form type="add"></recipe-form>
-      </div>
-    </div>
+    <recipe-form type="add"></recipe-form>
   </div>
 </template>
 
