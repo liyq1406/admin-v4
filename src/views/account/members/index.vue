@@ -1,19 +1,28 @@
 <template>
   <div class="main">
     <div class="panel mt20 mb30">
-      <div class="panel-hd with-actions ml20 mr20">
-        <div class="actions">
-          <search-box :key.sync="query" :auto="true" :active="searching" :placeholder="$t('ui.member.search_palceholder')" @cancel="cancelSearching" @search-activate="toggleSearching" @search-deactivate="toggleSearching">
-            <label>{{ $t('ui.member.search_label') }}</label>
-          </search-box>
-        </div>
-        <h2>{{ $t('ui.member.member_list') }}</h2>
-        <a class="btn btn-primary fl ml20" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>添加成员</a>
-      </div>
       <div class="panel-bd ml20 mr20">
+        <div class="action-bar">
+          <a class="btn btn-primary fl" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>添加成员</a>
+        </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
             <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="filter-bar">
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getMembers(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMembers(true)">
+                  <x-select width="130px" :label="queryType.label" size="small">
+                    <select v-model="queryType">
+                      <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                    </select>
+                  </x-select>
+                  <button slot="search-button" @click="getMembers(true)" class="btn"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+            <h3>{{ $t('ui.member.member_list') }}</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
@@ -28,9 +37,12 @@
               </tr>
             </thead>
             <tbody>
-              <template v-if="filteredMembers.length > 0">
-                <tr v-for="member in filteredMembers">
-                  <td><a v-link="{path: member.id, append: true}" v-if="member.name.length" class="hl-red">{{ member.name }}</a><a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a></td>
+              <template v-if="members.length > 0">
+                <tr v-for="member in members">
+                  <td>
+                    <a v-link="{path: member.id, append: true}" v-if="member.name && member.name.length" class="hl-red">{{ member.name }}</a>
+                    <a v-link="{path: member.id, append: true}" v-else class="hl-gray">{{ $t('common.not_set') }}</a>
+                  </td>
                   <td>{{ member.email || '-' }}</td>
                   <td>{{ member.phone || '-' }}</td>
                   <td><span>{{ MEMBER_TYPES[member.role] }}</span></td>
@@ -41,7 +53,7 @@
                   </td> -->
                 </tr>
               </template>
-              <tr v-if="filteredMembers.length === 0">
+              <tr v-if="members.length === 0">
                 <td colspan="6" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
@@ -49,7 +61,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="getMembers"></pager>
+        <pager v-if="total > 0" :total="total" :current.sync="currentPage" :count-per-page.sync="countPerPage" @count-update="getMembers" @page-update="getMembers"></pager>
       </div>
 
       <!-- 添加成员 -->
@@ -193,6 +205,15 @@ export default {
         type: 2,
         password: ''
       },
+      queryTypeOptions: [
+        { label: '姓名', value: 'name' },
+        { label: '手机', value: 'phone' },
+        { label: '邮箱', value: 'email' }
+      ],
+      queryType: {
+        label: '姓名',
+        value: 'name'
+      },
       originAddModel: {},
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
@@ -220,21 +241,25 @@ export default {
   },
 
   computed: {
-    filteredMembers () {
-      if (this.query.length) {
-        this.currentPage = 1
-      }
-      return this.members.filter((item) => {
-        return item.name.indexOf(this.query) > -1 || item.email.indexOf(this.query) > -1 || item.phone.indexOf(this.query) > -1
-      })
-    },
+    // filteredMembers () {
+    //   if (this.query.length) {
+    //     this.currentPage = 1
+    //   }
+    //   return this.members.filter((item) => {
+    //     return item.name.indexOf(this.query) > -1 || item.email.indexOf(this.query) > -1 || item.phone.indexOf(this.query) > -1
+    //   })
+    // },
 
     queryCondition () {
       var condition = {
-        offset: this.countPerPage * (this.currentPage - 1),
-        limit: this.countPerPage
+        filter: ['id', 'name', 'role', 'phone', 'email', 'create_time', 'last_auth_time', 'is_notice', 'is_alert', 'status', 'role_id'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        query: {}
       }
-
+      if (this.query.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
       return condition
     }
   },
@@ -247,9 +272,13 @@ export default {
     /**
      * 获取企业成员
      */
-    getMembers () {
+    getMembers (reset) {
       this.loadingData = true
+      if (reset) {
+        this.currentPage = 1
+      }
       api.corp.getMembers(this.queryCondition).then((res) => {
+        console.log(res.data)
         this.members = res.data.list
         this.total = res.data.count
         this.loadingData = false
@@ -269,6 +298,12 @@ export default {
 
     setQuery (query) {
       this.query = query
+    },
+
+    handleSearch () {
+      if (this.query.length === 0) {
+        this.getMembers()
+      }
     },
 
     toggleSearching () {
@@ -323,3 +358,10 @@ export default {
   }
 }
 </script>
+<style lang="stylus" scoped>
+  .action-bar
+    padding-top 0
+  .search-box-input
+    width 144px
+    overflow hidden
+</style>
