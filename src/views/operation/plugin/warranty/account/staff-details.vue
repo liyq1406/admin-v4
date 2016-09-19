@@ -182,9 +182,6 @@ export default {
   methods: {
     // 获取维修点员工信息
     getBranchStaffsList () {
-      var self = this
-      var argvs = arguments
-      var fn = self.getBranchStaffsList
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -193,26 +190,15 @@ export default {
           _id: this.$route.params.id
         }
       }
-      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-        api.warranty.getBranchStaffsList(this.$route.params.app_id, token, condition).then((res) => {
-          this.detail = res.data.list[0] || {}
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'warranty'
-          }
-          self.handlePluginError(err, env)
-          this.loadingData = false
-        })
+      api.warranty.getBranchStaffsList(this.$route.params.app_id, condition).then((res) => {
+        this.detail = res.data.list[0] || {}
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
       })
     },
 
     editAccount () {
-      var self = this
-      var argvs = arguments
-      var fn = self.editAccount
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -221,19 +207,11 @@ export default {
           _id: this.$route.params.id
         }
       }
-      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-        api.warranty.getBranchStaffsList(this.$route.params.app_id, token, condition).then((res) => {
-          this.editModal = res.data.list[0] || {}
-        }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'warranty'
-          }
-          self.handlePluginError(err, env)
-          this.loadingData = false
-        })
+      api.warranty.getBranchStaffsList(this.$route.params.app_id, condition).then((res) => {
+        this.editModal = res.data.list[0] || {}
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
       })
       this.showEditModal = true
     },
@@ -257,45 +235,26 @@ export default {
     },
     // 提交编辑表单
     onEditSubmit () {
-      var self = this
-      var argvs = arguments
-      var fn = self.onEditSubmit
       if (this.delChecked && !this.editing) { // 删除
         this.editing = true
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.deleteStaff(this.$route.params.app_id, token, this.$route.params.id).then((res) => {
-            this.editing = false
-            this.showEditModal = false
-            this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.editing = false
-          })
+        api.warranty.deleteStaff(this.$route.params.app_id, this.$route.params.id).then((res) => {
+          this.editing = false
+          this.showEditModal = false
+          this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts/' + this.$route.params.account_id)
+        }).catch((err) => {
+          this.handleError(err)
+          this.editing = false
         })
       } else if (this.editValidation.$valid && !this.editing) { // 更新
         this.editing = true
-        this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-          api.warranty.UpdateBranchStaffs(this.$route.params.app_id, token, this.$route.params.id, this.editModal).then((res) => {
-            if (res.status === 200) {
-              this.resetEdit()
-              this.getBranchStaffsList()
-            }
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-            this.editing = false
-          })
+        api.warranty.UpdateBranchStaffs(this.$route.params.app_id, this.$route.params.id, this.editModal).then((res) => {
+          if (res.status === 200) {
+            this.resetEdit()
+            this.getBranchStaffsList()
+          }
+        }).catch((err) => {
+          this.handleError(err)
+          this.editing = false
         })
       }
     }
