@@ -144,21 +144,21 @@
         branchs: [],
         repairSummary: {
           unrepair: {
-            total: 23,
+            total: 1,
             title: '待维修数'
           },
           repairing: {
-            total: 135,
+            total: 1,
             title: '正在维修中'
           },
           today: {
-            total: 232,
-            change: 124,
+            total: 1,
+            change: 1,
             title: '今日维修数'
           },
           week: {
-            total: 2800,
-            change: 124,
+            total: 1,
+            change: 1,
             title: '7日维修数'
           }
         },
@@ -331,7 +331,7 @@
       data () {
         // this.getOrderWorkList()
         this.init()
-        // this.getSummary()
+        this.getSummary()
       }
     },
 
@@ -364,6 +364,12 @@
       getSummary () {
         api.warranty.getSummary(this.$route.params.app_id).then((res) => {
           console.log(res.data)
+          this.repairSummary.unrepair.total = res.data.untreatedTotal
+          this.repairSummary.repairing.total = res.data.treatedTotal
+          this.repairSummary.today.total = res.data.dayCount
+          this.repairSummary.today.change = res.data.dayCountPercent
+          this.repairSummary.week.total = res.data.sevenCount
+          this.repairSummary.week.change = res.data.sevenCountPercent
         }).catch((err) => {
           this.handleError(err)
         })
