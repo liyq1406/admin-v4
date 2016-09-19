@@ -85,7 +85,7 @@
             <div class="filter-bar fr col-10">
               <div class="filter-group fr">
                 <div class="filter-group-item mt10">
-                  <button class="btn btn-ghost" @click="showLog = !showLog">
+                  <button class="btn btn-ghost" @click="showLogPanel">
                     <i class="fa fa-angle-double fa-angle-double-left" v-show="!showLog"></i>
                     <i class="fa fa-angle-double fa-angle-double-right" v-show="showLog"></i>
                     设备日志
@@ -142,7 +142,7 @@
                 </tbody>
               </table>
               <div class="refresh-box">
-                <button class="btn btn-ghost" @click="getDatapointValues">
+                <button class="btn btn-ghost mr10" @click="getDatapointValues">
                   <i class="fa fa-refresh" :class="{'fa-spin': refreshing}"></i>刷新
                 </button>
               </div>
@@ -385,6 +385,9 @@ export default {
   },
 
   methods: {
+    showLogPanel () {
+      this.showLog = !this.showLog
+    },
     /**
      * socket改变状态
      * @param  {[type]} value [description]
@@ -481,6 +484,8 @@ export default {
             this.datapointValueArr = res.data.datapoint
           }
         }
+        // add by guohao IE11的bug。v-for重新渲染以后，焦点丢失。导致所有button点击无响应
+        document.body.focus()
       }).catch((res) => {
         this.refreshing = false
         this.handleError(res)
@@ -530,7 +535,6 @@ export default {
       let index = dp.index
       let value = dp.value
       if (type === 'string') {
-        console.log(ev.target.value)
         value = ev.target.value
       }
       // if (isNaN(dp.value)) return
