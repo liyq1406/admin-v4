@@ -634,6 +634,7 @@ export default {
         this.devicesCount = res.data.device
         this.addMajorClientsCount = res.data.current_month_heavy_buger
         this.addDevicesCount = res.data.current_month_device
+        this.allTotal = res.data.heavy_buger
       }).catch((res) => {
         this.handleError(res)
       })
@@ -673,8 +674,6 @@ export default {
         this.tableLoadingData = false
         this.majorClients = res.data.list
         this.total = res.data.count
-        // 已进入获取全部总数放进概览
-        this.allTotal = res.data.count
       }).catch((err) => {
         this.tableLoadingData = false
         this.handleError(err)
