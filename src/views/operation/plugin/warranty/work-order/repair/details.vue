@@ -16,8 +16,7 @@
               </div>
               <div class="down row">
                 <div class="col-12">
-                  <span>2016-12-03</span>
-                  <span class="ml15">16:12:03</span>
+                  <span>{{repairOrder.create_time | formatDate}}</span>
                 </div>
                 <div class="col-12">
                   <button>
@@ -38,16 +37,16 @@
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">维修设备</div>
-                    <div class="x-val">电饭煲A1</div>
+                    <div class="x-val">{{repairOrder.device_id || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">持续时长</div>
-                    <div class="x-val">2.1h</div>
+                    <div class="x-val">-</div>
                   </div>
                 </div>
-                <div class="x-info-list-item threeDepart">
+                <!-- <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">维修人员</div>
                     <div class="x-val">
@@ -57,23 +56,29 @@
                       </select>
                     </div>
                   </div>
+                </div> -->
+                <div class="x-info-list-item threeDepart">
+                  <div class="x-info-list-item-in">
+                    <div class="x-label">维修人员</div>
+                    <div class="x-val">{{repairOrder.assigned_name}}</div>
+                  </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">处理时间</div>
-                    <div class="x-val">2016-07-18 18:00:00</div>
+                    <div class="x-val">{{repairOrder.manage_time || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">维修费用</div>
-                    <div class="x-val">210元</div>
+                    <div class="x-val">{{repairOrder.fees || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">用户账号</div>
-                    <div class="x-val">13800138000</div>
+                    <div class="x-val">{{repairOrder.account || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item oneDepart">
@@ -361,9 +366,6 @@ export default {
       ]
     },
     getRepairOrder () {
-      var self = this
-      var argvs = arguments
-      var fn = self.getRepairOrder
       var condition = {
         filter: [],
         limit: 1,
@@ -371,47 +373,27 @@ export default {
         order: {},
         query: {}
       }
-      this.getAppToKen(this.$route.params.app_id, 'warranty').then((token) => {
-        api.warranty.getOrderWorkList(this.$route.params.app_id, token, this.queryCondition).then((res) => {
-          this.repairOrder = res.data.list[0] || {}
+      api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+        this.repairOrder = res.data.list[0] || {}
 
-          // 查询网点信息
-          condition.query._id = this.repairOrder.branch_id
-          api.warranty.getBranchList(this.$route.params.app_id, token, condition).then((res) => {
-            this.branch = res.data.list[0] || {}
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-          })
-
-          // 查询维修详情信息
-          condition.query = {}
-          condition.query.order_id = this.repairOrder._id
-          api.warranty.getRepairDetailList(this.$route.params.app_id, token, condition).then((res) => {
-            this.repairDetails = res.data.list[0] || {}
-          }).catch((err) => {
-            var env = {
-              'fn': fn,
-              'argvs': argvs,
-              'context': self,
-              'plugin': 'warranty'
-            }
-            self.handlePluginError(err, env)
-          })
+        // 查询网点信息
+        condition.query._id = this.repairOrder.branch_id
+        api.warranty.getBranchList(this.$route.params.app_id, condition).then((res) => {
+          this.branch = res.data.list[0] || {}
         }).catch((err) => {
-          var env = {
-            'fn': fn,
-            'argvs': argvs,
-            'context': self,
-            'plugin': 'warranty'
-          }
-          self.handlePluginError(err, env)
+          this.handleError(err)
         })
+
+        // 查询维修详情信息
+        condition.query = {}
+        condition.query.order_id = this.repairOrder._id
+        api.warranty.getRepairDetailList(this.$route.params.app_id, condition).then((res) => {
+          this.repairDetails = res.data.list[0] || {}
+        }).catch((err) => {
+          this.handleError(err)
+        })
+      }).catch((err) => {
+        this.handleError(err)
       })
     }
   }
