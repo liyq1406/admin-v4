@@ -220,8 +220,8 @@
       computedVaild () {
         var result = '-'
         let status = this.user.status
-        let is_vaild = this.user.is_vaild
-        var str1 = is_vaild ? '已激活' : '未激活'
+        let isVaild = this.user.is_vaild
+        var str1 = isVaild ? '已激活' : '未激活'
         var str2 = ''
         if (status === 1) {
           str2 = '已启用'
