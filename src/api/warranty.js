@@ -48,6 +48,31 @@ export default {
       }
     )
   },
+  /**
+   * 添加维修详情
+   * @param  Object 查询参数
+   * @return status
+   */
+  addRepairDetailList (appID, params) {
+    return http.post(
+      `${API_SERVER.warranty}/${appID}/api/work_orders/save`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
+    )
+  },
+  /**
+   * 维修概览
+   * @param  Object 查询参数
+   * @return status
+   */
+  getSummary (appID) {
+    return http.post(
+      `${API_SERVER.warranty}/${appID}/api/work_orders/group`
+    )
+  },
 
   /**
    * 查询网点信息
@@ -170,6 +195,37 @@ export default {
   deleteStaff (appID, staffId) {
     return http.del(
       `${API_SERVER.warranty}/${appID}/api/outlet_staffs/delete/${staffId}`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
+    )
+  },
+  /**
+   * 查询标签
+   * @param  {string} appID, {string} token {object} params
+   * @return promise
+   */
+  getWarrantyLabel (appID) {
+    return http.post(
+      `${API_SERVER.warranty}/${appID}/api/label/list`, {}, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
+    )
+  },
+
+  /**
+   * 添加标签
+   * @param  {string} appID, {string} token {object} params
+   * @return promise
+   */
+  saveWarrantyLabel (appID, params) {
+    return http.post(
+      `${API_SERVER.warranty}/${appID}/api/label/save`, params, {
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded',
           'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
