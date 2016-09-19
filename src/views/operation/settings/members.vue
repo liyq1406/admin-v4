@@ -249,7 +249,6 @@
           this.currentPage = 1
         }
         return this.members.filter((item) => {
-          console.log(item.email.indexOf(this.query))
           return item.name.indexOf(this.query) > -1 || item.email.indexOf(this.query) > -1 || item.phone.indexOf(this.query) > -1
         })
         // var filter = Vue.filter('filterBy')

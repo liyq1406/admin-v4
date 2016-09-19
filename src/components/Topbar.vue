@@ -183,7 +183,7 @@ export default {
   absolute right top
   size auto 55px
   line-height 54px
-  z-index 1
+  z-index 10000
   text-align right
   padding 0 20px
 
