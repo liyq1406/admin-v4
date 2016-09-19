@@ -243,7 +243,7 @@
           if (item.scope.type === 2) {
             item.scope.app_list.forEach((app) => {
               api.plugin.get(app).then((res) => {
-                Apps.push(res.data.name)
+                Apps.push(res.data.name + '(' + res.data.plugin + ')')
                 item.appNames = Apps.join(' , ')
                 this.histories.$set(index, item)
               })
