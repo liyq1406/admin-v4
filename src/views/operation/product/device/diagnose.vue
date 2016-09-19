@@ -80,6 +80,7 @@
                 <template v-if="log.type === 'connected'"><span class="msg-success">{{ log.msg }}</span></template>
                 <template v-if="log.type === 'disconnected'"><span class="msg-error">{{ log.msg }}</span></template>
               </div>
+              <div><a class="logend" name="logend" href="#logend">&nbsp</a></div>
             </code>
           </div>
         </div>
@@ -283,11 +284,26 @@ export default {
 
     // 收集日志信息并格式化输出
     outputLog (msg, type) {
+      let log = document.querySelector('.output-log')
+      let isMoved = false
+      if (log && log.scrollTop >= 0) {
+        if (log.scrollHeight - (log.scrollTop + log.clientHeight) < 100) {
+          isMoved = true
+        }
+      }
       this.logs.push({
         time: dateFormat('hh:mm:ss.SSS', new Date()),
         msg: msg,
         type: type
       })
+      if (isMoved) {
+        setTimeout(() => {
+          let logend = document.querySelector('.logend')
+          if (logend) {
+            logend.scrollIntoView()
+          }
+        }, 100)
+      }
     },
 
     // 切换日志显示
