@@ -284,7 +284,7 @@
             if (evt.target.readyState === window.FileReader.DONE) {
               if (!this.uploading) {
                 this.uploading = true
-                api.upload.firmware(this.selectProduct.id, evt.target.result).then((res) => {
+                api.upload.firmware(this.currProduct.id, evt.target.result).then((res) => {
                   if (res.status === 200) {
                     input.value = ''
                     this[model].file_url = res.data.url
