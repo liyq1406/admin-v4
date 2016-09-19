@@ -68,6 +68,7 @@ import { pluginMixins } from '../mixins'
 import store from 'store'
 import api from 'api'
 import dateFormat from 'date-format'
+import { uniformDate, uniformTime } from 'src/filters'
 
 export default {
   name: 'Issues',
@@ -224,7 +225,10 @@ export default {
       condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        query: {}
+        query: {},
+        order: {
+          create_time: -1
+        }
       }
       if (this.period === '') {
         condition.query = {
@@ -296,11 +300,11 @@ export default {
       return condition
     },
     beginTime () {
-      var past = new Date().getTime() - this.period * 24 * 3600 * 1000
+      var past = new Date().getTime() - (this.period - 2) * 24 * 3600 * 1000
       return dateFormat('yyyy-MM-dd', new Date(past))
     },
     endTime () {
-      var end = new Date().getTime()
+      var end = new Date().getTime() + 24 * 3600 * 1000
       return dateFormat('yyyy-MM-dd', new Date(end))
     }
   },
@@ -355,6 +359,7 @@ export default {
         if (res.status === 200 && res.data.list.length > 0) {
           this.total = res.data.count
           this.issues = res.data.list
+          this.dealTime()
         } else {
           this.issues = []
           this.total = 0
@@ -366,6 +371,13 @@ export default {
       }).catch((err) => {
         this.handleError(err)
         this.loadingData = false
+      })
+    },
+    // 将后台返回的时间加上8个小时处理
+    dealTime () {
+      this.issues.forEach((issue) => {
+        var time = new Date(issue.create_time)
+        issue.create_time = uniformDate(time) + ' ' + uniformTime(time)
       })
     },
 
