@@ -2,10 +2,12 @@
   <div class="row">
     <div class="col" :class="containerClass">
       <div :class="classes">
-        <div :class="'fa fa-' + icon + '-circle'"></div>
-        <h2>{{ title }}</h2>
+        <div :class="'fa fa-' + icon"></div>
         <div class="x-alert-cont">
-          <slot></slot>
+          <div class="x-alert-inner">
+            <h2 v-if="title">{{ title }}</h2>
+            <slot></slot>
+          </div>
         </div>
       </div>
     </div>
@@ -62,9 +64,10 @@
       // 图标
       icon () {
         return ({
-          'success': 'check',
-          'info': 'info',
-          'error': 'times'
+          'success': 'check-circle',
+          'info': 'info-circle',
+          'warning': 'exclamation-triangle',
+          'error': 'times-circle'
         })[this.type] || ''
       },
 
@@ -98,6 +101,15 @@
     p
       margin 0
 
+    .x-alert-cont
+      min-height 36px
+      display table
+      width 100%
+
+      .x-alert-inner
+        display table-cell
+        vertical-align middle
+
     .actions
       margin-top 30px
 
@@ -119,4 +131,8 @@
   .x-alert-info
     .fa
       color blue
+
+  .x-alert-warning
+    .fa
+      color #F6D14C
 </style>

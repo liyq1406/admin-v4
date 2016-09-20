@@ -126,6 +126,22 @@
         </form>
       </div>
     </modal>
+
+    <!-- 提示浮层 -->
+    <modal :show.sync="isShowTipsModal" @close="onTipsCancel">
+      <h3 slot="header">提示</h3>
+      <div slot="body">
+        <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
+          <p>设备导入成功，<a v-link="{path: 'info/list/' + tips.record.id}" class="hl-red">查看导入记录</a></p>
+        </alert>
+        <alert type="warning" title="" :cols="22" v-if="tips.type==='error'">
+          <p>{{ tips.msg }}</p>
+        </alert>
+      </div>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="onTipsCancel" class="btn btn-primary">{{ $t("common.ok") }}</button>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -144,6 +160,7 @@ import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Statistic from 'components/Statistic2'
+import Alert from 'components/Alert'
 import { formatDate } from 'src/filters'
 
 export default {
@@ -159,12 +176,13 @@ export default {
 
   components: {
     'x-table': Table,
-    'modal': Modal,
-    'pager': Pager,
+    Modal,
+    Pager,
     'x-select': Select,
     Breadcrumb,
     Statistic,
-    'search-box': SearchBox
+    SearchBox,
+    Alert
   },
 
   data () {
@@ -218,7 +236,9 @@ export default {
       records: [],
       file: {},
       adding: false,
-      importing: false
+      importing: false,
+      isShowTipsModal: false,
+      tips: {}
     }
   },
 
@@ -351,14 +371,15 @@ export default {
       let code = res.data.error.code
       const ERRORS = {
         '4001001': 'MAC地址不合法',
-        '4041033': '已超出配额上限'
+        '4041033': '导入失败，产品配额不足'
       }
 
       if (ERRORS.hasOwnProperty(code)) {
-        this.showNotice({
+        this.isShowTipsModal = true
+        this.tips = {
           type: 'error',
-          content: ERRORS[code]
-        })
+          msg: ERRORS[code]
+        }
       } else {
         this.handleError(res)
       }
@@ -376,13 +397,22 @@ export default {
       this.adding = true
       api.product.importDevices(this.$route.params.id, [this.addModel]).then((res) => {
         if (res.status === 200) {
-          this.showNotice({
-            type: 'success',
-            content: '添加成功'
-          })
+          // this.showNotice({
+          //   type: 'success',
+          //   content: '添加成功'
+          // })
+          // TODO 后端应返回创建好的记录id，而不是导入的数据列表
+          res.data = {
+            id: 123
+          }
           this.getUsed()
           this.onAddCancel()
           this.getRecords()
+          this.isShowTipsModal = true
+          this.tips = {
+            type: 'import-success',
+            record: res.data
+          }
         }
       }).catch((res) => {
         this.handleImportError(res)
@@ -441,16 +471,26 @@ export default {
             })
             api.product.importDevices(this.$route.params.id, macArr).then((res) => {
               if (res.status === 200) {
-                this.showNotice({
-                  type: 'success',
-                  content: this.$t('ui.upload.success_msg')
-                })
+                // this.showNotice({
+                //   type: 'success',
+                //   content: this.$t('ui.upload.success_msg')
+                // })
+                // TODO 后端应返回创建好的记录id，而不是导入的数据列表
+                res.data = {
+                  id: 123
+                }
                 this.getUsed()
                 this.getRecords()
                 this.onBatchCancel()
+                this.isShowTipsModal = true
+                this.tips = {
+                  type: 'import-success',
+                  record: res.data
+                }
               }
               this.importing = false
             }).catch((res) => {
+              this.onBatchCancel()
               this.handleImportError(res)
               this.importing = false
             })
@@ -491,6 +531,14 @@ export default {
      */
     showBatchModal () {
       this.isShowBatchModal = true
+    },
+
+    /**
+     * 关闭提示浮层
+     */
+    onTipsCancel () {
+      this.isShowTipsModal = false
+      this.tips = {}
     }
   }
 }

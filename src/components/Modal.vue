@@ -58,7 +58,7 @@ export default {
   fixed left top
   size 100%
   background rgba(0, 0, 0, .6)
-  z-index 10000
+  z-index 10100
   display table
   transition opacity .2s ease
 
@@ -111,6 +111,9 @@ export default {
       text-align center
       margin-bottom 30px
 
+    .x-alert
+      margin 30px 0
+
   .modal-actions
       text-align center
 
@@ -120,5 +123,6 @@ export default {
   .modal-footer
     padding 0 30px 20px
     text-align right
+    background #FFF
     clearfix()
 </style>

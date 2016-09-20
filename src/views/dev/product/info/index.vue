@@ -67,6 +67,7 @@
               </x-select>
             </div>
           </div>
+          <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
         </x-table>
       </div>
     </div>

@@ -49,11 +49,9 @@
 import * as config from 'consts/config'
 import { globalMixins } from 'src/mixins'
 import Select from 'components/Select'
-import AreaSelect from 'components/AreaSelect'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
-import Pager from 'components/Pager'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import { formatDate } from 'src/filters'
 import api from 'api'
@@ -65,9 +63,7 @@ export default {
 
   components: {
     Breadcrumb,
-    AreaSelect,
     SearchBox,
-    Pager,
     DateTimeRangePicker,
     'x-select': Select,
     'x-table': Table
