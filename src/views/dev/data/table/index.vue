@@ -25,7 +25,7 @@
                     <li @click.stop="deleteAllData"><span>删除所有数据</span></li>
                     <li @click.stop="deleteDataTable"><span>删除数据表</span></li>
                     <li @click.stop="showDeleteColumnModal"><span>删除列</span></li>
-                    <li @click.stop="showJurisdictionModal"><span>限权设置</span></li>
+                    <li @click.stop="showJurisdictionModal"><span>权限设置</span></li>
                     <!-- <li @click.stop=""><span>导出数据</span></li>
                     <li @click.stop=""><span>导出全部数据表</span></li> -->
                   </ul>
