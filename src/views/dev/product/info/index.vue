@@ -156,6 +156,7 @@ export default {
 
     return {
       // showExportQRCode: false,
+      firstRequest: true,
       qrcodeModal: {
         show: false
       },
@@ -232,7 +233,7 @@ export default {
     annulusInfo () {
       let used = (this.used >= this.currentProduct.quota) ? this.currentProduct.quota : this.used
       // 剩余配额
-      let remain = this.currentProduct.quota - used
+      let remain = this.currentProduct.quota ? this.currentProduct.quota - used : 0
 
       return [{
         name: '授权设备',
@@ -348,6 +349,7 @@ export default {
       this.query = ''
       this.currentPage = 1
       // 初次获取设备列表，并将获取的数量作为已用配额
+      this.firstRequest = true
       this.getDevices()
       // let condition = {
       //   filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'last_login'],
@@ -487,7 +489,12 @@ export default {
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
         this.total = res.data.count
+        // 初次请求，设备数量就是已使用配额
+        if (this.firstRequest) {
+          this.used = res.data.count
+        }
         this.loadingData = false
+        this.firstRequest = false
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
