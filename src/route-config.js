@@ -268,6 +268,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 产品上下线记录
+        'products/:id/info/online-offline-records': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/product/info/online-offline-records'))
+            }, 'admin')
+          }
+        },
         // 编辑产品信息
         'products/:id/info/edit': {
           component (resolve) {
