@@ -110,7 +110,7 @@ export default {
       placeSearch: {},
       mapHeight: 500,
       mapCenter: [],
-      zoom: 3,
+      zoom: 10,
       loadingData: true,
       loadingProducts: true,
       loadingDevices: true,

@@ -3,11 +3,7 @@
     <div class="main-title bordered">
       <h2>升级列表</h2>
     </div>
-
-    <div class="panel">
-      <div class="panel-hd">
-        <!-- <h2>设备列表</h2> -->
-      </div>
+    <div class="panel mt15">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">

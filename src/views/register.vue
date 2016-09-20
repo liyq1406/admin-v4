@@ -190,6 +190,7 @@
   @import '../assets/stylus/common'
 
   .register-form
+    margin-bottom 40px
     .inner
       width 955px
       padding-bottom 0
