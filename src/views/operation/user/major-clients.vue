@@ -813,4 +813,9 @@ export default {
       border-bottom 0
     .mr5
       margin-right 5px
+    /*针对ie 的hock*/
+    .modal-body
+      padding-bottom 0 !important
+      .form
+        margin-bottom 20px !important
 </style>
