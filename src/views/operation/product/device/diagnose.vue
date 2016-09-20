@@ -248,8 +248,13 @@ export default {
     // 连接
     connect () {
       api.diagnosis.getDeviceToken(this.$route.params.device_id).then((res) => {
+        var addr = res.data.addr
+        if (window.location.protocol === 'https:') {
+          addr = addr.replace(/:\d+$/, ':443')
+          console.log(addr)
+        }
         this.token = res.data.token
-        socket = io.connect('http://' + res.data.addr, {'force new connection': true})
+        socket = io.connect(window.location.protocol + '//' + addr, {'force new connection': true})
 
         // 连接 socket
         socket.on('connect', () => {
