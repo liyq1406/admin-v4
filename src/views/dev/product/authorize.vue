@@ -106,17 +106,18 @@
     </modal>
 
     <!-- 批量导入浮层 -->
-    <modal :show.sync="isShowBatchModal" @close="onBatchCancel" width="400px">
-      <h3 slot="header">批量导入</h3>
+    <modal :show.sync="isShowBatchModal" @close="onBatchCancel">
+      <h3 slot="header">导入设备</h3>
       <div slot="body" class="form">
         <form @submit.prevent="">
           <div class="form-row row">
             <!-- <label class="form-control col-6">导入:</label> -->
+            <p>您可以通过标准设备列表文件批量导入设备，<a href="/static/authorize_template.csv" class="hl-red">查看示例</a></p>
             <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
               <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量导入
             </label>
             <span class="file-name">{{ file.name }}</span>
-            <p><i class="fa fa-warning" style="color:red"></i><span style="color:#666">仅限csv格式文件</span></p>
+            <p class="hl-gray">* 仅限csv格式文件</p>
           </div>
           <div class="form-actions">
             <button @click.prevent.stop="batchImport" :disabled="importing" :class="{'disabled':importing}" v-text="importing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -244,7 +245,11 @@ export default {
     // 剩余配额
     remain () {
       let total = this.currentProduct.quota || 0
-      return (total - this.used) || 0
+      let remain = 0
+      if (total > 0 && this.used > 0) {
+        remain = total - this.used
+      }
+      return remain < 0 ? 0 : remain
     },
 
     // 授权记录列表
@@ -337,6 +342,28 @@ export default {
       this.$resetValidation()
     },
 
+    /**
+     * 处理导入错误
+     * @author shengzhi
+     * @params {Object} res 响应信息
+     */
+    handleImportError (res) {
+      let code = res.data.error.code
+      const ERRORS = {
+        '4001001': 'MAC地址不合法',
+        '4041033': '已超出配额上限'
+      }
+
+      if (ERRORS.hasOwnProperty(code)) {
+        this.showNotice({
+          type: 'error',
+          content: ERRORS[code]
+        })
+      } else {
+        this.handleError(res)
+      }
+    },
+
     // 添加操作
     onAddSubmit () {
       if (this.adding) return
@@ -358,7 +385,7 @@ export default {
           this.getRecords()
         }
       }).catch((res) => {
-        this.handleError(res)
+        this.handleImportError(res)
         this.adding = false
       })
     },
@@ -424,7 +451,7 @@ export default {
               }
               this.importing = false
             }).catch((res) => {
-              this.handleError(res)
+              this.handleImportError(res)
               this.importing = false
             })
           }
