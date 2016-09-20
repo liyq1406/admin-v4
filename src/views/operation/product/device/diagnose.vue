@@ -320,6 +320,7 @@ export default {
           socket.disconnect()
           socket = null
         }
+        this.logs = []
       }
     },
 
