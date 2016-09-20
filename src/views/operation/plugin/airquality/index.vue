@@ -43,7 +43,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
-import { formatDate } from 'src/filters'
+import { formatDate, uniformDate } from 'src/filters'
 
 import api from 'api'
 
@@ -180,10 +180,10 @@ export default {
         query: {
           'update_time': {
             $gte: {
-              '@date': this.time.startDate
+              '@date': uniformDate(this.time.startDate) + ' 00:00:00.000Z'
             },
             $lte: {
-              '@date': this.time.endDate
+              '@date': uniformDate(this.time.endDate) + ' 23:59:59.999Z'
             }
           }
         }
