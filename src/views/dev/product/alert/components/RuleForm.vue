@@ -315,6 +315,9 @@ export default {
           this.model = _.find(res.data, (item) => {
             return item.id === this.$route.params.rule_id
           })
+          this.model.notify_target.forEach((item) => {
+            item = item - 0
+          })
           if (this.model.type === 1) {
             this.value1 = this.model.value
           } else {
