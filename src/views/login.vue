@@ -134,6 +134,7 @@
           this.setLoadingStatus(true)
           api.corp.auth(this.model).then((res) => {
             var today = new Date()
+            window.localStorage.clear()
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)
@@ -152,7 +153,7 @@
               this.delCookie('password')
             }
             this.isLoginSuccess = true
-            this.$route.router.go({path: '/dashboard'})
+            this.$route.router.replace({path: '/dashboard'})
           }).catch((res) => {
             this.setLoadingStatus(false)
             this.handleError(res)

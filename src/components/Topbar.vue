@@ -82,7 +82,7 @@ export default {
      * 移除保存在 window.localStorage中的 accessToken
      */
     quit () {
-      window.localStorage.removeItem('accessToken')
+      window.localStorage.clear()
       this.showNotice({
         type: 'info',
         content: '您已退出登录'
