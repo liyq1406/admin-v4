@@ -320,6 +320,7 @@
   import TagInput from 'components/TagInput'
   import store from 'store'
   import api from 'api'
+  import _ from 'lodash'
   import { createDayRange } from 'utils'
 
   export default {
@@ -708,7 +709,10 @@
         }
       },
       add () {
-        api.broadcast.addTask(this.task).then((res) => {
+        var task = _.clone(this.task)
+        task.time = this.formatTime(task.time)
+        task.expire = this.formatTime(task.expire)
+        api.broadcast.addTask(task).then((res) => {
           this.showNotice({
             type: 'success',
             content: '创建成功'
@@ -719,7 +723,10 @@
         })
       },
       edit () {
-        api.broadcast.updateTask(this.$route.params.id, this.task).then((res) => {
+        var task = _.clone(this.task)
+        task.time = this.formatTime(task.time)
+        task.expire = this.formatTime(task.expire)
+        api.broadcast.updateTask(this.$route.params.id, task).then((res) => {
           this.showNotice({
             type: 'success',
             content: '修改成功'
@@ -739,6 +746,10 @@
         }).catch((res) => {
           this.handleError(res)
         })
+      },
+      formatTime (time) {
+        var result = +new Date(time) + 8 * 60 * 60 * 1000 + 5 * 60 * 1000
+        return new Date(result)
       }
     }
   }

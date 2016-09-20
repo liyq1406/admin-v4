@@ -44,7 +44,7 @@
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import TimeLine from 'components/g2-charts/TimeLine'
   import api from 'api'
-  import {uniformDate, uniformTime} from 'src/filters'
+  import { formatDate } from 'src/filters'
 
   export default {
     name: 'BroadcastHistory',
@@ -128,7 +128,7 @@
           var history = {
             title: '<a class="hl-red">' + item.title + '</a>',
             app: item.appNames || '全部',
-            time: uniformDate(item.time) + ' ' + uniformTime(item.time),
+            time: formatDate(item.time),
             people: this.computedPeopleText(item.scope.type),
             status: this.computedStatusText(item.status),
             valid_count: item.user_num,
