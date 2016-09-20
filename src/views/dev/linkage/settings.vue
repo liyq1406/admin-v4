@@ -46,12 +46,12 @@
                     <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value.sync="datapoint.isControlable"></x-switch>
+                        <x-switch size="small" :value="datapoint.isControlable" @switch-toggle="toggleControlable(datapoint)"></x-switch>
                       </span>
                     </td>
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value.sync="datapoint.isEnable"></x-switch>
+                        <x-switch size="small" :value="datapoint.isEnable" @switch-toggle="toggleEnable(datapoint)"></x-switch>
                       </span>
                     </td>
                   </tr>
@@ -68,6 +68,18 @@
         <!-- Start: 数据端点列表 -->
       </div>
     </div>
+
+    <modal :show.sync="isShowAlertModel" @close="isShowAlertModel = false">
+      <h3 slot="header">提示</h3>
+      <div slot="body" class="form">
+        <div class="form-row row">
+          {{{alertModel.content}}}
+        </div>
+        <div class="form-actions">
+          <button type="submit" @click.parent="isShowAlertModel = false" v-text="$t('common.ok')" class="btn btn-primary w100"></button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -76,6 +88,7 @@
   import Alert from 'components/Alert'
   import Select from 'components/Select'
   import Switch from 'components/Switch'
+  import Modal from 'components/Modal'
   import api from 'api'
 
   export default {
@@ -84,6 +97,7 @@
     mixins: [globalMixins],
 
     components: {
+      Modal,
       'x-alert': Alert,
       'x-select': Select,
       'x-switch': Switch
@@ -91,6 +105,11 @@
 
     data () {
       return {
+        isShowAlertModel: false,
+        alertModel: {
+          type: '',
+          content: ''
+        },
         loadingProducts: false,
         loadingDatapoints: false,
         datapoints: [],
@@ -106,6 +125,25 @@
     },
 
     methods: {
+      toggleControlable (point) {
+        point.isControlable = !point.isControlable
+        setTimeout(() => {
+          point.isControlable = !point.isControlable
+        }, 500)
+        this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
+      },
+      toggleEnable (point) {
+        point.isEnable = !point.isEnable
+        setTimeout(() => {
+          point.isEnable = !point.isEnable
+        }, 500)
+        this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
+      },
+      showAlert (str) {
+        this.isShowAlertModel = true
+        this.alertModel.type = 'warm'
+        this.alertModel.content = str
+      },
       /**
        * 获取产品列表
        * @author shengzhi
