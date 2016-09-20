@@ -64,7 +64,7 @@
                     <i class="fa fa-question-circle mr5" ></i>未激活
                   </span>
                   <span class="status-date ml10 mr10">{{selectedDevice.last_login | uniformDate true}}</span>
-                  <!-- <span class="status-time ml10 mr10">{{selectedDevice.last_login | uniformTime true}}</span> -->
+                  <span class="status-time ml10 mr10">{{selectedDevice.last_login | uniformTime true}}</span>
                 </div>
 
               </div>

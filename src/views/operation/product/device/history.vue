@@ -4,13 +4,21 @@
       <div class="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <date-time-multiple-picker :periods="periods" @timechange="onTimeChange"></date-time-multiple-picker>
+            <radio-button-group :items="periods" :value.sync="period" @select="periodSelect"></radio-button-group>
           </div>
         </div>
         <div class="filter-group">
           <div class="filter-group-item">
+            <x-select :label="selectRules.interval + '分钟'" width="110px" size="small">
+              <span slot="label">快照规则</span>
+              <select v-model="selectRules">
+                <option v-for="opt in rules" :value="opt">{{ opt.interval }}分钟</option>
+              </select>
+            </x-select>
+          </div>
+          <div class="filter-group-item">
             <x-select :label="selectedDatapoint.name" width="110px" size="small">
-              <span slot="label">显示</span>
+              <span slot="label">数据端点</span>
               <select v-model="selectedDatapoint">
                 <option v-for="opt in datapointOptions" :value="opt">{{ opt.name }}</option>
               </select>
@@ -46,7 +54,6 @@ import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
 import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
 import { uniformDate, formatDate } from 'src/filters'
@@ -64,20 +71,24 @@ export default {
     'intelligent-table': IntelligentTable,
     'x-select': Select,
     RadioButtonGroup,
-    DateTimeMultiplePicker,
     TimeLine
   },
 
   data () {
     return {
+      selectRules: {
+        interval: ''
+      },
       period: 1,
-      periods: [1, 7, 30],
-      startTime: 0,
-      endTime: 0,
+      periods: [
+        { label: '24h', value: 1 },
+        { label: '7天', value: 7 },
+        { label: '15天', value: 15 }
+      ],
       total: 0,
       currentPage: 1,
       countPerPage: 10,
-      indexes: [],
+      rules: [],
       snapshots: [],
       currSnapshot: {},
       datapoints: [],
@@ -107,17 +118,19 @@ export default {
     // 下拉选项
     datapointOptions () {
       let result = []
-      this.indexes.forEach((index) => {
-        // 过滤出非字符串类型和非布尔型的快照端点列表
-        let dp = _.find(this.datapoints, (item) => {
-          return item.type !== 6 && item.type !== 1 && item.index === index
+      if (Array.isArray(this.selectRules.datapoint)) {
+        this.selectRules.datapoint.forEach((index) => {
+          // 过滤出非字符串类型和非布尔型的快照端点列表
+          let dp = _.find(this.datapoints, (item) => {
+            return item.type !== 6 && item.type !== 1 && item.index === index
+          })
+          if (dp) {
+            result.push(dp)
+          }
         })
-        if (dp) {
-          result.push(dp)
+        if (result.length) {
+          this.selectedDatapoint = result[0]
         }
-      })
-      if (result.length) {
-        this.selectedDatapoint = result[0]
       }
       return result
     },
@@ -169,12 +182,15 @@ export default {
     // 查询条件
     queryCondition () {
       // 取当前开始到period天前的时间
+      var endtime = Date.parse(new Date())
+      // 取当前开始到period天前的时间
+      var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
       var condition = {
-        offset: 0,
-        limit: 2500,
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
         date: {
-          begin: this.startTime,
-          end: this.endTime
+          begin: begintime,
+          end: endtime
         }
       }
       return condition
@@ -189,16 +205,9 @@ export default {
   },
 
   methods: {
-    /**
-     * 处理时间选择
-     * @author shengzhi
-     */
-    onTimeChange (start, end) {
-      this.startTime = start.getTime()
-      this.endTime = end.getTime()
+    periodSelect (period) {
       this.getSnapshots()
     },
-
     /**
      * 获取设备端点列表
      * @author shengzhi
@@ -221,7 +230,9 @@ export default {
     getSnapshotRule () {
       api.snapshot.getRules(this.$route.params.product_id).then((res) => {
         if (res.status === 200) {
-          this.indexes = res.data.list[0].datapoint
+          this.rules = res.data.list
+          this.selectRules = this.rules[0]
+          this.getSnapshots()
         }
       }).catch((res) => {
         this.handleError(res)

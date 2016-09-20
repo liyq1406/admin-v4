@@ -530,7 +530,6 @@
     route: {
       data () {
         this.getUsersTotal() // 获取总注册用户数
-        console.log(this.$route.params.id)
         if (this.$route.params.id) {
           this.getDetails()
         }
@@ -545,11 +544,8 @@
        * @return {[type]} [description]
        */
       getDetails () {
-        console.log('getDetails')
         api.broadcast.getTask(this.id).then((res) => {
-          console.log(res)
           var details = res.data
-          console.log(details)
           this.title = details.title
           this.content = details.content
           this.timeType = 2
@@ -620,7 +616,6 @@
        */
       checkUser (userId) {
         this.userIdType[userId] = true
-        console.log('发请求验证userid: ' + userId)
         setTimeout(() => {
           this.userIdType[userId] = false
         }, 1000)
@@ -694,7 +689,6 @@
           if (this.pageType === 'add') {
             this.add()
           } else {
-            console.log(this.delChecked)
             if (this.delChecked) {
               this.deleteBreakcast()
             } else {

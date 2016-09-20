@@ -15,7 +15,7 @@ export default {
     )
   },
   // 删除任务
-  delTask (taskId) {
+  deleteTask (taskId) {
     return http.del(
       `${API_SERVER.default}/v2/broadcast/task/${taskId}`
     )
