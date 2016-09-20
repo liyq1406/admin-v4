@@ -230,7 +230,7 @@
             phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
-            is_active: user.status === 1 ? '已激活' : '未激活',
+            is_active: user.is_active ? '已激活' : '未激活',
             online: user.is_online === true ? '在线' : '下线',
             status: this.computedStatus(user.status),
             prototype: user
