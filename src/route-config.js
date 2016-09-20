@@ -308,14 +308,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 虚拟设备
-        'products/:id/virtual-devices': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/product/virtual-devices'))
-            }, 'admin')
-          }
-        },
+        // 虚拟设备(功能没实现，暂时隐藏 2016-09-20)
+        // 'products/:id/virtual-devices': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/dev/product/virtual-devices'))
+        //     }, 'admin')
+        //   }
+        // },
         // 告警管理
         'products/:id/alert': {
           component (resolve) {

@@ -66,7 +66,9 @@ export default {
       })
 
       // 产品导航
-      const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-point', 'authorize']
+      // const PRO_SUBS = ['info', 'debug', 'virtual-devices', 'alert', 'data-point', 'authorize']
+      // 虚拟设备(功能没实现，暂时隐藏 2016-09-20)
+      const PRO_SUBS = ['info', 'debug', 'alert', 'data-point', 'authorize']
       this.products.forEach((item) => {
         result.subs.push({
           name: item.name,
