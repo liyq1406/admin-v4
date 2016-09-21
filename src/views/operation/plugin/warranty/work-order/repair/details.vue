@@ -12,7 +12,7 @@
 
               <div class="up">
                 <h3>滤网失效</h3>
-                <span class="text-label-warning">二级</span>
+                <a v-link="{path: '/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/edit/' + this.$route.params.id}" class="fa fa-edit"></a>
               </div>
               <div class="down row">
                 <div class="col-12">
@@ -43,7 +43,7 @@
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">持续时长</div>
-                    <div class="x-val">-</div>
+                    <div class="x-val">{{lasting || '正在计算……'}}</div>
                   </div>
                 </div>
                 <!-- <div class="x-info-list-item threeDepart">
@@ -89,6 +89,17 @@
                 </div>
               </div>
             </div>
+            <div class="x-info-list-item oneDepart">
+              <div class="x-info-list-item-in">
+                <div class="x-label">维修图片</div>
+                <div v-if="repairOrder.images && !repairOrder.images[0]" class="x-val">暂无图片</div>
+                <div v-else class="pic-ul">
+                  <div v-for="pic in repairOrder.images" class="pic">
+                    <image :src="pic"></image>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
         <div class="col-8 device-map with-loading">
@@ -124,7 +135,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
@@ -141,6 +152,8 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import Select from 'components/Select'
 import InfoList from 'components/InfoList'
+import {formatDate} from 'src/filters'
+import * as config from 'consts/config'
 
 export default {
   name: 'OrderDetails',
@@ -159,6 +172,9 @@ export default {
   data () {
     return {
       branch: {},
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      total: 0,
       repairOrder: {},
       repairDetails: {},
       breadcrumbNav: [{
@@ -194,11 +210,11 @@ export default {
         //   key: 'addr',
         //   title: '地点'
         // },
-        {
-          key: 'level',
-          title: '维修等级',
-          class: 'tac'
-        },
+        // {
+        //   key: 'level',
+        //   title: '维修等级',
+        //   class: 'tac'
+        // },
         {
           key: 'state',
           title: '状态',
@@ -209,6 +225,10 @@ export default {
   },
 
   computed: {
+    lasting () {
+      var result = this.prettyDuration(this.repairOrder.lasting)
+      return result
+    },
     page () {
       return {
         currentPage: this.currentPage,
@@ -220,62 +240,60 @@ export default {
       var result = []
       this.historys.map((item) => {
         var history = {
-          id: '<a class="hl-red">' + item.id + '</a>',
-          mac: item.mac,
-          create_date: item.create_date,
-          person: item.person,
-          content: item.content,
-          addr: item.addr,
-          level: resetLevel(item.level),
-          state: resetState(item.state),
+          id: '<a class="hl-red">' + item._id + '</a>',
+          create_date: formatDate(item.create_time),
+          person: item.assigned_name,
+          content: item.remark,
+          // state: resetState(item.state),
+          state: item.state,
           prototype: item
         }
         result.push(history)
       })
       return result
-      function resetState (state) {
-        var result = [
-          {
-            text: '待处理',
-            color: '#6699CC'
-          },
-          {
-            text: '维修中',
-            color: '#CC6600'
-          }
-        ]
-        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
-        return html
-      }
-      function resetLevel (state) {
-        var resutl = [
-          {
-            text: '一级',
-            backgroundColor: '#ff9966'
-          },
-          {
-            text: '二级',
-            backgroundColor: '#9cc'
-          },
-          {
-            text: '三级',
-            backgroundColor: '#cb4a52'
-          }
-        ]
-        var html = '<div class="level tac" style="color:#FFF; background-color: ' + resutl[state - 1].backgroundColor + ';;width: 50px;display: inline-block">' + resutl[state - 1].text + '</div>'
-        return html
-      }
+      // function resetState (state) {
+      //   var result = [
+      //     {
+      //       text: '待处理',
+      //       color: '#6699CC'
+      //     },
+      //     {
+      //       text: '维修中',
+      //       color: '#CC6600'
+      //     }
+      //   ]
+      //   var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+      //   return html
+      // }
+      // function resetLevel (state) {
+      //   var resutl = [
+      //     {
+      //       text: '一级',
+      //       backgroundColor: '#ff9966'
+      //     },
+      //     {
+      //       text: '二级',
+      //       backgroundColor: '#9cc'
+      //     },
+      //     {
+      //       text: '三级',
+      //       backgroundColor: '#cb4a52'
+      //     }
+      //   ]
+      //   var html = '<div class="level tac" style="color:#FFF; background-color: ' + resutl[state - 1].backgroundColor + ';;width: 50px;display: inline-block">' + resutl[state - 1].text + '</div>'
+      //   return html
+      // }
     },
     queryCondition () {
       var condition = {
         filter: [],
-        limit: 1,
-        offset: 0,
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
         query: {}
       }
 
-      condition.query._id = this.$route.params.id
+      condition.query.product_id = this.repairOrder.product_id
 
       return condition
     },
@@ -307,63 +325,50 @@ export default {
   },
 
   methods: {
+    /**
+     * 当前页码改变
+     * @author weijie
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
+      this.currentPage = number
+      this.getOrderWorkList()
+    },
+
+    /**
+     * 每页显示的数量改变
+     * @author weijie
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+      this.getOrderWorkList(true)
+    },
     goDetails (table) {
       this.$route.router.go(this.$route.path + '/' + table.prototype.id)
     },
     getData () {
       this.total = 50
-      this.historys = [
-        {
-          id: 'YWD21291233',
-          mac: 'a1ds54asd',
-          create_date: '2016-07-22   19:21:32',
-          person: '张小琴',
-          content: '更换滤网',
-          addr: '广东，广州',
-          level: '1',
-          state: '0'
-        },
-        {
-          id: 'YWD21291232',
-          mac: 'a1ds54asd',
-          create_date: '2016-07-21   12:33:12',
-          person: '王献强',
-          content: '更换滤网',
-          addr: '广东，广州',
-          level: '1',
-          state: '0'
-        },
-        {
-          id: 'YWD21291231',
-          mac: 'a1ds54asd',
-          create_date: '2016-07-21   11:21:39',
-          person: '张小琴',
-          content: '电源故障，电压不稳定',
-          addr: '广东，深圳',
-          level: '2',
-          state: '0'
-        },
-        {
-          id: 'YWD21291229',
-          mac: 'a1ds54asd',
-          create_date: '2016-07-21   11:18:09',
-          person: '张小琴',
-          content: '电机转速过高，异响',
-          addr: '广东，深圳',
-          level: '2',
-          state: '1'
-        },
-        {
-          id: 'YWD21291228',
-          mac: 'a1ds54asd',
-          create_date: '2016-07-21   9:17:32',
-          person: '王献强',
-          content: '更换滤网',
-          addr: '广东，佛山',
-          level: '3',
-          state: '0'
-        }
-      ]
+      this.historys = []
+    },
+    /**
+     * 将毫秒数格式化为合适显示的时间段
+     */
+    prettyDuration (n) {
+      let hours = (n / 3600000).toFixed(1)
+      if (hours > 1) {
+        return `${hours}小时`
+      } else {
+        return `${Math.floor(n / 60000)}分钟`
+      }
+    },
+    // 计算持续时间
+    dealTime (obj) {
+      // 起始时间
+      let begin = new Date(formatDate(obj.create_time))
+      let end = new Date()
+      // 持续时间
+      obj.lasting = end.getTime() - begin.getTime()
     },
     getRepairOrder () {
       var condition = {
@@ -371,11 +376,14 @@ export default {
         limit: 1,
         offset: 0,
         order: {},
-        query: {}
+        query: {
+          _id: this.$route.params.id
+        }
       }
-      api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+      api.warranty.getOrderWorkList(this.$route.params.app_id, condition).then((res) => {
         this.repairOrder = res.data.list[0] || {}
-
+        // 计算持续时间
+        this.dealTime(this.repairOrder)
         // 查询网点信息
         condition.query._id = this.repairOrder.branch_id
         api.warranty.getBranchList(this.$route.params.app_id, condition).then((res) => {
@@ -389,9 +397,20 @@ export default {
         condition.query.order_id = this.repairOrder._id
         api.warranty.getRepairDetailList(this.$route.params.app_id, condition).then((res) => {
           this.repairDetails = res.data.list[0] || {}
+          // 获取历史
+          this.getHistory()
         }).catch((err) => {
           this.handleError(err)
         })
+      }).catch((err) => {
+        this.handleError(err)
+      })
+    },
+    getHistory () {
+      api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+        this.total = res.data.count
+        console.log(res.data.list)
+        this.historys = res.data.list
       }).catch((err) => {
         this.handleError(err)
       })
@@ -402,6 +421,16 @@ export default {
 
 <style lang='stylus'>
 @import '../../../../../../assets/stylus/common'
+.pic
+  width 160px
+  height 120px
+  border 1px solid #d9d9d9
+  margin 10px 10px 10px 0
+  box-sizing border-box
+  display inline-block
+  img
+    width 100%
+    height 100%
 .x-info-list-wrap
   /*position relative*/
   overflow hidden
@@ -410,22 +439,22 @@ export default {
   margin-top -1px
   clearfix()
 
-  .x-info-list-item
-    float left
-    line-height 22px
-    box-sizing border-box
+.x-info-list-item
+  float left
+  line-height 22px
+  box-sizing border-box
 
-    .x-info-list-item-in
-      padding 8px 0 8px 8px
-      border-top 1px solid default-border-color
+.x-info-list-item-in
+  padding 8px 0 8px 8px
+  /*border-top 1px solid default-border-color*/
 
-    .x-val
-    .x-label
-      height 22px
+  .x-val
+  .x-label
+    height 22px
 
-    .x-label
-    .x-val
-      color gray-light
+  .x-label
+  .x-val
+    color gray-light
 
     /*&:nth-child(2n-1)
       .x-info-list-item-in
