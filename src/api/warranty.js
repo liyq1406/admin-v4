@@ -64,6 +64,21 @@ export default {
     )
   },
   /**
+   * 编辑维修详情
+   * @param  Object 查询参数
+   * @return status
+   */
+  editRepairDetailList (appID, repairId, params) {
+    return http.put(
+      `${API_SERVER.warranty}/${appID}/api/work_orders/update/${repairId}`, params, {
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'Access-Token': JSON.parse(window.localStorage.pluginsToken)[appID].token
+        }
+      }
+    )
+  },
+  /**
    * 维修概览
    * @param  Object 查询参数
    * @return status
