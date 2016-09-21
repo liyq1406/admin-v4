@@ -1487,6 +1487,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 编辑维修工单
+        'plugins/warranty/:app_id/work-orders/repair/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/plugin/warranty/work-order/repair/edit'))
+            }, 'admin')
+          }
+        },
         // 维保设置
         'plugins/warranty/:app_id/settings': {
           component (resolve) {
