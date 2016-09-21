@@ -1,6 +1,6 @@
 <template>
   <div class="image-uploader">
-    <div class="image-uploader-item" v-for="image in images" track-by="$index">
+    <div class="image-uploader-item" v-for="image in images" track-by="$index" :style="itemStyles">
       <label>
         <img v-if="image.length" :src="image"/>
         <input type="file" @change.prevent="upload($event, $index)"/>
@@ -26,12 +26,31 @@
         default () {
           return []
         }
+      },
+
+      imgWidth: {
+        type: String,
+        default: '160px'
+      },
+
+      imgHeight: {
+        type: String,
+        default: '120px'
       }
     },
 
     data () {
       return {
         uploading: false
+      }
+    },
+
+    computed: {
+      itemStyles () {
+        return {
+          width: this.imgWidth,
+          height: this.imgHeight
+        }
       }
     },
 
@@ -118,7 +137,6 @@
   .image-uploader-item
     position relative
     float left
-    size 160px 120px
     border 1px solid default-border-color
     color gray-light
     cursor pointer

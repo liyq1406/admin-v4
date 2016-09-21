@@ -64,6 +64,9 @@ export default {
         }, {
           label: '产品字段',
           link: { path: `${deviceDetailRoot}/field` }
+        }, {
+          label: '产品二维码',
+          link: { path: `${deviceDetailRoot}/qrcode` }
         }]
       }
     }

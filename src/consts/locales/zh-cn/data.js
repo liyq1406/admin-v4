@@ -96,6 +96,12 @@ export const PRODUCT_TYPES = [
   { label: '其他', value: 8 }
 ]
 
+// 产品扫描订阅策略类型
+export const SCAN_MODES = [
+  { label: '只允许用户单次订阅', value: 1 },
+  { label: '允许用户多次订阅', value: 2 }
+]
+
 // 设备筛选待选项
 export const DEVICE_VISIBILITY_OPTIONS = [
   { label: '全部', value: 'all' },

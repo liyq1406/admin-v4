@@ -164,7 +164,7 @@ export default {
       api.corp.getCorpInfo().then((res) => {
         this.setCorp(res.data)
       }).catch((res) => {
-        this.handleError(res)
+        // this.handleError(res)
       })
     },
     /**
@@ -184,10 +184,10 @@ export default {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
       }).catch((res) => {
-        this.showNotice({
-          type: 'error',
-          content: '暂无当前用户信息'
-        })
+        // this.showNotice({
+        //   type: 'error',
+        //   content: '暂无当前用户信息'
+        // })
         this.$route.router.go('/login')
       })
     },
