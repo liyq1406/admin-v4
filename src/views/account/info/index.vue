@@ -31,7 +31,7 @@
                 </div>
               </div>
             </div>
-            <div class="form-row row">
+            <div class="form-row row" v-if="currentMember.role === 1">
               <label class="form-control col-6">角色</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
@@ -221,18 +221,20 @@ export default {
      * @return {[type]} [description]
      */
     onSubmitEditInfo () {
-      console.log('编辑信息提交表单')
-      this.editing = true
       if (this.currentMember.role !== this.role.value) {
         this.setRole()
+        return
       }
       if (this.currentMember.name !== this.editModel.name) {
         this.setMemberInfo()
+        return
       }
+      this.onEditInfoCancel()
     },
     setMemberInfo () {
       this.editModel.is_notice = true
       this.editModel.is_alert = true
+      this.editing = true
       api.corp.updateMember(this.currentMember.id, this.editModel).then((res) => {
         this.onEditInfoCancel()
         this.showNotice({
@@ -270,6 +272,7 @@ export default {
       let params = {
         // 'role_id': '自定义角色ID'
       }
+      this.editing = true
       api.corp.setMemberRole(this.currentMember.id, roleType, params).then((res) => {
         this.onEditInfoCancel()
         this.showNotice({
