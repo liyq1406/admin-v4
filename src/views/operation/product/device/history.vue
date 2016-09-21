@@ -9,10 +9,10 @@
         </div>
         <div class="filter-group">
           <div class="filter-group-item">
-            <x-select :label="selectRules.interval + '分钟'" width="110px" size="small">
+            <x-select :label="selectRules.name" width="110px" size="small">
               <span slot="label">快照规则</span>
-              <select v-model="selectRules">
-                <option v-for="opt in rules" :value="opt">{{ opt.interval }}分钟</option>
+              <select v-model="selectRules" @change="ruleSelect">
+                <option v-for="opt in rules" :value="opt">{{ opt.name }}</option>
               </select>
             </x-select>
           </div>
@@ -28,13 +28,13 @@
       </div>
       <div class="device-data-table-box">
         <div class="panel-bd">
-          <time-line :data="trendData" scale="hour"></time-line>
+          <time-line :data="trendData" scale="day-hour"></time-line>
         </div>
       </div>
-      <div class="history-list mt20" v-if="filteredSnapshots.length">
+      <div class="history-list mt20" v-if="snapshots.length">
         <div class="col-dates">
           <ul>
-            <li v-for="snapshot in filteredSnapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.snapshot_date }}</li>
+            <li v-for="snapshot in snapshots" :class="{'active':currSnapshot._id===snapshot._id}" @click="currSnapshot=snapshot">{{ snapshot.snapshot_date }}</li>
           </ul>
         </div>
         <div class="col-details">
@@ -90,6 +90,7 @@ export default {
       countPerPage: 10,
       rules: [],
       snapshots: [],
+      trendSnapshots: [],
       currSnapshot: {},
       datapoints: [],
       selectedDatapoint: {},
@@ -135,21 +136,11 @@ export default {
       return result
     },
 
-    // 过滤后的的快照列表
-    filteredSnapshots () {
-      let offset = (this.currentPage - 1) * this.countPerPage
-      let result = this.snapshots.slice(offset, offset + this.countPerPage)
-      if (result.length) {
-        this.currSnapshot = result[0]
-      }
-      return result
-    },
-
     // 趋势数据
     trendData () {
       let result = []
-      if (this.selectedDatapoint.index) {
-        let snapshotGroup = _.groupBy(this.snapshots, (item) => {
+      if (this.selectedDatapoint.index !== undefined) {
+        let snapshotGroup = _.groupBy(this.trendSnapshots, (item) => {
           let hour = item.snapshot_date.split(' ')[1].split(':')[0]
           return `${uniformDate(item.snapshot_date)}-${hour}`
         })
@@ -157,8 +148,8 @@ export default {
         for (var key in snapshotGroup) {
           let dp = snapshotGroup[key][0]
           result.push({
-            date: formatDate(dp.snapshot_date),
-            val: Number(dp[this.selectedDatapoint.index]),
+            date: dp.snapshot_date,
+            val: Number(dp[this.selectedDatapoint.index]) || 0,
             name: this.selectedDatapoint.name
           })
         }
@@ -179,7 +170,7 @@ export default {
       return result
     },
 
-    // 查询条件
+    // 列表数据查询条件
     queryCondition () {
       // 取当前开始到period天前的时间
       var endtime = Date.parse(new Date())
@@ -191,7 +182,25 @@ export default {
         date: {
           begin: begintime,
           end: endtime
-        }
+        },
+        rule_id: this.selectRules.id
+      }
+      return condition
+    },
+    // 图数据查询条件
+    trendQueryCondition () {
+      // 取当前开始到period天前的时间
+      var endtime = Date.parse(new Date())
+      // 取当前开始到period天前的时间
+      var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
+      var condition = {
+        limit: 2500,
+        offset: 0,
+        date: {
+          begin: begintime,
+          end: endtime
+        },
+        rule_id: this.selectRules.id
       }
       return condition
     }
@@ -205,8 +214,13 @@ export default {
   },
 
   methods: {
+    ruleSelect () {
+      this.getSnapshots(true)
+      this.getTrendSnapshots()
+    },
     periodSelect (period) {
-      this.getSnapshots()
+      this.getSnapshots(true)
+      this.getTrendSnapshots()
     },
     /**
      * 获取设备端点列表
@@ -233,6 +247,7 @@ export default {
           this.rules = res.data.list
           this.selectRules = this.rules[0]
           this.getSnapshots()
+          this.getTrendSnapshots()
         }
       }).catch((res) => {
         this.handleError(res)
@@ -246,7 +261,7 @@ export default {
      */
     onCurrPageChage (number) {
       this.currentPage = number
-      // this.getSnapshots()
+      this.getSnapshots()
     },
 
     /**
@@ -256,15 +271,18 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      // this.getSnapshots(true)
+      this.getSnapshots(true)
     },
 
     /**
      * 获取快照数据
      */
-    getSnapshots () {
+    getSnapshots (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, this.queryCondition).then((res) => {
-        if (res.status === 200) {
+        if (res.status === 200 && res.data.list.length > 0) {
           // 模拟数据开始 ******************************
           // res.data.count = 2
           // res.data.list = [{
@@ -297,6 +315,25 @@ export default {
           // 获取全部数组数据
           this.total = res.data.count
           this.snapshots = res.data.list.map((item) => {
+            item.snapshot_date = formatDate(item.snapshot_date)
+            return item
+          }).sort((a, b) => {
+            return new Date(b.snapshot_date) - new Date(a.snapshot_date)
+          })
+
+          this.currSnapshot = this.snapshots[0]
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 获取快照数据
+     */
+    getTrendSnapshots () {
+      api.snapshot.getSnapshot(this.$route.params.product_id, this.$route.params.device_id, this.trendQueryCondition).then((res) => {
+        if (res.status === 200 && res.data.list.length > 0) {
+          this.trendSnapshots = res.data.list.map((item) => {
             item.snapshot_date = formatDate(item.snapshot_date)
             return item
           }).sort((a, b) => {

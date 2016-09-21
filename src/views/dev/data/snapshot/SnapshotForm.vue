@@ -1,80 +1,96 @@
 <template>
-  <form novalidate>
-    <div class="form">
-      <div class="form-row row">
-        <label class="form-control col-3">产品:</label>
-        <div class="controls col-21">
-          <template v-if="type==='add'">
-            <x-select :label="selectedProduct.label" width="200px">
-              <select v-model="selectedProduct">
-                <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
-              </select>
-            </x-select>
-          </template>
-          <div class="control-text" v-else>{{ selectedProduct.name }}</div>
-        </div>
-      </div>
-      <div class="form-row row">
-        <label class="form-control col-3">快照规则:</label>
-        <div class="controls col-21">
-          <x-select :label="interval.label" width="200px">
-            <select v-model="interval">
-              <option v-for="opt in locales.data.SNAPSHOT_INTERVAL" :value="opt">{{ opt.label }}</option>
-            </select>
-          </x-select>
-        </div>
-      </div>
-      <div class="form-row row">
-        <label class="form-control col-3">快照数据:</label>
-        <div class="controls col-21">
-          <div class="control-text" v-if="!loadingData && !datapoints.length"><span class="hl-gray">暂无数据</span></div>
-          <div class="table-wrap" v-if="!loadingData && datapoints.length">
-            <div class="data-table with-loading">
-              <div class="icon-loading" v-show="loadingData">
-                <i class="fa fa-refresh fa-spin"></i>
+  <div>
+    <validator name="validation">
+      <form novalidate>
+        <div class="form">
+          <div class="form-row row">
+            <label class="form-control col-3">快照名称:</label>
+            <div class="controls col-21">
+              <div class="input-text-wrap">
+                <input v-model="name" type="text" placeholder="请输入快照名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text input-lenght"/>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入快照名称</span>
+                  <span v-if="$validation.name.modified && $validation.name.minlength">快照名称不能少于2位</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">快照名称不能大于于30位</span>
+                </div>
               </div>
-              <table class="table table-stripe table-bordered">
-                <thead>
-                  <tr>
-                    <th width="5%">选择</th>
-                    <th widht="10%">索引</th>
-                    <th width="30%">数据类型</th>
-                    <th width="15%">单位符号</th>
-                    <th width="40%">描述</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="dp in datapoints | limitBy countPerPage (currentPage-1)*countPerPage">
-                    <td><input :checked="dp.selected" type="checkbox" @click="toggleSelected(dp)"/></td>
-                    <td>{{dp.index}}</td>
-                    <td>{{getTypeByValue(dp.type).label}}</td>
-                    <td>{{dp.symbol}}</td>
-                    <td>{{dp.description}}</td>
-                  </tr>
-                </tbody>
-              </table>
             </div>
-            <div class="data-points-footer">
-              <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pager>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3">产品:</label>
+            <div class="controls col-21">
+              <template v-if="type==='add'">
+                <x-select :label="selectedProduct.label" width="200px">
+                  <select v-model="selectedProduct">
+                    <option v-for="opt in productOptions" :value="opt">{{ opt.label }}</option>
+                  </select>
+                </x-select>
+              </template>
+              <div class="control-text" v-else>{{ selectedProduct.name }}</div>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3">快照规则:</label>
+            <div class="controls col-21">
+              <x-select :label="interval.label" width="200px">
+                <select v-model="interval">
+                  <option v-for="opt in locales.data.SNAPSHOT_INTERVAL" :value="opt">{{ opt.label }}</option>
+                </select>
+              </x-select>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3">快照数据:</label>
+            <div class="controls col-21">
+              <div class="control-text" v-if="!loadingData && !datapoints.length"><span class="hl-gray">暂无数据</span></div>
+              <div class="table-wrap" v-if="!loadingData && datapoints.length">
+                <div class="data-table with-loading">
+                  <div class="icon-loading" v-show="loadingData">
+                    <i class="fa fa-refresh fa-spin"></i>
+                  </div>
+                  <table class="table table-stripe table-bordered">
+                    <thead>
+                      <tr>
+                        <th width="5%">选择</th>
+                        <th widht="10%">索引</th>
+                        <th width="30%">数据类型</th>
+                        <th width="15%">单位符号</th>
+                        <th width="40%">描述</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr v-for="dp in datapoints | limitBy countPerPage (currentPage-1)*countPerPage">
+                        <td><input :checked="dp.selected" type="checkbox" @click="toggleSelected(dp)"/></td>
+                        <td>{{dp.index}}</td>
+                        <td>{{getTypeByValue(dp.type).label}}</td>
+                        <td>{{dp.symbol}}</td>
+                        <td>{{dp.description}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <div class="data-points-footer">
+                  <pager v-if="datapoints.length > countPerPage" :total="datapoints.length" :current="currentPage" :count-per-page="countPerPage" @page-update="onPageUpdate" :simple="true"></pager>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row" v-if="type==='edit'">
+            <div class="col-21 col-offset-3">
+              <label class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除快照
+              </label>
+            </div>
+          </div>
+          <div class="form-actions row">
+            <div class="col-21 col-offset-3">
+              <button :disabled="submiting || selectedDatapoints.length === 0 || $validation.invalid" :class="{'disabled':submiting || selectedDatapoints.length === 0 || $validation.invalid}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
             </div>
           </div>
         </div>
-      </div>
-      <div class="form-row row" v-if="type==='edit'">
-        <div class="col-21 col-offset-3">
-          <label class="del-check">
-            <input type="checkbox" name="del" v-model="delChecked"/> 删除快照
-          </label>
-        </div>
-      </div>
-      <div class="form-actions row">
-        <div class="col-21 col-offset-3">
-          <button :disabled="submiting || selectedDatapoints.length === 0" :class="{'disabled':submiting || selectedDatapoints.length === 0}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
-        </div>
-      </div>
-    </div>
-  </form>
-
+      </form>
+    </validation>
+  </div>
 </template>
 
 <script>
@@ -117,6 +133,7 @@ export default {
         label: '请选择产品'
       }, // 已选产品
       interval: {}, // 快照规则
+      name: '', // 快照名称
       submiting: false,
       selectedDatapoints: [],
       allDatapoints: [],
@@ -256,6 +273,7 @@ export default {
           this.interval = _.find(this.locales.data.SNAPSHOT_INTERVAL, (o) => {
             return o.value === res.data.interval
           })
+          this.name = res.data.name
           this.selectedDatapoints = res.data.datapoint || []
         }
       }).catch((res) => {
@@ -294,6 +312,11 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+
       if (this.submiting) return
 
       let model = {
@@ -302,7 +325,8 @@ export default {
         storage: {
           expire: 0
         },
-        datapoint: this.selectedDatapoints
+        datapoint: this.selectedDatapoints,
+        name: this.name
       }
       let process
 
@@ -336,4 +360,6 @@ export default {
 
 .form
   max-width 800px
+  .input-lenght
+    width 200px
 </style>

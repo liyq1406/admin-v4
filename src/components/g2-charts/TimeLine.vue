@@ -148,6 +148,8 @@ export default {
       }
       if (this.scale === 'hour') {
         defs.date.mask = 'HH:MM'
+      } else if (this.scale === 'day-hour') {
+        defs.date.mask = 'mm-dd HH:MM'
       }
 
       // x 轴配置
