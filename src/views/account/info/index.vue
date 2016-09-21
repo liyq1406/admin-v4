@@ -256,11 +256,11 @@ export default {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
       }).catch((res) => {
-        this.showNotice({
-          type: 'error',
-          content: '暂无当前用户信息'
-        })
-        this.$route.router.go('/login')
+        // this.showNotice({
+        //   type: 'error',
+        //   content: '暂无当前用户信息'
+        // })
+        // this.$route.router.go('/login')
       })
     },
     /**

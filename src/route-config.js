@@ -297,6 +297,13 @@ let configRouter = (router) => {
                   resolve(require('./views/dev/product/info/edit/field'))
                 }, 'admin')
               }
+            },
+            'qrcode': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/product/info/edit/qrcode'))
+                }, 'admin')
+              }
             }
           }
         },
