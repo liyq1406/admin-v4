@@ -132,7 +132,7 @@
       <h3 slot="header">提示</h3>
       <div slot="body">
         <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
-          <p>设备导入成功，<a v-link="{path: 'info/list/' + tips.record.id}" class="hl-red">查看导入记录</a></p>
+          <p>设备导入成功，<a v-link="{path: 'info/list/' + tips.recordId}" class="hl-red">查看导入记录</a></p>
         </alert>
         <alert type="warning" title="" :cols="22" v-if="tips.type==='error'">
           <p>{{ tips.msg }}</p>
@@ -401,17 +401,13 @@ export default {
           //   type: 'success',
           //   content: '添加成功'
           // })
-          // TODO 后端应返回创建好的记录id，而不是导入的数据列表
-          res.data = {
-            id: 123
-          }
           this.getUsed()
           this.onAddCancel()
           this.getRecords()
           this.isShowTipsModal = true
           this.tips = {
             type: 'import-success',
-            record: res.data
+            recordId: res.data.import_record_id
           }
         }
       }).catch((res) => {
@@ -475,17 +471,13 @@ export default {
                 //   type: 'success',
                 //   content: this.$t('ui.upload.success_msg')
                 // })
-                // TODO 后端应返回创建好的记录id，而不是导入的数据列表
-                res.data = {
-                  id: 123
-                }
                 this.getUsed()
                 this.getRecords()
                 this.onBatchCancel()
                 this.isShowTipsModal = true
                 this.tips = {
                   type: 'import-success',
-                  record: res.data
+                  recordId: res.data.import_record_id
                 }
               }
               this.importing = false

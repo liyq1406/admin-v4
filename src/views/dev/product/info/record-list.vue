@@ -4,7 +4,7 @@
       <h2>产品信息</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel mt10">
+    <div class="panel mt15">
       <div class="panel-bd">
         <div class="data-table with-loading">
           <div class="filter-bar">
@@ -21,7 +21,7 @@
                 </div>
               </div>
             </div>
-            <div class="filter-group fr mr20">
+            <div class="filter-group fr">
               <div class="filter-group-item">
                 <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button>
               </div>
