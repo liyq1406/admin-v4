@@ -36,7 +36,11 @@
                 <td>
                   <a class="hl">{{dp.productName}}</a>
                 </td>
-                <td><div v-if="dp.rule===3">定时更新/{{dp.interval}}分钟</div></td>
+                <td>
+                  <div v-if="dp.rule===3">定时更新/{{dp.interval}}分钟</div>
+                  <div v-if="dp.rule===2">变化更新</div>
+                  <div v-if="dp.rule===1">即时更新</div>
+                </td>
                 <td>{{dp.create_time | formatDate}}</td>
                 <td>{{dp.creator}}</td>
                 <td>

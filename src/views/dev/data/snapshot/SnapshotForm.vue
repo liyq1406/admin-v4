@@ -4,19 +4,6 @@
       <form novalidate>
         <div class="form">
           <div class="form-row row">
-            <label class="form-control col-3">快照名称:</label>
-            <div class="controls col-21">
-              <div class="input-text-wrap">
-                <input v-model="name" type="text" placeholder="请输入快照名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text input-lenght"/>
-                <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">请输入快照名称</span>
-                  <span v-if="$validation.name.modified && $validation.name.minlength">快照名称不能少于2位</span>
-                  <span v-if="$validation.name.modified && $validation.name.maxlength">快照名称不能大于于30位</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-row row">
             <label class="form-control col-3">产品:</label>
             <div class="controls col-21">
               <template v-if="type==='add'">
@@ -32,11 +19,47 @@
           <div class="form-row row">
             <label class="form-control col-3">快照规则:</label>
             <div class="controls col-21">
+              <div class="clearfix">
+                <div class="form-control rule-type-item mr10">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="timer">
+                  <span>定时快照</span>
+                </div>
+                <div class="form-control rule-type-item mr10">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="instance">
+                  <span>即时快照</span>
+                </div>
+                <div class="form-control rule-type-item">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="update">
+                  <span>变化快照</span>
+                </div>
+              </div>
+              <div class="ruletype-tips">
+                <span v-show="ruleType==='instance'">(当设备产生上报动作时立即创建快照)</span>
+                <span v-show="ruleType==='update'">(当设备上报的数据端点和上次的数据端点发生变化时，才会进行存储和快照，如果没有变化则不存储快照)</span>
+              </div>
+            </div>
+          </div>
+          <div v-show="ruleType==='timer'" class="form-row row">
+            <label class="form-control col-3">采集周期:</label>
+            <div class="controls col-21">
               <x-select :label="interval.label" width="200px">
                 <select v-model="interval">
                   <option v-for="opt in locales.data.SNAPSHOT_INTERVAL" :value="opt">{{ opt.label }}</option>
                 </select>
               </x-select>
+            </div>
+          </div>
+          <div class="form-row row">
+            <label class="form-control col-3">快照名称:</label>
+            <div class="controls col-21">
+              <div class="input-text-wrap">
+                <input v-model="name" type="text" placeholder="请输入快照名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text input-lenght"/>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入快照名称</span>
+                  <span v-if="$validation.name.modified && $validation.name.minlength">快照名称不能少于2位</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">快照名称不能大于于30位</span>
+                </div>
+              </div>
             </div>
           </div>
           <div class="form-row row">
@@ -140,7 +163,8 @@ export default {
       currentPage: 1,
       countPerPage: 10,
       delChecked: false,
-      loadingData: false
+      loadingData: false,
+      ruleType: 'timer'
     }
   },
 
@@ -273,6 +297,20 @@ export default {
           this.interval = _.find(this.locales.data.SNAPSHOT_INTERVAL, (o) => {
             return o.value === res.data.interval
           })
+          switch (res.data.rule) {
+            case 1:
+              this.ruleType = 'instance'
+              break
+            case 2:
+              this.ruleType = 'update'
+              break
+            case 3:
+              this.ruleType = 'timer'
+              break
+            default:
+              this.ruleType = 'timer'
+              break
+          }
           this.name = res.data.name
           this.selectedDatapoints = res.data.datapoint || []
         }
@@ -321,12 +359,21 @@ export default {
 
       let model = {
         rule: 3,
-        interval: this.interval.value,
         storage: {
           expire: 0
         },
         datapoint: this.selectedDatapoints,
         name: this.name
+      }
+
+      if (this.ruleType === 'instance') {
+        model.rule = 1
+      } else if (this.ruleType === 'update') {
+        model.rule = 2
+      }
+
+      if (model.rule === 3) {
+        this.model.interval = this.interval.value
       }
       let process
 
@@ -362,4 +409,8 @@ export default {
   max-width 800px
   .input-lenght
     width 200px
+  .rule-type-item
+    display inline-block
+  .ruletype-tips
+    color #999
 </style>
