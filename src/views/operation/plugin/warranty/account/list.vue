@@ -46,7 +46,7 @@
                   <td>{{ account.name }}</td>
                   <td>{{ account.director }}</td>
                   <td>{{ account.phone }}</td>
-                  <td>{{ account.create_time | uniformDate}}</td>
+                  <td>{{ account.create_time | formatDate}}</td>
                   <td>
                     <a v-link="{path: '/operation/plugins/warranty/' + $route.params.app_id + '/accounts/'+account._id}" class="hl-red">查看详情</a>
                   </td>
