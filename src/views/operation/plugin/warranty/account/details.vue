@@ -10,7 +10,7 @@
         <ul class="info-details">
           <li class="row">
             <div class="col-3 label">创建日期:</div>
-            <div class="clo-21 info">{{ info.create_time | uniformDate }}</div>
+            <div class="clo-21 info">{{ info.create_time | formatDate }}</div>
           </li>
         </ul>
       </div>
