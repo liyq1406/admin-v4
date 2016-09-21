@@ -6,6 +6,7 @@
 
 <script>
 import { uniformDate } from 'src/filters'
+import _ from 'lodash'
 
 export default {
   name: 'Line',
@@ -66,6 +67,21 @@ export default {
       } else {
         return 5
       }
+    },
+    // 最长一条线的长度
+    maxLineLenght () {
+      var res = 0
+      if (this.data.length > 0 && this.data[0].name) {
+        let group = _.groupBy(this.data, (item) => {
+          return item.name
+        })
+        let lengthArr = []
+        for (let key in group) {
+          lengthArr.push(group[key].length)
+        }
+        res = Math.max(...lengthArr)
+      }
+      return res
     }
   },
 
@@ -73,7 +89,7 @@ export default {
     // 监听数据变化，渲染图表
     data () {
       if (this.chart) {
-        if (this.data.length >= 30 && this.point) {
+        if (this.maxLineLenght >= 30 && this.point) {
           this.point.size(0)
         } else if (this.point) {
           this.point.size(4)
@@ -165,7 +181,7 @@ export default {
 
       let line = chart.line().position('date*val').size(2)
       let point = null
-      if (this.data.length < 30) {
+      if (this.maxLineLenght < 30) {
         point = chart.point().position('date*val').shape('name', ['circle', 'rect', 'diamond']).size(4)
         this.point = point
       } else {
