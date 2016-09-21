@@ -61,7 +61,7 @@
             </tbody>
           </table>
         </div>
-        <pager v-if="total > 0" :total="total" :current.sync="currentPage" :count-per-page.sync="countPerPage" @count-update="getMembers" @page-update="getMembers"></pager>
+        <pager v-if="total > 0" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @count-update="getMembers(false)" @page-update="getMembers(false)" :simple="true"></pager>
       </div>
 
       <!-- 添加成员 -->
