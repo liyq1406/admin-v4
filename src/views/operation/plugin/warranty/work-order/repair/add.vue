@@ -45,9 +45,9 @@
                 <label class="form-control col-5 alert-label">维修内容:</label>
                 <div class="controls col-19">
                   <div v-placeholder="'请输入维修内容'" class="input-text-wrap">
-                    <input v-lengthtip="{max: 32, model:addModal.content }" v-model="addModal.content" type="text" v-form-ctrl name="name" minlength="0" maxlength="32" lazy required class="input-text"/>
+                    <input v-lengthtip="{max: 32, model:addModal.instructions }" v-model="addModal.instructions" type="text" v-form-ctrl name="instructions" minlength="0" maxlength="32" lazy required class="input-text"/>
                   </div>
-                  <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">请输入维修内容</span></div>
+                  <div v-if="addValidation.$submitted && addValidation.instructions.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.instructions.$error.required">请输入维修内容</span></div>
                 </div>
               </div>
 
