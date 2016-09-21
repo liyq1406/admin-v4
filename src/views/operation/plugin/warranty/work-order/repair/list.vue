@@ -56,7 +56,7 @@
               </div>
             </div>
           </div>
-          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails"></x-table>
+          <x-table :headers="headers" :tables="tables" :page="page" @tbody-id="goDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
         </div>
       </div>
     </div>
@@ -264,17 +264,13 @@
           filter: [],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
-          order: {},
+          order: {'create_time': -1},
           query: {}
         }
 
         condition.query = {
           product_id: {
             $in: [this.selectedProduct.id]
-          // },
-          // create_time: {
-          //   $gte: {'@date': this.startTimePick},
-          //   $lte: {'@date': this.endTimePick}
           }
         }
         if (this.useTime === true) {
@@ -350,6 +346,25 @@
     },
 
     methods: {
+      /**
+       * 当前页码改变
+       * @author weijie
+       * @param  {Number} number 页码
+       */
+      onCurrPageChage (number) {
+        this.currentPage = number
+        this.getOrderWorkList()
+      },
+
+      /**
+       * 每页显示的数量改变
+       * @author weijie
+       * @param  {Number} count 数量
+       */
+      onPageCountUpdate (count) {
+        this.countPerPage = count
+        this.getOrderWorkList(true)
+      },
       init () {
         this.selectedProduct = this.products[0] || {}
         if (this.products.length > 0) {
