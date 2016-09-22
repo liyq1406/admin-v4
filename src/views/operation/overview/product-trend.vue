@@ -153,7 +153,7 @@ export default {
         item.data.forEach((i) => {
           product.count += i.count
         })
-        product.product = item.product
+        product.product = item.product.length > 6 ? (item.product.substring(0, 5) + '...') : item.product
         products.push(product)
       })
 
