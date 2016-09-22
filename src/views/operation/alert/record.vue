@@ -8,7 +8,7 @@
         <div class="filter-group-item">
           <x-select :label="currentProduct.name" width="110px" size="small">
             <span slot="label">产品</span>
-            <select v-model="currentProduct" @change="getAlerts">
+            <select v-model="currentProduct" @change="productSelected">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
             </select>
@@ -298,12 +298,6 @@ export default {
           }
         }
       }
-      // if (this.endTimePick.getTime() - this.startTimePick.getTime() >= 3600 * 1000 * 24) {
-      //   this.endTimePick = new Date(this.endTimePick.getTime())
-      //   this.startTimePick = new Date(this.startTimePick.getTime())
-      //   condition.query.create_date.$lte = new Date(uniformDate(this.endTimePick))
-      //   condition.query.create_date.$gte = new Date(uniformDate(this.startTimePick))
-      // }
       // 关键字搜索
       if (this.key !== '') {
         if (this.queryType.value === 'from') {
@@ -422,7 +416,6 @@ export default {
     if (this.products.length > 0) {
       this.getFirstProduct()
       this.getSummary()
-      this.getAlerts()
     }
   },
 
@@ -432,12 +425,16 @@ export default {
       if (this.products.length > 0) {
         this.getFirstProduct()
         this.getSummary()
-        this.getAlerts()
+        this.getAlerts(true)
       }
     }
   },
 
   methods: {
+    productSelected () {
+      this.getSummary()
+      this.getAlerts(true)
+    },
     // 获取第一个产品@author weijie
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
@@ -533,7 +530,7 @@ export default {
         if (!this.currentProduct.id) {
           this.getFirstProduct()
         }
-        this.getAlerts()
+        this.getAlerts(true)
         this.getUnreadCount(start, end)
       }
     },

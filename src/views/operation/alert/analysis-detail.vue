@@ -150,6 +150,13 @@ export default {
   },
 
   computed: {
+    page () {
+      return {
+        total: this.total,
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage
+      }
+    },
     queryCondition () {
       var params = {
         limit: this.countPerPage,
