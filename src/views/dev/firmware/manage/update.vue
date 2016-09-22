@@ -111,7 +111,7 @@
                 <!-- <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload btn-sm">
                   <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="" :disabled="uploading"/><i class="fa fa-reply-all"></i>上传固件文件
                 </label> -->
-                <label :class="{'disabled':unableAdd}" class="btn btn-success btn-upload mbt10">
+                <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mbt10">
                   <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addmodel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                 </label>
                 <div v-if="addmodel.file_url.length > 0" class="file-url">url: {{ addmodel.file_url }}</div>

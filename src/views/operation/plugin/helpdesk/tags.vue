@@ -3,7 +3,7 @@
     <div class="panel">
       <div class="panel-hd">
         <div class="actions">
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加标签</button>
+          <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加标签</button>
         </div>
         <h2>标签列表</h2>
       </div>

@@ -153,7 +153,7 @@
                   <span @click="removeField(field, addModal.fields)" class="fa fa-times"></span>
                 </div>
               </div>
-              <button @click.prevent.stop="createField(addModal.fields, $event)" :disabled="!canCreateAddFields" class="btn btn-success" :class="{'disabled':!canCreateAddFields}">{{ $t("ui.table.add_field") }}</button>
+              <button @click.prevent.stop="createField(addModal.fields, $event)" :disabled="!canCreateAddFields" class="btn btn-ghost" :class="{'disabled':!canCreateAddFields}"><i class="fa fa-plus"></i>{{ $t("ui.table.add_field") }}</button>
             </div>
           </div>
           <div class="form-actions">
@@ -224,7 +224,7 @@
                   <span @click="removeField(field, editModal.fields)" class="fa fa-times"></span>
                 </div>
               </div>
-              <button @click.prevent.stop="createField(editModal.fields, $event)" :disabled="!canCreateEditFields" class="btn btn-success" :class="{'disabled':!canCreateEditFields}">{{ $t("ui.table.add_field") }}</button>
+              <button @click.prevent.stop="createField(editModal.fields, $event)" :disabled="!canCreateEditFields" class="btn btn-ghost" :class="{'disabled':!canCreateEditFields}"><i class="fa fa-plus"></i>{{ $t("ui.table.add_field") }}</button>
             </div>
           </div>
           <div class="form-actions">

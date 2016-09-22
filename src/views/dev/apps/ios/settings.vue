@@ -25,7 +25,7 @@
       <div v-show="model.config.apn.enable" class="form-row row">
         <label class="form-control col-6">{{ $t("ui.app.apn_file") }}:</label>
         <div class="controls col-18">
-          <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+          <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload">
             <input type="file" v-el:edit-apn-file="v-el:edit-apn-file" name="apnFile" @change.prevent="uploadApn('editApnFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.app.uploading') : $t('ui.app.upload') }}
           </label>
           <div v-if="model.config.apn.license_url" class="file-url">url: {{ model.config.apn.license_url }}</div>

@@ -42,12 +42,13 @@
                   <div class="operation"><a v-link="{path: '/dev/products/' + product.id + '/debug'}" class="link-start">立即开始</a></div>
                 </div>
               </div>
-              <div class="dev-item dev-app hidden">
+              <div class="dev-item dev-app">
                 <div class="thumb"></div>
                 <div class="info">
                   <h3>我是APP开发者</h3>
                   <p>根据开发者身份，您可以选择iOS、Android的对应测试工具，以及相关的SDK文档，与设备进行联调。</p>
-                  <div class="operation"><a v-link="{path: '/dev/products/' + product.id + '/virtual-devices'}" class="link-start">立即开始</a></div>
+                  <!-- <div class="operation"><a v-link="{path: '/dev/products/' + product.id + '/virtual-devices'}" class="link-start">立即开始</a></div> -->
+                  <div class="operation"><a v-link="{path: '/dev/home'}" class="link-start">立即开始</a></div>
                 </div>
               </div>
             </div>

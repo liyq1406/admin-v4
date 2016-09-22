@@ -98,7 +98,7 @@
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.firmware.file") }}:</label>
             <div class="controls col-18">
-              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+              <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload">
                 <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('addModel', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
               </label>
               <div v-if="addModel.file_url.length > 0" class="file-url">url: {{ addModel.file_url }}</div>
@@ -158,7 +158,7 @@
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.firmware.file") }}:</label>
             <div class="controls col-18">
-              <label :class="{'disabled':uploading}" class="btn btn-success btn-upload">
+              <label :class="{'disabled':uploading}" class="btn btn-ghost btn-upload">
                 <input type="file" v-el:edit-firmware-file="v-el:edit-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('editModel', 'editFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
               </label>
               <div v-if="editModel.file_url" class="file-url">url: {{ editModel.file_url }}</div>

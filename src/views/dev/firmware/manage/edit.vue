@@ -64,7 +64,7 @@
                   <label class="form-control col-5 dealer-label">固件文件:</label>
                   <div class="controls col-19 row line32">
                     <div v-if="firmware.file_url.length > 0">{{firmware.file_url}}</div>
-                    <label :class="{'disabled':unableAdd}" class="btn btn-success btn-upload mbt10">
+                    <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mbt10">
                       <input type="file" v-el:add-firmware-file="v-el:add-firmware-file" name="firmwareFile" @change.prevent="uploadFirmware('firmware', 'addFirmwareFile', $event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                     </label>
                   </div>
