@@ -10,7 +10,7 @@
         </div>
         <div class="msg-box">
           <div class="title">
-            <a>{{notice.title}}</a>
+            <a :href="notice.url" target="_blank">{{notice.title}}</a>
           </div>
           <div class="time-box">
             <span>{{notice.time}}</span>
@@ -29,33 +29,27 @@
         notices: [
           {
             icon: 'apple',
-            title: 'iOS SDK 更新v3.0版本啦！',
-            time: '2016-08-12'
-          },
-          {
-            icon: 'file-text-o',
-            title: '应用开发文档内容有更新，详情进入了解',
-            time: '2016-08-07'
+            title: 'iOS SDK 更新v3.0版本！',
+            time: '2016-08-12',
+            url: 'https://github.com/xlink-corp/ios-sdk'
           },
           {
             icon: 'android',
-            title: 'Android SDK 更新v3.8版本啦！',
-            time: '2016-07-27'
+            title: 'Android SDK 更新v3.0版本！',
+            time: '2016-07-27',
+            url: 'https://github.com/xlink-corp/android-sdk'
           },
           {
             icon: 'file-text-o',
-            title: 'MCU SDK QC4004 V1.2',
-            time: '2016-07-14'
+            title: 'JSSDK微信版V1.1.2',
+            time: '2016-07-14',
+            url: 'https://github.com/xlink-corp/JS-SDK'
           },
           {
             icon: 'file-text-o',
-            title: 'JSSDK微信版V0.9',
-            time: '2016-07-04'
-          },
-          {
-            icon: 'android',
-            title: 'Android SDK 更新v3.7版本啦！',
-            time: '2016-07-04'
+            title: '设备端SDK已更新至V3',
+            time: '2016-07-14',
+            url: 'https://github.com/xlink-corp/device-sdk'
           }
         ]
       }
