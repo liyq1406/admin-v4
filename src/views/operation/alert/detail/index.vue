@@ -20,18 +20,9 @@
                   <!-- <span class="ml15">16:12:03</span> -->
                 </div>
                 <div class="col-12">
-                  <!-- <button>
-                    <i class="fa fa-commenting"></i>
-                    通知维保
-                  </button> -->
-                  <button v-if="info.is_read" @click="changeStyleUnread"  style="background-color:red;color:#fff">
-                    <!-- <i class="fa fa-check"></i> -->
-                    重开任务
-                  </button>
-                  <button v-else @click="changeStyle">
-                    <!-- <i class="fa fa-check"></i> -->
-                    标记为已处理
-                  </button>
+                  <button class="btn btn-ghost fr ml10 hidden"><i class="fa fa-commenting"></i> 通知维保</button>
+                  <button class="btn btn-primary fr" v-if="info.is_read" @click="changeStyleUnread">重开任务</button>
+                  <button class="btn btn-ghost fr" v-else @click="changeStyle">标记为已处理</button>
                 </div>
               </div>
             </div>
@@ -352,14 +343,4 @@ export default {
   .down
     color gray-light
     font-size 12px
-    button
-      border 1px solid #BCBCBC
-      outline none
-      background-color #FAFAFA
-      color #323232
-      height 24px
-      float right
-      margin-right 20px
-      i
-        font-size 15px
 </style>
