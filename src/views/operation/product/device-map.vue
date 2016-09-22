@@ -88,7 +88,7 @@ export default {
       searching: false,
       queryTypeOptions: [
         { label: '设备ID', value: 'id' },
-        { label: 'MAC', value: 'mac' },
+        // { label: 'MAC', value: 'mac' },
         { label: '所在区域', value: 'area' }
       ],
       queryType: {
