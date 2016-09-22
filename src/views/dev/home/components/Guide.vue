@@ -16,7 +16,10 @@
               <p>{{guide.introduce}}</p>
             </div>
             <div class="btn-box">
-              <a class="btn btn-ghost mr10" v-for="btn in guide.buttons" @click="open(btn.link)">{{btn.text}}</a>
+              <template v-for="btn in guide.buttons" >
+                <a class="btn btn-ghost mr10" v-if="btn.link" @click="open(btn.link)">{{btn.text}}</a>
+                <span v-else class="btn btn-ghost mr10 disabled">{{btn.text}}</span>
+              </template>
             </div>
           </div>
         </div>
@@ -33,7 +36,7 @@
         guides: [
           {
             title: '开发文档',
-            introduce: '云智易平台提供了丰富的接口，将服务能力开放给上层应用和第三方系统',
+            introduce: '云智易物联平台提供了丰富的开发接口，为设备接入、APP开发、平台对接提供了丰富的业务支持。',
             buttons: [
               {
                 text: '浏览开发者文档',
@@ -47,21 +50,21 @@
             buttons: [
               {
                 text: 'iOS SDK',
-                link: 'https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/APP%20iOS%20SDK%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md'
+                link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
               },
               {
                 text: 'Android SDK',
-                link: 'https://github.com/xlink-corp/xlink-sdk/blob/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3/APP%20Android%20SDK%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3.md'
+                link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
               }
             ]
           },
           {
-            title: 'MCU SDK下载',
-            introduce: '基于云智易的无线通讯模块，厂商可以轻松实现与任意MCU的集成，为设备增加可连接的特性',
+            title: '硬件SDK下载',
+            introduce: '云智易硬件SDK提供各种不同CPU架构的C库，方便快捷将各种硬件设备快速安全地接入到云智易物联平台，加快开发者开发周期。',
             buttons: [
               {
                 text: 'MCU SDK下载',
-                link: 'http://support.xlink.cn/'
+                link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/设备端开发文档'
               }
             ]
           },
@@ -71,7 +74,7 @@
             buttons: [
               {
                 text: '下载软件',
-                link: ''
+                link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/硬件模拟器_v3'
               }
             ]
           },
@@ -81,11 +84,11 @@
             buttons: [
               {
                 text: 'iOS',
-                link: ''
+                link: 'https://github.com/xlink-corp/ios-sdk'
               },
               {
                 text: 'Android',
-                link: ''
+                link: 'https://github.com/xlink-corp/android-sdk'
               }
             ]
           },
@@ -94,7 +97,7 @@
             introduce: '辅助量产客户进行自动化测试，为客户构建高效可靠的智慧产品量产测试体系，降低产品智能化对于产能的影响。',
             buttons: [
               {
-                text: '下载软件',
+                text: '敬请期待',
                 link: ''
               }
             ]

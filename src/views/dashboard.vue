@@ -151,16 +151,16 @@ export default {
       productSummary: [],
       links: [
         {
-          content: '如何接入xlink wifi sdk，需要注意哪些事情？',
-          path: 'http://support.xlink.cn/hc/'
-        },
-        {
           content: '了解什么是数据端点？',
-          path: 'http://support.xlink.cn/hc/'
+          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/常见问题解答.md'
         },
         {
-          content: '我要开发一个wifi产品，在开发之前需要准备好哪些东西？',
-          path: 'http://support.xlink.cn/hc/'
+          content: '如何调用产品与设备接口？',
+          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/产品与设备管理接口.md#addProduct'
+        },
+        {
+          content: '在APP上如何创建用户并管理用户信息？',
+          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/%E7%89%A9%E8%81%94%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3.md'
         }
       ],
       nav: {
