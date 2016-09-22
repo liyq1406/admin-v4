@@ -254,7 +254,7 @@ export default {
           console.log(addr)
         }
         this.token = res.data.token
-        socket = io.connect(window.location.protocol + '//' + addr, {'force new connection': true})
+        socket = io.connect(window.location.protocol + '//' + addr, {'force new connection': true, secure: true})
 
         // 连接 socket
         socket.on('connect', () => {
