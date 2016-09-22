@@ -439,7 +439,8 @@ export default {
     batchImport () {
       if (window.File && window.FileReader && window.FileList && window.Blob) {
         var reader = new window.FileReader()
-        if (!/text\/\w+/.test(this.file.type)) {
+        console.log(this.file)
+        if (!/\.csv$/.test(this.file.name)) {
           this.showNotice({
             type: 'error',
             content: this.file.name + this.$t('ui.upload.type_tips')
@@ -457,6 +458,7 @@ export default {
         reader.onloadend = (evt) => {
           if (evt.target.readyState === window.FileReader.DONE) {
             var macArr = evt.target.result.replace(' ', '').replace(/\r\n/g, '\n').split('\n')
+            macArr = _.compact(macArr)
             macArr = macArr.slice(1).map((item) => {
               let macObj = item.split(',')
               return {
