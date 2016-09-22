@@ -212,8 +212,8 @@
           if (this.queryType.value === 'from') {
             // 设备ID
             let temp = parseInt(this.key)
-            if (!temp || temp > 1620000000) {
-              temp = 1620000000
+            if (!temp || temp > 2100000000) {
+              temp = 2100000000
             }
             // 设备ID不能用模糊匹配
             params.query.from = {

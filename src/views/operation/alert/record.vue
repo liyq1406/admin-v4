@@ -141,7 +141,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate, uniformDate } from 'src/filters'
+import { formatDate } from 'src/filters'
 import dateFormat from 'date-format'
 
 // TODO 消除代码冗余 #weijie
@@ -298,19 +298,19 @@ export default {
           }
         }
       }
-      if (this.endTimePick.getTime() - this.startTimePick.getTime() > 3600 * 1000 * 24) {
-        this.endTimePick = new Date(this.endTimePick.getTime() + 3600 * 1000 * 24)
-        this.startTimePick = new Date(this.startTimePick.getTime() + 3600 * 1000 * 24)
-        condition.query.create_date.$lte = new Date(uniformDate(this.endTimePick))
-        condition.query.create_date.$gte = new Date(uniformDate(this.startTimePick))
-      }
+      // if (this.endTimePick.getTime() - this.startTimePick.getTime() >= 3600 * 1000 * 24) {
+      //   this.endTimePick = new Date(this.endTimePick.getTime())
+      //   this.startTimePick = new Date(this.startTimePick.getTime())
+      //   condition.query.create_date.$lte = new Date(uniformDate(this.endTimePick))
+      //   condition.query.create_date.$gte = new Date(uniformDate(this.startTimePick))
+      // }
       // 关键字搜索
       if (this.key !== '') {
         if (this.queryType.value === 'from') {
           // 设备ID
           let temp = parseInt(this.key)
-          if (!temp || temp > 1620000000) {
-            temp = 1620000000
+          if (!temp || temp > 2100000000) {
+            temp = 2100000000
           }
           // 设备ID不能用模糊匹配
           condition.query.from = {
