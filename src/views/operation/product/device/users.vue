@@ -159,7 +159,7 @@ export default {
       this.usersInfo.map((item) => {
         let nickname = item.nickname || '-'
         if (user.user_id - 0 === item.id - 0) {
-          if (user.role) {
+          if (!user.role) {
             result = '<span><i class="fa fa-user"></i> ' + nickname + '</span>'
           } else {
             result = '<span>' + nickname + '</span>'
