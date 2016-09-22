@@ -107,7 +107,7 @@
           </div>
           <div class="form-actions row">
             <div class="col-21 col-offset-3">
-              <button :disabled="submiting || selectedDatapoints.length === 0 || $validation.invalid" :class="{'disabled':submiting || selectedDatapoints.length === 0 || $validation.invalid}" class="btn btn-primary" @click="onSubmit">{{ $t('common.ok') }}</button>
+              <button :disabled="submiting || selectedDatapoints.length === 0 || $validation.invalid" :class="{'disabled':submiting || selectedDatapoints.length === 0 || $validation.invalid}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
             </div>
           </div>
         </div>
@@ -373,7 +373,7 @@ export default {
       }
 
       if (model.rule === 3) {
-        this.model.interval = this.interval.value
+        model.interval = this.interval.value
       }
       let process
 
