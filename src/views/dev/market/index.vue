@@ -25,7 +25,7 @@
                   <p>{{ plugin.description }}</p>
                 </div>
                 <span class="status">
-                  <switch :disabled="plugin.enable || plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="showAlert(plugin)"></switch>
+                  <switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="pluginToggle(plugin)"></switch>
                 </span>
               </div>
             </div>
@@ -146,6 +146,14 @@
           enable: false,
           platform_status: 1,
           type: 10
+        }, {
+          id: '',
+          name: '运营位管理',
+          description: '运营位描述',
+          alias: 'operateposition',
+          enable: false,
+          platform_status: 1,
+          type: 10
         }]
       }
     },
@@ -156,16 +164,10 @@
       }
     },
     methods: {
-      showAlert (plugin) {
-        if (plugin.platform_status && plugin.platform_status === 1) {
-          this.isShowAlertModel = true
-          this.alertModel.type = 'warm'
-          this.alertModel.content = '<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>'
-          // setTimeout(() => {
-          //   plugin.enable = !plugin.enable
-          // }, 500)
-          return
-        }
+      showAlert (str) {
+        this.isShowAlertModel = true
+        this.alertModel.type = 'warm'
+        this.alertModel.content = str
       }
     }
   }
