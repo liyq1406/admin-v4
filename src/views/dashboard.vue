@@ -178,11 +178,11 @@ export default {
           {
             content: '告警分析',
             path: '/operation/alerts/analysis'
-          },
-          {
-            content: '热力分布',
-            path: '/operation/alerts/heat'
           }
+          // {
+          //   content: '热力分布',
+          //   path: '/operation/alerts/heat'
+          // }
         ],
         users: [
           {
@@ -195,12 +195,12 @@ export default {
           },
           {
             content: '人群画像',
-            path: '/operation/users/portrait/os'
-          },
-          {
-            content: '用户标签',
-            path: '/operation/users/overview'
+            path: '/operation/users/portrait'
           }
+          // {
+          //   content: '用户标签',
+          //   path: '/operation/users/overview'
+          // }
         ]
       }
     }
