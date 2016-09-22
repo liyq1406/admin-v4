@@ -27,7 +27,7 @@
                   <!-- <span class="product-id">({{product.id}})</span> -->
                 </div>
                 <div class="info">
-                  <span>授权：{{product['授权'] || 0}}</span>
+                  <span>授权：{{product['quota'] || 0}}</span>
                   <span class="ml10">| 设备数：{{product['total'] || '0'}}</span>
                   <span class="ml10">| 状态：{{product['is_release']?'已发布':'未发布'}}</span>
                 </div>
@@ -218,6 +218,7 @@ export default {
         product.name = item1.name
         product.id = item1.id
         product.is_release = item1.is_release
+        product.quota = item1.quota
         this.productSummary.forEach((item2) => {
           if (product.id === item2.id) {
             product.total = item2['total'] || 0
