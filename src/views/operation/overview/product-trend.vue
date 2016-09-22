@@ -194,11 +194,11 @@ export default {
       products.forEach((item) => {
         getActivatedTrend(item.id, duration).then((res) => {
           recv.activated.push({
-            product: item.name,
+            product: item.name.length > 11 ? (item.name.substring(0, 10) + '...') : item.name,
             data: res.activated
           })
           recv.total.push({
-            product: item.name,
+            product: item.name.length > 11 ? (item.name.substring(0, 10) + '...') : item.name,
             data: res.total
           })
 

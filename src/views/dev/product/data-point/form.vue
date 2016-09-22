@@ -275,7 +275,7 @@ export default {
       } else if (this.modelType.value === 3) { // 短整型有符号
         max = 32767
       } else if (this.modelType.value === 4) { // 长整型有符号
-        max = 2147483648
+        max = 2147483647
       } else if (this.modelType.value === 8) { // 短整型无符号
         max = 65535
       } else if (this.modelType.value === 9) { // 长整型无符号

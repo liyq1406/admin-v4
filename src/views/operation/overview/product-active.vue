@@ -106,11 +106,11 @@ export default {
       products.forEach((item) => {
         getActiveTrend(item.id, duration).then((res) => {
           recv.active.push({
-            product: item.name,
+            product: item.name.length > 11 ? (item.name.substring(0, 10) + '...') : item.name,
             data: res.active
           })
           recv.add.push({
-            product: item.name,
+            product: item.name.length > 11 ? (item.name.substring(0, 10) + '...') : item.name,
             data: res.add
           })
 
