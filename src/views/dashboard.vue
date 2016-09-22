@@ -19,7 +19,7 @@
           <div class="content-box">
             <div class="product" v-for="product in devProducts">
               <div class="img-box">
-                <img src="../assets/images/device_thumb.png">
+                <img :src="product.pic">
               </div>
               <div class="text-box">
                 <div class="line msg">
@@ -78,7 +78,7 @@
           <div class="content-box">
             <div class="product" v-for="product in releaseProducts">
               <div class="img-box">
-                <img src="../assets/images/device_thumb.png">
+                <img :src="product.pic">
               </div>
               <div class="text-box">
                 <div class="line msg">
@@ -219,6 +219,7 @@ export default {
         product.id = item1.id
         product.is_release = item1.is_release
         product.quota = item1.quota
+        product.pic = item1.pics[0] || '/static/images/device_thumb.png'
         this.productSummary.forEach((item2) => {
           if (product.id === item2.id) {
             product.total = item2['total'] || 0

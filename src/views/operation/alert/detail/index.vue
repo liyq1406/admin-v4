@@ -7,7 +7,7 @@
     <div class="panel mt15 mb20 no-split-line">
       <div class="panel-bd row">
         <div class="col-16">
-          <info-card>
+          <info-card :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''">
             <div class="alert-record-summary">
 
               <div class="up">
@@ -76,6 +76,7 @@ export default {
     return {
       alerts: [],
       account: '',
+      currentProduct: {},
       info: {
         id: '',
         type: '',
@@ -182,6 +183,7 @@ export default {
   watch: {
     info () {
       if (this.info.product_id !== '' & this.info.from !== '') {
+        this.getProduct()
         this.getDeviceGeography()
       }
     }
@@ -200,6 +202,17 @@ export default {
   },
 
   methods: {
+    /**
+     * 获取产品
+     */
+    getProduct () {
+      api.product.getProduct(this.info.product_id).then((res) => {
+        if (res.status === 200) {
+          this.currentProduct = res.data
+        }
+      })
+    },
+
     /**
      * 获取设备的地理坐标
      * @author shengzhi
