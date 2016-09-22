@@ -254,8 +254,17 @@ export const ISSUE_TYPES = [
   { label: '待处理问题', value: 1 }
 ]
 
+// 告警级别
 export const ALERT_LEVELS = {
   blue: '通知',
   orange: '轻微',
   red: '严重'
 }
+
+// 企业成员操作类型
+export const OPERATE_TYPES = [
+  { label: '只读', value: 1 },
+  { label: '更新', value: 2 },
+  { label: '删除', value: 3 },
+  { label: '新增', value: 4 }
+]

@@ -42,6 +42,7 @@ import airquality from './api/airquality'
 import recipes from './api/recipes'
 import content from './api/content'
 import operate from './api/operate'
+import log from './api/log'
 
 export default {
   sms,
@@ -70,5 +71,6 @@ export default {
   airquality,
   recipes,
   content,
-  operate
+  operate,
+  log
 }

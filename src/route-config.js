@@ -193,6 +193,14 @@ let configRouter = (router) => {
             }, 'account')
           }
         },
+        // 授权管理
+        'security': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/account/security'))
+            }, 'account')
+          }
+        },
         // 企业信息
         'corp': {
           component (resolve) {

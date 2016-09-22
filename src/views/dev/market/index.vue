@@ -158,7 +158,7 @@
     }
   }
 </script>
-<style lang="stylus">
+<style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
 
   .panel-hd

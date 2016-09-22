@@ -29,6 +29,9 @@
           <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
           </li>
+          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
+            <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>安全审计</a>
+          </li>
           <li class="sec-nav-item">
             <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>企业信息</a>
           </li>
