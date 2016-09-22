@@ -102,7 +102,7 @@
 
     ready () {
       this.getAppInfo()
-      this.getAndVersion()
+      this.getApk()
     },
 
     methods: {
@@ -115,8 +115,8 @@
         })
       },
       // 获取 Android APK最新版本
-      getAndVersion () {
-        api.plugin.getAndVersion(this.$route.params.id, window.localStorage.getItem('corpId')).then((res) => {
+      getApk () {
+        api.plugin.getApk(this.$route.params.id, window.localStorage.getItem('corpId')).then((res) => {
           this.editModel = res.data
         })
       },
@@ -130,12 +130,12 @@
       // 提交应用更新
       onEditSubmit () {
         if (this.$editValidation.valid) {
-          api.plugin.setAndVersion(this.$route.params.id, this.editModel).then((res) => {
+          api.plugin.setApk(this.$route.params.id, this.editModel).then((res) => {
             this.showNotice({
               type: 'success',
               content: '配置成功！'
             })
-            this.getAndVersion()
+            this.getApk()
           })
         }
       }
