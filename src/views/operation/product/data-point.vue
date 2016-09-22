@@ -4,7 +4,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button @click="addDataPoint" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.datapoint.add_datapoint") }}</button>
+            <button @click.prevent="addDataPoint" class="btn btn-primary"><i class="fa fa-plus"></i>{{ $t("ui.datapoint.add_datapoint") }}</button>
           </div>
         </div>
         <div class="data-table with-loading">
