@@ -344,6 +344,7 @@ export default {
       // 表单验证
       if (datapoint.name === '') {
         this.requireDatapointName = true
+        this.showErrors('请填写端点ID')
         this.loadingData = false
         return
       } else {
@@ -351,6 +352,7 @@ export default {
       }
       if (datapoint.min === '') {
         this.requireDatapointMin = true
+        this.showErrors('请填写最小值')
         this.loadingData = false
         return
       } else {
@@ -358,6 +360,7 @@ export default {
       }
       if (datapoint.max === '') {
         this.requireDatapointMax = true
+        this.showErrors('请填写最大值')
         this.loadingData = false
         return
       } else {
@@ -365,11 +368,51 @@ export default {
       }
       if (datapoint.max <= datapoint.min) {
         this.requireDatapointMax = true
+        this.showErrors('最大值必须大于最小值')
         this.loadingData = false
         return
       } else {
         this.requireDatapointMax = false
       }
+
+      if (datapoint.type === 2) {
+        if (datapoint.min - 0 < -127) {
+          this.requireDatapointMin = true
+          this.showErrors('最小值不合法')
+          this.loadingData = false
+          return
+        } else {
+          this.requireDatapointMin = false
+        }
+        if (datapoint.max - 0 > 128) {
+          this.requireDatapointMax = true
+          this.showErrors('最大值不合法')
+          this.loadingData = false
+          return
+        } else {
+          this.requireDatapointMax = false
+        }
+      }
+
+      if (datapoint.type === 8) {
+        if (datapoint.min - 0 < 0) {
+          this.requireDatapointMin = true
+          this.showErrors('最小值不合法')
+          this.loadingData = false
+          return
+        } else {
+          this.requireDatapointMin = false
+        }
+        if (datapoint.max - 0 > 255) {
+          this.requireDatapointMax = true
+          this.showErrors('最大值不合法')
+          this.loadingData = false
+          return
+        } else {
+          this.requireDatapointMax = false
+        }
+      }
+
       if (this.adding) { // 添加
         api.product.addDataPoint(this.product.id, datapoint).then((res) => {
           if (res.status === 200) {
@@ -393,6 +436,12 @@ export default {
       }
     },
 
+    showErrors (str) {
+      this.showNotice({
+        type: 'error',
+        content: str
+      })
+    },
     /**
      * 移除数据端点
      * @author shengzhi
