@@ -112,7 +112,7 @@
         <form @submit.prevent="">
           <div class="form-row row">
             <!-- <label class="form-control col-6">导入:</label> -->
-            <p>您可以通过标准设备列表文件批量导入设备，<a href="/static/authorize_template.csv" class="hl-red">查看示例</a></p>
+            <p>您可以通过标准设备列表文件批量导入设备，<a href="/static/import_template.csv" class="hl-red">查看示例</a></p>
             <label :class="{'disabled':importing}" class="btn btn-ghost btn-upload">
               <input type="file" v-el:mac-file name="macFile" @change.prevent="selectFile"/><i class="fa fa-reply-all"></i> 批量导入
             </label>
@@ -266,7 +266,7 @@ export default {
     remain () {
       let total = this.currentProduct.quota || 0
       let remain = 0
-      if (total > 0 && this.used > 0) {
+      if (total > 0 && this.used >= 0) {
         remain = total - this.used
       }
       return remain < 0 ? 0 : remain
