@@ -15,7 +15,7 @@
         <div class="mt20" style="padding-left: 126px">
           <span class="mr5">开启amazon echo联动服务</span>
           <!-- <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="pluginToggle(plugins[0])"></x-switch> -->
-          <x-switch size="small" :disabled="loading" :value.sync="plugins[0].enable" @switch-toggle="toggle"></x-switch>
+          <x-switch size="small" :disabled="loading || true" :value.sync="plugins[0].enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
         </div>
       </div>
       <div class="row mt20 mb20" v-show="plugins[0].enable" transition="bottomToTop">
@@ -193,19 +193,19 @@
     methods: {
       toggle (val) {
         this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
-        setTimeout(() => {
-          var obj = {
-            id: '2e07d2ae62ffe000',
-            name: 'Google nest互联',
-            description: '',
-            alias: 'nest',
-            enable: false,
-            type: 10,
-            config: {}
-          }
-          obj.enable = !val
-          this.plugins.$set(0, obj)
-        }, 0)
+        // setTimeout(() => {
+        //   var obj = {
+        //     id: '2e07d2ae62ffe000',
+        //     name: 'Google nest互联',
+        //     description: '',
+        //     alias: 'nest',
+        //     enable: false,
+        //     type: 10,
+        //     config: {}
+        //   }
+        //   obj.enable = !val
+        //   this.plugins.$set(0, obj)
+        // }, 0)
       },
       showAlert (str) {
         this.isShowAlertModel = true

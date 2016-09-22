@@ -13,7 +13,7 @@
           <div class="tal mt20" style="padding-left: 126px">
             <span class="mr5">开启萤石联动服务</span>
             <!-- <x-switch size="small" :disabled="loading" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></x-switch> -->
-            <x-switch size="small" :disabled="loading" :value.sync="plugin.enable" @switch-toggle="toggle"></x-switch>
+            <x-switch size="small" :disabled="loading || true" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
           </div>
         </div>
       </div>
@@ -147,9 +147,9 @@ export default {
      */
     toggle (val) {
       this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
-      setTimeout(() => {
-        this.plugin.enable = !val
-      }, 0)
+      // setTimeout(() => {
+      //   this.plugin.enable = !val
+      // }, 0)
 
       // 临时关闭插件功能
       // this.loading = true

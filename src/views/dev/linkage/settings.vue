@@ -46,12 +46,12 @@
                     <!-- <td>{{ datapoint.create_date | formatDate }}</td> -->
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value="datapoint.isControlable" @switch-toggle="toggleControlable(datapoint)"></x-switch>
+                        <x-switch size="small" :value="datapoint.isControlable" :disabled="true" @switch-toggle="toggleControlable(datapoint)" @disabled-click="toggleControlable(datapoint)"></x-switch>
                       </span>
                     </td>
                     <td class="tac">
                       <span class="status">
-                        <x-switch size="small" :value="datapoint.isEnable" @switch-toggle="toggleEnable(datapoint)"></x-switch>
+                        <x-switch size="small" :value="datapoint.isEnable" :disabled="true"  @switch-toggle="toggleEnable(datapoint)" @disabled-click="toggleEnable(datapoint)"></x-switch>
                       </span>
                     </td>
                   </tr>
@@ -129,14 +129,14 @@
         point.isControlable = !point.isControlable
         setTimeout(() => {
           point.isControlable = !point.isControlable
-        }, 500)
+        }, 0)
         this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
       },
       toggleEnable (point) {
         point.isEnable = !point.isEnable
         setTimeout(() => {
           point.isEnable = !point.isEnable
-        }, 500)
+        }, 0)
         this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
       },
       showAlert (str) {
