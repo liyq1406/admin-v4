@@ -39,7 +39,7 @@
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
               </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?1620000000: false)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -303,10 +303,10 @@ export default {
     // 获取设备列表
     getDevices (reset) {
       if (this.queryType.value === 'id') {
-        if (this.query - 0 > 1620000000) {
+        if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
-            content: '设备ID不可超过1620000000'
+            content: '设备ID不可超过2100000000'
           })
           return
         }
