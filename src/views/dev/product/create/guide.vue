@@ -6,23 +6,23 @@
     </div>
     <div class="creation-flow">
       <div class="creation-flow-item">
-        <i class="icon"></i>
+        <i class="icon process1"></i>
         <span>创建产品</span>
       </div>
       <div class="creation-flow-item">
-        <i class="icon"></i>
+        <i class="icon process2"></i>
         <span>配置产品</span>
       </div>
       <div class="creation-flow-item">
-        <i class="icon"></i>
+        <i class="icon process3"></i>
         <span>开发指引</span>
       </div>
       <div class="creation-flow-item">
-        <i class="icon"></i>
+        <i class="icon process4"></i>
         <span>产测调试</span>
       </div>
       <div class="creation-flow-item">
-        <i class="icon"></i>
+        <i class="icon process5"></i>
         <span>发布产品</span>
       </div>
     </div>
@@ -86,10 +86,27 @@ export default {
     .icon
       display block
       size 72px
-      border 1px solid default-border-color
       border-radius 40px
       margin-bottom 5px
-      background #F8F8F8
+      background-repeat no-repeat
+      background-size 75%
+      background-position center
+
+    .process1
+      background-image url('../../../../assets/images/process1.png')
+      background-color #eaead2
+    .process2
+      background-image url('../../../../assets/images/process2.png')
+      background-color #eaead2
+    .process3
+      background-image url('../../../../assets/images/process3.png')
+      background-color #dbe1de
+    .process4
+      background-image url('../../../../assets/images/process4.png')
+      background-color #d7eff4
+    .process5
+      background-image url('../../../../assets/images/process5.png')
+      background-color #d7eff4
 
     &:last-child
       margin-right 0
