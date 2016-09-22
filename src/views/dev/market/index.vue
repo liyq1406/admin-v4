@@ -25,7 +25,7 @@
                   <p>{{ plugin.description }}</p>
                 </div>
                 <span class="status">
-                  <switch :disabled="loading || plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="showAlert(plugin)"></switch>
+                  <switch :disabled="plugin.enable || plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="showAlert(plugin)"></switch>
                 </span>
               </div>
             </div>
