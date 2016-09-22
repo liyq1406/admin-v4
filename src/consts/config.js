@@ -6,15 +6,15 @@ let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.locatio
 // 测试服务器地址
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
-// const DEFAULT_API_SERVER = 'http://api-demo.xlink.cn'
+// const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
 // 天际
-// const DEFAULT_API_SERVER = 'https://dev-man.360tj.com:8016'
+// const DEFAULT_API_SERVER = `${protocol}://dev-man.360tj.com:8016`
 // 测试图表
-// const DEFAULT_API_SERVER = 'http://120.26.244.72:8887'
+// const DEFAULT_API_SERVER = `${protocol}//120.26.244.72:8887`
 // 海曼
-// const DEFAULT_API_SERVER = 'http://ic.heiman.cn:8887'
+// const DEFAULT_API_SERVER = `${protocol}//ic.heiman.cn:8887`
 // 开发者本地
-// const DEFAULT_API_SERVER: 'http://localhost:8887',
+// const DEFAULT_API_SERVER: `${protocol}//localhost:8887`,
 // 正式地址
 // const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn:443`
 // Demo
@@ -23,7 +23,7 @@ let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.locatio
 const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
 
 // 插件服务器地址
-// const DEFAULT_PLUGIN_SERVER = 'http://test.plugin.xlink.cn:3000'
+// const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3000`
 // Demo插件服务器灰度地址
 // const DEFAULT_PLUGIN_SERVER = `${protocol}//api-demo.xlink.cn`
 // 插件服务器灰度地址
