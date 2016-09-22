@@ -112,7 +112,7 @@
                 <div class="controls col-19">
                   <div class="checkbox-group">
                     <template v-for="type in locales.data.RULE_NOTIFY_TYPES">
-                      <label v-if="$index < 3" class="checkbox">
+                      <label v-if="$index < 3 && $index > 0" class="checkbox">
                         <input type="checkbox" v-model="model.notify_target" name="notify_target" :value="$index+1" number v-validate:notify-target="['required']"/>{{ type }}
                       </label>
                     </template>
