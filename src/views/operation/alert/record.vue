@@ -17,8 +17,7 @@
       </div>
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <!-- <date-time-range-picker @timechange = "getAlertsSpecial"></date-time-range-picker> -->
-          <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker>
+          <!-- <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker> -->
         </div>
       </div>
     </div>
@@ -291,11 +290,11 @@ export default {
         query: {
           product_id: {
             $in: [this.currentProduct.id]
-          },
-          create_date: {
-            $lte: this.endTimePick,
-            $gte: this.startTimePick
           }
+          // create_date: {
+          //   $lte: this.endTimePick,
+          //   $gte: this.startTimePick
+          // }
         }
       }
       // 关键字搜索
@@ -303,7 +302,7 @@ export default {
         if (this.queryType.value === 'from') {
           // 设备ID
           let temp = parseInt(this.key)
-          if (!temp || temp > 2100000000) {
+          if (!temp || temp > 2100000000 || this.key.length > 10) {
             temp = 2100000000
           }
           // 设备ID不能用模糊匹配
@@ -361,48 +360,6 @@ export default {
         result.push(alert)
       })
       return result
-    },
-
-    TimePick () {
-      var params = {
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
-        query: {
-          product_id: {
-            $in: [this.currentProduct.id]
-          },
-          create_date: {
-            $gte: this.startTimePick,
-            $lte: this.endTimePick
-          }
-        }
-      }
-      if (this.curLevel.value !== 0) {
-        params.query.tags = {
-          '$in': [this.curLevel.label]
-        }
-      }
-
-      if (this.key !== '') {
-        if (this.queryType.value === 'from') {
-          // 设备ID不能用模糊匹配
-          params.query.from = {
-            '$in': [this.key]
-          }
-        } else {
-          params.query[this.queryType.value] = {
-            '$like': this.key
-          }
-        }
-      }
-
-      return params
-    },
-
-    selectedProduct () {
-      var product = this.currentProduct
-      return product
     }
   },
 
@@ -416,6 +373,7 @@ export default {
     if (this.products.length > 0) {
       this.getFirstProduct()
       this.getSummary()
+      this.getAlerts()
     }
   },
 
@@ -453,18 +411,29 @@ export default {
 
     // 获取告警概览
     getSummary () {
+      var todayTime = new Date().getTime()
+      todayTime = dateFormat('yyyy-MM-dd', new Date(todayTime))
+      var initTime = new Date(0)
+      initTime = dateFormat('yyyy-MM-dd', new Date(initTime))
       var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
       weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
       var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
       monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
       var now = new Date().getTime() - 1 * 24 * 3600 * 1000
       now = dateFormat('yyyy-MM-dd', new Date(now))
+      // 获取当天数据
+      api.statistics.getProductAlertSummary(this.currentProduct.id, initTime, todayTime).then((res) => {
+        if (res.status === 200) {
+          this.alertSummary.unread.total = res.data.unread
+          this.alertSummary.today.total = res.data.add_today
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
 
       // 获取7天数据
       api.statistics.getProductAlertSummary(this.currentProduct.id, weekBeginTime, now).then((res) => {
         if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
-          this.alertSummary.today.total = res.data.add_today
           this.alertSummary.week.total = res.data.message
         }
       }).catch((res) => {

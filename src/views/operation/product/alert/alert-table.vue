@@ -144,7 +144,7 @@ export default {
         if (this.queryType.value === 'from') {
           // 设备ID
           let temp = parseInt(this.key)
-          if (!temp || temp > 2100000000) {
+          if (!temp || temp > 2100000000 || this.key.length > 10) {
             temp = 2100000000
           }
           // 设备ID不能用模糊匹配
