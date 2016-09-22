@@ -13,12 +13,12 @@
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap">
-                    <input v-model="model.index" type="text" name="index" readonly="readyonly" v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
+                    <input v-model="model.index" type="text" name="index"  v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                   </div>
-                  <!-- <div class="form-tips form-tips-error">
+                  <div class="form-tips form-tips-error">
                     <span v-if="$validation.index.touched && $validation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
                     <span v-if="$validation.index.modified && $validation.index.format">{{ $t('ui.validation.numberic') }}</span>
-                  </div> -->
+                  </div>
                 </div>
               </div>
               <div class="form-row row">
