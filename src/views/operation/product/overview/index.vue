@@ -46,7 +46,6 @@ import { removeProduct, updateProduct } from 'store/actions/products'
 import Panel from 'components/Panel'
 import Statistic from 'components/Statistic2'
 import Tooltip from 'components/Tooltip'
-import defaultDeviceThumb from 'assets/images/device_thumb.png'
 import { globalMixins } from 'src/mixins'
 import { productSummaryMixin, setCurrProductMixin } from '../mixins'
 import ProductTrend from './product-trend'
@@ -82,7 +81,6 @@ export default {
 
   data () {
     return {
-      deviceThumb: defaultDeviceThumb,
       trendTabs: {
         curr: 0,
         labels: ['激活设备', '累计激活']
@@ -121,6 +119,13 @@ export default {
           }
         }
       }
+    }
+  },
+
+  computed: {
+    deviceThumb () {
+      let pics = this.currentProduct.pics
+      return (pics && pics.length) ? pics[0] : '/static/images/device_thumb.png'
     }
   },
 

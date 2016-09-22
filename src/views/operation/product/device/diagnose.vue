@@ -44,7 +44,7 @@
                     <div class="range-box" v-if="dataPointType(datapoint.type) === 'number'">
                       <range :min="datapoint.min" :max="datapoint.max" :value="datapoint.value" :expand="datapoint" @changed="onRangeChanged"></range>
                     </div>
-                    <div class="string-box w160" v-if="dataPointType(datapoint.type) === 'string'">
+                    <div class="string-box" v-if="dataPointType(datapoint.type) === 'string'">
                       <div class="input-text-wrap">
                         <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
                       </div>

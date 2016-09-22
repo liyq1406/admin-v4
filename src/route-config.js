@@ -1587,8 +1587,6 @@ let configRouter = (router) => {
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',
-    '/operation/data': '/operation/data/tables',
-    '/operation/settings': '/operation/settings/auth',
     '/operation/users': '/operation/users/overview',
     '/operation/users/details/:id': '/operation/users/details/:id/devices',
     '/operation/users/major-clients/:id': '/operation/users/major-clients/:id/devices',

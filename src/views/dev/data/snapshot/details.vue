@@ -62,7 +62,7 @@
                   <div class="header-box row">
                     <div class="device-base-msg-box col-15 row">
                       <div class="device-picture col-6">
-                        <img>
+                        <img :src="deviceThumb"/>
                       </div>
                       <div class="device-base-msg row col-18">
                         <p>
@@ -277,6 +277,10 @@ export default {
   },
 
   computed: {
+    deviceThumb () {
+      let pics = this.product.pics
+      return (pics && pics.length) ? pics[0] : '/static/images/device_thumb.png'
+    },
     tdnames () {
       var result = []
       this.snapshotHeader.map((item) => {
@@ -650,7 +654,10 @@ export default {
       .device-picture
         width 65px
         height 65px
-        background url('../../../../assets/images/device_thumb.png') center/100%
+        img
+          display block
+          width 65px
+          height 65px
       .device-base-msg
         height 60px
         line-height 23px
