@@ -77,6 +77,11 @@
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
 
+    <modal :show.sync="showQrcodeModal">
+      <h3 slot="header">二维码</h3>
+      <div slot="body" class="qrcode">{{ currentProduct.qrcode }}</div>
+    </modal>
+
     <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
@@ -158,9 +163,7 @@ export default {
     return {
       // showExportQRCode: false,
       firstRequest: true,
-      qrcodeModal: {
-        show: false
-      },
+      showQrcodeModal: false,
       query: '',
       sortKey: '',
       sortOrders: sortOrders,
@@ -430,7 +433,7 @@ export default {
      * @author shengzhi
      */
     displayQrcode () {
-      this.qrcodeModal.show = true
+      this.showQrcodeModal = true
     },
 
     /**
@@ -617,4 +620,8 @@ export default {
 
 .product-key
   font-size 20px
+
+.qrcode
+  font-size 16px
+  word-wrap break-word
 </style>
