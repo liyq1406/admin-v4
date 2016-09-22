@@ -79,7 +79,7 @@
 
     <modal :show.sync="showQrcodeModal">
       <h3 slot="header">二维码</h3>
-      <div slot="body" class="qrcode">{{ currentProduct.qrcode }}</div>
+      <div slot="body" class="qrcode">{{ currentProduct.qrcode || 'XQR:T:P;V:1;PID:'+$route.params.id+';;' }}</div>
     </modal>
 
     <modal :show.sync="showDeviceEditModal">
