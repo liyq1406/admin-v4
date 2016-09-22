@@ -271,16 +271,26 @@
     watch: {
       products () {
         this.selectProduct = this.products[0]
+        this.getFirmwares()
+      // },
+      // selectProduct () {
+      //   this.getFirmwares()
       }
     },
     route: {
       data () {
+        if (this.selectProduct.id) {
+          this.getFirmwares()
+        }
         // this.getFirmwares()
       }
     },
 
     ready () {
       this.selectProduct = this.products[0]
+      if (this.selectProduct) {
+        this.getFirmwares()
+      }
     },
     methods: {
       getTypeLabelByValue (val) {
@@ -291,8 +301,9 @@
       // 提交添加任务表单
       onAddTaskSubmit () {
         console.log(this.$validation.valid)
-        if (!this.$validation.valid) {
-          this.$validation.name.touched = true
+        if (this.$validation.invalid) {
+          // this.$validation.name.touched = true
+          this.$validate(true)
           return
         }
         this.adding = true
@@ -306,26 +317,27 @@
             // this.resetAddTask()
             // this.tasks.push(res.data)
             this.adding = false
-            this.addmodel = {
-              type: '',
-              identify: '',
-              name: '',
-              description: '',
-              product_id: '',
-              from_version: '',
-              from_version_url: '',
-              from_version_md5: '',
-              from_version_size: 0,
-              target_version: '',
-              target_version_url: '',
-              target_version_md5: '',
-              target_version_size: 0
-            }
+            // this.addmodel = {
+            //   type: '',
+            //   identify: '',
+            //   name: '',
+            //   description: '',
+            //   product_id: '',
+            //   from_version: '',
+            //   from_version_url: '',
+            //   from_version_md5: '',
+            //   from_version_size: 0,
+            //   target_version: '',
+            //   target_version_url: '',
+            //   target_version_md5: '',
+            //   target_version_size: 0
+            // }
           }
           this.showNotice({
             type: 'info',
             content: '成功创建任务！'
           })
+          this.$route.router.go('/dev/firmware/list')
         }).catch((res) => {
           this.handleError(res)
           this.adding = false
@@ -335,7 +347,7 @@
         this.loadingFirmwares = true
         api.product.getFirmwares(this.selectProduct.id).then((res) => {
           if (res.status === 200) {
-            this.firmwares = res.data
+            this.firmwares = res.data.list
             this.loadingFirmwares = false
             this.addmodel = {
               type: '',

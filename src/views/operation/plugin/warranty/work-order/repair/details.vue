@@ -345,7 +345,8 @@ export default {
       this.getOrderWorkList(true)
     },
     goDetails (table) {
-      this.$route.router.go(this.$route.path + '/' + table.prototype.id)
+      console.log(table)
+      this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/' + table.prototype._id)
     },
     getData () {
       this.total = 50
