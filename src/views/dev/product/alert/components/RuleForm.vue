@@ -375,7 +375,9 @@ export default {
             return
           }
           this.datapoints = res.data
-          this.model.param = res.data[0].id
+          if (this.type === 'add') {
+            this.model.param = res.data[0].id
+          }
         }
         this.loadingData = false
       }).catch((res) => {
