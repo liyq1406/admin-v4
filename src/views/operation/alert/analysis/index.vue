@@ -332,7 +332,7 @@ export default {
       this.trendPieData = []
       let beginHour = null
       let endHour = null
-      if (this.endTimePick.getTime() - this.startTimePick.getTime() < 3600 * 1000 * 24) {
+      if (this.endTimePick.getTime() - this.startTimePick.getTime() <= 3600 * 1000 * 24) {
         beginHour = this.startTimePick.getHours()
         endHour = this.endTimePick.getHours()
       } else {
@@ -433,7 +433,7 @@ export default {
     sortArr (arr, tag) {
       let beginHour = null
       let endHour = null
-      if (this.endTimePick.getTime() - this.startTimePick.getTime() < 3600 * 1000 * 24) {
+      if (this.endTimePick.getTime() - this.startTimePick.getTime() <= 3600 * 1000 * 24) {
         beginHour = this.startTimePick.getHours()
         endHour = this.endTimePick.getHours()
       } else {
