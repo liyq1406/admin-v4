@@ -57,10 +57,11 @@
     methods: {
       toogle () {
         if (this.disabled) {
+          this.$emit('disabled-click')
           return
         }
         this.value = !this.value
-        this.$dispatch('switch-toggle', this.value)
+        this.$emit('switch-toggle', this.value)
       }
     }
   }
@@ -89,15 +90,18 @@
       transition left .2s ease-in-out
       box-shadow 0 0 2px rgba(0, 0, 0, .2)
 
-    &.disabled
-      cursor not-allowed
-
   .x-switch-on
     background green
     text-align left
 
     .switch-block
       left 17px
+
+    &.disabled
+      background #CCC
+
+      .switch-block
+        left 1px
 
   .x-switch-sm
     size 36px 22px
@@ -109,4 +113,10 @@
     &.x-switch-on
       .switch-block
         left 15px
+
+    &.x-switch-on.disabled
+      background #CCC
+
+      .switch-block
+        left 1px
 </style>

@@ -14,8 +14,11 @@ export const pluginFactoryMixin = {
           res.data.list.forEach((item) => {
             var index = _.indexOf(pluginTypes, item.plugin)
             if (index >= 0) {
-              this.plugins[index].id = item.id
-              this.plugins[index].enable = item.enable
+              let plugin = _.clone(this.plugins[index])
+              plugin.id = item.id
+              plugin.enable = item.enable
+              plugin.platform_status = item.platform_status
+              this.plugins.$set(index, plugin)
             }
           })
           this.loading = false
@@ -31,14 +34,6 @@ export const pluginFactoryMixin = {
      * @param  {Object} plugin 当前插件
      */
     pluginToggle (plugin) {
-      var allowAlias = ['broadcast', 'helpdesk']
-      if (allowAlias.indexOf(plugin.alias) === -1) {
-        this.showAlert('<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>')
-        setTimeout(() => {
-          plugin.enable = !plugin.enable
-        }, 500)
-        return
-      }
       this.loading = true
       var params = {
         name: plugin.name,

@@ -259,7 +259,7 @@ export default {
             break
           default:
         }
-        if (!exists(excluded, item.plugin) && item.enable) {
+        if (!exists(excluded, item.plugin) && item.enable && item.platform_status === 2) {
           result.subs.push(sub)
         }
       })

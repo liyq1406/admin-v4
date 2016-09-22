@@ -25,7 +25,7 @@
                   <p>{{ plugin.description }}</p>
                 </div>
                 <span class="status">
-                  <switch :disabled="loading" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></switch>
+                  <switch :disabled="loading || plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="showAlert(plugin)"></switch>
                 </span>
               </div>
             </div>
@@ -56,9 +56,7 @@
   import { pluginFactoryMixin } from './mixins'
 
   export default {
-    name: 'Data',
-
-    layout: 'admin',
+    name: 'Market',
 
     mixins: [globalMixins, pluginFactoryMixin],
 
@@ -90,6 +88,7 @@
           description: '让app具备消息广播，运营通知的特性，支持多维度的推送规则管理。',
           alias: 'broadcast',
           enable: false,
+          platform_status: 2,
           type: 10
         }, {
           id: '',
@@ -97,6 +96,7 @@
           description: '建立在用户与企业之间的反馈渠道，包括使用、售后、故障等业务服务。',
           alias: 'helpdesk',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -104,6 +104,7 @@
           description: '提供与企业产品相关的售后支持、产品维护、保修记录的查询与管理服务。',
           alias: 'warranty',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -111,6 +112,7 @@
           description: '管理企业各经销商，配置商家信息和销售资源数据。',
           alias: 'dealer',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -118,6 +120,7 @@
           description: '面向厨电品类产品，可自定义菜谱类别、菜谱图文内容及分类管理。',
           alias: 'recipe',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -125,6 +128,7 @@
           description: '发布文章、资讯，自定义自己的内容资讯版块，让前台内容展示更丰富。',
           alias: 'content',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -132,6 +136,7 @@
           description: '面向空气行业产品，提供室外pm2.5、AQI、pm20、pm25、so2、no2、co、o3等历史与实时数据服务。',
           alias: 'airquality',
           enable: false,
+          platform_status: 1,
           type: 10
         }, {
           id: '',
@@ -139,6 +144,7 @@
           description: '对APP进行启动页设置。',
           alias: 'splashwnd',
           enable: false,
+          platform_status: 1,
           type: 10
         }]
       }
@@ -150,10 +156,16 @@
       }
     },
     methods: {
-      showAlert (str) {
-        this.isShowAlertModel = true
-        this.alertModel.type = 'warm'
-        this.alertModel.content = str
+      showAlert (plugin) {
+        if (plugin.platform_status && plugin.platform_status === 1) {
+          this.isShowAlertModel = true
+          this.alertModel.type = 'warm'
+          this.alertModel.content = '<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>'
+          // setTimeout(() => {
+          //   plugin.enable = !plugin.enable
+          // }, 500)
+          return
+        }
       }
     }
   }
