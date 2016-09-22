@@ -332,6 +332,7 @@ export default {
     },
     // 更改应用后获取列表与状态
     Productstatus () {
+      this.currentPage = 1
       this.getFirmwares()
       this.getTrend()
     },
