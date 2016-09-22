@@ -33,7 +33,7 @@
           <div class="describe">
             <p v-for="describe in introduce.describes">{{describe}}</p>
           </div>
-          <button class="btn btn-primary" @click="goto(introduce.link)">了解详情</button>
+          <!-- <button class="btn btn-primary" @click="goto(introduce.link)">了解详情</button> -->
         </div>
         <div class="img-box">
           <div class="img" :class="introduce.key"></div>
