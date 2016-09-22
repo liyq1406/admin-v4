@@ -62,7 +62,9 @@ export default {
     },
     tickCount () {
       let range = this.max - this.min
-      if (range <= 5) {
+      if (range === 0) {
+        return 1
+      } else if (range <= 5) {
         return parseInt(range)
       } else {
         return 5
@@ -95,7 +97,8 @@ export default {
           this.point.size(4)
         }
         let data = this.format(this.data)
-        this.chart.source(data)
+        let defs = this.getConfig()
+        this.chart.source(data, defs)
         this.chart.repaint()
       } else {
         // 检查组件dom是否就绪
@@ -151,22 +154,9 @@ export default {
         itemWrap: true
       })
 
-      let defs = {
-        date: {
-          alias: '日期',
-          type: 'time',
-          mask: 'mm-dd'
-        },
-        val: {
-          type: 'linear',
-          tickCount: this.tickCount
-        }
-      }
-      if (this.scale === 'hour') {
-        defs.date.mask = 'HH:MM'
-      } else if (this.scale === 'day-hour') {
-        defs.date.mask = 'mm-dd HH:MM'
-      }
+      let defs = this.getConfig()
+
+      chart.source(data, defs)
 
       // x 轴配置
       chart.axis('date', {
@@ -176,8 +166,6 @@ export default {
       chart.axis('val', {
         title: null
       })
-
-      chart.source(data, defs)
 
       let line = chart.line().position('date*val').size(2)
       let point = null
@@ -208,6 +196,26 @@ export default {
 
       chart.render()
       this.rendered = true
+    },
+    getConfig () {
+      let defs = {
+        date: {
+          alias: '日期',
+          type: 'time',
+          mask: 'mm-dd'
+        },
+        val: {
+          type: 'linear',
+          tickCount: this.tickCount
+        }
+      }
+      if (this.scale === 'hour') {
+        defs.date.mask = 'HH:MM'
+      } else if (this.scale === 'day-hour') {
+        defs.date.mask = 'mm-dd HH:MM'
+      }
+
+      return defs
     }
   }
 }
