@@ -57,7 +57,7 @@
                     <div class="col-2 tac control-text">-</div>
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                        <input v-model="model.max" type="number" name="model.max" class="input-text" v-validate:max="{required: true, format: 'numberic', min: addMin, max: modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807}"/>
+                        <input v-model="model.max" type="number" name="model.max" class="input-text" v-validate:max="validateMax"/>
                       </div>
                     </div>
                   </div>
@@ -73,7 +73,7 @@
                     <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
                     <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$validation.max.modified && $validation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
+                    <span v-if="$validation.max.modified && $validation.max.max">最大值超过范围</span>
                   </div>
                 </div>
               </div>
@@ -182,14 +182,15 @@ export default {
       var result = {}
       result.format = 'numberic'
       result.max = this.addMax
-      result.min = -9223372036854775808
-      if (this.modelType.value === 2) { // 单字节
-        result.min = 0
-      } else if (this.modelType.value === 3) { // 短整型有符号
-        result.min = -32768
-      } else if (this.modelType.value === 4) { // 32位整型（有符号）
-        result.min = -2147483648
-      }
+      result.min = this.addMin
+      result.required = true
+      return result
+    },
+    validateMax () {
+      var result = {}
+      result.format = 'numberic'
+      result.max = this.addMax
+      result.min = this.model.min !== '' ? Math.max(this.model.min, this.addMin) : this.addMin
       result.required = true
       return result
     },
@@ -240,10 +241,10 @@ export default {
           value: 6,
           label: '字符串'
         },
-        {
-          value: 7,
-          label: '字节数组'
-        },
+        // {
+        //   value: 7,
+        //   label: '字节数组'
+        // },
         {
           value: 8,
           label: '16位短整型（无符号）'
@@ -256,21 +257,31 @@ export default {
       return result
     },
     addMin () {
-      var min = 0
-      if (this.modelType.value === 4) {
-        min = -9223372036854775808
+      var min = -9223372036854775808
+      if (this.modelType.value === 2 || this.modelType.value === 8 || this.modelType.value === 9) { // 单字节
+        min = 0
+      } else if (this.modelType.value === 3) { // 短整型有符号
+        min = -32768
+      } else if (this.modelType.value === 4) { // 32位整型（有符号）
+        min = -2147483648
       }
-      return this.model.min === '' ? min : parseInt(this.model.min) + 1
+      return min
     },
 
     addMax () {
-      var max = 9223372036854775807
-      if (this.modelType.value === 2) {
+      var max = 9223372036854775807 // 浮点数
+      if (this.modelType.value === 2) { // 单字节
         max = 255
-      } else if (this.modelType.value === 3) {
+      } else if (this.modelType.value === 3) { // 短整型有符号
+        max = 32767
+      } else if (this.modelType.value === 4) { // 长整型有符号
+        max = 2147483648
+      } else if (this.modelType.value === 8) { // 短整型无符号
         max = 65535
+      } else if (this.modelType.value === 9) { // 长整型无符号
+        max = 4294967295
       }
-      return this.model.max || max
+      return max
     }
   },
 

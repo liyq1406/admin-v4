@@ -277,11 +277,14 @@
       .content4
       .content5
       .content6
-        padding-right 560px
+        padding-left 500px
         box-sizing border-box
         .text-box
-          width 100%
+          width 500px
           height 100%
+          position absolute
+          left 0
+          top 0
           padding-left 50px
           padding-right 10px
           box-sizing border-box
@@ -307,11 +310,9 @@
             box-sizing border-box
             border-radius 2px
         .img-box
-          width 560px
+          width 100%
           height 100%
-          position absolute
-          right 0
-          top 0
+
           .img
             width 100%
             height 100%

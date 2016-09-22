@@ -149,7 +149,7 @@
         }, {
           id: '',
           name: '运营位管理',
-          description: '运营位描述',
+          description: '在终端应用程序界面提供运营内容的展示入口，如轮播图、图片链接等多种自定义呈现形式',
           alias: 'operateposition',
           enable: false,
           platform_status: 1,

@@ -1076,7 +1076,7 @@ let configRouter = (router) => {
         // 运营位管理
         // ------------------------------
         // 运营位列表
-        '/plugins/operate-position/:app_id': {
+        '/plugins/operateposition/:app_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/list'))
@@ -1084,7 +1084,7 @@ let configRouter = (router) => {
           }
         },
         // 管理运营位
-        '/plugins/operate-position/:app_id/stall/:id': {
+        '/plugins/operateposition/:app_id/stall/:id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/details'))
@@ -1092,7 +1092,7 @@ let configRouter = (router) => {
           }
         },
         // 运营位添加内容
-        '/plugins/operate-position/:app_id/stall/:id/add/:contentType': {
+        '/plugins/operateposition/:app_id/stall/:id/add/:contentType': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/add'))
@@ -1100,7 +1100,7 @@ let configRouter = (router) => {
           }
         },
         // 运营位编辑内容
-        '/plugins/operate-position/:app_id/stall/:id/edit/:contentType/:contentId': {
+        '/plugins/operateposition/:app_id/stall/:id/edit/:contentType/:contentId': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/operate-position/edit'))
