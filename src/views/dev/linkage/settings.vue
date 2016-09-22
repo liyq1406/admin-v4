@@ -76,7 +76,7 @@
           {{{alertModel.content}}}
         </div>
         <div class="form-actions">
-          <button type="submit" @click.parent="isShowAlertModel = false" v-text="$t('common.ok')" class="btn btn-primary w100"></button>
+          <button type="submit" @click.prevent="isShowAlertModel = false" v-text="$t('common.ok')" class="btn btn-primary w100"></button>
         </div>
       </div>
     </modal>
