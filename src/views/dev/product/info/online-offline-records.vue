@@ -13,7 +13,7 @@
                 <button class="btn btn-ghost btn-sm fa fa-refresh" @click="resetQueryCondition"></button>
               </div>
               <div class="filter-group-item">
-                <date-time-range-picker input-size="small" :from.sync="startDate" :to.sync="endDate" :from-time.sync="startTime" :to-time.sync="endTime" input-width="94px" @select-day="getRecords(true)" @select-time="getRecords(true)">
+                <date-time-range-picker @timechange="timeSelect">
                   <span slot="label">记录时间：</span>
                 </date-time-range-picker>
               </div>
@@ -92,10 +92,8 @@ export default {
       }],
       name: '',
       key: '',
-      startDate: '',
-      startTime: '00:00',
-      endDate: '',
-      endTime: '23:00',
+      startTime: '',
+      endTime: '',
       records: [],
       loadingData: false,
       currentPage: 1,
@@ -142,13 +140,13 @@ export default {
         condition.query[this.queryType.value] = this.queryType.value === 'device_id' ? Number(this.key) : this.key
       }
 
-      if (this.startDate !== '') {
+      if (this.startTime !== '') {
         condition.query.create_time = condition.query.create_time || {}
-        condition.query.create_time['$gte'] = `${this.startDate}T${this.startTime}:00.000Z`
+        condition.query.create_time['$gte'] = this.startTime
       }
-      if (this.endDate !== '') {
+      if (this.endTime !== '') {
         condition.query.create_time = condition.query.create_time || {}
-        condition.query.create_time['$lte'] = `${this.endDate}T${this.endTime}:00.000Z`
+        condition.query.create_time['$lte'] = this.endTime
       }
 
       if (this.dateType.value === 'all') {
@@ -177,7 +175,7 @@ export default {
         var record = {
           device_id: item.device_id,
           ip: item.ip,
-          create_time: formatDate(item.active_date),
+          create_time: formatDate(item.create_time),
           status: item.status ? '<span class="hl-green">上线</span>' : '<span class="hl-gray">下线</span>',
           origin: item
         }
@@ -188,6 +186,11 @@ export default {
   },
 
   methods: {
+    timeSelect (start, end) {
+      this.startTime = start
+      this.endTime = end
+      this.getRecords(true)
+    },
     /**
      * 获取记录
      */
