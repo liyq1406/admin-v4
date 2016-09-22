@@ -190,12 +190,12 @@ export default {
             path: '/operation/users/overview'
           },
           {
-            content: '用户管理',
+            content: '用户列表',
             path: '/operation/users/list'
-          },
-          {
-            content: '人群画像',
-            path: '/operation/users/portrait'
+          // },
+          // {
+          //   content: '人群画像',
+          //   path: '/operation/users/portrait'
           }
           // {
           //   content: '用户标签',
