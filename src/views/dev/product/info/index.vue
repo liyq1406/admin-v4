@@ -8,7 +8,7 @@
         <div class="row">
           <div class="col-16">
             <div class="product-info">
-              <info-card class="mb15">
+              <info-card class="mb15" :pic="(currentProduct.pics && currentProduct.pics.length) ? currentProduct.pics[0] : ''">
                 <div class="product-name">{{ currentProduct.name }} <a href="#" @click.prevent="editProduct" class="fa fa-edit"></a></div>
                 <div class="product-createtime">{{ currentProduct.create_time | formatDate }}</div>
               </info-card>
