@@ -73,7 +73,7 @@
                     <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
                     <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
                     <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$validation.max.modified && $validation.max.max">{{ $t('ui.validation.max', [$t('ui.datapoint.fields.max'), modelType.value === 2 ? 255 : modelType.value === 3 ? 65535 : 9223372036854775807]) }}</span>
+                    <span v-if="$validation.max.modified && $validation.max.max">最大值超过范围</span>
                   </div>
                 </div>
               </div>
@@ -182,7 +182,7 @@ export default {
       var result = {}
       result.format = 'numberic'
       result.max = this.addMax
-      result.min = this.addmin
+      result.min = this.addMin
       result.required = true
       return result
     },
@@ -190,7 +190,7 @@ export default {
       var result = {}
       result.format = 'numberic'
       result.max = this.addMax
-      result.min = this.model.min !== '' ? Math.max(this.model.min, this.addmin) : this.addmin
+      result.min = this.model.min !== '' ? Math.max(this.model.min, this.addMin) : this.addMin
       result.required = true
       return result
     },

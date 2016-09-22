@@ -439,7 +439,6 @@ export default {
     batchImport () {
       if (window.File && window.FileReader && window.FileList && window.Blob) {
         var reader = new window.FileReader()
-        console.log(this.file)
         if (!/\.csv$/.test(this.file.name)) {
           this.showNotice({
             type: 'error',
