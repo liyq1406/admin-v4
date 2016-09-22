@@ -148,6 +148,7 @@ export default {
 
   ready () {
     this.getRules()
+    this.getList()
   },
 
   computed: {
