@@ -706,6 +706,14 @@ export default {
       this.adding = true
       if (this.$majorClientValidation.valid) {
         var params = _.clone(this.addModal)
+        if (this.curProvince && this.curCity && this.curDistrict) {
+          this.showNotice({
+            type: 'error',
+            content: '请输入完整所在地信息'
+          })
+          this.adding = false
+          return
+        }
         params.province = this.curProvince.name
         params.city = this.curCity.name
         api.heavyBuyer.addHeavyBuyer(params).then((res) => {
