@@ -20,10 +20,10 @@
                   <!-- <span class="ml15">16:12:03</span> -->
                 </div>
                 <div class="col-12">
-                  <button>
+                  <!-- <button>
                     <i class="fa fa-commenting"></i>
                     通知维保
-                  </button>
+                  </button> -->
                   <button v-if="info.is_read" @click="changeStyleUnread"  style="background-color:red;color:#fff">
                     <!-- <i class="fa fa-check"></i> -->
                     重开任务
