@@ -73,9 +73,7 @@
   // import _ from 'lodash'
 
   export default {
-    name: 'promote',
-
-    layout: 'admin',
+    name: 'AndroidUpgrade',
 
     mixins: [globalMixins],
 

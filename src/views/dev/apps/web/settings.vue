@@ -41,9 +41,7 @@
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 
   export default {
-    name: 'webForm',
-
-    layout: 'admin',
+    name: 'webSettings',
 
     mixins: [globalMixins],
 

@@ -51,9 +51,7 @@
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 
   export default {
-    name: 'androidForm',
-
-    layout: 'admin',
+    name: 'androidSettings',
 
     mixins: [globalMixins],
 

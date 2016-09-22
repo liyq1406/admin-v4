@@ -69,7 +69,7 @@
   import { updatePlugin, removePlugin } from 'store/actions/plugins'
 
   export default {
-    name: 'ios-form',
+    name: 'IosSettings',
 
     mixins: [globalMixins],
 

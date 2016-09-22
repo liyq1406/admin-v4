@@ -32,7 +32,7 @@
 
     <!-- 主内容 -->
     <div class="panel">
-      <div class="panel-bd apps-container" v-show="appList.length>0">
+      <div class="panel-bd apps-container" v-show="appList.length>0 && !loadingData">
         <!-- 应用列表  -->
         <div class="app-list-box">
           <div class="app" v-for="app in appList" :class="{'selected': app.id === selectedApp.id}" @click="selectApp(app)">
@@ -74,15 +74,23 @@
           <div class="panel-bd mt20">
             <div class="tab-s2 tab-s2-full mb5">
               <ul>
-                <li :class="{'active': selectedTabIndex-0===1}" @click="selectedTabIndex=1">应用配置</li>
-                <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===2" @click="selectedTabIndex=2">升级管理</li>
+                <li v-for="link in appNav[selectedApp.type]" :class="{'active': selectedTabIndex-0===$index}" @click="selectedTabIndex=$index">{{ link.label }}</li>
+                <!-- <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===2" @click="selectedTabIndex=2">升级管理</li>
+                <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===4" @click="selectedTabIndex=2">微信授权</li> -->
               </ul>
             </div>
+            <!-- <div class="tab-s2 tab-s2-full mb5">
+              <ul>
+                <li :class="{'active': selectedTabIndex-0===1}" @click="selectedTabIndex=1">应用配置</li>
+                <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===2" @click="selectedTabIndex=2">升级管理</li>
+                <li :class="{'active': selectedTabIndex-0===2}" v-show="selectedApp.type===4" @click="selectedTabIndex=2">微信授权</li>
+              </ul>
+            </div> -->
             <component v-if="selectedApp" :is="componentName" :app="selectedApp" @update-curr-app="getApps" transition="view" transition-mode="out-in"></component>
           </div>
         </div>
       </div>
-      <div class="no-product" v-show="appList.length===0">
+      <div class="no-product" v-show="appList.length===0 && !loadingData">
         <div class="content">
           <span>您还没有创建任何应用，请点击“添加应用”立刻开始创建。</span>
           <div class="btn-box mt10">
@@ -144,398 +152,409 @@
 </template>
 
 <script>
-  import api from 'api'
-  import Select from 'components/Select'
-  import { globalMixins } from 'src/mixins'
-  import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-  import { formatDate } from 'src/filters'
-  import Ios from './components/IOS'
-  import Android from './components/Android'
-  import Web from './components/Web'
-  import Wechat from './components/Wechat'
-  import Promote from './components/Promote'
-  import Modal from 'components/Modal'
-  import _ from 'lodash'
+import api from 'api'
+import Select from 'components/Select'
+import { globalMixins } from 'src/mixins'
+import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
+import { formatDate } from 'src/filters'
+import IosSettings from './ios/settings'
+import AndroidSettings from './android/settings'
+import AndroidUpgrade from './android/upgrade'
+import WebSettings from './web/settings'
+import WechatSettings from './wechat/settings'
+import WechatAuthorize from './wechat/authorize'
+import Modal from 'components/Modal'
+import _ from 'lodash'
 
-  export default {
-    name: 'Data',
+export default {
+  name: 'Data',
 
-    layout: 'admin',
+  layout: 'admin',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    vuex: {
-      actions: {
-        createPlugin,
-        updatePlugin,
-        removePlugin
-      }
-    },
+  vuex: {
+    actions: {
+      createPlugin,
+      updatePlugin,
+      removePlugin
+    }
+  },
 
-    components: {
-      'x-select': Select,
-      Modal,
-      Ios,
-      Android,
-      Web,
-      Wechat,
-      Promote
-    },
+  components: {
+    'x-select': Select,
+    Modal,
+    IosSettings,
+    AndroidSettings,
+    AndroidUpgrade,
+    WebSettings,
+    WechatSettings,
+    WechatAuthorize
+  },
 
-    data () {
-      return {
-        // 正在加载列表
-        loadingData: false,
-        // 显示添加浮层
-        showAddModal: false,
-        // 显示密钥浮层
-        showSecretModal: false,
-        // 正在添加应用
-        adding: false,
-        // 已选择的tab 1为应用配置 2为升级管理
-        selectedTabIndex: 1,
-        // 添加应用浮层
-        addModal: {
-          name: '',
+  data () {
+    return {
+      // 正在加载列表
+      loadingData: false,
+      // 显示添加浮层
+      showAddModal: false,
+      // 显示密钥浮层
+      showSecretModal: false,
+      // 正在添加应用
+      adding: false,
+      // 默认选中选项卡第一项
+      selectedTabIndex: 0,
+      // 添加应用浮层
+      addModal: {
+        name: '',
+        type: 1
+      },
+      appNav: {
+        '1': [{
+          name: 'ios-settings',
+          label: '应用配置'
+        }],
+        '2': [{
+          name: 'android-settings',
+          label: '应用配置'
+        }, {
+          name: 'android-upgrade',
+          label: '升级管理'
+        }],
+        '3': [{
+          name: 'web-settings',
+          label: '应用配置'
+        }],
+        '4': [{
+          name: 'wechat-settings',
+          label: '应用配置'
+        }, {
+          name: 'wechat-authorize',
+          label: '微信授权'
+        }]
+      },
+      // 应用类型
+      appTypes: [
+        {
+          name: 'iOS',
           type: 1
         },
-        // 应用类型
-        appTypes: [
-          {
-            name: 'iOS',
-            type: 1
-          },
-          {
-            name: 'Android',
-            type: 2
-          },
-          {
-            name: 'Web',
-            type: 3
-          },
-          {
-            name: '微信',
-            type: 4
-          }
-        ],
-        // 已经选择的过滤条件
-        selectedFilter: {},
-        // 过滤条件
-        filterOptions: [
-          {
-            name: '全部',
-            type: 0
-          },
-          {
-            name: 'iOS',
-            type: 1
-          },
-          {
-            name: 'Android',
-            type: 2
-          },
-          {
-            name: 'Web',
-            type: 3
-          }
-        ],
-        selectedApp: {},
-        // 应用列表
-        apps: [
-          // {
-          //   id: '2e07d2ad3c33aa00',
-          //   name: 'test',
-          //   create_time: '2016-01-19T19:26:57.00Z',
-          //   enable: false,
-          //   config: {
-          //     apn: {
-          //     },
-          //     secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
-          //     type: 1,
-          //     plugin: 'ios'
-          //   },
-          //   secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
-          //   type: 1,
-          //   plugin: 'ios'
-          // }
-        ]
-      }
-    },
-
-    computed: {
-      /**
-       * 计算组件名字
-       * @return {[type]} [description]
-       */
-      componentName () {
-        var result = ''
-        if (this.selectedTabIndex === 1) {
-          switch (this.selectedApp.type) {
-            case 1:
-              result = 'ios'
-              break
-            case 2:
-              result = 'android'
-              break
-            case 3:
-              result = 'web'
-              break
-            case 4:
-              result = 'wechat'
-              break
-            default:
-              break
-          }
-        } else {
-          result = 'promote'
+        {
+          name: 'Android',
+          type: 2
+        },
+        {
+          name: 'Web',
+          type: 3
+        },
+        {
+          name: '微信',
+          type: 4
         }
-        return result
-      },
-      /**
-       * 过滤后的应用列表
-       * @return {[type]} [description]
-       */
-      appList () {
-        var filter = this.selectedFilter
-        var result = []
-        this.apps.forEach((item) => {
-          if (item.type === filter.type || filter.type === 0) {
-            result.push(item)
-          }
-        })
-        return result
-      }
-    },
-
-    route: {
-      data () {
-        this.getApps()
-      }
-    },
-
-    ready () {
-      this.init()
-    },
-    methods: {
-      /**
-       * 初始化
-       * @return {[type]} [description]
-       */
-      init () {
-        this.selectedFilter = this.filterOptions[0]
-      },
-      /**
-       * 选中某个app
-       * @param  {[type]} app [description]
-       * @return {[type]}     [description]
-       */
-      selectApp (app) {
-        if (app.type !== this.selectedApp.type) {
-          this.selectedTabIndex = 1
+      ],
+      // 已经选择的过滤条件
+      selectedFilter: {},
+      // 过滤条件
+      filterOptions: [
+        {
+          name: '全部',
+          type: 0
+        },
+        {
+          name: 'iOS',
+          type: 1
+        },
+        {
+          name: 'Android',
+          type: 2
+        },
+        {
+          name: 'Web',
+          type: 3
         }
-        this.selectedApp = app
-      },
-      /**
-       * 显示密钥
-       * @return {[type]} [description]
-       */
-      showSecret () {
-        this.showSecretModal = true
-      },
-      /**
-       * 获取 APP 列表
-       * @return {[type]} [description]
-       */
-      getApps () {
-        this.loadingData = true
-        api.plugin.all().then((res) => {
+      ],
+      selectedApp: {},
+      // 应用列表
+      apps: [
+        // {
+        //   id: '2e07d2ad3c33aa00',
+        //   name: 'test',
+        //   create_time: '2016-01-19T19:26:57.00Z',
+        //   enable: false,
+        //   config: {
+        //     apn: {
+        //     },
+        //     secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
+        //     type: 1,
+        //     plugin: 'ios'
+        //   },
+        //   secret: 'BfnErEKgguL2uUxYmaZfuIzca0ylRrlt',
+        //   type: 1,
+        //   plugin: 'ios'
+        // }
+      ]
+    }
+  },
+
+  computed: {
+    /**
+     * 计算组件名字
+     * @return {[type]} [description]
+     */
+    componentName () {
+      let result = ''
+      if (this.selectedApp.type) {
+        result = this.appNav[this.selectedApp.type][this.selectedTabIndex].name
+      }
+      return result
+    },
+    /**
+     * 过滤后的应用列表
+     * @return {[type]} [description]
+     */
+    appList () {
+      var filter = this.selectedFilter
+      var result = []
+      this.apps.forEach((item) => {
+        if (item.type === filter.type || filter.type === 0) {
+          result.push(item)
+        }
+      })
+      return result
+    }
+  },
+
+  route: {
+    data () {
+      this.getApps()
+    }
+  },
+
+  ready () {
+    this.init()
+  },
+  methods: {
+    /**
+     * 初始化
+     * @return {[type]} [description
+     */
+    init () {
+      this.selectedFilter = this.filterOptions[0]
+    },
+    /**
+     * 选中某个app
+     * @param  {[type]} app [description]
+     * @return {[type]}     [description]
+     */
+    selectApp (app) {
+      if (app.type !== this.selectedApp.type) {
+        this.selectedTabIndex = 0
+      }
+      this.selectedApp = app
+    },
+    /**
+     * 显示密钥
+     * @return {[type]} [description]
+     */
+    showSecret () {
+      this.showSecretModal = true
+    },
+    /**
+     * 获取 APP 列表
+     * @return {[type]} [description]
+     */
+    getApps () {
+      this.loadingData = true
+      api.plugin.all().then((res) => {
+        if (res.status === 200) {
+          this.loadingData = false
+          this.apps = _.filter(res.data.list, (item) => {
+            return item.type !== 10
+          })
+          setTimeout(() => {
+            this.resetSelectedApp()
+          }, 300)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    },
+
+    /**
+     * 重置当前app
+     * @return {[type]} [description]
+     */
+    resetSelectedApp () {
+      var selectedAppInAppList = false
+      this.appList.forEach((item) => {
+        if (item.id === this.selectedApp.id) {
+          selectedAppInAppList = true
+          this.selectedApp = item
+        }
+      })
+      if (!selectedAppInAppList) {
+        this.selectedApp = this.appList[0] || {}
+      }
+    },
+
+    /**
+     * 表单提交
+     * @return {[type]} [description]
+     */
+    onAddSubmit () {
+      console.log('表单提交')
+      if (true) {
+        if (this.addModal.type === 1) { // iOS应用
+          this.addModal.plugin = 'ios'
+        } else if (this.addModal.type === 2) { // 安卓应用
+          this.addModal.plugin = 'android'
+        } else if (this.addModal.type === 3) { // web应用
+          this.addModal.plugin = 'web'
+        } else if (this.addModal.type === 4) { // 微信应用
+          this.addModal.plugin = 'wechat'
+        }
+        this.addModal.enable = true
+        this.adding = true
+
+        api.plugin.create(this.addModal).then((res) => {
           if (res.status === 200) {
-            this.loadingData = false
-            this.apps = _.filter(res.data.list, (item) => {
-              return item.type !== 10
-            })
-            setTimeout(() => {
-              this.resetSelectedApp()
-            }, 300)
+            this.createPlugin(res.data)
+            this.onAddCancel()
+            this.getApps()
           }
         }).catch((res) => {
           this.handleError(res)
-          this.loadingData = false
+          this.adding = false
         })
-      },
-
-      /**
-       * 重置当前app
-       * @return {[type]} [description]
-       */
-      resetSelectedApp () {
-        var selectedAppInAppList = false
-        this.appList.forEach((item) => {
-          if (item.id === this.selectedApp.id) {
-            selectedAppInAppList = true
-            this.selectedApp = item
-          }
-        })
-        if (!selectedAppInAppList) {
-          this.selectedApp = this.appList[0] || {}
-        }
-      },
-
-      /**
-       * 表单提交
-       * @return {[type]} [description]
-       */
-      onAddSubmit () {
-        console.log('表单提交')
-        if (true) {
-          if (this.addModal.type === 1) { // iOS应用
-            this.addModal.plugin = 'ios'
-          } else if (this.addModal.type === 2) { // 安卓应用
-            this.addModal.plugin = 'android'
-          } else if (this.addModal.type === 3) { // web应用
-            this.addModal.plugin = 'web'
-          } else if (this.addModal.type === 4) { // 微信应用
-            this.addModal.plugin = 'wechat'
-          }
-          this.addModal.enable = true
-          this.adding = true
-
-          api.plugin.create(this.addModal).then((res) => {
-            if (res.status === 200) {
-              this.createPlugin(res.data)
-              this.onAddCancel()
-              this.getApps()
-            }
-          }).catch((res) => {
-            this.handleError(res)
-            this.adding = false
-          })
-        }
-        // setTimeout(() => {
-        //   this.onAddCancel()
-        // }, 2000)
-      },
-      /**
-       * 添加浮层的取消事件
-       * @return {[type]} [description]
-       */
-      onAddCancel () {
-        this.showAddModal = false
-        this.adding = false
-        this.addModal = {
-          name: '',
-          type: 1
-        }
-      },
-      formatDate (date) {
-        return formatDate(date)
-      },
-      computedAppType (num) {
-        var result = ''
-        switch (num) {
-          case 1:
-            result = 'iOS'
-            break
-          case 2:
-            result = 'Android'
-            break
-          case 3:
-            result = 'Web'
-            break
-          case 4:
-            result = '微信'
-            break
-        }
-        return result
       }
-
+      // setTimeout(() => {
+      //   this.onAddCancel()
+      // }, 2000)
+    },
+    /**
+     * 添加浮层的取消事件
+     * @return {[type]} [description]
+     */
+    onAddCancel () {
+      this.showAddModal = false
+      this.adding = false
+      this.addModal = {
+        name: '',
+        type: 1
+      }
+    },
+    formatDate (date) {
+      return formatDate(date)
+    },
+    computedAppType (num) {
+      var result = ''
+      switch (num) {
+        case 1:
+          result = 'iOS'
+          break
+        case 2:
+          result = 'Android'
+          break
+        case 3:
+          result = 'Web'
+          break
+        case 4:
+          result = '微信'
+          break
+      }
+      return result
     }
+
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
-  // 视图淡入淡出
-  .view-transition
-    transition transform .3s ease-in-out, opacity .3s ease-in-out
+// 视图淡入淡出
+.view-transition
+  transition transform .3s ease-in-out, opacity .3s ease-in-out
 
-  .view-enter
-  .view-leave
-    opacity 0
-    transform translate3d(10px, 0, 0)
+.view-enter
+.view-leave
+  opacity 0
+  transform translate3d(10px, 0, 0)
 
-  .pointer
-    cursor pointer
+.pointer
+  cursor pointer
 
-  .no-product
-    width 100%
-    min-height 200px
-    border 1px solid #ddd
-    text-align center
-    .content
-      display inline-block
-      height 200px
-      margin-top 100px
-      text-align left
-  .radio-group-v
-    .app-type-radio
-      margin-right 0
-  .panel
-    margin-top 15px
-    height 100%
-  .apps-container
-    position relative
-    width 100%
-    height 100%
-    .app-list-box
-      width 230px
-      height auto
-      position absolute
-      left 0
-      top 0
-      z-index 1
-      .app
-        width 100%
-        height 60px
-        background #f2f2f2
-        border 1px solid #ddd
-        border-right 0
-        margin-bottom 3px
-        box-sizing border-box
-        padding 10px 20px
-        position relative
-        &.selected
-          background #fff
-          &:after
-            content ""
-            display block
-            position absolute
-            right -2px
-            top 0
-            width 3px
-            height 100%
-            background #fff
-      .app-name
-        height 22px
-        font-size 14px
-        text-overflow 100%
-      .app-type
-        color #BCBCBC
-        font-size 13px
-        text-overflow 100%
-    .app-details-box
-      height 100%
-      margin-left 230px
+.no-product
+  width 100%
+  min-height 200px
+  border 1px solid #ddd
+  text-align center
+  .content
+    display inline-block
+    height 200px
+    margin-top 100px
+    text-align left
+.radio-group-v
+  .app-type-radio
+    margin-right 0
+.panel
+  margin-top 15px
+  height 100%
+.secret-key
+  font-size 20px
+.apps-container
+  position relative
+  width 100%
+  height 100%
+  .app-list-box
+    width 230px
+    height auto
+    position absolute
+    left 0
+    top 0
+    z-index 1
+    .app
+      width 100%
+      height 60px
+      background #f2f2f2
       border 1px solid #ddd
-      min-height 500px
-      padding 20px 35px
+      border-right 0
+      margin-bottom 3px
       box-sizing border-box
-      .app-name
-        font-size 22px
-        height 40px
-        line-height 40px
-      .app-msg
-        font-size 12px
-        color #666
+      padding 10px 20px
+      position relative
+      &.selected
+        background #fff
+        &:after
+          content ""
+          display block
+          position absolute
+          right -2px
+          top 0
+          width 3px
+          height 100%
+          background #fff
+    .app-name
+      height 22px
+      font-size 14px
+      text-overflow 100%
+    .app-type
+      color #BCBCBC
+      font-size 13px
+      text-overflow 100%
+  .app-details-box
+    height 100%
+    margin-left 230px
+    border 1px solid #ddd
+    min-height 500px
+    padding 20px 35px
+    box-sizing border-box
+    .app-name
+      font-size 22px
+      height 40px
+      line-height 40px
+    .app-msg
+      font-size 12px
+      color #666
 </style>
