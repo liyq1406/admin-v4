@@ -1,6 +1,6 @@
 <template>
-  <div class="x-info-card">
-    <div class="thumb"><img :src="picture"/></div>
+  <div :class="classes">
+    <div class="thumb" v-if="!thumbHidden"><img :src="picture"/></div>
     <div class="info">
       <slot>
         <h3>{{ info.title }}</h3>
@@ -25,6 +25,11 @@ export default {
       default: deviceThumb
     },
 
+    thumbHidden: {
+      type: Boolean,
+      default: false
+    },
+
     // 信息
     info: {
       type: Object,
@@ -41,6 +46,16 @@ export default {
   computed: {
     picture () {
       return this.pic || deviceThumb
+    },
+
+    classes () {
+      let cls = ['x-info-card']
+
+      if (this.thumbHidden) {
+        cls.push('thumb-hidden')
+      }
+
+      return cls.join(' ')
     }
   },
   data () {
@@ -104,4 +119,8 @@ export default {
         color green
         &:before
           background-color green
+
+  &.thumb-hidden
+    .info
+      margin-left 0
 </style>

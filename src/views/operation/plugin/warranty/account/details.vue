@@ -4,51 +4,41 @@
       <h2>网点详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-      <!-- Start: 网点详情 -->
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">创建日期:</div>
-            <div class="clo-21 info">{{ info.create_time | formatDate }}</div>
-          </li>
-        </ul>
-      </div>
-      <!-- End: 网点详情 -->
-
-      <!-- Start: 网点信息 -->
-      <div class="panel-hd">
-        <div class="actions">
-          <button @click="editAccount" class="btn btn-ghost mr10"><i class="fa fa-edit"></i>编辑网点</button>
-          <button @click="showAddModal = true" class="btn btn-success"><i class="fa fa-plus"></i>添加客服</button>
+    <div class="panel mt15 mb20 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <div class="account-info ml10">
+            <info-card :thumb-hidden="true">
+              <h3>{{ info.name }} <a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></h3>
+              <div class="desc">
+                <span>创建时间：{{ info.create_time | formatDate }}</span>
+              </div>
+            </info-card>
+          </div>
+          <div v-stretch="121">
+            <info-list :info="accountInfo"></info-list>
+          </div>
         </div>
-        <h2>网点信息</h2>
+        <div class="col-8 device-map with-loading">
+          <div class="icon-loading" v-show="loadingData">
+            <i class="fa fa-refresh fa-spin"></i>
+          </div>
+          <div class="mt10 ml30">
+            <!-- <x-map :location="deviceLocation" height="220px"></x-map> -->
+            <!-- <div class="device-ip mt5">
+              <span v-show="!currVirtualDevice.ip"> 未激活 </span>
+              <span v-show="currVirtualDevice.ip">{{ currVirtualDevice.ip }} </span>
+              <span v-show="province">{{province}} {{city}}</span>
+            </div> -->
+          </div>
+        </div>
       </div>
+    </div>
+    <div class="panel">
       <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">网点名称:</div>
-            <div class="clo-21 info">{{ info.name }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">负责人:</div>
-            <div class="clo-21 info">{{ info.director }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">联系电话:</div>
-            <div class="clo-21 info">{{ info.phone }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">所在地区:</div>
-            <div class="clo-21 info">{{ info.province + info.city + info.district }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">详细地址:</div>
-            <div class="clo-21 info">{{ info.address }}</div>
-          </li>
-        </ul>
-        <!-- End: 网点信息 -->
-
+        <div class="action-bar">
+          <button @click="showAddModal = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加客服</button>
+        </div>
         <!-- Start: 客服人员列表 -->
         <div class="data-table">
           <!-- Start: 过滤器 -->
@@ -272,6 +262,8 @@ import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
+import InfoCard from 'components/InfoCard'
+import InfoList from 'components/InfoList'
 import api from 'api'
 import * as config from 'consts/config'
 import _ from 'lodash'
@@ -365,7 +357,9 @@ export default {
     SearchBox,
     Pager,
     Modal,
-    Breadcrumb
+    Breadcrumb,
+    InfoCard,
+    InfoList
   },
 
   ready () {
@@ -374,6 +368,26 @@ export default {
   },
 
   computed: {
+    accountInfo () {
+      return {
+        director: {
+          label: '负责人',
+          value: this.info.director
+        },
+        phone: {
+          label: '联系电话',
+          value: this.info.phone
+        },
+        location: {
+          label: '所在地区',
+          value: `${this.info.province}${this.info.city}${this.info.district}`
+        },
+        address: {
+          label: '详细地址',
+          value: this.info.address
+        }
+      }
+    },
     queryCondition () {
       var condition = {
         limit: this.countPerPage,

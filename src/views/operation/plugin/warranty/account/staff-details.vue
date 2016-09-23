@@ -4,49 +4,21 @@
       <h2>客服详情</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="panel">
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">创建日期:</div>
-            <div class="col-21 info">{{ detail.create_time | uniformDate }}</div>
-          </li>
-        </ul>
-      </div>
-
-      <!-- start: 客服信息 -->
-      <div class="panel-hd">
-        <div class="actions">
-          <button @click="editAccount" class="btn btn-ghost"><i class="fa fa-edit"></i>编辑客服</button>
+    <div class="panel mt15 mb20 no-split-line">
+      <div class="panel-bd row">
+        <div class="col-16">
+          <div class="account-info ml10">
+            <info-card :thumb-hidden="true">
+              <h3>{{ detail.name }} <a href="#" @click.prevent="editAccount" class="fa fa-edit"></a></h3>
+              <div class="desc"><span :class="{'on-line':detail.status=== 1, 'off-line':detail.status!==1}" v-text="detail.status=== 1?'启用':'停用'"></span><span>创建时间：{{ detail.create_time | formatDate }}</span>
+              </div>
+            </info-card>
+          </div>
+          <div v-stretch="121">
+            <info-list :info="accountInfo"></info-list>
+          </div>
         </div>
-        <h2>客服信息</h2>
       </div>
-      <div class="panel-bd">
-        <ul class="info-details">
-          <li class="row">
-            <div class="col-3 label">姓名:</div>
-            <div class="col-21 info">{{ detail.name }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">邮箱地址:</div>
-            <div class="col-21 info">{{ detail.email }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">联系电话:</div>
-            <div class="col-21 info">{{ detail.phone }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">登陆密码:</div>
-            <div class="col-21 info">{{ detail.password }}</div>
-          </li>
-          <li class="row">
-            <div class="col-3 label">状态:</div>
-            <div class="col-21 info" v-if = "detail.status=== 1 ">启用</div>
-            <div class="col-21 info" v-else>停用</div>
-          </li>
-        </ul>
-      </div>
-      <!-- end: 客服信息-->
     </div>
     <!-- start 编辑客服 -->
     <modal :show.sync="showEditModal" width="600px">
@@ -121,6 +93,8 @@ import { pluginMixins } from '../../mixins'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Breadcrumb from 'components/Breadcrumb'
+import InfoCard from 'components/InfoCard'
+import InfoList from 'components/InfoList'
 import api from 'api'
 import * as config from 'consts/config'
 // import _ from 'lodash'
@@ -173,7 +147,28 @@ export default {
   components: {
     'x-select': Select,
     Modal,
-    Breadcrumb
+    Breadcrumb,
+    InfoCard,
+    InfoList
+  },
+
+  computed: {
+    accountInfo () {
+      return {
+        email: {
+          label: '邮箱地址',
+          value: this.detail.email
+        },
+        phone: {
+          label: '联系电话',
+          value: this.detail.phone
+        },
+        password: {
+          label: '登陆密码',
+          value: this.detail.password
+        }
+      }
+    }
   },
 
   ready () {
