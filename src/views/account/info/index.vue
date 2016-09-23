@@ -31,19 +31,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-row row" v-if="currentMember.role === 1">
-              <label class="form-control col-6">角色</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <x-select :label="role.label">
-                    <select v-model="role">
-                      <option v-if="currentMember.role === 1" :value="{label: '管理员', value: 1}">管理员</option>
-                      <option v-for="(key, role) in MEMBER_TYPES" v-if="key - 0 !== 1" :value="{label: role, value: key}">{{role}}</option>
-                    </select>
-                  </x-select>
-                </div>
-              </div>
-            </div>
             <div class="form-actions">
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onEditInfoCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
@@ -221,10 +208,6 @@ export default {
      * @return {[type]} [description]
      */
     onSubmitEditInfo () {
-      if (this.currentMember.role !== this.role.value) {
-        this.setRole()
-        return
-      }
       if (this.currentMember.name !== this.editModel.name) {
         this.setMemberInfo()
         return
@@ -263,29 +246,7 @@ export default {
         // this.$route.router.go('/login')
       })
     },
-    /**
-     * 设置角色
-     * @return {[type]} [description]
-     */
-    setRole () {
-      let roleType = this.role.value
-      let params = {
-        // 'role_id': '自定义角色ID'
-      }
-      this.editing = true
-      api.corp.setMemberRole(this.currentMember.id, roleType, params).then((res) => {
-        this.onEditInfoCancel()
-        this.showNotice({
-          type: 'success',
-          content: '角色设置成功！'
-        })
-        this.getMember()
-        // this.onEditInfoCancel()
-      }).catch((res) => {
-        this.onEditInfoCancel()
-        this.handleError(res)
-      })
-    },
+
     /**
      * 编辑按钮
      * @return {[type]} [description]
