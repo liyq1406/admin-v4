@@ -339,9 +339,9 @@
       </div>
     </modal>
     <!-- 筛选 -->
-    <!-- start 限权设置 -->
+    <!-- start 权限设置 -->
     <modal :show.sync="jurisdictionModal.show">
-      <h3 slot="header">限权设置</h3>
+      <h3 slot="header">权限设置</h3>
       <div slot="body" class="form">
         <form @submit.prevent="jurisdictionModalConfirm">
           <div class="form-row row">
@@ -358,7 +358,7 @@
         </form>
       </div>
     </modal>
-    <!-- 限权设置 -->
+    <!-- 权限设置 -->
     <!-- start 提示 -->
     <modal :show.sync="confirmModal.show">
       <h3 slot="header">{{confirmModal.title}}</h3>
@@ -560,7 +560,7 @@ export default {
           title: ''
         }
       },
-      // 限权设置浮层
+      // 权限设置浮层
       jurisdictionModal: {
         show: false,
         modal: {
@@ -1048,7 +1048,7 @@ export default {
     },
 
     /**
-     * 显示限权浮层
+     * 显示权限浮层
      * @return {[type]} [description]
      */
     showJurisdictionModal () {
@@ -1061,7 +1061,7 @@ export default {
       this.jurisdictionModal.show = true
     },
     /**
-     * 限权设置浮层的确定按钮
+     * 权限设置浮层的确定按钮
      * @return {[type]} [description]
      */
     jurisdictionModalConfirm () {
@@ -1083,7 +1083,7 @@ export default {
           this.dataFirClassList[index].permission = permission
           this.showNotice({
             type: 'success',
-            content: '限权设置成功'
+            content: '权限设置成功'
           })
           this.editing = false
         }

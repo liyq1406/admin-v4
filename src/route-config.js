@@ -1698,7 +1698,7 @@ let configRouter = (router) => {
       } else {
         router.app.showNotice({
           type: 'error',
-          content: `您是${identity[memberRole]}，您没有限权访问该页面！`
+          content: `您是${identity[memberRole]}，您没有权限访问该页面！`
         })
         if (transition.from.path && reg[memberRole].test(transition.from.path)) {
           router.replace(transition.from.path)
