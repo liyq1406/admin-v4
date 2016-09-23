@@ -75,7 +75,9 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
-        this.getActiveProductsTrend(this.products, this.period)
+        setTimeout(() => {
+          this.getActiveProductsTrend(this.products, this.period)
+        }, 200)
       }
     }
   },

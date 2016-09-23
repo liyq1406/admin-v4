@@ -193,7 +193,10 @@ export default {
           break
       }
 
+      let timestap = new Date()
       chart.render()
+      let timestap2 = new Date()
+      console.log(timestap2.getTime() - timestap.getTime())
       this.rendered = true
     },
     getConfig () {

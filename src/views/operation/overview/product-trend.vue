@@ -67,6 +67,7 @@ export default {
 
   data () {
     return {
+      requested: false,
       repaintTopFive: true, // 添加该变量为了处理g2的bug： changeData时g2会将传入数组根据source时的数组结构重新排序。所以总过v-if重绘
       trendTabIndex: 0,
       period: 30,
@@ -119,7 +120,8 @@ export default {
 
   watch: {
     products () {
-      if (this.products.length > 0) {
+      if (this.products.length > 0 && !this.requested) {
+        this.requested = true
         this.getActivatedProductsTrend(this.products, this.period)
       }
     }
@@ -176,14 +178,6 @@ export default {
         this.repaintTopFive = true
       }, 0)
       return products
-
-      // if (window.G2) {
-      //   var prodFrame = new window.G2.Frame(products)
-      //   prodFrame = window.G2.Frame.sort(prodFrame, 'count')
-      //   console.log(prodFrame)
-      //   // console.log(typeof prodFrame)
-      //   this.topAdded.data = prodFrame
-      // }
     },
     getActivatedProductsTrend (products, duration) {
       var prodLength = products.length
