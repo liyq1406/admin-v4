@@ -61,19 +61,7 @@ export default {
 
   watch: {
     nav () {
-      var result = this.nav.subs
-      result.forEach((item, index) => {
-        var reg
-        if (item.type === 'product') {
-          reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')
-        } else if (item.type === 'plugin') {
-          reg = new RegExp(`${this.nav.url}/plugins/${item.alias}/${item.id}`, 'i')
-        } else {
-          reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
-        }
-        result.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
-      })
-      this.subs = result
+      this.init()
     }
   },
 
@@ -87,8 +75,27 @@ export default {
   //     return result
   //   }
   // },
+  ready () {
+    this.init()
+  },
 
   methods: {
+    init () {
+      var result = this.nav.subs
+      result.forEach((item, index) => {
+        var reg
+        if (item.type === 'product') {
+          reg = new RegExp(`${this.nav.url}/${item.alias}/${item.id}`, 'i')
+        } else if (item.type === 'plugin') {
+          reg = new RegExp(`${this.nav.url}/plugins/${item.alias}/${item.id}`, 'i')
+        } else {
+          reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
+        }
+        result.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
+      })
+      this.subs = result
+    },
+
     /**
      * 生成顶级链接地址
      */
