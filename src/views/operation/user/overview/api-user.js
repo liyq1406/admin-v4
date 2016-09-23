@@ -12,7 +12,7 @@ export function getTrend (duration) {
   return new Promise((resolve, reject) => {
     api.statistics.getUserTrend(range.start, range.end).then((res) => {
       if (res.status === 200 && res.data.length > 0) {
-        var ret = beautify(res.data, duration)
+        var ret = beautify(res.data, range)
         var acRet = [] // 活跃用户
         var toRet = [] // 累计用户
         var addRet = [] // 新增用户
