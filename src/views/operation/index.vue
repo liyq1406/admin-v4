@@ -184,7 +184,7 @@ export default {
             //   url: `/plugins/warranty/${item.id}/heat`
             }]
             break
-          case 'warranty': // 在线维保
+          case 'warranty': // 智能维保
             sub.icon = 'support'
             sub.subs = [{
             //   alias: 'overview',

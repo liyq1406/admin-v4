@@ -2,7 +2,7 @@
   <div class="main">
     <div class="panel">
       <div class="panel-hd">
-        <h2>在线维保</h2>
+        <h2>智能维保</h2>
       </div>
       <div class="panel-bd">
         <x-alert :cols="7">
