@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="col-8">
-            <annulus :data="annulusInfo"></annulus>
+            <annulus :data="annulusInfo" title="产品配额"></annulus>
             <div class="buy-access hidden">
               <button class="btn btn-primary" @click="onBuyButtonClick">购买授权</button>
             </div>
@@ -243,7 +243,7 @@ export default {
         name: '授权设备',
         val: used
       }, {
-        name: '剩余份额',
+        name: '剩余配额',
         val: remain
       }]
     },

@@ -32,7 +32,7 @@ export default {
     },
     title: {
       type: String,
-      default: '产品配额'
+      default: '总量'
     }
   },
 
