@@ -48,7 +48,7 @@
             </div>
             <div class="form-actions">
               <label class="del-check" v-if="this.modal.type==='edit'">
-                <input type="checkbox" name="del" v-model="delChecked"/>删除授权
+                <input type="checkbox" name="del" v-model="delChecked"/>删除参数
               </label>
               <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>

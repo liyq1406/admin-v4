@@ -324,7 +324,13 @@ export default {
           this.currSnapshot = this.snapshots[0]
         }
       }).catch((res) => {
-        this.handleError(res)
+        // this.handleError(res)
+        if (res.data.error.code === 4001001) {
+          this.showNotice({
+            type: 'error',
+            content: '设备暂无快照数据'
+          })
+        }
       })
     },
     /**
@@ -341,7 +347,13 @@ export default {
           })
         }
       }).catch((res) => {
-        this.handleError(res)
+        // this.handleError(res)
+        if (res.data.error.code === 4001001) {
+          this.showNotice({
+            type: 'error',
+            content: '设备暂无快照数据'
+          })
+        }
       })
     }
   }
