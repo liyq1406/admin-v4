@@ -125,7 +125,7 @@ export default {
   computed: {
     deviceThumb () {
       let pics = this.currentProduct.pics
-      return (pics && pics.length) ? pics[0] : '/static/images/device_thumb.png'
+      return (pics && pics.length && pics[0]) ? pics[0] : '/static/images/device_thumb.png'
     }
   },
 
