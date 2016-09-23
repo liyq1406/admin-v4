@@ -4,13 +4,14 @@
       <div class="col-12">
         <v-select width="200px" :label="currProduct.name" size="small">
           <span slot="label">选择产品:</span>
-          <select v-model="currProduct" @change="appStatus">
+          <select v-model="currProduct" @change="getAppStatus">
             <option v-for="product in allProducts" :value="product">{{ product.name }}</option>
           </select>
         </v-select>
       </div>
       <div class="col-12">
-        <button @click.prevent.stop="productEmpower" :disabled="empowering" :class="{'disabled':empowering}" v-text="empowering ? $t('common.unempower') : $t('common.empower')" class="btn btn-ghost fr"></button>
+        <button @click.prevent.stop="stopProductEmpower" v-if="empowering" class="btn btn-ghost fr">{{ $t('common.unempower') }}</button>
+        <button @click.prevent.stop="productEmpower" v-else class="btn btn-ghost fr">{{ $t('common.empower') }}</button>
         <button @click.prevent.stop="showAlertModal = true" class="btn btn-ghost mr10 fr">授权设置</button>
         <button @click.prevent.stop="showAddModal = true" class="btn btn-primary mr10 fr"><i class="fa fa-plus"></i>添加测试设备</button>
       </div>
@@ -48,7 +49,7 @@
         </tbody>
       </table>
     </div>
-    <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="searchWechatList"></pager>
+    <pager v-if="!loadingData && total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getWechatList"></pager>
 
     <!-- 授权设置浮层-->
     <modal :show.sync="showSetModal" @close="onSetCancel" width="640px">
@@ -234,7 +235,7 @@
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">新增授权页面</h3>
       <div slot="body" class="form form-rules">
-        <form v-form name="addValidation" @submit.prevent.stop="createWechat" hook="addFormHook">
+        <form v-form name="addValidation" @submit.prevent.stop="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
             <div class="controls col-18">
@@ -259,7 +260,7 @@
         </div>
         <div class="form-actions">
           <button @click.prevent.stop="showAlertModal=false" class="btn btn-default">取消</button>
-          <button @click.prevent.stop="showwechat" class="btn btn-primary">确定</button>
+          <button @click.prevent.stop="showWechat" class="btn btn-primary">确定</button>
         </div>
       </div>
     </modal>
@@ -360,13 +361,6 @@ export default {
     }
   },
 
-  computed: {
-    // 判断授权设置是否可按
-    currProductEmpty () {
-      return Object.keys(this.currProduct).length === 0
-    }
-  },
-
   ready () {
     this.init()
   },
@@ -384,6 +378,7 @@ export default {
     init () {
       if (this.allProducts.length) {
         this.currProduct = this.allProducts[0]
+        this.getAppStatus()
       }
     },
 
@@ -398,17 +393,17 @@ export default {
     },
 
     // 更改产品后获取列表与状态
-    appStatus () {
-      this.searchWechatList()
-      this.empowerStatus()
+    getAppStatus () {
+      this.getWechatList()
+      this.getEmpowerStatus()
     },
 
     /**
      * 查询授权设备列表
      */
-    searchWechatList () {
+    getWechatList () {
       this.loadingData = true
-      api.app.searchWechatList(this.app.id, this.currProduct.id, {
+      api.app.getWechatList(this.app.id, this.currProduct.id, {
         offset: this.countPerPage * (this.currentPage - 1),
         limit: this.countPerPage
       }).then((res) => {
@@ -439,17 +434,11 @@ export default {
     },
 
     // 关闭添加授权浮层并净化添加表单
-    resetAdd () {
+    onAddCancel () {
       // var this = this
       this.adding = false
       this.showAddModal = false
       this.addModel = _.clone(this.originAddModel)
-    },
-
-    // 取消添加
-    onAddCancel () {
-      this.resetAdd()
-      // console.log(123)
     },
 
     // 添加表单钩子
@@ -483,7 +472,7 @@ export default {
     },
 
     // 微信授权
-    showwechat () {
+    showWechat () {
       this.showSetModal = true
       this.showAlertModal = false
       api.app.getWechat(this.app.id, this.currProduct.id).then((res) => {
@@ -509,12 +498,12 @@ export default {
     },
 
     // 提交新增
-    createWechat () {
+    onAddSubmit () {
       if (this.addValidation.$valid && !this.adding) {
         api.app.createWechat(this.app.id, this.currProduct.id, this.addModel).then((res) => {
           if (res.status === 200) {
-            this.resetAdd()
-            this.searchWechatList()
+            this.onAddCancel()
+            this.getWechatList()
           }
         }).catch((res) => {
           this.handleError(res)
@@ -524,16 +513,15 @@ export default {
     },
 
     // 获取产品授权状态
-    empowerStatus () {
+    getEmpowerStatus () {
       this.deviceEmpowering = true
       api.app.productEmpowerStatus(this.app.id, this.currProduct.id).then((res) => {
         if (res.data.status === 0) {
           this.empowering = false
           this.deviceEmpowering = false
-          this.searchWechatList()
         } else {
           this.empowering = true
-          setTimeout(this.empowerStatus, 3000)
+          setTimeout(this.getEmpowerStatus, 3000)
         }
       }).catch((res) => {
         this.handleError(res)
@@ -545,11 +533,22 @@ export default {
     productEmpower () {
       api.app.productEmpower(this.app.id, this.currProduct.id).then((res) => {
         if (res.status === 200) {
-          this.empowerStatus()
+          this.getAppStatus()
         }
       }).catch((res) => {
         this.handleError(res)
         this.empowering = false
+      })
+    },
+
+    /**
+     * 停止产品授权
+     */
+    stopProductEmpower () {
+      api.app.stopProductEmpower(this.app.id, this.currProduct.id).then((res) => {
+        if (res.status === 200) {
+          this.getAppStatus()
+        }
       })
     }
   }

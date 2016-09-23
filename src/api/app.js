@@ -201,7 +201,7 @@ export default {
       ]
     }
    */
-  searchWechatList (appId, productId, params) {
+  getWechatList (appId, productId, params) {
     return http.post(
       `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/devices`, params
     )
@@ -229,6 +229,15 @@ export default {
   productEmpower (appId, productId, params) {
     return http.post(
       `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}`, params
+    )
+  },
+
+  /**
+   * 产品授权
+   */
+  stopProductEmpower (appId, productId) {
+    return http.post(
+      `${API_SERVER.default}/v2/developer/app/${appId}/wechat_auth/product/${productId}/stop`
     )
   },
 

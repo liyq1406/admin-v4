@@ -7,7 +7,7 @@ export default {
   },
   ok: '确定',
   empower: '产品授权',
-  unempower: '授权中',
+  unempower: '停止授权',
   cancel: '取消',
   edit: '编辑',
   add: '添加',
