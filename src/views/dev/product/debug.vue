@@ -477,16 +477,18 @@ export default {
           console.log('设备离线！')
         } else {
           if (this.datapointValueArr.length) {
-            res.data.datapoint.forEach((item1) => {
-              this.datapointValueArr.forEach((item2) => {
-                if (item1.index === item2.index && item2.value !== item1.value) {
-                  item2.value = item1.value
-                  item2[item2.index] = item1.value
-                }
+            if (res.data.datapoint) {
+              res.data.datapoint.forEach((item1) => {
+                this.datapointValueArr.forEach((item2) => {
+                  if (item1.index === item2.index && item2.value !== item1.value) {
+                    item2.value = item1.value
+                    item2[item2.index] = item1.value
+                  }
+                })
               })
-            })
+            }
           } else {
-            this.datapointValueArr = res.data.datapoint
+            this.datapointValueArr = res.data.datapoint || []
           }
         }
         // add by guohao IE11的bug。v-for重新渲染以后，焦点丢失。导致所有button点击无响应

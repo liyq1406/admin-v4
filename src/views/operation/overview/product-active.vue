@@ -6,7 +6,7 @@
       </div>
       <h2>产品活跃度</h2>
     </div>
-    <div class="row">
+    <div class="row min-height">
       <div class="col-14">
         <time-line :data="activeData"></time-line>
       </div>
@@ -75,9 +75,7 @@ export default {
   watch: {
     products () {
       if (this.products.length > 0) {
-        setTimeout(() => {
-          this.getActiveProductsTrend(this.products, this.period)
-        }, 200)
+        this.getActiveProductsTrend(this.products, this.period)
       }
     }
   },
@@ -165,3 +163,10 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+@import '../../../assets/stylus/common'
+.min-height
+  height 270px
+  overflow hidden
+</style>

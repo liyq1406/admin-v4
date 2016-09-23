@@ -6,6 +6,7 @@
 // import G2 from 'g2'
 import mapData from './map-data.json'
 import _ from 'lodash'
+import getMessageQueue from 'src/utils/mq.js'
 
 export default {
   name: 'ChinaMap',
@@ -95,7 +96,8 @@ export default {
           })).percent * 100 + '%'
         })
       })
-      chart.render()
+      let mq = getMessageQueue()
+      mq.push(chart, this, function () {})
     }
   }
 }

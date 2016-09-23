@@ -29,12 +29,8 @@
       <div class="col-24">
         <product-trend></product-trend>
         <product-active></product-active>
-        <template v-if="loadDistribution">
-          <product-distribution></product-distribution>
-        </template>
-        <template v-if="loadUserTrend">
-          <user-trend></user-trend>
-        </template>
+        <product-distribution></product-distribution>
+        <user-trend></user-trend>
       </div>
     </div>
   </div>
@@ -92,20 +88,12 @@ export default {
             change: 0
           }
         }
-      },
-      loadUserTrend: false,
-      loadDistribution: false
+      }
     }
   },
 
   ready () {
     this.getSummary()
-    setTimeout(() => {
-      this.loadDistribution = true
-      setTimeout(() => {
-        this.loadUserTrend = true
-      }, 500)
-    }, 500)
   },
 
   methods: {

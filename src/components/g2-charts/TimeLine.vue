@@ -1,12 +1,13 @@
 <template>
   <div class="x-time-line">
-    <div v-if="data && !rendered" class="default">没有数据</div>
+    <div v-if="data && !rendered" class="default"></div>
   </div>
 </template>
 
 <script>
 import { uniformDate } from 'src/filters'
 import _ from 'lodash'
+import getMessageQueue from 'src/utils/mq.js'
 
 export default {
   name: 'Line',
@@ -193,11 +194,10 @@ export default {
           break
       }
 
-      let timestap = new Date()
-      chart.render()
-      let timestap2 = new Date()
-      console.log(timestap2.getTime() - timestap.getTime())
-      this.rendered = true
+      let mq = getMessageQueue()
+      mq.push(chart, this, function () {
+        this.rendered = true
+      })
     },
     getConfig () {
       let defs = {

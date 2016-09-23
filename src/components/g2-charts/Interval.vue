@@ -1,12 +1,13 @@
 <template>
   <div class="x-interval">
-    <div v-if="!data || data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="!data || data.length===0" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}"></div>
   </div>
 </template>
 
 <script>
 // import G2 from 'g2'
 import _ from 'lodash'
+import getMessageQueue from 'src/utils/mq.js'
 
 export default {
   name: 'Interval',
@@ -150,7 +151,8 @@ export default {
       if (this.options.color) {
         interval.color(this.options.color)
       }
-      chart.render()
+      let mq = getMessageQueue()
+      mq.push(chart, this, function () {})
     }
   }
 }

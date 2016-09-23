@@ -11,7 +11,7 @@
         <li v-for="item in locales.data.PRODUCT_FILTERS" @click="trendTabIndex=$index" :class="{'active':trendTabIndex===$index}">{{ item.label }}</li>
       </ul>
     </div>
-    <div class="row">
+    <div class="row min-height">
       <div class="col-14" v-if="trendTabIndex === 0">
         <time-line :data="activatedData"></time-line>
       </div>
@@ -275,4 +275,7 @@ export default {
     text-align left
     margin 10px 0 5px
     color gray
+.min-height
+  height 250px
+  overflow hidden
 </style>
