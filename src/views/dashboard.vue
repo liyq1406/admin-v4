@@ -341,7 +341,7 @@ export default {
     .body
       width 100%
       height 100%
-      padding 35px 20px
+      padding 15px
       box-sizing border-box
       overflow auto
       .dev-box
@@ -349,7 +349,7 @@ export default {
         box-sizing border-box
 
     .container
-      padding 0 80px 50px
+      padding 0 80px 20px
       box-sizing border-box
       &.dev-box
         .icon-box
@@ -362,7 +362,7 @@ export default {
       .part
         width 100%
         height auto
-        margin-top 20px
+        margin-top 15px
         .title-box
           height 30px
           border-bottom 1px solid #ccc
@@ -459,7 +459,7 @@ export default {
             margin-left 10px
       .part4
         text-align center
-        margin-top 50px
+        margin-top 30px
         .btn
           width 155px
           height 33px
@@ -476,6 +476,6 @@ export default {
       border-top 1px solid #dddddd
       border-bottom 1px solid #dddddd
       position absolute
-      bottom 60px
+      bottom 53px
       left 0
 </style>
