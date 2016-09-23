@@ -6,7 +6,12 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
-          <float-select :list="selectOptions" :trigger-width="110" @select="productSelect"></float-select>
+          <x-select :label="product.label" width="110px" size="small">
+            <span slot="label">产品</span>
+            <select v-model="product" @change="productSelect">
+              <option v-for="selectProduct in selectOptions" :value="selectProduct">{{ selectProduct.label }}</option>
+            </select>
+          </x-select>
         </div>
       </div>
       <div class="filter-group fr">
@@ -19,8 +24,10 @@
       <div class="panel-hd panel-hd-full bordered">
         <h2>趋势</h2>
       </div>
-      <div class="panel-bd">
-        <time-line :data="lineData"></time-line>
+      <div class="panel-bd min-height">
+        <template v-if="repaint">
+          <time-line :data="lineData"></time-line>
+        </template>
       </div>
     </div>
     <div class="row statistic-group mb30">
@@ -60,8 +67,8 @@
                 <tbody>
                   <tr v-for="item in feedbacks">
                     <td>{{item.label}}</td>
-                    <td>{{item.untreatedCount}} ({{item.untreatedPercent}} %)</td>
-                    <td>{{item.treatedCount}} ({{item.treatedPercent}} %)</td>
+                    <td>{{item.untreatedCount}} ({{item.untreatedPercent || ''}} %)</td>
+                    <td>{{item.treatedCount}} ({{item.treatedPercent || ''}} %)</td>
                     <td>{{item.Count}}</td>
                   </tr>
                 </tbody>
@@ -81,7 +88,7 @@ import api from 'api'
 import Statistic from 'components/Statistic'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Pie from 'components/g2-charts/Pie'
-import FloatSelect from 'components/FloatSelect'
+import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
@@ -94,7 +101,7 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    FloatSelect,
+    'x-select': Select,
     Pie,
     DateTimeMultiplePicker,
     Statistic,
@@ -109,6 +116,7 @@ export default {
 
   data () {
     return {
+      repaint: true,
       product: {
         label: '全部'
       },
@@ -149,6 +157,7 @@ export default {
     selectOptions () {
       if (this.products.length > 0) {
         var res = [{
+          id: '',
           label: '全部'
         }]
         this.products.forEach((item) => {
@@ -165,7 +174,7 @@ export default {
     },
     groupQueryCondition () {
       var params = null
-      if (this.product && this.product.id) {
+      if (this.product && this.product.id !== '') {
         if (!params) {
           params = {}
           params.query = {}
@@ -210,7 +219,7 @@ export default {
             let dataRes = []
             res.data.labelGroupCount.forEach((item) => {
               let temp = {}
-              temp.name = item.label
+              temp.name = item.label || ''
               temp.value = item.Count
               dataRes.push(temp)
             })
@@ -220,18 +229,23 @@ export default {
           }
           // 日统计
           if (res.data.dayGroupCount.length > 0) {
+            // TODO @guohao 自动补0
             let dataRes = []
             res.data.dayGroupCount.forEach((item) => {
               let temp = {}
               temp.val = item.Count
               temp.date = item.day
-              temp.name = item.label
+              temp.name = item.label || '未知'
               dataRes.push(temp)
             })
             this.lineData = dataRes
           } else {
             this.lineData = []
           }
+          this.repaint = false
+          setTimeout(() => {
+            this.repaint = true
+          }, 0)
         }
       }).catch((res) => {
         this.handleError(res)
@@ -258,7 +272,6 @@ export default {
       this.getFeedbackList()
     },
     productSelect (item) {
-      this.product = item
       this.getFeedbackList()
     }
   }
@@ -267,4 +280,6 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+.min-height
+  height 300px
 </style>
