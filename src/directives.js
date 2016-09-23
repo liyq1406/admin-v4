@@ -111,6 +111,7 @@ export var tooltip = {
     let inPopup = false
     this.popup = document.createElement('div')
     this.popup.style.visibility = 'hidden'
+    this.popup.style.zIndex = '10001'
     this.popup.classList.add('x-tooltip', 'x-tooltip-top', 'hidden')
     document.body.appendChild(this.popup)
 

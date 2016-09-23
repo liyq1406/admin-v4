@@ -27,12 +27,12 @@
                 <i class="fa fa-question-circle tips-icon" v-tooltip="tipLabel"></i>
               </div>
               <div class="col-18">
-                <div v-for="rule in customRules" class="row input-text-wrap">
+                <div v-for="rule in customRules" class="row input-text-wrap" :class="[$index===0 ? 'padding-top-clear': '']">
                   <div class="col-4 key-input">
-                    <input v-model="rule.key" type="text" class="input-text"/>
+                    <input placeholder="key" v-model="rule.key" type="text" class="input-text"/>
                   </div>
                   <div class="col-14 value-input">
-                    <input v-model="rule.value" type="text" class="input-text"/>
+                    <input placeholder="value" v-model="rule.value" type="text" class="input-text"/>
                   </div>
                   <div v-if="$index === customRules.length-1" class="col-2">
                     <button class="btn btn-ghost add-btn" @click="addRule($index)">
@@ -45,12 +45,35 @@
                 </div>
               </div>
             </div>
-            <div class="row item">
+            <!-- <div class="row item">
               <div class="col-6 label">二维码信息预览:</div>
               <div class="col-18">
                 <span class="qrcode-preview">{{preview}}</span>
               </div>
+            </div> -->
+            <div class="row item">
+              <div class="col-6 label">前缀:</div>
+              <div class="col-18 row input-text-wrap padding-top-clear">
+                <div class="col-20">
+                  <input placeholder="二维码前缀字符串" v-model="prefix" type="text" class="input-text"/>
+                </div>
               </div>
+            </div>
+            <div class="row item">
+              <div class="col-6 label">后缀:</div>
+              <div class="col-18 row input-text-wrap padding-top-clear">
+                <div class="col-20">
+                  <input placeholder="二维码后缀字符串" v-model="suffix" type="text" class="input-text"/>
+                </div>
+              </div>
+            </div>
+            <div class="row item">
+              <div class="col-6 label">编码方式:</div>
+              <div class="col-18 encode-type">
+                <input v-model="base64" type="checkbox" class="input-text"/>
+                <label>Base64</label>
+              </div>
+            </div>
           </div>
           <div class="fr mr10 mt20">
             <button class="btn btn-primary btn-lg"  @click="exportQrcode">批量导出</button>
@@ -88,7 +111,10 @@
             key: '',
             value: ''
           }
-        ]
+        ],
+        suffix: '',
+        prefix: '',
+        base64: true
       }
     },
     computed: {
@@ -97,8 +123,23 @@
           record_id: this.$route.params.import_id,
           custom_field: this.customField,
           custom_property: this.customProperty,
-          access_token: window.localStorage.getItem('accessToken')
+          access_token: window.localStorage.getItem('accessToken'),
+          format: {
+            encode: 'base64'
+          }
         }
+
+        if (this.prefix.trim() !== '') {
+          temp.format.prefix = this.prefix.trim()
+        }
+        if (this.suffix.trim() !== '') {
+          temp.format.suffix = this.suffix.trim()
+        }
+
+        if (!this.base64) {
+          temp.format.encode = 'source'
+        }
+
         return window.btoa(JSON.stringify(temp))
       },
       customProperty () {
@@ -196,9 +237,9 @@
         left 128px
         transform rotate(45deg)
       .item
-        margin-top 30px
-        margin-bottom 20px
+        margin-top 20px
         .label
+          line-height 26px
           text-align right
           padding-right 20px
           box-sizing border-box
@@ -206,6 +247,8 @@
           line-height 26px
         .sn-range-label
           line-height 28px
+        .encode-type
+          line-height 26px
     .tips-wrap
        width 100%
        &:after
@@ -237,7 +280,7 @@
     .value-input
       margin-right 10px
     .input-text-wrap
-      margin-bottom 10px
+      padding-top 10px
     .del-icon
       height 32px
       width 32px
@@ -247,4 +290,6 @@
     display inline-block
     word-break break-all
     font-size 13px
+  .padding-top-clear
+    padding-top 0 !important
 </style>
