@@ -45,7 +45,7 @@
                   </div>
                 </div>
               </div>
-              <div class="form-row row" v-if="modelType.value!==1 && modelType.value!==6">
+              <div class="form-row row" v-if="modelType.value!==1 && modelType.value!==6 && && modelType.value!==7">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.range") }}:</label>
                 <div class="controls col-18">
                   <div class="row">
@@ -241,10 +241,10 @@ export default {
           value: 6,
           label: '字符串'
         },
-        // {
-        //   value: 7,
-        //   label: '字节数组'
-        // },
+        {
+          value: 7,
+          label: '字节数组'
+        },
         {
           value: 8,
           label: '16位短整型（无符号）'

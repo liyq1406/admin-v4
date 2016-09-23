@@ -79,7 +79,7 @@ export default {
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
         { label: '设备ID', value: 'from' },
-        { label: '告警内容', value: 'alert_name' }
+        { label: '告警内容', value: 'content' }
       ],
       queryType: {},
       key: '',
