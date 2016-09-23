@@ -13,11 +13,12 @@
           <div class="tal mt20" style="padding-left: 126px">
             <span class="mr5">开启萤石联动服务</span>
             <!-- <x-switch size="small" :disabled="loading" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)"></x-switch> -->
-            <x-switch size="small" :disabled="loading || true" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
+            <!-- <x-switch size="small" :disabled="loading || true" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch> -->
+            <x-switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="toggle" @disabled-click="toggle"></x-switch>
           </div>
         </div>
       </div>
-      <div class="row mt20 mb20" v-show="plugin.enable" transition="bottomToTop">
+      <div class="row mt20 mb20" v-show="plugin.enable && plugin.platform_status===2" transition="bottomToTop">
         <div class="col-offset-2 col-10">
           <form>
             <div class="form-row row mb10">
@@ -66,7 +67,6 @@ import Modal from 'components/Modal'
 import Switch from 'components/Switch'
 import PicTxt from 'components/PicTxt'
 import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
-// import { pluginFactoryMixin } from '../../opration/plugin/mixins'
 import _ from 'lodash'
 import api from 'api'
 
@@ -79,7 +79,6 @@ export default {
     'pic-txt': PicTxt
   },
 
-  // mixins: [globalMixins, pluginFactoryMixin],
   mixins: [globalMixins],
 
   vuex: {
@@ -104,8 +103,9 @@ export default {
       editing: false,
       plugin: {
         id: '',
-        name: '萤石',
+        name: '萤石联动服务',
         alias: 'ezviz',
+        plugin: 'ezviz',
         enable: false,
         type: 10,
         config: {
@@ -138,75 +138,91 @@ export default {
           return item.plugin === this.plugin.alias
         })
 
-        if (plugin) this.plugin = _.cloneDeep(plugin)
+        if (plugin) {
+          plugin.alias = 'ezviz'
+          this.plugin = _.cloneDeep(plugin)
+        }
       }
     },
 
     /**
      * 切换插件状态
      */
-    toggle (val) {
-      this.showAlert('您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。')
+    toggle () {
+      let status = this.plugin.platform_status
+      if (status && status === 1) {
+        this.showAlert('<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>')
+        // setTimeout(() => {
+        //   plugin.enable = !plugin.enable
+        // }, 500)
+        return
+      }
       // setTimeout(() => {
       //   this.plugin.enable = !val
       // }, 0)
 
-      // 临时关闭插件功能
-      // this.loading = true
-      // if (this.plugin.id) {
-      //   this.onUpdate().then((res) => {
-      //     if (res.status === 200) {
-      //       this.loading = false
-      //       this.editing = false
-      //       this.plugin = _.cloneDeep(res.data)
-      //       if (this.plugin.enable) {
-      //         this.updatePlugin(res.data)
-      //         this.showNotice({
-      //           type: 'success',
-      //           content: '服务已开启'
-      //         })
-      //       } else {
-      //         this.removePlugin(res.data)
-      //         this.showNotice({
-      //           type: 'info',
-      //           content: '服务已关闭'
-      //         })
-      //       }
-      //     }
-      //   }).catch((res) => {
-      //     this.handleError(res)
-      //     this.loading = false
-      //     this.editing = false
-      //   })
-      // } else {
-      //   api.plugin.create({
-      //     name: this.plugin.name,
-      //     type: 10,
-      //     enable: true,
-      //     plugin: this.plugin.alias
-      //   }).then((res) => {
-      //     this.loading = false
-      //     this.plugin = _.cloneDeep(res.data)
-      //     this.createPlugin(res.data)
-      //     this.showNotice({
-      //       type: 'success',
-      //       content: '服务已开启'
-      //     })
-      //   }).catch((res) => {
-      //     this.handleError(res)
-      //     this.loading = false
-      //   })
-      // }
+      this.loading = true
+      if (this.plugin.id) {
+        this.onUpdate().then((res) => {
+          if (res.status === 200) {
+            this.loading = false
+            this.editing = false
+            this.plugin = _.cloneDeep(res.data)
+            if (this.plugin.enable) {
+              this.updatePlugin(res.data)
+              this.showNotice({
+                type: 'success',
+                content: '萤石联动服务已开启'
+              })
+            } else {
+              this.removePlugin(res.data)
+              this.showNotice({
+                type: 'info',
+                content: '萤石联动服务已关闭'
+              })
+            }
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loading = false
+          this.editing = false
+        })
+      } else {
+        api.plugin.create({
+          name: this.plugin.name,
+          type: 10,
+          enable: true,
+          plugin: this.plugin.alias
+        }).then((res) => {
+          this.loading = false
+          this.plugin = _.cloneDeep(res.data)
+          this.createPlugin(res.data)
+          this.showNotice({
+            type: 'success',
+            content: '萤石联动服务已开启'
+          })
+        }).catch((res) => {
+          this.handleError(res)
+          this.loading = false
+        })
+      }
     },
 
     /**
      * 更新插件信息
      */
     onUpdate () {
+      let config = _.clone(this.plugin.config)
+      if (!Object.keys(config).length) {
+        config = {
+          app_key: '',
+          app_secret: ''
+        }
+      }
       let params = {
         name: this.plugin.name,
         enable: this.plugin.enable,
-        config: _.clone(this.plugin.config)
+        config: config
       }
       this.editing = true
       return api.plugin.update(this.plugin.id, params)
@@ -223,7 +239,7 @@ export default {
           this.updatePlugin(res.data)
           this.showNotice({
             type: 'success',
-            content: '配置成功'
+            content: '萤石联动服务配置成功'
           })
         }
       }).catch((res) => {

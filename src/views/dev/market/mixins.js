@@ -65,13 +65,13 @@ export const pluginFactoryMixin = {
               this.createPlugin(obj)
               this.showNotice({
                 type: 'success',
-                content: `${plugin.name}插件已启用`
+                content: `${plugin.name}已启用`
               })
             } else {
               this.removePlugin(obj)
               this.showNotice({
                 type: 'info',
-                content: `${plugin.name}插件已禁用`
+                content: `${plugin.name}已禁用`
               })
             }
           }
