@@ -235,7 +235,7 @@ export default {
               let temp = {}
               temp.val = item.Count
               temp.date = item.day
-              temp.name = item.label || '未知'
+              temp.name = !item.label || item.label === '' ? '用户反馈' : item.label
               dataRes.push(temp)
             })
             this.lineData = dataRes
