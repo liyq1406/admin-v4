@@ -155,3 +155,24 @@ export function toPercentDecimal (value, n) {
 
   return toDecimal(f * 100, n) + '%'
 }
+
+/**
+ * 将 bytes 数自动转换成 Xkb 或 Xmb
+ * 如：1024 ---> 1kb
+ * @param {Integer} n byte值
+ * @return {String}
+ */
+export function bytesPrettify (n) {
+  let index = 0
+  let units = ['bytes', 'kb', 'mb']
+  function process (x) {
+    if (x >= 1024) {
+      x = parseInt(x / 1024 * 100) / 100
+      index++
+      return process(x)
+    } else {
+      return x
+    }
+  }
+  return `${process(n)}${units[index]}`
+}

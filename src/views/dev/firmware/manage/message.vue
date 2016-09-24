@@ -64,12 +64,14 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>固件版本号</th>
+              <th width="10%">固件版本号</th>
               <th>版本说明</th>
-              <th>固件类型</th>
-              <th>识别码</th>
-              <th>添加日期</th>
-              <th class="tac">操作</th>
+              <th width="8%">固件类型</th>
+              <th width="6%">识别码</th>
+              <th width="15%">添加日期</th>
+              <th width="8%">文件大小</th>
+              <th width="26%">MD5</th>
+              <th width="6%" class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -80,6 +82,8 @@
                 <td><span v-if="firmware.type===1">WIFI</span><span v-if="firmware.type===2">MCU</span><span v-if="firmware.type===3">子设备</span></td>
                 <td><span v-if="firmware.identify===0">-</span><span v-else>{{ firmware.identify }}</span></td>
                 <td>{{ firmware.create_date | formatDate }}</td>
+                <td>{{ firmware.file_size | bytesPrettify }}</td>
+                <td>{{ firmware.file_md5 }}</td>
                 <td class="tac">
                   <!-- <button @click="onEditFirmware(firmware)" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button> -->
                   <button v-link="{ path: '/dev/firmware/edit/' + currProduct.id + '/' + firmware.id }" class="btn btn-link btn-mini">{{ $t('common.edit') }}</button>
@@ -87,7 +91,7 @@
               </tr>
             </template>
             <tr v-if="firmwares.length === 0 && !loadingData">
-              <td colspan="7" class="tac">
+              <td colspan="8" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
