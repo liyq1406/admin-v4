@@ -46,9 +46,13 @@ export default {
       countPerPage: 10,
       logs: [],
       columns: [{
+        key: 'opt_name',
+        title: '成员姓名',
+        class: 'wp10'
+      }, {
         key: 'opt',
         title: '成员ID',
-        class: 'wp15'
+        class: 'wp10'
       }, {
         key: 'ip',
         title: '操作者IP',
@@ -59,11 +63,11 @@ export default {
       }, {
         key: 'level',
         title: '日志级别',
-        class: 'wp10'
+        class: 'wp5'
       }, {
         key: 'operate_type',
         title: '操作类型',
-        class: 'wp10'
+        class: 'wp5'
       }, {
         key: 'create_date',
         title: '操作时间',
@@ -86,7 +90,7 @@ export default {
     // 查询条件
     queryCondition () {
       let condition = {
-        filter: ['opt', 'ip', 'summary', 'level', 'operate_type', 'create_date'],
+        filter: ['opt_name', 'opt', 'ip', 'summary', 'level', 'operate_type', 'create_date'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {
@@ -121,6 +125,7 @@ export default {
       }
       return this.logs.map((item) => {
         return {
+          opt_name: item.opt_name,
           opt: item.opt,
           ip: item.ip,
           summary: item.summary,
@@ -209,6 +214,7 @@ export default {
       })
       // this.total = 22
       // this.logs = [{
+      //   opt_name: 'Jon',
       //   opt: '1234',
       //   ip: '202.96.128.68',
       //   summary: 'asdfaf',
