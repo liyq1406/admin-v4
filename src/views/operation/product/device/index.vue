@@ -168,12 +168,13 @@ export default {
         }, {
           label: '用户信息',
           link: { path: `${deviceDetailRoot}/users` }
-        }, {
-          label: '维保记录',
-          link: { path: `${deviceDetailRoot}/warranty` }
-        }, {
-          label: '经销商',
-          link: { path: `${deviceDetailRoot}/dealers` }
+        // 暂时隐藏
+        // }, {
+        //   label: '维保记录',
+        //   link: { path: `${deviceDetailRoot}/warranty` }
+        // }, {
+        //   label: '经销商',
+        //   link: { path: `${deviceDetailRoot}/dealers` }
         }]
       }
     }
