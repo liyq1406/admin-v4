@@ -69,6 +69,16 @@ export default {
       `${API_SERVER.default}/v2/dealer_list`, params
     )
   },
+  /**
+   * 修改经销商状态
+   * @param  {Object} params
+   * @return {Promise}
+   */
+  toggle (dealerId, status) {
+    return http.put(
+      `${API_SERVER.default}/v2/dealer/${dealerId}/status/${status}`
+    )
+  },
 
   /**
    * 获取单个经销商
@@ -101,6 +111,7 @@ export default {
       `${API_SERVER.default}/v2/dealer/${dealerId}/sale_summary`, params
     )
   },
+
   /**
    * 获取客户详细信息
    * @param  {Object} params 认证信息
