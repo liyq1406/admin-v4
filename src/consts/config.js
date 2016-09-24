@@ -3,31 +3,36 @@
  * @type {Object}
  */
 let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
-// 测试服务器地址
+
+// 平台 API 服务器地址
+// 正式地址
+// const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn`
+// 灰
+const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
+// 测试服务器
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
 // 天际
 // const DEFAULT_API_SERVER = `${protocol}://dev-man.360tj.com:8016`
-// 测试图表
-// const DEFAULT_API_SERVER = `${protocol}//120.26.244.72:8887`
 // 海曼
 // const DEFAULT_API_SERVER = `${protocol}//ic.heiman.cn:8887`
+// 公牛
+// const DEFAULT_API_SERVER = `${protocol}//139.224.7.17`
 // 开发者本地
 // const DEFAULT_API_SERVER: `${protocol}//localhost:8887`,
-// 正式地址
-// const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn:443`
 // Demo
 // const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
-// 灰
-const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
 
 // 插件服务器地址
+// 灰
+const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn`
+// 测试服务器
 // const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3000`
+// 公牛
+// const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3002`
 // Demo插件服务器灰度地址
 // const DEFAULT_PLUGIN_SERVER = `${protocol}//api-demo.xlink.cn`
-// 插件服务器灰度地址
-const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn`
 // 测试 demo服务器地址 add by guohao 2016/8/28
 // const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
 // 天际
@@ -61,6 +66,9 @@ export const API_SERVER = {
   // 运营位管理
   operate: `${DEFAULT_PLUGIN_SERVER}/module/operatePosition`
 }
+
+// 是否显示旧版入口
+export const IS_SHOW_OLD_ENTRANCE = true
 
 // 默认每页记录数
 export const COUNT_PER_PAGE = 10

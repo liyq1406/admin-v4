@@ -35,7 +35,7 @@
         </validator>
       </div>
     </div>
-    <div class="old-entrance">
+    <div class="old-entrance" v-if="isShowOldEntrance">
       <a href="http://admin-v3.xlink.cn/" target="_blank">登录旧版管理台 &gt;</a>
     </div>
   </div>
@@ -45,6 +45,7 @@
   import api from 'api'
   import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
+  import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
   import store from 'store/index'
 
   export default {
@@ -67,6 +68,7 @@
 
     data () {
       return {
+        isShowOldEntrance: IS_SHOW_OLD_ENTRANCE,
         model: {
           account: '',
           password: ''

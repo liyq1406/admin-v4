@@ -10,7 +10,7 @@
         </div>
         <div class="msg-box">
           <div class="title">
-            <a :href="notice.url" target="_blank">{{notice.title}}</a>
+            <a :href="notice.url" target="_blank">{{{notice.title}}}</a>
           </div>
           <div class="time-box">
             <span>{{notice.time}}</span>
@@ -28,6 +28,12 @@
       return {
         notices: [
           {
+            icon: 'file-text-o',
+            title: '云智易物联平台发布4.0版本!<br>[更新说明]',
+            time: '2016-09-24',
+            url: 'http://support.xlink.cn/hc/kb/article/208913/'
+          },
+          {
             icon: 'apple',
             title: 'iOS SDK 更新v3.0版本！',
             time: '2016-08-12',
@@ -40,13 +46,13 @@
             url: 'https://github.com/xlink-corp/android-sdk'
           },
           {
-            icon: 'file-text-o',
+            icon: 'file-code-o',
             title: 'JSSDK微信版V1.1.2',
             time: '2016-07-14',
             url: 'https://github.com/xlink-corp/JS-SDK'
           },
           {
-            icon: 'file-text-o',
+            icon: 'file-code-o',
             title: '设备端SDK已更新至V3',
             time: '2016-07-14',
             url: 'https://github.com/xlink-corp/device-sdk'
