@@ -418,6 +418,10 @@
           this.dealerInfo.phone.value = this.dealer.phone || '--'
           this.dealerInfo.id.value = this.dealer.email || '--'
           this.dealerInfo.belong.value = this.dealer.upper_dealer_code || '--'
+          // 获取上级经销商名字
+          if (this.dealer.upper_dealer_code) {
+            this.getUpper(this.dealerInfo.belong.value)
+          }
           // todo字段缺失
           this.dealerInfo.area.value = this.dealer.region || '--'
           this.dealerInfo.target.value = this.dealer.sale_goal || '--'
@@ -426,6 +430,13 @@
         }).catch((err) => {
           this.handleError(err)
           this.loadingData = false
+        })
+      },
+      getUpper (id) {
+        api.dealer.get(id).then((res) => {
+          this.dealerInfo.belong.value = res.data.name
+        }).catch((err) => {
+          this.handleError(err)
         })
       },
       // 获取经销商对应销售信息列表

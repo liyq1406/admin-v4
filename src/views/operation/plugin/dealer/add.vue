@@ -300,6 +300,7 @@
           region: this.dealer.area,
           sale_goal: this.dealer.sale_goal
         }
+        // 如果有从属于
         if (this.belongType.code) {
           params.upper_dealer_code = this.belongType.code
         }
