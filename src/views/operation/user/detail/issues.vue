@@ -20,7 +20,7 @@
               <tr v-for="issue in issues">
                 <td><a v-link="{path: '/plugins/warranty/' + $route.params.app_id + '/work-orders/extended-warranties/' + issue._id}" class="hl-red">{{issue.content}}</a></td>
                 <td>{{issue.create_time | formatDate }}</td>
-                <td>{{issue.handle_time | formatDate }}</td>
+                <td>{{issue.treated_time | formatDate }}</td>
                 <td>{{issue.label}}</td>
                 <td><span v-if="issue.status === 0">未处理</span><span v-else>已处理</span></td>
               </tr>
