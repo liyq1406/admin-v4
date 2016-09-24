@@ -41,7 +41,7 @@
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-deactivate="getAlerts(true)" @search="getAlerts(true)" @press-enter="getAlerts(true)">
+                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getAlerts(true)">
                   <x-select width="90px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -170,6 +170,7 @@ export default {
 
   data () {
     return {
+      searching: false,
       defaultPeriod: 7,
       currentProduct: {},
       key: '',
@@ -459,6 +460,16 @@ export default {
       } else {
         return `${Math.floor(n / 60000)}分钟`
       }
+    },
+
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+
+    // 取消搜索
+    cancelSearching () {
+      this.getAlerts(true)
     },
 
     /**

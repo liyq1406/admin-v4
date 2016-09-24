@@ -24,7 +24,7 @@
       <div class="filter-bar filter-bar-head filter-bar-lr">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList()" @search-deactivate="getList()" @search="getList()" @press-enter="getList()">
+            <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -64,7 +64,6 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { formatDate } from 'src/filters'
-// import { formatDate, uniformDate } from 'src/filters'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
 import _ from 'lodash'
@@ -94,6 +93,7 @@ export default {
       defaultPeriod: 7,
       startTimePick: '',
       endTimePick: '',
+      searching: false,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
       records: [],
@@ -249,8 +249,18 @@ export default {
     },
     pageCountUpdate (count) {
       this.countPerPage = count
-      this.getList()
+      this.getList(true)
     },
+    // 切换搜索
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+
+    // 取消搜索
+    cancelSearching () {
+      this.getAlerts(true)
+    },
+
     getSpecial (start, end) {
       this.startTimePick = new Date(start.getTime() + 3600 * 1000 * 8)
       this.endTimePick = new Date(end.getTime() + 3600 * 1000 * 8)
