@@ -22,7 +22,7 @@
           </div>
         </div>
       </div>
-      <div class="row">
+      <div class="row min-height">
         <div class="col-24" v-if="trendTabIndex === 0">
           <time-line :data="activatedData" :margin="customMargin"></time-line>
         </div>
@@ -205,4 +205,7 @@ export default {
     text-align left
     margin 10px 0 5px
     color gray
+.min-height
+  height 250px
+  overflow hidden
 </style>

@@ -6,7 +6,7 @@
       </div>
       <h2>产品活跃度</h2>
     </div>
-    <div class="row">
+    <div class="row min-height">
       <div class="col-14">
         <template v-if="repaintLine">
           <time-line :data="activeData"></time-line>
@@ -151,3 +151,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.min-height
+  height 300px
+  overflow hidden
+</style>

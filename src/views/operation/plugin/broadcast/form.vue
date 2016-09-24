@@ -742,7 +742,7 @@
         })
       },
       formatTime (time) {
-        var result = +new Date(time) + 8 * 60 * 60 * 1000 + 5 * 60 * 1000
+        var result = +new Date(time) + 8 * 60 * 60 * 1000 + 2 * 60 * 1000
         return new Date(result)
       }
     }

@@ -6,7 +6,7 @@
       </div>
       <h2>趋势</h2>
     </div>
-    <div class="panel-bd">
+    <div class="panel-bd min-height">
       <div v-if="showHour">
         <time-line :data="trendData" :scale="scale"></time-line>
       </div>
@@ -171,3 +171,9 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus" scoped>
+.min-height
+  height 250px
+  overflow hidden
+</style>
