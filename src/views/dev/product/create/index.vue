@@ -9,7 +9,7 @@
     </div>
 
     <div class="pro-section">
-      <router-view transition="view" transition-mode="out-in" class="view" @next="next" :product="product"></router-view>
+      <router-view transition="view" transition-mode="out-in" class="view" @next="next"></router-view>
     </div>
   </div>
 </template>
@@ -29,7 +29,6 @@ export default {
 
   data () {
     return {
-      product: {},
       currStep: 0, // 当前步骤 [0|1|2|3]
       steps: ['填写产品信息', '创建数据端点', '完成']
     }
@@ -40,17 +39,16 @@ export default {
      * 提交信息
      */
     onInfoSubmit (product) {
-      this.product = product
       this.currStep = 2
-      this.$route.router.go('/dev/products/create/data-points')
+      this.$route.router.replace({path: `${product.id}/data-points`})
     },
 
     /**
      * 提交数据端点信息
      */
-    onDatapointSubmit () {
+    onDatapointSubmit (productId) {
       this.currStep = 3
-      this.$route.router.go('/dev/products/create/completion')
+      this.$route.router.replace({path: 'completion'})
     },
     next (step, data) {
       switch (step) {
@@ -62,10 +60,10 @@ export default {
           break
         case 'guide':
           this.currStep = 1
-          this.$route.router.go('/dev/products/create/baseinfo')
+          this.$route.router.replace('baseinfo')
           break
         case 'data-points':
-          this.onDatapointSubmit()
+          this.onDatapointSubmit(data)
           break
         default:
           break

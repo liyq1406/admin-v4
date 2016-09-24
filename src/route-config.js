@@ -252,14 +252,14 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
-            'data-points': {
+            ':id/data-points': {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/dev/product/create/data-points'))
                 }, 'admin')
               }
             },
-            'completion': {
+            ':id/completion': {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/dev/product/create/completion'))

@@ -201,17 +201,15 @@ export default {
     DataModel
   },
 
-  props: {
-    product: {
-      type: Object,
-      default () {
-        return {}
-      }
+  vuex: {
+    getters: {
+      allProducts: ({ products }) => products.all
     }
   },
 
   data () {
     return {
+      product: {},
       adding: false,
       editing: false,
       loadingData: false,
@@ -263,18 +261,36 @@ export default {
     }
   },
 
-  ready () {
-    // this.getDatapoints()
+  watch: {
+    allProducts () {
+      this.init()
+    }
+  },
+
+  route: {
+    data () {
+      this.init()
+      this.getDatapoints()
+    }
   },
 
   methods: {
+    init () {
+      if (this.allProducts.length) {
+        let product = _.find(this.allProducts, (item) => {
+          return item.id === this.$route.params.id
+        })
+        if (product) this.product = product
+      }
+    },
+
     /**
      * 获取数据端点列表
      * @author shengzhi
      */
     getDatapoints () {
       this.loadingData = true
-      api.product.getDatapoints(this.product.id).then((res) => {
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
         if (res.status === 200) {
           this.datapoints = res.data.map((item) => {
             item.editing = false
@@ -478,7 +494,7 @@ export default {
      * @author shengzhi
      */
     onBtnClick () {
-      this.$emit('next', 'data-points')
+      this.$emit('next', 'data-points', this.$route.params.id)
     }
   }
 }

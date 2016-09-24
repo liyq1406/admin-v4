@@ -67,16 +67,40 @@ export default {
 
   mixins: [globalMixins],
 
-  props: {
-    product: {
-      type: Object,
-      default () {
-        return {}
-      }
+  vuex: {
+    getters: {
+      allProducts: ({ products }) => products.all
+    }
+  },
+
+  data () {
+    return {
+      product: {}
+    }
+  },
+
+  watch: {
+    allProducts () {
+      this.init()
+    }
+  },
+
+  route: {
+    data () {
+      this.init()
     }
   },
 
   methods: {
+    init () {
+      if (this.allProducts.length) {
+        let product = _.find(this.allProducts, (item) => {
+          return item.id === this.$route.params.id
+        })
+        if (product) this.product = product
+      }
+    },
+
     /**
      * 根据值获取 label
      * @author shengzhi
