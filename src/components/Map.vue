@@ -102,10 +102,11 @@ export default {
               var lat = res.geocodes[0].location.lat
               this.location = [lng, lat]
             } else {
-              this.showNotice({
-                type: 'error',
-                content: '找不到' + this.addr
-              })
+              // this.showNotice({
+              //   type: 'error',
+              //   content: '找不到' + this.addr
+              // })
+              console.log('找不到' + this.addr)
             }
           })
         } else if (this.ip) {

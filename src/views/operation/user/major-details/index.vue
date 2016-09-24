@@ -9,18 +9,18 @@
         <div class="col-16">
           <div class="alert-record-summary">
             <div class="up">
-              <h1>{{ majorClient.name }}</h1>
+              <h1 class="mt10">{{ majorClient.name }}</h1>
             </div>
           </div>
-          <div v-stretch="230">
+          <div v-stretch="182">
             <info-list :info="clientsInfo"></info-list>
           </div>
         </div>
         <div class="col-8 with-loading">
-          <div class="position-map">
-            <x-map :addr="majorClient.city + majorClient.location" :zoom="majorClient.location?15:10"></x-map>
+          <div class="position-map ml30 mt10">
+            <x-map :addr="(majorClient.city || '') + majorClient.location" :zoom="majorClient.location?15:10" height="220px"></x-map>
           </div>
-          <div class="position-msg">
+          <div class="position-msg ml30">
             <span v-show="majorClient.province"> {{ (majorClient.province + ' ' + (majorClient.city || '')) }} </span>
           </div>
         </div>
@@ -102,7 +102,7 @@ export default {
         },
         area: {
           label: '所在地区',
-          value: (this.majorClient.country + this.majorClient.province + this.majorClient.city) || ''
+          value: `${this.majorClient.country || ''}${this.majorClient.province || ''}${this.majorClient.city || ''}`
         },
         location: {
           label: '详细地址',
@@ -167,9 +167,6 @@ export default {
 </script>
 <style lang="stylus" scoped>
   .position-map
-    width 100%
-    height 300px
-    padding 10px 10px 0
     box-sizing border-box
   .position-msg
     padding-left 10px
