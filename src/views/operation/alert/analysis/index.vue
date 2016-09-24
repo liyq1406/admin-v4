@@ -20,10 +20,10 @@
         </div>
       </div>
     </div>
-    <div v-if="showHour">
+    <div v-if="showHour" class="min-height">
       <time-line :data="trendData" :scale="scale"></time-line>
     </div>
-    <div v-else>
+    <div v-else class="min-height">
       <time-line :data="trendData" :scale="scale"></time-line>
     </div>
 
@@ -647,4 +647,7 @@ export default {
         position relative
         bottom -1px
         font-weight bold
+.min-height
+  height 250px
+  overflow hidden
 </style>

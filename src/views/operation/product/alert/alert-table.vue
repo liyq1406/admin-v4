@@ -276,12 +276,12 @@ export default {
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
             // 计算已读告警持续时间
-            let begin = new Date(formatDate(item.create_date))
+            let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
             // 默认为未读，时间从当前算起
             let end = new Date()
             // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              end = new Date(formatDate(item.read_time))
+              end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
             }
             // 持续时间
             item.lasting = end.getTime() - begin.getTime()

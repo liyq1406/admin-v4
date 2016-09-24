@@ -81,7 +81,7 @@ import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
-import { formatDate, uniformDate } from 'src/filters'
+import { uniformDate } from 'src/filters'
 import Select from 'components/Select'
 import TimeLine from 'components/g2-charts/TimeLine'
 import RadioButtonGroup from 'components/RadioButtonGroup'
@@ -215,20 +215,16 @@ export default {
               // this.alerts = res.data.list
               this.records = res.data.list.map((item) => {
                 // 计算已读告警持续时间
+                // 计算已读告警持续时间
+                let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
+                // 默认为未读，时间从当前算起
+                let end = new Date()
+                // 如果为已读，则从已读时间算起
                 if (item.is_read) {
-                  let beginTime = new Date(formatDate(item.create_date))
-                  let endTime = new Date(formatDate(item.read_time))
-                  let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-                  // console.log(lasting.toFixed(1))
-                  item.lasting = lasting.toFixed(1)
-                } else {
-                  // 计算未读告警持续时间
-                  let beginTime = new Date(formatDate(item.create_date))
-                  let endTime = new Date()
-                  let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-                  // console.log(lasting.toFixed(1))
-                  item.lasting = lasting.toFixed(1)
+                  end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
                 }
+                // 持续时间
+                item.lasting = end.getTime() - begin.getTime()
                 return item
               })
             }

@@ -455,11 +455,13 @@ export default {
      */
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
+      let res = ''
       if (hours > 1) {
-        return `${hours}小时`
+        res = `${hours}小时`
       } else {
-        return `${Math.floor(n / 60000)}分钟`
+        res `${Math.floor(n / 60000)}分钟`
       }
+      return res
     },
 
     // 切换搜索
@@ -525,12 +527,12 @@ export default {
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
             // 计算已读告警持续时间
-            let begin = new Date(formatDate(item.create_date))
+            let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
             // 默认为未读，时间从当前算起
             let end = new Date()
             // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              end = new Date(formatDate(item.read_time))
+              end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
             }
             // 持续时间
             item.lasting = end.getTime() - begin.getTime()

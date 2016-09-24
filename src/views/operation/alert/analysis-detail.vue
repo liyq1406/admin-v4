@@ -217,7 +217,7 @@ export default {
           mac: item.mac,
           id: item.from,
           create_date: formatDate(item.create_date),
-          duration: item.lasting + 'h',
+          duration: this.prettyDuration(item.lasting),
           state: item.is_read ? '已处理' : '未处理',
           prototype: item
         }
@@ -278,19 +278,15 @@ export default {
           // this.alerts = res.data.list
           this.records = res.data.list.map((item) => {
             // 计算已读告警持续时间
+            let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
+            // 默认为未读，时间从当前算起
+            let end = new Date()
+            // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              let beginTime = new Date(formatDate(item.create_date))
-              let endTime = new Date(formatDate(item.read_time))
-              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-              // console.log(lasting.toFixed(1))
-              item.lasting = lasting.toFixed(1)
-            } else {
-              // 计算未读告警持续时间
-              let beginTime = new Date(formatDate(item.create_date))
-              let endTime = new Date()
-              let lasting = (endTime.getTime() - beginTime.getTime()) / 3600000
-              item.lasting = lasting.toFixed(1)
+              end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
             }
+            // 持续时间
+            item.lasting = end.getTime() - begin.getTime()
             return item
           })
           this.loadingData = false
@@ -321,6 +317,19 @@ export default {
           break
       }
       return ''
+    },
+    /**
+     * 将毫秒数格式化为合适显示的时间段
+     */
+    prettyDuration (n) {
+      let hours = (n / 3600000).toFixed(1)
+      let res = ''
+      if (hours > 1) {
+        res = `${hours}小时`
+      } else {
+        res `${Math.floor(n / 60000)}分钟`
+      }
+      return res
     },
     // 标记为已处理
     setDeal () {
