@@ -125,11 +125,11 @@
                 <div class="form-row row mt20">
                   <label class="form-control col-5 dealer-label">销售指标:</label>
                   <div class="controls col-19">
-                    <div v-placeholder="'请输入销售指标'" class="input-text-wrap">
-                      <input type="text" v-model="dealer.sale_goal" name="dealer.sale_goal" maxlength="16" v-validate:sale_goal="{required: true}" lazy class="input-text"/>
+                    <div v-placeholder="'请输入销售指标(只可输入数字)'" class="input-text-wrap">
+                      <input type="number" v-model="dealer.sale_goal" name="dealer.sale_goal" maxlength="16" v-validate:sale_goal="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.sale_goal.touched && $autoValidation.sale_goal.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
+                      <span v-if="$autoValidation.sale_goal.touched && $autoValidation.sale_goal.required">请输入销售指标</span>
                     </div>
                   </div>
                 </div>
