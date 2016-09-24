@@ -345,7 +345,9 @@ export default {
         'type': this.model.type,
         'index': this.model.index,
         'description': this.model.description,
-        'symbol': this.model.symbol
+        'symbol': this.model.symbol,
+        'is_read': true,
+        'is_write': this.model.is_write
       }
       if (this.modelType.value !== 1 && this.modelType.value !== 6) {
         params.min = this.model.min
@@ -372,6 +374,7 @@ export default {
         'index': this.model.index,
         'description': this.model.description,
         'symbol': this.model.symbol,
+        'is_read': true,
         'is_write': this.model.is_write
       }
       if (this.modelType.value !== 1 && this.modelType.value !== 6) {
