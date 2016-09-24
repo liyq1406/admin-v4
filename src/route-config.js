@@ -1712,8 +1712,8 @@ let configRouter = (router) => {
     }
   })
 
+  // 切换路由时清空图表渲染队列
   router.beforeEach((transition) => {
-    console.log('xxx')
     let mq = getMessageQueue()
     mq.clear()
     transition.next()
