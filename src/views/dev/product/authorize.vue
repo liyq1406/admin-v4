@@ -134,9 +134,31 @@
         <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
           <p>设备导入成功，<a v-link="{path: 'info/list/' + tips.recordId}" class="hl-red">查看导入记录</a></p>
         </alert>
-        <alert type="warning" title="" :cols="22" v-if="tips.type==='error'">
+        <alert type="warning" title="" :cols="22" v-else>
           <p>{{ tips.msg }}</p>
         </alert>
+
+        <!-- <alert type="warning" title="" :cols="22" v-if="tips.type==='error-duplicated-items'">
+          <p>{{ tips.msg }}</p>
+        </alert>
+        <alert type="warning" title="" :cols="22" v-if="tips.type==='error-duplicated-data'">
+          <p>{{ tips.msg }}</p>
+        </alert> -->
+        <div class="row" v-if="tips.macArr || tips.snArr">
+          <div class="col-11">
+            <div class="tips-tit">重复mac</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.macArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+          <div class="col-11 col-offset-2">
+            <div class="tips-tit">重复sn</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.snArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+        </div>
+
       </div>
       <div slot="footer" class="modal-footer">
         <button @click.prevent.stop="onTipsCancel" class="btn btn-primary">{{ $t("common.ok") }}</button>
@@ -370,16 +392,34 @@ export default {
     handleImportError (res) {
       let code = res.data.error.code
       const ERRORS = {
-        '4001001': 'MAC地址不合法',
-        '4041033': '导入失败，产品配额不足'
+        '4001001': {
+          type: 'error',
+          msg: 'MAC地址不合法'
+        },
+        '4041033': {
+          type: 'error',
+          msg: '导入失败，产品配额不足'
+        },
+        '4001021': {
+          type: 'error-duplicated-data',
+          msg: '导入失败，导入设备信息与数据库存在重复项，请检查数据'
+        },
+        '4001147': {
+          type: 'error-duplicated-items',
+          msg: '导入数据中存在重复项，请检查数据是否唯一'
+        }
       }
 
       if (ERRORS.hasOwnProperty(code)) {
         this.isShowTipsModal = true
-        this.tips = {
-          type: 'error',
-          msg: ERRORS[code]
+        let tips = ERRORS[code]
+        let msg = res.data.error.msg.split('],[')
+
+        if (msg.length > 1) {
+          tips.macArr = msg[0].replace('[', '').split(',')
+          tips.snArr = msg[1].replace(']', '').split(',')
         }
+        this.tips = tips
       } else {
         this.handleError(res)
       }
@@ -538,6 +578,8 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
+@import '../../../assets/stylus/common'
+
 .btn-upload
   vertical-align middle
 
@@ -546,4 +588,14 @@ export default {
   margin-left 10px
   line-height 28px
   vertical-align middle
+
+.tips-box
+  border 1px solid light-border-color
+  font-size 11px
+  height 125px
+  overflow-y auto
+
+  .tips-box-item
+    line-height 20px
+    padding 2px 5px
 </style>
