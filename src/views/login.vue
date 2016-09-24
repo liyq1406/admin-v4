@@ -35,6 +35,9 @@
         </validator>
       </div>
     </div>
+    <div class="old-entrance">
+      <a href="http://admin-v3.xlink.cn/" target="_blank">登录旧版管理台 &gt;</a>
+    </div>
   </div>
 </template>
 
@@ -199,4 +202,13 @@
       .form-actions
         .btn
           cursor wait
+
+  .old-entrance
+    width 500px
+    margin 10px auto 0
+    text-align right
+
+    a
+      margin-right 10px
+      color #CCC
 </style>
