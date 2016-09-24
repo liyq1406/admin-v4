@@ -16,6 +16,13 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-14">
+            <div class="btnarea clearfix">
+              <button @click.prevent.stop="toggle">
+                <!-- <i class="fa fa-check"></i> -->
+                <span v-if="status===0">已停用</span>
+                <span v-else>已启用</span>
+              </button>
+            </div>
             <div class="listmargin">
               <info-list :info="dealerInfo"></info-list>
             </div>
@@ -275,6 +282,7 @@
           // area: '广州总部',
           // belong_to: '海珠'
         },
+        status: '',
         dealerInfo: {
           linkman: {
             label: '联系人',
@@ -418,6 +426,7 @@
           this.dealerInfo.phone.value = this.dealer.phone || '--'
           this.dealerInfo.id.value = this.dealer.email || '--'
           this.dealerInfo.belong.value = this.dealer.upper_dealer_code || '--'
+          this.status = this.dealer.status
           // 获取上级经销商名字
           if (this.dealer.upper_dealer_code) {
             this.getUpper(this.dealerInfo.belong.value)
@@ -453,6 +462,25 @@
         }).catch((err) => {
           this.handleError(err)
           this.loadingData = false
+        })
+      },
+      // 切换经销商状态
+      toggle () {
+        api.dealer.toggle(this.$route.params.dealer_id, (!this.status) - 0).then((res) => {
+          if ((!this.status) - 0 === 1) {
+            this.showNotice({
+              type: 'success',
+              content: '启用成功！'
+            })
+          } else {
+            this.showNotice({
+              type: 'error',
+              content: '账号已停用'
+            })
+          }
+          this.getDealer()
+        }).catch((err) => {
+          this.handleError(err)
         })
       },
       // 初始化编辑表单
@@ -547,6 +575,15 @@
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+.btnarea
+  button
+    border 1px solid #bcbcbc
+    outline none
+    background-color #fafafa
+    color #323232
+    height 24px
+    float right
+    margin-right 20px
 .titlemargin
   font-size 20px
   margin-top 20px
