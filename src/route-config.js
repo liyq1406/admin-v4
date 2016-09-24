@@ -1,4 +1,5 @@
 import api from 'api'
+import getMessageQueue from 'src/utils/mq.js'
 /**
  * 判断路由是否为非管理界面页面
  * @param  {String}  path 路由
@@ -1709,6 +1710,13 @@ let configRouter = (router) => {
     } else {
       transition.next()
     }
+  })
+
+  router.beforeEach((transition) => {
+    console.log('xxx')
+    let mq = getMessageQueue()
+    mq.clear()
+    transition.next()
   })
 }
 

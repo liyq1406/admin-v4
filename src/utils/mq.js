@@ -46,4 +46,11 @@ MessageQueue.prototype.startLoop = function () {
   }
 }
 
+MessageQueue.prototype.clear = function () {
+  if (this.queue.length > 0) {
+    console.log('this.queue.length = ' + this.queue.length)
+    this.queue = []
+  }
+}
+
 export default getMessageQueue

@@ -61,7 +61,10 @@ export default {
           this.chart.changeData(this.data)
         }
       } else {
-        this.render()
+        // 检查组件dom是否就绪
+        if (this._isReady) {
+          this.render()
+        }
       }
     }
   },

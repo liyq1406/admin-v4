@@ -1,12 +1,13 @@
 <template>
   <div class="x-pie">
-    <div v-if="(data && data.length===0 && !rendered) || rendering" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}">没有数据</div>
+    <div v-if="(data && data.length===0 && !rendered)" class="default" :style="{height: noDataHeight, lineHeight: noDataHeight}"></div>
   </div>
 </template>
 
 <script>
 // import G2 from 'g2'
 import _ from 'lodash'
+import getMessageQueue from 'src/utils/mq.js'
 
 export default {
   name: 'Pie',
@@ -38,7 +39,6 @@ export default {
   data () {
     return {
       chart: null,
-      rendering: false,
       rendered: false // 解决第二次传入空数组，空图标和没有数据同时存在的问题
     }
   },
@@ -53,10 +53,6 @@ export default {
 
   ready () {
     if (!this.chart) {
-      if (this.rendering || this.data.length <= 0) {
-        return
-      }
-      this.rendering = true
       this.render()
     }
   },
@@ -67,11 +63,10 @@ export default {
       if (this.chart) {
         this.chart.changeData(this.data)
       } else {
-        if (this.rendering || this.data.length <= 0) {
-          return
+        // 检查组件dom是否就绪
+        if (this._isReady) {
+          this.render()
         }
-        this.rendering = true
-        setTimeout(this.render, 500)
       }
     }
   },
@@ -123,17 +118,16 @@ export default {
         //   return name + ' ' + percent
         // })
 
-      chart.render()
-      this.rendering = false
-      this.rendered = true
+      let mq = getMessageQueue()
+      mq.push(chart, this, function () {
+        var geom = this.chart.getGeoms()[0] // 获取所有的图形
+        var items = geom.getData() // 获取图形对应的数据
+        geom.setSelected(items[0]) // 设置选中
+      })
 
       chart.on('itemselected', (e) => {
         this.$emit('itemselected', e.data._origin)
       })
-
-      var geom = chart.getGeoms()[0] // 获取所有的图形
-      var items = geom.getData() // 获取图形对应的数据
-      geom.setSelected(items[0]) // 设置选中
     }
   }
 }
