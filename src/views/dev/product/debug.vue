@@ -429,7 +429,10 @@ export default {
           console.log(addr)
         }
         this.token = res.data.token
-        socket = io.connect(window.location.protocol + '//' + addr, {'force new connection': true})
+        // 使用https协议
+        // socket = io.connect(window.location.protocol + '//' + addr, {'force new connection': true, secure: true})
+        // 使用http协议
+        socket = io.connect('http://' + res.data.addr, {'force new connection': true})
 
         // 连接 socket
         socket.on('connect', () => {
