@@ -93,7 +93,7 @@
               <div class="form-actions mt20 border-top row">
                 <div class="col-offset-5 col-19">
                   <button type="submit" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-primary mt5 ml20 submit-btn">提交</button>
-                  <!-- <button @click.prevent.stop="delRepair" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-default mt5 ml20 submit-btn">删除</button> -->
+                  <button @click.prevent.stop="delRepair" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-default mt5 ml20 submit-btn">删除</button>
                 </div>
               </div>
             </form>
@@ -261,18 +261,18 @@
       },
       // 删除工单
       delRepair () {
-        // var result = window.confirm('确认删除该维修工单吗?')
-        // if (result === true) {
-        //   this.editing = true
-        //   api.warranty.delRepairDetailList(this.$route.params.app_id, this.$route.params.id).then((res) => {
-        //     if (res.status === 200) {
-        //       this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair')
-        //     }
-        //   }).catch((res) => {
-        //     this.handleError(res)
-        //     this.editing = false
-        //   })
-        // }
+        var result = window.confirm('确认删除该维修工单吗?')
+        if (result === true) {
+          this.editing = true
+          api.warranty.delRepairDetailList(this.$route.params.app_id, this.$route.params.id).then((res) => {
+            if (res.status === 200) {
+              this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair')
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.editing = false
+          })
+        }
       },
       // addFormHook (form) {
       //   this.editModal.form = form
