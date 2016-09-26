@@ -4,69 +4,60 @@
  */
 let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
 
-// 平台 API 服务器地址
-// 正式环境
-const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn`
-// 灰
-// const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
-// 测试服务器
-// const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
-// 测试demo服务器地址 add by guohao 2016/8/28
-// const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
-// 天际
-// const DEFAULT_API_SERVER = `${protocol}://dev-man.360tj.com:8016`
-// 海曼
-// const DEFAULT_API_SERVER = `${protocol}//ic.heiman.cn:8887`
-// 公牛
-// const DEFAULT_API_SERVER = `${protocol}//139.224.7.17`
-// 开发者本地
-// const DEFAULT_API_SERVER: `${protocol}//localhost:8887`,
-// Demo
-// const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
-
-// 插件服务器地址
-// 正式环境
-const DEFAULT_PLUGIN_SERVER = `${protocol}//plugin-api.xlink.cn:3000`
-// 灰
-// const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn`
-// 测试服务器
-// const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3000`
-// 公牛
-// const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3002`
-// Demo插件服务器灰度地址
-// const DEFAULT_PLUGIN_SERVER = `${protocol}//api-demo.xlink.cn`
-// 测试 demo服务器地址 add by guohao 2016/8/28
-// const DEFAULT_PLUGIN_SERVER = 'http://demo.plugin.xlink.cn'
-// 天际
-// const DEFAULT_PLUGIN_SERVER = 'https://dev-man.360tj.com:8016'
+let apiServer = ({
+  api2: { // 正式环境
+    api: `${protocol}//api2.xlink.cn`,
+    plugin: `${protocol}//plugin-api.xlink.cn:3000`
+  },
+  test: { // 测试服务器
+    api: 'http://api-test.xlink.cn:8887',
+    plugin: 'http://test.plugin.xlink.cn:3000'
+  },
+  grey: { // 灰度服务器
+    api: `${protocol}//api-grey.xlink.cn`,
+    plugin: `${protocol}//api-grey.xlink.cn`
+  },
+  demo: { // Demo
+    api: `${protocol}//api-demo.xlink.cn`,
+    plugin: `${protocol}//api-demo.xlink.cn`
+  },
+  bull: { // 公牛
+    api: `${protocol}//139.224.7.17`,
+    plugin: `${protocol}//test.plugin.xlink.cn:3002`
+  },
+  tianji: { // 天际
+    api: `${protocol}//dev-man.360tj.com:8016`,
+    plugin: `${protocol}://dev-man.360tj.com:8016`
+  }
+})[process.env.API_SERVER || 'test']
 
 export const API_SERVER = {
   // 默认
-  default: process.env.API_SERVER || DEFAULT_API_SERVER,
+  default: apiServer.api,
 
   // 菜谱
-  recipe: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
+  recipe: `${apiServer.plugin}/module/recipes`,
 
   // 延保
-  warranty: `${DEFAULT_PLUGIN_SERVER}/module/warranty`,
+  warranty: `${apiServer.plugin}/module/warranty`,
 
   // 用户反馈
-  feedback: `${DEFAULT_PLUGIN_SERVER}/module/feedback`,
+  feedback: `${apiServer.plugin}/module/feedback`,
 
   // 经销商管理
-  dealer: `${DEFAULT_PLUGIN_SERVER}/module/distributer`,
+  dealer: `${apiServer.plugin}/module/distributer`,
 
   // 环境数据
-  airquality: `${DEFAULT_PLUGIN_SERVER}/module/airQuality`,
+  airquality: `${apiServer.plugin}/module/airQuality`,
 
   // 云菜谱
-  recipes: `${DEFAULT_PLUGIN_SERVER}/module/recipes`,
+  recipes: `${apiServer.plugin}/module/recipes`,
 
   // 内容管理
-  content: `${DEFAULT_PLUGIN_SERVER}/module/contents`,
+  content: `${apiServer.plugin}/module/contents`,
 
   // 运营位管理
-  operate: `${DEFAULT_PLUGIN_SERVER}/module/operatePosition`
+  operate: `${apiServer.plugin}/module/operatePosition`
 }
 
 // 是否显示旧版入口
