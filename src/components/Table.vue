@@ -8,7 +8,7 @@
       <table class="table" :class="{'table-bordered':bordered}">
         <thead>
           <tr>
-            <th v-show="selecting" class="tac">
+            <th v-show="selecting" class="tac w20">
               <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
             </th>
             <th v-for="tHeader in headers" :class="headerClass(tHeader)" @click="theaderClick(tHeader, $index)">

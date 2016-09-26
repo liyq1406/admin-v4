@@ -114,7 +114,7 @@
             title1: '智能互联',
             title2: '连接一切想象',
             describes: [
-              '云智易Xlink平台已与Google nest、海尔U+、Google THREAD、微信互联、Apple Homekit、海康萤石、Philips Hue实现互联,通过平台配置快速融入其产品体系，实现智能领域云互联！'
+              '云智易Xlink平台已与Google nest、amazon echo、微信互联、Apple Homekit、Philips Hue等平台实现互联，通过便捷的平台配置使企业产品轻松实现设备云端互联！'
             ],
             link: '/dev/linkage/settings'
           },

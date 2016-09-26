@@ -85,13 +85,13 @@ export default {
           }
         }
 
-        if (res.add.length > 0) {
-          res.add.sort(compare)
-          this.statistic.add.total = res.add[0].val
-          if (res.add.length > 1) {
-            this.statistic.add.change = res.add[0].val - res.add[1].val
-          }
-        }
+        // if (res.add.length > 0) {
+        //   res.add.sort(compare)
+        //   this.statistic.add.total = res.add[0].val
+        //   if (res.add.length > 1) {
+        //     this.statistic.add.change = res.add[0].val - res.add[1].val
+        //   }
+        // }
 
         if (res.active.length > 0) {
           res.active.sort(compare)
@@ -123,7 +123,7 @@ export default {
     getUserCount () {
       getTotalUser().then((res) => {
         this.statistic.total.total = res.total
-        this.statistic.total.change = res.add
+        this.statistic.add.total = res.add
       }).catch((res) => {
         this.handleError(res)
       })

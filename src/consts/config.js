@@ -5,10 +5,10 @@
 let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
 
 // 平台 API 服务器地址
-// 正式地址
-// const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn`
+// 正式环境
+const DEFAULT_API_SERVER = `${protocol}//api2.xlink.cn`
 // 灰
-const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
+// const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
 // 测试服务器
 // const DEFAULT_API_SERVER = 'http://api-test.xlink.cn:8887'
 // 测试demo服务器地址 add by guohao 2016/8/28
@@ -25,8 +25,10 @@ const DEFAULT_API_SERVER = `${protocol}//api-grey.xlink.cn`
 // const DEFAULT_API_SERVER = `${protocol}//api-demo.xlink.cn`
 
 // 插件服务器地址
+// 正式环境
+const DEFAULT_PLUGIN_SERVER = `${protocol}//plugin-api.xlink.cn:3000`
 // 灰
-const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn`
+// const DEFAULT_PLUGIN_SERVER = `${protocol}//api-grey.xlink.cn`
 // 测试服务器
 // const DEFAULT_PLUGIN_SERVER = `${protocol}//test.plugin.xlink.cn:3000`
 // 公牛

@@ -48,7 +48,7 @@
                   <span class="limit-width">{{rule.content }}</span></td>
                 <td>{{* rule.type | ruleLabel }}</td>
                 <td>
-                  <span class="text-label level-style" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
+                  <span class="text-label w50" :class="tagStyle(rule.tag)">{{rule.tag}}</span>
                   <!-- <span class="text-label text-label-warning level-style">{{rule.tag}}</span> -->
                 </td>
                 <td><span v-if="rule.is_enable" class="hl-green">{{ $t("common.enable") }}</span><span v-else class="hl-gray">{{ $t("common.disabled") }}</span></td>
@@ -219,9 +219,6 @@
 </script>
 <style lang='stylus' scoped>
 @import '../../../../assets/stylus/common'
-.level-style
-  display inline-block
-  width 50px
 .limit-width
   display inline-block
   width 400px

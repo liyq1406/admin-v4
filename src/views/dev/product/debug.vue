@@ -186,12 +186,13 @@
               <label class="form-control col-6">MAC:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请填写设备MAC'" class="input-text-wrap required-sign">
-                  <input v-model="addModel.mac"  v-validate:mac="{required: true}" type="text"class="input-text"/>
+                  <input v-model="addModel.mac" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'word'}" type="text" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">
-                    MAC为必填项
-                  </span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.format">MAC只能包含数字和字母</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.minlength">{{ $t('ui.validation.minlength', ['MAC', 2]) }}</span>
+                  <span v-if="$addValidation.mac.touched && $addValidation.mac.modified && $addValidation.mac.maxlength">{{ $t('ui.validation.maxlength', ['MAC', 64]) }}</span>
                 </div>
               </div>
             </div>
@@ -199,7 +200,10 @@
               <label class="form-control col-6">序列号:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入序列号'" class="input-text-wrap">
-                  <input v-model="addModel.sn" type="text" name="sn" lazy class="input-text"/>
+                  <input v-model="addModel.sn" type="text" name="addModel.sn" v-validate:sn="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$addValidation.sn.modified && $addValidation.sn.format">序列号前后不能包含空格</span>
                 </div>
               </div>
             </div>
@@ -207,7 +211,10 @@
               <label class="form-control col-6">名字:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                  <input v-model="addModel.name" type="text" name="name"  lazy class="input-text"/>
+                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$addValidation.name.modified && $addValidation.name.format">名字前后不能包含空格</span>
                 </div>
               </div>
             </div>
@@ -219,6 +226,37 @@
         </validator>
       </div>
     </Modal>
+
+    <!-- 提示浮层 -->
+    <modal :show.sync="isShowTipsModal" @close="onTipsCancel">
+      <h3 slot="header">提示</h3>
+      <div slot="body">
+        <alert type="success" title="" :cols="22" v-if="tips.type==='import-success'">
+          <p>设备导入成功，<a v-link="{path: 'info/list/' + tips.recordId}" class="hl-red">查看导入记录</a></p>
+        </alert>
+        <alert type="warning" title="" :cols="22" v-else>
+          <p>{{ tips.msg }}</p>
+        </alert>
+        <div class="row" v-if="tips.macArr || tips.snArr">
+          <div class="col-11">
+            <div class="tips-tit">重复mac</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.macArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+          <div class="col-11 col-offset-2">
+            <div class="tips-tit">重复sn</div>
+            <div class="tips-box">
+              <div class="tips-box-item" v-for="item in tips.snArr">{{ item.trim() }}</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      <div slot="footer" class="modal-footer">
+        <button @click.prevent.stop="onTipsCancel" class="btn btn-primary">{{ $t("common.ok") }}</button>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -234,6 +272,7 @@ import Pager from 'components/Pager'
 import Range from 'components/Range1'
 import Switch from 'components/Switch'
 import Modal from 'components/Modal'
+import Alert from 'components/Alert'
 import api from 'api'
 import _ from 'lodash'
 
@@ -243,12 +282,14 @@ export default {
   name: 'DeviceDebug',
 
   mixins: [globalMixins],
+
   components: {
     'search-box': SearchBox,
     Modal,
     Pager,
     Switch,
-    Range
+    Range,
+    Alert
     // 'api': api,
     // 'x-select': Select,
     // 'x-table': Table,
@@ -298,7 +339,10 @@ export default {
       datapoints: [],
       settingData: false,
       searching: false,
-      refreshing: false
+      refreshing: false,
+      isShowAddModal: false,
+      isShowTipsModal: false,
+      tips: {}
     }
   },
 
@@ -653,23 +697,86 @@ export default {
     },
 
     /**
+     * 处理导入错误
+     * @author shengzhi
+     * @params {Object} res 响应信息
+     */
+    handleImportError (res) {
+      let code = res.data.error.code
+      const ERRORS = {
+        '4001001': {
+          type: 'error',
+          msg: 'MAC地址不合法'
+        },
+        '4041033': {
+          type: 'error',
+          msg: '导入失败，产品配额不足'
+        },
+        '4001021': {
+          type: 'error-duplicated-data',
+          msg: '导入失败，导入设备信息与数据库存在重复项，请检查数据'
+        },
+        '4001147': {
+          type: 'error-duplicated-items',
+          msg: '导入数据中存在重复项，请检查数据是否唯一'
+        }
+      }
+
+      if (ERRORS.hasOwnProperty(code)) {
+        this.isShowTipsModal = true
+        let tips = ERRORS[code]
+        let msg = res.data.error.msg.split('],[')
+
+        if (msg.length > 1) {
+          tips.macArr = msg[0].replace('[', '').split(',')
+          tips.snArr = msg[1].replace(']', '').split(',')
+        }
+        this.tips = tips
+      } else {
+        this.handleError(res)
+      }
+    },
+
+    /**
+     * 关闭提示浮层
+     */
+    onTipsCancel () {
+      this.isShowTipsModal = false
+      this.tips = {}
+    },
+
+    /**
      * 表单提交-添加设备逻辑
      * @return {[type]} [description]
      */
     onAddSubmit () {
-      this.$addValidation.mac.touched = true
-      if (this.$addValidation.valid && !this.adding) {
-        this.adding = true
-        api.device.add(this.$route.params.id, this.addModel).then((res) => {
-          if (res.status === 200) {
-            this.resetAdd()
-            this.getDevices()
-          }
-        }).catch((res) => {
-          this.handleError(res)
-          this.adding = false
-        })
+      if (this.adding) return
+
+      if (this.$addValidation.invalid) {
+        this.$validate(true)
+        return
       }
+
+      this.adding = true
+      let device = {
+        mac: this.addModel.mac
+      }
+      if (this.addModel.name) device.name = this.addModel.name
+      if (this.addModel.sn) device.sn = this.addModel.sn
+      api.product.importDevices(this.$route.params.id, [device]).then((res) => {
+        if (res.status === 200) {
+          this.resetAdd()
+          this.getDevices()
+          this.isShowTipsModal = true
+          this.tips = {
+            type: 'import-success',
+            recordId: res.data.import_record_id
+          }
+        }
+      }).catch((res) => {
+        this.handleImportError(res)
+        this.adding = false
+      })
     },
     // 搜索
     handleSearch () {
@@ -927,4 +1034,14 @@ export default {
       overflow hidden
       text-overflow ellipsis
       display inline-block
+
+  .tips-box
+    border 1px solid light-border-color
+    font-size 11px
+    height 125px
+    overflow-y auto
+
+    .tips-box-item
+      line-height 20px
+      padding 2px 5px
 </style>

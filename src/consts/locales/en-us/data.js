@@ -99,8 +99,8 @@ export const PRODUCT_TYPES = [
 
 // 产品扫描订阅策略类型
 export const SCAN_MODES = [
-  { label: '只允许用户单次订阅', value: 1 },
-  { label: '允许用户多次订阅', value: 2 }
+  { label: '只允许单个用户订阅设备', value: 1 },
+  { label: '允许多用户订阅设备', value: 2 }
 ]
 
 // 设备筛选待选项

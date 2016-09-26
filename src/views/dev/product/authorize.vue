@@ -137,13 +137,6 @@
         <alert type="warning" title="" :cols="22" v-else>
           <p>{{ tips.msg }}</p>
         </alert>
-
-        <!-- <alert type="warning" title="" :cols="22" v-if="tips.type==='error-duplicated-items'">
-          <p>{{ tips.msg }}</p>
-        </alert>
-        <alert type="warning" title="" :cols="22" v-if="tips.type==='error-duplicated-data'">
-          <p>{{ tips.msg }}</p>
-        </alert> -->
         <div class="row" v-if="tips.macArr || tips.snArr">
           <div class="col-11">
             <div class="tips-tit">重复mac</div>
@@ -435,7 +428,12 @@ export default {
       }
 
       this.adding = true
-      api.product.importDevices(this.$route.params.id, [this.addModel]).then((res) => {
+      let device = {
+        mac: this.addModel.mac
+      }
+      if (this.addModel.name) device.name = this.addModel.name
+      if (this.addModel.sn) device.sn = this.addModel.sn
+      api.product.importDevices(this.$route.params.id, [device]).then((res) => {
         if (res.status === 200) {
           // this.showNotice({
           //   type: 'success',

@@ -386,9 +386,6 @@
   display inline-block
   width 450px
   overflow hidden
-.level-style
-  display inline-block
-  width 50px
 .mark-style
   padding-top 10px
 </style>

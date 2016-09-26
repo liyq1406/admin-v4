@@ -15,11 +15,6 @@
           </x-select>
         </div>
       </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <!-- <date-time-multiple-picker @timechange = "getAlertsSpecial" :periods="periods" :default-period="defaultPeriod"></date-time-multiple-picker> -->
-        </div>
-      </div>
     </div>
     <div class="row statistic-group mb30">
       <div class="col-6">
@@ -248,23 +243,29 @@ export default {
         title: '告警内容'
       }, {
         key: 'mac',
-        title: '设备MAC'
+        title: '设备MAC',
+        class: 'wp15'
       }, {
         key: 'id',
-        title: '设备ID'
+        title: '设备ID',
+        class: 'wp10'
       }, {
         key: 'create_date',
         title: '时间',
-        sortType: -1
+        sortType: -1,
+        class: 'wp15'
       }, {
         key: 'duration',
-        title: '持续时长'
+        title: '持续时长',
+        class: 'wp10'
       }, {
         key: 'level',
-        title: '告警等级'
+        title: '告警等级',
+        class: 'wp8'
       }, {
         key: 'state',
-        title: '状态'
+        title: '状态',
+        class: 'wp6'
       }],
       showBatchBtn: false,
       dealList: [],
@@ -354,7 +355,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags}</div>`,
           state: item.is_read ? '已处理' : '未处理',
           prototype: item
         }
@@ -459,7 +460,7 @@ export default {
       if (hours > 1) {
         res = `${hours}小时`
       } else {
-        res `${Math.floor(n / 60000)}分钟`
+        res = `${Math.floor(n / 60000)}分钟`
       }
       return res
     },
@@ -505,17 +506,7 @@ export default {
       this.headers.$set(index, header)
       this.getAlerts()
     },
-    getAlertsSpecial (start, end) {
-      this.startTimePick = new Date(start.getTime() + 3600 * 1000 * 8)
-      this.endTimePick = new Date(end.getTime() + 3600 * 1000 * 8)
-      if (this.products.length > 0) {
-        if (!this.currentProduct.id) {
-          this.getFirstProduct()
-        }
-        this.getAlerts(true)
-        this.getUnreadCount(start, end)
-      }
-    },
+
     // 获取消息列表@author weijie
     getAlerts (reset) {
       if (reset) {
@@ -526,13 +517,14 @@ export default {
         if (res.status === 200) {
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
+            console.log(item.create_date)
             // 计算已读告警持续时间
-            let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
+            let begin = new Date((new Date(item.create_date)).getTime())
             // 默认为未读，时间从当前算起
-            let end = new Date()
+            let end = new Date(+new Date() + 3600 * 8 * 1000)
             // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
+              end = new Date((new Date(item.read_time)).getTime())
             }
             // 持续时间
             item.lasting = end.getTime() - begin.getTime()

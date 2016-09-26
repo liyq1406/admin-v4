@@ -108,10 +108,12 @@ export default {
         title: 'Mac'
       }, {
         key: 'deviceID',
-        title: '设备ID'
+        title: '设备ID',
+        class: 'wp20'
       }, {
         key: 'sn',
-        title: '序列号(SN)'
+        title: '序列号(SN)',
+        class: 'wp30'
       }],
       breadcrumbNav: [{
         label: '全部',
@@ -148,7 +150,7 @@ export default {
         var device = {
           mac: item.mac,
           deviceID: item.device_id,
-          sn: item.sn.length ? item.sn : '-',
+          sn: (item.sn && item.sn.length) ? item.sn : '-',
           prototype: item
         }
         result.push(device)
