@@ -392,17 +392,17 @@ export default {
         }).catch((err) => {
           this.handleError(err)
         })
-
+        this.getHistory()
         // 查询维修详情信息
-        condition.query = {}
-        condition.query.order_id = this.repairOrder._id
-        api.warranty.getRepairDetailList(this.$route.params.app_id, condition).then((res) => {
-          this.repairDetails = res.data.list[0] || {}
-          // 获取历史
-          this.getHistory()
-        }).catch((err) => {
-          this.handleError(err)
-        })
+        // condition.query = {}
+        // condition.query.order_id = this.repairOrder._id
+        // api.warranty.getRepairDetailList(this.$route.params.app_id, condition).then((res) => {
+        //   this.repairDetails = res.data.list[0] || {}
+        //   // 获取历史
+        //   this.getHistory()
+        // }).catch((err) => {
+        //   this.handleError(err)
+        // })
       }).catch((err) => {
         this.handleError(err)
       })
