@@ -355,7 +355,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags}</div>`,
+          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || '通知'}</div>`,
           state: item.is_read ? '已处理' : '未处理',
           prototype: item
         }
