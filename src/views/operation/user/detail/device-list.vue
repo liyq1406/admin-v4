@@ -165,7 +165,6 @@ export default {
       name = name || ''
       role = Number(role) || 0
       mode = mode || ''
-      mode = 'leixi..........ng'
       result = '<div class="name-box"><i class="fa' + (role === 0 ? ' fa-user' : '') + '"></i><div class="name">' + name + '</div><div class="mode">' + mode + '</div></div>'
       return result
     },
