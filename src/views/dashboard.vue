@@ -35,7 +35,7 @@
             </div>
             <div class="no-products ml10" v-show="devProducts.length === 0">
               <span>您还没有任何产品，请点击按钮开始创建</span>
-              <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
+              <button class="btn btn-success ml20 bradius" @click="goto('/dev/products/create')">
                 <i class="fa fa-plus"></i>
                 添加产品
               </button>
@@ -76,7 +76,7 @@
             <a class="check-all" v-show="isReleaseProductsCount" @click="goto('/operation/overview')">查看全部({{isReleaseProductsCount}}) ></a>
           </div>
           <div class="content-box">
-            <div class="product" v-for="product in releaseProducts">
+            <div class="product" v-if="corp.status!==0 && releaseProducts.length!==0" v-for="product in releaseProducts">
               <div class="img-box">
                 <img :src="product.pic">
               </div>
@@ -92,8 +92,11 @@
                 </div>
               </div>
             </div>
-            <div class="no-products ml10" v-show="releaseProducts.length===0">
-              <span>您还没有任何产品，请在开发平台添加您的产品，并配置好后完成发布</span>
+            <div class="no-products ml10" v-show="corp.status===0">
+              <span>您的账号目前尚未认证，待认证成功后，即可使用运营平台，任何疑问联系：400-291-234</span>
+            </div>
+            <div class="no-products ml10" v-show="corp.status!==0 && releaseProducts.length===0">
+              <span>暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：400-291-234</span>
             </div>
           </div>
         </div>
@@ -142,6 +145,12 @@ export default {
 
   mixins: [globalMixins],
 
+  vuex: {
+    getters: {
+      corp: ({ system }) => system.corp
+    }
+  },
+
   data () {
     return {
       loading: false,
@@ -151,16 +160,16 @@ export default {
       productSummary: [],
       links: [
         {
-          content: '了解什么是数据端点？',
-          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/常见问题解答.md'
+          content: '如何接入智能？',
+          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/%E8%AE%BE%E5%A4%87%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3'
         },
         {
-          content: '如何调用产品与设备接口？',
-          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/物联平台管理接口文档/产品与设备管理接口.md#addProduct'
+          content: '如何开发一个APP',
+          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3'
         },
         {
-          content: '在APP上如何创建用户并管理用户信息？',
-          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/%E7%89%A9%E8%81%94%E5%B9%B3%E5%8F%B0%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3%E6%96%87%E6%A1%A3/%E7%94%A8%E6%88%B7%E7%AE%A1%E7%90%86%E6%8E%A5%E5%8F%A3.md'
+          content: '获取SDK',
+          path: 'https://github.com/xlink-corp/xlink-sdk'
         }
       ],
       nav: {
@@ -330,6 +339,8 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../assets/stylus/common'
+  .bradius
+    border-radius 10px
 
   .page-in
     width 100%
