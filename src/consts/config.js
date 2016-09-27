@@ -21,6 +21,10 @@ let apiServer = ({
     api: `${protocol}//api-demo.xlink.cn`,
     plugin: `${protocol}//api-demo.xlink.cn`
   },
+  console: { // console
+    api: 'http://127.0.0.1:8887',
+    plugin: 'http://test.plugin.xlink.cn:3000'
+  },
   bull: { // 公牛
     api: `${protocol}//139.224.7.17`,
     plugin: `${protocol}//test.plugin.xlink.cn:3002`
