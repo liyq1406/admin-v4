@@ -93,23 +93,29 @@ export default {
         title: '告警内容'
       }, {
         key: 'mac',
-        title: '设备MAC'
+        title: '设备MAC',
+        class: 'wp15'
       }, {
         key: 'id',
-        title: '设备ID'
+        title: '设备ID',
+        class: 'wp10'
       }, {
         key: 'create_date',
         title: '时间',
-        sortType: -1
+        sortType: -1,
+        class: 'wp15'
       }, {
         key: 'duration',
-        title: '持续时长'
+        title: '持续时长',
+        class: 'wp10'
       }, {
         key: 'level',
-        title: '告警等级'
+        title: '告警等级',
+        class: 'wp8'
       }, {
         key: 'state',
-        title: '状态'
+        title: '状态',
+        class: 'wp6'
       }],
       showBatchBtn: false,
       dealList: []
@@ -186,7 +192,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || '通知'}</div>`,
           state: item.is_read ? '已处理' : '未处理',
           prototype: item
         }
@@ -276,12 +282,12 @@ export default {
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
             // 计算已读告警持续时间
-            let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
+            let begin = new Date((new Date(item.create_date)).getTime())
             // 默认为未读，时间从当前算起
-            let end = new Date()
+            let end = new Date(+new Date() + 3600 * 8 * 1000)
             // 如果为已读，则从已读时间算起
             if (item.is_read) {
-              end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
+              end = new Date((new Date(item.read_time)).getTime())
             }
             // 持续时间
             item.lasting = end.getTime() - begin.getTime()

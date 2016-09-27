@@ -75,7 +75,7 @@ export default {
   data () {
     return {
       alerts: [],
-      account: '',
+      accounts: [],
       currentProduct: {},
       info: {
         id: '',
@@ -153,7 +153,7 @@ export default {
       var info = {
         device: {
           label: '告警设备',
-          value: this.info.product_name || 'N/A'
+          value: this.info.product_name || '-'
         },
         status: {
           label: '状态',
@@ -161,19 +161,19 @@ export default {
         },
         duration: {
           label: '持续时长',
-          value: this.info.lasting + 'h' || 'N/A'
+          value: this.info.lasting + 'h' || '-'
         },
         createTime: {
           label: '处理时间',
-          value: this.info.read_time ? formatDate(this.info.read_time) : 'N/A'
+          value: this.info.read_time ? formatDate(this.info.read_time) : '-'
         },
         area: {
           label: '告警地区',
-          value: this.info.location || 'N/A'
+          value: this.info.location || '-'
         },
         userId: {
           label: '用户账号',
-          value: this.account || 'N/A'
+          value: this.accounts.join(',') || '-'
         }
       }
       return info
@@ -308,7 +308,7 @@ export default {
       api.user.getSubInfo(item.product_id, item.from).then((res) => {
         if (res.status === 200) {
           res.data.list.forEach((user) => {
-            if (user.role === '1') {
+            if (user.role === 0) {
               this.profie(user)
             }
             return
@@ -322,8 +322,8 @@ export default {
     // 获取当前管理员详细信息@author weijie
     profie (item) {
       api.user.profile(item.user_id).then((res) => {
-        if (res.status === 200) {
-          this.account = res.data.account
+        if (res.status === 200 && res.data.nickname) {
+          this.accounts.push(res.data.nickname)
         }
       }).catch((res) => {
         this.handleError(res)
