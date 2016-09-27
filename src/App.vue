@@ -12,6 +12,9 @@
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <!-- End: 路由视图 -->
 
+    <!-- 内容遮罩 -->
+    <div class="content-mask hidden"></div>
+
     <template v-if="hasLayout('topbar')">
       <topbar></topbar>
     </template>
@@ -241,6 +244,13 @@ export default {
 
 .loading-resource
   cursor wait
+
+// 内容遮罩
+.content-mask
+  fixed left top
+  size 100%
+  background rgba(0, 0, 0, .6)
+  z-index 200
 
 // 主内容区
 .main-wrap

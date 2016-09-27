@@ -3,9 +3,7 @@
     <sidebar :nav="secNav"></sidebar>
 
     <section class="main-wrap" v-if="showContent">
-      <!-- <pre>
-        {{ subs | json}}
-      </pre> -->
+      <alert-bar :msg="alertMsg"></alert-bar>
       <!-- Start: 路由视图 -->
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
       <!-- End: 路由视图 -->
@@ -15,6 +13,7 @@
 
 <script>
 import Sidebar from 'components/Sidebar'
+import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
@@ -29,7 +28,8 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Sidebar
+    Sidebar,
+    AlertBar
   },
 
   store,
@@ -37,7 +37,8 @@ export default {
   vuex: {
     getters: {
       products: ({ products }) => products.released,
-      plugins: ({ plugins }) => plugins.all
+      plugins: ({ plugins }) => plugins.all,
+      alertMsg: ({ system }) => system.alertMsg
     }
   },
 
@@ -67,12 +68,13 @@ export default {
 
       // 产品导航
       const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
-      this.products.forEach((item) => {
+      this.products.forEach((item, index) => {
         result.subs.push({
           name: item.name,
           type: 'product',
           alias: 'products',
           icon: 'link',
+          unfold: index === 0,
           id: item.id,
           subs: PRO_SUBS.map((sub) => {
             return {
@@ -100,11 +102,12 @@ export default {
           alias: item.plugin,
           id: item.id,
           icon: 'puzzle-piece',
+          unfold: true, // 展开子级菜单?
           url: `plugins/${item.plugin}`
         }
 
         // 排除的插件 id
-        let excluded = ['ios', 'android', 'wechat']
+        let excluded = ['ios', 'android', 'wechat', 'ezviz']
 
         /**
          * 判断数组是否存在某个值
@@ -259,7 +262,7 @@ export default {
             break
           default:
         }
-        if (!exists(excluded, item.plugin) && item.enable && item.platform_status === 2) {
+        if (!exists(excluded, item.plugin) && item.enable) {
           result.subs.push(sub)
         }
       })

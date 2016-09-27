@@ -268,3 +268,9 @@ export const OPERATE_TYPES = [
   { label: '删除', value: 3 },
   { label: '新增', value: 4 }
 ]
+
+// 警告信息
+export const ALERT_MESSAGES = {
+  not_published: '暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：400-291-234',
+  not_authorized: '您的账号目前尚未认证，待认证成功后，即可使用运营平台，任何疑问联系：400-291-234'
+}

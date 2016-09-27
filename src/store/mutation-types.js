@@ -31,6 +31,12 @@ export const ADD_NOTICE = 'ADD_NOTICES'
 // 移除通知
 export const REMOVE_NOTICES = 'REMOVE_NOTICES'
 
+// 添加警告
+export const ADD_ALERT = 'ADD_ALERT'
+
+// 移除警告
+export const REMOVE_ALERT = 'REMOVE_ALERT'
+
 // 产品
 // ------------------------------
 

@@ -1665,12 +1665,22 @@ let configRouter = (router) => {
           // window.localStorage[appId + 'AppToken'] = JSON.stringify(params)
           transition.next()
         }).catch((err) => {
-          router.app.handleError(err)
-          if (transition.from.path) { // 判断有无上一个页面 有的话返回上一个页面 没有的话跳回概览页
-            router.replace(transition.from.path)
-          } else {
-            router.replace('/dashboard')
+          var params = {
+            appTokenInvalidTime: +new Date(),
+            token: '123',
+            app_id: appId
           }
+          // 重置appToken过期时间
+          pluginsToken[appId] = params
+          window.localStorage.pluginsToken = JSON.stringify(pluginsToken)
+          transition.next()
+          router.app.handleError(err)
+          // if (transition.from.path) { // 判断有无上一个页面 有的话返回上一个页面 没有的话跳回概览页
+          //   // router.replace(transition.from.path)
+          //   transition.next()
+          // } else {
+          //   router.replace('/dashboard')
+          // }
         })
       }
     } else { // 当前目标路径不在数组内 不需要apptoken

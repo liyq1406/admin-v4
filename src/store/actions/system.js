@@ -52,3 +52,13 @@ export const showNotice = ({ dispatch }, notice) => {
     dispatch(types.REMOVE_NOTICES)
   }, config.NOTICE_DURATION)
 }
+
+// 显示警告栏
+export const showAlertBar = ({ dispatch }, msg) => {
+  dispatch(types.ADD_ALERT, msg)
+}
+
+// 移除警告栏
+export const removeAlertBar = ({ dispatch }) => {
+  dispatch(types.REMOVE_ALERT)
+}

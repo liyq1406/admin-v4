@@ -91,7 +91,7 @@ export default {
         } else {
           reg = new RegExp(`${this.nav.url}/${item.alias}`, 'i')
         }
-        result.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
+        result.$set(index, _.assign({}, item, {unfold: item.unfold || reg.test(this.$route.path)}))
       })
       this.subs = result
     },
@@ -159,6 +159,7 @@ export default {
   size 199px 100%
   background #F2F2F2
   border-right 1px solid #ECECEC
+  z-index 1000
 
 // 侧栏导航
 .nav-aside

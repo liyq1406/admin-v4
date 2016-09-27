@@ -191,6 +191,7 @@ export const MAIN_NAV = {
     }, {
       alias: 'alerts', // 告警服务
       icon: 'bell',
+      unfold: true, // 展开子级菜单
       subs: [{
         alias: 'record',
         url: '/alerts/record'
@@ -204,6 +205,7 @@ export const MAIN_NAV = {
     }, {
       alias: 'users', // 用户管理
       icon: 'users',
+      unfold: true, // 展开子级菜单
       subs: [{
         alias: 'overview',
         url: '/users/overview'

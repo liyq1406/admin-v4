@@ -269,7 +269,7 @@ export default {
 
                     <div>欢迎注册云智易，请点击下方的链接完成帐号激活。</div>
 
-                    <p><a href="http://admin.xlink.cn/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://admin.xlink.cn/#!/user-email-activate/%corp_id%/%email%/%verifycode%</a></p>
+                    <p><a href="http://page.xlink.cn/user/email-activate.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%">http://page.xlink.cn/user/email-activate.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%</a></p>
 
                     <p><a> </a></p>
 
@@ -295,7 +295,7 @@ export default {
 
                   <p>Welcome to register,please click the link below to activate your account.</p>
 
-                  <p><a href="http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-email-activate/%corp_id%/%email%/%verifycode%</a></p>
+                  <p><a href="http://page.xlink.cn/user/email-activate.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%">http://page.xlink.cn/user/email-activate.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%</a></p>
 
                   <p><a> </a></p>
 
@@ -310,7 +310,7 @@ export default {
           name: '重置密码邮件模板',
           subject: '云智易找回密码',
           sender: '',
-          content: '<p>亲爱的&nbsp&nbsp %username%，</p>\n\n<p>我们收到了您找回密码的请求，请点击下方链接完成密码找回：</p>\n\n<p>http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%</p>\n\n<p>（本链接将在48小时后失效）</p>\n\n<p>本邮件由系统自动发出，请勿回复</p>\n\n<p>&nbsp</p>\n\n<p>云智易</p>\n\n<p>%date%</p>',
+          content: '<p>亲爱的&nbsp&nbsp %username%，</p>\n\n<p>我们收到了您找回密码的请求，请点击下方链接完成密码找回：</p>\n\n<p><a href="http://page.xlink.cn/user/email-reset.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%">http://page.xlink.cn/user/email-reset.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%</a></p>\n\n<p>（本链接将在48小时后失效）</p>\n\n<p>本邮件由系统自动发出，请勿回复</p>\n\n<p>&nbsp</p>\n\n<p>云智易</p>\n\n<p>%date%</p>',
           type: 2,
           lang: 'zh-cn'
         }
@@ -318,7 +318,7 @@ export default {
           name: '重置密码邮件英文模板',
           subject: 'Reset XLINK password?',
           sender: '',
-          content: '<p>Dear %username%,</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp</p>\n\n<p><a href="http://%admin_host%/#!/user-password-reset/%corp_id%/%email%/%verifycode%">http://%admin_host%/#!/user-password-reset/</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
+          content: '<p>Dear %username%,</p>\n\n<p>We received your request of retrieving your password,please click the link below to retrieve your password.&nbsp</p>\n\n<p><a href="http://page.xlink.cn/user/email-reset.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%">http://page.xlink.cn/user/email-reset.html?email=%email%&verifycode=%verifycode%&corp_id=%corp_id%</a></p>\n\n<p>（this link will be valid within 48 hours）<br />\n\n*Please note:this e-mail was sent from an address that cannot accept incoming e-mail.</p>\n\n<p>XLINK</p>\n\n<p>%date%</p>',
           type: 2,
           lang: 'en-us'
         }

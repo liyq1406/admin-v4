@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { setLayouts, showError, showNotice } from './store/actions/system'
+import { setLayouts, showError, showNotice, showAlertBar, removeAlertBar } from './store/actions/system'
 import locales from './consts/locales/index'
 import * as patterns from './consts/patterns'
 
@@ -14,10 +14,15 @@ export var globalMixins = {
   },
 
   vuex: {
+    getters: {
+      alertMsg: ({ system }) => system.alertMsg
+    },
     actions: {
       setLayouts,
       showError,
-      showNotice
+      showNotice,
+      showAlertBar,
+      removeAlertBar
     }
   },
 
@@ -26,6 +31,14 @@ export var globalMixins = {
     var layouts = this.$options.layouts
     if (layouts) {
       this.setLayouts(layouts)
+    }
+  },
+
+  route: {
+    deactivate () {
+      if (this.alertMsg) {
+        this.removeAlertBar()
+      }
     }
   },
 
@@ -63,10 +76,6 @@ export var globalMixins = {
     handleError (err) {
       // console.log(err)
       if (typeof err.data !== 'undefined' && typeof err.data.error !== 'undefined') {
-        this.showNotice({
-          type: 'error',
-          content: locales[Vue.config.lang].errors[err.data.error.code] || '请求出错'
-        })
         switch (err.data.error.code) {
           case 4031003:
             // console.log('即将返回登录页面, 错误信息如下')
@@ -75,9 +84,24 @@ export var globalMixins = {
             //   type: 'error',
             //   content: locales[Vue.config.lang].errors[err.data.error.code]
             // })
+            this.showNotice({
+              type: 'error',
+              content: locales[Vue.config.lang].errors[err.data.error.code]
+            })
             this.$route.router.go('/login')
             break
+          case 4001144:
+            this.showAlertBar(locales[Vue.config.lang].data.ALERT_MESSAGES['not_authorized'])
+            this.showNotice({
+              type: 'error',
+              content: '您尚未获得此应用的使用权限'
+            })
+            break
           default:
+            this.showNotice({
+              type: 'error',
+              content: locales[Vue.config.lang].errors[err.data.error.code] || `请求出错，错误码${err.data.error.code}`
+            })
             // this.showError(err.data.error)
         }
       }

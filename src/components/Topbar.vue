@@ -12,7 +12,7 @@
 
     <!-- Start: 用户导航 -->
     <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" class="user-nav">
-      <span class="user-name">{{ currentMember.name }}</span>
+      <span class="user-name"><i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}">{{ levelLabel }}</i>{{ currentMember.name }}</span>
       <i class="arrow-down"></i>
       <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
         <div class="user-info">
@@ -42,6 +42,18 @@
       </div>
     </div>
     <!-- End: 用户导航 -->
+
+    <!-- Start: 次导航 -->
+    <div class="extra-nav">
+      <ul>
+        <li class="link-demo">
+          <a href="http://ap.xlink.cn/" class="hl-red" target="_blank">查看demo</a>
+          <div class="authorize-tips">
+          </div>
+        </li>
+      </ul>
+    </div>
+    <!-- End: 主导航 -->
   </header>
 </template>
 
@@ -76,6 +88,15 @@ export default {
     logo () {
       var result = this.corp.logo
       return result
+    },
+
+    // 企业等级信息
+    levelLabel () {
+      return ({
+        '0': '未认证',
+        '1': '已认证',
+        '2': 'VIP'
+      })[this.corp.status || 0]
     }
   },
 
@@ -105,6 +126,7 @@ export default {
   size 100% 54px
   background #FAFAFA
   border-bottom 1px solid #E5E5E5
+  z-index 1000
 
 // Logo
 .logo
@@ -180,15 +202,24 @@ export default {
       &:hover
         color #000
         background #F3F3F3
+// 次导航
+.extra-nav
+  float right
+  height 55px
+  line-height 54px
+  z-index 10000
+
+  li
+    line-height 54px
 
 // 用户导航
 .user-nav
-  absolute right top
-  size auto 55px
+  float right
+  height 55px
   line-height 54px
-  z-index 10000
   text-align right
   padding 0 20px
+  z-index 10000
 
   .user-name
     padding 0 5px
@@ -197,6 +228,22 @@ export default {
     font-size 14px
     display inline-block
     white-space nowrap
+
+    .badge
+      display inline-block
+      line-height 20px
+      height 20px
+      color #FFF
+      background-color #CCC
+      padding 0 10px
+      font-size 12px
+      margin-right 5px
+
+    .badge-authorized
+      background-color #5CD35E
+
+    .badge-vip
+      background-color #FFBF4D
 
   .arrow-down
     triangle #777 8px down
@@ -207,6 +254,7 @@ export default {
     height 0
     opacity 0
     border 1px solid default-border-color
+    z-index 1000
 
     .sec-nav-item
       border-bottom none

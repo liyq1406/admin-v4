@@ -7,7 +7,9 @@ import {
   REMOVE_ERROR,
   ADD_NOTICE,
   HIDE_ERROR,
-  REMOVE_NOTICES
+  REMOVE_NOTICES,
+  ADD_ALERT,
+  REMOVE_ALERT
 } from '../mutation-types'
 
 // 状态初始化
@@ -20,7 +22,8 @@ var state = {
   isShowError: false, // 是否显示错误信息模态窗口
   after: null,        // 后续执行函数
   notices: [],        // 通知信息
-  plugins: []         // 插件列表
+  plugins: [],        // 插件列表
+  alertMsg: ''        // 警告栏信息
 }
 
 // 状态变化
@@ -75,6 +78,16 @@ const mutations = {
   // 移除通知信息
   [REMOVE_NOTICES] (state) {
     state.notices.shift()
+  },
+
+  // 加入警告信息
+  [ADD_ALERT] (state, msg) {
+    state.alertMsg = msg
+  },
+
+  // 移除通知信息
+  [REMOVE_ALERT] (state) {
+    state.alertMsg = ''
   }
 }
 
