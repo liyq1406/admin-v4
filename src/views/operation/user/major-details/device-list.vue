@@ -96,10 +96,10 @@ export default {
         // }
       ],
       headers: [
-        {
-          key: 'name',
-          title: '产品名称（型号）'
-        },
+        // {
+        //   key: 'name',
+        //   title: '产品名称（型号）'
+        // },
         {
           key: 'mac',
           title: 'MAC'
@@ -154,7 +154,7 @@ export default {
       var result = []
       this.devices.map((device) => {
         var table = {
-          name: device.name,
+          // name: device.name,
           mac: device.mac,
           sn: device.sn,
           is_active: device.is_active ? '是' : '否',
