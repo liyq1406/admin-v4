@@ -17,8 +17,10 @@
           </div>
         </div>
         <div class="col-8 with-loading">
-          <div class="position-map">
-            <x-map :addr="user.city" :zoom="10"></x-map>
+          <div class="ml30">
+            <div class="position-map">
+              <x-map :addr="user.city" :zoom="10"></x-map>
+            </div>
           </div>
           <div class="position-msg">
             <span> {{ user.city }} </span>
@@ -299,7 +301,7 @@
 <style lang="stylus" scoped>
   .position-map
     width 100%
-    height 300px
+    height 240px
     padding 10px 10px 0
     box-sizing border-box
   .position-msg

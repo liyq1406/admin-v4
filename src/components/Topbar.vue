@@ -48,7 +48,7 @@
       <ul>
         <li class="link-demo">
           <a href="http://ap.xlink.cn/" class="hl-red" target="_blank">查看demo</a>
-          <div class="authorize-tips" v-show="!isHideMaskForever && this.isPathInOperation && isShowMask">
+          <div class="authorize-tips" v-show="!isHideMaskForever && isPathInOperation && isShowMask && reason">
             <div class="cont">
               <p>{{ reason }}，点击demo体验运营平台！</p>
               <p>或者联系商务咨询400-042-4009</p>
@@ -135,7 +135,7 @@ export default {
 
     // 是否不再显示警告遮罩
     isHideMaskForever () {
-      return window.localStorage.getItem('hideAlertMask')
+      return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
     }
   },
 
@@ -165,7 +165,7 @@ export default {
      * 不再显示警告
      */
     removeAlertForever () {
-      window.localStorage.setItem('hideAlertMask', true)
+      window.localStorage.setItem(`${this.corp.id}hideAlertMask`, true)
       this.removeAlertMask()
     },
 
@@ -174,7 +174,11 @@ export default {
      * 移除保存在 window.localStorage中的 accessToken
      */
     quit () {
+      let temp = window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
       window.localStorage.clear()
+      if (temp) {
+        window.localStorage.setItem(`${this.corp.id}hideAlertMask`, temp)
+      }
       this.showNotice({
         type: 'info',
         content: '您已退出登录'

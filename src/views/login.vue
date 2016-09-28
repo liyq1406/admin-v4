@@ -139,7 +139,9 @@
           this.setLoadingStatus(true)
           api.corp.auth(this.model).then((res) => {
             var today = new Date()
-            window.localStorage.clear()
+            // window.localStorage.clear()
+            window.localStorage.removeItem('pluginsToken')
+            window.localStorage.removeItem('memberRole')
             window.localStorage.setItem('memberId', res.data.member_id)
             window.localStorage.setItem('corpId', res.data.corp_id)
             window.localStorage.setItem('accessToken', res.data.access_token)

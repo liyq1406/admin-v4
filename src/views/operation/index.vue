@@ -9,7 +9,7 @@
       <!-- End: 路由视图 -->
 
       <!-- 内容遮罩 -->
-      <div class="content-mask" v-show="!isHideMaskForever && !loading && isShowMask"></div>
+      <div class="content-mask" v-show="!isHideMaskForever && !loading && isShowMask && (releasedProducts.length === 0 || corp.status === 0)"></div>
     </section>
   </div>
 </template>
@@ -58,7 +58,7 @@ export default {
   computed: {
     // 是否不再显示警告遮罩
     isHideMaskForever () {
-      return window.localStorage.getItem('hideAlertMask')
+      return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
     },
 
     // 侧栏导航
