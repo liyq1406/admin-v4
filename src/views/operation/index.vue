@@ -9,7 +9,7 @@
       <!-- End: 路由视图 -->
 
       <!-- 内容遮罩 -->
-      <div class="content-mask" v-show="!isHideMaskForever && !loading && isShowMask && (releasedProducts.length === 0 || corp.status === 0)"></div>
+      <div class="content-mask" v-if="!isDemo" v-show="!isHideMaskForever && !loading && isShowMask && (releasedProducts.length === 0 || corp.status === 0)"></div>
     </section>
   </div>
 </template>
@@ -18,7 +18,7 @@
 import Sidebar from 'components/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
-import { MAIN_NAV } from 'consts/config'
+import { MAIN_NAV, IS_DEMO } from 'consts/config'
 // import api from 'api'
 // import _ from 'lodash'
 import store from 'store/index'
@@ -50,6 +50,7 @@ export default {
 
   data () {
     return {
+      isDemo: IS_DEMO,
       showContent: false,
       nav: {}
     }
@@ -315,5 +316,5 @@ export default {
   fixed left top
   size 100%
   background rgba(0, 0, 0, .6)
-  z-index 200
+  z-index 10000
 </style>

@@ -67,6 +67,9 @@ export const API_SERVER = {
 // 是否显示旧版入口
 export const IS_SHOW_OLD_ENTRANCE = true
 
+// 是否 DEMO
+export const IS_DEMO = process.env.API_SERVER === 'demo'
+
 // 默认每页记录数
 export const COUNT_PER_PAGE = 10
 

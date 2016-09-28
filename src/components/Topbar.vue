@@ -47,12 +47,13 @@
     <div class="extra-nav">
       <ul>
         <li class="link-demo">
-          <a href="http://ap.xlink.cn/" class="hl-red" target="_blank">查看demo</a>
-          <div class="authorize-tips" v-show="!isHideMaskForever && isPathInOperation && isShowMask && reason">
+          <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">查看demo</a>
+          <div class="authorize-tips" v-if="!isDemo" v-show="isShowTips">
             <div class="cont">
               <p>{{ reason }}，点击demo体验运营平台！</p>
               <p>或者联系商务咨询400-042-4009</p>
             </div>
+            <div class="demo-text">查看demo</div>
             <div class="actions">
               <a class="hl-orange" @click.prevent="removeAlertForever">不再显示</a>
             </div>
@@ -68,7 +69,7 @@
 <script>
 import store from 'store/index'
 import { globalMixins } from 'src/mixins'
-import { MAIN_NAV } from 'consts/config'
+import { MAIN_NAV, IS_DEMO } from 'consts/config'
 import { showAlertMask, removeAlertMask } from 'store/actions/system'
 
 export default {
@@ -95,6 +96,7 @@ export default {
 
   data () {
     return {
+      isDemo: IS_DEMO,
       isShowUserNav: false,
       mainNav: MAIN_NAV
     }
@@ -136,6 +138,11 @@ export default {
     // 是否不再显示警告遮罩
     isHideMaskForever () {
       return window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
+    },
+
+    // 是否显示遮罩提示
+    isShowTips () {
+      return !this.isHideMaskForever && !this.loading && this.isPathInOperation && this.isShowMask && this.reason
     }
   },
 
@@ -198,7 +205,6 @@ export default {
   size 100% 54px
   background #FAFAFA
   border-bottom 1px solid #E5E5E5
-  z-index 1000
 
 // Logo
 .logo
@@ -276,10 +282,11 @@ export default {
         background #F3F3F3
 // 次导航
 .extra-nav
+  position relative
   float right
   height 55px
   line-height 54px
-  z-index 10000
+  z-index 10100
 
   li
     line-height 54px
@@ -288,24 +295,32 @@ export default {
     position relative
 
     .authorize-tips
-      absolute right 25px top 68px
-      padding 104px 30px 0 0
+      absolute right -65px top 68px
+      padding 84px 0 0 0
       color #FFF
       width 320px
-      line-height 26px
-      font-size 16px
-      background url('../assets/images/indicator.png') no-repeat right top
+      line-height 24px
+      font-size 14px
+      background url('../assets/images/indicator.png') no-repeat 140px top
       text-align center
+
+      .demo-text
+        absolute right 46px top -66px
+        size 100px 50px
+        border-radius 100px / 50px
+        background-color #FFF
+        color gray-dark
+        font-size 13px
+        line-height 50px
 
       p
         margin 0
 
       .fa
-        absolute right -120px top
+        absolute right -40px top
         color #FFF
         font-size 24px
         cursor pointer
-        opacity .6
 
         &:hover
           opacity 1

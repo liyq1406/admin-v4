@@ -43,6 +43,8 @@ const transToDate = (str) => {
  * @return {Array}          [修改后的数据]
  */
 export const beautify = (data, range) => {
+  console.log(data)
+  console.log(range)
   // 将day字段数据转成date格式
   var minDay = Number.POSITIVE_INFINITY // 最小时间
   for (let i = 0; i < data.length; i++) {

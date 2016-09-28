@@ -103,6 +103,7 @@ import { globalMixins } from 'src/mixins'
 import { uniformDate } from 'src/filters'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
+import { beautify } from 'src/utils'
 // import _ from 'lodash'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
@@ -395,6 +396,11 @@ export default {
         } else {
           this.showHour = false
         }
+        console.log(beautify)
+        console.log(uniformDate(this.startTimePick))
+        console.log(uniformDate(this.endTimePick))
+        console.log(beautify([], {start: uniformDate(this.startTimePick), end: uniformDate(this.endTimePick)}))
+        // this.trendData = beautify(this.tempTrendData, {start: this.startTimePick, end: this.startTimePick})
         this.trendData = this.tempTrendData
       }
     },

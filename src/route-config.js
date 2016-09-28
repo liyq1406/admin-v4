@@ -81,6 +81,15 @@ let configRouter = (router) => {
       }
     },
 
+    // 登录
+    '/auto-login': {
+      component (resolve) {
+        require.ensure([], (require) => {
+          resolve(require('./views/auto-login'))
+        }, 'admin')
+      }
+    },
+
     // 手机找回密码
     '/fetch-password': {
       component (resolve) {
