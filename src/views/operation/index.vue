@@ -7,6 +7,9 @@
       <!-- Start: 路由视图 -->
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
       <!-- End: 路由视图 -->
+
+      <!-- 内容遮罩 -->
+      <div class="content-mask" v-show="!isHideMaskForever && !loading && isShowMask"></div>
     </section>
   </div>
 </template>
@@ -36,7 +39,10 @@ export default {
 
   vuex: {
     getters: {
-      products: ({ products }) => products.released,
+      loading: ({ system }) => system.loading,
+      isShowMask: ({ system }) => system.isShowMask,
+      corp: ({ system }) => system.corp,
+      releasedProducts: ({ products }) => products.released,
       plugins: ({ plugins }) => plugins.all,
       alertMsg: ({ system }) => system.alertMsg
     }
@@ -50,6 +56,12 @@ export default {
   },
 
   computed: {
+    // 是否不再显示警告遮罩
+    isHideMaskForever () {
+      return window.localStorage.getItem('hideAlertMask')
+    },
+
+    // 侧栏导航
     secNav () {
       let result = {
         alias: 'operation',
@@ -68,7 +80,7 @@ export default {
 
       // 产品导航
       const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
-      this.products.forEach((item, index) => {
+      this.releasedProducts.forEach((item, index) => {
         result.subs.push({
           name: item.name,
           type: 'product',
@@ -262,7 +274,7 @@ export default {
             break
           default:
         }
-        if (!exists(excluded, item.plugin) && item.enable) {
+        if (!exists(excluded, item.plugin) && item.enable && item.platform_status === 2) {
           result.subs.push(sub)
         }
       })
@@ -294,3 +306,14 @@ export default {
   }
 }
 </script>
+
+<style lang="stylus">
+@import '../../assets/stylus/base'
+
+// 内容遮罩
+.content-mask
+  fixed left top
+  size 100%
+  background rgba(0, 0, 0, .6)
+  z-index 200
+</style>

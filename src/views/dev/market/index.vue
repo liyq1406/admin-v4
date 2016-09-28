@@ -25,7 +25,7 @@
                   <p>{{ plugin.description }} <a class="pluginlink" v-if="plugin.enable === true" v-link="{path:'/operation/plugins/' + plugin.alias + '/' + plugin.id}">点此进入</a></p>
                 </div>
                 <span class="status">
-                  <x-switch size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="pluginToggle(plugin)"></x-switch>
+                  <x-switch :disabled="plugin.platform_status===1" size="small" :value.sync="plugin.enable" @switch-toggle="pluginToggle(plugin)" @disabled-click="pluginToggle(plugin)"></x-switch>
                 </span>
               </div>
             </div>

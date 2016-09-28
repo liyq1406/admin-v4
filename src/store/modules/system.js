@@ -8,8 +8,10 @@ import {
   ADD_NOTICE,
   HIDE_ERROR,
   REMOVE_NOTICES,
-  ADD_ALERT,
-  REMOVE_ALERT
+  ADD_ALERT_BAR,
+  REMOVE_ALERT_BAR,
+  ADD_ALERT_MASK,
+  REMOVE_ALERT_MASK
 } from '../mutation-types'
 
 // 状态初始化
@@ -23,7 +25,8 @@ var state = {
   after: null,        // 后续执行函数
   notices: [],        // 通知信息
   plugins: [],        // 插件列表
-  alertMsg: ''        // 警告栏信息
+  alertMsg: '',       // 警告栏信息
+  isShowMask: false   // 是否显示警示遮罩
 }
 
 // 状态变化
@@ -81,13 +84,23 @@ const mutations = {
   },
 
   // 加入警告信息
-  [ADD_ALERT] (state, msg) {
+  [ADD_ALERT_BAR] (state, msg) {
     state.alertMsg = msg
   },
 
   // 移除通知信息
-  [REMOVE_ALERT] (state) {
+  [REMOVE_ALERT_BAR] (state) {
     state.alertMsg = ''
+  },
+
+  // 加入警告信息
+  [ADD_ALERT_MASK] (state) {
+    state.isShowMask = true
+  },
+
+  // 移除通知信息
+  [REMOVE_ALERT_MASK] (state) {
+    state.isShowMask = false
   }
 }
 

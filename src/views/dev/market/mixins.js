@@ -34,10 +34,10 @@ export const pluginFactoryMixin = {
      * @param  {Object} plugin 当前插件
      */
     pluginToggle (plugin) {
-      // if (plugin.platform_status && plugin.platform_status === 1) {
-      //   this.showAlert('<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>')
-      //   return
-      // }
+      if (plugin.platform_status && plugin.platform_status === 1) {
+        this.showAlert('<span>您尚未获得此应用的使用权限，请联系商务或发送邮件到 <span class="hl-red">bd@xlink.cn</span> 申请开通。</span>')
+        return
+      }
       this.loading = true
       var params = {
         name: plugin.name,

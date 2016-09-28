@@ -55,10 +55,20 @@ export const showNotice = ({ dispatch }, notice) => {
 
 // 显示警告栏
 export const showAlertBar = ({ dispatch }, msg) => {
-  dispatch(types.ADD_ALERT, msg)
+  dispatch(types.ADD_ALERT_BAR, msg)
 }
 
 // 移除警告栏
 export const removeAlertBar = ({ dispatch }) => {
-  dispatch(types.REMOVE_ALERT)
+  dispatch(types.REMOVE_ALERT_BAR)
+}
+
+// 显示警示遮罩
+export const showAlertMask = ({ dispatch }) => {
+  dispatch(types.ADD_ALERT_MASK)
+}
+
+// 移除警示遮罩
+export const removeAlertMask = ({ dispatch }) => {
+  dispatch(types.REMOVE_ALERT_MASK)
 }

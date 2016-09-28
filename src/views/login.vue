@@ -82,7 +82,7 @@
       deactivate () {
         // 清除插件的token
         window.localStorage.removeItem('pluginsToken')
-        this.setLoadingStatus(false)
+        // this.setLoadingStatus(false)
         if (this.isLoginSuccess) {
           this.showNotice({
             type: 'success',

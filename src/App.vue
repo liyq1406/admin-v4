@@ -1,5 +1,6 @@
 <template>
   <div :class="{'auth-page':hasLayout('auth'), 'has-topbar':hasLayout('topbar'), 'has-sidebar':hasLayout('sidebar'), 'loading-resource':loading}" class="page-container">
+    <pre v-show="false">{{loadingInfo}}</pre>
     <template v-if="hasLayout('auth')">
       <header class="auth-header" transition="header" transition-mode="out-in">
         <div class="logo-auth">
@@ -11,9 +12,6 @@
     <!-- Start: 路由视图 -->
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <!-- End: 路由视图 -->
-
-    <!-- 内容遮罩 -->
-    <div class="content-mask hidden"></div>
 
     <template v-if="hasLayout('topbar')">
       <topbar></topbar>
@@ -39,7 +37,7 @@
 <script>
 import store from 'store/index'
 import { globalMixins } from './mixins'
-import { removeError, hideError, setCurrentMember, setCorp } from './store/actions/system'
+import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
 import Vue from 'vue'
@@ -83,14 +81,28 @@ export default {
       setCurrentMember,
       getAllProducts,
       createPlugin,
-      getAllPlugin
+      getAllPlugin,
+      setLoadingStatus
     }
   },
 
   data () {
     return {
       refreshed: false,
+      loadingCorp: true,
+      loadingProducts: true,
       customApps: []
+    }
+  },
+
+  computed: {
+    loadingInfo () {
+      // alert(1111)
+      let result = this.loadingCorp || this.loadingProducts
+      if (this.hasLayout('topbar')) {
+        this.setLoadingStatus(result)
+      }
+      return result
     }
   },
 
@@ -164,9 +176,12 @@ export default {
      * @author shengzhi
      */
     getCorpInfo () {
+      this.loadingCorp = true
       api.corp.getCorpInfo().then((res) => {
+        this.loadingCorp = false
         this.setCorp(res.data)
       }).catch((res) => {
+        this.loadingCorp = false
         // this.handleError(res)
       })
     },
@@ -196,9 +211,12 @@ export default {
     },
 
     getProducts () {
+      this.loadingProducts = true
       api.product.all().then((res) => {
+        this.loadingProducts = false
         this.getAllProducts(res.data)
       }).catch((res) => {
+        this.loadingProducts = false
         this.handleError(res)
       })
     },
@@ -244,13 +262,6 @@ export default {
 
 .loading-resource
   cursor wait
-
-// 内容遮罩
-.content-mask
-  fixed left top
-  size 100%
-  background rgba(0, 0, 0, .6)
-  z-index 200
 
 // 主内容区
 .main-wrap
