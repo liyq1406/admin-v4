@@ -367,7 +367,7 @@ export default {
     width 100%
     height 100%
     position relative
-    padding-bottom 107px
+    padding-bottom 200px
     box-sizing border-box
     background #fff
     .body
