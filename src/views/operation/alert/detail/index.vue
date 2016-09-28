@@ -42,8 +42,8 @@
         </div>
       </div>
     </div>
-    <!-- <tab :nav="secondaryNav"></tab>
-    <router-view transition="view" transition-mode="out-in" class="view"></router-view> -->
+    <tab :nav="secondaryNav"></tab>
+    <router-view transition="view" transition-mode="out-in" class="view"></router-view>
   </div>
 </template>
 
@@ -140,9 +140,9 @@ export default {
         secondaryNav: [{
           label: '告警历史',
           link: { path: `${deviceDetailRoot}/history` }
-        }, {
-          label: '维保记录',
-          link: { path: `${deviceDetailRoot}/warranty` }
+        // }, {
+        //   label: '维保记录',
+        //   link: { path: `${deviceDetailRoot}/warranty` }
         }]
       }
     }
