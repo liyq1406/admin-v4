@@ -128,12 +128,14 @@ export default {
           }
         },
         broadcast: {
+          label: '消息推送',
           subs: {
             add: '新建推送',
             list: '推送历史'
           }
         },
         warranty: {
+          label: '智能维保',
           subs: {
             overview: '概览',
             extended_warranties: '故障事件',
@@ -144,6 +146,7 @@ export default {
           }
         },
         helpdesk: {
+          label: '用户反馈',
           subs: {
             overview: '概览',
             issues: '消息列表',
@@ -151,16 +154,19 @@ export default {
           }
         },
         splashwnd: {
+          label: 'APP闪屏',
           subs: {
             list: 'APP启动页设置'
           }
         },
         dealer: {
+          label: '经销商管理',
           subs: {
             list: '经销商列表'
           }
         },
         recipes: {
+          label: '云菜谱',
           subs: {
             recipes: '菜谱管理',
             menus: '菜单管理',
