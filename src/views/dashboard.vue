@@ -1,7 +1,7 @@
 <template>
   <div class="page-in">
     <div class="body row">
-      <div class="tips"><i class="fa fa-bullhorn" style="color: #000;margin-right:5px"></i><a :href=info.notify.link>维护公告：今日9-23 04：00-05：00将进行系统升级！</a> </div>
+      <div class="tips"><i class="fa fa-bullhorn" style="color: #000;margin-right:5px"></i><a :href="info.notify.link">维护公告：今日9-23 04：00-05：00将进行系统升级！</a> </div>
       <div class="dev-box container col-12">
         <div class="container-body">
           <div class="part part1 base-introduce">
@@ -216,34 +216,34 @@ export default {
           //   content: '用户标签',
           //   path: '/operation/users/overview'
           // }
+        ]
+      },
+      info: {
+        notify: [
+          {
+            _id: 1,
+            tilte: '',
+            link: '##',
+            language: 'Zh-cn',
+            ttl: 0,
+            pubDate: ''
+          }
         ],
-        info: {
-          notify: [
-            {
-              _id: 1,
-              tilte: '',
-              link: '',
-              language: 'Zh-cn',
-              ttl: 0,
-              pubDate: ''
-            }
-          ],
-          articles: [
-            {
-              _id: 1,
-              title: '',
-              link: '',
-              description: '',
-              content: '',
-              language: 'Zh-cn',
-              ttl: 12345678,
-              pubDate: '',
-              image: 'http://image.xlink.cn/image.jpg',
-              category: [],
-              tags: []
-            }
-          ]
-        }
+        articles: [
+          {
+            _id: 1,
+            title: '',
+            link: '',
+            description: '',
+            content: '',
+            language: 'Zh-cn',
+            ttl: 12345678,
+            pubDate: '',
+            image: 'http://image.xlink.cn/image.jpg',
+            category: [],
+            tags: []
+          }
+        ]
       }
     }
   },
