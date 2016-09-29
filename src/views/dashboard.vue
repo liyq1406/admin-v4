@@ -34,9 +34,10 @@
                   </div>
                 </div>
               </div>
-              <div class="no-products ml10 grayfont" v-show="devProducts.length === 0">
-                <span>您还没有任何产品，请点击按钮开始创建</span>
-                <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
+              <div class="no-products ml10" v-show="devProducts.length
+              === 0">
+                <span class="lgrayfont">您还没有任何产品，请点击按钮开始创建</span>
+                <button class="btn bggray ml20" @click="goto('/dev/products/create')">
                   <i class="fa fa-plus"></i>
                   添加产品
                 </button>
@@ -47,7 +48,7 @@
           <div class="part part3 link-box">
             <div class="title-box">
               <h2>开发指南</h2>
-              <a class="check-all">查看全部 ></a>
+              <a class="check-all" @click="open('https://github.com/xlink-corp/xlink-sdk')">查看全部 ></a>
             </div>
             <div class="content-box">
               <div class="link" v-for="link in links">
@@ -58,7 +59,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary" @click="goto('/dev')">立即进入</button>
+            <button class="btn btn-primary" @click="goto('/dev')">立即进入 >></button>
           </div>
         </div>
 
@@ -95,11 +96,11 @@
                   </div>
                 </div>
               </div>
-              <div class="no-products ml10 grayfont" v-show="corp.status===0">
-                <span>您的账号目前尚未认证，待认证成功后，即可使用运营平台，任何疑问联系：400-291-234</span>
+              <div class="no-products ml10" v-show="corp.status===0">
+                <span class="lgrayfont">您的账号目前尚未认证，待认证成功后，即可使用运营平台，任何疑问联系：<i class="hl-red">400-291-234</i></span>
               </div>
               <div class="no-products ml10 grayfont" v-show="corp.status!==0 && releaseProducts.length===0">
-                <span>暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：400-291-234</span>
+                <span class="lgrayfont">暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：<i class="hl-red">400-291-234</i></span>
               </div>
             </div>
           </div>
@@ -126,7 +127,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary " @click="gotoOpear('/operation/overview')">立即进入</button>
+            <button class="btn btn-primary " @click="gotoOpear('/operation/overview')">立即进入 >></button>
           </div>
         </div>
       </div>
@@ -166,16 +167,16 @@ export default {
       productSummary: [],
       links: [
         {
-          content: '如何接入智能？',
-          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/%E8%AE%BE%E5%A4%87%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3'
+          content: '如何将我的智能设备接入平台？',
+          path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/README.md'
         },
         {
-          content: '如何开发一个APP',
-          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/%E5%BA%94%E7%94%A8%E7%AB%AF%E5%BC%80%E5%8F%91%E6%96%87%E6%A1%A3'
+          content: '应用开发接入说明及工程示例',
+          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
         },
         {
-          content: '获取SDK',
-          path: 'https://github.com/xlink-corp/xlink-sdk'
+          content: '云智易物联平台RESTful接口说明',
+          path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/物联平台管理接口文档'
         }
       ],
       nav: {
@@ -384,6 +385,10 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../assets/stylus/common'
+  .bggray
+    background-color #95A5A6
+  .lgrayfont
+    color #666
   /*.widmid
     width 1310px
     margin 0 auto*/
@@ -392,8 +397,8 @@ export default {
     line-height 25px
     padding 5px 10px
     box-sizing border-box
-    background-color #fafafa
-    color #333
+    background-color #EAEDF2
+    color #B1C3C8
     margin-bottom 20px
     &:hover
       color red
