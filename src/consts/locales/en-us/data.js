@@ -271,6 +271,6 @@ export const OPERATE_TYPES = [
 
 // 警告信息
 export const ALERT_MESSAGES = {
-  not_published: '暂未发布产品，马上去开发平台发布一款产品吧！',
-  not_authorized: '您尚未获得此应用的使用权限，请联系商务或发邮件到 bd@xlink.cn 申请开通。'
+  not_published: '您尚未发布产品，请在开发平台完成产品发布。如需了解运营平台功能您可以通过<a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">查看demo</a>了解示例',
+  not_authorized: '您尚未获得此应用的使用权限，请联系商务获取支持，<a class="hl-red" href="http://www.xlink.cn/about.html" target="_blank">查看联系方式</a>'
 }

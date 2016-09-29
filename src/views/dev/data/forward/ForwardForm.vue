@@ -52,7 +52,7 @@
       </div>
       <div class="form-actions row">
         <div class="col-20 col-offset-4">
-          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary w100" v-text="submiting ? $t('common.handling') : $t('common.ok')" @click="onSubmit"></button>
+          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary w100" v-text="submiting ? $t('common.handling') : $t('common.ok')" @click.prevent.stop="onSubmit"></button>
         </div>
       </div>
     </div>
@@ -185,6 +185,7 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
+      if (this.submiting) return
       this.submiting = true
       if (this.type === 'add') {
         this.add()

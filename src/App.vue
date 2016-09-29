@@ -88,8 +88,8 @@ export default {
   data () {
     return {
       refreshed: false,
-      loadingCorp: true,
-      loadingProducts: true,
+      loadingCorp: false,
+      loadingProducts: false,
       customApps: []
     }
   },

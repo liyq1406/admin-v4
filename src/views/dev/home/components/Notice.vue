@@ -29,9 +29,9 @@
         notices: [
           {
             icon: 'file-text-o',
-            title: '云智易物联平台发布4.0版本!<br>[更新说明]',
-            time: '2016-09-24',
-            url: 'http://support.xlink.cn/hc/kb/article/208913/'
+            title: '云智易物联平台发布4.2.24049版本!<br>[更新说明]',
+            time: '2016-09-29',
+            url: 'http://support.xlink.cn/hc/kb/article/210598'
           },
           {
             icon: 'apple',

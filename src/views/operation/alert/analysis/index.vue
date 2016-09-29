@@ -103,7 +103,6 @@ import { globalMixins } from 'src/mixins'
 import { uniformDate } from 'src/filters'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import { beautify } from 'src/utils'
 // import _ from 'lodash'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
@@ -298,15 +297,15 @@ export default {
           this.loadingTagTrend = false
         }
         if (res.status === 200) {
-          if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.blue) {
+          if (tag === this.locales.data.ALERT_LEVELS.blue) {
             this.light = res.data
             this.pushDayArr(this.light, tag)
             this.pushAllArr(this.light, tag)
-          } else if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.orange) {
+          } else if (tag === this.locales.data.ALERT_LEVELS.orange) {
             this.normal = res.data
             this.pushDayArr(this.normal, tag)
             this.pushAllArr(this.normal, tag)
-          } else if (tag === locales[Vue.config.lang].data.ALERT_LEVELS.red) {
+          } else if (tag === this.locales.data.ALERT_LEVELS.red) {
             this.serious = res.data
             this.pushDayArr(this.serious, tag)
             this.pushAllArr(this.serious, tag)
@@ -396,11 +395,31 @@ export default {
         } else {
           this.showHour = false
         }
-        console.log(beautify)
-        console.log(uniformDate(this.startTimePick))
-        console.log(uniformDate(this.endTimePick))
-        console.log(beautify([], {start: uniformDate(this.startTimePick), end: uniformDate(this.endTimePick)}))
+        // console.log(beautify)
+        // console.log(uniformDate(this.startTimePick))
+        // console.log(uniformDate(this.endTimePick))
+        // beautify(this.tempTrendData, {start: uniformDate(this.startTimePick), end: uniformDate(this.endTimePick)})
         // this.trendData = beautify(this.tempTrendData, {start: this.startTimePick, end: this.startTimePick})
+
+        // const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
+        // let start = new Date(uniformDate(this.startTimePick))
+        // let end = new Date(uniformDate(this.endTimePick))
+        // let trendArr = []
+        // for (let i = start.getTime(); i <= end.getTime(); i = i + MICRO_SECONDS_PER_DAY) {
+        //   let record = _.find(this.tempTrendData, (item) => {
+        //     return +new Date(item.date) === i
+        //   })
+        //   if (record) {
+        //     trendArr.push(record)
+        //   } else {
+        //     trendArr.push({
+        //       date: uniformDate(new Date(i)),
+        //       val: 0,
+        //       name: this.tempTrendData[0].name
+        //     })
+        //   }
+        // }
+        // this.trendData = trendArr
         this.trendData = this.tempTrendData
       }
     },

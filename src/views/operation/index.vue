@@ -271,10 +271,12 @@ export default {
 
   methods: {
     init () {
-      if (!this.releasedProducts.length && this.$route.path === '/operation/overview') {
-        this.showAlertBar(this.locales.data.ALERT_MESSAGES['not_published'])
-      } else {
-        this.removeAlertBar()
+      if (this.$route.path === '/operation/overview') {
+        if (!this.releasedProducts.length) {
+          this.showAlertBar(this.locales.data.ALERT_MESSAGES['not_published'])
+        } else {
+          this.removeAlertBar()
+        }
       }
     }
   }

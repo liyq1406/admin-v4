@@ -1,5 +1,5 @@
 <template>
-  <div class="alert-bar" v-if="msg">{{ msg }}</div>
+  <div class="alert-bar" v-if="msg">{{{ msg }}}</div>
 </template>
 
 <script>

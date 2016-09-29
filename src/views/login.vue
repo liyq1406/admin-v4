@@ -93,6 +93,7 @@
     },
 
     ready () {
+      this.setLoadingStatus(false)
       if (this.rememberPwd) {
         this.model.account = this.getCookie('account')
         this.model.password = this.getCookie('password')

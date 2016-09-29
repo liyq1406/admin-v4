@@ -53,13 +53,10 @@
           <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">查看demo</a>
           <div class="authorize-tips" v-if="!isDemo" v-show="isShowTips">
             <div class="cont">
-              <p>{{ reason }}，点击demo体验运营平台！</p>
-              <p>或者联系商务咨询400-042-4009</p>
+              <p>查看demo立即体验运营平台</p>
+              <p>更多服务请<a class="link-contact" href="http://www.xlink.cn/about.html" target="_blank">联系商务</a>获得支持<a class="hl-orange" @click.prevent="removeAlertForever">不再显示</a></p>
             </div>
             <div class="demo-text">查看demo</div>
-            <div class="actions">
-              <a class="hl-orange" @click.prevent="removeAlertForever">不再显示</a>
-            </div>
             <i class="fa fa-times-circle" @click="removeAlertMask"></i>
           </div>
         </li>
@@ -310,11 +307,10 @@ export default {
       absolute right -65px top 68px
       padding 84px 0 0 0
       color #FFF
-      width 320px
+      width 280px
       line-height 24px
       font-size 14px
-      background url('../assets/images/indicator.png') no-repeat 140px top
-      text-align center
+      background url('../assets/images/indicator.png') no-repeat 100px top
 
       .demo-text
         absolute right 46px top -66px
@@ -324,9 +320,17 @@ export default {
         color gray-dark
         font-size 13px
         line-height 50px
+        text-align center
 
       p
         margin 0
+
+        .link-contact
+          color #FFF
+          text-decoration underline
+
+        .hl-orange
+          margin-left 15px
 
       .fa
         absolute right -40px top
@@ -344,7 +348,7 @@ export default {
   line-height 54px
   text-align right
   padding 0 20px
-  z-index 10000
+  z-index 1000
   position relative
 
   &:after

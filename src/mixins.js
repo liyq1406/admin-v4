@@ -35,7 +35,7 @@ export var globalMixins = {
   },
 
   route: {
-    deactivate () {
+    canDeactivate () {
       if (this.alertMsg) {
         this.removeAlertBar()
       }
@@ -91,7 +91,7 @@ export var globalMixins = {
             this.$route.router.go('/login')
             break
           case 4001144:
-            this.showAlertBar(locales[Vue.config.lang].data.ALERT_MESSAGES['not_authorized'])
+            this.showAlertBar(this.locales.data.ALERT_MESSAGES['not_authorized'])
             this.showNotice({
               type: 'error',
               content: '您尚未获得此应用的使用权限'

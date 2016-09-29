@@ -42,6 +42,12 @@
       Guide,
       Notice,
       'x-footer': Footer
+    },
+
+    ready () {
+      this.$http.get('/static/platform_info.json').then((res) => {
+        console.log(res)
+      })
     }
   }
 </script>
