@@ -454,7 +454,7 @@ export default {
     height 22px
 
   .x-label
-  .x-val
+  /*.x-val*/
     color gray-light
 
     /*&:nth-child(2n-1)

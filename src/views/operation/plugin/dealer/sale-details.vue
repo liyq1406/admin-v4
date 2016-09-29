@@ -333,7 +333,7 @@ export default {
       api.dealer.getUser(this.$route.params.sale_id).then((res) => {
         this.sale = res.data
         this.userInfo.phone.value = this.sale.phone
-        if (this.sale.client_type === ' common_buyer') {
+        if (this.sale.client_type === 'common_buyer') {
           this.userInfo.type.value = '普通客户'
         } else {
           this.userInfo.type.value = '大客户'

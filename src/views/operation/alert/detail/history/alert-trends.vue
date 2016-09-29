@@ -51,10 +51,27 @@ export default {
     }
   },
 
+  props: {
+    device: {
+      type: Object,
+      default () {
+        return {}
+      }
+    }
+  },
+
   computed: {
     // 趋势数据
     trendData () {
       return this.trends.light.concat(this.trends.medium).concat(this.trends.serious)
+    }
+  },
+
+  watch: {
+    device () {
+      if (this.device.id && this.device.product_id) {
+        this.getTagTrend()
+      }
     }
   },
 
@@ -74,7 +91,9 @@ export default {
       } else {
         this.scale = 'hour'
       }
-      this.getTagTrend()
+      if (this.device.id && this.device.product_id) {
+        this.getTagTrend()
+      }
     },
 
     /**
@@ -96,7 +115,7 @@ export default {
       this.recvDataCount = 0
       for (var key in TAGS) {
         ((tag) => {
-          api.alert.getDeviceTagTrend(this.$route.params.product_id, this.$route.params.device_id, TAGS[tag], begin, end, beginHour, endHour).then((res) => {
+          api.alert.getDeviceTagTrend(this.device.product_id, this.device.id, TAGS[tag], begin, end, beginHour, endHour).then((res) => {
             if (res.status === 200) {
               if (this.scale === 'hour') {
                 let rearr = []
