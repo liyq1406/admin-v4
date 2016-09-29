@@ -36,7 +36,7 @@
               </div>
               <div class="no-products ml10 grayfont" v-show="devProducts.length === 0">
                 <span>您还没有任何产品，请点击按钮开始创建</span>
-                <button class="btn btn-success ml20 bradius" @click="goto('/dev/products/create')">
+                <button class="btn btn-success ml20" @click="goto('/dev/products/create')">
                   <i class="fa fa-plus"></i>
                   添加产品
                 </button>
@@ -58,7 +58,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary bradius" @click="goto('/dev')">立即进入</button>
+            <button class="btn btn-primary" @click="goto('/dev')">立即进入</button>
           </div>
         </div>
 
@@ -126,7 +126,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary bradius" @click="goto('/operation/overview')">立即进入</button>
+            <button class="btn btn-primary " @click="gotoOpear('/operation/overview')">立即进入</button>
           </div>
         </div>
       </div>
@@ -365,6 +365,18 @@ export default {
      */
     goto (path) {
       this.$route.router.go(path)
+    },
+    /**
+     * 切换路由到..
+     * @param  {[type]} path [description]
+     * @return {[type]}      [description]
+     */
+    gotoOpear (path) {
+      if (this.corp.status === 0) {
+        window.location.href = 'http://ap.xlink.cn/#!/auto-login'
+      } else {
+        this.$route.router.go(path)
+      }
     }
   }
 }
@@ -385,8 +397,6 @@ export default {
     margin-bottom 20px
     &:hover
       color red
-  .bradius
-    border-radius 10px
   .grayfont
     color #bcbcbc
   .page-in
@@ -403,6 +413,7 @@ export default {
       box-sizing border-box
       overflow auto
       .dev-box
+        margin-bottom 30px
         border-right 1px solid #dddddd
         box-sizing border-box
 
@@ -469,8 +480,10 @@ export default {
             color #333333
           .description
             color #bcbcbc
-            margin-bottom 60px
+            margin-bottom 20px
+            height 38px
       .part2
+        height 171px
         .product
           width 100%
           height 50px
