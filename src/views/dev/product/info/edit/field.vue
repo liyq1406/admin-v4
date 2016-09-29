@@ -189,8 +189,8 @@ export default {
       // 用于显示列表的数据
       fieldList: [],
       // 正在加载标志位
-      loadingDataPoint: true,
-      loadingDataField: true,
+      loadingDataPoint: false,
+      loadingDataField: false,
 
       showEditLabelModal: false,
 
@@ -232,12 +232,27 @@ export default {
     data () {
       this.getData()
       this.getDataPoint()
+      // this.reset() // 这个方法是调试用的
     }
   },
   ready () {
   },
 
   methods: {
+    /**
+     * 这个方法是调试用的
+     */
+    reset () {
+      var params = {
+        base_fields: [],
+        datapoints: []
+      }
+      api.product.setProductField(this.$route.params.id, params).then((res) => {
+        console.log(res)
+      }).catch((res) => {
+        console.log(res)
+      })
+    },
     /**
      * 编辑排序表单提交
      * @return {[type]} [description]
@@ -379,7 +394,7 @@ export default {
       // 是否需要向后端重置数据的标志位 弱下方执行完成之后标志位为true 就会去向服务器发请求重置当前的字段列表
       var needResetData = false
       // 判断服务器时候有返回基本字段信息
-      if (!this.dataList.base_fields) {
+      if (!this.dataList.base_fields || (this.dataList.base_fields && !this.dataList.base_fields.length)) {
         // 若没有返回基本字段信息 则将标志位设置为true
         needResetData = true
         // 读取默认的基本字段信息 默认前五个显示 三个隐藏 一共八个 具体看data()里面的定义
@@ -400,7 +415,7 @@ export default {
       // 如果当前标志位仍然为false
       if (!needResetData) {
         if (this.dataList.datapoints.length === this.datapoints.length) {
-          var dArray = this.dArray(this.dataList.datapoints, this.datapoints, 'name')
+          var dArray = this.dArray(this.dataList.datapoints, this.datapoints, 'index')
           if (dArray.length) {
             needResetData = true
           }
@@ -414,7 +429,7 @@ export default {
         //  标志位 标志：当前数据端点是否在字段列表中
         let hasPoints = false
         this.dataList.datapoints.forEach((item2) => {
-          if (item1.name === item2.name) {
+          if (item1.index - 0 === item2.index - 0) {
             hasPoints = true
             let obj = {}
             obj.name = item2.name
