@@ -498,12 +498,14 @@ export default {
             macArr = _.compact(macArr)
             macArr = macArr.slice(1).map((item) => {
               let macObj = item.split(',')
-              return {
-                mac: macObj[0] ? macObj[0].trim() : '',
-                sn: macObj[1] ? macObj[1].trim() : '',
-                name: macObj[2] ? macObj[2].trim() : ''
+              let result = {
+                mac: macObj[0] ? macObj[0].trim() : ''
               }
+              if (macObj[1] && macObj[1].trim()) result.sn = macObj[1].trim()
+              if (macObj[2] && macObj[2].trim()) result.name = macObj[2].trim()
+              return result
             })
+            console.log(macArr)
             api.product.importDevices(this.$route.params.id, macArr).then((res) => {
               if (res.status === 200) {
                 // this.showNotice({
