@@ -1,7 +1,7 @@
 <template>
   <div class="page-in">
     <div class="body row">
-      <div class="tips"><i class="fa fa-bullhorn" style="color: #000;margin-right:5px"></i><a :href="info.notify.link">维护公告：今日9-23 04：00-05：00将进行系统升级！</a> </div>
+      <div class="tips" v-if="tips.length"><i class="fa fa-bullhorn" style="color: #000;margin-right:5px"></i><span v-for="tip in tips"><a :href="tip.link" >{{tip.title}}</a></span></div>
       <div class="dev-box container col-12">
         <div class="container-body">
           <div class="part part1 base-introduce">
@@ -97,7 +97,8 @@
                 </div>
               </div>
               <div class="no-products ml10" v-show="corp.status===0">
-                <span class="lgrayfont">您的账号目前尚未认证，待认证成功后，即可使用运营平台，任何疑问联系：<i class="hl-red">400-291-234</i></span>
+                <div class="lgrayfont">您的账号尚未认证，认证成功后即可使用运营平台</div>
+                <div class="lgrayfont">相关问题请联系商务获得支持，<a class="hl-red" @click="open('http://www.xlink.cn/about.html')">查看联系方式</a></div>
               </div>
               <div class="no-products ml10 grayfont" v-show="corp.status!==0 && releaseProducts.length===0">
                 <span class="lgrayfont">暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：<i class="hl-red">400-291-234</i></span>
@@ -131,8 +132,11 @@
           </div>
         </div>
       </div>
-      <div class="footer-banner">
-        <img src="/static/images/banner.jpg" alt="">
+      <div class="footer-banner" v-if="pics.length">
+        <div v-for="pic in pics">
+          <a v-if="pic.link" :href="pic.link"><img :src="pic.image" alt=""></a>
+          <span v-else><img :src="pic.image" alt=""></span>
+        </div>
       </div>
     </div>
     <div class="footer">
@@ -160,6 +164,8 @@ export default {
 
   data () {
     return {
+      tips: [],
+      pics: [],
       loading: false,
       isReleaseProductsCount: 0,
       noReleaseProductsCount: 0,
@@ -218,33 +224,33 @@ export default {
           //   path: '/operation/users/overview'
           // }
         ]
-      },
-      info: {
-        notify: [
-          {
-            _id: 1,
-            tilte: '',
-            link: '##',
-            language: 'Zh-cn',
-            ttl: 0,
-            pubDate: ''
-          }
-        ],
-        articles: [
-          {
-            _id: 1,
-            title: '',
-            link: '',
-            description: '',
-            content: '',
-            language: 'Zh-cn',
-            ttl: 12345678,
-            pubDate: '',
-            image: 'http://image.xlink.cn/image.jpg',
-            category: [],
-            tags: []
-          }
-        ]
+      // },
+      // info: {
+      //   notify: [
+      //     {
+      //       _id: 1,
+      //       tilte: '',
+      //       link: '##',
+      //       language: 'Zh-cn',
+      //       ttl: 0,
+      //       pubDate: ''
+      //     }
+      //   ],
+      //   articles: [
+      //     {
+      //       _id: 1,
+      //       title: '',
+      //       link: '',
+      //       description: '',
+      //       content: '',
+      //       language: 'Zh-cn',
+      //       ttl: 12345678,
+      //       pubDate: '',
+      //       image: '',
+      //       category: [],
+      //       tags: []
+      //     }
+      //   ]
       }
     }
   },
@@ -301,6 +307,11 @@ export default {
   route: {
     data () {
       this.getProducts()
+      this.$http.get('/static/platform_info.json').then((res) => {
+        console.log(res)
+        this.tips = res.data.notify
+        this.pics = res.data.articles
+      })
     }
   },
   methods: {
@@ -414,7 +425,7 @@ export default {
     .body
       width 100%
       height 100%
-      padding 15px
+      padding 4px
       box-sizing border-box
       overflow auto
       .dev-box

@@ -1,18 +1,9 @@
 {
-	"notify": [
-		{
-			"_id": "1",
-			"tilte": "标题",
-			"link": "点击跳转链接",
-			"language": "Zh-cn",
-			"ttl": 0,
-			"pubDate": "2016-09-26T12:00:00Z"
-		}
-	],
+	"notify": [],
 	"articles": [
 		{
-			"link": "点击跳转链接",
-			"image": "http://image.xlink.cn/image.jpg"
+			"link": "",
+			"image": "/static/images/banner.jpg"
 		}
 	]
 }
