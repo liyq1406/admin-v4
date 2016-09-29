@@ -19,9 +19,11 @@ export default {
 
 <style lang="stylus">
 .alert-bar
-  background-color #FF9750
-  color #FFF
-  text-align center
+  background-color #FCF8E3
+  border 1px solid #FAEBCC
+  margin 4px 0 0 4px
+  padding 0 15px
+  color #AD7A3B
   height 36px
   line-height 36px
 </style>

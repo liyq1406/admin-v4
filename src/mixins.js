@@ -100,7 +100,7 @@ export var globalMixins = {
           default:
             this.showNotice({
               type: 'error',
-              content: locales[Vue.config.lang].errors[err.data.error.code] || `请求出错，错误码${err.data.error.code}`
+              content: locales[Vue.config.lang].errors[err.data.error.code] || '请求出错'
             })
             // this.showError(err.data.error)
         }

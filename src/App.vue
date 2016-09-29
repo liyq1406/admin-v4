@@ -1,6 +1,5 @@
 <template>
   <div :class="{'auth-page':hasLayout('auth'), 'has-topbar':hasLayout('topbar'), 'has-sidebar':hasLayout('sidebar'), 'loading-resource':loading}" class="page-container">
-    <pre v-show="false">{{loadingInfo}}</pre>
     <template v-if="hasLayout('auth')">
       <header class="auth-header" transition="header" transition-mode="out-in">
         <div class="logo-auth">
@@ -97,11 +96,7 @@ export default {
 
   computed: {
     loadingInfo () {
-      // alert(1111)
       let result = this.loadingCorp || this.loadingProducts
-      if (this.hasLayout('topbar')) {
-        this.setLoadingStatus(result)
-      }
       return result
     }
   },
@@ -113,6 +108,12 @@ export default {
         this.getProducts()
         this.getPlugins()
         this.getCorpInfo()
+      }
+    },
+
+    loadingInfo () {
+      if (this.hasLayout('topbar')) {
+        this.setLoadingStatus(this.loadingInfo)
       }
     }
   },

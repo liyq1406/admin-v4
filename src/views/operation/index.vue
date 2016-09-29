@@ -3,7 +3,7 @@
     <sidebar :nav="secNav"></sidebar>
 
     <section class="main-wrap" v-if="showContent">
-      <alert-bar :msg="alertMsg"></alert-bar>
+      <alert-bar :msg="alertMsg" v-if="!loading"></alert-bar>
       <!-- Start: 路由视图 -->
       <router-view transition="view" transition-mode="out-in" class="view"></router-view>
       <!-- End: 路由视图 -->
@@ -19,8 +19,6 @@ import Sidebar from 'components/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'
-// import api from 'api'
-// import _ from 'lodash'
 import store from 'store/index'
 
 export default {
@@ -139,27 +137,6 @@ export default {
         }
 
         switch (item.plugin) {
-          // 用户自定义 iOS 插件不予展示在侧栏
-          // case 'ios': // iOS
-          //   sub.icon = 'apple'
-          //   sub.subs = [{
-          //     alias: 'settings',
-          //     url: `/plugins/ios/${item.id}/settings`
-          //   }]
-          //   break
-
-          // 用户自定义 iOS 插件不予展示在侧栏
-          // case 'android': // Android
-          //   sub.icon = 'android'
-          //   sub.subs = [{
-          //     alias: 'settings',
-          //     url: `/plugins/android/${item.id}/settings`
-          //   }, {
-          //     alias: 'version',
-          //     url: `/plugins/android/${item.id}/version`
-          //   }]
-          //   break
-
           case 'web': // Web
             sub.icon = 'internet-explorer'
             sub.label = item.name
@@ -169,16 +146,6 @@ export default {
             //   url: `/plugins/web/${item.id}/settings`
             // }]
             break
-
-          // 用户自定义微信插件不予展示在侧栏
-          // case 'wechat': // Wechat
-          //   sub.icon = 'wechat'
-          //   sub.subs = [{
-          //     alias: 'settings',
-          //     url: `/plugins/wechat/${item.id}/settings`
-          //   }]
-          //   break
-
           case 'recipe': // 云菜谱
             sub.icon = 'cutlery'
             sub.alias = 'recipes'
@@ -248,8 +215,6 @@ export default {
             break
           case 'dealer': // 经销商管理
             sub.icon = 'sitemap'
-            // sub.alias = 'list'
-            // sub.url = `plugins/dealer/${item.id}/list`
             sub.subs = [{
               alias: 'list',
               url: `/plugins/dealer/${item.id}/list`
@@ -275,35 +240,43 @@ export default {
             break
           default:
         }
-        if (!exists(excluded, item.plugin) && item.enable && item.platform_status === 2) {
+
+        // 插件出现在侧栏的条件为：
+        // 1: 不在指定的排除列表里面
+        // 2：应用市场中状态为开启
+        // 3：认证状态为已认证(2)或半认证(3)
+        if (!exists(excluded, item.plugin) && item.enable && item.platform_status > 1) {
           result.subs.push(sub)
         }
       })
-
-      // console.log(subs.slice(1, subs.length))
-      // this.nav.subs.forEach((item, index) => {
-      //   var reg = new RegExp(`${result.url}/${item.alias}`, 'i')
-      //   this.nav.subs.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
-      // })
-      // reuslt.subs.forEach((item, index) => {
-      //   var reg = new RegExp(`${this.secNav.url}/${item.alias}`, 'i')
-      //   this.secNav.subs.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
-      // })
       return result
+    }
+  },
+
+  watch: {
+    releasedProducts () {
+      this.init()
+    }
+  },
+
+  route: {
+    data () {
+      this.init()
     }
   },
 
   ready () {
     this.showContent = true
-    // var subs = []
-    // subs.push(MAIN_NAV.operation.subs[0])
-    // console.log(this.subs)
-    //
-    // this.nav = MAIN_NAV.operation
-    // this.secNav.subs.forEach((item, index) => {
-    //   var reg = new RegExp(`${this.secNav.url}/${item.alias}`, 'i')
-    //   this.secNav.subs.$set(index, _.assign({}, item, {unfold: reg.test(this.$route.path)}))
-    // })
+  },
+
+  methods: {
+    init () {
+      if (!this.releasedProducts.length && this.$route.path === '/operation/overview') {
+        this.showAlertBar(this.locales.data.ALERT_MESSAGES['not_published'])
+      } else {
+        this.removeAlertBar()
+      }
+    }
   }
 }
 </script>

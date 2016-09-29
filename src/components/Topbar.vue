@@ -12,7 +12,10 @@
 
     <!-- Start: 用户导航 -->
     <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" class="user-nav">
-      <span class="user-name"><i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i>{{ currentMember.name }}</span>
+      <!-- DEMO环境成员默认为已认证 -->
+      <span class="user-name" v-if="isDemo"><i class="badge badge-authorized">已认证</i>{{ currentMember.name }}</span>
+      <!-- 正式环境成员认证状态动态读取 -->
+      <span class="user-name" v-else>{{ currentMember.name }}<i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
       <i class="arrow-down"></i>
       <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" v-show="isShowUserNav" class="sec-nav">
         <div class="user-info">
@@ -120,9 +123,6 @@ export default {
     // 遮罩出现的原因
     reason () {
       let result = ''
-      if (this.releasedProducts.length === 0) {
-        result = '暂未发布产品'
-      }
       if (this.corp.status === 0) {
         result = '暂无使用权限'
       }
@@ -151,6 +151,10 @@ export default {
   },
 
   watch: {
+    reason () {
+      this.init()
+    },
+
     isPathInOperation () {
       this.init()
     }
@@ -161,10 +165,12 @@ export default {
      * 初始化
      */
     init () {
-      if (!this.loading && this.reason) {
-        this.showAlertMask()
-      } else {
-        this.removeAlertMask()
+      if (this.isPathInOperation) {
+        if (!this.loading && this.reason) {
+          this.showAlertMask()
+        } else {
+          this.removeAlertMask()
+        }
       }
     },
 
@@ -182,10 +188,16 @@ export default {
      */
     quit () {
       let temp = window.localStorage.getItem(`${this.corp.id}hideAlertMask`)
-      window.localStorage.clear()
       if (temp) {
         window.localStorage.setItem(`${this.corp.id}hideAlertMask`, temp)
       }
+      // window.localStorage.clear()
+      window.localStorage.removeItem('memberId')
+      window.localStorage.removeItem('corpId')
+      window.localStorage.removeItem('accessToken')
+      window.localStorage.removeItem('refreshToken')
+      window.localStorage.removeItem('expireIn')
+      window.localStorage.removeItem('expireAt')
       this.showNotice({
         type: 'info',
         content: '您已退出登录'
@@ -344,19 +356,19 @@ export default {
 
     .badge
       display inline-block
-      line-height 20px
-      height 20px
+      line-height 17px
+      height 17px
       color #FFF
-      background-color #CCC
+      background-color #CECECE
       padding 0 10px
-      font-size 12px
+      font-size 11px
       margin-right 5px
 
     .badge-authorized
-      background-color #5CD35E
+      background-color #56AF2B
 
     .badge-vip
-      background-color #FFBF4D
+      background-color #FFBA00
 
   .arrow-down
     triangle #777 8px down

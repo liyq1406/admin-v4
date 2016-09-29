@@ -202,6 +202,7 @@ export default {
 
     &:hover
       background #E5E5E5
+      text-decoration none
 
     &.v-link-active
       padding-left 16px

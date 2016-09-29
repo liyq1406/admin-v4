@@ -22,7 +22,7 @@
               <div class="device-list-box">
                 <div class="action-bar">
                   <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)">
-                    <x-select width="130px" :label="queryType.label" size="small">
+                    <x-select width="100px" :label="queryType.label" size="small">
                       <select v-model="queryType">
                         <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
                       </select>
@@ -627,11 +627,11 @@ export default {
     .action-bar
       padding-top 0
     .search-box-input
-      width 144px
+      width 174px
       overflow hidden
 
       input
-        width 144px
+        width 174px
     .table-stripe tbody tr.selected:nth-child(2n+1) td
     .table-stripe tbody tr.selected td
       background #c0252e

@@ -33,7 +33,7 @@ let apiServer = ({
     api: `${protocol}//dev-man.360tj.com:8016`,
     plugin: `${protocol}://dev-man.360tj.com:8016`
   }
-})[process.env.API_SERVER || 'api2']
+})[process.env.API_SERVER || 'test']
 
 export const API_SERVER = {
   // 默认
@@ -119,6 +119,7 @@ export const MAIN_NAV = {
     }, {
       alias: 'linkage', // 智能互联
       icon: 'exchange',
+      unfold: true, // 展开子级菜单
       subs: [{
         alias: 'settings',
         url: '/linkage/settings'
@@ -137,6 +138,7 @@ export const MAIN_NAV = {
       }]
     }, {
       alias: 'firmware', // 固件管理
+      unfold: true, // 展开子级菜单
       icon: 'file-code-o',
       subs: [{
         alias: 'add',
@@ -150,6 +152,7 @@ export const MAIN_NAV = {
       }]
     }, {
       alias: 'data', // 数据服务
+      unfold: true, // 展开子级菜单
       icon: 'database',
       subs: [{
         alias: 'tables',
@@ -164,6 +167,7 @@ export const MAIN_NAV = {
     // 暂时隐藏
     // }, {
     //   alias: 'shopping', // 在线购买
+    //   unfold: true, // 展开子级菜单
     //   icon: 'shopping-cart',
     //   subs: [{
     //     alias: 'cart',
@@ -174,6 +178,7 @@ export const MAIN_NAV = {
     //   }]
     }, {
       alias: 'settings', // 系统设置
+      unfold: true, // 展开子级菜单
       icon: 'cog',
       subs: [{
         alias: 'users',
