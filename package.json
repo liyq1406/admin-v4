@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "node build/dev-server.js",
     "build": "node build/build.js",
-    "test": "",
+    "test": "mocha --compilers js:babel-core/register --colors -w ./test/unit/*.spec.js",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs"
   },
   "dependencies": {
@@ -15,10 +15,7 @@
     "date-format": "0.0.2",
     "echarts": "^2.2.8",
     "font-awesome": "^4.5.0",
-    "g2": "^1.2.5",
     "lodash": "^4.9.0",
-    "mockjs": "^1.0.1-beta2",
-    "moment": "^2.14.1",
     "promise": "^7.1.1",
     "socket.io-client": "^1.4.5",
     "tinymce": "^4.3.12",
@@ -36,6 +33,7 @@
     "babel-plugin-transform-runtime": "^6.0.0",
     "babel-preset-es2015": "^6.0.0",
     "babel-preset-stage-2": "^6.0.0",
+    "chai": "^3.5.0",
     "connect-history-api-fallback": "^1.1.0",
     "css-loader": "^0.23.0",
     "eslint": "^2.0.0",
@@ -56,6 +54,7 @@
     "imports-loader": "^0.6.5",
     "json-loader": "^0.5.4",
     "minimist": "^1.2.0",
+    "mocha": "^3.1.0",
     "mockjs": "^1.0.1-beta2",
     "ora": "^0.2.0",
     "shelljs": "^0.6.0",

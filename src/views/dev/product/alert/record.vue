@@ -260,12 +260,12 @@
           if (res.status === 200) {
             this.alerts = res.data.list.map((item) => {
               // 计算已读告警持续时间
-              let begin = new Date((new Date(item.create_date)).getTime() + 3600 * 8 * 1000)
+              let begin = new Date((new Date(item.create_date)).getTime())
               // 默认为未读，时间从当前算起
-              let end = new Date()
+              let end = new Date(+new Date() + 3600 * 8 * 1000)
               // 如果为已读，则从已读时间算起
               if (item.is_read) {
-                end = new Date((new Date(item.read_time)).getTime() + 3600 * 8 * 1000)
+                end = new Date((new Date(item.read_time)).getTime())
               }
               // 持续时间
               item.lasting = end.getTime() - begin.getTime()

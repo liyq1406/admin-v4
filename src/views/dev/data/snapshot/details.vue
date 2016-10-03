@@ -92,7 +92,8 @@
                   <button style="margin-left:90px" class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
                   <div class="chart-box">
                     <div class="panel-bd with-loading">
-                      <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart>
+                      <!-- <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart> -->
+                      <line :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line>
                       <div class="icon-loading" v-show="loadingProductTrends">
                         <i class="fa fa-refresh fa-spin"></i>
                       </div>
@@ -159,8 +160,8 @@ import Vue from 'vue'
 import locales from 'consts/locales/index'
 import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-// import dateFormat from 'date-format'
-import LineChart from 'components/charts/Line'
+// import LineChart from 'components/charts/Line'
+import Line from 'components/echarts/Line'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
@@ -178,7 +179,8 @@ export default {
   components: {
     Modal,
     RadioButtonGroup,
-    LineChart,
+    // LineChart,
+    Line,
     SearchBox,
     Pager,
     IntelligentTable,
@@ -279,7 +281,7 @@ export default {
   computed: {
     deviceThumb () {
       let pics = this.product.pics
-      return (pics && pics.length) ? pics[0] : '/static/images/device_thumb.png'
+      return (pics && pics.length && pics[0] !== '') ? pics[0] : '/static/images/device_thumb.png'
     },
     tdnames () {
       var result = []

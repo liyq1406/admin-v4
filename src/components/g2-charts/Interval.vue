@@ -5,7 +5,6 @@
 </template>
 
 <script>
-// import G2 from 'g2'
 import _ from 'lodash'
 import getMessageQueue from 'src/utils/mq.js'
 

@@ -92,6 +92,7 @@
     },
 
     ready () {
+      window.localStorage.setItem('memberId', '123')
       this.model.account = 'demo'
       this.model.password = 'demo'
       this.onSubmit()

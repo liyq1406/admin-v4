@@ -57,7 +57,6 @@ import Breadcrumb from 'components/Breadcrumb'
 import { globalMixins } from 'src/mixins'
 import { formatDate } from 'src/filters'
 import Map from 'components/Map'
-// import dateFormat from 'date-format'
 
 export default {
   name: 'Device',

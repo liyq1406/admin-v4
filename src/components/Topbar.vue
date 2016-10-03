@@ -5,7 +5,8 @@
     <nav class="nav-header">
       <!-- <pre>{{mainNav | json}}</pre> -->
       <ul>
-        <li v-for="link in mainNav"><a v-link="{path: link.url}"><span class="link-text">{{ $t('ui.main_nav.' + link.alias + '.label') }}</span></a></li>
+        <li><a v-link="{path: '/dev'}"><span class="link-text">{{ $t('ui.main_nav.dev.label') }}</span></a></li>
+        <li><a v-link="{path: '/operation'}" @click.prevent="enterOperation"><span class="link-text">{{ $t('ui.main_nav.operation.label') }}</span></a></li>
       </ul>
     </nav>
     <!-- End: 主导航 -->
@@ -69,7 +70,7 @@
 <script>
 import store from 'store/index'
 import { globalMixins } from 'src/mixins'
-import { MAIN_NAV, IS_DEMO } from 'consts/config'
+import { IS_DEMO } from 'consts/config'
 import { showAlertMask, removeAlertMask } from 'store/actions/system'
 
 export default {
@@ -97,8 +98,7 @@ export default {
   data () {
     return {
       isDemo: IS_DEMO,
-      isShowUserNav: false,
-      mainNav: MAIN_NAV
+      isShowUserNav: false
     }
   },
 
@@ -168,6 +168,17 @@ export default {
         } else {
           this.removeAlertMask()
         }
+      }
+    },
+
+    /**
+     * 进入运营平台
+     */
+    enterOperation () {
+      if (this.corp.status === 0) {
+        window.open('http://ap.xlink.cn/#!/auto-login')
+      } else {
+        this.$route.router.go('/operation/overview')
       }
     },
 

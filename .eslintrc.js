@@ -9,7 +9,12 @@ module.exports = {
   globals: {
     'io': true,
     'alert': true,
-    'AMap': true
+    'AMap': true,
+    'describe': true,
+    'before': true,
+    'it': true,
+    'expect': true,
+    'sinon': true
   },
   // add your custom rules here
   'rules': {

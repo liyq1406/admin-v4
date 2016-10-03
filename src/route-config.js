@@ -1,5 +1,7 @@
 import api from 'api'
 import getMessageQueue from 'src/utils/mq.js'
+import { IS_DEMO } from 'consts/config'
+
 /**
  * 判断路由是否为非管理界面页面
  * @param  {String}  path 路由
@@ -1402,14 +1404,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 用户行为分析
-        'users/analysis': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/user/analysis'))
-            }, 'admin')
-          }
-        },
         // 用户详情
         'users/details/:id': {
           component (resolve) {
@@ -1472,14 +1466,6 @@ let configRouter = (router) => {
         },
 
         // -------------------------智能维保-------------------------
-        // 概览
-        'plugins/warranty/:app_id/overview': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/overview'))
-            }, 'admin')
-          }
-        },
         // 延保工单列表
         'plugins/warranty/:app_id/heat': {
           component (resolve) {
@@ -1612,7 +1598,7 @@ let configRouter = (router) => {
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
     '/operation/plugins/recipes/:app_id/recipes/:id/edit': '/operation/plugins/recipes/:app_id/recipes/:id/edit/basic-info',
-    '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/extended-warranties',
+    '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/repair',
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
@@ -1625,7 +1611,9 @@ let configRouter = (router) => {
   router.beforeEach((transition) => {
     if (!window.localStorage.getItem('accessToken')) {
       if (!isAccessAuthPage(transition.to.path)) {
-        router.replace('/login')
+        if (!IS_DEMO) {
+          router.replace('/login')
+        }
       }
     }
     // throttle(transition)

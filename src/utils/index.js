@@ -152,3 +152,28 @@ export const isEmpty = (val) => {
       return false
   }
 }
+
+/**
+ * 异步加载脚本
+ * @param  {String}   url      脚本地址
+ * @param  {Function} callback 回调函数
+ */
+export const loadScript = (url, callback) => {
+  let script = document.createElement('script')
+  script.type = 'text/javascript'
+
+  if (script.readyState) { // IE
+    script.onreadystatechange = () => {
+      if (script.readyState === 'loaded' || script.readyState === 'complete') {
+        script.onreadystatechange = null
+        callback()
+      }
+    }
+  } else { // 其他浏览器
+    script.onload = () => {
+      callback()
+    }
+  }
+  script.src = url
+  document.getElementsByTagName('head')[0].appendChild(script)
+}

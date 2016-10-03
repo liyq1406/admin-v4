@@ -171,7 +171,6 @@
 import api from 'api'
 import _ from 'lodash'
 import RadioGroup from 'components/RadioGroup'
-// import dateFormat from 'date-format'
 import LineChart from 'components/charts/Line'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'

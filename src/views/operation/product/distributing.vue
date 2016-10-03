@@ -98,7 +98,8 @@ export default {
     },
     tables () {
       var result = []
-      this.dataPer.map((item) => {
+      this.dataPer.forEach((item) => {
+        if (!item.value) return
         var distribute = {
           region: item.name,
           count: item.value,

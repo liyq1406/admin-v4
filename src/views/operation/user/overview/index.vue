@@ -24,7 +24,6 @@
 
 <script>
 // import api from 'api'
-// import G2 from 'g2'
 import Statistic from 'components/Statistic'
 import { globalMixins } from 'src/mixins'
 import UserTrend from './user-trend'

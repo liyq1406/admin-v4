@@ -213,7 +213,6 @@ import TimeLine from 'components/g2-charts/TimeLine'
 import Modal from 'components/Modal'
 import { formatDate } from 'src/filters'
 import AreaSelect from 'components/AreaSelect'
-// import Mock from 'mockjs'
 import _ from 'lodash'
 import { createDayRange } from 'utils'
 

@@ -45,7 +45,7 @@ import Modal from './components/Modal'
 import Topbar from 'components/Topbar'
 import Toast from './components/Toast'
 import _ from 'lodash'
-import { API_SERVER } from 'consts/config'
+import { API_SERVER, IS_DEMO } from 'consts/config'
 
 export default {
   name: 'App',
@@ -207,7 +207,9 @@ export default {
         //   type: 'error',
         //   content: '暂无当前用户信息'
         // })
-        this.$route.router.go('/login')
+        if (!IS_DEMO) {
+          this.$route.router.go('/login')
+        }
       })
     },
 

@@ -6,7 +6,6 @@
 </template>
 
 <script>
-// import G2 from 'g2'
 import mapData from './map-data.json'
 import _ from 'lodash'
 import Parser from 'components/charts/resource/cityCenterParser'

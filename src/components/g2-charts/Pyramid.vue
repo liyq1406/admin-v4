@@ -3,7 +3,6 @@
 </template>
 
 <script>
-// import G2 from 'g2'
 import _ from 'lodash'
 
 export default {

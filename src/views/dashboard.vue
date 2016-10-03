@@ -128,7 +128,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary " @click="gotoOpear('/operation/overview')">立即进入 >></button>
+            <button class="btn btn-primary " @click="enterOperation">立即进入 >></button>
           </div>
         </div>
       </div>
@@ -379,15 +379,13 @@ export default {
       this.$route.router.go(path)
     },
     /**
-     * 切换路由到..
-     * @param  {[type]} path [description]
-     * @return {[type]}      [description]
+     * 进入运营平台
      */
-    gotoOpear (path) {
+    enterOperation () {
       if (this.corp.status === 0) {
-        window.location.href = 'http://ap.xlink.cn/#!/auto-login'
+        window.open('http://ap.xlink.cn/#!/auto-login')
       } else {
-        this.$route.router.go(path)
+        this.$route.router.go('/operation/overview')
       }
     }
   }
