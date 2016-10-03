@@ -10,6 +10,7 @@
         <Guide></Guide>
       </div>
       <div class="notice-box">
+         <!-- 最新公告 -->
         <notice></notice>
       </div>
     </div>
@@ -17,54 +18,40 @@
 </template>
 
 <script>
-  import Jumbotron from './components/Jumbotron'
-  import Guide from './components/Guide'
-  import Notice from './components/Notice'
-  import Footer from 'components/Footer'
+import Jumbotron from './components/Jumbotron'
+import Guide from './components/Guide'
+import Notice from './components/Notice'
 
-  export default {
-    name: 'home',
+export default {
+  name: 'Home',
 
-    layout: 'admin',
-
-    // mixins: [globalMixins, pluginFactoryMixin],
-
-    // vuex: {
-    //   actions: {
-    //     createPlugin,
-    //     updatePlugin,
-    //     removePlugin
-    //   }
-    // },
-
-    components: {
-      Jumbotron,
-      Guide,
-      Notice,
-      'x-footer': Footer
-    }
+  components: {
+    Jumbotron,
+    Guide,
+    Notice
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../../../assets/stylus/common'
+@import '../../../assets/stylus/common'
 
-  .home
+.home
+  width 100%
+  padding 20px 15px
+  box-sizing border-box
+  .part2
     width 100%
-    padding 20px 15px
+    position relative
+    padding-right 330px
     box-sizing border-box
-    .part2
+    .develop-box
       width 100%
-      position relative
-      padding-right 330px
-      box-sizing border-box
-      .develop-box
-        width 100%
-        min-height 430px
-      .notice-box
-        position absolute
-        right 0
-        top 0
-        width 310px
-        height 400px
+      min-height 430px
+    .notice-box
+      position absolute
+      right 0
+      top 0
+      width 310px
+      height 400px
 </style>
