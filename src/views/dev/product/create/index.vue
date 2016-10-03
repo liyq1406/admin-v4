@@ -50,6 +50,12 @@ export default {
       this.currStep = 3
       this.$route.router.replace({path: 'completion'})
     },
+
+    /**
+     * 下一步
+     * @param {String} step 步骤
+     * @param {Any} data 数据
+     */
     next (step, data) {
       switch (step) {
         case 'init':

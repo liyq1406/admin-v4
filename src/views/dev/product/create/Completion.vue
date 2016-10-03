@@ -13,11 +13,11 @@
                 </li>
                 <li>
                   <div class="label">产品类型：</div>
-                  <div class="info">{{ getProductModeByValue(product.type) }}</div>
+                  <div class="info">{{ getTypeByValue(product.type) }}</div>
                 </li>
                 <li>
                   <div class="label">连接类型：</div>
-                  <div class="info">{{ getLabelByValue(product.link_type) }}</div>
+                  <div class="info">{{ getLinkTypeByValue(product.link_type) }}</div>
                 </li>
                 <li>
                   <div class="label">产品描述：</div>
@@ -106,27 +106,20 @@ export default {
      * @author shengzhi
      * @param {Number} val 值
      */
-    getLabelByValue (val) {
+    getLinkTypeByValue (val) {
       return this.locales.data.DEVICE_TYPES[val - 1] || '--'
     },
+
     /**
      * 根据产品类型值获取 label
      * @author shengzhi
      * @param {Number} val 值
      */
-    getProductModeByValue (val) {
-      if (!this.locales.data.PRODUCT_TYPES) {
-        return
-      }
-      let ret = ''
+    getTypeByValue (val) {
       let type = _.find(this.locales.data.PRODUCT_TYPES, (item) => {
         return item.value === val
       })
-
-      if (type) {
-        ret = type.label
-      }
-      return ret
+      return type && type.label || ''
     }
   }
 }

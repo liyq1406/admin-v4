@@ -27,27 +27,25 @@
       </div>
     </div>
     <div class="actions">
-      <button class="btn btn-primary btn-lg" @click="goInfo">立即创建产品</button>
+      <button class="btn btn-primary btn-lg" @click="goCreation">立即创建产品</button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
-  data () {
-    return {
-    }
-  },
-  computed: {},
   ready () {
     this.$emit('next', 'init')
   },
+
   methods: {
-    goInfo () {
+    /**
+     * 跳转至创建产品流程
+     */
+    goCreation () {
       this.$emit('next', 'guide')
     }
-  },
-  components: {}
+  }
 }
 </script>
 
