@@ -33,7 +33,7 @@
                 <table class="table table-stripe table-bordered">
                   <thead>
                     <tr>
-                      <th>设备ID</th>
+                      <th class="wp44">设备ID</th>
                       <th>设备标识(MAC)</th>
                     </tr>
                   </thead>
@@ -53,7 +53,7 @@
                     </tr>
                   </tbody>
                 </table>
-                <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="getDevices"></pager>
+                <pager v-if="total > countPerPage" :total="total" :current="currentPage" :count-per-page="countPerPage" :simple="true" @page-update="onPageUpdate"></pager>
               </div>
             </div>
             <div class="panel-bd layout-right">
@@ -499,7 +499,7 @@ export default {
     // 搜索
     handleSearch () {
       if (this.query.length === 0) {
-        this.getDevices()
+        this.getDevices(true)
       }
     },
     // 获取当前产品快照规则
@@ -549,9 +549,15 @@ export default {
     //     this.buildTable()
     //   })
     // },
+
+    onPageUpdate (page) {
+      this.currentPage = page
+      this.getDevices()
+    },
+
     // 获取设备列表
-    getDevices (querying) {
-      if (typeof querying !== 'undefined') {
+    getDevices (reset) {
+      if (reset) {
         this.currentPage = 1
       }
       // this.loadingData = true
