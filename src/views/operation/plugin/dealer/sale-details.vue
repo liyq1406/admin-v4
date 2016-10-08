@@ -171,7 +171,6 @@
 import api from 'api'
 import _ from 'lodash'
 import RadioGroup from 'components/RadioGroup'
-import LineChart from 'components/charts/Line'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
@@ -195,7 +194,6 @@ export default {
     Modal,
     RadioGroup,
     AreaSelect,
-    LineChart,
     SearchBox,
     'x-select': Select,
     Pager,

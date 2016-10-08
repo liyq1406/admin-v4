@@ -4,17 +4,14 @@
       <h2>{{product.name}}设备快照</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="snapshot-details" v-if="!deviceDatas.length && !loadingData">
+    <div class="snapshot-details" v-if="!devices.length && !loadingData">
       <div class="panel">
         <x-alert :cols="7">
           <p>该产品暂无设备</p>
         </x-alert>
       </div>
     </div>
-    <div class="snapshot-details with-loading" v-else>
-      <div class="icon-loading" v-show="loadingData">
-        <i class="fa fa-refresh fa-spin"></i>
-      </div>
+    <div class="snapshot-details" v-else>
       <div class="row">
         <div class="col-24">
           <div class="panel row">
@@ -38,15 +35,15 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr v-for="deviceData in deviceDatas" :class="{'selected': deviceData.selected}" @click="selectedDeviceDataEvent(deviceData)">
-                      <td>{{ deviceData.id }}</td>
+                    <tr v-for="device in devices" :class="{'selected': device.selected}" @click="selectedDeviceDataEvent(device)">
+                      <td>{{ device.id }}</td>
                       <td>
                         <div class="text-overflow w110">
-                          {{ deviceData.mac }}
+                          {{ device.mac }}
                         </div>
                       </td>
                     </tr>
-                    <tr v-if="deviceDatas.length === 0">
+                    <tr v-if="devices.length === 0">
                       <td colspan="2" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
                         <div v-else class="tips-null">暂无数据</div>
                       </td>
@@ -78,6 +75,7 @@
                           <span v-if="selectedDeviceData.is_online=== true">在线</span>
                           <span v-else>下线</span>
                         </p>
+                        <button class="btn btn-ghost btn-sm mt10" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
                       </div>
                     </div>
                     <div class="operation-box col-9">
@@ -89,20 +87,11 @@
                       </div>
                     </div>
                   </div>
-                  <button style="margin-left:90px" class="btn btn-ghost btn-sm" @click="showEditModal=true"><i class="fa fa-edit"></i>选择显示的索引数据</button>
-                  <div class="chart-box">
-                    <div class="panel-bd with-loading">
-                      <!-- <line-chart :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line-chart> -->
-                      <line :series="snapshotSeries" :x-axis-data="snapshotXAxisData" v-ref:trend-chart></line>
-                      <div class="icon-loading" v-show="loadingProductTrends">
-                        <i class="fa fa-refresh fa-spin"></i>
-                      </div>
-                    </div>
-                  </div>
+                  <div class="chart-box" v-chart="chartOptions" :loading="loadingData"></div>
                 </div>
                 <div class="device-data-table-box">
                   <div class="title">
-                    <span>设备数据明细 : </span>
+                    <span>设备数据明细: </span>
                   </div>
                   <div class="table-box">
                     <intelligent-table :headers.sync="snapshotHeader" :tables="snapshots | limitBy countPerPage2 (currentPage2-1)*countPerPage2"></intelligent-table>
@@ -160,8 +149,6 @@ import Vue from 'vue'
 import locales from 'consts/locales/index'
 import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-// import LineChart from 'components/charts/Line'
-import Line from 'components/echarts/Line'
 import Pager from 'components/Pager'
 import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
@@ -170,6 +157,7 @@ import IntelligentTable from 'components/IntelligentTable'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
 import Breadcrumb from 'components/Breadcrumb'
+import _ from 'lodash'
 
 export default {
   name: 'TableDetails',
@@ -179,8 +167,6 @@ export default {
   components: {
     Modal,
     RadioButtonGroup,
-    // LineChart,
-    Line,
     SearchBox,
     Pager,
     IntelligentTable,
@@ -221,7 +207,7 @@ export default {
       countPerPage2: 10,
       countPerPage3: 10,
       product: {},
-      deviceDatas: [
+      devices: [
         // {
         //   id: '1999246249',
         //   mac: '163D18E5B72E',
@@ -279,86 +265,35 @@ export default {
   },
 
   computed: {
-    deviceThumb () {
-      let pics = this.product.pics
-      return (pics && pics.length && pics[0] !== '') ? pics[0] : '/static/images/device_thumb.png'
-    },
-    tdnames () {
-      var result = []
-      this.snapshotHeader.map((item) => {
-        result.push(item.key + '')
-      })
-      return result
-    },
-    selectedDeviceData () {
-      var result = {}
-      this.deviceDatas.map((deviceData) => {
-        if (deviceData.selected) {
-          result = deviceData
-        }
-      })
-      return result
-    },
-    queryCondition () {
-      var condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
-        limit: this.countPerPage,
-        offset: (this.currentPage - 1) * this.countPerPage,
-        query: {}
+    // 图表配置
+    chartOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 70,
+          y: 32,
+          x2: 10
+        },
+        legend: {
+          y: 5,
+          data: this.legends
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: this.xAxisData
+        }],
+        yAxis: [{
+          type: 'value'
+        }],
+        series: this.series
       }
-      if (this.query.length > 0) {
-        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
-      }
-      return condition
     },
-
-    // 图表横轴数据
-    snapshotXAxisData () {
-      // var today = new Date()
-      var now = Date.parse(new Date())
-      var result = []
-      for (var i = this.period * 24 - 1; i >= 0; i--) {
-        // result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-        var date = new Date(now - i * 3600 * 1000)
-        var hour = date.getHours() + 1
-        result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
-      }
-      return result
-    },
-
-    selectedDatapoints () {
-      return this.datapoints.filter((item) => {
-        return item.selected
-      }).sort((a, b) => {
-        return a.index - b.index
-      })
-    },
-
-    snapshotHeader () {
-      var result = [
-        {
-          key: 'snapshot_date', // 与tables的key对应
-          title: '时间'
-        }
-      ]
-      this.selectedDatapoints.map((item) => {
-        var obj = {
-          key: item.index,
-          title: `${item.index} (${item.description})`
-        }
-        result.push(obj)
-      })
-      return result
-    },
-
-    // snapshotTable () {
-    //   return this.snapshots.map((item) => {
-    //     this.snapshotTable.push(item)
-    //   })
-    // },
 
     // 趋势图表数据
-    snapshotSeries () {
+    series () {
       var result = []
       this.selectedDatapoints.forEach((item) => {
         result.push({
@@ -396,6 +331,89 @@ export default {
       return result
     },
 
+    // 图例
+    legends () {
+      return this.series.length > 0 ? _.map(this.series, 'name') : []
+    },
+
+    // 图表横轴数据
+    xAxisData () {
+      // var today = new Date()
+      var now = Date.parse(new Date())
+      var result = []
+      for (var i = this.period * 24 - 1; i >= 0; i--) {
+        // result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
+        var date = new Date(now - i * 3600 * 1000)
+        var hour = date.getHours() + 1
+        result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
+      }
+      return result
+    },
+
+    deviceThumb () {
+      let pics = this.product.pics
+      return (pics && pics.length && pics[0] !== '') ? pics[0] : '/static/images/device_thumb.png'
+    },
+    tdnames () {
+      var result = []
+      this.snapshotHeader.map((item) => {
+        result.push(item.key + '')
+      })
+      return result
+    },
+    selectedDeviceData () {
+      var result = {}
+      this.devices.map((device) => {
+        if (device.selected) {
+          result = device
+        }
+      })
+      return result
+    },
+    queryCondition () {
+      var condition = {
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        query: {}
+      }
+      if (this.query.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
+      }
+      return condition
+    },
+
+    selectedDatapoints () {
+      return this.datapoints.filter((item) => {
+        return item.selected
+      }).sort((a, b) => {
+        return a.index - b.index
+      })
+    },
+
+    snapshotHeader () {
+      var result = [
+        {
+          key: 'snapshot_date', // 与tables的key对应
+          title: '时间'
+        }
+      ]
+      this.selectedDatapoints.map((item) => {
+        var obj = {
+          key: item.index,
+          title: `${item.index} (${item.description})`
+        }
+        result.push(obj)
+      })
+      return result
+    },
+
+    // snapshotTable () {
+    //   return this.snapshots.map((item) => {
+    //     this.snapshotTable.push(item)
+    //   })
+    // },
+
     querySnapshotCondition () {
       var endtime = Date.parse(new Date())
       // 取当前开始到period天前的时间
@@ -422,9 +440,9 @@ export default {
 
   ready () {
     // 监听窗口尺寸变化
-    window.onresize = () => {
-      this.$refs.trendChart.chart.resize()
-    }
+    // window.onresize = () => {
+    //   this.$refs.trendChart.chart.resize()
+    // }
   },
   methods: {
     /**
@@ -567,11 +585,11 @@ export default {
             item.selected = false
           })
           res.data.list[0].selected = true
-          this.deviceDatas = []
-          this.deviceDatas = res.data.list
+          this.devices = []
+          this.devices = res.data.list
           this.total = res.data.count
         } else {
-          this.deviceDatas = []
+          this.devices = []
         }
         this.loadingData = false
         this.getSnapshot()
@@ -602,11 +620,11 @@ export default {
      * 选择数据端点事件
      * @return {[type]} [description]
      */
-    selectedDeviceDataEvent (deviceData) {
-      this.deviceDatas.map((item) => {
+    selectedDeviceDataEvent (device) {
+      this.devices.map((item) => {
         item.selected = false
       })
-      deviceData.selected = true
+      device.selected = true
       // this.getRule()
       this.getSnapshot()
     },
@@ -655,9 +673,8 @@ export default {
     .device-msg-box
       border 1px solid light-border-color
     .header-box
-      padding 15px 20px
+      padding-bottom 15px
       box-sizing border-box
-      height 90px
       overflow hidden
       .device-picture
         width 65px
@@ -667,7 +684,6 @@ export default {
           width 65px
           height 65px
       .device-base-msg
-        height 60px
         line-height 23px
         padding-left 10px
         box-sizing border-box
@@ -679,12 +695,12 @@ export default {
             width 60px
     .chart-box
       width 100%
-      padding-right 20px
       box-sizing border-box
     .device-data-table-box
       margin-top 20px
       .title
-        font-size 16px
+        font-size 14px
+        margin-bottom 5px
   .operation-box
     position relative
     height 70px

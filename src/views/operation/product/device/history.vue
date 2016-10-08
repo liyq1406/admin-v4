@@ -48,7 +48,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import LineChart from 'components/charts/Line'
 import Pager from 'components/Pager'
 import IntelligentTable from 'components/IntelligentTable'
 import api from 'src/api'
@@ -65,7 +64,6 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    LineChart,
     'pager': Pager,
     'x-table': Table,
     'intelligent-table': IntelligentTable,

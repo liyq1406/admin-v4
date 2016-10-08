@@ -124,7 +124,6 @@ import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import dateFormat from 'date-format'
-import LineChart from 'components/charts/Line'
 import { globalMixins } from 'src/mixins'
 
 export default {
@@ -135,7 +134,6 @@ export default {
   components: {
     Pager,
     RadioButtonGroup,
-    LineChart,
     'x-select': Select,
     SearchBox,
     ChinaHeatMap

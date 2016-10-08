@@ -239,7 +239,6 @@
   import api from 'api'
   import _ from 'lodash'
   import RadioGroup from 'components/RadioGroup'
-  import LineChart from 'components/charts/Line'
   import Pager from 'components/Pager'
   import Breadcrumb from 'components/Breadcrumb'
   import SearchBox from 'components/SearchBox'
@@ -260,7 +259,6 @@
       'x-alert': Alert,
       Modal,
       RadioGroup,
-      LineChart,
       SearchBox,
       InfoList,
       'x-select': Select,

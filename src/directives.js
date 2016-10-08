@@ -1,3 +1,6 @@
+import EventListener from './components/utils/EventListener'
+import echarts from 'echarts'
+
 /**
  * input/textarea占位符
  * @author shengzhi
@@ -213,14 +216,10 @@ export var stretch = {
     }
     var domInit = function (el) {
       var wrapDiv = document.createElement('div')
-      wrapDiv.style.width = '100%'
-      wrapDiv.style.height = 'auto'
-      wrapDiv.style.overflow = 'hidden'
+      wrapDiv.style.cssText = 'width: 100%; height: auto; overview: hidden;'
 
       var listDiv = document.createElement('div') // 为了计算el内容高度
-      listDiv.style.width = '100%'
-      listDiv.style.height = 'auto'
-      listDiv.style.overflow = 'hidden'
+      listDiv.style.cssText = 'width: 100%; height: auto; overflow: hidden;'
 
       var node = el.firstChild
       while (node) {
@@ -235,18 +234,11 @@ export var stretch = {
       self.$wrapDiv = wrapDiv // 绑定wrap div 元素到指令对象上
 
       var div = document.createElement('div')
-      div.style.width = '100%'
-      div.style.height = '11px'
-      div.style.backgroundColor = '#F2F2F2'
-      div.style.textAlign = 'center'
+      div.style.cssText = 'width: 100%; height: 11px; background-color: #F2F2F2; text-align: center;'
 
       var a = document.createElement('a')
       a.className = 'fa fa-caret-down'
-      a.style.verticalAlign = 'top'
-      a.style.fontSize = '16px'
-      a.style.lineHeight = '11px'
-      a.style.width = '100%'
-      a.style.opacity = '0.6'
+      a.style.cssText = 'vertical-align: top; font-size: 16px; line-height 11px; width: 100%; opacity: 0.6;'
 
       bindListener(a)
       div.appendChild(a)
@@ -304,5 +296,55 @@ export var lengthtip = {
   },
 
   unbind () {
+  }
+}
+
+/**
+ * Echarts 图表
+ * @type {Object}
+ */
+export var chart = {
+  deep: true,
+
+  params: ['loading', 'height'],
+
+  paramWatchers: {
+    loading (val, oldVal) {
+      if (val) {
+        this.chart.showLoading()
+      } else {
+        this.chart.hideLoading()
+      }
+    }
+  },
+
+  bind () {
+    this.vm.$nextTick(() => {
+      this.el.style.height = this.params.height || '250px'
+      this.chart = echarts.init(this.el)
+
+      if (this.params.loading) {
+        this.chart.showLoading()
+      }
+
+      this.resizeEvent = EventListener.listen(window, 'resize', (e) => {
+        this.chart.resize()
+      })
+    })
+  },
+
+  update (val, oldVal) {
+    this.vm.$nextTick(() => {
+      this.chart.dispose()
+      this.chart = echarts.init(this.el)
+      this.chart.setOption(val)
+    })
+  },
+
+  unbind () {
+    this.chart.dispose()
+    if (this.resizeEvent) {
+      this.resizeEvent.remove()
+    }
   }
 }
