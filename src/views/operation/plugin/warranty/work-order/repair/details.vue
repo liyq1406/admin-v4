@@ -11,7 +11,7 @@
             <div class="alert-record-summary">
 
               <div class="up">
-                <h3>滤网失效</h3>
+                <h3 class="textoverflow wid">{{repairOrder.remark || '-'}}</h3>
                 <a v-link="{path: '/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/edit/' + this.$route.params.id}" class="fa fa-edit"></a>
               </div>
               <div class="down row">
@@ -19,14 +19,19 @@
                   <span>{{repairOrder.create_time | formatDate}}</span>
                 </div>
                 <div class="col-12">
-                  <button>
+                  <!-- <button>
                     <i class="fa fa-check"></i>
                     已处理
-                  </button>
-                  <button>
-                    <!-- <i class="fa fa-commenting"></i> -->
+                  </button> -->
+                  <x-select :label="status.label" width="110px" size="small">
+                    <select v-model="status"  @change="changeStatus">
+                      <option :value="opt" v-for="opt in statusOptions">{{ opt.label }}</option>
+                    </select>
+                  </x-select>
+                  <!-- <button>
+                    <i class="fa fa-commenting"></i>
                     查看维修进度
-                  </button>
+                  </button> -->
                 </div>
               </div>
             </div>
@@ -60,7 +65,7 @@
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">维修人员</div>
-                    <div class="x-val">{{repairOrder.assigned_name}}</div>
+                    <div class="x-val">{{repairOrder.assigned_name || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
@@ -84,9 +89,15 @@
                 <div class="x-info-list-item oneDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">用户评价</div>
-                    <div class="x-val">好评</div>
+                    <div class="x-val">-</div>
                   </div>
                 </div>
+              </div>
+            </div>
+            <div class="x-info-list-item wholeDepart">
+              <div class="x-info-list-item-in">
+                <div class="x-label">现象说明</div>
+                <div class="x-val textoverflow">{{repairOrder.remark || '-'}}</div>
               </div>
             </div>
             <div class="x-info-list-item oneDepart">
@@ -175,6 +186,20 @@ export default {
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
       total: 0,
+      statusOptions: [{
+        label: '未处理',
+        value: 0
+      }, {
+        label: '维修中',
+        value: 1
+      }, {
+        label: '维修完成',
+        value: 2
+      }],
+      status: {
+        label: '未处理',
+        value: 0
+      },
       repairOrder: {},
       repairDetails: {},
       breadcrumbNav: [{
@@ -367,7 +392,13 @@ export default {
     dealTime (obj) {
       // 起始时间
       let begin = new Date(formatDate(obj.create_time))
-      let end = new Date()
+      let end = ''
+      if (obj.manage_time) {
+        end = new Date(formatDate(obj.manage_time))
+      } else {
+        end = new Date()
+      }
+      // let end = new Date()
       // 持续时间
       obj.lasting = end.getTime() - begin.getTime()
     },
@@ -383,6 +414,22 @@ export default {
       }
       api.warranty.getOrderWorkList(this.$route.params.app_id, condition).then((res) => {
         this.repairOrder = res.data.list[0] || {}
+        if (this.repairOrder.status === 0) {
+          this.status = {
+            label: '未处理',
+            value: 0
+          }
+        } else if (this.repairOrder.status === 1) {
+          this.status = {
+            label: '维修中',
+            value: 1
+          }
+        } else if (this.repairOrder.status === 2) {
+          this.status = {
+            label: '维修完成',
+            value: 2
+          }
+        }
         // 计算持续时间
         this.dealTime(this.repairOrder)
         // 查询网点信息
@@ -415,6 +462,20 @@ export default {
       }).catch((err) => {
         this.handleError(err)
       })
+    },
+    changeStatus () {
+      var params = {
+        status: this.status.value
+      }
+      api.warranty.editRepairDetailList(this.$route.params.app_id, this.$route.params.id, params).then((res) => {
+        this.getRepairOrder()
+        this.showNotice({
+          type: 'info',
+          content: '修改状态成功！'
+        })
+      }).catch((err) => {
+        this.handleError(err)
+      })
     }
   }
 }
@@ -422,6 +483,14 @@ export default {
 
 <style lang='stylus'>
 @import '../../../../../../assets/stylus/common'
+.wid
+  max-width 300px
+.textoverflow
+  overflow hidden
+  text-overflow ellipsis
+.wholeDepart
+  border-bottom 1px solid #d9d9d9
+  width 100%
 .pic
   width 160px
   height 120px
@@ -482,7 +551,8 @@ export default {
   color gray-light
   font-size 12px
   button
-    border 1px solid #BCBCBC
+  .x-select
+    /*border 1px solid #BCBCBC*/
     outline none
     background-color #FAFAFA
     color #323232
