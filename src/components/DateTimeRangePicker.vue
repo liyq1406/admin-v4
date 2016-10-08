@@ -25,7 +25,7 @@
 <script>
 import DateTimePicker from './DateTimePicker'
 import {uniformDate} from '../filters'
-import EventListener from './utils/EventListener'
+import EventListener from 'utils/event-listener'
 
 export default {
   name: 'timerangepicker',

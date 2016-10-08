@@ -1,4 +1,4 @@
-var EventListener = {
+let EventListener = {
   /**
    * Listen to DOM events during the bubble phase.
    *
@@ -26,4 +26,4 @@ var EventListener = {
   }
 }
 
-module.exports = EventListener
+export default EventListener

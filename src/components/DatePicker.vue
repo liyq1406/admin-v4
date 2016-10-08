@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import EventListener from './utils/EventListener'
+  import EventListener from 'utils/event-listener'
 
   export default {
     props: {

@@ -79,7 +79,7 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.content") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
-                    <textarea class="input-text" type="text" name="model.content" v-model="model.content" v-lengthtip="{max: 250, model: model.content}" v-validate:content="{required: true, maxlength: 250}" lazy></textarea>
+                    <textarea class="input-text" type="text" name="model.content" v-model="model.content" v-length-tip="{max: 250, model: model.content}" v-validate:content="{required: true, maxlength: 250}" lazy></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.content.touched && $validation.content.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span>

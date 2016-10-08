@@ -8,7 +8,7 @@
 <script>
 import mapData from './map-data.json'
 import _ from 'lodash'
-import Parser from 'components/charts/resource/cityCenterParser'
+import Parser from './resource/cityCenterParser'
 
 export default {
   name: 'ChinaMap',

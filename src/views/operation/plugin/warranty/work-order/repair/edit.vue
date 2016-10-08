@@ -45,7 +45,7 @@
                 <label class="form-control col-5 alert-label">维修内容:</label>
                 <div class="controls col-19">
                   <div v-placeholder="'请输入维修内容'" class="input-text-wrap">
-                    <input v-lengthtip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" type="text" v-form-ctrl name="instructions" minlength="0" maxlength="32" lazy required class="input-text"/>
+                    <input v-length-tip="{max: 32, model:editModal.instructions }" v-model="editModal.instructions" type="text" v-form-ctrl name="instructions" minlength="0" maxlength="32" lazy required class="input-text"/>
                   </div>
                   <div v-if="addValidation.$submitted && addValidation.instructions.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.instructions.$error.required">请输入维修内容</span></div>
                 </div>
@@ -55,7 +55,7 @@
                 <label class="form-control col-5 alert-label">维修说明:</label>
                 <div class="controls col-19">
                   <div v-placeholder="'请输入维修说明'" class="input-text-wrap">
-                    <textarea v-lengthtip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" v-form-ctrl name="remark" minlength="2" maxlength="32" lazy required class="input-text"></textarea>
+                    <textarea v-length-tip="{max: 240, model:editModal.discription }" v-model="editModal.remark" type="text" v-form-ctrl name="remark" minlength="2" maxlength="32" lazy required class="input-text"></textarea>
                   </div>
                   <div v-if="addValidation.$submitted && addValidation.remark.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.remark.$error.required">请输入维修说明</span></div>
                 </div>
