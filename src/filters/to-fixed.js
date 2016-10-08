@@ -1,10 +1,11 @@
 /**
  * 处理浮点数,保留n位小数
- * @param  {Float} value 浮点数
- * @param  {int} n 保留多少位
- * @return {String}
+ * @author 国豪
+ * @param  {Number} num 浮点数
+ * @param  {Number} digits 保留多少位
+ * @return {Number}
  */
-var toFixed = (number, digits) => {
+var toFixed = (num, digits) => {
   var result
 
   if (digits === null || digits === undefined) {
@@ -13,10 +14,10 @@ var toFixed = (number, digits) => {
 
   digits = parseInt(digits)
 
-  if (number === null || number === '' || isNaN(number) || isNaN(digits)) {
+  if (num === null || num === '' || isNaN(num) || isNaN(digits)) {
     result = '-'
   } else {
-    result = Math.round(number * Math.pow(10, digits)) / Math.pow(10, digits)
+    result = Math.round(num * Math.pow(10, digits)) / Math.pow(10, digits)
   }
 
   return result
