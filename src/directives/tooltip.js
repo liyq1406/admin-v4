@@ -5,7 +5,7 @@
  *   <i class="fa fa-question-circle" v-tooltip="要显示的文本">...</i>
  */
 // REVIEW 提示初始化时会有一瞬间的错位 #shengzhi
-export var tooltip = {
+var tooltip = {
   bind () {
     let inTrigger = false
     let inPopup = false
@@ -72,3 +72,5 @@ export var tooltip = {
     document.body.removeChild(this.popup)
   }
 }
+
+export default tooltip

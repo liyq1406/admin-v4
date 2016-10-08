@@ -2,7 +2,7 @@
  * 内容超出容器高度时显示展开全部内容的横条
  * @author guohao
  */
-export var stretch = {
+var stretch = {
   bind () {
     var self = this
 
@@ -77,3 +77,5 @@ export var stretch = {
   unbind () {
   }
 }
+
+export default stretch

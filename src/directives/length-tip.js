@@ -6,7 +6,7 @@
  *   max 表示max lenght
  *   model 表示v-model对应的变量
  */
-export var lengthTip = {
+var lengthTip = {
   bind () {
     var self = this
     var domInit = function (el) {
@@ -40,3 +40,5 @@ export var lengthTip = {
   unbind () {
   }
 }
+
+export default lengthTip

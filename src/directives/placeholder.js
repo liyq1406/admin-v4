@@ -7,7 +7,7 @@
  *   </div>
  */
 // NOTE 不能在 v-for 循环中使用
-export var placeholder = {
+var placeholder = {
   bind () {
     var vModel
     var handlePlaceholder = () => {
@@ -54,3 +54,5 @@ export var placeholder = {
     this.placeholder.innerText = value
   }
 }
+
+export default placeholder

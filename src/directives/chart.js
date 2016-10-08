@@ -5,7 +5,7 @@ import echarts from 'echarts'
  * Echarts 图表
  * @type {Object}
  */
-export var chart = {
+var chart = {
   deep: true,
 
   params: ['loading', 'height'],
@@ -50,3 +50,5 @@ export var chart = {
     }
   }
 }
+
+export default chart

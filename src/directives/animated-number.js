@@ -5,7 +5,7 @@
  *   <div v-animated-number="num"></div> // num 为需展示的数字
  */
 // FIXME 数字异步传入时不更新 #shengzhi
-export var animatedNumber = {
+var animatedNumber = {
   bind () {
     this.end = 0
   },
@@ -40,3 +40,5 @@ export var animatedNumber = {
     window.requestAnimationFrame(loop)
   }
 }
+
+export default animatedNumber

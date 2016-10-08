@@ -9,7 +9,7 @@ import browser from 'utils/browser'
 import locales from './consts/locales/index'
 
 // 指令
-import * as directives from './directives'
+import directives from './directives/index'
 
 // 过滤器
 import * as filters from './filters'
@@ -45,6 +45,8 @@ Vue.use(i18n, {
   // lang: 'zh-cn',
   locales: locales
 })
+
+console.log(directives)
 
 // 注册全局指令
 // ------------------------------
