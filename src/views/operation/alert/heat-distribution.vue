@@ -37,7 +37,7 @@
                     <template v-if="data.value">
                       <td>{{data.name}}</td>
                       <td>{{data.value}}</td>
-                      <td>{{data.percent | toPercentDecimal 2}}</td>
+                      <td>{{data.percent | toPercentage }}</td>
                     </template>
                   </tr>
                   <tr v-if="dataPer.length === 0">

@@ -1,5 +1,5 @@
 import chai from 'chai'
-import { formatDate } from '../../src/filters.js'
+import { formatDate } from '../../src/filters/format-date.js'
 
 chai.expect()
 const expect = chai.expect

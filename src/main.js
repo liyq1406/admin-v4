@@ -12,7 +12,7 @@ import locales from './consts/locales/index'
 import directives from './directives/index'
 
 // 过滤器
-import * as filters from './filters'
+import filters from './filters/index'
 
 // 表单验证器
 import * as validators from './validators'
@@ -45,8 +45,6 @@ Vue.use(i18n, {
   // lang: 'zh-cn',
   locales: locales
 })
-
-console.log(directives)
 
 // 注册全局指令
 // ------------------------------

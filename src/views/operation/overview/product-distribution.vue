@@ -22,7 +22,7 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
 import {numToPercent} from 'utils'
-import { toPercentDecimal } from 'src/filters'
+import { toPercentage } from 'src/filters'
 import PercentTable from 'components/PercentTable'
 import _ from 'lodash'
 
@@ -90,7 +90,7 @@ export default {
   ready () {
   },
   methods: {
-    toPercentDecimal,
+    toPercentage,
 
     sort (header) {
       this.headers.forEach((item) => {

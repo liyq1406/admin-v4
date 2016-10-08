@@ -30,7 +30,7 @@
                 <template v-if="warningLevel.length > 0">
                   <tr v-for="item in warningLevel">
                     <td>{{item.name}}</td>
-                    <td>{{ item.value }}/{{ item.percent | toPercentDecimal 2 }}</td>
+                    <td>{{ item.value }}/{{ item.percent | toPercentage }}</td>
                   </tr>
                 </template>
                 <tr v-if="warningLevel.length === 0">
