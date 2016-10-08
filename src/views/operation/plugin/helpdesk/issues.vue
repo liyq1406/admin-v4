@@ -6,10 +6,10 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item" v-if="products.length">
-          <x-select :label="selectedProduct.name" @change="getIssues" width="110px" size="small">
+          <x-select :label="selectedProduct.label" @change="getIssues" width="110px" size="small">
             <span slot="label">显示</span>
             <select v-model="selectedProduct">
-              <option :value="opt" v-for="opt in products">{{ opt.name }}</option>
+              <option :value="opt" v-for="opt in selectOptions">{{ opt.label }}</option>
             </select>
           </x-select>
         </div>
@@ -231,29 +231,51 @@ export default {
         }
       }
       if (this.period === '') {
-        condition.query = {
-          product_id: {
-            $in: [this.selectedProduct.id]
-          },
-          create_time: {
-            $gte: {'@date': this.startTimePick},
-            $lte: {'@date': this.endTimePick}
+        if (this.selectedProduct.label === '全部') {
+          condition.query = {
+            create_time: {
+              $gte: {'@date': this.startTimePick},
+              $lte: {'@date': this.endTimePick}
+            }
+          }
+        } else {
+          condition.query = {
+            product_id: {
+              $in: [this.selectedProduct.id]
+            },
+            create_time: {
+              $gte: {'@date': this.startTimePick},
+              $lte: {'@date': this.endTimePick}
+            }
           }
         }
       } else if (this.period === 'all') {
-        condition.query = {
-          product_id: {
-            $in: [this.selectedProduct.id]
+        if (this.selectedProduct.label === '全部') {
+
+        } else {
+          condition.query = {
+            product_id: {
+              $in: [this.selectedProduct.id]
+            }
           }
         }
       } else {
-        condition.query = {
-          product_id: {
-            $in: [this.selectedProduct.id]
-          },
-          create_time: {
-            $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
-            $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
+        if (this.selectedProduct.label === '全部') {
+          condition.query = {
+            create_time: {
+              $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+              $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
+            }
+          }
+        } else {
+          condition.query = {
+            product_id: {
+              $in: [this.selectedProduct.id]
+            },
+            create_time: {
+              $lte: {'@date': this.endTime + 'T00:00:00.000Z'},
+              $gte: {'@date': this.beginTime + 'T00:00:00.000Z'}
+            }
           }
         }
       }
@@ -312,7 +334,7 @@ export default {
   // TODO 优化初始化获取 vuex 产品的流程
   route: {
     data () {
-      this.init()
+      // this.init()
       // this.getIssues()
       this.getLabels()
     }
@@ -327,18 +349,20 @@ export default {
     },
     issues () {
       if (this.issues.length && !this.$route.params.id) {
+        // this.init()
         this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
       }
     }
   },
 
   ready () {
+    this.init()
     // this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
   },
 
   methods: {
     init () {
-      this.selectedProduct = this.products[0] || {}
+      this.selectedProduct = this.selectOptions[0] || {}
       if (this.products.length > 0) {
         this.getIssues()
       }
@@ -360,6 +384,7 @@ export default {
           this.total = res.data.count
           this.issues = res.data.list
           this.dealTime()
+          this.$route.router.replace('/operation/plugins/helpdesk/' + this.$route.params.app_id + '/issues/' + this.issues[0]._id)
         } else {
           this.issues = []
           this.total = 0

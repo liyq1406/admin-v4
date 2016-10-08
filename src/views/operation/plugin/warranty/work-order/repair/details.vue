@@ -37,7 +37,7 @@
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">维修设备</div>
-                    <div class="x-val">{{repairOrder.device_id || '-'}}</div>
+                    <div class="x-val">{{repairOrder.product_sn || '-'}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
