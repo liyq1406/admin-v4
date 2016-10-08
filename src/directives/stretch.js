@@ -38,7 +38,7 @@ var stretch = {
     }
     var domInit = function (el) {
       var wrapDiv = document.createElement('div')
-      wrapDiv.style.cssText = 'width: 100%; height: auto; overview: hidden;'
+      wrapDiv.style.cssText = 'width: 100%; height: auto; overflow: hidden;'
 
       var listDiv = document.createElement('div') // 为了计算el内容高度
       listDiv.style.cssText = 'width: 100%; height: auto; overflow: hidden;'
