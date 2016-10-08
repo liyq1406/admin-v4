@@ -37,6 +37,7 @@ var stretch = {
       })
     }
     var domInit = function (el) {
+      // el.style.overflow = 'hidden'
       var wrapDiv = document.createElement('div')
       wrapDiv.style.cssText = 'width: 100%; height: auto; overflow: hidden;'
 
@@ -60,7 +61,7 @@ var stretch = {
 
       var a = document.createElement('a')
       a.className = 'fa fa-caret-down'
-      a.style.cssText = 'vertical-align: top; font-size: 16px; line-height 11px; width: 100%; opacity: 0.6;'
+      a.style.cssText = 'vertical-align: top; font-size: 16px; line-height: 11px; width: 100%; opacity: 0.6;'
 
       bindListener(a)
       div.appendChild(a)
