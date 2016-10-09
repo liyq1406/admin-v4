@@ -96,7 +96,7 @@ import Vue from 'vue'
 import api from 'api'
 import Switch from 'components/Switch'
 import io from 'socket.io-client'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import locales from 'consts/locales/index'
 import Range from 'components/Range1'
@@ -129,9 +129,9 @@ export default {
       deviceToken: '',
       datapointValues: {},
       logs: [
-        // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'connected' },
-        // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: 'Welcome to xlink', type: 'disconnected' },
-        // { time: dateFormat('hh:mm:ss.SSS', new Date()), msg: [200, 'Welcome to xlink'], type: 'user' }
+        // { time: formatDate(new Date(), 'hh:mm:ss.SSS', true), msg: 'Welcome to xlink', type: 'connected' },
+        // { time: formatDate(new Date(), 'hh:mm:ss.SSS', true), msg: 'Welcome to xlink', type: 'disconnected' },
+        // { time: formatDate(new Date(), 'hh:mm:ss.SSS', true), msg: [200, 'Welcome to xlink'], type: 'user' }
       ],
       token: '',
       refreshing: false
@@ -300,7 +300,7 @@ export default {
         }
       }
       this.logs.push({
-        time: dateFormat('hh:mm:ss.SSS', new Date()),
+        time: formatDate(new Date(), 'hh:mm:ss.SSS', true),
         msg: msg,
         type: type
       })

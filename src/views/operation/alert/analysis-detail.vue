@@ -63,7 +63,7 @@ import Breadcrumb from 'components/Breadcrumb'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
 import _ from 'lodash'
@@ -170,19 +170,10 @@ export default {
           },
           product_id: {
             $in: [this.$route.params.product_id]
-          // },
-          // create_date: {
-          //   $gte: this.startTimePick,
-          //   $lte: this.endTimePick
           }
         }
       }
-      // if (this.endTimePick.getTime() - this.startTimePick.getTime() > 3600 * 1000 * 24) {
-      //   this.endTimePick = new Date(this.endTimePick.getTime() + 3600 * 1000 * 24)
-      //   this.startTimePick = new Date(this.startTimePick.getTime() + 3600 * 1000 * 24)
-      //   params.query.create_date.$lte = new Date(uniformDate(this.endTimePick))
-      //   params.query.create_date.$gte = new Date(uniformDate(this.startTimePick))
-      // }
+
       // 关键字搜索
       if (this.key !== '') {
         if (this.queryType.value === 'from') {

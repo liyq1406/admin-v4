@@ -47,7 +47,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import Table from 'components/Table'
-import { formatDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import api from 'api'
 
 export default {

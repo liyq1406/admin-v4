@@ -63,8 +63,7 @@
                   <span v-else>
                     <i class="fa fa-question-circle mr5" ></i>未激活
                   </span>
-                  <span class="status-date ml10 mr10">{{selectedDevice.last_login | uniformDate true}}</span>
-                  <span class="status-time ml10 mr10">{{selectedDevice.last_login | uniformTime true}}</span>
+                  <span class="status-date ml10 mr10">{{selectedDevice.last_login | formatDate }}</span>
                 </div>
 
               </div>
@@ -264,7 +263,7 @@
 // import Vue from 'vue'
 import io from 'socket.io-client'
 import { globalMixins } from 'src/mixins'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 // import locales from 'consts/locales/index'
 // import * as config from 'consts/config'
 import SearchBox from 'components/SearchBox'
@@ -665,7 +664,7 @@ export default {
         }
       }
       this.logs.push({
-        time: dateFormat('hh:mm:ss.SSS', new Date()),
+        time: formatDate(new Date(), 'hh:mm:ss.SSS', true),
         msg: msg,
         type: type
       })

@@ -38,7 +38,6 @@ import { globalMixins } from 'src/mixins'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import _ from 'lodash'
 import {getLastYearDate} from 'utils'
-// import {uniformDate} from 'filters/format-date'
 
 export default {
   name: 'user-trend',

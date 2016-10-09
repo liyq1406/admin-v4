@@ -132,7 +132,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import store from 'store'
 import api from 'api'
-import { formatDate, uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import _ from 'lodash'
 
 export default {
@@ -313,13 +313,13 @@ export default {
 
     // 起始日期
     startDate () {
-      return uniformDate(new Date())
+      return formatDate(new Date(), 'yyyy-MM-dd', true)
     },
 
     // 结束日期
     endDate () {
       let timestamp = new Date().getTime() - this.period * 24 * 3600 * 1000
-      return uniformDate(new Date(timestamp))
+      return formatDate(timestamp, 'yyyy-MM-dd', true)
     },
 
     // 趋势图表数据

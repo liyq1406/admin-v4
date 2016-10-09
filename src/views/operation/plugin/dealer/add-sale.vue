@@ -186,7 +186,6 @@
   import { globalMixins } from 'src/mixins'
   import AreaSelect from 'components/AreaSelect'
   import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
 
   export default {
     name: 'TableDetails',
@@ -194,11 +193,10 @@
     mixins: [globalMixins],
 
     components: {
-      'x-select': Select,
       Breadcrumb,
-      'area-select': AreaSelect,
       DateTimeSinglePicker,
-      DateTimeRangePicker
+      'x-select': Select,
+      'area-select': AreaSelect
     },
 
     data () {

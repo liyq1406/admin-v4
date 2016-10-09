@@ -338,11 +338,11 @@
     },
 
     components: {
-      'x-select': Select,
-      'date-picker': DatePicker,
-      'area-select': AreaSelect,
-      'tag-input': TagInput,
-      RadioButtonGroup
+      DatePicker,
+      AreaSelect,
+      TagInput,
+      RadioButtonGroup,
+      'x-select': Select
     },
 
     data () {

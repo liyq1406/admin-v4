@@ -56,7 +56,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Table from 'components/Table'
-  import { formatDate } from 'filters/format-date'
+  import formatDate from 'filters/format-date'
   import { globalMixins } from 'src/mixins'
   import Statistic from 'components/Statistic2'
   import {createDayRange} from 'utils'

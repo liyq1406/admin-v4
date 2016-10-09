@@ -6,12 +6,12 @@
     <div v-show='showChoosePanel' class="time-range-picker-panel" :style="{opacity: opacity}">
       <div class="start-time">
         <span>开始时间:</span>
-        <span class="time">{{startTime | uniformDate}}</span>
+        <span class="time">{{startTime | formatDate 'yyyy-MM-dd' true}}</span>
         <a @click.prevent.stop='selectStartTime' class="fa fa-calendar"></a>
       </div>
       <div class="end-time">
         <span>结束时间:</span>
-        <span class="time">{{endTime | uniformDate}}</span>
+        <span class="time">{{endTime | formatDate 'yyyy-MM-dd' true}}</span>
         <a @click.prevent.stop='selectEndTime' class="fa fa-calendar"></a>
       </div>
       <div class="choose-submit">
@@ -24,7 +24,7 @@
 
 <script>
 import DateTimePicker from './DateTimePicker'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import EventListener from 'utils/event-listener'
 
 export default {
@@ -52,7 +52,7 @@ export default {
   },
   computed: {
     timeShowPanel () {
-      return uniformDate(this.startTime) + ' ~ ' + uniformDate(this.endTime) + ' '
+      return formatDate(this.startTime, 'yyyy-MM-dd', true) + ' ~ ' + formatDate(this.endTime, 'yyyy-MM-dd', true) + ' '
     }
   },
   ready () {

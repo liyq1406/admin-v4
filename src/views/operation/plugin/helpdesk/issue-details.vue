@@ -105,8 +105,7 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
-// import { formatDate } from 'filters/format-date'
-import { uniformDate, uniformTime } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 // import _ from 'lodash'
 
 export default {
@@ -266,8 +265,7 @@ export default {
           this.issue = res.data.list[0]
           // 用户信息
           this.userInfo.nickname.value = this.issue.user_name
-          // this.userInfo.create_time.value = formatDate(this.issue.create_time)
-          this.userInfo.create_time.value = uniformDate(new Date(this.issue.create_time)) + ' ' + uniformTime(new Date(this.issue.create_time))
+          this.userInfo.create_time.value = formatDate(this.issue.create_time)
           this.userInfo.email.value = this.issue.email
           this.userInfo.phone.value = this.issue.phone
           // APP信息
@@ -321,8 +319,6 @@ export default {
       }
       api.helpdesk.getFeedbackRecordList(this.$route.params.app_id, condition).then((res) => {
         if (res.status === 200) {
-          console.log(11111)
-          console.log(res)
           // this.firstReply = res.data.list[0]
           this.recordList = res.data.list
           // 去除第一个客服回复

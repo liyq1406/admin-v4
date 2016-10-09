@@ -40,7 +40,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Interval from 'components/g2-charts/Interval'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import Distributing from './distributing'
 import _ from 'lodash'
 
@@ -142,8 +142,8 @@ export default {
         period: 'getActionPeriod'
       }
       let fn = api.statistics[API_FUNCTIONS[this.dimension]]
-      let start = uniformDate(this.startTime)
-      let end = uniformDate(this.endTime)
+      let start = formatDate(this.startTime, 'yyyy-MM-dd', true)
+      let end = formatDate(this.endTime, 'yyyy-MM-dd', true)
       fn(this.$route.params.id, start, end).then((res) => {
         if (res.status === 200) {
           let arr = []

@@ -39,7 +39,7 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
-import { formatDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import Table from 'components/Table'
 import store from 'store'
 
