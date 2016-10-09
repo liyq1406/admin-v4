@@ -19,6 +19,7 @@
             <a href="http://www.xlink.cn/customers.html#ousilang" class="c-logo logo-osram" target="_blank"></a>
             <a href="http://www.xlink.cn/customers.html#kaichi" class="c-logo logo-karcher" target="_blank"></a>
             <a href="http://www.xlink.cn/customers.html#tianji" class="c-logo logo-tonze" target="_blank"></a>
+            <a href="http://www.xlink.cn/customers.html" class="c-logo logo-bull" target="_blank"></a>
           </div>
         </div>
       </div>
@@ -243,7 +244,7 @@
         .c-logo
           display inline-block
           height 60px
-          margin 20px 30px 0 0
+          margin 20px 20px 0 0
           background-repeat no-repeat
 
           &:hover
@@ -269,6 +270,10 @@
         .logo-tonze
           background-image url(../assets/images/register/logo_tonze.png)
           width 68px
+
+        .logo-bull
+          background-image url(../assets/images/register/logo_bull.png)
+          width 120px
 
     // 表单
     .form
