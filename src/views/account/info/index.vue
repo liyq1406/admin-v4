@@ -49,12 +49,10 @@
               <label class="form-control col-6">{{ $t('ui.account.fields.old_password') }}</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
-                  <input type="password" v-model="model.oldpassword" name="model.oldpassword" v-validate:oldpassword="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
+                  <input type="password" v-model="model.oldpassword" name="model.oldpassword" v-validate:oldpassword="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.oldpassword.touched && $validation.oldpassword.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
-                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.old_password'), 8]) }}</span>
-                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.old_password'), 16]) }}</span>
                 </div>
               </div>
             </div>
