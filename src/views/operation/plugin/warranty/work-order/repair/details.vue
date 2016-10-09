@@ -71,7 +71,7 @@
                 <div class="x-info-list-item threeDepart">
                   <div class="x-info-list-item-in">
                     <div class="x-label">处理时间</div>
-                    <div class="x-val">{{repairOrder.manage_time || '-'}}</div>
+                    <div class="x-val">{{repairOrder.manage_time | formatDate}}</div>
                   </div>
                 </div>
                 <div class="x-info-list-item threeDepart">
@@ -391,12 +391,19 @@ export default {
     // 计算持续时间
     dealTime (obj) {
       // 起始时间
-      let begin = new Date(formatDate(obj.create_time))
-      let end = ''
+      // let begin = new Date(formatDate(obj.create_time))
+      // let end = ''
+      // if (obj.manage_time) {
+      //   end = new Date(formatDate(obj.manage_time)) || new Date()
+      // } else {
+      //   end = new Date()
+      // }
+      let begin = ''
+      let end = new Date()
       if (obj.manage_time) {
-        end = new Date(formatDate(obj.manage_time))
+        begin = new Date(formatDate(obj.manage_time))
       } else {
-        end = new Date()
+        begin = new Date(formatDate(obj.create_time))
       }
       // let end = new Date()
       // 持续时间
@@ -463,9 +470,16 @@ export default {
         this.handleError(err)
       })
     },
+    // 控制时间
+    timeValue (n) {
+      return n < 10 ? `0${n}` : `${n}`
+    },
     changeStatus () {
+      var time = new Date().getFullYear() + '-' + this.timeValue(new Date().getMonth() + 1) + '-' + this.timeValue(new Date().getDate()) + 'T' + this.timeValue(new Date().getHours()) + ':' + this.timeValue(new Date().getMinutes()) + ':' + this.timeValue(new Date().getSeconds()) + '.000Z'
+      console.log(time)
       var params = {
-        status: this.status.value
+        status: this.status.value,
+        manage_time: time
       }
       api.warranty.editRepairDetailList(this.$route.params.app_id, this.$route.params.id, params).then((res) => {
         this.getRepairOrder()

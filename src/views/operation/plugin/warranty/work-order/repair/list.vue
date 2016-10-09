@@ -235,6 +235,10 @@
             {
               text: '维修中',
               color: '#CC6600'
+            },
+            {
+              text: '维修完成',
+              color: '#090'
             }
           ]
           var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
