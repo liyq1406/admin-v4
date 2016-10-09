@@ -24,7 +24,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import {getActiveTrend} from './api-product'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import api from 'api'
 
 export default {
@@ -89,7 +89,7 @@ export default {
       recv.forEach((item) => {
         item.data.forEach((prodData) => {
           let temp = {}
-          temp.date = uniformDate(prodData.day)
+          temp.date = formatDate(prodData.day, 'yyyy-MM-dd', true)
           temp.val = prodData.count
           temp.name = item.product
           res.push(temp)

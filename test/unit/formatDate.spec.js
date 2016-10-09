@@ -1,10 +1,10 @@
 import chai from 'chai'
-import { formatDate, uniformDate } from '../../src/filters/format-date.js'
+import formatDate from '../../src/filters/format-date.js'
 
 chai.expect()
 const expect = chai.expect
 
-let dateStr = '2016-09-06T16:08:24Z'
+let dateStr = '2016-09-06T16:08:24.12345Z'
 let date = new Date(dateStr)
 
 describe('Method: formatDate', () => {
@@ -21,7 +21,7 @@ describe('Method: formatDate', () => {
   describe('when passing a JSON-format Date string and a string describing the output format', () => {
     it('should return a string which format is like the given format', () => {
       expect(formatDate(dateStr, 'yyyy-MM-dd')).to.equal('2016-09-06')
-      expect(formatDate(dateStr, 'hh:mm:ss')).to.equal('16:08:24')
+      expect(formatDate(dateStr, 'hh:mm:ss.SSS')).to.equal('16:08:24.123')
       expect(formatDate(dateStr, 'hh:mm')).to.equal('16:08')
     })
   })
@@ -33,21 +33,8 @@ describe('Method: formatDate', () => {
   describe('when passing a JSON-format Date string and a string describing the output format', () => {
     it('should return a string which format is like the given format', () => {
       expect(formatDate(date, 'yyyy-MM-dd')).to.equal('2016-09-06')
-      expect(formatDate(date, 'hh:mm:ss')).to.equal('16:08:24')
+      expect(formatDate(date, 'hh:mm:ss.SSS')).to.equal('16:08:24.123')
       expect(formatDate(date, 'hh:mm')).to.equal('16:08')
-    })
-  })
-})
-
-describe('Method: uniformDate', () => {
-  describe('when given a JSON-ed Date string', () => {
-    it('should return a string like YYYY-MM-DDThh:mm:ssZ', () => {
-      expect(uniformDate(dateStr, true)).to.equal('2016-09-06')
-    })
-  })
-  describe('when given a Date object', () => {
-    it('should return a string like YYYY-MM-DD hh:mm:ss', () => {
-      expect(uniformDate(date, true)).to.equal('2016-09-06')
     })
   })
 })

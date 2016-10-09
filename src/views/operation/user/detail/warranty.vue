@@ -42,7 +42,6 @@
   import AreaSelect from 'components/AreaSelect'
   import Select from 'components/Select'
   // import api from 'api'
-  // import dateFormat from 'date-format'
 
   export default {
     components: {

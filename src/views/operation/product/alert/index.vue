@@ -28,7 +28,7 @@ import api from 'api'
 import { globalMixins } from 'src/mixins'
 import { setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 import AlertTable from './alert-table'
 import AlertTrends from './alert-trends'
 
@@ -97,13 +97,12 @@ export default {
 
   computed: {
     endTime () {
-      var end = new Date().getTime()
-      return dateFormat('yyyy-MM-dd', new Date(end))
+      return formatDate(new Date(), 'yyyy-MM-dd', true)
     },
 
     beginTime () {
       var past = new Date().getTime() - this.period * 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(past))
+      return formatDate(past, 'yyyy-MM-dd', true)
     }
   },
 
@@ -124,16 +123,15 @@ export default {
   methods: {
     // 获取告警概览@author weijie
     getSummary () {
-      var todayTime = new Date().getTime()
-      todayTime = dateFormat('yyyy-MM-dd', new Date(todayTime))
-      var initTime = new Date(0)
-      initTime = dateFormat('yyyy-MM-dd', new Date(initTime))
-      var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
-      weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
-      var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
-      monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
-      var now = new Date().getTime() - 1 * 24 * 3600 * 1000
-      now = dateFormat('yyyy-MM-dd', new Date(now))
+      const MILLISECONDS_PER_DAY = 24 * 3600 * 1000
+      var todayTime = formatDate(new Date(), 'yyyy-MM-dd', true)
+      var initTime = formatDate(new Date(0), 'yyyy-MM-dd', true)
+      var weekBeginTime = new Date().getTime() - 7 * MILLISECONDS_PER_DAY
+      weekBeginTime = formatDate(weekBeginTime, 'yyyy-MM-dd', true)
+      var monthBeginTime = new Date().getTime() - 30 * MILLISECONDS_PER_DAY
+      monthBeginTime = formatDate(monthBeginTime, 'yyyy-MM-dd', true)
+      var now = new Date().getTime() - MILLISECONDS_PER_DAY
+      now = formatDate(now, 'yyyy-MM-dd', true)
       // 获取当天数据
       api.statistics.getProductAlertSummary(this.productID, initTime, todayTime).then((res) => {
         if (res.status === 200) {

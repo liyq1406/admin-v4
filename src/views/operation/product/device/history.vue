@@ -55,7 +55,7 @@ import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
-import { uniformDate, formatDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import _ from 'lodash'
 
 export default {
@@ -140,7 +140,7 @@ export default {
       if (this.selectedDatapoint.index !== undefined) {
         let snapshotGroup = _.groupBy(this.trendSnapshots, (item) => {
           let hour = item.snapshot_date.split(' ')[1].split(':')[0]
-          return `${uniformDate(item.snapshot_date)}-${hour}`
+          return `${formatDate(item.snapshot_date, 'yyyy-MM-dd', true)}-${hour}`
         })
 
         for (var key in snapshotGroup) {

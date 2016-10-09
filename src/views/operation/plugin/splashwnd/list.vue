@@ -62,17 +62,10 @@ import * as config from 'consts/config'
 import locales from 'consts/locales/index'
 import Pager from 'components/Pager'
 import Modal from 'components/Modal'
-import Statistic from 'components/Statistic'
-import RadioButtonGroup from 'components/RadioButtonGroup'
 import Select from 'components/Select'
-import SearchBox from 'components/SearchBox'
-import DateTimeRangePicker from 'components/DateTimeRangePicker'
-import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import Table from 'components/Table'
-import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'filters/format-date'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 // import { setCurrPlugin } from 'store/actions/plugins'
 
 // TODO 消除代码冗余 #weijie
@@ -85,14 +78,8 @@ export default {
   components: {
     Pager,
     Modal,
-    RadioButtonGroup,
-    TimeLine,
-    Statistic,
-    DateTimeRangePicker,
-    DateTimeSinglePicker,
     'x-select': Select,
-    'x-table': Table,
-    SearchBox
+    'x-table': Table
   },
 
   vuex: {
@@ -134,7 +121,7 @@ export default {
       product_id: '',
       alertTypes: locales[Vue.config.lang].data.ALERT_TYPES,
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
-      today: dateFormat('yyyy-MM-dd', new Date()),
+      today: formatDate(new Date(), 'yyyy-MM-dd'),
       loadingData: false,
       startTimePick: '',
       endTimePick: '',

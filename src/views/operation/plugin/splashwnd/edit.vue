@@ -74,14 +74,13 @@
   import { globalMixins } from 'src/mixins'
   import ImageUploader from 'components/ImageUploaderSplashWnd'
   import Select from 'components/Select'
-  import DatePicker from 'components/DateTimeSinglePicker'
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
   import Breadcrumb from 'components/Breadcrumb'
   import store from 'store'
   import api from 'api'
-  // import { formatDate } from 'filters/format-date'
+  // import formatDate from 'filters/format-date'
   // import _ from 'lodash'
   // import { createDayRange } from 'utils'
 
@@ -101,7 +100,6 @@
 
     components: {
       'x-select': Select,
-      'date-picker': DatePicker,
       'area-select': AreaSelect,
       'tag-input': TagInput,
       RadioButtonGroup,

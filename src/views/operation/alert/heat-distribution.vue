@@ -122,7 +122,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 
@@ -153,7 +153,7 @@ export default {
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
       alertTrends: [],
-      today: dateFormat('yyyy-MM-dd', new Date()),
+      today: formatDate(new Date(), 'yyyy-MM-dd', true),
       loadingData: false,
       dataPer: [],
       regionData: []

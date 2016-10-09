@@ -97,10 +97,9 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
-import dateFormat from 'date-format'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 // import _ from 'lodash'
@@ -250,8 +249,8 @@ export default {
       this.currentProduct = this.products[0] || {}
     },
     getUnreadCount (start, end) {
-      let beginTime = dateFormat('yyyy-MM-dd', new Date(start))
-      let endTime = dateFormat('yyyy-MM-dd', new Date(end))
+      let beginTime = formatDate(start, 'yyyy-MM-dd', true)
+      let endTime = formatDate(end, 'yyyy-MM-dd', true)
       api.statistics.getProductAlertSummary(this.currentProduct.id, beginTime, endTime).then((res) => {
         if (res.status === 200) {
           this.alertSummary.unread.total = res.data.unread
@@ -262,12 +261,13 @@ export default {
     },
     // 获取告警概览@author weijie
     getSummary () {
-      var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
-      weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
-      var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
-      monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
-      var now = new Date().getTime() - 1 * 24 * 3600 * 1000
-      now = dateFormat('yyyy-MM-dd', new Date(now))
+      const MILLISECONDS_PER_DAY = 24 * 3600 * 1000
+      var weekBeginTime = new Date().getTime() - 7 * MILLISECONDS_PER_DAY
+      weekBeginTime = formatDate(weekBeginTime, 'yyyy-MM-dd', true)
+      var monthBeginTime = new Date().getTime() - 30 * MILLISECONDS_PER_DAY
+      monthBeginTime = formatDate(monthBeginTime, 'yyyy-MM-dd', true)
+      var now = new Date().getTime() - MILLISECONDS_PER_DAY
+      now = formatDate(now, 'yyyy-MM-dd', true)
 
       // 获取7天数据
       api.statistics.getProductAlertSummary(this.currentProduct.id, weekBeginTime, now).then((res) => {
@@ -339,8 +339,8 @@ export default {
         beginHour = '00'
         endHour = '24'
       }
-      let begin = uniformDate(this.startTimePick)
-      let end = uniformDate(this.endTimePick)
+      let begin = formatDate(this.startTimePick, 'yyyy-MM-dd', true)
+      let end = formatDate(this.endTimePick, 'yyyy-MM-dd', true)
 
       locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS.forEach((item) => {
         this.getSingleTag(this.currentProduct.id, item, begin, end, beginHour, endHour)
@@ -395,31 +395,6 @@ export default {
         } else {
           this.showHour = false
         }
-        // console.log(beautify)
-        // console.log(uniformDate(this.startTimePick))
-        // console.log(uniformDate(this.endTimePick))
-        // beautify(this.tempTrendData, {start: uniformDate(this.startTimePick), end: uniformDate(this.endTimePick)})
-        // this.trendData = beautify(this.tempTrendData, {start: this.startTimePick, end: this.startTimePick})
-
-        // const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
-        // let start = new Date(uniformDate(this.startTimePick))
-        // let end = new Date(uniformDate(this.endTimePick))
-        // let trendArr = []
-        // for (let i = start.getTime(); i <= end.getTime(); i = i + MICRO_SECONDS_PER_DAY) {
-        //   let record = _.find(this.tempTrendData, (item) => {
-        //     return +new Date(item.date) === i
-        //   })
-        //   if (record) {
-        //     trendArr.push(record)
-        //   } else {
-        //     trendArr.push({
-        //       date: uniformDate(new Date(i)),
-        //       val: 0,
-        //       name: this.tempTrendData[0].name
-        //     })
-        //   }
-        // }
-        // this.trendData = trendArr
         this.trendData = this.tempTrendData
       }
     },
@@ -465,8 +440,8 @@ export default {
         beginHour = '00'
         endHour = '24'
       }
-      let begin = uniformDate(this.startTimePick)
-      let end = uniformDate(this.endTimePick)
+      let begin = formatDate(this.startTimePick, 'yyyy-MM-dd', true)
+      let end = formatDate(this.endTimePick, 'yyyy-MM-dd', true)
 
       // 遍历处理每个标签数组里对应的告警规则数据
       var count = 0

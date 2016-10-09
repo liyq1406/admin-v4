@@ -43,7 +43,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import {getActivatedTrend} from './api-product'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import _ from 'lodash'
 
 export default {
@@ -136,7 +136,7 @@ export default {
       recv.forEach((item) => {
         item.data.forEach((prodData) => {
           let temp = {}
-          temp.date = uniformDate(prodData.day)
+          temp.date = formatDate(prodData.day, 'yyyy-MM-dd', true)
           temp.val = prodData.count
           temp.name = item.product
           res.push(temp)

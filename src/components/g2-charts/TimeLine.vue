@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { uniformDate } from 'src/filters/format-date'
+import formatDate from 'src/filters/format-date'
 import _ from 'lodash'
 import getMessageQueue from 'src/utils/mq.js'
 
@@ -124,7 +124,7 @@ export default {
     format (data) {
       if (this.scale === 'day') {
         data.map((item) => {
-          item.date = uniformDate(new Date(item.date))
+          item.date = formatDate(item.date, 'yyyy-MM-dd', true)
         })
       }
       return data

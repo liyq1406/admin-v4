@@ -7,7 +7,8 @@ let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.locatio
 let apiServer = ({
   api2: { // 正式环境
     api: `${protocol}//api2.xlink.cn`,
-    plugin: `${protocol}//plugin-api.xlink.cn:3000`
+    // plugin: `${protocol}//plugin-api.xlink.cn:3000`
+    plugin: 'http://plugin-api.xlink.cn:3000'
   },
   test: { // 测试服务器
     api: 'http://api-test.xlink.cn:8887',
@@ -33,7 +34,7 @@ let apiServer = ({
     api: `${protocol}//dev-man.360tj.com:8016`,
     plugin: `${protocol}://dev-man.360tj.com:8016`
   }
-})[process.env.API_SERVER || 'test']
+})[process.env.API_SERVER || 'api2']
 
 export const API_SERVER = {
   // 默认

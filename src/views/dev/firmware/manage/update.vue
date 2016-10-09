@@ -149,7 +149,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import Select from 'components/Select'
-  import DatePicker from 'components/DateTimeSinglePicker'
   import AreaSelect from 'components/AreaSelect'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import TagInput from 'components/TagInput'
@@ -174,7 +173,6 @@
 
     components: {
       'x-select': Select,
-      'date-picker': DatePicker,
       'area-select': AreaSelect,
       'tag-input': TagInput,
       RadioButtonGroup

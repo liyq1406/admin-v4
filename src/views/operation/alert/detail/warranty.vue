@@ -47,7 +47,7 @@
                 <td>{{order.name}}</td>
                 <td>{{order.product_name}}</td>
                 <td>{{order.product_type}}</td>
-                <td>{{order.extended_days | uniformDate}}</td>
+                <td>{{order.extended_days | formatDate 'yyyy-MM-dd' true}}</td>
                 <td>
                   <div v-if="order.status === 0">已过期</div>
                   <div v-else class='hl-green'>未过期</div>

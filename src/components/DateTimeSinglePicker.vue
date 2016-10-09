@@ -12,7 +12,7 @@
 <script>
 import DateTimePicker from 'components/DateTimePicker'
 import Dropdown from 'components/Dropdown'
-import { uniformDate, uniformMinuteTime } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 
 export default {
   name: 'timesinglerangepicker',
@@ -45,11 +45,8 @@ export default {
   },
   computed: {
     timeShowPanel () {
-      if (this.showTime) {
-        return uniformDate(this.startTime) + ' ' + uniformMinuteTime(this.startTime)
-      } else {
-        return uniformDate(this.startTime)
-      }
+      let format = this.showTime ? 'yyyy-MM-dd hh:mm' : 'yyyy-MM-dd'
+      return formatDate(this.startTime, format, true)
     }
   },
   ready () {

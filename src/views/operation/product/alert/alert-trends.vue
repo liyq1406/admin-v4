@@ -22,7 +22,7 @@ import api from 'api'
 import TimeLine from 'components/g2-charts/TimeLine'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import { globalMixins } from 'src/mixins'
-import { uniformDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 import _ from 'lodash'
 
 export default {
@@ -105,9 +105,9 @@ export default {
      */
     getTagTrend () {
       if (this.startTime === null || this.endTime === null) return
-      let begin = uniformDate(this.startTime)
+      let begin = formatDate(this.startTime, 'yyyy-MM-dd', true)
       let beginHour = this.startTime.getHours()
-      let end = uniformDate(this.endTime)
+      let end = formatDate(this.endTime, 'yyyy-MM-dd', true)
       let endHour = this.endTime.getHours()
       const TAGS = {
         light: '通知',

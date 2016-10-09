@@ -5,7 +5,7 @@
  * @param {Boolean} isLocal 是否本地时间
  * @return {String}
  */
-export function formatDate (date, format, isLocal) {
+var formatDate = (date, format, isLocal) => {
   // 不传任何参数
   if (typeof date === 'undefined' || date === null || date === '') {
     return '-'
@@ -38,6 +38,7 @@ export function formatDate (date, format, isLocal) {
   let hours = date.getHours()
   let minutes = date.getMinutes()
   let seconds = date.getSeconds()
+  let milliseconds = date.getMilliseconds()
 
   var zeroPrefix = (num) => {
     return ('0' + num).slice(-2)
@@ -52,81 +53,7 @@ export function formatDate (date, format, isLocal) {
     .replace(/hh/g, zeroPrefix(hours))
     .replace(/mm/g, zeroPrefix(minutes))
     .replace(/ss/g, zeroPrefix(seconds))
+    .replace(/SSS/g, ('' + milliseconds).slice(0, 3))
 }
 
-/**
- * 日期格式化 yyyy-mm-dd
- * @param  {String} value 目标日期字符串
- *         {Boolean} correct 修正偏差
- * @return {String}
- */
-export function uniformDate (date, correct) {
-  var formatDate = null
-  if (date instanceof Date) {
-    formatDate = date
-  } else if (date && date.length > 0) {
-    formatDate = new Date(Date.parse(date))
-  } else {
-    return date
-  }
-
-  if (typeof correct === 'boolean' && correct) {
-    formatDate = new Date(formatDate.getTime() - 3600 * 8 * 1000)
-  }
-
-  var year = formatDate.getFullYear().toString()
-  var month = formatDate.getMonth() + 1 > 9 ? (formatDate.getMonth() + 1).toString() : '0' + (formatDate.getMonth() + 1).toString()
-  var dates = formatDate.getDate() > 9 ? formatDate.getDate().toString() : '0' + formatDate.getDate().toString()
-  return year + '-' + month + '-' + dates
-}
-
-/**
- * 日期格式化 hh:mm:ss
- * @param  {String} value 目标日期字符串
- *         {Boolean} correct 修正偏差
- * @return {String}
- */
-export function uniformTime (date, correct) {
-  var formatDate = null
-  if (date instanceof Date) {
-    formatDate = date
-  } else if (date && date.length > 0) {
-    formatDate = new Date(date)
-  } else {
-    return date
-  }
-
-  if (typeof correct === 'boolean' && correct) {
-    formatDate = new Date(formatDate.getTime() - 3600 * 8 * 1000)
-  }
-
-  var hours = formatDate.getHours() > 9 ? formatDate.getHours().toString() : '0' + formatDate.getHours().toString()
-  var minutes = formatDate.getMinutes() > 9 ? formatDate.getMinutes().toString() : '0' + formatDate.getMinutes().toString()
-  var seconds = formatDate.getSeconds() > 9 ? formatDate.getSeconds().toString() : '0' + formatDate.getSeconds().toString()
-  return hours + ':' + minutes + ':' + seconds
-}
-
-/**
- * 日期格式化 hh:mm
- * @param  {String} value 目标日期字符串
- *         {Boolean} correct 修正偏差
- * @return {String}
- */
-export function uniformMinuteTime (date, correct) {
-  var formatDate = null
-  if (date instanceof Date) {
-    formatDate = date
-  } else if (date && date.length > 0) {
-    formatDate = new Date(date)
-  } else {
-    return date
-  }
-
-  if (correct) {
-    formatDate = new Date(formatDate.getTime() - 3600 * 8 * 1000)
-  }
-
-  var hours = formatDate.getHours() > 9 ? formatDate.getHours().toString() : '0' + formatDate.getHours().toString()
-  var minutes = formatDate.getMinutes() > 9 ? formatDate.getMinutes().toString() : '0' + formatDate.getMinutes().toString()
-  return hours + ':' + minutes
-}
+export default formatDate

@@ -45,7 +45,7 @@
   import Pager from 'components/Pager'
   import { globalMixins } from 'src/mixins'
   import Table from 'components/Table'
-  import {formatDate} from 'filters/format-date'
+  import formatDate from 'filters/format-date'
 
   export default {
     name: 'Alert',

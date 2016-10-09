@@ -135,8 +135,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'filters/format-date'
-import dateFormat from 'date-format'
+import formatDate from 'filters/format-date'
 
 // TODO 消除代码冗余 #weijie
 
@@ -215,7 +214,7 @@ export default {
           change: 0
         }
       },
-      today: dateFormat('yyyy-MM-dd', new Date()),
+      today: formatDate(new Date(), 'yyyy-MM-dd', true),
       loadingData: false,
       startTimePick: '',
       endTimePick: '',
@@ -399,30 +398,18 @@ export default {
     getFirstProduct () {
       this.currentProduct = this.products[0] || {}
     },
-    getUnreadCount (start, end) {
-      let beginTime = dateFormat('yyyy-MM-dd', new Date(start))
-      let endTime = dateFormat('yyyy-MM-dd', new Date(end))
-      api.statistics.getProductAlertSummary(this.currentProduct.id, beginTime, endTime).then((res) => {
-        if (res.status === 200) {
-          this.alertSummary.unread.total = res.data.unread
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
 
     // 获取告警概览
     getSummary () {
-      var todayTime = new Date().getTime()
-      todayTime = dateFormat('yyyy-MM-dd', new Date(todayTime))
-      var initTime = new Date(0)
-      initTime = dateFormat('yyyy-MM-dd', new Date(initTime))
-      var weekBeginTime = new Date().getTime() - 7 * 24 * 3600 * 1000
-      weekBeginTime = dateFormat('yyyy-MM-dd', new Date(weekBeginTime))
-      var monthBeginTime = new Date().getTime() - 30 * 24 * 3600 * 1000
-      monthBeginTime = dateFormat('yyyy-MM-dd', new Date(monthBeginTime))
-      var now = new Date().getTime() - 1 * 24 * 3600 * 1000
-      now = dateFormat('yyyy-MM-dd', new Date(now))
+      const MILLISECONDS_PER_DAY = 24 * 3600 * 1000
+      var todayTime = formatDate(new Date(), 'yyyy-MM-dd', true)
+      var initTime = formatDate(new Date(0), 'yyyy-MM-dd', true)
+      var weekBeginTime = new Date().getTime() - 7 * MILLISECONDS_PER_DAY
+      weekBeginTime = formatDate(weekBeginTime, 'yyyy-MM-dd', true)
+      var monthBeginTime = new Date().getTime() - 30 * MILLISECONDS_PER_DAY
+      monthBeginTime = formatDate(monthBeginTime, 'yyyy-MM-dd', true)
+      var now = new Date().getTime() - MILLISECONDS_PER_DAY
+      now = formatDate(now, 'yyyy-MM-dd', true)
       // 获取当天数据
       api.statistics.getProductAlertSummary(this.currentProduct.id, initTime, todayTime).then((res) => {
         if (res.status === 200) {
@@ -517,7 +504,6 @@ export default {
         if (res.status === 200) {
           this.total = res.data.count
           this.alerts = res.data.list.map((item) => {
-            console.log(item.create_date)
             // 计算已读告警持续时间
             let begin = new Date((new Date(item.create_date)).getTime())
             // 默认为未读，时间从当前算起

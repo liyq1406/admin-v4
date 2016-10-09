@@ -67,8 +67,7 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
 import store from 'store'
 import api from 'api'
-import dateFormat from 'date-format'
-import { uniformDate, uniformTime } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 
 export default {
   name: 'Issues',
@@ -323,11 +322,11 @@ export default {
     },
     beginTime () {
       var past = new Date().getTime() - (this.period - 2) * 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(past))
+      return formatDate(past, 'yyyy-MM-dd', true)
     },
     endTime () {
       var end = new Date().getTime() + 24 * 3600 * 1000
-      return dateFormat('yyyy-MM-dd', new Date(end))
+      return formatDate(end, 'yyyy-MM-dd', true)
     }
   },
 
@@ -401,8 +400,7 @@ export default {
     // 将后台返回的时间加上8个小时处理
     dealTime () {
       this.issues.forEach((issue) => {
-        var time = new Date(issue.create_time)
-        issue.create_time = uniformDate(time) + ' ' + uniformTime(time)
+        issue.create_time = formatDate(issue.create_time, true)
       })
     },
 

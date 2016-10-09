@@ -35,7 +35,7 @@ import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
-import { formatDate } from 'filters/format-date'
+import formatDate from 'filters/format-date'
 
 export default {
   name: 'MenuList',
