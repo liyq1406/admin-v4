@@ -944,9 +944,8 @@ export default {
                 overflow hidden
                 .mac
                   span
-                    text-overflow ellipsis
-                    overflow hidden
-                    display inline-block
+                    text-overflow()
+                    display block
                     max-width 110px
           .no-devices
             height 400px
