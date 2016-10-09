@@ -1,7 +1,7 @@
 <template>
   <div class="auth-form login-form">
     <div class="inner">
-      <div class="form-legend">云智易企业管理台</div>
+      <div class="form-legend">云智易物联云平台企业管理台</div>
       <div class="form">
         <validator name="authValidation">
           <form novalidate @submit.prevent="onSubmit">
