@@ -40,7 +40,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
 import Interval from 'components/g2-charts/Interval'
-import { uniformDate } from 'src/filters'
+import { uniformDate } from 'filters/format-date'
 import Distributing from './distributing'
 import _ from 'lodash'
 

@@ -43,7 +43,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import {getActivatedTrend} from './api-product'
-import { uniformDate } from 'src/filters'
+import { uniformDate } from 'filters/format-date'
 import _ from 'lodash'
 
 export default {

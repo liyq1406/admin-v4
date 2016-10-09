@@ -105,8 +105,8 @@ import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
 import Gallery from 'components/Gallery'
 import api from 'api'
-// import { formatDate } from 'src/filters'
-import { uniformDate, uniformTime } from 'src/filters'
+// import { formatDate } from 'filters/format-date'
+import { uniformDate, uniformTime } from 'filters/format-date'
 // import _ from 'lodash'
 
 export default {

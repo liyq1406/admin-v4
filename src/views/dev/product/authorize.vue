@@ -176,7 +176,7 @@ import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Statistic from 'components/Statistic2'
 import Alert from 'components/Alert'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 
 export default {
   name: 'Authorize',

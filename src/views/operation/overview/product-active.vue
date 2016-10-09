@@ -24,7 +24,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pie from 'components/g2-charts/Pie'
 import { globalMixins } from 'src/mixins'
 import {getActiveTrend} from './api-product'
-import { uniformDate } from 'src/filters'
+import { uniformDate } from 'filters/format-date'
 import api from 'api'
 
 export default {

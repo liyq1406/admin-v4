@@ -14,7 +14,7 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Dropdown from 'components/Dropdown'
 import Table from 'components/Table'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 
 export default {
   name: 'Users',

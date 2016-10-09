@@ -132,7 +132,7 @@ import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import store from 'store'
 import api from 'api'
-import { formatDate, uniformDate } from 'src/filters'
+import { formatDate, uniformDate } from 'filters/format-date'
 import _ from 'lodash'
 
 export default {

@@ -42,7 +42,7 @@ import Map from 'components/Map'
 import { globalMixins } from 'src/mixins'
 import store from 'store'
 import { getCurrProduct, setCurrDevice, setCurrVirtualDevice } from 'store/actions/products'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 
 export default {
   name: 'Device',

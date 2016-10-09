@@ -21,7 +21,7 @@ import api from 'api'
 import TimeLine from 'components/g2-charts/TimeLine'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import { globalMixins } from 'src/mixins'
-import { uniformDate } from 'src/filters'
+import { uniformDate } from 'filters/format-date'
 import _ from 'lodash'
 
 export default {

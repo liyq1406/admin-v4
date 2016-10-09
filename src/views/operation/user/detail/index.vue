@@ -45,7 +45,7 @@
   import Breadcrumb from 'components/Breadcrumb'
   import InfoCard from 'components/InfoCard'
   import InfoList from 'components/InfoList'
-  import { formatDate } from 'src/filters'
+  import { formatDate } from 'filters/format-date'
   import Tab from 'components/Tab'
   import Map from 'components/Map'
 

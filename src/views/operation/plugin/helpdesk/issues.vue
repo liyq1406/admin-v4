@@ -68,7 +68,7 @@ import { pluginMixins } from '../mixins'
 import store from 'store'
 import api from 'api'
 import dateFormat from 'date-format'
-import { uniformDate, uniformTime } from 'src/filters'
+import { uniformDate, uniformTime } from 'filters/format-date'
 
 export default {
   name: 'Issues',

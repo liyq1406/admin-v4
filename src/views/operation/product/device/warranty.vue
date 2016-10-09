@@ -37,7 +37,7 @@
   import AreaSelect from 'components/AreaSelect'
   import Select from 'components/Select'
   import Table from 'components/Table'
-  import { formatDate } from 'src/filters'
+  import { formatDate } from 'filters/format-date'
 
   export default {
     components: {

@@ -24,7 +24,7 @@
 
 <script>
 import DateTimePicker from './DateTimePicker'
-import {uniformDate} from '../filters'
+import { uniformDate } from 'filters/format-date'
 import EventListener from 'utils/event-listener'
 
 export default {

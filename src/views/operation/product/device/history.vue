@@ -55,7 +55,7 @@ import Select from 'components/Select'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import TimeLine from 'components/g2-charts/TimeLine'
 import Table from 'components/Table'
-import { uniformDate, formatDate } from 'src/filters'
+import { uniformDate, formatDate } from 'filters/format-date'
 import _ from 'lodash'
 
 export default {

@@ -12,7 +12,7 @@
 <script>
 import DateTimePicker from 'components/DateTimePicker'
 import Dropdown from 'components/Dropdown'
-import {uniformDate, uniformMinuteTime} from '../filters'
+import { uniformDate, uniformMinuteTime } from 'filters/format-date'
 
 export default {
   name: 'timesinglerangepicker',

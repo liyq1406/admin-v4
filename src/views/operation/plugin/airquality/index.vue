@@ -43,7 +43,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
-import { formatDate, uniformDate } from 'src/filters'
+import { formatDate, uniformDate } from 'filters/format-date'
 
 import api from 'api'
 

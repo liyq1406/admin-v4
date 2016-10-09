@@ -53,7 +53,7 @@ import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Table from 'components/Table'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 import api from 'api'
 
 export default {

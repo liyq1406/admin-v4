@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import { uniformDate } from 'src/filters'
+import { uniformDate } from 'src/filters/format-date'
 import _ from 'lodash'
 import getMessageQueue from 'src/utils/mq.js'
 

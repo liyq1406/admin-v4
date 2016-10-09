@@ -71,7 +71,7 @@ import DateTimeSinglePicker from 'components/DateTimeSinglePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 import dateFormat from 'date-format'
 // import { setCurrPlugin } from 'store/actions/plugins'
 

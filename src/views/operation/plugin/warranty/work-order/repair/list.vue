@@ -73,7 +73,7 @@
   import api from 'api'
   import * as config from 'consts/config'
   import Statistic from 'components/Statistic'
-  import { formatDate } from 'src/filters'
+  import { formatDate } from 'filters/format-date'
 
   export default {
     name: 'OrderList',

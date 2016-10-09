@@ -33,7 +33,7 @@
 
 <script>
 import Datetimepicker from './Datetimepicker'
-import {uniformMinuteTime, uniformDate} from '../filters'
+import {uniformMinuteTime, uniformDate} from 'filters/format-date'
 
 export default {
   name: 'timerangepicker',

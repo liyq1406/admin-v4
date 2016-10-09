@@ -44,7 +44,7 @@
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import TimeLine from 'components/g2-charts/TimeLine'
   import api from 'api'
-  import { formatDate } from 'src/filters'
+  import { formatDate } from 'filters/format-date'
 
   export default {
     name: 'BroadcastHistory',

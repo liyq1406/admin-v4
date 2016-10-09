@@ -62,7 +62,7 @@ import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
 import Statistic from 'components/Statistic2'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 import BatchExportQr from './batch-export-qr'
 
 export default {

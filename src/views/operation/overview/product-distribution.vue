@@ -22,7 +22,7 @@ import ChinaMap from 'components/g2-charts/ChinaMap'
 import { globalMixins } from 'src/mixins'
 import {getProductRegion} from './api-product'
 import {numToPercent} from 'utils'
-import { toPercentage } from 'src/filters'
+import { toPercentage } from 'filters/format-date'
 import PercentTable from 'components/PercentTable'
 import _ from 'lodash'
 

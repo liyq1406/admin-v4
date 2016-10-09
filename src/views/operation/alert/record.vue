@@ -135,7 +135,7 @@ import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
 import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 import dateFormat from 'date-format'
 
 // TODO 消除代码冗余 #weijie

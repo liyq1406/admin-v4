@@ -81,7 +81,7 @@
   import Breadcrumb from 'components/Breadcrumb'
   import store from 'store'
   import api from 'api'
-  // import { formatDate } from 'src/filters'
+  // import { formatDate } from 'filters/format-date'
   // import _ from 'lodash'
   // import { createDayRange } from 'utils'
 

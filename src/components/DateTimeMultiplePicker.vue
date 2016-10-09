@@ -29,7 +29,7 @@
 
 <script>
 import DateTimePicker from './DateTimePicker'
-import {uniformDate} from '../filters'
+import { uniformDate } from 'filters/format-date'
 import EventListener from 'utils/event-listener'
 import { globalMixins } from 'src/mixins'
 import RadioButtonGroup from 'components/RadioButtonGroup'

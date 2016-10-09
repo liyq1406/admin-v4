@@ -43,7 +43,7 @@
         <a v-link="{path: 'authorize'}" class="btn btn-primary">管理授权</a>
         <!-- <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button> -->
       </div>
-      <div class="panel-bd">
+      <div class="panel-bd mt15">
         <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
@@ -120,7 +120,7 @@ import Modal from 'components/Modal'
 import Select from 'components/Select'
 import store from 'store'
 import _ from 'lodash'
-import { formatDate } from 'src/filters'
+import { formatDate } from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
 export default {
