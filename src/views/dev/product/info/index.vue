@@ -72,16 +72,19 @@
       </div>
     </div>
 
+    <!-- 查看产品密钥浮层 -->
     <modal :show.sync="showKeyModal">
       <h3 slot="header">{{ $t("ui.overview.key") }}</h3>
       <div slot="body" class="product-key tac">{{ productKey }}</div>
     </modal>
 
+    <!-- 查看二维码浮层 -->
     <modal :show.sync="showQrcodeModal">
       <h3 slot="header">二维码</h3>
       <div slot="body" class="qrcode">{{ currentProduct.qrcode || 'XQR:T:P;V:1;PID:'+$route.params.id+';;' }}</div>
     </modal>
 
+    <!-- 编辑设备浮层 -->
     <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
@@ -185,6 +188,7 @@ export default {
       loadingData: false,
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
+        { label: 'SN', value: 'sn' },
         { label: '设备ID', value: 'id' },
         { label: '设备名称', value: 'name' }
       ],

@@ -18,7 +18,6 @@
           :loading="tableLoadingData"
           @theader-active-date="sortBysomeKey"
           @theader-is-online="sortBysomeKey">
-
         </x-table>
       </div>
     </div>
