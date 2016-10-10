@@ -28,6 +28,14 @@
               </div>
             </div>
           </div>
+          <div class="form-row row">
+            <label class="form-control col-6">分类图片:</label>
+            <div class="controls col-18">
+              <div class="input-text-wrap">
+                <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
+              </div>
+            </div>
+          </div>
           <div class="form-actions">
             <label v-if="type === 'edit'" class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
@@ -44,9 +52,10 @@
 <script>
 import api from 'api'
 import Modal from 'components/Modal'
+import ImageUploader from 'components/ImageUploader'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
-// import _ from 'lodash'
+import _ from 'lodash'
 
 export default {
   name: 'CategoryModal',
@@ -89,11 +98,13 @@ export default {
   },
 
   components: {
+    ImageUploader,
     Modal
   },
 
   data () {
     return {
+      images: [''], // 分类图片
       delChecked: false, // 是否删除
       submiting: false // 正在提交？
     }
@@ -117,7 +128,24 @@ export default {
     }
   },
 
+  watch: {
+    isShow () {
+      if (this.isShow) {
+        let images = _.compact(this.category.images)
+        this.images = images.length ? images : ['']
+      }
+    }
+  },
+
   methods: {
+    /**
+     * 处理图片上传
+     * @param  {Array} images 图片路径数组
+     */
+    onModifiedImages (images, data) {
+      images = data
+    },
+
     /**
      * 取消表单提交
      * @author shengzhi
@@ -147,6 +175,7 @@ export default {
       this.submiting = true
       let params = {
         name: this.category.name,
+        images: _.compact(_.clone(this.images)),
         instructions: this.category.instructions
       }
       let process

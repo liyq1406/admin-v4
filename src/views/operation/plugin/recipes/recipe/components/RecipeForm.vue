@@ -115,7 +115,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="action col-offset-3">
+                <div class="operations col-offset-3">
                   <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
                 </div>
               </div>
@@ -140,7 +140,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="action col-offset-3">
+                <div class="operations col-offset-3">
                   <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
                 </div>
               </div>

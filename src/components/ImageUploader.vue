@@ -18,6 +18,8 @@
   import { globalMixins } from 'src/mixins'
 
   export default {
+    name: 'ImageUploader',
+
     mixins: [globalMixins],
 
     props: {
