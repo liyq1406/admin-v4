@@ -270,26 +270,30 @@ export default {
           person: item.assigned_name,
           content: item.remark,
           // state: resetState(item.state),
-          state: item.state,
+          state: resetState(item.status || 0),
           prototype: item
         }
         result.push(history)
       })
       return result
-      // function resetState (state) {
-      //   var result = [
-      //     {
-      //       text: '待处理',
-      //       color: '#6699CC'
-      //     },
-      //     {
-      //       text: '维修中',
-      //       color: '#CC6600'
-      //     }
-      //   ]
-      //   var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
-      //   return html
-      // }
+      function resetState (state) {
+        var result = [
+          {
+            text: '待处理',
+            color: '#6699CC'
+          },
+          {
+            text: '维修中',
+            color: '#CC6600'
+          },
+          {
+            text: '维修完成',
+            color: '#090'
+          }
+        ]
+        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+        return html
+      }
       // function resetLevel (state) {
       //   var resutl = [
       //     {
