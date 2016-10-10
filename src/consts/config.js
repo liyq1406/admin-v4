@@ -34,7 +34,7 @@ let apiServer = ({
     api: `${protocol}//dev-man.360tj.com:8016`,
     plugin: `${protocol}://dev-man.360tj.com:8016`
   }
-})[process.env.API_SERVER || 'api2']
+})[process.env.API_SERVER || 'test']
 
 export const API_SERVER = {
   // 默认

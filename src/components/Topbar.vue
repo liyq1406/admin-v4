@@ -6,7 +6,7 @@
       <!-- <pre>{{mainNav | json}}</pre> -->
       <ul>
         <li><a v-link="{path: '/dev'}"><span class="link-text">{{ $t('ui.main_nav.dev.label') }}</span></a></li>
-        <li><a v-link="{path: '/operation'}" @click.prevent="enterOperation"><span class="link-text">{{ $t('ui.main_nav.operation.label') }}</span></a></li>
+        <li><a v-link="{path: '/operation'}"><span class="link-text">{{ $t('ui.main_nav.operation.label') }}</span></a></li>
       </ul>
     </nav>
     <!-- End: 主导航 -->

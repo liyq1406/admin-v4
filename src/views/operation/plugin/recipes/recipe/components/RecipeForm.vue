@@ -72,19 +72,19 @@
               <div class="form-row row">
                 <label class="form-control col-3">{{ $t("ui.ingredient.fields.classification") }}:</label>
                 <div class="controls col-21">
-                  <div class="select-group1">
+                  <div class="select-group1" v-for="category in classification">
                     <div class="select">
                       <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
-                        <select v-model="category.main" @change="handleMainType(category)">
-                          <option v-for="opt in categories_main"  :value="opt" :label= "opt.name" :selected="opt.name===category.main">{{ opt.main }}</option>
+                        <select v-model="category.main" @change="getSubCategories(category, true)">
+                          <option v-for="opt in mainCategories" :value="opt.main">{{ opt.main.name }}</option>
                         </select>
                       </v-select>
-                      <v-select v-show="categories_sub.length && category.main " width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
+                      <v-select v-show="category.subOptions.length" width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
                         <select v-model="category.sub">
-                          <option v-for="opt in categories_sub" :value="opt" :label= "opt.name" :selected="opt.name===category.sub">{{ opt.main }}</option>
+                          <option v-for="opt in category.subOptions" :value="opt.sub">{{ opt.sub.name }}</option>
                         </select>
                       </v-select>
-                      <span @click="removeObj(category, classifications)" class="fa fa-times ml10"></span>
+                      <span @click="removeObj(category, classification)" class="fa fa-times ml10"></span>
                     </div>
                   </div>
                   <button @click.prevent="addCategory" class="btn btn-primary"><i class="fa fa-plus"></i>添加类别</button>
@@ -360,16 +360,6 @@ export default {
       name: '',
       images: [''], // 成品图
       difficulty: '不限',
-      category: {
-        main: {
-          name: '',
-          _id: ''
-        },
-        sub: {
-          name: '',
-          _id: ''
-        }
-      },
       instructions: '',
       cooking_steps: [{
         description: '',
@@ -382,12 +372,8 @@ export default {
         difficulty: '不限',
         label: ''
       },
-      classification: {
-        main: '',
-        sub: ''
-      },
-      categories_main: [],
-      categories_sub: [],
+      mainCategories: [],
+      classification: [],
       tips: '',
       tag: '',
       editingTag: false,
@@ -400,7 +386,6 @@ export default {
       allDevices: '',
       // candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
       candidateTags: [],
-      categories: [],
       adding: false,
       status: 1,
       isShowPreview: false,
@@ -409,35 +394,20 @@ export default {
   },
 
   computed: {
-    // autoexecs () {
-    //   var result = []
-    //   // console.log(this.decToHex(0))
-    //   this.devices.forEach((item) => {
-    //     var execArr = [this.decToHex(item.count)]
-    //     item.steps.forEach((step) => {
-    //       step.bytes.forEach((byte) => {
-    //         execArr.push(this.decToHex(byte.value))
-    //       })
-    //     })
-    //     for (var i = 99, len = execArr.length; i >= len; i--) {
-    //       execArr[i] = this.decToHex(0)
-    //     }
-    //     result.push(execArr.join(' '))
-    //   })
-    //   return result
-    // },
-
-    categoryOptions () {
-      return _.differenceBy(this.categories, this.classifications, 'main')
-    }
   },
 
   ready () {
     let appId = this.$route.params.app_id
     // 从 localStorage 中获取app token
     let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
-    // 如果是编辑表单
-    if (this.type === 'edit') {
+
+    if (this.type === 'add') { // 添加
+      this.classification = [{
+        main: {id: '', name: ''},
+        sub: {id: '', name: ''},
+        subOptions: []
+      }]
+    } else { // 编辑
       var condition = {
         filter: [],
         limit: 1,
@@ -454,9 +424,7 @@ export default {
           this.instructions = data.instructions
           this.properties.cooking_time = data.properties.cooking_time
           this.properties.difficulty = data.properties.difficulty
-          this.tag = data.properties.label
-          this.category.main = data.classification[0].main
-          this.category.sub.name = data.classification[0].sub
+          this.tag = data.properties.label ? data.properties.label.join(',') : ''
           this.major_ingredients = data.major_ingredients
           this.minor_ingredients = data.minor_ingredients
           this.cooking_steps = data.cooking_steps
@@ -467,30 +435,23 @@ export default {
             images[index] = item
           })
           this.images = images
-          this.getOption()
+
+          // TODO
+          _.forEach(data.classification, (item) => {
+            this.getSubCategories(item)
+            this.classification.push(item)
+          })
         }
       })
     }
 
     // 获取所有菜谱分类
-    this.getCategories()
+    this.getMainCategories()
     // 获取所有标签
     this.getTags()
-    // 获取所有食材
-    // this.getIngredients()
   },
 
   methods: {
-    // /**
-    //  * 十进制转换为十六进制
-    //  * @param  {Number} n 目标数字
-    //  * @return {String}   十六进制字符串
-    //  */
-    // decToHex (n) {
-    //   var str = n.toString(16)
-    //   return str.length === 1 ? `0${str}` : str
-    // },
-
     /**
      * 处理图片上传
      * @param  {Array} images 图片路径数组
@@ -500,94 +461,75 @@ export default {
     },
 
     /**
-     * 获取菜谱父分类
+     * 获取菜谱分类
+     * @author shengzhi
      */
-    getCategories () {
+    getCategories (id, limit) {
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+
       let condition = {
-        limit: 200,
+        limit: limit,
         query: {
-          parent_id: 0
+          parent_id: id
         }
       }
+
       this.loadingData = true
-      api.recipes.getCategories(appId, token, condition).then((res) => {
-        if (res.status === 200) {
-          console.log(res.data.list)
-          res.data.list.forEach((item) => {
-            var obj = {}
-            obj.name = item.name
-            obj._id = item._id
-            this.categories_main.push(obj)
-          })
-          // this.categories_main = res.data.list
+      return api.recipes.getCategories(appId, token, condition)
+    },
+
+    /**
+     * 获取父级分类
+     * @author shengzhi
+     */
+    getMainCategories () {
+      this.getCategories(0, 50).then((res) => {
+        if (res.status !== 200) {
           this.loadingData = false
+          return
         }
+        this.mainCategories = res.data.list.map((item) => {
+          return {
+            main: {
+              id: item._id,
+              name: item.name
+            }
+          }
+        })
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
       })
     },
 
-    // 获取对应父类的子类
-    handleMainType (data) {
-      let appId = this.$route.params.app_id
-      // 从 localStorage 中获取app token
-      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
-      this.categories_sub = []
-      data.sub = {}
-      var condition = {
-        limit: 500,
-        query: {
-          parent_id: data.main._id
-        }
+    /**
+     * 获取子级分类
+     * @author shengzhi
+     * @param {Object} parent 父级
+     */
+    getSubCategories (parent, trigger) {
+      if (trigger) {
+        parent.sub = {id: '', name: ''}
       }
-      this.loadingData = true
-      api.recipes.getCategories(appId, token, condition).then((res) => {
-        if (res.status === 200) {
-          console.log(res.data.list)
-          res.data.list.forEach((item) => {
-            var obj = {}
-            obj.name = item.name
-            obj._id = item._id
-            this.categories_sub.push(obj)
-            this.loadingData = false
-          })
-          // this.categories_main = res.data.list
+      parent.subOptions = []
+      this.getCategories(parent.main.id, 500).then((res) => {
+        if (res.status !== 200) {
           this.loadingData = false
+          return
         }
+        parent.subOptions = res.data.list.map((item) => {
+          return {
+            sub: {
+              id: item._id,
+              name: item.name
+            }
+          }
+        })
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
-      })
-    },
-
-    // 编辑时判断是否出现子类别，获取对应option
-    getOption () {
-      let appId = this.$route.params.app_id
-      // 从 localStorage 中获取app token
-      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
-      let condition = {
-        limit: 500,
-        query: {
-          parent_id: this.category.main._id
-        }
-      }
-      this.loadingData = true
-      api.recipes.getCategories(appId, token, condition).then((res) => {
-        if (res.status === 200) {
-          res.data.list.forEach((item) => {
-            var obj = {}
-            obj.name = item.name
-            obj._id = item._id
-            this.categories_sub.push(obj)
-            this.loadingData = false
-          })
-          // this.categories_main = res.data.list
-          this.loadingData = false
-        }
       })
     },
 
@@ -621,10 +563,11 @@ export default {
      * 添加菜谱类别
      */
     addCategory () {
-      var newCate = {}
-      newCate.main = ''
-      newCate.sub = ''
-      this.classifications.push(newCate)
+      this.classification.push({
+        main: {id: '', name: ''},
+        sub: {id: '', name: ''},
+        subOptions: []
+      })
     },
 
     /**
@@ -734,29 +677,31 @@ export default {
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
       this.editing = true
-      this.images = _.compact(this.images)
+      let images = _.compact(_.clone(this.images))
       let major = this.major_ingredients.filter((item) => {
         return Object.keys(item).length > 0
       })
       let minor = this.minor_ingredients.filter((item) => {
         return Object.keys(item).length > 0
       })
+      let classification = []
+      _.forEach(this.classification, (item) => {
+        if (!item.main.id) return
+        classification.push({
+          main: item.main,
+          sub: item.sub
+        })
+      })
       let params = {
         name: this.name,
-        images: this.images,
+        images: images,
         instructions: this.instructions,
         properties: {
           cooking_time: this.properties.cooking_time,
           difficulty: this.properties.difficulty,
-          label: this.tag
+          label: _.compact(this.tag.split(','))
         },
-        classification: [{
-          main: {
-            name: this.category.main.name,
-            _id: this.category.main._id
-          },
-          sub: this.category.sub.name
-        }],
+        classification: classification,
         major_ingredients: major,
         minor_ingredients: minor,
         cooking_steps: this.cooking_steps,
