@@ -394,14 +394,15 @@ export default {
      * @return {[type]} [description]
      */
     onDeviceEditModalSubmit () {
-      if (this.deviceEditModal.sn.length) {
-        this.setSn()
-      } else {
-        this.showNotice({
-          type: 'error',
-          content: '请输入设备sn'
-        })
-      }
+      this.setSn()
+      // if (this.deviceEditModal.sn.length) {
+      //   this.setSn()
+      // } else {
+      //   this.showNotice({
+      //     type: 'error',
+      //     content: '请输入设备sn'
+      //   })
+      // }
     },
     /**
      * 显示sn编辑浮层
