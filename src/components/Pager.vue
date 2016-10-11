@@ -23,8 +23,8 @@
       </div>
       <div class="v-pager-control">
         <button-group>
-          <button :class="{'disabled': current === 1}" :disabled="current === 1" @click="onPageChange(current-1)" class="btn v-pager-prev"><i class="fa fa-chevron-left"></i></button>
-          <button :class="{'disabled': current === pages}" :disabled="current === pages" @click="onPageChange(current+1)" class="btn v-pager-next"><i class="fa fa-chevron-right"></i></button>
+          <button :class="{'disabled': current === 1}" :disabled="current === 1" @click.stop.prevent="onPageChange(current-1)" class="btn v-pager-prev"><i class="fa fa-chevron-left"></i></button>
+          <button :class="{'disabled': current === pages}" :disabled="current === pages" @click.stop.prevent="onPageChange(current+1)" class="btn v-pager-next"><i class="fa fa-chevron-right"></i></button>
         </button-group>
       </div>
     </div>

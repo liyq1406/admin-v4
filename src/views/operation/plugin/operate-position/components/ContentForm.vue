@@ -50,8 +50,8 @@
                     <tr>
                       <th class="tac w40">选择</th>
                       <th>标题</th>
-                      <th v-if="$route.params.contentType==='recipe'">类型</th>
-                      <th>作者</th>
+                      <th v-if="$route.params.contentType==='recipe'" class="w60">类型</th>
+                      <th class="w100">作者</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -266,7 +266,7 @@ export default {
       if (!this.allPlugins.length) return
       let contentType = this.$route.params.contentType
       this.allPlugins.forEach((item) => {
-        if ((item.plugin === 'content' && contentType === 'article') || (item.plugin === 'recipe' && (contentType === 'recipe' || contentType === 'menu'))) {
+        if ((item.plugin === 'content' && contentType === 'article') || (item.plugin === 'recipe' && (contentType === 'recipes' || contentType === 'menu'))) {
           this.contentAppId = item.id
         }
       })
@@ -284,6 +284,7 @@ export default {
       }
       var appTokenInvalidTime = pluginsToken[appId] && pluginsToken[appId].appTokenInvalidTime - 0
       var appTokenValid = appTokenInvalidTime > +new Date()
+      this.token = pluginsToken[appId].token
       if (!appTokenValid) { // appToken过期
         var params = {
           'app_id': appId
@@ -328,7 +329,7 @@ export default {
         case 'article':
           process = api.content.getArticleList(this.contentAppId, this.queryCondition)
           break
-        case 'recipe':
+        case 'recipes':
           process = api.recipes.getRecipes(this.contentAppId, this.token, this.queryCondition)
           break
         case 'menu':
