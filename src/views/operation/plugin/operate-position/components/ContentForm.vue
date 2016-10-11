@@ -167,7 +167,7 @@ export default {
     breadcrumbNav () {
       let result = [{
         label: '运营位管理',
-        link: `/operation/plugins/operate-position/${this.$route.params.app_id}`
+        link: `/operation/plugins/operateposition/${this.$route.params.app_id}`
       }]
       let actionLabel = ({
         add: '添加',
@@ -177,7 +177,7 @@ export default {
       if (this.operatePosition.name) {
         result.push({
           label: this.operatePosition.name,
-          link: `/operation/plugins/operate-position/${this.$route.params.app_id}/stall/${this.$route.params.id}`
+          link: `/operation/plugins/operateposition/${this.$route.params.app_id}/stall/${this.$route.params.id}`
         })
         result.push({
           label: `${actionLabel}内容`
@@ -428,7 +428,7 @@ export default {
                   type: 'success',
                   content: '运营位内容添加成功'
                 })
-                this.$route.router.replace(`/operation/plugins/operate-position/${this.$route.params.app_id}/stall/${this.$route.params.id}`)
+                this.$route.router.replace(`/operation/plugins/operateposition/${this.$route.params.app_id}/stall/${this.$route.params.id}`)
               }
             })
           }
@@ -440,7 +440,7 @@ export default {
               type: 'success',
               content: '运营位内容更新成功'
             })
-            this.$route.router.replace(`/operation/plugins/operate-position/${this.$route.params.app_id}/stall/${this.$route.params.id}`)
+            this.$route.router.replace(`/operation/plugins/operateposition/${this.$route.params.app_id}/stall/${this.$route.params.id}`)
           }
         })
       }

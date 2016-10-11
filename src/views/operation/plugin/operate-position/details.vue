@@ -136,7 +136,7 @@ export default {
     breadcrumbNav () {
       let result = [{
         label: '运营位管理',
-        link: `/operation/plugins/operate-position/${this.$route.params.app_id}`
+        link: `/operation/plugins/operateposition/${this.$route.params.app_id}`
       }]
 
       if (this.operatePosition.name) {
