@@ -284,8 +284,9 @@ export default {
       }
       var appTokenInvalidTime = pluginsToken[appId] && pluginsToken[appId].appTokenInvalidTime - 0
       var appTokenValid = appTokenInvalidTime > +new Date()
-      this.token = pluginsToken[appId].token
-      if (!appTokenValid) { // appToken过期
+      if (appTokenValid) { // appToken未过期
+        this.token = pluginsToken[appId].token
+      } else { // appToken过期
         var params = {
           'app_id': appId
         }
