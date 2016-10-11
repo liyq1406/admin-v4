@@ -12,6 +12,9 @@ module.exports = {
     'AMap': true,
     'describe': true,
     'before': true,
+    'beforeEach': true,
+    'after': true,
+    'afterEach': true,
     'it': true,
     'expect': true,
     'sinon': true
