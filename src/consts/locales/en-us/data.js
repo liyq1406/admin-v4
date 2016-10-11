@@ -155,14 +155,14 @@ export const MEMBER_STATUS_TYPES = ['待激活', '启用', '已停用']
 // 数据端点类型
 export const DATAPOINT_TYPES = [
   { value: 1, label: '布尔类型' },
-  { value: 2, label: '单字节(无符号)' },
-  { value: 3, label: '16位短整型(有符号)' },
-  { value: 4, label: '32位整型(有符号)' },
-  { value: 5, label: '浮点' },
+  { value: 2, label: '单字节(无符号)', min: 0, max: 255 },
+  { value: 3, label: '16位短整型(有符号)', min: -32768, max: 32767 },
+  { value: 4, label: '32位整型(有符号)', min: -2147483648, max: 2147483647 },
+  { value: 5, label: '浮点', min: -9223372036854775808, max: 9223372036854775807 },
   { value: 6, label: '字符串' },
   { value: 7, label: '字节数组' },
-  { value: 8, label: '16位短整型(无符号)' },
-  { value: 9, label: '32位整型(无符号)' }
+  { value: 8, label: '16位短整型(无符号)', min: 0, max: 65535 },
+  { value: 9, label: '32位整型(无符号)', min: 0, max: 4294967295 }
 ]
 
 // 数据端点规则

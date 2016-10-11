@@ -39,7 +39,7 @@
                   <div class="select">
                     <v-select :label="modelType.label">
                       <select v-model="modelType" name="type">
-                        <option v-for="type in datapointTypes" :value="type">{{ type.label }}</option>
+                        <option v-for="type in locales.data.DATAPOINT_TYPES" :value="type">{{ type.label }}</option>
                       </select>
                     </v-select>
                   </div>
@@ -51,32 +51,29 @@
                   <div class="row">
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.min')" class="input-text-wrap">
-                        <input v-model="model.min" type="number" name="model.min" class="input-text" lazy v-validate:min="validateMin" class="input-text"/>
+                        <input v-model="model.min" type="number" name="model.min" class="input-text" v-validate:min="validateMin" lazy/>
+                      </div>
+                      <div class="form-tips form-tips-error">
+                        <span v-if="$validation.min.touched && $validation.min.required">最小值为必填项</span>
+                        <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
+                        <span v-if="$validation.min.modified && ($validation.min.min || $validation.min.max)">最小值不合法</span>
                       </div>
                     </div>
                     <div class="col-2 tac control-text">-</div>
                     <div class="col-11">
                       <div v-placeholder="$t('ui.datapoint.placeholders.max')" class="input-text-wrap">
-                        <input v-model="model.max" type="number" name="model.max" class="input-text" v-validate:max="validateMax"/>
+                        <input v-model="model.max" type="number" name="model.max" class="input-text" v-validate:max="validateMax" lazy/>
                       </div>
-                    </div>
-                  </div>
-                  <div class="form-tips form-tips-error">
-                    <div class="row">
-                      <div class="col-13">
-                        <span v-if="$validation.min.touched && $validation.min.required">最小值为必填项</span>
-                      </div>
-                      <div class="col-11">
+                      <div class="form-tips form-tips-error">
                         <span v-if="$validation.max.touched && $validation.max.required">最大值为必填项</span>
+                        <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
+                        <span v-if="$validation.max.modified && ($validation.max.min || $validation.max.max)">最大值不合法</span>
                       </div>
                     </div>
-                    <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$validation.min.modified && $validation.min.min">最小值超过范围</span>
-                    <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
-                    <span v-if="$validation.max.modified && $validation.max.max">最大值超过范围</span>
                   </div>
                 </div>
               </div>
+              <!-- 非布尔类型允许添加单位 -->
               <div class="form-row row" v-if="modelType.value!==1">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.symbol") }}:</label>
                 <div class="controls col-18">
@@ -135,6 +132,7 @@ import api from 'api'
 import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import Breadcrumb from 'components/Breadcrumb'
+import _ from 'lodash'
 
 export default {
   name: 'Authorize',
@@ -214,74 +212,15 @@ export default {
         label: this.dataPointId ? '编辑数据端点' : '添加数据端点'
       }]
     },
-    // 数据端点类型
-    datapointTypes () {
-      var result = [
-        {
-          value: 1,
-          label: '布尔类型'
-        },
-        {
-          value: 2,
-          label: '单字节(无符号)'
-        },
-        {
-          value: 3,
-          label: '16位短整型（有符号）'
-        },
-        {
-          value: 4,
-          label: '32位整型（有符号）'
-        },
-        {
-          value: 5,
-          label: '浮点'
-        },
-        {
-          value: 6,
-          label: '字符串'
-        },
-        {
-          value: 7,
-          label: '字节数组'
-        },
-        {
-          value: 8,
-          label: '16位短整型（无符号）'
-        },
-        {
-          value: 9,
-          label: '32位整型（无符号）'
-        }
-      ]
-      return result
-    },
+
+    // 当前数据类型允许的最小值
     addMin () {
-      var min = -9223372036854775808
-      if (this.modelType.value === 2 || this.modelType.value === 8 || this.modelType.value === 9) { // 单字节
-        min = 0
-      } else if (this.modelType.value === 3) { // 短整型有符号
-        min = -32768
-      } else if (this.modelType.value === 4) { // 32位整型（有符号）
-        min = -2147483648
-      }
-      return min
+      return this.getByType(this.modelType.value, 'min')
     },
 
+    // 当前数据类型允许的最大值
     addMax () {
-      var max = 9223372036854775807 // 浮点数
-      if (this.modelType.value === 2) { // 单字节
-        max = 255
-      } else if (this.modelType.value === 3) { // 短整型有符号
-        max = 32767
-      } else if (this.modelType.value === 4) { // 长整型有符号
-        max = 2147483647
-      } else if (this.modelType.value === 8) { // 短整型无符号
-        max = 65535
-      } else if (this.modelType.value === 9) { // 长整型无符号
-        max = 4294967295
-      }
-      return max
+      return this.getByType(this.modelType.value, 'max')
     }
   },
 
@@ -302,13 +241,33 @@ export default {
 
   methods: {
     /**
+     * 根据数据端点类型获取指定属性值
+     * @author shengzhi
+     * @param {Number} type 数据端点类型
+     * @param {String} keyName 指定的属性
+     */
+    getByType (type, keyName) {
+      let obj = _.find(this.locales.data.DATAPOINT_TYPES, (item) => {
+        return item.value === type
+      })
+      if (typeof keyName !== 'undefined') {
+        return obj[keyName]
+      }
+      return obj
+    },
+
+    /**
      * 获取数据端点详情
      * @return {[type]} [description]
      */
     getDatapoint () {
       api.product.getDataPoint(this.$route.params.id, this.dataPointId).then((res) => {
         this.model = res.data
-        this.modelType = this.datapointTypes[res.data.type - 1]
+        // 如果是布尔类型，初始化其最大值为100
+        if (this.model.type === 1) {
+          this.model.max = 100
+        }
+        this.modelType = this.getByType(res.data.type)
       }).catch((res) => {
         this.handleError(res)
       })
@@ -319,27 +278,22 @@ export default {
      * @return {[type]} [description]
      */
     onSubmit () {
-      // 判断表单验证是否通过
-      if (this.$validation.valid || this.delChecked) {
-        this.submiting = true
-        if (this.type === 'add') {
-          this.addDataPoint()
-        } else {
-          if (this.delChecked) {
-            this.deleteDataPoint()
-          } else {
-            this.updateDataPoint()
-          }
-        }
-      } else {
+      // 如果表单正在提交，禁止二次提交
+      if (this.submiting) return
+
+      // 如果勾选了删除但在确认弹窗中没确认，则取消该次表单提交动作
+      if (this.delChecked && !window.confirm('确定要删除该数据端点？')) return
+
+      // 如果表单验证不通过则重新验证
+      if (!this.delChecked && this.$validation.invalid) {
         this.$validate(true)
+        return
       }
-    },
 
-    /**
-     * 添加数据端点
-     */
-    addDataPoint () {
+      // 开始提交表单
+      this.submiting = true
+
+      // 表单参数
       let params = {
         'name': this.model.name,
         'type': this.model.type,
@@ -349,83 +303,53 @@ export default {
         'is_read': true,
         'is_write': this.model.is_write
       }
-      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
-        params.min = this.model.min
-        params.max = this.model.max
-      }
-      api.product.addDataPoint(this.$route.params.id, params).then((res) => {
-        this.showSuccess('添加成功')
-        this.goList()
-        this.submiting = false
-      }).catch((res) => {
-        this.handleError(res)
-        this.submiting = false
-      })
-    },
-    /**
-     * 编辑数据端点
-     * @return {[type]} [description]
-     */
-    updateDataPoint () {
-      let params = {
-        'id': this.model.id,
-        'name': this.model.name,
-        'type': this.model.type,
-        'index': this.model.index,
-        'description': this.model.description,
-        'symbol': this.model.symbol,
-        'is_read': true,
-        'is_write': this.model.is_write
-      }
-      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
-        params.min = this.model.min
-        params.max = this.model.max
-      }
-      api.product.updateDataPoint(this.$route.params.id, params).then((res) => {
-        this.showSuccess('更新成功')
-        this.goList()
-        this.submiting = false
-      }).catch((res) => {
-        this.handleError(res)
-        this.submiting = false
-      })
-    },
 
-    /**
-     * 删除数据端点
-     * @return {[type]} [description]
-     */
-    deleteDataPoint () {
-      if (window.confirm('确定要删除改数据端点？')) {
-        api.product.deleteDataPoint(this.$route.params.id, this.dataPointId).then((res) => {
-          this.showSuccess('删除成功')
-          this.goList()
-        }).catch((res) => {
-          this.handleError(res)
-          this.submiting = false
+      if (this.modelType.value !== 1 && this.modelType.value !== 6) {
+        params.min = this.model.min
+        params.max = this.model.max
+      }
+
+      // 如果是编辑，则加上数据端点的 id
+      if (this.type === 'edit') {
+        params.id = this.model.id
+      }
+
+      // 删除动作则只需要数据端点的 id作为参数
+      if (this.delChecked) {
+        params = this.dataPointId
+      }
+
+      // 产品 id
+      let productId = this.$route.params.id
+
+      // 根据表单的类型和是否勾选删除确定提交动作
+      let process = ({
+        add: {
+          act: api.product.addDataPoint,
+          label: '添加'
+        },
+        edit: {
+          act: api.product.updateDataPoint,
+          label: '更新'
+        },
+        del: {
+          act: api.product.deleteDataPoint,
+          label: '删除'
+        }
+      })[this.delChecked ? 'del' : this.type]
+
+      // 执行动作并处理回调
+      process.act(productId, params).then((res) => {
+        this.showNotice({
+          type: 'success',
+          content: `${process.label}成功`
         })
-      } else {
+        // 跳转到列表页
+        this.$route.router.go('/dev/products/' + this.$route.params.id + '/data-point')
         this.submiting = false
-      }
-    },
-
-    /**
-     * 跳回列表页
-     * @return {[type]} [description]
-     */
-    goList () {
-      this.$route.router.go('/dev/products/' + this.$route.params.id + '/data-point')
-    },
-
-    /**
-     * 显示成功文案
-     * @param  {[type]} str [description]
-     * @return {[type]}     [description]
-     */
-    showSuccess (str) {
-      this.showNotice({
-        type: 'success',
-        content: str
+      }).catch((res) => {
+        this.handleError(res)
+        this.submiting = false
       })
     }
   }

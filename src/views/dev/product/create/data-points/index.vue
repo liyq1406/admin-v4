@@ -29,7 +29,7 @@
                   <td>{{ $index }}</td>
                   <td>
                     <div class="input-text-wrap">
-                      <input type="text" class="input-text input-text-sm" maxlength="32" v-model="datapoint.name" :class="{'require-warnning': requireDatapointName }">
+                      <input type="text" class="input-text input-text-sm" maxlength="32" v-model="datapoint.name" :class="{'require-warnning': isNameError }">
                     </div>
                   </td>
                   <td>
@@ -51,14 +51,14 @@
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="number" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值" :class="{'require-warnning': requireDatapointMin }">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.min" placeholder="最小值" :class="{'require-warnning': isMinError }">
                           </div>
                         </div>
                       </div>
                       <div class="col-7">
                         <div class="ml5">
                           <div class="input-text-wrap">
-                            <input type="number" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值" :class="{'require-warnning': requireDatapointMax }">
+                            <input type="number" class="input-text input-text-sm" v-model="datapoint.max" placeholder="最大值" :class="{'require-warnning': isMaxError }">
                           </div>
                         </div>
                       </div>
@@ -107,7 +107,7 @@
                 <td>{{ addModel.index }}</td>
                 <td>
                   <div class="input-text-wrap">
-                    <input type="text" class="input-text input-text-sm" v-model="addModel.name" :class="{'require-warnning': requireDatapointName }" maxlength="32">
+                    <input type="text" class="input-text input-text-sm" v-model="addModel.name" :class="{'require-warnning': isNameError }" maxlength="32">
                   </div>
                 </td>
                 <td>
@@ -129,14 +129,14 @@
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="number" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值" :class="{'require-warnning': requireDatapointMin }">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.min" placeholder="最小值" :class="{'require-warnning': isMinError }">
                         </div>
                       </div>
                     </div>
                     <div class="col-7">
                       <div class="ml5">
                         <div class="input-text-wrap">
-                          <input type="number" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值" :class="{'require-warnning': requireDatapointMax }">
+                          <input type="number" class="input-text input-text-sm" v-model="addModel.max" placeholder="最大值" :class="{'require-warnning': isMaxError }">
                         </div>
                       </div>
                     </div>
@@ -188,6 +188,7 @@
 import Select from 'components/Select'
 import DataModel from './data-model'
 import { globalMixins } from 'src/mixins'
+import Validator from 'utils/Validator'
 import api from 'api'
 import _ from 'lodash'
 
@@ -227,9 +228,9 @@ export default {
       originEditModel: {},
       addModel: {},
       showModal: false,
-      requireDatapointName: false, // 判断端点ID是否缺失
-      requireDatapointMin: false, // 判断端点最大值是否缺失
-      requireDatapointMax: false // 判断端点最小值是否缺失
+      isNameError: false, // 判断端点ID是否缺失
+      isMinError: false, // 判断端点最小值是否缺失
+      isMaxError: false // 判断端点最大值是否缺失
     }
   },
 
@@ -282,6 +283,19 @@ export default {
         })
         if (product) this.product = product
       }
+    },
+
+    /**
+     * 根据数据端点类型获取指定属性值
+     * @author shengzhi
+     * @param {Number} type 数据端点类型
+     * @param {String} keyName 指定的属性
+     */
+    getByType (type, keyName) {
+      let obj = _.find(this.locales.data.DATAPOINT_TYPES, (item) => {
+        return item.value === type
+      })
+      return obj[keyName]
     },
 
     /**
@@ -351,99 +365,59 @@ export default {
      * @param {Object} datapoint 目标数据端点
      */
     save (datapoint) {
+      if (this.loadingData) return
+
+      let validator = new Validator()
+
       // 端点ID为必填
-      if (this.loadingData) {
+      validator.add(datapoint.name, [{
+        format: 'required',
+        msg: '请填写端点ID'
+      }])
+
+      // 数字类型需要判断必填以及取值范围的合法性
+      let isNumType = _.some([2, 3, 4, 5, 8, 9], (item) => item === datapoint.type)
+      if (isNumType) {
+        validator.add(datapoint.min, [{
+          format: 'required',
+          msg: '请填写最小值'
+        }, {
+          format: 'min:' + this.getByType(datapoint.type, 'min'),
+          msg: '最小值不合法'
+        }])
+
+        validator.add(datapoint.max, [{
+          format: 'required',
+          msg: '请填写最大值'
+        }, {
+          format: 'max:' + this.getByType(datapoint.type, 'max'),
+          msg: '最大值不合法'
+        }, {
+          format: 'compare:' + datapoint.min,
+          msg: '最大值必须大于最小值'
+        }])
+      }
+
+      let errMsg = validator.validate()
+      if (errMsg) {
+        this.showErrors(errMsg)
         return
       }
+
       this.loadingData = true
-
-      // 表单验证
-      if (datapoint.name === '') {
-        this.requireDatapointName = true
-        this.showErrors('请填写端点ID')
-        this.loadingData = false
-        return
-      } else {
-        this.requireDatapointName = false
-      }
-      if (datapoint.min === '') {
-        this.requireDatapointMin = true
-        this.showErrors('请填写最小值')
-        this.loadingData = false
-        return
-      } else {
-        this.requireDatapointMin = false
-      }
-      if (datapoint.max === '') {
-        this.requireDatapointMax = true
-        this.showErrors('请填写最大值')
-        this.loadingData = false
-        return
-      } else {
-        this.requireDatapointMax = false
-      }
-      if (datapoint.max <= datapoint.min) {
-        this.requireDatapointMax = true
-        this.showErrors('最大值必须大于最小值')
-        this.loadingData = false
-        return
-      } else {
-        this.requireDatapointMax = false
-      }
-
-      if (datapoint.type === 2) {
-        if (datapoint.min - 0 < -127) {
-          this.requireDatapointMin = true
-          this.showErrors('最小值不合法')
-          this.loadingData = false
-          return
-        } else {
-          this.requireDatapointMin = false
-        }
-        if (datapoint.max - 0 > 128) {
-          this.requireDatapointMax = true
-          this.showErrors('最大值不合法')
-          this.loadingData = false
-          return
-        } else {
-          this.requireDatapointMax = false
-        }
-      }
-
-      if (datapoint.type === 8) {
-        if (datapoint.min - 0 < 0) {
-          this.requireDatapointMin = true
-          this.showErrors('最小值不合法')
-          this.loadingData = false
-          return
-        } else {
-          this.requireDatapointMin = false
-        }
-        if (datapoint.max - 0 > 255) {
-          this.requireDatapointMax = true
-          this.showErrors('最大值不合法')
-          this.loadingData = false
-          return
-        } else {
-          this.requireDatapointMax = false
-        }
-      }
-
       if (this.adding) { // 添加
         api.product.addDataPoint(this.product.id, datapoint).then((res) => {
-          if (res.status === 200) {
+          if (res.status !== 200) return
             // this.adding = false
-            this.getDatapoints()
-          }
+          this.getDatapoints()
         }).catch((res) => {
           this.handleError(res)
           this.loadingData = false
         })
       } else { // 修改
         api.product.updateDataPoint(this.product.id, datapoint).then((res) => {
-          if (res.status === 200) {
-            this.getDatapoints()
-          }
+          if (res.status !== 200) return
+          this.getDatapoints()
         }).catch((res) => {
           this.editing = false
           this.handleError(res)
