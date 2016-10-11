@@ -104,7 +104,7 @@ export default {
       // 内容类型
       types: {
         'article': '文章',
-        'recipe': '菜谱',
+        'recipes': '菜谱',
         'menu': '菜单'
       },
       ordering: false,
