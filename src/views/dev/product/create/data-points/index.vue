@@ -369,11 +369,16 @@ export default {
 
       let validator = new Validator()
 
+      // 重置验证标识
+      this.resetValidate()
+
       // 端点ID为必填
       validator.add(datapoint.name, [{
         format: 'required',
         msg: '请填写端点ID'
-      }])
+      }], () => {
+        this.isNameError = true
+      })
 
       // 数字类型需要判断必填以及取值范围的合法性
       let isNumType = _.some([2, 3, 4, 5, 8, 9], (item) => item === datapoint.type)
@@ -384,7 +389,9 @@ export default {
         }, {
           format: 'min:' + this.getByType(datapoint.type, 'min'),
           msg: '最小值不合法'
-        }])
+        }], () => {
+          this.isMinError = true
+        })
 
         validator.add(datapoint.max, [{
           format: 'required',
@@ -395,7 +402,9 @@ export default {
         }, {
           format: 'compare:' + datapoint.min,
           msg: '最大值必须大于最小值'
-        }])
+        }], () => {
+          this.isMaxError = true
+        })
       }
 
       let errMsg = validator.validate()
@@ -424,6 +433,13 @@ export default {
           this.loadingData = true
         })
       }
+    },
+
+    resetValidate () {
+      // 重置验证标识
+      this.isNameError = false
+      this.isMinError = false
+      this.isMaxError = false
     },
 
     showErrors (str) {
@@ -456,6 +472,8 @@ export default {
      * @param {Number} index 目标数据端点索引
      */
     cancel (datapoint, index) {
+      // 重置验证标识
+      this.resetValidate()
       if (this.adding) {
         this.adding = false
       } else {
