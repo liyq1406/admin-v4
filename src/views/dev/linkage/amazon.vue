@@ -88,15 +88,15 @@
                     <td>{{ product.id }}</td>
                     <td>{{ product.status ? '已授权' : '无权限' }}</td>
                     <td class="tac">
-                      <x-select width="140px" :label="product.onOff" size="small" :disabled="!product.status || (product.datapoints && product.datapoints.length <= 1)" :placeholder="'暂无数据端点'">
-                        <select v-model="product.onOff" :disabled="!product.status" @change="setInterconnectLimit">
+                      <x-select width="140px" :label="product.onOff" size="small" :disabled="!product.status || !product.enableOnOff || (product.datapoints && product.datapoints.length <= 1)" :placeholder="'暂无数据端点'">
+                        <select v-model="product.onOff" :disabled="!product.status" @change="setInterconnectLimit(product)">
                           <option v-for="option in product.datapoints" :value="option.name">{{ option.name || none }}</option>
                         </select>
                       </x-select>
                     </td>
                     <td class="tac">
-                      <x-select width="140px" :label="product.percentage" size="small" :disabled="!product.status || (product.datapoints && product.datapoints.length <= 1)" :placeholder="'暂无数据端点'">
-                        <select v-model="product.percentage" :disabled="!product.status" @change="setInterconnectLimit">
+                      <x-select width="140px" :label="product.percentage" size="small" :disabled="!product.status || !product.enablePercentage || (product.datapoints && product.datapoints.length <= 1)" :placeholder="'暂无数据端点'">
+                        <select v-model="product.percentage" :disabled="!product.status" @change="setInterconnectLimit(product)">
                           <option v-for="option in product.datapoints" :value="option.name">{{ option.name || none }}</option>
                         </select>
                       </x-select>
@@ -204,12 +204,20 @@ export default {
         let limit = this.interconnectLimit
         let status = false
         let onOff = this.none
+        let enableOnOff = false
         let percentage = this.none
+        let enablePercentage = false
 
         if (product.id in limit) {
           status = true
-          onOff = limit[product.id].turn_on_off || this.none
-          percentage = limit[product.id].percentage || this.none
+          if ('turn_on_off' in limit[product.id]) {
+            onOff = limit[product.id].turn_on_off || this.none
+            enableOnOff = true
+          }
+          if ('percentage' in limit[product.id]) {
+            percentage = limit[product.id].percentage || this.none
+            enablePercentage = true
+          }
         }
 
         if (len <= 1) {
@@ -223,7 +231,9 @@ export default {
           id: product.id,
           status: status,
           onOff: onOff,
+          enableOnOff: enableOnOff,
           percentage: percentage,
+          enablePercentage: enablePercentage,
           datapoints: datapoints
         }
       })
@@ -310,31 +320,26 @@ export default {
 
     /**
      * 设置设备互联应用限制
+     * @author shengzhi
+     * @param {Object} product 产品
      */
-    setInterconnectLimit () {
+    setInterconnectLimit (product) {
       let limit = {}
-      _.forEach(this.productList, (product) => {
-        if (product.status) {
-          let noOnOff = _.some(['', '无'], (item) => item === product.onOff)
-          let noPercentage = _.some(['', '无'], (item) => item === product.percentage)
+      let noOnOff = _.some(['', '无'], (item) => item === product.onOff)
+      let noPercentage = _.some(['', '无'], (item) => item === product.percentage)
 
-          // 如果开关联动与百分比联动都没有设置，则直接忽略
-          if (noOnOff && noPercentage) return
+      limit[product.id] = {
+        turn_on_off: noOnOff ? '' : product.onOff,
+        percentage: noPercentage ? '' : product.percentage
+      }
 
-          limit[product.id] = {
-            turn_on_off: noOnOff ? '' : product.onOff,
-            percentage: noPercentage ? '' : product.percentage
-          }
-        }
-      })
-      console.log(limit)
       let params = {
         plugin: 'avs',
         biz_limit: limit
       }
       api.interconnect.setLimit(this.corp.id, params).then((res) => {
         if (res.status !== 200) return
-        this.interconnectLimit = res.data.biz_limit
+        this.getInterconnectLimit()
         this.showNotice({
           type: 'success',
           content: '联动设置成功'
