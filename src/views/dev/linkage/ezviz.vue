@@ -75,8 +75,8 @@ export default {
 
   components: {
     Modal,
-    'x-switch': Switch,
-    'pic-txt': PicTxt
+    PicTxt,
+    'x-switch': Switch
   },
 
   mixins: [globalMixins],

@@ -150,6 +150,7 @@
         text-indent 8px
         height 28px
         font-size 12px
+        text-align left !important
 
       select
         font-size 12px
@@ -166,6 +167,9 @@
     .x-select-trigger
       span
         color gray-lighter
+
+      select
+        cursor not-allowed
 
       .caret
         border-color gray-lighter transparent transparent

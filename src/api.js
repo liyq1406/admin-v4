@@ -43,6 +43,7 @@ import recipes from './api/recipes'
 import content from './api/content'
 import operate from './api/operate'
 import log from './api/log'
+import interconnect from './api/interconnect'
 
 export default {
   sms,
@@ -72,5 +73,6 @@ export default {
   recipes,
   content,
   operate,
-  log
+  log,
+  interconnect
 }

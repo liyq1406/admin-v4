@@ -209,7 +209,7 @@ export default {
     // 列表数据
     tables () {
       var result = []
-      this.devices.map((item) => {
+      this.devices.forEach((item) => {
         var device = {
           id: item.id,
           mac: '<a class="hl-red">' + item.mac + '</a>',
