@@ -93,7 +93,7 @@ export default {
   data () {
     return {
       // 最大的允许添加数量
-      maxCount: 4,
+      maxCount: 10000,
       // 正在加载数据
       loadingData: true,
       // 正在删除的索引
