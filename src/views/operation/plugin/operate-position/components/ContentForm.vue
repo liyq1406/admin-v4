@@ -50,7 +50,7 @@
                     <tr>
                       <th class="tac w40">选择</th>
                       <th>标题</th>
-                      <th v-if="$route.params.contentType==='recipe'" class="w60">类型</th>
+                      <th v-if="$route.params.contentType==='recipes'" class="w60">类型</th>
                       <th class="w100">作者</th>
                     </tr>
                   </thead>
@@ -62,12 +62,12 @@
                           <input type="radio" name="content" :value="content" v-model="modalSelectedContent">
                         </td>
                         <td>{{ content.name }}</td>
-                        <td v-if="$route.params.contentType==='recipe'">{{ content.type }}</td>
+                        <td v-if="$route.params.contentType==='recipes'">{{ content.type }}</td>
                         <td>{{ content.creator }}</td>
                       </tr>
                     </template>
                     <tr v-if="contentList.length===0">
-                      <td :colspan="$route.params.contentType==='recipe' ? 4 : 3" class="tac">
+                      <td :colspan="$route.params.contentType==='recipes' ? 4 : 3" class="tac">
                         <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
                       </td>
                     </tr>
@@ -158,7 +158,7 @@ export default {
     typeLabel () {
       return ({
         article: '文章',
-        recipe: '菜谱',
+        recipes: '菜谱',
         menu: '菜单'
       })[this.$route.params.contentType]
     },
@@ -392,12 +392,12 @@ export default {
       }
       const MODULES = {
         article: 'contents',
-        recipe: 'recipes',
+        recipes: 'recipes',
         menu: 'recipes'
       }
       const APIS = {
         article: 'article',
-        recipe: 'recipes',
+        recipes: 'recipes',
         menu: 'menu'
       }
       let appId = this.$route.params.app_id

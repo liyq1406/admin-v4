@@ -477,6 +477,17 @@ export default {
     batchImport () {
       if (window.File && window.FileReader && window.FileList && window.Blob) {
         var reader = new window.FileReader()
+
+        // 没选择文件
+        if (!this.file.name) {
+          this.showNotice({
+            type: 'error',
+            content: '请上传导入设备文件'
+          })
+          return false
+        }
+
+        // 导入文件类型不合法
         if (!/\.csv$/.test(this.file.name)) {
           this.showNotice({
             type: 'error',
@@ -484,6 +495,7 @@ export default {
           })
           return false
         }
+
         reader.onerror = (evt) => {
           this.showNotice({
             type: 'error',

@@ -80,22 +80,24 @@
               <a class="check-all" v-show="isReleaseProductsCount" @click="goto('/operation/overview')">查看全部({{isReleaseProductsCount}}) ></a>
             </div>
             <div class="content-box">
-              <div class="product" v-if="corp.status!==0 && releaseProducts.length!==0" v-for="product in releaseProducts">
-                <div class="img-box">
-                  <img :src="product.pic">
-                </div>
-                <div class="text-box">
-                  <div class="line msg">
-                    <a class="name" v-link="{'path': '/operation/products/' + product.id + '/overview'}">{{product.name}}</a>
-                    <!-- <span class="product-id">({{product.id}})</span> -->
+              <template v-if="corp.status!==0 && releaseProducts.length!==0">
+                <div class="product" v-for="product in releaseProducts">
+                  <div class="img-box">
+                    <img :src="product.pic">
                   </div>
-                  <div class="info">
-                    <span>设备数：{{product['total']}}</span>
-                    <span class="ml10">| 激活：{{product['activated']}}</span>
-                    <span class="ml10">| 在线：{{product['online']}}</span>
+                  <div class="text-box">
+                    <div class="line msg">
+                      <a class="name" v-link="{'path': '/operation/products/' + product.id + '/overview'}">{{product.name}}</a>
+                      <!-- <span class="product-id">({{product.id}})</span> -->
+                    </div>
+                    <div class="info">
+                      <span>设备数：{{product['total']}}</span>
+                      <span class="ml10">| 激活：{{product['activated']}}</span>
+                      <span class="ml10">| 在线：{{product['online']}}</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </template>
               <div class="no-products ml10" v-show="corp.status===0">
                 <div class="lgrayfont">您的账号尚未认证，认证成功后即可使用运营平台</div>
                 <div class="lgrayfont">相关问题请联系商务获得支持，<a class="hl-red" @click="open('http://www.xlink.cn/about.html')">查看联系方式</a></div>
@@ -308,7 +310,6 @@ export default {
     data () {
       this.getProducts()
       this.$http.get('/static/platform_info.json').then((res) => {
-        console.log(res)
         this.tips = res.data.notify
         this.pics = res.data.articles
       })
@@ -317,8 +318,8 @@ export default {
   methods: {
     /**
      * 获取产品概览
-     * @param  {[type]} productId [description]
-     * @return {[type]}           [description]
+     * @param  {String} productId 产品ID
+     * @return {void}
      */
     getProductSummary (productId) {
       api.statistics.getProductSummary(productId).then((res) => {
@@ -328,9 +329,10 @@ export default {
         this.handleError(res)
       })
     },
+
     /**
-     * 获取产品
-     * @return {[type]} [description]
+     * 获取所有产品
+     * @return {void}
      */
     getProducts () {
       this.loading = true
@@ -383,7 +385,7 @@ export default {
      */
     enterOperation () {
       if (this.corp.status === 0) {
-        window.open('http://ap.xlink.cn/#!/auto-login')
+        this.open('http://ap.xlink.cn/#!/auto-login')
       } else {
         this.$route.router.go('/operation/overview')
       }
