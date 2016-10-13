@@ -40,8 +40,11 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <x-select label="全部" width='110px' size="small">
-                  <span slot="label">显示</span>
+                <x-select :label="queryType.label" width='110px' size="small">
+                  <span slot="label">状态</span>
+                  <select v-model="queryType" @change="getOrderWorkList(true)">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
                 </x-select>
               </div>
               <div class="filter-group-item">
@@ -50,8 +53,8 @@
             </div>
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="getOrderWorkList">
-                  <button slot="search-button" @click="getOrderWorkList" class="btn"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="query" :active="searching" @cancel="getOrderWorkList(true)" :placeholder="'输入工单编号'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getOrderWorkList(true)">
+                  <button slot="search-button" @click="getOrderWorkList(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
@@ -112,6 +115,7 @@
           label: '全部',
           value: 0
         },
+        searching: false,
         statusOptions: [{
           label: '全部',
           value: 0
@@ -134,13 +138,14 @@
         countPerPage: config.COUNT_PER_PAGE,
         total: 0,
         queryTypeOptions: [
-          { label: '工单编号', value: '_id' },
-          { label: '客户姓名', value: 'linkman' },
-          { label: '网点', value: 'branch' }
+          { label: '全部', value: 'all' },
+          { label: '待处理', value: 0 },
+          { label: '维修中', value: 1 },
+          { label: '维修完成', value: 2 }
         ],
         queryType: {
-          label: '工单编号',
-          value: '_id'
+          label: '全部',
+          value: 'all'
         },
         query: '',
         branchs: [],
@@ -277,6 +282,9 @@
             $in: [this.selectedProduct.id]
           }
         }
+        if (this.queryType.value !== 'all') {
+          condition.query.status = this.queryType.value
+        }
         if (this.useTime === true) {
           condition.query = {
             create_time: {
@@ -359,6 +367,9 @@
         this.currentPage = number
         this.getOrderWorkList()
       },
+      toggleSearching () {
+        this.searching = !this.searching
+      },
 
       /**
        * 每页显示的数量改变
@@ -404,7 +415,7 @@
         })
       },
       // 获取工单列表
-      getOrderWorkList (querying) {
+      getOrderWorkList (reset) {
         // if (typeof querying !== 'undefined') {
         //   this.currentPage = 1
         // }
@@ -415,6 +426,9 @@
         //   this.getBranchIdByName(this.key)
         //   return
         // }
+        if (reset) {
+          this.currentPage = 1
+        }
 
         api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
           this.total = res.data.count
