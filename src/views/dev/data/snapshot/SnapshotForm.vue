@@ -17,7 +17,7 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">快照规则:</label>
+            <label class="form-control col-3">快照类型:</label>
             <div class="controls col-21">
               <div class="clearfix">
                 <div class="form-control rule-type-item mr10">
