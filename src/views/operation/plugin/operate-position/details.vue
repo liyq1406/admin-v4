@@ -25,9 +25,9 @@
             <thead>
               <tr>
                 <th>名称</th>
-                <th class="w180">图片</th>
-                <th class="w80 tac">排序</th>
-                <th class="w60 tac">操作</th>
+                <th class="wp30 tac">图片</th>
+                <th class="wp16 tac">排序</th>
+                <th class="wp10 tac">操作</th>
               </tr>
             </thead>
             <tbody>
@@ -329,8 +329,9 @@ export default {
         line-height 32px
         font-size 15px
     .picture-box
-      width 100%
+      width 200px
       height 150px
+      margin 0 auto
       overflow hidden
       .picture
         width 100%
@@ -341,6 +342,8 @@ export default {
         background-color transparent
     .button-list
       padding 0 10px
+      width 80px
+      margin 0 auto
       box-sizing border-box
       .control-button
         width 25px

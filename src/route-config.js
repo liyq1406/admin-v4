@@ -1439,32 +1439,6 @@ let configRouter = (router) => {
           }
         },
 
-        // -------------------------系统设置-------------------------
-        // 授权管理
-        'settings/auth': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/settings/auth'))
-            }, 'admin')
-          }
-        },
-        // 成员管理
-        'settings/members': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/settings/members'))
-            }, 'admin')
-          }
-        },
-        // 帐号信息
-        'settings/account': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/settings/account'))
-            }, 'admin')
-          }
-        },
-
         // -------------------------智能维保-------------------------
         // 延保工单列表
         'plugins/warranty/:app_id/heat': {
