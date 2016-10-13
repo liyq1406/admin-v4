@@ -28,9 +28,9 @@
     <div class="row">
       <div class="col-24">
         <product-trend></product-trend>
-        <product-active></product-active>
+        <!-- <product-active></product-active>
         <product-distribution></product-distribution>
-        <user-trend></user-trend>
+        <user-trend></user-trend> -->
       </div>
     </div>
   </div>

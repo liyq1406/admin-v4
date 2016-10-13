@@ -13,10 +13,10 @@
     </div>
     <div class="row min-height">
       <div class="col-14" v-if="trendTabIndex === 0">
-        <time-line :data="activatedData"></time-line>
+        <div class="chart-box" v-chart="activatedOptions" :loading="loadingData"></div>
       </div>
       <div class="col-14" v-else>
-        <time-line :data="totalData"></time-line>
+        <!-- <div class="chart-box" v-chart="sumActivatedOptions" :loading="loadingData"></div> -->
       </div>
       <div class="col-9 col-offset-1">
         <div class="row">
@@ -26,9 +26,7 @@
         </div>
         <div class="top">
           <h3>{{period}}天激活TOP{{topAdded.data.length}}</h3>
-          <template v-if="repaintTopFive">
-            <interval :data="topAdded.data" :options="topAdded.options"></interval>
-          </template>
+          <!-- <div class="chart-box" v-chart="topOptions" height="120px" :loading="loadingData"></div> -->
         </div>
       </div>
     </div>
@@ -44,6 +42,7 @@ import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
 import {getActivatedTrend} from './api-product'
 import formatDate from 'filters/format-date'
+import truncate from 'filters/truncate'
 import _ from 'lodash'
 
 export default {
@@ -67,12 +66,21 @@ export default {
 
   data () {
     return {
+      loadingData: false,
       requested: false,
       repaintTopFive: true, // 添加该变量为了处理g2的bug： changeData时g2会将传入数组根据source时的数组结构重新排序。所以总过v-if重绘
       trendTabIndex: 0,
       period: 30,
       activatedData: [], // 激活设备数据
+      activated: {
+        series: [],
+        xAxis: []
+      }, // 激活设备数据
       totalData: [], // 累计设备数据
+      sumActivated: {
+        series: [],
+        xAxis: []
+      }, // 累计设备数据
       avg: { // 平均设备数据
         options: {},
         info: {
@@ -115,6 +123,122 @@ export default {
     },
     avgTooltip () {
       return this.period + '天平均增长'
+    },
+
+    // 图例
+    legend () {
+      return _.map(this.activated.series, 'name')
+    },
+
+    // 激活设备图表配置
+    activatedOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 32,
+          x2: 15,
+          y2: 20
+        },
+        legend: {
+          y: 5,
+          data: this.legend
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: this.activated.xAxis
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: this.activated.series
+      }
+    },
+
+    // 累计激活设备图表配置
+    sumActivatedOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 32,
+          x2: 15,
+          y2: 20
+        },
+        legend: {
+          y: 5,
+          data: this.legend
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: this.sumActivated.xAxis
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: this.sumActivated.series
+      }
+    },
+
+    // 激活数量前5
+    topOptions () {
+      let COLORS = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
+      let topFive = _.map(this.activated.series, (item) => {
+        let sum = _.reduce(item.data, (prev, next) => {
+          return prev + next
+        }, 0)
+        return {
+          name: item.name,
+          count: sum
+        }
+      })
+      topFive = _.sortBy(topFive, ['count'])
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          x: 100,
+          y: 5,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: {
+          type: 'value',
+          minInterval: 1,
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: 'category',
+          data: _.map(topFive, 'name')
+        },
+        series: [
+          {
+            name: `${this.period}天激活数`,
+            type: 'bar',
+            barMaxWidth: 16, // 柱条的最大宽度
+            itemStyle: {
+              normal: {
+                color (params) {
+                  return COLORS[params.dataIndex]
+                }
+              }
+            },
+            data: _.map(topFive, 'count')
+          }
+        ]
+      }
     }
   },
 
@@ -123,6 +247,7 @@ export default {
       if (this.products.length > 0 && !this.requested) {
         this.requested = true
         this.getActivatedProductsTrend(this.products, this.period)
+        this.getTrend()
       }
     }
   },
@@ -130,6 +255,54 @@ export default {
   ready () {
   },
   methods: {
+    /**
+     * 获取产品趋势
+     * @author shengzhi
+     */
+    getTrend () {
+      let series = []
+      let xAxis = []
+      let sumSeries = []
+      let sumXAxis = []
+
+      this.loadingData = true
+      this.products.forEach((item, index) => {
+        getActivatedTrend(item.id, this.period).then((res) => {
+          let obj = {
+            name: truncate(item.name),
+            type: 'line',
+            data: []
+          }
+          let sumObj = {
+            name: truncate(item.name),
+            type: 'line',
+            data: []
+          }
+          _.forEach(res.activated, (o) => {
+            obj.data.push(o.count)
+            if (!index) {
+              xAxis.push(formatDate(o.day, 'MM-dd', true))
+            }
+          })
+          _.forEach(res.total, (o) => {
+            sumObj.data.push(o.count)
+            if (!index) {
+              sumXAxis.push(formatDate(o.day, 'MM-dd', true))
+            }
+          })
+          series.push(obj)
+          sumSeries.push(sumObj)
+          if (index === this.products.length - 1) {
+            this.loadingData = false
+          }
+        })
+      })
+      this.activated.series = series
+      this.activated.xAxis = xAxis
+      this.sumActivated.series = sumSeries
+      this.sumActivated.xAxis = sumXAxis
+    },
+
     // 将所有产品数据合并成一个数组
     combineRecv (recv) {
       let res = []
@@ -216,6 +389,7 @@ export default {
     activatedSelect () {
       // this.repaintTopFive = false
       this.getActivatedProductsTrend(this.products, this.period)
+      this.getTrend()
     },
     // 获取上一个取值周期的所有数据，为了计算平均增长
     getLastDurationData (products, duration) {
@@ -260,6 +434,10 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
+
+.chart-box
+  width 100%
+  min-height 10px
 .blockdiv
   display block!important
   margin-top 10px
@@ -275,7 +453,7 @@ export default {
     text-align left
     margin 10px 0 5px
     color gray
-.min-height
+/*.min-height
   height 250px
-  overflow hidden
+  overflow hidden*/
 </style>
