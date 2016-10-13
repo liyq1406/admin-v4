@@ -130,18 +130,21 @@
           <div class="filter-bar">
             <div class="filter-group fl">
               <div class="filter-group-item">
-                <x-select label="全部" width='110px' size="small">
-                  <span slot="label">显示</span>
+                <x-select :label="queryType.label" width='110px' size="small">
+                  <span slot="label">状态</span>
+                  <select v-model="queryType" @change="getHistory(true)">
+                    <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
+                  </select>
                 </x-select>
               </div>
             </div>
             <div class="filter-group fr">
-              <div class="filter-group-item">
+              <!-- <div class="filter-group-item">
                 <button class="btn btn-ghost btn-sm"><i class="fa fa-share-square-o"></i></button>
-              </div>
+              </div> -->
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" @cancel="" :placeholder="'输入搜索内容'" @search-activate="" @search-deactivate="" @search="" @press-enter="">
-                  <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
+                <search-box :key.sync="query" :active="searching" @cancel="getHistory(true)" :placeholder="'输入工单编号'" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="" @press-enter="getHistory(true)">
+                  <button slot="search-button" @click="getHistory(true)" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>
             </div>
@@ -182,6 +185,7 @@ export default {
 
   data () {
     return {
+      query: '',
       branch: {},
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
@@ -209,6 +213,17 @@ export default {
         label: '工单详情'
       }],
       historys: [],
+      queryTypeOptions: [
+        { label: '全部', value: 'all' },
+        { label: '待处理', value: 0 },
+        { label: '维修中', value: 1 },
+        { label: '维修完成', value: 2 }
+      ],
+      queryType: {
+        label: '全部',
+        value: 'all'
+      },
+      searching: false,
       headers: [
         {
           key: 'id',
@@ -324,6 +339,13 @@ export default {
 
       condition.query.product_id = this.repairOrder.product_id
 
+      if (this.queryType.value !== 'all') {
+        condition.query.status = this.queryType.value
+      }
+      if (this.query !== '') {
+        condition.query._id = {$in: [this.query]}
+      }
+
       return condition
     },
 
@@ -361,7 +383,10 @@ export default {
      */
     onCurrPageChage (number) {
       this.currentPage = number
-      this.getOrderWorkList()
+      this.getHistory()
+    },
+    toggleSearching () {
+      this.searching = !this.searching
     },
 
     /**
@@ -371,7 +396,7 @@ export default {
      */
     onPageCountUpdate (count) {
       this.countPerPage = count
-      this.getOrderWorkList(true)
+      this.getHistory(true)
     },
     goDetails (table) {
       console.log(table)
@@ -395,19 +420,21 @@ export default {
     // 计算持续时间
     dealTime (obj) {
       // 起始时间
-      // let begin = new Date(formatDate(obj.create_time))
-      // let end = ''
-      // if (obj.manage_time) {
-      //   end = new Date(formatDate(obj.manage_time)) || new Date()
-      // } else {
-      //   end = new Date()
-      // }
       let begin = ''
-      let end = new Date()
-      if (obj.manage_time) {
-        begin = new Date(formatDate(obj.manage_time))
-      } else {
+      let end = ''
+      // if (obj.manage_time) {
+      //   begin = new Date(formatDate(obj.manage_time))
+      // } else {
+      //   begin = new Date(formatDate(obj.create_time))
+      // }
+      // 如果工单未处理完成，持续时间为工单创建时间到当前时间
+      if (obj.status !== 2) {
         begin = new Date(formatDate(obj.create_time))
+        end = new Date()
+      } else if (obj.status === 2) {
+        // 如果工单处理完成，持续时间为工单创建时间到处理时间
+        begin = new Date(formatDate(obj.create_time))
+        end = new Date(formatDate(obj.manage_time))
       }
       // let end = new Date()
       // 持续时间
@@ -465,7 +492,10 @@ export default {
         this.handleError(err)
       })
     },
-    getHistory () {
+    getHistory (reset) {
+      if (reset) {
+        this.currentPage = 1
+      }
       api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
         this.total = res.data.count
         console.log(res.data.list)

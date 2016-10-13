@@ -62,7 +62,7 @@
                           <input type="radio" name="content" :value="content" v-model="modalSelectedContent">
                         </td>
                         <td>{{ content.name }}</td>
-                        <td v-if="$route.params.contentType==='recipes'">{{ content.type }}</td>
+                        <td v-if="$route.params.contentType==='recipes'">{{ content.devices.length ? '智能菜谱' : '普通菜谱' }}</td>
                         <td>{{ content.creator }}</td>
                       </tr>
                     </template>
