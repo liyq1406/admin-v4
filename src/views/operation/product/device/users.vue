@@ -2,19 +2,19 @@
   <div class="panel device-users">
     <div class="panel-bd row">
       <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></x-table>
+      <div class="actions clearfix mt10">
+        <button class="btn btn-primary fr">解除绑定</button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-// import v-form from 'vue'
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import Select from 'components/Select'
-import SearchBox from 'components/SearchBox'
-import Dropdown from 'components/Dropdown'
 import Table from 'components/Table'
 import formatDate from 'filters/format-date'
+import _ from 'lodash'
 
 export default {
   name: 'Users',
@@ -22,10 +22,7 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-table': Table,
-    'x-select': Select,
-    SearchBox,
-    Dropdown
+    'x-table': Table
   },
 
   data () {
@@ -37,20 +34,7 @@ export default {
       loadingData: false,
       users: [],
       // 设备绑定的用户列表
-      deviceUsers: [
-        // {
-        //   'user_id': '1605923406',
-        //   'role': 1, // 角色权限
-        //   'from_id': '123', // 来源用户ID
-        //   'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-        // },
-        // {
-        //   'user_id': '1999245132',
-        //   'role': 0, // 角色权限
-        //   'from_id': '123', // 来源用户ID
-        //   'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
-        // }
-      ],
+      deviceUsers: [],
       // 设备绑定的用户信息
       usersInfo: [
         // {
@@ -96,7 +80,7 @@ export default {
   computed: {
     tables () {
       var result = []
-      this.deviceUsers.map((item) => {
+      _.forEach(this.deviceUsers, (item) => {
         var user = {
           id: item.user_id,
           role: item.role,
@@ -110,7 +94,7 @@ export default {
         result.push(user)
       })
       result.sort((a, b) => {
-        return b.role - a.role
+        return a.role - b.role
       })
       return result
     },
@@ -245,6 +229,8 @@ export default {
       this.loadingData = true
       var { 'device_id': deviceId, 'product_id': productId } = this.$route.params
       api.product.getUsers(productId, deviceId).then((res) => {
+        // 虚拟数据用于调试，请勿删除
+        // 虚拟数据开始
         // res.data.list = [
         //   {
         //     'user_id': '1605923406',
@@ -259,6 +245,8 @@ export default {
         //     'create_date': '2015-10-09T08:15:40.843Z' // 订阅时间，例2015-10-09T08:15:40.843Z
         //   }
         // ]
+        // 虚拟数据结束
+
         // 根据获取回来的id去获取用户详情
         this.deviceUsers = res.data.list
         if (this.deviceUsers.length) {
