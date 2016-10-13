@@ -30,14 +30,6 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6" style="line-height:32px">Secret:</label>
-                <div class="controls col-18">
-                  <div class="input-text-wrap" v-placeholder="'厂商自定义的secret'">
-                    <input type="text" v-model="plugin.config.client_secret" name="plugin.config.client_secret" class="input-text"/>
-                  </div>
-                </div>
-              </div>
-              <div class="form-row row">
                 <label class="form-control col-6" style="line-height:32px">Scope:</label>
                 <div class="controls col-18">
                   <div class="input-text-wrap" v-placeholder="'权限列表,最多15个,逗号隔开'">
@@ -50,6 +42,14 @@
                 <div class="controls col-18">
                   <div class="input-text-wrap" v-placeholder="'Alexa产生的Redirect URL'">
                     <input type="text" v-model="plugin.config.redirect_url" name="plugin.config.redirect_url" class="input-text"/>
+                  </div>
+                </div>
+              </div>
+              <div class="form-row row">
+                <label class="form-control col-6" style="line-height:32px">Client Secret:</label>
+                <div class="controls col-18">
+                  <div class="input-text-wrap" v-placeholder="'厂商自定义的secret'">
+                    <input type="password" v-model="plugin.config.client_secret" name="plugin.config.client_secret" class="input-text"/>
                   </div>
                 </div>
               </div>
