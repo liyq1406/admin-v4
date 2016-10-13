@@ -15,7 +15,7 @@
         </div>
       </div>
       <div class="form-row row">
-        <label class="form-control col-4">快照规则:</label>
+        <label class="form-control col-4">转发规则:</label>
         <div class="controls col-14">
           <div class="checkbox-group">
             <label v-for="type in dataForwardType" class="checkbox">
