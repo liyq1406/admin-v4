@@ -109,7 +109,7 @@
               </label>
             </div>
             <div class="form-actions">
-              <button class="btn btn-primary btn-xlg btn-pill" :disabled="submiting" :class="{'disabled':submiting}">{{ $t("ui.auth.register_submit") }}</button>
+              <button class="btn btn-primary btn-xlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("ui.auth.register_submit") }}</button>
             </div>
             <div class="form-operations"><a v-link="{ path: '/login' }">已有帐号？</a></div>
           </form>
@@ -155,7 +155,7 @@ export default {
       confirmPassword: '',
       isAgree: false,
       registerSuccess: false,
-      submiting: false
+      submitting: false
     }
   },
 
@@ -175,7 +175,7 @@ export default {
      */
     onSubmit () {
       // 防止二次提交
-      if (this.submiting) return
+      if (this.submitting) return
 
       // 表单验证不通过，重新验证
       if (this.$authValidation.invalid) {
@@ -193,13 +193,13 @@ export default {
       }
 
       // 注册
-      this.submiting = true
+      this.submitting = true
       api.corp.emailRegister(this.model).then((res) => {
         if (res.status !== 200) return
-        this.submiting = false
+        this.submitting = false
         this.registerSuccess = true
       }).catch((res) => {
-        this.submiting = false
+        this.submitting = false
         this.handleError(res)
       })
     }

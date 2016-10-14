@@ -43,9 +43,9 @@
         </div>
         <div class="form-actions row">
           <div class="col-offset-4">
-            <button class="btn btn-primary btn-lg" :disabled="submiting || deleting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')"></button>
+            <button class="btn btn-primary btn-lg" :disabled="submitting || deleting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')"></button>
             <button class="btn btn-ghost btn-lg" @click.prevent.stop="previewArticle">预览</button>
-            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" :disabled="submiting || deleting" :class="{'disabled':deleting}" v-if="type==='edit'" v-text="deleting ? $t('common.handling') : $t('common.del')"></button>
+            <button @click.stop.prevent="deleteArticle" class="btn btn-ghost btn-lg" :disabled="submitting || deleting" :class="{'disabled':deleting}" v-if="type==='edit'" v-text="deleting ? $t('common.handling') : $t('common.del')"></button>
           </div>
         </div>
       </form>
@@ -148,7 +148,7 @@ export default {
      * @author shengzhi
      */
     onArticleSubmit () {
-      if (this.submiting) return
+      if (this.submitting) return
 
       if (this.$validation.invalid) {
         this.$validate(true)
@@ -161,7 +161,7 @@ export default {
         edit: '文章修改成功！'
       })[this.type]
 
-      this.submiting = true
+      this.submitting = true
       if (this.type === 'add') {
         process = api.content.addArticle(this.$route.params.app_id, this.formParams)
       } else {
@@ -176,7 +176,7 @@ export default {
           this.$route.router.go(`/operation/plugins/content/${this.$route.params.app_id}`)
         }
       }).catch((res) => {
-        this.submiting = false
+        this.submitting = false
         this.handleError(res)
       })
     },

@@ -49,7 +49,7 @@
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此标签
               </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
@@ -276,13 +276,13 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.$validation.invalid || this.submiting) return
+      if (this.$validation.invalid || this.submitting) return
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
-      this.submiting = true
+      this.submitting = true
       let params = {
         label: this.model.label
       }
@@ -305,7 +305,7 @@ export default {
         if (res.status === 200) {
           this.getTags()
           this.onCancel()
-          this.submiting = false
+          this.submitting = false
         }
       }).catch((res) => {
         this.handleError(res)

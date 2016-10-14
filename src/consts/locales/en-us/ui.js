@@ -341,7 +341,7 @@ export default {
     email_phone: 'Email/Phone',
     password: 'Password',
     login_submit: 'Login',
-    login_submiting: 'Login In Progress…',
+    login_submitting: 'Login In Progress…',
     // 注册
     account_tips: 'Please enter your account information:',
     basic_tips: 'Please enter your basic information:',

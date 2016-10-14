@@ -56,7 +56,7 @@
           </div>
           <div class="form-actions row">
             <div class="col-offset-4">
-              <button type="submit" :disabled="submiting" :class="{'disabled': submiting}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+              <button type="submit" :disabled="submitting" :class="{'disabled': submitting}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
               <!-- <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-lg">预览</button> -->
               <button @click.prevent="deleteMenu" class="btn btn-ghost btn-lg" v-if="type==='edit'">删除该菜单</button>
             </div>
@@ -92,7 +92,7 @@
             </ul>
           </div>
           <div class="form-actions mt20">
-            <button @click="onRecipesSubmit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click="onRecipesSubmit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             <button @click.prevent.stop="onRecipesCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </div>
@@ -145,7 +145,7 @@ export default {
         status: 0
       },
       model: {},
-      submiting: false,
+      submitting: false,
       isShowModal: false,
       columns: [{
         key: 'name',
@@ -298,7 +298,7 @@ export default {
      */
     onRecipesCancel () {
       this.modal.show = false
-      this.submiting = false
+      this.submitting = false
     },
 
     /**
@@ -308,7 +308,7 @@ export default {
     onRecipesSubmit () {
       this.model.menu = this.modal.recipes
       this.modal.show = false
-      this.submiting = false
+      this.submitting = false
     },
 
     /**
@@ -316,7 +316,7 @@ export default {
      * @author shengzhi
      */
     onMenuSubmit () {
-      if (this.$validation.invalid || this.submiting) return
+      if (this.$validation.invalid || this.submitting) return
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
@@ -327,7 +327,7 @@ export default {
         edit: '菜单修改成功！'
       })[this.type]
 
-      this.submiting = true
+      this.submitting = true
       // 作者
       this.model.creator = this.currentMember.name
       if (this.type === 'edit') {
