@@ -149,7 +149,8 @@ export default {
       // 浮层上的内容列表
       contentList: [],
       // 浮层上面已经选择的内容
-      modalSelectedContent: {}
+      modalSelectedContent: {},
+      firstPageContents: []
     }
   },
 
@@ -199,7 +200,7 @@ export default {
         filter: filter,
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        // order: {'create_time': 'desc'},
+        order: {'create_time': -1},
         query: {}
       }
 
@@ -319,6 +320,12 @@ export default {
      */
     selectContent () {
       this.isShowSelectedModal = true
+
+      // 如果已存在第一页数据，则使用之，否则重新获取
+      if (this.firstPageContents.length) {
+        this.contentList = _.clone(this.firstPageContents)
+        return
+      }
       this.getContentList()
     },
 
@@ -348,6 +355,9 @@ export default {
 
       this.loadingData = true
       process.then((res) => {
+        if (!this.firstPageContents.length) {
+          this.firstPageContents = _.cloneDeep(res.data.list)
+        }
         this.contentList = res.data.list
         this.total = res.data.count
         this.loadingData = false
@@ -367,6 +377,7 @@ export default {
      * @return {[type]} [description]
      */
     cancelSelect () {
+      this.currentPage = 1
       this.isShowSelectedModal = false
     },
     /**
