@@ -183,6 +183,7 @@ export default {
      */
     queryCondition () {
       var condition = {
+        filter: ['_id', 'name', 'creator', 'create_time', 'pageviews', 'status'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},

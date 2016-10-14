@@ -189,7 +189,14 @@ export default {
 
     // 查询条件
     queryCondition () {
-      var condition = {
+      let filter = ['_id', 'name', 'creator']
+
+      if (this.$route.params.contentType === 'recipes') {
+        filter.push('devices')
+      }
+
+      let condition = {
+        filter: filter,
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         // order: {'create_time': 'desc'},
@@ -218,7 +225,7 @@ export default {
     // 从 localStorage 中获取app token
     let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
     let params = {
-      filter: ['name', 'content'],
+      filter: ['_id', 'name', 'content'],
       limit: 1,
       offset: 0,
       query: {
