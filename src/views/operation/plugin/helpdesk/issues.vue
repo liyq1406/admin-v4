@@ -222,6 +222,7 @@ export default {
     queryCondition () {
       var condition = {}
       condition = {
+        filter: ['_id', 'content', 'create_time', 'label'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},
