@@ -270,7 +270,7 @@
       },
       queryCondition () {
         var condition = {
-          filter: [],
+          filter: ['_id', 'assigned_id', 'create_time', 'product_id', 'product_sn', 'remark', 'status', 'assigned_name'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           order: {'create_time': -1},

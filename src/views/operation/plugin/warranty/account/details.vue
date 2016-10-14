@@ -532,7 +532,7 @@ export default {
         api.warranty.deleteBranch(this.$route.params.app_id, this.$route.params.id).then((res) => {
           this.editing = false
           this.showEditModal = false
-          this.$route.router.replace('/plugins/warranty/' + this.$route.params.app_id + '/accounts')
+          this.$route.router.replace('/operation/plugins/warranty/' + this.$route.params.app_id + '/accounts')
         }).catch((err) => {
           this.handleError(err)
           this.editing = false
