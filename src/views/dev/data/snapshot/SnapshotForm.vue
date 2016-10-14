@@ -107,7 +107,7 @@
           </div>
           <div class="form-actions row">
             <div class="col-21 col-offset-3">
-              <button :disabled="submiting || selectedDatapoints.length === 0 || $validation.invalid" :class="{'disabled':submiting || selectedDatapoints.length === 0 || $validation.invalid}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
+              <button :disabled="submitting || selectedDatapoints.length === 0 || $validation.invalid" :class="{'disabled':submitting || selectedDatapoints.length === 0 || $validation.invalid}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
             </div>
           </div>
         </div>
@@ -157,7 +157,7 @@ export default {
       }, // 已选产品
       interval: {}, // 快照规则
       name: '', // 快照名称
-      submiting: false,
+      submitting: false,
       selectedDatapoints: [],
       allDatapoints: [],
       currentPage: 1,
@@ -355,7 +355,7 @@ export default {
         return
       }
 
-      if (this.submiting) return
+      if (this.submitting) return
 
       let model = {
         rule: 3,
@@ -377,7 +377,7 @@ export default {
       }
       let process
 
-      this.submiting = true
+      this.submitting = true
       if (this.type === 'add') { // 添加
         process = api.snapshot.createRule(this.selectedProduct.id, model)
       } else {
@@ -389,12 +389,12 @@ export default {
         }
       }
       process.then((res) => {
-        this.submiting = false
+        this.submitting = false
         if (res.status === 200) {
           this.$route.router.replace('/dev/data/snapshots')
         }
       }).catch((res) => {
-        this.submiting = false
+        this.submitting = false
         this.handleError(res)
       })
     }

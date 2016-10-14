@@ -52,7 +52,7 @@
       </div>
       <div class="form-actions row">
         <div class="col-20 col-offset-4">
-          <button :disabled="submiting" :class="{'disabled':submiting}" class="btn btn-primary w100" v-text="submiting ? $t('common.handling') : $t('common.ok')" @click.prevent.stop="onSubmit"></button>
+          <button :disabled="submitting" :class="{'disabled':submitting}" class="btn btn-primary w100" v-text="submitting ? $t('common.handling') : $t('common.ok')" @click.prevent.stop="onSubmit"></button>
         </div>
       </div>
     </div>
@@ -118,7 +118,7 @@ export default {
       dataForwardType: locales[Vue.config.lang].data.DATA_FORWARD_TYPES,
       dataDestination: locales[Vue.config.lang].data.DATA_DESTINATIONS,
       // 正在提交表单
-      submiting: false
+      submitting: false
     }
   },
 
@@ -185,8 +185,8 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.submiting) return
-      this.submiting = true
+      if (this.submitting) return
+      this.submitting = true
       if (this.type === 'add') {
         this.add()
       } else {
@@ -200,7 +200,7 @@ export default {
     add () {
       api.dataForward.addRule(this.selectedProduct.id, this.model).then((res) => {
         if (res.status === 200) {
-          this.submiting = false
+          this.submitting = false
           this.showNotice({
             type: 'success',
             content: '添加成功'
@@ -209,7 +209,7 @@ export default {
         }
       }).catch((res) => {
         this.handleError(res)
-        this.submiting = false
+        this.submitting = false
       })
     },
 
@@ -220,7 +220,7 @@ export default {
     edit () {
       api.dataForward.updateRule(this.$route.params.productId, this.$route.params.forwardId, this.model).then((res) => {
         if (res.status === 200) {
-          this.submiting = false
+          this.submitting = false
           this.showNotice({
             type: 'success',
             content: '编辑成功'
@@ -229,7 +229,7 @@ export default {
         }
       }).catch((res) => {
         this.handleError(res)
-        this.submiting = false
+        this.submitting = false
       })
     }
   }

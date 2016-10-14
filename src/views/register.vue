@@ -99,7 +99,7 @@
             <div class="form-row">
               <x-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
                 <select v-model="model.type" name="model.type">
-                  <option v-for="type in accountTypes" :value="type.value">{{ type.label }}</option>
+                  <option v-for="type in locales.data.ACCOUNT_TYPES" :value="type.value">{{ type.label }}</option>
                 </select>
               </x-select>
             </div>
@@ -109,7 +109,7 @@
               </label>
             </div>
             <div class="form-actions">
-              <button class="btn btn-primary btn-xlg btn-pill">{{ $t("ui.auth.register_submit") }}</button>
+              <button class="btn btn-primary btn-xlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("ui.auth.register_submit") }}</button>
             </div>
             <div class="form-operations"><a v-link="{ path: '/login' }">已有帐号？</a></div>
           </form>
@@ -126,185 +126,205 @@
 </template>
 
 <script>
-  import api from 'api'
-  import Vue from 'vue'
-  import locales from 'consts/locales/index'
-  import Select from 'components/Select'
-  import Alert from 'components/Alert'
-  import { globalMixins } from 'src/mixins'
-  import _ from 'lodash'
+import api from 'api'
+// import Vue from 'vue'
+// import locales from 'consts/locales/index'
+import Select from 'components/Select'
+import Alert from 'components/Alert'
+import { globalMixins } from 'src/mixins'
+import _ from 'lodash'
 
-  export default {
-    name: 'RegisterForm',
+export default {
+  name: 'RegisterForm',
 
-    layouts: ['auth'],
+  layouts: ['auth'],
 
-    mixins: [globalMixins],
+  mixins: [globalMixins],
 
-    components: {
-      'x-select': Select,
-      'x-alert': Alert
-    },
+  components: {
+    'x-select': Select,
+    'x-alert': Alert
+  },
 
-    data () {
-      return {
-        accountTypes: locales[Vue.config.lang].data.ACCOUNT_TYPES,
-        model: {
-          email: '',
-          password: ''
-        },
-        confirmPassword: '',
-        isAgree: false,
-        registerSuccess: false
+  data () {
+    return {
+      model: {
+        email: '',
+        password: ''
+      },
+      confirmPassword: '',
+      isAgree: false,
+      registerSuccess: false,
+      submitting: false
+    }
+  },
+
+  computed: {
+    accountTypeLabel () {
+      let accountTypes = this.locales.data.ACCOUNT_TYPES
+      var index = _.findIndex(accountTypes, (item) => {
+        return item.value === this.model.type
+      })
+      return this.model.type ? accountTypes[index].label : ''
+    }
+  },
+
+  methods: {
+    /**
+     * 提交注册
+     */
+    onSubmit () {
+      // 防止二次提交
+      if (this.submitting) return
+
+      // 表单验证不通过，重新验证
+      if (this.$authValidation.invalid) {
+        this.$validate(true)
+        return
       }
-    },
 
-    computed: {
-      accountTypeLabel () {
-        var index = _.findIndex(this.accountTypes, (item) => {
-          return item.value === this.model.type
+      // 没有勾选同意条款，给出提示
+      if (!this.isAgree) {
+        this.showNotice({
+          type: 'error',
+          content: '您必须同意云智易的使用条款和隐私权政策才能继续注册'
         })
-        return this.model.type ? this.accountTypes[index].label : ''
+        return
       }
-    },
 
-    methods: {
-      /**
-       * 提交注册
-       */
-      onSubmit () {
-        if (this.$authValidation.valid && this.isAgree) {
-          api.corp.emailRegister(this.model).then((res) => {
-            if (res.status === 200) {
-              this.registerSuccess = true
-            }
-          }).catch((res) => {
-            this.handleError(res)
-          })
-        }
-      }
+      // 注册
+      this.submitting = true
+      api.corp.emailRegister(this.model).then((res) => {
+        if (res.status !== 200) return
+        this.submitting = false
+        this.registerSuccess = true
+      }).catch((res) => {
+        this.submitting = false
+        this.handleError(res)
+      })
     }
   }
+}
 </script>
 
 <style lang="stylus" scoped>
-  @import '../assets/stylus/common'
+@import '../assets/stylus/common'
 
-  .register-form
-    margin-bottom 40px
-    .inner
-      width 955px
-      padding-bottom 0
-      background #F7F7F7
+.register-form
+  margin-bottom 40px
+  .inner
+    width 955px
+    padding-bottom 0
+    background #F7F7F7
 
-    .slogan
-      font-size 28px
-      color #FFF
-      text-align center
-      margin 0 0 60px
+  .slogan
+    font-size 28px
+    color #FFF
+    text-align center
+    margin 0 0 60px
 
-    // 简介
-    .intro
-      float left
-      size 411px 100%
-      padding 30px 45px 0
-      box-sizing border-box
+  // 简介
+  .intro
+    float left
+    size 411px 100%
+    padding 30px 45px 0
+    box-sizing border-box
 
-      .desc
-        margin-bottom 50px
+    .desc
+      margin-bottom 50px
 
-        p
-          font-weight bold
-          margin 0 0 42px
-          line-height 26px
-
-      li
-        position relative
-        margin-bottom 20px
-        padding-left 20px
-
-        &:before
-          absolute left top 4px
-          content ''
-          size 10px
-          background #B4B4B4
-          border-radius 10px
-
-        span
-          color #9C9B9B
-
-    .customers
       p
-        font-size 16px
+        font-weight bold
+        margin 0 0 42px
+        line-height 26px
 
-      .logos
-        margin-right -20px
-        font-size 0
+    li
+      position relative
+      margin-bottom 20px
+      padding-left 20px
 
-        .c-logo
-          display inline-block
-          height 60px
-          margin 20px 20px 0 0
-          background-repeat no-repeat
+      &:before
+        absolute left top 4px
+        content ''
+        size 10px
+        background #B4B4B4
+        border-radius 10px
 
-          &:hover
-            background-position 0 -70px
+      span
+        color #9C9B9B
 
-        .logo-ge
-          background-image url(../assets/images/register/logo_ge.png)
-          width 60px
-
-        .logo-fotile
-          background-image url(../assets/images/register/logo_fotile.png)
-          width 119px
-
-        .logo-osram
-          background-image url(../assets/images/register/logo_osram.png)
-          width 93px
-          margin-right 0
-
-        .logo-karcher
-          background-image url(../assets/images/register/logo_karcher.png)
-          width 82px
-
-        .logo-tonze
-          background-image url(../assets/images/register/logo_tonze.png)
-          width 68px
-
-        .logo-bull
-          background-image url(../assets/images/register/logo_bull.png)
-          width 120px
-
-    // 表单
-    .form
-      float right
-      width 544px
-      box-sizing border-box
-      background #FFF
-      padding 20px 45px
+  .customers
+    p
       font-size 16px
 
-      .row-check
-        font-size 14px
-        color #969595
+    .logos
+      margin-right -20px
+      font-size 0
 
-        a
-          color red
+      .c-logo
+        display inline-block
+        height 60px
+        margin 20px 20px 0 0
+        background-repeat no-repeat
 
-      .form-hints
-        font-size 16px
+        &:hover
+          background-position 0 -70px
 
-    .form-operations
-      margin-top 20px
-      text-align right
+      .logo-ge
+        background-image url(../assets/images/register/logo_ge.png)
+        width 60px
+
+      .logo-fotile
+        background-image url(../assets/images/register/logo_fotile.png)
+        width 119px
+
+      .logo-osram
+        background-image url(../assets/images/register/logo_osram.png)
+        width 93px
+        margin-right 0
+
+      .logo-karcher
+        background-image url(../assets/images/register/logo_karcher.png)
+        width 82px
+
+      .logo-tonze
+        background-image url(../assets/images/register/logo_tonze.png)
+        width 68px
+
+      .logo-bull
+        background-image url(../assets/images/register/logo_bull.png)
+        width 120px
+
+  // 表单
+  .form
+    float right
+    width 544px
+    box-sizing border-box
+    background #FFF
+    padding 20px 45px
+    font-size 16px
+
+    .row-check
       font-size 14px
+      color #969595
 
       a
-        color #C8C8C8
+        color red
 
-  .loading-resource
-    .form-auth
-      .form-actions
-        .btn
-          cursor wait
+    .form-hints
+      font-size 16px
+
+  .form-operations
+    margin-top 20px
+    text-align right
+    font-size 14px
+
+    a
+      color #C8C8C8
+
+.loading-resource
+  .form-auth
+    .form-actions
+      .btn
+        cursor wait
 </style>

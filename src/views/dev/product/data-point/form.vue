@@ -117,7 +117,7 @@
                 </label>
               </div>
               <div class="form-actions col-offset-6">
-                <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary w100"></button>
+                <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary w100"></button>
               </div>
             </form>
           </validator>
@@ -152,7 +152,7 @@ export default {
 
   data () {
     return {
-      submiting: false,
+      submitting: false,
       delChecked: false,
       modelType: {
         value: 1,
@@ -279,7 +279,7 @@ export default {
      */
     onSubmit () {
       // 如果表单正在提交，禁止二次提交
-      if (this.submiting) return
+      if (this.submitting) return
 
       // 如果勾选了删除但在确认弹窗中没确认，则取消该次表单提交动作
       if (this.delChecked && !window.confirm('确定要删除该数据端点？')) return
@@ -291,7 +291,7 @@ export default {
       }
 
       // 开始提交表单
-      this.submiting = true
+      this.submitting = true
 
       // 表单参数
       let params = {
@@ -346,10 +346,10 @@ export default {
         })
         // 跳转到列表页
         this.$route.router.go('/dev/products/' + this.$route.params.id + '/data-point')
-        this.submiting = false
+        this.submitting = false
       }).catch((res) => {
         this.handleError(res)
-        this.submiting = false
+        this.submitting = false
       })
     }
   }
