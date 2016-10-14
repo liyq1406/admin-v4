@@ -64,11 +64,11 @@
               <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap required-sign">
-                  <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'word'}" class="input-text"/>
+                  <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'hex'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.mac.touched && $validation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
-                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.format">MAC只能包含数字和字母</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.format">MAC应为十六进制字符的组合</span>
                   <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.minlength">{{ $t('ui.validation.minlength', ['MAC', 2]) }}</span>
                   <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.maxlength">{{ $t('ui.validation.maxlength', ['MAC', 64]) }}</span>
                 </div>

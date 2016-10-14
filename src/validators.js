@@ -22,6 +22,11 @@ export function format (val, type) {
       result = /^\w+$/.test(val)
       break
 
+    // 字母+数字
+    case 'hex':
+      result = /^[0-9|a-f]+$/i.test(val)
+      break
+
     // 邮箱格式
     case 'email':
       // result = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(val)
