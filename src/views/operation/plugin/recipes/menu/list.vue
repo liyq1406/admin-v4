@@ -117,7 +117,7 @@ export default {
     // 菜单查询条件
     queryCondition () {
       var condition = {
-        filter: ['name', 'creator', 'create_time', 'pageviews', 'status'],
+        filter: ['_id', 'name', 'creator', 'create_time', 'pageviews', 'status'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},

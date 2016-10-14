@@ -146,7 +146,7 @@ export default {
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
       let condition = {
-        filter: [],
+        filter: ['name', 'devices'],
         limit: 1,
         offset: 0,
         query: {

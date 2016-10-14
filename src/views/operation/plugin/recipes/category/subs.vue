@@ -118,6 +118,7 @@ export default {
     // 查询条件
     queryCondition () {
       var condition = {
+        filter: ['_id', 'name', 'instructions'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {
@@ -190,6 +191,7 @@ export default {
      */
     getParent () {
       let params = {
+        filter: ['_id', 'name'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},

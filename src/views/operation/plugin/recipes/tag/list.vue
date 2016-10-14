@@ -156,7 +156,7 @@ export default {
     // 标签查询条件
     queryCondition () {
       var condition = {
-        filter: ['label'],
+        filter: ['_id', 'label'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},

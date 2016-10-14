@@ -171,7 +171,7 @@ export default {
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
       let params = {
-        filter: ['name', 'content'],
+        filter: ['_id', 'name', 'content'],
         limit: 1,
         offset: 0,
         query: {
@@ -182,6 +182,7 @@ export default {
         if (res.status === 200) {
           this.operatePosition = res.data.list[0]
           let condition = {
+            filter: ['_id', 'name', 'images', 'api'],
             limit: 100,
             offset: 0,
             query: {
