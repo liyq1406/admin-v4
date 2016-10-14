@@ -16,7 +16,7 @@
                 <a class="fa fa-edit" @click="onShowMemberRoleModal" v-if="member.role !== 1"></a>
               </div>
               <div slot="password">
-                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role === 2">修改密码</a>
+                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role != 1">修改密码</a>
                 <span class="hl-gray" v-else>无权修改</span>
               </div>
             </info-list>
