@@ -5,7 +5,7 @@
         <i class="fa fa-refresh fa-spin"></i>
       </div> -->
       <validator name="validation">
-        <form novalidate @submit.prevent="onMenuSubmit">
+        <form autocomplete="off" novalidate @submit.prevent="onMenuSubmit">
           <div class="form-row row">
             <label class="form-control col-4">标题:</label>
             <div class="controls col-20">

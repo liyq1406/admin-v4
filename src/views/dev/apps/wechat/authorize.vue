@@ -55,7 +55,7 @@
     <modal :show.sync="showSetModal" @close="onSetCancel" width="640px">
       <h3 slot="header">授权设置页面</h3>
       <div slot="body" class="form form-rules">
-        <form v-form name="setValidation" @submit.prevent="onSetSubmit" hook="setFormHook">
+        <form autocomplete="off" v-form name="setValidation" @submit.prevent="onSetSubmit" hook="setFormHook">
           <p style="display:inline-block;margin-top:0;"><span class="hl-red">具体参数说明: </span><a href="http://iot.weixin.qq.com/wiki/document-2_6.html" target="_blank">http://iot.weixin.qq.com/wiki/index.html</a></p>
           <div class="form-row row">
             <label class="form-control col-7">
@@ -235,7 +235,7 @@
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">新增授权页面</h3>
       <div slot="body" class="form form-rules">
-        <form v-form name="addValidation" @submit.prevent.stop="onAddSubmit" hook="addFormHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent.stop="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
             <div class="controls col-18">

@@ -6,7 +6,7 @@
     <div class="container row">
       <div class="form-box col-16">
         <validator name="validation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="panel mt20">
               <div class="panel-hd bordered">
                 <h2><i class="number">1</i> 推送人群</h2>

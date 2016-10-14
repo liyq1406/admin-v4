@@ -7,7 +7,7 @@
     <div class="container row">
       <div class="form-box col-16 mt10">
         <validator name="validation">
-          <form novalidate @submit.prevent="">
+          <form autocomplete="off" novalidate @submit.prevent="">
             <div class="form">
               <div class="form-row row">
                 <label class="form-control col-5">应用名称:</label>

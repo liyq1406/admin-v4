@@ -1,5 +1,5 @@
 <template>
-  <form novalidate>
+  <form autocomplete="off" novalidate>
     <div class="form">
       <div class="form-row row" v-show="type==='add'">
         <label class="form-control col-4">产品:</label>

@@ -3,7 +3,7 @@
     <div class="panel-bd">
       <div class="form ml20">
         <validator name="validation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <!-- 产品名称 -->
             <div class="form-row row">
               <label class="form-control col-3">{{ $t("ui.product.fields.name") }}:</label>

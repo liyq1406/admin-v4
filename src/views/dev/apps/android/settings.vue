@@ -1,7 +1,7 @@
 <template>
   <!-- 应用配置 -->
   <div class="form">
-    <form v-form name="validation" @submit.prevent="onEditSubmit">
+    <form autocomplete="off" v-form name="validation" @submit.prevent="onEditSubmit">
       <div class="form-row row">
         <label class="form-control col-6">{{ '应用名称' }}:</label>
         <div class="controls col-18">

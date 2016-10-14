@@ -59,7 +59,7 @@
       <h3 slot="header">{{ $t("ui.overview.add_device") }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form novalidate @submit.prevent="onAddSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onAddSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
               <div class="controls col-18">
@@ -110,7 +110,7 @@
     <modal :show.sync="isShowBatchModal" @close="onBatchCancel">
       <h3 slot="header">导入设备</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="">
+        <form autocomplete="off" @submit.prevent="">
           <div class="form-row row">
             <!-- <label class="form-control col-6">导入:</label> -->
             <p>您可以通过标准设备列表文件批量导入设备，<a href="/static/import_template.csv" class="hl-red">查看示例</a></p>

@@ -1,7 +1,7 @@
 <template>
   <div class="form form-auth form-member-activate">
     <div class="form-logo"></div>
-    <form v-show="!activateSuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+    <form autocomplete="off" v-show="!activateSuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
         <h2>{{ $t("ui.auth.member_activate") }}</h2>
         <p>{{ $t("ui.auth.member_activate_tips") }}</p>

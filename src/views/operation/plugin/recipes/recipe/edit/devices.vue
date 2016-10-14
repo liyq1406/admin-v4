@@ -33,7 +33,7 @@
       <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-row row">
               <label class="form-control col-6">烹饪菜谱:</label>
               <div class="controls col-18">

@@ -24,7 +24,7 @@
     <modal :show.sync="showEditModal" width="600px">
       <h3 slot="header">编辑客服</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
           <div class="form-row row">
             <label class="form-control col-6">姓名:</label>
             <div class="controls col-18">

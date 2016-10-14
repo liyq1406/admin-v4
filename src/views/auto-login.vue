@@ -4,7 +4,7 @@
       <div class="form-legend">云智易企业管理台</div>
       <div class="form">
         <validator name="authValidation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.email_phone')" class="input-text-wrap">
                 <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>

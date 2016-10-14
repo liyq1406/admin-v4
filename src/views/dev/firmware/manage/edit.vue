@@ -5,7 +5,7 @@
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <validator name="validation">
-      <form novalidate @submit.prevent="onEditSubmit">
+      <form autocomplete="off" novalidate @submit.prevent="onEditSubmit">
         <div class="panel">
           <div class="panel-bd">
             <div class="row">

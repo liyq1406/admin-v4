@@ -6,7 +6,7 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="form">
-          <form v-form name="validation" @submit.prevent="onEditSubmit">
+          <form autocomplete="off" v-form name="validation" @submit.prevent="onEditSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
               <div class="controls col-18">

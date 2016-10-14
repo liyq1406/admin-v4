@@ -8,7 +8,7 @@
       <div class="panel-bd">
         <div class="form">
           <validator name="validation">
-            <form novalidate @submit.prevent="onSubmit">
+            <form autocomplete="off" novalidate @submit.prevent="onSubmit">
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
                 <div class="controls col-18">

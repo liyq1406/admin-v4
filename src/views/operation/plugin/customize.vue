@@ -64,7 +64,7 @@
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">{{ $t("ui.app.create_app") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addAppHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addAppHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
             <div class="controls col-18">

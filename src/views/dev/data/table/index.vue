@@ -84,7 +84,7 @@
     <modal :show.sync="addModal.show" @close="onAddCancel">
       <h3 slot="header">{{ $t("ui.table.create_table") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-6">
               <span>{{ $t("ui.table.fields.name") }}:</span>
@@ -169,7 +169,7 @@
     <modal :show.sync="editModal.show" @close="onEditCancel">
       <h3 slot="header">{{ $t("ui.table.edit_table") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
             <label class="form-control col-6">
               <span>{{ $t("ui.table.fields.name") }}:</span>
@@ -242,7 +242,7 @@
     <modal :show.sync="addColumnModal.show">
       <h3 slot="header">添加列</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="addColumnModalConfirm">
+        <form autocomplete="off" @submit.prevent="addColumnModalConfirm">
           <div class="form-row row">
             <label class="form-control col-6">列名:</label>
             <div class="controls col-18">
@@ -273,7 +273,7 @@
     <modal :show.sync="delColumnModal.show">
       <h3 slot="header">删除列</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="delColumnModalConfirm">
+        <form autocomplete="off" @submit.prevent="delColumnModalConfirm">
           <div class="form-row row">
             <label class="form-control col-6">列名:</label>
             <div class="controls col-12">
@@ -296,7 +296,7 @@
     <modal :show.sync="filterModal.show">
       <h3 slot="header">筛选</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="filterModalConfirm">
+        <form autocomplete="off" @submit.prevent="filterModalConfirm">
           <div class="form-row">
             <div class="controls row">
               <span class="filterModalTitle col-6">选择列：</span>
@@ -343,7 +343,7 @@
     <modal :show.sync="jurisdictionModal.show">
       <h3 slot="header">权限设置</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="jurisdictionModalConfirm">
+        <form autocomplete="off" @submit.prevent="jurisdictionModalConfirm">
           <div class="form-row row">
             <div class="checkbox-group">
               <label v-for="type in locales.data.TABLE_PERMISSION_TYPES" class="checkbox">
@@ -377,7 +377,7 @@
     <modal :show.sync="userEditColumnModal.show" class="visible">
       <h3 slot="header">编辑内容</h3>
       <div slot="body" class="form">
-        <form v-form name="userEditColumnModalValidation" @submit.prevent="userEditColumnModalConfirm">
+        <form autocomplete="off" v-form name="userEditColumnModalValidation" @submit.prevent="userEditColumnModalConfirm">
           <div class="form-row row">
             <label class="form-control col-6">
               <span>{{userEditColumnModal.columnName}}:</span>

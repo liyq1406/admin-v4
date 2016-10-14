@@ -1,7 +1,7 @@
 <template>
   <!-- 应用配置 -->
   <div class="form form-edit-apk">
-    <form v-form name="validation" @submit.prevent="onEditSubmit(model)">
+    <form autocomplete="off" v-form name="validation" @submit.prevent="onEditSubmit(model)">
       <div class="form-row row">
         <label class="form-control col-6">{{ $t("ui.app.fields.name") }}:</label>
         <div class="controls col-18">

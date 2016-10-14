@@ -8,7 +8,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-16 alert-max form">
-            <form  v-form name="addValidation" @submit.prevent="onSubmit">
+            <form autocomplete="off"  v-form name="addValidation" @submit.prevent="onSubmit">
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">设备SN:</label>
                 <div class="controls col-19">
