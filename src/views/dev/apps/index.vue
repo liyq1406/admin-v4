@@ -107,7 +107,7 @@
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">添加应用</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="onAddSubmit">
+        <form autocomplete="off" @submit.prevent="onAddSubmit">
           <div class="form-row row">
             <label class="form-control col-6">应用名称:</label>
             <div class="controls col-18">

@@ -25,7 +25,7 @@
       </div>
       <div class="form">
         <validator name="authValidation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-hints mt10 mb15">请输入您的账号信息</div>
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.fields.email')" class="input-text-wrap">

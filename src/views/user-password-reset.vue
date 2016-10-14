@@ -5,7 +5,7 @@
       <div class="form-legend">{{ $t("ui.auth.reset") }}</div>
       <div class="form">
         <validator name="authValidation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
                 <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
@@ -46,7 +46,7 @@
     </div>
   </div>
   <!-- <div v-show="!validating" class="form form-auth form-fetch-password">
-    <form v-show="verifycodeValid && !resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+    <form autocomplete="off" v-show="verifycodeValid && !resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
         <h2>{{ $t("ui.auth.reset") }}</h2>
       </div>

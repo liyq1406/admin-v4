@@ -30,7 +30,7 @@
       <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form novalidate @submit.prevent="onSubmitPwd">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmitPwd">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('ui.account.fields.old_password') }}</label>
               <div class="controls col-18">

@@ -65,7 +65,7 @@
     <modal :show.sync="addModal.show" width="670px" :flag="addModal.editingTag" @close="onAddCancel">
       <h3 slot="header">{{ $t("ui.rule.add_rule") }}</h3>
       <div slot="body" class="form form-rules">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-5">产品:</label>
             <div class="controls col-19">
@@ -250,7 +250,7 @@
     <modal :show.sync="editModal.show" :width="'670px'" :flag="editModal.editingTag">
       <h3 slot="header">{{ $t("ui.rule.edit_rule") }}</h3>
       <div slot="body" class="form form-rules">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
             <label class="form-control col-5">产品:</label>
             <div class="controls col-19">

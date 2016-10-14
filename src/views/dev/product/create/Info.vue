@@ -9,7 +9,7 @@
             </div>
             <div class="col-form">
               <div class="form">
-                <form novalidate>
+                <form autocomplete="off" novalidate>
                   <div class="form-row row">
                     <label class="form-control col-4">{{ $t("ui.product.fields.name") }}:</label>
                     <div class="controls col-20">

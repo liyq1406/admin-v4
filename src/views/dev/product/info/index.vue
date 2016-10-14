@@ -89,7 +89,7 @@
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form novalidate @submit.prevent="onDeviceEditModalSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onDeviceEditModalSubmit">
             <div class="form-row row">
               <label class="form-control col-4">SN:</label>
               <div class="controls col-20">

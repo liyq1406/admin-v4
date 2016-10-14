@@ -1,7 +1,7 @@
 <template>
   <div class="form-edit-info">
     <validator name="validation">
-      <form novalidate @submit.prevent="onSubmit">
+      <form autocomplete="off" novalidate @submit.prevent="onSubmit">
         <div class="form-row row">
           <label class="form-control col-6">名称</label>
           <div class="controls col-18">

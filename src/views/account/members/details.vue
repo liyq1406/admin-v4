@@ -16,7 +16,7 @@
                 <a class="fa fa-edit" @click="onShowMemberRoleModal" v-if="member.role !== 1"></a>
               </div>
               <div slot="password">
-                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role === 2">修改密码</a>
+                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role != 1">修改密码</a>
                 <span class="hl-gray" v-else>无权修改</span>
               </div>
             </info-list>
@@ -29,7 +29,7 @@
     <modal :show.sync="showMemberRoleModal">
       <h3 slot="header">修改角色</h3>
       <div slot="body" class="form">
-        <form novalidate @submit.prevent="onSubmitMemberRole">
+        <form autocomplete="off" novalidate @submit.prevent="onSubmitMemberRole">
           <div class="form-row row">
             <label class="form-control col-6">角色: </label>
             <div class="controls col-18">
@@ -52,7 +52,7 @@
       <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form novalidate @submit.prevent="onSubmitPwd">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmitPwd">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('ui.account.fields.new_password') }}</label>
               <div class="controls col-18">

@@ -53,7 +53,7 @@
       <h3 slot="header">{{ $t("ui.datapoint.add_datapoint") }}</h3>
       <div slot="body" class="form">
         <validator name="addValidation">
-          <form novalidate @submit.prevent="onAddSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onAddSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>
               <div class="controls col-18">
@@ -150,7 +150,7 @@
       <h3 slot="header">{{ $t("ui.datapoint.edit_datapoint") }}</h3>
       <div slot="body" class="form">
         <validator name="editValidation">
-          <form novalidate @submit.prevent="onEditSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onEditSubmit">
             <!-- <pre>{{$editValidation|json}}</pre> -->
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.datapoint.fields.index") }}:</label>

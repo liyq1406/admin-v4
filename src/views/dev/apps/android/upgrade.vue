@@ -1,7 +1,7 @@
 <template>
   <div class="promote">
     <div class="form">
-      <form @submit.prevent="onSubmit">
+      <form autocomplete="off" @submit.prevent="onSubmit">
         <div class="form-row row">
           <label class="form-control col-6">升级版本号:</label>
           <div class="controls col-18">

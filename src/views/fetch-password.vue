@@ -5,7 +5,7 @@
       <div class="form-legend">{{ $t("ui.auth.by_phone") }}</div>
       <div class="form">
         <validator name="authValidation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-hints">{{ $t("ui.auth.by_phone_tips") }}</div>
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
@@ -83,7 +83,7 @@
   </div>
   <!-- <div class="form form-auth form-fetch-password">
     <div class="form-logo"><a v-link="{path: '/login'}" class="fa fa-chevron-circle-left link-return"></a></div>
-    <form v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+    <form autocomplete="off" v-show="!resetsuccess" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header">
         <h2>{{ $t("ui.auth.fetch") }}</h2>
         <p>{{ $t("ui.auth.by_phone_tips") }}</p>

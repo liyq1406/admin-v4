@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-16 alert-max form">
           <validator name="validation">
-            <form novalidate @submit.prevent="onSubmit">
+            <form autocomplete="off" novalidate @submit.prevent="onSubmit">
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
                 <div class="controls col-19">
