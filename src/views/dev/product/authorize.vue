@@ -64,7 +64,7 @@
               <label class="form-control col-6">{{ $t("ui.overview.addForm.mac") }}:</label>
               <div class="controls col-18">
                 <div v-placeholder="$t('ui.overview.addForm.mac_placeholder')" class="input-text-wrap required-sign">
-                  <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'hex'}" class="input-text"/>
+                  <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'mac'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.mac.touched && $validation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
@@ -78,10 +78,11 @@
               <label class="form-control col-6">序列号:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入序列号'" class="input-text-wrap">
-                  <input v-model="addModel.sn" type="text" name="addModel.sn" v-validate:sn="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                  <input v-model="addModel.sn" type="text" name="addModel.sn" v-validate:sn="{format: 'sn', maxlength: 32}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号不允许前后带空格</span>
+                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>
             </div>

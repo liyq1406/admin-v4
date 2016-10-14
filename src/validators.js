@@ -22,9 +22,18 @@ export function format (val, type) {
       result = /^\w+$/.test(val)
       break
 
-    // 字母+数字
-    case 'hex':
-      result = /^[0-9|a-f]+$/i.test(val)
+    // mac
+    case 'mac':
+      result = /^[0-9a-fA-F]+$/i.test(val)
+      break
+
+    // sn
+    case 'sn':
+      if (!val.length) {
+        result = true
+      } else {
+        result = /^[0-9a-zA-Z][0-9a-zA-Z\-]*$/i.test(val)
+      }
       break
 
     // 邮箱格式
