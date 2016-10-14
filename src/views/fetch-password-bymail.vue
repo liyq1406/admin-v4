@@ -5,7 +5,7 @@
       <div class="form-legend">{{ $t("ui.auth.by_mail") }}</div>
       <div class="form">
         <validator name="authValidation">
-          <form novalidate @submit.prevent="onSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
             <div class="form-hints">{{ $t("ui.auth.by_mail_tips") }}</div>
             <div class="form-row">
               <div v-placeholder="$t('ui.auth.fields.email')" class="input-text-wrap">

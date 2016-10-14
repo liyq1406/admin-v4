@@ -1,7 +1,7 @@
 <template>
   <div class="form form-auth form-register">
     <div class="form-logo"></div>
-    <form v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
+    <form autocomplete="off" v-form name="validation" @submit.prevent="onSubmit" class="form-cont">
       <div class="form-header"><a v-link="{ path: '/login' }">{{ $t("ui.auth.login") }}</a><span>{{ $t("ui.auth.register") }}</span></div>
       <div class="form-body">
         <div class="form-hints">{{ $t("ui.auth.account_tips") }}</div>

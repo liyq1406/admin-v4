@@ -1,7 +1,7 @@
 <template>
   <div>
     <validator name="validation">
-      <form novalidate>
+      <form autocomplete="off" novalidate>
         <div class="form">
           <div class="form-row row">
             <label class="form-control col-3">产品:</label>

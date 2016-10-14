@@ -67,7 +67,7 @@
           <h3 slot="header">添加网点</h3>
           <div slot="body" class="form">
             <validator name="addValidation">
-              <form novalidate @submit.prevent="onAddSubmit">
+              <form autocomplete="off" novalidate @submit.prevent="onAddSubmit">
                 <div class="form-row row">
                   <label class="form-control col-6">网点:</label>
                   <div class="controls col-18">

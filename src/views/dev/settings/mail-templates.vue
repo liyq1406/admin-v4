@@ -9,7 +9,7 @@
       </div>
       <div class="panel-bd">
         <div class="form">
-          <form v-form name="validation" @submit.prevent="onSenderSubmit">
+          <form autocomplete="off" v-form name="validation" @submit.prevent="onSenderSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.sender") }}:</label>
               <div class="controls col-18">
@@ -40,7 +40,7 @@
       </div>
       <div class="panel-bd">
         <div v-show="activateLang === 'zh-cn'" class="form template-form">
-          <form v-form name="activateValidation" @submit.prevent="onActivateSubmit">
+          <form autocomplete="off" v-form name="activateValidation" @submit.prevent="onActivateSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
@@ -69,7 +69,7 @@
           </form>
         </div>
         <div v-show="activateLang === 'en-us'" class="form template-form">
-          <form v-form name="activateValidation2" @submit.prevent="onActivateSubmit2">
+          <form autocomplete="off" v-form name="activateValidation2" @submit.prevent="onActivateSubmit2">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
@@ -110,7 +110,7 @@
       </div>
       <div class="panel-bd">
         <div v-show="resetLang === 'zh-cn'" class="form template-form">
-          <form v-form name="resetValidation" @submit.prevent="onResetSubmit">
+          <form autocomplete="off" v-form name="resetValidation" @submit.prevent="onResetSubmit">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">
@@ -139,7 +139,7 @@
           </form>
         </div>
         <div v-show="resetLang === 'en-us'" class="form template-form">
-          <form v-form name="resetValidation2" @submit.prevent="onResetSubmit2">
+          <form autocomplete="off" v-form name="resetValidation2" @submit.prevent="onResetSubmit2">
             <div class="form-row row">
               <label class="form-control col-6">{{ $t("ui.mail_templates.fields.subject") }}:</label>
               <div class="controls col-18">

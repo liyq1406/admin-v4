@@ -6,7 +6,7 @@
     <div class="panel">
       <div class="panel-bd">
         <div class="form">
-          <form v-form name="validation" @submit.prevent="onSubmit">
+          <form autocomplete="off" v-form name="validation" @submit.prevent="onSubmit">
             <div class="form-row row">
               <label class="checkbox">
                 <input type="checkbox" v-model="model.is_user_active"/>

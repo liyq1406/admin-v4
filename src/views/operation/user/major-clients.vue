@@ -71,7 +71,7 @@
       <h3 slot="header">添加大客户</h3>
       <div slot="body" class="form">
         <validator name="majorClientValidation">
-          <form @submit.prevent="addMajorClient" novalidate>
+          <form autocomplete="off" @submit.prevent="addMajorClient" novalidate>
             <div class="form-row row">
               <label class="form-control col-6">客户名称:</label>
               <div class="controls col-18">

@@ -32,7 +32,7 @@
       <modal :show.sync="isShowSelectedModal" @close="cancelSelect" :width="'600px'">
         <h3 slot="header">添加{{ typeLabel }}</h3>
         <div slot="body" class="selected-content-box form">
-          <form @submit.prevent="confirmSelect">
+          <form autocomplete="off" @submit.prevent="confirmSelect">
             <div class="form-row row">
               <div class="action-bar">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search_condi')" @cancel="getContentList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getContentList(true)">

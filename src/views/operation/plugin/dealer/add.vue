@@ -5,7 +5,7 @@
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <validator name="autoValidation">
-      <form novalidate @submit.prevent="onSubmit">
+      <form autocomplete="off" novalidate @submit.prevent="onSubmit">
         <div class="panel">
           <div class="panel-hd bordered mt20">
             <h2>{{accountTitle}}</h2>

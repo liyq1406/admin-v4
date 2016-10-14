@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <div class="form">
           <validator name="editValidation">
-            <form novalidate @submit.prevent="onEditSubmit">
+            <form autocomplete="off" novalidate @submit.prevent="onEditSubmit">
               <!-- <pre>{{$editValidation|json}}</pre> -->
               <div class="form-row row">
                 <label class="form-control col-6">下载路径:</label>

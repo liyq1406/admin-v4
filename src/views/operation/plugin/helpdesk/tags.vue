@@ -44,7 +44,7 @@
     <modal :show.sync="showAddModal" width="380px">
       <h3 slot="header">添加标签</h3>
       <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFormHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t('ui.tags.fields.name') }}:</label>
             <div class="controls col-18">
@@ -71,7 +71,7 @@
     <modal :show.sync="showEditModal" width="380px">
       <h3 slot="header">修改标签</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t('ui.tags.fields.name') }}:</label>
             <div class="controls col-18">

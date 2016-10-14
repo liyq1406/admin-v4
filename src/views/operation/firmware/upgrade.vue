@@ -79,7 +79,7 @@
     <modal :show.sync="showAddTaskModal" @close="onAddTaskCancel">
       <h3 slot="header">{{ $t("ui.task.create_task") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
+        <form autocomplete="off" v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.task.fields.name") }}:</label>
             <div class="controls col-18">

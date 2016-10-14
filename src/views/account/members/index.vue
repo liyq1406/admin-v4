@@ -69,7 +69,7 @@
         <h3 slot="header">{{ $t('ui.member.add_member') }}</h3>
         <div slot="body" class="form">
           <validator name="validation">
-            <form novalidate hook="addHook" @submit.prevent="onAddSubmit">
+            <form autocomplete="off" novalidate hook="addHook" @submit.prevent="onAddSubmit">
               <div class="form-row row">
                 <label class="form-control col-6">{{ $t("ui.member.fields.email") }}:</label>
                 <div class="controls col-18">

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="form-box col-16">
       <validator name="validation">
-        <form novalidate @submit.prevent="onAddSubmit">
+        <form autocomplete="off" novalidate @submit.prevent="onAddSubmit">
           <div class="panel">
             <div class="panel-hd">
               <h3><i class="number">1</i> 选择产品</h3>

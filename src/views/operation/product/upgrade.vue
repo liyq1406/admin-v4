@@ -93,7 +93,7 @@
     <modal :show.sync="showAddModal" @close="onAddCancel">
       <h3 slot="header">{{ $t('ui.firmware.add_firmware') }}</h3>
       <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFirmwareHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addFirmwareHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.firmware.fields.mod") }}:</label>
             <div class="controls col-18">
@@ -153,7 +153,7 @@
     <modal :show.sync="showEditModal" @close="onEditCancel">
       <h3 slot="header">{{ $t('ui.firmware.edit_firmware') }}</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFirmwareHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFirmwareHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.firmware.fields.mod") }}:</label>
             <div class="controls col-18">
@@ -216,7 +216,7 @@
     <modal :show.sync="showAddTaskModal" @close="onAddTaskCancel">
       <h3 slot="header">{{ $t("ui.task.create_task") }}</h3>
       <div slot="body" class="form">
-        <form v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
+        <form autocomplete="off" v-form name="addTaskValidation" @submit.prevent="onAddTaskSubmit" hook="addTaskHook">
           <div class="form-row row">
             <label class="form-control col-6">{{ $t("ui.task.fields.name") }}:</label>
             <div class="controls col-18">

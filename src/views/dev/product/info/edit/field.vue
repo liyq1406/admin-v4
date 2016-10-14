@@ -65,7 +65,7 @@
       <h3 slot="header">编辑字段名</h3>
       <div slot="body" class="form">
         <validator name="editLabelValidation">
-          <form novalidate @submit.prevent="onEditLabelSubmit">
+          <form autocomplete="off" novalidate @submit.prevent="onEditLabelSubmit">
             <div class="form-row row">
               <label class="form-control col-5">请输入字段名:</label>
               <div class="controls col-19">
@@ -89,7 +89,7 @@
     <modal :show.sync="showEditSortModal">
       <h3 slot="header">编辑排序</h3>
       <div slot="body" class="form">
-        <form @submit.prevent="onEditSortSubmit">
+        <form autocomplete="off" @submit.prevent="onEditSortSubmit">
           <div class="form-row row">
             <label class="form-control col-5">编辑序号:</label>
             <div class="controls col-19">

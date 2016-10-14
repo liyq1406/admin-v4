@@ -143,7 +143,7 @@
    <modal :show.sync="editModal.show" width="600px">
      <h3 slot="header">修改经销商信息</h3>
      <div slot="body" class="form">
-       <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
+       <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
          <div class="form-row row">
            <label class="form-control col-5">账号:</label>
            <div class="controls col-19">

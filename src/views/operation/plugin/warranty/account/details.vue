@@ -115,7 +115,7 @@
     <modal :show.sync="showAddModal" width="600px">
       <h3 slot="header">添加客服</h3>
       <div slot="body" class="form">
-        <form v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addStaffHook">
+        <form autocomplete="off" v-form name="addValidation" @submit.prevent="onAddSubmit" hook="addStaffHook">
           <div class="form-row row">
             <label class="form-control col-6">姓名:</label>
             <div class="controls col-18">
@@ -188,7 +188,7 @@
     <modal :show.sync="showEditModal" width="600px">
       <h3 slot="header">编辑网点</h3>
       <div slot="body" class="form">
-        <form v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
+        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editStaffHook">
           <div class="form-row row">
             <label class="form-control col-6">网点名称:</label>
             <div class="controls col-18">

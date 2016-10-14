@@ -4,7 +4,7 @@
       <i class="fa fa-refresh fa-spin"></i>
     </div>
     <validator name="validation">
-      <form novalidate @submit.prevent="onArticleSubmit">
+      <form autocomplete="off" novalidate @submit.prevent="onArticleSubmit">
         <div class="form-row row">
           <label class="form-control col-4"><i class="hl-red">*</i> 文章标题:</label>
           <div class="controls col-20">

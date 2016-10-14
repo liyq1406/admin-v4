@@ -7,7 +7,7 @@
           <h2>编辑消息推送</h2>
         </div>
         <div class="panel-bd">
-          <form v-form name="validation" @submit.prevent="onSubmit">
+          <form autocomplete="off" v-form name="validation" @submit.prevent="onSubmit">
             <div class="form">
               <div class="form-row row">
                 <label class="form-control col-6">推送渠道:</label>
