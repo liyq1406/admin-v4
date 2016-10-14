@@ -333,7 +333,7 @@ export default {
     email_phone: '邮箱/手机号',
     password: '密码',
     login_submit: '登录',
-    login_submiting: '登录中...',
+    login_submitting: '登录中...',
     // 注册
     account_tips: '请输入您的帐号信息：',
     basic_tips: '请输入您的基本信息：',

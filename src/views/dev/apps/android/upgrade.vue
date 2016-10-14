@@ -36,7 +36,7 @@
         </div>
         <div class="form-actions row">
           <div class="col-offset-6 col-18">
-            <button type="submit" :disabled="submiting || loadingData" :class="{'disabled':submiting || loadingData}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button type="submit" :disabled="submitting || loadingData" :class="{'disabled':submitting || loadingData}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
           </div>
         </div>
       </form>
@@ -86,7 +86,7 @@
     data () {
       return {
         // 表单正在提交
-        submiting: false,
+        submitting: false,
         // 正在加载
         loadingData: false,
         apk: {
@@ -125,9 +125,9 @@
        * @return {[type]} [description]
        */
       onSubmit () {
-        if (this.submiting) return
+        if (this.submitting) return
 
-        this.submiting = true
+        this.submitting = true
         api.plugin.setApk(this.app.id, this.apk).then((res) => {
           // this.$emit('update-curr-app')
           this.getVersion()
@@ -135,13 +135,13 @@
             type: 'success',
             content: '设置成功'
           })
-          this.submiting = false
+          this.submitting = false
         }).catch((res) => {
           this.showNotice({
             type: 'error',
             content: '设置失败'
           })
-          this.submiting = false
+          this.submitting = false
         })
       }
     }

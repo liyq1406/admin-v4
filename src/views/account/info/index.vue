@@ -15,30 +15,16 @@
         </div>
       </div>
     </div>
+
+    <!-- 编辑帐号信息浮层 start -->
     <modal :show.sync="isShowEditModal">
       <h3 slot="header">编辑帐号信息</h3>
       <div slot="body" class="form">
-        <validator name="editInfoValidation">
-          <form novalidate @submit.prevent="onSubmitEditInfo">
-            <div class="form-row row">
-              <label class="form-control col-6">名称</label>
-              <div class="controls col-18">
-                <div class="input-text-wrap">
-                  <input type="text" v-model="editModel.name" name="editModel.name" v-validate:name="{required: true}" class="input-text"/>
-                  <div class="form-tips form-tips-error">
-                    <span v-if="$editInfoValidation.name.touched && $editInfoValidation.name.required">名称为必填项</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-actions">
-              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-              <button @click.prevent.stop="onEditInfoCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-            </div>
-          </form>
-        </validator>
+        <edit-info-form :model="editModel" :submitting="editing" @form-submit="onSubmitEditInfo" @cancel="onEditInfoCancel"></edit-info-form>
       </div>
     </modal>
+    <!-- 编辑帐号信息浮层 end -->
+
     <!-- 修改密码浮层 start -->
     <modal :show.sync="isShowModal" width="400px">
       <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
@@ -102,7 +88,8 @@ import store from 'store'
 import formatDate from 'filters/format-date'
 import api from 'api'
 import Select from 'components/Select'
-import { setCurrentMember } from '../../../store/actions/system'
+import EditInfoForm from './components/EditInfoForm'
+import { setCurrentMember } from 'store/actions/system'
 // import _ from 'lodash'
 
 export default {
@@ -123,9 +110,10 @@ export default {
   },
 
   components: {
-    'x-select': Select,
     InfoList,
-    Modal
+    Modal,
+    EditInfoForm,
+    'x-select': Select
   },
 
   data () {
@@ -195,15 +183,20 @@ export default {
   },
 
   methods: {
+    /**
+     * 初始化: 获取成员角色
+     * @return {void}
+     */
     init () {
       this.role = {
         value: this.currentMember.role,
         label: this.MEMBER_TYPES[this.currentMember.role]
       }
     },
+
     /**
      * 编辑信息提交表单
-     * @return {[type]} [description]
+     * @return {void}
      */
     onSubmitEditInfo () {
       if (this.currentMember.name !== this.editModel.name) {
@@ -212,6 +205,11 @@ export default {
       }
       this.onEditInfoCancel()
     },
+
+    /**
+     * 更新用户信息
+     * @return {void}
+     */
     setMemberInfo () {
       this.editModel.is_notice = true
       this.editModel.is_alert = true
@@ -228,39 +226,36 @@ export default {
         this.handleError(res)
       })
     },
+
     /**
      * 获取成员信息
-     * @return {[type]} [description]
+     * @return {void}
      */
     getMember () {
       api.corp.getMember(this.currentMember.id).then((res) => {
         this.setCurrentMember(res.data)
         window.localStorage.memberRole = res.data.role
-      }).catch((res) => {
-        // this.showNotice({
-        //   type: 'error',
-        //   content: '暂无当前用户信息'
-        // })
-        // this.$route.router.go('/login')
       })
     },
 
     /**
-     * 编辑按钮
-     * @return {[type]} [description]
+     * 显示编辑浮层：初始化需要编辑的模型
+     * @return {void}
      */
     showEditModal () {
       this.editModel.name = this.currentMember.name
       this.isShowEditModal = true
     },
+
     /**
-     * 取消编辑个人信息
-     * @return {[type]} [description]
+     * 取消编辑个人信息：重置标志位
+     * @return {void}
      */
     onEditInfoCancel () {
       this.editing = false
       this.isShowEditModal = false
     },
+
     /**
      * 获取企业信息
      * @author shengzhi
@@ -281,11 +276,16 @@ export default {
      * @author shengzhi
      */
     onSubmitPwd () {
-      if (this.adding) return
+      // 防止二次提交
+      if (this.editing) return
+
+      // 验证不通过，手动触发验证
       if (this.$validation.invalid) {
         this.$validate(true)
         return
       }
+
+      // 密码修改
       this.editing = true
       api.corp.memberResetPwd(this.model).then((res) => {
         if (res.status === 200) {
@@ -300,49 +300,6 @@ export default {
         this.editing = false
       })
     }
-    // /**
-    //  * 修改密码
-    //  * @author shengzhi
-    //  */
-    // editPwd () {
-    //   this.isShowModal = true
-    //   this.confirmPassword = ''
-    //   this.model = _.clone(this.originModel)
-    // },
-    //
-    // /**
-    //  * 取消修改密码
-    //  * @author shengzhi
-    //  */
-    // onEditPwdCancel () {
-    //   this.editing = false
-    //   this.isShowModal = false
-    //   this.$nextTick(() => {
-    //     this.$resetValidation()
-    //   })
-    // },
-    //
-    // /**
-    //  * 提交密码修改
-    //  * @author shengzhi
-    //  */
-    // onSubmitPwd () {
-    //   if (this.$validation.valid && !this.editing) {
-    //     this.editing = true
-    //     api.corp.memberResetPwd(this.model).then((res) => {
-    //       if (res.status === 200) {
-    //         this.showNotice({
-    //           type: 'success',
-    //           content: this.$t('ui.account.password_msg')
-    //         })
-    //       }
-    //       this.onEditPwdCancel()
-    //     }).catch((res) => {
-    //       this.handleError(res)
-    //       this.editing = false
-    //     })
-    //   }
-    // }
   }
 }
 </script>

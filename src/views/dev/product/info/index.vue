@@ -88,20 +88,26 @@
     <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
-        <form novalidate @submit.prevent="onDeviceEditModalSubmit">
-          <div class="form-row row">
-            <label class="form-control col-4">SN:</label>
-            <div class="controls col-20">
-              <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" lazy class="input-text"/>
+        <validator name="validation">
+          <form novalidate @submit.prevent="onDeviceEditModalSubmit">
+            <div class="form-row row">
+              <label class="form-control col-4">SN:</label>
+              <div class="controls col-20">
+                <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
+                  <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" v-validate:sn="{format: 'sn', maxlength: 32}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="showDeviceEditModal = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          </div>
-        </form>
+            <div class="form-actions">
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="showDeviceEditModal = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            </div>
+          </form>
+        </validator>
       </div>
     </modal>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->

@@ -40,7 +40,7 @@
             <label v-if="type === 'edit'" class="del-check">
               <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
             </label>
-            <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
@@ -106,7 +106,7 @@ export default {
     return {
       images: [''], // 分类图片
       delChecked: false, // 是否删除
-      submiting: false // 正在提交？
+      submitting: false // 正在提交？
     }
   },
 
@@ -161,7 +161,7 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.submiting) return
+      if (this.submitting) return
 
       if (this.$validation.invalid) {
         this.$validate(true)
@@ -172,7 +172,7 @@ export default {
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
-      this.submiting = true
+      this.submitting = true
       let params = {
         name: this.category.name,
         images: _.compact(_.clone(this.images)),
@@ -203,10 +203,10 @@ export default {
         if (res.status === 200) {
           this.$emit('submit-success')
           this.onCancel()
-          this.submiting = false
+          this.submitting = false
         }
       }).catch((res) => {
-        this.submiting = false
+        this.submitting = false
         this.handleError(res)
       })
     }

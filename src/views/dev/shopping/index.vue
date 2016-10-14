@@ -1,6 +1,6 @@
 <template>
   <div class="main with-loading">
-    <div class="icon-loading" v-show="submiting">
+    <div class="icon-loading" v-show="submitting">
       <i class="fa fa-refresh fa-spin"></i>
     </div>
 
@@ -50,7 +50,7 @@ export default {
 
   data () {
     return {
-      submiting: false,
+      submitting: false,
       currStep: 2, // 当前步骤 [1|2|3|4|5]
       steps: ['确认信息', '选择购买信息', '确认订单', '在线支付', '支付成功']
     }
@@ -72,10 +72,10 @@ export default {
       console.log(order)
       // TODO 调用创建订单接口
       this.currStep = 4
-      this.submiting = true
+      this.submitting = true
       window.setTimeout(() => {
         this.currStep = 5
-        this.submiting = false
+        this.submitting = false
       }, 1000)
       window.setTimeout(() => {
         this.$route.router.replace('orders')

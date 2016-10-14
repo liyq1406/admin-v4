@@ -50,7 +50,7 @@
               <label class="del-check" v-if="this.modal.type==='edit'">
                 <input type="checkbox" name="del" v-model="delChecked"/>删除参数
               </label>
-              <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
@@ -96,7 +96,7 @@ export default {
         key: 'info',
         title: '参数信息'
       }],
-      submiting: false,
+      submitting: false,
       delChecked: false,
       modal: {
         show: false,
@@ -181,7 +181,7 @@ export default {
      */
     onCancel () {
       this.delChecked = false
-      this.submiting = false
+      this.submitting = false
       this.modal.show = false
       this.$resetValidation()
     },
@@ -190,14 +190,14 @@ export default {
      * 提交表单
      */
     onSubmit () {
-      if (this.submiting) return
+      if (this.submitting) return
 
       if (this.$validation.invalid) {
         this.$validate(true)
         return
       }
 
-      this.submiting = true
+      this.submitting = true
       let params = _.clone(this.currentProduct)
 
       if (this.modal.type === 'add') {

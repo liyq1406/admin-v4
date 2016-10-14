@@ -68,7 +68,7 @@
               <label v-if="modal.type === 'edit'" class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此设备
               </label>
-              <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
             </div>
           </form>
@@ -122,7 +122,7 @@ export default {
         autoexec: ''
       },
       model: {},
-      submiting: false,
+      submitting: false,
       delChecked: false,
       loadingData: true
     }
@@ -192,14 +192,14 @@ export default {
     },
 
     onSubmit () {
-      if (this.submiting) return
+      if (this.submitting) return
 
       if (this.$validation.invalid) {
         this.$validate(true)
         return
       }
 
-      this.submiting = true
+      this.submitting = true
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
@@ -233,7 +233,7 @@ export default {
       }
       api.recipes.editRecipes(appId, this.$route.params.id, token, params).then((res) => {
         if (res.status === 200) {
-          this.submiting = false
+          this.submitting = false
           this.onCancel()
           this.getRecipes()
         }

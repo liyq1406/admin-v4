@@ -22,6 +22,20 @@ export function format (val, type) {
       result = /^\w+$/.test(val)
       break
 
+    // mac
+    case 'mac':
+      result = /^[0-9a-fA-F]+$/i.test(val)
+      break
+
+    // sn
+    case 'sn':
+      if (!val.length) {
+        result = true
+      } else {
+        result = /^[0-9a-zA-Z][0-9a-zA-Z\-]*$/i.test(val)
+      }
+      break
+
     // 邮箱格式
     case 'email':
       // result = /^(\w)+(\.\w+)*@(\w)+((\.\w{2,3}){1,3})$/.test(val)
