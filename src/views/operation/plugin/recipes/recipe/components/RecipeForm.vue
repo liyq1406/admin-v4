@@ -1018,7 +1018,8 @@ export default {
     max-width 800px
     .form-row
       max-height 5000px
-
+      .fa-times
+        cursor pointer
       .controls
         .select-group1
           position relative
@@ -1038,26 +1039,6 @@ export default {
             margin-right 10px
           span.text-time
             margin-right 10px
-
-        .delete-input
-          position absolute
-          right 5px
-          top 5px
-          span.fa
-            color #c0252e
-
-    .ingredient-row
-      table
-        margin-top 0
-
-        td
-          padding 5px 0
-
-      .ingredient-name
-        margin-right 20px
-
-      .fa-times
-        color #c0252e
 
     // 设备列表
     .device-list

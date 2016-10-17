@@ -38,6 +38,11 @@
       imgHeight: {
         type: String,
         default: '120px'
+      },
+
+      uploadApi: {
+        type: Function,
+        default: api.upload.image
       }
     },
 
@@ -63,8 +68,18 @@
        * @param  {Number}       index 索引
        */
       upload (event, index) {
+        console.log(this.uploadApi)
         var input = event.target
         var file = input.files[0]
+
+        // 导入文件类型不合法
+        if (!/\.(?:png|jpg|bmp|gif)$/i.test(file.name)) {
+          this.showNotice({
+            type: 'error',
+            content: '请上传正确的图片文件'
+          })
+          return false
+        }
 
         if (file && file.size > config.MAX_IMAGE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
@@ -87,7 +102,7 @@
             if (evt.target.readyState === window.FileReader.DONE) {
               if (!this.uploading) {
                 this.uploading = true
-                api.upload.image(evt.target.result).then((res) => {
+                this.uploadApi(evt.target.result).then((res) => {
                   if (res.status === 200) {
                     this.setImage(index, res.data.url)
                     input.value = ''
