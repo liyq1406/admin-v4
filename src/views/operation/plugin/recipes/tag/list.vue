@@ -26,11 +26,11 @@
     </div>
 
     <!-- 添加/修改标签浮层-->
-    <modal :show.sync="modal.isShow" width="480px">
+    <modal :show.sync="modal.isShow" width="480px" @close="onCancel">
       <h3 slot="header">{{ modalTitle }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
-          <form autocomplete="off" novalidate @submit.prevent="onSubmit">
+          <form novalidate @submit.prevent="onSubmit">
             <div class="form-row row">
               <label class="form-control col-6">名称:</label>
               <div class="controls col-18">
@@ -49,7 +49,7 @@
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除此标签
               </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
@@ -156,7 +156,7 @@ export default {
     // 标签查询条件
     queryCondition () {
       var condition = {
-        filter: ['_id', 'label'],
+        filter: ['label'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},
@@ -267,6 +267,7 @@ export default {
      */
     onCancel () {
       this.modal.isShow = false
+      this.submiting = false
       this.delChecked = false
       this.$resetValidation()
     },
@@ -276,13 +277,20 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.$validation.invalid || this.submitting) return
+      if (this.submiting) {
+        return
+      }
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
       let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
 
-      this.submitting = true
+      this.submiting = true
       let params = {
         label: this.model.label
       }
@@ -305,9 +313,10 @@ export default {
         if (res.status === 200) {
           this.getTags()
           this.onCancel()
-          this.submitting = false
+          this.submiting = false
         }
       }).catch((res) => {
+        this.submiting = false
         this.handleError(res)
       })
     },
