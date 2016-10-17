@@ -222,6 +222,12 @@ export default {
           _.remove(contentArr, (item) => {
             return item.id === content._id
           })
+          contentArr = _.map(contentArr, (item, index) => {
+            return {
+              index: index + 1,
+              id: item.id
+            }
+          })
           let contentParams = {
             content: contentArr
           }
@@ -254,8 +260,14 @@ export default {
       // } else {
       //
       // }
+      let content = _.map(this.operatePosition.content, (item, index) => {
+        return {
+          index: index + 1,
+          id: item.id
+        }
+      })
       let contentParams = {
-        content: this.operatePosition.content
+        content: content
       }
       this.ordering = true
       api.operate.updateOperatePosition(appId, token, contentParams, this.$route.params.id).then((res) => {
