@@ -13,7 +13,8 @@
     </div>
     <div class="row min-height">
       <div class="col-14" v-if="trendTabIndex === 0">
-        <div class="chart-box" v-chart="activatedOptions" :loading="loadingData"></div>
+        <chart :options="activatedOptions" :loading="loadingTrend"></chart>
+        <!-- <div class="chart-box" v-chart="activatedOptions" :loading="loadingData"></div> -->
       </div>
       <div class="col-14" v-else>
         <!-- <div class="chart-box" v-chart="sumActivatedOptions" :loading="loadingData"></div> -->
@@ -35,8 +36,9 @@
 
 <script>
 import Panel from 'components/Panel'
-import TimeLine from 'components/g2-charts/TimeLine'
-import Interval from 'components/g2-charts/Interval'
+// import TimeLine from 'components/g2-charts/TimeLine'
+// import Interval from 'components/g2-charts/Interval'
+import Chart from 'components/Chart/index'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic'
@@ -53,8 +55,9 @@ export default {
   components: {
     Panel,
     RadioButtonGroup,
-    TimeLine,
-    Interval,
+    Chart,
+    // TimeLine,
+    // Interval,
     Statistic
   },
 
@@ -71,6 +74,7 @@ export default {
       repaintTopFive: true, // 添加该变量为了处理g2的bug： changeData时g2会将传入数组根据source时的数组结构重新排序。所以总过v-if重绘
       trendTabIndex: 0,
       period: 30,
+      loaded: 0,
       activatedData: [], // 激活设备数据
       activated: {
         series: [],
@@ -123,6 +127,10 @@ export default {
     },
     avgTooltip () {
       return this.period + '天平均增长'
+    },
+
+    loadingTrend () {
+      return this.loaded !== this.products.length
     },
 
     // 图例
@@ -244,17 +252,23 @@ export default {
 
   watch: {
     products () {
+      this.init()
+    }
+  },
+
+  ready () {
+    this.init()
+  },
+
+  methods: {
+    init () {
       if (this.products.length > 0 && !this.requested) {
         this.requested = true
         this.getActivatedProductsTrend(this.products, this.period)
         this.getTrend()
       }
-    }
-  },
+    },
 
-  ready () {
-  },
-  methods: {
     /**
      * 获取产品趋势
      * @author shengzhi
@@ -265,7 +279,7 @@ export default {
       let sumSeries = []
       let sumXAxis = []
 
-      this.loadingData = true
+      this.loaded = 0
       this.products.forEach((item, index) => {
         getActivatedTrend(item.id, this.period).then((res) => {
           let obj = {
@@ -292,9 +306,7 @@ export default {
           })
           series.push(obj)
           sumSeries.push(sumObj)
-          if (index === this.products.length - 1) {
-            this.loadingData = false
-          }
+          this.loaded++
         })
       })
       this.activated.series = series
@@ -435,9 +447,6 @@ export default {
 <style lang="stylus" scoped>
 @import '../../../assets/stylus/common'
 
-.chart-box
-  width 100%
-  min-height 10px
 .blockdiv
   display block!important
   margin-top 10px
