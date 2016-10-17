@@ -46,7 +46,7 @@
                     </div>
                     <div class="string-box" v-if="dataPointType(datapoint.type) === 'string'">
                       <div class="input-text-wrap">
-                        <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @change="setDataEvent(datapoint)">
+                        <input type="text" class="input-text input-text-sm" v-model="datapoint.value" @keyup.enter="setDataEvent(datapoint)">
                       </div>
                     </div>
                   </div>
