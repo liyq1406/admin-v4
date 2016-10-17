@@ -10,50 +10,8 @@
             <a class="btn btn-primary" v-link="{path: '/dev/data/snapshot/create'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <div class="data-table">
-          <div class="filter-bar">
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')"></search-box>
-              </div>
-            </div>
-          </div>
-          <table class="table table-stripe table-bordered">
-            <thead>
-              <tr>
-                <th>产品名称</th>
-                <th class="wp20">快照规则</th>
-                <th class="wp20">创建时间</th>
-                <th class="wp20">创建者</th>
-                <th class="wp20">操作</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="dp in filteredRules">
-                <td>
-                  <a class="hl">{{dp.productName}}</a>
-                </td>
-                <td>
-                  <div v-if="dp.rule===3">定时更新/{{dp.interval}}分钟</div>
-                  <div v-if="dp.rule===2">变化更新</div>
-                  <div v-if="dp.rule===1">即时更新</div>
-                </td>
-                <td>{{dp.create_time | formatDate}}</td>
-                <td>{{dp.creator}}</td>
-                <td>
-                  <a v-link="{ path: '/dev/data/snapshots/' + dp.productId}" class="hl-red">查看快照</a>
-                  <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productId+'/'+dp.id}">编辑</a>
-                </td>
-              </tr>
-              <tr v-if="filteredRules.length === 0">
-                <td :colspan="5" class="tac">
-                  <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" :simple="true"></pager>
+        <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint">
+        </x-table>
       </div>
     </div>
   </div>
@@ -61,10 +19,10 @@
 
 <script>
 import * as config from 'consts/config'
-import Pager from 'components/Pager'
+import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
-import api from 'api'
+import proxy from './restful-proxy'
 
 export default {
   name: 'statictis-rule',
@@ -72,8 +30,8 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    Pager,
-    SearchBox
+    SearchBox,
+    'x-table': Table
   },
 
   vuex: {
@@ -91,96 +49,62 @@ export default {
       rules: [],
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
-      total: 0
+      total: 0,
+      headers: [
+        {
+          key: 'name',
+          title: '规则名称'
+        },
+        {
+          key: 'description',
+          title: '描述'
+        },
+        {
+          key: 'create_time',
+          title: '创建时间'
+        },
+        {
+          key: 'autor',
+          title: '创建者'
+        },
+        {
+          key: 'status',
+          title: '状态'
+        }
+      ]
     }
   },
 
   route: {
     data () {
-      this.init()
+      this.getStatisticRules()
     }
   },
 
   computed: {
     // 下拉选项
-    productOptions () {
-      var result = [{
-        label: '全部',
-        value: 0
-      }]
-
-      this.products.forEach((item) => {
-        var option = {}
-        option.label = item.name
-        option.value = item.id
-        result.push(option)
-      })
-
-      return result
-    },
-
-    // 经过过滤的规则列表
-    filteredRules () {
-      let result = this.rules
-      let offset = (this.currentPage - 1) * this.countPerPage
-      let count = this.countPerPage
-
-      if (this.selectedProduct.value) {
-        result = result.filter((item) => {
-          return item.productId === this.selectedProduct.value
-        })
-      }
-
-      this.total = result.length
-
-      result = result.slice(offset, offset + count)
-      return result
+    tables () {
+      return []
     }
   },
 
   watch: {
     products () {
-      this.init()
+      if (this.products && this.products.length) {
+        this.getStatisticRules()
+      }
     }
   },
 
   methods: {
     /**
-     * 初始化
-     * @author shengzhi
+     * 获取统计快照规则
+     * @author guohao
      */
-    init () {
-      if (this.products.length) {
-        this.getRules()
-      }
-    },
-
-    /**
-     * 处理产品切换
-     * @author shengzhi
-     */
-    onProductSelect () {
-      this.offset = 0
-      this.currentPage = 1
-    },
-
-    /**
-     * 获取快照规则
-     * @author shengzhi
-     */
-    getRules () {
-      this.rules = []
+    getStatisticRules () {
       this.products.forEach((product) => {
-        api.snapshot.getRules(product.id).then((res) => {
-          if (res.status === 200) {
-              // 循环插入
-            let rules = res.data.list.map((item) => {
-              item.productName = product.name
-              item.productId = product.id
-              return item
-            })
-            this.rules = this.rules.concat(rules)
-          }
+        proxy.getStatisticRules(product.id).then((res) => {
+          console.log(res)
         }).catch((res) => {
           this.handleError(res)
         })

@@ -72,5 +72,65 @@ export default {
     return http.del(
       `${API_SERVER.default}/v2/product/${productId}/snapshot/${ruleId}`
     )
+  },
+  /**
+   * 获取快照统计规则列表
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @return {Promise}
+   */
+  getStatisticRules (productId, snapshotId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rules`
+    )
+  },
+  /**
+   * 获取单个快照统计规则
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @param  {String} statisticRuleId 统计规则ID
+   * @return {Promise}
+   */
+  getStatisticRule (productId, snapshotId, statisticRuleId) {
+    return http.get(
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rule/${statisticRuleId}`
+    )
+  },
+  /**
+   * 创建快照统计规则
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @param  {Object} params 携带参数
+   * @return {Promise}
+   */
+  ceateStatisticRules (productId, snapshotId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rule`, params
+    )
+  },
+  /**
+   * 修改快照统计规则
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @param  {String} statisticRuleId 统计规则ID
+   * @param  {Object} params 携带参数
+   * @return {Promise}
+   */
+  editStatisticRule (productId, snapshotId, statisticRuleId, params) {
+    return http.put(
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rule/${statisticRuleId}`, params
+    )
+  },
+  /**
+   * 删除快照统计规则
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @param  {String} statisticRuleId 统计规则ID
+   * @return {Promise}
+   */
+  delStatisticRules (productId, snapshotId, statisticRuleId) {
+    return http.del(
+      `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rule/${statisticRuleId}`
+    )
   }
 }
