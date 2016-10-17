@@ -129,7 +129,7 @@
                         </div>
                         <div class="string-box" v-show="dataPointType(datapoint.type) === 'string'">
                           <div class="input-text-wrap">
-                            <input type="text" class="input-text input-text-sm" :value="datapoint.value" @change="setDataEvent(datapoint, 'string', $event)">
+                            <input type="text" class="input-text input-text-sm" :value="datapoint.value" @keyup.enter="setDataEvent(datapoint, 'string', $event)">
                           </div>
                         </div>
                       </div>
