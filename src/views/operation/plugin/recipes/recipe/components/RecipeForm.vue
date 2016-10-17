@@ -382,6 +382,7 @@ export default {
       cookingtimes: ['5分钟', '10分钟', '15分钟', '30分钟', '60分钟', '90分钟', '2小时', '数小时', '1天', '数天'],
       major_ingredients: [{name: '', unit: ''}],
       minor_ingredients: [{name: '', unit: ''}],
+      devices: [],
       // allDevices: DEVICES,
       allDevices: '',
       // candidateTags: locales[Vue.config.lang].data.RULE_CANDIDATE_TAGS,
@@ -429,6 +430,7 @@ export default {
           this.minor_ingredients = data.minor_ingredients
           this.cooking_steps = data.cooking_steps
           this.tips = data.tips
+          this.devices = data.devices
           this.status = data.status
           var images = ['']
           data.images.forEach((item, index) => {
@@ -707,7 +709,8 @@ export default {
         cooking_steps: this.cooking_steps,
         tips: this.tips,
         status: this.status,
-        creator: this.currentMember.name
+        creator: this.currentMember.name,
+        type: this.devices.length ? 2 : 1
       }
 
       let process
