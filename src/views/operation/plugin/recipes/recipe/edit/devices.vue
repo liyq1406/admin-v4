@@ -191,6 +191,9 @@ export default {
       this.$resetValidation()
     },
 
+    /**
+     * 提交
+     */
     onSubmit () {
       if (this.submitting) return
 
@@ -229,14 +232,15 @@ export default {
         }
       }
       let params = {
-        devices: devices
+        devices: devices,
+        type: devices.length ? 2 : 1
       }
       api.recipes.editRecipes(appId, this.$route.params.id, token, params).then((res) => {
-        if (res.status === 200) {
-          this.submitting = false
-          this.onCancel()
-          this.getRecipes()
-        }
+        if (res.status !== 200) return
+
+        this.submitting = false
+        this.onCancel()
+        this.getRecipes()
       })
     }
   }
