@@ -136,7 +136,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
+        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pager>
       </div>
     </div>
     <!--修改经销商信息浮层-->
@@ -460,6 +460,15 @@
           this.handleError(err)
           this.loadingData = false
         })
+      },
+      /**
+       * 每页显示的数量改变
+       * @author shengzhi
+       * @param  {Number} count 数量
+       */
+      onPageCountUpdate (count) {
+        this.countPerPage = count
+        this.getSales()
       },
       // 切换经销商状态
       toggle () {
