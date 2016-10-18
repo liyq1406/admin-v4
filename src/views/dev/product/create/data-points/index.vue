@@ -23,9 +23,8 @@
                 <th width="12%" class="tac">操作</th>
               </tr>
             </thead>
-            <tbody>
-              <tr v-for="datapoint in datapoints">
-                <template v-if="datapoint.editing">
+            <tbody v-for="datapoint in datapoints">
+                <tr v-if="datapoint.editing">
                   <td>{{ $index }}</td>
                   <td>
                     <div class="input-text-wrap">
@@ -85,8 +84,8 @@
                   <td class="tac">
                     <button class="btn btn-link mr10" @click.prevent="save(datapoint)">保存</button><button class="btn btn-link" @click.prevent="cancel(datapoint, $index)">取消</button>
                   </td>
-                </template>
-                <template v-else>
+                </tr>
+                <tr v-else>
                   <td>{{ datapoint.index }}</td>
                   <td>{{ datapoint.name }}</td>
                   <td>{{ getLabelByValue(datapoint.type) }}</td>
@@ -101,8 +100,9 @@
                   <td class="tac">
                     <button class="btn btn-link mr10" @click.prevent="edit(datapoint)" :disabled="editing && !datapoint.editing" :class="{'disabled':editing && !datapoint.editing}">编辑</button><button class="btn btn-link" @click.prevent="remove(datapoint)" :disabled="editing && !datapoint.editing" :class="{'disabled':editing && !datapoint.editing}">删除</button>
                   </td>
-                </template>
               </tr>
+            </tbody>
+            <tbody>
               <tr v-if="adding">
                 <td>{{ addModel.index }}</td>
                 <td>
