@@ -262,14 +262,14 @@
         if (this.selectedFilter.value) {
           switch (this.selectedFilter.value) {
             case 1: // 已激活 查询手机不是未验证并且邮箱不是未验证
-              // condition.query['phone_valid'] = { $nin: [false] }
-              // condition.query['email_valid'] = { $nin: [false] }
-              condition.query['status'] = { $in: [1] }
+              condition.query['phone_valid'] = { $nin: [false] }
+              condition.query['email_valid'] = { $nin: [false] }
+              // condition.query['status'] = { $in: [1] }
               break
             case 2: // 未激活 查询手机未验证并且邮箱未验证
-              // condition.query['phone_valid'] = { $in: [false] }
-              // condition.query['email_valid'] = { $in: [false] }
-              condition.query['status'] = { $in: [2] }
+              condition.query['phone_valid'] = { $in: [false] }
+              condition.query['email_valid'] = { $in: [false] }
+              // condition.query['status'] = { $in: [2] }
               break
             case 3: // 在线
               condition.query['is_online'] = {$in: [true]}
