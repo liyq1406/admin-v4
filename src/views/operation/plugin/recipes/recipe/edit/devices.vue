@@ -195,11 +195,16 @@ export default {
      * 提交
      */
     onSubmit () {
+      if (!this.selectedProduct.name) {
+        return this.showNotice({
+          type: 'error',
+          content: '请选择工作设备'
+        })
+      }
       if (this.submitting) return
 
       if (this.$validation.invalid) {
-        this.$validate(true)
-        return
+        return this.$validate(true)
       }
 
       this.submitting = true
