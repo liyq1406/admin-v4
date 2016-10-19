@@ -8,7 +8,14 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容"></search-box>
+              <!-- <search-box :key.sync="query" :active="searching" placeholder="请输入搜索内容">
+                <x-select width="100px" :label="queryType.label" size="small">
+                  <select v-model="queryType">
+                    <option v-for="option in queryTypeOptions" :value="option">{{option.label}}</option>
+                  </select>
+                </x-select>
+                <button slot="search-button" @click="" class="btn"><i class="fa fa-search"></i></button>
+              </search-box> -->
             </div>
           </div>
         </div>
@@ -75,10 +82,19 @@ export default {
         // }
       ],
       products: [],
+      queryTypeOptions: [
+        { label: '设备ID', value: 'id' },
+        { label: 'MAC', value: 'mac' },
+        { label: '序列号', value: 'sn' }
+      ],
+      queryType: {
+        label: '设备ID',
+        value: 'id'
+      },
       headers: [
         {
-          key: 'name',
-          title: '产品名称(型号)'
+          key: 'id',
+          title: '设备ID'
         },
         {
           key: 'mac',
@@ -110,14 +126,15 @@ export default {
     tables () {
       var result = []
       this.subDevices.map((device) => {
-        var product = {}
-        this.products.forEach((item) => {
-          if (item.id === device.product_id) {
-            product = item
-          }
-        })
+        // var product = {}
+        // this.products.forEach((item) => {
+        //   if (item.id === device.product_id) {
+        //     product = item
+        //   }
+        // })
         var table = {
-          name: this.computedName(product.name, device.role, product.mode),
+          // name: this.computedName(product.name, device.role, product.mode),
+          id: device.id,
           mac: device.mac,
           sn: device.sn, // 是否激活
           active_date: formatDate(device.active_date),
@@ -245,9 +262,9 @@ export default {
           this.tableLoadingData = false
           this.subDevices = res.data.list
           this.version = res.data.version
-          this.subDevices.forEach((item, index) => {
-            this.getProduct(item.product_id)
-          })
+          // this.subDevices.forEach((item, index) => {
+          //   this.getProduct(item.product_id)
+          // })
         }
       }).catch((res) => {
         this.tableLoadingData = false
