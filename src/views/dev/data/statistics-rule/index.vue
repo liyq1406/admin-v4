@@ -7,10 +7,10 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <a class="btn btn-primary" v-link="{path: '/dev/data/snapshot/create'}"><i class="fa fa-plus"></i>添加统计规则</a>
+            <a class="btn btn-primary" v-link="{path: '/dev/data/statistics-rule/add'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-edit="editDataPoint">
+        <x-table :headers="headers" :tables="tables" @tbody-edit="editRule">
         </x-table>
       </div>
     </div>
@@ -109,6 +109,9 @@ export default {
           this.handleError(res)
         })
       })
+    },
+    editRule (rule) {
+      console.log(rule)
     }
   }
 }

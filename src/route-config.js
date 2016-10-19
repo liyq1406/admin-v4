@@ -628,7 +628,7 @@ let configRouter = (router) => {
         'data/statistics-rule/add': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/details'))
+              resolve(require('./views/dev/data/statistics-rule/add'))
             }, 'admin')
           }
         },
@@ -636,7 +636,7 @@ let configRouter = (router) => {
         'data/statistics-rule/edit/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/details'))
+              resolve(require('./views/dev/data/statistics-rule/edit'))
             }, 'admin')
           }
         },

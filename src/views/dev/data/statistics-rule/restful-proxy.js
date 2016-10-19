@@ -1,11 +1,13 @@
 import api from 'api'
 
-function _getStatisticRules (productId, snapshotId) {
+function _getStatisticRules (productId, snapshots) {
   return new Promise(function (resolve, reject) {
-    api.snapshot.getStatisticRules(productId, snapshotId).then((res) => {
-      resolve(res)
-    }).catch((res) => {
-      reject(res)
+    snapshots.forEach((snap) => {
+      api.snapshot.getStatisticRules(productId, snap.id).then((res) => {
+        resolve(res)
+      }).catch((res) => {
+        reject(res)
+      })
     })
   })
 }
@@ -28,20 +30,16 @@ function _getRules (productId) {
 export default {
   getStatisticRules (productId) {
     return new Promise(function (resolve, reject) {
-      console.log(productId)
       _getRules(productId).then((res) => {
         if (res.status === 200 && res.data.list && res.data.list.length) {
-          res.data.list.forEach((item) => {
-            _getStatisticRules(productId, item.id).then((res) => { // 根据快照规则ID
-              resolve(res)
-            }).catch((res) => {
-              reject(res)
-            })
-          })
+          return _getStatisticRules(productId, res.data.list)
         }
+      }).then((res) => {
+        resolve(res)
       }).catch((res) => {
         reject(res)
       })
     })
-  }
+  },
+  getRules: _getRules
 }
