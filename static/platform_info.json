@@ -1,9 +1,4 @@
 {
 	"notify": [],
-	"articles": [
-		{
-			"link": "",
-			"image": "/static/images/banner.png"
-		}
-	]
+	"articles": []
 }
