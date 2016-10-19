@@ -7,7 +7,7 @@
  */
 var formatDate = (date, format, isLocal) => {
   // 不传任何参数
-  if (typeof date === 'undefined' || date === null || date === '') {
+  if (typeof date === 'undefined' || date === '') {
     return '-'
   }
 

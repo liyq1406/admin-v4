@@ -6,10 +6,10 @@
     <div class="panel-bd">
       <div class="row">
         <div class="col-13 tac">
-          <china-map :data="data"></china-map>
+          <chart :options="distributeOptions" :loading="loadingData" height="450px" type="china-map"></chart>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
-          <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
+          <percent-table :headers="columns" :tables="distributeData" @theader-percent="sort"></percent-table>
         </div>
       </div>
     </div>
@@ -17,36 +17,38 @@
 </template>
 
 <script>
-import mapData from 'components/g2-charts/map-data.json'
-import ChinaMap from 'components/g2-charts/ChinaMap'
+import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
-import {getProductRegion} from './api-product'
 import {numToPercent} from 'utils'
 import { toPercentage } from 'filters/format-date'
 import PercentTable from 'components/PercentTable'
+import api from 'api'
 import _ from 'lodash'
 
 export default {
-  name: 'distribution',
+  name: 'ProductDistribution',
 
   mixins: [globalMixins],
 
   components: {
-    ChinaMap,
-    PercentTable
+    // ChinaMap,
+    PercentTable,
+    Chart
   },
 
   vuex: {
     getters: {
-      products: ({ products }) => products.all
+      currentProduct: ({ products }) => products.curr
     }
   },
 
   data () {
     return {
+      loadingData: false,
       data: [],
       dataPer: [],
-      headers: [
+      // provinces: [],
+      columns: [
         {
           key: 'region',
           title: '地域'
@@ -65,7 +67,7 @@ export default {
   },
 
   computed: {
-    tables () {
+    distributeData () {
       var result = []
       this.dataPer.map((item) => {
         var distribute = {
@@ -77,40 +79,109 @@ export default {
         result.push(distribute)
       })
       return result
+    },
+
+    distributeOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if ('value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          left: 10,
+          bottom: 20,
+          text: ['高', '低'],
+          calculable: true
+        },
+        series: [{
+          name: '设备数量',
+          type: 'map',
+          mapType: 'china',
+          roam: false,
+          label: {
+            normal: {
+              show: true
+            },
+            emphasis: {
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#FFF',
+              borderColor: '#666'
+            }
+          },
+          data: this.data
+        }]
+      }
+    },
+
+    max () {
+      let ret = 0
+      if (this.data.length) {
+        ret = _.max(_.map(this.data, 'value'))
+      }
+      return ret
     }
   },
+
   watch: {
-    products () {
-      if (this.products.length > 0) {
-        this.getProductsDistribution(this.products)
+    currentProduct () {
+      if (this.currentProduct.id) {
+        this.getProductsDistribution()
       }
     }
   },
 
   ready () {
+    this.getProductsDistribution()
+    // this.getProvinces()
   },
+
   methods: {
     toPercentage,
 
+    /**
+     * 排序
+     */
     sort (header) {
-      this.headers.forEach((item) => {
+      this.columns.forEach((item) => {
         if (item.key === 'percent') {
           item.sortType = header.sortType * -1
         }
       })
     },
 
-    getProductsDistribution (products) {
+    // getProvinces () {
+    //   this.$http.get('/static/china.json').then((res) => {
+    //     this.provinces = _.map(res.data.features, (item) => {
+    //       return item.properties.name
+    //     })
+    //   })
+    // },
+
+    getProductsDistribution () {
       var prodRegions = []
-      products.forEach((item) => {
-        getProductRegion(item.id).then((res) => {
-          prodRegions.push(res)
-          if (prodRegions.length === products.length) {
-            this.combineData(prodRegions)
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      this.loadingData = true
+      api.statistics.getProductRegion(this.$route.params.id).then((res) => {
+        prodRegions.push(res.data['China'])
+        prodRegions.push(res.data['中国'])
+        this.combineData(prodRegions)
+        this.loadingData = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
       })
     },
     combineData (data) {
@@ -156,18 +227,7 @@ export default {
       }
 
       mapDataArr = numToPercent(mapDataArr, 'value')
-      var regionData = []
-      var features = mapData.features
-
-      for (var i = 0; i < features.length; i++) {
-        var name = features[i].properties.name
-        regionData.push({
-          'name': name,
-          'value': 0,
-          'percent': 0
-        })
-      }
-      this.data = _.unionBy(mapDataArr, regionData, 'name')
+      this.data = mapDataArr
     }
   }
 }

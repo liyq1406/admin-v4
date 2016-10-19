@@ -1,89 +1,94 @@
 <template>
   <div class="row sex-box">
-    <interval :data="data" :options="options"></interval>
+    <chart :options="sexOptions" :loading="loadingData"></chart>
   </div>
 </template>
+
 <script>
-  import PercentTable from 'components/PercentTable'
-  import Interval from 'components/g2-charts/Interval'
-  import api from 'api'
-  export default {
-    name: 'sex',
+import PercentTable from 'components/PercentTable'
+import Chart from 'components/Chart/index'
+import api from 'api'
 
-    components: {
-      Interval,
-      PercentTable
-    },
-    data () {
-      return {
-        options: {
-          horizontal: true,
-          stack: true,
-          props: {
-            height: 300,
-            plotCfg: {
-              margin: [40, 20, 80, 60]
-            }
-          },
-          defs: {
-            'sex': {
-              type: 'cat',
-              alias: '性别'
-            },
-            'count': {
-              alias: '数量',
-              min: 0
-            },
-            'cat': {
-              alias: '性别'
-            }
-          },
-          position: 'cat*count',
-          color: 'sex'
-        },
-        data: [
-          // {
-          //   sex: '女性',
-          //   count: 1657,
-          //   cat: '性别'
-          // },
-          // {
-          //   sex: '男性',
-          //   count: 1627,
-          //   cat: '性别'
-          // }
-        ]
-      }
-    },
+export default {
+  name: 'Sex',
 
-    ready () {
-      this.getData()
-    },
+  components: {
+    PercentTable,
+    Chart
+  },
 
-    methods: {
-      /**
-       * 获取数据
-       * @return {[type]} [description]
-       */
-      getData () {
-        api.statistics.getUserSex().then((res) => {
-          let male = {
-            sex: '男性',
-            count: res.data.male_total,
-            cat: '性别'
-          }
-          let female = {
-            sex: '女性',
-            count: res.data.female_total,
-            cat: '性别'
-          }
-          this.data = [male, female]
-        }).catch((res) => {
-          this.handleError(res)
-        })
+  data () {
+    return {
+      loadingData: false,
+      data: {
+        '男性': 0,
+        '女性': 0
       }
     }
+  },
 
+  computed: {
+    // 性别图表配置
+    sexOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          x: 50,
+          y: 20,
+          x2: 15,
+          y2: 40
+        },
+        xAxis: {
+          type: 'value',
+          minInterval: 1,
+          boundaryGap: [0, 0.01]
+        },
+        yAxis: {
+          type: 'category',
+          data: ['性别']
+        },
+        series: [{
+          name: '男性',
+          type: 'bar',
+          stack: '性别',
+          barMaxWidth: 40, // 柱条的最大宽度
+          data: this.data['男性']
+        }, {
+          name: '女性',
+          type: 'bar',
+          stack: '性别',
+          barMaxWidth: 40, // 柱条的最大宽度
+          data: this.data['女性']
+        }]
+      }
+    }
+  },
+
+  ready () {
+    this.getData()
+  },
+
+  methods: {
+    /**
+     * 获取数据
+     * @return {[type]} [description]
+     */
+    getData () {
+      this.loadingData = true
+      api.statistics.getUserSex().then((res) => {
+        this.data['男性'] = [res.data.male_total]
+        this.data['女性'] = [res.data.female_total]
+        this.loadingData = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingData = false
+      })
+    }
   }
-
+}
 </script>

@@ -1,4 +1,6 @@
 import _ from 'lodash'
+import formatDate from '../filters/format-date'
+
 // 每天毫秒数
 const MICRO_SECONDS_PER_DAY = 3600 * 1000 * 24
 /**
@@ -24,6 +26,74 @@ export const createDayRange = (offset, n) => {
     start: getDateInfo(startDate),
     end: getDateInfo(endDate)
   }
+}
+
+/**
+ * 补全缺失的日期数据
+ * @author shengzhi
+ * @param {Array} data 包含 date 或 day 属性的原始数据
+ * @param {String|Date|Number} start 合法的时间对象、字符串或时间戳
+ * @param {Number} period 时间段
+ * @param {Array} properties 输出哪些属性
+ * @param {String} type 跨度单位类型，可选[hour|day]，默认为 day
+ * @param {String} key 用于比对的日期属性名称，默认为 day
+ * @return {Array} 数据数组
+ */
+export const patchLostDates = (data, start, period, properties, type, key) => {
+  start = new Date(start).getTime()
+
+  if (typeof type === 'undefined') {
+    type = 'day'
+  }
+
+  if (typeof key === 'undefined') {
+    key = 'day'
+  }
+
+  let unit = ({
+    hour: 3600 * 1000,
+    day: 24 * 3600 * 1000
+  })[type]
+  let format = ({
+    hour: 'yyyy-MM-dd hh:mm',
+    day: 'yyyy-MM-dd'
+  })[type]
+  let res = []
+
+  // 如果 period 不是数字，则尝试将其转化为结束时间
+  // 求出天数或小时数
+  if (typeof period !== 'number') {
+    let end = new Date(period)
+    if (end.getFullYear) {
+      period = parseInt((end.getTime() - start) / unit) + 1
+    } else {
+      period = 0
+    }
+  }
+
+  if (period <= 0) {
+    return data
+  }
+
+  // 将原始数据按日期分组
+  data = _.groupBy(data, (item) => {
+    return formatDate(item[key], format, true)
+  })
+
+  // 遍历，遇到缺失的日期补0
+  for (let i = 0; i < period; i++) {
+    let date = formatDate(start + unit * i, format, true)
+    let obj = { day: date }
+    for (let j = 0, len = properties.length; j < len; j++) {
+      if (date in data) {
+        obj[properties[j]] = data[date][0][properties[j]]
+      } else {
+        obj[properties[j]] = 0
+      }
+    }
+    res.push(obj)
+  }
+  return res
 }
 
 // 2016-07-23

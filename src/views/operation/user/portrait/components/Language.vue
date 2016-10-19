@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <pie :data="languages" :height="400"></pie>
+      <chart :options="languageOptions" :loading="loadingData" height="400px"></chart>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap">
       <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
@@ -10,20 +10,22 @@
 </template>
 
 <script>
-import Pie from 'components/g2-charts/Pie'
+import Chart from 'components/Chart/index'
 import PercentTable from 'components/PercentTable'
 import api from 'api'
+import _ from 'lodash'
 
 export default {
   name: 'portrait-model',
 
   components: {
-    Pie,
+    Chart,
     PercentTable
   },
 
   data () {
     return {
+      loadingData: false,
       headers: [
         {
           key: 'language',
@@ -39,48 +41,7 @@ export default {
           sortType: -1
         }
       ],
-      languages: [
-        // {
-        //   name: 'iphone 5',
-        //   value: 50
-        // },
-        // {
-        //   name: 'iphone 6',
-        //   value: 30
-        // },
-        // {
-        //   name: 'iphone 7',
-        //   value: 30
-        // },
-        // {
-        //   name: 'iphone 8',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 1',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 2',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 3',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 4',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 5',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 6',
-        //   value: 30
-        // }
-      ]
+      languages: []
     }
   },
 
@@ -107,6 +68,34 @@ export default {
         return (a.value - b.value) * this.headers[this.headers.length - 1].sortType
       })
       return result
+    },
+
+    // 图表配置
+    languageOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          y: 20,
+          data: _.map(this.languages, 'name')
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: this.languages,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      }
     }
   },
   ready () {
@@ -119,7 +108,22 @@ export default {
      * @return {[type]} [description]
      */
     getData () {
+      this.loadingData = true
       api.statistics.getUserLanguage().then((res) => {
+        // 以下为虚拟数据，勿删
+        // 虚拟数据开始
+        // res.data = [{
+        //   language: 'English',
+        //   total: 50
+        // }, {
+        //   language: 'Chinese',
+        //   total: 30
+        // }, {
+        //   language: 'Germany',
+        //   total: 30
+        // }]
+        // 虚拟数据结束
+
         var result = []
         res.data.forEach((item) => {
           let obj = {
@@ -129,8 +133,10 @@ export default {
           result.push(obj)
         })
         this.languages = result
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     // 排序

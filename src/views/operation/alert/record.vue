@@ -133,7 +133,6 @@ import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Table from 'components/Table'
-import TimeLine from 'components/g2-charts/TimeLine'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 
@@ -148,7 +147,6 @@ export default {
     Pager,
     Modal,
     RadioButtonGroup,
-    TimeLine,
     Statistic,
     DateTimeMultiplePicker,
     'x-select': Select,

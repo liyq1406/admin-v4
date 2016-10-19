@@ -6,7 +6,7 @@
     <div class="panel-bd">
       <div class="row">
         <div class="col-11">
-          <china-heat-map :data="regionData"></china-heat-map>
+          <chart :options="regionOptions" :loading="loadingData" type="china-map" height="450px"></chart>
         </div>
         <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
           <!-- <div class="data-table">
@@ -43,17 +43,18 @@
 
 <script>
 import api from 'api'
-import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
+import Chart from 'components/Chart/index'
+import convertData from 'components/Chart/convert-data'
 import { globalMixins } from 'src/mixins'
-import { setCurrProductMixin } from './mixins'
 import {numToPercent} from 'utils'
 import PercentTable from 'components/PercentTable'
+import _ from 'lodash'
 
 export default {
   name: 'Distributing',
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  mixins: [globalMixins, setCurrProductMixin],
+  mixins: [globalMixins],
 
   vuex: {
     getters: {
@@ -62,14 +63,15 @@ export default {
   },
 
   components: {
-    ChinaHeatMap,
-    PercentTable
+    PercentTable,
+    Chart
   },
 
   data () {
     return {
       dataPer: [],
       regionData: [],
+      loadingData: false,
       headers: [
         {
           key: 'region',
@@ -89,6 +91,77 @@ export default {
   },
 
   computed: {
+    // 区域地图配置
+    regionOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter (params) {
+            return params.name + ' : ' + params.value[2]
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          calculable: true,
+          inRange: {
+            color: ['#50a3ba', '#eac736', '#d94e5d']
+          },
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        geo: {
+          map: 'china',
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#FFF',
+              borderColor: '#666'
+            },
+            emphasis: {
+              areaColor: '#EEE'
+            }
+          }
+        },
+        series: [{
+          name: '设备数量',
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          data: convertData(this.regionData),
+          symbolSize: 12,
+          label: {
+            normal: {
+              show: false
+            },
+            emphasis: {
+              show: false
+            }
+          },
+          itemStyle: {
+            emphasis: {
+              borderColor: '#fff',
+              borderWidth: 1
+            }
+          }
+        }]
+      }
+    },
+
+    // 最大值
+    max () {
+      let ret = 0
+      if (this.regionData.length) {
+        ret = _.max(_.map(this.regionData, 'value'))
+      }
+      return ret
+    },
+
+    // 分页信息
     page () {
       return {
         total: this.total,
@@ -140,6 +213,7 @@ export default {
       })
     },
     getRegion (pruductId) {
+      this.loadingData = true
       api.statistics.getProductRegion(pruductId).then((res) => {
         if (res.status === 200) {
           var CNData = res.data['中国']
@@ -154,8 +228,7 @@ export default {
               for (let j in CNData[i]) {
                 if (j !== 'activated' && j !== 'online') {
                   let temp = {
-                    province: i,
-                    city: j,
+                    name: j,
                     value: CNData[i][j].activated || 0
                   }
                   resData.push(temp)
@@ -165,9 +238,11 @@ export default {
           }
           this.sortRegion(regions)
           this.regionData = resData
+          this.loadingData = false
         }
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     sortRegion (regions) {

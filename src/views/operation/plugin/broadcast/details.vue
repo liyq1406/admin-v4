@@ -36,7 +36,7 @@
         </div>
         <h3>推送历史</h3>
       </div>
-      <time-line :data="trendData" :margin="options.margin"></time-line>
+      <chart :options="trendOptions" :loading="loadingData"></chart>
     </div>
     <div class="panel mt10">
       <div class="panel-hd panel-hd-full bordered">
@@ -129,9 +129,10 @@ import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
 import Breadcrumb from 'components/Breadcrumb'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import TimeLine from 'components/g2-charts/TimeLine'
+import Chart from 'components/Chart/index'
 import store from 'store'
 import api from 'api'
+import { patchLostDates } from 'utils'
 import formatDate from 'filters/format-date'
 import _ from 'lodash'
 
@@ -153,7 +154,7 @@ export default {
     Breadcrumb,
     Statistic,
     RadioButtonGroup,
-    TimeLine
+    Chart
   },
 
   data () {
@@ -162,6 +163,7 @@ export default {
       periods: [],
       task: {},
       trends: [],
+      loadingData: false,
       options: {
         margin: [20, 30, 30, 50]
       }
@@ -169,6 +171,37 @@ export default {
   },
 
   computed: {
+    // 推送历史图表配置
+    trendOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 5,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: _.map(this.trendData, (item) => {
+            return formatDate(item.day, 'MM-dd', true)
+          })
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: [{
+          name: '数量',
+          type: 'line',
+          data: _.map(this.trendData, 'read')
+        }]
+      }
+    },
+
     // 任务信息
     taskInfo () {
       const SCOPE_TYPES = [{
@@ -324,13 +357,7 @@ export default {
 
     // 趋势图表数据
     trendData () {
-      let result = []
-      this.trends.forEach((item) => {
-        result.push({
-          date: item.day,
-          val: item.read
-        })
-      })
+      let result = patchLostDates(this.trends, this.endDate, this.startDate, ['read'])
       return result
     }
   },
@@ -367,37 +394,41 @@ export default {
      * 获取推送任务阅读数日趋势
      */
     getReadTrend () {
+      this.loadingData = true
       api.statistics.getReadTrend(this.$route.params.id, this.startDate, this.endDate).then((res) => {
         if (res.status === 200) {
+          // 模拟数据，莫删
           // 模拟数据开始
           // res.data = [{
-          //   day: '2016-08-08',
+          //   day: '2016-10-18',
           //   read: 123
           // }, {
-          //   day: '2016-08-09',
+          //   day: '2016-10-17',
           //   read: 150
           // }, {
-          //   day: '2016-08-10',
+          //   day: '2016-10-16',
           //   read: 190
           // }, {
-          //   day: '2016-08-11',
+          //   day: '2016-10-15',
           //   read: 133
           // }, {
-          //   day: '2016-08-12',
+          //   day: '2016-10-14',
           //   read: 67
           // }, {
-          //   day: '2016-08-13',
+          //   day: '2016-10-13',
           //   read: 89
           // }, {
-          //   day: '2016-08-14',
+          //   day: '2016-10-12',
           //   read: 138
           // }]
           // 模拟数据结束
 
           this.trends = res.data
+          this.loadingData = false
         }
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
 
@@ -429,8 +460,8 @@ export default {
           //     product_list: ['1607d2ad172d52001607d2ad172d5201', '1607d2aee669d4001607d2aee669d401'], // 产品列表
           //     group: {
           //       type: 1,
-          //       start_day: '2016-08-06',
-          //       end_day: '2016-08-06'
+          //       start_day: '2016-10-06',
+          //       end_day: '2016-10-06'
           //     },
           //     area: {
           //       type: 1,

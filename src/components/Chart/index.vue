@@ -32,6 +32,11 @@ export default {
           series: []
         }
       }
+    },
+
+    type: {
+      type: String,
+      default: 'line'
     }
   },
 
@@ -66,7 +71,14 @@ export default {
   },
 
   ready () {
-    this._render()
+    if (this.type === 'china-map') {
+      this.$http.get('/static/china.json').then((res) => {
+        echarts.registerMap('china', res.data)
+        this.init()
+      })
+    } else {
+      this.init()
+    }
   },
 
   destroyed () {
@@ -77,20 +89,27 @@ export default {
   },
 
   methods: {
+    init () {
+      this.chart = echarts.init(this.$el)
+      this.bindEvent()
+      this._render()
+    },
+
+    bindEvent () {
+      this.resizeEvent = EventListener.listen(window, 'resize', (e) => {
+        this.chart.resize()
+      })
+    },
+
     _render () {
-      if (!this.chart) {
-        this.chart = echarts.init(this.$el)
+      if (!this.chart) return
+      this.$nextTick(() => {
+        if (this.loading) {
+          this.chart.showLoading()
+        }
 
-        this.resizeEvent = EventListener.listen(window, 'resize', (e) => {
-          this.chart.resize()
-        })
-      }
-
-      if (this.loading) {
-        this.chart.showLoading()
-      }
-
-      this.chart.setOption(this.options, true)
+        this.chart.setOption(this.options, true)
+      })
     }
   }
 }
@@ -98,5 +117,6 @@ export default {
 
 <style lang="stylus">
 .chart-box
+  position relative
   width 100%
 </style>

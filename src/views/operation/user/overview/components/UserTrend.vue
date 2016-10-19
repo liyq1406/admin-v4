@@ -14,15 +14,15 @@
           </div>
         </div>
       </div>
-      <div class="row bottom-line-height">
+      <div class="row">
         <div class="mb20" v-if="userCat === 0">
-          <time-line :data="addData" :margin="customMargin"></time-line>
+          <chart :options="addOptions" :loading="loadingData"></chart>
         </div>
         <div class="mb20" v-if="userCat === 1">
-          <time-line :data="activeData" :margin="customMargin"></time-line>
+          <chart :options="activeOptions" :loading="loadingData"></chart>
         </div>
         <div class="mb20" v-if="userCat === 2">
-          <time-line :data="totalData" :margin="customMargin"></time-line>
+          <chart :options="totalOptions" :loading="loadingData"></chart>
         </div>
       </div>
     </div>
@@ -32,10 +32,11 @@
 <script>
 import Panel from 'components/Panel'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import TimeLine from 'components/g2-charts/TimeLine'
-import {getTrend} from './api-user'
+import Chart from 'components/Chart/index'
+import {getTrend} from '../api-user'
 import { globalMixins } from 'src/mixins'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
+import formatDate from 'filters/format-date'
 import _ from 'lodash'
 import {getLastYearDate} from 'utils'
 
@@ -49,13 +50,13 @@ export default {
   components: {
     Panel,
     RadioButtonGroup,
-    TimeLine,
-    DateTimeMultiplePicker
+    DateTimeMultiplePicker,
+    Chart
   },
 
   data () {
     return {
-      customMargin: [30, 20, 30, 30],
+      loadingData: false,
       periods: [7, 30, 90],
       defaultPeriod: 7,
       addData: [],
@@ -77,12 +78,108 @@ export default {
     }
   },
 
+  computed: {
+    // 新增用户图表配置
+    addOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: _.map(this.addData, (item) => {
+            return formatDate(item.date, 'MM-dd', true)
+          })
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: [{
+          name: '数量',
+          type: 'line',
+          data: _.map(this.addData, 'val')
+        }]
+      }
+    },
+
+    // 活跃用户图表配置
+    activeOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: _.map(this.activeData, (item) => {
+            return formatDate(item.date, 'MM-dd', true)
+          })
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: [{
+          name: '数量',
+          type: 'line',
+          data: _.map(this.activeData, 'val')
+        }]
+      }
+    },
+
+    // 累计用户图表配置
+    totalOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: _.map(this.totalData, (item) => {
+            return formatDate(item.date, 'MM-dd', true)
+          })
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: [{
+          name: '数量',
+          type: 'line',
+          data: _.map(this.totalData, 'val')
+        }]
+      }
+    }
+  },
+
   ready () {
     // this.getUserTrend(7)
   },
 
   methods: {
     getUserTrend (duration) {
+      this.loadingData = true
       getTrend(duration).then((res) => {
         this.addData = res.add
         this.totalData = res.total
@@ -90,8 +187,10 @@ export default {
         this.avg.total = this.countAvgAdd(this.addData, this.period)
         this.countTodayAdd(this.addData, this.period)
         this.getLastDurationData(this.period)
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     countTodayAdd (addData, period) {
@@ -168,7 +267,7 @@ export default {
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../../assets/stylus/common'
+@import '../../../../../assets/stylus/common'
 
 .statistic
   .x-panel
@@ -187,6 +286,4 @@ export default {
 .pd15
   .x-statistic-left
     padding-left 15px!important
-.bottom-line-height
-  height 300px
 </style>

@@ -13,19 +13,19 @@
           <!-- Start: 产品信息统计 -->
           <div class="row">
             <div class="col-6">
-              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" tooltip="当前产品的设备总量" color="gray" :has-chart="true" align="left" :titletop="true">
+              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" tooltip="当前产品的设备总量" color="gray" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" tooltip="已联网激活的设备数量" color="green" :has-chart="true" align="left" :titletop="true">
+              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" tooltip="已联网激活的设备数量" color="green" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" tooltip="当前在线的设备数量" color="blue" :has-chart="true" :titletop="true">
+              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" tooltip="当前在线的设备数量" color="blue" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" tooltip="当前产品的用户数量" color="orange" :has-chart="true" :titletop="true">
+              <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" tooltip="当前产品的用户数量" color="orange" :titletop="true">
               </statistic>
             </div>
           </div>
@@ -48,9 +48,9 @@ import Statistic from 'components/Statistic2'
 import Tooltip from 'components/Tooltip'
 import { globalMixins } from 'src/mixins'
 import { productSummaryMixin, setCurrProductMixin } from '../mixins'
-import ProductTrend from './product-trend'
-import ProductActive from './product-active'
-import ProductDistribution from './product-distribution'
+import ProductTrend from './components/ProductTrend'
+import ProductActive from './components/ProductActive'
+import ProductDistribution from './components/ProductDistribution'
 
 export default {
   name: 'Overview',

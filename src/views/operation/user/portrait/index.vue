@@ -41,7 +41,7 @@
         <h2>机型分布TOP10</h2>
       </div>
       <div class="panel-bd">
-        <machine></machine>
+        <devices></devices>
       </div>
 
     </div>
@@ -55,7 +55,7 @@ import Sex from './components/Sex'
 import Age from './components/Age'
 import Language from './components/Language'
 import Terminal from './components/Terminal'
-import Machine from './components/Machine'
+import Devices from './components/Devices'
 
 export default {
   name: 'Portrait',
@@ -65,7 +65,7 @@ export default {
   components: {
     Age,
     Language,
-    Machine,
+    Devices,
     Terminal,
     Sex
   },
