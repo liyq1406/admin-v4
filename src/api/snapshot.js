@@ -91,7 +91,7 @@ export default {
    * @param  {String} statisticRuleId 统计规则ID
    * @return {Promise}
    */
-  getStatisticRule (productId, snapshotId, statisticRuleId) {
+  getSingleStatisticRule (productId, snapshotId, statisticRuleId) {
     return http.get(
       `${API_SERVER.default}/v2/product/${productId}/snapshot/${snapshotId}/statistic_rule/${statisticRuleId}`
     )

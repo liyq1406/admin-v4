@@ -17,6 +17,19 @@
             </div>
           </div>
           <div class="form-row row">
+            <label class="form-control col-3">规则描述:</label>
+            <div class="controls col-19">
+              <div class="input-text-wrap">
+                <textarea v-model="description" type="text" placeholder="请输入规则描述" v-validate:description="{required: true, minlength: 1, maxlength: 300}" name="description" class="input-text textarea"></textarea>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.description.touched && $validation.description.required">请输入规则描述</span>
+                  <span v-if="$validation.description.modified && $validation.description.minlength">规则名称不能少于1位</span>
+                  <span v-if="$validation.description.modified && $validation.description.maxlength">规则名称不能大于于300位</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-row row">
             <label class="form-control col-3">快照名称:</label>
             <div class="controls col-21">
               <x-select :label="selectedSnapshot.label" width="200px">
@@ -24,14 +37,12 @@
                   <option v-for="opt in snapshotOptions" :value="opt">{{ opt.label }}</option>
                 </select>
               </x-select>
-              <div class="ruletype-tips">
-                <span v-show="ruleType==='instance'">(当设备产生上报动作时立即创建快照)</span>
-                <span v-show="ruleType==='update'">(当设备上报的数据端点和上次的数据端点发生变化时，才会进行存储和快照，如果没有变化则不存储快照)</span>
-              </div>
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">时间粒度:</label>
+            <label class="form-control col-3">时间粒度:
+              <i class="fa fa-question-circle" v-tooltip="'选择时间粒度，可根据所选时间，查看以该时间为粒度的数据统计分析；可多选'"></i>
+            </label>
             <div class="controls col-21 fineness-select mutiple-select">
               <input v-model="fineness" type="checkbox" name="fineness" value="hour">
               <label>小时</label>
@@ -46,7 +57,9 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">统计维度:</label>
+            <label class="form-control col-3">统计维度:
+              <i class="fa fa-question-circle" v-tooltip="'根据数据端点，选择统计维度，可以统计求和、平均、最大、最小为维度，<br/>如统计求和，可以统计某电池包发电量端口年发点总和趋势'"></i>
+            </label>
             <div class="controls col-21">
               <div class="control-text" v-if="!loadingData && !datapoints.length"><span class="hl-gray">暂无数据</span></div>
               <div class="table-wrap" v-if="!loadingData && datapoints.length">
@@ -97,12 +110,12 @@
           </div>
           <div class="form-actions row">
             <div class="col-21 col-offset-3">
-              <button :disabled="submitting || $validation.invalid || !selectedSnapshot.id || !fineness.length || !isSelected" :class="{'disabled':submitting || $validation.invalid || !selectedSnapshot.id || !fineness.length || !isSelected}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
+              <button :disabled="submitting || $validation.invalid || (selectedSnapshot && !selectedSnapshot.id) || !fineness.length || !isSelected" :class="{'disabled':submitting || $validation.invalid || (selectedSnapshot && !selectedSnapshot.id) || !fineness.length || !isSelected}" class="btn btn-primary" @click.prevent="onSubmit">{{ $t('common.ok') }}</button>
             </div>
           </div>
         </div>
       </form>
-    </validation>
+    </validator>
   </div>
 </template>
 
@@ -112,7 +125,6 @@ import store from 'store'
 import Select from 'components/Select'
 import Pager from 'components/Pager'
 import api from 'api'
-import proxy from './restful-proxy'
 import _ from 'lodash'
 
 const SNAPSHOT_STATISTICS_TYPES = {
@@ -157,21 +169,23 @@ export default {
 
   data () {
     return {
+      statisticsRules: [],
       fineness: [],
       selectedSnapshot: {
         id: 0,
         label: '请选择快照'
       },
       name: '', // 规则名称
+      description: '', // 规则描述
       submitting: false,
       currentPage: 1,
       countPerPage: 10,
       delChecked: false,
       loadingData: false,
-      ruleType: 'timer',
       snapshotsRules: [],
       datapoints: [],
-      curSelect: 0 // 为触发computer 无意义
+      curSelect: 0, // 为触发computer 无意义
+      curStatisticsRules: {}
     }
   },
 
@@ -207,7 +221,7 @@ export default {
 
   watch: {
     selectedSnapshot () {
-      if (this.selectedSnapshot.productId) {
+      if (this.selectedSnapshot && this.selectedSnapshot.productId) {
         this.getDatapoints()
       } else {
         this.datapoints = []
@@ -215,6 +229,53 @@ export default {
     },
     products () {
       this.getSnapshotRules()
+    },
+    statisticsRules () {
+      let cur = _.find(this.statisticsRules, (item) => {
+        return item.id === this.$route.params.rule_id
+      })
+      this.curStatisticsRules = cur
+      if (cur) {
+        this.name = cur.name
+        this.description = cur.describe
+        let selected = _.find(this.snapshotOptions, (item) => {
+          return item.id === cur.snapshot_id
+        })
+        if (selected) {
+          this.selectedSnapshot = selected
+        }
+
+        this.fineness = []
+        if (cur.fineness && cur.fineness.length) {
+          cur.fineness.forEach((item) => {
+            for (let key in SNAPSHOT_STATISTICS_FINENESS) {
+              if (SNAPSHOT_STATISTICS_FINENESS[key] === item) {
+                this.fineness.push(key)
+              }
+            }
+          })
+        }
+        this.$validate(true)
+      }
+    },
+    datapoints () {
+      let cur = this.curStatisticsRules
+      if (cur.dp_mode && cur.dp_mode.length) {
+        cur.dp_mode.forEach((item) => {
+          let dp = _.find(this.datapoints, (dpItem) => {
+            return dpItem.index === item.index
+          })
+          if (dp && dp.statisticsType) {
+            dp.selected = true
+            dp.statisticsType = []
+            for (let key in SNAPSHOT_STATISTICS_TYPES) {
+              if (SNAPSHOT_STATISTICS_TYPES[key] === item.mode) {
+                dp.statisticsType.push(key)
+              }
+            }
+          }
+        })
+      }
     }
   },
 
@@ -244,7 +305,7 @@ export default {
     getSnapshotRules () {
       this.snapshotsRules = []
       this.products.forEach((product) => {
-        proxy.getRules(product.id).then((res) => {
+        api.snapshot.getRules(product.id).then((res) => {
           if (res.status === 200 && res.data.list && res.data.list.length) {
             res.data.list = _.filter(res.data.list, (item) => {
               return item.rule === 1 || item.rule === 2
@@ -253,6 +314,20 @@ export default {
               item.productId = product.id
             })
             this.snapshotsRules = this.snapshotsRules.concat(res.data.list)
+
+            if (this.type === 'edit') {
+              // 如果是修改。就获取统计规则列表
+              this.snapshotsRules.forEach((snap) => {
+                api.snapshot.getStatisticRules(snap.productId, snap.id).then((res) => {
+                  if (res.status === 200 && res.data.list && res.data.list.length) {
+                    this.statisticsRules = this.statisticsRules.concat(res.data.list)
+                  }
+                }).catch((res) => {
+                  this.handleError(res)
+                })
+              })
+              // 如果是修改。就获取统计规则列表
+            }
           }
         }).catch((res) => {
           this.handleError(res)
@@ -285,10 +360,6 @@ export default {
           })
 
           this.datapoints = this.filterSnapshotDatapoint(datapoints)
-
-          if (this.type === 'edit') {
-            this.getRule()
-          }
         }
       }).catch((res) => {
         this.loadingData = false
@@ -339,11 +410,10 @@ export default {
         dp_mode: this.getDpMode(),
         fineness: this.getFineness(),
         name: this.name,
-        describe: this.name,
+        describe: this.description,
         type: 1
       }
 
-      console.log(model)
       let process
 
       this.submitting = true
@@ -351,16 +421,16 @@ export default {
         process = api.snapshot.ceateStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, model)
       } else {
         if (this.delChecked) { // 删除
-          process = api.snapshot.delStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, '')
+          process = api.snapshot.delStatisticRules(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id)
         } else {
           model._id = this.$route.params.rule_id
-          process = api.snapshot.editStatisticRule(this.selectedSnapshot.productId, this.selectedSnapshot.id, '', model)
+          process = api.snapshot.editStatisticRule(this.selectedSnapshot.productId, this.selectedSnapshot.id, this.$route.params.rule_id, model)
         }
       }
       process.then((res) => {
         this.submitting = false
         if (res.status === 200) {
-          this.$route.router.replace('/dev/data/snapshots')
+          this.$route.router.replace('/dev/data/statistics-rule')
         }
       }).catch((res) => {
         this.submitting = false
@@ -399,10 +469,6 @@ export default {
   max-width 800px
   .input-lenght
     width 200px
-  .rule-type-item
-    display inline-block
-  .ruletype-tips
-    color #999
 .fineness-select
   display inline-block
   line-height 32px

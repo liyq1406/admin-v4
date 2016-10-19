@@ -10,7 +10,7 @@
             <a class="btn btn-primary" v-link="{path: '/dev/data/statistics-rule/add'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-edit="editRule">
+        <x-table :headers="headers" :tables="tables" @tbody-operation="editRule">
         </x-table>
       </div>
     </div>
@@ -22,7 +22,8 @@ import * as config from 'consts/config'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
-import proxy from './restful-proxy'
+import formatDate from 'filters/format-date'
+import api from 'api'
 
 export default {
   name: 'statictis-rule',
@@ -50,6 +51,7 @@ export default {
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
       total: 0,
+      statisticsRules: [],
       headers: [
         {
           key: 'name',
@@ -68,8 +70,8 @@ export default {
           title: '创建者'
         },
         {
-          key: 'status',
-          title: '状态'
+          key: 'operation',
+          title: '操作'
         }
       ]
     }
@@ -84,7 +86,18 @@ export default {
   computed: {
     // 下拉选项
     tables () {
-      return []
+      let res = []
+      this.statisticsRules.forEach((item) => {
+        res.push({
+          name: item.name,
+          description: item.describe,
+          create_time: formatDate(item.create_time),
+          autor: item.creator,
+          operation: '<button class="btn-link">编辑</button>',
+          id: item.id
+        })
+      })
+      return res
     }
   },
 
@@ -102,16 +115,27 @@ export default {
      * @author guohao
      */
     getStatisticRules () {
+      this.statisticsRules = []
       this.products.forEach((product) => {
-        proxy.getStatisticRules(product.id).then((res) => {
-          console.log(res)
+        api.snapshot.getRules(product.id).then((res) => {
+          if (res.status === 200 && res.data.list && res.data.list.length) {
+            res.data.list.forEach((snap) => {
+              api.snapshot.getStatisticRules(product.id, snap.id).then((res) => {
+                if (res.status === 200 && res.data.list && res.data.list.length) {
+                  this.statisticsRules = this.statisticsRules.concat(res.data.list)
+                }
+              }).catch((res) => {
+                this.handleError(res)
+              })
+            })
+          }
         }).catch((res) => {
           this.handleError(res)
         })
       })
     },
     editRule (rule) {
-      console.log(rule)
+      this.$route.router.go({path: 'statistics-rule/edit/' + rule.id})
     }
   }
 }
