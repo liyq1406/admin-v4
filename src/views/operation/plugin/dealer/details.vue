@@ -136,7 +136,7 @@
           </table>
         </div>
         <!-- 分页-->
-        <pager v-if="total > countPerPage" :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales"></pager>
+        <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getSales" @count-update="onPageCountUpdate"></pager>
       </div>
     </div>
     <!--修改经销商信息浮层-->
@@ -335,7 +335,7 @@
         originEditModel: {},
         editValidation: {},
         queryTypeOptions: [
-          { label: '产品型号', value: 'version' },
+          { label: '产品型号', value: 'product_mod' },
           { label: '客户名称', value: 'name' },
           { label: '手机号', value: 'phone' },
           { label: '序列号', value: 'sn' }
@@ -460,6 +460,15 @@
           this.handleError(err)
           this.loadingData = false
         })
+      },
+      /**
+       * 每页显示的数量改变
+       * @author shengzhi
+       * @param  {Number} count 数量
+       */
+      onPageCountUpdate (count) {
+        this.countPerPage = count
+        this.getSales()
       },
       // 切换经销商状态
       toggle () {

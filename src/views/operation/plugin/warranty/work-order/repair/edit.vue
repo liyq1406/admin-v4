@@ -22,22 +22,24 @@
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">选择产品:</label>
                 <div class="controls col-19">
-                  <x-select :label="selectedProduct.name" :width="'120px'">
+                  <x-select  v-if="products.length" :label="selectedProduct.name" :width="'120px'">
                     <select v-model="selectedProduct">
                       <option v-for="product in products" :value="product">{{ product.name }}</option>
                     </select>
                   </x-select>
+                  <div v-else class="non-tip">暂无产品，请先添加产品</div>
                 </div>
               </div>
 
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">维修类型:</label>
                 <div class="controls col-19">
-                  <x-select :label="selectedType" :width="'120px'">
+                  <x-select v-if="types.length" :label="selectedType" :width="'120px'">
                     <select v-model="selectedType">
                       <option v-for="type in types" :value="type">{{ type }}</option>
                     </select>
                   </x-select>
+                  <div v-else class="non-tip">暂无维修类型，请先添加标签</div>
                 </div>
               </div>
 
@@ -71,29 +73,31 @@
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">网点选择:</label>
                 <div class="controls col-19">
-                  <x-select :label="selectedBranch.name" :width="'120px'">
+                  <x-select v-if="branchs.length" :label="selectedBranch.name" :width="'120px'">
                     <select v-model="selectedBranch" @change="getBranchStaffsList">
                       <option v-for="branch in branchs" :value="branch">{{ branch.name }}</option>
                     </select>
                   </x-select>
+                  <div v-else class="non-tip">暂无网点，请先添加网点</div>
                 </div>
               </div>
 
               <div class="form-row row">
                 <label class="form-control col-5 alert-label">处理人员:</label>
                 <div class="controls col-19">
-                  <x-select :label="selectedBranchStarff.name" :width="'120px'">
+                  <x-select v-if="branchStaffs.length" :label="selectedBranchStarff.name" :width="'120px'">
                     <select v-model="selectedBranchStarff">
                       <option v-for="staff in branchStaffs" :value="staff">{{ staff.name }}</option>
                     </select>
                   </x-select>
+                  <div v-else class="non-tip">暂无客服，请先添加客服</div>
                 </div>
               </div>
 
               <div class="form-actions mt20 border-top row">
                 <div class="col-offset-5 col-19">
                   <button type="submit" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-primary mt5 ml20 submit-btn">提交</button>
-                  <button @click.prevent.stop="delRepair" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-default mt5 ml20 submit-btn">删除</button>
+                  <!-- <button @click.prevent.stop="delRepair" :disabled="editing" :class="{'disabled':editing}"  class="btn btn-default mt5 ml20 submit-btn">删除</button> -->
                 </div>
               </div>
             </form>
@@ -279,13 +283,15 @@
       // },
       // 提交添加
       onEdit () {
-        console.log(this.addValidation.$invalid)
+        // console.log(this.addValidation.$invalid)
         if (this.editing) return
-
-        // if (this.$addValidation.invalid) {
-        //   this.$validate(true)
-        //   return
-        // }
+        this.editModal.product_sn = this.editModal.product_sn.trim()
+        this.editModal.remark = this.editModal.remark.trim()
+        this.editModal.instructions = this.editModal.instructions.trim()
+        if (this.addValidation.$invalid) {
+          // this.$validate(true)
+          return
+        }
         if (this.addValidation.$valid) {
           this.editModal.product_id = this.selectedProduct.id
           this.editModal.label = this.selectedType
@@ -307,6 +313,9 @@
   }
 </script>
 <style lang='stylus' scoped>
+.non-tip
+  line-height 32px
+  color red
 .alert-label
   line-height 32px
   pediting-left 20px

@@ -333,7 +333,7 @@ export default {
         filter: [],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        order: {},
+        order: {'create_time': -1},
         query: {}
       }
 

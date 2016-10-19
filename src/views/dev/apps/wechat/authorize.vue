@@ -490,6 +490,7 @@ export default {
           }
         } else {
           this.setModel = res.data.auth_config
+          this.setModel.product_id = res.data.product_id
         }
       }).catch((res) => {
         this.handleError(res)
@@ -531,14 +532,34 @@ export default {
 
     // 产品授权
     productEmpower () {
-      api.app.productEmpower(this.app.id, this.currProduct.id).then((res) => {
-        if (res.status === 200) {
-          this.getAppStatus()
+      // 授权前先获取配置看是否已配置，如无配置，弹框提示配置
+      api.app.getWechat(this.app.id, this.currProduct.id).then((res) => {
+        // 已存在配置
+        if (Object.keys(res.data).length !== 0) {
+          console.log(Object.keys(res.data).length)
+          api.app.productEmpower(this.app.id, this.currProduct.id).then((res) => {
+            if (res.status === 200) {
+              this.getAppStatus()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+            this.empowering = false
+          })
+        } else {
+          // 不存在配置
+          alert('还未设置授权，请先设置授权！')
         }
       }).catch((res) => {
         this.handleError(res)
-        this.empowering = false
       })
+      // api.app.productEmpower(this.app.id, this.currProduct.id).then((res) => {
+      //   if (res.status === 200) {
+      //     this.getAppStatus()
+      //   }
+      // }).catch((res) => {
+      //   this.handleError(res)
+      //   this.empowering = false
+      // })
     },
 
     /**
