@@ -162,6 +162,9 @@ export const MAIN_NAV = {
         alias: 'snapshots',
         url: '/data/snapshots'
       }, {
+        alias: 'statistics-rule',
+        url: '/data/statistics-rule'
+      }, {
         alias: 'forward',
         url: '/data/forward'
       }]

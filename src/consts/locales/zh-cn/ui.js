@@ -50,6 +50,7 @@ export default {
           subs: {
             tables: '数据表',
             snapshots: '数据快照',
+            statistics_rule: '统计规则',
             forward: '数据转发'
           }
         },

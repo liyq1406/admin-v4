@@ -616,6 +616,30 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 统计规则
+        'data/statistics-rule': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule'))
+            }, 'admin')
+          }
+        },
+        // 添加统计规则
+        'data/statistics-rule/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/add'))
+            }, 'admin')
+          }
+        },
+        // 修改统计规则
+        'data/statistics-rule/edit/:rule_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/edit'))
+            }, 'admin')
+          }
+        },
         // 数据转发
         'data/forward': {
           component (resolve) {
