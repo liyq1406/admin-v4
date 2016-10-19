@@ -335,7 +335,7 @@
         originEditModel: {},
         editValidation: {},
         queryTypeOptions: [
-          { label: '产品型号', value: 'version' },
+          { label: '产品型号', value: 'product_mod' },
           { label: '客户名称', value: 'name' },
           { label: '手机号', value: 'phone' },
           { label: '序列号', value: 'sn' }
