@@ -529,6 +529,11 @@
 
     route: {
       data () {
+        // 如果当前是添加页面 则初始化内容 不然在编辑页面切换回来的时候会保留原来编辑页的数据
+        if (this.pageType === 'add') {
+          console.log('这里是添加页面  需要清空数据')
+          this.init()
+        }
         this.getUsersTotal() // 获取总注册用户数
         if (this.$route.params.id) {
           this.getDetails()
@@ -536,6 +541,57 @@
       }
     },
     methods: {
+      init () {
+        var data = {
+          // 消息标题
+          title: '',
+          // 消息内容
+          content: '',
+          // 推送时间
+          time: new Date(), // 时间对象
+          // 失效时间
+          expire: new Date(+new Date() + 30 * 1000 * 60 * 60 * 24), // 时间对象 默认是开始时间加30天
+          // 推送时间类型
+          timeType: 1, // 1为现在，2为自定义时间
+          // 推送类型
+          scopeType: 1, // 1全部，2定向，3单个用户
+          // 已选择的推送应用
+          selectedApps: [],
+          // 已选择的推送产品
+          selectedProducts: [],
+          // 推送人群
+          group: {
+            unlimited: true, // 是否不限的标志位
+            type: 0, // 0不限，1活跃用户，2沉睡用户
+            time: 7 // 活跃/沉睡天数
+          },
+          // 推送地域
+          area: {
+            type: 0, // 0不限，1自定义
+            province: {}, // 省份
+            city: {} // 城市
+          },
+          // 用户标签
+          tag: {
+            type: 0, // 0不限，1推送，2不推送
+            tag_list: '' // 用户标签
+          },
+          // 用户id
+          user: [''],
+          // 动作类型
+          actionType: 1, // 1为打开指定页面，2为打开指定网页，3自定义内容，4直接打开app
+          action: {
+            'view': '', // 指定页面
+            'url': '', // 指定网页
+            'command': '' // 自定义内容
+          }
+        }
+        for (var key in data) {
+          if (data.hasOwnProperty(key)) {
+            this[key] = data[key]
+          }
+        }
+      },
       removeUser (u) {
         this.user.$remove(u)
       },
@@ -549,9 +605,9 @@
           this.title = details.title
           this.content = details.content
           this.timeType = 2
-          this.time = new Date(details.time)
-          this.expire = new Date(details.expire)
-          this.action
+          this.time = new Date(+new Date((details.time)) - 8 * 60 * 60 * 1000)
+          this.expire = new Date(+new Date(details.expire) - 8 * 60 * 60 * 1000)
+          // this.action
           switch (details.action.type) {
             case 0:
               this.actionType = 1
