@@ -32,8 +32,8 @@
           <div class="form-row row">
             <label class="form-control col-3">快照名称:</label>
             <div class="controls col-21">
-              <x-select :label="selectedSnapshot.label" width="200px">
-                <select v-model="selectedSnapshot">
+              <x-select :label="selectedSnapshot.label" width="200px" :disabled="type==='edit'">
+                <select v-model="selectedSnapshot" :disabled="type==='edit'">
                   <option v-for="opt in snapshotOptions" :value="opt">{{ opt.label }}</option>
                 </select>
               </x-select>
@@ -267,7 +267,6 @@ export default {
           })
           if (dp && dp.statisticsType) {
             dp.selected = true
-            dp.statisticsType = []
             for (let key in SNAPSHOT_STATISTICS_TYPES) {
               if (SNAPSHOT_STATISTICS_TYPES[key] === item.mode) {
                 dp.statisticsType.push(key)
