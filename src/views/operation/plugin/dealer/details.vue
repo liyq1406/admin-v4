@@ -60,13 +60,13 @@
           <div class="col-10">
             <div class="row status">
               <div class="col-12">
-                <div class="status-item">
+                <div class="status-item textcenter">
                   <em>{{ dealer.sale_goal || '--' }}</em>
                   <span>年销售目标</span>
                 </div>
               </div>
               <div class="col-12">
-                <div class="status-item">
+                <div class="status-item textcenter">
                   <em>{{ dealer.saled_amount || '--' }}</em>
                   <span>已销售数量</span>
                 </div>
@@ -581,6 +581,8 @@
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+.textcenter
+  text-align center
 .btnarea
   button
     border 1px solid #bcbcbc
