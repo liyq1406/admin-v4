@@ -255,7 +255,9 @@ export default {
             }
           })
         }
-        this.$validate(true)
+        this.$nextTick(() => {
+          this.$validate(true)
+        })
       }
     },
     datapoints () {

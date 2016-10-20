@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>设备快照</h2>
+      <h2>统计规则</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt20">
