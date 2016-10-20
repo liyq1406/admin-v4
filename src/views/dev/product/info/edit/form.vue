@@ -29,13 +29,13 @@
                 </div>
               </div>
             </div>
-            <!-- 产品类型 -->
+            <!-- 产品类型不允许修改 -->
             <div class="form-row row">
               <label class="form-control col-3">产品类型:</label>
               <div class="controls col-12">
                 <div class="select">
-                  <x-select :label="productType" :placeholder="'请选择类型'">
-                    <select v-model="editModel.type" name="editModel.type">
+                  <x-select :label="productType" :placeholder="'请选择类型'" :disabled="true">
+                    <select v-model="editModel.type" name="editModel.type" :disabled="true">
                       <option v-for="type in locales.data.ACCOUNT_TYPES" :value="type.value">{{ type.label }}</option>
                     </select>
                   </x-select>
