@@ -773,18 +773,18 @@ let configRouter = (router) => {
           }
         },
         // 热力分布
-        'products/:id/distributing': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/distributing'))
-            }, 'admin')
-          }
-        },
+        // 'products/:id/distributing': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/product/distributing'))
+        //     }, 'admin')
+        //   }
+        // },
         // 使用分析
         'products/:id/analysis': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/product/analysis'))
+              resolve(require('./views/operation/product/analysis/index'))
             }, 'admin')
           }
         },
@@ -1361,13 +1361,13 @@ let configRouter = (router) => {
         },
 
         // 热力分布
-        'alerts/heat': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/alert/heat-distribution'))
-            }, 'admin')
-          }
-        },
+        // 'alerts/heat': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/alert/heat-distribution'))
+        //     }, 'admin')
+        //   }
+        // },
 
         // -------------------------用户管理-------------------------
         // 概览
@@ -1464,14 +1464,6 @@ let configRouter = (router) => {
         },
 
         // -------------------------智能维保-------------------------
-        // 延保工单列表
-        'plugins/warranty/:app_id/heat': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/heat-distribution'))
-            }, 'admin')
-          }
-        },
         // 延保工单列表
         'plugins/warranty/:app_id/work-orders/extended-warranties': {
           component (resolve) {
@@ -1600,7 +1592,6 @@ let configRouter = (router) => {
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
-    '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
     '/dev/firmware/manage': '/dev/firmware/manage/message'

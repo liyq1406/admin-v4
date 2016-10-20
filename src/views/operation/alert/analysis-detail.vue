@@ -58,7 +58,6 @@ import Modal from 'components/Modal'
 import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
 import Statistic from 'components/Statistic'
-import TimeLine from 'components/g2-charts/TimeLine'
 import Breadcrumb from 'components/Breadcrumb'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
@@ -80,7 +79,6 @@ export default {
     'x-table': Table,
     Statistic,
     Breadcrumb,
-    TimeLine,
     SearchBox
   },
 

@@ -24,10 +24,8 @@
       <div class="panel-hd panel-hd-full bordered">
         <h2>趋势</h2>
       </div>
-      <div class="panel-bd min-height">
-        <template v-if="repaint">
-          <time-line :data="lineData"></time-line>
-        </template>
+      <div class="panel-bd">
+        <chart :options="trendOptions" :loading="loadingData"></chart>
       </div>
     </div>
     <div class="row statistic-group mb30">
@@ -51,7 +49,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-9">
-            <pie :data="pieData" :height="350" :margin="customPieMargin"></pie>
+            <chart :options="distributeOptions" height="320px"></chart>
           </div>
           <div class="col-14 col-offset-1 data-table-wrap" style="min-height: 350px">
             <div class="data-table" v-if="feedbacks.length > 0">
@@ -86,14 +84,14 @@
 // import locales from 'consts/locales/index'
 import api from 'api'
 import Statistic from 'components/Statistic'
-import TimeLine from 'components/g2-charts/TimeLine'
-import Pie from 'components/g2-charts/Pie'
+import Chart from 'components/Chart/index'
 import Select from 'components/Select'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-// import _ from 'lodash'
+import formatDate from 'filters/format-date'
+import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import {getLastYearDate} from 'utils'
+import { getLastYearDate, patchLostDates } from 'utils'
 
 export default {
   name: 'Overview',
@@ -102,10 +100,9 @@ export default {
 
   components: {
     'x-select': Select,
-    Pie,
     DateTimeMultiplePicker,
     Statistic,
-    TimeLine
+    Chart
   },
 
   vuex: {
@@ -116,12 +113,10 @@ export default {
 
   data () {
     return {
-      repaint: true,
       product: {
         label: '全部'
       },
       defaultPeriod: 30,
-      customPieMargin: [20, 0, 0, 0],
       feedbacks: [],
       summary: {
         total: {
@@ -143,17 +138,78 @@ export default {
       },
       // 时间间隔
       periods: [7, 30, 90],
-
       // 数据是否加载中
       loadingData: false,
-      pieData: [],
-      lineData: [],
+      trend: {
+        series: [],
+        xAxis: []
+      },
+      distData: [],
+      // trendData: [],
       startTime: null,
       endTime: null
     }
   },
 
   computed: {
+    // 推送历史图表配置
+    trendOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis'
+        },
+        grid: {
+          x: 50,
+          y: 20,
+          x2: 15,
+          y2: 30
+        },
+        xAxis: [{
+          type: 'category',
+          boundaryGap: false,
+          data: this.trend.xAxis
+        }],
+        yAxis: [{
+          type: 'value',
+          minInterval: 1
+        }],
+        series: this.trend.series
+        // series: [{
+        //   name: '数量',
+        //   type: 'line',
+        //   data: this.trendSeries
+        // }]
+      }
+    },
+
+    // 分布图表配置
+    distributeOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          y: 10,
+          data: _.map(this.distData, 'name')
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: this.distData,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      }
+    },
+
     selectOptions () {
       if (this.products.length > 0) {
         var res = [{
@@ -208,47 +264,68 @@ export default {
 
   methods: {
     getFeedbackList () {
+      this.loadingData = true
       api.helpdesk.getFeedbackGroup(this.$route.params.app_id, this.groupQueryCondition).then((res) => {
-        if (res.status === 200) {
-          this.summary.total.total = res.data.total
-          this.summary.untreatedTotal.total = res.data.untreatedTotal
-          this.summary.weekAdded.total = res.data.sevenCount
-          this.summary.monthAdded.total = res.data.thirtyCount
-          this.feedbacks = res.data.labelGroupCount
-          if (res.data.labelGroupCount.length > 0) {
-            let dataRes = []
-            res.data.labelGroupCount.forEach((item) => {
-              let temp = {}
-              temp.name = item.label || ''
-              temp.value = item.Count
-              dataRes.push(temp)
-            })
-            this.pieData = dataRes
-          } else {
-            this.pieData = []
-          }
-          // 日统计
-          if (res.data.dayGroupCount.length > 0) {
-            // TODO @guohao 自动补0
-            let dataRes = []
-            res.data.dayGroupCount.forEach((item) => {
-              let temp = {}
-              temp.val = item.Count
-              temp.date = item.day
-              temp.name = !item.label || item.label === '' ? '用户反馈' : item.label
-              dataRes.push(temp)
-            })
-            this.lineData = dataRes
-          } else {
-            this.lineData = []
-          }
-          this.repaint = false
-          setTimeout(() => {
-            this.repaint = true
-          }, 0)
+        if (res.status !== 200) return
+        this.summary.total.total = res.data.total
+        this.summary.untreatedTotal.total = res.data.untreatedTotal
+        this.summary.weekAdded.total = res.data.sevenCount
+        this.summary.monthAdded.total = res.data.thirtyCount
+        this.feedbacks = res.data.labelGroupCount
+        if (res.data.labelGroupCount.length > 0) {
+          let dataRes = []
+          res.data.labelGroupCount.forEach((item) => {
+            let temp = {}
+            temp.name = item.label || ''
+            temp.value = item.Count
+            dataRes.push(temp)
+          })
+          this.distData = dataRes
+        } else {
+          this.distData = []
         }
+
+        // 趋势数据
+        let data = _.map(res.data.dayGroupCount, (item) => {
+          return {
+            day: item.day,
+            value: item.Count,
+            name: !item.label || item.label === '' ? '用户反馈' : item.label
+          }
+        })
+        let series = []
+        let flag = false
+        data = _.groupBy(data, 'name')
+        for (var key in data) {
+          let obj = {
+            name: key,
+            type: 'line'
+          }
+          // 缺失日期数据补0
+          let patched = patchLostDates(data[key], this.startTime, this.endTime, ['value'])
+          if (!flag) {
+            this.trend.xAxis = _.map(patched, (item) => {
+              return formatDate(item.day, 'MM-dd', true)
+            })
+            flag = true
+          }
+          obj['data'] = _.map(patched, 'value')
+          series.push(obj)
+        }
+        this.trend.series = series
+        // let dataRes = []
+        // res.data.dayGroupCount.forEach((item) => {
+        //   let temp = {}
+        //   temp.val = item.Count
+        //   temp.date = item.day
+        //   temp.name = !item.label || item.label === '' ? '用户反馈' : item.label
+        //   dataRes.push(temp)
+        // })
+        // this.trendData = dataRes
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     timeFilter (start, end) {
@@ -277,9 +354,3 @@ export default {
   }
 }
 </script>
-
-<style lang="stylus" scoped>
-@import '../../../../assets/stylus/common'
-.min-height
-  height 300px
-</style>

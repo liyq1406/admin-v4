@@ -53,7 +53,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-10">
-            <pie :data="warningLevel"></pie>
+            <chart :options="labelOptions" :loading="loadingTagTrend" height="320px"></chart>
           </div>
           <div class="col-13 col-offset-1 data-table-wrap">
             <div class="data-table">
@@ -94,7 +94,7 @@ import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import Pie from 'components/g2-charts/Pie'
+import Chart from 'components/Chart/index'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import TimeLine from 'components/g2-charts/TimeLine'
@@ -102,7 +102,7 @@ import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import Statistic from 'components/Statistic'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-// import _ from 'lodash'
+import _ from 'lodash'
 import locales from 'consts/locales/index'
 import Vue from 'vue'
 
@@ -118,8 +118,8 @@ export default {
     'x-select': Select,
     DateTimeMultiplePicker,
     SearchBox,
-    Pie,
-    TimeLine
+    TimeLine,
+    Chart
   },
 
   vuex: {
@@ -202,6 +202,34 @@ export default {
       return {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage
+      }
+    },
+
+    // 告警图表配置
+    labelOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          y: 10,
+          data: _.map(this.warningLevel, 'name')
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: this.warningLevel,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
       }
     }
   },

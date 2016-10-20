@@ -209,7 +209,6 @@ import { globalMixins } from 'src/mixins'
 import Statistic from 'components/Statistic2'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import TimeLine from 'components/g2-charts/TimeLine'
 import Modal from 'components/Modal'
 import formatDate from 'filters/format-date'
 import AreaSelect from 'components/AreaSelect'
@@ -229,8 +228,7 @@ export default {
     'modal': Modal,
     Statistic,
     RadioButtonGroup,
-    DateTimeMultiplePicker,
-    TimeLine
+    DateTimeMultiplePicker
   },
 
   data () {

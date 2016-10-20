@@ -6,7 +6,7 @@
     <div class="panel-bd">
       <div class="row">
         <div class="col-13 tac">
-          <china-map :data="data"></china-map>
+          <chart :options="distributeOptions" :loading="loadingData" type="china-map" height="450px"></chart>
         </div>
         <div class="col-9 col-offset-2 data-table-wrap mt20 mb20">
           <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
@@ -17,12 +17,11 @@
 </template>
 
 <script>
-import mapData from 'components/g2-charts/map-data.json'
-import ChinaMap from 'components/g2-charts/ChinaMap'
+import Chart from 'components/Chart/index'
 import PercentTable from 'components/PercentTable'
 import Panel from 'components/Panel'
 import { globalMixins } from 'src/mixins'
-import {getUserRegion} from './api-user'
+import {getUserRegion} from '../api-user'
 import {numToPercent} from 'utils'
 import _ from 'lodash'
 
@@ -35,12 +34,13 @@ export default {
 
   components: {
     Panel,
-    ChinaMap,
-    PercentTable
+    PercentTable,
+    Chart
   },
 
   data () {
     return {
+      loadingData: false,
       data: [],
       dataPer: [],
       headers: [
@@ -73,6 +73,60 @@ export default {
         result.push(distribute)
       })
       return result
+    },
+
+    distributeOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter (obj) {
+            let data = obj.data
+            let valStr = '-'
+            if ('value' in data) {
+              let percentage = Math.round(data.percent * Math.pow(10, 4)) / Math.pow(10, 2)
+              valStr = `${data.value} (${percentage}%)`
+            }
+            return `${obj.seriesName} <br/>${data.name} : ${valStr}`
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          left: 10,
+          bottom: 20,
+          text: ['高', '低'],
+          calculable: true
+        },
+        series: [{
+          name: '设备数量',
+          type: 'map',
+          mapType: 'china',
+          roam: false,
+          label: {
+            normal: {
+              show: true
+            },
+            emphasis: {
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#FFF',
+              borderColor: '#666'
+            }
+          },
+          data: this.data
+        }]
+      }
+    },
+
+    max () {
+      let ret = 0
+      if (this.data.length) {
+        ret = _.max(_.map(this.data, 'value'))
+      }
+      return ret
     }
   },
 
@@ -88,10 +142,13 @@ export default {
       })
     },
     getUserDistribution () {
+      this.loadingData = true
       getUserRegion().then((res) => {
         this.combineData(res)
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     combineData (data) {
@@ -130,26 +187,27 @@ export default {
       }
 
       mapDataArr = numToPercent(mapDataArr, 'value')
-      var regionData = []
-      var features = mapData.features
-
-      for (var i = 0; i < features.length; i++) {
-        var name = features[i].properties.name
-        regionData.push({
-          'name': name,
-          'value': 0,
-          'percent': 0
-        })
-      }
-
-      this.data = _.unionBy(mapDataArr, regionData, 'name')
+      this.data = mapDataArr
+      // var regionData = []
+      // var features = mapData.features
+      //
+      // for (var i = 0; i < features.length; i++) {
+      //   var name = features[i].properties.name
+      //   regionData.push({
+      //     'name': name,
+      //     'value': 0,
+      //     'percent': 0
+      //   })
+      // }
+      //
+      // this.data = _.unionBy(mapDataArr, regionData, 'name')
     }
   }
 }
 </script>
 
 <style lang="stylus" scoped>
-@import '../../../../assets/stylus/common'
+@import '../../../../../assets/stylus/common'
 .border-top-style
   border-top 1px solid #e5e5e5
   margin-top 10px

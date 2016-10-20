@@ -19,13 +19,13 @@
     </div>
     <div class="panel mt20">
       <div class="panel-bd" v-if="dimension==='duration'">
-        <interval :data="durationData" :options="chartOptions"></interval>
+        <chart :options="durationOptions" :loading="loadingData" height="300px"></chart>
       </div>
       <div class="panel-bd" v-if="dimension==='times'">
-        <interval :data="timesData" :options="chartOptions"></interval>
+        <chart :options="timesOptions" :loading="loadingData" height="300px"></chart>
       </div>
       <div class="panel-bd" v-if="dimension==='period'">
-        <interval :data="periodData" :options="chartOptions"></interval>
+        <chart :options="periodOptions" :loading="loadingData" height="300px"></chart>
       </div>
     </div>
     <distributing></distributing>
@@ -35,13 +35,12 @@
 <script>
 import api from 'api'
 import { globalMixins } from 'src/mixins'
-import { setCurrProductMixin } from './mixins'
+import { setCurrProductMixin } from '../mixins'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import DateTimeMultiplePicker from 'components/DateTimeMultiplePicker'
-import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
-import Interval from 'components/g2-charts/Interval'
+import Chart from 'components/Chart/index'
 import formatDate from 'filters/format-date'
-import Distributing from './distributing'
+import Distributing from './components/Distributing'
 import _ from 'lodash'
 
 export default {
@@ -59,35 +58,13 @@ export default {
   components: {
     DateTimeMultiplePicker,
     RadioButtonGroup,
-    Interval,
-    ChinaHeatMap,
-    Distributing
+    Distributing,
+    Chart
   },
 
   data () {
     return {
-      chartOptions: {
-        legend: false,
-        stack: true,
-        props: {
-          height: 300,
-          plotCfg: {
-            margin: [10, 20, 30, 50]
-          }
-        },
-        defs: {
-          'type': {
-            type: 'cat',
-            alias: '时间'
-          },
-          'val': {
-            alias: '数量',
-            min: 0
-          }
-        },
-        position: 'type*val',
-        color: 'type'
-      },
+      loadingData: false,
       durationData: [],
       timesData: [],
       periodData: [],
@@ -108,6 +85,98 @@ export default {
     }
   },
 
+  computed: {
+    // 单次图表配置
+    durationOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          x: 80,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: {
+          data: _.map(this.durationData, 'name')
+        },
+        yAxis: {
+          minInterval: 1
+        },
+        series: [{
+          name: '数量',
+          type: 'bar',
+          barMaxWidth: 30,
+          data: _.map(this.durationData, 'value')
+        }]
+      }
+    },
+
+    // 使用次数图表配置
+    timesOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          x: 80,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: {
+          data: _.map(this.timesData, 'name')
+        },
+        yAxis: {
+          minInterval: 1
+        },
+        series: [{
+          name: '数量',
+          type: 'bar',
+          barMaxWidth: 30,
+          data: _.map(this.timesData, 'value')
+        }]
+      }
+    },
+
+    // 单次图表配置
+    periodOptions () {
+      return {
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        grid: {
+          x: 80,
+          y: 20,
+          x2: 15,
+          y2: 20
+        },
+        xAxis: {
+          data: _.map(this.periodData, 'name')
+        },
+        yAxis: {
+          minInterval: 1
+        },
+        series: [{
+          name: '数量',
+          type: 'bar',
+          barMaxWidth: 30,
+          data: _.map(this.periodData, 'value')
+        }]
+      }
+    }
+  },
+
   watch: {
     dimension () {
       this.getActionData()
@@ -115,6 +184,7 @@ export default {
 
     currentProduct () {
       if (this.currentProduct.id) {
+        this.getActionData()
       }
     }
   },
@@ -144,21 +214,24 @@ export default {
       let fn = api.statistics[API_FUNCTIONS[this.dimension]]
       let start = formatDate(this.startTime, 'yyyy-MM-dd', true)
       let end = formatDate(this.endTime, 'yyyy-MM-dd', true)
+      this.loadingData = true
       fn(this.$route.params.id, start, end).then((res) => {
         if (res.status === 200) {
           let arr = []
           for (let key in res.data) {
             arr.push({
-              type: key,
-              val: res.data[key]
+              name: key,
+              value: res.data[key]
             })
           }
           this[`${this.dimension}Data`] = _.sortBy(arr, (item) => {
-            return parseInt(item.type.split('-')[0])
+            return parseInt(item.name.split('-')[0])
           })
         }
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     }
   }

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-12">
-      <pie :data="machines" :height="400"></pie>
+      <chart :options="deviceOptions" :loading="loadingData" height="400px"></chart>
     </div>
     <div class="col-11 col-offset-1 data-table-wrap">
       <percent-table :headers="headers" :tables="tables" @theader-percent="sort"></percent-table>
@@ -10,15 +10,16 @@
 </template>
 
 <script>
-import Pie from 'components/g2-charts/Pie'
+import Chart from 'components/Chart/index'
 import PercentTable from 'components/PercentTable'
 import api from 'api'
+import _ from 'lodash'
 
 export default {
-  name: 'machines',
+  name: 'Devices',
 
   components: {
-    Pie,
+    Chart,
     PercentTable
   },
 
@@ -26,8 +27,8 @@ export default {
     return {
       headers: [
         {
-          key: 'language',
-          title: '语言'
+          key: 'name',
+          title: '机型'
         },
         {
           key: 'value',
@@ -39,48 +40,7 @@ export default {
           sortType: -1
         }
       ],
-      machines: [
-        // {
-        //   name: 'iphone 5',
-        //   value: 50
-        // },
-        // {
-        //   name: 'iphone 6',
-        //   value: 30
-        // },
-        // {
-        //   name: 'iphone 7',
-        //   value: 30
-        // },
-        // {
-        //   name: 'iphone 8',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 1',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 2',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 3',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 4',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 5',
-        //   value: 30
-        // },
-        // {
-        //   name: '小米 6',
-        //   value: 30
-        // }
-      ]
+      devices: []
     }
   },
 
@@ -88,15 +48,15 @@ export default {
     tables () {
       var result = []
       var total = 0
-      this.machines.forEach((item) => {
+      this.devices.forEach((item) => {
         total += item.value - 0
       })
-      this.machines.forEach((item) => {
+      this.devices.forEach((item) => {
         let percent = item.value / total
         percent = item.value / total * 100
         percent = percent.toFixed(1) + '%'
         var table = {
-          language: item.name,
+          name: item.name,
           value: item.value,
           percent: percent,
           prototype: item
@@ -107,6 +67,34 @@ export default {
         return (a.value - b.value) * this.headers[this.headers.length - 1].sortType
       })
       return result
+    },
+
+    // 图表配置
+    deviceOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          y: 20,
+          data: _.map(this.devices, 'name')
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: this.devices,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      }
     }
   },
   ready () {
@@ -119,7 +107,22 @@ export default {
      * @return {[type]} [description]
      */
     getData () {
+      this.loadingData = true
       api.statistics.getUserMachine().then((res) => {
+        // 以下为虚拟数据，勿删
+        // 虚拟数据开始
+        // res.data = [{
+        //   machine_name: 'iPhone 5',
+        //   total: 50
+        // }, {
+        //   machine_name: 'iPhone 6',
+        //   total: 30
+        // }, {
+        //   machine_name: 'iPhone 7',
+        //   total: 30
+        // }]
+        // 虚拟数据结束
+
         var result = []
         res.data.forEach((item) => {
           let obj = {
@@ -128,9 +131,11 @@ export default {
           }
           result.push(obj)
         })
-        this.machines = result
+        this.devices = result
+        this.loadingData = false
       }).catch((res) => {
         this.handleError(res)
+        this.loadingData = false
       })
     },
     // 排序
