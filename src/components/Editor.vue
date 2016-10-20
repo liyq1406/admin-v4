@@ -94,7 +94,9 @@ export default {
   watch: {
     value () {
       if (this.editor) {
-        this.editor.setContent(this.value)
+        if (typeof this.value === 'string') {
+          this.editor.setContent(this.value)
+        }
       }
     }
   },

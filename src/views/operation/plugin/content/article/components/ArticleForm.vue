@@ -122,7 +122,7 @@ export default {
       this.loadingData = true
       api.content.getArticleList(this.$route.params.app_id, condition).then((res) => {
         if (res.status === 200) {
-          var data = res.data.list[0] ? res.data.list[0] : null
+          var data = res.data.list[0] ? res.data.list[0] : {}
           this.model = data
           this.loadingData = false
         }
@@ -140,7 +140,9 @@ export default {
      * @param {String} content 编辑器内容
      */
     onContentChange (content) {
-      this.model.text = content
+      if (typeof content === 'string') {
+        this.model.text = content
+      }
     },
 
     /**
