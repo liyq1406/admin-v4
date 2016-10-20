@@ -35,10 +35,10 @@
     <div class="panel mt10">
       <div class="panel-hd">
         <div class="actions">
-          <button class="btn btn-primary" @click="onShowAddModal">
+          <a class="btn btn-primary" @click="onShowAddModal">
             <i class="fa fa-plus"></i>
             新增大客户
-          </button>
+          </a>
         </div>
         <h2>大客户列表</h2>
       </div>
