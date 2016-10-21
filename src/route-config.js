@@ -886,7 +886,14 @@ let configRouter = (router) => {
             }
           }
         },
-
+        // 快照分析
+        'snapshots': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/snapshots'))
+            }, 'admin')
+          }
+        },
         // 插件管理
         'plugins': {
           component (resolve) {

@@ -235,6 +235,10 @@ export const MAIN_NAV = {
       //   alias: 'analysis',
       //   url: '/users/analysis'
       }]
+    }, {
+      alias: 'snapshots', // 用户管理
+      icon: 'database',
+      url: 'snapshots'
     }]
   }
 }

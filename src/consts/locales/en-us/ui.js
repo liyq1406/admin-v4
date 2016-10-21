@@ -198,6 +198,9 @@ export default {
             snapshot: '设备快照'
           }
         },
+        snapshots: {
+          label: '快照分析'
+        },
         users: {
           label: '用户管理',
           subs: {
