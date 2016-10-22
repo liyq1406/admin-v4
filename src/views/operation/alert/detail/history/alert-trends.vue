@@ -133,18 +133,20 @@ export default {
       let beginHour = this.startTime.getHours()
       let end = formatDate(this.endTime, 'yyyy-MM-dd', true)
       let endHour = this.endTime.getHours()
-      const TAGS = {
-        light: '通知',
-        medium: '轻微',
-        serious: '严重'
+
+      if (this.scale !== 'hour') {
+        beginHour = 0
+        endHour = 24
       }
+
       let xAxis = []
       let series = []
+      const TAGS = this.locales.data.RULE_CANDIDATE_TAGS
 
       this.recvDataCount = 0
-      for (var key in TAGS) {
-        ((tag) => {
-          api.alert.getDeviceTagTrend(this.device.product_id, this.device.id, TAGS[tag], begin, end, beginHour, endHour).then((res) => {
+      for (let i = 0, len = TAGS.length; i < len; i++) {
+        ((index) => {
+          api.alert.getDeviceTagTrend(this.device.product_id, this.device.id, TAGS[index], begin, end, beginHour, endHour).then((res) => {
             if (res.status !== 200) {
               return
             }
@@ -168,7 +170,7 @@ export default {
                 xAxis = _.map(data, 'day')
               }
               series.push({
-                name: TAGS[tag],
+                name: TAGS[index],
                 type: 'line',
                 data: _.map(data, 'value')
               })
@@ -186,7 +188,7 @@ export default {
                 xAxis = _.map(data, 'day')
               }
               series.push({
-                name: TAGS[tag],
+                name: TAGS[index],
                 type: 'line',
                 data: _.map(data, 'value')
               })
@@ -197,7 +199,7 @@ export default {
           }).catch((res) => {
             this.handleError(res)
           })
-        })(key)
+        })(i)
       }
     }
   }

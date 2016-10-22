@@ -58,7 +58,6 @@ import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
 import Select from 'components/Select'
-import AreaSelect from 'components/AreaSelect'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import Pager from 'components/Pager'
@@ -72,10 +71,9 @@ export default {
 
   components: {
     'x-select': Select,
-    'search-box': SearchBox,
     'x-alert': Alert,
-    'pager': Pager,
-    AreaSelect
+    SearchBox,
+    Pager
   },
 
   data () {
@@ -358,12 +356,12 @@ export default {
       api.device.getGeographies(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.data.count) {
           this.ids = _.map(res.data.devices, 'device_id')
-          console.log(res.data.devices)
+          // console.log(res.data.devices)
           res.data.devices.forEach((item, index) => {
             this.geocoder.getAddress([item.lon, item.lat], (status, result) => {
               let address = ''
               if (status === 'complete' && result.info === 'OK') {
-                console.log(result.regeocode)
+                // console.log(result.regeocode)
                 address = result.regeocode.formattedAddress
               }
               this.geographies.push({
@@ -575,7 +573,7 @@ export default {
             // console.log(res.data)
             if (res.data.list.length) {
               var did = res.data.list[0].id
-              console.log(did)
+              // console.log(did)
               this.getGeography(Number(did))
             } else {
               this.devices = []

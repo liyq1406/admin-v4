@@ -59,7 +59,7 @@ export default {
       this.dispatchTime()
     },
     dispatchTime () {
-      this.$dispatch('timechange', this.startTime)
+      this.$emit('timechange', this.startTime)
     }
   }
 }

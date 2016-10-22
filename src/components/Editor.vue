@@ -77,7 +77,7 @@ export default {
     // var tinymce = window.tinymce
     tinymce.init(editorConfig).then((editors) => {
       editors[0].on('change', (e) => {
-        this.$dispatch('change', editors[0].getContent())
+        this.$emit('change', editors[0].getContent())
       })
       this.editor = editors[0]
       if (this.value !== '') {

@@ -148,7 +148,6 @@
   import { globalMixins } from 'src/mixins'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
-  import Select from 'components/Select'
   import Modal from 'components/Modal'
   import AreaSelect from 'components/AreaSelect'
   import api from 'api'
@@ -161,11 +160,10 @@
     mixins: [globalMixins],
 
     components: {
-      'x-select': Select,
-      'area-select': AreaSelect,
-      'modal': Modal,
-      'search-box': SearchBox,
-      'pager': Pager
+      AreaSelect,
+      Modal,
+      SearchBox,
+      Pager
     },
 
     data () {

@@ -29,134 +29,142 @@
 </template>
 
 <script>
-  import provinces from 'consts/areas/provinces'
-  import cities from 'consts/areas/cities'
-  import districts from 'consts/areas/districts'
-  import Select from '../components/Select'
-  import _ from 'lodash'
+import Select from '../components/Select'
+import _ from 'lodash'
 
-  export default {
-    name: 'AreaSelect',
+export default {
+  name: 'AreaSelect',
 
-    components: {
-      'x-select': Select
+  components: {
+    'x-select': Select
+  },
+
+  props: {
+    // 尺寸
+    selectSize: {
+      type: String,
+      default: 'normal'
     },
 
-    props: {
-      // 尺寸
-      selectSize: {
-        type: String,
-        default: 'normal'
-      },
+    // 标签
+    label: {
+      type: String,
+      default: ''
+    },
 
-      // 标签
-      label: {
-        type: String,
-        default: ''
-      },
-
-      // 省
-      province: {
-        type: Object,
-        required: true,
-        twoWay: true,
-        default () {
-          return {}
-        }
-      },
-
-      // 市
-      city: {
-        type: Object,
-        required: true,
-        twoWay: true,
-        default () {
-          return {}
-        }
-      },
-
-      // 区
-      district: {
-        type: Object,
-        required: false,
-        twoWay: true,
-        default () {
-          return {}
-        }
-      },
-
-      showDistrict: {
-        type: Boolean,
-        default: true
+    // 省
+    province: {
+      type: Object,
+      required: true,
+      twoWay: true,
+      default () {
+        return {}
       }
     },
 
-    data () {
-      return {
-        provinces: provinces,
-        cities: cities,
-        districts: districts,
-        cityOptions: [],
-        districtOptions: [],
-        defaultOption: {
-          name: this.$t('common.any')
-        }
+    // 市
+    city: {
+      type: Object,
+      required: true,
+      twoWay: true,
+      default () {
+        return {}
       }
     },
 
-    methods: {
-      /**
-       * 处理切换省
-       */
-      handleProvinceChange () {
-        this.districtOptions = []
+    // 区
+    district: {
+      type: Object,
+      required: false,
+      twoWay: true,
+      default () {
+        return {}
+      }
+    },
 
-        // 获取对应城市
-        this.cityOptions = _.filter(this.cities, (item) => {
-          return item.proID === this.province.proID
-        })
+    showDistrict: {
+      type: Boolean,
+      default: true
+    }
+  },
 
-        this.city = {}
-        this.district = {}
-
-        // 向父组件传递省份改变事件
-        this.$dispatch('province-change')
-      },
-
-      /**
-       * 处理切换市
-       */
-      handleCityChange () {
-        // 获取对应区
-        this.districtOptions = _.filter(this.districts, (item) => {
-          return item.cityID === this.city.cityID
-        })
-
-        this.district = {}
-
-        // 向父组件传递市改变事件
-        this.$dispatch('city-change')
-      },
-
-      /**
-       * 处理切换区
-       */
-      handleDistrictChange () {
-        // 向父组件传递区改变事件
-        this.$dispatch('district-change')
+  data () {
+    return {
+      provinces: [],
+      cities: [],
+      districts: [],
+      cityOptions: [],
+      districtOptions: [],
+      defaultOption: {
+        name: this.$t('common.any')
       }
     }
+  },
+
+  created () {
+    const FILE_NAMES = ['provinces', 'cities', 'districts']
+
+    // 从文件中导入地区数据
+    for (let i = 0, len = FILE_NAMES.length; i < len; i++) {
+      this.$http.get(`/static/data/areas/${FILE_NAMES[i]}.json`).then((res) => {
+        this[FILE_NAMES[i]] = res.data
+      })
+    }
+  },
+
+  methods: {
+    /**
+     * 处理切换省
+     */
+    handleProvinceChange () {
+      this.districtOptions = []
+
+      // 获取对应城市
+      this.cityOptions = _.filter(this.cities, (item) => {
+        return item.proID === this.province.proID
+      })
+
+      this.city = {}
+      this.district = {}
+
+      // 向父组件传递省份改变事件
+      this.$emit('province-change')
+    },
+
+    /**
+     * 处理切换市
+     */
+    handleCityChange () {
+      // 获取对应区
+      this.districtOptions = _.filter(this.districts, (item) => {
+        return item.cityID === this.city.cityID
+      })
+
+      this.district = {}
+
+      // 向父组件传递市改变事件
+      this.$emit('city-change')
+    },
+
+    /**
+     * 处理切换区
+     */
+    handleDistrictChange () {
+      // 向父组件传递区改变事件
+      this.$emit('district-change')
+    }
   }
+}
 </script>
 
 <style lang='stylus'>
-  .area-select
-    font-size 0 !important
+.area-select
+  font-size 0 !important
 
-    .select-box
-      display inline-block
+  .select-box
+    display inline-block
 
-    .x-select
-      margin-right 5px !important
-      font-size 14px !important
+  .x-select
+    margin-right 5px !important
+    font-size 14px !important
 </style>

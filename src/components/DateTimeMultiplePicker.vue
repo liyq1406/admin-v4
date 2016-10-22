@@ -142,7 +142,7 @@ export default {
     },
     dispatchTime () {
       this.showChoosePanel = false
-      this.$dispatch('timechange', this.startTime, this.endTime)
+      this.$emit('timechange', this.startTime, this.endTime)
     },
     handleClose (e) {
       if (this.$el && !this.$el.contains(e.target)) {
@@ -160,7 +160,7 @@ export default {
     },
     periodSelect () {
       this.adjustTime()
-      this.$dispatch('timechange', this.startTime, this.endTime)
+      this.$emit('timechange', this.startTime, this.endTime)
     }
   },
   watch: {

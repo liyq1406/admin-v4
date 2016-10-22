@@ -66,7 +66,6 @@
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
   import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -89,7 +88,6 @@
 
     components: {
       'x-select': Select,
-      'area-select': AreaSelect,
       'search-box': SearchBox,
       'x-table': Table,
       DateTimeRangePicker,

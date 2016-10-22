@@ -87,7 +87,7 @@
                       </div>
                     </div>
                   </div>
-                  <div class="chart-box" v-chart="chartOptions" :loading="loadingData"></div>
+                  <chart :options="chartOptions" :loading="loadingData"></chart>
                 </div>
                 <div class="device-data-table-box">
                   <div class="title">
@@ -145,8 +145,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import locales from 'consts/locales/index'
 import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pager from 'components/Pager'
@@ -154,6 +152,7 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import IntelligentTable from 'components/IntelligentTable'
+import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
 import Breadcrumb from 'components/Breadcrumb'
@@ -171,6 +170,7 @@ export default {
     Pager,
     IntelligentTable,
     Breadcrumb,
+    Chart,
     'x-select': Select,
     'x-alert': Alert
   },
@@ -185,8 +185,8 @@ export default {
       }],
       /** ***图表 按钮 start*********/
       loadingProductTrends: false,
-      periods: locales[Vue.config.lang].data.SHORT_PERIODS,
-      period: 1,
+      period: 0,
+      periods: [],
       /* ******图表 按钮 end*************/
       query: '',
       searching: false,
@@ -424,7 +424,8 @@ export default {
         date: {
           begin: begintime,
           end: endtime
-        }
+        },
+        rule_id: this.$route.params.rule_id
       }
       return condition
     }
@@ -432,19 +433,27 @@ export default {
 
   route: {
     data () {
+      this.initPeriods()
       this.getDevices()
       this.getProduct()
       this.getRule()
     }
   },
 
-  ready () {
-    // 监听窗口尺寸变化
-    // window.onresize = () => {
-    //   this.$refs.trendChart.chart.resize()
-    // }
-  },
   methods: {
+    initPeriods () {
+      let res = []
+      let periodArr = [1, 7, 15]
+      periodArr.forEach((item) => {
+        res.push({
+          label: this.locales.data.PERIODS_MAP[item],
+          value: item
+        })
+      })
+      this.periods = res
+      this.period = res[0].value
+    },
+
     /**
      * 获取快照数据
      */

@@ -182,9 +182,9 @@
 
     components: {
       'x-select': Select,
-      'date-picker': DatePicker,
-      'time-picker': TimePicker,
-      'area-select': AreaSelect
+      DatePicker,
+      TimePicker,
+      AreaSelect
     },
 
     data () {

@@ -42,6 +42,7 @@ import { createDayRange, patchLostDates } from 'utils'
 import api from 'api'
 import truncate from 'filters/truncate'
 import formatDate from 'filters/format-date'
+import { CHART_COLORS } from 'consts/config'
 import _ from 'lodash'
 
 export default {
@@ -164,7 +165,6 @@ export default {
 
     // 激活数量前5
     topOptions () {
-      let COLORS = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
       let topFive = _.map(this.activated.series, (item) => {
         let sum = _.reduce(item.data, (prev, next) => {
           return prev + next
@@ -205,7 +205,7 @@ export default {
             itemStyle: {
               normal: {
                 color (params) {
-                  return COLORS[params.dataIndex]
+                  return CHART_COLORS[params.dataIndex]
                 }
               }
             },

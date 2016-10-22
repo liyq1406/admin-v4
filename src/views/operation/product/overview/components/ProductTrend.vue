@@ -71,9 +71,14 @@ export default {
         series: [],
         xAxis: []
       },
+      today: {
+        count: 0,
+        change: 0
+      },
       doubled: 0, // 两倍时间段数据总和
       latest: 0, // 时间段数据总和
-      loadingTrend: false
+      loadingTrend: false, // 是否正在加载趋势数据
+      firstRequest: true // 是否初次请求
     }
   },
 
@@ -89,13 +94,6 @@ export default {
     avg () {
       return {
         count: parseInt((this.latest * 2 - this.doubled) / this.period), // (后段 - 前段) / 时间段
-        change: 0
-      }
-    },
-
-    today () {
-      return {
-        count: 0,
         change: 0
       }
     },
@@ -212,6 +210,13 @@ export default {
         series.push(obj)
         sumSeries.push(sumObj)
         this.loadingTrend = false
+
+        // TODO 无法取得今日增长数据
+        // 暂时将初次请求的最后一个值作为今日增长数
+        if (this.firstRequest) {
+          this.today.count = activatedData[this.period * 2 - 1].activated
+          this.firstRequest = false
+        }
       })
 
       this.activated.series = series

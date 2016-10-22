@@ -44,7 +44,7 @@
                 <td>{{dp.create_time | formatDate}}</td>
                 <td>{{dp.creator}}</td>
                 <td>
-                  <a v-link="{ path: '/dev/data/snapshots/' + dp.productId}" class="hl-red">查看快照</a>
+                  <a v-link="{ path: '/dev/data/snapshots/' + dp.productId + '/' + dp.id}" class="hl-red">查看快照</a>
                   <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productId+'/'+dp.id}">编辑</a>
                 </td>
               </tr>

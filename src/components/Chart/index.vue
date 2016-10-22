@@ -5,11 +5,11 @@
 <script>
 import EventListener from 'utils/event-listener'
 import echarts from 'echarts'
+import { CHART_COLORS } from 'consts/config'
+import _ from 'lodash'
 
 export default {
   name: 'Chart',
-
-  // props: ['height', 'loading', 'options'],
 
   props: {
     // 高度
@@ -34,6 +34,7 @@ export default {
       }
     },
 
+    // 图表类型
     type: {
       type: String,
       default: 'line'
@@ -47,10 +48,19 @@ export default {
   },
 
   computed: {
+    // 图表样式
     chartStyles () {
       return {
         height: this.height
       }
+    },
+
+    // 选项
+    opts () {
+      let result = {
+        color: CHART_COLORS
+      }
+      return _.merge(result, this.options)
     }
   },
 
@@ -72,7 +82,7 @@ export default {
 
   ready () {
     if (this.type === 'china-map') {
-      this.$http.get('/static/china.json').then((res) => {
+      this.$http.get('/static/data/map/china.json').then((res) => {
         echarts.registerMap('china', res.data)
         this.init()
       })
@@ -108,7 +118,7 @@ export default {
           this.chart.showLoading()
         }
 
-        this.chart.setOption(this.options, true)
+        this.chart.setOption(this.opts, true)
       })
     }
   }

@@ -221,11 +221,11 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'search-box': SearchBox,
     'x-select': Select,
     'x-table': Table,
-    'area-select': AreaSelect,
-    'modal': Modal,
+    AreaSelect,
+    SearchBox,
+    Modal,
     Statistic,
     RadioButtonGroup,
     DateTimeMultiplePicker

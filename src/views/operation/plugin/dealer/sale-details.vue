@@ -41,14 +41,6 @@
         </div>
       </div>
     </div>
-      <!-- <div class="panel-hd">
-        <h2>销售照片</h2>
-        <div class="panel-bd">
-          <x-alert :cols="7">
-            <p>暂时无照片</p>
-          </x-alert>
-        </div>
-      </div> -->
     <!--修改销售信息浮层-->
    <modal :show.sync="editModal.show" width="600px">
      <h3 slot="header">修改销售信息</h3>
@@ -166,23 +158,14 @@
 </template>
 
 <script>
-// import Vue from 'vue'
-// import locales from 'consts/locales/index'
 import api from 'api'
 import _ from 'lodash'
-import RadioGroup from 'components/RadioGroup'
-import Pager from 'components/Pager'
-import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
-import Select from 'components/Select'
 import Modal from 'components/Modal'
-import AreaSelect from 'components/AreaSelect'
-import IntelligentTable from 'components/IntelligentTable'
+// import AreaSelect from 'components/AreaSelect'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
-import InfoCard from 'components/InfoCard'
 import InfoList from 'components/InfoList'
-import Alert from 'components/Alert'
 
 export default {
   name: 'TableDetails',
@@ -190,16 +173,9 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'x-alert': Alert,
     Modal,
-    RadioGroup,
-    AreaSelect,
-    SearchBox,
-    'x-select': Select,
-    Pager,
-    IntelligentTable,
+    // AreaSelect,
     Breadcrumb,
-    InfoCard,
     InfoList
   },
 

@@ -2,29 +2,6 @@
  * 英文数据翻译
  */
 
-// 图表地区
-export const REGIONS = [
-  { label: '全球', value: 'world' },
-  { label: '国内', value: 'china' }
-]
-
-// 地图类型
-export const MAP_TYPES = [
-  'china',
-  // 23个省
-  '广东', '青海', '四川', '海南', '陕西',
-  '甘肃', '云南', '湖南', '湖北', '黑龙江',
-  '贵州', '山东', '江西', '河南', '河北',
-  '山西', '安徽', '福建', '浙江', '江苏',
-  '吉林', '辽宁', '台湾',
-  // 5个自治区
-  '新疆', '广西', '宁夏', '内蒙古', '西藏',
-  // 4个直辖市
-  '北京', '天津', '上海', '重庆',
-  // 2个特别行政区
-  '香港', '澳门'
-]
-
 // 账号类型
 export const ACCOUNT_TYPES = [
   { value: 1, label: 'Consumer electronics' },
@@ -55,20 +32,6 @@ export const AllPERIODS = [
   { label: '7天', value: 7 },
   { label: '30天', value: 30 },
   { label: '全部', value: 'all' }
-]
-
-// 短时间段
-export const SHORT_PERIODS = [
-  { label: '1天', value: 1 },
-  { label: '7天', value: 7 },
-  { label: '15天', value: 15 }
-]
-
-// 一天到三十天时间段
-export const BIG_PERIODS = [
-  { label: '24h', value: 1 },
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 }
 ]
 
 // 一天到三十天时间段

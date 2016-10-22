@@ -92,6 +92,9 @@ export const NOTICE_DURATION = 2000
 // 经销商级别分隔符
 export const DEALER_SCOPE_SEPERATOR = '.'
 
+// Echarts 图表默认配色
+export const CHART_COLORS = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
+
 export const MAIN_NAV = {
   // dashboard: {
   //   alias: 'dashboard',

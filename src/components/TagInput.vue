@@ -52,7 +52,7 @@
     },
 
     ready () {
-      this.$dispatch('tag-input-created', this)
+      this.$emit('tag-input-created', this)
       // this.tags = this.value.length ? this.value.split(',') : []
       this._closeEvent = EventListener.listen(window, 'click', (e) => {
         if (!this.$el.contains(e.target)) {
@@ -111,7 +111,7 @@
 
       addTag (evt) {
         var input = evt.target
-        this.$dispatch('adding-tag')
+        this.$emit('adding-tag')
         // evt.stopPropagation()
         // evt.preventDefault()
 

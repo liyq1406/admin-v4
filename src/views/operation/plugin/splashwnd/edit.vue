@@ -73,10 +73,6 @@
 <script>
   import { globalMixins } from 'src/mixins'
   import ImageUploader from 'components/ImageUploaderSplashWnd'
-  import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
-  import TagInput from 'components/TagInput'
   import Breadcrumb from 'components/Breadcrumb'
   import store from 'store'
   import api from 'api'
@@ -99,10 +95,6 @@
     },
 
     components: {
-      'x-select': Select,
-      'area-select': AreaSelect,
-      'tag-input': TagInput,
-      RadioButtonGroup,
       Breadcrumb,
       'image-uploader': ImageUploader
     },
@@ -286,8 +278,5 @@
         margin-top 0
         padding-bottom 10px
         border-bottom 1px solid #d9d9d9
-  .select-group
-    .x-select
-      display inline-block
 
 </style>

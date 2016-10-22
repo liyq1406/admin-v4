@@ -24,14 +24,10 @@
                 <area-select :province.sync="area.province" :city.sync="area.city" :show-district="false" @province-change="getList" @city-change="getList" select-size="small"></area-select>
               </div>
             </div>
-            <div class="filter-group fr">
-
-            </div>
           </div>
         </x-table>
       </div>
     </div>
-
   </div>
 </template>
 
@@ -39,8 +35,7 @@
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
 import Table from 'components/Table'
-import SearchBox from 'components/SearchBox'
-import Select from 'components/Select'
+// import Select from 'components/Select'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
 import formatDate from 'filters/format-date'
@@ -53,9 +48,8 @@ export default {
   mixins: [globalMixins],
 
   components: {
-    'x-select': Select,
+    // 'x-select': Select,
     'x-table': Table,
-    SearchBox,
     DateTimeRangePicker,
     AreaSelect
   },

@@ -593,7 +593,7 @@ let configRouter = (router) => {
           }
         },
         // 数据快照详情
-        'data/snapshots/:product_id': {
+        'data/snapshots/:product_id/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/snapshot/details'))

@@ -22,6 +22,7 @@ import { globalMixins } from 'src/mixins'
 import {numToPercent} from 'utils'
 import { toPercentage } from 'filters/format-date'
 import PercentTable from 'components/PercentTable'
+import PROVINCE_MAP from 'consts/mapping/provinces'
 import api from 'api'
 import _ from 'lodash'
 
@@ -168,7 +169,7 @@ export default {
     },
 
     // getProvinces () {
-    //   this.$http.get('/static/china.json').then((res) => {
+    //   this.$http.get('/static/data/map/china.json').then((res) => {
     //     this.provinces = _.map(res.data.features, (item) => {
     //       return item.properties.name
     //     })
@@ -181,8 +182,17 @@ export default {
       this.releasedProducts.forEach((product) => {
         api.statistics.getProductRegion(product.id).then((res) => {
           this.loaded++
-          prodRegions.push(res.data['China'])
-          prodRegions.push(res.data['中国'])
+
+          // 英文索引数据
+          // 去掉'activated'和'online'，使之只包含省份数据
+          let enData = _.omit(res.data['China'], ['activated', 'online'])
+
+          // 中文索引数据
+          // 去掉'activated'和'online'，使之只包含省份数据
+          let cnData = _.omit(res.data['中国'], ['activated', 'online'])
+
+          prodRegions.push(enData)
+          prodRegions.push(cnData)
           if (this.loaded === this.releasedProducts.length) {
             this.combineData(prodRegions)
           }
@@ -195,11 +205,15 @@ export default {
       let regions = {}
       data.forEach((item) => {
         for (var i in item) {
-          if (i !== 'activated' && i !== 'online') {
-            if (!_.isNumber(regions[i])) {
-              regions[i] = 0
-            }
-            regions[i] += item[i].activated
+          let key = i
+          if (PROVINCE_MAP.hasOwnProperty(i)) {
+            key = PROVINCE_MAP[i]
+          }
+
+          if (typeof regions[key] !== 'undefined') {
+            regions[key] += item[i].activated
+          } else {
+            regions[key] = item[i].activated
           }
         }
       })

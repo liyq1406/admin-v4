@@ -83,13 +83,8 @@
   import { pluginMixins } from '../mixins'
   import api from 'api'
   import Select from 'components/Select'
-  import DatePicker from 'components/DatePicker'
-  import TimePicker from 'components/TimePicker'
-  import AreaSelect from 'components/AreaSelect'
-  import Editor from 'components/Editor'
-  import Pager from 'components/Pager'
-  import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
+  import Pager from 'components/Pager'
 
   export default {
     name: 'AddBroadcast',
@@ -97,14 +92,9 @@
     mixins: [globalMixins, pluginMixins],
 
     components: {
-      'editor': Editor,
       'x-select': Select,
-      'search-box': SearchBox,
-      'date-picker': DatePicker,
-      'time-picker': TimePicker,
-      'area-select': AreaSelect,
-      'modal': Modal,
-      'pager': Pager
+      SearchBox,
+      Pager
     },
 
     data () {

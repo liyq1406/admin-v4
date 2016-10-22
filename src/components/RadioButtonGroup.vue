@@ -45,7 +45,7 @@
     methods: {
       onSelect (value) {
         this.value = value
-        this.$dispatch('select', value)
+        this.$emit('select', value)
       }
     }
   }
