@@ -328,5 +328,19 @@ export default {
     return http.get(
       `${API_SERVER.default}/v2/statistics/user_machine`
     )
+  },
+
+  /**
+   * 设备快照数据端点统计
+   * @param  {String} snapshotId 快照id
+   * @param  {String} statisticsId  统计id
+   * @param  {String} deviceId    设备id
+   * @param  {Object} params  查询参数
+   * @return {Promise}
+   */
+  getSnapshotStatistic (snapshotId, statisticsId, deviceId, params) {
+    return http.post(
+      `${API_SERVER.default}/v2/statistics/snapshot/${snapshotId}/snapshot_statistic/${statisticsId}/${deviceId}`, params
+    )
   }
 }
