@@ -28,6 +28,30 @@ export const createDayRange = (offset, n) => {
   }
 }
 
+export const toDate = (date) => {
+  // 不传任何参数
+  if (typeof date === 'undefined' || date === '') {
+    return null
+  }
+
+  if (date instanceof Date) {
+    return date
+  }
+
+  let regex = /.+T.+/i
+  if (typeof date === 'string' && !regex.test(date)) {
+    date = new Date(date.replace(/-/g, '/'))
+  } else {
+    date = new Date(date)
+  }
+
+  if (date && date.getTime) {
+    return date
+  } else {
+    return null
+  }
+}
+
 /**
  * 补全缺失的日期数据
  * @author shengzhi
@@ -40,7 +64,7 @@ export const createDayRange = (offset, n) => {
  * @return {Array} 数据数组
  */
 export const patchLostDates = (data, start, period, properties, type, key) => {
-  start = new Date(start).getTime()
+  start = toDate(start).getTime()
 
   if (typeof type === 'undefined') {
     type = 'day'
@@ -63,7 +87,7 @@ export const patchLostDates = (data, start, period, properties, type, key) => {
   // 如果 period 不是数字，则尝试将其转化为结束时间
   // 求出天数或小时数
   if (typeof period !== 'number') {
-    let end = new Date(period)
+    let end = toDate(period)
     if (end.getFullYear) {
       period = parseInt((end.getTime() - start) / unit) + 1
     } else {

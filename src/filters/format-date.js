@@ -1,3 +1,4 @@
+import { toDate } from '../utils/index'
 /**
  * 日期格式化
  * @param {Any} date 目标日期字符串
@@ -11,10 +12,13 @@ var formatDate = (date, format, isLocal) => {
     return '-'
   }
 
-  date = new Date(date)
+  date = toDate(date)
+  console.log(date)
+  // date = new Date(date)
+  // console.log(date)
 
   // date 参数不合法（不能转为Date类型）
-  if (!date.getFullYear) {
+  if (!date) {
     return '-'
   }
 
