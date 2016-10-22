@@ -42,5 +42,5 @@ export default {
   not_set: '未设置',
   wechat: '微信',
   any: '不限',
-  all: '全部'
+  all: 'All'
 }
