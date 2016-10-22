@@ -279,8 +279,6 @@
               fineness: item.fineness
             })
           })
-          this.selectedRule = res[1]
-          this.toggleSelectedRule(this.selectedRule)
         }
         return res
       },
@@ -303,8 +301,6 @@
               })
             }
           })
-          this.selectedDatapoint = res[1]
-          this.selectDataPoint()
         }
         return res
       },
@@ -407,6 +403,8 @@
         api.product.getDatapoints(productId).then((res) => {
           if (res.status === 200 && res.data.length) {
             this.dataPoints = res.data
+            this.selectedDatapoint = this.datapointOptions[1]
+            this.selectDataPoint()
           } else {
             this.dataPoints = []
           }
@@ -418,6 +416,8 @@
         api.snapshot.getAllStatisticRules(this.srQueryCondition).then((res) => {
           if (res.status === 200 && res.data.list && res.data.list.length) {
             this.statisticsRules = res.data.list
+            this.selectedRule = this.ruleOptions[1]
+            this.toggleSelectedRule(this.selectedRule)
           } else {
             this.statisticsRules = []
           }
