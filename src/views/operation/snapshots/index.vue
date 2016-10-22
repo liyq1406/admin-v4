@@ -99,7 +99,7 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Select from 'components/select'
+  import Select from 'components/Select'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import SearchBox from 'components/SearchBox'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
