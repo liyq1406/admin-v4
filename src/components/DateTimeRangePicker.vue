@@ -18,7 +18,7 @@
         <button @click='dispatchTime'>确定</button>
       </div>
     </div>
-    <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='false'></date-time-picker>
+    <date-time-picker :open.sync='showTimePicker' @timechange='timeChange' :value='defaultTime' :show-time='showTime'></date-time-picker>
   </div>
 </template>
 
@@ -36,6 +36,14 @@ export default {
     label: {
       type: String,
       default: ''
+    },
+    startOffset: {
+      type: Number,
+      default: 6
+    },
+    showTime: {
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -57,7 +65,7 @@ export default {
   },
   ready () {
     var curTime = new Date()
-    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 6000)
+    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
     this.endTime = curTime
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },
@@ -109,6 +117,11 @@ export default {
         this.opacity = 1
         this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
       }
+    },
+    startOffset () {
+      var curTime = new Date()
+      this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
+      this.endTime = curTime
     }
   }
 }

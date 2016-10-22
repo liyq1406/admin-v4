@@ -74,7 +74,18 @@ export default {
     )
   },
   /**
-   * 获取快照统计规则列表
+   * 获取产品下快照统计规则列表
+   * @param  {String} productId 产品ID
+   * @param  {String} snapshotId 快照规则ID
+   * @return {Promise}
+   */
+  getAllStatisticRules (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/snapshot/statistics_rules`, params
+    )
+  },
+  /**
+   * 获取产品下快照统计规则列表
    * @param  {String} productId 产品ID
    * @param  {String} snapshotId 快照规则ID
    * @return {Promise}
