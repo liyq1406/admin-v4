@@ -7,11 +7,12 @@
             <label class="form-control col-3">规则名称:</label>
             <div class="controls col-21">
               <div class="input-text-wrap">
-                <input v-model="name" type="text" placeholder="请输入规则名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text input-lenght"/>
+                <input v-model="name" type="text" placeholder="请输入规则名称" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'no-spaces-both-ends'}" name="name" class="input-text input-lenght"/>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.name.touched && $validation.name.required">请输入规则名称</span>
                   <span v-if="$validation.name.modified && $validation.name.minlength">规则名称不能少于2位</span>
                   <span v-if="$validation.name.modified && $validation.name.maxlength">规则名称不能大于于30位</span>
+                  <span v-if="$validation.name.modified && $validation.name.format">请输入规则名称</span>
                 </div>
               </div>
             </div>
@@ -20,11 +21,12 @@
             <label class="form-control col-3">规则描述:</label>
             <div class="controls col-19">
               <div class="input-text-wrap">
-                <textarea v-model="description" type="text" placeholder="请输入规则描述" v-validate:description="{required: true, minlength: 1, maxlength: 300}" name="description" class="input-text textarea"></textarea>
+                <textarea v-model="description" type="text" placeholder="请输入规则描述" v-validate:description="{required: true, minlength: 1, maxlength: 300, format: 'no-spaces-both-ends'}" name="description" class="input-text textarea"></textarea>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.description.touched && $validation.description.required">请输入规则描述</span>
                   <span v-if="$validation.description.modified && $validation.description.minlength">规则名称不能少于1位</span>
                   <span v-if="$validation.description.modified && $validation.description.maxlength">规则名称不能大于于300位</span>
+                  <span v-if="$validation.description.modified && $validation.description.format">请输入规则描述</span>
                 </div>
               </div>
             </div>
@@ -101,6 +103,19 @@
               </div>
             </div>
           </div>
+          <div class="form-row row">
+            <label class="form-control col-3">{{ $t("common.status") }}:</label>
+            <div class="controls col-21 mutiple-select">
+              <div class="radio-group">
+                <label class="radio">
+                  <input type="radio" v-model="status" name="is_enable" :value="1"/>{{ $t("common.enable") }}
+                </label>
+                <label class="radio">
+                  <input type="radio" v-model="status" name="is_enable" :value="2"/>{{ $t("common.disabled") }}
+                </label>
+              </div>
+            </div>
+          </div>
           <div class="form-row row" v-if="type==='edit'">
             <div class="col-21 col-offset-3">
               <label class="del-check">
@@ -169,6 +184,7 @@ export default {
 
   data () {
     return {
+      status: 1,
       statisticsRules: [],
       fineness: [],
       selectedSnapshot: {
@@ -400,19 +416,24 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
+      if (this.submitting) return
+
       if (this.$validation.invalid) {
         this.$validate(true)
         return
       }
 
-      if (this.submitting) return
+      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
+        return
+      }
 
       let model = {
         dp_mode: this.getDpMode(),
         fineness: this.getFineness(),
         name: this.name,
         describe: this.description,
-        type: 1
+        type: 1,
+        status: this.status
       }
 
       let process

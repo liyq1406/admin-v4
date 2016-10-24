@@ -24,19 +24,16 @@
             </select>
           </x-select>
         </div>
-        <div class="filter-group-item mutiple-select ml20">
-          <!-- <input v-model="statisticsType.avg" type="checkbox" value="avg" @click="toggleSelectedType('avg')">
-          <label>平均</label>
-          <input v-model="statisticsType.sum" type="checkbox" value="sum" @click="toggleSelectedType('sum')">
-          <label>求和</label>
-          <input v-model="statisticsType.max" type="checkbox" value="max" @click="toggleSelectedType('max')">
-          <label>最大</label>
-          <input v-model="statisticsType.min" type="checkbox" value="min" @click="toggleSelectedType('min')">
-          <label>最小</label> -->
-        </div>
       </div>
     </div>
-    <div class="panel snapshot-details">
+    <div class="snapshot-details" v-if="!devices.length && !loadingData">
+      <div class="panel">
+        <x-alert :cols="7">
+          <p>该产品暂无设备</p>
+        </x-alert>
+      </div>
+    </div>
+    <div class="panel snapshot-details" v-else>
       <div class="panel-bd layout-left">
         <div class="device-list-box">
           <div class="action-bar">
@@ -104,12 +101,14 @@
   import SearchBox from 'components/SearchBox'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
   import InfoCard from 'components/InfoCard'
+  import Alert from 'components/Alert'
   import Chart from 'components/Chart/index'
   import Pager from 'components/Pager'
   import formatDate from 'filters/format-date'
   import api from 'api'
   import _ from 'lodash'
   import Table from 'components/Table'
+  import toFixed from 'filters/to-fixed'
 
   const FINENESS_TYPE = {
     1: {
@@ -153,6 +152,7 @@
     components: {
       'x-table': Table,
       'x-select': Select,
+      'x-alert': Alert,
       RadioButtonGroup,
       DateTimeRangePicker,
       Chart,
@@ -207,7 +207,8 @@
         stCountPerPage: 10,
         stCurrentPage: 1,
         stData: [], // 统计数据
-        chartX: 80,
+        chartX: 30,
+        timepickerModified: false,
         stHeader: [
           {
             key: 'date',
@@ -257,7 +258,7 @@
       // 设备简介
       deviceSummary () {
         return {
-          title: this.currDevice.name || this.currentProduct.name || '--',
+          title: this.currDevice.id,
           online: this.currDevice.is_online || false,
           time: formatDate(this.currDevice.last_login)
         }
@@ -312,6 +313,10 @@
           min: false
         }
       },
+      // 图例
+      legends () {
+        return this.series.length > 0 ? _.map(this.series, 'name') : []
+      },
       chartOptions () {
         return {
           tooltip: {
@@ -319,9 +324,13 @@
           },
           grid: {
             x: this.chartX,
-            y: 20,
+            y: 30,
             x2: 30,
             y2: 40
+          },
+          legend: {
+            y: 5,
+            data: this.legends
           },
           xAxis: [{
             type: 'category',
@@ -394,7 +403,8 @@
     },
 
     methods: {
-      setTimeRange () {
+      setTimeRange (offset) {
+        this.timePickerStartOffset = offset
         let curTime = new Date()
         this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * FINENESS_TYPE[this.dimension].timeOffset)
         this.endTime = curTime
@@ -451,9 +461,10 @@
             res.push(FINENESS_TYPE[item])
           })
           this.dimension = res[0] ? res[0].value : ''
-          this.timePickerStartOffset = res[0].timeOffset
           // 设置默认筛选时间
-          this.setTimeRange()
+          if (!this.timepickerModified) {
+            this.setTimeRange(res[0].timeOffset)
+          }
         }
         this.dimensions = res
       },
@@ -461,6 +472,9 @@
         this.searching = !this.searching
       },
       timechange (startDate, endDate) {
+        if (!this.timepickerModified) {
+          this.timepickerModified = true
+        }
         this.startTime = startDate
         this.endTime = endDate
         this.getSnapshotStatistic()
@@ -524,11 +538,20 @@
           api.statistics.getSnapshotStatistic(this.currSnapshotId, this.selectedRule.id, this.currDevice.id, this.sdQueryCondition).then((res) => {
             if (res.status === 200 && res.data.list.length) {
               this.dealSnapshot(res.data.list)
+            } else {
+              this.clearData()
             }
           }).catch((res) => {
             this.handleError(res)
           })
         }
+      },
+      clearData () {
+        this.xAxis = []
+        this.series = []
+        this.stTotal = 0
+        this.stData = []
+        this.chartX = 30
       },
       dealSnapshot (snapshots) {
         let avg = {}
@@ -544,6 +567,7 @@
             case 1: // max 最大值
               if (item.value_list.length) {
                 item.value_list.forEach((maxItem) => {
+                  maxItem.value = toFixed(maxItem.value)
                   max[maxItem.date] = maxItem.value
                   data.push(maxItem.value)
                   if (maxItem.value > maxValue) {
@@ -560,6 +584,7 @@
             case 2: // min 最小值
               if (item.value_list.length) {
                 item.value_list.forEach((minItem) => {
+                  minItem.value = toFixed(minItem.value)
                   min[minItem.date] = minItem.value
                   data.push(minItem.value)
                   if (minItem.value > maxValue) {
@@ -576,6 +601,7 @@
             case 3: // avg 平均值
               if (item.value_list.length) {
                 item.value_list.forEach((avgItem) => {
+                  avgItem.value = toFixed(avgItem.value)
                   avg[avgItem.date] = avgItem.value
                   data.push(avgItem.value)
                   if (avgItem.value > maxValue) {
@@ -592,6 +618,7 @@
             case 4: // sum 求和
               if (item.value_list.length) {
                 item.value_list.forEach((sumItem) => {
+                  sumItem.value = toFixed(sumItem.value)
                   sum[sumItem.date] = sumItem.value
                   data.push(sumItem.value)
                   if (sumItem.value > maxValue) {
@@ -616,10 +643,8 @@
         })
         let xAxis = []
         let formate = ''
-        if (this.dimension === 1) {
-          formate = 'hh:mm'
-        } else if (this.dimension >= 2 && this.dimension <= 4) {
-          formate = 'MM-dd'
+        if (this.dimension >= 1 && this.dimension <= 4) {
+          formate = 'MM-dd hh:mm'
         } else {
           formate = 'yyyy-MM-dd'
         }
@@ -642,8 +667,9 @@
         this.stData = statistic
       },
       setFineness (value) {
-        this.timePickerStartOffset = FINENESS_TYPE[value].timeOffset
-        this.setTimeRange()
+        if (!this.timepickerModified) {
+          this.setTimeRange(FINENESS_TYPE[value].timeOffset)
+        }
         this.getSnapshotStatistic()
       },
       selectDataPoint () {

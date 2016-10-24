@@ -10,7 +10,16 @@
             <a class="btn btn-primary" v-link="{path: '/dev/data/statistics-rule/add'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-operation="editRule">
+        <x-table :headers="headers" :tables="tables" @tbody-name="editRule">
+          <div class="filter-bar" slot="filter-bar">
+            <div class="filter-group fr">
+              <div class="filter-group-item">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="">
+                  <button slot="search-button" @click="getMembers(true)" class="btn"><i class="fa fa-search"></i></button>
+                </search-box>
+              </div>
+            </div>
+          </div>
         </x-table>
       </div>
     </div>
@@ -24,6 +33,7 @@ import SearchBox from 'components/SearchBox'
 import { globalMixins } from 'src/mixins'
 import formatDate from 'filters/format-date'
 import api from 'api'
+import _ from 'lodash'
 
 export default {
   name: 'statictis-rule',
@@ -43,6 +53,8 @@ export default {
 
   data () {
     return {
+      query: '',
+      searching: false,
       selectedProduct: {
         label: '全部',
         value: 0
@@ -58,6 +70,10 @@ export default {
           title: '规则名称'
         },
         {
+          key: 'snapshot_name',
+          title: '快照规则名称'
+        },
+        {
           key: 'description',
           title: '描述'
         },
@@ -70,8 +86,8 @@ export default {
           title: '创建者'
         },
         {
-          key: 'operation',
-          title: '操作'
+          key: 'status',
+          title: '状态'
         }
       ]
     }
@@ -79,7 +95,9 @@ export default {
 
   route: {
     data () {
-      this.getStatisticRules()
+      if (this.products && this.products.length) {
+        this.getStatisticRules()
+      }
     }
   },
 
@@ -87,15 +105,33 @@ export default {
     // 下拉选项
     tables () {
       let res = []
-      this.statisticsRules.forEach((item) => {
+      let tempRules = _.clone(this.statisticsRules)
+      if (this.query) {
+        tempRules = _.filter(tempRules, (item) => {
+          return item.name.indexOf(this.query) > -1 || item.snapshot_name.indexOf(this.query) > -1 || item.describe.indexOf(this.query) > -1
+        })
+      }
+      tempRules.forEach((item) => {
+        let status = ''
+        if (item.status === 1) {
+          status = '<span class="hl-green">启用</span>'
+        } else {
+          status = '<span class="hl-gray">停用</span>'
+        }
         res.push({
-          name: item.name,
+          name: '<a class="hl-red">' + (item.name || ' - ') + '</a>',
+          snapshot_name: item.snapshot_name,
           description: item.describe,
           create_time: formatDate(item.create_time),
           autor: item.creator,
-          operation: '<button class="btn-link">编辑</button>',
-          id: item.id
+          status: status,
+          id: item.id,
+          timeOrigin: item.create_time
         })
+      })
+
+      res.sort((a, b) => {
+        return new Date(b.timeOrigin) - new Date(a.timeOrigin)
       })
       return res
     }
@@ -110,6 +146,22 @@ export default {
   },
 
   methods: {
+    setQuery (query) {
+      this.query = query
+    },
+
+    handleSearch () {
+      if (this.query.length === 0) {
+      }
+    },
+
+    toggleSearching () {
+      this.searching = !this.searching
+    },
+
+    cancelSearching () {
+      this.setQuery('')
+    },
     /**
      * 获取统计快照规则
      * @author guohao
@@ -140,3 +192,6 @@ export default {
   }
 }
 </script>
+<style lang='stylus'>
+@import '../../../../../src/assets/stylus/common'
+</style>

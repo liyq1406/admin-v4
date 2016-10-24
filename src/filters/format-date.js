@@ -13,9 +13,6 @@ var formatDate = (date, format, isLocal) => {
   }
 
   date = toDate(date)
-  console.log(date)
-  // date = new Date(date)
-  // console.log(date)
 
   // date 参数不合法（不能转为Date类型）
   if (!date) {

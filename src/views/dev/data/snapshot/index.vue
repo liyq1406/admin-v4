@@ -24,6 +24,7 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
+                <th>快照名称</th>
                 <th>产品名称</th>
                 <th class="wp20">快照规则</th>
                 <th class="wp20">创建时间</th>
@@ -33,6 +34,9 @@
             </thead>
             <tbody>
               <tr v-for="dp in filteredRules">
+                <td>
+                  <a class="hl">{{dp.name}}</a>
+                </td>
                 <td>
                   <a class="hl">{{dp.productName}}</a>
                 </td>
