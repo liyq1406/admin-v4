@@ -258,7 +258,7 @@
       // 设备简介
       deviceSummary () {
         return {
-          title: this.currDevice.id,
+          title: this.currDevice.name || this.currentProduct.name,
           online: this.currDevice.is_online || false,
           time: formatDate(this.currDevice.last_login)
         }
@@ -371,7 +371,7 @@
       // 设备列表
       deQueryCondition () {
         var condition = {
-          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login'],
+          filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'last_login', 'name'],
           limit: this.countPerPage,
           offset: (this.currentPage - 1) * this.countPerPage,
           query: {}

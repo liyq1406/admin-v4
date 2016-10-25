@@ -12,7 +12,7 @@
                   <span v-if="$validation.name.touched && $validation.name.required">请输入规则名称</span>
                   <span v-if="$validation.name.modified && $validation.name.minlength">规则名称不能少于2位</span>
                   <span v-if="$validation.name.modified && $validation.name.maxlength">规则名称不能大于于30位</span>
-                  <span v-if="$validation.name.modified && $validation.name.format">请输入规则名称</span>
+                  <span v-if="$validation.name.modified && $validation.name.format">规则名称不能包含空格</span>
                 </div>
               </div>
             </div>
@@ -26,7 +26,7 @@
                   <span v-if="$validation.description.touched && $validation.description.required">请输入规则描述</span>
                   <span v-if="$validation.description.modified && $validation.description.minlength">规则名称不能少于1位</span>
                   <span v-if="$validation.description.modified && $validation.description.maxlength">规则名称不能大于于300位</span>
-                  <span v-if="$validation.description.modified && $validation.description.format">请输入规则描述</span>
+                  <span v-if="$validation.description.modified && $validation.description.format">规则描述不能包含空格</span>
                 </div>
               </div>
             </div>

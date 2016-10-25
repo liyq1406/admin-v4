@@ -13,7 +13,7 @@ import Tab from 'components/Tab'
 import { globalMixins } from 'src/mixins'
 
 export default {
-  name: 'edit',
+  name: 'email',
 
   mixins: [globalMixins],
 
