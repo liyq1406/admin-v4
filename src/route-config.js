@@ -684,12 +684,57 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 邮件模板
-        'settings/mail-templates': {
+        // 邮件设置
+        'settings/email': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/mail-templates'))
+              resolve(require('./views/dev/settings/email'))
             }, 'admin')
+          },
+          subRoutes: {
+            // 自定义邮件模版
+            '/customize': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/email/customize'))
+                }, 'admin')
+              }
+            },
+            // 云智易邮件模版
+            '/template': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/email/template'))
+                }, 'admin')
+              }
+            }
+          }
+        },
+
+        // 短信设置
+        'settings/message': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 自定义邮件模版
+            '/config': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/message/config'))
+                }, 'admin')
+              }
+            },
+            // 自定义运营商
+            '/custom-carrier': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/message/custom-carrier'))
+                }, 'admin')
+              }
+            }
           }
         },
 

@@ -191,8 +191,11 @@ export const MAIN_NAV = {
         alias: 'users',
         url: '/settings/users'
       }, {
-        alias: 'mail_templates',
-        url: '/settings/mail-templates'
+        alias: 'email',
+        url: '/settings/email/customize'
+      }, {
+        alias: 'message',
+        url: '/settings/message/config'
       }]
     }]
   },

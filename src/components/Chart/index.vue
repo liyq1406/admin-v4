@@ -92,7 +92,9 @@ export default {
   },
 
   destroyed () {
-    this.chart.dispose()
+    if (this.chart) {
+      this.chart.dispose()
+    }
     if (this.resizeEvent) {
       this.resizeEvent.remove()
     }

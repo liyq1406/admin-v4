@@ -85,7 +85,8 @@ export default {
           label: '设置',
           subs: {
             users: '用户设置',
-            mail_templates: '邮件模板'
+            email: '邮件设置',
+            message: '短信设置'
           }
         }
       }

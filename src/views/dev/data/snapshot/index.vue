@@ -53,7 +53,7 @@
                 </td>
               </tr>
               <tr v-if="filteredRules.length === 0">
-                <td :colspan="5" class="tac">
+                <td :colspan="6" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>

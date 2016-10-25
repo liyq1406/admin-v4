@@ -289,18 +289,6 @@ export default {
       let maxValue = Number.NEGATIVE_INFINITY // 计算所有值的最大值。调整图标左边距
       this.xAxisData = []
       let tempData = _.clone(this.snapshots)
-      // this.snapshots.forEach((item, index) => {
-        // result.forEach((r) => {
-        //   r.data.push(Number(item[r.dpIndex]))
-        //
-        //   if (item[r.dpIndex] > maxValue) {
-        //     maxValue = item[`${r.dpIndex}`]
-        //   }
-        // })
-
-        // 生成x轴
-      //   this.xAxisData.push(formatDate(item.snapshot_date, 'MM-dd hh' + ':00'))
-      // })
       let filterTempData = _.groupBy(tempData, (item) => {
         let date = +new Date(item.snapshot_date) + 1000 * 3600
         return formatDate(date, 'MM-dd hh' + ':00', true)
@@ -537,12 +525,11 @@ export default {
       }
       // this.loadingData = true
       api.device.getList(this.$route.params.product_id, this.queryCondition).then((res) => {
-        if (res.status === 200 && res.data.list && res.data.list.length !== 0) {
+        if (res.status === 200 && res.data.list && res.data.list.length) {
           res.data.list.map((item) => {
             item.selected = false
           })
           res.data.list[0].selected = true
-          this.devices = []
           this.devices = res.data.list
           this.total = res.data.count
           this.getSnapshot()
