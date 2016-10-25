@@ -1,19 +1,164 @@
 <template lang="html">
-  <div></div>
+  <div class="form">
+    <validator name="validation">
+      <form autocomplete="off" novalidate @submit.prevent="onSubmit">
+        <div class="panel">
+          <div class="panel-bd">
+            <div class="email-type-list mt30 ml20">
+              <ul>
+                <li v-for="type in emailTypes">
+                  <input v-model="emailType" type="radio" :value="type.value" name="email-type"/>
+                  <label>{{type.label}}</label>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="panel top-bordered" v-if="emailType === 2">
+          <div class="panel-bd smtp-setting ml30 mt15">
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>类型:</label>
+              </div>
+              <div class="controls col-18">
+                <div class="input-radio-wrap">
+                  <input v-model="connectModel.type" type="radio" value="0" name="connect-type"/>
+                  <label>TLS</label>
+                  <input v-model="connectModel.type" type="radio" value="1" name="connect-type"/>
+                  <label>SSL</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>帐号:</label>
+              </div>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input v-model="connectModel.email" type="text" placeholder="请输入邮箱帐号" class="input-text" v-validate:name="{required: true, format: 'email'}" lazy/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.format">邮箱格式不正确</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>密码:</label>
+              </div>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input v-model="connectModel.password" type="password" placeholder="请输入邮箱密码" class="input-text" v-validate:passwd="{required: true}" lazy/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.passwd.touched && $validation.passwd.required">邮箱密码不能为空</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>smtp host:</label>
+              </div>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input v-model="connectModel.host" type="text" placeholder="请输入smtp host" class="input-text" v-validate:host="{required: true}" lazy/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.host.touched && $validation.host.required">smtp host 不能为空</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>smtp port:</label>
+              </div>
+              <div class="controls col-18">
+                <div class="input-text-wrap">
+                  <input v-model="connectModel.port" type="text" placeholder="请输入smtp port" class="input-text" v-validate:port="{required: true}" lazy/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.port.touched && $validation.port.required">smtp host 不能为空</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <div class="form-actions col-offset-2">
+            <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.save')" class="btn btn-primary w100"></button>
+          </div>
+        </div>
+      </form>
+    </validator>
+  </div>
 </template>
 
 <script>
 export default {
   data () {
     return {
+      submitting: false,
+      connectModel: {
+        type: 0,
+        host: '',
+        port: '',
+        email: '',
+        password: ''
+      },
+      emailType: 0,
+      emailTypes: [{
+        value: 0,
+        label: '使用云智易默认邮件模版'
+      }, {
+        value: 1,
+        label: '使用自定义模版'
+      }, {
+        value: 2,
+        label: 'SMTP设置'
+      }
+      ]
     }
   },
   computed: {},
   ready () {},
-  methods: {},
+  methods: {
+    /**
+     * 提交按钮
+     * @return {[type]} [description]
+     */
+    onSubmit () {
+      // 如果表单正在提交，禁止二次提交
+      if (this.submitting) return
+
+      // 如果表单验证不通过则重新验证
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+
+      // 开始提交表单
+      this.submitting = true
+    }
+  },
   components: {}
 }
 </script>
 
-<style lang="stylus">
+<style lang="stylus" scoped>
+@import '../../../../assets/stylus/common'
+.email-type-list
+  ul
+    li
+      margin-top 20px
+.input-radio-wrap
+  position relative
+  line-height 30px
+  display inline-block
+  input, label
+    vertical-align middle
+  label
+    margin-right 20px
+.top-bordered
+  border-top 1px solid default-border-color
 </style>

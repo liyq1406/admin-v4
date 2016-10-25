@@ -1,8 +1,5 @@
 <template>
   <div class="main">
-    <div class="main-title bordered">
-      <h2>邮件模板</h2>
-    </div>
     <div class="panel mt20">
       <div class="panel-hd panel-hd-full bordered">
         <h2>{{ $t("ui.mail_templates.general") }}</h2>
