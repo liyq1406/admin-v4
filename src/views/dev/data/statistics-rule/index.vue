@@ -71,7 +71,7 @@ export default {
         },
         {
           key: 'snapshot_name',
-          title: '快照规则名称'
+          title: '快照名称'
         },
         {
           key: 'description',

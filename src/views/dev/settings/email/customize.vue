@@ -14,6 +14,41 @@
             </div>
           </div>
         </div>
+        <div class="panel top-bordered" v-if="emailType === 1">
+          <div class="panel-bd smtp-setting ml30 mt15">
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>URL:</label>
+              </div>
+              <div class="controls col-14">
+                <div class="input-text-wrap">
+                  <input v-model="customizeModel.url" type="text" placeholder="请输入URL" class="input-text" v-validate:url="{required: true}"/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.url.touched && $validation.url.required">URL不能为空</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row row">
+              <div class="form-control col-4">
+                <label>TOKEN:</label>
+              </div>
+              <div class="controls col-14">
+                <div class="input-text-wrap">
+                  <input v-model="customizeModel.token" type="text" placeholder="请输入TOKEN" class="input-text" v-validate:token="{required: true}"/>
+                  <div class="form-tips form-tips-error">
+                    <span v-if="$validation.token.touched && $validation.token.required">TOKEN不能为空</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-actions col-6">
+                <div class="line-height-30 fr">
+                  <button :disabled="!verificateShow" :class="{'disabled': !verificateShow || customizeModel.success}" class="btn btn-primary w100" @click.prevent.stop="verificateUrl">验证</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
         <div class="panel top-bordered" v-if="emailType === 2">
           <div class="panel-bd smtp-setting ml30 mt15">
             <div class="form-row row">
@@ -86,7 +121,7 @@
         </div>
         <div class="form-row row">
           <div class="form-actions col-offset-2">
-            <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.save')" class="btn btn-primary w100"></button>
+            <button type="submit" :disabled="submitting || $validation.invalid || (emailType===1 && !customizeModel.check)" :class="{'disabled':submitting || $validation.invalid || (emailType===1 && !customizeModel.success)}" v-text="submitting ? $t('common.handling') : $t('common.save')" class="btn btn-primary w100"></button>
           </div>
         </div>
       </form>
@@ -95,7 +130,19 @@
 </template>
 
 <script>
+import {get} from 'src/http'
+import { globalMixins } from 'src/mixins'
+
 export default {
+  name: 'customize-email',
+
+  mixins: [globalMixins],
+
+  vuex: {
+    getters: {
+      corp: ({ system }) => system.corp
+    }
+  },
   data () {
     return {
       submitting: false,
@@ -106,13 +153,19 @@ export default {
         email: '',
         password: ''
       },
+      customizeModel: {
+        url: '',
+        token: '',
+        checking: false,
+        success: false
+      },
       emailType: 0,
       emailTypes: [{
         value: 0,
         label: '使用云智易默认邮件模版'
       }, {
         value: 1,
-        label: '使用自定义模版'
+        label: '使用第三方厂商邮件'
       }, {
         value: 2,
         label: 'SMTP设置'
@@ -120,7 +173,16 @@ export default {
       ]
     }
   },
-  computed: {},
+  computed: {
+    verificateShow () {
+      let res = false
+      if (this.customizeModel.url && this.customizeModel.token) {
+        res = true
+        this.customizeModel.success = false
+      }
+      return res
+    }
+  },
   ready () {},
   methods: {
     /**
@@ -139,9 +201,26 @@ export default {
 
       // 开始提交表单
       this.submitting = true
+    },
+    verificateUrl () {
+      this.customizeModel.checking = true
+      let url = this.url
+      let params = {
+        timestamp: +new Date()
+      }
+      params.signature = this.corp.id + this.customizeModel.token + params.timestamp
+      get(url, params).then((res) => {
+        if (res.status === 200) {
+          this.customizeModel.success = true
+        }
+        this.customizeModel.checking = false
+      }).catch((res) => {
+        // 验证失败
+        this.customizeModel.checking = false
+        this.handleError(res)
+      })
     }
-  },
-  components: {}
+  }
 }
 </script>
 
@@ -161,4 +240,7 @@ export default {
     margin-right 20px
 .top-bordered
   border-top 1px solid default-border-color
+.line-height-30
+  line-height 30px
+  vertical-align middle
 </style>
