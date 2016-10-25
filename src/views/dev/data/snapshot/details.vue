@@ -249,7 +249,8 @@ export default {
         grid: {
           x: this.chartX,
           y: 32,
-          x2: 10
+          x2: 55,
+          y2: 20
         },
         legend: {
           y: 5,
@@ -287,17 +288,56 @@ export default {
 
       let maxValue = Number.NEGATIVE_INFINITY // 计算所有值的最大值。调整图标左边距
       this.xAxisData = []
-      this.snapshots.forEach((item, index) => {
-        result.forEach((r) => {
-          r.data.push(Number(item[r.dpIndex]))
-
-          if (item[r.dpIndex] > maxValue) {
-            maxValue = item[`${r.dpIndex}`]
-          }
-        })
+      let tempData = _.clone(this.snapshots)
+      // this.snapshots.forEach((item, index) => {
+        // result.forEach((r) => {
+        //   r.data.push(Number(item[r.dpIndex]))
+        //
+        //   if (item[r.dpIndex] > maxValue) {
+        //     maxValue = item[`${r.dpIndex}`]
+        //   }
+        // })
 
         // 生成x轴
-        this.xAxisData.push(formatDate(item.snapshot_date, 'MM-dd hh:mm'))
+      //   this.xAxisData.push(formatDate(item.snapshot_date, 'MM-dd hh' + ':00'))
+      // })
+      let filterTempData = _.groupBy(tempData, (item) => {
+        let date = +new Date(item.snapshot_date) + 1000 * 3600
+        return formatDate(date, 'MM-dd hh' + ':00', true)
+      })
+
+      let filterTempDataArr = []
+      for (let ts in filterTempData) {
+        filterTempData[ts].sort((a, b) => {
+          a = +new Date(a.snapshot_date)
+          b = +new Date(b.snapshot_date)
+          return a - b
+        })
+        let value = filterTempData[ts].slice(-1)
+        if (value.length) {
+          value = value[0]
+        }
+
+        filterTempDataArr.push({
+          date: ts,
+          value: value
+        })
+      }
+
+      filterTempDataArr.sort((a, b) => {
+        a = +new Date(a.date)
+        b = +new Date(b.date)
+        return a - b
+      })
+
+      filterTempDataArr.forEach((item) => {
+        this.xAxisData.push(item.date)
+        result.forEach((r) => {
+          r.data.push(item.value[r.dpIndex])
+          if (item.value[r.dpIndex] > maxValue) {
+            maxValue = item.value[r.dpIndex]
+          }
+        })
       })
 
       // 计算最大值长度
