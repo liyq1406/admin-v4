@@ -737,6 +737,22 @@ let configRouter = (router) => {
             }
           }
         },
+        // 添加运营商
+        'settings/message/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message/add'))
+            }, 'admin')
+          }
+        },
+        // 编辑运营商
+        'settings/message/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message/edit'))
+            }, 'admin')
+          }
+        },
 
         // -------------------------在线购买-------------------------
         // 在线购买

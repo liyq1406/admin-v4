@@ -44,6 +44,7 @@ import content from './api/content'
 import operate from './api/operate'
 import log from './api/log'
 import interconnect from './api/interconnect'
+import message from './api/message'
 
 export default {
   sms,
@@ -74,5 +75,6 @@ export default {
   content,
   operate,
   log,
-  interconnect
+  interconnect,
+  message
 }

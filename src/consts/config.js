@@ -12,7 +12,8 @@ let apiServer = ({
   },
   test: { // 测试服务器
     api: 'http://api-test.xlink.cn:8887',
-    plugin: 'http://test.plugin.xlink.cn:3000'
+    plugin: 'http://test.plugin.xlink.cn:3000',
+    message: 'http://139.196.164.250:3072'
   },
   grey: { // 灰度服务器
     api: `${protocol}//api-grey.xlink.cn`,
@@ -39,7 +40,7 @@ let apiServer = ({
 export const API_SERVER = {
   // 默认
   default: apiServer.api,
-
+  message: apiServer.message,
   // 菜谱
   recipe: `${apiServer.plugin}/module/recipes`,
 
