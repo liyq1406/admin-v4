@@ -147,6 +147,7 @@ export default {
   },
   data () {
     return {
+      requestType: 'add',
       submitting: false,
       connectModel: {
         type: 0,
@@ -201,7 +202,22 @@ export default {
     getEmailAcount () {
       api.message.getEmailAcount().then((res) => {
         if (res.status === 200) {
-          console.log(res)
+          if (res.data) {
+            this.requestType = 'edit'
+            if (res.data.type <= 1) {
+              this.emailType = 0
+            } else if (res.data.type === 2) {
+              this.emailType = 1
+              this.customizeModel.url = res.data.third || res.data.third.host
+              this.customizeModel.token = res.data.third || res.data.third.token
+            } else if (res.data.type >= 3) {
+              this.emailType = 2
+              this.connectModel.host = res.data.smtp || res.data.smtp.host
+              this.connectModel.port = res.data.smtp || res.data.smtp.port
+              this.connectModel.password = res.data.smtp || res.data.smtp.pwd
+              this.connectModel.email = res.data.smtp || res.data.smtp.user
+            }
+          }
         }
       }).catch((res) => {
         this.handleError(res)
@@ -223,6 +239,67 @@ export default {
 
       // 开始提交表单
       this.submitting = true
+      this.reqEmailAcount()
+    },
+    reqEmailAcount () {
+      let params = {
+        type: 0
+      }
+      if (this.emailType === 0) {
+        params.type = 1
+      } else if (this.emailType === 1) {
+        params.type = 2
+        params.third = {
+          host: this.customizeModel.url,
+          token: this.customizeModel.token
+        }
+      } else if (this.emailType === 2) {
+        if (this.connectModel.type === 0) {
+          params.type = 3
+        } else if (this.connectModel.type === 1) {
+          params.type = 4
+        }
+        params.smtp = {
+          user: this.connectModel.email,
+          pwd: this.connectModel.password,
+          host: this.connectModel.host,
+          port: this.connectModel.port
+        }
+      }
+
+      if (this.requestType === 'add') {
+        this.addEmailAcount(params)
+      } else if (this.requestType === 'edit') {
+        this.editEmailAcount(params)
+      }
+    },
+    addEmailAcount (params) {
+      api.message.addEmailAcount(params).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '保存成功'
+          })
+        }
+        this.submitting = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.submitting = false
+      })
+    },
+    editEmailAcount (params) {
+      api.message.editEmailAcount(params).then((res) => {
+        if (res.status === 200) {
+          this.showNotice({
+            type: 'success',
+            content: '保存成功'
+          })
+        }
+        this.submitting = false
+      }).catch((res) => {
+        this.handleError(res)
+        this.submitting = false
+      })
     },
     verificateUrl () {
       if (this.customizeModel.checking) {
