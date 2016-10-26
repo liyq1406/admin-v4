@@ -83,7 +83,7 @@
                         <radio-button-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
                       </div>
                       <div class="radio-group-box">
-                        <button class="btn btn-ghost mr10" @click="getSnapshot">
+                        <button class="btn btn-ghost mr10" @click="refresh">
                           <i class="fa fa-refresh" :class="{'fa-spin': refreshing}"></i>刷新
                         </button>
                       </div>
@@ -228,7 +228,8 @@ export default {
       allDatapoints: [],
       chartX: 30, // 图的左侧预留空间
       selectedRule: {}, // 当前页面的设备快照
-      xAxisData: []
+      xAxisData: [],
+      beRefresh: true
     }
   },
 
@@ -391,7 +392,12 @@ export default {
     },
 
     querySnapshotCondition () {
-      var endtime = Date.parse(new Date())
+      var endtime
+      if (this.beRefresh) {
+        endtime = Date.parse(new Date())
+      } else {
+        endtime = Date.parse(new Date())
+      }
       // 取当前开始到period天前的时间
       var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
       var condition = {
@@ -570,6 +576,10 @@ export default {
     },
     saveDataPoints () {
       this.showEditModal = false
+    },
+    refresh () {
+      this.beRefresh = !this.beRefresh
+      this.getSnapshot()
     }
   }
 }
