@@ -540,8 +540,6 @@
           api.statistics.getSnapshotStatistic(this.currSnapshotId, this.selectedRule.id, this.currDevice.id, this.sdQueryCondition).then((res) => {
             if (res.status === 200 && res.data.list.length) {
               this.dealSnapshot(res.data.list)
-            } else {
-              this.clearData()
             }
           }).catch((res) => {
             this.handleError(res)
