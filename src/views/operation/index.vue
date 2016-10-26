@@ -118,7 +118,7 @@ export default {
         }
 
         // 排除的插件 id
-        let excluded = ['ios', 'android', 'wechat', 'ezviz']
+        let excluded = ['ios', 'android', 'wechat', 'ezviz', 'avs']
 
         /**
          * 判断数组是否存在某个值
