@@ -56,6 +56,7 @@
         </validator>
       </div>
     </modal>
+    <pre v-show="false">{{deviceIds}}</pre>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
 </template>
@@ -154,6 +155,10 @@ export default {
       //   sortType: -1,
       //   class: 'wp10'
       // }],
+      sortOrders: {
+        active_date: -1,
+        is_online: -1
+      },
       vDevices: [
         {
           '0': '50',
@@ -174,13 +179,21 @@ export default {
   },
 
   computed: {
+
+    // 列表头部
     headers () {
       var result = []
       if (!this.fieldList) return result
+      if (!this.devices) return result
+      if (!this.datapointIndexs) return result
+
       this.fieldList.forEach((item) => {
         if (item.hidden) return
+        if (item.index >= 0 && this.datapointIndexs.indexOf(item.index) === -1) {
+          return
+        }
         var header = {
-          key: item.index || item.name,
+          key: (item.index >= 0 ? item.index.toString() : '') || item.name,
           title: item.label || item.name
         }
 
@@ -188,11 +201,21 @@ export default {
           header.tooltip = '设备已联网激活'
         }
 
-        if (header.key === 'active_date' || header.key === 'is_online') {
-          header.sortType = -1
+        if (header.key === 'active_date') {
+          header.class = 'time-box'
         }
+        // 设置排序
+        header.sortType = this.sortOrders[header.key] || 0
 
         result.push(header)
+      })
+      return result
+    },
+
+    datapointIndexs () {
+      var result = []
+      result = this.datapoints.map((item) => {
+        return item.index
       })
       return result
     },
@@ -210,17 +233,42 @@ export default {
     // 设备列表
     tables () {
       var result = []
-      this.devices.map((item) => {
+      this.devices.forEach((item) => {
         var device = {
           id: item.id,
           mac: item.mac,
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
           sn: '<a class="hl-red">' + (item.sn || ' - ') + '</a>',
-          firmware: item.firmware,
+          firmware_version: item.firmware_version,
           is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
           prototype: item
         }
+        var hasVDevice = false
+        var modal = this.vDevices && this.vDevices[0]
+        this.vDevices.forEach((item1) => {
+          if (item1.device_id === device.id) {
+            hasVDevice = true
+            for (let key in item1) {
+              if (item1.hasOwnProperty(key)) {
+                let value = item1[key]
+                if (key === 'online_count') {
+                  value = parseInt((item1[key] - 0) / 360) / 10 + '小时'
+                }
+                device[key] = value
+              }
+            }
+          }
+        })
+
+        if (!hasVDevice && modal.device_id) {
+          for (let key in modal) {
+            if (modal.hasOwnProperty(key)) {
+              device[key] = '-'
+            }
+          }
+        }
+
         result.push(device)
       })
       return result
@@ -297,13 +345,16 @@ export default {
       result = this.devices.map((item) => {
         return item.id
       })
+      if (result.length) {
+        this.getVDevices(result)
+      }
       return result
     },
 
     // 筛选条件
     queryCondition () {
       let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware', 'last_login'],
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware_version', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
@@ -341,16 +392,28 @@ export default {
     }
   },
   ready () {
+    // 获取设备列表
     this.getDevices()
+    // 获取字段
     this.getField()
+    // 获取数据端点
     this.getDataPoint()
   },
   methods: {
     /**
+     * 批量获取虚拟设备
+     */
+    getVDevices (deviceIds) {
+      api.product.getVDevices(this.$route.params.id, deviceIds).then((res) => {
+        this.vDevices = res.data.list
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
      * 获取字段
      */
     getField () {
-      console.log('获取字段')
       this.loadingDataField = true
       api.product.getProductField(this.$route.params.id).then((res) => {
         this.fieldData = res.data || {}
@@ -503,16 +566,18 @@ export default {
       } else {
         header.sortType = 1
       }
-      this.headers.$set(index, header)
+      this.$set('sortOrders.' + header.key, header.sortType)
       this.getDevices()
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '../../../../../assets/stylus/common'
 
   .no-data
     height 200px
+  .time-box
+    min-width 200px
 </style>
