@@ -24,7 +24,7 @@
           :tables="tables | filterBy query in 'id' 'mac'"
           :loading="tableLoadingData"
           @theader-active-date="sortBysomeKey"
-          @theader-is-online="sortBysomeKey">
+          @theader-is-online="sortBysomeKey" @tbody-mac="linkToDetails">
         </x-table>
       </div>
     </div>
@@ -135,7 +135,7 @@ export default {
         var table = {
           // name: this.computedName(product.name, device.role, product.mode),
           id: device.id,
-          mac: device.mac,
+          mac: '<a class="hl-red">' + device.mac + '</a>',
           sn: device.sn, // 是否激活
           active_date: formatDate(device.active_date),
           is_online: device.is_online ? '在线' : '离线', // 是否在线
@@ -197,6 +197,14 @@ export default {
         this.tableLoadingData = false
         this.handleError(res)
       })
+    },
+    /**
+     * 跳转至设备详情
+     * @param  {[type]} table [description]
+     * @return {[type]}       [description]
+     */
+    linkToDetails (table) {
+      this.$route.router.go('/operation/products/' + table.prototype.product_id + '/devices/' + table.prototype.id)
     },
     /**
      * 按某个属性排序
