@@ -43,7 +43,7 @@
           </div>
           <div class="form-row row">
             <label class="form-control col-3">时间粒度:
-              <i class="fa fa-question-circle" v-tooltip="'选择时间粒度，可根据所选时间，查看以该时间为粒度的数据统计分析；可多选'"></i>
+              <i class="fa fa-question-circle" v-tooltip="'选择时间粒度，可根据所选时间，查看以该时间为粒度的数据统计分析，可多选'"></i>
             </label>
             <div class="controls col-21 fineness-select mutiple-select">
               <input v-model="fineness" type="checkbox" name="fineness" value="hour">
@@ -60,7 +60,7 @@
           </div>
           <div class="form-row row">
             <label class="form-control col-3">统计维度:
-              <i class="fa fa-question-circle" v-tooltip="'根据数据端点，选择统计维度，可以统计求和、平均、最大、最小为维度，<br/>如统计求和，可以统计某电池包发电量端口年发点总和趋势'"></i>
+              <i class="fa fa-question-circle" v-tooltip="'根据数据端点，选择统计维度，可以统计求和、平均、最大、最小，可多选'"></i>
             </label>
             <div class="controls col-21">
               <div class="control-text" v-if="!loadingData && !datapoints.length"><span class="hl-gray">暂无数据</span></div>

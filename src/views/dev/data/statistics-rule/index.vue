@@ -102,6 +102,19 @@ export default {
   },
 
   computed: {
+    srQueryCondition () {
+      let params = {
+        offset: 0,
+        limit: 10000, // 取所有规则
+        product_id: []
+      }
+      if (this.products && this.products.length) {
+        this.products.forEach((item) => {
+          params.product_id.push(item.id)
+        })
+      }
+      return params
+    },
     // 下拉选项
     tables () {
       let res = []
@@ -167,23 +180,19 @@ export default {
      * @author guohao
      */
     getStatisticRules () {
-      this.statisticsRules = []
-      this.products.forEach((product) => {
-        api.snapshot.getRules(product.id).then((res) => {
-          if (res.status === 200 && res.data.list && res.data.list.length) {
-            res.data.list.forEach((snap) => {
-              api.snapshot.getStatisticRules(product.id, snap.id).then((res) => {
-                if (res.status === 200 && res.data.list && res.data.list.length) {
-                  this.statisticsRules = this.statisticsRules.concat(res.data.list)
-                }
-              }).catch((res) => {
-                this.handleError(res)
-              })
-            })
-          }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+      api.snapshot.getAllStatisticRules(this.srQueryCondition).then((res) => {
+        if (res.status === 200 && res.data.list && res.data.list.length) {
+          res.data.list.sort((a, b) => {
+            a = +new Date(a.create_time)
+            b = +new Date(b.create_time)
+            return a - b
+          })
+          this.statisticsRules = res.data.list
+        } else {
+          this.statisticsRules = []
+        }
+      }).catch((res) => {
+        this.handleError(res)
       })
     },
     editRule (rule) {
