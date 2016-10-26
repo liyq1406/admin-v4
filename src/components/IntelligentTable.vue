@@ -185,6 +185,6 @@
 
   .intelligent-table-box
     width 100%
-    overflow auto
+    overflow auto !important
     box-sizing border-box
 </style>

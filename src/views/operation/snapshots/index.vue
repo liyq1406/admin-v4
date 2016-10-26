@@ -162,7 +162,7 @@
           label: '请选择统计规则'
         },
         selectedDatapoint: {
-          id: 0,
+          id: -1,
           label: '请选择数据端点'
         },
         statisticsRules: [],
@@ -279,7 +279,7 @@
       datapointOptions () {
         let res = []
         res.push({
-          id: 0,
+          id: -1,
           label: '请选择数据端点'
         })
         if (this.dataPoints && this.dataPoints.length) {
@@ -434,6 +434,7 @@
       // 选择规则
       toggleSelectedRule (rule) {
         if (rule.id !== 0) {
+          this.clearData()
           this.fineness = rule.fineness
           this.dpMode = rule.dp_mode
           this.currProductId = rule.product_id
@@ -535,7 +536,7 @@
         if (reset) {
           this.stCurrentPage = 1
         }
-        if (this.currDevice.id && this.currSnapshotId && this.selectedRule.id && typeof this.selectedDatapoint.index === 'number') {
+        if (this.currDevice.id && this.currSnapshotId && this.selectedRule.id && this.selectedDatapoint.index > -1) {
           api.statistics.getSnapshotStatistic(this.currSnapshotId, this.selectedRule.id, this.currDevice.id, this.sdQueryCondition).then((res) => {
             if (res.status === 200 && res.data.list.length) {
               this.dealSnapshot(res.data.list)
@@ -553,6 +554,7 @@
         this.stTotal = 0
         this.stData = []
         this.chartX = 30
+        this.currDevice = {}
       },
       dealSnapshot (snapshots) {
         let avg = {}

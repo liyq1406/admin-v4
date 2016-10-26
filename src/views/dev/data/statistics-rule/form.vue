@@ -254,6 +254,7 @@ export default {
       if (cur) {
         this.name = cur.name
         this.description = cur.describe
+        this.status = cur.status
         let selected = _.find(this.snapshotOptions, (item) => {
           return item.id === cur.snapshot_id
         })
