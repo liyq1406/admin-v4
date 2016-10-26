@@ -93,5 +93,35 @@ export default {
     return http.del(
       `${API_SERVER.message}/v2/message/email/email_account`
     )
+  },
+  /**
+   * 设置发送短信默认帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  setMessageAcount (params) {
+    return http.post(
+      `${API_SERVER.message}/v2/message/sms/default_account_type`, params
+    )
+  },
+  /**
+   * 查询发送短信默认帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  getMessageAcount () {
+    return http.get(
+      `${API_SERVER.message}/v2/message/sms/default_account_type`
+    )
+  },
+  /**
+   * 设置自定义运营商默认帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  setCustomAcount (params) {
+    return http.post(
+      `${API_SERVER.message}/v2/message/sms/custom_carrier_default_account`, params
+    )
   }
 }

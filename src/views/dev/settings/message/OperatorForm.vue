@@ -246,7 +246,7 @@
               </div>
             </div>
           </div>
-          <div class="form-row row" v-if="type==='edit'">
+          <div class="form-row row" v-if="type!=='add'">
             <div class="col-21 col-offset-3">
               <label class="del-check">
                 <input type="checkbox" name="del" v-model="delChecked"/> 删除运营商
@@ -284,11 +284,7 @@ export default {
 
   store,
 
-  vuex: {
-    getters: {
-      products: ({ products }) => products.all
-    }
-  },
+  vuex: {},
 
   props: {
     type: {
@@ -398,8 +394,27 @@ export default {
         if (res.status === 200) {
           console.log(res.data)
           this.name = res.data.name
-          this.type = res.data.type
-          this.area_code = res.data.area_code
+          // this.selectedType = res.data.type
+          if (res.data.type === 1) {
+            // 阿里大于
+            this.selectedType = {
+              label: '阿里大于',
+              value: 1
+            }
+          } else if (res.data.type === 2) {
+            // Twilio
+            this.selectedType = {
+              label: 'Twilio',
+              value: 2
+            }
+          }
+          // this.area_code = res.data.area_code
+          this.countryCode.forEach((item) => {
+            if (item.value === res.data.area_code) {
+              this.selectedCode = item
+              return
+            }
+          })
           this.desc = res.data.desc
           if (res.data.type === 1) {
             // 阿里大于
@@ -421,7 +436,7 @@ export default {
     onSubmit () {
       if (this.submitting) return
 
-      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
+      if (this.delChecked && !window.confirm('您确定要删除该运营商?')) {
         return
       }
       if (!this.delChecked) { // 非删除
@@ -452,7 +467,7 @@ export default {
           process = api.message.delCount(this.$route.params.id)
         } else {
           let accountId = this.$route.params.id
-          process = api.snapshot.updateRule(accountId, params)
+          process = api.message.editCount(accountId, params)
         }
       }
       process.then((res) => {

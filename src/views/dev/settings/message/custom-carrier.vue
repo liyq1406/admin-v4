@@ -84,13 +84,13 @@ export default {
   data () {
     return {
       operators: [
-        {
-          account_id: 12345,
-          name: '名称一',
-          desc: '这是买哦书',
-          area_code: '+86',
-          type: 1
-        }
+        // {
+        //   account_id: 12345,
+        //   name: '名称一',
+        //   desc: '这是买哦书',
+        //   area_code: '+86',
+        //   type: 1
+        // }
       ],
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
