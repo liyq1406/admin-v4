@@ -146,6 +146,7 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
+  import { warrantyMixins } from '../mixins'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
   import Modal from 'components/Modal'
@@ -157,7 +158,7 @@
   export default {
     // name: 'AccountList',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, warrantyMixins],
 
     components: {
       AreaSelect,
@@ -168,6 +169,7 @@
 
     data () {
       return {
+        token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
         loadingAccount: false,
         currentPage: 1,
         countPerPage: config.COUNT_PER_PAGE,
@@ -247,6 +249,12 @@
     methods: {
       // 获取网点列表
       getBranchList () {
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }
@@ -279,6 +287,12 @@
       },
       // 添加操作
       onAddSubmit () {
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         if (this.$addValidation.invalid || this.adding) return
         this.adding = true
         this.addModel.province = this.selectedProvince.name

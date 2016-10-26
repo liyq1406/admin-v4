@@ -159,6 +159,7 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
+import { warrantyMixins } from '../../mixins'
 import Breadcrumb from 'components/Breadcrumb'
 import api from 'api'
 import InfoCard from 'components/InfoCard'
@@ -172,7 +173,7 @@ import * as config from 'consts/config'
 export default {
   name: 'OrderDetails',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
     Breadcrumb,
@@ -185,6 +186,7 @@ export default {
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       query: '',
       branch: {},
       currentPage: 1,
@@ -441,6 +443,12 @@ export default {
       obj.lasting = end.getTime() - begin.getTime()
     },
     getRepairOrder () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         filter: [],
         limit: 1,
@@ -493,6 +501,12 @@ export default {
       })
     },
     getHistory (reset) {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       if (reset) {
         this.currentPage = 1
       }
@@ -509,6 +523,12 @@ export default {
       return n < 10 ? `0${n}` : `${n}`
     },
     changeStatus () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var time = new Date().getFullYear() + '-' + this.timeValue(new Date().getMonth() + 1) + '-' + this.timeValue(new Date().getDate()) + 'T' + this.timeValue(new Date().getHours()) + ':' + this.timeValue(new Date().getMinutes()) + ':' + this.timeValue(new Date().getSeconds()) + '.000Z'
       console.log(time)
       var params = {

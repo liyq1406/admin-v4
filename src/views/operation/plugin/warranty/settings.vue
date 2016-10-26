@@ -24,15 +24,17 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../mixins'
+import { warrantyMixins } from './mixins'
 import api from 'api'
 
 export default {
   name: 'Settings',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       tags: []
     }
   },
@@ -46,6 +48,12 @@ export default {
   methods: {
     // 获取标签
     getTags () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       api.warranty.getWarrantyLabel(this.$route.params.app_id).then((res) => {
         console.log(res)
         this.tags = res.data.label
@@ -55,6 +63,12 @@ export default {
     },
     // 编辑标签
     updateTags () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var params = {
         label: []
       }

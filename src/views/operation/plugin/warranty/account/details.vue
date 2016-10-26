@@ -257,6 +257,7 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
+import { warrantyMixins } from '../mixins'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Breadcrumb from 'components/Breadcrumb'
@@ -271,10 +272,11 @@ import _ from 'lodash'
 export default {
   name: 'AccountDetails',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       info: {},
       key: '',
       staffs: [],
@@ -418,6 +420,12 @@ export default {
   methods: {
     // 获取网点信息
     getBranchList () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -434,6 +442,12 @@ export default {
     },
     // 获取维修点员工列表
     getBranchStaffsList () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       api.warranty.getBranchStaffsList(this.$route.params.app_id, this.queryCondition).then((res) => {
         this.staffs = res.data.list
         this.total = res.data.count
@@ -489,6 +503,12 @@ export default {
     },
     // 添加操作
     onAddSubmit () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       if (this.addValidation.$valid && !this.adding) {
         this.adding = true
         this.addModel.status = this.addModel.status - 0
@@ -507,6 +527,12 @@ export default {
       }
     },
     editAccount () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -526,6 +552,12 @@ export default {
 
     // 提交编辑表单
     onEditSubmit () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       if (this.delChecked && !this.editing) { // 删除
         this.editing = true
         // console.log(this.$route.params.id)

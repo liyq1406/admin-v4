@@ -111,12 +111,13 @@
   import Select from 'components/Select'
   import ImageUploader from 'components/ImageUploader'
   import { globalMixins } from 'src/mixins'
+  import { warrantyMixins } from '../../mixins'
   import api from 'api'
 
   export default {
     name: 'add-warranty',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, warrantyMixins],
 
     vuex: {
       getters: {
@@ -149,6 +150,7 @@
 
     data () {
       return {
+        token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
         adding: false,
         branchStaffs: [],
         selectedBranchStarff: {},
@@ -187,6 +189,12 @@
       },
       // 获取标签
       getTags () {
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         api.warranty.getWarrantyLabel(this.$route.params.app_id).then((res) => {
           this.types = res.data.label
         }).catch((res) => {
@@ -195,6 +203,12 @@
       },
       // 获取网点列表
       getBranchList () {
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         var params = {
           filter: ['_id', 'name'],
           limit: 100
@@ -209,7 +223,12 @@
       },
       // 获取网点对应维修人员列表
       getBranchStaffsList () {
-        console.log(888)
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         var params = {
           filter: ['_id', 'name'],
           limit: 100,
@@ -229,7 +248,12 @@
       // },
       // 提交添加
       onSubmit () {
-        console.log(this.addValidation.$invalid)
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         if (this.adding) return
 
         this.addModal.product_sn = this.addModal.product_sn.trim()

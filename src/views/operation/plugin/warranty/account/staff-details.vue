@@ -90,6 +90,7 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
+import { warrantyMixins } from '../mixins'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
 import Breadcrumb from 'components/Breadcrumb'
@@ -102,10 +103,11 @@ import * as config from 'consts/config'
 export default {
   name: 'OrderDetails',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       showEditModal: false,
       editModal: false,
       editValidation: '',
@@ -177,6 +179,12 @@ export default {
   methods: {
     // 获取维修点员工信息
     getBranchStaffsList () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -194,6 +202,12 @@ export default {
     },
 
     editAccount () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
@@ -230,6 +244,12 @@ export default {
     },
     // 提交编辑表单
     onEditSubmit () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       if (this.delChecked && !this.editing) { // 删除
         this.editing = true
         api.warranty.deleteStaff(this.$route.params.app_id, this.$route.params.id).then((res) => {

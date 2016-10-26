@@ -1723,14 +1723,16 @@ let configRouter = (router) => {
         }).catch((err) => {
           var params = {
             appTokenInvalidTime: +new Date(),
-            token: '123',
+            token: '',
             app_id: appId
           }
           // 重置appToken过期时间
           pluginsToken[appId] = params
           window.localStorage.pluginsToken = JSON.stringify(pluginsToken)
           transition.next()
+          console.log(err)
           router.app.handleError(err)
+
           // if (transition.from.path) { // 判断有无上一个页面 有的话返回上一个页面 没有的话跳回概览页
           //   // router.replace(transition.from.path)
           //   transition.next()

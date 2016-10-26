@@ -68,6 +68,7 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
+import { warrantyMixins } from '../../mixins'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
@@ -80,7 +81,7 @@ import formatDate from 'filters/format-date'
 export default {
   name: 'OrderList',
 
-  mixins: [globalMixins],
+  mixins: [globalMixins, warrantyMixins],
 
   vuex: {
     getters: {
@@ -98,6 +99,7 @@ export default {
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       useTime: false,
       startTimePick: '',
       endTimePick: '',
@@ -399,6 +401,12 @@ export default {
     // },
     // 获取概览
     getSummary () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       api.warranty.getSummary(this.$route.params.app_id).then((res) => {
         this.repairSummary.unrepair.total = res.data.untreatedTotal
         this.repairSummary.repairing.total = res.data.treatedTotal
@@ -415,6 +423,12 @@ export default {
       // if (typeof querying !== 'undefined') {
       //   this.currentPage = 1
       // }
+
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
 
       this.loadingData = true
       // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
@@ -436,6 +450,12 @@ export default {
       })
     },
     getBranchIdByName (name) {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var condition = {
         filter: [],
         limit: 1,
