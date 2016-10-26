@@ -133,6 +133,7 @@
 import {get} from 'src/http'
 import { globalMixins } from 'src/mixins'
 import JSSHA from 'jssha'
+import api from 'api'
 
 export default {
   name: 'customize-email',
@@ -193,8 +194,19 @@ export default {
       }
     }
   },
-  ready () {},
+  ready () {
+    this.getEmailAcount()
+  },
   methods: {
+    getEmailAcount () {
+      api.message.getEmailAcount().then((res) => {
+        if (res.status === 200) {
+          console.log(res)
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
     /**
      * 提交按钮
      * @return {[type]} [description]

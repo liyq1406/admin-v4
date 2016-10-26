@@ -52,5 +52,46 @@ export default {
     return http.del(
       `${API_SERVER.message}/v2/message/sms/custom_carrier_account_delete/${accountId}`
     )
+  },
+
+  /**
+   * 邮件账户添加
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  addEmailAcount (params) {
+    return http.post(
+      `${API_SERVER.message}/v2/message/email/email_account`, params
+    )
+  },
+  /**
+   * 邮件账户查询
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  getEmailAcount () {
+    return http.get(
+      `${API_SERVER.message}/v2/message/email/email_account`
+    )
+  },
+  /**
+   * 邮件账户修改
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  editEmailAcount (params) {
+    return http.put(
+      `${API_SERVER.message}/v2/message/email/email_account`, params
+    )
+  },
+  /**
+   * 邮件账户删除
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  delEmailAcount () {
+    return http.del(
+      `${API_SERVER.message}/v2/message/email/email_account`
+    )
   }
 }
