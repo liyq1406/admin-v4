@@ -8,14 +8,7 @@
       </h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="snapshot-details" v-if="!devices.length && !loadingData">
-      <div class="panel">
-        <x-alert :cols="7">
-          <p>该产品暂无设备</p>
-        </x-alert>
-      </div>
-    </div>
-    <div class="snapshot-details" v-else>
+    <div class="snapshot-details">
       <div class="row">
         <div class="col-24">
           <div class="panel row">
@@ -459,9 +452,12 @@ export default {
           })
         } else {
           this.snapshots = []
+          this.total = 0
         }
       }).catch((res) => {
         this.refreshing = false
+        this.snapshots = []
+        this.total = 0
         this.handleError(res)
       })
     },

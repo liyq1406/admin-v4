@@ -26,14 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="snapshot-details" v-if="!devices.length && !loadingData">
-      <div class="panel">
-        <x-alert :cols="7">
-          <p>该产品暂无设备</p>
-        </x-alert>
-      </div>
-    </div>
-    <div class="panel snapshot-details" v-else>
+    <div class="panel snapshot-details">
       <div class="panel-bd layout-left">
         <div class="device-list-box">
           <div class="action-bar">
@@ -504,8 +497,13 @@
             this.getSnapshotStatistic()
           } else {
             this.devices = []
+            this.currDevice = {}
+            this.total = 0
           }
         }).catch((res) => {
+          this.devices = []
+          this.currDevice = {}
+          this.total = 0
           this.handleError(res)
         })
       },
