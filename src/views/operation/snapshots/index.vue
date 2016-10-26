@@ -470,7 +470,7 @@
         }
         this.startTime = startDate
         this.endTime = endDate
-        this.getSnapshotStatistic()
+        this.getSnapshotStatistic(true)
       },
       handleSearch () {
         if (this.query.length === 0) {
@@ -494,7 +494,7 @@
             this.currDevice = res.data.list[0]
             this.devices = res.data.list
             this.total = res.data.count
-            this.getSnapshotStatistic()
+            this.getSnapshotStatistic(true)
           } else {
             this.devices = []
             this.currDevice = {}
@@ -529,9 +529,12 @@
         })
         device.selected = true
         this.currDevice = device
-        this.getSnapshotStatistic()
+        this.getSnapshotStatistic(true)
       },
-      getSnapshotStatistic () {
+      getSnapshotStatistic (reset) {
+        if (reset) {
+          this.stCurrentPage = 1
+        }
         if (this.currDevice.id && this.currSnapshotId && this.selectedRule.id && typeof this.selectedDatapoint.index === 'number') {
           api.statistics.getSnapshotStatistic(this.currSnapshotId, this.selectedRule.id, this.currDevice.id, this.sdQueryCondition).then((res) => {
             if (res.status === 200 && res.data.list.length) {
@@ -559,23 +562,22 @@
         let statistic = []
         this.series = []
         let maxValue = Number.NEGATIVE_INFINITY // 计算所有值的最大值。调整图标左边距
+        let finded = null
+        let maxDpLength = 0
         snapshots.forEach((item) => {
-          let data = []
+          if (item.value_list.length > maxDpLength) {
+            maxDpLength = item.value_list.length
+            finded = item
+          }
           switch (item.mode) {
             case 1: // max 最大值
               if (item.value_list.length) {
                 item.value_list.forEach((maxItem) => {
                   maxItem.value = toFixed(maxItem.value)
                   max[maxItem.date] = maxItem.value
-                  data.push(maxItem.value)
                   if (maxItem.value > maxValue) {
                     maxValue = maxItem.value
                   }
-                })
-                this.series.push({
-                  data: data,
-                  type: 'line',
-                  name: '最大值'
                 })
               }
               break
@@ -584,15 +586,9 @@
                 item.value_list.forEach((minItem) => {
                   minItem.value = toFixed(minItem.value)
                   min[minItem.date] = minItem.value
-                  data.push(minItem.value)
                   if (minItem.value > maxValue) {
                     maxValue = minItem.value
                   }
-                })
-                this.series.push({
-                  data: data,
-                  type: 'line',
-                  name: '最小值'
                 })
               }
               break
@@ -601,15 +597,9 @@
                 item.value_list.forEach((avgItem) => {
                   avgItem.value = toFixed(avgItem.value)
                   avg[avgItem.date] = avgItem.value
-                  data.push(avgItem.value)
                   if (avgItem.value > maxValue) {
                     maxValue = avgItem.value
                   }
-                })
-                this.series.push({
-                  data: data,
-                  type: 'line',
-                  name: '平均值'
                 })
               }
               break
@@ -618,16 +608,15 @@
                 item.value_list.forEach((sumItem) => {
                   sumItem.value = toFixed(sumItem.value)
                   sum[sumItem.date] = sumItem.value
-                  data.push(sumItem.value)
                   if (sumItem.value > maxValue) {
                     maxValue = sumItem.value
                   }
                 })
-                this.series.push({
-                  data: data,
-                  type: 'line',
-                  name: '和'
-                })
+                // this.series.push({
+                //   data: data,
+                //   type: 'line',
+                //   name: '和'
+                // })
               }
               break
             default:
@@ -636,9 +625,7 @@
         })
         let maxLength = Number(maxValue).toString().length
         this.chartX = maxLength * 10 > 200 ? 200 : maxLength * 10
-        let finded = _.find(snapshots, (item) => {
-          return item.value_list.length > 0
-        })
+
         let xAxis = []
         let formate = ''
         if (this.dimension >= 1 && this.dimension <= 4) {
@@ -646,8 +633,17 @@
         } else {
           formate = 'yyyy-MM-dd'
         }
+
         if (finded) {
+          let maxData = []
+          let minData = []
+          let avgData = []
+          let sumData = []
           finded.value_list.forEach((item) => {
+            maxData.push(max[item.date] || NaN)
+            minData.push(min[item.date] || NaN)
+            avgData.push(avg[item.date] || NaN)
+            sumData.push(sum[item.date] || NaN)
             statistic.push({
               date: formatDate(item.date),
               max: typeof max[item.date] === 'number' ? max[item.date] : '--',
@@ -657,6 +653,31 @@
             })
 
             xAxis.push(formatDate(item.date, formate))
+          })
+
+          this.series.push({
+            data: maxData,
+            type: 'line',
+            name: '最大值',
+            connectNulls: true
+          })
+          this.series.push({
+            data: minData,
+            type: 'line',
+            name: '最小值',
+            connectNulls: true
+          })
+          this.series.push({
+            data: avgData,
+            type: 'line',
+            name: '平均值',
+            connectNulls: true
+          })
+          this.series.push({
+            data: sumData,
+            type: 'line',
+            name: '和',
+            connectNulls: true
           })
         }
 
@@ -668,10 +689,10 @@
         if (!this.timepickerModified) {
           this.setTimeRange(FINENESS_TYPE[value].timeOffset)
         }
-        this.getSnapshotStatistic()
+        this.getSnapshotStatistic(true)
       },
       selectDataPoint () {
-        this.getSnapshotStatistic()
+        this.getSnapshotStatistic(true)
       }
     }
   }
