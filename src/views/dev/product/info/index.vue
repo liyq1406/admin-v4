@@ -50,8 +50,7 @@
         <!-- <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button> -->
       </div>
       <div class="panel-bd mt15">
-        <device-list></device-list>
-        <!-- <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
+        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -75,7 +74,7 @@
             </div>
           </div>
           <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
-        </x-table> -->
+        </x-table>
       </div>
     </div>
 
@@ -92,7 +91,7 @@
     </modal>
 
     <!-- 编辑设备浮层 -->
-    <!-- <modal :show.sync="showDeviceEditModal">
+    <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
         <validator name="validation">
@@ -115,7 +114,7 @@
             </div>
           </form>
         </validator>
-      </div> -->
+      </div>
     </modal>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
@@ -133,7 +132,6 @@ import Chart from 'components/Chart/index'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
-import DeviceList from './components/DeviceList'
 import Select from 'components/Select'
 import store from 'store'
 import _ from 'lodash'
@@ -161,8 +159,7 @@ export default {
     InfoList,
     Modal,
     SearchBox,
-    Chart,
-    DeviceList
+    Chart
   },
 
   data () {
