@@ -329,7 +329,7 @@ export default {
   },
 
   upload: {
-    file_size_msg: '文件大小不能大于{max}MB',
+    file_size_msg: '文件超过限定大小{max}MB，请重新上传',
     type_tips: '不是文本文件不能上传',
     read_err: '文件读取失败。',
     success_msg: '设备导入成功!',
