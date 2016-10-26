@@ -1,19 +1,18 @@
 <template>
   <div class="intelligent-table-box">
-    <div class="data-table with-loading" v-show="headers.length > 0">
+    <div class="table-content data-table with-loading" v-show="headers.length > 0">
       <div class="icon-loading" v-show="loading">
         <i class="fa fa-refresh fa-spin"></i>
       </div>
       <slot name="filter-bar"></slot>
-      <div class="table-content">
-        <table class="table" :class="{'table-bordered':bordered}">
+      <table class="table" :class="{'table-bordered':bordered}">
         <thead>
           <tr>
             <th v-show="selecting" class="tac w20">
               <input type="checkbox" v-model="selectedAll" @change="selectAllEvent($event)">
             </th>
             <th v-for="tHeader in headers" :class="headerClass(tHeader)" @click="theaderClick(tHeader, $index)">
-              <div class="theader-box" :class="{'mr10': tHeader.sortType}">
+              <div class="theader-box">
                 <slot :name="'theader-' + hump2line(tHeader.key)">
                   {{{tHeader.title}}}
                   <i class="fa fa-question-circle" v-tooltip="tHeader.tooltip" v-if="tHeader.tooltip"></i>
@@ -44,7 +43,6 @@
           </tr>
         </tbody>
       </table>
-      </div>
     </div>
     <div class="row" v-show="headers.length > 0">
       <div class="col-8">
