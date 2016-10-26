@@ -347,10 +347,9 @@ export default {
               item.productId = product.id
             })
             this.snapshotsRules = this.snapshotsRules.concat(res.data.list)
-
-            if (finished === this.products.length && this.type === 'edit') {
-              this.getStatisticRules()
-            }
+          }
+          if (finished === this.products.length && this.type === 'edit') {
+            this.getStatisticRules()
           }
         }).catch((res) => {
           finished++
