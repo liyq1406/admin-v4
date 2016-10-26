@@ -67,369 +67,405 @@
 </template>
 
 <script>
-  import { globalMixins } from 'src/mixins'
-  import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
-  import SearchBox from 'components/SearchBox'
-  import Table from 'components/Table'
-  import DateTimeRangePicker from 'components/DateTimeRangePicker'
-  import api from 'api'
-  import * as config from 'consts/config'
-  import Statistic from 'components/Statistic'
-  import formatDate from 'filters/format-date'
+import { globalMixins } from 'src/mixins'
+import { warrantyMixins } from '../../mixins'
+import Select from 'components/Select'
+import SearchBox from 'components/SearchBox'
+import Table from 'components/Table'
+import DateTimeRangePicker from 'components/DateTimeRangePicker'
+import api from 'api'
+import * as config from 'consts/config'
+import Statistic from 'components/Statistic'
+import formatDate from 'filters/format-date'
 
-  export default {
-    name: 'OrderList',
+export default {
+  name: 'OrderList',
 
-    mixins: [globalMixins],
+  mixins: [globalMixins, warrantyMixins],
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.released
+  vuex: {
+    getters: {
+      products: ({ products }) => products.released
+    }
+  },
+
+  components: {
+    'x-select': Select,
+    'search-box': SearchBox,
+    'x-table': Table,
+    DateTimeRangePicker,
+    Statistic
+  },
+
+  data () {
+    return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
+      useTime: false,
+      startTimePick: '',
+      endTimePick: '',
+      selectedProduct: {},
+      name: '',
+      key: '',
+      curProvince: {},
+      curCity: {},
+      curDistrict: {},
+      startDate: '',
+      endDate: '',
+      status: {
+        label: '全部',
+        value: 0
+      },
+      searching: false,
+      statusOptions: [{
+        label: '全部',
+        value: 0
+      }, {
+        label: '已接单',
+        value: 1
+      }, {
+        label: '处理中',
+        value: 2
+      }, {
+        label: '处理失败',
+        value: 3
+      }, {
+        label: '完成',
+        value: 4
+      }],
+      workOrders: [],
+      loadingData: false,
+      currentPage: 1,
+      countPerPage: config.COUNT_PER_PAGE,
+      total: 0,
+      queryTypeOptions: [
+        { label: '全部', value: 'all' },
+        { label: '待处理', value: 0 },
+        { label: '维修中', value: 1 },
+        { label: '维修完成', value: 2 }
+      ],
+      queryType: {
+        label: '全部',
+        value: 'all'
+      },
+      query: '',
+      branchs: [],
+      repairSummary: {
+        unrepair: {
+          total: 1,
+          title: '待维修数'
+        },
+        repairing: {
+          total: 1,
+          title: '正在维修中'
+        },
+        today: {
+          total: 1,
+          change: 1,
+          title: '今日维修数'
+        },
+        week: {
+          total: 1,
+          change: 1,
+          title: '7日维修数'
+        }
+      },
+      headers: [
+        {
+          key: 'id',
+          title: '工单编号'
+        },
+        {
+          key: 'create_date',
+          title: '创建时间'
+        },
+        {
+          key: 'person',
+          title: '维修人员'
+        },
+        {
+          key: 'content',
+          title: '维修内容',
+          class: 'w200'
+        },
+        // {
+        //   key: 'addr',
+        //   title: '地点'
+        // },
+        // {
+        //   key: 'level',
+        //   title: '维修等级',
+        //   class: 'tac'
+        // },
+        {
+          key: 'state',
+          title: '状态',
+          class: 'tac'
+        }
+      ]
+    }
+  },
+
+  computed: {
+    page () {
+      return {
+        currentPage: this.currentPage,
+        countPerPage: this.countPerPage,
+        total: this.total
       }
     },
-
-    components: {
-      'x-select': Select,
-      'area-select': AreaSelect,
-      'search-box': SearchBox,
-      'x-table': Table,
-      DateTimeRangePicker,
-      Statistic
-    },
-
-    data () {
-      return {
-        useTime: false,
-        startTimePick: '',
-        endTimePick: '',
-        selectedProduct: {},
-        name: '',
-        key: '',
-        curProvince: {},
-        curCity: {},
-        curDistrict: {},
-        startDate: '',
-        endDate: '',
-        status: {
-          label: '全部',
-          value: 0
-        },
-        searching: false,
-        statusOptions: [{
-          label: '全部',
-          value: 0
-        }, {
-          label: '已接单',
-          value: 1
-        }, {
-          label: '处理中',
-          value: 2
-        }, {
-          label: '处理失败',
-          value: 3
-        }, {
-          label: '完成',
-          value: 4
-        }],
-        workOrders: [],
-        loadingData: false,
-        currentPage: 1,
-        countPerPage: config.COUNT_PER_PAGE,
-        total: 0,
-        queryTypeOptions: [
-          { label: '全部', value: 'all' },
-          { label: '待处理', value: 0 },
-          { label: '维修中', value: 1 },
-          { label: '维修完成', value: 2 }
-        ],
-        queryType: {
-          label: '全部',
-          value: 'all'
-        },
-        query: '',
-        branchs: [],
-        repairSummary: {
-          unrepair: {
-            total: 1,
-            title: '待维修数'
-          },
-          repairing: {
-            total: 1,
-            title: '正在维修中'
-          },
-          today: {
-            total: 1,
-            change: 1,
-            title: '今日维修数'
-          },
-          week: {
-            total: 1,
-            change: 1,
-            title: '7日维修数'
-          }
-        },
-        headers: [
+    tables () {
+      var result = []
+      this.workOrders.map((item) => {
+        var workOrder = {
+          id: '<a class="hl-red">' + item._id + '</a>',
+          // mac: item.mac,
+          create_date: formatDate(item.create_time),
+          person: item.assigned_name,
+          content: item.remark,
+          // addr: item.addr,
+          // level: resetLevel(item.level),
+          // state: item.state - 0 === 1 ? '维修中' : '待处理',
+          state: resetState(item.status || 0),
+          prototype: item
+        }
+        result.push(workOrder)
+      })
+      return result
+      function resetState (state) {
+        var result = [
           {
-            key: 'id',
-            title: '工单编号'
+            text: '待处理',
+            color: '#6699CC'
           },
           {
-            key: 'create_date',
-            title: '创建时间'
+            text: '维修中',
+            color: '#CC6600'
           },
           {
-            key: 'person',
-            title: '维修人员'
-          },
-          {
-            key: 'content',
-            title: '维修内容',
-            class: 'w200'
-          },
-          // {
-          //   key: 'addr',
-          //   title: '地点'
-          // },
-          // {
-          //   key: 'level',
-          //   title: '维修等级',
-          //   class: 'tac'
-          // },
-          {
-            key: 'state',
-            title: '状态',
-            class: 'tac'
+            text: '维修完成',
+            color: '#090'
           }
         ]
+        var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
+        return html
       }
+      // function resetLevel (state) {
+      //   var result = [
+      //     {
+      //       text: '一级',
+      //       backgroundColor: '#ff9966'
+      //     },
+      //     {
+      //       text: '二级',
+      //       backgroundColor: '#9cc'
+      //     },
+      //     {
+      //       text: '三级',
+      //       backgroundColor: '#cb4a52'
+      //     }
+      //   ]
+      //   var html = '<div class="level" style="color:#FFF; background-color: ' + result[state - 1].backgroundColor + '">' + result[state - 1].text + '</div>'
+      //   return html
+      // }
     },
+    queryCondition () {
+      var condition = {
+        filter: ['_id', 'assigned_id', 'create_time', 'product_id', 'product_sn', 'remark', 'status', 'assigned_name'],
+        limit: this.countPerPage,
+        offset: (this.currentPage - 1) * this.countPerPage,
+        order: {'create_time': -1},
+        query: {}
+      }
 
-    computed: {
-      page () {
-        return {
-          currentPage: this.currentPage,
-          countPerPage: this.countPerPage,
-          total: this.total
+      condition.query = {
+        product_id: {
+          $in: [this.selectedProduct.id]
         }
-      },
-      tables () {
-        var result = []
-        this.workOrders.map((item) => {
-          var workOrder = {
-            id: '<a class="hl-red">' + item._id + '</a>',
-            // mac: item.mac,
-            create_date: formatDate(item.create_time),
-            person: item.assigned_name,
-            content: item.remark,
-            // addr: item.addr,
-            // level: resetLevel(item.level),
-            // state: item.state - 0 === 1 ? '维修中' : '待处理',
-            state: resetState(item.status || 0),
-            prototype: item
-          }
-          result.push(workOrder)
-        })
-        return result
-        function resetState (state) {
-          var result = [
-            {
-              text: '待处理',
-              color: '#6699CC'
-            },
-            {
-              text: '维修中',
-              color: '#CC6600'
-            },
-            {
-              text: '维修完成',
-              color: '#090'
-            }
-          ]
-          var html = '<div class="state" style="color: ' + result[state - 0].color + '">' + result[state - 0].text + '</div>'
-          return html
-        }
-        // function resetLevel (state) {
-        //   var result = [
-        //     {
-        //       text: '一级',
-        //       backgroundColor: '#ff9966'
-        //     },
-        //     {
-        //       text: '二级',
-        //       backgroundColor: '#9cc'
-        //     },
-        //     {
-        //       text: '三级',
-        //       backgroundColor: '#cb4a52'
-        //     }
-        //   ]
-        //   var html = '<div class="level" style="color:#FFF; background-color: ' + result[state - 1].backgroundColor + '">' + result[state - 1].text + '</div>'
-        //   return html
-        // }
-      },
-      queryCondition () {
-        var condition = {
-          filter: ['_id', 'assigned_id', 'create_time', 'product_id', 'product_sn', 'remark', 'status', 'assigned_name'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          order: {'create_time': -1},
-          query: {}
-        }
-
+      }
+      if (this.queryType.value !== 'all') {
+        condition.query.status = this.queryType.value
+      }
+      if (this.useTime === true) {
         condition.query = {
-          product_id: {
-            $in: [this.selectedProduct.id]
+          create_time: {
+            $gte: {'@date': this.startTimePick},
+            $lte: {'@date': this.endTimePick}
           }
         }
-        if (this.queryType.value !== 'all') {
-          condition.query.status = this.queryType.value
-        }
-        if (this.useTime === true) {
-          condition.query = {
-            create_time: {
-              $gte: {'@date': this.startTimePick},
-              $lte: {'@date': this.endTimePick}
-            }
-          }
-        }
-
-        // 取地区 省市区
-        // if (this.curProvince.name !== this.$t('common.any')) {
-        //   condition.query.province = this.curProvince.name
-        // }
-        // if (this.curCity.name !== this.$t('common.any')) {
-        //   condition.query.city = this.curCity.name
-        // }
-        // if (this.curDistrict.name !== this.$t('common.any')) {
-        //   condition.query.district = this.curDistrict.name
-        // }
-        // 去工单状态 过期和未过期
-        if (this.status.value !== 0) {
-          condition.query.status = this.status.label
-        }
-        // 取搜索条件
-        // if (this.query !== '') {
-        //   if (this.queryType.value === 'branch') {
-        //     var ids = []
-        //     this.branchs.forEach((item) => {
-        //       ids.push({'@data': item._id})
-        //     })
-        //     condition.query.branch_id = {'$in': ids}
-        //   } else {
-        //     condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
-        //   }
-        // }
-        if (this.query !== '') {
-          condition.query._id = {$in: [this.query]}
-        }
-        // 取时间条件
-        if (this.startDate !== undefined && this.startDate !== '') {
-          if (this.endDate === '') { // 只有开始时间
-            condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}}
-          } else if (this.endDate !== '') { // 都不为空
-            condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}, '$lte': {'@date': new Date(this.endDate)}}
-          }
-        } else {
-          if (this.startDate !== undefined && this.endDate !== '') { // 只有结束时间
-            condition.query.create_time = {'$lte': {'@date': new Date(this.endDate)}}
-          }
-        }
-
-        return condition
       }
-    },
 
-    route: {
-      data () {
-        // this.getOrderWorkList()
-        this.init()
-        this.getSummary()
+      // 取地区 省市区
+      // if (this.curProvince.name !== this.$t('common.any')) {
+      //   condition.query.province = this.curProvince.name
+      // }
+      // if (this.curCity.name !== this.$t('common.any')) {
+      //   condition.query.city = this.curCity.name
+      // }
+      // if (this.curDistrict.name !== this.$t('common.any')) {
+      //   condition.query.district = this.curDistrict.name
+      // }
+      // 去工单状态 过期和未过期
+      if (this.status.value !== 0) {
+        condition.query.status = this.status.label
       }
-    },
-
-    ready () {
-    },
-
-    watch: {
-      products () {
-        this.init()
+      // 取搜索条件
+      // if (this.query !== '') {
+      //   if (this.queryType.value === 'branch') {
+      //     var ids = []
+      //     this.branchs.forEach((item) => {
+      //       ids.push({'@data': item._id})
+      //     })
+      //     condition.query.branch_id = {'$in': ids}
+      //   } else {
+      //     condition.query[this.queryType.value] = {$regex: this.key, $options: 'i'}
+      //   }
+      // }
+      if (this.query !== '') {
+        condition.query._id = {$in: [this.query]}
       }
+      // 取时间条件
+      if (this.startDate !== undefined && this.startDate !== '') {
+        if (this.endDate === '') { // 只有开始时间
+          condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}}
+        } else if (this.endDate !== '') { // 都不为空
+          condition.query.create_time = {'$gte': {'@date': new Date(this.startDate)}, '$lte': {'@date': new Date(this.endDate)}}
+        }
+      } else {
+        if (this.startDate !== undefined && this.endDate !== '') { // 只有结束时间
+          condition.query.create_time = {'$lte': {'@date': new Date(this.endDate)}}
+        }
+      }
+
+      return condition
+    }
+  },
+
+  route: {
+    data () {
+      // this.getOrderWorkList()
+      this.init()
+      this.getSummary()
+    }
+  },
+
+  ready () {
+  },
+
+  watch: {
+    products () {
+      this.init()
+    }
+  },
+
+  methods: {
+    /**
+     * 当前页码改变
+     * @author weijie
+     * @param  {Number} number 页码
+     */
+    onCurrPageChage (number) {
+      this.currentPage = number
+      this.getOrderWorkList()
+    },
+    toggleSearching () {
+      this.searching = !this.searching
     },
 
-    methods: {
-      /**
-       * 当前页码改变
-       * @author weijie
-       * @param  {Number} number 页码
-       */
-      onCurrPageChage (number) {
-        this.currentPage = number
+    /**
+     * 每页显示的数量改变
+     * @author weijie
+     * @param  {Number} count 数量
+     */
+    onPageCountUpdate (count) {
+      this.countPerPage = count
+      this.getOrderWorkList(true)
+    },
+    init () {
+      this.selectedProduct = this.products[0] || {}
+      if (this.products.length > 0) {
         this.getOrderWorkList()
-      },
-      toggleSearching () {
-        this.searching = !this.searching
-      },
+      }
+    },
+    getSpecial (start, end) {
+      this.useTime = true
+      this.startTimePick = start
+      this.endTimePick = end
+      this.getOrderWorkList()
+    },
+    goDetails (table) {
+      this.$route.router.go(this.$route.path + '/' + table.prototype._id)
+    },
+    // goInfo (table, header, index) {
+    //   console.log(table)
+    //   this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/' + table.prototype.id)
+    // },
+    // 获取概览
+    getSummary () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
 
-      /**
-       * 每页显示的数量改变
-       * @author weijie
-       * @param  {Number} count 数量
-       */
-      onPageCountUpdate (count) {
-        this.countPerPage = count
-        this.getOrderWorkList(true)
-      },
-      init () {
-        this.selectedProduct = this.products[0] || {}
-        if (this.products.length > 0) {
-          this.getOrderWorkList()
-        }
-      },
-      getSpecial (start, end) {
-        this.useTime = true
-        this.startTimePick = start
-        this.endTimePick = end
-        this.getOrderWorkList()
-      },
-      goDetails (table) {
-        console.log(table)
-        this.$route.router.go(this.$route.path + '/' + table.prototype._id)
-      },
-      // goInfo (table, header, index) {
-      //   console.log(table)
-      //   this.$route.router.go('/operation/plugins/warranty/' + this.$route.params.app_id + '/work-orders/repair/' + table.prototype.id)
-      // },
-      // 获取概览
-      getSummary () {
-        api.warranty.getSummary(this.$route.params.app_id).then((res) => {
-          console.log(res.data)
-          this.repairSummary.unrepair.total = res.data.untreatedTotal
-          this.repairSummary.repairing.total = res.data.treatedTotal
-          this.repairSummary.today.total = res.data.dayCount
-          this.repairSummary.today.change = res.data.dayCountPercent
-          this.repairSummary.week.total = res.data.sevenCount
-          this.repairSummary.week.change = res.data.sevenCountPercent
-        }).catch((err) => {
-          this.handleError(err)
-        })
-      },
-      // 获取工单列表
-      getOrderWorkList (reset) {
-        // if (typeof querying !== 'undefined') {
-        //   this.currentPage = 1
-        // }
+      api.warranty.getSummary(this.$route.params.app_id).then((res) => {
+        this.repairSummary.unrepair.total = res.data.untreatedTotal
+        this.repairSummary.repairing.total = res.data.treatedTotal
+        this.repairSummary.today.total = res.data.dayCount
+        this.repairSummary.today.change = Math.round(res.data.dayCountPercent)
+        this.repairSummary.week.total = res.data.sevenCount
+        this.repairSummary.week.change = Math.round(res.data.sevenCountPercent)
+      }).catch((err) => {
+        this.handleError(err)
+      })
+    },
+    // 获取工单列表
+    getOrderWorkList (reset) {
+      // if (typeof querying !== 'undefined') {
+      //   this.currentPage = 1
+      // }
 
-        this.loadingData = true
-        // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
-        // if (this.key !== '' && this.queryType.value === 'branch') {
-        //   this.getBranchIdByName(this.key)
-        //   return
-        // }
-        if (reset) {
-          this.currentPage = 1
-        }
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
 
+      this.loadingData = true
+      // 如果需要检索网点名，需要先通过网点名获取branchid。再通过branchid搜索
+      // if (this.key !== '' && this.queryType.value === 'branch') {
+      //   this.getBranchIdByName(this.key)
+      //   return
+      // }
+      if (reset) {
+        this.currentPage = 1
+      }
+
+      api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
+        this.total = res.data.count
+        this.workOrders = res.data.list
+        this.loadingData = false
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
+      })
+    },
+    getBranchIdByName (name) {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
+      var condition = {
+        filter: [],
+        limit: 1,
+        offset: 0,
+        order: {},
+        query: {}
+      }
+      condition.query.name = {$regex: name, $options: 'i'}
+      api.warranty.getBranchList(this.$route.params.app_id, condition).then((res) => {
+        this.branchs = res.data.list
         api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
           this.total = res.data.count
           this.workOrders = res.data.list
@@ -438,43 +474,23 @@
           this.handleError(err)
           this.loadingData = false
         })
-      },
-      getBranchIdByName (name) {
-        var condition = {
-          filter: [],
-          limit: 1,
-          offset: 0,
-          order: {},
-          query: {}
-        }
-        condition.query.name = {$regex: name, $options: 'i'}
-        api.warranty.getBranchList(this.$route.params.app_id, condition).then((res) => {
-          this.branchs = res.data.list
-          api.warranty.getOrderWorkList(this.$route.params.app_id, this.queryCondition).then((res) => {
-            this.total = res.data.count
-            this.workOrders = res.data.list
-            this.loadingData = false
-          }).catch((err) => {
-            this.handleError(err)
-            this.loadingData = false
-          })
-        }).catch((err) => {
-          this.handleError(err)
-          this.loadingData = false
-        })
-      },
-      onAddBtnClick () {
-        this.$route.router.go({path: 'add', append: true})
-      }
+      }).catch((err) => {
+        this.handleError(err)
+        this.loadingData = false
+      })
+    },
+    onAddBtnClick () {
+      this.$route.router.go({path: 'add', append: true})
     }
   }
+}
 </script>
 
 <style lang="stylus">
-  @import '../../../../../../assets/stylus/common'
+@import '../../../../../../assets/stylus/common'
 
-  .table
-    .level
-      display inline-block
-      width 50px
+.table
+  .level
+    display inline-block
+    width 50px
 </style>

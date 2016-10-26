@@ -51,11 +51,11 @@ export default {
           buttons: [
             {
               text: 'iOS SDK',
-              link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
+              link: 'https://github.com/xlink-corp/ios-sdk'
             },
             {
               text: 'Android SDK',
-              link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
+              link: 'https://github.com/xlink-corp/android-sdk'
             }
           ]
         },
@@ -65,7 +65,7 @@ export default {
           buttons: [
             {
               text: 'MCU SDK下载',
-              link: 'https://github.com/xlink-corp/xlink-sdk/tree/master/设备端开发文档'
+              link: 'https://github.com/xlink-corp/device-sdk'
             }
           ]
         },

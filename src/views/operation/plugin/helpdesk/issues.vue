@@ -442,6 +442,10 @@ export default {
 @import '../../../../assets/stylus/common'
 .overhid
   word-wrap break-word
+  display block
+  overflow hidden
+  white-space nowrap
+  text-overflow ellipsis
 .issue-list
   position relative
   margin-bottom 40px

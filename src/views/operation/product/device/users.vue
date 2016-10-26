@@ -3,7 +3,7 @@
     <div class="panel-bd row">
       <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></x-table>
       <div class="actions clearfix mt10">
-        <button class="btn btn-primary fr">解除绑定</button>
+        <button class="btn btn-primary fr hidden">解除绑定</button>
       </div>
     </div>
   </div>

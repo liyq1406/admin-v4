@@ -1,6 +1,11 @@
 <template>
   <div class="main">
-    <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="" @theader-is-online="" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
+    <div class="no-data with-loading" v-show="!headers.length">
+      <div class="icon-loading">
+        <i class="fa fa-refresh fa-spin"></i>
+      </div>
+    </div>
+    <x-table v-show="headers.length" :headers="headers" :tables="tables" :page="page" :loading="loadingDevices" @theader-active-date="sortBySomeKey" @theader-is-online="sortBySomeKey" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
       <div class="filter-bar" slot="filter-bar">
         <div class="filter-group fr">
           <div class="filter-group-item">
@@ -23,32 +28,41 @@
           </x-select>
         </div>
       </div>
+      <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
     </x-table>
 
     <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
-        <form autocomplete="off" novalidate @submit.prevent="onDeviceEditModalSubmit">
-          <div class="form-row row">
-            <label class="form-control col-4">SN:</label>
-            <div class="controls col-20">
-              <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
-                <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" lazy class="input-text"/>
+        <validator name="validation">
+          <form autocomplete="off" novalidate @submit.prevent="onDeviceEditModalSubmit">
+            <div class="form-row row">
+              <label class="form-control col-4">SN:</label>
+              <div class="controls col-20">
+                <div v-placeholder="$t('ui.product.placeholders.mode')" class="input-text-wrap">
+                  <input v-model="deviceEditModal.sn" type="text" name="deviceEditModal.sn" v-validate:sn="{format: 'sn', maxlength: 32}" lazy class="input-text"/>
+                </div>
+                <div class="form-tips form-tips-error">
+                  <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="showDeviceEditModal = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          </div>
-        </form>
+            <div class="form-actions">
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="showDeviceEditModal = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+            </div>
+          </form>
+        </validator>
       </div>
     </modal>
+    <pre v-show="false">{{deviceIds}}</pre>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
 </template>
 
 <script>
+// import Promise from 'Promise'
 import api from 'api'
 import { globalMixins } from 'src/mixins'
 import * as config from 'consts/config'
@@ -57,7 +71,7 @@ import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
 import Select from 'components/Select'
 import store from 'store'
-import _ from 'lodash'
+// import _ from 'lodash'
 import formatDate from 'filters/format-date'
 // import BatchExportQr from './batch-export-qr'
 
@@ -90,15 +104,14 @@ export default {
         value: 'all'
       },
       devices: [],
+      datapoints: [],
+      loadingDataPoint: false,
+      fieldData: [],
+      loadingDataField: false,
       total: 0,
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
-      page: {
-        total: 20, // 数据总数
-        currentPage: 1, // 当前页
-        countPerPage: 10 // 每页数量
-      },
-      loadingData: false,
+      loadingDevices: false,
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
         { label: '设备ID', value: 'id' },
@@ -112,40 +125,100 @@ export default {
       deviceEditModal: {
         sn: ''
       },
-      headers: [{
-        key: 'mac',
-        title: 'MAC'
-      }, {
-        key: 'id',
-        title: '设备ID',
-        class: 'wp25'
-      }, {
-        key: 'is_active',
-        title: '是否激活',
-        tooltip: '设备已联网激活',
-        class: 'wp10'
-      }, {
-        key: 'active_date',
-        title: '激活时间',
-        sortType: -1,
-        class: 'wp20'
-      }, {
-        key: 'sn',
-        title: 'SN'
+      // headers: [{
+      //   key: 'mac',
+      //   title: 'MAC'
       // }, {
-      //   key: 'firmware',
-      //   title: '固件版本号',
-      //   class: 'tac'
-      }, {
-        key: 'is_online',
-        title: '在线状态',
-        sortType: -1,
-        class: 'wp10'
-      }]
+      //   key: 'id',
+      //   title: '设备ID',
+      //   class: 'wp25'
+      // }, {
+      //   key: 'is_active',
+      //   title: '是否激活',
+      //   tooltip: '设备已联网激活',
+      //   class: 'wp10'
+      // }, {
+      //   key: 'active_date',
+      //   title: '激活时间',
+      //   sortType: -1,
+      //   class: 'wp20'
+      // }, {
+      //   key: 'sn',
+      //   title: 'SN'
+      // // }, {
+      // //   key: 'firmware',
+      // //   title: '固件版本号',
+      // //   class: 'tac'
+      // }, {
+      //   key: 'is_online',
+      //   title: '在线状态',
+      //   sortType: -1,
+      //   class: 'wp10'
+      // }],
+      sortOrders: {
+        active_date: -1,
+        is_online: -1
+      },
+      vDevices: [
+        {
+          '0': '50',
+          '1': '687931357',
+          '2': '#9PgQimAhNA7gGkI17^w^&EVL&bV*aQ#!&lBM@7v',
+          cm_id: '101',
+          device_id: 1725036218,
+          ip: '42.121.122.23',
+          lastKeepAlive: '2016-06-16 15:23:31 CST',
+          last_login: '2016-06-12T09:50:46.00Z',
+          last_logout: '2016-06-08T17:30:30.00Z',
+          last_update: '2016-06-16T15:25:31.00Z',
+          online: true,
+          online_count: 11669169
+        }
+      ]
     }
   },
 
   computed: {
+
+    // 列表头部
+    headers () {
+      var result = []
+      if (!this.fieldList) return result
+      if (!this.devices) return result
+      if (!this.datapointIndexs) return result
+
+      this.fieldList.forEach((item) => {
+        if (item.hidden) return
+        if (item.index >= 0 && this.datapointIndexs.indexOf(item.index) === -1) {
+          return
+        }
+        var header = {
+          key: (item.index >= 0 ? item.index.toString() : '') || item.name,
+          title: item.label || item.name
+        }
+
+        if (header.key === 'is_active') {
+          header.tooltip = '设备已联网激活'
+        }
+
+        if (header.key === 'active_date') {
+          header.class = 'time-box'
+        }
+        // 设置排序
+        header.sortType = this.sortOrders[header.key] || 0
+
+        result.push(header)
+      })
+      return result
+    },
+
+    datapointIndexs () {
+      var result = []
+      result = this.datapoints.map((item) => {
+        return item.index
+      })
+      return result
+    },
 
     // 分页信息
     page () {
@@ -160,26 +233,128 @@ export default {
     // 设备列表
     tables () {
       var result = []
-      this.devices.map((item) => {
+      this.devices.forEach((item) => {
         var device = {
           id: item.id,
           mac: item.mac,
           is_active: item.is_active ? '是' : '否',
           active_date: formatDate(item.active_date),
           sn: '<a class="hl-red">' + (item.sn || ' - ') + '</a>',
-          firmware: item.firmware,
+          firmware_version: item.firmware_version,
           is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
           prototype: item
         }
+        var hasVDevice = false
+        var modal = this.vDevices && this.vDevices[0]
+        this.vDevices.forEach((item1) => {
+          if (item1.device_id === device.id) {
+            hasVDevice = true
+            for (let key in item1) {
+              if (item1.hasOwnProperty(key)) {
+                let value = item1[key]
+                if (key === 'online_count') {
+                  value = parseInt((item1[key] - 0) / 360) / 10 + '小时'
+                }
+                device[key] = value
+              }
+            }
+          }
+        })
+
+        if (!hasVDevice && modal.device_id) {
+          for (let key in modal) {
+            if (modal.hasOwnProperty(key)) {
+              device[key] = '-'
+            }
+          }
+        }
+
         result.push(device)
       })
+      return result
+    },
+
+    /**
+     * 字段列表
+     */
+    fieldList () {
+      var result = [
+        {
+          'name': 'mac',
+          'label': 'MAC地址',
+          'hidden': false,
+          'sort': 1
+        },
+        {
+          'name': 'id',
+          'label': '设备ID',
+          'hidden': false,
+          'sort': 2
+        },
+        {
+          'name': 'is_active',
+          'label': '是否激活',
+          'hidden': false,
+          'sort': 3
+        },
+        {
+          'name': 'is_online',
+          'label': '激活时间',
+          'hidden': false,
+          'sort': 4
+        },
+        {
+          'name': 'is_online',
+          'label': '是否在线',
+          'hidden': false,
+          'sort': 5
+        },
+        {
+          'name': 'sn',
+          'label': 'SN',
+          'hidden': true,
+          'sort': 6
+        },
+        {
+          'name': 'online_count',
+          'label': '累计在线时间',
+          'hidden': true,
+          'sort': 7
+        },
+        {
+          'name': 'firmware_version',
+          'label': '固件版本号',
+          'hidden': true,
+          'sort': 8
+        }
+      ]
+      if (!this.fieldData.base_fields || !this.fieldData.datapoints) return result
+      result = this.fieldData.base_fields.concat(this.fieldData.datapoints)
+      result = result.sort((a, b) => {
+        return a.sort - b.sort
+      })
+      return result
+    },
+
+    /**
+     * 计算属性
+     * 设备id数组
+     */
+    deviceIds () {
+      var result = []
+      result = this.devices.map((item) => {
+        return item.id
+      })
+      if (result.length) {
+        this.getVDevices(result)
+      }
       return result
     },
 
     // 筛选条件
     queryCondition () {
       let condition = {
-        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware', 'last_login'],
+        filter: ['id', 'mac', 'is_active', 'active_date', 'is_online', 'sn', 'firmware_version', 'last_login'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
@@ -207,14 +382,67 @@ export default {
         default:
       }
 
+      this.headers.map((item) => {
+        if (item.sortType) {
+          condition.order[item.key] = (item.sortType === 1 ? 'asc' : 'desc')
+        }
+      })
+
       return condition
     }
   },
   ready () {
+    // 获取设备列表
     this.getDevices()
-
+    // 获取字段
+    this.getField()
+    // 获取数据端点
+    this.getDataPoint()
   },
   methods: {
+    /**
+     * 批量获取虚拟设备
+     */
+    getVDevices (deviceIds) {
+      api.product.getVDevices(this.$route.params.id, deviceIds).then((res) => {
+        this.vDevices = res.data.list
+      }).catch((res) => {
+        this.handleError(res)
+      })
+    },
+    /**
+     * 获取字段
+     */
+    getField () {
+      this.loadingDataField = true
+      api.product.getProductField(this.$route.params.id).then((res) => {
+        this.fieldData = res.data || {}
+        this.initHeaders()
+        this.loadingDataField = false
+      }).catch((res) => {
+        this.loadingDataField = false
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取数据端点
+     */
+    getDataPoint () {
+      this.loadingDataPoint = true
+      api.product.getDatapoints(this.$route.params.id).then((res) => {
+        if (res.status === 200) {
+          this.datapoints = res.data
+          this.loadingDataPoint = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingDataPoint = false
+      })
+    },
+    /**
+     * 设置sn
+     */
     setSn () {
       let productId = this.$route.params.id
       let deviceId = this.deviceEditModal.deviceId
@@ -290,14 +518,14 @@ export default {
       if (reset === true) {
         this.currentPage = 1
       }
-      this.loadingData = true
+      this.loadingDevices = true
       api.device.getList(this.$route.params.id, this.queryCondition).then((res) => {
         this.devices = res.data.list
         this.total = res.data.count
-        this.loadingData = false
+        this.loadingDevices = false
       }).catch((res) => {
         this.handleError(res)
-        this.loadingData = false
+        this.loadingDevices = false
       })
     },
 
@@ -324,12 +552,32 @@ export default {
      */
     cancelSearching () {
       this.getDevices()
+    },
+
+    /**
+     * 按某个属性排序
+     * 国辉
+     * @param  {[type]} table [description]
+     * @return {[type]}       [description]
+     */
+    sortBySomeKey (header, index) {
+      if (header.sortType === 1) {
+        header.sortType = -1
+      } else {
+        header.sortType = 1
+      }
+      this.$set('sortOrders.' + header.key, header.sortType)
+      this.getDevices()
     }
   }
 }
 </script>
 
-<style lang="stylus" scoped>
+<style lang="stylus">
 @import '../../../../../assets/stylus/common'
 
+  .no-data
+    height 200px
+  .time-box
+    min-width 200px
 </style>

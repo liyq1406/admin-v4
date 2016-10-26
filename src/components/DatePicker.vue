@@ -195,7 +195,7 @@
         this.currDate = date
         this.value = this.stringify(this.currDate)
         this.displayDayView = false
-        this.$dispatch('select-day')
+        this.$emit('select-day')
       },
 
       getYearMonth (year, month) {
@@ -347,7 +347,7 @@
     },
 
     ready () {
-      this.$dispatch('date-picker-created', this)
+      this.$emit('date-picker-created', this)
       this.currDate = this.parse(this.value) || this.parse(new Date())
       this._closeEvent = EventListener.listen(window, 'click', (e) => {
         if (!this.$el.contains(e.target)) {

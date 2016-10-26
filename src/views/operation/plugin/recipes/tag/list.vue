@@ -38,7 +38,7 @@
                   <input v-model="model.label" name="model.label" type="text" v-validate:label="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.label.touched && $validation.label.required">{{ $t('ui.validation.required', {field: $t('ui.recipe.fields.name')}) }}</span>
+                  <span v-if="$validation.label.touched && $validation.label.required">请输入名称</span>
                   <span v-if="$validation.label.modified && $validation.label.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.recipe.fields.name'), 20]) }}</span>
                   <span v-if="$validation.label.touched && $validation.label.format">名称不允许前后带空格</span>
                 </div>

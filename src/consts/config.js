@@ -12,7 +12,8 @@ let apiServer = ({
   },
   test: { // 测试服务器
     api: 'http://api-test.xlink.cn:8887',
-    plugin: 'http://test.plugin.xlink.cn:3000'
+    plugin: 'http://test.plugin.xlink.cn:3000',
+    message: 'http://139.196.164.250:3072'
   },
   grey: { // 灰度服务器
     api: `${protocol}//api-grey.xlink.cn`,
@@ -39,7 +40,7 @@ let apiServer = ({
 export const API_SERVER = {
   // 默认
   default: apiServer.api,
-
+  message: apiServer.message,
   // 菜谱
   recipe: `${apiServer.plugin}/module/recipes`,
 
@@ -91,6 +92,9 @@ export const NOTICE_DURATION = 2000
 
 // 经销商级别分隔符
 export const DEALER_SCOPE_SEPERATOR = '.'
+
+// Echarts 图表默认配色
+export const CHART_COLORS = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3']
 
 export const MAIN_NAV = {
   // dashboard: {
@@ -162,6 +166,9 @@ export const MAIN_NAV = {
         alias: 'snapshots',
         url: '/data/snapshots'
       }, {
+        alias: 'statistics-rule',
+        url: '/data/statistics-rule'
+      }, {
         alias: 'forward',
         url: '/data/forward'
       }]
@@ -185,8 +192,12 @@ export const MAIN_NAV = {
         alias: 'users',
         url: '/settings/users'
       }, {
-        alias: 'mail_templates',
-        url: '/settings/mail-templates'
+        alias: 'email',
+        url: '/settings/email/template'
+      // url: '/settings/email/customize'
+      // }, {
+      //   alias: 'message',
+      //   url: '/settings/message/config'
       }]
     }]
   },
@@ -232,6 +243,10 @@ export const MAIN_NAV = {
       //   alias: 'analysis',
       //   url: '/users/analysis'
       }]
+    }, {
+      alias: 'snapshots', // 用户管理
+      icon: 'database',
+      url: 'snapshots'
     }]
   }
 }

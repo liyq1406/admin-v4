@@ -21,15 +21,15 @@
             <div class="controls col-21">
               <div class="clearfix">
                 <div class="form-control rule-type-item mr10">
-                  <input v-model="ruleType" type="radio" name="rule-type" value="timer">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="timer" :disabled="type==='edit'">
                   <span>定时快照</span>
                 </div>
                 <div class="form-control rule-type-item mr10">
-                  <input v-model="ruleType" type="radio" name="rule-type" value="instance">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="instance" :disabled="type==='edit'">
                   <span>即时快照</span>
                 </div>
                 <div class="form-control rule-type-item">
-                  <input v-model="ruleType" type="radio" name="rule-type" value="update">
+                  <input v-model="ruleType" type="radio" name="rule-type" value="update" :disabled="type==='edit'">
                   <span>变化快照</span>
                 </div>
               </div>
@@ -39,7 +39,7 @@
               </div>
             </div>
           </div>
-          <div v-show="ruleType==='timer'" class="form-row row">
+          <div v-if="ruleType==='timer'" class="form-row row">
             <label class="form-control col-3">采集周期:</label>
             <div class="controls col-21">
               <x-select :label="interval.label" width="200px">
@@ -294,9 +294,12 @@ export default {
       api.snapshot.getRule(this.$route.params.product_id, this.$route.params.rule_id).then((res) => {
         if (res.status === 200) {
           this.loadingData = false
-          this.interval = _.find(this.locales.data.SNAPSHOT_INTERVAL, (o) => {
+          let interval = _.find(this.locales.data.SNAPSHOT_INTERVAL, (o) => {
             return o.value === res.data.interval
           })
+          if (interval) {
+            this.interval = interval
+          }
           switch (res.data.rule) {
             case 1:
               this.ruleType = 'instance'
@@ -350,32 +353,39 @@ export default {
      * @author shengzhi
      */
     onSubmit () {
-      if (this.$validation.invalid) {
-        this.$validate(true)
+      if (this.submitting) return
+
+      if (this.delChecked && !window.confirm('您确定要删除该规则?')) {
         return
       }
 
-      if (this.submitting) return
-
-      let model = {
-        rule: 3,
-        storage: {
-          expire: 0
-        },
-        datapoint: this.selectedDatapoints,
-        name: this.name
-      }
-
-      if (this.ruleType === 'instance') {
-        model.rule = 1
-      } else if (this.ruleType === 'update') {
-        model.rule = 2
-      }
-
-      if (model.rule === 3) {
-        model.interval = this.interval.value
-      }
+      let model
       let process
+      if (!this.delChecked) { // 非删除
+        if (this.$validation.invalid) {
+          this.$validate(true)
+          return
+        }
+
+        model = {
+          rule: 3,
+          storage: {
+            expire: 0
+          },
+          datapoint: this.selectedDatapoints,
+          name: this.name
+        }
+
+        if (this.ruleType === 'instance') {
+          model.rule = 1
+        } else if (this.ruleType === 'update') {
+          model.rule = 2
+        }
+
+        if (model.rule === 3) {
+          model.interval = this.interval.value
+        }
+      }
 
       this.submitting = true
       if (this.type === 'add') { // 添加
@@ -395,7 +405,15 @@ export default {
         }
       }).catch((res) => {
         this.submitting = false
-        this.handleError(res)
+        console.log(res.data)
+        if (res.data.error.code === 4001160) {
+          this.showNotice({
+            type: 'error',
+            content: '编辑或删除本规则前请删除相关联的统计规则'
+          })
+        } else {
+          this.handleError(res)
+        }
       })
     }
   }

@@ -1,3 +1,4 @@
+import { toDate } from '../utils/index'
 /**
  * 日期格式化
  * @param {Any} date 目标日期字符串
@@ -7,14 +8,14 @@
  */
 var formatDate = (date, format, isLocal) => {
   // 不传任何参数
-  if (typeof date === 'undefined' || date === null || date === '') {
+  if (typeof date === 'undefined' || date === '') {
     return '-'
   }
 
-  date = new Date(date)
+  date = toDate(date)
 
   // date 参数不合法（不能转为Date类型）
-  if (!date.getFullYear) {
+  if (!date) {
     return '-'
   }
 

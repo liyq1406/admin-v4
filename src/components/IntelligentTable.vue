@@ -122,7 +122,7 @@
             this.selectedTable = []
             this.selectedAll = false
           }
-          this.$dispatch('selected-change', this.selectedTable)
+          this.$emit('selected-change', this.selectedTable)
         } else {
           this.selectedTable = []
           this.selectedAll = false
@@ -142,7 +142,7 @@
           } else {
             this.selectedTable = []
           }
-          this.$dispatch('selected-change', this.selectedTable)
+          this.$emit('selected-change', this.selectedTable)
           // alert('全选')
         }
       },
@@ -185,6 +185,6 @@
 
   .intelligent-table-box
     width 100%
-    overflow auto
+    overflow auto !important
     box-sizing border-box
 </style>

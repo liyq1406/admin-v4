@@ -26,8 +26,8 @@
 // import api from 'api'
 import Statistic from 'components/Statistic'
 import { globalMixins } from 'src/mixins'
-import UserTrend from './user-trend'
-import UserDistribution from './user-distribution'
+import UserTrend from './components/UserTrend'
+import UserDistribution from './components/UserDistribution'
 import {getTotalUser, getTrend} from './api-user'
 
 export default {

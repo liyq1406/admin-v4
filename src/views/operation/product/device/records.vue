@@ -88,7 +88,6 @@
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
   import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
   import Pager from 'components/Pager'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -101,7 +100,6 @@
 
     components: {
       'x-select': Select,
-      'area-select': AreaSelect,
       'search-box': SearchBox,
       'pager': Pager,
       'date-time-range-picker': DateTimeRangePicker

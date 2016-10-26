@@ -20,7 +20,7 @@
       <div class="panel-bd">
         <div class="row">
           <div class="col-11">
-            <china-heat-map :data="regionData"></china-heat-map>
+            <chart :options="regionOptions" :loading="loadingData" height="450px" type="china-map"></chart>
           </div>
           <div class="col-12 col-offset-1 data-table-wrap mt20 mb20">
             <div class="data-table">
@@ -114,12 +114,13 @@
 </template>
 
 <script>
-// import _ from 'lodash'
+import _ from 'lodash'
 import api from 'api'
 import * as config from 'consts/config'
 import Pager from 'components/Pager'
 import RadioButtonGroup from 'components/RadioButtonGroup'
-import ChinaHeatMap from 'components/g2-charts/ChinaHeatMap'
+import Chart from 'components/Chart/index'
+import convertData from 'components/Chart/convert-data'
 import Select from 'components/Select'
 import SearchBox from 'components/SearchBox'
 import formatDate from 'filters/format-date'
@@ -136,7 +137,7 @@ export default {
     RadioButtonGroup,
     'x-select': Select,
     SearchBox,
-    ChinaHeatMap
+    Chart
   },
 
   vuex: {
@@ -157,6 +158,78 @@ export default {
       loadingData: false,
       dataPer: [],
       regionData: []
+    }
+  },
+
+  computed: {
+    // 区域地图配置
+    regionOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter (params) {
+            return params.name + ' : ' + params.value[2]
+          }
+        },
+        visualMap: {
+          min: 0,
+          max: this.max,
+          calculable: true,
+          inRange: {
+            color: ['#50a3ba', '#eac736', '#d94e5d']
+          },
+          textStyle: {
+            color: '#fff'
+          }
+        },
+        geo: {
+          map: 'china',
+          label: {
+            emphasis: {
+              show: false
+            }
+          },
+          itemStyle: {
+            normal: {
+              areaColor: '#FFF',
+              borderColor: '#666'
+            },
+            emphasis: {
+              areaColor: '#EEE'
+            }
+          }
+        },
+        series: [{
+          name: '设备数量',
+          type: 'scatter',
+          coordinateSystem: 'geo',
+          data: convertData(this.regionData),
+          symbolSize: 12,
+          label: {
+            normal: {
+              show: false
+            },
+            emphasis: {
+              show: false
+            }
+          },
+          itemStyle: {
+            emphasis: {
+              borderColor: '#fff',
+              borderWidth: 1
+            }
+          }
+        }]
+      }
+    },
+
+    // 最大值
+    max () {
+      let ret = 0
+      if (this.regionData.length) {
+        ret = _.max(_.map(this.regionData, 'value'))
+      }
+      return ret
     }
   },
 
@@ -204,8 +277,7 @@ export default {
               for (let j in CNData[i]) {
                 if (j !== '通知' && j !== '严重' && j !== '轻微') {
                   let temp = {
-                    province: i,
-                    city: j,
+                    name: j,
                     value: CNData[i][j].通知 || 0 + CNData[i][j].轻微 || 0 + CNData[i][j].严重 || 0
                   }
                   resData.push(temp)

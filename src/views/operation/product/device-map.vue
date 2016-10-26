@@ -6,7 +6,7 @@
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fr">
         <div class="filter-group-item">
-          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="initMap(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="handleSearch">
             <x-select width="106px" :label="queryType.label" size="small">
               <select v-model="queryType">
                 <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -58,7 +58,6 @@ import api from 'api'
 import * as config from 'consts/config'
 // import AMap from 'AMap'
 import Select from 'components/Select'
-import AreaSelect from 'components/AreaSelect'
 import SearchBox from 'components/SearchBox'
 import Alert from 'components/Alert'
 import Pager from 'components/Pager'
@@ -72,10 +71,9 @@ export default {
 
   components: {
     'x-select': Select,
-    'search-box': SearchBox,
     'x-alert': Alert,
-    'pager': Pager,
-    AreaSelect
+    SearchBox,
+    Pager
   },
 
   data () {
@@ -88,7 +86,7 @@ export default {
       searching: false,
       queryTypeOptions: [
         { label: '设备ID', value: 'id' },
-        // { label: 'MAC', value: 'mac' },
+        { label: 'MAC', value: 'mac' },
         { label: '所在区域', value: 'area' }
       ],
       queryType: {
@@ -128,6 +126,9 @@ export default {
         coord: this.mapCenter,
         max_dist: this.map.getResolution() * this.map.getSize().height / 2,
         query: {}
+      }
+      if (this.query.length > 0) {
+        condition.query[this.queryType.value] = this.queryType.value === 'id' ? { $in: [Number(this.query)] } : { $like: this.query }
       }
 
       return condition
@@ -355,12 +356,12 @@ export default {
       api.device.getGeographies(this.$route.params.id, this.queryCondition).then((res) => {
         if (res.data.count) {
           this.ids = _.map(res.data.devices, 'device_id')
-          console.log(res.data.devices)
+          // console.log(res.data.devices)
           res.data.devices.forEach((item, index) => {
             this.geocoder.getAddress([item.lon, item.lat], (status, result) => {
               let address = ''
               if (status === 'complete' && result.info === 'OK') {
-                console.log(result.regeocode)
+                // console.log(result.regeocode)
                 address = result.regeocode.formattedAddress
               }
               this.geographies.push({
@@ -556,6 +557,32 @@ export default {
       if (this.query.length !== 0) {
         if (this.queryType.value === 'id') {
           this.getGeography(Number(this.query))
+        } else if (this.queryType.value === 'mac') {
+          // 通过mac先获取对应设备信息
+          var params = {
+            filter: ['id'],
+            offset: 0,
+            limit: 10,
+            query: {
+              mac: {
+                $in: [this.query]
+              }
+            }
+          }
+          api.device.getList(this.$route.params.id, params).then((res) => {
+            // console.log(res.data)
+            if (res.data.list.length) {
+              var did = res.data.list[0].id
+              // console.log(did)
+              this.getGeography(Number(did))
+            } else {
+              this.devices = []
+              this.infoMsg = '未找到该设备'
+              this.setMarkers()
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
         } else {
           this.placeSearch.search(this.query)
         }

@@ -24,6 +24,7 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
+                <th>快照名称</th>
                 <th>产品名称</th>
                 <th class="wp20">快照规则</th>
                 <th class="wp20">创建时间</th>
@@ -33,6 +34,9 @@
             </thead>
             <tbody>
               <tr v-for="dp in filteredRules">
+                <td>
+                  <a class="hl">{{dp.name}}</a>
+                </td>
                 <td>
                   <a class="hl">{{dp.productName}}</a>
                 </td>
@@ -44,12 +48,12 @@
                 <td>{{dp.create_time | formatDate}}</td>
                 <td>{{dp.creator}}</td>
                 <td>
-                  <a v-link="{ path: '/dev/data/snapshots/' + dp.productId}" class="hl-red">查看快照</a>
+                  <a v-link="{ path: '/dev/data/snapshots/' + dp.productId + '/' + dp.id}" class="hl-red">查看快照</a>
                   <a class="hl-red ml10" v-link="{path: '/dev/data/snapshot/edit/'+dp.productId+'/'+dp.id}">编辑</a>
                 </td>
               </tr>
               <tr v-if="filteredRules.length === 0">
-                <td :colspan="5" class="tac">
+                <td :colspan="6" class="tac">
                   <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
                 </td>
               </tr>

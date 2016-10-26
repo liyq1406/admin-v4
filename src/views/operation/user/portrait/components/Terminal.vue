@@ -1,62 +1,75 @@
 <template>
   <div class="row sex-box">
-    <interval :data="data" :options="options"></interval>
-    <!-- <div class="col-11 col-offset-1 data-table-wrap" style="min-height: 250px">
-      <percent-table @theader-percent="sort"></percent-table>
-    </div> -->
+    <chart :options="terminalOptions" :loading="loadingData"></chart>
   </div>
 </template>
 <script>
-  import PercentTable from 'components/PercentTable'
-  import Interval from 'components/g2-charts/Interval'
+  import Chart from 'components/Chart/index'
   import api from 'api'
 
   export default {
     name: 'terminal',
 
     components: {
-      Interval,
-      PercentTable
+      Chart
     },
+
     data () {
       return {
-        options: {
-          horizontal: true,
-          stack: true,
-          props: {
-            height: 300,
-            plotCfg: {
-              margin: [40, 20, 80, 60]
+        loadingData: false,
+        data: {
+          ios: 0,
+          android: 0,
+          others: 0
+        }
+      }
+    },
+
+    computed: {
+      // 终端图表配置
+      terminalOptions () {
+        return {
+          tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+              type: 'shadow'
             }
           },
-          defs: {
-            'terminal': {
-              type: 'cat',
-              alias: '终端'
-            },
-            'count': {
-              alias: '数量',
-              min: 0
-            },
-            'a': {
-              alias: '系统'
-            }
+          grid: {
+            x: 50,
+            y: 20,
+            x2: 15,
+            y2: 40
           },
-          position: 'a*count',
-          color: 'terminal'
-        },
-        data: [
-          // {
-          //   terminal: 'iPhone',
-          //   count: 1657,
-          //   a: '系统'
-          // },
-          // {
-          //   terminal: 'Android',
-          //   count: 1627,
-          //   a: '系统'
-          // }
-        ]
+          xAxis: {
+            type: 'value',
+            minInterval: 1,
+            boundaryGap: [0, 0.01]
+          },
+          yAxis: {
+            type: 'category',
+            data: ['系统']
+          },
+          series: [{
+            name: 'iOS',
+            type: 'bar',
+            stack: '系统',
+            barMaxWidth: 40, // 柱条的最大宽度
+            data: this.data['ios']
+          }, {
+            name: 'Android',
+            type: 'bar',
+            stack: '系统',
+            barMaxWidth: 40, // 柱条的最大宽度
+            data: this.data['android']
+          }, {
+            name: '其他',
+            type: 'bar',
+            stack: '系统',
+            barMaxWidth: 40, // 柱条的最大宽度
+            data: this.data['others']
+          }]
+        }
       }
     },
 
@@ -70,23 +83,19 @@
        * @return {[type]} [description]
        */
       getData () {
+        this.loadingData = true
         api.statistics.getUserOs().then((res) => {
-          let data = []
           res.data.forEach((item) => {
-            let obj = {
-              terminal: item.operate_system,
-              count: item.total,
-              a: '系统'
+            if (item.operate_system in this.data) {
+              this.data[item.operate_system] = [item.total]
             }
-            data.push(obj)
           })
-          this.data = data
+          this.loadingData = false
         }).catch((res) => {
           this.handleError(res)
+          this.loadingData = false
         })
       }
     }
-
   }
-
 </script>

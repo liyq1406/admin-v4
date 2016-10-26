@@ -15,7 +15,7 @@
       </div>
       <div class="row">
         <div class="col-12">
-          <pie :data="warningLevel"></pie>
+          <chart :options="versionOptions" :loading="loadingSummary" height="320px"></chart>
         </div>
         <div class="col-11 col-offset-1 data-table-wrap">
           <div class="data-table">
@@ -111,18 +111,16 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
-// import _ from 'lodash'
-// import formatDate from 'filters/format-date'
-// import { globalMixins } from 'src/mixins'
+import _ from 'lodash'
+import { globalMixins } from 'src/mixins'
 // import { productSummaryMixin, setCurrProductMixin } from './mixins'
 import Statistic from 'components/Statistic2'
-import Pie from 'components/g2-charts/Pie'
+import Chart from 'components/Chart/index'
 
 export default {
   name: 'DeviceList',
 
-  // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
-  // mixins: [globalMixins, productSummaryMixin, setCurrProductMixin],
+  mixins: [globalMixins],
 
   components: {
     'x-select': Select,
@@ -130,8 +128,8 @@ export default {
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,
-    Pie,
-    Statistic
+    Statistic,
+    Chart
   },
 
   data () {
@@ -227,6 +225,34 @@ export default {
         offset: (this.currentPage - 1) * this.countPerPage
       }
       return condition
+    },
+
+    // 版本信息图表配置
+    versionOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{a} <br/>{b} : {c} ({d}%)'
+        },
+        legend: {
+          y: 20,
+          data: _.map(this.warningLevel, 'name')
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          radius: '55%',
+          center: ['50%', '60%'],
+          data: this.warningLevel,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      }
     }
   },
   // 监听属性变动

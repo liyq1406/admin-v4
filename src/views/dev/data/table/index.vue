@@ -426,7 +426,7 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="submit" :disabled="editing || !userEditColumnModal.value" :class="{'disabled':(editing || !userEditColumnModal.value)}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button type="submit" :disabled="editing || !userEditColumnModal.value === ''" :class="{'disabled':(editing || !userEditColumnModal.value === '')}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             <button @click.prevent.stop="userEditColumnModal.show = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
           </div>
         </form>
@@ -902,7 +902,7 @@ export default {
       this.userEditColumnModal.columnName = column.key
       this.userEditColumnModal.lineIndex = lineIndex
       this.userEditColumnModal.fieldType = column.type
-      this.userEditColumnModal.value = line[column.key]
+      this.userEditColumnModal.value = Boolean(line[column.key])
       this.userEditColumnModal.objectId = line.objectId
       if (this.userEditColumnModal.fieldType === 'date') {
         if (line[column.key]) {

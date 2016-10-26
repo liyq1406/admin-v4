@@ -42,7 +42,6 @@
   import Statistic from 'components/Statistic'
   import RadioButtonGroup from 'components/RadioButtonGroup'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
-  import TimeLine from 'components/g2-charts/TimeLine'
   import api from 'api'
   import formatDate from 'filters/format-date'
 
@@ -57,8 +56,7 @@
       'search-box': SearchBox,
       Statistic,
       RadioButtonGroup,
-      DateTimeRangePicker,
-      TimeLine
+      DateTimeRangePicker
     },
 
     data () {

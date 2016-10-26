@@ -122,6 +122,7 @@
 <script>
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
+import { warrantyMixins } from '../../mixins'
 import Breadcrumb from 'components/Breadcrumb'
 import api from 'api'
 import InfoCard from 'components/InfoCard'
@@ -133,7 +134,7 @@ import InfoList from 'components/InfoList'
 export default {
   name: 'OrderDetails',
 
-  mixins: [globalMixins, pluginMixins],
+  mixins: [globalMixins, pluginMixins, warrantyMixins],
 
   components: {
     Breadcrumb,
@@ -146,6 +147,7 @@ export default {
 
   data () {
     return {
+      token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
       branch: {},
       repairOrder: {},
       repairDetails: {},
@@ -297,6 +299,12 @@ export default {
       ]
     },
     getRepairOrder () {
+      // token 不存在，无权限访问
+      if (!this.token) {
+        this.showNoTokenError()
+        return
+      }
+
       var self = this
       var argvs = arguments
       var fn = self.getRepairOrder

@@ -1,17 +1,14 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>{{product.name}}设备快照</h2>
+      <h2>{{selectedRule.name}}
+        <span v-if="selectedRule.rule===3">(定时更新/{{selectedRule.interval}}分钟)</span>
+        <span v-if="selectedRule.rule===2">(变化更新)</span>
+        <span v-if="selectedRule.rule===1">(即时更新)</span>
+      </h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
-    <div class="snapshot-details" v-if="!devices.length && !loadingData">
-      <div class="panel">
-        <x-alert :cols="7">
-          <p>该产品暂无设备</p>
-        </x-alert>
-      </div>
-    </div>
-    <div class="snapshot-details" v-else>
+    <div class="snapshot-details">
       <div class="row">
         <div class="col-24">
           <div class="panel row">
@@ -82,12 +79,19 @@
                       <div class="check-device hidden">
                         <button class="btn btn-primary" v-link="{path: '/dev/products/' + this.$route.params.product_id + '/devices/' + selectedDeviceData.id}">查看设备</button>
                       </div>
-                      <div class="radio-group-box">
+                      <div class="radio-group-periods">
                         <radio-button-group :items="periods" :value.sync="period" @select="getSnapshot"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
+                      </div>
+                      <div class="radio-group-box">
+                        <button class="btn btn-ghost mr10" @click="refresh">
+                          <i class="fa fa-refresh" :class="{'fa-spin': refreshing}"></i>刷新
+                        </button>
                       </div>
                     </div>
                   </div>
-                  <div class="chart-box" v-chart="chartOptions" :loading="loadingData"></div>
+                  <div class="over-flow-hidden">
+                    <chart :options="chartOptions" :loading="loadingData"></chart>
+                  </div>
                 </div>
                 <div class="device-data-table-box">
                   <div class="title">
@@ -145,8 +149,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import locales from 'consts/locales/index'
 import api from 'api'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Pager from 'components/Pager'
@@ -154,10 +156,12 @@ import SearchBox from 'components/SearchBox'
 import Select from 'components/Select'
 import Modal from 'components/Modal'
 import IntelligentTable from 'components/IntelligentTable'
+import Chart from 'components/Chart/index'
 import { globalMixins } from 'src/mixins'
 import Alert from 'components/Alert'
 import Breadcrumb from 'components/Breadcrumb'
 import _ from 'lodash'
+import formatDate from 'filters/format-date'
 
 export default {
   name: 'TableDetails',
@@ -171,6 +175,7 @@ export default {
     Pager,
     IntelligentTable,
     Breadcrumb,
+    Chart,
     'x-select': Select,
     'x-alert': Alert
   },
@@ -185,8 +190,8 @@ export default {
       }],
       /** ***图表 按钮 start*********/
       loadingProductTrends: false,
-      periods: locales[Vue.config.lang].data.SHORT_PERIODS,
-      period: 1,
+      period: 0,
+      periods: [],
       /* ******图表 按钮 end*************/
       query: '',
       searching: false,
@@ -207,18 +212,7 @@ export default {
       countPerPage2: 10,
       countPerPage3: 10,
       product: {},
-      devices: [
-        // {
-        //   id: '1999246249',
-        //   mac: '163D18E5B72E',
-        //   selected: true
-        // },
-        // {
-        //   id: '1999246249',
-        //   mac: '163D18E5B72E',
-        //   selected: false
-        // }
-      ],
+      devices: [],
       datapoints: [],
       snapshotSeries: [
         {
@@ -230,37 +224,12 @@ export default {
       snapshots: [],
       allSnapshots: [],
       loadingData: true,
-      // snapshotHeader: [
-      //   {
-      //     key: 'snapshot_date', // 与tables的key对应
-      //     title: '时间' // 标题内容
-      //   // },
-      //   // {
-      //   //   key: 'creatTime',
-      //   //   title: 'ID'
-      //   // },
-      //   // {
-      //   //   key: 'updateTime',
-      //   //   title: '更新时间'
-      //   }
-      // ],
-      // snapshotTable: [
-      //   {
-      //     snapshot_date: ''
-      //     // creatTime: '123',
-      //     // updateTime: '更新时间',
-      //     // creater: '创建者',
-      //     // operation: '操作'
-      //   // },
-      //   // {
-      //   //   create_time: 'idididid',
-      //   //   creatTime: '创建时间',
-      //   //   updateTime: '更新时间',
-      //   //   creater: '创建者',
-      //   //   operation: '操作'
-      //   }
-      // ],
-      allDatapoints: []
+      refreshing: false,
+      allDatapoints: [],
+      chartX: 30, // 图的左侧预留空间
+      selectedRule: {}, // 当前页面的设备快照
+      xAxisData: [],
+      beRefresh: true
     }
   },
 
@@ -272,9 +241,10 @@ export default {
           trigger: 'axis'
         },
         grid: {
-          x: 70,
+          x: this.chartX,
           y: 32,
-          x2: 10
+          x2: 55,
+          y2: 20
         },
         legend: {
           y: 5,
@@ -295,59 +265,72 @@ export default {
     // 趋势图表数据
     series () {
       var result = []
-      this.selectedDatapoints.forEach((item) => {
+      let usefulDp = _.filter(this.selectedDatapoints, (item) => {
+        return this.canBeCounted(item.type)
+      })
+      if (!usefulDp || !usefulDp.length) {
+        return result
+      }
+      usefulDp.forEach((item) => {
         result.push({
-          name: `${item.index}`,
+          name: `${item.name}`,
           type: 'line',
-          data: []
+          data: [],
+          dpIndex: item.index
         })
       })
-      var now = Date.parse(new Date()) / 1000
-      // 当前未满一小时默认取满一小时
-      now = (Math.floor(now / 3600) + 1) * 3600
-      const SECONDS_PER_HOUR = 3600
-      // var itemToAdd = {}
-      var i = 0
 
-      for (let k = this.period * 24 - 1; k >= 0; k--) {
-        result.forEach((re) => {
-          re.data.push(0)
+      let maxValue = Number.NEGATIVE_INFINITY // 计算所有值的最大值。调整图标左边距
+      this.xAxisData = []
+      let tempData = _.clone(this.snapshots)
+      let filterTempData = _.groupBy(tempData, (item) => {
+        let date = +new Date(item.snapshot_date) + 1000 * 3600
+        return formatDate(date, 'MM-dd hh' + ':00', true)
+      })
+
+      let filterTempDataArr = []
+      for (let ts in filterTempData) {
+        filterTempData[ts].sort((a, b) => {
+          a = +new Date(a.snapshot_date)
+          b = +new Date(b.snapshot_date)
+          return a - b
+        })
+        let value = filterTempData[ts].slice(-1)
+        if (value.length) {
+          value = value[0]
+        }
+
+        filterTempDataArr.push({
+          date: ts,
+          value: value
         })
       }
 
-      this.snapshots.forEach((item, index) => {
-        // 去掉经过后台处理的时间的T和Z字符
-        var snapshotDate = item.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '').replace(/-/ig, '/').split('.')[0]
-        // console.log(new Date(snapshotDate))
-        // 获取经过的小时数的整数部分将同个小时内的数据分为同一组
-        var a = Math.floor((now - Date.parse(new Date(snapshotDate)) / 1000) / SECONDS_PER_HOUR) - 1
-        if (a !== i) {
-          result.forEach((r, n) => {
-            r.data[this.period * 24 - 2 - a] = Number(item[`${r.name}`]) || 0
-          })
-          i = a
-        }
+      filterTempDataArr.sort((a, b) => {
+        a = +new Date(a.date)
+        b = +new Date(b.date)
+        return a - b
       })
+
+      filterTempDataArr.forEach((item) => {
+        this.xAxisData.push(item.date)
+        result.forEach((r) => {
+          r.data.push(item.value[r.dpIndex])
+          if (item.value[r.dpIndex] > maxValue) {
+            maxValue = item.value[r.dpIndex]
+          }
+        })
+      })
+
+      // 计算最大值长度
+      let maxLength = Number(maxValue).toString().length
+      this.chartX = maxLength * 10 > 200 ? 200 : maxLength * 10
       return result
     },
 
     // 图例
     legends () {
       return this.series.length > 0 ? _.map(this.series, 'name') : []
-    },
-
-    // 图表横轴数据
-    xAxisData () {
-      // var today = new Date()
-      var now = Date.parse(new Date())
-      var result = []
-      for (var i = this.period * 24 - 1; i >= 0; i--) {
-        // result[i] = dateFormat('MM-dd', new Date(today - (this.period - i - 1) * 24 * 3600 * 1000))
-        var date = new Date(now - i * 3600 * 1000)
-        var hour = date.getHours() + 1
-        result.push(`${hour > 9 ? hour : `0${hour}`}:00`)
-      }
-      return result
     },
 
     deviceThumb () {
@@ -401,21 +384,20 @@ export default {
       this.selectedDatapoints.map((item) => {
         var obj = {
           key: item.index,
-          title: `${item.index} (${item.description})`
+          title: `${item.name} (${item.description})`
         }
         result.push(obj)
       })
       return result
     },
 
-    // snapshotTable () {
-    //   return this.snapshots.map((item) => {
-    //     this.snapshotTable.push(item)
-    //   })
-    // },
-
     querySnapshotCondition () {
-      var endtime = Date.parse(new Date())
+      var endtime
+      if (this.beRefresh) {
+        endtime = Date.parse(new Date())
+      } else {
+        endtime = Date.parse(new Date())
+      }
       // 取当前开始到period天前的时间
       var begintime = endtime - this.period * 24 * 60 * 60 * 1000 - 60 * 60 * 1000 // 比当前时间往前取多一个小时为了使第一个点获取到数据
       var condition = {
@@ -424,7 +406,8 @@ export default {
         date: {
           begin: begintime,
           end: endtime
-        }
+        },
+        rule_id: this.$route.params.rule_id
       }
       return condition
     }
@@ -432,88 +415,58 @@ export default {
 
   route: {
     data () {
+      this.initPeriods()
       this.getDevices()
       this.getProduct()
       this.getRule()
     }
   },
 
-  ready () {
-    // 监听窗口尺寸变化
-    // window.onresize = () => {
-    //   this.$refs.trendChart.chart.resize()
-    // }
-  },
   methods: {
+    canBeCounted (type) {
+      return (type >= 2 && type <= 5) || type === 8 || type === 9 // 可统计的数据端点类型
+    },
+    initPeriods () {
+      let res = []
+      let periodArr = [1, 7, 15]
+      periodArr.forEach((item) => {
+        res.push({
+          label: this.locales.data.PERIODS_MAP[item],
+          value: item
+        })
+      })
+      this.periods = res
+      this.period = res[0].value
+    },
+
     /**
      * 获取快照数据
      */
     getSnapshot () {
+      this.refreshing = true
       api.snapshot.getSnapshot(this.$route.params.product_id, this.selectedDeviceData.id, this.querySnapshotCondition).then((res) => {
-        if (res.status === 200) {
+        this.refreshing = false
+        if (res.status === 200 && res.data.list && res.data.list.length) {
           // 获取全部数组数据
           this.allSnapshots = res.data.list
-          // res.data.list.map((li) => {
-          //   li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '')
-          //   this.snapshotTableli.push(li)
-          // })
           this.snapshotTable = res.data.list
           this.snapshotTable.map((li) => {
             li.snapshot_date = li.snapshot_date.replace(/T/ig, ' ').replace(/Z/ig, '').replace(/-/ig, '/').split('.')[0]
           })
-          // this.snapshotTable = res.data.list
           this.snapshots = res.data.list.sort((a, b) => {
             return new Date(b.snapshot_date) - new Date(a.snapshot_date)
           })
-          // this.buildTable()
+        } else {
+          this.snapshots = []
+          this.total = 0
         }
       }).catch((res) => {
+        this.refreshing = false
+        this.snapshots = []
+        this.total = 0
         this.handleError(res)
       })
     },
-    // 获取数据端点列表
-    // getDatapoints () {
-    //   this.loadingData = true
-    //   api.product.getDatapoints(this.$route.params.id).then((res) => {
-    //     if (res.status === 200) {
-    //       this.datapoints = res.data
-    //       this.loadingData = false
-    //     }
-    //   }).catch((res) => {
-    //     this.handleError(res)
-    //     this.loadingData = false
-    //   })
-    // },
-    // 生成表格
-    // buildTable () {
-    //   this.snapshotHeader = [
-    //     {
-    //       key: 'snapshot_date', // 与tables的key对应
-    //       title: '时间'
-    //     }
-    //   ]
-    //   this.selectedDatapoints.map((item) => {
-    //     var obj = {
-    //       key: item.index,
-    //       title: item.index + '-' + item.description
-    //     }
-    //     // console.log(222)
-    //     // console.log(item)
-    //     this.snapshotHeader.push(obj)
-    //   })
-    //   // this.tdnames.map((key) => {
-    //   //   var table = {
-    //   //     create_time: '',
-    //   //     '78789' : '',
-    //   //     ....
-    //   //   }
-    //   //   abc[key] =
-    //   // })
-    //   this.snapshots.map((dptd) => {
-    //     this.snapshotTable.push(dptd)
-    //   })
-    //   // this.snapshotTable = this.snapshots
-    // },
     // 搜索
     handleSearch () {
       if (this.query.length === 0) {
@@ -523,50 +476,44 @@ export default {
     // 获取当前产品快照规则
     getRule () {
       api.snapshot.getRules(this.$route.params.product_id).then((res) => {
-        // 匹配数据端点信息
-        api.product.getDatapoints(this.$route.params.product_id).then((r) => {
-          if (r.status === 200) {
-            var dps = []
-            res.data.list[0].datapoint.map((item, index) => {
-              r.data.map((dp) => {
-                if (dp.index === item) {
-                  var obj = {
-                    index: item,
-                    selected: index < 3 || false,
-                    description: dp.description,
-                    name: dp.name
-                  }
-                  dps.push(obj)
-                }
-              })
-            })
-            this.datapoints = dps.sort((a, b) => {
-              return a.index - b.index
-            })
+        if (res.status === 200 && res.data.list && res.data.list.length) {
+          let selectedRule = _.find(res.data.list, (item) => {
+            return item.id === this.$route.params.rule_id
+          })
+          if (!selectedRule) {
+            return
           }
-        }).catch((res) => {
-          this.handleError(res)
-        })
+          this.selectedRule = selectedRule
+          // 匹配数据端点信息
+          api.product.getDatapoints(this.$route.params.product_id).then((r) => {
+            if (r.status === 200) {
+              var dps = []
+              selectedRule.datapoint && selectedRule.datapoint.length && selectedRule.datapoint.map((item, index) => {
+                r.data.map((dp) => {
+                  if (dp.index === item) {
+                    var obj = {
+                      index: item,
+                      selected: index < 3 || false,
+                      description: dp.description,
+                      name: dp.name,
+                      type: dp.type
+                    }
+                    dps.push(obj)
+                  }
+                })
+              })
+              this.datapoints = dps.sort((a, b) => {
+                return a.index - b.index
+              })
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        }
       }, (err) => {
         this.handleError(err)
       })
     },
-    // 获取selected为true的列表
-    // getlist () {
-    //   this.selectedDatapoints = []
-    //   this.dataPoints.map((item) => {
-    //     if (item.selected) {
-    //       this.selectedDatapoints.push(item)
-    //     }
-    //     // console.log(2222)
-    //     // this.buildTable()
-    //     // console.log(this.snapshotHeader)
-    //     setTimeout(() => {
-    //       this.getSnapshot()
-    //     }, 500)
-    //     this.buildTable()
-    //   })
-    // },
 
     onPageUpdate (page) {
       this.currentPage = page
@@ -580,19 +527,18 @@ export default {
       }
       // this.loadingData = true
       api.device.getList(this.$route.params.product_id, this.queryCondition).then((res) => {
-        if (res.data.list.length !== 0) {
+        if (res.status === 200 && res.data.list && res.data.list.length) {
           res.data.list.map((item) => {
             item.selected = false
           })
           res.data.list[0].selected = true
-          this.devices = []
           this.devices = res.data.list
           this.total = res.data.count
+          this.getSnapshot()
         } else {
           this.devices = []
         }
         this.loadingData = false
-        this.getSnapshot()
       }).catch((res) => {
         this.handleError(res)
         this.loadingData = false
@@ -629,9 +575,11 @@ export default {
       this.getSnapshot()
     },
     saveDataPoints () {
-      // this.getlist()
-      // console.log(this.selectedDatapoints)
       this.showEditModal = false
+    },
+    refresh () {
+      this.beRefresh = !this.beRefresh
+      this.getSnapshot()
     }
   }
 }
@@ -710,6 +658,18 @@ export default {
       top 0
     .radio-group-box
       position absolute
-      right 0
+      right 5px
       bottom 0
+      .btn .fa
+        /*height 100%*/
+        font-size 14px
+        line-height 26px
+        color #383838
+        margin-right 5px
+    .radio-group-periods
+      position absolute
+      right 100px
+      bottom 0
+  .over-flow-hidden
+    overflow hidden
 </style>

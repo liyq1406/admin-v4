@@ -309,7 +309,7 @@ export default {
   route: {
     data () {
       this.getProducts()
-      this.$http.get('/static/platform_info.json').then((res) => {
+      this.$http.get('/static/data/platform_info.json').then((res) => {
         this.tips = res.data.notify
         this.pics = res.data.articles
       })

@@ -148,10 +148,6 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
-  import RadioButtonGroup from 'components/RadioButtonGroup'
-  import TagInput from 'components/TagInput'
   import store from 'store'
   import * as config from 'consts/config'
   import api from 'api'
@@ -169,13 +165,6 @@
         products: ({ products }) => products.all,
         plugins: ({ plugins }) => plugins.all
       }
-    },
-
-    components: {
-      'x-select': Select,
-      'area-select': AreaSelect,
-      'tag-input': TagInput,
-      RadioButtonGroup
     },
 
     data () {

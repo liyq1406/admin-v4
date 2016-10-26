@@ -45,7 +45,7 @@ export default {
   methods: {
     dismiss () {
       this.show = false
-      this.$dispatch('close')
+      this.$emit('close')
     }
   }
 }

@@ -593,7 +593,7 @@ let configRouter = (router) => {
           }
         },
         // 数据快照详情
-        'data/snapshots/:product_id': {
+        'data/snapshots/:product_id/:rule_id': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/snapshot/details'))
@@ -613,6 +613,30 @@ let configRouter = (router) => {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/dev/data/snapshot/edit'))
+            }, 'admin')
+          }
+        },
+        // 统计规则
+        'data/statistics-rule': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule'))
+            }, 'admin')
+          }
+        },
+        // 添加统计规则
+        'data/statistics-rule/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/add'))
+            }, 'admin')
+          }
+        },
+        // 修改统计规则
+        'data/statistics-rule/edit/:rule_id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/data/statistics-rule/edit'))
             }, 'admin')
           }
         },
@@ -660,11 +684,72 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // 邮件模板
-        'settings/mail-templates': {
+        // 邮件设置
+        'settings/email': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/mail-templates'))
+              resolve(require('./views/dev/settings/email'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 自定义邮件模版
+            '/customize': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/email/customize'))
+                }, 'admin')
+              }
+            },
+            // 云智易邮件模版
+            '/template': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/email/template'))
+                }, 'admin')
+              }
+            }
+          }
+        },
+
+        // 短信设置
+        'settings/message': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 自定义邮件模版
+            '/config': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/message/config'))
+                }, 'admin')
+              }
+            },
+            // 自定义运营商
+            '/custom-carrier': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/message/custom-carrier'))
+                }, 'admin')
+              }
+            }
+          }
+        },
+        // 添加运营商
+        'settings/message/add': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message/add'))
+            }, 'admin')
+          }
+        },
+        // 编辑运营商
+        'settings/message/edit/:id': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/message/edit'))
             }, 'admin')
           }
         },
@@ -749,18 +834,18 @@ let configRouter = (router) => {
           }
         },
         // 热力分布
-        'products/:id/distributing': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/product/distributing'))
-            }, 'admin')
-          }
-        },
+        // 'products/:id/distributing': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/product/distributing'))
+        //     }, 'admin')
+        //   }
+        // },
         // 使用分析
         'products/:id/analysis': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/product/analysis'))
+              resolve(require('./views/operation/product/analysis/index'))
             }, 'admin')
           }
         },
@@ -862,7 +947,14 @@ let configRouter = (router) => {
             }
           }
         },
-
+        // 快照分析
+        'snapshots': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/snapshots'))
+            }, 'admin')
+          }
+        },
         // 插件管理
         'plugins': {
           component (resolve) {
@@ -1337,13 +1429,13 @@ let configRouter = (router) => {
         },
 
         // 热力分布
-        'alerts/heat': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/alert/heat-distribution'))
-            }, 'admin')
-          }
-        },
+        // 'alerts/heat': {
+        //   component (resolve) {
+        //     require.ensure([], (require) => {
+        //       resolve(require('./views/operation/alert/heat-distribution'))
+        //     }, 'admin')
+        //   }
+        // },
 
         // -------------------------用户管理-------------------------
         // 概览
@@ -1440,14 +1532,6 @@ let configRouter = (router) => {
         },
 
         // -------------------------智能维保-------------------------
-        // 延保工单列表
-        'plugins/warranty/:app_id/heat': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/heat-distribution'))
-            }, 'admin')
-          }
-        },
         // 延保工单列表
         'plugins/warranty/:app_id/work-orders/extended-warranties': {
           component (resolve) {
@@ -1576,7 +1660,6 @@ let configRouter = (router) => {
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
-    '/operation/firmware': '/operation/firmware/overview',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',
     '/dev/firmware/manage': '/dev/firmware/manage/message'
@@ -1640,14 +1723,16 @@ let configRouter = (router) => {
         }).catch((err) => {
           var params = {
             appTokenInvalidTime: +new Date(),
-            token: '123',
+            token: '',
             app_id: appId
           }
           // 重置appToken过期时间
           pluginsToken[appId] = params
           window.localStorage.pluginsToken = JSON.stringify(pluginsToken)
           transition.next()
+          console.log(err)
           router.app.handleError(err)
+
           // if (transition.from.path) { // 判断有无上一个页面 有的话返回上一个页面 没有的话跳回概览页
           //   // router.replace(transition.from.path)
           //   transition.next()

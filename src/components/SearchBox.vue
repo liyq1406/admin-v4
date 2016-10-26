@@ -133,13 +133,13 @@
             return
           }
         }
-        this.$dispatch('search')
+        this.$emit('search')
       }
     },
 
     methods: {
       enterPress () {
-        this.$dispatch('press-enter')
+        this.$emit('press-enter')
       },
       handleCancelClick () {
         this.key = ''
@@ -148,7 +148,7 @@
           let inputDom = inputDoms[0]
           inputDom.value = ''
         }
-        this.$dispatch('cancel')
+        this.$emit('cancel')
       },
 
       // handleInput () {
@@ -158,11 +158,11 @@
       // },
 
       handleFocus (key) {
-        this.$dispatch('search-activate', key)
+        this.$emit('search-activate', key)
       },
 
       handleBlur (key) {
-        this.$dispatch('search-deactivate', key)
+        this.$emit('search-deactivate', key)
       }
     }
   }

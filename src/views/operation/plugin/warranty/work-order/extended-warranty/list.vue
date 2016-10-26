@@ -65,8 +65,8 @@
   // import api from 'api'
   import * as config from 'consts/config'
   import { globalMixins } from 'src/mixins'
+  import { warrantyMixins } from '../../mixins'
   import Select from 'components/Select'
-  import AreaSelect from 'components/AreaSelect'
   import SearchBox from 'components/SearchBox'
   import Table from 'components/Table'
   import DateTimeRangePicker from 'components/DateTimeRangePicker'
@@ -77,7 +77,7 @@
   export default {
     name: 'OrderList',
 
-    mixins: [globalMixins],
+    mixins: [globalMixins, warrantyMixins],
 
     store,
 
@@ -89,7 +89,6 @@
 
     components: {
       'x-select': Select,
-      'area-select': AreaSelect,
       'search-box': SearchBox,
       'x-table': Table,
       DateTimeRangePicker,
@@ -98,6 +97,7 @@
 
     data () {
       return {
+        token: JSON.parse(window.localStorage.pluginsToken)[this.$route.params.app_id].token,
         product: {},
         name: '',
         status: {
@@ -281,6 +281,12 @@
         this.$route.router.go(this.$route.path + '/' + table.prototype.id)
       },
       getWarrantyList (querying) {
+        // token 不存在，无权限访问
+        if (!this.token) {
+          this.showNoTokenError()
+          return
+        }
+
         if (typeof querying !== 'undefined') {
           this.currentPage = 1
         }

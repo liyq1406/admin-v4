@@ -25,7 +25,13 @@
             </div>
           </div>
           <div class="col-8">
-            <annulus :data="annulusInfo" title="产品配额"></annulus>
+            <div class="annuls-chart">
+              <chart :options="quotaOptions" :loading="firstRequest"></chart>
+              <div class="quota" v-show="!rendering">
+                <div class="quota-tit">产品配额</div>
+                <div class="quota-sum">{{ currentProduct.quota }}</div>
+              </div>
+            </div>
             <div class="buy-access hidden">
               <button class="btn btn-primary" @click="onBuyButtonClick">购买授权</button>
             </div>
@@ -44,7 +50,8 @@
         <!-- <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button> -->
       </div>
       <div class="panel-bd mt15">
-        <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
+        <device-list></device-list>
+        <!-- <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @tbody-sn="onShowDeviceEditModal">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -68,7 +75,7 @@
             </div>
           </div>
           <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
-        </x-table>
+        </x-table> -->
       </div>
     </div>
 
@@ -85,7 +92,7 @@
     </modal>
 
     <!-- 编辑设备浮层 -->
-    <modal :show.sync="showDeviceEditModal">
+    <!-- <modal :show.sync="showDeviceEditModal">
       <h3 slot="header">编辑设备</h3>
       <div slot="body" class="form">
         <validator name="validation">
@@ -108,7 +115,7 @@
             </div>
           </form>
         </validator>
-      </div>
+      </div> -->
     </modal>
     <!-- <batch-export-qr :show.sync="showExportQRCode"></batch-export-qr> -->
   </div>
@@ -122,10 +129,11 @@ import { removeProduct, updateProduct } from 'store/actions/products'
 import * as config from 'consts/config'
 import InfoList from 'components/InfoList'
 import InfoCard from 'components/InfoCard'
-import Annulus from 'components/g2-charts/Annulus'
+import Chart from 'components/Chart/index'
 import Table from 'components/Table'
 import SearchBox from 'components/SearchBox'
 import Modal from 'components/Modal'
+import DeviceList from './components/DeviceList'
 import Select from 'components/Select'
 import store from 'store'
 import _ from 'lodash'
@@ -151,9 +159,10 @@ export default {
     'x-select': Select,
     InfoCard,
     InfoList,
-    Annulus,
     Modal,
-    SearchBox
+    SearchBox,
+    Chart,
+    DeviceList
   },
 
   data () {
@@ -251,11 +260,46 @@ export default {
 
       return [{
         name: '授权设备',
-        val: used
+        value: used
       }, {
         name: '剩余配额',
-        val: remain
+        value: remain
       }]
+    },
+
+    // 配额图表选项
+    quotaOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter: '{b} : {c} ({d}%)'
+        },
+        series: [{
+          name: '数量',
+          type: 'pie',
+          avoidLabelOverlap: false,
+          labelLine: {
+            normal: {
+              show: false
+            }
+          },
+          radius: ['50%', '70%'],
+          // center: ['50%', '60%'],
+          label: {
+            normal: {
+              show: false
+            }
+          },
+          data: this.annulusInfo,
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          }
+        }]
+      }
     },
 
     // 分页信息
@@ -593,6 +637,28 @@ export default {
 
 <style lang="stylus" scoped>
 @import '../../../../assets/stylus/common'
+
+.annuls-chart
+  position relative
+
+.quota
+  position absolute
+  width 100px
+  top 85px
+  left 50%
+  margin-left -50px
+  text-align center
+  color #999
+
+.quota-tit
+  font-size 10px
+  margin 5px 0
+
+.quota-sum
+  font-size 20px
+  margin 5px 0
+  color black
+
 .product-info
   position relative
 

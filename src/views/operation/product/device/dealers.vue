@@ -34,9 +34,6 @@
 </template>
 
 <script>
-import SearchBox from 'components/SearchBox'
-import AreaSelect from 'components/AreaSelect'
-import Select from 'components/Select'
 import { globalMixins } from 'src/mixins'
 import store from 'store'
 import api from 'api'
@@ -47,12 +44,6 @@ export default {
   name: 'Dealers',
 
   mixins: [globalMixins],
-
-  components: {
-    'x-select': Select,
-    'area-select': AreaSelect,
-    'search-box': SearchBox
-  },
 
   store,
 

@@ -38,69 +38,60 @@
 </template>
 
 <script>
-  import SearchBox from 'components/SearchBox'
-  import AreaSelect from 'components/AreaSelect'
-  import Select from 'components/Select'
-  // import api from 'api'
+// import api from 'api'
 
-  export default {
-    components: {
-      'x-select': Select,
-      'area-select': AreaSelect,
-      'search-box': SearchBox
-    },
-
-    data () {
-      return {
-        key: '',
-        status: {
+export default {
+  data () {
+    return {
+      key: '',
+      status: {
+        label: '全部',
+        value: 0
+      },
+      statusOptions: [
+        {
           label: '全部',
           value: 0
-        },
-        statusOptions: [
-          {
-            label: '全部',
-            value: 0
-          }, {
-            label: '未到期',
-            value: 1
-          }, {
-            label: '已到期',
-            value: 2}
-        ],
-        loadingData: false,
-        workOrders: [
-          // {
-          //   _id: '45a6dsa5sd46a',
-          //   create_time: '2016-1-1 19:21:32',
-          //   handle_time: '2016-1-1 19:21:32',
-          //   type: 0,
-          //   status: 0
-          // },
-          // {
-          //   _id: '45a6dsa5sd46a',
-          //   create_time: '2016-1-1 19:21:32',
-          //   handle_time: '2016-1-1 19:21:32',
-          //   type: 0,
-          //   status: 0
-          // }
-        ]
-      }
-    },
-
-    ready () {
-      // this.getIssues()
-    },
-
-    methods: {
-      typeText (index) {
-        return (['延保工单', '维修工单'])[index]
-      },
-
-      statusText (index) {
-        return (['待处理', '已维修', '已延保'])[index]
-      }
-
+        }, {
+          label: '未到期',
+          value: 1
+        }, {
+          label: '已到期',
+          value: 2}
+      ],
+      loadingData: false,
+      workOrders: [
+        // {
+        //   _id: '45a6dsa5sd46a',
+        //   create_time: '2016-1-1 19:21:32',
+        //   handle_time: '2016-1-1 19:21:32',
+        //   type: 0,
+        //   status: 0
+        // },
+        // {
+        //   _id: '45a6dsa5sd46a',
+        //   create_time: '2016-1-1 19:21:32',
+        //   handle_time: '2016-1-1 19:21:32',
+        //   type: 0,
+        //   status: 0
+        // }
+      ]
     }
+  },
+
+  ready () {
+    // this.getIssues()
+  },
+
+  methods: {
+    typeText (index) {
+      return (['延保工单', '维修工单'])[index]
+    },
+
+    statusText (index) {
+      return (['待处理', '已维修', '已延保'])[index]
+    }
+
   }
+}
 </script>

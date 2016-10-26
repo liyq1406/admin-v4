@@ -91,7 +91,7 @@ export default {
       this.yearShow = true
       this.value = this.timestamp()
       this.microtime = this.value.getTime()
-      this.$dispatch('timechange', this.microtime)
+      this.$emit('timechange', this.microtime)
     },
     timestamp () {
       return new Date(this.year, this.month - 1, this.date, this.hour, this.min, 0)

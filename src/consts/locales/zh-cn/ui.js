@@ -50,6 +50,7 @@ export default {
           subs: {
             tables: '数据表',
             snapshots: '数据快照',
+            statistics_rule: '统计规则',
             forward: '数据转发'
           }
         },
@@ -84,7 +85,8 @@ export default {
           label: '设置',
           subs: {
             users: '用户设置',
-            mail_templates: '邮件模板'
+            email: '邮件设置',
+            message: '短信设置'
           }
         }
       }
@@ -196,6 +198,9 @@ export default {
             tables: '数据表',
             snapshot: '设备快照'
           }
+        },
+        snapshots: {
+          label: '快照分析'
         },
         users: {
           label: '用户管理',

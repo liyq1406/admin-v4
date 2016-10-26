@@ -57,7 +57,7 @@
 
     methods: {
       selectTime () {
-        this.$dispatch('select-time')
+        this.$emit('select-time')
       },
 
       timeValue (n) {
