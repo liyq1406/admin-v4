@@ -43,7 +43,7 @@
               </div>
               <div class="form-actions col-6">
                 <div class="line-height-30 fr">
-                  <button :disabled="!verificateShow" :class="{'disabled': !verificateShow || customizeModel.success}" class="btn btn-primary w100" @click.prevent.stop="verificateUrl">验证</button>
+                  <button :disabled="!verificateShow || customizeModel.success || customizeModel.checking" :class="{'disabled': !verificateShow || customizeModel.success || customizeModel.checking}" class="btn btn-primary w100" @click.prevent.stop="verificateUrl">{{checkLabel}}</button>
                 </div>
               </div>
             </div>
@@ -132,6 +132,7 @@
 <script>
 import {get} from 'src/http'
 import { globalMixins } from 'src/mixins'
+import JSSHA from 'jssha'
 
 export default {
   name: 'customize-email',
@@ -181,6 +182,15 @@ export default {
         this.customizeModel.success = false
       }
       return res
+    },
+    checkLabel () {
+      if (this.customizeModel.success) {
+        return '验证成功'
+      } else if (this.customizeModel.checking) {
+        return '正在验证..'
+      } else {
+        return '验证'
+      }
     }
   },
   ready () {},
@@ -203,19 +213,28 @@ export default {
       this.submitting = true
     },
     verificateUrl () {
-      this.customizeModel.checking = true
-      let url = this.url
-      let params = {
-        timestamp: +new Date()
+      if (this.customizeModel.checking) {
+        return
       }
-      params.signature = this.corp.id + this.customizeModel.token + params.timestamp
-      get(url, params).then((res) => {
+      this.customizeModel.checking = true
+      let url = this.customizeModel.url
+      let timestamp = +new Date()
+
+      let signature = this.corp.id + this.customizeModel.token + timestamp
+      let sha1 = new JSSHA('SHA-1', 'TEXT')
+      sha1.update(signature)
+      signature = sha1.getHash('HEX')
+      get(url + '?timestamp=' + timestamp + '&signature=' + signature).then((res) => {
         if (res.status === 200) {
           this.customizeModel.success = true
         }
         this.customizeModel.checking = false
       }).catch((res) => {
         // 验证失败
+        this.showNotice({
+          type: 'error',
+          content: '验证失败'
+        })
         this.customizeModel.checking = false
         this.handleError(res)
       })
