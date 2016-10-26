@@ -186,7 +186,13 @@ export default {
               item.productId = product.id
               return item
             })
-            this.rules = this.rules.concat(rules)
+            let rulesTemp = this.rules.concat(rules)
+            rulesTemp.sort((a, b) => {
+              a = +new Date(a.create_time)
+              b = +new Date(b.create_time)
+              return b - a
+            })
+            this.rules = rulesTemp
           }
         }).catch((res) => {
           this.handleError(res)
