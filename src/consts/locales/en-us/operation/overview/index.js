@@ -18,7 +18,7 @@ export default {
     tooltip: '当前在线的设备数量' // 当前在线的设备数量
   },
   users: {
-    count: '设备总数', // 设备总数
+    count: '用户总数', // 用户总数
     tooltip: '企业的用户数量' // 企业的用户数量
   },
   product_trend: {
