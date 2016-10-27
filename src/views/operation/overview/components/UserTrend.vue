@@ -1,7 +1,7 @@
 <template>
   <div class="panel mt20 mb20">
     <div class="panel-hd">
-      <h2>用户趋势</h2>
+      <h2>{{ $t('operation.overview.user_trend.title') }}</h2>
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
@@ -14,10 +14,10 @@
     <div class="row mt10">
       <div class="col-offset-12 col-12 row">
         <div class="col-12">
-          <statistic :total="today.total" :change="today.change" title="今日增长" tooltip="今日增长" color="green" :titletop="true"></statistic>
+          <statistic :total="today.total" :change="today.change" :title="$t('common.today_increase')" :tooltip="$t('common.today_increase')" color="green" :titletop="true"></statistic>
         </div>
         <div class="col-12">
-          <statistic :total="avg.total" :change="avg.change" :title="period+'天平均增长'" :tooltip="period+'天平均增长'" color="orange" :titletop="true"></statistic>
+          <statistic :total="avg.total" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true"></statistic>
         </div>
       </div>
     </div>

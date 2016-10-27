@@ -4,7 +4,7 @@
       <div class="actions">
         <radio-button-group :items="locales.data.PERIODS" :value.sync="period" @select="getTrend"></radio-button-group>
       </div>
-      <h2>产品活跃度</h2>
+      <h2>{{ $t('operation.overview.product_active.title') }}</h2>
     </div>
     <div class="row">
       <div class="col-14">
@@ -62,10 +62,10 @@ export default {
   computed: {
     activatedData () {
       return [{
-        name: '未激活设备',
+        name: this.$t('operation.overview.product_active.not_activated'),
         value: this.total - this.activated
       }, {
-        name: '激活设备',
+        name: this.$t('operation.overview.product_active.activated'),
         value: this.activated
       }]
     },
@@ -118,7 +118,7 @@ export default {
           data: _.map(this.activatedData, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],

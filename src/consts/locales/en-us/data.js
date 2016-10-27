@@ -22,26 +22,26 @@ export const INFORM_TYPES = ['通知与预警']
 
 // 默认时间段
 export const PERIODS = [
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 },
-  { label: '90天', value: 90 }
+  { label: '7days', value: 7 },
+  { label: '30days', value: 30 },
+  { label: '90days', value: 90 }
 ]
 
 // 包含全部时间段
 export const AllPERIODS = [
-  { label: '7天', value: 7 },
-  { label: '30天', value: 30 },
-  { label: '全部', value: 'all' }
+  { label: '7days', value: 7 },
+  { label: '30days', value: 30 },
+  { label: 'All', value: 'all' }
 ]
 
 // 一天到三十天时间段
 export const PERIODS_MAP = {
-  1: '24h',
-  7: '7天',
-  15: '15天',
-  30: '30天',
-  60: '60天',
-  90: '90天'
+  1: '24hours',
+  7: '7days',
+  15: '15days',
+  30: '30days',
+  60: '60days',
+  90: '90days'
 }
 
 // 设备类型

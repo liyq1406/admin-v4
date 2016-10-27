@@ -42,5 +42,8 @@ export default {
   not_set: '未设置',
   wechat: '微信',
   any: '不限',
-  all: '全部'
+  all: '全部',
+  avg_increase: '{period}天平均增长', // 30天平均增长
+  today_increase: '今日增长', // 今日增长
+  count: '数量' // 数量
 }
