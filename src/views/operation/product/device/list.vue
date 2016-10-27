@@ -1,22 +1,22 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>设备管理</h2>
+      <h2>{{ $t('operation.product.device.manager.title') }}</h2>
     </div>
 
     <!-- Start: 产品信息统计 -->
     <div class="row statistic-group mb30">
       <div class="col-6">
-        <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" align="left"></statistic>
+        <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="$t('operation.product.device.manager.sum.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" align="left"></statistic>
+        <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="$t('operation.product.device.manager.activated.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" align="left"></statistic>
+        <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="$t('operation.product.device.manager.online.count')" align="left"></statistic>
       </div>
       <div class="col-6">
-        <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" align="left"></statistic>
+        <statistic :total="statistic.users.total" :change="statistic.users.change" :title="$t('operation.product.device.manager.users.count')" align="left"></statistic>
       </div>
     </div>
     <!-- End: 产品信息统计 -->
@@ -29,7 +29,7 @@
             <input type="file" v-el:mac-file="v-el:mac-file" name="macFile" @change.prevent="batchImport"/><i class="fa fa-reply-all"></i>{{ importing ? $t("common.handling") : $t("ui.overview.import_devices") }}
           </label>
         </div> -->
-        <h2>设备列表</h2>
+        <h2>{{ $t('operation.product.device.manager.list') }}</h2>
       </div>
       <div class="panel-bd">
         <div class="data-table with-loading">
@@ -114,7 +114,7 @@ export default {
       sortOrders: sortOrders,
       searching: false,
       visibility: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 'all'
       },
       visibilityOptions: locales[Vue.config.lang].data.DEVICE_VISIBILITY_OPTIONS,
@@ -125,9 +125,9 @@ export default {
       // querying: false,
       loadingData: false,
       queryTypeOptions: [
-        { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'id' },
-        { label: '设备名称', value: 'name' }
+        { label: this.$t('operation.product.device.manager.mac'), value: 'mac' },
+        { label: this.$t('operation.product.device.manager.device_id'), value: 'id' },
+        { label: this.$t('operation.product.device.manager.device_name'), value: 'name' }
       ],
       queryType: {
         label: 'MAC',
@@ -136,25 +136,25 @@ export default {
       headers: [
         {
           key: 'mac',
-          title: 'MAC'
+          title: this.$t('operation.product.device.manager.mac')
         },
         {
           key: 'id',
-          title: '设备ID'
+          title: this.$t('operation.product.device.manager.device_id')
         },
         {
           key: 'is_active',
-          title: '是否激活',
-          tooltip: '设备已联网激活'
+          title: this.$t('operation.product.device.manager.is_active.label'),
+          tooltip: this.$t('operation.product.device.manager.is_active.tooltip')
         },
         {
           key: 'active_date',
-          title: '激活时间',
+          title: this.$t('operation.product.device.manager.active_date'),
           sortType: -1
         },
         {
           key: 'is_online',
-          title: '在线状态',
+          title: this.$t('operation.product.device.manager.is_online'),
           sortType: -1
         }
       ],
@@ -213,9 +213,9 @@ export default {
         var device = {
           id: item.id,
           mac: '<a class="hl-red">' + item.mac + '</a>',
-          is_active: item.is_active ? '是' : '否',
+          is_active: item.is_active ? this.$t('common.yes') : this.$t('common.no'),
           active_date: formatDate(item.active_date),
-          is_online: item.is_online ? '<span class="hl-green">在线</span>' : '<span class="hl-gray">下线</span>',
+          is_online: item.is_online ? '<span class="hl-green">' + this.$t('common.online') + '</span>' : '<span class="hl-gray">' + this.$t('common.offline') + '</span>',
           prototype: item
         }
         result.push(device)
@@ -306,7 +306,7 @@ export default {
         if (this.query - 0 > 2100000000) {
           this.showNotice({
             type: 'error',
-            content: '设备ID不可超过2100000000'
+            content: this.$t('operation.product.device.manager.query_device_id_error')
           })
           return
         }

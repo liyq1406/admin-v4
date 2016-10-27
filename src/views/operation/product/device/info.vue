@@ -12,7 +12,7 @@
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
             </div>
           </div>
-          <h3>设备状态数据</h3>
+          <h3>{{ $t('operation.product.device.info.title') }}</h3>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>

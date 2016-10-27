@@ -29,5 +29,11 @@ export default {
     title: '产品活跃度',
     not_active_device: '未激活设备',
     active_device: '激活设备'
+  },
+  distribution: {
+    title: '产品分布',
+    region: '地域',
+    device_count: '设备数量',
+    percent: '占比'
   }
 }
