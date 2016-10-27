@@ -21,7 +21,9 @@
                   <img :src="'static/images/'+plugin.alias+'.png'" alt="">
                 </div>
                 <div class="info">
-                  <h3>{{ plugin.name }}</h3>
+                  <h3>{{ plugin.name }}
+                    <span>ID: {{ plugin.id || '--' }}</span>
+                  </h3>
                   <p>{{ plugin.description }} <a class="pluginlink hl-red" v-if="plugin.enable === true && plugin.platform_status > 1" v-link="{path:'/operation/plugins/' + plugin.alias + '/' + plugin.id}">点此进入</a></p>
                 </div>
                 <span class="status">
@@ -215,7 +217,10 @@
         margin 0 0 10px
         font-weight normal
         font-size 16px
-
+        span
+          margin-left 10px
+          font-size 13px
+          color gray-light
       p
         margin 0
         color gray
