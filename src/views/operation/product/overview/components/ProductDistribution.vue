@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd panel-hd-full bordered">
-      <h2>产品分布</h2>
+      <h2>{{ $t('operation.product.overview.distribution.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
@@ -52,15 +52,15 @@ export default {
       columns: [
         {
           key: 'region',
-          title: '地域'
+          title: this.$t('operation.product.overview.distribution.region')
         },
         {
           key: 'count',
-          title: '设备数量'
+          title: this.$t('operation.product.overview.distribution.device_count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('operation.product.overview.distribution.percent'),
           sortType: -1
         }
       ]

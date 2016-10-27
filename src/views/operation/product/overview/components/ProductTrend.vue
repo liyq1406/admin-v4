@@ -1,7 +1,7 @@
 <template>
   <div class="panel mt20 mb20">
     <div class="panel-hd">
-      <h2>产品趋势</h2>
+      <h2>{{ $t('operation.product.overview.trend.title') }}</h2>
     </div>
     <div class="tab-s2 tab-s2-full mt10 mb5">
       <div class="actions">
@@ -14,10 +14,10 @@
     <div class="row mt10">
       <div class="col-offset-12 col-12 row">
         <div class="col-12">
-          <statistic :total="today.count" :change="today.change" title="今日增长" tooltip="今日增长" color="green" :titletop="true">
+          <statistic :total="today.count" :change="today.change" :title="$t('operation.product.overview.trend.today_add')" :tooltip="$t('operation.product.overview.trend.today_add')" color="green" :titletop="true">
         </div>
         <div class="col-12">
-          <statistic :total="avg.count" :change="avg.change" :title="avgTitle" :tooltip="avgTooltip" color="orange" :titletop="true">
+          <statistic :total="avg.count" :change="avg.change" :title="$t('common.avg_increase', {period: period})" :tooltip="$t('common.avg_increase', {period: period})" color="orange" :titletop="true">
         </div>
       </div>
     </div>
@@ -83,14 +83,6 @@ export default {
   },
 
   computed: {
-    avgTitle () {
-      return this.period + '天平均增长'
-    },
-
-    avgTooltip () {
-      return this.period + '天平均增长'
-    },
-
     avg () {
       return {
         count: parseInt((this.latest * 2 - this.doubled) / this.period), // (后段 - 前段) / 时间段
@@ -183,12 +175,12 @@ export default {
         // 日期数据补全，缺失的日期数据全部补0
         let activatedData = patchLostDates(res.data, range.start, this.period * 2, ['activated', 'total_activated'])
         let obj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
         let sumObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }

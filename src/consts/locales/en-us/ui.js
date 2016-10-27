@@ -530,7 +530,8 @@ export default {
       min: '最小值',
       max: '最大值',
       symbol: '单位符号',
-      description: '描述'
+      description: '描述',
+      mode: '端点类型'
     }
   },
   // 安卓版本信息配置

@@ -12,14 +12,14 @@
               <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
             </div>
           </div>
-          <h3>设备状态数据</h3>
+          <h3>{{ $t('operation.product.device.info.title') }}</h3>
         </div>
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
               <th>{{ $t('ui.datapoint.fields.index') }}</th>
               <th>{{ $t('ui.datapoint.fields.name') }}</th>
-              <th>端点类型</th>
+              <th>{{ $t('ui.datapoint.fields.mode') }}</th>
               <th>{{ $t('ui.datapoint.fields.description') }}</th>
               <th>{{ $t('ui.device.current_value') }}</th>
             </tr>
@@ -106,39 +106,39 @@ export default {
       var result = [
         {
           value: 1,
-          label: '布尔类型'
+          label: this.$t('operation.product.device.info.dp_types.type_bool')
         },
         {
           value: 2,
-          label: '单字节(无符号)'
+          label: this.$t('operation.product.device.info.dp_types.type_uint8')
         },
         {
           value: 3,
-          label: '16位短整型（有符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_int16')
         },
         {
           value: 4,
-          label: '32位整型（有符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_int32')
         },
         {
           value: 5,
-          label: '浮点'
+          label: this.$t('operation.product.device.info.dp_types.type_float')
         },
         {
           value: 6,
-          label: '字符串'
+          label: this.$t('operation.product.device.info.dp_types.type_str')
         },
         {
           value: 7,
-          label: '字节数组'
+          label: this.$t('operation.product.device.info.dp_types.type_char_arr')
         },
         {
           value: 8,
-          label: '16位短整型（无符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_uint16')
         },
         {
           value: 9,
-          label: '32位整型（无符号）'
+          label: this.$t('operation.product.device.info.dp_types.type_uint32')
         }
       ]
       return result
