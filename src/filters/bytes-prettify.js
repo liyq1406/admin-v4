@@ -12,7 +12,7 @@ var bytesPrettify = (n) => {
     result = '-'
   } else {
     let index = 0
-    let units = ['bytes', 'kb', 'mb', 'gb']
+    let units = ['Bytes', 'KB', 'MB', 'GB']
     while (n >= 1024) {
       index++
       n = n / 1024
