@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>概览</h2>
+      <h2>{{ $t('operation.product.overview.main_title') }}</h2>
     </div>
     <panel>
       <div class="product-card">
@@ -13,19 +13,19 @@
           <!-- Start: 产品信息统计 -->
           <div class="row">
             <div class="col-6">
-              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" title="设备总数" tooltip="当前产品的设备总量" color="gray" align="left" :titletop="true">
+              <statistic :total="statistic.devices.sum.total" :change="statistic.devices.sum.change" :title="$t('operation.product.overview.total.count')" :tooltip="$t('operation.product.overview.total.tooltip')" color="gray" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" title="激活设备数" tooltip="已联网激活的设备数量" color="green" align="left" :titletop="true">
+              <statistic :total="statistic.devices.activated.total" :change="statistic.devices.activated.change" :title="$t('operation.product.overview.activated.count')" :tooltip="$t('operation.product.overview.activated.tooltip')" color="green" align="left" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" title="在线设备数" tooltip="当前在线的设备数量" color="blue" :titletop="true">
+              <statistic :total="statistic.devices.online.total" :change="statistic.devices.online.change" :title="$t('operation.product.overview.online.count')" :tooltip="$t('operation.product.overview.online.tooltip')" color="blue" :titletop="true">
               </statistic>
             </div>
             <div class="col-6">
-              <statistic :total="statistic.users.total" :change="statistic.users.change" title="用户总数" tooltip="当前产品的用户数量" color="orange" :titletop="true">
+              <statistic :total="statistic.users.total" :change="statistic.users.change" :title="$t('operation.product.overview.users.count')" :tooltip="$t('operation.product.overview.users.tooltip')" color="orange" :titletop="true">
               </statistic>
             </div>
           </div>
@@ -81,10 +81,6 @@ export default {
 
   data () {
     return {
-      trendTabs: {
-        curr: 0,
-        labels: ['激活设备', '累计激活']
-      },
       // 统计
       statistic: {
         // 用户总数

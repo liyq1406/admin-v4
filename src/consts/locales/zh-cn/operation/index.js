@@ -4,7 +4,9 @@
  */
 
 import overview from './overview'
+import product from './product'
 
 export default {
-  overview
+  overview,
+  product
 }
