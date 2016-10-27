@@ -10,7 +10,7 @@
             <a class="btn btn-primary" v-link="{path: '/dev/data/statistics-rule/add'}"><i class="fa fa-plus"></i>添加统计规则</a>
           </div>
         </div>
-        <x-table :headers="headers" :tables="tables" @tbody-name="editRule">
+        <x-table :headers="headers" :tables="tables" @tbody-id="editRule">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
@@ -65,6 +65,10 @@ export default {
       total: 0,
       statisticsRules: [],
       headers: [
+        {
+          key: 'id',
+          title: '规则ID'
+        },
         {
           key: 'name',
           title: '规则名称'
@@ -132,14 +136,15 @@ export default {
           status = '<span class="hl-gray">停用</span>'
         }
         res.push({
-          name: '<a class="hl-red">' + (item.name || ' - ') + '</a>',
+          id: '<a class="hl-red">' + (item.id || ' - ') + '</a>',
+          name: item.name,
           snapshot_name: item.snapshot_name,
           description: item.describe,
           create_time: formatDate(item.create_time),
           autor: item.creator,
           status: status,
-          id: item.id,
-          timeOrigin: item.create_time
+          timeOrigin: item.create_time,
+          idOrigin: item.id
         })
       })
 
@@ -196,7 +201,7 @@ export default {
       })
     },
     editRule (rule) {
-      this.$route.router.go({path: 'statistics-rule/edit/' + rule.id})
+      this.$route.router.go({path: 'statistics-rule/edit/' + rule.idOrigin})
     }
   }
 }
