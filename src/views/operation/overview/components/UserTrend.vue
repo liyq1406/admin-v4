@@ -219,17 +219,17 @@ export default {
         // 日期数据补全，缺失的日期数据全部补0
         let userData = patchLostDates(res.data, range.start, this.period, ['add', 'active', 'total'])
         let addObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
         let activeObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
         let totalObj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }
