@@ -56,6 +56,17 @@ export default {
     }
   },
   info: { // 设备状态信息
-    title: '设备状态数据'
+    title: '设备状态数据',
+    dp_types: {
+      type_bool: '布尔类型',
+      type_uint8: '单字节(无符号)',
+      type_int16: '16位短整型（有符号）',
+      type_int32: '32位整型（有符号）',
+      type_float: '浮点',
+      type_str: '字符串',
+      type_char_arr: '字节数组',
+      type_uint16: '16位短整型（无符号）',
+      type_uint32: '32位整型（无符号）'
+    }
   }
 }
