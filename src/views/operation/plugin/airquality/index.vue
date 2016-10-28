@@ -3,9 +3,10 @@
     <div class="main-title">
       <h2>环境数据</h2>
     </div>
-    <div class="panel">
+    <chart :options="mapOptions" :loading="loadingData" type="bmap" height="450px"></chart>
+    <div class="panel mt20">
       <div class="panel-bd">
-        <x-table :headers="headers" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
+        <x-table :headers="columns" :tables="tables" :loading="loadingData" :page="page" @theader-update-time="sortBySomeKey" @page-count-update="pageCountUpdate" @current-page-change="currentPageChange">
           <div class="filter-bar" slot="filter-bar">
             <div class="filter-group">
               <div class="filter-group-item">
@@ -38,7 +39,10 @@ import Table from 'components/Table'
 // import Select from 'components/Select'
 import DateTimeRangePicker from 'components/DateTimeRangePicker'
 import AreaSelect from 'components/AreaSelect'
+import Chart from 'components/Chart/index'
+import 'echarts/extension/bmap/bmap'
 import formatDate from 'filters/format-date'
+import _ from 'lodash'
 
 import api from 'api'
 
@@ -51,6 +55,7 @@ export default {
     // 'x-select': Select,
     'x-table': Table,
     DateTimeRangePicker,
+    Chart,
     AreaSelect
   },
 
@@ -62,6 +67,7 @@ export default {
 
   data () {
     return {
+      geoCoordMap: {},
       // 总数
       total: 0,
       // 每页数量
@@ -70,9 +76,11 @@ export default {
       currentPage: 1,
       // 正在加载数据
       loadingData: false,
-      selectedOption: { label: '全部', value: 'all' },
+      cityData: [],
+      loadingCityData: false,
+      selectedOption: { label: this.$t('common.all'), value: 'all' },
       options: [
-        { label: '全部', value: 'all' },
+        { label: this.$t('common.all'), value: 'all' },
         { label: 'AQI', value: 'aqi' },
         { label: 'co', value: 'co' },
         { label: 'co', value: 'no2' }
@@ -85,7 +93,7 @@ export default {
         startDate: new Date((+new Date()) - 7 * 1000 * 60 * 60 * 24),
         endDate: new Date()
       },
-      headers: [
+      columns: [
         {
           key: 'update_time',
           title: '时间',
@@ -154,6 +162,175 @@ export default {
   },
 
   computed: {
+    mapOptions () {
+      return {
+        tooltip: {
+          trigger: 'item',
+          formatter (params) {
+            return `${params.seriesName}<br >${params.name} : ${params.value[2]}`
+          }
+        },
+        bmap: {
+          center: [104.114129, 37.550339],
+          zoom: 5,
+          roam: true,
+          mapStyle: {
+            styleJson: [{
+              'featureType': 'water',
+              'elementType': 'all',
+              'stylers': {
+                'color': '#AEE1F5'
+              }
+            }, {
+              'featureType': 'land',
+              'elementType': 'all',
+              'stylers': {
+                'color': '#f3f3f3'
+              }
+            }, {
+              'featureType': 'railway',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'highway',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'highway',
+              'elementType': 'labels',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'arterial',
+              'elementType': 'geometry',
+              'stylers': {
+                'color': '#fefefe'
+              }
+            }, {
+              'featureType': 'arterial',
+              'elementType': 'geometry.fill',
+              'stylers': {
+                'color': '#fefefe'
+              }
+            }, {
+              'featureType': 'poi',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'green',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'subway',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'manmade',
+              'elementType': 'all',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'local',
+              'elementType': 'all',
+              'stylers': {
+                'color': '#d1d1d1'
+              }
+            }, {
+              'featureType': 'arterial',
+              'elementType': 'labels',
+              'stylers': {
+                'visibility': 'off'
+              }
+            }, {
+              'featureType': 'boundary',
+              'elementType': 'all',
+              'stylers': {
+                'color': '#fefefe'
+              }
+            }, {
+              'featureType': 'building',
+              'elementType': 'all',
+              'stylers': {
+                'color': '#d1d1d1'
+              }
+            }, {
+              'featureType': 'label',
+              'elementType': 'labels.text.fill',
+              'stylers': {
+                'color': '#999999'
+              }
+            }]
+          }
+        },
+        series: [{
+          name: 'pm2.5',
+          type: 'scatter',
+          coordinateSystem: 'bmap',
+          data: this._convertData(this.cityData),
+          symbolSize: function (val) {
+            return Math.sqrt(val[2]) * 1.8
+          },
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: false
+            },
+            emphasis: {
+              show: false
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: this._getColor()
+            }
+          }
+        }, {
+          name: 'Top 5',
+          type: 'effectScatter',
+          coordinateSystem: 'bmap',
+          data: this._convertData(this.cityData.sort(function (a, b) {
+            return b.value - a.value
+          }).slice(0, 7)),
+          symbolSize: function (val) {
+            return Math.sqrt(val[2]) * 1.8
+          },
+          showEffectOn: 'render',
+          rippleEffect: {
+            brushType: 'stroke'
+          },
+          hoverAnimation: true,
+          label: {
+            normal: {
+              formatter: '{b}',
+              position: 'right',
+              show: true
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: this._getColor(),
+              shadowBlur: 10,
+              shadowColor: '#F37F58'
+            }
+          },
+          zlevel: 1
+        }]
+      }
+    },
+
     // 分页信息
     page () {
       return {
@@ -164,10 +341,9 @@ export default {
     },
 
     // 查询条件
-    // TODO 加了日期就获取不到数据 国辉
     queryCondition () {
       var condition = {
-        // filter: ['id', 'account', 'nickname', 'email', 'phone', 'phone/email', 'create_date', 'source', 'status', 'phone_valid', 'email_valid'],
+        filter: ['_id', 'update_time', 'aqi', 'co', 'location', 'no2', 'o3', 'pm10', 'pm25', 'so2'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {},
@@ -183,7 +359,7 @@ export default {
         }
       }
 
-      this.headers.map((item) => {
+      this.columns.map((item) => {
         if (item.sortType) {
           condition.order[item.key] = (item.sortType === 1 ? '1' : '-1')
         }
@@ -234,15 +410,116 @@ export default {
 
   route: {
     data () {
+      this.$http.get('/static/data/map/coordinates.json').then((res) => {
+        let geoCoordMap = {}
+        let cities = res.data.municipalities
+
+        _.forEach(res.data.provinces, (item) => {
+          cities = cities.concat(item.cities)
+        })
+        cities = cities.concat(res.data.other)
+
+        _.forEach(cities, (item) => {
+          let arr = item.g.split(',')
+          geoCoordMap[item.n] = [arr[0], arr[1]]
+        })
+        this.geoCoordMap = geoCoordMap
+      })
+      this.getCityData()
       this.getList()
+
+      window.setInterval(() => {
+        this.getCityData()
+        this.getList()
+      }, 60000)
     }
   },
 
   methods: {
+    /**
+     * 获取颜色
+     */
+    _getColor () {
+      return function (params) {
+        // let colors = ['#B3C24F', '#F3D55E', '#FFB15A', '#EF8050', '#DE5753', '#8C3348']
+        let colors = ['#B3C24F', '#FDCD46', '#FFB15A', '#EF8050', '#DE5753', '#C6202E']
+        let val = params.value[2]
+        let level = 0
+
+        if (val >= 35 && val < 70) {
+          level = 1
+        } else if (val >= 70 && val < 100) {
+          level = 2
+        } else if (val >= 100 && val < 150) {
+          level = 3
+        } else if (val >= 150 && val < 200) {
+          level = 4
+        } else if (val >= 200) {
+          level = 5
+        }
+
+        return colors[level]
+      }
+    },
+
+    /**
+     * 转换地图数据
+     */
+    _convertData (data) {
+      var res = []
+      for (var i = 0; i < data.length; i++) {
+        var geoCoord = this.geoCoordMap[data[i].name]
+        if (geoCoord) {
+          res.push({
+            name: data[i].name,
+            value: geoCoord.concat(data[i].value)
+          })
+        }
+      }
+      return res
+    },
+
+    /**
+     * 获取城市 pm2.5 数据
+     */
+    getCityData () {
+      // 往前推20分钟才能查出最近的一个记录
+      let date = new Date().getTime() - 20 * 60 * 1000
+      let condition = {
+        filter: ['location', 'pm25'],
+        limit: 1000,
+        // offset: (this.currentPage - 1) * this.countPerPage,
+        order: {},
+        query: {
+          'update_time': {
+            $gte: {
+              '@date': formatDate(date, 'yyyy-MM-dd hh:mm:ss.SSS', true) + 'Z'
+            }
+          }
+        }
+      }
+      this.loadingCityData = true
+      api.airquality.getAirQualitys(this.$route.params.app_id, condition).then((res) => {
+        console.log(res.data)
+        this.cityData = _.map(res.data.list, (item) => {
+          return {
+            name: item.location.name,
+            value: item.pm25 - 0
+          }
+        })
+        this.loadingCityData = false
+      }).catch((res) => {
+        this.loadingCityData = false
+        this.handleError(res)
+      })
+    },
+
+    /**
+     * 获取列表
+     */
     getList () {
       this.loadingData = true
       api.airquality.getAirQualitys(this.$route.params.app_id, this.queryCondition).then((res) => {
-        console.log(res.data)
         this.dataList = res.data.list
         this.total = res.data.count
         this.loadingData = false
@@ -292,7 +569,7 @@ export default {
       } else {
         header.sortType = 1
       }
-      this.headers.$set(index, header)
+      this.columns.$set(index, header)
       this.getList()
     }
   }
@@ -300,7 +577,6 @@ export default {
 </script>
 
 <style lang="stylus">
-  .filter-group-item
-    .label
-      line-height 28px
+.anchorBL
+  display none !important
 </style>

@@ -35,7 +35,7 @@ let apiServer = ({
     api: `${protocol}//dev-man.360tj.com:8016`,
     plugin: `${protocol}://dev-man.360tj.com:8016`
   }
-})[process.env.API_SERVER || 'test']
+})[process.env.API_SERVER || 'api2']
 
 export const API_SERVER = {
   // 默认
@@ -74,6 +74,9 @@ export const IS_DEMO = process.env.API_SERVER === 'demo'
 
 // 默认每页记录数
 export const COUNT_PER_PAGE = 10
+
+// 百度地图 key
+export const BMAP_KEY = 'iqGzDSunIlUeEK1H8rkRfptH'
 
 // 高德地图 key
 export const AMAP_KEY = '5f21a013829b628d05551513d352f3f7'
