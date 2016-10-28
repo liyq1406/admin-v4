@@ -154,7 +154,7 @@
             api.plugin.remove(this.currApp.id).then((res) => {
               if (res.status === 200) {
                 this.$emit('update-curr-app')
-                // this.removePlugin(this.currApp)
+                this.removePlugin(this.currApp)
                 // this.$route.router.go('/plugins/customize')
               }
             }).catch((res) => {

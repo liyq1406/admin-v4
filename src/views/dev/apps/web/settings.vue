@@ -112,6 +112,7 @@
             api.plugin.remove(this.currApp.id).then((res) => {
               if (res.status === 200) {
                 this.$emit('update-curr-app')
+                this.removePlugin(this.currApp)
               }
             }).catch((res) => {
               this.handleError(res)
