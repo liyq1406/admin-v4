@@ -9,6 +9,7 @@ import * as data from './data'
 import ui from './ui'
 import operation from './operation'
 import auth from './auth'
+import home from './home'
 
 export default {
   common,
@@ -16,5 +17,6 @@ export default {
   data,
   ui,
   operation,
-  auth
+  auth,
+  home
 }
