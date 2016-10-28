@@ -43,7 +43,32 @@ export default {
   wechat: '微信',
   any: '不限',
   all: '全部',
-  avg_increase: '{period}天平均增长', // 30天平均增长
-  today_increase: '今日增长', // 今日增长
-  count: '数量' // 数量
+  avg_increase: '{period}天平均增长',
+  today_increase: '今日增长',
+  count: '数量',
+  placeholder: {
+    search: '请输入查询内容'
+  },
+
+  // 表单验证
+  validation: {
+    required: '请输入{field}',
+    format: '{field}格式有误',
+    numberic: '请填写数字格式',
+    max: '{0}不能大于{1}',
+    min: '{0}不能小于{1}',
+    maxlength: '{0}不能多于{1}位',
+    minlength: '{0}不能少于{1}位',
+    length: '必须是{field}位',
+    equal: '{0}必须与{1}一致'
+  },
+
+  // 上传相关提示信息
+  upload: {
+    file_size_msg: '文件超过限定大小{max}MB，请重新上传',
+    type_tips: '不是文本文件不能上传',
+    read_err: '文件读取失败。',
+    success_msg: '设备导入成功!',
+    compatiblity: '您的浏览器过于低级，不支持 HTML5 上传'
+  }
 }

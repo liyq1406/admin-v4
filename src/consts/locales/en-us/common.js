@@ -34,7 +34,6 @@ export default {
   enable: '启用',
   disabled: '禁用',
   search: '搜索',
-  total_results: '共有<span class="hl-red">{count}</span>条结果',
   display: '显示',
   status: '状态',
   online: '上线',
@@ -43,7 +42,31 @@ export default {
   wechat: '微信',
   any: '不限',
   all: 'All',
-  avg_increase: '{period}天平均增长', // 30天平均增长
-  today_increase: '今日增长', // 今日增长
-  count: '数量' // 数量
+  avg_increase: '{period}天平均增长',
+  today_increase: '今日增长',
+  count: '数量',
+  placeholder: {
+    search: '请输入查询内容'
+  },
+
+  // 表单验证
+  validation: {
+    required: '{field} is required',
+    format: '{field} format error',
+    numberic: 'Please insert a number',
+    max: '{0} cannot be more than {1}',
+    min: '{0} cannot be less than {1}',
+    maxlength: '{0} cannot be more than {1} characters',
+    minlength: '{0} cannot be less than {1} characters',
+    equal: '{0} must be equal to {1}'
+  },
+
+  // 上传相关提示信息
+  upload: {
+    file_size_msg: '文件超过限定大小{max}MB，请重新上传',
+    type_tips: '不是文本文件不能上传',
+    read_err: '文件读取失败。',
+    success_msg: '设备导入成功!',
+    compatiblity: '您的浏览器过于低级，不支持 HTML5 上传'
+  }
 }
