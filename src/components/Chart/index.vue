@@ -81,7 +81,7 @@ export default {
   },
 
   ready () {
-    if (this.type === 'china-map') {
+    if (this.type === 'china-map' || this.type === 'bmap') {
       this.$http.get('/static/data/map/china.json').then((res) => {
         echarts.registerMap('china', res.data)
         this.init()
