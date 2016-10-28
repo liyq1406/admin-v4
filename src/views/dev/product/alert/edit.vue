@@ -13,7 +13,7 @@ import RuleForm from './components/RuleForm'
 import { globalMixins } from 'src/mixins'
 
 export default {
-  name: 'AddRule',
+  name: 'EditRule',
 
   mixins: [globalMixins],
 
