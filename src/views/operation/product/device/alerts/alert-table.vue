@@ -70,10 +70,10 @@ export default {
       selecting: true,
       alerts: [],
       visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: this.$t('operation.product.device.alert.all_level'), value: 'all' },
+        { label: this.$t('operation.product.device.alert.info'), value: this.$t('operation.product.device.alert.info') },
+        { label: this.$t('operation.product.device.alert.warning'), value: this.$t('operation.product.device.alert.warning') },
+        { label: this.$t('operation.product.device.alert.danger'), value: this.$t('operation.product.device.alert.danger') }
       ],
       visibility: {},
       queryTypeOptions: [

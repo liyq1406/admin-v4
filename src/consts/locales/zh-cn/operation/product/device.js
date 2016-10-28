@@ -96,6 +96,8 @@ export default {
     alert_level: '告警等级', // 告警等级
     state: '状态', // 状态
     warning: '轻微', // 轻微
-    danger: '严重' // 严重
+    danger: '严重', // 严重
+    all_level: '全部等级',
+    info: '通知'
   }
 }
