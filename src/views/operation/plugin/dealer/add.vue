@@ -14,7 +14,7 @@
             <div class="row">
               <div class="form col-14 max-width">
                 <div class="form-row row">
-                  <label class="form-control col-5 dealer-label">账号:</label>
+                  <label class="form-control col-5 dealer-label">帐号:</label>
                   <div class="controls col-19">
                     <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
                       <input v-model="dealer.username" type="email" name="dealer.username" minlength="2" maxlength="32" v-validate:username="{required: true}" lazy class="input-text"/>

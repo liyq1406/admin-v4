@@ -49,7 +49,7 @@
     </modal>
     <!-- 修改密码浮层 start -->
     <modal :show.sync="isShowModal" width="400px">
-      <h3 slot="header">{{ $t("ui.auth.reset") }}</h3>
+      <h3 slot="header">{{ $t("auth.reset") }}</h3>
       <div slot="body" class="form">
         <validator name="validation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmitPwd">
@@ -67,14 +67,14 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('ui.auth.fields.confirm_password') }}</label>
+              <label class="form-control col-6">{{ $t('auth.fields.confirm_password') }}</label>
               <div class="controls col-18">
                 <div class="input-text-wrap">
                   <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.newpassword}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
                 </div>
               </div>
             </div>

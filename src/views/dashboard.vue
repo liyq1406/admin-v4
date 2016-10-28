@@ -99,7 +99,7 @@
                 </div>
               </template>
               <div class="no-products ml10" v-show="corp.status===0">
-                <div class="lgrayfont">您的账号尚未认证，认证成功后即可使用运营平台</div>
+                <div class="lgrayfont">您的帐号尚未认证，认证成功后即可使用运营平台</div>
                 <div class="lgrayfont">相关问题请联系商务获得支持，<a class="hl-red" @click="open('http://www.xlink.cn/about.html')">查看联系方式</a></div>
               </div>
               <div class="no-products ml10 grayfont" v-show="corp.status!==0 && releaseProducts.length===0">

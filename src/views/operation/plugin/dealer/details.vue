@@ -28,7 +28,7 @@
             </div>
             <!-- <ul class="info-details">
               <li class="row">
-                <div class="col-5 label">账号:</div>
+                <div class="col-5 label">帐号:</div>
                 <div class="clo-19 info">{{ dealer.username }}</div>
               </li>
               <li class="row">
@@ -145,7 +145,7 @@
      <div slot="body" class="form">
        <form autocomplete="off" v-form name="editValidation" @submit.prevent="onEditSubmit" hook="editFormHook">
          <div class="form-row row">
-           <label class="form-control col-5">账号:</label>
+           <label class="form-control col-5">帐号:</label>
            <div class="controls col-19">
              <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
                <input v-model="editModal.model.username" type="text" v-form-ctrl name="username" required minlength="2" maxlength="32" lazy class="input-text"/>
@@ -294,7 +294,7 @@
           //   value: '102810821'
           // },
           id: {
-            label: '账号',
+            label: '帐号',
             value: ''
           },
           area: {
@@ -481,7 +481,7 @@
           } else {
             this.showNotice({
               type: 'error',
-              content: '账号已停用'
+              content: '帐号已停用'
             })
           }
           this.getDealer()

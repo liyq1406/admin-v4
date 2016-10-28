@@ -30,7 +30,7 @@
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <!-- <div class="panel">
       <div class="panel-hd panel-hd-full">
-        <h2>账号状态</h2>
+        <h2>帐号状态</h2>
       </div>
       <div class="panel-bd">
         <span>{{ clientsInfo.status-0===1 ? '已启用' : '已停用' }}</span>

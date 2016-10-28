@@ -235,7 +235,7 @@ export default {
           subs: {
             auth: '授权管理',
             members: '成员管理',
-            account: '账号信息',
+            account: '帐号信息',
             mail_templates: '邮件模板'
           }
         },
@@ -746,7 +746,7 @@ export default {
     }
   },
 
-  // 账号信息
+  // 帐号信息
   account: {
     personal: '个人信息',
     corp: '企业信息',
@@ -774,7 +774,7 @@ export default {
       target: '请输入年销售目标'
     },
     fields: {
-      username: '账号',
+      username: '帐号',
       password: '密码',
       name: '经销商名称',
       linkman: '联系人',
@@ -918,7 +918,7 @@ export default {
     }
   },
 
-  // 天际账号管理
+  // 天际帐号管理
   account_manage: {
     search_condi: '网点名称'
   },

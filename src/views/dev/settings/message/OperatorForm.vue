@@ -15,14 +15,14 @@
             </div>
           </div>
           <div class="form-row row">
-            <label class="form-control col-3">账号名称:</label>
+            <label class="form-control col-3">帐号名称:</label>
             <div class="controls col-15">
               <div class="input-text-wrap">
-                <input v-model="name" type="text" placeholder="请输入账号名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text"/>
+                <input v-model="name" type="text" placeholder="请输入帐号名称" v-validate:name="{required: true, minlength: 2, maxlength: 30}" name="name" class="input-text"/>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">请输入账号名称</span>
-                  <span v-if="$validation.name.modified && $validation.name.minlength">账号名称不能少于2位</span>
-                  <span v-if="$validation.name.modified && $validation.name.maxlength">账号名称不能大于等于30位</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入帐号名称</span>
+                  <span v-if="$validation.name.modified && $validation.name.minlength">帐号名称不能少于2位</span>
+                  <span v-if="$validation.name.modified && $validation.name.maxlength">帐号名称不能大于等于30位</span>
                 </div>
               </div>
             </div>
@@ -91,7 +91,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">注册账号模板:</label>
+              <label class="form-control col-3">注册帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
                   <input v-model="dayu.register_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname="{required: true, minlength: 2, maxlength: 30}" name="dayu.register_template.free_sign_name" class="input-text"/>
@@ -141,7 +141,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">更新账号模板:</label>
+              <label class="form-control col-3">更新帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
                   <input v-model="dayu.update_template.free_sign_name" type="text" placeholder="请输入短信签名" v-validate:freesignname3="{required: true, minlength: 2, maxlength: 30}" name="dayu.update_template.free_sign_name" class="input-text"/>
@@ -207,7 +207,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">注册账号模板:</label>
+              <label class="form-control col-3">注册帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
                   <input v-model="twilio.register_template" type="text" placeholder="请输入模板内容" v-validate:registertemplate="{required: true, minlength: 2, maxlength: 30}" name="twilio.register_template" class="input-text"/>
@@ -233,7 +233,7 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-3">更新账号模板:</label>
+              <label class="form-control col-3">更新帐号模板:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
                   <input v-model="twilio.update_template" type="text" placeholder="请输入模板内容" v-validate:updatetemplate="{required: true, minlength: 2, maxlength: 30}" name="twilio.update_template" class="input-text"/>

@@ -65,14 +65,14 @@ let configRouter = (router) => {
       }
     },
 
-    // 注册
-    '/register-with-verifycode': {
-      component (resolve) {
-        require.ensure([], (require) => {
-          resolve(require('./views/register-with-verifycode'))
-        }, 'register-with-verifycode')
-      }
-    },
+    // 带验证码注册（已废弃，页面保留）
+    // '/register-with-verifycode': {
+    //   component (resolve) {
+    //     require.ensure([], (require) => {
+    //       resolve(require('./views/register-with-verifycode'))
+    //     }, 'register-with-verifycode')
+    //   }
+    // },
 
     // 登录
     '/login': {

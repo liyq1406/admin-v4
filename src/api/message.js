@@ -3,7 +3,7 @@ import { API_SERVER } from 'consts/config'
 
 export default {
   /**
-   * 自定义运营账号列表获取
+   * 自定义运营帐号列表获取
    * @param  {[type]} params 参数
    * @return {[type]}        [description]
    */
@@ -13,7 +13,7 @@ export default {
     )
   },
   /**
-   * 自定义运营账号添加
+   * 自定义运营帐号添加
    * @param  {[type]} params 参数
    * @return {[type]}        [description]
    */
@@ -24,7 +24,7 @@ export default {
     )
   },
   /**
-   * 自定义运营账号单个查询
+   * 自定义运营帐号单个查询
    * @param  {[type]} params 参数
    * @return {[type]}        [description]
    */
@@ -34,7 +34,7 @@ export default {
     )
   },
   /**
-   * 自定义运营账号编辑
+   * 自定义运营帐号编辑
    * @param  {[type]} params 参数
    * @return {[type]}        [description]
    */
@@ -44,7 +44,7 @@ export default {
     )
   },
   /**
-   * 自定义运营账号删除
+   * 自定义运营帐号删除
    * @param  {[type]} params 参数
    * @return {[type]}        [description]
    */

@@ -1,18 +1,18 @@
 <template>
   <div class="auth-form register-form">
-    <div class="slogan" v-show="!registerSuccess">让企业拥有物联网的力量</div>
+    <div class="slogan" v-show="!registerSuccess">{{ $t('auth.solgan') }}</div>
     <div class="inner" v-show="!registerSuccess">
       <div class="intro">
         <div class="desc">
-          <p>云智易物联PaaS平台，专注于智慧生活场景，主要服务于智能照明/电工、智能安防、生活电器、健康穿戴、智能社区等领域的企业，提供软件和云平台一体化解决方案。</p>
+          <p>{{ $t('auth.xlink_intro') }}</p>
           <ul>
-            <li><strong>快速连接：</strong><span>最快仅需一周便可接入覆盖全球的云端服务</span></li>
-            <li><strong>简化开发：</strong><span>完善的开发工具协助企业快速开发和集成</span></li>
-            <li><strong>设备管理：</strong><span>15个子模块提供成熟的运营体系和数据管理服务</span></li>
+            <li><strong>{{ $t('auth.xlink_features.link.tit') }}</strong><span>{{ $t('auth.xlink_features.link.desc') }}</span></li>
+            <li><strong>{{ $t('auth.xlink_features.dev.tit') }}</strong><span>{{ $t('auth.xlink_features.dev.desc') }}</span></li>
+            <li><strong>{{ $t('auth.xlink_features.device.tit') }}</strong><span>{{ $t('auth.xlink_features.device.desc') }}</span></li>
           </ul>
         </div>
         <div class="customers">
-          <p>他们选择了云智易：</p>
+          <p>{{ $t('auth.customer_tit') }}</p>
           <div class="logos">
             <a href="http://www.xlink.cn/customers.html#ge" class="c-logo logo-ge" target="_blank"></a>
             <a href="http://www.xlink.cn/customers.html#fangtai" class="c-logo logo-fotile" target="_blank"></a>
@@ -26,78 +26,78 @@
       <div class="form">
         <validator name="authValidation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-            <div class="form-hints mt10 mb15">请输入您的账号信息</div>
+            <div class="form-hints mt10 mb15">{{ $t('auth.account_tips') }}</div>
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.fields.email')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.fields.email')" class="input-text-wrap">
                 <input type="email" v-model="model.email" name="model.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
-                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('common.validation.required', {field: $t('auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
               </div>
             </div>
             <div class="form-row row">
               <div class="col-12">
                 <div class="mr10">
-                  <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.password')" class="input-text-wrap">
                     <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
-                    <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                    <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 8]) }}</span>
+                    <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
                   </div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="ml10">
-                  <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
                     <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                    <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                    <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                    <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="form-hints mt30 mb15">请输入您的基本信息</div>
+            <div class="form-hints mt30 mb15">{{ $t('auth.basic_tips') }}</div>
             <div class="form-row">
-              <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
+              <div v-placeholder="$t('auth.fields.name')" class="input-text-wrap">
                 <input type="text" v-model="model.name" name="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.name.touched && $authValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
-                <span v-if="$authValidation.name.modified && $authValidation.name.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.name'), 2]) }}</span>
-                <span v-if="$authValidation.name.modified && $authValidation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.name'), 32]) }}</span>
+                <span v-if="$authValidation.name.touched && $authValidation.name.required">{{ $t('common.validation.required', {field: $t('auth.fields.name')}) }}</span>
+                <span v-if="$authValidation.name.modified && $authValidation.name.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.name'), 2]) }}</span>
+                <span v-if="$authValidation.name.modified && $authValidation.name.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.name'), 32]) }}</span>
               </div>
             </div>
             <div class="form-row row">
               <div class="col-12">
                 <div class="mr10">
-                  <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
                     <input type="text" v-model="model.phone" name="model.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.phone.touched && $authValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
-                    <span v-if="$authValidation.phone.modified && $authValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    <span v-if="$authValidation.phone.touched && $authValidation.phone.required">{{ $t('common.validation.required', {field: $t('auth.fields.phone')}) }}</span>
+                    <span v-if="$authValidation.phone.modified && $authValidation.phone.format">{{ $t('common.validation.format', {field: $t('auth.fields.phone')}) }}</span>
                   </div>
                 </div>
               </div>
               <div class="col-12">
                 <div class="ml10">
-                  <div v-placeholder="$t('ui.auth.fields.company')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.company')" class="input-text-wrap">
                     <input type="text" v-model="model.company" name="model.company" v-validate:company="{required: true, maxlength: 250}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.company.touched && $authValidation.company.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.company')}) }}</span>
-                    <span v-if="$authValidation.company.modified && $authValidation.company.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.company'), 250]) }}</span>
+                    <span v-if="$authValidation.company.touched && $authValidation.company.required">{{ $t('common.validation.required', {field: $t('auth.fields.company')}) }}</span>
+                    <span v-if="$authValidation.company.modified && $authValidation.company.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.company'), 250]) }}</span>
                   </div>
                 </div>
               </div>
             </div>
             <div class="form-row">
-              <x-select :placeholder="$t('ui.auth.type_tips')" :label="accountTypeLabel">
+              <x-select :placeholder="$t('auth.type_tips')" :label="accountTypeLabel">
                 <select v-model="model.type" name="model.type">
                   <option v-for="type in locales.data.ACCOUNT_TYPES" :value="type.value">{{ type.label }}</option>
                 </select>
@@ -105,20 +105,20 @@
             </div>
             <div class="form-row row-check">
               <label class="checkbox">
-                <input type="checkbox" v-model="isAgree"/>我同意云智易的<a href="#">使用条款</a>和<a href="#">隐私权政策</a>
+                <input type="checkbox" v-model="isAgree"/>{{{ $t('auth.check_info') }}}
               </label>
             </div>
             <div class="form-actions">
-              <button class="btn btn-primary btn-xlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("ui.auth.register_submit") }}</button>
+              <button class="btn btn-primary btn-xlg btn-pill" :disabled="submitting" :class="{'disabled':submitting}">{{ $t("auth.register_submit") }}</button>
             </div>
-            <div class="form-operations"><a v-link="{ path: '/login' }">已有帐号？</a></div>
+            <div class="form-operations"><a v-link="{ path: '/login' }">{{ $t('auth.has_account') }}</a></div>
           </form>
         </validator>
       </div>
     </div>
     <div class="auth-msg-box" v-else>
-      <x-alert :cols="16" type="success" :title="$t('ui.auth.register_success')">
-        <p>{{ $t("ui.auth.register_success_msg") }}</p>
+      <x-alert :cols="16" type="success" :title="$t('auth.register_success')">
+        <p>{{ $t("auth.register_success_msg") }}</p>
         <div class="actions"><a v-link="{ path: '/login'}" class="btn btn-primary btn-pill">{{ $t("common.ok") }}</a></div>
       </x-alert>
     </div>
@@ -187,7 +187,7 @@ export default {
       if (!this.isAgree) {
         this.showNotice({
           type: 'error',
-          content: '您必须同意云智易的使用条款和隐私权政策才能继续注册'
+          content: this.$t('auth.is_agree_tips')
         })
         return
       }

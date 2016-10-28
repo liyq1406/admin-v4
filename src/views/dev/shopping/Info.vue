@@ -5,7 +5,7 @@
         <h2><i class="num">1</i> 确认信息</h2>
       </div>
       <div class="panel-bd info">
-        <p>登陆账号：demotesthelloworld@xlink.com</p>
+        <p>登陆帐号：demotesthelloworld@xlink.com</p>
         <p>公司名称：广州云湾信息科技有限公司</p>
       </div>
     </div>

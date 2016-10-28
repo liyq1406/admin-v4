@@ -35,7 +35,7 @@
             <thead>
               <tr>
                 <th>经销商名称</th>
-                <th>账号(经销商代码)</th>
+                <th>帐号(经销商代码)</th>
                 <th>联系人</th>
                 <th>手机号</th>
                 <th>负责区域</th>
@@ -135,7 +135,7 @@
         editValidation: {},   // 修改验证
         queryTypeOptions: [
           { label: '名称', value: 'name' },
-          { label: '账号', value: 'email' },
+          { label: '帐号', value: 'email' },
           { label: '联系人', value: 'contacter' }
         ],
         belongs: [

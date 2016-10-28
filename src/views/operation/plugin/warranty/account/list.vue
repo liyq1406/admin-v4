@@ -98,7 +98,7 @@
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
-                      <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                      <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('common.validation.format', {field: $t('auth.fields.phone')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -110,7 +110,7 @@
                     </div>
                     <div class="form-tips form-tips-error">
                       <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
-                      <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                      <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
                     </div>
                   </div>
                 </div>

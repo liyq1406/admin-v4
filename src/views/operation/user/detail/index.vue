@@ -32,7 +32,7 @@
     <router-view transition="view" transition-mode="out-in" class="view"></router-view>
     <!-- <div class="panel">
       <div class="panel-hd panel-hd-full">
-        <h2>账号状态</h2>
+        <h2>帐号状态</h2>
       </div>
 
     </div> -->
@@ -119,7 +119,7 @@
       userInfo () {
         var result = {
           status: {
-            label: '账号状态',
+            label: '帐号状态',
             value: this.computedVaild(this.user.status)
           },
           create_date: {

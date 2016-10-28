@@ -2,7 +2,7 @@
  * 英文数据翻译
  */
 
-// 账号类型
+// 帐号类型
 export const ACCOUNT_TYPES = [
   { value: 1, label: 'Consumer electronics' },
   { value: 2, label: 'Smart Home' },

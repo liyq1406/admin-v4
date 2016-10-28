@@ -106,7 +106,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.phone.touched && $majorClientValidation.phone.required">联系电话为必填</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('common.validation.format', {field: $t('auth.fields.phone')}) }}</span>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.email.touched && $majorClientValidation.email.required">邮箱为必填</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
                 </div>
               </div>
             </div>

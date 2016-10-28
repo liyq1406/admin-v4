@@ -214,7 +214,7 @@
             this.loadingData = false
             this.currentPage = 1
             this.operators = res.data.carrier
-            // 遍历列表是否有已设置的账号
+            // 遍历列表是否有已设置的帐号
             this.operators.forEach((item) => {
               if (item.default === true) {
                 this.curtomAble = true

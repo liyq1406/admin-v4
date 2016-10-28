@@ -34,10 +34,10 @@
       return {
         activateSuccess: false,
         activateFail: false,
-        successTitle: this.$t('ui.auth.activate_success'),
-        successMsg: this.$t('ui.auth.activate_success_msg'),
-        failTitle: this.$t('ui.auth.activate_fail'),
-        failMsg: this.$t('ui.auth.activate_fail_msg')
+        successTitle: this.$t('auth.activate_success'),
+        successMsg: this.$t('auth.activate_success_msg'),
+        failTitle: this.$t('auth.activate_fail'),
+        failMsg: this.$t('auth.activate_fail_msg')
       }
     },
 
@@ -56,12 +56,12 @@
         switch (res.data.error.code) {
           case 4041004:
             this.activateFail = true
-            this.failMsg = '用于激活成员的邮箱不存在'
+            this.failMsg = this.$t('auth.email_not_exists')
             break
           case 4001062:
             this.activateSuccess = true
-            this.successTitle = '温馨提示'
-            this.successMsg = '该成员邮箱已经激活'
+            this.successTitle = this.$t('auth.success_tips')
+            this.successMsg = this.$t('auth.email_activated')
             break
           default:
             this.activateFail = true

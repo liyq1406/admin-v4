@@ -77,31 +77,31 @@
                     <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}"  maxlength="32" required lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.email.touched && $validation.email.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
-                    <span v-if="$validation.email.modified && $validation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                    <span v-if="$validation.email.touched && $validation.email.required">{{ $t('common.validation.required', {field: $t('auth.fields.email')}) }}</span>
+                    <span v-if="$validation.email.modified && $validation.email.format">{{ $t('common.validation.format', {field: $t('auth.fields.email')}) }}</span>
                   </div>
                 </div>
               </div>
               <div class="form-row row">
                 <label class="form-control col-6">手机号码:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ui.auth.fields.phone')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
                     <input type="text" v-model="addModel.phone" v-validate:phone="{required: true, format: 'phone'}" name="addModel.phone" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.phone.touched && $validation.phone.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
-                    <span v-if="$validation.phone.modified && $validation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    <span v-if="$validation.phone.touched && $validation.phone.required">{{ $t('common.validation.required', {field: $t('auth.fields.phone')}) }}</span>
+                    <span v-if="$validation.phone.modified && $validation.phone.format">{{ $t('common.validation.format', {field: $t('auth.fields.phone')}) }}</span>
                   </div>
                 </div>
               </div>
               <div class="form-row row">
                 <label class="form-control col-6">姓名:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ui.auth.fields.name')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.name')" class="input-text-wrap">
                     <input type="text" v-model="addModel.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}" maxlength="10" name="addModel.name" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('auth.fields.name')}) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.format">名字前后不能包含空格</span>
                   </div>
                 </div>
@@ -121,25 +121,25 @@
               <div class="form-row row">
                 <label class="form-control col-6">密码:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.password')" class="input-text-wrap">
                     <input type="password" v-model="addModel.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" name="addModel.password" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                    <span v-if="$validation.password.modified && $validation.password.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
-                    <span v-if="$validation.password.modified && $validation.password.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                    <span v-if="$validation.password.touched && $validation.password.required">{{ $t('common.validation.required', {field: $t('auth.fields.password')}) }}</span>
+                    <span v-if="$validation.password.modified && $validation.password.minlength">{{ $t('common.validation.minlength', [$t('auth.fields.password'), 8]) }}</span>
+                    <span v-if="$validation.password.modified && $validation.password.maxlength">{{ $t('common.validation.maxlength', [$t('auth.fields.password'), 16]) }}</span>
                   </div>
                 </div>
               </div>
               <div class="form-row row">
                 <label class="form-control col-6">确认密码:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">
+                  <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
                     <input type="password" v-model="confirmPassword" v-validate:confirm-password="{required: true, equal: addModel.password}"  name="confirmPassword" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                    <span v-if="$validation.confirmPassword.modified && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                    <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('auth.fields.confirm_password')}) }}</span>
+                    <span v-if="$validation.confirmPassword.modified && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('auth.fields.confirm_password'), $t('auth.fields.password')]) }}</span>
                   </div>
                 </div>
               </div>

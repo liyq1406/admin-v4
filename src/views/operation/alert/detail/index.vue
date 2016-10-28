@@ -116,7 +116,7 @@ export default {
       //     value: '广东 顺德'
       //   },
       //   userId: {
-      //     label: '用户账号',
+      //     label: '用户帐号',
       //     value: '1992019201'
       //   }
       // },
@@ -171,7 +171,7 @@ export default {
           value: this.info.location || '-'
         },
         userId: {
-          label: '用户账号',
+          label: '用户帐号',
           value: this.accounts.join(',') || '-'
         }
       }

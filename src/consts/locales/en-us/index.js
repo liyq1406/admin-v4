@@ -8,11 +8,13 @@ import errors from './errors'
 import * as data from './data'
 import ui from './ui'
 import operation from './operation'
+import auth from './auth'
 
 export default {
   common,
   errors,
   data,
   ui,
-  operation
+  operation,
+  auth
 }
