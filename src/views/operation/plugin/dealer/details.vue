@@ -150,9 +150,9 @@
              <div v-placeholder="$t('ui.dealer.placeholders.code')" class="input-text-wrap">
                <input v-model="editModal.model.username" type="text" v-form-ctrl name="username" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.username.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
-             <div v-if="editValidation.username.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
-               <!-- <span v-if="editValidation.username.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span> -->
+             <div v-if="editValidation.$submitted && editValidation.username.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span></div>
+             <div v-if="editValidation.username.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.username.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+               <!-- <span v-if="editValidation.username.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.fields.username'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.fields.username'), 32]) }}</span> -->
              </div>
            </div>
          </div>
@@ -162,8 +162,8 @@
              <div v-placeholder="$t('ui.dealer.placeholders.password')" class="input-text-wrap">
                <input v-model="editModal.model.password" type="text" v-form-ctrl name="password" required minlength="6" maxlength="16" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.password.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span></div>
-             <div v-if="editValidation.password.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span><span v-if="editValidation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.password'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.password'), 32]) }}</span></div>
+             <div v-if="editValidation.$submitted && editValidation.password.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span></div>
+             <div v-if="editValidation.password.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.password.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.password')}) }}</span><span v-if="editValidation.password.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.fields.password'), 2]) }}</span><span v-if="editValidation.username.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.fields.password'), 32]) }}</span></div>
            </div>
          </div>
          <div class="form-row row">
@@ -172,8 +172,8 @@
              <div v-placeholder="$t('ui.dealer.placeholders.name')" class="input-text-wrap">
                <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
-             <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
+             <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
+             <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span></div>
            </div>
          </div>
          <div class="form-row row">
@@ -182,8 +182,8 @@
              <div v-placeholder="$t('ui.dealer.placeholders.contact')" class="input-text-wrap">
                <input v-model="editModal.model.linkman" type="text" v-form-ctrl name="linkman" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.linkman.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
-             <div v-if="editValidation.linkman.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
+             <div v-if="editValidation.$submitted && editValidation.linkman.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
+             <div v-if="editValidation.linkman.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.linkman.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span></div>
            </div>
          </div>
          <div class="form-row row">
@@ -192,8 +192,8 @@
              <div v-placeholder="$t('ui.dealer.placeholders.phone')" class="input-text-wrap">
                <input v-model="editModal.model.phone" type="text" v-form-ctrl name="phone" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span></div>
-             <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.dealer.fields.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.dealer.fields.phone'), 32]) }}</span></div>
+             <div v-if="editValidation.$submitted && editValidation.phone.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span></div>
+             <div v-if="editValidation.phone.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.phone.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span><span v-if="editValidation.phone.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.dealer.fields.phone'), 2]) }}</span><span v-if="editValidation.phone.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.dealer.fields.phone'), 32]) }}</span></div>
            </div>
          </div>
          <div class="form-row row">
@@ -202,8 +202,8 @@
              <div v-placeholder="$t('ui.dealer.placeholders.area')" class="input-text-wrap">
                <input v-model="editModal.model.area" type="text" v-form-ctrl name="area" required minlength="2" maxlength="32" lazy class="input-text"/>
              </div>
-             <div v-if="editValidation.$submitted && editValidation.area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
-             <div v-if="editValidation.area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
+             <div v-if="editValidation.$submitted && editValidation.area.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
+             <div v-if="editValidation.area.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.area.$error.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span></div>
            </div>
          </div>
          <div class="form-row row">

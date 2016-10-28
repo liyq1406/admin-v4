@@ -140,7 +140,7 @@ export default {
 
       // 文件大小不合法
       if (file && file.size > this.size * 1024 * 1024) {
-        let err = this.$t('ui.upload.file_size_msg', {max: this.size})
+        let err = this.$t('common.upload.file_size_msg', {max: this.size})
         this.showError(err)
         return
       }

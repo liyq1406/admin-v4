@@ -32,8 +32,8 @@
                 <input type="email" v-model="model.email" name="model.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
-                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
               </div>
             </div>
             <div class="form-row row">
@@ -43,9 +43,9 @@
                     <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
-                    <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                    <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                    <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.password'), 8]) }}</span>
+                    <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
                   </div>
                 </div>
               </div>
@@ -55,8 +55,8 @@
                     <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                    <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                    <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                    <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
                   </div>
                 </div>
               </div>
@@ -67,9 +67,9 @@
                 <input type="text" v-model="model.name" name="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.name.touched && $authValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
-                <span v-if="$authValidation.name.modified && $authValidation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.name'), 2]) }}</span>
-                <span v-if="$authValidation.name.modified && $authValidation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.name'), 32]) }}</span>
+                <span v-if="$authValidation.name.touched && $authValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.name')}) }}</span>
+                <span v-if="$authValidation.name.modified && $authValidation.name.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.name'), 2]) }}</span>
+                <span v-if="$authValidation.name.modified && $authValidation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.name'), 32]) }}</span>
               </div>
             </div>
             <div class="form-row row">
@@ -79,8 +79,8 @@
                     <input type="text" v-model="model.phone" name="model.phone" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.phone.touched && $authValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
-                    <span v-if="$authValidation.phone.modified && $authValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    <span v-if="$authValidation.phone.touched && $authValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.phone')}) }}</span>
+                    <span v-if="$authValidation.phone.modified && $authValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
                   </div>
                 </div>
               </div>
@@ -90,8 +90,8 @@
                     <input type="text" v-model="model.company" name="model.company" v-validate:company="{required: true, maxlength: 250}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$authValidation.company.touched && $authValidation.company.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.company')}) }}</span>
-                    <span v-if="$authValidation.company.modified && $authValidation.company.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.company'), 250]) }}</span>
+                    <span v-if="$authValidation.company.touched && $authValidation.company.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.company')}) }}</span>
+                    <span v-if="$authValidation.company.modified && $authValidation.company.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.company'), 250]) }}</span>
                   </div>
                 </div>
               </div>

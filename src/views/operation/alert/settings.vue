@@ -82,8 +82,8 @@
               <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="addModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
-              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+              <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="addValidation.name.$error.minlength">{{ $t('common.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span><span v-if="addValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -146,8 +146,8 @@
               <div v-placeholder="$t('ui.rule.placeholders.content')" class="input-text-wrap">
                 <textarea v-model="addModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
-              <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+              <div v-if="addValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="addValidation.content.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -263,8 +263,8 @@
               <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
                 <input v-model="editModal.model.name" type="text" v-form-ctrl name="name" required minlength="2" maxlength="32" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
-              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span></div>
+              <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span><span v-if="editValidation.name.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.rule.fields.name'), 2]) }}</span><span v-if="editValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.rule.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -324,8 +324,8 @@
               <div v-placeholder="'请输入告警内容'" class="input-text-wrap">
                 <textarea v-model="editModal.model.content" type="text" v-form-ctrl name="content" required maxlength="250" lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
-              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.content.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span></div>
+              <div v-if="editValidation.content.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.content.$error.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span><span v-if="editValidation.content.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.rule.fields.content'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">

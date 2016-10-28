@@ -13,8 +13,8 @@
                 <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 250}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '标题'}) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['标题', 250]) }}</span>
+                <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: '标题'}) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', ['标题', 250]) }}</span>
               </div>
             </div>
           </div>
@@ -25,7 +25,7 @@
                 <input v-model="model.instructions" type="text" name="model.instructions" v-validate:instructions="{maxlength: 250}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['摘要介绍', 250]) }}</span>
+                <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['摘要介绍', 250]) }}</span>
               </div>
             </div>
           </div>

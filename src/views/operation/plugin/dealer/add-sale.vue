@@ -20,7 +20,7 @@
                       <input v-model="saled.name" type="text" name="saled.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -50,7 +50,7 @@
                       <input v-model="saled.address" type="text" name="saled.address" minlength="2" maxlength="32" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -61,7 +61,7 @@
                       <input v-model="saled.phone" type="text" name="saled.phone" minlength="2" maxlength="32" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -72,7 +72,7 @@
                       <input v-model="saled.sale_time" type="date" name="saled.sale_time" minlength="2" maxlength="32" v-validate:sale_time="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.username')}) }}</span>
                     </div>
                   </div> -->
                   <date-time-single-picker :show-time='false' :time="nowDate" @timechange = ""></date-time-single-picker>
@@ -97,7 +97,7 @@
                       <input type="text" v-model="dealer.name" name="dealer.name" minlength="2" maxlength="32" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span>
+                      <span v-if="$autoValidation.name.touched && $autoValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.name')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -108,7 +108,7 @@
                       <input type="text" v-model="dealer.linkman" name="dealer.linkman" minlength="6" maxlength="16" v-validate:linkman="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.linkman.touched && $autoValidation.linkman.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
+                      <span v-if="$autoValidation.linkman.touched && $autoValidation.linkman.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -119,7 +119,7 @@
                       <input type="text" v-model="dealer.phone" name="dealer.phone" minlength="6" maxlength="16" v-validate:phone="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span>
+                      <span v-if="$autoValidation.phone.touched && $autoValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.phone')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -130,7 +130,7 @@
                       <input type="text" v-model="dealer.address" name="dealer.address" minlength="6" maxlength="16" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.address')}) }}</span>
+                      <span v-if="$autoValidation.address.touched && $autoValidation.address.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.address')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -141,7 +141,7 @@
                       <input type="text" v-model="dealer.area" name="dealer.area" minlength="6" maxlength="16" v-validate:dutyarea="{required: true}" lazy  class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
+                      <span v-if="$autoValidation.dutyarea.touched && $autoValidation.dutyarea.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.area')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -161,7 +161,7 @@
                       <input type="text" v-model="dealer.sale_goal" name="dealer.sale_goal" maxlength="16" v-validate:sale_goal="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$autoValidation.sale_goal.touched && $autoValidation.sale_goal.required">{{ $t('ui.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
+                      <span v-if="$autoValidation.sale_goal.touched && $autoValidation.sale_goal.required">{{ $t('common.validation.required', {field: $t('ui.dealer.fields.linkman')}) }}</span>
                     </div>
                   </div>
                 </div>

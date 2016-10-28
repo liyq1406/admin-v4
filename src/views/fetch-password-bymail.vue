@@ -12,8 +12,8 @@
                 <input type="text" v-model="model.email" name="model.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
-                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.touched && $authValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.email')}) }}</span>
+                <span v-if="$authValidation.email.modified && $authValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
               </div>
               <div v-if="sendSuccess" class="form-tips form-tips-success"><span><i class="fa fa-check-circle"></i>{{ $t("ui.auth.by_mail_success_msg") }}</span></div>
             </div>

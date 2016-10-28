@@ -75,7 +75,7 @@
                       <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.name')}) }}</span>
+                      <span v-if="$addValidation.name.touched && $addValidation.name.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.name')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -86,7 +86,7 @@
                       <input v-model="addModel.director" type="text" name="addModel.director" v-validate:director="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.director')}) }}</span>
+                      <span v-if="$addValidation.director.touched && $addValidation.director.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.director')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -97,8 +97,8 @@
                       <input v-model="addModel.phone" type="text" v-validate:phone="{required: true, format: 'phone'}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
-                      <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                      <span v-if="$addValidation.phone.touched && $addValidation.phone.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.phone')}) }}</span>
+                      <span v-if="$addValidation.phone.modified && $addValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -109,8 +109,8 @@
                       <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
-                      <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                      <span v-if="$addValidation.email.touched && $addValidation.email.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.email')}) }}</span>
+                      <span v-if="$addValidation.email.modified && $addValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
                     </div>
                   </div>
                 </div>
@@ -127,7 +127,7 @@
                       <input v-model="addModel.address" type="text" name="addModel.address" v-validate:address="{required: true}" lazy class="input-text"/>
                     </div>
                     <div class="form-tips form-tips-error">
-                      <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('ui.validation.required', {field: $t('ui.warranty.fields.address')}) }}</span>
+                      <span v-if="$addValidation.address.touched && $addValidation.address.required">{{ $t('common.validation.required', {field: $t('ui.warranty.fields.address')}) }}</span>
                     </div>
                   </div>
                 </div>

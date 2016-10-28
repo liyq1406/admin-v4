@@ -11,9 +11,9 @@
                 <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true, minlength: 6, maxlength: 16}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
-                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('ui.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
-                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.minlength">{{ $t('common.validation.minlength', [$t('ui.auth.fields.password'), 6]) }}</span>
+                <span v-if="$authValidation.password.modified && $authValidation.password.maxlength">{{ $t('common.validation.maxlength', [$t('ui.auth.fields.password'), 16]) }}</span>
               </div>
             </div>
             <div class="form-row">
@@ -21,8 +21,8 @@
                 <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.password}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                <span v-if="$authValidation.confirmPassword.touched && $authValidation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                <span v-if="$authValidation.confirmPassword.modified && $authValidation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
               </div>
             </div>
             <div class="form-actions">
@@ -50,8 +50,8 @@
           <div v-placeholder="$t('ui.auth.password')" class="input-text-wrap">
             <input type="password" v-model="model.password" v-form-ctrl required maxlength="16" minlength="6" name="password" lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span></div>
-          <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span></div>
+          <div v-if="validation.$submitted && validation.password.$pristine" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span></div>
+          <div v-if="validation.password.$dirty" class="form-tips form-tips-error"><span v-if="validation.password.$error.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span><span v-if="validation.password.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.auth.fields.password'), 6]) }}</span><span v-if="validation.password.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.auth.fields.password'), 16]) }}</span></div>
         </div>
         <div class="form-row row">
           <div v-placeholder="$t('ui.auth.fields.confirm_password')" class="input-text-wrap">

@@ -86,8 +86,8 @@
               <div v-placeholder="$t('ui.task.placeholders.name')" class="input-text-wrap">
                 <input v-model="addTaskModel.name" type="text" v-form-ctrl name="name" maxlength="32" required lazy class="input-text"/>
               </div>
-              <div v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.name')}) }}</span></div>
-              <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.task.fields.name'), 32]) }}</span></div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.name.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.task.fields.name')}) }}</span></div>
+              <div v-if="addTaskValidation.name.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.task.fields.name')}) }}</span><span v-if="addTaskValidation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.task.fields.name'), 32]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -96,8 +96,8 @@
               <div v-placeholder="$t('ui.task.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addTaskModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.description')}) }}</span></div>
-              <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.task.fields.description'), 250]) }}</span></div>
+              <div v-if="addTaskValidation.$submitted && addTaskValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.task.fields.description')}) }}</span></div>
+              <div v-if="addTaskValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addTaskValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.task.fields.description')}) }}</span><span v-if="addTaskValidation.description.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.task.fields.description'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">

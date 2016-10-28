@@ -15,8 +15,8 @@
                     <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
                     <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
                   </div>
                 </div>
@@ -34,8 +34,8 @@
                         <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的心得吧" v-validate:instructions="{required: true, maxlength: 60}" class="input-text"></textarea>
                       </div>
                       <div class="form-tips form-tips-error">
-                        <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('ui.validation.required', {field: '心得'}) }}</span>
-                        <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['心得', 60]) }}</span>
+                        <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('common.validation.required', {field: '心得'}) }}</span>
+                        <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['心得', 60]) }}</span>
                       </div>
                     </div>
                   </div>
@@ -181,8 +181,8 @@
                     <textarea v-model="tips" type="text" name="tips" v-validate:tips="{required: true, maxlength: 100}" lazy class="input-text"></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.tips.touched && $validation.tips.required">{{ $t('ui.validation.required', {field: '烹饪技巧'}) }}</span>
-                    <span v-if="$validation.tips.modified && $validation.tips.maxlength">{{ $t('ui.validation.maxlength', ['烹饪技巧', 100]) }}</span>
+                    <span v-if="$validation.tips.touched && $validation.tips.required">{{ $t('common.validation.required', {field: '烹饪技巧'}) }}</span>
+                    <span v-if="$validation.tips.modified && $validation.tips.maxlength">{{ $t('common.validation.maxlength', ['烹饪技巧', 100]) }}</span>
                   </div>
                 </div>
               </div>

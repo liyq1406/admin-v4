@@ -75,9 +75,9 @@
                   <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32}"  lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.app.fields.name'), 2]) }}</span>
-                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.app.fields.name'), 32]) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.minlength">{{ $t('common.validation.minlength', [$t('ui.app.fields.name'), 2]) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.app.fields.name'), 32]) }}</span>
                 </div>
               </div>
             </div>

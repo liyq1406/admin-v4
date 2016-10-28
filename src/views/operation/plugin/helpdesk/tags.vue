@@ -52,10 +52,10 @@
                 <input v-model="addModel.name" type="text" v-form-ctrl name="name" required lazy class="input-text"/>
               </div>
               <div v-if="addValidation.$submitted && addValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
               </div>
               <div v-if="addValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="addValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
+                <span v-if="addValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
               </div>
             </div>
           </div>
@@ -79,10 +79,10 @@
                 <input v-model="editModel.label" type="text" v-form-ctrl name="name" required lazy class="input-text"/>
               </div>
               <div v-if="editValidation.$submitted && editValidation.name.$pristine" class="form-tips form-tips-error">
-                <span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
+                <span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
               </div>
               <div v-if="editValidation.name.$dirty" class="form-tips form-tips-error">
-                <span v-if="editValidation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
+                <span v-if="editValidation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.tags.fields.name')}) }}</span>
               </div>
             </div>
           </div>

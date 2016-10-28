@@ -113,7 +113,7 @@ export default {
       if (file && file.size > config.MAX_IMAGE_FILE_SIZE * 1024 * 1024) {
         this.showNotice({
           type: 'error',
-          content: this.$t('ui.upload.file_size_msg', {max: config.MAX_IMAGE_FILE_SIZE})
+          content: this.$t('common.upload.file_size_msg', {max: config.MAX_IMAGE_FILE_SIZE})
         })
         return
       }
@@ -123,7 +123,7 @@ export default {
         reader.onerror = (evt) => {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.read_err')
+            content: this.$t('common.upload.read_err')
           })
         }
         // 读取完成
@@ -151,7 +151,7 @@ export default {
       } else {
         this.showNotice({
           type: 'error',
-          content: this.$t('ui.upload.compatiblity')
+          content: this.$t('common.upload.compatiblity')
         })
       }
     }

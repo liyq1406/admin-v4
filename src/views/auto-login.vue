@@ -10,7 +10,7 @@
                 <input type="text" v-model="model.account" name="model.account" v-validate:account="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.account')}) }}</span>
+                <span v-if="$authValidation.account.touched && $authValidation.account.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.account')}) }}</span>
               </div>
             </div>
             <div class="form-row">
@@ -18,7 +18,7 @@
                 <input type="password" v-model="model.password" name="model.password" v-validate:password="{required: true}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
+                <span v-if="$authValidation.password.touched && $authValidation.password.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.password')}) }}</span>
               </div>
             </div>
             <div class="form-row row-check">

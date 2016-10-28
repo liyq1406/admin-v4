@@ -12,9 +12,9 @@
                     <input class="input-text" type="text" name="model.name" v-model="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32, format: 'no-spaces-both-ends'}" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.name')}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('ui.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.rule.fields.name'), 32]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.minlength">{{ $t('common.validation.minlength', [$t('ui.rule.fields.name'), 2]) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.rule.fields.name'), 32]) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.format">{{ $t('ui.rule.fields.name') }}不允许前后带空格</span>
                   </div>
                 </div>
@@ -82,8 +82,8 @@
                     <textarea class="input-text" type="text" name="model.content" v-model="model.content" v-length-tip="{max: 250, model: model.content}" v-validate:content="{required: true, maxlength: 250}" lazy></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.content.touched && $validation.content.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.content')}) }}</span>
-                    <span v-if="$validation.content.modified && $validation.content.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.rule.fields.content'), 250]) }}</span>
+                    <span v-if="$validation.content.touched && $validation.content.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.content')}) }}</span>
+                    <span v-if="$validation.content.modified && $validation.content.maxlength">{{ $t('common.validation.maxlength', [$t('ui.rule.fields.content'), 250]) }}</span>
                   </div>
                 </div>
               </div>
@@ -152,7 +152,7 @@
                     </div>
                   </template>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.notifyTarget.touched && $validation.notifyTarget.required">{{ $t('ui.validation.required', {field: $t('ui.rule.fields.notify_type')}) }}</span>
+                    <span v-if="$validation.notifyTarget.touched && $validation.notifyTarget.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.notify_type')}) }}</span>
                   </div>
                 </div>
               </div>

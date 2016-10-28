@@ -12,8 +12,8 @@
               <input v-model="model.name" name="model.name" type="text" v-validate:name="{required: true, maxlength: 50, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
             </div>
             <div class="form-tips form-tips-error">
-              <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: '标题'}) }}</span>
-              <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', ['标题', 50]) }}</span>
+              <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: '标题'}) }}</span>
+              <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', ['标题', 50]) }}</span>
               <span v-if="$validation.name.touched && $validation.name.format">标题不允许前后带空格</span>
             </div>
           </div>
@@ -24,7 +24,7 @@
             <editor @change="onContentChange" :value="model.text"></editor>
             <input type="text" v-model="model.text" name="model.text" v-validate:text="{required: true}" class="hidden">
             <div class="form-tips form-tips-error">
-              <span v-if="$validation.text.touched && $validation.text.required">{{ $t('ui.validation.required', {field: '正文'}) }}</span>
+              <span v-if="$validation.text.touched && $validation.text.required">{{ $t('common.validation.required', {field: '正文'}) }}</span>
             </div>
           </div>
         </div>

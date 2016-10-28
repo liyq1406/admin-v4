@@ -104,7 +104,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
-                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('common.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>
             </div>

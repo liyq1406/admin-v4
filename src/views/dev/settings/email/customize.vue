@@ -72,7 +72,7 @@
                 <div class="input-text-wrap">
                   <input v-model="connectModel.email" type="text" placeholder="请输入邮箱帐号" class="input-text" v-validate:name="{required: true, format: 'email'}" lazy/>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
                     <span v-if="$validation.name.modified && $validation.name.format">邮箱格式不正确</span>
                   </div>
                 </div>

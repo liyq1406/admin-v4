@@ -60,7 +60,7 @@
                   <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('ui.validation.required', {field: '设备指令'}) }}</span>
+                  <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('common.validation.required', {field: '设备指令'}) }}</span>
                 </div>
               </div>
             </div>

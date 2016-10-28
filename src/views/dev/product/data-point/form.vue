@@ -16,8 +16,8 @@
                     <input v-model="model.index" type="text" name="index"  v-validate:index="{required: true, format: 'numberic'}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.index.touched && $validation.index.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
-                    <span v-if="$validation.index.modified && $validation.index.format">{{ $t('ui.validation.numberic') }}</span>
+                    <span v-if="$validation.index.touched && $validation.index.required">{{ $t('common.validation.required', {field: $t('ui.datapoint.fields.index')}) }}</span>
+                    <span v-if="$validation.index.modified && $validation.index.format">{{ $t('common.validation.numberic') }}</span>
                   </div>
                 </div>
               </div>
@@ -28,8 +28,8 @@
                     <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 32}" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.name'), 32]) }}</span>
+                    <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.datapoint.fields.name')}) }}</span>
+                    <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', [$t('ui.datapoint.fields.name'), 32]) }}</span>
                   </div>
                 </div>
               </div>
@@ -55,7 +55,7 @@
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.min.touched && $validation.min.required">最小值为必填项</span>
-                        <span v-if="$validation.min.modified && $validation.min.format">{{ $t('ui.validation.numberic') }}</span>
+                        <span v-if="$validation.min.modified && $validation.min.format">{{ $t('common.validation.numberic') }}</span>
                         <span v-if="$validation.min.modified && ($validation.min.min || $validation.min.max)">最小值不合法</span>
                       </div>
                     </div>
@@ -66,7 +66,7 @@
                       </div>
                       <div class="form-tips form-tips-error">
                         <span v-if="$validation.max.touched && $validation.max.required">最大值为必填项</span>
-                        <span v-if="$validation.max.modified && $validation.max.format">{{ $t('ui.validation.numberic') }}</span>
+                        <span v-if="$validation.max.modified && $validation.max.format">{{ $t('common.validation.numberic') }}</span>
                         <span v-if="$validation.max.modified && ($validation.max.min || $validation.max.max)">最大值不合法</span>
                       </div>
                     </div>
@@ -81,7 +81,7 @@
                     <input v-model="model.symbol" type="text" name="model.symbol" v-validate:symbol="{maxlength: 10}" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.symbol.modified && $validation.symbol.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.symbol'), 10]) }}</span>
+                    <span v-if="$validation.symbol.modified && $validation.symbol.maxlength">{{ $t('common.validation.maxlength', [$t('ui.datapoint.fields.symbol'), 10]) }}</span>
                   </div>
                 </div>
               </div>
@@ -107,7 +107,7 @@
                     <textarea v-model="model.description" type="text" name="model.description" v-validate:description="{maxlength: 250}" class="input-text"></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.datapoint.fields.description'), 250]) }}</span>
+                    <span v-if="$validation.description.modified && $validation.description.maxlength">{{ $t('common.validation.maxlength', [$t('ui.datapoint.fields.description'), 250]) }}</span>
                   </div>
                 </div>
               </div>

@@ -16,8 +16,8 @@
                     <input v-model="editModel.url" type="text" name="editModel.url" v-validate:url="{format: 'url'}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <!-- <span v-if="$editValidation.url.touched && $editValidation.url.required">{{ $t('ui.validation.required', {field: $t('ui.version.url')}) }}</span> -->
-                    <span v-if="$editValidation.url.modified && $editValidation.url.format">{{ $t('ui.validation.format') }}</span>
+                    <!-- <span v-if="$editValidation.url.touched && $editValidation.url.required">{{ $t('common.validation.required', {field: $t('ui.version.url')}) }}</span> -->
+                    <span v-if="$editValidation.url.modified && $editValidation.url.format">{{ $t('common.validation.format') }}</span>
                   </div>
                 </div>
               </div>
@@ -28,8 +28,8 @@
                     <input v-model="editModel.version" type="text" name="editModel.version" v-validate:version="{format: 'numberic'}" class="input-text" lazy number/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <!-- <span v-if="$editValidation.version.touched && $editValidation.version.required">{{ $t('ui.validation.required', {field: $t('ui.version.version')}) }}</span> -->
-                    <span v-if="$editValidation.version.modified && $editValidation.version.format">{{ $t('ui.validation.format') }}</span>
+                    <!-- <span v-if="$editValidation.version.touched && $editValidation.version.required">{{ $t('common.validation.required', {field: $t('ui.version.version')}) }}</span> -->
+                    <span v-if="$editValidation.version.modified && $editValidation.version.format">{{ $t('common.validation.format') }}</span>
                   </div>
                 </div>
               </div>
@@ -40,7 +40,7 @@
                     <textarea v-model="editModel.illustration" type="text" name="editModel.illustration" v-validate:illustration="{maxlength: 250}" class="input-text" lazy></textarea>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <span v-if="$editValidation.illustration.modified && $editValidation.illustration.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.version.illustration'), 250]) }}</span>
+                    <span v-if="$editValidation.illustration.modified && $editValidation.illustration.maxlength">{{ $t('common.validation.maxlength', [$t('ui.version.illustration'), 250]) }}</span>
                   </div>
                 </div>
               </div>
@@ -51,8 +51,8 @@
                     <input v-model="editModel.md5" type="text" name="editModel.md5" v-validate:md5="{}" class="input-text" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
-                    <!-- <span v-if="$editValidation.md5.touched && $editValidation.md5.required">{{ $t('ui.validation.required', {field: $t('ui.version.md5')}) }}</span> -->
-                    <!-- <span v-if="$editValidation.md5.modified && $editValidation.md5.numberic">{{ $t('ui.validation.format') }}</span> -->
+                    <!-- <span v-if="$editValidation.md5.touched && $editValidation.md5.required">{{ $t('common.validation.required', {field: $t('ui.version.md5')}) }}</span> -->
+                    <!-- <span v-if="$editValidation.md5.modified && $editValidation.md5.numberic">{{ $t('common.validation.format') }}</span> -->
                   </div>
                 </div>
               </div>

@@ -80,8 +80,8 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">名称为必填</span>
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.minlength">{{ $t('ui.validation.minlength', ['客户名称', 2]) }}</span>
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.maxlength">{{ $t('ui.validation.maxlength', ['客户名称', 40]) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.minlength">{{ $t('common.validation.minlength', ['客户名称', 2]) }}</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.modified && $majorClientValidation.name.maxlength">{{ $t('common.validation.maxlength', ['客户名称', 40]) }}</span>
                 </div>
               </div>
             </div>
@@ -93,8 +93,8 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.required">联系人为必填</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.minlength">{{ $t('ui.validation.minlength', ['联系人', 2]) }}</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.maxlength">{{ $t('ui.validation.maxlength', ['联系人', 40]) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.minlength">{{ $t('common.validation.minlength', ['联系人', 2]) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.contacter.modified && $majorClientValidation.contacter.maxlength">{{ $t('common.validation.maxlength', ['联系人', 40]) }}</span>
                 </div>
               </div>
             </div>
@@ -106,7 +106,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.phone.touched && $majorClientValidation.phone.required">联系电话为必填</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.phone.modified && $majorClientValidation.phone.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.phone')}) }}</span>
                 </div>
               </div>
             </div>
@@ -118,7 +118,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.email.touched && $majorClientValidation.email.required">邮箱为必填</span>
-                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('ui.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
+                  <span v-if="$majorClientValidation.contacter.touched && $majorClientValidation.email.modified && $majorClientValidation.email.format">{{ $t('common.validation.format', {field: $t('ui.auth.fields.email')}) }}</span>
                 </div>
               </div>
             </div>
@@ -184,8 +184,8 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.required">地址为必填</span>
-                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.minlength">{{ $t('ui.validation.minlength', ['详细地址', 6]) }}</span>
-                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.maxlength">{{ $t('ui.validation.maxlength', ['详细地址', 240]) }}</span>
+                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.minlength">{{ $t('common.validation.minlength', ['详细地址', 6]) }}</span>
+                  <span v-if="$majorClientValidation.location.touched && $majorClientValidation.location.modified && $majorClientValidation.location.maxlength">{{ $t('common.validation.maxlength', ['详细地址', 240]) }}</span>
                 </div>
               </div>
             </div>

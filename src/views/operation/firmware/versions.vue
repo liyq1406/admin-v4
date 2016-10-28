@@ -81,8 +81,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="addModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
-              <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
+              <div v-if="addValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.mod.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="addValidation.mod.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -91,8 +91,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="addModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
-              <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('ui.validation.numberic') }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
+              <div v-if="addValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.version.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="addValidation.version.$error.customValidator">{{ $t('common.validation.numberic') }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -110,8 +110,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="addModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="addValidation.$submitted && addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
-              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
+              <div v-if="addValidation.$submitted && addValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
+              <div v-if="addValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="addValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="addValidation.description.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -141,8 +141,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.mod')" class="input-text-wrap">
                 <input v-model="editModel.mod" type="text" v-form-ctrl name="mod" maxlength="20" required lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
-              <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.mod.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span></div>
+              <div v-if="editValidation.mod.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.mod.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.mod')}) }}</span><span v-if="editValidation.mod.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.firmware.fields.mod'), 20]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -151,8 +151,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.version')" class="input-text-wrap">
                 <input v-model="editModel.version" type="text" v-form-ctrl name="version" required custom-validator="numberic" lazy class="input-text"/>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
-              <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('ui.validation.numberic') }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.version.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span></div>
+              <div v-if="editValidation.version.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.version.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.version')}) }}</span><span v-if="editValidation.version.$error.customValidator">{{ $t('common.validation.numberic') }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -170,8 +170,8 @@
               <div v-placeholder="$t('ui.firmware.placeholders.description')" class="input-text-wrap">
                 <textarea v-model="editModel.description" type="text" v-form-ctrl name="description" maxlength="250" required lazy class="input-text"></textarea>
               </div>
-              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
-              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('ui.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
+              <div v-if="editValidation.$submitted && editValidation.description.$pristine" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span></div>
+              <div v-if="editValidation.description.$dirty" class="form-tips form-tips-error"><span v-if="editValidation.description.$error.required">{{ $t('common.validation.required', {field: $t('ui.firmware.fields.description')}) }}</span><span v-if="editValidation.description.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.firmware.fields.version'), 250]) }}</span></div>
             </div>
           </div>
           <div class="form-row row">
@@ -394,7 +394,7 @@
         if (file && file.size > config.MAX_FIRMWARE_FILE_SIZE * 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
+            content: this.$t('common.upload.file_size_msg', {max: config.MAX_FIRMWARE_FILE_SIZE})
           })
           return
         }
@@ -404,7 +404,7 @@
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('ui.upload.read_err')
+              content: this.$t('common.upload.read_err')
             })
           }
           // 读取完成
@@ -431,7 +431,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.compatiblity')
+            content: this.$t('common.upload.compatiblity')
           })
         }
       }

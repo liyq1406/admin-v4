@@ -38,7 +38,7 @@
                   <input type="password" v-model="model.oldpassword" name="model.oldpassword" v-validate:oldpassword="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
+                  <span v-if="$validation.oldpassword.touched && $validation.oldpassword.required">{{ $t('common.validation.required', {field: $t('ui.account.fields.old_password')}) }}</span>
                 </div>
               </div>
             </div>
@@ -49,9 +49,9 @@
                   <input type="password" v-model="model.newpassword" name="model.newpassword" v-validate:newpassword="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.required">{{ $t('ui.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span>
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.minlength">{{ $t('ui.validation.minlength', [$t('ui.account.fields.new_password'), 8]) }}</span>
-                  <span v-if="$validation.newpassword.touched && $validation.newpassword.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.account.fields.new_password'), 16]) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.required">{{ $t('common.validation.required', {field: $t('ui.account.fields.new_password')}) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.minlength">{{ $t('common.validation.minlength', [$t('ui.account.fields.new_password'), 8]) }}</span>
+                  <span v-if="$validation.newpassword.touched && $validation.newpassword.maxlength">{{ $t('common.validation.maxlength', [$t('ui.account.fields.new_password'), 16]) }}</span>
                 </div>
               </div>
             </div>
@@ -62,8 +62,8 @@
                   <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.newpassword}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('ui.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
-                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('ui.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.required">{{ $t('common.validation.required', {field: $t('ui.auth.fields.confirm_password')}) }}</span>
+                  <span v-if="$validation.confirmPassword.touched && $validation.confirmPassword.equal">{{ $t('common.validation.equal', [$t('ui.auth.fields.confirm_password'), $t('ui.auth.fields.password')]) }}</span>
                 </div>
               </div>
             </div>

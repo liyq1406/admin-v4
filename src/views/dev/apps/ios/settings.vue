@@ -8,8 +8,8 @@
           <div v-placeholder="$t('ui.app.placeholders.name')" class="input-text-wrap">
             <input v-model="model.name" type="text" v-form-ctrl name="name" minlength="2" maxlength="32" required lazy class="input-text"/>
           </div>
-          <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
-          <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('ui.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('ui.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
+          <div v-if="validation.$submitted && validation.name.$pristine" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span></div>
+          <div v-if="validation.name.$dirty" class="form-tips form-tips-error"><span v-if="validation.name.$error.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span><span v-if="validation.name.$error.minlength">{{ $t('common.validation.minlength', [ $t('ui.app.fields.name'), 2]) }}</span><span v-if="validation.name.$error.maxlength">{{ $t('common.validation.maxlength', [ $t('ui.app.fields.name'), 32]) }}</span></div>
         </div>
       </div>
       <div class="form-row row">
@@ -190,7 +190,7 @@
         if (file && file.size > 1024 * 1024) {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.compatiblity')
+            content: this.$t('common.upload.compatiblity')
           })
           return
         }
@@ -200,7 +200,7 @@
           reader.onerror = (evt) => {
             this.showNotice({
               type: 'error',
-              content: this.$t('ui.upload.read_err')
+              content: this.$t('common.upload.read_err')
             })
           }
           // 读取完成
@@ -225,7 +225,7 @@
         } else {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.compatiblity')
+            content: this.$t('common.upload.compatiblity')
           })
         }
       }

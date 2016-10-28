@@ -29,7 +29,7 @@
                   <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}"  lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.app.fields.name')}) }}</span>
                   <span v-if="$validation.name.modified && $validation.name.format">名称前后不能包含空格</span>
                 </div>
               </div>
@@ -41,7 +41,7 @@
                   <textarea v-model="model.info" type="text" name="model.info" v-validate:info="{required: true, format: 'no-spaces-both-ends'}"  lazy class="input-text"></textarea>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.info.touched && $validation.info.required">{{ $t('ui.validation.required', {field: '参数值'}) }}</span>
+                  <span v-if="$validation.info.touched && $validation.info.required">{{ $t('common.validation.required', {field: '参数值'}) }}</span>
                   <span v-if="$validation.info.modified && $validation.info.format">参数值前后不能包含空格</span>
                 </div>
               </div>

@@ -67,10 +67,10 @@
                   <input v-model="addModel.mac" type="text" name="addModel.mac" v-validate:mac="{required: true, minlength: 2, maxlength: 64, format: 'mac'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$validation.mac.touched && $validation.mac.required">{{ $t('ui.validation.required', {field: 'MAC'}) }}</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.required">{{ $t('common.validation.required', {field: 'MAC'}) }}</span>
                   <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.format">MAC应为十六进制字符的组合</span>
-                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.minlength">{{ $t('ui.validation.minlength', ['MAC', 2]) }}</span>
-                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.maxlength">{{ $t('ui.validation.maxlength', ['MAC', 64]) }}</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.minlength">{{ $t('common.validation.minlength', ['MAC', 2]) }}</span>
+                  <span v-if="$validation.mac.touched && $validation.mac.modified && $validation.mac.maxlength">{{ $t('common.validation.maxlength', ['MAC', 64]) }}</span>
                 </div>
               </div>
             </div>
@@ -82,7 +82,7 @@
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.sn.modified && $validation.sn.format">序列号只能包含数字、英文字母和中划线，且不以中划线开头</span>
-                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('ui.validation.maxlength', ['序列号', 32]) }}</span>
+                  <span v-if="$validation.sn.touched && $validation.sn.modified && $validation.sn.maxlength">{{ $t('common.validation.maxlength', ['序列号', 32]) }}</span>
                 </div>
               </div>
             </div>
@@ -492,7 +492,7 @@ export default {
         if (!/\.csv$/.test(this.file.name)) {
           this.showNotice({
             type: 'error',
-            content: this.file.name + this.$t('ui.upload.type_tips')
+            content: this.file.name + this.$t('common.upload.type_tips')
           })
           return false
         }
@@ -500,7 +500,7 @@ export default {
         reader.onerror = (evt) => {
           this.showNotice({
             type: 'error',
-            content: this.$t('ui.upload.read_err')
+            content: this.$t('common.upload.read_err')
           })
         }
         this.importing = true
@@ -523,7 +523,7 @@ export default {
               if (res.status === 200) {
                 // this.showNotice({
                 //   type: 'success',
-                //   content: this.$t('ui.upload.success_msg')
+                //   content: this.$t('common.upload.success_msg')
                 // })
                 this.getUsed()
                 this.getRecords()
@@ -546,7 +546,7 @@ export default {
       } else {
         this.showNotice({
           type: 'error',
-          content: this.$t('ui.upload.compatiblity')
+          content: this.$t('common.upload.compatiblity')
         })
       }
     },
