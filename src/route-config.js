@@ -1071,15 +1071,15 @@ let configRouter = (router) => {
           }
         },
         // 添加菜谱
-        '/plugins/recipes/:app_id/recipe/add': {
+        '/plugins/recipes/:app_id/recipe/add/:type_value': {
           component (resolve) {
             require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/recipes/recipe/add'))
+              resolve(require('./views/operation/plugin/recipes/recipe/add/add'))
             }, 'admin')
           }
         },
         // 编辑菜谱
-        '/plugins/recipes/:app_id/recipes/:id/edit': {
+        '/plugins/recipes/:app_id/recipes/:id/edit/:type_value': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/recipes/recipe/edit/index'))
@@ -1090,6 +1090,22 @@ let configRouter = (router) => {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/operation/plugin/recipes/recipe/edit/basic-info'))
+                }, 'admin')
+              }
+            },
+            // 步骤
+            'step': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/recipes/recipe/edit/step'))
+                }, 'admin')
+              }
+            },
+            // 参数
+            'parameter': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/operation/plugin/recipes/recipe/edit/parameter'))
                 }, 'admin')
               }
             },
@@ -1655,7 +1671,7 @@ let configRouter = (router) => {
     // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
     // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
-    '/operation/plugins/recipes/:app_id/recipes/:id/edit': '/operation/plugins/recipes/:app_id/recipes/:id/edit/basic-info',
+    '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value': '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value/basic-info',
     '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/repair',
     '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
     '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',

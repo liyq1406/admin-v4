@@ -1,304 +1,40 @@
 <template>
   <div class="panel mt20 pdb30">
     <div class="panel-bd">
-      <!-- 第一步骤 -->
       <validator name="validation">
         <div>
-          <!-- <step-form1></step-form1> -->
           <div class="recipe-form">
-            <div class="form with-loading pad0">
+            <div class="form with-loading">
               <div class="icon-loading" v-show="loadingData">
                 <i class="fa fa-refresh fa-spin"></i>
               </div>
-              <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
-                <div class="panel mt30 mb30 bordered">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red"></i> 菜谱类型:</label>
-                      <div class="controls col-21">
-                        <div class="input-text-wrap line32">
-                          <span v-if="this.$route.params.type_value==='1'">普通菜谱</span>
-                          <span v-if="this.$route.params.type_value==='2'">智能菜谱</span>
-                          <span v-if="this.$route.params.type_value==='3'">本地菜谱</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
-                      <div class="controls col-21">
-                        <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
-                          <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
-                        </div>
-                        <div class="form-tips form-tips-error">
-                          <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
-                          <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
-                          <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.ingredient.fields.images") }}:</label>
-                      <div class="controls col-21">
-                        <div class="thumb-info">
-                          <div class="thumb">
-                            <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
-                            <!-- <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div> -->
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> 介绍:</label>
-                      <div class="controls col-21">
-                        <div class="thumb-info">
-                          <div class="">
-                            <div class="input-text-wrap" style="height:100%">
-                              <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的介绍吧" v-validate:instructions="{required: true, maxlength: 60}" class="input-text"></textarea>
-                            </div>
-                            <div class="form-tips form-tips-error">
-                              <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('ui.validation.required', {field: '介绍'}) }}</span>
-                              <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['介绍', 60]) }}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">时长:</label>
-                      <div class="controls col-21">
-                        <div class="select-group">
-                          <div class="select">
-                            <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
-                              <select v-model="properties.cooking_time" name="properties.cooking_time">
-                                <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
-                              </select>
-                            </v-select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">难度:</label>
-                      <div class="controls col-21">
-                        <div class="select-group">
-                          <div class="select">
-                            <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
-                              <select v-model="properties.difficulty" name="properties.difficulty">
-                                <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
-                              </select>
-                            </v-select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">{{ $t("ui.ingredient.fields.classification") }}:</label>
-                      <div class="controls col-21">
-                        <div class="select-group1" v-for="category in classification">
-                          <div class="select">
-                            <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
-                              <select v-model="category.main" @change="getSubCategories(category, true)">
-                                <option v-for="opt in mainCategories" :value="opt.main">{{ opt.main.name }}</option>
-                              </select>
-                            </v-select>
-                            <v-select v-show="category.subOptions.length" width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
-                              <select v-model="category.sub">
-                                <option v-for="opt in category.subOptions" :value="opt.sub">{{ opt.sub.name }}</option>
-                              </select>
-                            </v-select>
-                            <span @click="removeObj(category, classification)" class="fa fa-times ml10"></span>
-                          </div>
-                        </div>
-                        <button @click.prevent="addCategory" class="btn btn-primary"><i class="fa fa-plus"></i>添加类别</button>
-                      </div>
+              <div class="row">
+                <label class="form-control col-3 line32">烹饪设备: </label>
+                <div class="controls col-21">
+                  <x-select :label="currentProduct.name" width="300px">
+                    <select v-model="currentProduct" @change="">
+                      <option v-for="product in products" :value="product">{{product.name}}</option>
+                    </select>
+                  </x-select>
+                </div>
+              </div>
+              <div class="settingArea row">
+                <label class="col-3 line32">菜单</label>
+                <div class="controls col-21">
+                  <!-- 第一级菜单 -->
+                  <div class="settit" v-if="settingCode" v-for="menu in settingCode">
+                    <div class="setname"><a href="">{{menu.name}}</a></div>
+                    <!-- 第二级菜单     -->
+                    <div class="setarea" v-if="menu.param" v-for='secMenu in menu.param'>
+                      <div class="setname"><span class="linedot"></span><a class="down8">{{secMenu.name}}</a></div>
                     </div>
                   </div>
                 </div>
-                <div class="panel mb20 bordered">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3">主料:</label>
-                      <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="major in major_ingredients">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-8 col-offset-1">
-                              <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-3">
-                              <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="operations col-offset-3">
-                        <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">辅料:</label>
-                      <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="minor in minor_ingredients">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-8 col-offset-1">
-                              <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-3">
-                              <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="operations col-offset-3">
-                        <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel mb20">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> 烹饪技巧:</label>
-                      <div class="controls col-21">
-                        <div v-placeholder="$t('ui.recipe.placeholders.skill')" class="input-text-wrap">
-                          <textarea v-model="tips" type="text" name="tips" v-validate:tips="{required: true, maxlength: 100}" lazy class="input-text"></textarea>
-                        </div>
-                        <div class="form-tips form-tips-error">
-                          <span v-if="$validation.tips.touched && $validation.tips.required">{{ $t('ui.validation.required', {field: '烹饪技巧'}) }}</span>
-                          <span v-if="$validation.tips.modified && $validation.tips.maxlength">{{ $t('ui.validation.maxlength', ['烹饪技巧', 100]) }}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">标签:</label>
-                      <div class="controls col-21">
-                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel mb20">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3">状态:</label>
-                      <div class="controls col-21">
-                        <div class="radio-group">
-                          <label class="radio">
-                            <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
-                          </label>
-                          <label class="radio">
-                            <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-actions mb40 row">
-                  <div class="col-offset-4">
-                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
-                    <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
-                  </div>
-                </div>
-              </form>
+              </div>
             </div>
           </div>
         </div>
-        <!-- 第一步骤END -->
-      <div v-show="isShowPreview" transition="modal" class="mask">
-        <div class="preview-wrapper">
-          <div :style="dialogStyle" class="preview-dialog">
-            <div class="preview-header">
-              <h3>预览</h3>
-            </div>
-            <div class="preview-body">
-              <div class="app-header">{{ name }}</div>
-              <div class="preview-thumb">
-                <img :src="images[0]">
-              </div>
-              <div class="preview-panel">
-                <div class="preview-panel-hd">
-                  <h3>{{name}}</h3>
-                </div>
-                <div class="preview-panel-bd">
-                  <p class="introduce">{{ instructions }}</p>
-                  <div class="metas">
-                    <div class="meta"><i class="fa fa-hand-pointer-o"></i> {{properties.difficulty}}</div>
-                    <div class="meta"><i class="fa fa-clock-o"></i> {{properties.cooking_time}}</div>
-                  </div>
-                </div>
-              </div>
-              <div class="preview-panel">
-                <div class="preview-panel-hd">
-                  <div class="preview-panel-hd-actions"><span>添加到我的菜篮</span></div>
-                  <h3>用料：</h3>
-                </div>
-                <div class="preview-panel-bd">
-                  <table>
-                    <tbody>
-                      <tr v-for="ingredient in major_ingredients">
-                        <td>{{ ingredient.name }}</td>
-                        <td>{{ ingredient.unit }}</td>
-                      </tr>
-                      <tr v-for="ingredient in minor_ingredients">
-                        <td>{{ ingredient.name }}</td>
-                        <td>{{ ingredient.unit }}</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-              <div class="preview-panel">
-                <div class="preview-panel-hd">
-                  <h3>步骤：</h3>
-                </div>
-                <div class="preview-panel-bd">
-                  <p v-for="step in cooking_steps">
-                    {{$index+1}}、{{step.description}}
-                  </p>
-                </div>
-              </div>
-              <div class="preview-panel">
-                <ul class="introlist">
-                  <li><i class="fa fa-star"></i> 收藏菜谱</li>
-                  <li><i class="fa fa-plus-circle"></i> 添加到我的常用菜</li>
-                </ul>
-              </div>
-              <div class="preview-panel device-panel">
-                <h4>选择厨具并开始烹饪</h4>
-                <div class="cooking-devices">
-                  <div class="cooking-device-item device1"></div>
-                  <div class="cooking-device-item device2"></div>
-                </div>
-              </div>
-            </div>
-            <span @click="dismiss" class="fa fa-times-circle"></span>
-          </div>
-        </div>
-      </div>
     </div>
-    <!-- <div class="row border-top action">
-      <div class="col-21 col-offset-3">
-        <button v-if="mixPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
-        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
-        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
-        <button v-if="!maxPage" class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -351,6 +87,13 @@ export default {
 
   data () {
     return {
+      currentProduct: {},
+      settingCode: [{
+        name: '一级菜单',
+        param: [{
+          name: '二级菜单'
+        }]
+      }],
       name: '',
       images: [''], // 成品图
       difficulty: '不限',
@@ -456,46 +199,55 @@ export default {
 
   ready () {
     // this.getRecipes()
-    // this.whichPage()
+    this.whichPage()
     let appId = this.$route.params.app_id
     // 从 localStorage 中获取app token
     let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
-    var condition = {
-      filter: [],
-      limit: 1,
-      offset: 0,
-      query: {
-        _id: this.$route.params.id
+
+    if (this.type === 'add') { // 添加
+      this.classification = [{
+        main: {id: '', name: ''},
+        sub: {id: '', name: ''},
+        subOptions: []
+      }]
+    } else { // 编辑
+      var condition = {
+        filter: [],
+        limit: 1,
+        offset: 0,
+        query: {
+          _id: this.$route.params.id
+        }
       }
+      api.recipes.getRecipes(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          var data = res.data.list[0] ? res.data.list[0] : null
+
+          this.name = data.name
+          this.instructions = data.instructions
+          this.properties.cooking_time = data.properties.cooking_time
+          this.properties.difficulty = data.properties.difficulty
+          this.tag = data.properties.label ? data.properties.label.join(',') : ''
+          this.major_ingredients = data.major_ingredients
+          this.minor_ingredients = data.minor_ingredients
+          this.cooking_steps = data.cooking_steps
+          this.tips = data.tips
+          this.devices = data.devices
+          this.status = data.status
+          var images = ['']
+          data.images.forEach((item, index) => {
+            images[index] = item
+          })
+          this.images = images
+
+          // TODO
+          _.forEach(data.classification, (item) => {
+            this.getSubCategories(item)
+            this.classification.push(item)
+          })
+        }
+      })
     }
-    api.recipes.getRecipes(appId, token, condition).then((res) => {
-      if (res.status === 200) {
-        var data = res.data.list[0] ? res.data.list[0] : null
-
-        this.name = data.name
-        this.instructions = data.instructions
-        this.properties.cooking_time = data.properties.cooking_time
-        this.properties.difficulty = data.properties.difficulty
-        this.tag = data.properties.label ? data.properties.label.join(',') : ''
-        this.major_ingredients = data.major_ingredients
-        this.minor_ingredients = data.minor_ingredients
-        this.cooking_steps = data.cooking_steps
-        this.tips = data.tips
-        this.devices = data.devices
-        this.status = data.status
-        var images = ['']
-        data.images.forEach((item, index) => {
-          images[index] = item
-        })
-        this.images = images
-
-        // TODO
-        _.forEach(data.classification, (item) => {
-          this.getSubCategories(item)
-          this.classification.push(item)
-        })
-      }
-    })
 
     // 获取所有菜谱分类
     this.getMainCategories()
@@ -504,6 +256,32 @@ export default {
   },
 
   methods: {
+    // 控制页码逻辑
+    whichPage () {
+      if (this.$route.params.type_value === '1') {
+        // 如果菜谱类型为普通菜谱
+        this.pages = [1, 2]
+      } else if (this.$route.params.type_value === '2') {
+        // 如果菜谱类型为智能菜谱
+        this.pages = [1, 2]
+      } else if (this.$route.params.type_value === '3') {
+        // 如果菜谱类型为本地菜谱
+        this.pages = [1, 2, 3]
+      }
+      this.currPage = this.pages[0]
+      this.arrNum = 0
+    },
+    // 上一页功能
+    lastStep () {
+      this.arrNum -= 1
+      this.currPage = this.pages[this.arrNum]
+    },
+
+    // 下一页功能
+    nextStep () {
+      this.arrNum += 1
+      this.currPage = this.pages[this.arrNum]
+    },
 
     /**
      * 处理图片上传
@@ -645,6 +423,56 @@ export default {
     },
 
     /**
+     * 设置步骤
+     * @param {Objcet} device 设备
+     */
+    setSteps (device) {
+      var arr = []
+      for (var i = 0, len = device.count; i < len; i++) {
+        if (i < device.steps.length) {
+          arr[i] = _.cloneDeep(device.steps[i])
+        } else {
+          arr[i] = _.cloneDeep(this.allDevices[device.id].template)
+        }
+      }
+      device.steps = arr
+    },
+
+    /**
+     * 菜谱步骤右边四个小操作按钮的事件
+     * @param  {[type]} step      当前操作的步骤对象
+     * @param  {[type]} index     当前操作的步骤index
+     * @param  {[type]} eventType 事件类型，用来区分四个按钮的四个事件
+     * @return {[type]}           无返回
+     */
+    handleStepEvent (eventType, step, index) {
+      var newstep = {
+        description: '',
+        time: 0,
+        images: ['']
+      }
+      switch (eventType) {
+        case 'MOVE_UP':
+          this.cooking_steps.splice(index, 1)
+          this.cooking_steps.splice(index - 1, 0, step)
+          break
+        case 'MOVE_DOWN':
+          this.cooking_steps.splice(index, 1)
+          this.cooking_steps.splice(index + 1, 0, step)
+          break
+        case 'ADD':
+          this.cooking_steps.splice(index + 1, 0, newstep)
+          break
+        case 'DEL':
+          if (!window.confirm('您确定要删除该步骤？')) return
+          this.cooking_steps.$remove(step)
+          break
+        default:
+          break
+      }
+    },
+
+    /**
      * 通用删除事件
      * @param  {Object} obj 要删除的对象
      * @param  {Array}  arr 要删除的对象的父数组
@@ -726,7 +554,11 @@ export default {
         edit: '菜谱修改成功！'
       })[this.type]
 
-      process = api.recipes.editRecipes(appId, this.$route.params.id, token, params)
+      if (this.type === 'edit') {
+        process = api.recipes.editRecipes(appId, this.$route.params.id, token, params)
+      } else {
+        process = api.recipes.addRecipes(appId, token, params)
+      }
 
       process.then((res) => {
         if (res.status === 200) {
