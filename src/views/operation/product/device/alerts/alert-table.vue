@@ -176,7 +176,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.device.alert.info')}</div>`,
           state: item.is_read ? this.$t('operation.product.device.alert.processed') : this.$t('operation.product.device.alert.no_processed'),
           prototype: item
         }

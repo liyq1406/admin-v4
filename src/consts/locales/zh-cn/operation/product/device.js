@@ -99,5 +99,24 @@ export default {
     danger: '严重', // 严重
     all_level: '全部等级',
     info: '通知'
+  },
+  diagnose: {
+    datapoint: '数据端点',
+    index: '索引',
+    id: '端点ID',
+    describe: '描述',
+    current_value: '当前值',
+    log: '设备日志',
+    no_datapoint: '暂无端点信息'
+  },
+  users: {
+    release_bind: '解除绑定',
+    nickname: '昵称',
+    email: '邮箱',
+    phone: '电话',
+    last_login: '最后一次登录时间',
+    status: '在线状态',
+    online: '在线',
+    offline: '离线'
   }
 }

@@ -3,7 +3,7 @@
     <div class="panel-bd row">
       <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData"></x-table>
       <div class="actions clearfix mt10">
-        <button class="btn btn-primary fr hidden">解除绑定</button>
+        <button class="btn btn-primary fr hidden">{{ $t('operation.product.device.users.release_bind') }}</button>
       </div>
     </div>
   </div>
@@ -55,23 +55,23 @@ export default {
       headers: [
         {
           key: 'nickname',
-          title: '昵称'
+          title: this.$t('operation.product.device.users.nickname')
         },
         {
           key: 'email',
-          title: '邮箱'
+          title: this.$t('operation.product.device.users.email')
         },
         {
           key: 'phone',
-          title: '电话'
+          title: this.$t('operation.product.device.users.phone')
         },
         {
           key: 'lastLogin',
-          title: '最后一次登录时间'
+          title: this.$t('operation.product.device.users.last_login')
         },
         {
           key: 'online',
-          title: '在线状态'
+          title: this.$t('operation.product.device.users.status')
         }
       ]
     }
@@ -208,9 +208,9 @@ export default {
       this.usersOnline.map((user) => {
         if (id - 0 === user.user_id - 0) {
           if (user.online) {
-            result = '<span class="online-green">在线</span>'
+            result = '<span class="online-green">' + this.$t('operation.product.device.users.online') + '</span>'
           } else {
-            result = '离线'
+            result = this.$t('operation.product.device.users.offline')
           }
         }
       })
