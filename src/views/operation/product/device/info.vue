@@ -17,11 +17,11 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>{{ $t('ui.datapoint.fields.index') }}</th>
-              <th>{{ $t('ui.datapoint.fields.name') }}</th>
-              <th>{{ $t('ui.datapoint.fields.mode') }}</th>
-              <th>{{ $t('ui.datapoint.fields.description') }}</th>
-              <th>{{ $t('ui.device.current_value') }}</th>
+              <th>{{ $t('operation.product.device.info.index') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_id') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_type') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_describe') }}</th>
+              <th>{{ $t('operation.product.device.info.dp_value') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -34,7 +34,7 @@
             </tr>
             <tr v-if="filteredDatapoints.length === 0">
               <td colspan="5" class="tac"><i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
+                <div v-else class="tips-null">{{ $t('common.no_data') }}</div>
               </td>
             </tr>
           </tbody>

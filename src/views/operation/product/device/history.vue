@@ -10,7 +10,7 @@
         <div class="filter-group">
           <div class="filter-group-item">
             <x-select :label="selectRules.name" width="110px" size="small">
-              <span slot="label">快照规则</span>
+              <span slot="label">{{ $t('operation.product.device.history.photo_rule') }}</span>
               <select v-model="selectRules" @change="ruleSelect">
                 <option v-for="opt in rules" :value="opt">{{ opt.name }}</option>
               </select>
@@ -18,7 +18,7 @@
           </div>
           <div class="filter-group-item">
             <x-select :label="selectedDatapoint.name" width="110px" size="small">
-              <span slot="label">数据端点</span>
+              <span slot="label">{{ $t('operation.product.device.history.dp') }}</span>
               <select v-model="selectedDatapoint">
                 <option v-for="opt in datapointOptions" :value="opt">{{ opt.name }}</option>
               </select>
@@ -81,9 +81,9 @@ export default {
       },
       period: 1,
       periods: [
-        { label: '24h', value: 1 },
-        { label: '7天', value: 7 },
-        { label: '15天', value: 15 }
+        { label: this.$t('data.PERIODS_MAP[1]'), value: 1 },
+        { label: this.$t('data.PERIODS_MAP[7]'), value: 7 },
+        { label: this.$t('data.PERIODS_MAP[15]'), value: 15 }
       ],
       total: 0,
       currentPage: 1,
@@ -96,15 +96,15 @@ export default {
       columns: [
         {
           key: 'name',
-          title: '数据端点'
+          title: this.$t('operation.product.device.history.dp')
         },
         {
           key: 'description',
-          title: '描述'
+          title: this.$t('operation.product.device.history.dp')
         },
         {
           key: 'value',
-          title: '数据值'
+          title: this.$t('operation.product.device.history.data_value')
         }
       ]
     }
@@ -385,7 +385,7 @@ export default {
         if (res.data.error.code === 4001001) {
           this.showNotice({
             type: 'error',
-            content: '设备暂无快照数据'
+            content: this.$t('operation.product.device.history.no_photo')
           })
         }
         this.loadingData = false
