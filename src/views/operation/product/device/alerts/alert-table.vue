@@ -70,10 +70,10 @@ export default {
       selecting: true,
       alerts: [],
       visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: this.$t('operation.product.device.alert.all_level'), value: 'all' },
+        { label: this.$t('operation.product.device.alert.info'), value: this.$t('operation.product.device.alert.info') },
+        { label: this.$t('operation.product.device.alert.warning'), value: this.$t('operation.product.device.alert.warning') },
+        { label: this.$t('operation.product.device.alert.danger'), value: this.$t('operation.product.device.alert.danger') }
       ],
       visibility: {},
       queryTypeOptions: [
@@ -176,7 +176,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.device.alert.info')}</div>`,
           state: item.is_read ? this.$t('operation.product.device.alert.processed') : this.$t('operation.product.device.alert.no_processed'),
           prototype: item
         }

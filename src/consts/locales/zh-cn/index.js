@@ -9,6 +9,7 @@ import * as data from './data'
 import ui from './ui'
 import operation from './operation'
 import auth from './auth'
+import home from './home'
 
 // 其他
 import layout from './other/layout'
@@ -20,5 +21,6 @@ export default {
   ui,
   operation,
   auth,
-  layout
+  layout,
+  home
 }

@@ -10,18 +10,18 @@
                 <button :disabled="!device.is_online || refreshing" :class="{'disabled':!device.is_online || refreshing}" @click="getDatapointValues" class="btn btn-ghost btn-sm"><i :class="{'fa-spin':refreshing}" class="fa fa-refresh"></i></button>
               </div>
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @search-activate="searching=!searching" @search-deactivate="searching=!searching"></search-box>
               </div>
             </div>
-            <h3>{{ $t('ui.device.datapoint') }}</h3>
+            <h3>{{ $t('operation.product.device.diagnose.datapoint') }}</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th class="wp5">{{ $t('ui.datapoint.fields.index') }}</th>
-                <th class="wp20">{{ $t('ui.datapoint.fields.name') }}</th>
-                <th class="wp25">{{ $t('ui.datapoint.fields.description') }}</th>
-                <th>{{ $t('ui.device.current_value') }}</th>
+                <th class="wp5">{{ $t('operation.product.device.diagnose.index') }}</th>
+                <th class="wp20">{{ $t('operation.product.device.diagnose.id') }}</th>
+                <th class="wp25">{{ $t('operation.product.device.diagnose.describe') }}</th>
+                <th>{{ $t('operation.product.device.diagnose.current_value') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -55,7 +55,7 @@
               <tr v-if="datapointList.length === 0">
                 <td colspan="4" class="tac">
                   <i v-if="$loadingRouteData" class="fa fa-refresh fa-spin"></i>
-                  <div v-else class="tips-null">{{ $t('ui.device.no_datapoint') }}</div>
+                  <div v-else class="tips-null">{{ $t('operation.product.device.diagnose.no_datapoint') }}</div>
                 </td>
               </tr>
             </tbody>
@@ -70,7 +70,7 @@
             <div class="actions">
               <switch :value.sync="showLog" @switch-toggle="toggleLog" size="small"></switch>
             </div>
-            <h2>{{ $t('ui.device.log') }}</h2>
+            <h2>{{ $t('operation.product.device.diagnose.log') }}</h2>
           </div>
           <div class="log-panel-bd">
             <code class="output-log">
