@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd bordered panel-hd-full">
-      <h2>热力分布</h2>
+      <h2>{{ $t('operation.product.analysis.hot.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="row">
@@ -75,15 +75,15 @@ export default {
       headers: [
         {
           key: 'region',
-          title: '地域'
+          title: this.$t('operation.product.analysis.hot.region')
         },
         {
           key: 'count',
-          title: '设备数量'
+          title: this.$t('operation.product.analysis.hot.device_count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('operation.product.analysis.hot.percent'),
           sortType: -1
         }
       ]
@@ -129,7 +129,7 @@ export default {
           }
         },
         series: [{
-          name: '设备数量',
+          name: this.$t('operation.product.analysis.hot.device_count'),
           type: 'scatter',
           coordinateSystem: 'geo',
           data: convertData(this.regionData),

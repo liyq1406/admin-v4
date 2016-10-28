@@ -92,6 +92,7 @@ export default {
     time: '时间', // 时间
     hour: '小时', // 小时
     minutes: '分钟', // 分钟
+    second: '秒', // 秒
     time_length: '持续时长', // 持续市长
     alert_level: '告警等级', // 告警等级
     state: '状态', // 状态

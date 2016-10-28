@@ -226,7 +226,7 @@ export default {
       if (hours > 1) {
         return `${hours}${this.$t('operation.product.alert.hour')}`
       } else {
-        return `${Math.floor(n / 60000)}${this.$t('operation.product.device.alert.minutes')}`
+        return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
     },
 
