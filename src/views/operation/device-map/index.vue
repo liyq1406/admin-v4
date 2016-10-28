@@ -12,7 +12,7 @@
     <!-- 设备地图 -->
     <div class="panel device-map-page" v-show="productOptions.length && !loadingProducts">
       <div class="panel-hd">
-        <h2>{{ $t("ui.main_nav.operation.subs.device_map.label") }}</h2>
+        <h2>{{ $t("layout.main_nav.operation.subs.device_map.label") }}</h2>
         <div class="leftbox">
           <x-select width="160px" :label="currProduct.name" size="small">
             <span slot="label">选择产品：</span>

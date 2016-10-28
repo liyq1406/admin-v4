@@ -257,7 +257,7 @@ export default {
   },
 
   // 用户菜单
-  user_menu: {
+  account_menu: {
     account: '帐号信息',
     quit: '退出'
   },

@@ -5,8 +5,8 @@
     <nav class="nav-header">
       <!-- <pre>{{mainNav | json}}</pre> -->
       <ul>
-        <li><a v-link="{path: '/dev'}"><span class="link-text">{{ $t('ui.main_nav.dev.label') }}</span></a></li>
-        <li><a v-link="{path: '/operation'}"><span class="link-text">{{ $t('ui.main_nav.operation.label') }}</span></a></li>
+        <li><a v-link="{path: '/dev'}"><span class="link-text">{{ $t('layout.main_nav.dev.label') }}</span></a></li>
+        <li><a v-link="{path: '/operation'}"><span class="link-text">{{ $t('layout.main_nav.operation.label') }}</span></a></li>
       </ul>
     </nav>
     <!-- End: 主导航 -->
@@ -14,7 +14,7 @@
     <!-- Start: 用户导航 -->
     <div @mouseover="isShowUserNav = true" @mouseout="isShowUserNav = false" class="user-nav">
       <!-- DEMO环境成员默认为已认证 -->
-      <span class="user-name" v-if="isDemo"><i class="badge badge-authorized">已认证</i>{{ currentMember.name }}</span>
+      <span class="user-name" v-if="isDemo"><i class="badge badge-authorized">{{ $t('layout.levels.authorized') }}</i>{{ currentMember.name }}</span>
       <!-- 正式环境成员认证状态动态读取 -->
       <span class="user-name" v-else>{{ currentMember.name }}<i class="badge" :class="{'badge-authorized': corp.status===1, 'badge-vip': corp.status===2}" v-show="corp.status>=0">{{ levelLabel }}</i></span>
       <i class="arrow-down"></i>
@@ -25,22 +25,22 @@
         </div>
         <ul>
           <li class="sec-nav-item">
-            <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("ui.user_menu.account") }}</a>
+            <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("layout.account_menu.account") }}</a>
           </li>
           <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-            <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>成员管理</a>
+            <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>{{ $t("layout.account_menu.members") }}</a>
           </li>
           <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-            <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
+            <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>{{ $t("layout.account_menu.authorize") }}</a>
           </li>
           <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-            <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>安全审计</a>
+            <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>{{ $t("layout.account_menu.security") }}</a>
           </li>
           <li class="sec-nav-item">
-            <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>企业信息</a>
+            <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>{{ $t("layout.account_menu.corp") }}</a>
           </li>
           <li class="sec-nav-item">
-            <a href="#" @click.prevent="quit"><i class="fa fa-sign-out"></i>{{ $t("ui.user_menu.quit") }}</a>
+            <a href="#" @click.prevent="quit"><i class="fa fa-sign-out"></i>{{ $t("layout.account_menu.quit") }}</a>
           </li>
         </ul>
       </div>
@@ -51,13 +51,13 @@
     <div class="extra-nav">
       <ul>
         <li class="link-demo">
-          <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">查看demo</a>
+          <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">{{ $t('layout.view_demo') }}</a>
           <div class="authorize-tips" v-if="!isDemo" v-show="isShowTips">
             <div class="cont">
-              <p>查看demo立即体验运营平台</p>
-              <p>更多服务请<a class="link-contact" href="http://www.xlink.cn/about.html" target="_blank">联系商务</a>获得支持<a class="hl-orange" @click.prevent="removeAlertForever">不再显示</a></p>
+              <p>{{ $t('layout.demo_tips') }}</p>
+              <p>{{{ $t('layout.service_tips') }}}<a class="hl-orange" @click.prevent="removeAlertForever">{{ $t('layout.display_no_more') }}</a></p>
             </div>
-            <div class="demo-text">查看demo</div>
+            <div class="demo-text">{{ $t('layout.view_demo') }}</div>
             <i class="fa fa-times-circle" @click="removeAlertMask"></i>
           </div>
         </li>
@@ -111,8 +111,8 @@ export default {
     // 企业等级信息
     levelLabel () {
       return ({
-        '0': '未认证',
-        '1': '已认证',
+        '0': this.$t('layout.levels.not_authorized'),
+        '1': this.$t('layout.levels.authorized'),
         '2': 'VIP'
       })[this.corp.status || 0]
     },
@@ -121,7 +121,7 @@ export default {
     reason () {
       let result = ''
       if (this.corp.status === 0) {
-        result = '暂无使用权限'
+        result = this.$t('layout.messages.no_permission')
       }
       return result
     },
@@ -208,7 +208,7 @@ export default {
       window.localStorage.removeItem('expireAt')
       this.showNotice({
         type: 'info',
-        content: '您已退出登录'
+        content: this.$t('layout.messages.quit')
       })
       this.$route.router.go({path: '/login'})
     }

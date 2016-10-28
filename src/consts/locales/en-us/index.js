@@ -10,11 +10,15 @@ import ui from './ui'
 import operation from './operation'
 import auth from './auth'
 
+// 其他
+import layout from './other/layout'
+
 export default {
   common,
   errors,
   data,
   ui,
   operation,
-  auth
+  auth,
+  layout
 }

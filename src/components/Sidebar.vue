@@ -11,14 +11,14 @@
               <div class="nav-aside-title" v-if="item.type === 'title'">{{ item.label }} </div>
               <!-- 按钮 -->
               <div class="nav-aside-actions" v-if="item.action">
-                <a v-link="{path: nav.url + item.url}"><i class="fa" :class="'fa-'+item.icon"></i>添加产品</a>
+                <a v-link="{path: nav.url + item.url}"><i class="fa" :class="'fa-'+item.icon"></i>{{ $t('layout.main_nav.dev.subs.add_product') }}</a>
               </div>
             </template>
             <!-- 导航菜单 -->
             <template v-else>
-              <a class="nav-aside-item-title" :href="genTopLevelLink(item)" @click="toggle(item, $event)" :class="{'v-link-active':isActive(item)}"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
+              <a class="nav-aside-item-title" :href="genTopLevelLink(item)" @click="toggle(item, $event)" :class="{'v-link-active':isActive(item)}"><i class="fa" :class="'fa-'+item.icon"></i>{{ item.name || $t('layout.main_nav.' + nav.alias + '.subs.' + item.alias + '.label') }}</a>
               <ul class="sub-nav" v-show="item.subs && item.subs.length && item.unfold">
-                <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('ui.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + strikeToLodash(link.alias)) }}</span></a></li>
+                <li v-for="link in item.subs"><a v-link="{path: nav.url + link.url}"><span class="link-text">{{ $t('layout.main_nav.' + nav.alias + '.subs.' + item.alias + '.subs.' + strikeToLodash(link.alias)) }}</span></a></li>
               </ul>
             </template>
           </div>
