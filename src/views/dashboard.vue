@@ -7,15 +7,15 @@
           <div class="part part1 base-introduce">
             <div class="icon-box"></div>
             <div class="text-box">
-              <h2>我是开发</h2>
-              <div class="description">在开发平台创建产品、开发调试产品，配置产品设备属性，发布产品上线</div>
+              <h2>{{ $t('home.developer.title') }}</h2>
+              <div class="description">{{ $t('home.developer.description') }}</div>
             </div>
           </div>
 
           <div class="part part2 product-list">
             <div class="title-box">
-              <h2>产品开发</h2>
-              <a class="check-all" v-show="isReleaseProductsCount + noReleaseProductsCount" @click="goto('/dev')">查看全部({{isReleaseProductsCount + noReleaseProductsCount}}) ></a>
+              <h2>{{ $t('home.developer.product_dev') }}</h2>
+              <a class="check-all" v-show="isReleaseProductsCount + noReleaseProductsCount" @click="goto('/dev')">{{ $t('home.detail') }}({{isReleaseProductsCount + noReleaseProductsCount}}) ></a>
             </div>
             <div class="content-box">
               <div class="product" v-for="product in devProducts">
@@ -28,18 +28,18 @@
                     <!-- <span class="product-id">({{product.id}})</span> -->
                   </div>
                   <div class="info">
-                    <span>授权：{{product['quota'] || 0}}</span>
-                    <span class="ml10">| 设备数：{{product['total'] || '0'}}</span>
-                    <span class="ml10">| 状态：{{product['is_release']?'已发布':'未发布'}}</span>
+                    <span>{{ $t('home.authorization') }}：{{product['quota'] || 0}}</span>
+                    <span class="ml10">| {{ $t('home.device_count') }}：{{product['total'] || '0'}}</span>
+                    <span class="ml10">| {{ $t('home.status') }}：{{product['is_release'] ? $t('home.developer.published') : $t('home.developer.unpublished') }}</span>
                   </div>
                 </div>
               </div>
               <div class="no-products ml10" v-show="devProducts.length
               === 0">
-                <span class="lgrayfont">您还没有任何产品，请点击按钮开始创建</span>
+                <span class="lgrayfont">{{ $t('home.developer.no_product_tip') }}</span>
                 <button class="btn bggray ml20" @click="goto('/dev/products/create')">
                   <i class="fa fa-plus"></i>
-                  添加产品
+                {{ $t('home.developer.add_product') }}
                 </button>
               </div>
             </div>
@@ -47,8 +47,8 @@
 
           <div class="part part3 link-box">
             <div class="title-box">
-              <h2>开发指南</h2>
-              <a class="check-all" @click="open('https://github.com/xlink-corp/xlink-sdk')">查看全部 ></a>
+              <h2>{{ $t('home.developer.dev_guide') }}</h2>
+              <a class="check-all" @click="open('https://github.com/xlink-corp/xlink-sdk')">{{ $t('home.detail')}}></a>
             </div>
             <div class="content-box">
               <div class="link" v-for="link in links">
@@ -59,7 +59,7 @@
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary" @click="goto('/dev')">立即进入 >></button>
+            <button class="btn btn-primary" @click="goto('/dev')">{{ $t('home.go_in') }} >></button>
           </div>
         </div>
 
@@ -69,15 +69,15 @@
           <div class="part part1 base-introduce">
             <div class="icon-box"></div>
             <div class="text-box">
-              <h2>我是运营</h2>
-              <div class="description">在运营平台查看设备数据、用户数据，查看设备运行状态并针对设备和用户数据统计运营数据</div>
+              <h2>{{ $t('home.operation.title') }}</h2>
+              <div class="description">{{ $t('home.operation.description') }}</div>
             </div>
           </div>
 
           <div class="part part2 product-list">
             <div class="title-box">
-              <h2>产品管理</h2>
-              <a class="check-all" v-show="isReleaseProductsCount" @click="goto('/operation/overview')">查看全部({{isReleaseProductsCount}}) ></a>
+              <h2>{{ $t('home.operation.product_manager') }}</h2>
+              <a class="check-all" v-show="isReleaseProductsCount" @click="goto('/operation/overview')">{{ $t('home.detail')}}({{isReleaseProductsCount}}) ></a>
             </div>
             <div class="content-box">
               <template v-if="corp.status!==0 && releaseProducts.length!==0">
@@ -91,46 +91,46 @@
                       <!-- <span class="product-id">({{product.id}})</span> -->
                     </div>
                     <div class="info">
-                      <span>设备数：{{product['total']}}</span>
-                      <span class="ml10">| 激活：{{product['activated']}}</span>
-                      <span class="ml10">| 在线：{{product['online']}}</span>
+                      <span>{{ $t('home.device_count') }}：{{product['total']}}</span>
+                      <span class="ml10">| {{ $t('home.operation.actived') }}：{{product['activated']}}</span>
+                      <span class="ml10">| {{ $t('home.operation.online') }}：{{product['online']}}</span>
                     </div>
                   </div>
                 </div>
               </template>
               <div class="no-products ml10" v-show="corp.status===0">
-                <div class="lgrayfont">您的帐号尚未认证，认证成功后即可使用运营平台</div>
-                <div class="lgrayfont">相关问题请联系商务获得支持，<a class="hl-red" @click="open('http://www.xlink.cn/about.html')">查看联系方式</a></div>
+                <div class="lgrayfont">{{ $t('home.operation.not_certified') }}</div>
+                <div class="lgrayfont">{{ $t('home.operation.business_support') }}，<a class="hl-red" @click="open('http://www.xlink.cn/about.html')">{{ $t('home.operation.contact_info') }}</a></div>
               </div>
               <div class="no-products ml10 grayfont" v-show="corp.status!==0 && releaseProducts.length===0">
-                <span class="lgrayfont">暂未发布产品，马上去开发平台发布一款产品，即可使用运营平台，任何疑问联系：<i class="hl-red">400-291-234</i></span>
+                <span class="lgrayfont">{{ $t('home.operation.publish_tip') }}：<i class="hl-red">400-291-234</i></span>
               </div>
             </div>
           </div>
 
           <div class="part part3 link">
             <div class="title-box">
-              <h2>快捷导航</h2>
+              <h2>{{ $t('home.operation.fast_link') }}</h2>
               <!-- <a class="check-all" @click="goto('/operation/overview')">查看全部 ></a> -->
             </div>
             <div class="content-box">
               <div class="nav">
-                <span>产品管理：</span>
+                <span>{{ $t('home.operation.product_manager') }}：</span>
                 <a v-for="nav in nav.products" @click="goto(nav.path)">{{nav.content}}</a>
               </div>
               <div class="nav">
-                <span>告警服务：</span>
+                <span>{{ $t('home.operation.alert') }}：</span>
                 <a v-for="nav in nav.alerts" @click="goto(nav.path)">{{nav.content}}</a>
               </div>
               <div class="nav">
-                <span>用户管理：</span>
+                <span>{{ $t('home.operation.users') }}：</span>
                 <a v-for="nav in nav.users" @click="goto(nav.path)">{{nav.content}}</a>
               </div>
             </div>
           </div>
 
           <div class="part part4 entry">
-            <button class="btn btn-primary " @click="enterOperation">立即进入 >></button>
+            <button class="btn btn-primary " @click="enterOperation">{{ $t('home.go_in') }} >></button>
           </div>
         </div>
       </div>
@@ -142,7 +142,7 @@
       </div>
     </div>
     <div class="footer">
-      <span>© 2016  云智易 |  www.xlink.cn</span>
+      <span>{{ $t('home.copy_right') }}</span>
     </div>
   </div>
 </template>
@@ -175,32 +175,32 @@ export default {
       productSummary: [],
       links: [
         {
-          content: '如何将我的智能设备接入平台？',
+          content: this.$t('home.how_to_link'),
           path: 'https://github.com/xlink-corp/xlink-sdk/blob/master/README.md'
         },
         {
-          content: '应用开发接入说明及工程示例',
+          content: this.$t('home.app_demo_link'),
           path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/应用端开发文档'
         },
         {
-          content: '云智易物联平台RESTful接口说明',
+          content: this.$t('home.resful_link'),
           path: 'https://github.com/xlink-corp/xlink-sdk/tree/master/物联平台管理接口文档'
         }
       ],
       nav: {
         products: [
           {
-            content: '产品概览',
+            content: this.$t('home.product_overview'),
             path: '/operation/overview'
           }
         ],
         alerts: [
           {
-            content: '告警记录',
+            content: this.$t('home.alert_record'),
             path: '/operation/alerts/record'
           },
           {
-            content: '告警分析',
+            content: this.$t('home.alert_analysis'),
             path: '/operation/alerts/analysis'
           }
           // {
@@ -210,11 +210,11 @@ export default {
         ],
         users: [
           {
-            content: '用户概览',
+            content: this.$t('home.user_overview'),
             path: '/operation/users/overview'
           },
           {
-            content: '用户列表',
+            content: this.$t('home.user_list'),
             path: '/operation/users/list'
           // },
           // {

@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>告警记录</h2>
+      <h2>{{ $t('operation.alert.record.title') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select :label="currentProduct.name" width="110px" size="small">
-            <span slot="label">产品</span>
+            <span slot="label">{{ $t('operation.alert.record.product') }}</span>
             <select v-model="currentProduct" @change="productSelected">
               <!-- <option :value="currentProduct">{{ currentProduct.name }}</option> -->
               <option v-for="product in products" :value="product">{{ product.name }}</option>
@@ -56,9 +56,9 @@
             </div>
           </div>
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-            <label>标记为:</label>
-            <button class="btn btn-ghost" @click="setDeal">已处理</button>
-            <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+            <label>{{ $t('operation.alert.record.sign') }}:</label>
+            <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.alert.record.processed') }}</button>
+            <button class="btn btn-ghost" @click="setUnDeal">{{ $t('operation.alert.record.no_processed') }}</button>
           </div>
         </x-table>
       </div>
@@ -192,22 +192,22 @@ export default {
       informTypes: locales[Vue.config.lang].data.INFORM_TYPES,
       alertSummary: {
         unread: {
-          title: '待处理告警',
+          title: this.$t('operation.alert.record.untreated'),
           total: '--',
           change: 0
         },
         today: {
-          title: '今日告警',
+          title: this.$t('operation.alert.record.today_add'),
           total: '--',
           change: 0
         },
         week: {
-          title: '7天告警数',
+          title: this.$t('operation.alert.record.sevent_add'),
           total: '--',
           change: 0
         },
         month: {
-          title: '30天告警数',
+          title: this.$t('operation.alert.record.thirty_add'),
           total: '--',
           change: 0
         }
@@ -218,50 +218,47 @@ export default {
       endTimePick: '',
       queryTypeOptions: [
         { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'from' },
-        { label: '告警内容', value: 'content' }
+        { label: this.$t('operation.alert.record.device_id'), value: 'from' },
+        { label: this.$t('operation.alert.record.alert_content'), value: 'content' }
       ],
       queryType: {
         label: 'MAC',
         value: 'mac'
       },
       visibility: {
-        label: '全部等级',
+        label: this.$t('operation.alert.record.all_level'),
         value: 'all'
       },
       visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: this.$t('operation.product.alert.all_level'), value: 'all' },
+        { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
+        { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
+        { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
       ],
       headers: [{
         key: 'content',
-        title: '告警内容'
+        title: this.$t('operation.product.device.alert.alert_content')
       }, {
         key: 'mac',
-        title: '设备MAC',
-        class: 'wp15'
+        title: this.$t('operation.product.device.alert.mac')
       }, {
         key: 'id',
-        title: '设备ID',
-        class: 'wp10'
+        title: this.$t('operation.product.device.alert.device_id')
       }, {
         key: 'create_date',
-        title: '时间',
-        sortType: -1,
-        class: 'wp15'
+        title: this.$t('operation.product.device.alert.time'),
+        sortType: -1
       }, {
         key: 'duration',
-        title: '持续时长',
+        title: this.$t('operation.product.device.alert.time_length'),
         class: 'wp10'
       }, {
         key: 'level',
-        title: '告警等级',
+        title: this.$t('operation.product.device.alert.alert_level'),
         class: 'wp8'
       }, {
         key: 'state',
-        title: '状态',
+        title: this.$t('operation.product.device.alert.state'),
         class: 'wp6'
       }],
       showBatchBtn: false,
@@ -316,14 +313,14 @@ export default {
       }
 
       switch (this.visibility.value) {
-        case '通知':
-          condition.query['tags'] = { $in: ['通知'] }
+        case `${this.$t('operation.alert.record.info')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.info')}`] }
           break
-        case '轻微':
-          condition.query['tags'] = { $in: ['轻微'] }
+        case `${this.$t('operation.alert.record.warning')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.warning')}`] }
           break
-        case '严重':
-          condition.query['tags'] = { $in: ['严重'] }
+        case `${this.$t('operation.alert.record.danger')}`:
+          condition.query['tags'] = { $in: [`${this.$t('operation.alert.record.danger')}`] }
           break
         default:
       }
@@ -341,8 +338,8 @@ export default {
       var result = []
       this.alerts.forEach((item) => {
         let levelCls = ({
-          '轻微': 'text-label-warning',
-          '严重': 'text-label-danger'
+          [this.$t('operation.product.alert.warning')]: 'text-label-warning',
+          [this.$t('operation.product.alert.danger')]: 'text-label-danger'
         })[item.tags] || ''
 
         let content = '<a class="table-limit-width hl-red">' + item.content + '</a>'
@@ -352,8 +349,8 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || '通知'}</div>`,
-          state: item.is_read ? '已处理' : '未处理',
+          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
           prototype: item
         }
         result.push(alert)
@@ -441,13 +438,11 @@ export default {
      */
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
-      let res = ''
       if (hours > 1) {
-        res = `${hours}小时`
+        return `${hours}${this.$t('operation.product.alert.hour')}`
       } else {
-        res = `${Math.floor(n / 60000)}分钟`
+        return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
-      return res
     },
 
     // 切换搜索

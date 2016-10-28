@@ -5,8 +5,10 @@
 
 import overview from './overview'
 import product from './product'
+import alert from './alert'
 
 export default {
   overview,
-  product
+  product,
+  alert
 }
