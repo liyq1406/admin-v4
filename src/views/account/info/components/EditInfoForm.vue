@@ -3,12 +3,12 @@
     <validator name="validation">
       <form autocomplete="off" novalidate @submit.prevent="onSubmit">
         <div class="form-row row">
-          <label class="form-control col-6">名称</label>
+          <label class="form-control col-6">{{ this.$t('account.info.name') }}</label>
           <div class="controls col-18">
             <div class="input-text-wrap">
               <input type="text" v-model="model.name" name="model.name" v-validate:name="{required: true}" class="input-text"/>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.name.touched && $validation.name.required">名称为必填项</span>
+                <span v-if="$validation.name.touched && $validation.name.required">{{ this.$t('account.info.required_name') }}</span>
               </div>
             </div>
           </div>

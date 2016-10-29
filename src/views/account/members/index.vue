@@ -3,7 +3,7 @@
     <div class="panel mt20 mb30">
       <div class="panel-bd ml20 mr20">
         <div class="action-bar">
-          <a class="btn btn-primary fl" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>添加成员</a>
+          <a class="btn btn-primary fl" v-if="this.currentMember.role===1" @click.prevent="addMember"><i class="fa fa-plus"></i>{{ $t('account.members.add_member') }}</a>
         </div>
         <div class="data-table with-loading">
           <div class="icon-loading" v-show="loadingData">
@@ -12,7 +12,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getMembers(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMembers(true)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getMembers(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getMembers(true)">
                   <x-select width="130px" :label="queryType.label" size="small">
                     <select v-model="queryType">
                       <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -22,17 +22,17 @@
                 </search-box>
               </div>
             </div>
-            <h3>{{ $t('ui.member.member_list') }}</h3>
+            <h3>{{ $t('account.members.member_list') }}</h3>
           </div>
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th width="18%">{{ $t('ui.member.fields.name') }}</th>
-                <th width="22%">{{ $t('ui.member.fields.email') }}</th>
-                <th width="20%">{{ $t('ui.member.fields.phone') }}</th>
-                <th width="10%">{{ $t('ui.member.fields.role') }}</th>
+                <th width="18%">{{ $t('account.members.fields.name') }}</th>
+                <th width="22%">{{ $t('account.members.fields.email') }}</th>
+                <th width="20%">{{ $t('account.members.fields.phone') }}</th>
+                <th width="10%">{{ $t('account.members.fields.role') }}</th>
                 <th width="10%" class="tac">{{ $t('common.status') }}</th>
-                <th width="20%">最后一次登录</th>
+                <th width="20%">{{ $t('account.members.last_login') }}</th>
                 <!-- <th width="14%" class="tac" v-if ="this.currentMember.role === 1">{{ $t('common.action') }}</th> -->
               </tr>
             </thead>
@@ -66,14 +66,14 @@
 
       <!-- 添加成员 -->
       <modal :show.sync="showModal" @close="onAddCancel">
-        <h3 slot="header">{{ $t('ui.member.add_member') }}</h3>
+        <h3 slot="header">{{ $t('account.members.add_member') }}</h3>
         <div slot="body" class="form">
           <validator name="validation">
             <form autocomplete="off" novalidate hook="addHook" @submit.prevent="onAddSubmit">
               <div class="form-row row">
-                <label class="form-control col-6">{{ $t("ui.member.fields.email") }}:</label>
+                <label class="form-control col-6">{{ $t("account.members.fields.email") }}:</label>
                 <div class="controls col-18">
-                  <div v-placeholder="$t('ui.member.placeholders.email')" class="input-text-wrap">
+                  <div v-placeholder="$t('account.members.placeholders.email')" class="input-text-wrap">
                     <input v-model="addModel.email" type="email" name="addModel.email" v-validate:email="{required: true, format: 'email'}"  maxlength="32" required lazy class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
@@ -83,7 +83,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6">手机号码:</label>
+                <label class="form-control col-6">{{ $t('account.members.phone_number') }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('auth.fields.phone')" class="input-text-wrap">
                     <input type="text" v-model="addModel.phone" v-validate:phone="{required: true, format: 'phone'}" name="addModel.phone" lazy class="input-text"/>
@@ -95,19 +95,19 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6">姓名:</label>
+                <label class="form-control col-6">{{ $t('account.members.name') }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('auth.fields.name')" class="input-text-wrap">
                     <input type="text" v-model="addModel.name" v-validate:name="{required: true, format: 'no-spaces-both-ends'}" maxlength="10" name="addModel.name" class="input-text"/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('auth.fields.name')}) }}</span>
-                    <span v-if="$validation.name.modified && $validation.name.format">名字前后不能包含空格</span>
+                    <span v-if="$validation.name.modified && $validation.name.format">{{ $t('account.members.name_no_space') }}</span>
                   </div>
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6">{{ $t("ui.member.fields.role") }}:</label>
+                <label class="form-control col-6">{{ $t("account.members.fields.role") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
                     <x-select :label="MEMBER_TYPES[addModel.type]">
@@ -119,7 +119,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6">密码:</label>
+                <label class="form-control col-6">{{ $t('account.members.password') }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('auth.password')" class="input-text-wrap">
                     <input type="password" v-model="addModel.password" v-validate:password="{required: true, minlength: 8, maxlength: 16}" name="addModel.password" lazy class="input-text"/>
@@ -132,7 +132,7 @@
                 </div>
               </div>
               <div class="form-row row">
-                <label class="form-control col-6">确认密码:</label>
+                <label class="form-control col-6">{{ $t('account.members.comfirm_password') }}:</label>
                 <div class="controls col-18">
                   <div v-placeholder="$t('auth.fields.confirm_password')" class="input-text-wrap">
                     <input type="password" v-model="confirmPassword" v-validate:confirm-password="{required: true, equal: addModel.password}"  name="confirmPassword" lazy class="input-text"/>
@@ -206,12 +206,12 @@ export default {
         password: ''
       },
       queryTypeOptions: [
-        { label: '姓名', value: 'name' },
-        { label: '手机', value: 'phone' },
-        { label: '邮箱', value: 'email' }
+        { label: this.$t('account.members.name'), value: 'name' },
+        { label: this.$t('account.members.phone'), value: 'phone' },
+        { label: this.$t('account.members.email'), value: 'email' }
       ],
       queryType: {
-        label: '姓名',
+        label: this.$t('account.members.name'),
         value: 'name'
       },
       originAddModel: {},
@@ -266,7 +266,7 @@ export default {
 
   methods: {
     statusText (status) {
-      let result = ['未激活', '已启用', '已停用']
+      let result = [this.$t('account.members.not_action'), this.$t('account.members.enabled'), this.$t('account.members.not_enabled')]
       return result[status]
     },
     /**

@@ -6,8 +6,8 @@
         <div class="col-16">
           <h2>{{ member.name }}</h2>
           <div class="actions" v-if="currentMember.role === 1 && member.role !== 1">
-            <button class="btn btn-ghost" @click="toggleAccount"><i class="hl-red fa" :class="{'fa-ban': member.status === 1, 'fa-undo': member.status !== 1}"></i>{{ member.status === 1 ? '停用帐号' : '启用帐号'}}</button>
-            <button class="btn btn-ghost" @click="delMember"><i class="hl-red fa fa-times"></i>删除成员</button>
+            <button class="btn btn-ghost" @click="toggleAccount"><i class="hl-red fa" :class="{'fa-ban': member.status === 1, 'fa-undo': member.status !== 1}"></i>{{ member.status === 1 ? $t('account.members.not_enabled_account') : $t('account.members.enabled_account') }}</button>
+            <button class="btn btn-ghost" @click="delMember"><i class="hl-red fa fa-times"></i>{{ $t('account.members.delete_member') }}</button>
           </div>
           <div v-stretch="182">
             <info-list :info="accountInfo">
@@ -16,8 +16,8 @@
                 <a class="fa fa-edit" @click="onShowMemberRoleModal" v-if="member.role !== 1"></a>
               </div>
               <div slot="password">
-                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role != 1">修改密码</a>
-                <span class="hl-gray" v-else>无权修改</span>
+                <a href="#" class="hl-red" @click.prevent="editPwd" v-if="currentMember.role === 1 && member.role != 1">{{ $t('account.members.change_password') }}</a>
+                <span class="hl-gray" v-else>{{ $t('account.members.no_permissions') }}</span>
               </div>
             </info-list>
           </div>
@@ -27,11 +27,11 @@
 
     <!-- 切换状态浮层   -->
     <modal :show.sync="showMemberRoleModal">
-      <h3 slot="header">修改角色</h3>
+      <h3 slot="header">{{ $t('account.members.change_role') }}</h3>
       <div slot="body" class="form">
         <form autocomplete="off" novalidate @submit.prevent="onSubmitMemberRole">
           <div class="form-row row">
-            <label class="form-control col-6">角色: </label>
+            <label class="form-control col-6">{{ $t('account.members.role') }}: </label>
             <div class="controls col-18">
               <x-select :label="role.label">
                 <select v-model="role" @change="">
@@ -135,10 +135,10 @@ export default {
       },
       member: {},
       breadcrumbNav: [{
-        label: '成员列表',
+        label: this.$t('account.members.member_list'),
         link: '/account/members'
       }, {
-        label: '成员资料'
+        label: this.$t('account.members.member_data')
       }]
     }
   },
@@ -147,27 +147,27 @@ export default {
     accountInfo () {
       return {
         role: {
-          label: '角色',
+          label: this.$t('account.members.role'),
           slot: true
         },
         password: {
-          label: '密码',
+          label: this.$t('account.members.password'),
           slot: true
         },
         phone: {
-          label: '手机',
+          label: this.$t('account.members.phone'),
           value: this.member.phone
         },
         email: {
-          label: '邮箱',
+          label: this.$t('account.members.email'),
           value: this.member.email
         },
         lastAuthTime: {
-          label: '最后登录',
+          label: this.$t('account.members.last_login'),
           value: formatDate(this.member.last_auth_time)
         },
         createTime: {
-          label: '创建时间',
+          label: this.$t('account.members.create_time'),
           value: formatDate(this.member.create_time)
         }
       }
@@ -193,7 +193,7 @@ export default {
       api.corp.setMemberRole(this.member.id, roleType, params).then((res) => {
         this.showNotice({
           type: 'success',
-          content: '设置成功！'
+          content: this.$t('common.action_success')
         })
         this.getMember()
         this.onSubmitMemberRoleCancel()
@@ -248,11 +248,11 @@ export default {
       if (this.member.status === 1) {
         type = 'disableMember'
         status = 2
-        text = '停用成功！'
+        text = this.$t('common.action_success')
       } else if (this.member.status === 2) {
         type = 'enableMember'
         status = 1
-        text = '启用成功！'
+        text = this.$t('common.action_success')
       } else {
         return
       }
@@ -271,20 +271,20 @@ export default {
      * @return {[type]} [description]
      */
     delMember () {
-      if (!window.confirm('确定删除？')) {
+      if (!window.confirm(this.$t('account.members.comfirm_delete'))) {
         return
       }
       api.corp.delMember(this.member.id).then((res) => {
         if (res.status === 200) {
           this.showNotice({
             type: 'success',
-            content: '删除成功！'
+            content: this.$t('common.action_success')
           })
           this.$route.router.go('/account/members')
         } else {
           this.showNotice({
             type: 'error',
-            content: '删除失败！'
+            content: this.$t('common.action_fail')
           })
         }
       }).catch((res) => {
@@ -303,7 +303,7 @@ export default {
           if (res.status === 200) {
             this.showNotice({
               type: 'success',
-              content: this.$t('ui.account.password_msg')
+              content: this.$t('common.action_success')
             })
           }
           this.onEditPwdCancel()

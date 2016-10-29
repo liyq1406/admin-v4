@@ -69,27 +69,27 @@ export default {
     corpInfo () {
       let result = {
         id: {
-          label: '企业ID',
+          label: this.$t('account.corp.corp_id'),
           value: ''
         },
         type: {
-          label: '应用类型',
+          label: this.$t('account.corp.app_type'),
           value: ''
         },
         contact: {
-          label: '联系人',
+          label: this.$t('account.corp.contact'),
           value: ''
         },
         createTime: {
-          label: '创建时间',
+          label: this.$t('account.corp.create_time'),
           value: ''
         },
         phone: {
-          label: '手机',
+          label: this.$t('account.corp.phone'),
           value: ''
         },
         email: {
-          label: '邮箱',
+          label: this.$t('account.corp.email'),
           value: ''
         }
       }
