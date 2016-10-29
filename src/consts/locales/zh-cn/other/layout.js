@@ -244,6 +244,8 @@ export default {
     }
   },
 
+  my_account: '我的账户',
+
   // 用户菜单
   account_menu: {
     account: '帐号信息',

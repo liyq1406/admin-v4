@@ -1,7 +1,7 @@
 <template>
   <div class="page-in account-page">
     <div class="main-title bordered">
-      <h2>我的帐户</h2>
+      <h2>{{ $t("layout.my_account") }}</h2>
     </div>
     <div class="sec-nav mt30">
       <ul>
@@ -9,16 +9,16 @@
           <a v-link="{path: '/account/info'}"><i class="fa fa-user"></i>{{ $t("layout.account_menu.account") }}</a>
         </li>
         <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-          <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>成员管理</a>
+          <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>{{ $t("layout.account_menu.members") }}</a>
         </li>
         <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-          <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>授权管理</a>
+          <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>{{ $t("layout.account_menu.authorize") }}</a>
         </li>
         <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-          <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>安全审计</a>
+          <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>{{ $t("layout.account_menu.security") }}</a>
         </li>
         <li class="sec-nav-item">
-          <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>企业信息</a>
+          <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>{{ $t("layout.account_menu.corp") }}</a>
         </li>
       </ul>
     </div>
