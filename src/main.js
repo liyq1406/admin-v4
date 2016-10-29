@@ -65,54 +65,6 @@ Object.keys(validators).forEach((key) => {
 })
 
 /**
- * 食材/菜谱类别过滤器
- */
-Vue.filter('formatCategories', {
-  read (val) {
-    let cateStr = ''
-    val.map((category, index) => {
-      cateStr += category.main
-      if (category.sub.length) {
-        cateStr += ':'
-        category.sub.map((item, i) => {
-          cateStr += item
-          if (i < category.sub.length - 1) {
-            cateStr += ','
-          }
-        })
-      }
-      if (index < val.length - 1) {
-        cateStr += '\n'
-      }
-    })
-    return cateStr
-  },
-
-  write (val, oldVal) {
-    let ret = []
-    let arr = val.split('\n')
-    arr.map((item, index) => {
-      if (item.length) {
-        let obj = {}
-        let temp = item.split(':')
-        obj.main = temp[0].trim()
-        if (temp[1]) {
-          let subArr = temp[1].split(',')
-          subArr = subArr.map((item) => {
-            return item.trim()
-          })
-          obj.sub = subArr
-        } else {
-          obj.sub = []
-        }
-        ret.push(obj)
-      }
-    })
-    return ret
-  }
-})
-
-/**
  * 用户反馈类别过滤器
  */
 Vue.filter('formatTags', {
@@ -154,33 +106,6 @@ Vue.filter('formatTags', {
         //   string.sub = []
         // }
         ret.push(string)
-      }
-    })
-    return ret
-  }
-})
-
-/**
- * 推送规则过滤器
- */
-Vue.filter('formatRules', {
-  read (val) {
-    let ruleStr = ''
-    val.map((rule, index) => {
-      ruleStr += rule
-      if (index < val.length - 1) {
-        ruleStr += '\n'
-      }
-    })
-    return ruleStr
-  },
-
-  write (val, oldVal) {
-    let ret = []
-    let arr = val.split('\n')
-    arr.map((item, index) => {
-      if (item.trim().length) {
-        ret.push(item.trim())
       }
     })
     return ret
