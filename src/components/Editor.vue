@@ -54,7 +54,7 @@ export default {
       skin: 'lightgray', // 皮肤样式
       skin_url: '/static/vendor/tinymce/skins/lightgray', // 皮肤
       toolbar_items_size: 'small', // 工具栏图标大小
-      fontsize_formats: '8px 10px 12px 14px 18px 24px 36px', // 候选字体大小
+      fontsize_formats: '12px 14px 18px 24px 30px 36px 40px 48px', // 候选字体大小
       plugins: ['link', 'autoresize', 'image', 'textcolor'], // 插件
       // toolbar1: 'undo redo | bold italic underline strikethrough | alignleft aligncenter alignright alignjustify', // 工具栏1
       // toolbar2: 'searchreplace | bullist numlist | outdent indent blockquote | link unlink anchor image code | preview fullscreen', // 工具栏2
