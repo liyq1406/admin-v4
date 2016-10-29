@@ -25,6 +25,6 @@ export default {
   auth,
   layout,
   home,
-  account
+  account,
   components
 }
