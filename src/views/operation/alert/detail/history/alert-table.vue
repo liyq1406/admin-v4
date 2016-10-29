@@ -7,7 +7,7 @@
           <div class="filter-group fl">
             <div class="filter-group-item">
               <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">显示：</span>
+                <span slot="label">{{ $t('operation.product.alert.display') }}：</span>
                 <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
@@ -16,7 +16,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
+              <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getAlerts(true)" @search-activate="searching=!searching"  @press-enter="getAlerts(true)">
                 <x-select width="90px" :label="queryType.label" size="small">
                   <select v-model="queryType">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>
@@ -29,9 +29,9 @@
         </div>
         <x-table :headers="headers" :tables="tables" :page="page" :selecting="selecting" :loading="loadingData" @tbody-content="getInfo" @selected-change="selectChange" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage" @theader-create-date="sortBy">
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
-            <label>标记为:</label>
-            <button class="btn btn-ghost" @click="setDeal">已处理</button>
-            <button class="btn btn-ghost" @click="setUnDeal">未处理</button>
+            <label>{{ $t('operation.product.alert.sign') }}:</label>
+            <button class="btn btn-ghost" @click="setDeal">{{ $t('operation.product.alert.processed') }}</button>
+            <button class="btn btn-ghost" @click="setUnDeal">{{ $t('operation.product.alert.no_processed') }}</button>
           </div>
         </x-table>
       </div>
@@ -73,16 +73,16 @@ export default {
       selecting: true,
       alerts: [],
       visibilityOptions: [
-        { label: '全部等级', value: 'all' },
-        { label: '通知', value: '通知' },
-        { label: '轻微', value: '轻微' },
-        { label: '严重', value: '严重' }
+        { label: this.$t('operation.product.alert.all_level'), value: 'all' },
+        { label: this.$t('operation.product.alert.info'), value: this.$t('operation.product.alert.info') },
+        { label: this.$t('operation.product.alert.warning'), value: this.$t('operation.product.alert.warning') },
+        { label: this.$t('operation.product.alert.danger'), value: this.$t('operation.product.alert.danger') }
       ],
       visibility: {},
       queryTypeOptions: [
-        { label: 'MAC', value: 'mac' },
-        { label: '设备ID', value: 'from' },
-        { label: '告警内容', value: 'alert_name' }
+        { label: this.$t('operation.product.alert.mac'), value: 'mac' },
+        { label: this.$t('operation.product.alert.device_id'), value: 'from' },
+        { label: this.$t('operation.product.alert.alert_content'), value: 'alert_name' }
       ],
       queryType: {},
       key: '',
@@ -93,26 +93,26 @@ export default {
       countPerPage: config.COUNT_PER_PAGE,
       headers: [{
         key: 'content',
-        title: '告警内容'
+        title: this.$t('operation.product.device.alert.alert_content')
       }, {
         key: 'mac',
-        title: '设备MAC'
+        title: this.$t('operation.product.device.alert.mac')
       }, {
         key: 'id',
-        title: '设备ID'
+        title: this.$t('operation.product.device.alert.device_id')
       }, {
         key: 'create_date',
-        title: '时间',
+        title: this.$t('operation.product.device.alert.time'),
         sortType: -1
       }, {
         key: 'duration',
-        title: '持续时长'
+        title: this.$t('operation.product.device.alert.time_length')
       }, {
         key: 'level',
-        title: '告警等级'
+        title: this.$t('operation.product.device.alert.alert_level')
       }, {
         key: 'state',
-        title: '状态'
+        title: this.$t('operation.product.device.alert.state')
       }],
       showBatchBtn: false,
       dealList: []
@@ -169,8 +169,8 @@ export default {
       var result = []
       this.alerts.map((item) => {
         let levelCls = ({
-          '轻微': 'text-label-warning',
-          '严重': 'text-label-danger'
+          [this.$t('operation.product.alert.warning')]: 'text-label-warning',
+          [this.$t('operation.product.alert.danger')]: 'text-label-danger'
         })[item.tags] || ''
         let content = '<span class="table-limit-width">' + item.content + '</span>'
         let alert = {
@@ -179,8 +179,8 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls}">${item.tags}</div>`,
-          state: item.is_read ? '已处理' : '未处理',
+          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
           prototype: item
         }
         result.push(alert)
@@ -213,9 +213,9 @@ export default {
     prettyDuration (n) {
       let hours = (n / 3600000).toFixed(1)
       if (hours > 1) {
-        return `${hours}小时`
+        return `${hours}${this.$t('operation.product.alert.hour')}`
       } else {
-        return `${Math.floor(n / 60000)}分钟`
+        return `${Math.floor(n / 60000)}${this.$t('operation.product.alert.minutes')}`
       }
     },
 
