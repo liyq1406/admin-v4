@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>大客户管理</h2>
+      <h2>{{ $t('operation.user.details.major.main_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 mb20 no-split-line">
@@ -69,10 +69,10 @@ export default {
       majorClient: {},
       secondaryNav: [],
       breadcrumbNav: [{
-        label: '大客户管理',
+        label: this.$t('operation.user.details.major.main_title'),
         link: '/operation/users/major-clients'
       }, {
-        label: '当前'
+        label: this.$t('operation.user.details.curr')
       }]
     }
   },
@@ -81,31 +81,31 @@ export default {
     clientsInfo () {
       var result = {
         name: {
-          label: '联系人',
+          label: this.$t('operation.user.details.contacter'),
           value: this.majorClient.name
         },
         phone: {
-          label: '联系电话',
+          label: this.$t('common.phone'),
           value: this.majorClient.phone
         },
         industry: {
-          label: '行业',
+          label: this.$t('operation.user.details.industry'),
           value: this.majorClient.industry
         },
         email: {
-          label: '邮箱',
+          label: this.$t('common.email'),
           value: this.majorClient.email
         },
         create_time: {
-          label: '创建时间',
+          label: this.$t('operation.user.details.create_date'),
           value: formatDate(this.majorClient.create_time)
         },
         area: {
-          label: '所在地区',
+          label: this.$t('operation.user.details.area'),
           value: `${this.majorClient.country || ''}${this.majorClient.province || ''}${this.majorClient.city || ''}`
         },
         location: {
-          label: '详细地址',
+          label: this.$t('operation.user.details.address'),
           value: this.majorClient.location
         }
       }
@@ -120,7 +120,7 @@ export default {
 
       return {
         secondaryNav: [{
-          label: '设备列表',
+          label: this.$t('operation.user.details.devices.title'),
           link: { path: `${majorRoot}/devices` }
         // }, {
         //   label: '经销商',
@@ -132,7 +132,6 @@ export default {
 
   methods: {
     getMajorClient () {
-      console.log('获取大客户列表')
       this.loadingData = true
       var params = {
         filter: [

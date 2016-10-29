@@ -1,7 +1,7 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>用户基本信息</h2>
+      <h2>{{ $t('operation.user.details.main_title') }}</h2>
     </div>
     <breadcrumb :nav="breadcrumbNav"></breadcrumb>
     <div class="panel mt15 no-split-line">
@@ -10,7 +10,7 @@
           <info-card :info="userSummary" :pic="user.avatar"></info-card>
           <div class="account-type-box">
             <!-- <span>{{ user.status-0===1 ? '已启用' : '已停用' }}</span> -->
-            <button :disabled="toggling" @click="toggleMember(user)" class="btn btn-ghost btn-sm"><i :class="{'fa-ban': (user.status - 0 === 1), 'fa-play': !(user.status - 0 === 1)}" class="fa"></i>{{ user.status-0===1 ? ' 停用帐号' : ' 启用帐号' }}</button>
+            <button :disabled="toggling" @click="toggleMember(user)" class="btn btn-ghost btn-sm"><i :class="{'fa-ban': (user.status - 0 === 1), 'fa-play': !(user.status - 0 === 1)}" class="fa"></i>{{ user.status-0===1 ? $t('operation.user.details.disable_account') : $t('operation.user.details.enable_account') }}</button>
           </div>
           <div v-stretch="182">
             <info-list :info="userInfo"></info-list>
@@ -90,10 +90,10 @@
           'email_valid': false
         }, // 用户信息
         breadcrumbNav: [{
-          label: '全部',
+          label: this.$t('common.all'),
           link: '/operation/users/list'
         }, {
-          label: '用户信息'
+          label: this.$t('operation.user.details.curr')
         }],
         secondaryNav: []
       }
@@ -119,35 +119,35 @@
       userInfo () {
         var result = {
           status: {
-            label: '帐号状态',
+            label: this.$t('operation.user.details.status'),
             value: this.computedVaild(this.user.status)
           },
           create_date: {
-            label: '创建时间',
+            label: this.$t('operation.user.details.create_date'),
             value: formatDate(this.user.create_date) || '-'
           },
           email: {
-            label: '邮箱',
+            label: this.$t('common.email'),
             value: this.user.email || '-'
           },
           phone: {
-            label: '手机',
+            label: this.$t('common.phone'),
             value: this.user.phone || '-'
           },
           age: {
-            label: '年龄',
+            label: this.$t('common.age'),
             value: this.user.age >= 0 ? this.user.age : '-'
           },
           gender: {
-            label: '性别',
+            label: this.$t('common.sex'),
             value: this.computedGender(this.user.gender)
           },
           area: {
-            label: '所在区域',
+            label: this.$t('operation.user.details.area'),
             value: this.user.province + this.user.city || '-'
           },
           address: {
-            label: '详细地址',
+            label: this.$t('operation.user.details.address'),
             value: this.user.address || '-'
           },
           id: {
@@ -189,13 +189,13 @@
       route () {
         var deviceDetailRoot = `/operation/users/details/${this.$route.params.id}`
         this.secondaryNav = [{
-          label: '设备列表',
+          label: this.$t('operation.user.details.nav.devices'),
           link: { path: `${deviceDetailRoot}/devices` }
         }, {
-          label: '维保信息',
+          label: this.$t('operation.user.details.nav.warranty'),
           link: { path: `${deviceDetailRoot}/warranty` }
         }, {
-          label: '反馈记录',
+          label: this.$t('operation.user.details.nav.issues'),
           link: { path: `${deviceDetailRoot}/issues` }
         }]
       },
@@ -208,8 +208,8 @@
       computedGender (gender) {
         var result = {
           '-1': '-',
-          '1': '男',
-          '2': '女'
+          '1': this.$t('operation.user.details.male'),
+          '2': this.$t('operation.user.details.female')
         }
         return result[gender]
       },
@@ -223,12 +223,12 @@
         var result = '-'
         let status = this.user.status
         let isVaild = this.user.is_vaild
-        var str1 = isVaild ? '已激活' : '未激活'
+        var str1 = isVaild ? this.$t('operation.user.details.activated') : this.$t('operation.user.details.not_activated')
         var str2 = ''
         if (status === 1) {
-          str2 = '已启用'
+          str2 = this.$t('operation.user.details.enabled')
         } else if (status === 2) {
-          str2 = '已停用'
+          str2 = this.$t('operation.user.details.disabled')
         }
         result = str1 + ' ' + str2
         return result
@@ -248,10 +248,10 @@
       },
 
       deleteUser () {
-        if (window.confirm('确定要停用当前用户吗？')) {
+        if (window.confirm(this.$t('operation.user.details.confirm_info'))) {
           api.user.banMember(this.user.id).then((res) => {
             if (res.status === 200) {
-              console.log('已停用用户')
+              // console.log('已停用用户')
             }
           }).catch((res) => {
             this.handleError(res)
@@ -264,7 +264,7 @@
         if (!this.toggling) {
           this.toggling = true
           if (user.status - 0 === 1) {
-            if (window.confirm('确认停用该用户吗?')) {
+            if (window.confirm(this.$t('operation.user.details.confirm_info'))) {
               api.user.toggleMember(user.id, user.status - 0 === 1 ? 2 : 1).then((res) => {
                 // this.getTasks()
                 if (res.status === 200) {

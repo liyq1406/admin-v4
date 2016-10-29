@@ -21,8 +21,8 @@ export default {
     return {
       loadingData: false,
       data: {
-        '男性': 0,
-        '女性': 0
+        [this.$t('operation.user.portrait.sex.male')]: 0,
+        [this.$t('operation.user.portrait.sex.female')]: 0
       }
     }
   },
@@ -50,20 +50,20 @@ export default {
         },
         yAxis: {
           type: 'category',
-          data: ['性别']
+          data: [this.$t('operation.user.portrait.sex.title')]
         },
         series: [{
-          name: '男性',
+          name: this.$t('operation.user.portrait.sex.male'),
           type: 'bar',
-          stack: '性别',
+          stack: this.$t('operation.user.portrait.sex.title'),
           barMaxWidth: 40, // 柱条的最大宽度
-          data: this.data['男性']
+          data: this.data[this.$t('operation.user.portrait.sex.male')]
         }, {
-          name: '女性',
+          name: this.$t('operation.user.portrait.sex.female'),
           type: 'bar',
-          stack: '性别',
+          stack: this.$t('operation.user.portrait.sex.title'),
           barMaxWidth: 40, // 柱条的最大宽度
-          data: this.data['女性']
+          data: this.data[this.$t('operation.user.portrait.sex.female')]
         }]
       }
     }
@@ -81,8 +81,8 @@ export default {
     getData () {
       this.loadingData = true
       api.statistics.getUserSex().then((res) => {
-        this.data['男性'] = [res.data.male_total]
-        this.data['女性'] = [res.data.female_total]
+        this.data[this.$t('operation.user.portrait.sex.male')] = [res.data.male_total]
+        this.data[this.$t('operation.user.portrait.sex.female')] = [res.data.female_total]
         this.loadingData = false
       }).catch((res) => {
         this.handleError(res)

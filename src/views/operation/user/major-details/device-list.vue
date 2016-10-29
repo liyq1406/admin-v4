@@ -6,7 +6,7 @@
           <div class="filter-group fl">
             <div class="filter-group-item">
               <x-select :label="selectedProduct.name" width='110px' size="small">
-                <span slot="label">显示</span>
+                <span slot="label">{{ $t('common.display') }}</span>
                 <select v-model="selectedProduct" @change="getDevices">
                   <option v-for="product in products" :value="product">{{product.name}}</option>
                 </select>
@@ -15,7 +15,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="query" :active="searching" @cancel="getDevices" placeholder="请输入搜索内容" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
+              <search-box :key.sync="query" :active="searching" @cancel="getDevices" :placeholder="$t('common.placeholder.search')" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices">
                 <button slot="search-button" @click="getDevices" class="btn"><i class="fa fa-search"></i></button>
                 <!-- <label>{{ $t('ui.user.search_user') }}</label> -->
               </search-box>
@@ -106,22 +106,22 @@ export default {
         },
         {
           key: 'sn',
-          title: '序列号（sn）'
+          title: this.$t('operation.user.details.devices.sn')
           // tooltip: '提示内容'
         },
         {
           key: 'is_active',
-          title: '是否激活',
+          title: this.$t('operation.user.details.devices.is_active'),
           sortType: '-1'
         },
         {
           key: 'active_date',
-          title: '激活时间',
+          title: this.$t('operation.user.details.devices.active_date'),
           sortType: '-1'
         },
         {
           key: 'is_online',
-          title: '在线状态',
+          title: this.$t('operation.user.details.devices.is_online'),
           class: 'tac',
           sortType: '-1'
         }
@@ -157,9 +157,9 @@ export default {
           // name: device.name,
           mac: device.mac,
           sn: device.sn,
-          is_active: device.is_active ? '是' : '否',
+          is_active: device.is_active ? this.$t('common.yes') : this.$t('common.no'),
           active_date: formatDate(device.active_date),
-          is_online: device.is_online ? '上线' : '下线',
+          is_online: device.is_online ? this.$t('common.online') : this.$t('common.offline'),
           prototype: device
         }
         result.push(table)

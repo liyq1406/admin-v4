@@ -1,20 +1,20 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>概览</h2>
+      <h2>{{ $t('operation.user.overview.main_title') }}</h2>
     </div>
     <div class="row user-card mt15">
       <div class="col-6 total-box">
-        <statistic :info="statistic.total" title="总用户数" color="gray" align="left" :titletop="true"></statistic>
+        <statistic :info="statistic.total" :title="$t('operation.user.overview.total.count')" color="gray" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.add" title="今日新增" color="green" align="left" :titletop="true"></statistic>
+        <statistic :info="statistic.add" :title="$t('operation.user.overview.add.count')" color="green" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.active" title="今日活跃用户" color="blue" align="left" :titletop="true"></statistic>
+        <statistic :info="statistic.active" :title="$t('operation.user.overview.active.count')" color="blue" align="left" :titletop="true"></statistic>
       </div>
       <div class="col-6">
-        <statistic :info="statistic.seventTotal" title="过去7天活跃用户数" color="orange" align="left" :titletop="true"></statistic>
+        <statistic :info="statistic.seventTotal" :title="$t('operation.user.overview.sevent_total.count')" color="orange" align="left" :titletop="true"></statistic>
       </div>
     </div>
     <user-trend></user-trend>

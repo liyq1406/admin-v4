@@ -6,9 +6,13 @@
 import overview from './overview'
 import product from './product'
 import alert from './alert'
+import user from './user'
 
 export default {
+  product_management: '产品管理',
+  product_service: '产品服务',
   overview,
   product,
-  alert
+  alert,
+  user
 }

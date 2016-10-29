@@ -28,15 +28,15 @@ export default {
       headers: [
         {
           key: 'name',
-          title: '机型'
+          title: this.$t('operation.user.portrait.device.type')
         },
         {
           key: 'value',
-          title: '数量'
+          title: this.$t('common.count')
         },
         {
           key: 'percent',
-          title: '占比',
+          title: this.$t('common.percent'),
           sortType: -1
         }
       ],
@@ -81,7 +81,7 @@ export default {
           data: _.map(this.devices, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],

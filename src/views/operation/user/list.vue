@@ -2,7 +2,7 @@
   <div class="main">
 
     <div class="main-title">
-      <h2>用户管理</h2>
+      <h2>{{ $t('operation.user.list.main_title') }}</h2>
     </div>
     <!-- <pre> {{ usersOnlineType | json}} </pre> -->
     <!-- Start: 产品信息统计 -->
@@ -20,7 +20,7 @@
             <div class="filter-group fl">
               <div class="filter-group-item">
                 <x-select :label="selectedFilter.name" width='110px' size="small">
-                  <span slot="label">显示</span>
+                  <span slot="label">{{ $t('common.display') }}</span>
                   <select v-model="selectedFilter" @change="getUsers(true)">
                     <!-- <option :value="">全部</option> -->
                     <option v-for="filter in filters" :value="filter">{{filter.name}}</option>
@@ -87,28 +87,28 @@
         loadingData: false,
         users: [],
         queryTypeOptions: [
-          { label: '邮箱', value: 'email' },
-          { label: '手机', value: 'phone' }
+          { label: this.$t('common.email'), value: 'email' },
+          { label: this.$t('common.phone'), value: 'phone' }
         ],
         queryType: {
-          label: '邮箱',
+          label: this.$t('common.email'),
           value: 'email'
         },
         filters: [
           {
-            name: '全部',
+            name: this.$t('common.all'),
             value: 0
           },
           {
-            name: '已激活',
+            name: this.$t('operation.user.list.activated'),
             value: 1
           },
           {
-            name: '未激活',
+            name: this.$t('operation.user.list.not_activated'),
             value: 2
           },
           {
-            name: '在线',
+            name: this.$t('operation.user.list.online'),
             value: 3
           }
         ],
@@ -117,7 +117,7 @@
          * @type {Object}
          */
         selectedFilter: {
-          name: '全部',
+          name: this.$t('common.all'),
           value: 0
         },
         // 今日新增
@@ -133,35 +133,35 @@
           },
           {
             key: 'nickname', // 与tables的key对应
-            title: '昵称' // 标题的内容
+            title: this.$t('operation.user.list.columns.nickname') // 标题的内容
           },
           {
             key: 'email',
-            title: '邮箱'
+            title: this.$t('common.email')
           },
           {
             key: 'phone',
-            title: '手机'
+            title: this.$t('common.phone')
           },
           {
             key: 'create_date',
-            title: '注册时间',
+            title: this.$t('operation.user.list.columns.create_date'), // 标题的内容
             sortType: -1
             // tooltip: '提示内容'
           },
           {
             key: 'source',
-            title: '来源',
+            title: this.$t('operation.user.list.columns.source'), // 标题的内容
             class: 'tac'
           },
           {
             key: 'is_active',
-            title: '激活状态',
+            title: this.$t('operation.user.list.columns.is_active'), // 标题的内容
             class: 'tac'
           },
           {
             key: 'online',
-            title: '在线状态',
+            title: this.$t('operation.user.list.columns.online'), // 标题的内容
             class: 'tac'
           }
         ],
@@ -183,19 +183,19 @@
       statisticArr () {
         var result = [
           {
-            title: '用户总数',
+            title: this.$t('operation.user.list.total'),
             value: this.allTotal
           },
           {
-            title: '今日新增',
+            title: this.$t('operation.user.list.add_count'),
             value: this.todayAddCount
           },
           {
-            title: '当前在线',
+            title: this.$t('operation.user.list.online_count'),
             value: this.onlineCount
           },
           {
-            title: '七日活跃用户',
+            title: this.$t('operation.user.list.active_count'),
             value: this.serverDayActiveCount
           }
         ]
@@ -230,8 +230,8 @@
             phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),
-            is_active: user.is_active ? '已激活' : '未激活',
-            online: user.is_online === true ? '在线' : '下线',
+            is_active: user.is_active ? this.$t('operation.user.list.activated') : this.$t('operation.user.list.not_activated'),
+            online: user.is_online === true ? this.$t('operation.user.list.online') : this.$t('operation.user.list.offline'),
             status: this.computedStatus(user.status),
             prototype: user
           }
@@ -314,7 +314,7 @@
           var obj = {
             id: userId,
             online: Boolean(res.data.online),
-            text: res.data.online ? '在线' : '下线'
+            text: res.data.online ? this.$t('operation.user.list.online') : this.$t('operation.user.list.offline')
           }
           this.usersOnlineType.push(obj)
         }).catch((res) => {
@@ -404,7 +404,7 @@
        * @return {[type]}        [description]
        */
       computedOnline (userId) {
-        var result = '查询中...'
+        var result = '-'
         this.usersOnlineType.map((item) => {
           if (item.id === userId) {
             result = item.text
@@ -429,7 +429,7 @@
           '1': 'Web',
           '2': 'Android',
           '3': 'iOS',
-          '4': '微信'
+          '4': this.$t('common.wechat')
         }
         return result[source]
       },
@@ -441,8 +441,8 @@
        */
       computedStatus (status) {
         var result = {
-          '1': '正常',
-          '2': '停用'
+          '1': this.$t('common.normal'),
+          '2': this.$t('common.outage')
         }
         return result[status]
       },

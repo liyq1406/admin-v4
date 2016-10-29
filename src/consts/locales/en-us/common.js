@@ -33,6 +33,8 @@ export default {
   no: '否',
   enable: '启用',
   disabled: '禁用',
+  normal: '正常',
+  outage: '停用',
   search: '搜索',
   display: '显示',
   status: '状态',
@@ -45,9 +47,16 @@ export default {
   avg_increase: '{period}天平均增长',
   today_increase: '今日增长',
   count: '数量',
+  percent: '占比',
   placeholder: {
     search: '请输入查询内容'
   },
+  email: '邮箱',
+  phone: '手机',
+  age: '年龄',
+  sex: '性别',
+  action_success: '操作成功',
+  action_fail: '操作失败',
 
   // 表单验证
   validation: {

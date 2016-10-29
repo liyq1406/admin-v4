@@ -8,11 +8,11 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>反馈信息</th>
-              <th class="w150">提交日期</th>
-              <th class="w150">最后处理</th>
-              <th class="w60">问题类型</th>
-              <th class="w60">处理状态</th>
+              <th>{{ $t('operation.user.details.issues.info') }}</th>
+              <th class="w150">{{ $t('operation.user.details.issues.create_time') }}</th>
+              <th class="w150">{{ $t('operation.user.details.issues.treated_time') }}</th>
+              <th class="w60">{{ $t('operation.user.details.issues.type') }}</th>
+              <th class="w60">{{ $t('operation.user.details.issues.status') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -22,7 +22,7 @@
                 <td>{{issue.create_time | formatDate }}</td>
                 <td>{{issue.treated_time | formatDate }}</td>
                 <td>{{issue.label}}</td>
-                <td><span v-if="issue.status === 0">未处理</span><span v-else>已处理</span></td>
+                <td><span v-if="issue.status === 0">{{ $t('operation.user.details.issues.unhandled') }}</span><span v-else>{{ $t('operation.user.details.issues.handled') }}</span></td>
               </tr>
             </template>
             <tr v-if="issues.length === 0 && !loadingData">
@@ -49,18 +49,18 @@ export default {
       currentPage: 1,
       countPerPage: config.COUNT_PER_PAGE,
       status: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 0
       },
       statusOptions: [
         {
-          label: '全部',
+          label: this.$t('common.all'),
           value: 0
         }, {
-          label: '未到期',
+          label: this.$t('operation.user.details.not_timeout'),
           value: 1
         }, {
-          label: '已到期',
+          label: this.$t('operation.user.details.timeout'),
           value: 2}
       ],
       loadingData: false,
@@ -96,7 +96,7 @@ export default {
       if (this.plugins.length > 0) {
         var appId
         this.plugins.forEach((item) => {
-          if (item.name === '用户反馈') {
+          if (item.plugin === 'helpdesk') {
             appId = item.id
           }
         })
@@ -110,7 +110,7 @@ export default {
     if (this.plugins.length > 0) {
       var appId
       this.plugins.forEach((item) => {
-        if (item.name === '用户反馈') {
+        if (item.plugin === 'helpdesk') {
           appId = item.id
         }
       })

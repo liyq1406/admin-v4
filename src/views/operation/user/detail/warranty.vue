@@ -8,11 +8,11 @@
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
-              <th>工单编号</th>
-              <th>提交日期</th>
-              <th>最后处理</th>
-              <th>维保类型</th>
-              <th>处理状态</th>
+              <th>{{ $t('operation.user.details.warranty.id') }}</th>
+              <th>{{ $t('operation.user.details.warranty.create_time') }}</th>
+              <th>{{ $t('operation.user.details.warranty.handle_time') }}</th>
+              <th>{{ $t('operation.user.details.warranty.type') }}</th>
+              <th>{{ $t('operation.user.details.warranty.status') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -45,18 +45,18 @@ export default {
     return {
       key: '',
       status: {
-        label: '全部',
+        label: this.$t('common.all'),
         value: 0
       },
       statusOptions: [
         {
-          label: '全部',
+          label: this.$t('common.all'),
           value: 0
         }, {
-          label: '未到期',
+          label: this.$t('operation.user.details.not_timeout'),
           value: 1
         }, {
-          label: '已到期',
+          label: this.$t('operation.user.details.timeout'),
           value: 2}
       ],
       loadingData: false,
@@ -85,11 +85,11 @@ export default {
 
   methods: {
     typeText (index) {
-      return (['延保工单', '维修工单'])[index]
+      return ([this.$t('operation.user.details.warranty.order1'), this.$t('operation.user.details.warranty.order2')])[index]
     },
 
     statusText (index) {
-      return (['待处理', '已维修', '已延保'])[index]
+      return ([this.$t('operation.user.details.warranty.status1'), this.$t('operation.user.details.warranty.status2'), this.$t('operation.user.details.warranty.status3')])[index]
     }
 
   }

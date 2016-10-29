@@ -4,7 +4,13 @@
  */
 
 import overview from './overview'
+import product from './product'
+import user from './user'
 
 export default {
-  overview
+  product_management: '产品管理',
+  product_service: '产品服务',
+  overview,
+  product,
+  user
 }

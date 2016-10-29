@@ -1,7 +1,7 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
-      <h2>用户趋势</h2>
+      <h2>{{ $t('operation.user.overview.trend.title') }}</h2>
     </div>
     <div class="panel-bd">
       <div class="filter-bar filter-bar-head filter-bar-full">
@@ -65,13 +65,13 @@ export default {
       userCat: 0,
       userCatList: [
         {
-          label: '新增用户',
+          label: this.$t('operation.user.overview.trend.add'),
           value: 0
         }, {
-          label: '活跃用户',
+          label: this.$t('operation.user.overview.trend.active'),
           value: 1
         }, {
-          label: '累计用户',
+          label: this.$t('operation.user.overview.trend.sum'),
           value: 2
         }
       ]
@@ -103,7 +103,7 @@ export default {
           minInterval: 1
         }],
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: _.map(this.addData, 'val')
         }]
@@ -134,7 +134,7 @@ export default {
           minInterval: 1
         }],
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: _.map(this.activeData, 'val')
         }]
@@ -165,7 +165,7 @@ export default {
           minInterval: 1
         }],
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: _.map(this.totalData, 'val')
         }]

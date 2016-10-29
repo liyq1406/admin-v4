@@ -73,7 +73,7 @@ export default {
 
       // 产品管理标题
       result.subs.push({
-        label: '产品管理',
+        label: this.$t('operation.product_management'),
         type: 'title'
       })
 
@@ -98,7 +98,7 @@ export default {
 
       // 产品服务标题
       result.subs.push({
-        label: '产品服务',
+        label: this.$t('operation.product_service'),
         type: 'title'
       })
 
