@@ -28,7 +28,7 @@
       // 标题
       title: {
         type: String,
-        default: '温馨提示'
+        default: this.$t('components.tips')
       },
 
       // 类型

@@ -44,8 +44,11 @@
 
 <script>
   import EventListener from 'utils/event-listener'
+  import { globalMixins } from 'src/mixins'
 
   export default {
+    mixins: [globalMixins],
+
     props: {
       // 值
       value: {
@@ -80,14 +83,14 @@
 
     data () {
       return {
-        weekRange: ['日', '一', '二', '三', '四', '五', '六'],
+        weekRange: this.locales.data.WEEK_RANGE,
         dateRange: [],
         decadeRange: [],
         currDate: new Date(),
         displayDayView: false,
         displayMonthView: false,
         displayYearView: false,
-        monthNames: ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'],
+        monthNames: this.locales.data.MONTH_NAMES,
         inputStyle: {
           width: this.width
         }
@@ -222,11 +225,11 @@
       // 格式化当前日期头部
       stringifyDayHeader (date) {
         // return '2016年4月'
-        return date.getFullYear() + '年 ' + this.monthNames[date.getMonth()]
+        return date.getFullYear() + this.$t('components.year') + ' ' + this.monthNames[date.getMonth()]
       },
 
       stringifyYearHeader (date) {
-        return date.getFullYear() + '年 '
+        return date.getFullYear() + this.$t('components.year') + ' '
       },
 
       stringifyDecadeHeader (date) {

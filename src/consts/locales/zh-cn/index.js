@@ -14,6 +14,7 @@ import home from './home'
 
 // 其他
 import layout from './other/layout'
+import components from './other/components'
 
 export default {
   common,
@@ -25,4 +26,5 @@ export default {
   layout,
   home,
   account
+  components
 }

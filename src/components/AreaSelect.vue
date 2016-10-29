@@ -1,7 +1,7 @@
 <template>
   <div class="area-select">
     <div class="select-box">
-      <x-select width="120px" :label="province.name" placeholder="请选择省" :size="selectSize">
+      <x-select width="120px" :label="province.name" :placeholder="$t('components.area.select_province')" :size="selectSize">
         <span slot="label" v-if="label.length">{{ label }}</span>
         <select v-model="province" @change="handleProvinceChange">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
@@ -10,7 +10,7 @@
       </x-select>
     </div>
     <div class="select-box">
-      <x-select v-show="cityOptions.length && province.name" width="120px" :label="city.name" placeholder="请选择市" :size="selectSize">
+      <x-select v-show="cityOptions.length && province.name" width="120px" :label="city.name" :placeholder="$t('components.area.select_city')" :size="selectSize">
         <select v-model="city" @change="handleCityChange">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in cityOptions" :value="option">{{ option.name }}</option>
@@ -18,7 +18,7 @@
       </x-select>
     </div>
     <div class="select-box" v-show="showDistrict">
-      <x-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" placeholder="请选择区" :size="selectSize">
+      <x-select v-show="districtOptions.length && city.name" width="120px" :label="district.name" :placeholder="$t('components.area.select_district')" :size="selectSize">
         <select v-model="district" @change="handleDistrictChange">
           <option :value="defaultOption">{{ defaultOption.name }}</option>
           <option v-for="option in districtOptions" :value="option">{{ option.name }}</option>
