@@ -8,6 +8,7 @@ import errors from './errors'
 import * as data from './data'
 import ui from './ui'
 import operation from './operation'
+import account from './account'
 import auth from './auth'
 import home from './home'
 
@@ -22,5 +23,6 @@ export default {
   operation,
   auth,
   layout,
-  home
+  home,
+  account
 }
