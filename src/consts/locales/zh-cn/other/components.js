@@ -20,5 +20,15 @@ export default {
     fri: '五',
     sat: '六'
   },
-  tip: '提示'
+  tip: '提示',
+
+  // pager
+  pager: {
+    display: '显示行数：',
+    total_page: '共{pages}页，',
+    turn_to: '转到',
+    page: '页',
+    item_range: '第{start}-{end}项，',
+    total_items: '共{total}项'
+  }
 }

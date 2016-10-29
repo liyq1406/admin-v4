@@ -3,7 +3,7 @@
     <div class="fr">
       <div class="v-pager-control" v-if="!simple">
         <x-select width="30px" :label="countPerPage.toString()" size="small">
-          <span slot="label">显示行数：</span>
+          <span slot="label">{{ $t('components.pager.display') }}</span>
           <select v-model="countPerPage" @change="onCountChange">
             <option v-for="n in countOptions" :value="n">{{ n }}</option>
           </select>
@@ -11,15 +11,15 @@
       </div>
       <div class="v-pager-control" v-if="!simple">
         <div class="turn-to-page">
-          <span>共{{ pages }}页，转到</span>
+          <span>{{ $t('components.pager.total_page', {pages: pages}) }}{{ $t('components.pager.turn_to') }}</span>
           <div class="input-text-wrap">
             <input type="number" class="input-text input-text-sm" v-model="destPage" number @keypress.enter.prevent.stop="goToPage">
           </div>
-          <span>页</span>
+          <span>{{ $t('components.pager.page') }}</span>
         </div>
       </div>
       <div class="v-pager-control">
-        <span>第{{ countPerPage*(current-1)+1 }}-{{ rangeText }}项，共{{ total }}项</span>
+        <span>{{ $t('components.pager.item_range', {start: countPerPage*(current-1)+1, end: rangeText}) }}{{ $t('components.pager.total_items', {total: total}) }}</span>
       </div>
       <div class="v-pager-control">
         <button-group>
