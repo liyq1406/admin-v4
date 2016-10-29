@@ -1,5 +1,5 @@
 /**
- * 英文翻译信息入口
+ * 中文翻译信息入口
  * @return {Object}
  */
 
@@ -8,10 +8,13 @@ import errors from './errors'
 import * as data from './data'
 import ui from './ui'
 import operation from './operation'
+import account from './account'
 import auth from './auth'
+import home from './home'
 
 // 其他
 import layout from './other/layout'
+import components from './other/components'
 
 export default {
   common,
@@ -20,5 +23,8 @@ export default {
   ui,
   operation,
   auth,
-  layout
+  layout,
+  home,
+  account,
+  components
 }

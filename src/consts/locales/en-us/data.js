@@ -232,6 +232,10 @@ export const OPERATE_TYPES = [
   { label: '新增', value: 4 }
 ]
 
+export const WEEK_RANGE = ['日', '一', '二', '三', '四', '五', '六']
+
+export const MONTH_NAMES = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月']
+
 // 警告信息
 export const ALERT_MESSAGES = {
   not_published: '您尚未发布产品，请在开发平台完成产品发布。如需了解运营平台功能您可以通过<a class="hl-red" href="http://ap.xlink.cn/#!/auto-login" target="_blank">查看demo</a>了解示例',

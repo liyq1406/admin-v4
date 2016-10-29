@@ -1,10 +1,11 @@
 /**
- * 产品告警信息翻译信息
+ * 告警记录翻译信息
  * @return {Object}
  */
 
 export default {
-  title: '告警信息',
+  title: '告警记录',
+  product: '产品',
   untreated: '待处理告警',
   today_add: '今日告警',
   sevent_add: '7天告警数',
@@ -27,5 +28,18 @@ export default {
   warning: '轻微', // 轻微
   danger: '严重', // 严重
   all_level: '全部等级',
-  info: '通知'
+  info: '通知',
+  detail: '告警详情',
+  no: '暂无',
+  no_map: '暂无地图数据',
+  notice_warranty: '通知维保',
+  sign_deal: '标记为已处理',
+  restart_task: '重开任务',
+  history: '告警历史',
+  alert_info: '告警信息',
+  alert_device: '告警设备',
+  alert_status: '状态',
+  deal_time: '处理时间',
+  alert_region: '告警地区',
+  user_id: '用户帐号'
 }

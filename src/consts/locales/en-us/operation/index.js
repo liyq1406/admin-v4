@@ -5,6 +5,7 @@
 
 import overview from './overview'
 import product from './product'
+import alert from './alert'
 import user from './user'
 
 export default {
@@ -12,5 +13,6 @@ export default {
   product_service: '产品服务',
   overview,
   product,
+  alert,
   user
 }
