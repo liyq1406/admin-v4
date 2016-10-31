@@ -83,14 +83,14 @@
 
     data () {
       return {
-        weekRange: this.locales.data.WEEK_RANGE,
+        weekRange: [],
         dateRange: [],
         decadeRange: [],
         currDate: new Date(),
         displayDayView: false,
         displayMonthView: false,
         displayYearView: false,
-        monthNames: this.locales.data.MONTH_NAMES,
+        monthNames: [],
         inputStyle: {
           width: this.width
         }
@@ -350,6 +350,8 @@
     },
 
     ready () {
+      this.weekRange = this.locales.data.WEEK_RANGE
+      this.monthNames = this.locales.data.MONTH_NAMES
       this.$emit('date-picker-created', this)
       this.currDate = this.parse(this.value) || this.parse(new Date())
       this._closeEvent = EventListener.listen(window, 'click', (e) => {
