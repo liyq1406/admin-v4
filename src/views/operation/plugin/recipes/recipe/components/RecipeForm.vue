@@ -293,7 +293,96 @@
         </div>
         <!-- 第二步骤END -->
         <!-- 第三步骤 -->
-        <div v-show="currPage === 3"><step-form3></step-form3></div>
+        <div v-show="currPage === 3">
+          <div class="recipe-form">
+            <div class="main-title bordered">
+              <h2>3.填写菜谱烹饪参数</h2>
+            </div>
+            <div class="form with-loading">
+              <div class="icon-loading" v-show="loadingData">
+                <i class="fa fa-refresh fa-spin"></i>
+              </div>
+            </div>
+            <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
+              <div class="recipe-form">
+                <div class="form with-loading">
+                  <div class="icon-loading" v-show="loadingData">
+                    <i class="fa fa-refresh fa-spin"></i>
+                  </div>
+                  <div class="row">
+                    <label class="form-control col-3 line32">烹饪设备: </label>
+                    <div class="controls col-21">
+                      <x-select :label="currentProduct.name" width="180px">
+                        <select v-model="currentProduct" @change="">
+                          <option v-for="product in products" :value="product">{{product.name}}</option>
+                        </select>
+                      </x-select>
+                    </div>
+                  </div>
+                  <div class="row mrt10">
+                    <label class="form-control col-3 line32">本地菜谱ID: </label>
+                    <div class="controls col-21">
+                      <div class="input-text-wrap">
+                        <input type="text" v-model="local_id" style="width:300px" lazy class="input-text" name="local_id" lazy/>
+                      </div>
+                      <!-- <div class="form-tips form-tips-error">
+                        <span v-if="$validation.localid.touched && $validation.localid.required">请输入本地菜谱ID</span>
+                        <span v-if="$validation.localid.modified && $validation.localid.maxlength">本地菜谱ID不能超过20位</span>
+                        <span v-if="$validation.localid.touched && $validation.localid.format">菜谱ID不允许前后带空格</span>
+                      </div> -->
+                    </div>
+                  </div>
+                  <div class="settingArea row">
+                    <label class="col-3 line32">菜单:</label>
+                    <div class="controls col-21">
+                      <!-- <tree-item></tree-item> -->
+                      <ul class="menu" v-if="menus && menus.length > 0">
+                        <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode"></tree-item>
+                      </ul>
+                    </div>
+                  </div>
+                  <div class="form-actions row">
+                    <div class="col-offset-4">
+                      <button @click.prevent.stop="openFirAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加菜单</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <!-- <div class="form-actions mb40 row">
+                <div class="col-offset-4">
+                  <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+                  <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
+                </div>
+              </div> -->
+            </form>
+
+            <!-- 添加第一级菜单 -->
+            <modal :show.sync="addFirMenuShow" width="480px">
+              <h3 slot="header">添加菜单</h3>
+              <div slot="body" class="form">
+                <form autocomplete="off" novalidate>
+                  <div class="form-row row">
+                    <label class="form-control col-6">菜单名称:</label>
+                    <div class="controls col-18">
+                      <div class="input-text-wrap">
+                        <input v-model="addMenuModal.type" name="addMenuModal.type" type="text" class="input-text" lazy>
+                      </div>
+                      <!-- <div class="form-tips form-tips-error">
+                        <span v-if="$validation.firmenu.touched && $validation.firmenu.required">请输入菜单名称</span>
+                        <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过20位</span>
+                        <span v-if="$validation.firmenu.touched && $validation.firmenu.format">菜单名称不允许前后带空格</span>
+                      </div> -->
+                    </div>
+                  </div>
+                  <div class="form-actions">
+                    <button @click.prevent.stop="addFirstMenu" class="btn btn-primary">确定</button>
+                    <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+                  </div>
+                </form>
+              </div>
+            </modal>
+          </div>
+        </div>
         <!-- 第三步骤END -->
         <!-- 第四步骤 -->
         <!-- <div v-show="currPage === 4">
@@ -469,6 +558,7 @@ import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
+import TreeItem from './TreeItem'
 // import locales from 'consts/locales/index'
 // import { DEVICES } from '../../config'
 import store from 'src/store'
@@ -481,6 +571,7 @@ export default {
   mixins: [globalMixins, pluginMixins],
 
   components: {
+    'tree-item': TreeItem,
     'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
@@ -507,6 +598,14 @@ export default {
 
   data () {
     return {
+      addFirMenuShow: false,
+      local_id: '',
+      addMenuModal: {
+        type: '',
+        name: ''
+      },
+      menus: [],
+      currentProduct: {},
       name: '',
       images: [''], // 成品图
       difficulty: '不限',
@@ -611,6 +710,7 @@ export default {
   },
 
   ready () {
+    this.init()
     // this.getRecipes()
     this.whichPage()
     let appId = this.$route.params.app_id
@@ -645,6 +745,10 @@ export default {
           this.minor_ingredients = data.minor_ingredients
           this.cooking_steps = data.cooking_steps
           this.tips = data.tips
+          if (data.param) {
+            this.menus = data.param
+          }
+          this.local_id = data.local_id
           this.devices = data.devices
           this.status = data.status
           var images = ['']
@@ -668,7 +772,20 @@ export default {
     this.getTags()
   },
 
+  watch: {
+    products () {
+      this.init()
+    }
+  },
+
   methods: {
+    setCode (val, index) {
+      console.log(index)
+      console.log(val)
+      this.menus.$set(index, val)
+      console.log(JSON.stringify(this.menus))
+      // this.menu = val
+    },
     // 控制页码逻辑
     whichPage () {
       if (this.$route.params.type_value === '1') {
@@ -957,6 +1074,9 @@ export default {
         tips: this.tips,
         status: this.status,
         creator: this.currentMember.name,
+        local_id: this.local_id,
+        param: this.menus,
+        pid: [this.currentProduct.id],
         // type: this.devices.length ? 2 : 1
         type: this.$route.params.type_value
       }
@@ -1015,6 +1135,68 @@ export default {
     },
     addTips () {
       this.cookTips.push({content: ''})
+    },
+    addMenu (item) {
+      // window.alert(JSON.stringify(item))
+      this.addMenuShow = true
+    },
+    openFirAdd () {
+      this.addMenuModal.type = ''
+      this.addFirMenuShow = true
+      // this.$resetValidation()
+    },
+    // 创建一级菜单
+    addFirstMenu () {
+      // if (this.$validation.invalid) {
+      //   return
+      // }
+      this.menus.push({
+        type: this.addMenuModal.type
+      })
+      this.addFirMenuShow = false
+      this.addMenuModal.type = ''
+    },
+    // 创建子菜单
+    addChildrenMenu () {
+      // if (this.$validation.invalid) {
+      //   return
+      // }
+      this.menus.push({
+        type: this.addMenuModal.type
+      })
+      // this.addMenuModal = _.clone(this.originAddModel)
+      this.addFirMenuShow = false
+      this.addMenuModal.type = ''
+      // this.$resetValidation()
+    },
+    editMenu (item) {
+      this.editMenuShow = true
+    },
+    addCode (item) {
+      this.addCodeShow = true
+    },
+    editCode (item) {
+      this.editCodeShow = true
+    },
+    cancel () {
+      // console.log(this)
+      // this.$resetValidation()
+      this.addFirMenuShow = false
+    },
+    test (val, index) {
+      console.log(index)
+      console.log(val)
+      this.menus.$set(index, val)
+      console.log(JSON.stringify(this.menus))
+      // this.menu = val
+    },
+    /**
+     * 初始化
+     */
+    init () {
+      if (this.products && this.products.length > 0) {
+        this.currentProduct = this.products[0]
+      }
     }
   }
 }
@@ -1022,6 +1204,24 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .settingArea
+    margin-top 10px
+  .mrt10
+    margin-top 10px
+  .line32
+    line-height 32px
+    height 32px
+  .mrb10
+    margin-bottom 10px
+  .cooktipp
+    width 100%
+    border 1px solid #ddd
+    box-sizing border-box
+    margin 0
+    height 32px
+    line-height 32px
+  .addCookTip
+    margin-top 10px
   .line32
     line-height 32px
     height 32px
