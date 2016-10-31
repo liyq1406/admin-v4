@@ -120,7 +120,7 @@ export default {
 
   ready () {
     // this.refreshToken()
-    document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IOT Platform'
+    document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IoT Platform'
   },
 
   methods: {

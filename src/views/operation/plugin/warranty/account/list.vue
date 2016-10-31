@@ -17,7 +17,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.account_manage.search_condi')" style="float:right">
+                <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" style="float:right">
                   <button slot="search-button" @click="getBranchList" class="btn"><i class="fa fa-search"></i></button>
                 </search-box>
               </div>

@@ -15,7 +15,7 @@
           </div>
           <div class="filter-group fr">
             <div class="filter-group-item">
-              <search-box :key.sync="key" :active="searching" :placeholder="$t('ui.overview.addForm.search_condi')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
+              <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getAlerts(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="getAlerts(true)" @press-enter="getAlerts(true)">
                 <x-select width="100px" :label="queryType.label" size="small">
                   <select v-model="queryType" @change="getAlerts(true)">
                     <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>

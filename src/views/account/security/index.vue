@@ -3,7 +3,7 @@
     <div class="panel mt20 mb30">
       <div class="panel-hd ml20 mr20">
         <div class="actions">
-          <search-box :key.sync="query" :active="searching" placeholder="$t('account.security.placeholder.id')" @cancel="getLogs(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getLogs(true)">
+          <search-box :key.sync="query" :active="searching" :placeholder="$t('account.security.placeholder.id')" @cancel="getLogs(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getLogs(true)">
             <label>{{ $t('account.security.search_member') }}</label>
             <button slot="search-button" @click="getLogs(true)" class="btn"><i class="fa fa-search"></i></button>
           </search-box>
@@ -62,7 +62,7 @@ export default {
         title: this.$t('account.security.log_abstract')
       }, {
         key: 'level',
-        title: '日志级别',
+        title: this.$t('account.security.log_level'),
         class: 'wp5'
       }, {
         key: 'operate_type',

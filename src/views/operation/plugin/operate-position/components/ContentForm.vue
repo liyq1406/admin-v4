@@ -35,7 +35,7 @@
           <form autocomplete="off" @submit.prevent="confirmSelect">
             <div class="form-row row">
               <div class="action-bar">
-                <search-box :key.sync="query" :active="searching" :placeholder="$t('ui.ingredient.placeholders.search_condi')" @cancel="getContentList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getContentList(true)">
+                <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getContentList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getContentList(true)">
                   <button slot="search-button" @click.prevent.stop="getContentList(true)" class="btn">{{ $t('common.search') }}</button>
                 </search-box>
               </div>

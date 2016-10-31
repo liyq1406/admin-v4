@@ -479,7 +479,7 @@ export default {
     addForm: {
       mac: 'MAC地址',
       mac_placeholder: '请输入MAC地址',
-      search_condi: '请输入查询内容'
+      search_condi: 'Search'
     }
   },
 

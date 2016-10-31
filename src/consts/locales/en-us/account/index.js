@@ -118,14 +118,14 @@ export default {
     member_id: 'Member ID',
     user_ip: 'User IP',
     log_abstract: 'Log Abstract',
-    log_level: 'Log Level',
+    log_level: 'Level',
     action_type: 'Operation Type',
     action_time: 'Operation Time',
     notice: 'Notice',
     alert: 'Alert',
     error: 'Error',
     placeholder: {
-      id: 'Please enter Member ID'
+      id: 'Member ID'
     }
   },
 

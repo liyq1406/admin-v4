@@ -6,19 +6,19 @@
 export default {
   main_title: 'Overview', // 概览
   total: {
-    count: 'Device Amount', // 设备总数
+    count: 'All Devices', // 设备总数
     tooltip: 'Enterprise Device Amount' // 企业的设备总量
   },
   activated: {
-    count: 'Activation Amount', // 激活数
+    count: 'Activated Devices', // 激活数
     tooltip: 'Online Activated Device Amount' // 已联网激活的设备数量
   },
   online: {
-    count: 'Online Amount', // 在线量
+    count: 'Online Users', // 在线量
     tooltip: 'Currently Online Device Amount' // 当前在线的设备数量
   },
   users: {
-    count: 'User Amount', // 用户总数
+    count: 'All Users', // 用户总数
     tooltip: 'Enterprise User Amount' // 企业的用户数量
   },
   product_trend: {

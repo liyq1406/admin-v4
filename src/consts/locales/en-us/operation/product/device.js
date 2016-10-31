@@ -27,11 +27,11 @@ export default {
     device_id: 'Device ID', // 设备ID
     device_name: 'Device Name', // 设备名称
     is_active: {
-      label: 'Activated or Not', // 是否激活
+      label: 'Activated', // 是否激活
       tooltip: 'Device Connected and Activated' // 设备已联网激活
     },
     active_date: 'Activated Time', // 激活时间
-    is_online: 'Online Status', // 在线状态
+    is_online: 'Status', // 在线状态
     query_device_id_error: 'Device Id could not exceed 2100000000' // 设备ID不可超过2100000000
   },
   detail: { // 设备详情页翻译

@@ -1,5 +1,6 @@
 export default {
   'not_found': 'Sorry, the service is unavailable.',
+  'no_permission': 'No permission.',
   '4001001': 'Request message field verification failed.',
   '4001002': 'Request message mandatory fields must be nonempty.',
   '4001003': 'Phone verification code no exists.',

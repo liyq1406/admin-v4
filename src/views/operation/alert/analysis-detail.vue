@@ -24,7 +24,7 @@
       <div class="filter-bar filter-bar-head filter-bar-lr">
         <div class="filter-group fr">
           <div class="filter-group-item">
-            <search-box :key.sync="key" :placeholder="$t('ui.overview.addForm.search_condi')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
+            <search-box :key.sync="key" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getList(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @press-enter="getList(true)">
               <x-select width="90px" :label="queryType.label" size="small">
                 <select v-model="queryType">
                   <option v-for="option in queryTypeOptions" :value="option">{{ option.label }}</option>

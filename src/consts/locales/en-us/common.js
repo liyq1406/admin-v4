@@ -49,7 +49,7 @@ export default {
   count: 'Quantity',
   percent: 'Ratio',
   placeholder: {
-    search: 'Enter Keyword'
+    search: 'Search'
   },
   email: 'Email',
   phone: 'Phone',

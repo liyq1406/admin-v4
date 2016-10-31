@@ -94,7 +94,7 @@ export var globalMixins = {
             this.showAlertBar(this.locales.data.ALERT_MESSAGES['not_authorized'])
             this.showNotice({
               type: 'error',
-              content: '您尚未获得此应用的使用权限'
+              content: this.$t('errors.no_permission')
             })
             break
           default:

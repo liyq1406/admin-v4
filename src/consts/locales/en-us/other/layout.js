@@ -102,11 +102,11 @@ export default {
         products: {
           subs: {
             overview: 'Overview',
-            devices: 'Device Management',
-            alerts: 'Alert Message',
+            devices: 'Devices',
+            alerts: 'Alert',
             device_map: 'Device Map',
             distributing: 'Thermal Distribution',
-            analysis: 'Product Analysis'
+            analysis: 'Analysis'
           }
         },
         ios: {
@@ -171,10 +171,10 @@ export default {
         recipes: {
           label: 'Cloud Recipe',
           subs: {
-            recipes: 'Recipe Management',
-            menus: 'Menu Management',
-            categories: 'Category Management',
-            tags: 'Tag Management'
+            recipes: 'Recipes',
+            menus: 'Menus',
+            categories: 'Categories',
+            tags: 'Tags'
           }
         },
         alerts: {
@@ -256,12 +256,12 @@ export default {
 
   // 用户菜单
   account_menu: {
-    account: 'Account Information',
-    members: 'Member Management',
-    authorize: 'Authorization Management',
-    security: 'Safe Audit',
-    corp: 'Enterprise Information',
-    quit: 'Exit'
+    account: 'Account',
+    members: 'Member',
+    authorize: 'Authorization',
+    security: 'Audit',
+    corp: 'Enterprise',
+    quit: 'Logout'
   },
 
   // 提示信息
