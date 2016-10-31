@@ -73,7 +73,7 @@
         var file = input.files[0]
 
         // 导入文件类型不合法
-        if (!/\.(?:png|jpg|bmp|gif)$/i.test(file.name)) {
+        if (!/\.(?:png|jpg|bmp|gif)$/i.test(file.name) || !file.size) {
           this.showNotice({
             type: 'error',
             content: '请上传正确的图片文件'

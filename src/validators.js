@@ -53,7 +53,7 @@ export function format (val, type) {
       break
 
     // 字符串开始与结尾无空格
-    case 'no-spaces-both-ends':
+    case 'trim':
       result = val.trim().length === val.length
       break
 

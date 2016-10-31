@@ -9,7 +9,7 @@
                 <label class="form-control col-5 alert-label">{{ $t("ui.rule.fields.name") }}:</label>
                 <div class="controls col-19">
                   <div v-placeholder="$t('ui.rule.placeholders.name')" class="input-text-wrap">
-                    <input class="input-text" type="text" name="model.name" v-model="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32, format: 'no-spaces-both-ends'}" lazy/>
+                    <input class="input-text" type="text" name="model.name" v-model="model.name" v-validate:name="{required: true, minlength: 2, maxlength: 32, format: 'trim'}" lazy/>
                   </div>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: $t('ui.rule.fields.name')}) }}</span>

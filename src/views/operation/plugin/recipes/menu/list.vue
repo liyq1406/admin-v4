@@ -127,7 +127,7 @@ export default {
       }
 
       if (this.query.length > 0) {
-        condition.query['label'] = {$regex: this.query, $options: 'i'}
+        condition.query['name'] = {$regex: this.query, $options: 'i'}
       }
 
       return condition

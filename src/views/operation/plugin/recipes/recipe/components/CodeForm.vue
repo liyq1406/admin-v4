@@ -5,7 +5,7 @@
         <label class="form-control col-6">参数名称:</label>
         <div class="controls col-18">
           <div class="input-text-wrap">
-            <input v-model="menu.name" name="menu.type" type="text" class="input-text" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}">
+            <input v-model="menu.name" name="menu.type" type="text" class="input-text" v-validate:name="{required: true, maxlength: 20, format: 'trim'}">
           </div>
           <div class="form-tips form-tips-error">
             <span v-if="$validation.name.touched && $validation.name.required">请输入参数名称</span>
@@ -18,7 +18,7 @@
         <label class="form-control col-6">参数ID:</label>
         <div class="controls col-18">
           <div class="input-text-wrap">
-            <input v-model="menu.param_id" name="menu.param_id" type="text" class="input-text" v-validate:id="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}">
+            <input v-model="menu.param_id" name="menu.param_id" type="text" class="input-text" v-validate:id="{required: true, maxlength: 20, format: 'trim'}">
           </div>
           <div class="form-tips form-tips-error">
             <span v-if="$validation.id.touched && $validation.id.required">请输入参数ID</span>
@@ -31,7 +31,7 @@
         <label class="form-control col-6">参数信息:</label>
         <div class="controls col-18">
           <div class="input-text-wrap">
-            <input v-model="menu.desc" name="menu.name" type="text" class="input-text" v-validate:desc="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}">
+            <input v-model="menu.desc" name="menu.name" type="text" class="input-text" v-validate:desc="{required: true, maxlength: 20, format: 'trim'}">
           </div>
           <div class="form-tips form-tips-error">
             <span v-if="$validation.desc.touched && $validation.desc.required">请输入参数信息</span>
