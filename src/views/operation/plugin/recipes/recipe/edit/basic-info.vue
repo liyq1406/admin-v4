@@ -132,7 +132,7 @@
                               </div>
                             </div>
                             <div class="col-3">
-                              <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
+                              <span v-if="major_ingredients.length > 1" @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
                             </div>
                           </div>
                         </div>
@@ -157,7 +157,7 @@
                               </div>
                             </div>
                             <div class="col-3">
-                              <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
+                              <span v-if="minor_ingredients.length > 1" @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
                             </div>
                           </div>
                         </div>

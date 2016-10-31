@@ -76,7 +76,7 @@
         </div>
         <div class="form-actions">
           <button @click.prevent.stop="jumpAdd" class="btn btn-primary">确定</button>
-          <button @click.prevent.stop="isShowType = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
         </div>
       </div>
     </modal>
@@ -276,6 +276,10 @@ export default {
 
     jumpAdd () {
       this.$route.router.go('/operation/plugins/recipes/' + this.$route.params.app_id + '/recipe/add/' + this.selectedType.value)
+    },
+    cancel () {
+      this.isShowType = false
+      this.selectedType = {label: '普通菜谱', value: 1}
     },
 
     /**

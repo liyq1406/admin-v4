@@ -125,7 +125,7 @@
                               </div>
                             </div>
                             <div class="col-3">
-                              <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
+                              <span v-if="major_ingredients.length > 1" @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
                             </div>
                           </div>
                         </div>
@@ -150,7 +150,7 @@
                               </div>
                             </div>
                             <div class="col-3">
-                              <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
+                              <span v-if="minor_ingredients.length > 1" @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
                             </div>
                           </div>
                         </div>
@@ -178,7 +178,7 @@
                     <div class="form-row row">
                       <label class="form-control col-3">标签:</label>
                       <div class="controls col-21">
-                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
+                        <tag-input :value.sync="tag" :ableinput=false :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
                       </div>
                     </div>
                   </div>
@@ -536,7 +536,24 @@
         </div>
       </div>
     </div>
-    <div class="row border-top action">
+    <div v-if="!maxPage" class="panel mb20">
+      <div class="panel-bd">
+        <div class="form-row row">
+          <label class="form-control col-3">状态:</label>
+          <div class="controls col-21">
+            <div class="radio-group">
+              <label class="radio">
+                <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
+              </label>
+              <label class="radio">
+                <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row border-top">
       <div class="col-21 col-offset-3">
         <button v-if="mixPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
         <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
@@ -782,7 +799,7 @@ export default {
     setCode (val, index) {
       console.log(index)
       console.log(val)
-      this.menus.$set(index, val)
+      // this.menus.$set(index, val)
       console.log(JSON.stringify(this.menus))
       // this.menu = val
     },
