@@ -108,7 +108,7 @@
             </div>
             <div class="panel-bd">
               <div class="controls">
-                <file-upload :input="firmwareInput" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess">
+                <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess">
                   <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mb10 mt10">
                     <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                   </label>
@@ -169,6 +169,7 @@ export default {
 
   data () {
     return {
+      inputValue: '',
       adding: false,
       emptyArr: [],
       addModelType: { label: 'WIFI', value: 1 },
@@ -293,6 +294,7 @@ export default {
      * @param {HTMLDOMEvent} e 事件
      */
     uploadFirmware (e) {
+      this.inputValue = e.target.value
       this.firmwareInput = e.target
     },
 

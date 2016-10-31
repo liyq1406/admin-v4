@@ -38,6 +38,11 @@ export default {
       required: true
     },
 
+    inputValue: {
+      required: true,
+      default: ''
+    },
+
     // API 地址
     apiUrl: {
       type: String,
@@ -108,7 +113,10 @@ export default {
   },
 
   watch: {
-    inputVal (val, oldVal) {
+    inputValue (val, oldVal) {
+      console.log(val !== oldVal)
+      console.log(val)
+      console.log(oldVal)
       if (val && val !== oldVal) {
         this.upload()
       }
@@ -126,6 +134,7 @@ export default {
         this.xhr = null
       }
       this.input.value = ''
+      this.inputValue = ''
       this.status = ''
       this.loaded = 0
       this.total = 0
