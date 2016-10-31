@@ -202,7 +202,9 @@ export default {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         order: {'create_time': -1},
-        query: {}
+        query: {
+          status: 1
+        }
       }
 
       if (this.query.length > 0) {
