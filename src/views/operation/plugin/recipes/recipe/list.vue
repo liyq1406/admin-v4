@@ -7,7 +7,7 @@
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <button v-link="{path: 'recipe/add'}" class="btn btn-primary"><i class="fa fa-plus"></i>添加菜谱</button>
+            <button @click.prevent.stop="isShowType = true" class="btn btn-primary"><i class="fa fa-plus"></i>添加菜谱</button>
           </div>
         </div>
         <x-table :headers="columns" :tables="recipeList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
@@ -57,6 +57,29 @@
         </x-table>
       </div>
     </div>
+    <modal :show.sync="isShowType">
+      <h3 slot="header">请选择菜谱类型</h3>
+      <div slot="body" class="form">
+        <div class="form-row row">
+          <!-- <v-select size="small" width="120px" placeholder="请选择类型" :label="selectedType.label">
+            <span slot="label">类型：</span>
+            <select v-model="selectedType">
+              <option v-for="opt in menuTypeOptions" :value="opt">{{ opt.label }}</option>
+            </select>
+          </v-select> -->
+          <label class="form-control col-6">菜谱类型:</label>
+          <div class="radio-group col-18">
+            <label v-for="opt in menuTypeOptions" class="radio">
+              <input type="radio" v-model="selectedType" name="currType" :value="opt" number required/>{{ opt.label }}
+            </label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button @click.prevent.stop="jumpAdd" class="btn btn-primary">确定</button>
+          <button @click.prevent.stop="isShowType = false" class="btn btn-default">{{ $t("common.cancel") }}</button>
+        </div>
+      </div>
+    </modal>
   </div>
 </template>
 
@@ -69,6 +92,7 @@ import Table from 'components/Table'
 import formatDate from 'filters/format-date'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../mixins'
+import Modal from 'components/Modal'
 
 export default {
   name: 'recipeList',
@@ -78,11 +102,13 @@ export default {
   components: {
     SearchBox,
     'v-select': Select,
-    'x-table': Table
+    'x-table': Table,
+    Modal
   },
 
   data () {
     return {
+      isShowType: false,
       columns: [{
         key: 'name',
         title: '标题',
@@ -118,8 +144,15 @@ export default {
       typeOptions: [
         {label: '全部', value: 'all'},
         {label: '普通菜谱', value: 1},
-        {label: '智能菜谱', value: 2}
+        {label: '智能菜谱', value: 2},
+        {label: '本地菜谱', value: 3}
       ],
+      menuTypeOptions: [
+        {label: '普通菜谱', value: 1},
+        {label: '智能菜谱', value: 2},
+        {label: '本地菜谱', value: 3}
+      ],
+      selectedType: {label: '普通菜谱', value: 1},
       type: {label: '全部', value: 'all'},
       statusOptions: [
         {label: '全部', value: 'all'},
@@ -183,7 +216,7 @@ export default {
      */
     queryCondition () {
       var condition = {
-        filter: ['_id', 'name', 'creator', 'create_time', 'pageviews', 'status'],
+        filter: ['_id', 'name', 'creator', 'create_time', 'pageviews', 'status', 'type'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {},
@@ -237,7 +270,12 @@ export default {
      * @param {Object} recipe 目标菜谱
      */
     onNameClick (recipe) {
-      this.$route.router.go({path: `${recipe.origin._id}/edit`, append: true})
+      console.log(recipe)
+      this.$route.router.go({path: `${recipe.origin._id}/edit/${recipe.origin.type}/basic-info`, append: true})
+    },
+
+    jumpAdd () {
+      this.$route.router.go('/operation/plugins/recipes/' + this.$route.params.app_id + '/recipe/add/' + this.selectedType.value)
     },
 
     /**

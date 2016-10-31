@@ -3,222 +3,10 @@
     <div class="panel-bd">
       <!-- 第一步骤 -->
       <validator name="validation">
-        <div v-show="currPage === 1">
-          <!-- <step-form1></step-form1> -->
-          <div class="recipe-form">
-            <div class="main-title bordered">
-              <h2>1.填写菜谱基本信息</h2>
-            </div>
-            <div class="form with-loading pad0">
-              <div class="icon-loading" v-show="loadingData">
-                <i class="fa fa-refresh fa-spin"></i>
-              </div>
-              <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
-                <div class="panel mt30 mb30 bordered">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
-                      <div class="controls col-21">
-                        <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
-                          <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
-                        </div>
-                        <div class="form-tips form-tips-error">
-                          <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>
-                          <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('ui.validation.maxlength', [$t('ui.ingredient.fields.name'), 20]) }}</span>
-                          <span v-if="$validation.name.touched && $validation.name.format">菜谱名称不允许前后带空格</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.ingredient.fields.images") }}:</label>
-                      <div class="controls col-21">
-                        <div class="thumb-info">
-                          <div class="thumb">
-                            <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
-                            <!-- <div class="form-tips">建议上传640像素*480像素成品图，最多不超过3张</div> -->
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> 介绍:</label>
-                      <div class="controls col-21">
-                        <div class="thumb-info">
-                          <div class="">
-                            <div class="input-text-wrap" style="height:100%">
-                              <textarea v-model="instructions" style="height:100%" type="text" lazy placeholder="说说这道菜的介绍吧" v-validate:instructions="{required: true, maxlength: 60}" class="input-text"></textarea>
-                            </div>
-                            <div class="form-tips form-tips-error">
-                              <span v-if="$validation.instructions.touched && $validation.instructions.required">{{ $t('ui.validation.required', {field: '介绍'}) }}</span>
-                              <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('ui.validation.maxlength', ['介绍', 60]) }}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">时长:</label>
-                      <div class="controls col-21">
-                        <div class="select-group">
-                          <div class="select">
-                            <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
-                              <select v-model="properties.cooking_time" name="properties.cooking_time">
-                                <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
-                              </select>
-                            </v-select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">难度:</label>
-                      <div class="controls col-21">
-                        <div class="select-group">
-                          <div class="select">
-                            <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
-                              <select v-model="properties.difficulty" name="properties.difficulty">
-                                <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
-                              </select>
-                            </v-select>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">{{ $t("ui.ingredient.fields.classification") }}:</label>
-                      <div class="controls col-21">
-                        <div class="select-group1" v-for="category in classification">
-                          <div class="select">
-                            <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
-                              <select v-model="category.main" @change="getSubCategories(category, true)">
-                                <option v-for="opt in mainCategories" :value="opt.main">{{ opt.main.name }}</option>
-                              </select>
-                            </v-select>
-                            <v-select v-show="category.subOptions.length" width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
-                              <select v-model="category.sub">
-                                <option v-for="opt in category.subOptions" :value="opt.sub">{{ opt.sub.name }}</option>
-                              </select>
-                            </v-select>
-                            <span @click="removeObj(category, classification)" class="fa fa-times ml10"></span>
-                          </div>
-                        </div>
-                        <button @click.prevent="addCategory" class="btn btn-primary"><i class="fa fa-plus"></i>添加类别</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel mb20 bordered">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3">主料:</label>
-                      <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="major in major_ingredients">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="major.name" type="text" name="major.name" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-8 col-offset-1">
-                              <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="major.unit" type="text" name="major.unit" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-3">
-                              <span @click="removeObj(major, major_ingredients)" class="fa fa-times m10"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="operations col-offset-3">
-                        <button @click.prevent="addMajor" class="btn btn-primary"><i class="fa fa-plus"></i>添加主料</button>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">辅料:</label>
-                      <div class="col-20 row">
-                        <div class="col-12 mb10" v-for="minor in minor_ingredients">
-                          <div class="row">
-                            <div class="col-12">
-                              <div class="input-text-wrap">
-                                <input placeholder="请填写材料" v-model="minor.name" type="text" name="minor.name" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-8 col-offset-1">
-                              <div class="input-text-wrap">
-                                <input placeholder="用量" v-model="minor.unit" type="text" name="minor.unit" lazy class="input-text"/>
-                              </div>
-                            </div>
-                            <div class="col-3">
-                              <span @click="removeObj(minor, minor_ingredients)" class="fa fa-times m10"></span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="operations col-offset-3">
-                        <button @click.prevent="addMinor" class="btn btn-primary"><i class="fa fa-plus"></i>添加辅料</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="panel mb20">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3"><i class="hl-red">*</i> 烹饪技巧:</label>
-                      <div class="controls col-21">
-                        <div v-placeholder="$t('ui.recipe.placeholders.skill')" class="input-text-wrap">
-                          <textarea v-model="tips" type="text" name="tips" v-validate:tips="{required: true, maxlength: 100}" lazy class="input-text"></textarea>
-                        </div>
-                        <div class="form-tips form-tips-error">
-                          <span v-if="$validation.tips.touched && $validation.tips.required">{{ $t('ui.validation.required', {field: '烹饪技巧'}) }}</span>
-                          <span v-if="$validation.tips.modified && $validation.tips.maxlength">{{ $t('ui.validation.maxlength', ['烹饪技巧', 100]) }}</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="form-row row">
-                      <label class="form-control col-3">标签:</label>
-                      <div class="controls col-21">
-                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <!-- <div class="panel mb20">
-                  <div class="panel-bd">
-                    <div class="form-row row">
-                      <label class="form-control col-3">状态:</label>
-                      <div class="controls col-21">
-                        <div class="radio-group">
-                          <label class="radio">
-                            <input type="radio" v-model="status" name="is_enable" :value="1"/>已发布
-                          </label>
-                          <label class="radio">
-                            <input type="radio" v-model="status" name="is_enable" :value="0"/>待审核
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div> -->
-                <!-- <div class="form-actions mb40 row">
-                  <div class="col-offset-4">
-                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
-                    <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
-                  </div>
-                </div> -->
-              </form>
-            </div>
-          </div>
-        </div>
-        <!-- 第一步骤END -->
         <!-- 第二步骤 -->
-        <div v-show="currPage === 2">
+        <div>
           <!-- <step-form2></step-form2> -->
           <div class="recipe-form">
-            <div class="main-title bordered">
-              <h2>2.编辑烹饪步骤</h2>
-            </div>
             <div class="form with-loading">
               <div class="icon-loading" v-show="loadingData">
                 <i class="fa fa-refresh fa-spin"></i>
@@ -264,6 +52,13 @@
                     </div>
                   </div>
                 </div>
+                <div class="form-actions mb40 row">
+                  <div class="col-offset-4">
+                    <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
+                    <button @click.prevent.stop="isShowPreview=true" class="btn btn-ghost btn-lg">预览</button>
+                    <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
+                  </div>
+                </div>
               </form>
               <modal :show.sync="cookTipShow" width="480px">
                 <h3 slot="header">编辑烹饪提示信息</h3>
@@ -288,182 +83,9 @@
                 </div>
               </modal>
             </div>
-
           </div>
         </div>
         <!-- 第二步骤END -->
-        <!-- 第三步骤 -->
-        <div v-show="currPage === 3">
-          <div class="recipe-form">
-            <div class="main-title bordered">
-              <h2>3.填写菜谱烹饪参数</h2>
-            </div>
-            <div class="form with-loading">
-              <div class="icon-loading" v-show="loadingData">
-                <i class="fa fa-refresh fa-spin"></i>
-              </div>
-            </div>
-            <form autocomplete="off" novalidate @submit.prevent="onRecipeSubmit">
-              <div class="recipe-form">
-                <div class="form with-loading">
-                  <div class="icon-loading" v-show="loadingData">
-                    <i class="fa fa-refresh fa-spin"></i>
-                  </div>
-                  <div class="row">
-                    <label class="form-control col-3 line32">烹饪设备: </label>
-                    <div class="controls col-21">
-                      <x-select :label="currentProduct.name" width="180px">
-                        <select v-model="currentProduct" @change="">
-                          <option v-for="product in products" :value="product">{{product.name}}</option>
-                        </select>
-                      </x-select>
-                    </div>
-                  </div>
-                  <div class="row mrt10">
-                    <label class="form-control col-3 line32">本地菜谱ID: </label>
-                    <div class="controls col-21">
-                      <div class="input-text-wrap">
-                        <input type="text" v-model="local_id" style="width:300px" lazy class="input-text" name="local_id" lazy/>
-                      </div>
-                      <!-- <div class="form-tips form-tips-error">
-                        <span v-if="$validation.localid.touched && $validation.localid.required">请输入本地菜谱ID</span>
-                        <span v-if="$validation.localid.modified && $validation.localid.maxlength">本地菜谱ID不能超过20位</span>
-                        <span v-if="$validation.localid.touched && $validation.localid.format">菜谱ID不允许前后带空格</span>
-                      </div> -->
-                    </div>
-                  </div>
-                  <div class="settingArea row">
-                    <label class="col-3 line32">菜单:</label>
-                    <div class="controls col-21">
-                      <!-- <tree-item></tree-item> -->
-                      <ul class="menu" v-if="menus && menus.length > 0">
-                        <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode"></tree-item>
-                      </ul>
-                    </div>
-                  </div>
-                  <div class="form-actions row">
-                    <div class="col-offset-4">
-                      <button @click.prevent.stop="openFirAdd" class="btn btn-ghost"><i class="fa fa-plus"></i>添加菜单</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <!-- <div class="form-actions mb40 row">
-                <div class="col-offset-4">
-                  <button type="submit" :disabled="editing" :class="{'disabled': editing}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
-                  <button @click.prevent="deleteRecipe" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t('ui.recipe.del') }}</button>
-                </div>
-              </div> -->
-            </form>
-
-            <!-- 添加第一级菜单 -->
-            <modal :show.sync="addFirMenuShow" width="480px">
-              <h3 slot="header">添加菜单</h3>
-              <div slot="body" class="form">
-                <form autocomplete="off" novalidate>
-                  <div class="form-row row">
-                    <label class="form-control col-6">菜单名称:</label>
-                    <div class="controls col-18">
-                      <div class="input-text-wrap">
-                        <input v-model="addMenuModal.type" name="addMenuModal.type" type="text" class="input-text" lazy>
-                      </div>
-                      <!-- <div class="form-tips form-tips-error">
-                        <span v-if="$validation.firmenu.touched && $validation.firmenu.required">请输入菜单名称</span>
-                        <span v-if="$validation.firmenu.modified && $validation.firmenu.maxlength">菜单名称不能超过20位</span>
-                        <span v-if="$validation.firmenu.touched && $validation.firmenu.format">菜单名称不允许前后带空格</span>
-                      </div> -->
-                    </div>
-                  </div>
-                  <div class="form-actions">
-                    <button @click.prevent.stop="addFirstMenu" class="btn btn-primary">确定</button>
-                    <button @click.prevent.stop="cancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-                  </div>
-                </form>
-              </div>
-            </modal>
-          </div>
-        </div>
-        <!-- 第三步骤END -->
-        <!-- 第四步骤 -->
-        <!-- <div v-show="currPage === 4">
-          <div class="panel mt20">
-            <div class="panel-hd">
-              <div class="actions">
-                <button class="btn btn-primary" @click="addDevice" :disabled="recipe.devices.length >= products.length" :class="{'disabled':recipe.devices.length >= products.length}"><i class="fa fa-plus"></i>添加烹饪设备</button>
-              </div>
-              <h2>烹饪设备列表</h2>
-            </div>
-            <div class="panel-bd">
-              <div class="tips-null" v-if="!recipe.devices.length && !loadingData">您还没有关联烹饪设备，请点击“添加烹饪设备”按钮编辑智能菜谱数据</div>
-              <div class="data-table with-loading" v-if="recipe.devices.length">
-                <div class="icon-loading" v-show="loadingData">
-                  <i class="fa fa-refresh fa-spin"></i>
-                </div>
-                <table class="table table-stripe table-bordered">
-                  <thead>
-                    <tr>
-                      <th class="wp30">烹饪设备</th>
-                      <th>指令</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="device in recipe.devices">
-                      <td>{{ device.name }}</td>
-                      <td><a class="hl-red" @click.prevent="editDevice(device)">{{ device.autoexec.value || '-' }}123</a></td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <modal :show.sync="modal.show" @close="onCancel" width="480px">
-              <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
-              <div slot="body" class="form">
-                <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-                  <div class="form-row row">
-                    <label class="form-control col-6">烹饪菜谱:</label>
-                    <div class="controls col-18">
-                      <div class="control-text">{{ recipe.name }}</div>
-                    </div>
-                  </div>
-                  <div class="form-row row">
-                    <label class="form-control col-6">工作设备:</label>
-                    <div class="controls col-18" v-if="modal.type === 'add'">
-                      <x-select placeholder="请选择设备" :label="selectedProduct.name">
-                        <select v-model="selectedProduct" name="selectedProduct">
-                          <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
-                        </select>
-                      </x-select>
-                    </div>
-                    <div class="controls col-18" v-if="modal.type === 'edit'">
-                      <div class="control-text">{{ model.name }}</div>
-                    </div>
-                  </div>
-                  <div class="form-row row">
-                    <label class="form-control col-6">设备指令:</label>
-                    <div class="controls col-18">
-                      <div class="input-text-wrap required-sign">
-                        <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
-                      </div>
-                      <div class="form-tips form-tips-error">
-                        <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('ui.validation.required', {field: '设备指令'}) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-actions">
-                    <label v-if="modal.type === 'edit'" class="del-check">
-                      <input type="checkbox" name="del" v-model="delChecked"/> 删除此设备
-                    </label>
-                    <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-                    <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-                  </div>
-                </form>
-              </div>
-            </modal>
-          </div>
-        </div> -->
-      </validator>
-      <!-- 第四步骤END -->
       <div v-show="isShowPreview" transition="modal" class="mask">
         <div class="preview-wrapper">
           <div :style="dialogStyle" class="preview-dialog">
@@ -536,14 +158,6 @@
         </div>
       </div>
     </div>
-    <div class="row border-top action">
-      <div class="col-21 col-offset-3">
-        <button v-if="mixPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
-        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
-        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
-        <button v-if="!maxPage" class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -558,20 +172,18 @@ import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
-import TreeItem from './TreeItem'
 // import locales from 'consts/locales/index'
 // import { DEVICES } from '../../config'
 import store from 'src/store'
 
 export default {
-  name: 'Creation',
+  name: 'EditRecipe',
 
   layout: 'admin',
 
   mixins: [globalMixins, pluginMixins],
 
   components: {
-    'tree-item': TreeItem,
     'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
@@ -592,20 +204,12 @@ export default {
   props: {
     type: {
       type: String,
-      default: 'add'
+      default: 'edit'
     }
   },
 
   data () {
     return {
-      addFirMenuShow: false,
-      local_id: '',
-      addMenuModal: {
-        type: '',
-        name: ''
-      },
-      menus: [],
-      currentProduct: {},
       name: '',
       images: [''], // 成品图
       difficulty: '不限',
@@ -710,7 +314,6 @@ export default {
   },
 
   ready () {
-    this.init()
     // this.getRecipes()
     this.whichPage()
     let appId = this.$route.params.app_id
@@ -745,10 +348,6 @@ export default {
           this.minor_ingredients = data.minor_ingredients
           this.cooking_steps = data.cooking_steps
           this.tips = data.tips
-          if (data.param) {
-            this.menus = data.param
-          }
-          this.local_id = data.local_id
           this.devices = data.devices
           this.status = data.status
           var images = ['']
@@ -772,20 +371,7 @@ export default {
     this.getTags()
   },
 
-  watch: {
-    products () {
-      this.init()
-    }
-  },
-
   methods: {
-    setCode (val, index) {
-      console.log(index)
-      console.log(val)
-      this.menus.$set(index, val)
-      console.log(JSON.stringify(this.menus))
-      // this.menu = val
-    },
     // 控制页码逻辑
     whichPage () {
       if (this.$route.params.type_value === '1') {
@@ -1074,9 +660,6 @@ export default {
         tips: this.tips,
         status: this.status,
         creator: this.currentMember.name,
-        local_id: this.local_id,
-        param: this.menus,
-        pid: [this.currentProduct.id],
         // type: this.devices.length ? 2 : 1
         type: this.$route.params.type_value
       }
@@ -1135,68 +718,6 @@ export default {
     },
     addTips () {
       this.cookTips.push({content: ''})
-    },
-    addMenu (item) {
-      // window.alert(JSON.stringify(item))
-      this.addMenuShow = true
-    },
-    openFirAdd () {
-      this.addMenuModal.type = ''
-      this.addFirMenuShow = true
-      // this.$resetValidation()
-    },
-    // 创建一级菜单
-    addFirstMenu () {
-      // if (this.$validation.invalid) {
-      //   return
-      // }
-      this.menus.push({
-        type: this.addMenuModal.type
-      })
-      this.addFirMenuShow = false
-      this.addMenuModal.type = ''
-    },
-    // 创建子菜单
-    addChildrenMenu () {
-      // if (this.$validation.invalid) {
-      //   return
-      // }
-      this.menus.push({
-        type: this.addMenuModal.type
-      })
-      // this.addMenuModal = _.clone(this.originAddModel)
-      this.addFirMenuShow = false
-      this.addMenuModal.type = ''
-      // this.$resetValidation()
-    },
-    editMenu (item) {
-      this.editMenuShow = true
-    },
-    addCode (item) {
-      this.addCodeShow = true
-    },
-    editCode (item) {
-      this.editCodeShow = true
-    },
-    cancel () {
-      // console.log(this)
-      // this.$resetValidation()
-      this.addFirMenuShow = false
-    },
-    test (val, index) {
-      console.log(index)
-      console.log(val)
-      this.menus.$set(index, val)
-      console.log(JSON.stringify(this.menus))
-      // this.menu = val
-    },
-    /**
-     * 初始化
-     */
-    init () {
-      if (this.products && this.products.length > 0) {
-        this.currentProduct = this.products[0]
-      }
     }
   }
 }
@@ -1204,24 +725,6 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
-  .settingArea
-    margin-top 10px
-  .mrt10
-    margin-top 10px
-  .line32
-    line-height 32px
-    height 32px
-  .mrb10
-    margin-bottom 10px
-  .cooktipp
-    width 100%
-    border 1px solid #ddd
-    box-sizing border-box
-    margin 0
-    height 32px
-    line-height 32px
-  .addCookTip
-    margin-top 10px
   .line32
     line-height 32px
     height 32px
