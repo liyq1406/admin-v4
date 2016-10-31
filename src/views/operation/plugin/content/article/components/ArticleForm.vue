@@ -86,7 +86,7 @@ export default {
       model: {
         name: '',
         text: '',
-        status: 1
+        status: 0
       },
       submitting: false,
       deleting: false,
