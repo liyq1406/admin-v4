@@ -4,20 +4,20 @@
  */
 
 export default {
-  main_title: '用户管理',
-  activated: '已激活',
-  not_activated: '未激活',
-  online: '在线',
-  offline: '下线',
+  main_title: 'User  Management',
+  activated: 'Activated',
+  not_activated: 'Unactivated',
+  online: 'Online ',
+  offline: 'Offline',
   columns: {
-    nickname: '昵称',
-    create_date: '注册时间',
-    source: '来源',
-    is_active: '激活状态',
-    online: '在线状态'
+    nickname: 'Nickname',
+    create_date: 'Registration Time',
+    source: 'Source',
+    is_active: 'Activation Status',
+    online: 'Connection Status'
   },
-  total: '用户总数',
-  add_count: '用户总数',
-  online_count: '当前在线',
-  active_count: '七日活跃用户'
+  total: 'User Amount',
+  add_count: 'New User Amount',
+  online_count: 'Current Online User',
+  active_count: '7-day Active User'
 }

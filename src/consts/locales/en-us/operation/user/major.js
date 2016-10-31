@@ -4,38 +4,38 @@
  */
 
 export default {
-  main_title: '大客户管理',
-  list_title: '大客户列表',
-  new: '新增大客户',
-  search_placeholder: '搜索客户名称',
+  main_title: 'VIP Customer Management',
+  list_title: 'VIP Customer List',
+  new: 'Add VIP Customer',
+  search_placeholder: 'Enter Customer Name',
   columns: {
-    name: '客户名称',
-    contacter: '联系人',
-    phone: '联系电话',
-    device_count: '设备数',
-    email: '邮箱',
-    industry: '行业',
-    locality: '所在地',
-    location: '地址',
-    create_time: '创建时间'
+    name: 'Customer Name',
+    contacter: 'Liaisons',
+    phone: 'Phone NO',
+    device_count: 'Device Amount',
+    email: 'Email',
+    industry: 'Industry',
+    locality: 'Region',
+    location: 'Address',
+    create_time: 'Creation Time'
   },
   placeholders: {
-    name: '请输入名称',
-    contacter: '请输入联系人',
-    phone: '请输入联系电话',
-    email: '请输入邮箱',
-    location: '请输入地址'
+    name: 'Please Enter Name',
+    contacter: 'Please Enter Liaisons',
+    phone: 'Please Enter Phone NO',
+    email: 'Please Enter Email',
+    location: 'Please Enter Address'
   },
-  total: '大客户总数',
-  add_count: '本月新增大客户',
-  device_count: '大客户设备数',
-  add_device_count: '本月新增大客户设备',
+  total: 'VIP Customer Amount',
+  add_count: 'New VIP Customer Of Current Month',
+  device_count: 'VIP Customer Device Amount',
+  add_device_count: 'New VIP Customer Of Current Month Device Amount',
   industrys: {
-    web: '互联网',
-    security: '信息安全',
-    air: '空气净化',
-    game: '游戏运营',
-    consumable: '快消品',
-    communication: '通信电子'
+    web: 'Internet',
+    security: 'Information Security',
+    air: 'Air Purification',
+    game: 'Game Operation',
+    consumable: 'FMCG',
+    communication: 'Communication Electronics'
   }
 }

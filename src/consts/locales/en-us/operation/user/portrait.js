@@ -4,31 +4,31 @@
  */
 
 export default {
-  main_title: '人群画像',
+  main_title: 'Portrait',
   sex: {
-    title: '性别',
-    male: '男性',
-    female: '女性'
+    title: 'Gender',
+    male: 'Male',
+    female: 'Female'
   },
   age: {
-    title: '年龄分布',
-    label: '年龄',
-    'lt19': '19岁以下',
-    'lt29': '20-29岁',
-    'lt39': '30-39岁',
-    'lt49': '40-49岁',
-    'gt50': '50岁以上'
+    title: 'Age Distribution',
+    label: 'Age',
+    'lt19': 'below 19',
+    'lt29': '20-29',
+    'lt39': '30-39',
+    'lt49': '40-49',
+    'gt50': 'Above 50'
   },
   lang: {
-    title: '语言'
+    title: 'Language'
   },
   terminal: {
-    title: '终端分布',
-    system: '系统',
-    other: '其他'
+    title: 'Terminal Distribution',
+    system: 'System',
+    other: 'Other'
   },
   device: {
-    title: '机型分布TOP10',
-    type: '机型'
+    title: 'Device Distribution TOP10',
+    type: 'Device Model'
   }
 }

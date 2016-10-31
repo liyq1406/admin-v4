@@ -1,47 +1,47 @@
 /**
- * 告警记录翻译信息
+ * Alert 记录翻译信息
  * @return {Object}
  */
 
 export default {
-  title: '告警分析',
-  product: '产品',
-  number: '数量',
-  percent: '占比',
-  untreated: '待处理告警',
-  today_add: '今日告警',
-  sevent_add: '7天告警数',
-  thirty_add: '30天告警',
-  trend: '趋势',
-  display: '显示', // 显示
-  sign: '标记为', // 标记为
-  processed: '已处理', // 已处理
-  no_processed: '未处理', // 未处理
-  mac: '设备MAC', // MAC
-  device_id: '设备ID', // 设备ID
-  alert_content: '告警内容', // 告警内容
-  time: '时间', // 时间
-  hour: '小时', // 小时
-  minutes: '分钟', // 分钟
-  second: '秒', // 秒
-  time_length: '持续时长', // 持续市长
-  alert_level: '告警等级', // 告警等级
-  state: '状态', // 状态
-  warning: '轻微', // 轻微
-  danger: '严重', // 严重
-  all_level: '全部等级',
-  info: '通知',
-  detail: '告警分析详情',
-  alert_list: '告警列表',
-  no: '暂无',
-  no_map: '暂无地图数据',
-  notice_warranty: '通知维保',
-  sign_deal: '标记为已处理',
-  restart_task: '重开任务',
-  history: '告警历史',
-  alert_info: '告警信息',
-  alert_device: '告警设备',
-  alert_status: '状态',
-  deal_time: '处理时间',
-  alert_region: '告警地区'
+  title: 'Alert Analysis',
+  product: 'Product',
+  number: 'Amount',
+  percent: 'Ratio',
+  untreated: 'Pending Alert ',
+  today_add: 'New Alert',
+  sevent_add: '7-day Alert Amount',
+  thirty_add: '30-day Alert Amount',
+  trend: 'Trend',
+  display: 'View', // 显示
+  sign: 'Mark', // 标记为
+  processed: 'Processed', // 已处理
+  no_processed: 'Unprocessed', // 未处理
+  mac: 'Device MAC', // MAC
+  device_id: 'Device ID', // 设备ID
+  alert_content: 'Alert Content', // Alert 内容
+  time: 'Time', // 时间
+  hour: 'hrs', // 小时
+  minutes: 'min', // 分钟
+  second: 'sec', // 秒
+  time_length: 'Duration', // 持续市长
+  alert_level: 'Alert Level', // Alert 等级
+  state: 'Status', // 状态
+  warning: 'Warning', // 轻微
+  danger: 'Dangerous', // 严重
+  all_level: 'All Level',
+  info: 'Notification',
+  detail: 'Alert Analysis Detail',
+  alert_list: 'Alert List',
+  no: 'No records',
+  no_map: 'No map records',
+  notice_warranty: 'Inform Maintenance Team',
+  sign_deal: 'Mark as Processed',
+  restart_task: 'Restart task',
+  history: 'Alert History',
+  alert_info: 'Alert Information',
+  alert_device: 'Alert Device',
+  alert_status: 'Alert Status',
+  deal_time: 'Deal Time',
+  alert_region: 'Alert Region'
 }
