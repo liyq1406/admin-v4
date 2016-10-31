@@ -45,7 +45,7 @@
                   </td>
                   <td>{{ member.email || '-' }}</td>
                   <td>{{ member.phone || '-' }}</td>
-                  <td><span>{{ MEMBER_TYPES[member.role] }}</span></td>
+                  <td><span>{{ locales.data.MEMBER_TYPES[member.role] }}</span></td>
                   <td class="tac"><span :class="{'hl-gray': member.status===0, 'hl-green': member.status===1, 'hl-red': member.status===2}">{{ statusText(member.status) }}</span></td>
                   <td>{{ member.last_auth_time | formatDate }}</td>
                   <!-- <td class="tac" v-if ="this.currentMember.role === 1">
@@ -110,9 +110,9 @@
                 <label class="form-control col-6">{{ $t("account.members.fields.role") }}:</label>
                 <div class="controls col-18">
                   <div class="select">
-                    <x-select :label="MEMBER_TYPES[addModel.type]">
+                    <x-select :label="locales.data.MEMBER_TYPES[addModel.type]">
                       <select v-model="addModel.type" name="addModel.type">
-                        <option v-for="type in MEMBER_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
+                        <option v-for="type in locales.data.MEMBER_TYPES" :value="$index + 1" :selected="$index===0">{{ type }}</option>
                       </select>
                     </x-select>
                   </div>

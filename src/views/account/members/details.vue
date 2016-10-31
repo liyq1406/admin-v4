@@ -12,7 +12,7 @@
           <div v-stretch="182">
             <info-list :info="accountInfo">
               <div slot="role">
-                {{MEMBER_TYPES[member.role]}}
+                {{locales.data.MEMBER_TYPES[member.role]}}
                 <a class="fa fa-edit" @click="onShowMemberRoleModal" v-if="member.role !== 1"></a>
               </div>
               <div slot="password">
@@ -35,7 +35,7 @@
             <div class="controls col-18">
               <x-select :label="role.label">
                 <select v-model="role" @change="">
-                  <option v-for="(key, type) in MEMBER_TYPES" :value="{label: type, value: key}">{{type}}</option>
+                  <option v-for="(key, type) in locales.data.MEMBER_TYPES" :value="{label: type, value: key}">{{type}}</option>
                 </select>
               </x-select>
             </div>
@@ -227,7 +227,7 @@ export default {
           this.member = res.data
           this.role = {
             value: this.member.role,
-            label: this.MEMBER_TYPES[this.member.role]
+            label: this.locales.data.MEMBER_TYPES[this.member.role]
           }
         }
       }).catch((res) => {

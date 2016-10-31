@@ -244,15 +244,7 @@ export default {
     }
   },
 
-  // 头部导航
-  nav_head: {
-    home: 'Index',
-    platform: 'Platform Overview',
-    solutions: 'Solutions',
-    developer: 'Developer',
-    cases: 'Customer Cases',
-    documents: 'Development Document'
-  },
+  my_account: 'My Account',
 
   // 用户菜单
   account_menu: {

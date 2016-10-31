@@ -141,7 +141,7 @@ export default {
       return {
         role: {
           label: this.$t('account.info.role'),
-          value: this.MEMBER_TYPES[this.currentMember.role]
+          value: this.locales.data.MEMBER_TYPES[this.currentMember.role]
         },
         password: {
           label: this.$t('account.info.password'),
@@ -190,7 +190,7 @@ export default {
     init () {
       this.role = {
         value: this.currentMember.role,
-        label: this.MEMBER_TYPES[this.currentMember.role]
+        label: this.locales.data.MEMBER_TYPES[this.currentMember.role]
       }
     },
 

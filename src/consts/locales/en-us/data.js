@@ -110,7 +110,11 @@ export const USER_FILTERS = [
 ]
 
 // 成员类型
-export const MEMBER_TYPES = ['Administrator', 'Group Member']
+export const MEMBER_TYPES = {
+  '1': 'Administrator',
+  '2': 'Operator',
+  '3': 'Developer'
+}
 
 // 成员状态类型
 export const MEMBER_STATUS_TYPES = ['To be Activated', 'Enable', 'Disabled']
