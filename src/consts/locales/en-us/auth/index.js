@@ -6,8 +6,8 @@
 export default {
 
   // 登录
-  platform_name: '云智易物联云平台企业管理台',
-  old_entrance: '登录旧版管理台',
+  platform_name: 'Xlink IOT Cloud Enterprise Admin Platform',
+  old_entrance: 'Sign On the Original Platform',
   register: 'Register',
   remember: 'Remember Me',
   forget: 'Forgot Password?',
@@ -18,34 +18,34 @@ export default {
   login_success: 'Login Succeed',
 
   // 注册
-  solgan: '让企业拥有物联网的力量',
+  solgan: 'Let Enterprise More Effective With IOT.',
   account_tips: 'Please enter your account information:',
   basic_tips: 'Please enter your basic information:',
-  confirm_password: 'Please confirm your password again',
+  confirm_password: 'Please confirm your password.',
   confirm_password_tips: 'Passwords different.',
-  type_tips: 'Please select Application type',
+  type_tips: 'Please select Application type.',
   register_submit: 'Submit',
   register_success: 'Register Succeed',
   register_success_msg: 'An activation email had sent to you, please check your email.',
-  check_info: '我同意云智易的<a href="#">使用条款</a>和<a href="#">隐私权政策</a>',
-  has_account: '已有帐号？',
-  is_agree_tips: '您必须同意云智易的使用条款和隐私权政策才能继续注册',
-  xlink_intro: '云智易物联PaaS平台，专注于智慧生活场景，主要服务于智能照明/电工、智能安防、生活电器、健康穿戴、智能社区等领域的企业，提供软件和云平台一体化解决方案。',
+  check_info: 'I agree with the <a href="#">terms of use</a> and <a href="#">privacy policy</a> of Xlink.',
+  has_account: 'Already have an account?',
+  is_agree_tips: 'Accept the terms of use and privacy policy of Xlink to continue your registration.',
+  xlink_intro: 'We connect to PaaS Platform by using IOT technology, and are specialized in smart living scene. We mainly provide services with the enterprises that mainly includes smart lightning, eletrics, smart security, electric appliance, healthing wearings,and smart social network domains. That services are End to End solutions including software and cloud platform.',
   xlink_features: {
     link: {
-      tit: '快速连接：',
-      desc: '最快仅需一周便可接入覆盖全球的云端服务'
+      tit: 'Fast connectivity: ',
+      desc: 'can connect to cloud server that covers global earth even within one week'
     },
     dev: {
-      tit: '简化开发：',
-      desc: '完善的开发工具协助企业快速开发和集成'
+      tit: 'Facilitate Development: ',
+      desc: 'enterprise can take fast development and integration with thourough tool'
     },
     device: {
-      tit: '设备管理：',
-      desc: '15个子模块提供成熟的运营体系和数据管理服务'
+      tit: 'Device Management: ',
+      desc: 'we provide run well operation system and data management service by 15 sub-module'
     }
   },
-  customer_tit: '他们选择了云智易：',
+  customer_tit: 'They choose Xlink: ',
 
   // 找回密码
   by_phone: 'Reset Password via Mobile Phone',
@@ -53,27 +53,27 @@ export default {
   by_mail_tips: 'Please enter your Email Address, we will send password reset URL via Email.',
   by_mail_success_msg: 'Succeed, please check your email to continue the process.',
   fetch: 'Reset Password',
-  by_phone_tips: 'Please enter your registration Mobile Number, click send button, and fill in the Verification code into the placeholder.',
+  by_phone_tips: 'Please enter your registration Phone Number, click send button, and fill in the Verification code into the placeholder.',
   by_phone_success: 'Reset success',
   by_phone_success_msg: 'Your password has successfully reset, please re-login。',
   insert_code: 'Please enter the verification code.',
   verifycode: 'SMS Verification Code',
   get_code: 'Retrieve SMS Verification Code',
-  waiting: 'Retrieve it again after {seconds} seconds',
-  phone_msg: 'Please enter the correct Mobile Number',
+  waiting: 'Retrieve again after {seconds} seconds',
+  phone_msg: 'Please enter the correct Phone Number',
 
   // 激活帐号
   activate_success: 'Activation Success',
-  activate_success_msg: 'You account has successfully activated.',
-  activate_fail: 'Activation Failed.',
-  activate_fail_msg: 'Activation Code Expired',
-  email_not_exists: '用于激活成员的邮箱不存在',
-  success_tips: '温馨提示',
-  email_activated: '该成员邮箱已经激活',
+  activate_success_msg: 'You account has been successfully activated.',
+  activate_fail: 'Activation failed.',
+  activate_fail_msg: 'Activation code expired',
+  email_not_exists: 'The member activation Email not exists.',
+  success_tips: 'Tips',
+  email_activated: 'The Member email is activated successfully.',
 
   // 成员邀请激活
   member_activate: 'Activate Member',
-  member_activate_tips: 'Please enter your Username, Password, Mobile Phone Number and Verification Code. Please click ',
+  member_activate_tips: 'Please enter your Username, Password, Phone Number and Verification Code. Please click ',
 
   // 修改密码
   reset: 'Reset Password',

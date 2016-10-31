@@ -4,17 +4,17 @@
  */
 
 export default {
-  title: '设备地图',
-  map: '地图',
-  online: '在线',
-  offline: '离线',
-  device_id: '设备ID',
-  region: '所在区域',
-  nationwide: '全国',
-  no_location: '无法定位当前城市',
-  no_area: '找不到指定城市或地区',
-  no_device: '当前区域未找到设备',
-  detail: '查看详情',
-  no_device_find: '未找到该设备',
-  input_device_id: '请输入设备ID'
+  title: 'Device Map',
+  map: 'Map',
+  online: 'Online',
+  offline: 'Offline',
+  device_id: 'Device ID',
+  region: 'Region',
+  nationwide: 'Nation',
+  no_location: 'Current city could not be located.',
+  no_area: 'The city or region not found.',
+  no_device: 'No device found in current region.',
+  detail: 'View Detail',
+  no_device_find: 'The device not found.',
+  input_device_id: 'Please input device ID'
 }

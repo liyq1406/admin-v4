@@ -4,30 +4,30 @@
  */
 
 export default {
-  main_title: '概览',
+  main_title: 'Overview',
   total: {
-    count: '总用户数'
+    count: 'User Amount'
   },
   add: {
-    count: '今日新增'
+    count: 'New'
   },
   active: {
-    count: '今日活跃用户'
+    count: 'New Active User Amount'
   },
   sevent_total: {
-    count: '过去7天活跃用户数'
+    count: '7-day Active User Amount'
   },
   distribution: {
-    title: '用户分布',
-    device_count: '设备数量',
-    region: '地域',
-    user_count: '用户数量',
-    percent: '占比'
+    title: 'User  Distribution',
+    device_count: 'Device Amount',
+    region: 'Region',
+    user_count: 'User Amount',
+    percent: 'Ratio'
   },
   trend: {
-    title: '用户趋势',
-    add: '新增用户',
-    active: '活跃用户',
-    sum: '累计用户'
+    title: 'User Trend',
+    add: 'New User Amount',
+    active: 'Active User Amount',
+    sum: 'Accumulated User Amount'
   }
 }

@@ -7,237 +7,237 @@ export default {
   // 主导航
   main_nav: {
     dashboard: {
-      label: '首页'
+      label: 'Index'
     },
     dev: {
-      label: '开发平台',
+      label: 'Development Platform',
       // 侧栏导航
       subs: {
         home: {
-          label: '首页'
+          label: 'Index'
         },
         products: {
           subs: {
-            info: '产品信息',
-            debug: '设备调试',
-            virtual_devices: '虚拟设备',
-            alert: '告警设置',
-            data_point: '数据端点',
-            data_forward: '数据接口',
-            authorize: '授权管理'
+            info: 'Product Information',
+            debug: 'Device Debug',
+            virtual_devices: 'Virtual Device ',
+            alert: 'Alert Setting',
+            data_point: 'Data Point',
+            data_forward: 'Data Interface',
+            authorize: 'Authorization Management'
           }
         },
-        add_product: '添加产品',
+        add_product: 'Add Product',
         authorize: {
-          label: '设备授权',
+          label: 'Device Authorization',
           subs: {
-            list: '授权记录'
+            list: 'Authorization Record'
           }
         },
         apps: {
-          label: '应用管理',
+          label: 'APP Management',
           subs: {
-            index: '应用管理'
+            index: 'APP Management'
           }
         },
         market: {
-          label: '应用市场',
+          label: 'APP Market',
           subs: {
-            index: '应用市场'
+            index: 'APP Market'
           }
         },
         data: {
-          label: '数据服务',
+          label: 'Data Service',
           subs: {
-            tables: '数据表',
-            snapshots: '数据快照',
-            statistics_rule: '统计规则',
-            forward: '数据转发'
+            tables: 'Data Table',
+            snapshots: 'Data Snapshot',
+            statistics_rule: 'Statistical Rule',
+            forward: 'Data Forward'
           }
         },
         firmware: {
-          label: '固件管理',
+          label: 'Firmware Management',
           subs: {
-            list: '升级列表',
-            manage: '版本管理',
-            add: '新建任务',
-            update: '上传新固件'
+            list: 'Upgrade List',
+            manage: 'Version Management',
+            add: 'Add Task',
+            update: 'Upload New Firmware'
           }
         },
         linkage: {
-          label: '智能互联',
+          label: 'Smart Interconnection',
           subs: {
-            settings: '互联设置',
+            settings: 'Interconnection Setting',
             amazon: 'Amazon echo',
             google: 'Google nest',
             philips: 'Philips hue',
-            ezviz: '萤石',
+            ezviz: 'Ezviz',
             ifttt: 'IFTTT'
           }
         },
         shopping: {
-          label: '在线购买',
+          label: 'Purchase Online',
           subs: {
-            cart: '在线购买',
-            orders: '购买记录'
+            cart: 'Purchase Online',
+            orders: 'Purchase Records'
           }
         },
         settings: {
-          label: '设置',
+          label: ' Setting',
           subs: {
-            users: '用户设置',
-            email: '邮件设置',
-            message: '短信设置'
+            users: 'User Setting',
+            email: 'Email Setting',
+            message: 'SMS Setting'
           }
         }
       }
     },
     operation: {
-      label: '运营平台',
+      label: 'Operation Platform',
       // 侧栏导航
       subs: {
         overview: {
-          label: '概览'
+          label: 'Overview'
         },
         products: {
           subs: {
-            overview: '概览',
-            devices: '设备管理',
-            alerts: '告警信息',
-            device_map: '设备地图',
-            distributing: '热力分布',
-            analysis: '产品分析'
+            overview: 'Overview',
+            devices: 'Device Management',
+            alerts: 'Alert Message',
+            device_map: 'Device Map',
+            distributing: 'Thermal Distribution',
+            analysis: 'Product Analysis'
           }
         },
         ios: {
           subs: {
-            settings: '应用配置'
+            settings: 'APP Configuration'
           }
         },
         android: {
           subs: {
-            version: '版本信息',
-            settings: '应用配置'
+            version: 'Version Information',
+            settings: 'APP Configuration'
           }
         },
         web: {
           subs: {
-            settings: '应用配置'
+            settings: 'APP Configuration'
           }
         },
         wechat: {
           subs: {
-            settings: '应用配置'
+            settings: 'APP Configuration'
           }
         },
         broadcast: {
-          label: '消息推送',
+          label: 'Message Push',
           subs: {
-            add: '新建推送',
-            list: '推送历史'
+            add: 'Add Push',
+            list: 'Push History'
           }
         },
         warranty: {
-          label: '智能维保',
+          label: 'Smart Maintenance',
           subs: {
-            overview: '概览',
-            extended_warranties: '故障事件',
-            repair: '维修列表',
-            accounts: '网点管理',
-            heat: '热力分布',
-            settings: '设置'
+            overview: 'Overview',
+            extended_warranties: 'Failure',
+            repair: 'Repair List',
+            accounts: 'Net Management',
+            heat: 'Thermal Distribution',
+            settings: 'Setting'
           }
         },
         helpdesk: {
-          label: '用户反馈',
+          label: 'Feedback',
           subs: {
-            overview: '概览',
-            issues: '消息列表',
-            settings: '设置'
+            overview: 'Overview',
+            issues: 'Message List',
+            settings: 'Setting'
           }
         },
         splashwnd: {
-          label: 'APP闪屏',
+          label: 'APP Splash Screen',
           subs: {
-            list: 'APP启动页设置'
+            list: 'APP Startup Setting'
           }
         },
         dealer: {
-          label: '经销商管理',
+          label: 'Dealers Management',
           subs: {
-            list: '经销商列表'
+            list: 'Dealers List'
           }
         },
         recipes: {
-          label: '云菜谱',
+          label: 'Cloud Recipe',
           subs: {
-            recipes: '菜谱管理',
-            menus: '菜单管理',
-            categories: '类别管理',
-            tags: '标签管理'
+            recipes: 'Recipe Management',
+            menus: 'Menu Management',
+            categories: 'Category Management',
+            tags: 'Tag Management'
           }
         },
         alerts: {
-          label: '告警服务',
+          label: 'Alert Service',
           subs: {
-            record: '告警记录',
-            analysis: '告警分析',
-            heat: '热力分布'
+            record: 'Alert Record',
+            analysis: 'Alert Analysis',
+            heat: 'Thermal Distribution'
           }
         },
         linkage: {
-          label: '设备互联',
+          label: 'Device Interconnection',
           subs: {
-            devices: '设备联动',
-            nest: 'nest联动',
-            echo: 'echo'
+            devices: 'Device Interconnection',
+            nest: 'Nest Interconnection',
+            echo: 'Echo'
           }
         },
         data: {
-          label: '数据管理',
+          label: 'Data Management',
           subs: {
-            tables: '数据表',
-            snapshot: '设备快照'
+            tables: 'Data Table',
+            snapshot: 'Device Snapshot'
           }
         },
         snapshots: {
-          label: '快照分析'
+          label: 'Snapshot Analysis'
         },
         users: {
-          label: '用户管理',
+          label: 'User Management',
           subs: {
-            overview: '概览',
-            list: '用户列表',
-            major_clients: '大客户管理',
-            portrait: '人群画像',
-            analysis: '用户行为分析'
+            overview: 'Overview',
+            list: 'User List',
+            major_clients: 'VIP Management',
+            portrait: 'Portrait',
+            analysis: 'User Performance Analysis'
           }
         },
         device_map: {
-          label: '设备地图'
+          label: 'Device Map'
         },
         firmwares: {
-          label: '固件管理',
+          label: 'Firmware Management',
           subs: {
-            overview: '概览',
-            versions: '版本管理',
-            upgrade: '固件升级'
+            overview: 'Overview',
+            versions: 'Version Management',
+            upgrade: 'Firmware Upgrade'
           }
         },
         statistic: {
-          label: '统计分析',
+          label: 'Statistical Ananlysis',
           subs: {
-            products: '产品统计',
-            users: '用户统计'
+            products: 'Product Statistics',
+            users: 'User Statistics'
           }
         },
         settings: {
-          label: '系统设置',
+          label: 'System Setting',
           subs: {
-            auth: '授权管理',
-            members: '成员管理',
-            account: '帐号信息',
-            mail_templates: '邮件模板'
+            auth: 'Authorization Management',
+            members: 'Member Management',
+            account: 'Account Information',
+            mail_templates: 'Email Module'
           }
         }
       }
@@ -246,39 +246,39 @@ export default {
 
   // 头部导航
   nav_head: {
-    home: '首页',
-    platform: '平台介绍',
-    solutions: '解决方案',
-    developer: '开发者',
-    cases: '客户案例',
-    documents: '开发文档'
+    home: 'Index',
+    platform: 'Platform Overview',
+    solutions: 'Solutions',
+    developer: 'Developer',
+    cases: 'Customer Cases',
+    documents: 'Development Document'
   },
 
   // 用户菜单
   account_menu: {
-    account: '帐号信息',
-    members: '成员管理',
-    authorize: '授权管理',
-    security: '安全审计',
-    corp: '企业信息',
-    quit: '退出'
+    account: 'Account Information',
+    members: 'Member Management',
+    authorize: 'Authorization Management',
+    security: 'Safe Audit',
+    corp: 'Enterprise Information',
+    quit: 'Exit'
   },
 
   // 提示信息
   messages: {
-    quit: '您已退出登录',
-    no_permission: '暂无使用权限'
+    quit: 'You have logout',
+    no_permission: 'No Permission'
   },
 
   // 等级
   levels: {
-    not_authorized: '未认证',
-    authorized: '已认证'
+    not_authorized: 'Unauthorized',
+    authorized: 'Authorized'
   },
 
   // 顶栏
-  view_demo: '查看demo',
-  demo_tips: '查看demo立即体验运营平台',
-  service_tips: '更多服务请<a class="link-contact" href="http://www.xlink.cn/about.html" target="_blank">联系商务</a>获得支持',
-  display_no_more: '不再显示'
+  view_demo: 'View Demo',
+  demo_tips: 'Know how to use the Operation Platform? View demo now!',
+  service_tips: ' More service please <a class="link-contact" href="http://www.xlink.cn/about.html" target="_blank"> contact our business team </a>',
+  display_no_more: 'No more display.'
 }
