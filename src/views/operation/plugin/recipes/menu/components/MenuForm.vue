@@ -7,14 +7,15 @@
       <validator name="validation">
         <form autocomplete="off" novalidate @submit.prevent="onMenuSubmit">
           <div class="form-row row">
-            <label class="form-control col-4">标题:</label>
+            <label class="form-control col-4"><i class="hl-red">*</i> 标题:</label>
             <div class="controls col-20">
               <div v-placeholder="'请输入标题'" class="input-text-wrap">
-                <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 250}" lazy class="input-text"/>
+                <input v-model="model.name" type="text" name="model.name" v-validate:name="{required: true, maxlength: 50, format: 'trim'}" lazy class="input-text"/>
               </div>
               <div class="form-tips form-tips-error">
                 <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: '标题'}) }}</span>
-                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', ['标题', 250]) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.maxlength">{{ $t('common.validation.maxlength', ['标题', 50]) }}</span>
+                <span v-if="$validation.name.modified && $validation.name.format">标题前后不允许带空格</span>
               </div>
             </div>
           </div>
@@ -22,10 +23,11 @@
             <label class="form-control col-4">摘要:</label>
             <div class="controls col-20">
               <div v-placeholder="'请输入摘要介绍'" class="input-text-wrap">
-                <input v-model="model.instructions" type="text" name="model.instructions" v-validate:instructions="{maxlength: 250}" lazy class="input-text"/>
+                <textarea v-model="model.instructions" type="text" name="model.instructions" v-validate:instructions="{maxlength: 200, format: 'trim'}" v-length-tip="{max: 200, model: model.instructions}" lazy class="input-text"></textarea>
               </div>
               <div class="form-tips form-tips-error">
-                <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['摘要介绍', 250]) }}</span>
+                <span v-if="$validation.instructions.modified && $validation.instructions.maxlength">{{ $t('common.validation.maxlength', ['摘要介绍', 200]) }}</span>
+                <span v-if="$validation.instructions.modified && $validation.instructions.format">摘要前后不允许带空格</span>
               </div>
             </div>
           </div>
@@ -58,7 +60,7 @@
             <div class="col-offset-4">
               <button type="submit" :disabled="submitting" :class="{'disabled': submitting}" class="btn btn-primary btn-lg">{{ $t("common.save") }}</button>
               <!-- <button @click.prevent.stop="showMask=true" class="btn btn-ghost btn-lg">预览</button> -->
-              <button @click.prevent="deleteMenu" class="btn btn-ghost btn-lg" v-if="type==='edit'">删除该菜单</button>
+              <button @click.prevent="deleteMenu" class="btn btn-ghost btn-lg" v-if="type==='edit'">{{ $t("common.del") }}</button>
             </div>
           </div>
         </form>
@@ -211,6 +213,7 @@ export default {
      */
     queryCondition () {
       var condition = {
+        filter: ['name', 'creator', 'type'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {
@@ -318,7 +321,18 @@ export default {
      * @author shengzhi
      */
     onMenuSubmit () {
-      if (this.$validation.invalid || this.submitting) return
+      if (this.submitting) return
+
+      if (this.$validation.invalid) {
+        this.$validate(true)
+        return
+      }
+
+      // 菜谱至少添加两个
+      if (this.model.menu.length < 2) {
+        this.showError('请至少添加2个菜谱')
+        return
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token

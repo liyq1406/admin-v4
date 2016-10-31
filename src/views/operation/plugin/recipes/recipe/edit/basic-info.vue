@@ -27,7 +27,7 @@
                       <label class="form-control col-3"><i class="hl-red">*</i> {{ $t("ui.recipe.fields.name") }}:</label>
                       <div class="controls col-21">
                         <div v-placeholder="'请填写菜谱名称'" class="input-text-wrap">
-                          <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                          <input v-model="name" type="text" name="name" v-validate:name="{required: true, maxlength: 20, format: 'trim'}" lazy class="input-text"/>
                         </div>
                         <div class="form-tips form-tips-error">
                           <span v-if="$validation.name.touched && $validation.name.required">{{ $t('ui.validation.required', {field: $t('ui.ingredient.fields.name')}) }}</span>

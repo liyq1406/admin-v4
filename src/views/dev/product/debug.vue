@@ -213,7 +213,7 @@
               <label class="form-control col-6">名字:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入名字'" class="input-text-wrap">
-                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+                  <input v-model="addModel.name" type="text" name="addModel.name" v-validate:name="{format: 'trim'}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$addValidation.name.modified && $addValidation.name.format">名字前后不能包含空格</span>

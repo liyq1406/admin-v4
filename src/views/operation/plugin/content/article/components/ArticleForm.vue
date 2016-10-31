@@ -9,7 +9,7 @@
           <label class="form-control col-4"><i class="hl-red">*</i> 文章标题:</label>
           <div class="controls col-20">
             <div v-placeholder="'请输入标题'" class="input-text-wrap">
-              <input v-model="model.name" name="model.name" type="text" v-validate:name="{required: true, maxlength: 50, format: 'no-spaces-both-ends'}" lazy class="input-text"/>
+              <input v-model="model.name" name="model.name" type="text" v-validate:name="{required: true, maxlength: 50, format: 'trim'}" lazy class="input-text"/>
             </div>
             <div class="form-tips form-tips-error">
               <span v-if="$validation.name.touched && $validation.name.required">{{ $t('common.validation.required', {field: '标题'}) }}</span>

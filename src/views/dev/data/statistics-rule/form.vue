@@ -7,7 +7,7 @@
             <label class="form-control col-3">规则名称:</label>
             <div class="controls col-21">
               <div class="input-text-wrap">
-                <input v-model="name" type="text" placeholder="请输入规则名称" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'no-spaces-both-ends'}" name="name" class="input-text input-lenght"/>
+                <input v-model="name" type="text" placeholder="请输入规则名称" v-validate:name="{required: true, minlength: 2, maxlength: 30, format: 'trim'}" name="name" class="input-text input-lenght"/>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.name.touched && $validation.name.required">请输入规则名称</span>
                   <span v-if="$validation.name.modified && $validation.name.minlength">规则名称不能少于2位</span>
@@ -21,7 +21,7 @@
             <label class="form-control col-3">规则描述:</label>
             <div class="controls col-19">
               <div class="input-text-wrap">
-                <textarea v-model="description" type="text" placeholder="请输入规则描述" v-validate:description="{required: true, minlength: 1, maxlength: 300, format: 'no-spaces-both-ends'}" name="description" class="input-text textarea"></textarea>
+                <textarea v-model="description" type="text" placeholder="请输入规则描述" v-validate:description="{required: true, minlength: 1, maxlength: 300, format: 'trim'}" name="description" class="input-text textarea"></textarea>
                 <div class="form-tips form-tips-error">
                   <span v-if="$validation.description.touched && $validation.description.required">请输入规则描述</span>
                   <span v-if="$validation.description.modified && $validation.description.minlength">规则名称不能少于1位</span>
