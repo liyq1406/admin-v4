@@ -1334,7 +1334,7 @@ let configRouter = (router) => {
           }
         },
         // 经销商导入设备
-        'plugins/dealer/:app_id/import_devices': {
+        'plugins/dealer/:app_id/list/:dealer_id/import_devices': {
           component (resolve) {
             require.ensure([], (require) => {
               resolve(require('./views/operation/plugin/dealer/import-devices'))

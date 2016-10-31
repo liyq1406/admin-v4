@@ -148,7 +148,7 @@
 
       span
         text-indent 8px
-        height 28px
+        height 26px
         font-size 12px
         text-align left !important
 
