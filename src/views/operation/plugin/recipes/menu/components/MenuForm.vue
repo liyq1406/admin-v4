@@ -213,7 +213,9 @@ export default {
       var condition = {
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        query: {},
+        query: {
+          status: 1
+        },
         order: {
           create_time: -1
         }
