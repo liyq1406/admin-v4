@@ -38,22 +38,22 @@ export default {
           title: '用户字段',
           key: 'user'
         },
-        {
-          title: '告警字段',
-          key: 'alert'
-        },
+        // {
+        //   title: '告警字段',
+        //   key: 'alert'
+        // },
         {
           title: '产品字段',
           key: 'product'
-        },
-        {
-          title: '经销商字段',
-          key: 'dealer'
-        },
-        {
-          title: '维保字段',
-          key: 'warranty'
         }
+        // {
+        //   title: '经销商字段',
+        //   key: 'dealer'
+        // },
+        // {
+        //   title: '维保字段',
+        //   key: 'warranty'
+        // }
       ]
     }
   },

@@ -9,19 +9,9 @@
           <i class="fa fa-refresh fa-spin"></i>
         </div>
         <div class="filter-bar">
-          <div class="filter-group fl">
-            <div class="filter-group-item">
-              <x-select width="90px" :label="currProduct.name" size="small">
-                <span slot="label">显示:</span>
-                <select v-model="selectedProduct" name="product">
-                  <option v-for="product in products" :value="product">{{ product.name }}</option>
-                </select>
-              </x-select>
-            </div>
-          </div>
           <div class="filter-group fr">
             <div class="actions">
-              <button class="btn btn-primary" @click="onAddBtnClick"><i class="fa fa-plus"></i> 添加用户字段</button>
+              <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
             </div>
           </div>
         </div>
@@ -47,7 +37,7 @@
                   <span>{{field.type}}</span>
                 </td>
                 <td class="tac">
-                  <a class="hl-red">编辑</a>
+                  <a class="hl-red" @click="onEdit(field)">编辑</a>
                 </td>
               </tr>
             </template>
@@ -61,29 +51,18 @@
       </div>
     </div>
     <!-- 添加字段浮层 -->
-    <modal :show.sync="showAddModal" @close="onAddCancel">
-      <h3 slot="header">新增用户字段</h3>
+    <modal :show.sync="showModal" @close="onCancel">
+      <h3 slot="header">{{modalTitle}}</h3>
       <div slot="body" class="form">
         <validator name="majorClientValidation">
-          <form autocomplete="off" @submit.prevent="addField" novalidate>
-            <!-- 选择产品 -->
-            <div class="form-row row">
-              <label class="form-control col-6">选择产品:</label>
-              <div class="controls filter-group-item col-18">
-                <x-select :label="addModal.product.name">
-                  <select v-model="addModal.product">
-                    <option v-for="product in products" :value="product">{{product.name}}</option>
-                  </select>
-                </x-select>
-              </div>
-            </div>
+          <form autocomplete="off" @submit.prevent="onSubmit" novalidate>
 
             <!-- 字段key -->
             <div class="form-row row">
               <label class="form-control col-6">字段key:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段key'" class="input-text-wrap">
-                  <input v-model="addModal.key" type="text" name="addModal.key" v-validate:key="{required: true}" lazy class="input-text"/>
+                  <input v-model="modal.key" type="text" name="modal.key" v-validate:key="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.key.touched && $majorClientValidation.key.required">请输入字段key</span>
@@ -96,7 +75,7 @@
               <label class="form-control col-6">字段名:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段名'" class="input-text-wrap">
-                  <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true}" lazy class="input-text"/>
+                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
                   <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">请输入字段名</span>
@@ -108,8 +87,8 @@
             <div class="form-row row">
               <label class="form-control col-6">数据类型:</label>
               <div class="controls filter-group-item col-18">
-                <x-select :label="dataPointType(addModal.type)">
-                  <select v-model="addModal.type">
+                <x-select :label="dataPointType(modal.type)">
+                  <select v-model="modal.type">
                     <option v-for="type in 9" :value="type+1">{{dataPointType(type+1)}}</option>
                   </select>
                 </x-select>
@@ -118,8 +97,8 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
-              <button @click.prevent.stop="onAddCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-              <button type="submit" :disabled="adding" :class="{'disabled':adding}" v-text="adding ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+              <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+              <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
           </form>
         </validator>
@@ -155,40 +134,55 @@
     data () {
       return {
         loadingData: false,
-        showAddModal: false,
-        adding: false,
+        showModal: false,
+        editing: false,
         // 已选择产品
-        selectedProduct: {},
-        addModal: {
-          product: '',
+        selectedProduct: {
+          label: '全部',
+          value: 0
+        },
+        modal: {
+          product: {},
           key: '',
           name: '',
           type: 1
         },
+        modalType: '',
         fields: [
           {
             name: '昵称', // 字段名
             type: '类型1', // 类型
+            key: 'aaa',
             category: '类别1' // 类别
           },
           {
             name: '昵称2', // 字段名
             type: '类型2', // 类型
+            key: 'bbb',
             category: '类别2' // 类别
           }
         ]
       }
     },
     computed: {
-      // 当前产品
-      currProduct () {
-        var result = {}
-        if (this.selectedProduct.name) {
-          result = this.selectedProduct
-        } else {
-          result = this.products && this.products[0]
-        }
-        return result || {}
+      // 下拉选项
+      productOptions () {
+        var result = [{
+          label: '全部',
+          value: 0
+        }]
+
+        this.products.forEach((item) => {
+          var option = {}
+          option.label = item.name
+          option.value = item.id
+          result.push(option)
+        })
+
+        return result
+      },
+      modalTitle () {
+        return this.modalType === 'add' ? '添加用户字段' : '编辑用户字段'
       }
     },
     route: {
@@ -201,25 +195,69 @@
       /**
        * 显示添加字段浮层
        */
-      onAddBtnClick () {
+      onAdd () {
         console.log('添加字段')
-        this.addModal.product = this.currProduct
-        this.showAddModal = true
+        this.modalType = 'add'
+        this.modal.product = this.products[0]
+        this.modal.key = ''
+        this.modal.name = ''
+        this.showModal = true
+      },
+
+      /**
+       * 显示浮层
+       */
+      onEdit (field) {
+        this.modalType = 'edit'
+        this.modal.product = this.products[0]
+        this.modal.key = field.key
+        this.modal.name = field.name
+        this.showModal = true
+      },
+
+      /**
+       * 添加字段
+       */
+      addField () {
+        this.editing = true
+        setTimeout(() => {
+          this.onCancel()
+        }, 2000)
+      },
+
+      /**
+       * 编辑字段
+       */
+      editField () {
+        this.editing = true
+        setTimeout(() => {
+          this.onCancel()
+        }, 2000)
       },
 
       /**
        * 新增字段
        */
-      addField () {
-
+      onSubmit () {
+        switch (this.modalType) {
+          case 'add':
+            this.addField()
+            break
+          case 'edit':
+            this.editField()
+            break
+          default:
+            return
+        }
       },
+
       /**
        * 关闭添加大客户浮层
        * @return {[type]} [description]
        */
-      onAddCancel () {
-        this.adding = false
-        this.showAddModal = false
+      onCancel () {
+        this.editing = false
+        this.showModal = false
         this.$resetValidation()
       },
       /**
