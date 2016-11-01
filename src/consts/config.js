@@ -208,6 +208,9 @@ export const MAIN_NAV = {
       }, {
         alias: 'message',
         url: '/settings/message/config'
+      }, {
+        alias: 'views',
+        url: '/settings/views/field'
       }]
     }]
   },

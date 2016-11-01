@@ -754,6 +754,33 @@ let configRouter = (router) => {
           }
         },
 
+        // 视图自定义
+        'settings/views': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/dev/settings/views'))
+            }, 'admin')
+          },
+          subRoutes: {
+            // 自定义邮件模版
+            '/overview': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/views/overview'))
+                }, 'admin')
+              }
+            },
+            // 自定义运营商
+            '/field': {
+              component (resolve) {
+                require.ensure([], (require) => {
+                  resolve(require('./views/dev/settings/views/field'))
+                }, 'admin')
+              }
+            }
+          }
+        },
+
         // -------------------------在线购买-------------------------
         // 在线购买
         'shopping/cart': {
