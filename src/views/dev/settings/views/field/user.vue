@@ -93,7 +93,7 @@
 
             <!-- 字段名 -->
             <div class="form-row row">
-              <label class="form-control col-6">字段key:</label>
+              <label class="form-control col-6">字段名:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段名'" class="input-text-wrap">
                   <input v-model="addModal.name" type="text" name="addModal.name" v-validate:name="{required: true}" lazy class="input-text"/>
