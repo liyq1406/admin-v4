@@ -11,24 +11,24 @@ export default {
     female: 'Female'
   },
   age: {
-    title: 'Age Distribution',
+    title: 'Age',
     label: 'Age',
-    'lt19': 'below 19',
+    'lt19': 'Under 19',
     'lt29': '20-29',
     'lt39': '30-39',
     'lt49': '40-49',
-    'gt50': 'Above 50'
+    'gt50': 'Over 50'
   },
   lang: {
     title: 'Language'
   },
   terminal: {
-    title: 'Terminal Distribution',
+    title: 'Terminal',
     system: 'System',
     other: 'Other'
   },
   device: {
-    title: 'Device Distribution TOP10',
+    title: 'TOP10 Devices',
     type: 'Device Model'
   }
 }

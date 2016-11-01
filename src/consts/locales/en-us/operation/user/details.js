@@ -8,12 +8,12 @@ export default {
   disable_account: 'Disable Account',
   enable_account: ' Enable Account',
   curr: 'User Information',
-  status: 'Account Status',
-  create_date: 'Creation Time',
+  status: 'Status',
+  create_date: 'Registration Time',
   area: 'Region',
   address: 'Address',
   industry: 'Industry',
-  contacter: 'Liaisons',
+  contacter: 'Contact',
   male: 'Male',
   female: 'Female',
   timeout: 'Expired',
@@ -21,7 +21,7 @@ export default {
   nav: {
     devices: 'Device List',
     warranty: 'Maintenance Information',
-    issues: 'Feedback Records'
+    issues: 'User Feedback'
   },
   activated: 'Activated',
   not_activated: 'Unactivated',
@@ -33,9 +33,9 @@ export default {
   devices: {
     title: 'Device List',
     id: 'Device ID',
-    sn: 'Seria Number',
+    sn: 'Serial Number',
     active_date: 'Activation Date',
-    is_active: 'isActivated',
+    is_active: 'Activated',
     is_online: 'Status',
     online: 'Online ',
     offline: 'Offline'
@@ -43,7 +43,7 @@ export default {
 
   // 维保信息
   warranty: {
-    id: 'Warranty NO',
+    id: 'Warranty Number',
     create_time: 'Submit Time',
     handle_time: 'Last Handled Time',
     type: 'Type',

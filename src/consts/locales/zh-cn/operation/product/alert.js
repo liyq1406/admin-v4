@@ -10,7 +10,6 @@ export default {
   sevent_add: '7天告警数',
   thirty_add: '30天告警',
   trend: '趋势',
-  display: '显示', // 显示
   sign: '标记为', // 标记为
   processed: '已处理', // 已处理
   no_processed: '未处理', // 未处理

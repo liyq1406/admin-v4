@@ -15,6 +15,8 @@ export default {
   del: '删除',
   save: '保存',
   update: '修改',
+  stop: '停止',
+  Start: '开始',
   config: '配置',
   company: '广州云湾信息技术有限公司',
   name: '名称',
@@ -58,6 +60,15 @@ export default {
   sex: '性别',
   action_success: '操作成功',
   action_fail: '操作失败',
+  unit: {
+    time: {
+      hour: '时',
+      day: '日',
+      week: '周',
+      month: '月',
+      year: '年'
+    }
+  },
 
   // 表单验证
   validation: {

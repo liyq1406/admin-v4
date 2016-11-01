@@ -8,10 +8,10 @@ export default {
   product: 'Product',
   number: 'Amount',
   percent: 'Ratio',
-  untreated: 'Pending Alert ',
-  today_add: 'New Alert',
-  sevent_add: '7-day Alert Amount',
-  thirty_add: '30-day Alert Amount',
+  untreated: 'Pending',
+  today_add: '1 Day Alert',
+  sevent_add: '7 Day Alert',
+  thirty_add: '30 Day Alert',
   trend: 'Trend',
   display: 'View', // 显示
   sign: 'Mark', // 标记为
@@ -19,16 +19,16 @@ export default {
   no_processed: 'Unprocessed', // 未处理
   mac: 'Device MAC', // MAC
   device_id: 'Device ID', // 设备ID
-  alert_content: 'Alert Content', // Alert 内容
+  alert_content: 'Content', // Alert 内容
   time: 'Time', // 时间
   hour: 'hrs', // 小时
   minutes: 'min', // 分钟
   second: 'sec', // 秒
   time_length: 'Duration', // 持续市长
-  alert_level: 'Alert Level', // Alert 等级
+  alert_level: 'Level', // Alert 等级
   state: 'Status', // 状态
   warning: 'Warning', // 轻微
-  danger: 'Dangerous', // 严重
+  danger: 'Critical', // 严重
   all_level: 'All Level',
   info: 'Notification',
   detail: 'Alert Analysis Detail',

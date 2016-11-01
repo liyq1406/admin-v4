@@ -7,7 +7,7 @@
           <div class="filter-group fl">
             <div class="filter-group-item">
               <x-select width="90px" size="small" :label="visibility.label">
-                <span slot="label">{{ $t('operation.product.alert.display') }}：</span>
+                <span slot="label">{{ $t('common.display') }}：</span>
                 <select v-model="visibility" @change="getAlerts(true)">
                   <option v-for="option in visibilityOptions" :value="option">{{ option.label }}</option>
                 </select>
@@ -186,7 +186,7 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
           state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
           prototype: item
         }

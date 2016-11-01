@@ -5,14 +5,14 @@
 
 export default {
   title: 'Product Analysis',
-  duration_per: 'Average Duration',
-  using_count: 'Using Times',
+  duration_per: 'Duration',
+  using_count: 'Usage',
   time_distribution: 'Time Distribution',
   count: 'Amount',
   hot: { // 热力分布
     title: 'Thermal Distribution',
     region: 'Region',
-    device_count: 'Device Amount',
+    device_count: 'Devices',
     percent: 'Ratio'
   }
 }

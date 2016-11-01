@@ -125,9 +125,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowApn" class="apn-list mt10">
+                        <div v-show="isShowApn && iOSApps.length" class="app-list mb10">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===1" class="checkbox">
+                            <label v-for="app in iOSApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -141,9 +141,9 @@
                         </label>
                       </div>
                       <div class="col-18">
-                        <div v-show="isShowGoogle" class="apn-list">
+                        <div v-show="isShowGoogle && androidApps.length" class="app-list">
                           <div class="checkbox-group">
-                            <label v-for="app in apps" v-if="app.type===2" class="checkbox">
+                            <label v-for="app in androidApps" class="checkbox">
                               <input type="checkbox" v-model="model.notify_apps" name="notify_apps" :value="app.id" number/>{{ app.name }}
                             </label>
                           </div>
@@ -269,6 +269,16 @@ export default {
      */
     isShowGoogle () {
       return _.includes(this.model.notify_target, 5)
+    },
+
+    // iOS 应用
+    iOSApps () {
+      return _.filter(this.apps, (item) => item.type === 1)
+    },
+
+    // Android 应用
+    androidApps () {
+      return _.filter(this.apps, (item) => item.type === 2)
     },
 
     /**
@@ -426,7 +436,7 @@ export default {
   .submit-btn
     width 120px
 
-.apn-list
+.app-list
   border 1px solid #ddd
   padding 5px
 </style>

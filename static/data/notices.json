@@ -1,0 +1,40 @@
+{
+	"notices": [{
+		"title": "云智易物联平台发布4.2.24049版本!<br>[更新说明]",
+		"time": "2016-09-29",
+		"link": "http://support.xlink.cn/hc/kb/article/210598",
+		"extra": {
+			"icon": "file-text-o"
+		}
+	}, {
+		"icon": "apple",
+		"title": "iOS SDK 更新v3.0版本！",
+		"time": "2016-08-12",
+		"link": "https://github.com/xlink-corp/ios-sdk",
+		"extra": {
+			"icon": "apple"
+		}
+	}, {
+		"icon": "android",
+		"title": "Android SDK 更新v3.0版本！",
+		"time": "2016-07-27",
+		"link": "https://github.com/xlink-corp/android-sdk",
+		"extra": {
+			"icon": "android"
+		}
+	}, {
+		"title": "JSSDK微信版V1.1.2",
+		"time": "2016-07-14",
+		"link": "https://github.com/xlink-corp/JS-SDK",
+		"extra": {
+			"icon": "file-code-o"
+		}
+	}, {
+		"title": "设备端SDK已更新至V3",
+		"time": "2016-07-14",
+		"link": "https://github.com/xlink-corp/device-sdk",
+		"extra": {
+			"icon": "file-code-o"
+		}
+	}]
+}

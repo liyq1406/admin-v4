@@ -7,20 +7,20 @@ export default {
   manager: { // 设备管理列表页
     title: 'Device Management',
     sum: {
-      count: 'Device Amount', // 设备总数
-      tooltip: 'Device Amount of Current Product' // 企业的设备总量
+      count: 'All Devices', // 设备总数
+      tooltip: 'Total device amount of current product' // 企业的设备总量
     },
     activated: {
-      count: 'Activated Device Amount', // 激活数
-      tooltip: 'Connected Activated Device Amount' // 已联网激活的设备数量
+      count: 'Activated Devices', // 激活数
+      tooltip: 'Activated device amount' // 已联网激活的设备数量
     },
     online: {
-      count: 'Online Device Amount', // 在线设备数
-      tooltip: 'Current Online Device Amount' // 当前在线的设备数量
+      count: 'Online Devices', // 在线设备数
+      tooltip: 'Current online device amount' // 当前在线的设备数量
     },
     users: {
-      count: 'User Amount ', // 用户总数
-      tooltip: 'User Amount of Current Product' // 当前产品的用户数量
+      count: 'All Users ', // 用户总数
+      tooltip: 'Total user amount of current product' // 当前产品的用户数量
     },
     list: 'Device List', // 设备列表
     mac: 'MAC', // MAC
@@ -39,12 +39,12 @@ export default {
     not_actived: 'Not Activated', // 未激活
     actived: 'Activated', // 已激活
     mac: 'MAC', // MAC
-    online_long: 'Accumulated online time', // 累计在线时长
+    online_long: 'Accumulated Online Time', // 累计在线时长
     active_status: 'Activation Status', // 激活状态
     mode: 'Model', // 型号
     version: 'Firmware Version', // 固件版本
     device_id: 'Device ID', // 设备ID
-    sn: 'sn', // sn
+    sn: 'Serial Number', // sn
     secondary: {
       device: 'Device Status', // 设备状态
       history: 'History Data', // 历史数据
@@ -88,16 +88,16 @@ export default {
     no_processed: 'Unprocessed', // 未处理
     mac: 'MAC', // MAC
     device_id: 'Device ID', // 设备ID
-    alert_content: 'Alert Content', // 告警内容
+    alert_content: 'Content', // 告警内容
     time: 'Time', // 时间
     hour: 'hrs', // 小时
     minutes: 'mins', // 分钟
     second: 'seconds', // 秒
     time_length: 'Duration', // 持续市长
-    alert_level: 'Alert Level', // 告警等级
+    alert_level: 'Level', // 告警等级
     state: 'Status', // 状态
     warning: 'Warning', // 轻微
-    danger: 'Dangerous', // 严重
+    danger: 'Critical', // 严重
     all_level: 'All Level',
     info: 'Notification'
   },
@@ -111,11 +111,11 @@ export default {
     no_datapoint: 'No record'
   },
   users: {
-    release_bind: 'Release Binding',
+    release_bind: 'Unbind',
     nickname: 'Nickname',
     email: 'Email',
     phone: 'Phone',
-    last_login: 'Last Login Time',
+    last_login: 'Last Login',
     status: 'Status',
     online: 'Online',
     offline: 'Offline'

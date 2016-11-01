@@ -4,17 +4,17 @@
  */
 export default {
   developer: {
-    title: 'I\'am a developer',
+    title: 'I\'m a developer',
     description: 'You can create, develop, debug your product, change the configurations freely, and release your product here.',
     product_dev: 'Product Development',
     published: 'Released',
     unpublished: 'Unreleased',
     no_product_tip: 'Please click here to create a new one, as you don\'t own any product.',
     add_product: 'Add Product',
-    dev_guide: 'Development Guideline'
+    dev_guide: 'Development Guide'
   },
   operation: {
-    title: 'I am an Operator',
+    title: 'I\'m an operator',
     description: 'In Operation Platform, you can check many datas such as the device data, user data, device working status, espcially the statistical data for device and use data.',
     product_manager: 'Product Management',
     actived: 'Activated',

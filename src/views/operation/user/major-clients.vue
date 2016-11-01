@@ -68,7 +68,7 @@
             <div class="form-row row">
               <label class="form-control col-6">{{ $t('operation.user.major.columns.contacter') }}:</label>
               <div class="controls col-18">
-                <div v-placeholder="$t('operation.user.major.placeholders.name')" class="input-text-wrap">
+                <div v-placeholder="$t('operation.user.major.placeholders.contacter')" class="input-text-wrap">
                   <input v-model="addModal.contacter" type="text" name="addModal.contacter" v-validate:contacter="{required: false, minlength: 2, maxlength: 32}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">

@@ -32,8 +32,8 @@
         <validator name="validation">
           <form autocomplete="off" novalidate @submit.prevent="onSubmitPwd">
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('account.info.fields.old_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('account.info.fields.old_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="model.oldpassword" name="model.oldpassword" v-validate:oldpassword="{required: true}" lazy class="input-text"/>
                 </div>
@@ -43,8 +43,8 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('account.info.fields.new_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('account.info.fields.new_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="model.newpassword" name="model.newpassword" v-validate:newpassword="{required: true, minlength: 8, maxlength: 16}" lazy class="input-text"/>
                 </div>
@@ -56,8 +56,8 @@
               </div>
             </div>
             <div class="form-row row">
-              <label class="form-control col-6">{{ $t('auth.fields.confirm_password') }}</label>
-              <div class="controls col-18">
+              <label class="form-control col-10">{{ $t('auth.fields.confirm_password') }}</label>
+              <div class="controls col-14">
                 <div class="input-text-wrap">
                   <input type="password" v-model="confirmPassword" name="confirmPassword" v-validate:confirm-password="{required: true, equal: model.newpassword}" lazy class="input-text"/>
                 </div>

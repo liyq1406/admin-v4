@@ -7,19 +7,19 @@ export default {
   main_title: 'Overview', // 概览
   total: {
     count: 'All Devices', // 设备总数
-    tooltip: 'Enterprise Device Amount' // 企业的设备总量
+    tooltip: 'Total device amount' // 企业的设备总量
   },
   activated: {
     count: 'Activated Devices', // 激活数
-    tooltip: 'Online Activated Device Amount' // 已联网激活的设备数量
+    tooltip: 'Activated device amount' // 已联网激活的设备数量
   },
   online: {
-    count: 'Online Users', // 在线量
-    tooltip: 'Currently Online Device Amount' // 当前在线的设备数量
+    count: 'Online Devices', // 在线量
+    tooltip: 'Current online device amount' // 当前在线的设备数量
   },
   users: {
     count: 'All Users', // 用户总数
-    tooltip: 'Enterprise User Amount' // 企业的用户数量
+    tooltip: 'Total user amount' // 企业的用户数量
   },
   product_trend: {
     title: 'Product Trend', // 产品趋势
@@ -28,13 +28,13 @@ export default {
   },
   product_active: {
     title: 'Product Activation', // 产品活跃度
-    not_activated: 'Unactivated Device Amount', // 未激活设备
-    activated: 'Activated Device Amount' // 激活设备
+    not_activated: 'Unactivated Device', // 未激活设备
+    activated: 'Activated Device' // 激活设备
   },
   product_dist: {
-    title: 'Product Trend', // 产品分布
+    title: 'Product Distribution', // 产品分布
     region: 'Region', // 地域
-    count: 'Device Amount', // 设备数量
+    count: 'Device', // 设备数量
     percent: 'Ratio' // 占比
   },
   user_trend: {
