@@ -2,7 +2,7 @@
   <div class="field-page">
     <div class="container">
       <div class="catalog-box">
-        <div :class="'catalog-list ' + catalog.key" v-for="catalog in catalogs">
+        <div :class="'catalog-list ' + catalog.key + (catalog.key === selectedField?' selected': '')" v-for="catalog in catalogs">
           <span>{{catalog.title}}</span>
         </div>
       </div>
@@ -58,8 +58,15 @@ export default {
     }
   },
   computed: {
+    // 当前自定义字段类型
     selectedField () {
+      var result = ''
+      var path = this.$route.path
+      console.log(path)
+      result = path.split('/field/')[1]
+      result = result.split('?')[0]
       // return this.$route.p
+      return result
     }
   },
   ready () {
@@ -71,4 +78,46 @@ export default {
 <style lang="stylus" scoped>
 @import '../../../../../assets/stylus/common'
 
+  .field-page
+    padding 15px
+    box-sizing border-box
+    .container
+      width 100%
+      height 100%
+      position relative
+      padding-left 230px
+      box-sizing border-box
+      .catalog-box
+        width 230px
+        position absolute
+        left 0
+        top 0
+      .content-box
+        width 100%
+        min-height 500px
+        border 1px solid #e8e8e8
+        padding 20px
+        box-sizing border-box
+    .catalog-box .catalog-list
+      width 100%
+      height 40px
+      line-height 40px
+      border 1px solid #e8e8e8
+      border-right 0
+      background #f2f2f2
+      margin-bottom 10px
+      box-sizing border-box
+      padding-left 20px
+      position relative
+      &.selected
+        background #fff
+        &:after
+          content ''
+          display block
+          width 3px
+          height 100%
+          position absolute
+          top 0
+          right -1px
+          background #fff
 </style>
