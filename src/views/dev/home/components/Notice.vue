@@ -6,11 +6,11 @@
     <div class="content-box">
       <div class="notice" v-for="notice in notices">
         <div class="icon">
-          <i class="fa" :class="'fa-' + notice.icon"></i>
+          <i class="fa" :class="'fa-' + notice.extra.icon"></i>
         </div>
         <div class="msg-box">
           <div class="title">
-            <a :href="notice.url" target="_blank">{{{notice.title}}}</a>
+            <a :href="notice.link" target="_blank">{{{notice.title}}}</a>
           </div>
           <div class="time-box">
             <span>{{notice.time}}</span>
@@ -27,39 +27,14 @@ export default {
 
   data () {
     return {
-      notices: [
-        {
-          icon: 'file-text-o',
-          title: '云智易物联平台发布4.2.24049版本!<br>[更新说明]',
-          time: '2016-09-29',
-          url: 'http://support.xlink.cn/hc/kb/article/210598'
-        },
-        {
-          icon: 'apple',
-          title: 'iOS SDK 更新v3.0版本！',
-          time: '2016-08-12',
-          url: 'https://github.com/xlink-corp/ios-sdk'
-        },
-        {
-          icon: 'android',
-          title: 'Android SDK 更新v3.0版本！',
-          time: '2016-07-27',
-          url: 'https://github.com/xlink-corp/android-sdk'
-        },
-        {
-          icon: 'file-code-o',
-          title: 'JSSDK微信版V1.1.2',
-          time: '2016-07-14',
-          url: 'https://github.com/xlink-corp/JS-SDK'
-        },
-        {
-          icon: 'file-code-o',
-          title: '设备端SDK已更新至V3',
-          time: '2016-07-14',
-          url: 'https://github.com/xlink-corp/device-sdk'
-        }
-      ]
+      notices: []
     }
+  },
+
+  ready () {
+    this.$http.get('/static/data/notices.json').then((res) => {
+      this.notices = res.data.notices
+    })
   }
 }
 </script>

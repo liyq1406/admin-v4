@@ -1,9 +1,9 @@
 export default {
   tips: 'Tips',
   area: {
-    select_province: 'Select Province',
-    select_city: 'Select City',
-    select_district: 'Select District'
+    select_province: 'Province',
+    select_city: 'City',
+    select_district: 'District'
   },
   year: 'Year',
   month: 'Month',
@@ -24,11 +24,11 @@ export default {
 
   // pager
   pager: {
-    display: 'Records per page:',
-    total_page: 'Total {pages} Pages,',
-    turn_to: 'Go to',
-    page: 'Page',
-    item_range: '{start}-{end},',
-    total_items: 'Total {total} records'
+    display: 'Show rows:',
+    total_page: 'Total {pages} pages, ',
+    turn_to: 'go to',
+    page: 'page.',
+    item_range: 'Showing {start}-{end} of ',
+    total_items: '{total} rows'
   }
 }

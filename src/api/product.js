@@ -285,7 +285,7 @@ export default {
     )
   },
 
-  // 查询导入设备记录详情
+  // 更新设备信息
   updateDeviceMsg (productId, deviceId, params) {
     return http.put(
       `${API_SERVER.default}/v2/product/${productId}/device/${deviceId}`, params

@@ -30,7 +30,7 @@
                   <td>{{ accessKey.name }}</td>
                   <td>{{ accessKey.create_time | formatDate }}</td>
                   <td class="tac">
-                    <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': accessKey.toggling}" :disabled="accessKey.toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('ui.task.stop') : $t('ui.task.start') }}</button>
+                    <button :class="{'btn-primary': accessKey.status, 'btn-success': !accessKey.status, 'disabled': accessKey.toggling}" :disabled="accessKey.toggling" @click="togglekeys(accessKey)" class="btn btn-primary btn-mini"><i :class="{'fa-stop': accessKey.status, 'fa-play': !accessKey.status}" class="fa"></i>{{ accessKey.status ? $t('common.stop') : $t('common.start') }}</button>
                   </td>
                 </tr>
               </template>

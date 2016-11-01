@@ -7,6 +7,7 @@ import overview from './overview'
 import product from './product'
 import alert from './alert'
 import user from './user'
+import snapshot from './snapshot'
 
 export default {
   product_management: 'Product  Management',
@@ -14,5 +15,6 @@ export default {
   overview,
   product,
   alert,
-  user
+  user,
+  snapshot
 }

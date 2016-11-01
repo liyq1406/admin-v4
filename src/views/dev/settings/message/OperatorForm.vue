@@ -55,11 +55,11 @@
               <label class="form-control col-3">URL:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.server_url" type="text" placeholder="请输入URL" v-validate:url="{required: true, minlength: 2, maxlength: 30}" name="dayu.server_url" class="input-text"/>
+                  <input v-model="dayu.server_url" type="text" placeholder="请输入URL" v-validate:url="{required: true}" name="dayu.server_url" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.url.touched && $validation.url.required">请输入url</span>
-                    <span v-if="$validation.url.modified && $validation.url.minlength">url不能少于2位</span>
-                    <span v-if="$validation.url.modified && $validation.url.maxlength">url不能大于等于30位</span>
+                    <!-- <span v-if="$validation.url.modified && $validation.url.minlength">url不能少于2位</span>
+                    <span v-if="$validation.url.modified && $validation.url.maxlength">url不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -68,11 +68,11 @@
               <label class="form-control col-3">app_key:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.app_key" type="text" placeholder="请输入URL" v-validate:appkey="{required: true, minlength: 2, maxlength: 30}" name="dayu.app_key" class="input-text"/>
+                  <input v-model="dayu.app_key" type="text" placeholder="请输入URL" v-validate:appkey="{required: true}" name="dayu.app_key" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.appkey.touched && $validation.appkey.required">请输入app_key</span>
-                    <span v-if="$validation.appkey.modified && $validation.appkey.minlength">app_key不能少于2位</span>
-                    <span v-if="$validation.appkey.modified && $validation.appkey.maxlength">app_key不能大于等于30位</span>
+                    <!-- <span v-if="$validation.appkey.modified && $validation.appkey.minlength">app_key不能少于2位</span>
+                    <span v-if="$validation.appkey.modified && $validation.appkey.maxlength">app_key不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>
@@ -81,11 +81,11 @@
               <label class="form-control col-3">app_secret:</label>
               <div class="controls col-15">
                 <div class="input-text-wrap">
-                  <input v-model="dayu.app_secret" type="text" placeholder="请输入app secret" v-validate:appsecret="{required: true, minlength: 2, maxlength: 30}" name="dayu.app_secret" class="input-text"/>
+                  <input v-model="dayu.app_secret" type="text" placeholder="请输入app secret" v-validate:appsecret="{required: true}" name="dayu.app_secret" class="input-text"/>
                   <div class="form-tips form-tips-error">
                     <span v-if="$validation.appsecret.touched && $validation.appsecret.required">请输入app_secret</span>
-                    <span v-if="$validation.appsecret.modified && $validation.appsecret.minlength">app_secret不能少于2位</span>
-                    <span v-if="$validation.appsecret.modified && $validation.appsecret.maxlength">app_secret不能大于等于30位</span>
+                    <!-- <span v-if="$validation.appsecret.modified && $validation.appsecret.minlength">app_secret不能少于2位</span>
+                    <span v-if="$validation.appsecret.modified && $validation.appsecret.maxlength">app_secret不能大于等于30位</span> -->
                   </div>
                 </div>
               </div>

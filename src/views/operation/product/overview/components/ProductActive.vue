@@ -104,7 +104,7 @@ export default {
           data: _.map(this.activatedData, 'name')
         },
         series: [{
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'pie',
           radius: '55%',
           center: ['50%', '60%'],
@@ -153,7 +153,7 @@ export default {
         // 日期数据补全，缺失的日期数据全部补0
         let activeData = patchLostDates(res.data, range.start, this.period, ['active'])
         let obj = {
-          name: '数量',
+          name: this.$t('common.count'),
           type: 'line',
           data: []
         }

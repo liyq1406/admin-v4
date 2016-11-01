@@ -22,26 +22,26 @@ export const INFORM_TYPES = ['Notification And Alert']
 
 // 默认时间段
 export const PERIODS = [
-  { label: '7days', value: 7 },
-  { label: '30days', value: 30 },
-  { label: '90days', value: 90 }
+  { label: '7 Day', value: 7 },
+  { label: '30 Day', value: 30 },
+  { label: '90 Day', value: 90 }
 ]
 
 // 包含全部时间段
 export const AllPERIODS = [
-  { label: '7days', value: 7 },
-  { label: '30days', value: 30 },
+  { label: '7 Day', value: 7 },
+  { label: '30 Day', value: 30 },
   { label: 'All', value: 'all' }
 ]
 
 // 一天到三十天时间段
 export const PERIODS_MAP = {
-  1: '24hours',
-  7: '7days',
-  15: '15days',
-  30: '30days',
-  60: '60days',
-  90: '90days'
+  1: '1 Day',
+  7: '7 Day',
+  15: '15 Day',
+  30: '30 Day',
+  60: '60 Day',
+  90: '90 Day'
 }
 
 // Device Type
@@ -71,8 +71,8 @@ export const DEVICE_VISIBILITY_OPTIONS = [
   { label: 'All', value: 'all' },
   { label: 'Online', value: 'online' },
   { label: 'Offline', value: 'offline' },
-  { label: 'Active', value: 'active' },
-  { label: 'Inactive', value: 'inactive' }
+  { label: 'Activated', value: 'active' },
+  { label: 'Inactivated', value: 'inactive' }
 ]
 
 // Firmware Type
@@ -157,7 +157,7 @@ export const RULE_NOTIFY_TYPES = ['SMS', 'Email', 'App Push', 'APN Push', 'Googl
 export const RULE_SCOPE_TYPES = ['Enterprise Only', 'User Only', 'All']
 
 // 候选标签
-export const RULE_CANDIDATE_TAGS = ['Dangerous', 'Warning', 'Notification']
+export const RULE_CANDIDATE_TAGS = ['Critical', 'Warning', 'Notification']
 
 // 数据表类型
 export const TABLE_TYPES = ['User Public Table', 'User Private Table', 'Application Data Table']
@@ -225,7 +225,7 @@ export const ISSUE_TYPES = [
 export const ALERT_LEVELS = {
   blue: 'Notification',
   orange: 'Warning',
-  red: 'Dangerous'
+  red: 'Critical'
 }
 
 // 企业成员操作类型

@@ -167,7 +167,7 @@ export default {
           value: formatDate(this.member.last_auth_time)
         },
         createTime: {
-          label: this.$t('account.members.create_time'),
+          label: this.$t('account.members.fields.create_time'),
           value: formatDate(this.member.create_time)
         }
       }

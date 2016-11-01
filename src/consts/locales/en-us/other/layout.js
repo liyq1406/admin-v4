@@ -10,7 +10,7 @@ export default {
       label: 'Index'
     },
     dev: {
-      label: 'Development Platform',
+      label: 'Development',
       // 侧栏导航
       subs: {
         home: {
@@ -18,13 +18,13 @@ export default {
         },
         products: {
           subs: {
-            info: 'Product Information',
-            debug: 'Device Debug',
+            info: 'Information',
+            debug: 'Debug',
             virtual_devices: 'Virtual Device ',
-            alert: 'Alert Setting',
+            alert: 'Alert Settings',
             data_point: 'Data Point',
             data_forward: 'Data Interface',
-            authorize: 'Authorization Management'
+            authorize: 'Authorization'
           }
         },
         add_product: 'Add Product',
@@ -50,24 +50,24 @@ export default {
           label: 'Data Service',
           subs: {
             tables: 'Data Table',
-            snapshots: 'Data Snapshot',
-            statistics_rule: 'Statistical Rule',
+            snapshots: 'Device Snapshot',
+            statistics_rule: 'Statistic',
             forward: 'Data Forward'
           }
         },
         firmware: {
-          label: 'Firmware Management',
+          label: 'OTA',
           subs: {
-            list: 'Upgrade List',
-            manage: 'Version Management',
-            add: 'Add Task',
+            list: 'Task List',
+            manage: 'Versions',
+            add: 'New Task',
             update: 'Upload New Firmware'
           }
         },
         linkage: {
-          label: 'Smart Interconnection',
+          label: 'Interconnection',
           subs: {
-            settings: 'Interconnection Setting',
+            settings: 'Settings',
             amazon: 'Amazon echo',
             google: 'Google nest',
             philips: 'Philips hue',
@@ -83,18 +83,18 @@ export default {
           }
         },
         settings: {
-          label: ' Setting',
+          label: ' Settings',
           subs: {
-            users: 'User Setting',
-            email: 'Email Setting',
-            message: 'SMS Setting',
-            views: '视图自定义'
+            users: 'User',
+            email: 'Email',
+            message: 'SMS',
+            views: 'Customize'
           }
         }
       }
     },
     operation: {
-      label: 'Operation Platform',
+      label: 'Operation',
       // 侧栏导航
       subs: {
         overview: {
@@ -181,8 +181,8 @@ export default {
         alerts: {
           label: 'Alert Service',
           subs: {
-            record: 'Alert Record',
-            analysis: 'Alert Analysis',
+            record: 'Record',
+            analysis: 'Analysis',
             heat: 'Thermal Distribution'
           }
         },
@@ -270,7 +270,7 @@ export default {
   },
 
   // 顶栏
-  view_demo: 'View Demo',
+  view_demo: 'Demo',
   demo_tips: 'Know how to use the Operation Platform? View demo now!',
   service_tips: ' More service please <a class="link-contact" href="http://www.xlink.cn/about.html" target="_blank"> contact our business team </a>',
   display_no_more: 'No more display.'

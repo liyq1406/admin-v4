@@ -71,7 +71,7 @@ export default {
       periods: [7, 30, 90],
       dimension: 'duration',
       dimensions: [{
-        label: this.$t('operation.product.analysis.title'),
+        label: this.$t('operation.product.analysis.duration_per'),
         value: 'duration'
       }, {
         label: this.$t('operation.product.analysis.using_count'),

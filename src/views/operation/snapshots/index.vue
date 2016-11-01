@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title">
-      <h2>快照分析</h2>
+      <h2>{{ $t('operation.snapshot.main_title') }}</h2>
     </div>
     <div class="filter-bar filter-bar-head">
       <div class="filter-group fl">
         <div class="filter-group-item">
           <x-select width="130px" :label="selectedRule.label" size="small">
-            <span slot="label">规则：</span>
+            <span slot="label">{{ $t('operation.snapshot.rule') }}</span>
             <select v-model="selectedRule" @change="toggleSelectedRule(selectedRule)">
               <option v-for="rule in ruleOptions" :value="rule">{{ rule.label }}</option>
             </select>
@@ -18,7 +18,7 @@
         </div>
         <div class="filter-group-item ml10">
           <x-select width="130px" :label="selectedDatapoint.label" size="small">
-            <span slot="label">数据端点：</span>
+            <span slot="label">{{ $t('operation.snapshot.datapoint') }}</span>
             <select v-model="selectedDatapoint" @change="selectDataPoint">
               <option v-for="dp in datapointOptions" :value="dp">{{ dp.label }}</option>
             </select>
@@ -42,8 +42,8 @@
           <table class="table table-stripe table-bordered">
             <thead>
               <tr>
-                <th class="wp44">设备ID</th>
-                <th>设备标识(MAC)</th>
+                <th class="wp44">{{ $t('operation.snapshot.id') }}</th>
+                <th>{{ $t('operation.snapshot.mac') }}</th>
               </tr>
             </thead>
             <tbody>
@@ -57,7 +57,7 @@
               </tr>
               <tr v-if="devices.length === 0">
                 <td colspan="2" class="tac"><i v-if="$loading" class="fa fa-refresh fa-spin"></i>
-                  <div v-else class="tips-null">暂无数据</div>
+                  <div v-else class="tips-null">{{ $t('common.no_data') }}</div>
                 </td>
               </tr>
             </tbody>
@@ -103,33 +103,33 @@
   import Table from 'components/Table'
   import toFixed from 'filters/to-fixed'
 
-  const FINENESS_TYPE = {
-    1: {
-      label: '小时',
-      value: 1,
-      timeOffset: 1
-    },
-    2: {
-      label: '天',
-      value: 2,
-      timeOffset: 7
-    },
-    3: {
-      label: '周',
-      value: 3,
-      timeOffset: 30
-    },
-    4: {
-      label: '月',
-      value: 4,
-      timeOffset: 365
-    },
-    5: {
-      label: '年',
-      value: 5,
-      timeOffset: 365
-    }
-  }
+  // const this.FINENESS_TYPE = {
+  //   1: {
+  //     label: this.$t('common.unit.time.hour'),
+  //     value: 1,
+  //     timeOffset: 1
+  //   },
+  //   2: {
+  //     label: this.$t('common.unit.time.day'),
+  //     value: 2,
+  //     timeOffset: 7
+  //   },
+  //   3: {
+  //     label: this.$t('common.unit.time.week'),
+  //     value: 3,
+  //     timeOffset: 30
+  //   },
+  //   4: {
+  //     label: this.$t('common.unit.time.month'),
+  //     value: 4,
+  //     timeOffset: 365
+  //   },
+  //   5: {
+  //     label: this.$t('common.unit.time.year'),
+  //     value: 5,
+  //     timeOffset: 365
+  //   }
+  // }
 
   export default {
     name: 'snapshots',
@@ -156,14 +156,41 @@
 
     data () {
       return {
+        FINENESS_TYPE: {
+          1: {
+            label: this.$t('common.unit.time.hour'),
+            value: 1,
+            timeOffset: 1
+          },
+          2: {
+            label: this.$t('common.unit.time.day'),
+            value: 2,
+            timeOffset: 7
+          },
+          3: {
+            label: this.$t('common.unit.time.week'),
+            value: 3,
+            timeOffset: 30
+          },
+          4: {
+            label: this.$t('common.unit.time.month'),
+            value: 4,
+            timeOffset: 365
+          },
+          5: {
+            label: this.$t('common.unit.time.year'),
+            value: 5,
+            timeOffset: 365
+          }
+        },
         loading: false,
         selectedRule: {
           id: 0,
-          label: '请选择统计规则'
+          label: this.$t('operation.snapshot.placeholder.rule')
         },
         selectedDatapoint: {
           id: -1,
-          label: '请选择数据端点'
+          label: this.$t('operation.snapshot.placeholder.datapoint')
         },
         statisticsRules: [],
         dataPoints: [],
@@ -176,7 +203,7 @@
         query: '',
         searching: false,
         queryTypeOptions: [
-          { label: '设备ID', value: 'id' },
+          { label: this.$t('operation.snapshot.id'), value: 'id' },
           { label: 'MAC', value: 'mac' }
         ],
         queryType: {
@@ -205,23 +232,23 @@
         stHeader: [
           {
             key: 'date',
-            title: '时间'
+            title: this.$t('operation.snapshot.columns.date')
           },
           {
             key: 'max',
-            title: '最大值'
+            title: this.$t('operation.snapshot.columns.max')
           },
           {
             key: 'min',
-            title: '最小值'
+            title: this.$t('operation.snapshot.columns.min')
           },
           {
             key: 'avg',
-            title: '平均值'
+            title: this.$t('operation.snapshot.columns.avg')
           },
           {
             key: 'sum',
-            title: '和'
+            title: this.$t('operation.snapshot.columns.sum')
           }
         ]
       }
@@ -260,7 +287,7 @@
         let res = []
         res.push({
           id: 0,
-          label: '请选择统计规则'
+          label: this.$t('operation.snapshot.placeholder.rule')
         })
         if (this.statisticsRules && this.statisticsRules.length) {
           this.statisticsRules.forEach((item) => {
@@ -280,7 +307,7 @@
         let res = []
         res.push({
           id: -1,
-          label: '请选择数据端点'
+          label: this.$t('operation.snapshot.placeholder.datapoint')
         })
         if (this.dataPoints && this.dataPoints.length) {
           this.dataPoints.forEach((item) => {
@@ -399,7 +426,7 @@
       setTimeRange (offset) {
         this.timePickerStartOffset = offset
         let curTime = new Date()
-        this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * FINENESS_TYPE[this.dimension].timeOffset)
+        this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.FINENESS_TYPE[this.dimension].timeOffset)
         this.endTime = curTime
       },
       getDatapoints (productId) {
@@ -452,7 +479,7 @@
         if (this.fineness.length) {
           this.fineness.sort()
           this.fineness.forEach((item) => {
-            res.push(FINENESS_TYPE[item])
+            res.push(this.FINENESS_TYPE[item])
           })
           this.dimension = res[0] ? res[0].value : ''
           // 设置默认筛选时间
@@ -658,25 +685,25 @@
           this.series.push({
             data: maxData,
             type: 'line',
-            name: '最大值',
+            name: this.$t('operation.snapshot.columns.max'),
             connectNulls: true
           })
           this.series.push({
             data: minData,
             type: 'line',
-            name: '最小值',
+            name: this.$t('operation.snapshot.columns.min'),
             connectNulls: true
           })
           this.series.push({
             data: avgData,
             type: 'line',
-            name: '平均值',
+            name: this.$t('operation.snapshot.columns.avg'),
             connectNulls: true
           })
           this.series.push({
             data: sumData,
             type: 'line',
-            name: '和',
+            name: this.$t('operation.snapshot.columns.sum'),
             connectNulls: true
           })
         }
@@ -687,7 +714,7 @@
       },
       setFineness (value) {
         if (!this.timepickerModified) {
-          this.setTimeRange(FINENESS_TYPE[value].timeOffset)
+          this.setTimeRange(this.FINENESS_TYPE[value].timeOffset)
         }
         this.getSnapshotStatistic(true)
       },

@@ -6,24 +6,24 @@
 export default {
 
   // 登录
-  platform_name: 'Xlink IOT Cloud Enterprise Admin Platform',
-  old_entrance: 'Sign On the Original Platform',
+  platform_name: 'Xlink IoT Platform',
+  old_entrance: 'Previous version',
   register: 'Register',
   remember: 'Remember Me',
   forget: 'Forgot Password?',
   email_phone: 'Email/Phone',
   password: 'Password',
   login_submit: 'Login',
-  login_submitting: 'Login In Progress…',
+  login_submitting: 'Prcessing...',
   login_success: 'Login Succeed',
 
   // 注册
   solgan: 'Let Enterprise More Effective With IOT.',
-  account_tips: 'Please enter your account information:',
-  basic_tips: 'Please enter your basic information:',
+  account_tips: 'Please input your account information:',
+  basic_tips: 'Please input your basic information:',
   confirm_password: 'Please confirm your password.',
   confirm_password_tips: 'Passwords different.',
-  type_tips: 'Please select Application type.',
+  type_tips: 'Please select application type.',
   register_submit: 'Submit',
   register_success: 'Register Succeed',
   register_success_msg: 'An activation email had sent to you, please check your email.',
@@ -50,16 +50,16 @@ export default {
   // 找回密码
   by_phone: 'Reset Password via Mobile Phone',
   by_mail: 'Reset Password via Email',
-  by_mail_tips: 'Please enter your Email Address, we will send password reset URL via Email.',
+  by_mail_tips: 'Please enter your email address, we will send password reset link to your email.',
   by_mail_success_msg: 'Succeed, please check your email to continue the process.',
   fetch: 'Reset Password',
   by_phone_tips: 'Please enter your registration Phone Number, click send button, and fill in the Verification code into the placeholder.',
   by_phone_success: 'Reset success',
   by_phone_success_msg: 'Your password has successfully reset, please re-login。',
-  insert_code: 'Please enter the verification code.',
+  insert_code: 'Please enter the captcha',
   verifycode: 'SMS Verification Code',
-  get_code: 'Retrieve SMS Verification Code',
-  waiting: 'Retrieve again after {seconds} seconds',
+  get_code: 'Retrieve Code',
+  waiting: 'Wait {seconds}s',
   phone_msg: 'Please enter the correct Phone Number',
 
   // 激活帐号

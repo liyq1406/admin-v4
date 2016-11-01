@@ -10,26 +10,26 @@ export default {
   search_placeholder: 'Enter Customer Name',
   columns: {
     name: 'Customer Name',
-    contacter: 'Liaisons',
-    phone: 'Phone NO',
-    device_count: 'Device Amount',
+    contacter: 'Contact',
+    phone: 'Phone',
+    device_count: 'Devices',
     email: 'Email',
     industry: 'Industry',
     locality: 'Region',
     location: 'Address',
-    create_time: 'Creation Time'
+    create_time: 'Registration Time'
   },
   placeholders: {
-    name: 'Please Enter Name',
-    contacter: 'Please Enter Liaisons',
-    phone: 'Please Enter Phone NO',
-    email: 'Please Enter Email',
-    location: 'Please Enter Address'
+    name: 'Please Input Name',
+    contacter: 'Please Input Contact',
+    phone: 'Please Input Phone Number',
+    email: 'Please Input Email',
+    location: 'Please Input Address'
   },
-  total: 'VIP Customer Amount',
-  add_count: 'New VIP Customer Of Current Month',
-  device_count: 'VIP Customer Device Amount',
-  add_device_count: 'New VIP Customer Of Current Month Device Amount',
+  total: 'VIPs',
+  add_count: '30 Day New VIPs',
+  device_count: 'Devices',
+  add_device_count: '30 Day New Devices',
   industrys: {
     web: 'Internet',
     security: 'Information Security',

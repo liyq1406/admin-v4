@@ -62,7 +62,7 @@ export default {
 
       // 产品开发标题
       result.subs.push({
-        label: '产品开发',
+        label: this.$t('dev.product_development'),
         type: 'title'
       })
 

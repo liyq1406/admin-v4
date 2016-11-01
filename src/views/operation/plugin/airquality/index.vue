@@ -510,7 +510,7 @@ export default {
         this.loadingCityData = false
       }).catch((res) => {
         this.loadingCityData = false
-        this.handleError(res)
+        // this.handleError(res)
       })
     },
 

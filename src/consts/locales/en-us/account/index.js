@@ -22,10 +22,10 @@ export default {
     },
     role: 'Role',
     password: 'Password',
-    phone: 'Phone NO',
+    phone: 'Phone',
     email: 'Email',
-    last_login: 'Last Login Time',
-    create_time: 'Creation Time',
+    last_login: 'Last Login',
+    create_time: 'Registration Time',
     name: 'Name',
     required_name: 'Name is required.'
   },
@@ -33,14 +33,14 @@ export default {
   // 成员管理
   members: {
     add_member: 'Add Member',
-    last_login: 'Last Login Time',
-    phone_number: 'Phone NO',
+    last_login: 'Last Login',
+    phone_number: 'Phone',
     name: 'Name',
-    phone: 'Phone NO',
+    phone: 'Phone',
     email: 'Email',
     name_no_space: 'No space before or after name',
     password: 'Password',
-    comfirm_password: 'Confirm Password',
+    comfirm_password: 'Confirm',
     not_enabled: 'Disabled',
     enabled: 'Enabled',
     not_action: 'Nonactivated',
@@ -51,7 +51,7 @@ export default {
     no_permissions: 'No permission to update.',
     change_role: 'Change Role',
     role: 'Role',
-    member_data: 'Member Data',
+    member_data: 'Member Information',
     comfirm_delete: 'Confirm Delete',
     search_palceholder: 'Name, Email, Phone NO',
     search_label: 'Search Member ',
@@ -67,7 +67,7 @@ export default {
       password: 'Password',
       phone: 'Phone NO',
       email: 'Email',
-      create_time: 'Creation Time',
+      create_time: 'Registration Time',
       last_auth_time: 'Latest login time',
       role: 'Role',
       is_notice: 'Accept Notification',
@@ -82,9 +82,9 @@ export default {
     create_time: 'Create time',
     del_authorize: 'Delete Authorization',
     action: 'Operation',
-    authorize_name: 'Authorization Name',
+    authorize_name: 'Name',
     placeholders: {
-      name: 'Enter application URL.',
+      name: 'Enter application name.',
       apn_license_pwd: 'Please enter the password of the authorization file.',
       wechat_id: 'Please enter WeChat Official ID.',
       wechat_app_id: 'Please enter WeChat Official APPID.',
@@ -115,8 +115,8 @@ export default {
     search_member: 'Search Member ',
     log_list: 'Log List',
     member_name: 'Member Name',
-    member_id: 'Member ID',
-    user_ip: 'User IP',
+    member_id: 'ID',
+    user_ip: 'IP',
     log_abstract: 'Log Abstract',
     log_level: 'Level',
     action_type: 'Operation Type',
@@ -131,11 +131,11 @@ export default {
 
   // 企业信息
   corp: {
-    corp_id: 'Enterprise ID',
+    corp_id: 'ID',
     app_type: 'Application Type',
     contact: 'Contact',
-    create_time: 'Creation Time',
-    phone: 'Phone NO',
+    create_time: 'Registration Time',
+    phone: 'Phone',
     email: 'Email'
   }
 }

@@ -15,6 +15,8 @@ export default {
   del: 'Delete',
   save: 'Save',
   update: 'Update',
+  stop: 'Stop',
+  Start: 'Start',
   config: 'Config',
   company: 'xlink.cn All rights reserved',
   name: 'Name',
@@ -44,8 +46,8 @@ export default {
   wechat: 'Wechat',
   any: 'Any',
   all: 'All',
-  avg_increase: '{period} average increase',
-  today_increase: 'Today increase',
+  avg_increase: '{period} Day Increase',
+  today_increase: 'Today Increase',
   count: 'Quantity',
   percent: 'Ratio',
   placeholder: {
@@ -57,6 +59,15 @@ export default {
   sex: 'Gender',
   action_success: 'Success',
   action_fail: 'Failed',
+  unit: {
+    time: {
+      hour: 'Hour',
+      day: 'Day',
+      week: 'Week',
+      month: 'Month',
+      year: 'Year'
+    }
+  },
 
   // Table Validation
   validation: {

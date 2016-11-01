@@ -13,11 +13,11 @@ export default {
     nickname: 'Nickname',
     create_date: 'Registration Time',
     source: 'Source',
-    is_active: 'Activation Status',
-    online: 'Connection Status'
+    is_active: 'Activation',
+    online: 'Status'
   },
-  total: 'User Amount',
-  add_count: 'New User Amount',
-  online_count: 'Current Online User',
-  active_count: '7-day Active User'
+  total: 'Users',
+  add_count: '1 Day New Users',
+  online_count: '1 Day Active Users',
+  active_count: '7 Day Active Users'
 }

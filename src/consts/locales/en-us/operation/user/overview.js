@@ -6,28 +6,28 @@
 export default {
   main_title: 'Overview',
   total: {
-    count: 'User Amount'
+    count: 'Users'
   },
   add: {
-    count: 'New'
+    count: '1 Day New Users'
   },
   active: {
-    count: 'New Active User Amount'
+    count: '1 Day Active Users'
   },
   sevent_total: {
-    count: '7-day Active User Amount'
+    count: '7 Day Active Users'
   },
   distribution: {
-    title: 'User  Distribution',
+    title: 'User Distribution',
     device_count: 'Device Amount',
     region: 'Region',
-    user_count: 'User Amount',
+    user_count: 'Users',
     percent: 'Ratio'
   },
   trend: {
     title: 'User Trend',
-    add: 'New User Amount',
-    active: 'Active User Amount',
-    sum: 'Accumulated User Amount'
+    add: 'New Users',
+    active: 'Active Users',
+    sum: 'Accumulated Users'
   }
 }

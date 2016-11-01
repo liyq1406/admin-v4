@@ -120,7 +120,7 @@
         var result = {
           status: {
             label: this.$t('operation.user.details.status'),
-            value: this.computedVaild(this.user.status)
+            value: this.user.is_vaild ? this.$t('operation.user.details.activated') : this.$t('operation.user.details.not_activated')
           },
           create_date: {
             label: this.$t('operation.user.details.create_date'),
@@ -213,26 +213,7 @@
         }
         return result[gender]
       },
-      /**
-       * 解析用户状态
-       * 国辉
-       * @param  {[type]} status [description]
-       * @return {[type]}        [description]
-       */
-      computedVaild () {
-        var result = '-'
-        let status = this.user.status
-        let isVaild = this.user.is_vaild
-        var str1 = isVaild ? this.$t('operation.user.details.activated') : this.$t('operation.user.details.not_activated')
-        var str2 = ''
-        if (status === 1) {
-          str2 = this.$t('operation.user.details.enabled')
-        } else if (status === 2) {
-          str2 = this.$t('operation.user.details.disabled')
-        }
-        result = str1 + ' ' + str2
-        return result
-      },
+
       getUserInfo () {
         api.user.profile(this.$route.params.id).then((res) => {
           if (res.status === 200) {

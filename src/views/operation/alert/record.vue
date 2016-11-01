@@ -63,59 +63,6 @@
         </x-table>
       </div>
     </div>
-    <!-- 查看告警信息浮层-->
-    <modal :show.sync="showModal">
-      <h3 slot="header">{{ $t("ui.alert.info") }}</h3>
-      <table slot="body" class="table table-stripe table-bordered">
-        <tbody>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.product_name") }}</td>
-            <td>{{ model.product_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.alert_name") }}</td>
-            <td>{{ model.alert_name }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.content") }}</td>
-            <td>{{ model.content }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.tags") }}</td>
-            <td>
-              <template v-if="model.tags"><span v-for="tag in model.tags | toTags" :class="{'text-label-danger':tag==='严重', 'text-label-info':tag==='轻微'}" class="text-label">{{ tag }}</span></template>
-            </td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.type") }}</td>
-            <td><span>{{ informTypes[model.type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.notify_type") }}</td>
-            <td><span>{{ alertTypes[model.notify_type - 1] }}</span></td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.alert_value") }}</td>
-            <td>{{ model.alert_value }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.from") }}</td>
-            <td>{{ model.from }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.to") }}</td>
-            <td>{{ model.to }}</td>
-          </tr>
-          <tr>
-            <td>{{ $t("ui.alert.info_list.create_date") }}</td>
-            <td>{{ model.create_date | formatDate }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <div slot="footer" class="modal-footer">
-        <button @click.prevent.stop="showModal = false" class="btn btn-primary">{{ $t("common.ok") }}</button>
-      </div>
-    </modal>
   </div>
 </template>
 
@@ -170,7 +117,6 @@ export default {
       total: 0,
       countPerPage: config.COUNT_PER_PAGE,
       currentPage: 1,
-      showModal: false,
       model: {
         id: '',
         type: 1,
@@ -349,8 +295,8 @@ export default {
           create_date: formatDate(item.create_date),
           duration: this.prettyDuration(item.lasting),
           id: item.from,
-          level: `<div class="level level1 text-label ${levelCls} w50">${item.tags || this.$t('operation.product.alert.info')}</div>`,
-          state: item.is_read ? this.$t('operation.product.alert.processed') : this.$t('operation.product.alert.no_processed'),
+          level: `<div class="level level1 text-label ${levelCls}">${item.tags || this.$t('operation.product.alert.info')}</div>`,
+          state: item.is_read ? `<span class="hl-green">${this.$t('operation.product.alert.processed')}</span>` : `<span>${this.$t('operation.product.alert.no_processed')}</span>`,
           prototype: item
         }
         result.push(alert)
@@ -516,21 +462,7 @@ export default {
         this.loadingData = false
       })
     },
-    /**
-     * 获取单条告警信息并弹出浮层显示
-     * @param  {Object} alert 目标告警信息
-     */
-    showAlert (alert) {
-      this.model = alert
-      this.showModal = true
-      api.alert.setAlertRead([alert.id]).then((res) => {
-        if (res.status === 200) {
-          alert.is_read = true
-        }
-      }).catch((res) => {
-        this.handleError(res)
-      })
-    },
+
     selectChange (table) {
       var result = []
       table.forEach((item) => {
