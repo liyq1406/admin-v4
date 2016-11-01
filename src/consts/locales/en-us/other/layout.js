@@ -87,7 +87,8 @@ export default {
           subs: {
             users: 'User Setting',
             email: 'Email Setting',
-            message: 'SMS Setting'
+            message: 'SMS Setting',
+            views: '视图自定义'
           }
         }
       }

@@ -87,7 +87,8 @@ export default {
           subs: {
             users: '用户设置',
             email: '邮件设置',
-            message: '短信设置'
+            message: '短信设置',
+            views: '视图自定义'
           }
         }
       }
