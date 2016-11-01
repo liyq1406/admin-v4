@@ -313,7 +313,7 @@
             name: item.userInfo ? item.userInfo.name : '',
             phone: item.userInfo ? item.userInfo.phone : '',
             sn: item.origin.sn,
-            sale_time: item.origin.active_date,
+            // sale_time: item.origin.active_date,
             client_type: 'common_buyer',
             // product_mod: '',
             mac: item.origin.mac,

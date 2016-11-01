@@ -12,7 +12,7 @@
             <info-list :info="userInfo"></info-list>
           </div>
         </div>
-        <div class="col-8">
+        <div class="col-8" v-if="sale.x_info && sale.x_info.length">
           <div class="sale-info-head">销售信息
             <div class="sale-info-body">
               <div class="row" v-for="info in sale.x_info">
@@ -305,19 +305,18 @@ export default {
       // }
       api.dealer.getUser(this.$route.params.sale_id).then((res) => {
         this.sale = res.data
-        this.userInfo.phone.value = this.sale.phone
+        this.userInfo.phone.value = this.sale.phone || '--'
         if (this.sale.client_type === 'common_buyer') {
           this.userInfo.type.value = '普通客户'
         } else {
           this.userInfo.type.value = '大客户'
         }
         // this.userInfo.type.value = this.sale.client_type
-        this.userInfo.province.value = this.sale.province
-        this.userInfo.city.value = this.sale.city
-        this.userInfo.address.value = this.sale.address
+        this.userInfo.province.value = this.sale.province || '--'
+        this.userInfo.city.value = this.sale.city || '--'
+        this.userInfo.address.value = this.sale.address || '--'
         // todo 字段缺失
-        this.userInfo.area.value = this.sale.region
-        this.loadingData = false
+        this.userInfo.area.value = this.sale.region || '--'
         this.loadingData = false
       }).catch((err) => {
         this.handleError(err)

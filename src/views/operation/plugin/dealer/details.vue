@@ -76,12 +76,12 @@
             <tbody>
               <template v-if="sales.length > 0">
                 <tr v-for="sale in sales">
-                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.mac }}</td>
+                  <td><a v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/sales/' + sale.id" class="hl-red">{{ sale.mac || '--' }}</td>
                   <td>{{ sale.sale_time | formatDate 'yyyy-MM-dd' true }}</a></td>
-                  <td>{{ sale.product_mod }}</td>
-                  <td>{{ sale.sn }}</td>
-                  <td>{{ sale.name }}</td>
-                  <td>{{ sale.phone }}</td>
+                  <td>{{ sale.product_mod || '--' }}</td>
+                  <td>{{ sale.sn || '--' }}</td>
+                  <td>{{ sale.name || '--' }}</td>
+                  <td>{{ sale.phone || '--' }}</td>
                   <!-- <td class="tac">
                     <button v-link="'/operation/plugins/dealer/' +$route.params.app_id + '/list/' + $route.params.dealer_id + '/edit/' + sale.id" class="btn btn-link btn-mini">{{ $t("common.edit") }}</button>
                   </td> -->
