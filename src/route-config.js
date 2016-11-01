@@ -762,7 +762,7 @@ let configRouter = (router) => {
             }, 'admin')
           },
           subRoutes: {
-            // 自定义邮件模版
+            // 自定义概览
             '/overview': {
               component (resolve) {
                 require.ensure([], (require) => {
@@ -770,12 +770,30 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
-            // 自定义运营商
+            // 自定义字段
             '/field': {
               component (resolve) {
                 require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/views/field'))
+                  resolve(require('./views/dev/settings/views/field/index'))
                 }, 'admin')
+              },
+              subRoutes: {
+                // 设备字段
+                '/device': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/device'))
+                    }, 'admin')
+                  }
+                },
+                // 用户字段
+                '/user': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/user'))
+                    }, 'admin')
+                  }
+                }
               }
             }
           }
@@ -1673,6 +1691,8 @@ let configRouter = (router) => {
     '/dev': '/dev/home',
     '/dev/products/create': '/dev/products/create/guide',
     '/dev/products/:id/info/edit': '/dev/products/:id/info/edit/form',
+    '/dev/settings/views/field': '/dev/settings/views/field/device',
+
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
     '/operation/products/:product_id/devices/:device_id': '/operation/products/:product_id/devices/:device_id/info',
