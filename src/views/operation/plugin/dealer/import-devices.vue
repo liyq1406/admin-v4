@@ -43,7 +43,7 @@
           <div slot="left-foot" v-show="showBatchBtn" class="row mt10">
             <x-select width="100px" :label="selectMarkDealer.label" size="small">
               <label slot="label">标记为:</label>
-              <select v-model="selectMarkDealer">
+              <select v-model="selectMarkDealer" @change="updateInfo">
                 <option v-for="option in markDealersOptions" :value="option">{{ option.label }}</option>
               </select>
             </x-select>
@@ -85,6 +85,7 @@
 
     data () {
       return {
+        selectDevices: [],
         devices: [],
         users: [],
         showBatchBtn: false,
@@ -165,12 +166,14 @@
           this.dealers.forEach((item) => {
             res.push({
               label: item.name,
-              id: item.id
+              id: item.id,
+              dealer_code: item.dealer_code,
+              upper_dealer_code: item.upper_dealer_code
             })
           })
         }
         res.unshift({
-          label: '全部',
+          label: '无',
           id: 0
         })
         return res
@@ -214,13 +217,16 @@
             })
           }
           res.push({
+            id: item.id,
             mac: item.mac,
             active_date: formatDate(item.active_date),
             sn: item.sn || '--',
             model: '--',
             user: userInfo ? userInfo.nickname || '--' : '--',
             phone: userInfo ? userInfo.phone || '--' : '--',
-            dealer: dealerInfo ? dealerInfo.name || '--' : '--'
+            dealer: dealerInfo ? dealerInfo.name || '--' : '--',
+            origin: item,
+            userInfo: userInfo
           })
         })
         return res
@@ -261,17 +267,75 @@
       }
     },
     methods: {
+      updateInfo () {
+        if (!this.selectMarkDealer.id || !this.selectDevices.length) {
+          return
+        }
+        // 添加设备dealer_scope
+        this.updateProductDevices()
+        // 添加销售信息
+        this.addClientInfo()
+      },
+      updateProductDevices () {
+        let params = {
+          dealer_scope: ''
+        }
+        params.dealer_scope = params.dealer_scope + this.selectMarkDealer.dealer_code
+        if (this.selectMarkDealer.upper_dealer_code) {
+          params.dealer_scope = this.selectMarkDealer.upper_dealer_code + ',' + params.dealer_scope
+        }
+        let length = this.selectDevices.length
+        let count = 0
+        this.selectDevices.forEach((item) => {
+          api.product.updateDeviceMsg(this.selectProduct.id, item.id, params).then((res) => {
+            count++
+            if (res.status === 200) {
+              // 更新成功
+            }
+            if (count === length) {
+              // 批量更新完毕
+              this.getProductDevices()
+              this.selectMarkDealer = {
+                label: '无',
+                id: 0
+              }
+            }
+          }).catch((res) => {
+            count++
+            this.handleError(res)
+          })
+        })
+      },
+      addClientInfo () {
+        // 添加销售记录
+        this.selectDevices.forEach((item) => {
+          let params = {
+            name: item.userInfo ? item.userInfo.name : '',
+            phone: item.userInfo ? item.userInfo.phone : '',
+            sn: item.origin.sn,
+            sale_time: item.origin.active_date,
+            client_type: 'common_buyer',
+            // product_mod: '',
+            mac: item.origin.mac,
+            product_id: this.selectProduct.id,
+            device_id: item.origin.id
+          }
+          api.dealer.addClientInfo(this.selectMarkDealer.id, params).then((res) => {
+            if (res.status === 200) {
+              // 更新成功
+            }
+          }).catch((res) => {
+            this.handleError(res)
+          })
+        })
+      },
       selectChange (table) {
         if (table.length > 0) {
           this.showBatchBtn = true
         } else {
           this.showBatchBtn = false
         }
-        // var result = []
-        // table.forEach((item) => {
-        //   result.push(item.prototype)
-        // })
-        // this.dealList = result
+        this.selectDevices = table
       },
       // 获取经销商列表
       getDealer (reset) {
