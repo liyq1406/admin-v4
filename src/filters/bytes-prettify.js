@@ -8,7 +8,7 @@
 var bytesPrettify = (n) => {
   let result
 
-  if (n === null || n === '' || isNaN(n)) {
+  if (n === '' || isNaN(n)) {
     result = '-'
   } else {
     let index = 0
