@@ -2,7 +2,7 @@
   <div class="field-page">
     <div class="container">
       <div class="catalog-box">
-        <div :class="'catalog-list ' + catalog.key + (catalog.key === selectedField?' selected': '')" v-for="catalog in catalogs">
+        <div :class="'catalog-list ' + catalog.key + (catalog.key === selectedField?' selected': '')" v-for="catalog in catalogs" @click.stop="go(catalog.key)">
           <span>{{catalog.title}}</span>
         </div>
       </div>
@@ -38,22 +38,22 @@ export default {
           title: '用户字段',
           key: 'user'
         },
-        {
-          title: '告警字段',
-          key: 'alert'
-        },
+        // {
+        //   title: '告警字段',
+        //   key: 'alert'
+        // },
         {
           title: '产品字段',
           key: 'product'
-        },
-        {
-          title: '经销商字段',
-          key: 'dealer'
-        },
-        {
-          title: '维保字段',
-          key: 'warranty'
         }
+        // {
+        //   title: '经销商字段',
+        //   key: 'dealer'
+        // },
+        // {
+        //   title: '维保字段',
+        //   key: 'warranty'
+        // }
       ]
     }
   },
@@ -71,7 +71,11 @@ export default {
   },
   ready () {
   },
-  methods: {}
+  methods: {
+    go (key) {
+      this.$route.router.go(key)
+    }
+  }
 }
 </script>
 
@@ -109,7 +113,9 @@ export default {
       box-sizing border-box
       padding-left 20px
       position relative
+      cursor pointer
       &.selected
+        cursor auto
         background #fff
         &:after
           content ''

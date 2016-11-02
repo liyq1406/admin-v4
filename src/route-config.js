@@ -793,6 +793,38 @@ let configRouter = (router) => {
                       resolve(require('./views/dev/settings/views/field/user'))
                     }, 'admin')
                   }
+                },
+                // 告警
+                '/alert': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/alert'))
+                    }, 'admin')
+                  }
+                },
+                // 产品
+                '/product': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/product'))
+                    }, 'admin')
+                  }
+                },
+                // 经销商
+                '/dealer': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/dealer'))
+                    }, 'admin')
+                  }
+                },
+                // 维保
+                '/warranty': {
+                  component (resolve) {
+                    require.ensure([], (require) => {
+                      resolve(require('./views/dev/settings/views/field/warranty'))
+                    }, 'admin')
+                  }
                 }
               }
             }
