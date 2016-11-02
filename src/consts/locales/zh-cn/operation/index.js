@@ -8,6 +8,7 @@ import product from './product'
 import alert from './alert'
 import user from './user'
 import snapshot from './snapshot'
+import settings from './settings'
 
 export default {
   product_management: '产品管理',
@@ -16,5 +17,6 @@ export default {
   product,
   alert,
   user,
-  snapshot
+  snapshot,
+  settings
 }

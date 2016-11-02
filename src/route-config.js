@@ -1024,6 +1024,14 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
+        // 离线数据
+        'settings/offline-data': {
+          component (resolve) {
+            require.ensure([], (require) => {
+              resolve(require('./views/operation/settings/offline-data'))
+            }, 'admin')
+          }
+        },
         // 插件管理
         'plugins': {
           component (resolve) {
