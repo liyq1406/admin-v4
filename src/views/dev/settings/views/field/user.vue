@@ -28,13 +28,13 @@
             <template v-if="fields.length > 0">
               <tr v-for="field in fields">
                 <td>
-                  <span>{{field.name}}</span>
+                  <span>{{field.label}}</span>
                 </td>
                 <td class="tac">
-                  <span>{{field.category }}</span>
+                  <span>{{computedCategory(field.category) }}</span>
                 </td>
                 <td class="tac">
-                  <span>{{field.type}}</span>
+                  <span>{{dataPointType(field.value_type)}}</span>
                 </td>
                 <td class="tac">
                   <a class="hl-red" @click="onEdit(field)">编辑</a>
@@ -62,10 +62,10 @@
               <label class="form-control col-6">字段key:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段key'" class="input-text-wrap">
-                  <input v-model="modal.key" type="text" name="modal.key" v-validate:key="{required: true}" lazy class="input-text"/>
+                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.key.touched && $majorClientValidation.key.required">请输入字段key</span>
+                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">请输入字段key</span>
                 </div>
               </div>
             </div>
@@ -75,10 +75,10 @@
               <label class="form-control col-6">字段名:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段名'" class="input-text-wrap">
-                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true}" lazy class="input-text"/>
+                  <input v-model="modal.label" type="text" name="modal.label" v-validate:label="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">请输入字段名</span>
+                  <span v-if="$majorClientValidation.label.touched && $majorClientValidation.label.required">请输入字段名</span>
                 </div>
               </div>
             </div>
@@ -87,9 +87,9 @@
             <div class="form-row row">
               <label class="form-control col-6">数据类型:</label>
               <div class="controls filter-group-item col-18">
-                <x-select :label="dataPointType(modal.type)">
-                  <select v-model="modal.type">
-                    <option v-for="type in 9" :value="type+1">{{dataPointType(type+1)}}</option>
+                <x-select :label="dataPointType(modal.value_type)">
+                  <select v-model="modal.value_type">
+                    <option v-for="type in 3" :value="type+1">{{dataPointType(type+1)}}</option>
                   </select>
                 </x-select>
               </div>
@@ -97,6 +97,9 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
+              <label v-if="modalType === 'edit'" class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
+              </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
@@ -109,23 +112,23 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  // import api from 'src/api'
+  import api from 'src/api'
   import Select from 'components/Select'
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
+  import _ from 'lodash'
   // import locales from 'consts/locales/index'
-  // import _ from 'lodash'
 
   export default {
     name: 'user',
 
     mixins: [globalMixins],
 
-    vuex: {
-      getters: {
-        products: ({ products }) => products.all
-      }
-    },
+    // vuex: {
+    //   getters: {
+    //     products: ({ products }) => products.all
+    //   }
+    // },
     components: {
       'x-select': Select,
       SearchBox,
@@ -136,49 +139,61 @@
         loadingData: false,
         showModal: false,
         editing: false,
+        delChecked: false,
         // 已选择产品
         selectedProduct: {
           label: '全部',
           value: 0
         },
         modal: {
-          product: {},
-          key: '',
+          label: '',
           name: '',
-          type: 1
+          value_type: 1
         },
         modalType: '',
-        fields: [
-          {
-            name: '昵称', // 字段名
-            type: '类型1', // 类型
-            key: 'aaa',
-            category: '类别1' // 类别
-          },
-          {
-            name: '昵称2', // 字段名
-            type: '类型2', // 类型
-            key: 'bbb',
-            category: '类别2' // 类别
-          }
-        ]
+        userFields: {
+          base_fields: [
+            {
+              'name': 'nickname',
+              'label': '昵称',
+              'hidden': false,
+              'sort': 1,
+              'value_type': 1
+            },
+            {
+              'name': 'gender',
+              'label': '性别',
+              'hidden': false,
+              'sort': 2,
+              'value_type': 1
+            },
+            {
+              'name': 'age',
+              'label': '年龄',
+              'hidden': false,
+              'sort': 3,
+              'value_type': 1
+            }
+          ]
+        }
       }
     },
     computed: {
-      // 下拉选项
-      productOptions () {
-        var result = [{
-          label: '全部',
-          value: 0
-        }]
-
-        this.products.forEach((item) => {
-          var option = {}
-          option.label = item.name
-          option.value = item.id
-          result.push(option)
+      fields () {
+        var result = []
+        // userFields: {
+        //   base_fields: [
+        this.userFields.base_fields.forEach((item, index) => {
+          var field = _.clone(item)
+          field.category = 'base_field'
+          result.push(field)
         })
-
+        result.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        result.forEach((item, index) => {
+          item.sort = index + 1
+        })
         return result
       },
       modalTitle () {
@@ -193,8 +208,76 @@
     ready () {
     },
     methods: {
-      getData () {
+      /**
+      * 添加字段
+      */
+      addField () {
+        this.editing = true
+        var params = _.cloneDeep(this.userFields)
+        var newField = {
+          'name': this.modal.name,
+          'label': this.modal.label,
+          'hidden': this.modal.hidden,
+          'sort': this.fields.length + 1,
+          'value_type': this.modal.value_type
+        }
+        params.base_fields.push(newField)
+        console.log(params)
+        api.customization.setUserCustomization(params).then((res) => {
+          this.onCancel()
+          console.log(res)
+          this.userFields = res.data || {}
+        }).catch((res) => {
+          this.onCancel()
+          this.handleError(res)
+        })
+        // setTimeout(() => {
+        //   this.onCancel()
+        // }, 2000)
+      },
 
+      /**
+      * 编辑字段
+      */
+      editField () {
+        this.editing = true
+        var params = _.cloneDeep(this.userFields)
+        var newField = {
+          'name': this.modal.name,
+          'label': this.modal.label,
+          'hidden': this.modal.hidden,
+          'sort': this.modal.sort,
+          'value_type': this.modal.value_type
+        }
+        params.base_fields.splice(this.modal.sort - 1, 1, newField)
+        console.log(params)
+        // api.customization.setUserCustomization(params).then((res) => {
+        //   this.onCancel()
+        //   console.log(res)
+        //   this.userFields = res.data || {}
+        // }).catch((res) => {
+        //   this.onCancel()
+        //   this.handleError(res)
+        // })
+      },
+
+      /**
+       * 删除字段
+       */
+      deleteField () {
+
+      },
+
+      /**
+       * 获取数据
+       */
+      getData () {
+        api.customization.getUserCustomization().then((res) => {
+          console.log(res)
+          this.userFields = res.data || {}
+        }).catch((res) => {
+          this.handleError(res)
+        })
       },
       /**
        * 显示添加字段浮层
@@ -202,8 +285,7 @@
       onAdd () {
         console.log('添加字段')
         this.modalType = 'add'
-        this.modal.product = this.products[0]
-        this.modal.key = ''
+        this.modal.label = ''
         this.modal.name = ''
         this.showModal = true
       },
@@ -213,30 +295,9 @@
        */
       onEdit (field) {
         this.modalType = 'edit'
-        this.modal.product = this.products[0]
-        this.modal.key = field.key
-        this.modal.name = field.name
+        this.modal = _.clone(field)
+        this.delChecked = false
         this.showModal = true
-      },
-
-      /**
-       * 添加字段
-       */
-      addField () {
-        this.editing = true
-        setTimeout(() => {
-          this.onCancel()
-        }, 2000)
-      },
-
-      /**
-       * 编辑字段
-       */
-      editField () {
-        this.editing = true
-        setTimeout(() => {
-          this.onCancel()
-        }, 2000)
       },
 
       /**
@@ -248,7 +309,11 @@
             this.addField()
             break
           case 'edit':
-            this.editField()
+            if (this.delChecked) {
+              this.deleteField()
+            } else {
+              this.editField()
+            }
             break
           default:
             return
@@ -264,6 +329,22 @@
         this.showModal = false
         this.$resetValidation()
       },
+
+      computedCategory (type) {
+        var result = ''
+        switch (type) {
+          case 'base_field':
+            result = '基本字段'
+            break
+          case 'base_fields':
+            result = '基本字段'
+            break
+          default:
+            result = '未知'
+            break
+        }
+        return result
+      },
       /**
        * 计算当前类型
        * @param  {[type]} type [description]
@@ -273,31 +354,13 @@
         var result = ''
         switch (type - 0) {
           case 1:
-            result = '布尔类型'
-            break
-          case 2:
-            result = '单字节(无符号)'
-            break
-          case 3:
-            result = '16位短整型（有符号）'
-            break
-          case 4:
-            result = '32位整型（有符号）'
-            break
-          case 5:
-            result = '浮点'
-            break
-          case 6:
             result = '字符串'
             break
-          case 7:
-            result = '字节数组'
+          case 2:
+            result = '32位整形(有符号)'
             break
-          case 8:
-            result = '16位短整型（无符号）'
-            break
-          case 9:
-            result = '32位整型（无符号）'
+          case 3:
+            result = '浮点'
             break
           default:
             result = '未知'
