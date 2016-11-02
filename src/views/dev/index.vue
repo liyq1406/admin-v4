@@ -18,7 +18,6 @@ import { globalMixins } from 'src/mixins'
 import { MAIN_NAV } from 'consts/config'
 // import api from 'api'
 // import _ from 'lodash'
-import store from 'store/index'
 
 export default {
   name: 'dev',
@@ -31,8 +30,6 @@ export default {
     Sidebar,
     AlertBar
   },
-
-  store,
 
   vuex: {
     getters: {

@@ -34,17 +34,16 @@
 </template>
 
 <script>
+import Modal from './components/Modal'
+import Topbar from 'components/Topbar'
+import Toast from './components/Toast'
+import _ from 'lodash'
+import api from './api'
 import store from 'store/index'
 import { globalMixins } from './mixins'
 import { removeError, hideError, setCurrentMember, setCorp, setLoadingStatus } from './store/actions/system'
 import { getAllProducts } from './store/actions/products'
 import { createPlugin, getAllPlugin } from './store/actions/plugins'
-import Vue from 'vue'
-import api from './api'
-import Modal from './components/Modal'
-import Topbar from 'components/Topbar'
-import Toast from './components/Toast'
-import _ from 'lodash'
 import { API_SERVER, IS_DEMO } from 'consts/config'
 
 export default {
@@ -70,7 +69,7 @@ export default {
       notices: ({ system }) => system.notices,
       corp: ({ system }) => system.corp,
       currentMember: ({ system }) => system.currentMember,
-      products: ({ products }) => products.all,
+      products: ({products}) => products.all,
       plugins: ({ plugins }) => plugins.all
     },
     actions: {
@@ -120,7 +119,7 @@ export default {
 
   ready () {
     // this.refreshToken()
-    document.title = Vue.config.lang === 'zh-cn' ? '云智易物联平台' : 'Xlink IoT Platform'
+    document.title = this.$t('layout.platform.name')
   },
 
   methods: {

@@ -174,8 +174,6 @@ export default {
       emptyArr: [],
       addModelType: { label: 'WIFI', value: 1 },
       selectProduct: {},
-      needVerificationUsers: false,
-      needVerification: false,
       title: '',
       content: '',
       timeType: 1,

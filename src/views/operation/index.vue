@@ -19,7 +19,6 @@ import Sidebar from 'components/Sidebar'
 import AlertBar from 'components/AlertBar'
 import { globalMixins } from 'src/mixins'
 import { MAIN_NAV, IS_DEMO } from 'consts/config'
-import store from 'store/index'
 
 export default {
   name: 'Operation',
@@ -32,8 +31,6 @@ export default {
     Sidebar,
     AlertBar
   },
-
-  store,
 
   vuex: {
     getters: {

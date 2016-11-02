@@ -28,15 +28,12 @@
   import { globalMixins } from 'src/mixins'
   import Vue from 'vue'
   import locales from 'consts/locales/index'
-  import store from 'store'
   import api from 'api'
 
   export default {
     name: 'TableDetails',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

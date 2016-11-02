@@ -61,11 +61,11 @@
                       <div class="controls col-21">
                         <div class="select-group">
                           <div class="select">
-                            <v-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
+                            <x-select width="160px" placeholder="请选择时间" :label="properties.cooking_time">
                               <select v-model="properties.cooking_time" name="properties.cooking_time">
                                 <option v-for="opt in cookingtimes" :value="opt" :selected="cookingtimes===opt">{{ opt }}</option>
                               </select>
-                            </v-select>
+                            </x-select>
                           </div>
                         </div>
                       </div>
@@ -75,11 +75,11 @@
                       <div class="controls col-21">
                         <div class="select-group">
                           <div class="select">
-                            <v-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
+                            <x-select width="160px" placeholder="请选择难度" :label="properties.difficulty">
                               <select v-model="properties.difficulty" name="properties.difficulty">
                                 <option v-for="opt in difficulties" :value="opt" :selected="properties.difficulty===opt">{{ opt }}</option>
                               </select>
-                            </v-select>
+                            </x-select>
                           </div>
                         </div>
                       </div>
@@ -89,16 +89,16 @@
                       <div class="controls col-21">
                         <div class="select-group1" v-for="category in classification">
                           <div class="select">
-                            <v-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
+                            <x-select width="160px" class="dis" placeholder="请选择父类别" :label="category.main.name">
                               <select v-model="category.main" @change="getSubCategories(category, true)">
                                 <option v-for="opt in mainCategories" :value="opt.main">{{ opt.main.name }}</option>
                               </select>
-                            </v-select>
-                            <v-select v-show="category.subOptions.length" width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
+                            </x-select>
+                            <x-select v-show="category.subOptions.length" width="160px" class="dis" placeholder="请选择子类别" :label="category.sub.name">
                               <select v-model="category.sub">
                                 <option v-for="opt in category.subOptions" :value="opt.sub">{{ opt.sub.name }}</option>
                               </select>
-                            </v-select>
+                            </x-select>
                             <span @click="removeObj(category, classification)" class="fa fa-times ml10"></span>
                           </div>
                         </div>
@@ -539,9 +539,6 @@ import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
 import TreeItem from './TreeItem'
 import DeviceForm from './DeviceForm'
-// import locales from 'consts/locales/index'
-// import { DEVICES } from '../../config'
-import store from 'src/store'
 
 export default {
   name: 'Creation',
@@ -552,7 +549,6 @@ export default {
 
   components: {
     'tree-item': TreeItem,
-    'v-select': Select,
     'search-box': SearchBox,
     'pager': Pager,
     'modal': Modal,
@@ -562,7 +558,6 @@ export default {
     DeviceForm,
     'x-select': Select
   },
-  store,
 
   vuex: {
     getters: {
@@ -1608,7 +1603,7 @@ export default {
       .status-bar
         padding 0
         border 0
-        .v-select
+        .x-select
           float left
           display inline-block
           padding-left 10px

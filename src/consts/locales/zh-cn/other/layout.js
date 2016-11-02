@@ -4,6 +4,11 @@
  */
 
 export default {
+  // 平台相关
+  platform: {
+    name: '云智易物联云平台企业管理台'
+  },
+
   // 主导航
   main_nav: {
     dashboard: {
@@ -245,6 +250,7 @@ export default {
     }
   },
 
+  // 我的帐号
   my_account: '我的账户',
 
   // 用户菜单

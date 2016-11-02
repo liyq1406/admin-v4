@@ -141,7 +141,6 @@ import api from 'api'
 // import * as config from 'consts/config'
 import { removeProduct, updateProduct } from 'store/actions/products'
 import { setCurrProductMixin } from '../../mixins'
-import store from 'store'
 import ImageUploader from 'components/ImageUploader'
 import Select from 'components/Select'
 import _ from 'lodash'
@@ -152,8 +151,6 @@ export default {
 
   // setCurrProductMixin 保证每个产品相关的页面都能正确访问到当前的产品信息
   mixins: [globalMixins, setCurrProductMixin],
-
-  store,
 
   vuex: {
     actions: {

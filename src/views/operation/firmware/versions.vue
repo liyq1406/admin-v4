@@ -203,7 +203,6 @@
   import Modal from 'components/Modal'
   import Select from 'components/Select'
   import Alert from 'components/Alert'
-  import store from 'store/index'
   import * as config from 'consts/config'
   import { createPlugin, updatePlugin, removePlugin } from 'store/actions/plugins'
   import _ from 'lodash'
@@ -213,8 +212,6 @@
     name: 'Management',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

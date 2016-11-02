@@ -130,7 +130,6 @@ import Statistic from 'components/Statistic2'
 import Breadcrumb from 'components/Breadcrumb'
 import RadioButtonGroup from 'components/RadioButtonGroup'
 import Chart from 'components/Chart/index'
-import store from 'store'
 import api from 'api'
 import { patchLostDates } from 'utils'
 import formatDate from 'filters/format-date'
@@ -140,8 +139,6 @@ export default {
   name: 'BroadcastDetails',
 
   mixins: [globalMixins],
-
-  store,
 
   vuex: {
     getters: {

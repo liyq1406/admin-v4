@@ -313,9 +313,6 @@ import _ from 'lodash'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
-// import locales from 'consts/locales/index'
-// import { DEVICES } from '../../config'
-import store from 'src/store'
 
 export default {
   name: 'EditRecipe',
@@ -334,7 +331,6 @@ export default {
     Modal,
     'x-select': Select
   },
-  store,
 
   vuex: {
     getters: {

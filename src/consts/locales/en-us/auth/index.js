@@ -6,7 +6,6 @@
 export default {
 
   // 登录
-  platform_name: 'Xlink IoT Platform',
   old_entrance: 'Previous version',
   register: 'Register',
   remember: 'Remember Me',

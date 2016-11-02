@@ -35,7 +35,6 @@
 
 <script>
 import { globalMixins } from 'src/mixins'
-import store from 'store'
 import api from 'api'
 import { isEmpty } from 'utils'
 import { DEALER_SCOPE_SEPERATOR } from 'consts/config'
@@ -44,8 +43,6 @@ export default {
   name: 'Dealers',
 
   mixins: [globalMixins],
-
-  store,
 
   vuex: {
     getters: {

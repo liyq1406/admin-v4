@@ -46,7 +46,6 @@
   import { globalMixins } from 'src/mixins'
   import { setLoadingStatus } from 'store/actions/system'
   import { IS_SHOW_OLD_ENTRANCE } from 'consts/config'
-  import store from 'store/index'
 
   export default {
     name: 'LoginForm',
@@ -54,8 +53,6 @@
     layouts: ['auth'],
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {

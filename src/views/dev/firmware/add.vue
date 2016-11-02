@@ -160,7 +160,6 @@
   import { globalMixins } from 'src/mixins'
   import Select from 'components/Select'
   import RadioButtonGroup from 'components/RadioButtonGroup'
-  import store from 'store'
   import api from 'api'
   import _ from 'lodash'
   // import { createDayRange } from 'utils'
@@ -173,8 +172,6 @@
     name: 'AddBroadcast',
 
     mixins: [globalMixins],
-
-    store,
 
     vuex: {
       getters: {
