@@ -247,7 +247,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="bortop" v-if="this.$route.params.type_value === '2'">
+                <!-- <div class="bortop" v-if="this.$route.params.type_value === '2'">
                   <h2>添加设备烹饪提示</h2>
                   <div class="row">
                     <div class="line32 mrb10" v-for="tip in cookTips">
@@ -263,7 +263,7 @@
                       <button @click.prevent.stop="addTips" class="col-offset-3 btn btn-ghost addCookTip"><i class="fa fa-plus">添加烹饪提示步骤</i></button>
                     </div>
                   </div>
-                </div>
+                </div> -->
               </form>
               <modal :show.sync="cookTipShow" width="480px">
                 <h3 slot="header">编辑烹饪提示信息</h3>
@@ -293,7 +293,7 @@
         </div>
         <!-- 第二步骤END -->
         <!-- 第三步骤 -->
-        <div v-show="currPage === 3">
+        <div v-if="currPage === 3">
           <div class="recipe-form">
             <div class="main-title bordered">
               <h2>3.填写菜谱烹饪参数</h2>
@@ -323,13 +323,13 @@
                     <label class="form-control col-3 line32">本地菜谱ID: </label>
                     <div class="controls col-21">
                       <div class="input-text-wrap">
-                        <input type="text" v-model="local_id" style="width:300px" lazy class="input-text" name="local_id" lazy/>
+                        <input type="text" v-model="local_id" style="width:300px" class="input-text" name="local_id" v-validate:localid="{required: true, maxlength: 20, format: 'trim'}"/>
                       </div>
-                      <!-- <div class="form-tips form-tips-error">
+                      <div class="form-tips form-tips-error">
                         <span v-if="$validation.localid.touched && $validation.localid.required">请输入本地菜谱ID</span>
                         <span v-if="$validation.localid.modified && $validation.localid.maxlength">本地菜谱ID不能超过20位</span>
                         <span v-if="$validation.localid.touched && $validation.localid.format">菜谱ID不允许前后带空格</span>
-                      </div> -->
+                      </div>
                     </div>
                   </div>
                   <div class="settingArea row">
@@ -337,7 +337,7 @@
                     <div class="controls col-21">
                       <!-- <tree-item></tree-item> -->
                       <ul class="menu" v-if="menus && menus.length > 0">
-                        <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode"></tree-item>
+                        <tree-item  v-for="menu in menus" :menu="menu" :index="$index" @push-data="test" @push-code-data="setCode" @delete-menu="deleteMenu" @delete-code="deleteCode"></tree-item>
                       </ul>
                     </div>
                   </div>
@@ -416,48 +416,10 @@
               </div>
             </div>
 
-            <modal :show.sync="modal.show" @close="onCancel" width="480px">
+            <modal :show.sync="modal.show" width="480px">
               <h3 slot="header">{{ modal.type === 'add' ? '添加' : '编辑' }}烹饪设备</h3>
               <div slot="body" class="form">
-                <form autocomplete="off" novalidate @submit.prevent="onSubmit">
-                  <div class="form-row row">
-                    <label class="form-control col-6">烹饪菜谱:</label>
-                    <div class="controls col-18">
-                      <div class="control-text">{{ recipe.name }}</div>
-                    </div>
-                  </div>
-                  <div class="form-row row">
-                    <label class="form-control col-6">工作设备:</label>
-                    <div class="controls col-18" v-if="modal.type === 'add'">
-                      <x-select placeholder="请选择设备" :label="selectedProduct.name">
-                        <select v-model="selectedProduct" name="selectedProduct">
-                          <option v-for="product in productOptions" :value="product">{{ product.name }}</option>
-                        </select>
-                      </x-select>
-                    </div>
-                    <div class="controls col-18" v-if="modal.type === 'edit'">
-                      <div class="control-text">{{ model.name }}</div>
-                    </div>
-                  </div>
-                  <div class="form-row row">
-                    <label class="form-control col-6">设备指令:</label>
-                    <div class="controls col-18">
-                      <div class="input-text-wrap required-sign">
-                        <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
-                      </div>
-                      <div class="form-tips form-tips-error">
-                        <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('ui.validation.required', {field: '设备指令'}) }}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-actions">
-                    <label v-if="modal.type === 'edit'" class="del-check">
-                      <input type="checkbox" name="del" v-model="delChecked"/> 删除此设备
-                    </label>
-                    <button type="submit" :disabled="submitting" :class="{'disabled':submitting}" v-text="submitting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-                    <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-                  </div>
-                </form>
+                <device-form :name="name"></device-form>
               </div>
             </modal>
           </div>
@@ -555,10 +517,10 @@
     </div>
     <div class="row border-top">
       <div class="col-21 col-offset-3">
-        <button v-if="mixPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
-        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
-        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
-        <button v-if="!maxPage" class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
+        <button v-if="!minPage" class="btn btn-primary btn-lg mlr10" @click.prevent="lastStep">上一步</button>
+        <button v-if="maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent.stop="onRecipeSubmit">提交</button>
+        <button v-if="!maxPage" class="btn btn-primary btn-lg mlr10" @click.prevent="nextStep">下一步</button>
+        <button class="btn btn-ghost btn-lg mlr10" @click.prevent.stop="isShowPreview=true">预览</button>
       </div>
     </div>
   </div>
@@ -576,6 +538,7 @@ import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
 import TagInput from 'components/TagInput'
 import TreeItem from './TreeItem'
+import DeviceForm from './DeviceForm'
 // import locales from 'consts/locales/index'
 // import { DEVICES } from '../../config'
 import store from 'src/store'
@@ -596,6 +559,7 @@ export default {
     'image-uploader': ImageUploader,
     'tag-input': TagInput,
     Modal,
+    DeviceForm,
     'x-select': Select
   },
   store,
@@ -615,6 +579,10 @@ export default {
 
   data () {
     return {
+      recipe: {
+        name: '',
+        devices: []
+      },
       addFirMenuShow: false,
       local_id: '',
       addMenuModal: {
@@ -657,10 +625,6 @@ export default {
       status: 1,
       isShowPreview: false,
       maxStepCount: 15,
-      recipe: {
-        name: '',
-        devices: []
-      },
       modal: {
         show: false,
         type: 'add'
@@ -704,23 +668,24 @@ export default {
       return _.differenceBy(this.products, this.recipe.devices, 'id')
     },
     // 判断当前是否第一页
-    mixPage () {
+    minPage () {
       var result = true
       if (this.currPage === 1) {
-        result = false
-      } else {
+        //
         result = true
+      } else {
+        result = false
       }
       return result
     },
     // 判断当前是否最后一页
     maxPage () {
-      var result = true
+      var result = false
       if (this.currPage === this.pages[this.pages.length - 1]) {
         // 如果跟页码数组最后一项相同，说明为最后一页
-        result = false
-      } else {
         result = true
+      } else {
+        result = false
       }
       return result
     }
@@ -796,10 +761,17 @@ export default {
   },
 
   methods: {
+    addDevice () {
+      this.modal = {
+        show: true,
+        type: 'add'
+      }
+      // this.model = _.clone(this.originModel)
+    },
     setCode (val, index) {
       console.log(index)
       console.log(val)
-      // this.menus.$set(index, val)
+      this.menus.$set(index, val)
       console.log(JSON.stringify(this.menus))
       // this.menu = val
     },
@@ -1054,6 +1026,11 @@ export default {
         })
         return
       }
+      if (this.$route.params.type_value === '3') {
+        if (!this.local_id) {
+          alert('请填写本地菜谱ID！')
+        }
+      }
 
       let appId = this.$route.params.app_id
       // 从 localStorage 中获取app token
@@ -1167,6 +1144,10 @@ export default {
       // if (this.$validation.invalid) {
       //   return
       // }
+      if (!(this.addMenuModal.type.trim())) {
+        alert('请输入菜单名称！')
+        return
+      }
       this.menus.push({
         type: this.addMenuModal.type
       })
@@ -1207,6 +1188,30 @@ export default {
       console.log(JSON.stringify(this.menus))
       // this.menu = val
     },
+    deleteMenu (val, index, deleted) {
+      if (index >= 0 && !deleted) {
+        this.menus.splice(index, 1)
+      }
+      console.log('最终')
+      console.log(JSON.stringify(this.menus))
+    },
+    deleteCode (val, index, codeDeleted) {
+      if (index >= 0 && !codeDeleted) {
+        var deleteKey = ['name', 'param_id', 'desc']
+        var obj = {}
+        for (var key in this.menus[index]) {
+          if (val.hasOwnProperty(key)) {
+            if (deleteKey.indexOf(key) === -1) {
+              obj[key] = val[key]
+            }
+          }
+        }
+        // this.menus.$set(index, obj)
+        this.menus[index].$set(obj)
+      }
+      console.log('最终')
+      console.log(JSON.stringify(this.menus))
+    },
     /**
      * 初始化
      */
@@ -1221,6 +1226,9 @@ export default {
 
 <style lang="stylus" scoped>
   @import '../../../../../../assets/stylus/common'
+  .tips-null
+    text-align center
+    border 1px solid default-border-color
   .settingArea
     margin-top 10px
   .mrt10
