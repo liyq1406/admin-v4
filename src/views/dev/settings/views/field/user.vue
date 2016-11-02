@@ -1,20 +1,20 @@
 <template>
   <div class="panel">
     <div class="panel-hd">
+      <div class="filter-group fr">
+        <div class="actions">
+          <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
+        </div>
+      </div>
       <h2>用户字段</h2>
     </div>
+
     <div class="panel-bd">
       <div class="data-table with-loading">
         <div class="icon-loading" v-show="loadingData">
           <i class="fa fa-refresh fa-spin"></i>
         </div>
-        <div class="filter-bar">
-          <div class="filter-group fr">
-            <div class="actions">
-              <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
-            </div>
-          </div>
-        </div>
+
         <table class="table table-stripe table-bordered">
           <thead>
             <tr>
@@ -187,11 +187,15 @@
     },
     route: {
       data () {
+        this.getData()
       }
     },
     ready () {
     },
     methods: {
+      getData () {
+
+      },
       /**
        * 显示添加字段浮层
        */
