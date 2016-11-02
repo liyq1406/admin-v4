@@ -108,7 +108,7 @@
             </div>
             <div class="panel-bd">
               <div class="controls">
-                <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess">
+                <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
                   <label :class="{'disabled':unableAdd}" class="btn btn-ghost btn-upload mb10 mt10">
                     <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
                   </label>
@@ -307,7 +307,15 @@ export default {
       this.addmodel.file_url = data.url
       this.addmodel.file_md5 = data.md5
       this.addmodel.file_size = data.size
-      this.firmwareInput = null
+    },
+
+    /**
+     * 上传重置处理
+     * @author shengzhi
+     */
+    onResetUpload (input) {
+      input.value = ''
+      this.inputValue = ''
     }
   }
 }

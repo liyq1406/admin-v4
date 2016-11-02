@@ -63,7 +63,7 @@
                 <div class="form-row row">
                   <label class="form-control col-5 dealer-label">固件文件:</label>
                   <div class="controls col-19 row line32">
-                    <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess">
+                    <file-upload :input="firmwareInput" :input-value="inputValue" type="firmware" :api-url="uploadApi" @upload-success="onUploadSuccess" @reset="onResetUpload">
                       <div v-if="firmware.file_url.length > 0" class="file-url">url: {{ firmware.file_url }}</div>
                       <label class="btn btn-ghost btn-upload mb10 mt10">
                         <input type="file" name="firmwareInput" @change.prevent="uploadFirmware($event)" :disabled="uploading"/><i class="fa fa-reply-all"></i>{{ uploading ? $t('ui.firmware.uploading') : $t('ui.firmware.upload') }}
@@ -255,7 +255,15 @@ export default {
       this.firmware.file_url = data.url
       this.firmware.file_md5 = data.md5
       this.firmware.file_size = data.size
-      this.firmwareInput = null
+    },
+
+    /**
+     * 上传重置处理
+     * @author shengzhi
+     */
+    onResetUpload (input) {
+      input.value = ''
+      this.inputValue = ''
     }
   }
 }
