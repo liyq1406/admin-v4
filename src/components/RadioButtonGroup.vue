@@ -44,8 +44,9 @@
 
     methods: {
       onSelect (value) {
+        let oldValue = this.value
         this.value = value
-        this.$emit('select', value)
+        this.$emit('select', value, oldValue)
       }
     }
   }
