@@ -44,6 +44,14 @@ export default {
     showTime: {
       type: Boolean,
       default: false
+    },
+    initStartTime: {
+      type: String,
+      default: ''
+    },
+    initEndTime: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -65,8 +73,16 @@ export default {
   },
   ready () {
     var curTime = new Date()
-    this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
-    this.endTime = curTime
+    if (this.initStartTime) {
+      this.defaultTime = this.startTime = new Date(this.initStartTime)
+    } else {
+      this.defaultTime = this.startTime = new Date(curTime.getTime() - 3600 * 24 * 1000 * this.startOffset)
+    }
+    if (this.initEndTime) {
+      this.endTime = new Date(this.initEndTime)
+    } else {
+      this.endTime = curTime
+    }
     this._closeEvent = EventListener.listen(window, 'click', this.handleClose)
   },
   beforeDestroy () {
