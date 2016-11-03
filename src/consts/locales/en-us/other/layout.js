@@ -183,6 +183,13 @@ export default {
             tags: 'Tags'
           }
         },
+        content: {
+          label: 'Content Management',
+          subs: {
+            articles: 'Articles',
+            tags: 'Tags'
+          }
+        },
         alerts: {
           label: 'Alert Service',
           subs: {

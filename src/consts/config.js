@@ -11,7 +11,7 @@ let apiServer = ({
     plugin: 'http://plugin-api.xlink.cn:3000'
   },
   test: { // 测试服务器
-    api: 'http://api-test.xlink.cn:8887',
+    api: 'http://api-test.xlink.cn:80',
     plugin: 'http://test.plugin.xlink.cn:3000',
     message: 'http://139.196.164.250:3072'
   },

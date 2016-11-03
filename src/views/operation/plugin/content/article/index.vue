@@ -1,13 +1,13 @@
 <template>
   <div class="main">
     <div class="main-title bordered">
-      <h2>内容管理</h2>
+      <h2>文章管理</h2>
     </div>
     <div class="panel mt20">
       <div class="panel-bd">
         <div class="action-bar">
           <div class="action-group">
-            <a class="btn btn-primary" v-link="{path: 'article/add', append: true}"><i class="fa fa-plus"></i>添加文章</a>
+            <a class="btn btn-primary" v-link="{path: 'article/add'}"><i class="fa fa-plus"></i>添加文章</a>
           </div>
         </div>
         <x-table :headers="columns" :tables="articleList" :page="page" :loading="loadingData" @page-count-update="onPageCountUpdate" @current-page-change="onCurrentPageChange" @tbody-name="onNameClick" :simple-page="true">
@@ -195,7 +195,7 @@ export default {
      * @param {Object} article 目标文章
      */
     onNameClick (article) {
-      this.$route.router.go({path: `articles/${article.prototype._id}/edit`, append: true})
+      this.$route.router.go({path: `${article.prototype._id}/edit`, append: true})
     },
 
     delArticle (id) {

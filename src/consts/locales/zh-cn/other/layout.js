@@ -183,6 +183,13 @@ export default {
             tags: '标签管理'
           }
         },
+        content: {
+          label: '内容管理',
+          subs: {
+            articles: '文章管理',
+            tags: '标签管理'
+          }
+        },
         alerts: {
           label: '告警服务',
           subs: {

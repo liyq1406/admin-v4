@@ -19,6 +19,14 @@
           </div>
         </div>
         <div class="form-row row">
+          <label class="form-control col-4">封面图片:</label>
+          <div class="controls col-20">
+            <div class="img-box">
+              <image-uploader :images="images" @modified="onModifiedImages(images)"></image-uploader>
+            </div>
+          </div>
+        </div>
+        <div class="form-row row">
           <label class="form-control col-4"><i class="hl-red">*</i> 正文:</label>
           <div class="controls col-20">
             <editor @change="onContentChange" :value="model.text"></editor>
@@ -26,6 +34,12 @@
             <div class="form-tips form-tips-error">
               <span v-if="$validation.text.touched && $validation.text.required">{{ $t('common.validation.required', {field: '正文'}) }}</span>
             </div>
+          </div>
+        </div>
+        <div class="form-row row">
+          <label class="form-control col-4">标签:</label>
+          <div class="controls col-20">
+            <tag-input :value.sync="tag" :input-disabled="true" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
           </div>
         </div>
         <div class="form-row row">
@@ -56,8 +70,11 @@
 <script>
 import api from 'api'
 import Editor from 'components/Editor'
+import ImageUploader from 'components/ImageUploader'
+import TagInput from 'components/TagInput'
 import { globalMixins } from 'src/mixins'
 import { pluginMixins } from '../../../mixins'
+import _ from 'lodash'
 
 export default {
   name: 'ArticleForm',
@@ -72,7 +89,9 @@ export default {
   },
 
   components: {
-    Editor
+    Editor,
+    ImageUploader,
+    TagInput
   },
 
   vuex: {
@@ -88,9 +107,15 @@ export default {
         text: '',
         status: 0
       },
+      images: [''],
       submitting: false,
       deleting: false,
-      loadingData: false
+      loadingData: false,
+      tag: '',
+      candidateTags: [],
+      editingTag: false,
+      show: false,
+      loadingTags: false
     }
   },
 
@@ -100,7 +125,9 @@ export default {
       var params = {
         name: this.model.name,
         text: this.model.text,
+        cover: this.images,
         status: parseInt(this.model.status),
+        label: _.compact(this.tag.split(',')),
         creator: this.currentMember.name
       }
       return params
@@ -108,6 +135,9 @@ export default {
   },
 
   ready () {
+    // 获取标签列表
+    this.getTags()
+
     // 如果是编辑表单
     if (this.type === 'edit') {
       var condition = {
@@ -124,6 +154,8 @@ export default {
         if (res.status === 200) {
           var data = res.data.list[0] ? res.data.list[0] : {}
           this.model = data
+          this.images = data.cover || ['']
+          this.tag = data.label ? data.label.join(',') : ''
           this.loadingData = false
         }
       }).catch((res) => {
@@ -157,6 +189,13 @@ export default {
         return
       }
 
+      // 不选取内容不允许提交
+      let images = _.compact(this.images)
+      if (!images.length) {
+        this.showError('请添加图片')
+        return
+      }
+
       let process
       let noticeCont = ({
         add: '文章添加成功！',
@@ -175,12 +214,21 @@ export default {
             type: 'success',
             content: noticeCont
           })
-          this.$route.router.go(`/operation/plugins/content/${this.$route.params.app_id}`)
+          this.$route.router.go(`/operation/plugins/content/${this.$route.params.app_id}/articles`)
         }
       }).catch((res) => {
         this.submitting = false
         this.handleError(res)
       })
+    },
+
+    /**
+     * 选择图片
+     * @param  {[type]} images [description]
+     * @return {[type]}        [description]
+     */
+    onModifiedImages (images) {
+      this.images = images
     },
 
     /**
@@ -207,7 +255,33 @@ export default {
      * 预览文章
      * @author shengzhi
      */
-    previewArticle () {}
+    previewArticle () {},
+
+    /**
+     * 获取标签
+     */
+    getTags () {
+      let appId = this.$route.params.app_id
+      // 从 localStorage 中获取app token
+      let token = JSON.parse(window.localStorage.pluginsToken)[appId].token
+      let condition = {
+        limit: 200,
+        query: {}
+      }
+
+      this.loadingTags = true
+      api.content.getTags(appId, token, condition).then((res) => {
+        if (res.status === 200) {
+          this.candidateTags = res.data.list.map((item) => {
+            return item.label
+          })
+          this.loadingTags = false
+        }
+      }).catch((res) => {
+        this.handleError(res)
+        this.loadingTags = false
+      })
+    }
   }
 }
 </script>

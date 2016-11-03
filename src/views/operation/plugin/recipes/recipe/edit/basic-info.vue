@@ -185,7 +185,7 @@
                     <div class="form-row row">
                       <label class="form-control col-3">标签:</label>
                       <div class="controls col-21">
-                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true"></tag-input>
+                        <tag-input :value.sync="tag" :candidate="candidateTags" :editing.sync="editingTag" @adding-tag="show = true" :input-disabled="true"></tag-input>
                       </div>
                     </div>
                   </div>
