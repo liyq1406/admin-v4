@@ -9,7 +9,7 @@ export default {
    */
   getList (params) {
     return http.post(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_account_list`, params
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_account_list`, params
     )
   },
   /**
@@ -20,7 +20,7 @@ export default {
   addCount (params) {
     // console.log(JSON.stringify(params))
     return http.post(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_account_add`, params
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_account_add`, params
     )
   },
   /**
@@ -30,7 +30,7 @@ export default {
    */
   getCount (accountId) {
     return http.get(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_account_query/${accountId}`
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_account_query/${accountId}`
     )
   },
   /**
@@ -40,7 +40,7 @@ export default {
    */
   editCount (accountId, params) {
     return http.put(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_account_modify/${accountId}`, params
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_account_modify/${accountId}`, params
     )
   },
   /**
@@ -50,7 +50,7 @@ export default {
    */
   delCount (accountId) {
     return http.del(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_account_delete/${accountId}`
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_account_delete/${accountId}`
     )
   },
 
@@ -61,7 +61,7 @@ export default {
    */
   addEmailAcount (params) {
     return http.post(
-      `${API_SERVER.message}/v2/message/email/email_account`, params
+      `${API_SERVER.default}/v2/message/email/email_account`, params
     )
   },
   /**
@@ -71,7 +71,7 @@ export default {
    */
   getEmailAcount () {
     return http.get(
-      `${API_SERVER.message}/v2/message/email/email_account`
+      `${API_SERVER.default}/v2/message/email/email_account`
     )
   },
   /**
@@ -81,7 +81,7 @@ export default {
    */
   editEmailAcount (params) {
     return http.put(
-      `${API_SERVER.message}/v2/message/email/email_account`, params
+      `${API_SERVER.default}/v2/message/email/email_account`, params
     )
   },
   /**
@@ -91,7 +91,7 @@ export default {
    */
   delEmailAcount () {
     return http.del(
-      `${API_SERVER.message}/v2/message/email/email_account`
+      `${API_SERVER.default}/v2/message/email/email_account`
     )
   },
   /**
@@ -101,7 +101,7 @@ export default {
    */
   setMessageAcount (params) {
     return http.post(
-      `${API_SERVER.message}/v2/message/sms/default_account_type`, params
+      `${API_SERVER.default}/v2/message/sms/default_account_type`, params
     )
   },
   /**
@@ -111,7 +111,7 @@ export default {
    */
   getMessageAcount () {
     return http.get(
-      `${API_SERVER.message}/v2/message/sms/default_account_type`
+      `${API_SERVER.default}/v2/message/sms/default_account_type`
     )
   },
   /**
@@ -121,7 +121,7 @@ export default {
    */
   setCustomAcount (params) {
     return http.post(
-      `${API_SERVER.message}/v2/message/sms/custom_carrier_default_account`, params
+      `${API_SERVER.default}/v2/message/sms/custom_carrier_default_account`, params
     )
   },
   /**
@@ -131,7 +131,7 @@ export default {
    */
   addThirdAcount (params) {
     return http.post(
-      `${API_SERVER.message}/v2/message/sms/third_party_account`, params
+      `${API_SERVER.default}/v2/message/sms/third_party_account`, params
     )
   },
   /**
@@ -141,7 +141,7 @@ export default {
    */
   getThirdAcount () {
     return http.get(
-      `${API_SERVER.message}/v2/message/sms/third_party_account`
+      `${API_SERVER.default}/v2/message/sms/third_party_account`
     )
   },
   /**
@@ -151,7 +151,7 @@ export default {
    */
   editThirdAcount () {
     return http.put(
-      `${API_SERVER.message}/v2/message/sms/third_party_account`
+      `${API_SERVER.default}/v2/message/sms/third_party_account`
     )
   },
   /**
@@ -161,7 +161,7 @@ export default {
    */
   delThirdAcount () {
     return http.put(
-      `${API_SERVER.message}/v2/message/sms/third_party_account`
+      `${API_SERVER.default}/v2/message/sms/third_party_account`
     )
   },
   /**
