@@ -21,10 +21,23 @@
         </div> -->
       </div>
       <div class="form-row row">
+        <label class="form-control col-6">指令类型:</label>
+        <div class="controls col-18" v-if="type === 'add'">
+          <x-select placeholder="请选择指令类型" :label="selectedType">
+            <select v-model="selectedType" name="selectedType">
+              <option v-for="type in types" :value="type">{{ type }}</option>
+            </select>
+          </x-select>
+        </div>
+        <div class="controls col-18" v-if="type === 'edit'">
+          <div class="control-text">{{ model.name }}</div>
+        </div>
+      </div>
+      <div class="form-row row">
         <label class="form-control col-6">设备指令:</label>
         <div class="controls col-18">
           <div class="input-text-wrap required-sign">
-            <textarea v-model="model.autoexec" name="model.autoexec" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
+            <textarea v-model="model.autoexec.value" name="model.autoexec.value" type="text" v-validate:autoexec="['required']" class="input-text"></textarea>
           </div>
           <div class="form-tips form-tips-error">
             <span v-if="$validation.autoexec.touched && $validation.autoexec.required">{{ $t('common.validation.required', {field: '设备指令'}) }}</span>
@@ -70,22 +83,42 @@ export default {
   props: {
     name: {
       type: String
+    },
+    type: {
+      type: String,
+      default: 'add'
+    },
+    recipe: {
+      type: Object,
+      default: {}
     }
   },
 
   data () {
     return {
       delChecked: false,
-      recipe: {
-        name: '',
-        devices: []
-      },
-      selectedProduct: {},
+      // recipe: {
+      //   name: '',
+      //   devices: []
+      // },
       model: {
         id: '',
         name: '',
-        autoexec: ''
-      }
+        autoexec: {
+          type: '',
+          value: ''
+        },
+        prompts: []
+      },
+      cloneModal: {},
+      selectedType: 'HEX',
+      types: ['HEX', 'base64', 'json'],
+      selectedProduct: {}
+      // model: {
+      //   id: '',
+      //   name: '',
+      //   autoexec: ''
+      // }
       // orignModel: {
       //   type: ''
       // }
@@ -100,9 +133,14 @@ export default {
   ready () {
     // this.orignModel.type = this.menu.type
     this.$resetValidation()
+    // this.init()
   },
 
   methods: {
+    // 初始化
+    init () {
+      this.cloneModal = _.clone(this.model)
+    },
     // handleSubmit (menu) {
     //   if (this.$validation.invalid) {
     //     return
@@ -120,9 +158,24 @@ export default {
       this.$resetValidation()
     },
     onSubmit () {
+      if (this.type === 'add') {
+        if (!this.selectedProduct.name) {
+          return this.showNotice({
+            type: 'error',
+            content: '请选择工作设备'
+          })
+        }
+      }
+      if (this.submitting) return
+
+      if (this.$validation.invalid) {
+        return this.$validate(true)
+      }
       this.model.name = this.selectedProduct.name
       this.model.id = this.selectedProduct.id
-      this.$emit('add')
+      this.model.autoexec.type = this.selectedType
+      console.log(this.model)
+      this.$emit('add', this.model)
     },
     onCancel () {}
   }
