@@ -2,7 +2,7 @@
   <div class="x-flow">
     <div class="tab-s2">
       <ul>
-        <li v-for="item in steps" @click="handleClick($index)" :class="{'active':curr===$index+1, 'finished':curr>$index+1, 'unclickable':!clickable}">
+        <li v-for="item in steps" @click="handleClick($index)" class="tab-s2-item" :class="{'active':curr===$index+1, 'finished':curr>$index+1, 'unclickable':!clickable}">
           <span class="num">
             <i class="fa fa-check" v-if="curr>$index+1"></i>
             <i v-else>{{ $index+1 }}</i>
@@ -59,10 +59,10 @@ export default {
 
 .x-flow
   .tab-s2
-    ul
+    & > ul
       margin-left 15px
 
-    li
+    .tab-s2-item
       margin-right 20px
 
       .num
