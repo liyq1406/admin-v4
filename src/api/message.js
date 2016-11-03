@@ -123,5 +123,65 @@ export default {
     return http.post(
       `${API_SERVER.message}/v2/message/sms/custom_carrier_default_account`, params
     )
+  },
+  /**
+   * 增加第三方厂商帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  addThirdAcount (params) {
+    return http.post(
+      `${API_SERVER.message}/v2/message/sms/third_party_account`, params
+    )
+  },
+  /**
+   * 查询第三方厂商帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  getThirdAcount () {
+    return http.get(
+      `${API_SERVER.message}/v2/message/sms/third_party_account`
+    )
+  },
+  /**
+   * 修改第三方厂商帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  editThirdAcount () {
+    return http.put(
+      `${API_SERVER.message}/v2/message/sms/third_party_account`
+    )
+  },
+  /**
+   * 删除第三方厂商帐号
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  delThirdAcount () {
+    return http.put(
+      `${API_SERVER.message}/v2/message/sms/third_party_account`
+    )
+  },
+  /**
+   * 获取图形验证码状态
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  getCaptcha () {
+    return http.get(
+      `${API_SERVER.default}/v2/message/sms/captcha_setting`
+    )
+  },
+  /**
+   * 获取图形验证码状态
+   * @param  {[type]} params 参数
+   * @return {[type]}        [description]
+   */
+  setCaptcha (params) {
+    return http.post(
+      `${API_SERVER.default}/v2/message/sms/captcha_setting`, params
+    )
   }
 }
