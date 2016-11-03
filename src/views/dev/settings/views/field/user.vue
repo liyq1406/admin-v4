@@ -140,11 +140,6 @@
         showModal: false,
         editing: false,
         delChecked: false,
-        // 已选择产品
-        selectedProduct: {
-          label: '全部',
-          value: 0
-        },
         modal: {
           label: '',
           name: '',
@@ -181,8 +176,6 @@
     computed: {
       fields () {
         var result = []
-        // userFields: {
-        //   base_fields: [
         this.userFields.base_fields.forEach((item, index) => {
           var field = _.clone(item)
           field.category = 'base_field'
@@ -213,27 +206,11 @@
       */
       addField () {
         this.editing = true
-        var params = _.cloneDeep(this.userFields)
-        var newField = {
-          'name': this.modal.name,
-          'label': this.modal.label,
-          'hidden': this.modal.hidden,
-          'sort': this.fields.length + 1,
-          'value_type': this.modal.value_type
-        }
-        params.base_fields.push(newField)
-        console.log(params)
-        api.customization.setUserCustomization(params).then((res) => {
-          this.onCancel()
-          console.log(res)
-          this.userFields = res.data || {}
-        }).catch((res) => {
-          this.onCancel()
-          this.handleError(res)
-        })
-        // setTimeout(() => {
-        //   this.onCancel()
-        // }, 2000)
+        var params = _.cloneDeep(this.fields)
+        var newField = _.clone(this.modal)
+        newField.sort = params.length + 1
+        params.push(newField)
+        this.updateData(params)
       },
 
       /**
@@ -241,7 +218,7 @@
       */
       editField () {
         this.editing = true
-        var params = _.cloneDeep(this.userFields)
+        var params = _.cloneDeep(this.fields)
         var newField = {
           'name': this.modal.name,
           'label': this.modal.label,
@@ -249,23 +226,44 @@
           'sort': this.modal.sort,
           'value_type': this.modal.value_type
         }
-        params.base_fields.splice(this.modal.sort - 1, 1, newField)
-        console.log(params)
-        // api.customization.setUserCustomization(params).then((res) => {
-        //   this.onCancel()
-        //   console.log(res)
-        //   this.userFields = res.data || {}
-        // }).catch((res) => {
-        //   this.onCancel()
-        //   this.handleError(res)
-        // })
+        params.splice(this.modal.sort - 1, 1, newField)
+        this.updateData(params)
       },
 
       /**
        * 删除字段
        */
       deleteField () {
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        params.splice(this.modal.sort - 1, 1)
+        this.updateData(params)
+      },
 
+      updateData (fields) {
+        fields.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        var params = {
+          base_fields: []
+        }
+        fields.forEach((item, index) => {
+          var field = {
+            'name': item.name,
+            'label': item.label,
+            'hidden': item.hidden,
+            'sort': index + 1,
+            'value_type': item.value_type
+          }
+          params.base_fields.push(field)
+        })
+        api.customization.setUserCustomization(params).then((res) => {
+          this.onCancel()
+          this.userFields = res.data || {}
+        }).catch((res) => {
+          this.onCancel()
+          this.handleError(res)
+        })
       },
 
       /**
@@ -273,20 +271,20 @@
        */
       getData () {
         api.customization.getUserCustomization().then((res) => {
-          console.log(res)
           this.userFields = res.data || {}
         }).catch((res) => {
           this.handleError(res)
         })
       },
+
       /**
        * 显示添加字段浮层
        */
       onAdd () {
-        console.log('添加字段')
         this.modalType = 'add'
         this.modal.label = ''
         this.modal.name = ''
+        this.modal.hidden = false
         this.showModal = true
       },
 
@@ -301,7 +299,7 @@
       },
 
       /**
-       * 新增字段
+       * 提交按钮
        */
       onSubmit () {
         switch (this.modalType) {
@@ -321,7 +319,7 @@
       },
 
       /**
-       * 关闭添加大客户浮层
+       * 关闭浮层
        * @return {[type]} [description]
        */
       onCancel () {
