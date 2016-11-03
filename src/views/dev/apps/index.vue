@@ -160,9 +160,6 @@ import formatDate from 'filters/format-date'
 import IosSettings from './ios/settings'
 import AndroidSettings from './android/settings'
 import AndroidUpgrade from './android/upgrade'
-import WebSettings from './web/settings'
-import WechatSettings from './wechat/settings'
-import WechatAuthorize from './wechat/authorize'
 import Modal from 'components/Modal'
 import _ from 'lodash'
 
@@ -186,10 +183,7 @@ export default {
     Modal,
     IosSettings,
     AndroidSettings,
-    AndroidUpgrade,
-    WebSettings,
-    WechatSettings,
-    WechatAuthorize
+    AndroidUpgrade
   },
 
   data () {
@@ -220,17 +214,6 @@ export default {
         }, {
           name: 'android-upgrade',
           label: '升级管理'
-        }],
-        '3': [{
-          name: 'web-settings',
-          label: '应用配置'
-        }],
-        '4': [{
-          name: 'wechat-settings',
-          label: '应用配置'
-        }, {
-          name: 'wechat-authorize',
-          label: '微信授权'
         }]
       },
       // 应用类型
@@ -242,14 +225,6 @@ export default {
         {
           name: 'Android',
           type: 2
-        },
-        {
-          name: 'Web',
-          type: 3
-        },
-        {
-          name: '微信',
-          type: 4
         }
       ],
       // 已经选择的过滤条件
@@ -267,10 +242,6 @@ export default {
         {
           name: 'Android',
           type: 2
-        },
-        {
-          name: 'Web',
-          type: 3
         }
       ],
       selectedApp: {},
@@ -409,10 +380,6 @@ export default {
           this.addModal.plugin = 'ios'
         } else if (this.addModal.type === 2) { // 安卓应用
           this.addModal.plugin = 'android'
-        } else if (this.addModal.type === 3) { // web应用
-          this.addModal.plugin = 'web'
-        } else if (this.addModal.type === 4) { // 微信应用
-          this.addModal.plugin = 'wechat'
         }
         this.addModal.enable = true
         this.adding = true
@@ -455,12 +422,6 @@ export default {
           break
         case 2:
           result = 'Android'
-          break
-        case 3:
-          result = 'Web'
-          break
-        case 4:
-          result = '微信'
           break
       }
       return result

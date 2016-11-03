@@ -1,18 +1,8 @@
 <template>
   <div class="main">
-
     <div class="main-title">
       <h2>{{ $t('operation.user.list.main_title') }}</h2>
     </div>
-    <!-- <pre> {{ usersOnlineType | json}} </pre> -->
-    <!-- Start: 产品信息统计 -->
-    <div class="row statistic-group mb20">
-      <div class="col-6" v-for="statistic in statisticArr">
-        <statistic :total="statistic.value" :title="statistic.title" align="left"></statistic>
-      </div>
-    </div>
-    <!-- End: 产品信息统计 -->
-
     <div class="panel">
       <div class="panel-bd">
         <div class="data-table with-loading">
@@ -87,12 +77,11 @@
         loadingData: false,
         users: [],
         queryTypeOptions: [
-          { label: this.$t('common.email'), value: 'email' },
           { label: this.$t('common.phone'), value: 'phone' }
         ],
         queryType: {
-          label: this.$t('common.email'),
-          value: 'email'
+          label: this.$t('common.phone'),
+          value: 'phone'
         },
         filters: [
           {
@@ -134,10 +123,6 @@
           {
             key: 'nickname', // 与tables的key对应
             title: this.$t('operation.user.list.columns.nickname') // 标题的内容
-          },
-          {
-            key: 'email',
-            title: this.$t('common.email')
           },
           {
             key: 'phone',
@@ -226,7 +211,6 @@
           var table = {
             id: '<a style="color: #c0252e">' + user.id + '</a>',
             nickname: user.nickname || '-',
-            email: user.email || '-',
             phone: user.phone || '-',
             create_date: formatDate(user.create_date),
             source: this.computedSource(user.source),

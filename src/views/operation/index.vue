@@ -65,8 +65,6 @@ export default {
         subs: []
       }
       let subs = MAIN_NAV.operation.subs
-      // 概览
-      result.subs.push(subs[0])
 
       // 产品管理标题
       result.subs.push({
@@ -75,7 +73,7 @@ export default {
       })
 
       // 产品导航
-      const PRO_SUBS = ['overview', 'devices', 'alerts', 'device-map', 'analysis']
+      const PRO_SUBS = ['devices', 'alerts']
       this.releasedProducts.forEach((item, index) => {
         result.subs.push({
           name: item.name,
@@ -100,7 +98,7 @@ export default {
       })
 
       // 其他固定导航
-      result.subs = result.subs.concat(subs.slice(1, subs.length))
+      result.subs = result.subs.concat(subs.slice(0, subs.length))
 
       // 插件导航
       this.plugins.forEach((item) => {
@@ -134,15 +132,6 @@ export default {
         }
 
         switch (item.plugin) {
-          case 'web': // Web
-            sub.icon = 'internet-explorer'
-            sub.label = item.name
-            sub.url = item.config.url
-            // sub.subs = [{
-            //   alias: 'settings',
-            //   url: `/plugins/web/${item.id}/settings`
-            // }]
-            break
           case 'recipe': // 云菜谱
             sub.icon = 'cutlery'
             sub.alias = 'recipes'
@@ -160,57 +149,11 @@ export default {
               url: `/plugins/recipes/${item.id}/tags`
             }]
             break
-          case 'warranty': // 智能维保
-            sub.icon = 'support'
-            sub.subs = [{
-            //   alias: 'overview',
-            //   url: `/plugins/warranty/${item.id}/overview`
-            // }, {
-              alias: 'repair',
-              url: `/plugins/warranty/${item.id}/work-orders/repair`
-            }, {
-              alias: 'extended_warranties',
-              url: `/plugins/warranty/${item.id}/work-orders/extended-warranties`
-            }, {
-              alias: 'accounts',
-              url: `/plugins/warranty/${item.id}/accounts`
-            }, {
-              alias: 'settings',
-              url: `/plugins/warranty/${item.id}/settings`
-            // 暂时隐藏
-            // }, {
-            //   alias: 'heat',
-            //   url: `/plugins/warranty/${item.id}/heat`
-            }]
-            break
-          case 'broadcast': // 消息推送
-            sub.icon = 'envelope'
-            sub.subs = [{
-              alias: 'add',
-              url: `/plugins/broadcast/${item.id}/add`
-            }, {
-              alias: 'list',
-              url: `/plugins/broadcast/${item.id}/list`
-            }]
-            break
           case 'helpdesk': // 用户反馈
             sub.icon = 'inbox'
             sub.subs = [{
-              alias: 'overview',
-              url: `/plugins/helpdesk/${item.id}/overview`
-            }, {
               alias: 'issues',
               url: `/plugins/helpdesk/${item.id}/issues`
-            }, {
-              alias: 'settings',
-              url: `/plugins/helpdesk/${item.id}/settings`
-            }]
-            break
-          case 'dealer': // 经销商管理
-            sub.icon = 'sitemap'
-            sub.subs = [{
-              alias: 'list',
-              url: `/plugins/dealer/${item.id}/list`
             }]
             break
           case 'splashwnd': // 闪屏设置
@@ -219,12 +162,6 @@ export default {
               alias: 'list',
               url: `/plugins/splashwnd/${item.id}/list`
             }]
-            break
-          case 'nest': // Google Nest网关
-            sub.icon = 'google'
-            break
-          case 'xpay': // 支付网关
-            sub.icon = 'credit-card'
             break
           case 'content': // 内容管理
             sub.alias = 'content'

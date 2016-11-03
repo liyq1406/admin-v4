@@ -70,9 +70,6 @@ export default {
         }, {
           label: this.$t('operation.user.overview.trend.active'),
           value: 1
-        }, {
-          label: this.$t('operation.user.overview.trend.sum'),
-          value: 2
         }
       ]
     }

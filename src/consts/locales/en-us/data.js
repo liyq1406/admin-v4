@@ -78,8 +78,7 @@ export const DEVICE_VISIBILITY_OPTIONS = [
 // Firmware Type
 export const FIRMWARE_TYPES = [
   { label: 'WIFI', value: 1 },
-  { label: 'MCU', value: 2 },
-  { label: 'Sub-device', value: 3 }
+  { label: 'MCU', value: 2 }
 ]
 
 // 产品活跃时间段

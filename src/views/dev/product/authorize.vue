@@ -3,23 +3,6 @@
     <div class="main-title bordered">
       <h2>授权记录</h2>
     </div>
-    <div class="row statistic-group">
-      <div class="col-8">
-        <statistic :total="currentProduct.quota" title="授权额度" align="left">
-        </statistic>
-      </div>
-      <div class="col-8">
-        <statistic :total="used" title="已使用" :has-target="true" align="left">
-        </statistic>
-      </div>
-      <div class="col-8">
-        <statistic :total="remain" title="剩余额度" :has-action="true" align="left" :showchange="true" :animated="false">
-          <div slot="action" class="hidden">
-            <button class="btn btn-ghost btn-sm">购买配额</button>
-          </div>
-        </statistic>
-      </div>
-    </div>
     <div class="panel mt15">
       <div class="panel-bd">
         <div class="data-table with-loading">

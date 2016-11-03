@@ -13,36 +13,6 @@
           </div>
         </div>
       </div>
-      <div class="row">
-        <div class="col-12">
-          <chart :options="versionOptions" :loading="loadingSummary" height="320px"></chart>
-        </div>
-        <div class="col-11 col-offset-1 data-table-wrap">
-          <div class="data-table">
-            <table class="table">
-              <thead>
-                <tr>
-                  <th>版本号</th>
-                  <th>设备数/占比</th>
-                </tr>
-              </thead>
-              <tbody>
-                <template v-if="warningLevel.length > 0">
-                  <tr v-for="item in warningLevel">
-                    <td>{{item.name}}</td>
-                    <td>{{ item.value }}/{{ item.percent | toPercentage }}</td>
-                  </tr>
-                </template>
-                <tr v-if="warningLevel.length === 0">
-                  <td colspan="3"  class="tac">
-                    <div class="tips-null"><i class="fa fa-exclamation-circle"></i> <span>{{ $t("common.no_records") }}</span></div>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
       <div class="data-table with-loading">
         <div class="filter-bar">
           <!-- <div class="filter-group fr">

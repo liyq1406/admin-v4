@@ -24,21 +24,6 @@
               </info-list>
             </div>
           </div>
-          <div class="col-8">
-            <div class="annuls-chart">
-              <chart :options="quotaOptions" :loading="firstRequest"></chart>
-              <div class="quota" v-show="!rendering">
-                <div class="quota-tit">产品配额</div>
-                <div class="quota-sum">{{ currentProduct.quota }}</div>
-              </div>
-            </div>
-            <div class="buy-access hidden">
-              <button class="btn btn-primary" @click="onBuyButtonClick">购买授权</button>
-            </div>
-            <div class="buy-record hidden">
-              <span>购买记录</span>
-            </div>
-          </div>
         </div>
       </div>
     </div>
@@ -73,7 +58,6 @@
               </x-select>
             </div>
           </div>
-          <button v-link="{path: 'online-offline-records', append: true}" class="btn btn-ghost mt10" slot="left-foot"><i class="fa fa-list"></i>查看上下线历史记录</button>
         </x-table>
       </div>
     </div>

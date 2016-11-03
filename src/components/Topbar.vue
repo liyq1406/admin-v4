@@ -30,12 +30,6 @@
           <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
             <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>{{ $t("layout.account_menu.members") }}</a>
           </li>
-          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-            <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>{{ $t("layout.account_menu.authorize") }}</a>
-          </li>
-          <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-            <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>{{ $t("layout.account_menu.security") }}</a>
-          </li>
           <li class="sec-nav-item">
             <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>{{ $t("layout.account_menu.corp") }}</a>
           </li>
@@ -51,7 +45,6 @@
     <div class="extra-nav">
       <ul>
         <li class="link-demo">
-          <a href="http://ap.xlink.cn/#!/auto-login" target="_blank" v-if="!isDemo">{{ $t('layout.view_demo') }}</a>
           <div class="authorize-tips" v-if="!isDemo" v-show="isShowTips">
             <div class="cont">
               <p>{{ $t('layout.demo_tips') }}</p>
@@ -357,14 +350,6 @@ export default {
   padding 0 20px
   z-index 1000
   position relative
-
-  &:after
-    absolute left 12px top 50%
-    margin-top -9px
-    size 1px 18px
-    background-color #E5E5E5
-    overflow hidden
-    content ''
 
   .user-name
     padding 0 5px

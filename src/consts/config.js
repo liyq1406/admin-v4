@@ -2,44 +2,17 @@
  * 项目基本配置
  * @type {Object}
  */
-let protocol = process.env.NODE_ENV !== 'production' ? 'https:' : window.location.protocol
 
 let apiServer = ({
-  api2: { // 正式环境
-    api: `${protocol}//api2.xlink.cn`,
-    // plugin: `${protocol}//plugin-api.xlink.cn:3000`
-    plugin: 'http://plugin-api.xlink.cn:3000'
-  },
   test: { // 测试服务器
     api: 'http://api-test.xlink.cn:80',
-    plugin: 'http://test.plugin.xlink.cn:3000',
-    message: 'http://139.196.164.250:3072'
-  },
-  grey: { // 灰度服务器
-    api: `${protocol}//api-grey.xlink.cn`,
-    plugin: `${protocol}//api-grey.xlink.cn`
-  },
-  demo: { // Demo
-    api: `${protocol}//api-demo.xlink.cn`,
-    plugin: `${protocol}//api-demo.xlink.cn`
-  },
-  console: { // console
-    api: 'http://127.0.0.1:8887',
     plugin: 'http://test.plugin.xlink.cn:3000'
   },
-  bull: { // 公牛
-    api: `${protocol}//139.224.7.17`,
-    plugin: `${protocol}//test.plugin.xlink.cn:3002`
-  },
-  tianji: { // 天际
-    api: `${protocol}//dev-man.360tj.com:8016`,
-    plugin: `${protocol}://dev-man.360tj.com:8016`
-  },
-  fangtai: { // 方太
+  fotile: { // 方太
     api: 'http://cloud.fotile.com',
     plugin: 'http://cloud.fotile.com:3000'
   }
-})[process.env.API_SERVER || 'test']
+})[process.env.API_SERVER || 'fotile']
 
 export const API_SERVER = {
   // 默认
@@ -149,40 +122,26 @@ export const MAIN_NAV = {
         alias: 'manage',
         url: '/firmware/manage'
       }]
-    }, {
-      alias: 'settings', // 系统设置
-      unfold: true, // 展开子级菜单
-      icon: 'cog',
-      subs: [{
-        alias: 'users',
-        url: '/settings/users'
-      }, {
-        alias: 'email',
-        url: '/settings/email/template'
-        // url: '/settings/email/customize'
-      }]
+    // }, {
+    //   alias: 'settings', // 系统设置
+    //   unfold: true, // 展开子级菜单
+    //   icon: 'cog',
+    //   subs: [{
+    //     alias: 'users',
+    //     url: '/settings/users'
+    //   }]
     }]
   },
   operation: {
     alias: 'operation',
     url: '/operation',
     subs: [{
-      alias: 'overview',
-      icon: 'home',
-      url: 'overview'
-    }, {
       alias: 'alerts', // 告警服务
       icon: 'bell',
       unfold: true, // 展开子级菜单
       subs: [{
         alias: 'record',
         url: '/alerts/record'
-      }, {
-        alias: 'analysis',
-        url: '/alerts/analysis'
-      // }, {
-      //   alias: 'heat',
-      //   url: '/alerts/heat'
       }]
     }, {
       alias: 'users', // 用户管理
@@ -194,16 +153,6 @@ export const MAIN_NAV = {
       }, {
         alias: 'list',
         url: '/users/list'
-      }, {
-        alias: 'major_clients',
-        url: '/users/major-clients'
-      }, {
-        alias: 'portrait',
-        url: '/users/portrait'
-      // 暂时隐藏
-      // }, {
-      //   alias: 'analysis',
-      //   url: '/users/analysis'
       }]
     }]
   }

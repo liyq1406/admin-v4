@@ -5,11 +5,6 @@
       <div class="desc">
         <span>{{ issue.product_name }}</span>
       </div>
-      <div class="issue-metas">
-        <span v-if="issue.status === 0" class="issue-status pending"><i class="fa fa-check-square-o"></i>未处理</span>
-        <span v-else class="issue-status handled"><i class="fa fa-check-square-o"></i>已处理</span>
-        <span class="issue-id">ID:{{ issue.product_id }}</span>
-      </div>
     </info-card>
     <div class="tab-s2 mt20 mb5">
       <ul>
@@ -18,8 +13,6 @@
     </div>
     <div v-stretch="122">
       <info-list :info="userInfo" v-show="currIndex===0"></info-list>
-      <info-list :info="deviceInfo" v-show="currIndex===1"></info-list>
-      <info-list :info="appInfo" v-show="currIndex===2"></info-list>
     </div>
     <!-- Start: 反馈信息 -->
     <div class="panel-sub-hd bordered mt20">反馈信息</div>
@@ -76,22 +69,6 @@
           <div class="comment-desc ml50">{{ item.content }}</div>
         </div>
 
-      </div>
-    </div>
-    <div class="reply-form mt20">
-      <div class="panel-sub-hd">客服回复</div>
-      <div class="form">
-        <div v-if="false">
-          暂时无法回复
-        </div>
-        <div v-else>
-          <div class="input-text-wrap" v-placeholder="'请填写回复内容'">
-            <textarea class="input-text" v-model="dealRecord"></textarea>
-          </div>
-          <div class="form-actions mt10">
-            <button class="btn btn-primary" @click="submitRecord">提交</button>
-          </div>
-        </div>
       </div>
     </div>
     <!-- End: 反馈详情 -->
@@ -183,7 +160,7 @@ export default {
           value: ' '
         }
       },
-      tabItems: ['用户信息', '设备信息', 'APP信息'],
+      tabItems: ['用户信息'],
       currIndex: 0,
       pics: [],
       currPicIndex: 0,

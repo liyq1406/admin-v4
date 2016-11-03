@@ -96,8 +96,7 @@ export const PRODUCT_FILTERS = [
 // 固件类型
 export const FIRMWARE_TYPES = [
   { label: 'WIFI', value: 1 },
-  { label: 'MCU', value: 2 },
-  { label: '子设备', value: 3 }
+  { label: 'MCU', value: 2 }
 ]
 
 // 用户过滤器

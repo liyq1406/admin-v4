@@ -21,11 +21,6 @@
                 </div>
               </div>
             </div>
-            <div class="filter-group fr">
-              <div class="filter-group-item">
-                <button class="btn btn-ghost ml10" @click="showExportQRCode = true">批量导出二维码</button>
-              </div>
-            </div>
             <!-- <div class="filter-group fr">
               <div class="filter-group-item">
                 <search-box :key.sync="query" :placeholder="$t('common.placeholder.search')" :active="searching" @cancel="getRecords" @search-activate="searching=!searching"  @press-enter="getRecords">

@@ -11,12 +11,6 @@
         <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
           <a v-link="{path: '/account/members'}"><i class="fa fa-users"></i>{{ $t("layout.account_menu.members") }}</a>
         </li>
-        <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-          <a v-link="{path: '/account/authorize'}"><i class="fa fa-expeditedssl"></i>{{ $t("layout.account_menu.authorize") }}</a>
-        </li>
-        <li class="sec-nav-item" v-if="currentMember.role && currentMember.role===1">
-          <a v-link="{path: '/account/security'}"><i class="fa fa-shield"></i>{{ $t("layout.account_menu.security") }}</a>
-        </li>
         <li class="sec-nav-item">
           <a v-link="{path: '/account/corp'}"><i class="fa fa-newspaper-o"></i>{{ $t("layout.account_menu.corp") }}</a>
         </li>

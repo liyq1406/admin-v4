@@ -3,33 +3,6 @@
     <div class="main-title">
       <h2>反馈列表 </h2>
     </div>
-    <div class="filter-bar filter-bar-head">
-      <div class="filter-group fl">
-        <div class="filter-group-item" v-if="products.length">
-          <x-select :label="selectedProduct.label" @change="getIssues" width="110px" size="small">
-            <span slot="label">显示</span>
-            <select v-model="selectedProduct">
-              <option :value="opt" v-for="opt in selectOptions">{{ opt.label }}</option>
-            </select>
-          </x-select>
-        </div>
-        <div class="filter-group-item" v-if="products.length">
-          <x-select :label="issueType.label" width="110px" size="small">
-            <select v-model="issueType"  @change="getIssues">
-              <option :value="opt" v-for="opt in issueTypeOptions">{{ opt.label }}</option>
-            </select>
-          </x-select>
-        </div>
-      </div>
-      <div class="filter-group fr">
-        <div class="filter-group-item">
-          <date-time-range-picker @timechange = "getSpecial"></date-time-range-picker>
-        </div>
-        <div class="filter-group-item">
-          <radio-button-group :items="locales.data.AllPERIODS" :value.sync="period" @select="getIssues()"><span slot="label" class="label">{{ $t("common.recent") }}</span></radio-button-group>
-        </div>
-      </div>
-    </div>
     <div class="row">
       <div v-if="issues.length">
         <div class="col-6 issue-list">

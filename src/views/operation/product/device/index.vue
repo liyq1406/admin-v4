@@ -154,15 +154,6 @@ export default {
           label: this.$t('operation.product.device.detail.secondary.device'),
           link: { path: `${deviceDetailRoot}/info` }
         }, {
-          label: this.$t('operation.product.device.detail.secondary.history'),
-          link: { path: `${deviceDetailRoot}/history` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.alert'),
-          link: { path: `${deviceDetailRoot}/alerts` }
-        }, {
-          label: this.$t('operation.product.device.detail.secondary.remote'),
-          link: { path: `${deviceDetailRoot}/diagnose` }
-        }, {
           label: this.$t('operation.product.device.detail.secondary.users'),
           link: { path: `${deviceDetailRoot}/users` }
         }]

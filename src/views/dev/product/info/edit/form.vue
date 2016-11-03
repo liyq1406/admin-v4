@@ -79,39 +79,6 @@
                 </div>
               </div>
             </div>
-            <div class="form-row row">
-              <label class="form-control col-3">设备授权:</label>
-                <!-- <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>允许多用户订阅设备 <span class="ml10 hl-gray">(设备被订阅后，可以被其它用户再次订阅)</span>
-                  </label>
-                </div> -->
-              <div class="controls col-19">
-                <div class="checkbox-group">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_registerable" v-model="editModel.is_registerable"/>允许用户授权设备 <span class="ml10 hl-gray">(注：用户添加设备时自动完成平台授权，并消耗产品配额，如mesh网络设备)</span>
-                  </label>
-                </div>
-                <div class="checkbox-group" v-show="editModel.link_type===5">
-                  <label class="checkbox">
-                    <input type="checkbox" name="is_active_register" v-model="editModel.is_active_register"/>允许设备自行授权 <span class="ml10 hl-gray">(注：PC设备调用SDK注册接口自动完成添加设备和授权设备，并消耗产品配额)</span>
-                  </label>
-                </div>
-              </div>
-            </div>
-            <div class="form-row row">
-              <label class="form-control col-3">订阅设备:</label>
-              <div class="controls col-19">
-                <div class="select">
-                  <x-select :label="scanMode" width="240px">
-                    <select v-model="editModel.scan_mode" name="editModel.scan_mode">
-                      <option v-for="opt in locales.data.SCAN_MODES" :value="opt.value">{{ opt.label }}</option>
-                    </select>
-                  </x-select>
-                </div>
-                <p class="mt5 hl-gray">(注：即当设备被订阅后，是否允许其他用户再次订阅该设备)</p>
-              </div>
-            </div>
 
             <!-- 产品图片 -->
             <div class="form-row row">

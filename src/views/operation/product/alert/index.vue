@@ -17,7 +17,6 @@
         <statistic :info="alertSummary.thirtyday" :title="alertSummary.thirtyday.title" align="left"></statistic>
       </div>
     </div>
-    <alert-trends :product-id="productID"></alert-trends>
     <alert-table :product-id="productID"></alert-table>
   </div>
 </template>
@@ -30,7 +29,6 @@ import { setCurrProductMixin } from '../mixins'
 import Statistic from 'components/Statistic'
 import formatDate from 'filters/format-date'
 import AlertTable from './alert-table'
-import AlertTrends from './alert-trends'
 
 export default {
   name: 'Alert',
@@ -40,8 +38,7 @@ export default {
 
   components: {
     Statistic,
-    AlertTable,
-    AlertTrends
+    AlertTable
   },
 
   data () {

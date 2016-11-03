@@ -45,12 +45,6 @@ export default {
         secondaryNav: [{
           label: '产品信息',
           link: { path: `${deviceDetailRoot}/form` }
-        }, {
-          label: '产品字段',
-          link: { path: `${deviceDetailRoot}/field` }
-        }, {
-          label: '产品二维码',
-          link: { path: `${deviceDetailRoot}/qrcode` }
         }]
       }
     }
