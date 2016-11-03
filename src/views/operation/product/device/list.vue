@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main device-list">
     <div class="main-title">
       <h2>{{ $t('operation.product.device.manager.title') }}</h2>
     </div>
@@ -35,9 +35,9 @@
         <div class="data-table with-loading">
           <div class="filter-bar">
             <div class="filter-group fr">
-              <!-- <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm"><i class="fa fa-reorder"></i></button>
-              </div> -->
+              <div class="filter-group-item">
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick"><i class="fa fa-share"></i></button>
+              </div>
               <div class="filter-group-item">
                 <search-box :key.sync="query" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDevices(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDevices(true)" :max="(queryType.value === 'id'?2100000000: false)">
                   <x-select width="90px" :label="queryType.label" size="small">
@@ -61,6 +61,34 @@
           <x-table :headers="headers" :tables="tables" :page="page" :loading="loadingData" @theader-active-date="sortBy" @theader-is-online="sortBy" @tbody-mac="linkToDetails" @page-count-update="onPageCountUpdate" @current-page-change="onCurrPageChage"></x-table>
       </div>
     </div>
+
+    <!-- 导出 CSV 条件筛选浮层 Start -->
+    <modal :show.sync="showExportModal" @close="onExportCancel" width="540px">
+      <h3 slot="header">{{ $t('common.export_condition') }}</h3>
+      <div slot="body" class="form">
+        <form autocomplete="off" novalidate @submit.prevent="onExportSubmit">
+          <div class="form-row row">
+            <label class="form-control col-6">销售时间</label>
+            <div class="controls col-18">
+              <div class="row">
+                <div class="col-10">
+                  <date-picker :value.sync="startDate" width="100%"></date-picker>
+                </div>
+                <div class="col-4 tac control-text">至</div>
+                <div class="col-10">
+                  <date-picker :value.sync="endDate" width="100%"></date-picker>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
+            <button @click.prevent.stop="onExportCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
+          </div>
+        </form>
+      </div>
+    </modal>
+    <!-- 导出 CSV 条件筛选浮层 End -->
   </div>
 </template>
 
@@ -73,6 +101,7 @@ import Pager from 'components/Pager'
 import Modal from 'components/Modal'
 import SearchBox from 'components/SearchBox'
 import Table from 'components/Table'
+import DatePicker from 'components/DatePicker'
 import locales from 'consts/locales/index'
 import _ from 'lodash'
 import formatDate from 'filters/format-date'
@@ -92,6 +121,7 @@ export default {
     'modal': Modal,
     'search-box': SearchBox,
     'pager': Pager,
+    DatePicker,
     Statistic
   },
 
@@ -109,6 +139,9 @@ export default {
     })
 
     return {
+      showExportModal: false,
+      startDate: '',
+      endDate: '',
       query: '',
       sortKey: '',
       sortOrders: sortOrders,
@@ -271,6 +304,27 @@ export default {
   },
 
   methods: {
+    /**
+     * 处理导出 CSV 按钮点击
+     */
+    onExportBtnClick () {
+      this.showExportModal = true
+    },
+
+    /**
+     * 取消导出
+     */
+    onExportCancel () {
+      this.showExportModal = false
+    },
+
+    /**
+     * 提交导出任务
+     */
+    onExportSubmit () {
+      this.showExportModal = false
+    },
+
     /**
      * 当前页码改变
      * @author shengzhi

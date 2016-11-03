@@ -41,6 +41,7 @@ import Modal from 'components/Modal'
 import _ from 'lodash'
 import formatDate from 'filters/format-date'
 import wrapTag from 'filters/wrap-tag'
+import toPercentage from 'filters/to-percentage'
 
 export default {
   name: 'OfflineData',
@@ -106,14 +107,22 @@ export default {
     taskList () {
       return _.map(this.tasks, (item) => {
         let url = '-'
+        let status
 
+        if (item.status === 2) { // 导出中，显示百分比
+          status = toPercentage(item.finished / item.total, 0)
+        } else { // 否则显示任务状态文案
+          status = this._getTaskStatusLabel(item.status)
+        }
+
+        // 导出完成，显示百分比和下载链接
         if (item.status === 3) {
           url = `<a class="hl-red">${this.$t('operation.settings.offline.get_url')}</a>`
         }
 
         return {
           id: item.id,
-          status: this._getTaskStatusLabel(item.status), // 任务状态
+          status: status, // 任务状态
           type: this._getTaskTypeLabel(item.type), // 导出类型
           begin_time: formatDate(item.begin_time), // 任务开始执行时间
           end_time: formatDate(item.end_time), // 任务结束执行时间
@@ -126,7 +135,7 @@ export default {
     // 筛选条件
     queryCondition () {
       let condition = {
-        filter: ['id', 'status', 'type', 'begin_time', 'end_time'],
+        filter: ['id', 'status', 'type', 'begin_time', 'end_time', 'finished', 'total'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
         query: {}
@@ -178,7 +187,7 @@ export default {
       return ({
         '1': this.$t(`${STATUS}.to_be_exported`),
         '2': this.$t(`${STATUS}.exporting`),
-        '3': wrapTag(this.$t(`${STATUS}.exported`), 'hl-green'),
+        '3': wrapTag('100%', 'hl-green'),
         '4': wrapTag(this.$t(`${STATUS}.invalid`), 'hl-gray'),
         '5': wrapTag(this.$t(`${STATUS}.expired`), 'hl-gray')
       })[status]
@@ -231,19 +240,25 @@ export default {
         //   status: 1,
         //   type: 1,
         //   begin_time: '2014-10-09T08:15:40.843Z',
-        //   end_time: '2014-10-09T08:15:40.843Z'
+        //   end_time: '2014-10-09T08:15:40.843Z',
+        //   finished: 0,
+        //   total: 54321
         // }, {
         //   id: '12345',
         //   status: 2,
         //   type: 2,
         //   begin_time: '2014-10-09T08:15:40.843Z',
-        //   end_time: '2014-10-09T08:15:40.843Z'
+        //   end_time: '2014-10-09T08:15:40.843Z',
+        //   finished: 12345,
+        //   total: 54321
         // }, {
         //   id: '12345',
         //   status: 3,
         //   type: 3,
         //   begin_time: '2014-10-09T08:15:40.843Z',
-        //   end_time: '2014-10-09T08:15:40.843Z'
+        //   end_time: '2014-10-09T08:15:40.843Z',
+        //   finished: 54321,
+        //   total: 54321
         // }]
         // res.data.count = 3
         // 虚拟数据结束

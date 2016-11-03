@@ -8,13 +8,13 @@
 var toFixed = (num, digits) => {
   var result
 
-  if (digits === null || digits === undefined) {
+  if (digits === undefined) {
     digits = 2
   }
 
   digits = parseInt(digits)
 
-  if (num === null || num === '' || isNaN(num) || isNaN(digits)) {
+  if (num === '' || isNaN(num) || isNaN(digits)) {
     result = '-'
   } else {
     result = Math.round(num * Math.pow(10, digits)) / Math.pow(10, digits)
