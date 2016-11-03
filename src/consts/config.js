@@ -34,6 +34,10 @@ let apiServer = ({
   tianji: { // 天际
     api: `${protocol}//dev-man.360tj.com:8016`,
     plugin: `${protocol}://dev-man.360tj.com:8016`
+  },
+  fangtai: { // 方太
+    api: 'http://cloud.fotile.com',
+    plugin: 'http://cloud.fotile.com:3000'
   }
 })[process.env.API_SERVER || 'test']
 
@@ -132,26 +136,6 @@ export const MAIN_NAV = {
       icon: 'shopping-bag',
       url: 'market/index'
     }, {
-      alias: 'linkage', // 智能互联
-      icon: 'exchange',
-      unfold: true, // 展开子级菜单
-      subs: [{
-        alias: 'settings',
-        url: '/linkage/settings'
-      }, {
-        alias: 'google',
-        url: '/linkage/google'
-      }, {
-        alias: 'amazon',
-        url: '/linkage/amazon'
-      }, {
-        alias: 'ifttt',
-        url: '/linkage/ifttt'
-      }, {
-        alias: 'ezviz',
-        url: '/linkage/ezviz'
-      }]
-    }, {
       alias: 'firmware', // 固件管理
       unfold: true, // 展开子级菜单
       icon: 'file-code-o',
@@ -166,35 +150,6 @@ export const MAIN_NAV = {
         url: '/firmware/manage'
       }]
     }, {
-      alias: 'data', // 数据服务
-      unfold: true, // 展开子级菜单
-      icon: 'database',
-      subs: [{
-        alias: 'tables',
-        url: '/data/tables'
-      }, {
-        alias: 'snapshots',
-        url: '/data/snapshots'
-      }, {
-        alias: 'statistics-rule',
-        url: '/data/statistics-rule'
-      }, {
-        alias: 'forward',
-        url: '/data/forward'
-      }]
-    // 暂时隐藏
-    // }, {
-    //   alias: 'shopping', // 在线购买
-    //   unfold: true, // 展开子级菜单
-    //   icon: 'shopping-cart',
-    //   subs: [{
-    //     alias: 'cart',
-    //     url: '/shopping/cart'
-    //   }, {
-    //     alias: 'orders',
-    //     url: '/shopping/orders'
-    //   }]
-    }, {
       alias: 'settings', // 系统设置
       unfold: true, // 展开子级菜单
       icon: 'cog',
@@ -203,14 +158,8 @@ export const MAIN_NAV = {
         url: '/settings/users'
       }, {
         alias: 'email',
-        // url: '/settings/email/template'
-        url: '/settings/email/customize'
-      }, {
-        alias: 'message',
-        url: '/settings/message/config'
-      }, {
-        alias: 'views',
-        url: '/settings/views/field'
+        url: '/settings/email/template'
+        // url: '/settings/email/customize'
       }]
     }]
   },
@@ -256,10 +205,6 @@ export const MAIN_NAV = {
       //   alias: 'analysis',
       //   url: '/users/analysis'
       }]
-    }, {
-      alias: 'snapshots', // 用户管理
-      icon: 'database',
-      url: 'snapshots'
     }]
   }
 }

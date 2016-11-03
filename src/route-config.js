@@ -443,63 +443,6 @@ let configRouter = (router) => {
         //     }, 'admin')
         //   }
         // },
-        // -------------------------智能互联-------------------------
-        // 设备联动
-        'linkage/settings': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/settings'))
-            }, 'admin')
-          }
-        },
-        // 微信互联（暂时去掉）
-        // 'nest/wechat': {
-        //   component (resolve) {
-        //     require.ensure([], (require) => {
-        //       resolve(require('./views/dev/nest/wechat'))
-        //     }, 'admin')
-        //   }
-        // },
-        // 亚马逊互联
-        'linkage/amazon': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/amazon'))
-            }, 'admin')
-          }
-        },
-        // Google互联
-        'linkage/google': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/google'))
-            }, 'admin')
-          }
-        },
-        // philips互联
-        'linkage/philips': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/philips'))
-            }, 'admin')
-          }
-        },
-        // 萤石互联
-        'linkage/ezviz': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/ezviz'))
-            }, 'admin')
-          }
-        },
-        // 设备联动
-        'linkage/ifttt': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/linkage/ifttt'))
-            }, 'admin')
-          }
-        },
         // -------------------------固件管理-------------------------
         // 新建任务
         'firmware/add': {
@@ -575,103 +518,6 @@ let configRouter = (router) => {
             }, 'admin')
           }
         },
-        // -------------------------数据服务-------------------------
-        // 数据表
-        'data/tables': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/table/index'))
-            }, 'admin')
-          }
-        },
-        // 数据快照
-        'data/snapshots': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot/index'))
-            }, 'admin')
-          }
-        },
-        // 数据快照详情
-        'data/snapshots/:product_id/:rule_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot/details'))
-            }, 'admin')
-          }
-        },
-        // 添加数据快照
-        'data/snapshot/create': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot/create'))
-            }, 'admin')
-          }
-        },
-        // 编辑数据快照
-        'data/snapshot/edit/:product_id/:rule_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/snapshot/edit'))
-            }, 'admin')
-          }
-        },
-        // 统计规则
-        'data/statistics-rule': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule'))
-            }, 'admin')
-          }
-        },
-        // 添加统计规则
-        'data/statistics-rule/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/add'))
-            }, 'admin')
-          }
-        },
-        // 修改统计规则
-        'data/statistics-rule/edit/:rule_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/statistics-rule/edit'))
-            }, 'admin')
-          }
-        },
-        // 数据转发
-        'data/forward': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/forward/index'))
-            }, 'admin')
-          }
-        },
-        // 数据转发详情
-        'data/forward/:productId/:forwardId': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/forward/details'))
-            }, 'admin')
-          }
-        },
-        // 添加数据转发
-        'data/forward/create': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/forward/create'))
-            }, 'admin')
-          }
-        },
-        // 编辑数据转发
-        'data/forward/edit/:productId/:forwardId': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/data/forward/edit'))
-            }, 'admin')
-          }
-        },
         // -------------------------硬件开发指南----------------------
         // -------------------------应用开发指南----------------------
         // -------------------------产测与工具-----------------------
@@ -692,140 +538,12 @@ let configRouter = (router) => {
             }, 'admin')
           },
           subRoutes: {
-            // 自定义邮件模版
-            '/customize': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/email/customize'))
-                }, 'admin')
-              }
-            },
             // 云智易邮件模版
             '/template': {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/dev/settings/email/template'))
                 }, 'admin')
-              }
-            }
-          }
-        },
-
-        // 短信设置
-        'settings/message': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/message'))
-            }, 'admin')
-          },
-          subRoutes: {
-            // 自定义邮件模版
-            '/config': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/message/config'))
-                }, 'admin')
-              }
-            },
-            // 自定义运营商
-            '/custom-carrier': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/message/custom-carrier'))
-                }, 'admin')
-              }
-            }
-          }
-        },
-        // 添加运营商
-        'settings/message/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/message/add'))
-            }, 'admin')
-          }
-        },
-        // 编辑运营商
-        'settings/message/edit/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/message/edit'))
-            }, 'admin')
-          }
-        },
-
-        // 视图自定义
-        'settings/views': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/dev/settings/views'))
-            }, 'admin')
-          },
-          subRoutes: {
-            // 自定义概览
-            '/overview': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/views/overview'))
-                }, 'admin')
-              }
-            },
-            // 自定义字段
-            '/field': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/dev/settings/views/field/index'))
-                }, 'admin')
-              },
-              subRoutes: {
-                // 设备字段
-                '/device': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/device'))
-                    }, 'admin')
-                  }
-                },
-                // 用户字段
-                '/user': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/user'))
-                    }, 'admin')
-                  }
-                },
-                // 告警
-                '/alert': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/alert'))
-                    }, 'admin')
-                  }
-                },
-                // 产品
-                '/product': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/product'))
-                    }, 'admin')
-                  }
-                },
-                // 经销商
-                '/dealer': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/dealer'))
-                    }, 'admin')
-                  }
-                },
-                // 维保
-                '/warranty': {
-                  component (resolve) {
-                    require.ensure([], (require) => {
-                      resolve(require('./views/dev/settings/views/field/warranty'))
-                    }, 'admin')
-                  }
-                }
               }
             }
           }
@@ -997,31 +715,7 @@ let configRouter = (router) => {
                   resolve(require('./views/operation/product/device/users'))
                 }, 'admin')
               }
-            },
-            // 维保记录
-            'warranty': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/product/device/warranty'))
-                }, 'admin')
-              }
-            },
-            // 经销商
-            'dealers': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/product/device/dealers'))
-                }, 'admin')
-              }
             }
-          }
-        },
-        // 快照分析
-        'snapshots': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/snapshots'))
-            }, 'admin')
           }
         },
         // 插件管理
@@ -1305,15 +999,6 @@ let configRouter = (router) => {
           }
         },
 
-        // Google nest
-        'plugins/nest/:app_id/forbidden': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/nest/forbidden'))
-            }, 'admin')
-          }
-        },
-
         // 用户反馈
         'plugins/helpdesk/:app_id/overview': {
           component (resolve) {
@@ -1378,79 +1063,6 @@ let configRouter = (router) => {
           }
         },
 
-        // 经销商管理
-        'plugins/dealer/:app_id/list': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/list'))
-            }, 'admin')
-          }
-        },
-        // 添加经销商
-        'plugins/dealer/:app_id/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add'))
-            }, 'admin')
-          }
-        },
-        // 编辑经销商
-        'plugins/dealer/:app_id/edit/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add'))
-            }, 'admin')
-          }
-        },
-        // 经销商详情
-        'plugins/dealer/:app_id/list/:dealer_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/details'))
-            }, 'admin')
-          }
-        },
-        // 添加销售记录
-        'plugins/dealer/:app_id/list/:dealer_id/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add-sale'))
-            }, 'admin')
-          }
-        },
-        // 编辑销售记录
-        'plugins/dealer/:app_id/list/:dealer_id/edit/:sale_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/add-sale'))
-            }, 'admin')
-          }
-        },
-        // 销售详情
-        'plugins/dealer/:app_id/list/:dealer_id/sales/:sale_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/sale-details'))
-            }, 'admin')
-          }
-        },
-        // 经销商导入设备
-        'plugins/dealer/:app_id/list/:dealer_id/import_devices': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/import-devices'))
-            }, 'admin')
-          }
-        },
-        // 禁止访问
-        'plugins/dealer/:app_id/forbidden': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/dealer/forbidden'))
-            }, 'admin')
-          }
-        },
-
         // 支付网关
         'plugins/xpay/:app_id': {
           component (resolve) {
@@ -1489,14 +1101,6 @@ let configRouter = (router) => {
               component (resolve) {
                 require.ensure([], (require) => {
                   resolve(require('./views/operation/alert/detail/history'))
-                }, 'admin')
-              }
-            },
-            // 维保记录
-            'warranty': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/alert/detail/warranty'))
                 }, 'admin')
               }
             }
@@ -1578,14 +1182,6 @@ let configRouter = (router) => {
                   resolve(require('./views/operation/user/major-details/device-list'))
                 }, 'admin')
               }
-            },
-            // 经销商
-            'dealers': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/user/major-details/dealers'))
-                }, 'admin')
-              }
             }
           }
         },
@@ -1613,14 +1209,6 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             },
-            // 维保信息
-            'warranty': {
-              component (resolve) {
-                require.ensure([], (require) => {
-                  resolve(require('./views/operation/user/detail/warranty'))
-                }, 'admin')
-              }
-            },
             // 反馈记录
             'issues': {
               component (resolve) {
@@ -1629,104 +1217,6 @@ let configRouter = (router) => {
                 }, 'admin')
               }
             }
-          }
-        },
-
-        // -------------------------智能维保-------------------------
-        // 延保工单列表
-        'plugins/warranty/:app_id/work-orders/extended-warranties': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/extended-warranty/list'))
-            }, 'admin')
-          }
-        },
-        // 维修工单列表
-        'plugins/warranty/:app_id/work-orders/repair': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/repair/list'))
-            }, 'admin')
-          }
-        },
-        // 添加维修工单
-        'plugins/warranty/:app_id/work-orders/repair/add': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/repair/add'))
-            }, 'admin')
-          }
-        },
-        // 编辑维修工单
-        'plugins/warranty/:app_id/work-orders/repair/edit/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/repair/edit'))
-            }, 'admin')
-          }
-        },
-        // 维保设置
-        'plugins/warranty/:app_id/settings': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/settings'))
-            }, 'admin')
-          }
-        },
-        // 网点管理
-        'plugins/warranty/:app_id/accounts': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/account/list'))
-            }, 'admin')
-          }
-        },
-        // 禁止访问
-        'plugins/warranty/:app_id/forbidden': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/forbidden'))
-            }, 'admin')
-          }
-        },
-        // 维保系统-延保工单详情
-        'plugins/warranty/:app_id/work-orders/extended-warranties/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/extended-warranty/details'))
-            }, 'admin')
-          }
-        },
-        // 维保系统-维修工单详情
-        'plugins/warranty/:app_id/work-orders/repair/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/work-order/repair/details'))
-            }, 'admin')
-          }
-        },
-        // 网点详情
-        'plugins/warranty/:app_id/accounts/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/account/details'))
-            }, 'admin')
-          }
-        },
-        // 网点-客服详情
-        'plugins/warranty/:app_id/accounts/:account_id/staffs/:id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/warranty/account/staff-details'))
-            }, 'admin')
-          }
-        },
-        // 环境数据
-        'plugins/airquality/:app_id': {
-          component (resolve) {
-            require.ensure([], (require) => {
-              resolve(require('./views/operation/plugin/airquality'))
-            }, 'admin')
           }
         }
       }
@@ -1739,7 +1229,6 @@ let configRouter = (router) => {
     '/dev': '/dev/home',
     '/dev/products/create': '/dev/products/create/guide',
     '/dev/products/:id/info/edit': '/dev/products/:id/info/edit/form',
-    '/dev/settings/views/field': '/dev/settings/views/field/device',
 
     '/operation': '/operation/overview',
     '/operation/products/:id': '/operation/products/:id/overview',
@@ -1749,19 +1238,13 @@ let configRouter = (router) => {
     '/operation/users/major-clients/:id': '/operation/users/major-clients/:id/devices',
     '/operation/plugins/android/:id': '/operation/plugins/android/:id/settings',
     '/operation/plugins/recipe/:app_id': '/operation/plugins/recipes/:app_id/recipes',
-    // '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/forbidden',
     // '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/forbidden',
     // '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/forbidden',
     '/operation/plugins/xpay/:app_id': '/operation/plugins/xpay/:app_id/forbidden',
     '/operation/plugins/splashwnd/:app_id': '/operation/plugins/splashwnd/:app_id/list',
     '/operation/content/splashwnd/:app_id': '/operation/content/splashwnd/:app_id',
-    // '/operation/plugins/nest/:app_id': '/operation/plugins/nest/:app_id/forbidden',
-    // '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/forbidden',
     '/operation/plugins/helpdesk/:app_id': '/operation/plugins/helpdesk/:app_id/overview',
     '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value': '/operation/plugins/recipes/:app_id/recipes/:id/edit/:type_value/basic-info',
-    '/operation/plugins/warranty/:app_id': '/operation/plugins/warranty/:app_id/work-orders/repair',
-    '/operation/plugins/broadcast/:app_id': '/operation/plugins/broadcast/:app_id/add',
-    '/operation/plugins/dealer/:app_id': '/operation/plugins/dealer/:app_id/list',
     '/operation/plugins': '/operation/plugins/extensions',
     '/operation/alerts': '/operation/alerts/record',
     '/operation/alerts/detail/:id': '/operation/alerts/detail/:id/history',

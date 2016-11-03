@@ -139,9 +139,6 @@ export default {
         secondaryNav: [{
           label: this.$t('operation.alert.record.history'),
           link: { path: `${deviceDetailRoot}/history` }
-        // }, {
-        //   label: '维保记录',
-        //   link: { path: `${deviceDetailRoot}/warranty` }
         }]
       }
     }

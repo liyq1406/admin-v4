@@ -122,9 +122,6 @@ export default {
         secondaryNav: [{
           label: this.$t('operation.user.details.devices.title'),
           link: { path: `${majorRoot}/devices` }
-        // }, {
-        //   label: '经销商',
-        //   link: { path: `${majorRoot}/dealers` }
         }]
       }
     }

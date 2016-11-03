@@ -192,9 +192,6 @@
           label: this.$t('operation.user.details.nav.devices'),
           link: { path: `${deviceDetailRoot}/devices` }
         }, {
-          label: this.$t('operation.user.details.nav.warranty'),
-          link: { path: `${deviceDetailRoot}/warranty` }
-        }, {
           label: this.$t('operation.user.details.nav.issues'),
           link: { path: `${deviceDetailRoot}/issues` }
         }]

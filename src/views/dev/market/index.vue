@@ -102,22 +102,6 @@
           type: 10
         }, {
           id: '',
-          name: '智能维保',
-          description: '提供与企业产品相关的售后支持、产品维护、保修记录的查询与管理服务。',
-          alias: 'warranty',
-          enable: false,
-          platform_status: 1,
-          type: 10
-        }, {
-          id: '',
-          name: '经销商管理',
-          description: '管理企业各经销商，配置商家信息和销售资源数据。',
-          alias: 'dealer',
-          enable: false,
-          platform_status: 1,
-          type: 10
-        }, {
-          id: '',
           name: '云菜谱',
           description: '面向厨电品类产品，可自定义菜谱类别、菜谱图文内容及分类管理。',
           alias: 'recipe',
@@ -129,14 +113,6 @@
           name: '内容管理',
           description: '发布文章、资讯，自定义自己的内容资讯版块，让前台内容展示更丰富。',
           alias: 'content',
-          enable: false,
-          platform_status: 1,
-          type: 10
-        }, {
-          id: '',
-          name: '环境数据',
-          description: '面向空气行业产品，提供室外pm2.5、AQI、pm20、pm25、so2、no2、co、o3等历史与实时数据服务。',
-          alias: 'airquality',
           enable: false,
           platform_status: 1,
           type: 10

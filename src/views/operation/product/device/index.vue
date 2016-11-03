@@ -165,13 +165,6 @@ export default {
         }, {
           label: this.$t('operation.product.device.detail.secondary.users'),
           link: { path: `${deviceDetailRoot}/users` }
-        // 暂时隐藏
-        // }, {
-        //   label: this.$t('operation.product.device.detail.secondary.warranty'),
-        //   link: { path: `${deviceDetailRoot}/warranty` }
-        // }, {
-        //   label: this.$t('operation.product.device.detail.secondary.dealers'),
-        //   link: { path: `${deviceDetailRoot}/dealers` }
         }]
       }
     }
