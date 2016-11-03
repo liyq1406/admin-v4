@@ -11,17 +11,17 @@
         <div class="filter-bar">
           <div class="filter-group fl">
             <div class="filter-group-item">
-              <x-select width="90px" :label="selectedProduct.label" size="small">
+              <x-select width="90px" :label="currProduct.name" size="small">
                 <span slot="label">显示:</span>
-                <select v-model="selectedProduct" name="product">
-                  <option v-for="product in productOptions" :value="product">{{ product.label }}</option>
+                <select v-model="selectedProduct" name="selectedProduct">
+                  <option v-for="product in products" :value="product">{{ product.name }}</option>
                 </select>
               </x-select>
             </div>
           </div>
           <div class="filter-group fr">
             <div class="actions">
-              <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加用户字段</button>
+              <button class="btn btn-primary" @click="onAdd"><i class="fa fa-plus"></i> 添加设备字段</button>
             </div>
           </div>
         </div>
@@ -49,18 +49,18 @@
                   <span>{{field.label}}</span>
                 </td>
                 <td class="tac">
-                  <span>{{computedCategory(field.type)}}</span>
+                  <span>{{computedCategory(field.category)}}</span>
                 </td>
                 <td class="tac">
-                  <span>{{!field.hidden}}</span>
+                  <switch :value="!field.hidden" @switch-toggle="toggleHidden(field)" size="small"></switch>
                 </td>
                 <td class="tac">
-                  <a class="hl-red" @click="onEdit(field)">编辑</a>
+                  <a class="hl-red" @click="onEdit(field, $index)">编辑</a>
                 </td>
               </tr>
             </template>
             <tr v-if="fields.length === 0 && !loadingData">
-              <td colspan="4" class="tac">
+              <td colspan="6" class="tac">
                 <div class="tips-null"><span>{{ $t("common.no_records") }}</span></div>
               </td>
             </tr>
@@ -72,29 +72,20 @@
     <modal :show.sync="showModal" @close="onCancel">
       <h3 slot="header">{{modalTitle}}</h3>
       <div slot="body" class="form">
-        <validator name="majorClientValidation">
+        <validator name="validation">
           <form autocomplete="off" @submit.prevent="onSubmit" novalidate>
-            <!-- 选择产品 -->
-            <div class="form-row row">
-              <label class="form-control col-6">选择产品:</label>
-              <div class="controls filter-group-item col-18">
-                <x-select :label="modal.product.name">
-                  <select v-model="modal.product">
-                    <option v-for="product in products" :value="product">{{product.name}}</option>
-                  </select>
-                </x-select>
-              </div>
-            </div>
 
-            <!-- 字段key -->
-            <div class="form-row row">
-              <label class="form-control col-6">字段key:</label>
+            <!-- 字段ID -->
+            <div class="form-row row" v-if="canEdit">
+              <label class="form-control col-6">字段ID:</label>
               <div class="controls col-18">
-                <div v-placeholder="'请输入字段key'" class="input-text-wrap">
-                  <input v-model="modal.key" type="text" name="modal.key" v-validate:key="{required: true}" lazy class="input-text"/>
+                <div v-placeholder="'请输入字段ID'" class="input-text-wrap">
+                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true, notInArr: repeatKeys(modal.oldName), format: 'englist'}" class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.key.touched && $majorClientValidation.key.required">请输入字段key</span>
+                  <span v-if="$validation.name.touched && $validation.name.required">请输入字段ID</span>
+                  <span v-if="$validation.name.touched && $validation.name.notInArr">字段ID已存在</span>
+                  <span v-if="$validation.name.touched && $validation.name.format">字段ID只能包含英文</span>
                 </div>
               </div>
             </div>
@@ -104,21 +95,21 @@
               <label class="form-control col-6">字段名:</label>
               <div class="controls col-18">
                 <div v-placeholder="'请输入字段名'" class="input-text-wrap">
-                  <input v-model="modal.name" type="text" name="modal.name" v-validate:name="{required: true}" lazy class="input-text"/>
+                  <input v-model="modal.label" type="text" name="modal.label" v-validate:label="{required: true}" lazy class="input-text"/>
                 </div>
                 <div class="form-tips form-tips-error">
-                  <span v-if="$majorClientValidation.name.touched && $majorClientValidation.name.required">请输入字段名</span>
+                  <span v-if="$validation.label.touched && $validation.label.required">请输入字段名</span>
                 </div>
               </div>
             </div>
 
             <!-- 选择字段类型 -->
-            <div class="form-row row">
+            <div class="form-row row" v-if="canEdit">
               <label class="form-control col-6">数据类型:</label>
               <div class="controls filter-group-item col-18">
-                <x-select :label="dataPointType(modal.type)">
-                  <select v-model="modal.type">
-                    <option v-for="type in 9" :value="type+1">{{dataPointType(type+1)}}</option>
+                <x-select :label="dataPointType(modal.value_type)">
+                  <select v-model="modal.value_type">
+                    <option v-for="type in 3" :value="type+1">{{dataPointType(type+1)}}</option>
                   </select>
                 </x-select>
               </div>
@@ -126,6 +117,9 @@
 
             <!-- 提交按钮 -->
             <div class="form-actions">
+              <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
+              </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
             </div>
@@ -138,7 +132,8 @@
 
 <script>
   import { globalMixins } from 'src/mixins'
-  // import api from 'src/api'
+  import api from 'src/api'
+  import Switch from 'components/Switch'
   import Select from 'components/Select'
   import Modal from 'components/Modal'
   import SearchBox from 'components/SearchBox'
@@ -158,101 +153,307 @@
     components: {
       'x-select': Select,
       SearchBox,
-      Modal
+      Modal,
+      Switch
     },
     data () {
       return {
+        base_fields: [
+          {
+            'name': 'mac',
+            'label': 'MAC地址',
+            'hidden': false,
+            'sort': 1
+          },
+          {
+            'name': 'id',
+            'label': '设备ID',
+            'hidden': false,
+            'sort': 2
+          },
+          {
+            'name': 'is_active',
+            'label': '是否激活',
+            'hidden': false,
+            'sort': 3
+          },
+          {
+            'name': 'is_online',
+            'label': '激活时间',
+            'hidden': false,
+            'sort': 4
+          },
+          {
+            'name': 'is_online',
+            'label': '是否在线',
+            'hidden': false,
+            'sort': 5
+          },
+          {
+            'name': 'sn',
+            'label': 'SN',
+            'hidden': true,
+            'sort': 6
+          },
+          {
+            'name': 'online_count',
+            'label': '累计在线时间',
+            'hidden': true,
+            'sort': 7
+          },
+          {
+            'name': 'firmware_version',
+            'label': '固件版本号',
+            'hidden': true,
+            'sort': 8
+          }
+        ],
         loadingData: false,
         showModal: false,
         editing: false,
         delChecked: false,
         // 已选择产品
-        selectedProduct: {
-          label: '全部',
-          value: 0
-        },
+        selectedProduct: {},
         modal: {
-          product: {},
           label: '',
           name: '',
           value_type: 1
         },
+        editIndex: -1,
         modalType: '',
-        deviceFields: {
-          base_fields: [
-            {
-              'name': 'nickname',
-              'label': '昵称',
-              'hidden': false,
-              'sort': 1,
-              'value_type': 1
-            },
-            {
-              'name': 'gender',
-              'label': '性别',
-              'hidden': false,
-              'sort': 2,
-              'value_type': 1
-            },
-            {
-              'name': 'age',
-              'label': '年龄',
-              'hidden': false,
-              'sort': 3,
-              'value_type': 1
-            }
-          ]
-        }
+        deviceFields: {},
+        dataPoints: []
       }
     },
     computed: {
+      // 字段列表
       fields () {
         var result = []
-        this.deviceFields.base_fields.forEach((item, index) => {
+        // 当前基本字段 接口有的话取接口的 没有的话取默认值
+        var baseFields = this.deviceFields.base_fields || this.base_fields
+        baseFields.forEach((item, index) => {
           var field = _.clone(item)
-          field.category = 'base_field'
+          field.category = 'base_fields'
           result.push(field)
         })
+        // 计算当前产品数据端点 更新页面数据端点字段
+        this.dataPoints.forEach((item, index) => {
+          var dataPoint = {
+            'category': 'datapoints',
+            'index': item.index,
+            'name': item.name,
+            'label': item.name,
+            'hidden': true,
+            'sort': baseFields.length + this.dataPoints.length + index
+          }
+          this.deviceFields.datapoints && this.deviceFields.datapoints.forEach((item2) => {
+            if (item2.index === dataPoint.index && item2.name === dataPoint.name) {
+              dataPoint.label = item2.label
+              dataPoint.hidden = item2.hidden
+              dataPoint.sort = item2.sort
+            }
+          })
+          result.push(dataPoint)
+        })
+        // 所有字段排序
         result.sort((a, b) => {
           return a.sort - b.sort
         })
+        // 所有字段重新计算索引
         result.forEach((item, index) => {
           item.sort = index + 1
         })
         return result
       },
-      // 下拉选项
-      productOptions () {
-        var result = [{
-          label: '全部',
-          value: 0
-        }]
 
-        this.products.forEach((item) => {
-          var option = {}
-          option.label = item.name
-          option.value = item.id
-          result.push(option)
+      // 基本字段key值
+      defaultFieldKeys () {
+        return this.base_fields.map((item) => {
+          return item.name
         })
+      },
 
+      // 基本字段key值
+      baseFieldKeys () {
+        return this.fields.map((item) => {
+          return item.name
+        })
+      },
+
+      // 当前产品
+      currProduct () {
+        var result = {}
+        if (this.selectedProduct.name) {
+          result = this.selectedProduct
+        } else {
+          result = this.products && this.products[0] || {}
+        }
         return result
       },
+
+      // 浮层标题
       modalTitle () {
         return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
+      },
+
+      canEdit () {
+        var result = false
+        var condition = [
+          this.modal.category === 'base_fields',
+          this.defaultFieldKeys.indexOf(this.modal.name) === -1,
+          this.modalType === 'add'
+        ]
+        result = condition[0] && condition[1] || condition[2]
+        return result
+      }
+    },
+    watch: {
+      currProduct (product) {
+        if (product && product.id) {
+          this.initData(product)
+        }
       }
     },
     route: {
       data () {
+        if (this.currProduct && this.currProduct.id) {
+          this.initData(this.currProduct)
+        }
       }
     },
     ready () {
     },
     methods: {
       /**
+       * 初始化数据
+       */
+      initData (product) {
+        this.getData(product)
+        this.getDataPoint(product)
+      },
+
+      /**
+       * 添加字段
+       */
+      addField () {
+        if (this.$validation.invalid) return this.$validate(true)
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        var newField = _.clone(this.modal)
+        newField.category = 'base_fields'
+        newField.sort = params.length + 1
+        params.push(newField)
+        this.updateData(params)
+      },
+
+      /**
+       * 编辑字段
+       */
+      editField () {
+        if (this.$validation.invalid) return this.$validate(true)
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        var newField = _.clone(this.modal)
+        params.splice(this.editIndex, 1, newField)
+        this.updateData(params)
+      },
+
+      deleteField () {
+        this.editing = true
+        var params = _.cloneDeep(this.fields)
+        params.splice(this.editIndex, 1)
+        this.updateData(params)
+      },
+
+      /**
+       * 更新服务器数据
+       */
+      updateData (fields) {
+        fields.sort((a, b) => {
+          return a.sort - b.sort
+        })
+        var params = {
+          base_fields: [],
+          datapoints: []
+        }
+        fields.forEach((item, index) => {
+          if (item.category === 'base_fields') {
+            let field = {
+              'name': item.name,
+              'label': item.label,
+              'hidden': item.hidden,
+              'sort': index + 1,
+              'value_type': item.value_type
+            }
+            params.base_fields.push(field)
+          } else if (item.category === 'datapoints') {
+            let field = {
+              'index': item.index,
+              'name': item.name,
+              'label': item.label,
+              'hidden': item.hidden,
+              'sort': index + 1
+            }
+            params.datapoints.push(field)
+          }
+        })
+        api.customization.setDeviceCustomization(this.currProduct.id, params).then((res) => {
+          this.onCancel()
+          this.deviceFields = res.data || {}
+        }).catch((res) => {
+          this.onCancel()
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 向服务器获取数据
+       * @return {[type]} [description]
+       */
+      getData (product) {
+        this.loadingDataField = true
+        api.customization.getDeviceCustomization(product.id).then((res) => {
+          if (res.data.base_fields && res.data.base_fields.length) {
+            this.deviceFields = res.data || {}
+          }
+          this.loadingDataField = false
+        }).catch((res) => {
+          this.loadingDataField = false
+          this.handleError(res)
+        })
+      },
+
+      /**
+       * 获取数据端点
+       * @return {[type]} [description]
+       */
+      getDataPoint (product) {
+        this.loadingDataPoint = true
+        api.product.getDatapoints(product.id).then((res) => {
+          if (res.status === 200) {
+            this.dataPoints = res.data
+            this.loadingDataPoint = false
+          }
+        }).catch((res) => {
+          this.handleError(res)
+          this.loadingDataPoint = false
+        })
+      },
+
+      /**
+       * 返回除了某个key之外的基本字段
+       */
+      repeatKeys (ignore) {
+        return this.baseFieldKeys.filter((item) => {
+          return item !== ignore
+        })
+      },
+      /**
        * 显示添加字段浮层
        */
       onAdd () {
         this.modalType = 'add'
+        this.modal.oldName = ''
         this.modal.label = ''
         this.modal.name = ''
         this.modal.hidden = false
@@ -262,11 +463,24 @@
       /**
        * 显示浮层
        */
-      onEdit (field) {
+      onEdit (field, index) {
         this.modalType = 'edit'
         this.modal = _.clone(field)
+        this.modal.oldName = field.name
+        this.editIndex = index
         this.delChecked = false
         this.showModal = true
+      },
+
+      /**
+       * 是否显示按钮切换事件
+       * @param  {[type]} field [description]
+       * @return {[type]}       [description]
+       */
+      toggleHidden (field) {
+        field.hidden = !field.hidden
+        this.updateData(this.fields)
+        // this.setFiled()
       },
 
       /**
@@ -299,14 +513,17 @@
         this.$resetValidation()
       },
 
+      /**
+       * 计算当前类型
+       */
       computedCategory (type) {
         var result = ''
         switch (type) {
-          case 'base_field':
-            result = '基本字段'
-            break
           case 'base_fields':
             result = '基本字段'
+            break
+          case 'datapoints':
+            result = '数据端点'
             break
           default:
             result = '未知'
@@ -314,6 +531,7 @@
         }
         return result
       },
+
       /**
        * 计算当前类型
        * @param  {[type]} type [description]

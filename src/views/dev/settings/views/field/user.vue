@@ -134,6 +134,7 @@
       SearchBox,
       Modal
     },
+
     data () {
       return {
         loadingData: false,
@@ -174,6 +175,7 @@
       }
     },
     computed: {
+      // 字段列表
       fields () {
         var result = []
         this.userFields.base_fields.forEach((item, index) => {
@@ -189,6 +191,7 @@
         })
         return result
       },
+      // 浮层标题
       modalTitle () {
         return this.modalType === 'add' ? '添加用户字段' : '编辑用户字段'
       }
@@ -199,8 +202,12 @@
       }
     },
     ready () {
+      // this.test()
     },
     methods: {
+      test () {
+        this.updateData([])
+      },
       /**
       * 添加字段
       */
@@ -271,7 +278,9 @@
        */
       getData () {
         api.customization.getUserCustomization().then((res) => {
-          this.userFields = res.data || {}
+          if (res.data.base_fields && res.data.base_fields.length) {
+            this.userFields = res.data || {}
+          }
         }).catch((res) => {
           this.handleError(res)
         })
