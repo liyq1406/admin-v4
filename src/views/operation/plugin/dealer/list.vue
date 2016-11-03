@@ -19,7 +19,7 @@
           <div class="filter-bar">
             <div class="filter-group fr">
               <div class="filter-group-item">
-                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick"><i class="fa fa-share"></i></button>
+                <button class="btn btn-ghost btn-sm" @click.stop="onExportBtnClick" :class="{'disabled': exporting}" :disabled="exporting"><i class="fa fa-share"></i></button>
               </div>
               <div class="filter-group-item">
                 <search-box :key.sync="key" :active="searching" :placeholder="$t('common.placeholder.search')" @cancel="getDealer(true)" @search-activate="toggleSearching" @search-deactivate="toggleSearching" @search="handleSearch" @press-enter="getDealer(true)">
@@ -78,34 +78,6 @@
         <pager :total="total" :current.sync="currentPage" :count-per-page="countPerPage" @page-update="getDealer"></pager>
       </div>
     </div>
-
-    <!-- 导出 CSV 条件筛选浮层 Start -->
-    <modal :show.sync="showExportModal" @close="onExportCancel" width="540px">
-      <h3 slot="header">{{ $t('common.export_condition') }}</h3>
-      <div slot="body" class="form">
-        <form autocomplete="off" novalidate @submit.prevent="onExportSubmit">
-          <div class="form-row row">
-            <label class="form-control col-6">销售时间</label>
-            <div class="controls col-18">
-              <div class="row">
-                <div class="col-10">
-                  <date-picker :value.sync="startDate" width="100%"></date-picker>
-                </div>
-                <div class="col-4 tac control-text">至</div>
-                <div class="col-10">
-                  <date-picker :value.sync="endDate" width="100%"></date-picker>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button type="submit" :disabled="submiting" :class="{'disabled':submiting}" v-text="submiting ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
-            <button @click.prevent.stop="onExportCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
-          </div>
-        </form>
-      </div>
-    </modal>
-    <!-- 导出 CSV 条件筛选浮层 End -->
   </div>
 </template>
 
@@ -118,9 +90,10 @@
   import Pager from 'components/Pager'
   import DatePicker from 'components/DatePicker'
   import Modal from 'components/Modal'
+  import _ from 'lodash'
 
   export default {
-    name: 'AddBroadcast',
+    name: 'DealerList',
 
     mixins: [globalMixins, pluginMixins],
 
@@ -147,9 +120,6 @@
         //   sole: '1213',
         //   status: 0
         // }],
-        showExportModal: false,
-        startDate: '',
-        endDate: '',
         dealers: [],
         loadingData: false,
         addModal: {
@@ -191,25 +161,40 @@
         countPerPage: 10,
         currentPage: 1,
         key: '',
-        adding: false
+        adding: false,
+        exporting: false
       }
     },
 
     computed: {
-      // 列表查询条件
-      queryCondition () {
-        var condition = {
+      // 基本筛选条件
+      baseCondition () {
+        let condition = {
           filter: ['id', 'name', 'email', 'phone', 'address', 'status', 'dealer_code', 'upper_dealer_code', 'region', 'contacter', 'sale_goal', 'saled_amount', 'create_time'],
-          limit: this.countPerPage,
-          offset: (this.currentPage - 1) * this.countPerPage,
-          query: {}
+          query: {},
+          order: {
+            create_time: 'desc'
+          }
         }
+
         if (this.key.length > 0) {
           condition.query[this.queryType.value] = {$in: [this.key]}
         }
+
+        return condition
+      },
+
+      // 列表查询条件
+      queryCondition () {
+        let condition = _.cloneDeep(this.baseCondition)
+
+        condition.limit = this.countPerPage
+        condition.offset = (this.currentPage - 1) * this.countPerPage
+
         return condition
       }
     },
+
     ready () {
       this.getDealer()
     },
@@ -219,34 +204,29 @@
        * 处理导出 CSV 按钮点击
        */
       onExportBtnClick () {
-        this.showExportModal = true
-      },
-
-      /**
-       * 取消导出
-       */
-      onExportCancel () {
-        this.showExportModal = false
-      },
-
-      /**
-       * 提交导出任务
-       */
-      onExportSubmit () {
-        let condition = {
-          filter: ['name', 'email', 'contacter', 'phone', 'region', 'upper_dealer_code', 'sale_goal', 'saled_amount', 'status'],
-          query: {
-            sale_time: {
-              $gt: '',
-              $lt: ''
-            }
-          },
-          order: {
-            sale_time: 'desc'
-          }
+        if (this.exporting) {
+          return
         }
-        console.log(condition)
-        this.showExportModal = false
+
+        let postData = {
+          name: '经销商列表',
+          describe: '经销商列表',
+          type: 5,
+          params: this.baseCondition
+        }
+
+        this.exporting = true
+        api.exportTask.createTask(postData).then((res) => {
+          this.showNotice({
+            type: 'success',
+            content: '导出CSV任务创建成功'
+          })
+          this.$route.router.go('/operation/settings/offline-data')
+          // this.onExportCancel()
+        }).catch((res) => {
+          this.exporting = false
+          this.handleError(res)
+        })
       },
 
       // 获取经销商列表

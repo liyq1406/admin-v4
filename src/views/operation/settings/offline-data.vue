@@ -138,7 +138,10 @@ export default {
         filter: ['id', 'status', 'type', 'begin_time', 'end_time', 'finished', 'total'],
         limit: this.countPerPage,
         offset: (this.currentPage - 1) * this.countPerPage,
-        query: {}
+        query: {},
+        order: {
+          create_time: 'desc'
+        }
       }
 
       if (this.visibility.value !== 'all') {
