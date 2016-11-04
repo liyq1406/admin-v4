@@ -33,7 +33,7 @@
               <th>字段名</th>
               <th class="tac">类型</th>
               <th class="tac">显示</th>
-              <th class="tac">排序</th>
+              <th class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@
             <!-- 提交按钮 -->
             <div class="form-actions">
               <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
-                <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
               </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -208,7 +208,8 @@
             'sort': 8
           }
         ],
-        loadingData: false,
+        loadingDataField: false,
+        loadingDataPoint: false,
         showModal: false,
         editing: false,
         delChecked: false,
@@ -278,6 +279,13 @@
         return this.fields.map((item) => {
           return item.name
         })
+      },
+
+      /**
+       * 正在加载
+       */
+      loadingData () {
+        return this.loadingDataPoint || this.loadingDataPoint
       },
 
       // 当前产品
