@@ -46,7 +46,7 @@ let defaultKey = {
 
 let defaultValue = {
   quatas: {
-    1: {
+    1: { // 指标1
       dataFrom: DATAFROM.preset,
       name: '授权数',
       preset: PRESET.devices_count // 数据来源为绑定数据项
@@ -60,7 +60,7 @@ let defaultValue = {
       //     end: 'yyyy-mm-ddThh:mm:ss.sssZ' // 结束时间
       //   }
       // }
-    }, // 指标1
+    },
     2: {
       dataFrom: DATAFROM.preset,
       name: '激活数',

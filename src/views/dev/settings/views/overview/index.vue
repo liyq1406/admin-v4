@@ -133,11 +133,11 @@
                           <label>30日</label>
                           <input v-model="curQuotaData.statisticPeriod" type="radio" :value="4" name="statistic-period"/>
                           <label>至今</label>
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="5" name="statistic-period"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="5" name="statistic-period" @change="customTimeTypeSelect"/>
                           <label>自定义时间</label>
                         </div>
                         <div v-if="curQuotaData.statisticPeriod === 5" class="time-range-lineheight">
-                          <date-time-range-picker @timechange = "customeTimeSelect"></date-time-range-picker>
+                          <date-time-range-picker @timechange="timeSelect"></date-time-range-picker>
                         </div>
                       </div>
                     </div>
@@ -245,17 +245,15 @@ export default {
       quotasInfo: QUOTAS,
       dataFromInfo: QUOTAS_TYPES,
       selectedQuota: 1,
-      originQuotaData: {},
-      defaultQuotaData: {
-        dataFrom: 1,
-        name: '',
-        dataBind: 1,
-        statisticRule: 1,
-        datapoint: 0,
-        statisticType: 1,
-        statisticPeriod: 1
+      curQuotaData: {
+        // dataFrom: 1,
+        // dataBind: 1,
+        // name: '',
+        // statisticPeriod: 1,
+        // selectedRule: {},
+        // selectedDatapoint: {},
+        // statisticType: 1
       },
-      curQuotaData: {},
       features: {},
       selectProduct: '',
       quotaData: {},
@@ -339,13 +337,12 @@ export default {
     resetConfig () {
       let defaultQuota = config.defaultValue.quatas
       for (var i in defaultQuota) {
-        if (!this.quotaData[i]) {
-          this.quotaData[i] = {
-            dataFrom: defaultQuota[i].dataFrom,
-            name: defaultQuota[i].name,
-            dataBind: defaultQuota[i].preset
-          }
+        this.quotaData[i] = {
+          dataFrom: defaultQuota[i].dataFrom,
+          name: defaultQuota[i].name,
+          dataBind: defaultQuota[i].preset
         }
+        this.quotaData[i].statisticPeriod = 1
       }
       this.selectedQuota = 1
       this.features = {
@@ -354,7 +351,6 @@ export default {
         distribution: config.defaultValue.active
       }
       this.curQuotaData = _.clone(this.quotaData[1])
-      this.originQuotaData = _.clone(this.curQuotaData)
     },
     // 获取当前产品的数据端点
     getCurProductDatapoints (productId) {
@@ -386,17 +382,24 @@ export default {
           this.selectedRule = {}
           this.selectedDatapoint = {}
         }
-        this.originQuotaData.selectedRule = _.clone(this.selectedRule)
+        this.setQuataSelect('selectedRule', _.clone(this.selectedRule))
       }).catch((res) => {
         this.handleError(res)
       })
+    },
+    setQuataSelect (key, value) {
+      for (let i in this.quotaData) {
+        if (this.quotaData[i]) {
+          this.quotaData[i][key] = value
+        }
+      }
     },
     // 默认选第一个数据规则和数据端点
     setInitSelect (first) {
       if (this.datapointOptions.length) {
         this.selectedDatapoint = this.datapointOptions[0]
         if (first) {
-          this.originQuotaData.selectedDatapoint = _.clone(this.selectedDatapoint)
+          this.setQuataSelect('selectedDatapoint', _.clone(this.selectedDatapoint))
         }
         this.$nextTick(() => {
           this.setStatisticsTypeInit(first)
@@ -409,7 +412,7 @@ export default {
       if (this.statisticsTypes.length) {
         this.curQuotaData.statisticType = this.statisticsTypes[0].mode
         if (first) {
-          this.originQuotaData.statisticType = this.statisticsTypes[0].mode
+          this.setQuataSelect('statisticType', this.statisticsTypes[0].mode)
         }
       }
     },
@@ -418,7 +421,7 @@ export default {
       this.quotaData[oldQuata] = _.clone(this.curQuotaData)
       this.quotaData[oldQuata].selectedRule = _.clone(this.selectedRule)
       this.quotaData[oldQuata].selectedDatapoint = _.clone(this.selectedDatapoint)
-      this.curQuotaData = _.clone(this.quotaData[quata] || this.originQuotaData)
+      this.curQuotaData = _.clone(this.quotaData[quata])
       this.selectedRule = _.clone(this.curQuotaData.selectedRule) || {}
       this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint) || {}
       this.$resetValidation()
@@ -436,6 +439,31 @@ export default {
         return
       }
       this.editing = true
+      let params = _.clone(config.defaultValue)
+      for (let i in this.quotaData) {
+        params[i].dataFrom = this.quotaData[i].dataFrom
+        params[i].name = this.quotaData[i].name
+        if (params[i].dataFrom === config.DATAFROM.preset) { // 绑定预设项
+          params[i].preset = this.quotaData[i].dataBind
+        } else if (params[i].dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
+          if (!this.quotaData[i].selectedRule || !this.quotaData[i].selectedRule.id) {
+            // 当前产品没有数据规则
+            return
+          }
+          params[i].datapoint = {
+            statistics_rule_id: this.quotaData[i].selectedRule.id,
+            datapoint_index: this.quotaData[i].selectedDatapoint.index,
+            statistics_type: this.quotaData[i].statisticType,
+            period: this.quotaData[i].statisticPeriod
+          }
+          if (params[i].datapoint.period === config.PERIODS.custom) {
+            params[i].datapoint.custom_time = {
+              start: '',
+              end: ''
+            }
+          }
+        }
+      }
       proxy.setCustomOverviewConfig(this.selectProduct, {})
     },
     statisticsRuleSelect () {
@@ -444,7 +472,16 @@ export default {
     datapointSelect () {
       this.setStatisticsTypeInit()
     },
-    customeTimeSelect () {}
+    timeSelect (startTime, endTime) {
+      if (!this.curQuotaData.custom_time) {
+        this.curQuotaData.custom_time = {}
+      }
+      this.curQuotaData.custom_time.start = startTime
+      this.curQuotaData.custom_time.end = endTime
+    },
+    customTimeTypeSelect (value) {
+      console.log(value)
+    }
   }
 }
 </script>
