@@ -292,7 +292,7 @@
 
       // 浮层标题
       modalTitle () {
-        return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
+        return this.modalType === 'add' ? '添加产品字段' : '编辑产品字段'
       }
     },
     watch: {
