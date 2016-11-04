@@ -331,9 +331,7 @@
       getData (product) {
         this.loadingData = true
         api.customization.getProductCustomization(product.id).then((res) => {
-          if (res.data.base_fields && res.data.base_fields.length) {
-            this.productFields = res.data || {}
-          }
+          this.productFields = res.data || {}
           this.loadingData = false
         }).catch((res) => {
           this.loadingData = false
