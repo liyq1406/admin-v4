@@ -158,6 +158,7 @@
     },
     data () {
       return {
+        // 基本字段
         base_fields: [
           {
             'name': 'mac',
@@ -208,21 +209,31 @@
             'sort': 8
           }
         ],
+        // 正在加载字段数据标志位
         loadingDataField: false,
+        // 正在加载数据端点标志位
         loadingDataPoint: false,
+        // 显示浮层标志位
         showModal: false,
+        // 正在编辑标志位
         editing: false,
+        // 显示删除按钮标志位
         delChecked: false,
         // 已选择产品
         selectedProduct: {},
+        // 浮层表单对象
         modal: {
           label: '',
           name: '',
           value_type: 1
         },
+        // 正在编辑的字段索引
         editIndex: -1,
+        // 当前浮层类型
         modalType: '',
+        // 服务器返回的设备字段
         deviceFields: {},
+        // 服务器返回的数据端点
         dataPoints: []
       }
     },
@@ -281,9 +292,7 @@
         })
       },
 
-      /**
-       * 正在加载
-       */
+      // 正在加载标志位
       loadingData () {
         return this.loadingDataPoint || this.loadingDataPoint
       },
@@ -304,6 +313,7 @@
         return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
       },
 
+      // 是否显示更多编辑权限标志位
       canEdit () {
         var result = false
         var condition = [
@@ -366,6 +376,9 @@
         this.updateData(params)
       },
 
+      /**
+       * 删除字段
+       */
       deleteField () {
         this.editing = true
         var params = _.cloneDeep(this.fields)
@@ -456,6 +469,7 @@
           return item !== ignore
         })
       },
+
       /**
        * 显示添加字段浮层
        */

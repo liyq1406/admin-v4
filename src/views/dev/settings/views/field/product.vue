@@ -352,7 +352,6 @@
         newField.category = 'custom_fields'
         newField.sort = params.length + 1
         params.push(newField)
-        console.log(params)
         this.updateData(params)
       },
 
@@ -437,8 +436,6 @@
        * 返回除了某个key之外的基本字段
        */
       repeatKeys (ignore) {
-        console.log(ignore)
-        console.log(this.baseFieldKeys)
         return this.baseFieldKeys.filter((item) => {
           return item !== ignore
         })
@@ -474,6 +471,9 @@
         this.$resetValidation()
       },
 
+      /**
+       * 解析类别成文字
+       */
       computedCategory (type) {
         var result = ''
         switch (type) {
@@ -489,8 +489,9 @@
         }
         return result
       },
+
       /**
-       * 计算当前类型
+       * 解析当前类型
        * @param  {[type]} type [description]
        * @return {[type]}      [description]
        */
