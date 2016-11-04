@@ -56,8 +56,8 @@ let defaultValue = {
       //   statistics_type: STATISTICS_TYPES.max, // 1,2,3,4分别表示最大值，最小值，平均，求和
       //   period: PERIODS.one,
       //   custom_time: { // 当period为自定义时间时添加
-      //     start: 'yyyy-mm-ddThh:mm:ss.sssZ', // 开始时间
-      //     end: 'yyyy-mm-ddThh:mm:ss.sssZ' // 结束时间
+      //     start: 0, // 时间戳
+      //     end: 0 // 时间戳
       //   }
       // }
     },

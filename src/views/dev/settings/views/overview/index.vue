@@ -157,9 +157,9 @@
                 </div>
                 <div class="controls col-21">
                   <div class="input-radio-wrap">
-                    <input v-model="features.trend" type="radio" :value="1" name="trend"/>
+                    <input v-model="features.trend" type="radio" :value="true" name="trend"/>
                     <label>显示</label>
-                    <input v-model="features.trend" type="radio" :value="2" name="trend"/>
+                    <input v-model="features.trend" type="radio" :value="false" name="trend"/>
                     <label>隐藏</label>
                   </div>
                 </div>
@@ -170,9 +170,9 @@
                 </div>
                 <div class="controls col-21">
                   <div class="input-radio-wrap">
-                    <input v-model="features.active" type="radio" :value="1" name="active"/>
+                    <input v-model="features.active" type="radio" :value="true" name="active"/>
                     <label>显示</label>
-                    <input v-model="features.active" type="radio" :value="2" name="active"/>
+                    <input v-model="features.active" type="radio" :value="false" name="active"/>
                     <label>隐藏</label>
                   </div>
                 </div>
@@ -183,9 +183,9 @@
                 </div>
                 <div class="controls col-21">
                   <div class="input-radio-wrap">
-                    <input v-model="features.distribution" type="radio" :value="1" name="distribution"/>
+                    <input v-model="features.distribution" type="radio" :value="true" name="distribution"/>
                     <label>显示</label>
-                    <input v-model="features.distribution" type="radio" :value="2" name="distribution"/>
+                    <input v-model="features.distribution" type="radio" :value="false" name="distribution"/>
                     <label>隐藏</label>
                   </div>
                 </div>
@@ -430,6 +430,8 @@ export default {
       if (this.curQuotaData.custom_time) {
         this.initStartTime = this.curQuotaData.custom_time.start || 0
         this.initEndTime = this.curQuotaData.custom_time.end || 0
+      } else {
+        this.initStartTime = this.initEndTime = 0
       }
       this.selectedRule = _.clone(this.curQuotaData.selectedRule) || {}
       this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint) || {}
@@ -450,13 +452,15 @@ export default {
       this.editing = true
       let params = _.clone(config.defaultValue)
       for (let i in this.quotaData) {
-        params.quatas[i] = this.setConfigParams(this.quotaData[i])
+        params.quatas[i] = this.setParamsQuatasConfig(this.quotaData[i])
       }
-      params.quatas[this.selectedQuota] = this.setConfigParams(this.curQuotaData)
-      console.log(params)
-      proxy.setCustomOverviewConfig(this.selectProduct, {})
+      params.quatas[this.selectedQuota] = this.setParamsQuatasConfig(this.curQuotaData)
+      params.trend = this.features.trend
+      params.active = this.features.active
+      params.distribution = this.features.distribution
+      proxy.setCustomOverviewConfig(this.selectProduct, params)
     },
-    setConfigParams (source) {
+    setParamsQuatasConfig (source) {
       let res = {}
       res.dataFrom = source.dataFrom
       res.name = source.name
