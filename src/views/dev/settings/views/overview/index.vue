@@ -266,7 +266,8 @@ export default {
       dataPoints: [],
       selectedDatapoint: {
         name: ''
-      }
+      },
+      configLoaded: false
     }
   },
   computed: {
@@ -337,30 +338,74 @@ export default {
   methods: {
     // 重置当前产品配置
     resetConfig () {
+      // 设置默认
+      this.initProductConfig(config.defaultValue)
       proxy.getCustomOverviewConfig(this.selectProduct).then((res) => {
-        console.log(res)
+        if (res) {
+          // 配置服务器返回
+          this.initProductConfig(res)
+          this.configLoaded = true
+        }
       }).catch((res) => {
         this.handleError(res)
       })
-      let defaultQuota = config.defaultValue.quatas
-      for (var i in defaultQuota) {
+    },
+    initProductConfig (pConfig) {
+      for (let i in pConfig.quatas) {
         this.quotaData[i] = {
-          dataFrom: defaultQuota[i].dataFrom,
-          name: defaultQuota[i].name,
-          dataBind: defaultQuota[i].preset
+          dataFrom: pConfig.quatas[i].dataFrom,
+          name: pConfig.quatas[i].name,
+          dataBind: pConfig.quatas[i].preset
         }
         this.quotaData[i].statisticPeriod = 1
+        if (pConfig.quatas[i].dataFrom === config.DATAFROM.datapoint && pConfig.quatas[i].datapoint) {
+          this.quotaData[i].statisticPeriod = pConfig.quatas[i].datapoint.period
+          this.quotaData[i].statisticType = pConfig.quatas[i].datapoint.statistics_type
+          this.quotaData[i].statistics_rule_id = pConfig.quatas[i].datapoint.statistics_rule_id
+          this.quotaData[i].datapoint_index = pConfig.quatas[i].datapoint.datapoint_index
+        }
       }
       this.selectedQuota = 1
       this.features = {
-        trend: config.defaultValue.trend,
-        active: config.defaultValue.active,
-        distribution: config.defaultValue.active
+        trend: pConfig.trend,
+        active: pConfig.active,
+        distribution: pConfig.distribution
       }
       this.curQuotaData = _.clone(this.quotaData[1])
+      this.setStatisticesConfig()
       this.$nextTick(() => {
         this.$validate(true)
       })
+    },
+    setStatisticesConfig () {
+      if (this.statisticsRulesOptions.length) {
+        for (let i in this.quotaData) {
+          if (this.quotaData[i].statistics_rule_id) { // 设置数据规则
+            let selectedRule = _.find(this.statisticsRulesOptions, (item) => {
+              return item.id === this.quotaData[i].statistics_rule_id
+            })
+            if (selectedRule) {
+              this.quotaData[i].selectedRule = _.clone(selectedRule)
+            }
+          }
+          if (typeof this.quotaData[i].datapoint_index === 'number') { // 设置数据端点
+            let selectedDatapoint = _.find(this.datapointOptions, (item) => {
+              return item.index === this.quotaData[i].datapoint_index
+            })
+            if (selectedDatapoint) {
+              this.quotaData[i].selectedDatapoint = _.clone(selectedDatapoint)
+            }
+          }
+        }
+        // 设置当前
+        this.curQuotaData = _.clone(this.quotaData[1])
+        if (this.curQuotaData.selectedRule) {
+          this.selectedRule = _.clone(this.curQuotaData.selectedRule)
+        }
+        if (this.curQuotaData.selectedDatapoint) {
+          this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint)
+        }
+      }
     },
     // 获取当前产品的数据端点
     getCurProductDatapoints (productId) {
@@ -371,6 +416,7 @@ export default {
         } else {
           this.dataPoints = []
         }
+        this.setStatisticesConfig()
       }).catch((res) => {
         this.handleError(res)
       })
@@ -393,6 +439,7 @@ export default {
           this.selectedDatapoint = {}
         }
         this.setQuataSelect('selectedRule', _.clone(this.selectedRule))
+        this.setStatisticesConfig()
       }).catch((res) => {
         this.handleError(res)
       })
@@ -400,7 +447,7 @@ export default {
     setQuataSelect (key, value) {
       for (let i in this.quotaData) {
         if (this.quotaData[i]) {
-          this.quotaData[i][key] = value
+          this.quotaData[i][key] = _.clone(value)
         }
       }
     },
@@ -411,9 +458,7 @@ export default {
         if (first) {
           this.setQuataSelect('selectedDatapoint', _.clone(this.selectedDatapoint))
         }
-        this.$nextTick(() => {
-          this.setStatisticsTypeInit(first)
-        })
+        this.setStatisticsTypeInit(first)
       } else {
         this.selectedDatapoint = {}
       }
@@ -421,7 +466,7 @@ export default {
     setStatisticsTypeInit (first) {
       if (this.statisticsTypes.length) {
         this.curQuotaData.statisticType = this.statisticsTypes[0].mode
-        if (first) {
+        if (first && !this.configLoaded) {
           this.setQuataSelect('statisticType', this.statisticsTypes[0].mode)
         }
       }
@@ -463,13 +508,17 @@ export default {
       params.trend = this.features.trend
       params.active = this.features.active
       params.distribution = this.features.distribution
+      params.quatas[this.selectedQuota].datapoint.datapoint_index = this.selectedDatapoint.index
+      params.quatas[this.selectedQuota].datapoint.statistics_rule_id = this.selectedRule.id
       proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
         if (res.status === 200) {
           // 设置成功
           console.log('设置成功')
         }
+        this.editing = false
       }).catch((res) => {
         this.handleError(res)
+        this.editing = false
       })
     },
     setParamsQuatasConfig (source) {
