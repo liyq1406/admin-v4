@@ -125,19 +125,19 @@
                       </div>
                       <div class="controls col-21">
                         <div class="input-radio-wrap fl">
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="1" name="statistic-period"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="1" name="statistic-period" @change="statisticPeriodSelect"/>
                           <label>24小时</label>
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="2" name="statistic-period"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="2" name="statistic-period" @change="statisticPeriodSelect"/>
                           <label>7日</label>
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="3" name="statistic-period"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="3" name="statistic-period" @change="statisticPeriodSelect"/>
                           <label>30日</label>
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="4" name="statistic-period"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="4" name="statistic-period" @change="statisticPeriodSelect"/>
                           <label>至今</label>
-                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="5" name="statistic-period" @change="customTimeTypeSelect"/>
+                          <input v-model="curQuotaData.statisticPeriod" type="radio" :value="5" name="statistic-period" @change="statisticPeriodSelect"/>
                           <label>自定义时间</label>
                         </div>
                         <div v-if="curQuotaData.statisticPeriod === 5" class="time-range-lineheight">
-                          <date-time-range-picker @timechange="timeSelect"></date-time-range-picker>
+                          <date-time-range-picker :init-start-time="initStartTime" :init-end-time="initEndTime" @timechange="timeSelect"></date-time-range-picker>
                         </div>
                       </div>
                     </div>
@@ -241,6 +241,8 @@ export default {
 
   data () {
     return {
+      initStartTime: 0,
+      initEndTime: 0,
       editing: false,
       quotasInfo: QUOTAS,
       dataFromInfo: QUOTAS_TYPES,
@@ -351,6 +353,9 @@ export default {
         distribution: config.defaultValue.active
       }
       this.curQuotaData = _.clone(this.quotaData[1])
+      this.$nextTick(() => {
+        this.$validate(true)
+      })
     },
     // 获取当前产品的数据端点
     getCurProductDatapoints (productId) {
@@ -433,6 +438,7 @@ export default {
       }
       if (this.$validation.invalid) {
         this.$validate(true)
+        console.log('xxx')
         return
       }
       if (!this.selectProduct) {
@@ -441,30 +447,42 @@ export default {
       this.editing = true
       let params = _.clone(config.defaultValue)
       for (let i in this.quotaData) {
-        params[i].dataFrom = this.quotaData[i].dataFrom
-        params[i].name = this.quotaData[i].name
-        if (params[i].dataFrom === config.DATAFROM.preset) { // 绑定预设项
-          params[i].preset = this.quotaData[i].dataBind
-        } else if (params[i].dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
-          if (!this.quotaData[i].selectedRule || !this.quotaData[i].selectedRule.id) {
-            // 当前产品没有数据规则
-            return
-          }
-          params[i].datapoint = {
-            statistics_rule_id: this.quotaData[i].selectedRule.id,
-            datapoint_index: this.quotaData[i].selectedDatapoint.index,
-            statistics_type: this.quotaData[i].statisticType,
-            period: this.quotaData[i].statisticPeriod
-          }
-          if (params[i].datapoint.period === config.PERIODS.custom) {
-            params[i].datapoint.custom_time = {
-              start: '',
-              end: ''
-            }
+        params.quatas[i] = this.setConfigParams(this.quotaData[i])
+      }
+      params.quatas[this.selectedQuota] = this.setConfigParams(this.curQuotaData)
+      console.log(params)
+      proxy.setCustomOverviewConfig(this.selectProduct, {})
+    },
+    setConfigParams (source) {
+      let res = {}
+      res.dataFrom = source.dataFrom
+      res.name = source.name
+      if (res.dataFrom === config.DATAFROM.preset) { // 绑定预设项
+        res.preset = source.dataBind
+      } else if (res.dataFrom === config.DATAFROM.datapoint) { // 绑定数据规则
+        if (!source.selectedRule || !source.selectedRule.id) {
+          // 当前产品没有数据规则
+          return
+        }
+        res.datapoint = {
+          statistics_rule_id: source.selectedRule.id,
+          datapoint_index: source.selectedDatapoint.index,
+          statistics_type: source.statisticType,
+          period: source.statisticPeriod
+        }
+        if (res.datapoint.period === config.PERIODS.custom) {
+          res.datapoint.custom_time = {}
+          if (source.custom_time) {
+            res.datapoint.custom_time.start = source.custom_time.start || 0
+            res.datapoint.custom_time.end = source.custom_time.end || 0
+          } else { // 没有设置时间。默认为一周
+            let curTime = new Date()
+            res.datapoint.custom_time.start = curTime.getTime() - 3600 * 24 * 1000 * 6
+            res.datapoint.custom_time.end = curTime.getTime()
           }
         }
       }
-      proxy.setCustomOverviewConfig(this.selectProduct, {})
+      return res
     },
     statisticsRuleSelect () {
       this.setInitSelect()
@@ -476,11 +494,14 @@ export default {
       if (!this.curQuotaData.custom_time) {
         this.curQuotaData.custom_time = {}
       }
-      this.curQuotaData.custom_time.start = startTime
-      this.curQuotaData.custom_time.end = endTime
+      this.curQuotaData.custom_time.start = startTime.getTime()
+      this.curQuotaData.custom_time.end = endTime.getTime()
     },
-    customTimeTypeSelect (value) {
-      console.log(value)
+    statisticPeriodSelect (value) {
+      if (this.curQuotaData.statisticPeriod === 5 && this.curQuotaData.custom_time) {
+        this.initStartTime = this.curQuotaData.custom_time.start || 0
+        this.initEndTime = this.curQuotaData.custom_time.end || 0
+      }
     }
   }
 }
