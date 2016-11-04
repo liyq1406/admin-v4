@@ -337,6 +337,11 @@ export default {
   methods: {
     // 重置当前产品配置
     resetConfig () {
+      proxy.getCustomOverviewConfig(this.selectProduct).then((res) => {
+        console.log(res)
+      }).catch((res) => {
+        this.handleError(res)
+      })
       let defaultQuota = config.defaultValue.quatas
       for (var i in defaultQuota) {
         this.quotaData[i] = {
@@ -458,7 +463,14 @@ export default {
       params.trend = this.features.trend
       params.active = this.features.active
       params.distribution = this.features.distribution
-      proxy.setCustomOverviewConfig(this.selectProduct, params)
+      proxy.setCustomOverviewConfig(this.selectProduct, params).then((res) => {
+        if (res.status === 200) {
+          // 设置成功
+          console.log('设置成功')
+        }
+      }).catch((res) => {
+        this.handleError(res)
+      })
     },
     setParamsQuatasConfig (source) {
       let res = {}

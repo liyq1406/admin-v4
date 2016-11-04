@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 const MODULES = {
   operation_product: 'OPERATION_PRODUCT'
 }
@@ -82,7 +84,21 @@ let defaultValue = {
   distribution: true
 }
 
+function genKey (productId) {
+  let keyObj = _.clone(defaultKey)
+  keyObj.module_id = productId
+  let res = ''
+  for (let i in keyObj) {
+    if (keyObj[i]) {
+      res = res + keyObj[i] + '_'
+    }
+  }
+  res = res.replace(/\./g, '_')
+  return res.substr(0, res.length - 1)
+}
+
 export default {
+  genKey,
   defaultValue,
   defaultKey,
   PERIODS,
