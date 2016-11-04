@@ -29,10 +29,10 @@ const STATISTICS_TYPES = {
 
 const PERIODS = {
   one: 1, // 24小时
-  seven: 7, // 7日
-  thirty: 30, // 30日
-  all: 0, // 至今
-  custom: -1 // 自定义
+  seven: 2, // 7日
+  thirty: 3, // 30日
+  all: 4, // 至今
+  custom: 5 // 自定义
 }
 
 let defaultKey = {

@@ -427,6 +427,10 @@ export default {
       this.quotaData[oldQuata].selectedRule = _.clone(this.selectedRule)
       this.quotaData[oldQuata].selectedDatapoint = _.clone(this.selectedDatapoint)
       this.curQuotaData = _.clone(this.quotaData[quata])
+      if (this.curQuotaData.custom_time) {
+        this.initStartTime = this.curQuotaData.custom_time.start || 0
+        this.initEndTime = this.curQuotaData.custom_time.end || 0
+      }
       this.selectedRule = _.clone(this.curQuotaData.selectedRule) || {}
       this.selectedDatapoint = _.clone(this.curQuotaData.selectedDatapoint) || {}
       this.$resetValidation()
@@ -438,7 +442,6 @@ export default {
       }
       if (this.$validation.invalid) {
         this.$validate(true)
-        console.log('xxx')
         return
       }
       if (!this.selectProduct) {
