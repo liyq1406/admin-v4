@@ -33,7 +33,7 @@
               <th>字段名</th>
               <th class="tac">类型</th>
               <th class="tac">显示</th>
-              <th class="tac">排序</th>
+              <th class="tac">操作</th>
             </tr>
           </thead>
           <tbody>
@@ -118,7 +118,7 @@
             <!-- 提交按钮 -->
             <div class="form-actions">
               <label v-if="modalType === 'edit' &&  canEdit" class="del-check">
-                <input type="checkbox" name="del" v-model="delChecked"/> 删除此类别
+                <input type="checkbox" name="del" v-model="delChecked"/> 删除此字段
               </label>
               <button @click.prevent.stop="onCancel" class="btn btn-default">{{ $t("common.cancel") }}</button>
               <button type="submit" :disabled="editing" :class="{'disabled':editing}" v-text="editing ? $t('common.handling') : $t('common.ok')" class="btn btn-primary"></button>
@@ -158,6 +158,7 @@
     },
     data () {
       return {
+        // 基本字段
         base_fields: [
           {
             'name': 'mac',
@@ -208,20 +209,31 @@
             'sort': 8
           }
         ],
-        loadingData: false,
+        // 正在加载字段数据标志位
+        loadingDataField: false,
+        // 正在加载数据端点标志位
+        loadingDataPoint: false,
+        // 显示浮层标志位
         showModal: false,
+        // 正在编辑标志位
         editing: false,
+        // 显示删除按钮标志位
         delChecked: false,
         // 已选择产品
         selectedProduct: {},
+        // 浮层表单对象
         modal: {
           label: '',
           name: '',
           value_type: 1
         },
+        // 正在编辑的字段索引
         editIndex: -1,
+        // 当前浮层类型
         modalType: '',
+        // 服务器返回的设备字段
         deviceFields: {},
+        // 服务器返回的数据端点
         dataPoints: []
       }
     },
@@ -280,6 +292,11 @@
         })
       },
 
+      // 正在加载标志位
+      loadingData () {
+        return this.loadingDataPoint || this.loadingDataPoint
+      },
+
       // 当前产品
       currProduct () {
         var result = {}
@@ -296,6 +313,7 @@
         return this.modalType === 'add' ? '添加设备字段' : '编辑设备字段'
       },
 
+      // 是否显示更多编辑权限标志位
       canEdit () {
         var result = false
         var condition = [
@@ -358,6 +376,9 @@
         this.updateData(params)
       },
 
+      /**
+       * 删除字段
+       */
       deleteField () {
         this.editing = true
         var params = _.cloneDeep(this.fields)
@@ -448,6 +469,7 @@
           return item !== ignore
         })
       },
+
       /**
        * 显示添加字段浮层
        */
